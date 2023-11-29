@@ -32,9 +32,6 @@
 
 #include "DetectorMessenger.hh"
 
-#include <sstream>
-
-#include "DetectorConstruction.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -42,11 +39,13 @@
 #include "G4UIdirectory.hh"
 #include "G4UIparameter.hh"
 
+#include "DetectorConstruction.hh"
+
+#include <sstream>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-  : G4UImessenger()
-  , fDetector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det) : G4UImessenger(), fDetector(Det)
 {
   fDetDir.reset(new G4UIdirectory("/det/"));
   fDetDir->SetGuidance("detector construction commands");
@@ -111,20 +110,16 @@ DetectorMessenger::~DetectorMessenger() = default;
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fSizeYZCmd.get())
-  {
+  if (command == fSizeYZCmd.get()) {
     fDetector->SetCalorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));
   }
-  else if(command == fNbLayersCmd.get())
-  {
+  else if (command == fNbLayersCmd.get()) {
     fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));
   }
-  else if(command == fNbAbsorCmd.get())
-  {
+  else if (command == fNbAbsorCmd.get()) {
     fDetector->SetNbOfAbsor(fNbAbsorCmd->GetNewIntValue(newValue));
   }
-  else if(command == fAbsorCmd.get())
-  {
+  else if (command == fAbsorCmd.get()) {
     G4int num;
     G4double tick;
     G4String unt, mat;

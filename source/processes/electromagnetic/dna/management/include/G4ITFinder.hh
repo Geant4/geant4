@@ -57,15 +57,15 @@
 
 class G4VITFinder
 {
-public:
-  G4VITFinder();
-  virtual ~G4VITFinder(){;}
-  virtual void Clear() = 0;
-  virtual void SetVerboseLevel(G4int level) = 0;
-  virtual G4int GetVerboseLevel() = 0;
-  virtual void Push(G4Track* track) = 0;
-  virtual G4ITType GetITType() = 0;
-  virtual void UpdatePositionMap() = 0;
+ public:
+  G4VITFinder() = default;
+  virtual ~G4VITFinder() = default;
+  virtual void Clear()                      = 0;
+  virtual void Push(G4Track* track)         = 0;
+  virtual G4ITType GetITType()              = 0;
+  virtual void UpdatePositionMap()          = 0;
+ protected:
+  G4int fVerbose = 0;
 };
 
 /**
@@ -73,61 +73,42 @@ public:
  * For now, G4KDTree is used
  */
 
-template<class T>//, class SearcherT = G4KDTree>
-class G4ITFinder: public G4VITFinder
+template <class T>  //, class SearcherT = G4KDTree>
+class G4ITFinder : public G4VITFinder
 {
-  static G4ThreadLocal G4ITFinder * fInstance;
-  G4ITFinder();
-
-  typedef std::map<int, G4KDTree*> TreeMap;
-  TreeMap fTree;
-
-  int fVerbose;
-
-public:
-  static G4ITFinder * Instance();
-  virtual ~G4ITFinder();
-  virtual void Clear();
-
-  virtual void SetVerboseLevel(G4int level)
-  {
-    fVerbose = level;
-  }
-
-  virtual G4int GetVerboseLevel()
-  {
-    return fVerbose;
-  }
-
-  virtual void Push(G4Track* track);
-
-  virtual G4ITType GetITType()
-  {
-    return T::ITType();
-  }
-
-  virtual void UpdatePositionMap();
-  static void iUpdatePositionMap();
-
+ public:
+  static G4ITFinder* Instance();
+  ~G4ITFinder() override;
+  void Clear() override;
+  void SetVerboseLevel(G4int level) { fVerbose = level; }
+  G4int GetVerboseLevel() { return fVerbose; }
+  void Push(G4Track* track) override;
+  G4ITType GetITType() override { return T::ITType(); }
+  void UpdatePositionMap() override;
   G4KDTreeResultHandle FindNearestInRange(const T* point /*from this point*/,
-                                          int key /*for this type*/,
+                                          G4int key /*for this type*/,
                                           G4double /*range*/);
   G4KDTreeResultHandle FindNearest(const G4ThreeVector&,
-                                   int key /*for this type*/);
+                                   G4int key /*for this type*/);
   G4KDTreeResultHandle FindNearest(const T* /*from this point*/,
-                                   int key /*for this type*/);
-  G4KDTreeResultHandle FindNearestInRange(const G4ThreeVector& /*from this point*/,
-                                          int key /*for this type*/,
-                                          G4double /*range*/);
+                                   G4int key /*for this type*/);
+  G4KDTreeResultHandle FindNearestInRange(
+    const G4ThreeVector& /*from this point*/, G4int key /*for this type*/,
+    G4double /*range*/);
   G4KDTreeResultHandle FindNearest(const T* /*from this point*/,
                                    const T* /*for this type*/);
+ private:
+  static G4ThreadLocal G4ITFinder* fInstance;
+  G4ITFinder();
+  using TreeMap = std::map<G4int, G4KDTree*> ;
+  TreeMap fTree;
 };
 
 #ifdef TEMPLATE
-#undef TEMPLATE
+#  undef TEMPLATE
 #endif
 
-#define TEMPLATE template<class T>
+#define TEMPLATE template <class T>
 #define G4ITMANAGER G4ITFinder<T>
 
 #include "G4ITFinder.icc"

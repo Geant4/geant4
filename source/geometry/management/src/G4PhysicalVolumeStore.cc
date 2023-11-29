@@ -54,7 +54,7 @@ G4ThreadLocal G4bool G4PhysicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4PhysicalVolumeStore::G4PhysicalVolumeStore()
-  : std::vector<G4VPhysicalVolume*>()
+   
 {
   reserve(100);
 }
@@ -90,25 +90,13 @@ void G4PhysicalVolumeStore::Clean()
   //
   locked = true;
 
-  std::size_t i=0;
   G4PhysicalVolumeStore* store = GetInstance();
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << "Deleting Physical Volumes ... ";
-#endif
 
   for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    delete *pos; ++i;
+    delete *pos;
   }
-
-#ifdef G4GEOMETRY_VOXELDEBUG
-  if (store->size() < i-1)
-    { G4cout << "No volumes deleted. Already deleted by user ?" << G4endl; }
-  else
-    { G4cout << i-1 << " volumes deleted !" << G4endl; }
-#endif
 
   store->bmap.clear(); store->mvalid = false;
   locked = false;
@@ -171,7 +159,7 @@ void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
     std::vector<G4VPhysicalVolume*> vol_vec { pVolume };
     store->bmap.insert(std::make_pair(vol_name, vol_vec));
   }
-  if (fgNotifier) { fgNotifier->NotifyRegistration(); }
+  if (fgNotifier != nullptr) { fgNotifier->NotifyRegistration(); }
   store->mvalid = true;
 }
 

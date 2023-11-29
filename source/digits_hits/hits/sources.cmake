@@ -12,7 +12,6 @@ geant4_add_module(G4hits
   SOURCES
     G4HCofThisEvent.cc
     G4THitsCollection.cc
-    G4VHit.cc
     G4VHitsCollection.cc)
 
 geant4_module_link_libraries(G4hits PUBLIC G4globman)

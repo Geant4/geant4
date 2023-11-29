@@ -41,14 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* DET,
-                               EventAction* EA)
-:G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
+SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* event)
+:fDetector(det), fEventAction(event)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +60,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     fEventAction->CountStepsCharg();
   } else {
     fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
-    fEventAction->CountStepsNeutr();
+    fEventAction->CountStepsNeutr(aStep->GetPostStepPoint()->GetProcessDefinedStep());
   }
 }
 

@@ -41,15 +41,10 @@
 
 G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
   : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
-  , weighted(false)
 {
   SetUnit("");
 }
-
-G4PSTrackCounter::~G4PSTrackCounter() { ; }
 
 G4bool G4PSTrackCounter::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -68,14 +63,14 @@ G4bool G4PSTrackCounter::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   //	 << " w " << aStep->GetPreStepPoint()->GetWeight()
   // <<    G4endl;
 
-  G4bool flag = FALSE;
+  G4bool flag = false;
 
   if(IsEnter && fDirection == fCurrent_In)
-    flag = TRUE;
+    flag = true;
   else if(IsExit && fDirection == fCurrent_Out)
-    flag = TRUE;
+    flag = true;
   else if((IsExit || IsEnter) && fDirection == fCurrent_InOut)
-    flag = TRUE;
+    flag = true;
 
   if(flag)
   {
@@ -85,10 +80,10 @@ G4bool G4PSTrackCounter::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       val *= aStep->GetPreStepPoint()->GetWeight();
     EvtMap->add(index, val);
 
-    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+    if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
     {
       auto filler = G4VScoreHistFiller::Instance();
-      if(!filler)
+      if(filler == nullptr)
       {
         G4Exception(
           "G4PSTrackCounter::ProcessHits", "SCORER0123", JustWarning,
@@ -102,7 +97,7 @@ G4bool G4PSTrackCounter::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSTrackCounter::Initialize(G4HCofThisEvent* HCE)
@@ -116,28 +111,23 @@ void G4PSTrackCounter::Initialize(G4HCofThisEvent* HCE)
   // G4cout <<   "----- PS Initialize " << G4endl;
 }
 
-void G4PSTrackCounter::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSTrackCounter::clear() { EvtMap->clear(); }
-
-void G4PSTrackCounter::DrawAll() { ; }
 
 void G4PSTrackCounter::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, count] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  track count: " << *(itr->second) << " [tracks] " << G4endl;
+    G4cout << "  copy no.: " << copy
+           << "  track count: " << *(count) << " [tracks] " << G4endl;
   }
 }
 
 void G4PSTrackCounter::SetUnit(const G4String& unit)
 {
-  if(unit == "")
+  if(unit.empty())
   {
     unitName  = unit;
     unitValue = 1.0;

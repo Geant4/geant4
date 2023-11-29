@@ -294,7 +294,6 @@ public:
                                            G4double cutEnergy = 0.0,
                                            G4double maxEnergy = DBL_MAX);
 
-
   // to select atom cross section per volume is recomputed for each element 
   const G4Element* SelectRandomAtom(const G4Material*,
                                     const G4ParticleDefinition*,
@@ -303,10 +302,12 @@ public:
                                     G4double maxEnergy = DBL_MAX);
 
   // to select atom if cross section is proportional number of electrons 
-  G4int SelectRandomAtomNumber(const G4Material*);
+  const G4Element* GetCurrentElement(const G4Material* mat = nullptr) const;
+  G4int SelectRandomAtomNumber(const G4Material*) const;
 
   // select isotope in order to have precise mass of the nucleus
-  G4int SelectIsotopeNumber(const G4Element*);
+  const G4Isotope* GetCurrentIsotope(const G4Element* elm = nullptr) const;
+  G4int SelectIsotopeNumber(const G4Element*) const;
 
   //------------------------------------------------------------------------
   // Get/Set methods
@@ -315,6 +316,10 @@ public:
   void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=nullptr);
 
   void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
+
+  G4bool LPMFlag() const;
+  
+  void SetLPMFlag(G4bool val);
 
   inline G4ElementData* GetElementData();
 
@@ -342,8 +347,6 @@ public:
 
   inline G4double SecondaryThreshold() const;
 
-  inline G4bool LPMFlag() const;
-
   inline G4bool DeexcitationFlag() const;
 
   inline G4bool ForceBuildTableFlag() const;
@@ -366,8 +369,6 @@ public:
 
   inline void SetSecondaryThreshold(G4double);
 
-  inline void SetLPMFlag(G4bool val);
-
   inline void SetDeexcitationFlag(G4bool val);
 
   inline void SetForceBuildTable(G4bool val);
@@ -387,10 +388,6 @@ public:
   inline const G4String& GetName() const;
 
   inline void SetCurrentCouple(const G4MaterialCutsCouple*);
-
-  inline const G4Element* GetCurrentElement() const;
-
-  inline const G4Isotope* GetCurrentIsotope() const;
 
   inline G4bool IsLocked() const;
 
@@ -415,7 +412,6 @@ private:
   G4VEmModel*                 fTripletModel = nullptr;
   const G4MaterialCutsCouple* fCurrentCouple = nullptr;
   const G4Element*            fCurrentElement = nullptr;
-  const G4Isotope*            fCurrentIsotope = nullptr;
   std::vector<G4EmElementSelector*>* elmSelectors = nullptr;
   G4LossTableManager*         fEmManager;
 
@@ -451,7 +447,6 @@ protected:
 
 private:
 
-  G4bool theLPMflag = false;
   G4bool flagDeexcitation = false;
   G4bool flagForceBuildTable = false;
   G4bool isMaster = true;
@@ -497,21 +492,6 @@ inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   fCurrentElement = elm;
-  fCurrentIsotope = nullptr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline const G4Element* G4VEmModel::GetCurrentElement() const
-{
-  return fCurrentElement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline const G4Isotope* G4VEmModel::GetCurrentIsotope() const
-{
-  return fCurrentIsotope;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -569,7 +549,7 @@ G4VEmModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* part,
                                        G4double cutEnergy,
                                        G4double maxEnergy)
 {
-  SetCurrentElement(elm);
+  fCurrentElement = elm;
   return ComputeCrossSectionPerAtom(part,kinEnergy,elm->GetZ(),elm->GetN(),
                                     cutEnergy,maxEnergy);
 }
@@ -587,7 +567,6 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
   fCurrentElement = (nSelectors > 0) ?
     ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy) :
     SelectRandomAtom(pBaseMaterial,part,kinEnergy,cutEnergy,maxEnergy);
-  fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
 
@@ -605,7 +584,6 @@ G4VEmModel::SelectTargetAtom(const G4MaterialCutsCouple* couple,
   fCurrentElement = (nSelectors > 0)
    ? ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy,logKinE)
    : SelectRandomAtom(pBaseMaterial,part,kinEnergy,cutEnergy,maxEnergy);
-  fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
 
@@ -690,13 +668,6 @@ inline G4double G4VEmModel::PolarAngleLimit() const
 inline G4double G4VEmModel::SecondaryThreshold() const
 {
   return secondaryThreshold;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4VEmModel::LPMFlag() const 
-{
-  return theLPMflag;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -809,13 +780,6 @@ inline void G4VEmModel::SetPolarAngleLimit(G4double val)
 inline void G4VEmModel::SetSecondaryThreshold(G4double val) 
 {
   secondaryThreshold = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmModel::SetLPMFlag(G4bool val) 
-{
-  theLPMflag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

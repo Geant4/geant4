@@ -56,21 +56,28 @@ public:
   G4NeutrinoElectronProcess(G4String anEnvelopeName , const G4String& procName = "neutrino-electron");
 
   virtual ~G4NeutrinoElectronProcess();
- 
+  
+  virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4ForceCondition* condition
+                            ) override;
+  
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep);
+					  const G4Step& aStep) override;
 
   // initialise thresholds
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // set internal limit
   virtual void SetLowestEnergy(G4double);
 
-  virtual void ProcessDescription(std::ostream& outFile) const;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
   void SetBiasingFactor(G4double bf);
-  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *);
+  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *) override;
+  
 private:
 
   // hide assignment operator as private 

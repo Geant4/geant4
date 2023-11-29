@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (copied from B1SteppingAction)
 
 #ifndef SteppingAction_h
@@ -41,16 +40,16 @@ class G4LogicalVolume;
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction(EventAction* eventAction);
-    virtual ~SteppingAction();
+public:
+ explicit SteppingAction(EventAction* eventAction);
+ virtual ~SteppingAction()=default;
 
-    // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
+ // method from the base class
+ virtual void UserSteppingAction(const G4Step*) override;
 
-  private:
-    EventAction*  fEventAction;
-    G4LogicalVolume* fScoringVolume;
+private:
+ EventAction*  fEventAction;
+ G4LogicalVolume* fScoringVolume;
 };
 
 #endif

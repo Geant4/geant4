@@ -29,6 +29,8 @@
 /analysis/setFileName fresnel_0
 /analysis/h1/set 20 90 0 90  # deg
 /analysis/h1/set 21 90 0 90  # deg
+/analysis/h1/set 22 90 0 90  # deg
+/analysis/h1/set 23 90 0 90  # deg
 /run/printProgress 100000
 /run/beamOn 500000
 

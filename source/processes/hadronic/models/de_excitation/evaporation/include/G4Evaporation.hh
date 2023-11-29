@@ -78,14 +78,14 @@ public:
   void SetGEMVIChannel();
   void SetCombinedChannel();
 
+  G4Evaporation(const G4Evaporation &right) = delete;
+  const G4Evaporation & operator=(const G4Evaporation &right) = delete;
+  G4bool operator==(const G4Evaporation &right) const = delete;
+  G4bool operator!=(const G4Evaporation &right) const = delete;
+
 private:
 
   void InitialiseChannelFactory();
-
-  G4Evaporation(const G4Evaporation &right);
-  const G4Evaporation & operator=(const G4Evaporation &right);
-  G4bool operator==(const G4Evaporation &right) const;
-  G4bool operator!=(const G4Evaporation &right) const;
 
   G4int    fVerbose;
   size_t   nChannels;

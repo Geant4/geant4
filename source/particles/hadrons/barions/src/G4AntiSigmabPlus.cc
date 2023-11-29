@@ -47,16 +47,16 @@
 // ###                      AntiSigmabPlus                            ###
 // ######################################################################
 
-G4AntiSigmabPlus* G4AntiSigmabPlus::theInstance = 0;
+G4AntiSigmabPlus* G4AntiSigmabPlus::theInstance = nullptr;
 
 G4AntiSigmabPlus* G4AntiSigmabPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_sigma_b+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (theInstance ==0)
+  if (theInstance ==nullptr)
   {
   // create particle
   //
@@ -73,14 +73,14 @@ G4AntiSigmabPlus* G4AntiSigmabPlus::Definition()
                     1,              +1,             0,
                     2,              -2,             0,
              "baryon",               0,            -1,       -5222,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,       "sigma_b");
 
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
+  auto  mode = new G4VDecayChannel*[1];
   // anti_sigma_b+ -> anti_lambda_b + pi-
   mode[0] = new G4PhaseSpaceDecayChannel("anti_sigma_b+",1.000,2,"anti_lambda_b","pi-");
 
@@ -89,7 +89,7 @@ G4AntiSigmabPlus* G4AntiSigmabPlus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiSigmabPlus*>(anInstance);
+  theInstance = static_cast<G4AntiSigmabPlus*>(anInstance);
   return theInstance;
 }
 

@@ -1,0 +1,205 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_hdf5_store
+#define toolx_hdf5_store
+
+#include "pages"
+
+#include <tools/vmanip>
+#include <tools/sout>
+
+namespace toolx {
+namespace hdf5 {
+
+class store {
+public:
+  TOOLS_SCLASS(toolx::hdf5::store)
+public:
+  store(std::ostream& a_out,hid_t a_group,const std::string& a_name,bool a_write,unsigned int a_compress)
+  :m_out(a_out)
+  ,m_write(a_write)
+  ,m_compress(a_compress) //used at write.
+  ,m_group(-1)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+    if(m_write) {
+      if(a_name.empty()) {
+        a_out << "toolx::hdf5::store::store : string a_name is empty." << std::endl;
+        m_group = -1;
+        return;
+      }
+      m_group = toolx_H5Gcreate(a_group,a_name.c_str(),0);
+      if(m_group<0) {
+        a_out << "toolx::hdf5::store::store : can't create " << a_name << " group." << std::endl;
+        m_group = -1;
+        return;
+      }
+      if(!write_atb(m_group,"type","object")) {
+        m_out << "toolx::hdf5::store::store : write_atb(type) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+        return;
+      }
+      if(!write_atb(m_group,"class",s_class())) {
+        m_out << "toolx::hdf5::store::store : write_atb(class) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+        return;
+      }
+      int v = 2; //1->2 add "type" atb.
+      if(!write_scalar_atb<int>(m_group,"version",v)) {
+        m_out << "toolx::hdf5::store::store : write_scalar_atb(version) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+        return;
+      }
+    } else { // to read.
+      m_group = toolx_H5Gopen(a_group,a_name.c_str());
+      if(m_group<0) {
+        a_out << "toolx::hdf5::store::store : can't open " << a_name << " group." << std::endl;
+        m_group = -1;
+        return;
+      }
+      std::vector<std::string> names;
+      if(!read_array_string(m_group,s_names(),names)) {
+        m_out << "toolx::hdf5::store::store : read_array_string(names) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+	return;
+      }
+      std::vector<std::string> TFORMs;
+      if(!read_array_string(m_group,s_forms(),TFORMs)) {
+        m_out << "toolx::hdf5::store::store : read_array_string(tforms) failed." << std::endl;
+        ::H5Gclose(m_group);
+        m_group = -1;
+	return;
+      }
+      if(names.size()!=TFORMs.size()) {
+        m_out << "toolx::hdf5::store::store : names/TFORMs size mismatch." << std::endl;
+        m_out << "names :" << std::endl;
+       {tools_vforcit(std::string,names,it) m_out << *it << std::endl;}
+        m_out << "TFORMs :" << std::endl;
+       {tools_vforcit(std::string,TFORMs,it) m_out << *it << std::endl;}
+        ::H5Gclose(m_group);
+        m_group = -1;
+	return;
+      }
+      for(size_t index=0;index<names.size();index++) {
+        if(!create_pages(names[index],TFORMs[index])) {
+          m_out << "toolx::hdf5::store::store : can't create hdf5_column "
+	            << tools::sout(names[index]) << "." << std::endl;
+          tools::safe_clear(m_pagess);
+          ::H5Gclose(m_group);
+          m_group = -1;
+          return;
+        }
+      }
+    }
+  }
+  virtual ~store(){
+    if(m_write) {
+      tools::uint64 _entries;
+      if(!entries(_entries)) {
+        m_out << "toolx::hdf5::store::~store : not same entries on all columns. Write 0." << std::endl;
+      }
+      if(m_group<0) { //constructor may have failed.
+      } else {
+        if(!write_scalar<tools::uint64>(m_group,s_entries(),_entries)) {
+          m_out << "toolx::hdf5::store::~store : write_scalar(entries) failed." << std::endl;
+        }
+        if(!write_scalar<unsigned int>(m_group,s_columns(),m_pagess.size())) {
+          m_out << "toolx::hdf5::store::~store : write_scalar(columns) failed." << std::endl;
+        }
+       {std::vector<std::string> names;
+        tools_vforcit(pages*,m_pagess,it) names.push_back((*it)->name());
+     //{m_out << "debug : write : names :" << std::endl;
+     // tools_vforcit(std::string,names,it) m_out << *it << std::endl;}
+        if(!write_array_string(m_group,s_names(),names)) {
+          m_out << "toolx::hdf5::store::~store : write_array_string(names) failed." << std::endl;
+        }}
+       {std::vector<std::string> TFORMs;
+        tools_vforcit(pages*,m_pagess,it) TFORMs.push_back((*it)->form());
+     //{m_out << "debug : write : TFORMs :" << std::endl;
+     // tools_vforcit(std::string,TFORMs,it) m_out << *it << std::endl;}
+        if(!write_array_string(m_group,s_forms(),TFORMs)) {
+          m_out << "toolx::hdf5::store::~store : write_array_string(tforms) failed." << std::endl;
+        }}
+      }
+    }
+    tools::safe_clear(m_pagess);
+    if(m_group<0) { //constructor may have failed.
+    } else {
+      ::H5Gclose(m_group);
+    }
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  store(const store& a_from)
+  :m_out(a_from.m_out)
+  ,m_name(a_from.m_name)
+  ,m_compress(a_from.m_compress)
+  ,m_group(-1)
+  {
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  store& operator=(const store&){return *this;}
+public:
+  std::ostream& out() const {return m_out;}
+  //bool fill(tools::uint32 &a_n){a_n = 0;return true;}
+
+  bool entries(tools::uint64& a_entries) const {
+    if(m_pagess.empty()) {a_entries = 0;return true;}
+    a_entries = m_pagess.front()->entries();
+    tools_vforcit(pages*,m_pagess,it) {
+      if((*it)->entries()!=a_entries) {
+        m_out << "toolx::hdf5::store::entries : not same entries on all columns."
+	      << " Front " << a_entries << ", it " << (*it)->entries() << "." << std::endl;
+        a_entries = 0;
+	return false;
+      }
+    }
+    return true;
+  }
+
+  pages* create_pages(const std::string& a_name,const std::string& a_form) {
+    //::printf("debug : create_pages %s %s\n",a_name.c_str(),a_form.c_str());
+    pages* _pages = new pages(m_out,m_group,a_name,a_form,m_write,m_compress);
+    if(!_pages->is_valid()) {
+      m_out << "toolx::hdf5::store::create_column : can't create pages." << std::endl;
+      delete _pages;
+      return 0;
+    }
+    m_pagess.push_back(_pages);
+    return _pages;
+  }
+  /*
+  pages* find_column(unsigned int a_index) {
+    if(a_index>=m_pagess.size()) {
+      m_out << "toolx::hdf5::store::find_column : out of range index." << std::endl;
+      return 0;
+    }
+    return m_pagess[a_index];
+  }
+  const std::vector<pages*>& columns() const {return m_pagess;}*/
+
+  hid_t group() const {return m_group;}
+  unsigned int compress_level() const {return m_compress;}
+protected:
+  std::ostream& m_out;
+  std::string m_name;
+  bool m_write;
+  unsigned int m_compress;
+  hid_t m_group;
+  std::vector<pages*> m_pagess;
+};
+
+}}
+
+#endif

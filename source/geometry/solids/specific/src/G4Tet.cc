@@ -72,7 +72,7 @@ G4Tet::G4Tet(const G4String& pName,
 {
   // Check for degeneracy
   G4bool degenerate = CheckDegeneracy(p0, p1, p2, p3);
-  if (degeneracyFlag)
+  if (degeneracyFlag != nullptr)
   {
     *degeneracyFlag = degenerate;
   }
@@ -218,7 +218,7 @@ void G4Tet::Initialize(const G4ThreeVector& p0,
   G4double volume = norm[0].dot(p3 - p0);
   if (volume > 0.)
   {
-    for (G4int i = 0; i < 4; ++i) { norm[i] = -norm[i]; }
+    for (auto & i : norm) { i = -i; }
   }
 
   // Set normals to face planes
@@ -254,7 +254,7 @@ void G4Tet::SetVertices(const G4ThreeVector& p0,
 {
   // Check for degeneracy
   G4bool degenerate = CheckDegeneracy(p0, p1, p2, p3);
-  if (degeneracyFlag)
+  if (degeneracyFlag != nullptr)
   {
     *degeneracyFlag = degenerate;
   }
@@ -326,12 +326,12 @@ void G4Tet::SetBoundingLimits(const G4ThreeVector& pMin,
   G4int iout[4] = { 0, 0, 0, 0 };
   for (G4int i = 0; i < 4; ++i)
   {
-    iout[i] = (fVertex[i].x() < pMin.x() ||
-               fVertex[i].y() < pMin.y() ||
-               fVertex[i].z() < pMin.z() ||
-               fVertex[i].x() > pMax.x() ||
-               fVertex[i].y() > pMax.y() ||
-               fVertex[i].z() > pMax.z());
+    iout[i] = (G4int)(fVertex[i].x() < pMin.x() ||
+                      fVertex[i].y() < pMin.y() ||
+                      fVertex[i].z() < pMin.z() ||
+                      fVertex[i].x() > pMax.x() ||
+                      fVertex[i].y() > pMax.y() ||
+                      fVertex[i].z() > pMax.z());
   }
   if (iout[0] + iout[1] + iout[2] + iout[3] != 0)
   {
@@ -342,10 +342,10 @@ void G4Tet::SetBoundingLimits(const G4ThreeVector& pMin,
             << "    pmin: " << pMin << "\n"
             << "    pmax: " << pMax << "\n"
             << "  Tetrahedron vertices:\n"
-            << "    anchor " << fVertex[0] << ((iout[0]) ? " is outside\n" : "\n")
-            << "    p1 "     << fVertex[1] << ((iout[1]) ? " is outside\n" : "\n")
-            << "    p2 "     << fVertex[2] << ((iout[2]) ? " is outside\n" : "\n")
-            << "    p3 "     << fVertex[3] << ((iout[3]) ? " is outside"   : "");
+            << "    anchor " << fVertex[0] << ((iout[0]) != 0 ? " is outside\n" : "\n")
+            << "    p1 "     << fVertex[1] << ((iout[1]) != 0 ? " is outside\n" : "\n")
+            << "    p2 "     << fVertex[2] << ((iout[2]) != 0 ? " is outside\n" : "\n")
+            << "    p3 "     << fVertex[3] << ((iout[3]) != 0 ? " is outside"   : "");
     G4Exception("G4Tet::SetBoundingLimits()", "GeomSolids0002",
                 FatalException, message);
   }
@@ -436,7 +436,7 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   G4double k[4];
   for (G4int i = 0; i < 4; ++i)
   {
-    k[i] = std::abs(fNormal[i].dot(p) - fDist[i]) <= halfTolerance;
+    k[i] = (G4double)(std::abs(fNormal[i].dot(p) - fDist[i]) <= halfTolerance);
   }
   G4double nsurf = k[0] + k[1] + k[2] + k[3];
   G4ThreeVector norm =
@@ -447,7 +447,7 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << "\n";
     message << "Position:\n";
@@ -538,8 +538,8 @@ G4double G4Tet::DistanceToOut(const G4ThreeVector& p,
   {
     G4double tmp = fNormal[i].dot(v);
     cosa[i] = tmp;
-    ind[nside] = (tmp > 0) * i;
-    nside += (tmp > 0);
+    ind[nside] = (G4int)(tmp > 0) * i;
+    nside += (G4int)(tmp > 0);
     dist[i] = fNormal[i].dot(p) - fDist[i];
   }
 
@@ -584,7 +584,7 @@ G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
 //
 G4GeometryType G4Tet::GetEntityType() const
 {
-  return G4String("G4Tet");
+  return {"G4Tet"};
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -602,7 +602,7 @@ G4VSolid* G4Tet::Clone() const
 //
 std::ostream& G4Tet::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -628,7 +628,9 @@ G4ThreeVector G4Tet::GetPointOnSurface() const
   // Select face
   G4double select = fSurfaceArea*G4QuickRand();
   G4int i = 0;
-  for ( ; i < 4; ++i) { if ((select -= fArea[i]) <= 0.) break; }
+  i += (G4int)(select > fArea[0]);
+  i += (G4int)(select > fArea[0] + fArea[1]);
+  i += (G4int)(select > fArea[0] + fArea[1] + fArea[2]);
 
   // Set selected triangle
   G4ThreeVector p0 = fVertex[iface[i][0]];
@@ -675,9 +677,9 @@ void G4Tet::DescribeYourselfTo (G4VGraphicsScene& scene) const
 //
 G4VisExtent G4Tet::GetExtent() const
 {
-  return G4VisExtent(fBmin.x(), fBmax.x(),
-                     fBmin.y(), fBmax.y(),
-                     fBmin.z(), fBmax.z());
+  return { fBmin.x(), fBmax.x(),
+           fBmin.y(), fBmax.y(),
+           fBmin.z(), fBmax.z() };
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -706,7 +708,7 @@ G4Polyhedron* G4Tet::CreatePolyhedron() const
 
   // Create polyhedron
   G4int faces[4][4] = { {1,3,2,0}, {1,4,3,0}, {1,2,4,0}, {2,3,4,0} };
-  G4Polyhedron* ph = new G4Polyhedron;
+  auto  ph = new G4Polyhedron;
   ph->createPolyhedron(4,4,xyz,faces);
 
   return ph;

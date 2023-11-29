@@ -1,0 +1,342 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_hdf5_h2file
+#define toolx_hdf5_h2file
+
+#include "tools"
+#include "T_tools"
+
+#include <tools/histo/histo_data>
+#include <tools/sout>
+#include <ostream>
+
+namespace toolx {
+namespace hdf5 {
+
+}}
+
+#include <map>
+
+namespace toolx {
+namespace hdf5 {
+
+inline bool write_std_map_ss(hid_t a_loc,const std::string& a_name,const std::map<std::string,std::string>& a_map,
+                             unsigned int /*a_chunked*/ = 0,unsigned int /*a_compress*/ = 0) {
+  if(!write_scalar<tools::uint64>(a_loc,a_name+"_size",a_map.size())) return false;
+  unsigned int count = 0; //uint for num2s.
+  std::string scount;
+  tools_mforcit(std::string,std::string,a_map,it) {
+    tools::num2s(count,scount);
+    if(!write_string(a_loc,a_name+"_elem_"+scount+"_first",(*it).first)) return false;
+    if(!write_string(a_loc,a_name+"_elem_"+scount+"_secon",(*it).second)) return false;
+    count++;
+  }
+  return true;
+}
+
+inline bool read_std_map_ss(hid_t a_loc,const std::string& a_name,std::map<std::string,std::string>& a_map,
+                             unsigned int /*a_chunked*/ = 0,unsigned int /*a_compress*/ = 0) {
+  a_map.clear();
+  tools::uint64 sz;
+  if(!read_scalar<tools::uint64>(a_loc,a_name+"_size",sz)) return false;
+  std::string scount,key,value;
+  for(tools::uint64 count=0;count<sz;count++) {
+    tools::num2s(count,scount);
+    if(!read_string(a_loc,a_name+"_elem_"+scount+"_first",key)) return false;
+    if(!read_string(a_loc,a_name+"_elem_"+scount+"_secon",value)) return false;
+    a_map[key] = value;
+  }
+  return true;
+}
+
+typedef tools::histo::histo_data<double,unsigned int,unsigned int,double> histo_data_t;
+
+inline bool write_hdata(hid_t a_loc,const histo_data_t& a_hdata) {
+
+  if(!write_string(a_loc,"title",a_hdata.m_title)) return false;
+  if(!write_scalar<unsigned int>(a_loc,"dimension",a_hdata.m_dimension)) return false;
+  if(!write_scalar<unsigned int>(a_loc,"bin_number",a_hdata.m_bin_number)) return false;
+
+  if(!write_std_vec<unsigned int>(a_loc,"bin_entries",a_hdata.m_bin_entries)) return false;
+  if(!write_std_vec<double>(a_loc,"bin_Sw",a_hdata.m_bin_Sw)) return false;
+  if(!write_std_vec<double>(a_loc,"bin_Sw2",a_hdata.m_bin_Sw2)) return false;
+  if(!write_std_vec_vec<double>(a_loc,"bin_Sxw",a_hdata.m_bin_Sxw)) return false;
+  if(!write_std_vec_vec<double>(a_loc,"bin_Sx2w",a_hdata.m_bin_Sx2w)) return false;
+
+  // axes :
+ {std::string name,saxis;
+  for(unsigned int iaxis=0;iaxis<a_hdata.m_dimension;iaxis++) {
+    tools::num2s(iaxis,saxis);
+    name = "axis_"+saxis+"_";
+    const histo_data_t::axis_t& _axis = a_hdata.m_axes[iaxis];
+    if(!write_scalar<unsigned int>(a_loc,name+"offset",_axis.m_offset)) return false;
+    if(!write_scalar<unsigned int>(a_loc,name+"number_of_bins",_axis.m_number_of_bins)) return false;
+    if(!write_scalar<double>(a_loc,name+"minimum_value",_axis.m_minimum_value)) return false;
+    if(!write_scalar<double>(a_loc,name+"maximum_value",_axis.m_maximum_value)) return false;
+    if(!write_scalar<bool>(a_loc,name+"fixed",_axis.m_fixed)) return false;
+    if(!write_scalar<double>(a_loc,name+"bin_width",_axis.m_bin_width)) return false;
+    if(!write_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;
+  }}
+
+  // etc :
+  if(!write_std_vec<double>(a_loc,"in_range_plane_Sxyw",a_hdata.m_in_range_plane_Sxyw)) return false;
+
+  // m_annotations :
+  if(!write_std_map_ss(a_loc,"annotations",a_hdata.m_annotations)) return false;
+
+  return true;
+}
+
+template <class HISTO>
+inline bool write_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name,const HISTO& a_histo) {
+
+  hid_t histo = toolx_H5Gcreate(a_loc,a_name.c_str(),0);
+  if(histo<0) {
+    a_out << "toolx::hdf5::write_histo : can't create group for histo " << tools::sout(a_name) << "." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  if(!write_atb(histo,"type","object")) {
+    a_out << "toolx::hdf5::write_histo : write_atb() class failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+  if(!write_atb(histo,"class",a_histo.s_cls())) {
+    a_out << "toolx::hdf5::write_histo : write_atb() class failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+  int v = 1;
+  if(!write_scalar_atb<int>(histo,"version",v)) {
+    a_out << "toolx::hdf5::write_histo : write_scalar_atb() version failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  if(!write_hdata(histo,a_histo.dac())) {::H5Gclose(histo);return false;}
+
+  ::H5Gclose(histo);
+
+  a_histo.not_a_profile(); //trick to be sure to use this function on an histo and not a profile.
+
+  return true;
+}
+
+template <class PROFILE>
+inline bool write_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_name,const PROFILE& a_histo) {
+
+  hid_t histo = toolx_H5Gcreate(a_loc,a_name.c_str(),0);
+  if(histo<0) {
+    a_out << "toolx::hdf5::write_profile : can't create group for histo " << tools::sout(a_name) << "." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  if(!write_atb(histo,"type","object")) {
+    a_out << "toolx::hdf5::write_profile : write_atb() class failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+  if(!write_atb(histo,"class",a_histo.s_cls())) {
+    a_out << "toolx::hdf5::write_profile : write_atb() class failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+  int v = 1;
+  if(!write_scalar_atb<int>(histo,"version",v)) {
+    a_out << "toolx::hdf5::write_profile : write_scalar_atb() version failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  typename PROFILE::pd_t pdata = a_histo.get_histo_data();
+
+  if(!write_hdata(histo,pdata)) {::H5Gclose(histo);return false;}
+
+  if(!write_bool(histo,"is_profile",pdata.m_is_profile)) {::H5Gclose(histo);return false;}
+  if(!write_std_vec<double>(histo,"bin_Svw",pdata.m_bin_Svw)) {::H5Gclose(histo);return false;}
+  if(!write_std_vec<double>(histo,"bin_Sv2w",pdata.m_bin_Sv2w)) {::H5Gclose(histo);return false;}
+  if(!write_bool(histo,"cut_v",pdata.m_cut_v)) {::H5Gclose(histo);return false;}
+  if(!write_scalar<double>(histo,"min_v",pdata.m_min_v)) {::H5Gclose(histo);return false;}
+  if(!write_scalar<double>(histo,"max_v",pdata.m_max_v)) {::H5Gclose(histo);return false;}
+
+  ::H5Gclose(histo);
+
+  return true;
+}
+
+inline bool read_hdata(hid_t a_loc,histo_data_t& a_hdata) {
+  if(!read_string(a_loc,"title",a_hdata.m_title)) return false;
+  if(!read_scalar<unsigned int>(a_loc,"dimension",a_hdata.m_dimension)) return false;
+  if(!read_scalar<unsigned int>(a_loc,"bin_number",a_hdata.m_bin_number)) return false;
+
+  if(!read_std_vec<unsigned int>(a_loc,"bin_entries",a_hdata.m_bin_entries)) return false;
+  if(!read_std_vec<double>(a_loc,"bin_Sw",a_hdata.m_bin_Sw)) return false;
+  if(!read_std_vec<double>(a_loc,"bin_Sw2",a_hdata.m_bin_Sw2)) return false;
+
+  if(!read_std_vec_vec<double>(a_loc,"bin_Sxw",a_hdata.m_bin_Sxw)) return false;
+  if(!read_std_vec_vec<double>(a_loc,"bin_Sx2w",a_hdata.m_bin_Sx2w)) return false;
+
+  // axes :
+ {a_hdata.m_axes.resize(a_hdata.m_dimension);
+  std::string name,saxis;
+  for(unsigned int iaxis=0;iaxis<a_hdata.m_dimension;iaxis++) {
+    tools::num2s(iaxis,saxis);
+    name = "axis_"+saxis+"_";
+    histo_data_t::axis_t& _axis = a_hdata.m_axes[iaxis];
+    if(!read_scalar<unsigned int>(a_loc,name+"offset",_axis.m_offset)) return false;
+    if(!read_scalar<unsigned int>(a_loc,name+"number_of_bins",_axis.m_number_of_bins)) return false;
+    if(!read_scalar<double>(a_loc,name+"minimum_value",_axis.m_minimum_value)) return false;
+    if(!read_scalar<double>(a_loc,name+"maximum_value",_axis.m_maximum_value)) return false;
+    if(!read_scalar<bool>(a_loc,name+"fixed",_axis.m_fixed)) return false;
+    if(!read_scalar<double>(a_loc,name+"bin_width",_axis.m_bin_width)) return false;
+    if(!read_std_vec<double>(a_loc,name+"edges",_axis.m_edges)) return false;
+  }}
+
+  // etc :
+  if(!read_std_vec<double>(a_loc,"in_range_plane_Sxyw",a_hdata.m_in_range_plane_Sxyw)) return false;
+
+  // m_annotations :
+  if(!read_std_map_ss(a_loc,"annotations",a_hdata.m_annotations)) return false;
+
+  return true;
+}
+
+template <class HISTO>
+inline bool read_histo(std::ostream& a_out,hid_t a_loc,const std::string& a_name,HISTO*& a_histo,bool a_verb_class = true) {
+  a_histo = 0;
+
+  //if(::H5Gget_objinfo(a_loc,a_name.c_str(),0,NULL)<0) {return false;}
+
+  hid_t histo = toolx_H5Gopen(a_loc,a_name.c_str());
+  if(histo<0) {
+    a_out << "toolx::hdf5::read_histo : can't open group." << std::endl;
+    return false;
+  }
+
+  std::string sclass;
+  if(!read_atb(histo,"class",sclass)) {
+    a_out << "toolx::hdf5::read_histo : can't read_atb() class." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  if(sclass!=HISTO::s_class()) {
+    if(a_verb_class) {
+      a_out << "toolx::hdf5::read_histo :"
+            << " read class " << tools::sout(sclass) << " not " << tools::sout(HISTO::s_class()) << std::endl;
+    }
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  int v;
+  if(!read_atb(histo,"version",v)) {
+    a_out << "toolx::hdf5::read_histo : read_atb version failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  histo_data_t hdata;
+
+  if(!read_hdata(histo,hdata)) {::H5Gclose(histo);return false;}
+
+  ::H5Gclose(histo);
+
+  hdata.update_fast_getters();
+
+  a_histo = new HISTO;
+  a_histo->copy_from_data(hdata);
+  a_histo->not_a_profile(); //trick to be sure to use this function on an histo and not a profile.
+  return true;
+}
+
+template <class PROFILE>
+inline bool read_profile(std::ostream& a_out,hid_t a_loc,const std::string& a_name,PROFILE*& a_histo,bool a_verb_class = true) {
+  a_histo = 0;
+
+  hid_t histo = toolx_H5Gopen(a_loc,a_name.c_str());
+  if(histo<0) {
+    a_out << "toolx::hdf5::read_profile : can't open group." << std::endl;
+    return false;
+  }
+
+  std::string sclass;
+  if(!read_atb(histo,"class",sclass)) {
+    a_out << "toolx::hdf5::read_profile : can't read_atb() class." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  if(sclass!=PROFILE::s_class()) {
+    if(a_verb_class) {
+      a_out << "toolx::hdf5::read_profile :"
+            << " read class " << tools::sout(sclass) << " not " << tools::sout(PROFILE::s_class()) << std::endl;
+    }
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  int v;
+  if(!read_atb(histo,"version",v)) {
+    a_out << "toolx::hdf5::read_profile : read_atb version failed." << std::endl;
+    ::H5Gclose(histo);
+    return false;
+  }
+
+  typename PROFILE::pd_t pdata;
+
+  if(!read_hdata(histo,pdata)) {::H5Gclose(histo);return false;}
+
+  if(!read_bool(histo,"is_profile",pdata.m_is_profile)) {::H5Gclose(histo);return false;}
+  if(!read_std_vec<double>(histo,"bin_Svw",pdata.m_bin_Svw)) {::H5Gclose(histo);return false;}
+  if(!read_std_vec<double>(histo,"bin_Sv2w",pdata.m_bin_Sv2w)) {::H5Gclose(histo);return false;}
+  if(!read_bool(histo,"cut_v",pdata.m_cut_v)) {::H5Gclose(histo);return false;}
+  if(!read_scalar<double>(histo,"min_v",pdata.m_min_v)) {::H5Gclose(histo);return false;}
+  if(!read_scalar<double>(histo,"max_v",pdata.m_max_v)) {::H5Gclose(histo);return false;}
+
+  ::H5Gclose(histo);
+
+  pdata.update_fast_getters();
+
+  a_histo = new PROFILE;
+  a_histo->copy_from_data(pdata);
+  return true;
+}
+
+inline bool read_class_version(std::ostream& a_out,hid_t a_loc,const std::string& a_name,
+                               std::string& a_class,int& a_version,bool a_verbose = true) {
+  hid_t id = toolx_H5Gopen(a_loc,a_name.c_str());
+  if(id<0) {
+    if(a_verbose) a_out << "toolx::hdf5::read_class_version : can't open group." << std::endl;
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  if(!read_atb(id,"class",a_class)) {
+    if(a_verbose) a_out << "toolx::hdf5::read_class_version : can't read_atb() class." << std::endl;
+    ::H5Gclose(id);
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  if(!read_atb(id,"version",a_version)) {
+    if(a_verbose) a_out << "toolx::hdf5::read_class_version : read_atb version failed." << std::endl;
+    ::H5Gclose(id);
+    a_class.clear();
+    a_version = 0;
+    return false;
+  }
+
+  ::H5Gclose(id);
+  return true;
+}
+
+}}
+
+
+#endif

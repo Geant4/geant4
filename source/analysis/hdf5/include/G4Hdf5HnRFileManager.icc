@@ -28,15 +28,13 @@
 
 #include "G4AnalysisUtilities.hh"
 
-#include "tools/hdf5/header"
-#include "tools/hdf5/h2file"
+#include "toolx/hdf5/header"
+#include "toolx/hdf5/h2file"
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/histo/h3d"
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
-
-#include "tools/hdf5/h2file"
 
 //_____________________________________________________________________________
 template <typename HT>
@@ -44,7 +42,7 @@ inline
 G4bool G4Hdf5HnRFileManager<HT>::ReadT(
   hid_t directory, const G4String& htName, HT*& ht)
 {
-  return tools::hdf5::read_histo(G4cout, directory, htName, ht);
+  return toolx::hdf5::read_histo(G4cout, directory, htName, ht);
 }
 
 //_____________________________________________________________________________
@@ -53,7 +51,7 @@ inline
 G4bool G4Hdf5HnRFileManager<tools::histo::p1d>::ReadT(
   hid_t directory, const G4String& htName, tools::histo::p1d*& ht)
 {
-  return tools::hdf5::read_profile(G4cout, directory, htName, ht);
+  return toolx::hdf5::read_profile(G4cout, directory, htName, ht);
 }
 
 //_____________________________________________________________________________
@@ -62,7 +60,7 @@ inline
 G4bool G4Hdf5HnRFileManager<tools::histo::p2d>::ReadT(
   hid_t directory, const G4String& htName, tools::histo::p2d*& ht)
 {
-  return tools::hdf5::read_profile(G4cout, directory, htName, ht);
+  return toolx::hdf5::read_profile(G4cout, directory, htName, ht);
 }
 
 //_____________________________________________________________________________

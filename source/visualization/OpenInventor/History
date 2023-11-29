@@ -1,23 +1,123 @@
--------------------------------------------------------------------
+# Category openinventor History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-04-27 Ben Morgan (openinventor-V11-01-05)
+- Support compilation against Qt5 and Qt6.
 
-History file for visualization/OpenInventor
--------------------------------------------
+## 2023-04-14 John Allison (openinventor-V11-01-04)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  opengl-V11-01-06, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (openinventor-V11-01-03)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-03-28 John Allison (openinventor-V11-01-02)
+- Add code for scene tree.
+- G4OpenInventorViewer:
+  - Call UpdateGUISceneTree in DrawView.
+- G4OpenInventorQtExaminerViewer:
+  - Add GetUIQt.
+- G4OpenInventorQtViewer:
+  - Implement virtual void UpdateGUISceneTree() {
+    - if (fUIQt) fUIQt->UpdateSceneTree(fSceneTree);
+
+## 2023-03-22 Ben Morgan (openinventor-V11-01-01)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-01-30 Ben Morgan (openinventor-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2022-11-25 Gabriele Cosmo (openinventor-V11-00-18)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-06 John Allison (openinventor-V11-00-17)
+- Eliminate G4cerr and introduce G4warn.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - In all except the Xt files, which, I understand are scheduled for
+    removal, change G4cout to G4warn in those cases where it is clearly
+    an error report or a warning.
+
+## 2022-10-28 John Allison (openinventor-V11-00-16)
+- Request kernel visit when cutaway mode changes:
+  - G4OpenInventorViewer.cc
+
+## 2022-10-24 Frederick Jones (openinventor-V11-00-15)
+- G4OpenInventorQtExaminerViewer.cc: For MacOS only, disabled the mouse
+  wheel event handler to fix the trackpad zoom direction issue.
+- G4OpenInventorXtExtendedViewer.cc: replaced sprintf by snprintf.
+
+## 2022-10-18 Gabriele Cosmo (openinventor-V11-00-14)
+- Fixed compilation warning on gcc-12.
+
+## 2022-10-14 Gabriele Cosmo (openinventor-V11-00-13)
+- Replaced use of sprintf() and vsprintf() with snprintf() and vsnprintf()
+  respectively, to fix deprecation compilation warnings on macOS-13 SDK.
+
+## 2022-10-07 Gabriele Cosmo (openinventor-V11-00-12)
+- Fixed compilation warnings on Intel/icc compiler for deprecated conversion
+  of string literal to char* in G4OpenInventorQtExaminerViewer.
+
+## 2022-09-14 John Allison (openinventor-V11-00-11)
+- G4OpenInventorViewer.cc:
+  - Add check on special mesh rendering option in CompareForKernelVisit.
+
+## 2022-09-03 John Allison (openinventor-V11-00-10)
+- Implement special mesh rendering:
+  - Use base class `StandardSpecialMeshRendering`.
+
+## 2022-08-31 Gabriele Cosmo (openinventor-V11-00-09)
+- Fixed reported Coverity defects for potentially uninitialised variables.
+
+## 2022-07-05 Gabriele Cosmo (openinventor-V11-00-08)
+- Fixed compilation error for missing inclusion of G4Types.hh
+  in G4OpenInventorTransform3D.hh, induced by recent changes in "global"
+  category.
+
+## 2022-05-03 Ben Morgan (openinventor-V11-00-07)
+- Preliminary build support for Qt5 and Qt6
+
+## 2022-04-21 Guy Barrand (openinventor-V11-00-06)
+- Have G4OpenGLOpenInventorViewer and SoGL2PSAction not using visman/G4gl2ps (but still using the thread safe tools/gl2ps).
+
+## 2022-04-11 Guy Barrand (openinventor-V11-00-05)
+- Have G4OpenGLOpenInventorViewer and SoGL2PSAction use the thread safe tools/gl2ps.
+
+## 2022-03-22 Ben Morgan (openinventor-V11-00-04)
+- Use geant4_module_sources to add optional sources
+
+## 2022-02-09 Gabriele Cosmo (openinventor-V11-00-03)
+- `G4OpenInventorQtExaminerViewer`: Fixed compilation warning on Intel
+  compiler for shadowing data.
+
+## 2022-01-28 Ben Morgan (openinventor-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2021-12-11 John Allison (openinventor-V11-00-01)
+- `G4OpenInventorViewer`: Remove misleading obsolete comment regarding
+  kernel visit in the case of a change in vis attribute modifiers.
+
+## 2021-12-10 Ben Morgan (openinventor-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 12 November 2021 - Ben Morgan (openinventor-V10-07-06)
 - Retire G4VIS_... preprocessor symbols in toolkit build, only required
   by obsolete GNUmake system

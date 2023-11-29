@@ -1,18 +1,26 @@
--------------------------------------------------------------------
+# Category had-theo-HE History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-              History file for theo_high_energy directory
-              -------------------------------------------
+## 2022-11-11 Alberto Ribon (had-theo-HE-V11-00-02)
+- G4TheoFSGenerator: simplified treatment for low-energy inelastic nuclear
+  reactions of light hypernuclei (because Bertini and Binary intra-nuclear 
+  cascade models are not applicable for these projectiles).
+  Note that for light anti-hypernuclei, FTF works fine down to zero 
+  kinetic energy.
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-05-25 Alberto Ribon (had-theo-HE-V11-00-01)
+- `G4TheoFSGenerator`: propagate the information on parent resonance
+  (in the `ApplyYourself` method, from `G4ReactionProduct` to `G4HadSecondary`)
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2021-12-10 Ben Morgan (had-theo-HE-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 04-Aug-2021, Alberto Ribon              (had-theo-HE-V10-07-03)
 - G4TheoFSGenerator, G4QuasiElasticChannel, G4CRCoalescence : 

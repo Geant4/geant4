@@ -28,12 +28,13 @@
 // Original authors: X.Dong, A.Dotti - 2013
 // --------------------------------------------------------------------
 
-#include <fstream>
-#include <sstream>
-
 #include "G4WorkerRunManager.hh"
+
+#include "G4AutoLock.hh"
+#include "G4CopyRandomState.hh"
 #include "G4MTRunManager.hh"
 #include "G4ParallelWorldProcess.hh"
+#include "G4ParallelWorldProcessStore.hh"
 #include "G4RNGHelper.hh"
 #include "G4Run.hh"
 #include "G4SDManager.hh"
@@ -54,9 +55,9 @@
 #include "G4VVisManager.hh"
 #include "G4WorkerRunManagerKernel.hh"
 #include "G4WorkerThread.hh"
-#include "G4MTRunManager.hh"
-#include "G4ParallelWorldProcessStore.hh"
-#include "G4AutoLock.hh"
+
+#include <fstream>
+#include <sstream>
 
 // --------------------------------------------------------------------
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -71,8 +72,7 @@ G4WorkerRunManagerKernel* G4WorkerRunManager::GetWorkerRunManagerKernel()
 }
 
 // --------------------------------------------------------------------
-G4WorkerRunManager::G4WorkerRunManager()
-  : G4RunManager(workerRM)
+G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM)
 {
   // This constructor should never be called in non-multithreaded mode
 
@@ -83,26 +83,20 @@ G4WorkerRunManager::G4WorkerRunManager()
          "is set to off).";
   msg << " This type of RunManager can only be used in mult-threaded "
          "applications.";
-  G4Exception("G4WorkerRunManager::G4WorkerRunManager()", "Run0103",
-              FatalException, msg);
+  G4Exception("G4WorkerRunManager::G4WorkerRunManager()", "Run0103", FatalException, msg);
 #endif
   G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
   G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
-  if(masterScM != nullptr)
-    G4ScoringManager::GetScoringManager();  // TLS instance for a worker
+  if (masterScM != nullptr) G4ScoringManager::GetScoringManager();  // TLS instance for a worker
 
   // Properly initialise luxury level for Ranlux* engines...
   //
-  if(dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine()))
-  {
-    const CLHEP::Ranlux64Engine* theEngine =
-      dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine());
+  if (dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine()) != nullptr) {
+    const auto theEngine = dynamic_cast<const CLHEP::Ranlux64Engine*>(G4Random::getTheEngine());
     luxury = theEngine->getLuxury();
   }
-  else if(dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine()))
-  {
-    const CLHEP::RanluxEngine* theEngine =
-      dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine());
+  else if (dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine()) != nullptr) {
+    const auto theEngine = dynamic_cast<const CLHEP::RanluxEngine*>(G4Random::getTheEngine());
     luxury = theEngine->getLuxury();
   }
 
@@ -110,8 +104,7 @@ G4WorkerRunManager::G4WorkerRunManager()
 
 #ifdef G4MULTITHREADED
   G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
-  if(pVVis != nullptr)
-  {
+  if (pVVis != nullptr) {
     pVVis->SetUpForAThread();
     visIsSetUp = true;
   }
@@ -121,43 +114,32 @@ G4WorkerRunManager::G4WorkerRunManager()
 // --------------------------------------------------------------------
 G4WorkerRunManager::~G4WorkerRunManager()
 {
-  // Delete thread-local data process manager objects
-  if(physicsList)
-  {
-    // physicsList->TerminateWorker();
-    // physicsList->RemoveProcessManager();
-  }
-
   // Put these pointers to zero: owned by master thread
   // If not to zero, the base class destructor will attempt to
   // delete them
-  userDetector                   = nullptr;
-  userWorkerInitialization       = nullptr;
+  userDetector = nullptr;
+  userWorkerInitialization = nullptr;
   userWorkerThreadInitialization = nullptr;
-  userActionInitialization       = nullptr;
-  physicsList                    = nullptr;
-  if(verboseLevel > 0)
-    G4cout << "Destroying WorkerRunManager (" << this << ")" << G4endl;
+  userActionInitialization = nullptr;
+  physicsList = nullptr;
+  if (verboseLevel > 1) G4cout << "Destroying WorkerRunManager (" << this << ")" << G4endl;
 }
 
 // --------------------------------------------------------------------
 void G4WorkerRunManager::InitializeGeometry()
 {
-  if(userDetector == nullptr)
-  {
+  if (userDetector == nullptr) {
     G4Exception("G4RunManager::InitializeGeometry", "Run0033", FatalException,
                 "G4VUserDetectorConstruction is not defined!");
     return;
   }
-  if(fGeometryHasBeenDestroyed)
-  {
+  if (fGeometryHasBeenDestroyed) {
     G4TransportationManager::GetTransportationManager()->ClearParallelWorlds();
   }
 
   // Step1: Get pointer to the physiWorld (note: needs to get the "super
   // pointer, i.e. the one shared by all threads"
-  G4RunManagerKernel* masterKernel =
-    G4MTRunManager::GetMasterRunManagerKernel();
+  G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();
   G4VPhysicalVolume* worldVol = masterKernel->GetCurrentWorld();
   // Step2:, Call a new "WorkerDefineWorldVolume( pointer from 2-, false);
   kernel->WorkerDefineWorldVolume(worldVol, false);
@@ -172,25 +154,21 @@ void G4WorkerRunManager::InitializeGeometry()
 void G4WorkerRunManager::RunInitialization()
 {
 #ifdef G4MULTITHREADED
-  if(!visIsSetUp)
-  {
+  if (!visIsSetUp) {
     G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
-    if(pVVis != nullptr)
-    {
+    if (pVVis != nullptr) {
       pVVis->SetUpForAThread();
       visIsSetUp = true;
     }
   }
 #endif
 
-  if(!(kernel->RunInitialization(fakeRun)))
-    return;
+  if (!(kernel->RunInitialization(fakeRun))) return;
 
   // Signal this thread can start event loop.
   // Note this will return only when all threads reach this point
   G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
-  if(fakeRun)
-    return;
+  if (fakeRun) return;
 
   const G4UserWorkerInitialization* uwi =
     G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
@@ -198,30 +176,24 @@ void G4WorkerRunManager::RunInitialization()
   delete currentRun;
   currentRun = nullptr;
 
-  if(fGeometryHasBeenDestroyed)
-    G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
+  if (fGeometryHasBeenDestroyed) G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
   // Call a user hook: this is guaranteed all threads are "synchronized"
-  if(uwi)
-    uwi->WorkerRunStart();
+  if (uwi != nullptr) uwi->WorkerRunStart();
 
-  if(userRunAction)
-    currentRun = userRunAction->GenerateRun();
-  if(currentRun == nullptr)
-    currentRun = new G4Run();
+  if (userRunAction != nullptr) currentRun = userRunAction->GenerateRun();
+  if (currentRun == nullptr) currentRun = new G4Run();
 
   currentRun->SetRunID(runIDCounter);
   currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
 
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
-  if(fSDM != nullptr)
-  {
+  if (fSDM != nullptr) {
     currentRun->SetHCtable(fSDM->GetHCtable());
   }
 
-  if(G4VScoreNtupleWriter::Instance())
-  {
-    auto hce            = fSDM->PrepareNewEvent();
+  if (G4VScoreNtupleWriter::Instance() != nullptr) {
+    auto hce = (fSDM != nullptr) ? fSDM->PrepareNewEvent() : nullptr;
     isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
     delete hce;
   }
@@ -231,35 +203,27 @@ void G4WorkerRunManager::RunInitialization()
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
 
-  for(G4int i_prev = 0; i_prev < n_perviousEventsToBeStored; ++i_prev)
-  {
+  for (G4int i_prev = 0; i_prev < n_perviousEventsToBeStored; ++i_prev) {
     previousEvents->push_back(nullptr);
   }
 
-  if(printModulo > 0 || verboseLevel > 0)
-  {
-    G4cout << "### Run " << currentRun->GetRunID()
-           << " starts on worker thread "
-           << G4Threading::G4GetThreadId() << "."
-           << G4endl;
+  if (printModulo > 0 || verboseLevel > 0) {
+    G4cout << "### Run " << currentRun->GetRunID() << " starts on worker thread "
+           << G4Threading::G4GetThreadId() << "." << G4endl;
   }
-  if(userRunAction != nullptr)
-    userRunAction->BeginOfRunAction(currentRun);
+  if (userRunAction != nullptr) userRunAction->BeginOfRunAction(currentRun);
 
 #if defined(GEANT4_USE_TIMEMORY)
   workerRunProfiler.reset(new ProfilerConfig(currentRun));
 #endif
 
-  if(isScoreNtupleWriter)
-  {
+  if (isScoreNtupleWriter) {
     G4VScoreNtupleWriter::Instance()->OpenFile();
   }
 
-  if(storeRandomNumberStatus)
-  {
+  if (storeRandomNumberStatus) {
     G4String fileN = "currentRun";
-    if(rngStatusEventsFlag)
-    {
+    if (rngStatusEventsFlag) {
       std::ostringstream os;
       os << "run" << currentRun->GetRunID();
       fileN = os.str();
@@ -267,16 +231,14 @@ void G4WorkerRunManager::RunInitialization()
     StoreRNGStatus(fileN);
   }
 
-  runAborted             = false;
+  runAborted = false;
   numberOfEventProcessed = 0;
 }
 
 // --------------------------------------------------------------------
-void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
-                                     G4int n_select)
+void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
-  if(userPrimaryGeneratorAction == nullptr)
-  {
+  if (userPrimaryGeneratorAction == nullptr) {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
                 "G4VUserPrimaryGeneratorAction is not defined!");
   }
@@ -286,8 +248,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
   InitializeEventLoop(n_event, macroFile, n_select);
 
   // Reset random number seeds queue
-  while(seedsQueue.size() > 0)
-  {
+  while (!seedsQueue.empty()) {
     seedsQueue.pop();
   }
   // for each run, worker should receive at least one set of random number
@@ -298,24 +259,16 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
   eventLoopOnGoing = true;
   ///////    G4int i_event = workerContext->GetThreadId();
   G4int i_event = -1;
-  nevModulo     = -1;
-  currEvID      = -1;
+  nevModulo = -1;
+  currEvID = -1;
 
-  while(eventLoopOnGoing)
-  {
+  while (eventLoopOnGoing) {
     ProcessOneEvent(i_event);
-    if(eventLoopOnGoing)
-    {
+    if (eventLoopOnGoing) {
       TerminateOneEvent();
-      if(runAborted)
-      {
+      if (runAborted) {
         eventLoopOnGoing = false;
       }
-      //////        else
-      //////        {
-      //////          i_event += workerContext->GetNumberThreads();
-      //////          eventLoopOnGoing = i_event<n_event;
-      //////        }
     }
   }
 
@@ -326,12 +279,11 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile,
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
   currentEvent = GenerateEvent(i_event);
-  if(eventLoopOnGoing)
-  {
+  if (eventLoopOnGoing) {
     eventManager->ProcessOneEvent(currentEvent);
     AnalyzeEvent(currentEvent);
     UpdateScoring();
-    if(currentEvent->GetEventID() < n_select_msg)
+    if (currentEvent->GetEventID() < n_select_msg)
       G4UImanager::GetUIpointer()->ApplyCommand(msgText);
   }
 }
@@ -339,50 +291,40 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 // --------------------------------------------------------------------
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
-  G4Event* anEvent          = new G4Event(i_event);
-  G4long s1                   = 0;
-  G4long s2                   = 0;
-  G4long s3                   = 0;
+  auto anEvent = new G4Event(i_event);
+  G4long s1 = 0;
+  G4long s2 = 0;
+  G4long s3 = 0;
   G4bool eventHasToBeSeeded = true;
-  if(G4MTRunManager::SeedOncePerCommunication() == 1 && runIsSeeded)
-  {
+  if (G4MTRunManager::SeedOncePerCommunication() == 1 && runIsSeeded) {
     eventHasToBeSeeded = false;
   }
 
-  if(i_event < 0)
-  {
+  if (i_event < 0) {
     G4int nevM = G4MTRunManager::GetMasterRunManager()->GetEventModulo();
-    if(nevM == 1)
-    {
-      eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()->SetUpAnEvent(
-        anEvent, s1, s2, s3, eventHasToBeSeeded);
+    if (nevM == 1) {
+      eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()->SetUpAnEvent(anEvent, s1, s2, s3,
+                                                                             eventHasToBeSeeded);
       runIsSeeded = true;
     }
-    else
-    {
-      if(nevModulo <= 0)
-      {
-        G4int nevToDo = G4MTRunManager::GetMasterRunManager()->SetUpNEvents(
-          anEvent, &seedsQueue, eventHasToBeSeeded);
-        if(nevToDo == 0)
-        {
+    else {
+      if (nevModulo <= 0) {
+        G4int nevToDo = G4MTRunManager::GetMasterRunManager()->SetUpNEvents(anEvent, &seedsQueue,
+                                                                            eventHasToBeSeeded);
+        if (nevToDo == 0) {
           eventLoopOnGoing = false;
         }
-        else
-        {
-          currEvID  = anEvent->GetEventID();
+        else {
+          currEvID = anEvent->GetEventID();
           nevModulo = nevToDo - 1;
         }
       }
-      else
-      {
-        if(G4MTRunManager::SeedOncePerCommunication() > 0)
-          eventHasToBeSeeded = false;
+      else {
+        if (G4MTRunManager::SeedOncePerCommunication() > 0) eventHasToBeSeeded = false;
         anEvent->SetEventID(++currEvID);
         --nevModulo;
       }
-      if(eventLoopOnGoing && eventHasToBeSeeded)
-      {
+      if (eventLoopOnGoing && eventHasToBeSeeded) {
         s1 = seedsQueue.front();
         seedsQueue.pop();
         s2 = seedsQueue.front();
@@ -390,23 +332,20 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
       }
     }
 
-    if(!eventLoopOnGoing)
-    {
+    if (!eventLoopOnGoing) {
       delete anEvent;
       return nullptr;
     }
   }
-  else if(eventHasToBeSeeded)
-  {
+  else if (eventHasToBeSeeded) {
     // Need to reseed random number generator
     G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    s1                  = helper->GetSeed(i_event * 2);
-    s2                  = helper->GetSeed(i_event * 2 + 1);
+    s1 = helper->GetSeed(i_event * 2);
+    s2 = helper->GetSeed(i_event * 2 + 1);
   }
 
-  if(eventHasToBeSeeded)
-  {
-    G4long seeds[3] = { s1, s2, 0 };
+  if (eventHasToBeSeeded) {
+    G4long seeds[3] = {s1, s2, 0};
     G4Random::setTheSeeds(seeds, luxury);
     runIsSeeded = true;
   }
@@ -425,44 +364,37 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
   };
 
   G4bool RNGstatusReadFromFile = false;
-  if(readStatusFromFile)
-  {
+  if (readStatusFromFile) {
     // Build full path of RNG status file for this event
     std::ostringstream os;
     os << filename() << ".rndm";
     const G4String& randomStatusFile = os.str();
     std::ifstream ifile(randomStatusFile.c_str());
-    if(ifile)
-    {  // File valid and readable
+    if (ifile) {  // File valid and readable
       RNGstatusReadFromFile = true;
       G4Random::restoreEngineStatus(randomStatusFile.c_str());
     }
   }
 
-  if(storeRandomNumberStatusToG4Event == 1 ||
-     storeRandomNumberStatusToG4Event == 3)
-  {
+  if (storeRandomNumberStatusToG4Event == 1 || storeRandomNumberStatusToG4Event == 3) {
     std::ostringstream oss;
     G4Random::saveFullState(oss);
     randomNumberStatusForThisEvent = oss.str();
     anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
   }
 
-  if(storeRandomNumberStatus && !RNGstatusReadFromFile)
+  if (storeRandomNumberStatus && !RNGstatusReadFromFile)
   {  // If reading from file, avoid to rewrite the same
     G4String fileN = "currentEvent";
-    if(rngStatusEventsFlag)
-    {
+    if (rngStatusEventsFlag) {
       fileN = filename();
     }
     StoreRNGStatus(fileN);
   }
 
-  if(printModulo > 0 && anEvent->GetEventID() % printModulo == 0)
-  {
+  if (printModulo > 0 && anEvent->GetEventID() % printModulo == 0) {
     G4cout << "--> Event " << anEvent->GetEventID() << " starts";
-    if(eventHasToBeSeeded)
-    {
+    if (eventHasToBeSeeded) {
       G4cout << " with initial seeds (" << s1 << "," << s2 << ")";
     }
     G4cout << "." << G4endl;
@@ -475,18 +407,16 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 void G4WorkerRunManager::MergePartialResults()
 {
   // Merge partial results into global run
-  G4MTRunManager* mtRM  = G4MTRunManager::GetMasterRunManager();
+  G4MTRunManager* mtRM = G4MTRunManager::GetMasterRunManager();
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
-  if(ScM != nullptr)
-    mtRM->MergeScores(ScM);
+  if (ScM != nullptr) mtRM->MergeScores(ScM);
   mtRM->MergeRun(currentRun);
 }
 
 // --------------------------------------------------------------------
 void G4WorkerRunManager::RunTermination()
 {
-  if(!fakeRun)
-  {
+  if (!fakeRun) {
 #if defined(GEANT4_USE_TIMEMORY)
     workerRunProfiler.reset();
 #endif
@@ -497,8 +427,7 @@ void G4WorkerRunManager::RunTermination()
     //(TerminateRun allows for synch via G4RunAction::EndOfRun)
     const G4UserWorkerInitialization* uwi =
       G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
-    if(uwi != nullptr)
-      uwi->WorkerRunEnd();
+    if (uwi != nullptr) uwi->WorkerRunEnd();
   }
 
   G4RunManager::RunTermination();
@@ -510,20 +439,15 @@ void G4WorkerRunManager::RunTermination()
 // --------------------------------------------------------------------
 void G4WorkerRunManager::TerminateEventLoop()
 {
-  if(verboseLevel > 0 && !fakeRun)
-  {
+  if (verboseLevel > 0 && !fakeRun) {
     timer->Stop();
     G4cout << "Thread-local run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
-    if(runAborted)
-    {
-      G4cout << "  Run Aborted after " << numberOfEventProcessed
-             << " events processed." << G4endl;
+    if (runAborted) {
+      G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl;
     }
-    else
-    {
-      G4cout << "  Number of events processed : " << numberOfEventProcessed
-             << G4endl;
+    else {
+      G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl;
     }
     G4cout << "  " << *timer << G4endl;
   }
@@ -532,7 +456,7 @@ void G4WorkerRunManager::TerminateEventLoop()
 // --------------------------------------------------------------------
 namespace
 {
-  G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER;
+G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER;
 }
 
 // --------------------------------------------------------------------
@@ -542,11 +466,9 @@ void G4WorkerRunManager::ConstructScoringWorlds()
 
   // Return if unnecessary
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
-  if(ScM == nullptr)
-    return;
-  G4int nPar = ScM->GetNumberOfMesh();
-  if(nPar < 1)
-    return;
+  if (ScM == nullptr) return;
+  auto nPar = (G4int)ScM->GetNumberOfMesh();
+  if (nPar < 1) return;
 
   // Update thread-local G4TransportationManager of all the world volumes
   kernel->WorkerUpdateWorldVolume();
@@ -555,66 +477,48 @@ void G4WorkerRunManager::ConstructScoringWorlds()
 
   auto particleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
 
-  for(G4int iw = 0; iw < nPar; ++iw)
-  {
+  for (G4int iw = 0; iw < nPar; ++iw) {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
-    if(fGeometryHasBeenDestroyed)
-      mesh->GeometryHasBeenDestroyed();
+    if (fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed();
     G4VPhysicalVolume* pWorld = nullptr;
-    if(mesh->GetShape() != MeshShape::realWorldLogVol)
-    {
-      pWorld = G4TransportationManager::GetTransportationManager()
-             ->IsWorldExisting(ScM->GetWorldName(iw));
-      if(pWorld == nullptr)
-      {
+    if (mesh->GetShape() != MeshShape::realWorldLogVol) {
+      pWorld =
+        G4TransportationManager::GetTransportationManager()->IsWorldExisting(ScM->GetWorldName(iw));
+      if (pWorld == nullptr) {
         G4ExceptionDescription ed;
-        ed << "Mesh name <" << ScM->GetWorldName(iw)
-           << "> is not found in the master thread.";
-        G4Exception("G4WorkerRunManager::ConstructScoringWorlds()", "RUN79001",
-                    FatalException, ed);
+        ed << "Mesh name <" << ScM->GetWorldName(iw) << "> is not found in the master thread.";
+        G4Exception("G4WorkerRunManager::ConstructScoringWorlds()", "RUN79001", FatalException, ed);
       }
     }
-    if(!(mesh->GetMeshElementLogical()))
-    {
+    if ((mesh->GetMeshElementLogical()) == nullptr) {
       G4AutoLock l(&ConstructScoringWorldsMutex);
       G4VScoringMesh* masterMesh = masterScM->GetMesh(iw);
       mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
       l.unlock();
 
-      if(mesh->GetShape() != MeshShape::realWorldLogVol)
-      {
-        G4ParallelWorldProcess* theParallelWorldProcess =
-                                mesh->GetParallelWorldProcess();
-        if(theParallelWorldProcess != nullptr)
-        {
+      if (mesh->GetShape() != MeshShape::realWorldLogVol) {
+        G4ParallelWorldProcess* theParallelWorldProcess = mesh->GetParallelWorldProcess();
+        if (theParallelWorldProcess != nullptr) {
           theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
         }
-        else
-        {
-          theParallelWorldProcess =
-            new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+        else {
+          theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
           mesh->SetParallelWorldProcess(theParallelWorldProcess);
           theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
           particleIterator->reset();
-          while((*particleIterator)())
-          {
+          while ((*particleIterator)()) {
             G4ParticleDefinition* particle = particleIterator->value();
-            G4ProcessManager* pmanager     = particle->GetProcessManager();
-            if(pmanager != nullptr)
-            {
+            G4ProcessManager* pmanager = particle->GetProcessManager();
+            if (pmanager != nullptr) {
               pmanager->AddProcess(theParallelWorldProcess);
-              if(theParallelWorldProcess->IsAtRestRequired(particle))
-              {
-                pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest,
-                                             9900);
+              if (theParallelWorldProcess->IsAtRestRequired(particle)) {
+                pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900);
               }
-              pmanager->SetProcessOrderingToSecond(theParallelWorldProcess,
-                                                   idxAlongStep);
-              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep,
-                                           9900);
+              pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+              pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
             }  // if(pmanager)
-          }    // while
+          }  // while
         }
         theParallelWorldProcess->SetLayeredMaterialFlag(mesh->LayeredMassFlg());
       }
@@ -626,38 +530,29 @@ void G4WorkerRunManager::ConstructScoringWorlds()
 // --------------------------------------------------------------------
 void G4WorkerRunManager::SetUserInitialization(G4UserWorkerInitialization*)
 {
-  G4Exception(
-    "G4RunManager::SetUserInitialization(G4UserWorkerInitialization*)",
-    "Run0118", FatalException,
-    "This method should be used only with an instance of G4MTRunManager");
+  G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerInitialization*)", "Run0118",
+              FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 // --------------------------------------------------------------------
-void G4WorkerRunManager::SetUserInitialization(
-  G4UserWorkerThreadInitialization*)
+void G4WorkerRunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)
 {
-  G4Exception(
-    "G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)",
-    "Run0119", FatalException,
-    "This method should be used only with an instance of G4MTRunManager");
+  G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)", "Run0119",
+              FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 // --------------------------------------------------------------------
 void G4WorkerRunManager::SetUserInitialization(G4VUserActionInitialization*)
 {
-  G4Exception(
-    "G4RunManager::SetUserInitialization(G4VUserActionInitialization*)",
-    "Run0120", FatalException,
-    "This method should be used only with an instance of G4MTRunManager");
+  G4Exception("G4RunManager::SetUserInitialization(G4VUserActionInitialization*)", "Run0120",
+              FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 // --------------------------------------------------------------------
 void G4WorkerRunManager::SetUserInitialization(G4VUserDetectorConstruction*)
 {
-  G4Exception(
-    "G4RunManager::SetUserInitialization(G4VUserDetectorConstruction*)",
-    "Run0121", FatalException,
-    "This method should be used only with an instance of G4MTRunManager");
+  G4Exception("G4RunManager::SetUserInitialization(G4VUserDetectorConstruction*)", "Run0121",
+              FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 // --------------------------------------------------------------------
@@ -671,8 +566,7 @@ void G4WorkerRunManager::SetUserInitialization(G4VUserPhysicsList* pl)
 void G4WorkerRunManager::SetUserAction(G4UserRunAction* userAction)
 {
   G4RunManager::SetUserAction(userAction);
-  if(userAction != nullptr)
-    userAction->SetMaster(false);
+  if (userAction != nullptr) userAction->SetMaster(false);
 }
 
 // --------------------------------------------------------------------
@@ -721,8 +615,7 @@ void G4WorkerRunManager::SetUserAction(G4UserSteppingAction* ua)
 void G4WorkerRunManager::StoreRNGStatus(const G4String& fn)
 {
   std::ostringstream os;
-  os << randomNumberStatusDir << "G4Worker" << workerContext->GetThreadId()
-     << "_" << fn << ".rndm";
+  os << randomNumberStatusDir << "G4Worker" << workerContext->GetThreadId() << "_" << fn << ".rndm";
   G4Random::saveEngineStatus(os.str().c_str());
 }
 
@@ -730,13 +623,11 @@ void G4WorkerRunManager::StoreRNGStatus(const G4String& fn)
 void G4WorkerRunManager::rndmSaveThisRun()
 {
   G4int runNumber = 0;
-  if(currentRun != nullptr)
-    runNumber = currentRun->GetRunID();
-  if(!storeRandomNumberStatus)
-  {
+  if (currentRun != nullptr) runNumber = currentRun->GetRunID();
+  if (!storeRandomNumberStatus) {
     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
-           << " Random number status was not stored prior to this run."
-           << G4endl << "/random/setSavingFlag command must be issued. "
+           << " Random number status was not stored prior to this run." << G4endl
+           << "/random/setSavingFlag command must be issued. "
            << "Command ignored." << G4endl;
     return;
   }
@@ -745,19 +636,14 @@ void G4WorkerRunManager::rndmSaveThisRun()
   oos << "G4Worker" << workerContext->GetThreadId() << "_"
       << "currentRun.rndm"
       << "\0";
-  G4String fileIn = randomNumberStatusDir + oos.str();
+  G4fs::path fileIn = randomNumberStatusDir + oos.str();
 
   std::ostringstream os;
   os << "run" << runNumber << ".rndm" << '\0';
-  G4String fileOut = randomNumberStatusDir + os.str();
+  G4fs::path fileOut = randomNumberStatusDir + os.str();
 
-#ifdef WIN32
-  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
-#else
-  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
-#endif
-  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
-  if(verboseLevel > 0)
+  if (G4CopyRandomState(fileIn, fileOut, "G4WorkerRunManager::rndmSaveThisRun()")
+      && verboseLevel > 0)
   {
     G4cout << fileIn << " is copied to " << fileOut << G4endl;
   }
@@ -766,16 +652,13 @@ void G4WorkerRunManager::rndmSaveThisRun()
 // --------------------------------------------------------------------
 void G4WorkerRunManager::rndmSaveThisEvent()
 {
-  if(currentEvent == nullptr)
-  {
+  if (currentEvent == nullptr) {
     G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
-           << " there is no currentEvent available." << G4endl
-           << "Command ignored." << G4endl;
+           << " there is no currentEvent available." << G4endl << "Command ignored." << G4endl;
     return;
   }
 
-  if(!storeRandomNumberStatus)
-  {
+  if (!storeRandomNumberStatus) {
     G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
            << " Random number engine status is not available." << G4endl
            << "/random/setSavingFlag command must be issued "
@@ -787,20 +670,14 @@ void G4WorkerRunManager::rndmSaveThisEvent()
   oos << "G4Worker" << workerContext->GetThreadId() << "_"
       << "currentEvent.rndm"
       << "\0";
-  G4String fileIn = randomNumberStatusDir + oos.str();
+  G4fs::path fileIn = randomNumberStatusDir + oos.str();
 
   std::ostringstream os;
-  os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
-     << ".rndm" << '\0';
-  G4String fileOut = randomNumberStatusDir + os.str();
+  os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID() << ".rndm" << '\0';
+  G4fs::path fileOut = randomNumberStatusDir + os.str();
 
-#ifdef WIN32
-  G4String copCmd = "/control/shell copy " + fileIn + " " + fileOut;
-#else
-  G4String copCmd = "/control/shell cp " + fileIn + " " + fileOut;
-#endif
-  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
-  if(verboseLevel > 0)
+  if (G4CopyRandomState(fileIn, fileOut, "G4WorkerRunManager::rndmSaveThisEvent()")
+      && verboseLevel > 0)
   {
     G4cout << fileIn << " is copied to " << fileOut << G4endl;
   }
@@ -810,64 +687,51 @@ void G4WorkerRunManager::rndmSaveThisEvent()
 void G4WorkerRunManager::DoWork()
 {
   G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
-  G4MTRunManager::WorkerActionRequest nextAction =
-    mrm->ThisWorkerWaitForNextAction();
-  while(nextAction != G4MTRunManager::WorkerActionRequest::ENDWORKER)
-  {
-    if(nextAction ==
-       G4MTRunManager::WorkerActionRequest::NEXTITERATION)  // start the next
-                                                            // run
+  G4MTRunManager::WorkerActionRequest nextAction = mrm->ThisWorkerWaitForNextAction();
+  while (nextAction != G4MTRunManager::WorkerActionRequest::ENDWORKER) {
+    if (nextAction == G4MTRunManager::WorkerActionRequest::NEXTITERATION)  // start the next
+                                                                           // run
     {
       // The following code deals with changing materials between runs
       static G4ThreadLocal G4bool skipInitialization = true;
-      if(skipInitialization)
-      {
+      if (skipInitialization) {
         // re-initialization is not necessary for the first run
         skipInitialization = false;
       }
-      else
-      {
+      else {
         //        ReinitializeGeometry();
         workerContext->UpdateGeometryAndPhysicsVectorFromMaster();
       }
 
       // Execute UI commands stored in the master UI manager
       std::vector<G4String> cmds = mrm->GetCommandStack();
-      G4UImanager* uimgr         = G4UImanager::GetUIpointer(); // TLS instance
-      for(auto it = cmds.cbegin(); it != cmds.cend(); ++it)
-      {
-        uimgr->ApplyCommand(*it);
+      G4UImanager* uimgr = G4UImanager::GetUIpointer();  // TLS instance
+      for (const auto& cmd : cmds) {
+        uimgr->ApplyCommand(cmd);
       }
       // Start this run
-      G4int numevents    = mrm->GetNumberOfEventsToBeProcessed();
+      G4int numevents = mrm->GetNumberOfEventsToBeProcessed();
       G4String macroFile = mrm->GetSelectMacro();
-      G4int numSelect    = mrm->GetNumberOfSelectEvents();
-      if(macroFile == "" || macroFile == " ")
-      {
+      G4int numSelect = mrm->GetNumberOfSelectEvents();
+      if (macroFile.empty() || macroFile == " ") {
         this->BeamOn(numevents);
       }
-      else
-      {
+      else {
         this->BeamOn(numevents, macroFile, numSelect);
       }
     }
-    else if(nextAction == G4MTRunManager::WorkerActionRequest::PROCESSUI)
-    {
+    else if (nextAction == G4MTRunManager::WorkerActionRequest::PROCESSUI) {
       std::vector<G4String> cmds = mrm->GetCommandStack();
-      G4UImanager* uimgr         = G4UImanager::GetUIpointer(); // TLS instance
-      for(auto it = cmds.cbegin(); it != cmds.cend(); ++it)
-      {
-        uimgr->ApplyCommand(*it);
+      G4UImanager* uimgr = G4UImanager::GetUIpointer();  // TLS instance
+      for (const auto& cmd : cmds) {
+        uimgr->ApplyCommand(cmd);
       }
       mrm->ThisWorkerProcessCommandsStackDone();
     }
-    else
-    {
+    else {
       G4ExceptionDescription d;
       d << "Cannot continue, this worker has been requested an unknown action: "
-        << static_cast<
-             std::underlying_type<G4MTRunManager::WorkerActionRequest>::type>(
-             nextAction);
+        << static_cast<std::underlying_type<G4MTRunManager::WorkerActionRequest>::type>(nextAction);
       G4Exception("G4WorkerRunManager::DoWork", "Run0104", FatalException, d);
     }
 

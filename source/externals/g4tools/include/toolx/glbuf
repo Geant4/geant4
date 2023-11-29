@@ -1,0 +1,29 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_glbuf
+#define toolx_glbuf
+
+//define of TOOLX_HAS_GL_VBO decided in the build systems.
+
+// To have prototypes of glGenBuffers,etc...
+
+#ifdef TOOLX_HAS_GL_VBO
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+#if TARGET_OS_IPHONE
+#elif defined(ANDROID)
+#elif _WIN32
+#include <GL/glext.h>
+#elif __APPLE__
+#include <OpenGL/glext.h> //Cocoa
+#else
+#include <GL/glext.h>
+#endif
+
+#endif //TOOLX_HAS_GL_VBO
+
+#endif

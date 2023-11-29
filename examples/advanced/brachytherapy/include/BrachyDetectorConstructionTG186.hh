@@ -52,7 +52,7 @@ class BrachyDetectorConstructionTG186
 {
 public:
   explicit BrachyDetectorConstructionTG186();
-  ~BrachyDetectorConstructionTG186();
+  ~BrachyDetectorConstructionTG186()=default;
 
   void  ConstructTG186(G4VPhysicalVolume*);
   // Model the TG186 reference source

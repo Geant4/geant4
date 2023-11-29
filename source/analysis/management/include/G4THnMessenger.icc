@@ -1,0 +1,599 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+
+// Author: Ivana Hrivnacova, 26/08/2022  (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisUtilities.hh"
+
+#include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+#include "G4Tokenizer.hh"
+
+#include <vector>
+
+using namespace G4Analysis;
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4THnMessenger<DIM, HT>::G4THnMessenger(G4THnToolsManager<DIM, HT>* manager)
+  : fManager(manager)
+{
+  CreateDirectory();
+
+  CreateCmd();
+  SetCmd();
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    fSetDimensionCmd[idim] = CreateSetBinsCommand(idim);
+  }
+
+  CreateSetTitleCommand();
+
+  for (unsigned int idim = 0; idim < DIM + 1; ++idim) {
+    fSetAxisCmd[idim] = CreateSetAxisCommand(idim);
+    fSetAxisLogCmd[idim] = CreateSetAxisLogCommand(idim);
+  }
+
+  CreateListCommand();
+  CreateGetCommand();
+  CreateGetVectorCommand();
+
+  // Initialize data
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    fTmpId[idim] = G4Analysis::kInvalidId;
+    fTmpBins[idim] = G4HnDimension();
+    fTmpInfo[idim] = G4HnDimensionInformation();
+  }
+}
+
+//
+// private functions
+//
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnMessenger<DIM, HT>::GetObjectType() const
+{
+  return (G4Analysis::IsProfile<HT>()) ?
+    std::to_string(DIM - 1) + "D profile " :  std::to_string(DIM) + "D histogram";
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnMessenger<DIM, HT>::IsProfileLastDimension(unsigned int idim) const
+{
+  return (idim == DIM - 1) && (G4Analysis::IsProfile<HT>());
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+std::unique_ptr<G4UIcommand> G4THnMessenger<DIM, HT>::CreateCommand(
+  G4String name, G4String guidance)
+{
+  G4String fullName = "/analysis/" + G4Analysis::GetHnType<HT>() + "/" + name;
+  G4String fullGuidance = guidance + GetObjectType();
+
+  auto command = std::make_unique<G4UIcommand>(fullName, this);
+  command->SetGuidance(fullGuidance);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateDimensionParameters(
+  unsigned int idim, std::vector<G4UIparameter*>& parameters) const
+{
+// Create [nbins], valMin, valMax, valUnit, valFcn, [valBinScheme] parameters.
+// The parameters in [] are omitted for the last dimension for profiles  
+
+  std::string xyz{"xyz"};
+  std::string axis = xyz.substr(idim, 1);
+
+  if (! IsProfileLastDimension(idim)) {
+    auto parName = axis + "nBins"; 
+    auto guidance =
+      std::string("Number of ") + axis + "-bins (default = 100)\n"
+      "Can be reset with /analysis/hn/set command";
+
+    auto param = new G4UIparameter(parName.c_str(), 'i', false);
+    param->SetGuidance(guidance.c_str());
+    param->SetDefaultValue(100);
+    parameters.push_back(param);
+  }
+
+  auto parName = axis + "valMin";
+  auto guidance =
+    std::string("Minimum ") + axis + "-value, expressed in unit (default = 0.)\n"
+    "Can be reset with /analysis/hn/set command";
+  auto param = new G4UIparameter(parName.c_str(), 'd', false);
+  param->SetGuidance(guidance.c_str());
+  param->SetDefaultValue(0.);
+  parameters.push_back(param);
+
+  parName = axis + "valMax";
+  guidance =
+    std::string("Maximum ") + axis + "-value, expressed in unit (default = 1.)\n"
+    "Can be reset with /analysis/hn/set command";
+  param = new G4UIparameter(parName.c_str(), 'd', false);
+  param->SetGuidance(guidance.c_str());
+  param->SetDefaultValue(1.);
+  parameters.push_back(param);
+
+  parName = axis + "valUnit";
+  guidance =
+    std::string("The unit applied to filled ") + axis + "-values and \n"
+    "Can be reset with /analysis/hn/set command";
+  param = new G4UIparameter(parName.c_str(), 's', true);
+  param->SetGuidance(guidance.c_str());
+  param->SetDefaultValue("none");
+  parameters.push_back(param);
+
+  parName = axis + "valFcn";
+  guidance =
+    std::string("The function applied to filled ") + axis + "-values (log, log10, exp, none).\n"
+    "Note that the unit parameter cannot be omitted in this case,\n"
+    "but none value should be used instead.";
+  param = new G4UIparameter(parName.c_str(), 's', true);
+  param->SetGuidance(guidance.c_str());
+  param->SetParameterCandidates("log log10 exp none");
+  param->SetDefaultValue("none");
+  parameters.push_back(param);
+
+  if (! IsProfileLastDimension(idim)) {
+    parName = axis + "valBinScheme";
+    guidance =
+       std::string("The binning scheme (linear, log).\n"
+       "Note that the unit and fcn parameters cannot be omitted in this case,\n"
+       "but none value should be used instead.");
+    param = new G4UIparameter(parName.c_str(), 's', true);
+    param->SetGuidance(guidance.c_str());
+    param->SetParameterCandidates("linear log");
+    param->SetDefaultValue("linear");  
+    parameters.push_back(param);
+  }
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::AddIdParameter(G4UIcommand& command)
+{
+  // update guidance
+  // // TO DO: this will add a new guidance as a new line !!
+  // auto guidance = command.GetGuidanceLine(0);
+  // guidance += " of given id";
+  // command.SetGuidance(guidance);
+
+  // add parameter
+  auto htId = new G4UIparameter("id", 'i', false);
+  htId->SetGuidance("Histogram id");
+  htId->SetParameterRange("id>=0");
+  command.SetParameter(htId);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnMessenger<DIM, HT>::GetTAddress(G4int id) const
+{
+  auto ht = fManager->GetT(id);
+  if ( ht != nullptr ) {
+    std::ostringstream os;
+    os << static_cast<void*>(ht);
+    return os.str();
+  }
+  return {};
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnMessenger<DIM, HT>::GetTVectorAddress() const
+{
+  auto htVector = fManager->GetTVector();
+  if ( htVector != nullptr ) {
+    std::ostringstream os;
+    os << static_cast<void*>(htVector);
+    return os.str();
+  }
+  return {};
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateDirectory() const
+{
+  G4String dirName = "/analysis/" + G4Analysis::GetHnType<HT>() + "/";
+  G4String guidance = GetObjectType() + " control";  
+
+  auto directory = std::make_unique<G4UIdirectory>(dirName);
+  directory->SetGuidance(guidance.c_str());
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateCmd()
+{
+  fCreateCmd = CreateCommand("create", "Create ");
+  fCreateCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  auto htName = new G4UIparameter("name", 's', false);
+  htName->SetGuidance("Histogram name (label)");
+  fCreateCmd->SetParameter(htName);
+
+  auto htTitle = new G4UIparameter("title", 's', false);
+  htTitle->SetGuidance("Histogram title");
+  fCreateCmd->SetParameter(htTitle);
+
+  std::vector<G4UIparameter*> parameters;
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    CreateDimensionParameters(idim, parameters);
+    for (size_t ipar = 0; ipar < parameters.size(); ++ipar) {
+      // the first three parameters can be omittes in create command
+      if (ipar < 3) parameters[ipar]->SetOmittable(true);
+      fCreateCmd->SetParameter(parameters[ipar]);
+    }
+    parameters.clear();
+  }
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::SetCmd()
+{
+  fSetCmd = CreateCommand("set", "Set ");
+  fSetCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*fSetCmd);
+
+  // Update guidance
+  fSetCmd->SetGuidance("\n  nbins; valMin; valMax; unit; function; binScheme");
+
+  std::vector<G4UIparameter*> parameters;
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    CreateDimensionParameters(idim, parameters);
+    for (auto parameter: parameters) {
+      fSetCmd->SetParameter(parameter);
+    }
+    parameters.clear();
+  }
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+std::unique_ptr<G4UIcommand>
+G4THnMessenger<DIM, HT>::CreateSetBinsCommand(unsigned int idim)
+{
+  G4String xyz{"XYZ"};
+  auto axis = xyz.substr(idim, 1);
+
+  auto command = CreateCommand("set" + axis, "Set " + axis + " parameters for the ");
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*command);
+
+  // Update guidance
+  G4String guidance =
+    "\n  nAXISbins; AXISvalMin; AXISvalMax; AXISunit; AXISfunction; AXISbinScheme";
+  // update AXIS with xyz
+  std::string::size_type n = 0;
+  std::string ts{"AXIS"};
+  while ( ( n = guidance.find(ts, n)) != std::string::npos ) {
+    guidance.replace(n, ts.size(), axis);
+    n += ts.size();
+  }
+  command->SetGuidance(guidance);
+
+  std::vector<G4UIparameter*> parameters;
+  CreateDimensionParameters(idim, parameters);
+  for (auto parameter: parameters) {
+    command->SetParameter(parameter);
+  }
+  
+  return command;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateSetTitleCommand()
+{
+  fSetTitleCmd = CreateCommand("setTitle", "Set title for the ");
+  fSetTitleCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*fSetTitleCmd);
+
+  auto parTitle = new G4UIparameter("title", 's', true);
+  auto guidance = GetObjectType() + " title";
+  parTitle->SetGuidance(guidance.c_str());
+  parTitle->SetDefaultValue("none");
+  fSetTitleCmd->SetParameter(parTitle);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+std::unique_ptr<G4UIcommand> 
+G4THnMessenger<DIM, HT>::CreateSetAxisCommand(unsigned int idim)
+{
+  G4String xyz{"XYZ"};
+  auto axis = xyz.substr(idim, 1);
+
+  G4String commandName = "set" + axis + "axis";
+  G4String guidance = "Set " + axis + "-axis title for the ";;
+
+  auto command = CreateCommand(commandName, guidance);
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*command);
+
+  auto parAxis = new G4UIparameter("axis", 's', false);
+  guidance = GetObjectType() + " " + axis + "-axis title";
+  parAxis->SetGuidance(guidance.c_str());
+  command->SetParameter(parAxis);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+std::unique_ptr<G4UIcommand>
+G4THnMessenger<DIM, HT>::CreateSetAxisLogCommand(unsigned int idim)
+{
+  G4String xyz{"XYZ"};
+  auto axis = xyz.substr(idim, 1);
+
+  G4String commandName = "set" + axis + "axisLog";
+  G4String guidance =  "Activate " + axis + "-axis  log scale for plotting of the ";
+
+  auto command = CreateCommand(commandName, guidance);
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*command);
+
+  auto parAxisLog = new G4UIparameter("axis", 'b', false);
+  guidance = GetObjectType() + " " + axis + "-axis log scale";
+  parAxisLog->SetGuidance(guidance.c_str());
+  command->SetParameter(parAxisLog);
+
+  return command;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateListCommand()
+{
+  fListCmd = CreateCommand("list", "List all/activate ");
+  fListCmd->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+
+  auto parOnlyIfActive = new G4UIparameter("onlyIfActive", 'b', true);
+  parOnlyIfActive->SetGuidance("Option whether to list only active objects");
+  parOnlyIfActive->SetDefaultValue("true");
+  fListCmd->SetParameter(parOnlyIfActive);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateGetCommand()
+{
+  fGetTCmd = CreateCommand("get", "Get the address of the ");
+  fGetTCmd->SetGuidance( "This command is only for Geant4 internal use.");
+  fGetTCmd->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+
+  // Add Id parameter
+  AddIdParameter(*fGetTCmd);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::CreateGetVectorCommand()
+{
+  fGetTVectorCmd = CreateCommand("getVector", "Get the address of the vector of the ");
+  fGetTVectorCmd->SetGuidance( "This command is only for Geant4 internal use.");
+  fGetTVectorCmd->AvailableForStates(G4State_Idle, G4State_GeomClosed, G4State_EventProc);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::GetBinData(
+  unsigned int idim, G4int& counter, const std::vector<G4String>& parameters,
+  G4HnDimension& bins) const
+{
+    G4int nbins = (! IsProfileLastDimension(idim)) ?
+      G4UIcommand::ConvertToInt(parameters[counter++]) : 0;
+
+    bins = {nbins,
+            G4UIcommand::ConvertToDouble(parameters[counter]),
+            G4UIcommand::ConvertToDouble(parameters[counter + 1])};
+    counter += 2;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::GetBinInfoData(
+  unsigned int idim, G4int& counter, const std::vector<G4String>& parameters,
+  G4HnDimension& bins, G4HnDimensionInformation& info) const
+{
+  // get bin data (this will shift the counter for hnInfo data)
+  GetBinData(idim, counter, parameters, bins);
+
+  // get dimension information data
+  if (! IsProfileLastDimension(idim)) {
+    info = {parameters[counter], parameters[counter + 1], parameters[counter + 2]};
+    counter += 3;
+  }
+  else {
+    info = {parameters[counter], parameters[counter + 1]};
+    counter += 2;
+  }
+
+  // apply unit to minValue and maxValue
+  bins.fMinValue *= info.fUnit;
+  bins.fMaxValue *= info.fUnit;
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::GetData(
+  G4int& counter, const std::vector<G4String>& parameters,
+  std::array<G4HnDimension, DIM>& bins, 
+  std::array<G4HnDimensionInformation, DIM>& info) const
+{
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    // get bin data (this will shift the counter for hnInfo data)
+    GetBinInfoData(idim, counter, parameters, bins[idim], info[idim]);
+  }
+}
+
+//
+// public functions
+//
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4String G4THnMessenger<DIM, HT>::GetCurrentValue (G4UIcommand* command)
+{
+  if ( command == fGetTCmd.get() ) return fTValue;
+
+  if ( command == fGetTVectorCmd.get() ) return fTVectorValue;
+
+  return "";
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValues)
+{
+  // tokenize parameters in a vector
+  std::vector<G4String> parameters;
+  G4Analysis::Tokenize(newValues, parameters);
+  // check consistency
+  if ( parameters.size() != command->GetParameterEntries() ) {
+    // Should never happen but let's check anyway for consistency
+    G4Analysis::Warn(
+      "Got wrong number of \"" + command->GetCommandName() +
+      "\" parameters: " + to_string(parameters.size()) +
+      " instead of " + to_string(command->GetParameterEntries()) + " expected",
+      fkClass, "WarnAboutParameters");
+    return;
+  }
+
+  std::array<G4HnDimension, DIM> bins;
+  std::array<G4HnDimensionInformation, DIM> info;
+
+  if ( command == fCreateCmd.get() ) {
+    auto counter = 0;
+    auto name = parameters[counter++];
+    auto title = parameters[counter++];
+    GetData(counter, parameters, bins, info);
+    fManager->Create(name, title, bins, info);
+    return;
+  }
+
+  if ( command == fSetCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    GetData(counter, parameters, bins, info);
+    fManager->Set(id, bins, info);
+    return;
+  }
+
+  if ( command == fSetTitleCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto title = parameters[counter++];
+    fManager->SetTitle(id, title);
+    return;
+  }
+
+  for (unsigned int idim = 0; idim < DIM; ++idim) {
+    if ( command == fSetDimensionCmd[idim].get() ) {
+      auto counter = 0;
+      fTmpId[idim] = G4UIcommand::ConvertToInt(parameters[counter++]);
+      GetBinInfoData(idim, counter, parameters, fTmpBins[idim], fTmpInfo[idim]);
+
+      if ( DIM > 1 && idim > 0) {
+        // the setX, setY, setZ must be apply consequently
+        if (fTmpId[idim - 1] != fTmpId[idim]) {
+           G4Analysis::Warn(
+            "Command setX, setY, setZ must be called successively in this order.\n"
+            "Command was ignored.", fkClass, "SetNewValue");
+           return;
+        }
+      }
+      if ( idim == DIM - 1) {
+        // Apply parameters when all dimensions are set
+        fManager->Set(fTmpId[idim], bins, info);
+        return;
+      }
+    }
+  }
+  
+  if ( command == fSetTitleCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto title = parameters[counter++];
+    fManager->SetTitle(id, title);
+    return;
+  }
+
+  auto maxDim = (DIM < kMaxDim) ? DIM + 1 : kMaxDim;
+  for (unsigned int idim = 0; idim < maxDim; ++idim) {
+    if ( command == fSetAxisCmd[idim].get() ) {
+      auto counter = 0;
+      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      auto axisTitle = parameters[counter++];
+      fManager->SetAxisTitle(idim, id, axisTitle);
+      return;
+    }  
+    if ( command == fSetAxisLogCmd[idim].get() ) {
+      // TO DO: this should go in HnMessenger
+      auto counter = 0;
+      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      auto axisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+      fManager->GetHnManager()->SetAxisIsLog(idim, id, axisLog);
+      return;
+    }
+  }
+
+  if ( command == fListCmd.get() ) {
+    auto onlyIfActive = G4UIcommand::ConvertToBool(parameters[0]);
+    fManager->List(G4cout, onlyIfActive);
+    return;
+  }
+
+  if ( command == fGetTCmd.get() ) {
+    auto id = G4UIcommand::ConvertToInt(newValues);
+    fTValue = GetTAddress(id);
+    return;
+  }
+
+  if ( command == fGetTVectorCmd.get() ) {
+    fTVectorValue = GetTVectorAddress();
+    return;
+  }
+}

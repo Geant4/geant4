@@ -44,8 +44,6 @@ G4WeightWindowStore::
 G4WeightWindowStore()
  : fWorldVolume(G4TransportationManager::GetTransportationManager()
                 ->GetNavigatorForTracking()->GetWorldVolume()),
-   fGeneralUpperEnergyBounds(),
-   fCellToUpEnBoundLoWePairsMap(),
    fCurrentIterator(fCellToUpEnBoundLoWePairsMap.cend())
 {
 }
@@ -54,16 +52,11 @@ G4WeightWindowStore::
 G4WeightWindowStore(const G4String& ParallelWorldName)
  : fWorldVolume(G4TransportationManager::GetTransportationManager()
                 ->GetParallelWorld(ParallelWorldName)),
-   fGeneralUpperEnergyBounds(),
-   fCellToUpEnBoundLoWePairsMap(),
    fCurrentIterator(fCellToUpEnBoundLoWePairsMap.cend())
 {
 }
 
-G4WeightWindowStore::
-~G4WeightWindowStore()
-{
-}
+G4WeightWindowStore::~G4WeightWindowStore() = default;
 
 G4double G4WeightWindowStore::
 GetLowerWeight(const G4GeometryCell& gCell, 
@@ -79,11 +72,11 @@ GetLowerWeight(const G4GeometryCell& gCell,
   G4UpperEnergyToLowerWeightMap upEnLoWeiPairs = fCurrentIterator->second;
   G4double lowerWeight = -1;
   G4bool found = false;
-  for (auto it = upEnLoWeiPairs.cbegin(); it != upEnLoWeiPairs.cend(); ++it)
+  for (const auto & upEnLoWeiPair : upEnLoWeiPairs)
   {
-    if (partEnergy < it->first)
+    if (partEnergy < upEnLoWeiPair.first)
     {
-      lowerWeight = it->second;
+      lowerWeight = upEnLoWeiPair.second;
       found = true;
       break;
     }
@@ -183,10 +176,9 @@ AddLowerWeights(const G4GeometryCell& gCell,
   }
   G4UpperEnergyToLowerWeightMap map;
   G4int i = 0;
-  for (auto it = fGeneralUpperEnergyBounds.cbegin(); 
-            it != fGeneralUpperEnergyBounds.cend(); ++it)
+  for (G4double fGeneralUpperEnergyBound : fGeneralUpperEnergyBounds)
   {
-    map[*it] = lowerWeights[i];
+    map[fGeneralUpperEnergyBound] = lowerWeights[i];
     ++i;
   }
   fCellToUpEnBoundLoWePairsMap[gCell] = map;

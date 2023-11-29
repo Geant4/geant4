@@ -69,7 +69,7 @@ G4FieldManager* G4LogicalVolume::GetMasterFieldManager() const
 // ********************************************************************
 //
 inline
-size_t G4LogicalVolume::GetNoDaughters() const
+std::size_t G4LogicalVolume::GetNoDaughters() const
 {
   return fDaughters.size();
 }
@@ -79,7 +79,7 @@ size_t G4LogicalVolume::GetNoDaughters() const
 // ********************************************************************
 //
 inline
-G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const G4int i) const
+G4VPhysicalVolume* G4LogicalVolume::GetDaughter(const std::size_t i) const
 {
   return fDaughters[i];
 }
@@ -103,9 +103,9 @@ G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const
 inline
 G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
 {
-  for (auto i=fDaughters.cbegin(); i!=fDaughters.cend(); ++i)
+  for (const auto & daughter : fDaughters)
   {
-    if (**i==*p) return true;
+    if (*daughter==*p) return true;
   }
   return false;
 }
@@ -319,27 +319,7 @@ void G4LogicalVolume::Lock()
 inline
 G4bool G4LogicalVolume::operator == ( const G4LogicalVolume& lv) const
 {
-  return (this==&lv) ? true : false;
-}
-
-// ********************************************************************
-// GetVisAttributes
-// ********************************************************************
-//
-inline
-const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
-{
-  return fVisAttributes;
-}
-
-// ********************************************************************
-// SetVisAttributes
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
-{
-  fVisAttributes = pVA;
+  return this==&lv;
 }
 
 // ********************************************************************
@@ -360,4 +340,14 @@ inline
 G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
+}
+
+// ********************************************************************
+// GetVisAttributes
+// ********************************************************************
+//
+inline
+const G4VisAttributes* G4LogicalVolume::GetVisAttributes () const
+{
+  return fVisAttributes.get();
 }

@@ -107,9 +107,7 @@ G4TwistTubsFlatSide::G4TwistTubsFlatSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistTubsFlatSide::~G4TwistTubsFlatSide()
-{
-}
+G4TwistTubsFlatSide::~G4TwistTubsFlatSide() = default;
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
@@ -353,7 +351,7 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
          if (AmIOnLeftSide(xx, dphimin) >= 0)            // xx is on dphimin
          {
             areacode |= (sAxis1 & (sAxisPhi | sAxisMin)); 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary;
 
             if (AmIOnLeftSide(xx, dphimin) > 0) isoutside = true; 
@@ -362,7 +360,7 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
          else if (AmIOnLeftSide(xx, dphimax) <= 0)       // xx is on dphimax
          {
             areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); 
-            if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+            if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
             else                        areacode |= sBoundary;
 
             if (AmIOnLeftSide(xx, dphimax) < 0) isoutside = true;
@@ -400,14 +398,14 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
          if (AmIOnLeftSide(xx, dphimin, false) >= 0)  // xx is leftside or
          {
            areacode |= (sAxis1 & (sAxisPhi | sAxisMin)) ; // boundary of dphimin
-           if   (areacode & sBoundary) areacode |= sCorner; // xx is on corner
+           if   ((areacode & sBoundary) != 0) areacode |= sCorner; // xx is on corner
            else                        areacode |= sBoundary;
 
          }
          else if (AmIOnLeftSide(xx, dphimax, false) <= 0) // xx is rightside or
          {
            areacode |= (sAxis1 & (sAxisPhi | sAxisMax)); // boundary of dphimax
-           if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner
+           if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner
            else                        areacode |= sBoundary;
            
          }

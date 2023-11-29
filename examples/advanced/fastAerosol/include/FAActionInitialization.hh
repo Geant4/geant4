@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (copied from B1ActionInitialization)
 
 #ifndef ActionInitialization_h
@@ -36,13 +35,12 @@
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization();
-    virtual ~ActionInitialization();
+    explicit ActionInitialization();
+    virtual ~ActionInitialization()=default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    virtual void BuildForMaster() const override;
+    virtual void Build() const override;
 };
-
 #endif
 
     

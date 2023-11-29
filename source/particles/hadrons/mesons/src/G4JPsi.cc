@@ -42,16 +42,16 @@
 // ###                                JPsi                            ###
 // ######################################################################
 
-G4JPsi* G4JPsi::theInstance = 0;
+G4JPsi* G4JPsi::theInstance = nullptr;
 
 G4JPsi* G4JPsi::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "J/psi";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,10 +68,10 @@ G4JPsi* G4JPsi::Definition()
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         443,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,         "J/psi",           443);
   }
-  theInstance = reinterpret_cast<G4JPsi*>(anInstance);
+  theInstance = static_cast<G4JPsi*>(anInstance);
   return theInstance;
 }
 

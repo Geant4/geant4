@@ -47,6 +47,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "Randomize.hh"
+#include "G4EmParameters.hh"
 
 #include "G4String.hh"
 
@@ -97,7 +98,7 @@ double G4SBBremTable::SampleEnergyTransfer(const G4double eekin,
   const G4double lElEnergy     = leekin;
   const SamplingTablePerZ* stZ = fSBSamplingTables[izet];
   // get the gamma cut of this Z that corresponds to the current mat-cuts
-  const size_t gamCutIndx = stZ->fMatCutIndxToGamCutIndx[matCutIndx];
+  const std::size_t gamCutIndx = stZ->fMatCutIndxToGamCutIndx[matCutIndx];
   // gcut was not found: should never happen (only in verbose mode)
   if (gamCutIndx >= stZ->fNumGammaCuts || stZ->fGammaECuts[gamCutIndx]!=gcut) {
     G4String msg = " Gamma cut="+std::to_string(gcut) + " [MeV] was not found ";
@@ -215,9 +216,9 @@ void G4SBBremTable::BuildSamplingTables() {
   const G4ProductionCutsTable
   *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
   // a temporary vector to store one element
-  std::vector<size_t> vtmp(1,0);
-  size_t numMatCuts = thePCTable->GetTableSize();
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
+  std::vector<std::size_t> vtmp(1,0);
+  std::size_t numMatCuts = thePCTable->GetTableSize();
+  for (G4int imc=0; imc<(G4int)numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut = thePCTable->GetMaterialCutsCouple(imc);
     if (!matCut->IsUsed()) {
       continue;
@@ -226,8 +227,8 @@ void G4SBBremTable::BuildSamplingTables() {
     const G4ElementVector* elemVect = mat->GetElementVector();
     const G4int              indxMC = matCut->GetIndex();
     const G4double gamCut = (*(thePCTable->GetEnergyCutsVector(0)))[indxMC];
-    const size_t numElems = elemVect->size();
-    for (size_t ielem=0; ielem<numElems; ++ielem) {
+    const std::size_t numElems = elemVect->size();
+    for (std::size_t ielem=0; ielem<numElems; ++ielem) {
       const G4Element *elem = (*elemVect)[ielem];
       const G4int izet = std::max(std::min(fMaxZet, elem->GetZasInt()),1);
       if (!fSBSamplingTables[izet]) {
@@ -240,7 +241,7 @@ void G4SBBremTable::BuildSamplingTables() {
       // add current gamma cut to the list of this element data (only if this
       // cut value is still not tehre)
       const std::vector<double> &cVect = fSBSamplingTables[izet]->fGammaECuts;
-      size_t indx = std::find(cVect.begin(), cVect.end(), gamCut)-cVect.begin();
+      std::size_t indx = std::find(cVect.cbegin(), cVect.cend(), gamCut)-cVect.cbegin();
       if (indx==cVect.size()) {
         vtmp[0] = imc;
         fSBSamplingTables[izet]->fGamCutIndxToMatCutIndx.push_back(vtmp);
@@ -255,7 +256,7 @@ void G4SBBremTable::BuildSamplingTables() {
 }
 
 void G4SBBremTable::InitSamplingTables() {
-  const size_t numMatCuts = G4ProductionCutsTable::GetProductionCutsTable()
+  const std::size_t numMatCuts = G4ProductionCutsTable::GetProductionCutsTable()
                             ->GetTableSize();
   for (G4int iz=1; iz<fMaxZet+1; ++iz) {
     SamplingTablePerZ* stZ = fSBSamplingTables[iz];
@@ -270,12 +271,12 @@ void G4SBBremTable::InitSamplingTables() {
       // 1 indicates that gamma production is not possible at this e- energy
       stZ->fTablesPerEnergy[iee]->fCumCutValues.resize(stZ->fNumGammaCuts,1.);
       // sort gamma cuts and other members accordingly
-      for (size_t i=0; i<stZ->fNumGammaCuts-1; ++i) {
-        for (size_t j=i+1; j<stZ->fNumGammaCuts; ++j) {
+      for (std::size_t i=0; i<stZ->fNumGammaCuts-1; ++i) {
+        for (std::size_t j=i+1; j<stZ->fNumGammaCuts; ++j) {
           if (stZ->fGammaECuts[j]<stZ->fGammaECuts[i]) {
             G4double dum0                   = stZ->fGammaECuts[i];
             G4double dum1                   = stZ->fLogGammaECuts[i];
-            std::vector<size_t>   dumv      = stZ->fGamCutIndxToMatCutIndx[i];
+            std::vector<std::size_t>   dumv = stZ->fGamCutIndxToMatCutIndx[i];
             stZ->fGammaECuts[i]             = stZ->fGammaECuts[j];
             stZ->fLogGammaECuts[i]          = stZ->fLogGammaECuts[j];
             stZ->fGamCutIndxToMatCutIndx[i] = stZ->fGamCutIndxToMatCutIndx[j];
@@ -287,26 +288,26 @@ void G4SBBremTable::InitSamplingTables() {
       }
       // set couple indices to store the corresponding gamma cut index
       stZ->fMatCutIndxToGamCutIndx.resize(numMatCuts,-1);
-      for (size_t i=0; i<stZ->fGamCutIndxToMatCutIndx.size(); ++i) {
-        for (size_t j=0; j<stZ->fGamCutIndxToMatCutIndx[i].size(); ++j) {
+      for (std::size_t i=0; i<stZ->fGamCutIndxToMatCutIndx.size(); ++i) {
+        for (std::size_t j=0; j<stZ->fGamCutIndxToMatCutIndx[i].size(); ++j) {
           stZ->fMatCutIndxToGamCutIndx[stZ->fGamCutIndxToMatCutIndx[i][j]] = i;
         }
       }
       // clear temporary vector
-      for (size_t i=0; i<stZ->fGamCutIndxToMatCutIndx.size(); ++i) {
+      for (std::size_t i=0; i<stZ->fGamCutIndxToMatCutIndx.size(); ++i) {
         stZ->fGamCutIndxToMatCutIndx[i].clear();
       }
       stZ->fGamCutIndxToMatCutIndx.clear();
       //  init for each gamma cut that are below the e- energy
-      for (size_t ic=0; ic<stZ->fNumGammaCuts; ++ic) {
+      for (std::size_t ic=0; ic<stZ->fNumGammaCuts; ++ic) {
         const G4double gamCut = stZ->fGammaECuts[ic];
         if (elEnergy>gamCut) {
           // find lower kappa index; compute the 'xi' i.e. cummulative value for
           // gamCut/elEnergy
           const G4double cutKappa = std::max(1.e-12, gamCut/elEnergy);
-          const G4int       iKLow = (cutKappa>1.e-12)
-          ? std::lower_bound(fKappaVect.begin(), fKappaVect.end(), cutKappa)
-            - fKappaVect.begin() -1
+          const std::size_t iKLow = (cutKappa>1.e-12)
+          ? std::lower_bound(fKappaVect.cbegin(), fKappaVect.cend(), cutKappa)
+            - fKappaVect.cbegin() -1
           : 0;
           const STPoint* stpL = &(stZ->fTablesPerEnergy[iee]->fSTable[iKLow]);
           const STPoint* stpH = &(stZ->fTablesPerEnergy[iee]->fSTable[iKLow+1]);
@@ -333,13 +334,7 @@ void G4SBBremTable::InitSamplingTables() {
 
 // should be called only from LoadSamplingTables(G4int) and once
 void G4SBBremTable::LoadSTGrid() {
-  char* path = std::getenv("G4LEDATA");
-  if (!path) {
-    G4Exception("G4SBBremTable::LoadSTGrid()","em0006",
-                FatalException, "Environment variable G4LEDATA not defined");
-    return;
-  }
-  const G4String fname =  G4String(path) + "/brem_SB/SBTables/grid";
+  const G4String fname =  G4EmParameters::Instance()->GetDirLEDATA() + "/brem_SB/SBTables/grid";
   std::ifstream infile(fname,std::ios::in);
   if (!infile.is_open()) {
     G4String msgc = "Cannot open file: " + fname;
@@ -391,13 +386,8 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
   }
   // load data for a given Z only once
   iz = std::max(std::min(fMaxZet, iz),1);
-  char* path = std::getenv("G4LEDATA");
-  if (!path) {
-    G4Exception("G4SBBremTable::LoadSamplingTables()","em0006",
-                FatalException, "Environment variable G4LEDATA not defined");
-    return;
-  }
-  const G4String fname =  G4String(path) + "/brem_SB/SBTables/sTableSB_"
+
+  const G4String fname = G4EmParameters::Instance()->GetDirLEDATA() + "/brem_SB/SBTables/sTableSB_"
                         + std::to_string(iz);
   std::istringstream infile(std::ios::in);
   // read the compressed data file into the stream
@@ -408,8 +398,8 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
   //
   // Determine min/max elektron kinetic energies and indices
   const G4double minGammaCut = zTable->fGammaECuts[ std::min_element(
-                 std::begin(zTable->fGammaECuts),std::end(zTable->fGammaECuts))
-                -std::begin(zTable->fGammaECuts)];
+                 std::cbegin(zTable->fGammaECuts),std::cend(zTable->fGammaECuts))
+                -std::cbegin(zTable->fGammaECuts)];
   const G4double elEmin = std::max(fUsedLowEenergy, minGammaCut);
   const G4double elEmax = fUsedHighEenergy;
   // find low/high elecrton energy indices where tables will be needed
@@ -418,8 +408,9 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
   if (elEmin>=fElEnergyVect[fNumElEnergy-1]) {
     zTable->fMinElEnergyIndx = fNumElEnergy-1;
   } else {
-    zTable->fMinElEnergyIndx = std::lower_bound(fElEnergyVect.begin(),
-                        fElEnergyVect.end(), elEmin) - fElEnergyVect.begin() -1;
+    zTable->fMinElEnergyIndx = G4int(std::lower_bound(fElEnergyVect.cbegin(),
+                                                fElEnergyVect.cend(), elEmin)
+                                     - fElEnergyVect.cbegin() -1);
   }
   // high:
   zTable->fMaxElEnergyIndx = 0;
@@ -427,8 +418,9 @@ void G4SBBremTable::LoadSamplingTables(G4int iz) {
     zTable->fMaxElEnergyIndx = fNumElEnergy-1;
   } else {
     // lower + 1
-    zTable->fMaxElEnergyIndx = std::lower_bound(fElEnergyVect.begin(),
-                           fElEnergyVect.end(), elEmax) - fElEnergyVect.begin();
+    zTable->fMaxElEnergyIndx = G4int(std::lower_bound(fElEnergyVect.cbegin(),
+                                                fElEnergyVect.cend(), elEmax)
+                                     - fElEnergyVect.cbegin());
   }
   // protect
   if (zTable->fMaxElEnergyIndx<=zTable->fMinElEnergyIndx) {
@@ -489,7 +481,7 @@ void G4SBBremTable::ClearSamplingTables() {
 //    if (fSBSamplingTables[iz]) {
 //      G4cerr<< "   ----> There are " << fSBSamplingTables[iz]->fNumGammaCuts
 //            << " g-cut for Z = " << iz << G4endl;
-//      for (size_t ic=0; ic<fSBSamplingTables[iz]->fGammaECuts.size(); ++ic)
+//      for (std::size_t ic=0; ic<fSBSamplingTables[iz]->fGammaECuts.size(); ++ic)
 //        G4cerr<< "        i = " << ic << "  "
 //              << fSBSamplingTables[iz]->fGammaECuts[ic] << G4endl;
 //    }
@@ -527,7 +519,7 @@ void G4SBBremTable::ReadCompressedFile(const G4String &fname,
   std::ifstream in(compfilename, std::ios::binary | std::ios::ate);
   if (in.good()) {
      // get current position in the stream (was set to the end)
-     int fileSize = in.tellg();
+     std::streamoff fileSize = in.tellg();
      // set current position being the beginning of the stream
      in.seekg(0,std::ios::beg);
      // create (zlib) byte buffer for the data

@@ -31,66 +31,102 @@
 #ifndef G4HnInformation_h
 #define G4HnInformation_h 1
 
-#include "globals.hh"
-#include "G4Fcn.hh"
-#include "G4BinScheme.hh"
 #include "G4AnalysisUtilities.hh"
+#include "G4BinScheme.hh"
+#include "G4Fcn.hh"
+#include "globals.hh"
 
-// The additional Hn information per dimension
+#include <utility>
+#include <vector>
 
+// The histogram input parameters per dimension
+struct G4HnDimension
+{
+  G4HnDimension(
+      G4int nbins,
+      G4double minValue,
+      G4double maxValue)
+    : fNBins(nbins),
+      fMinValue(minValue),
+      fMaxValue(maxValue)
+      {
+        fEdges.clear();
+      }
+
+  G4HnDimension(const std::vector<G4double>& edges)
+    : fNBins(0),
+      fMinValue(0.),
+      fMaxValue(0.),
+      fEdges(edges)
+      {}
+
+  G4HnDimension() = default;
+  G4HnDimension(const G4HnDimension& rhs) = default;
+  G4HnDimension& operator=(const G4HnDimension& rhs) = default;
+
+  void Print() const;
+
+  G4int fNBins{0};
+  G4double fMinValue{0.};
+  G4double fMaxValue{0.};
+  std::vector<G4double> fEdges;
+};
+
+// The additional histogram information per dimension
 struct G4HnDimensionInformation
 {
   G4HnDimensionInformation(
-      const G4String& unitName,
-      const G4String& fcnName,
-      G4double unit,
-      G4Fcn fcn,
-      G4BinScheme binScheme)
-    : fUnitName(unitName),
-      fFcnName(fcnName),
-      fUnit(unit),
-      fFcn(fcn),
-      fBinScheme(binScheme)
+      G4String unitName,
+      G4String fcnName,
+      G4String binSchemeName = "linear")
+    : fUnitName(std::move(unitName)),
+      fFcnName(std::move(fcnName)),
+      fBinSchemeName(std::move(binSchemeName)),
+      fUnit(G4Analysis::GetUnitValue(fUnitName)),
+      fFcn(G4Analysis::GetFunction(fFcnName)),
+      fBinScheme(G4Analysis::GetBinScheme(fBinSchemeName))
       {}
 
-  G4HnDimensionInformation() = default;
+  G4HnDimensionInformation()
+    : G4HnDimensionInformation("none", "none", "linear") {}
   G4HnDimensionInformation(const G4HnDimensionInformation& rhs) = default;
   G4HnDimensionInformation& operator=(const G4HnDimensionInformation& rhs) = default;
 
-  //G4String fName;
+  void Print() const;
+
   G4String fUnitName;
   G4String fFcnName;
+  G4String fBinSchemeName;
   G4double fUnit;
   G4Fcn    fFcn;
   G4BinScheme fBinScheme;
 };
 
+// The additional histogram information
 class G4HnInformation
 {
   public:
-    G4HnInformation(const G4String& name, G4int nofDimensions)
-      : fName(name)
+    G4HnInformation(G4String name, G4int nofDimensions)
+      : fName(std::move(name))
     { fHnDimensionInformations.reserve(nofDimensions); }
 
     // Deleted default constructor
     G4HnInformation() = delete;
 
     // Set methods
-    void AddHnDimensionInformation(
-            const G4HnDimensionInformation& hnDimensionInformation);
-    void AddDimension(
-            const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
-    void SetDimension(G4int dimension,
-            const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme);
+    void AddDimension(const G4HnDimensionInformation& hnDimensionInformation);
+    void SetDimension(G4int dimension, const G4HnDimensionInformation& hnDimensionInformation);
+
     void SetIsLogAxis(G4int axis, G4bool isLog);
     void SetActivation(G4bool activation);
     void SetAscii(G4bool ascii);
     void SetPlotting(G4bool plotting);
-    void SetFileName(G4String fileName);
+    void SetFileName(const G4String& fileName);
 
     // Get methods
     G4String GetName() const;
     G4HnDimensionInformation* GetHnDimensionInformation(G4int dimension);
+    const G4HnDimensionInformation& GetHnDimensionInformation(G4int dimension) const;
     G4bool  GetIsLogAxis(G4int axis) const;
     G4bool  GetActivation() const;
     G4bool  GetAscii() const;
@@ -108,32 +144,38 @@ class G4HnInformation
     G4String fFileName;
 };
 
+namespace G4Analysis
+{
+
+// Apply Hn information
+void Update(G4double& value, const G4HnDimensionInformation& hnInfo);
+void UpdateValues(G4HnDimension& bins, const G4HnDimensionInformation& hnInfo);
+void Update(G4HnDimension& bins, const G4HnDimensionInformation& hnInfo);
+void UpdateTitle(G4String& title, const G4HnDimensionInformation& hnInfo);
+
+// Paremeters check
+G4bool CheckMinMax(G4double min, G4double max);
+G4bool CheckDimension(unsigned int idim,
+         const G4HnDimension& dimension, const G4HnDimensionInformation& info);
+
+template <unsigned int DIM>
+G4bool CheckDimensions(
+         const std::array<G4HnDimension, DIM>& bins,
+         const std::array<G4HnDimensionInformation, DIM>& hnInfo,
+         G4bool isProfile = false);
+}
+
 // inline functions
 
-inline void G4HnInformation::AddHnDimensionInformation(
+inline void G4HnInformation::AddDimension(
   const G4HnDimensionInformation& hnDimensionInformation)
 { fHnDimensionInformations.push_back(hnDimensionInformation); }
 
-inline void G4HnInformation::AddDimension(
-  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
-{
-  auto unit = G4Analysis::GetUnitValue(unitName);
-  auto fcn = G4Analysis::GetFunction(fcnName);
-  fHnDimensionInformations.emplace_back(
-    unitName, fcnName, unit, fcn, binScheme);
-}
-
-inline void G4HnInformation::SetDimension(G4int dimension,
-  const G4String& unitName, const G4String& fcnName, G4BinScheme binScheme)
+inline void G4HnInformation::SetDimension(
+  G4int dimension, const G4HnDimensionInformation& hnDimensionInformation)
 {
   auto info = GetHnDimensionInformation(dimension);
-  auto unit = G4Analysis::GetUnitValue(unitName);
-  auto fcn = G4Analysis::GetFunction(fcnName);
-  info->fUnitName = unitName;
-  info->fFcnName = fcnName;
-  info->fUnit = unit;
-  info->fFcn = fcn;
-  info->fBinScheme = binScheme;
+  (*info) = hnDimensionInformation;
 }
 
 inline void G4HnInformation::SetIsLogAxis(G4int axis, G4bool isLog)
@@ -148,7 +190,7 @@ inline void G4HnInformation::SetAscii(G4bool ascii)
 inline void G4HnInformation::SetPlotting(G4bool plotting)
 { fPlotting = plotting; }
 
-inline void G4HnInformation::SetFileName(G4String fileName)
+inline void G4HnInformation::SetFileName(const G4String& fileName)
 { fFileName = fileName; }
 
 inline G4String G4HnInformation::GetName() const
@@ -156,6 +198,9 @@ inline G4String G4HnInformation::GetName() const
 
 inline G4HnDimensionInformation* G4HnInformation::GetHnDimensionInformation(G4int dimension)
 { return &(fHnDimensionInformations[dimension]); }
+
+inline const G4HnDimensionInformation& G4HnInformation::GetHnDimensionInformation(G4int dimension) const
+{ return fHnDimensionInformations[dimension]; }
 
 inline G4bool  G4HnInformation::GetIsLogAxis(G4int axis) const
 { return fIsLogAxis[axis]; }
@@ -171,5 +216,28 @@ inline G4bool  G4HnInformation::GetPlotting() const
 
 inline G4String G4HnInformation::GetFileName() const
 { return fFileName; }
+
+template <unsigned int DIM>
+inline G4bool G4Analysis::CheckDimensions(
+         const std::array<G4HnDimension, DIM>& bins,
+         const std::array<G4HnDimensionInformation, DIM>& hnInfo,
+         G4bool isProfile)
+{
+  G4bool result = true;
+
+  // Check bins parameters
+  // (the last dimension has special meaninh for profiles)
+  auto dimToCheck = (isProfile) ? DIM -1 : DIM ;
+  for (unsigned int idim = 0; idim < dimToCheck; ++idim) {
+    result &= CheckDimension(idim, bins[idim], hnInfo[idim]);
+  }
+
+  // Check profile min/max value
+  if (isProfile) {
+    result &= CheckMinMax(bins[DIM-1].fMinValue, bins[DIM-1].fMaxValue);
+  }
+
+  return result;
+}
 
 #endif

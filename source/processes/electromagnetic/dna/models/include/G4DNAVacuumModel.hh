@@ -28,15 +28,14 @@
 #ifndef G4DNAVacuumModel_h
 #define G4DNAVacuumModel_h 1
 
-#include "G4VDNAModel.hh"
+#include "G4DNACrossSectionDataSet.hh"
+#include "G4Electron.hh"
+#include "G4LogLogInterpolation.hh"
+#include "G4NistManager.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4DNACrossSectionDataSet.hh"
-#include "G4LogLogInterpolation.hh"
-#include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4NistManager.hh"
+#include "G4VDNAModel.hh"
 
 /*!
  * \brief The G4DNAVacuumModel class
@@ -45,32 +44,30 @@
  */
 class G4DNAVacuumModel : public G4VDNAModel
 {
+ public:
+  /*!
+   * \brief G4DNAVacuumModel
+   * Constructor
+   * \param applyToMaterial
+   * \param p
+   * \param nam
+   */
+  G4DNAVacuumModel(const G4String& applyToMaterial = "all", const G4ParticleDefinition* p = nullptr,
+    const G4String& nam = "DNAPTBVacuumModel");
 
-public:
-
-    /*!
-     * \brief G4DNAVacuumModel
-     * Constructor
-     * \param applyToMaterial
-     * \param p
-     * \param nam
-     */
-    G4DNAVacuumModel(const G4String &applyToMaterial = "all", const G4ParticleDefinition* p = 0,
-                  const G4String& nam = "DNAPTBVacuumModel");
-
-    /*!
+  /*!
    * \brief ~G4DNAVacuumModel
    * Destructor
    */
   virtual ~G4DNAVacuumModel();
 
-    /*!
+  /*!
    * \brief Initialise
    * Registers the G4_Galactic material as "void material" for every particle
    */
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()), G4ParticleChangeForGamma* fpChangeForGamme=nullptr);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-    /*!
+  /*!
    * \brief CrossSectionPerVolume
    * \param material
    * \param materialName
@@ -81,36 +78,23 @@ public:
    * \return cross section value
    */
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-                                         const G4String& materialName,
-                                         const G4ParticleDefinition* p,
-                                         G4double ekin,
-                                         G4double emin,
-                                         G4double emax);
+    const G4ParticleDefinition* p, G4double ekin, G4double emin, G4double emax) override;
 
-    /*!
+  /*!
    * \brief SampleSecondaries
    * \param materialName
    * \param particleChangeForGamma
    * \param tmin
    * \param tmax
    */
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4String& materialName,
-                                 const G4DynamicParticle*,
-                                 G4ParticleChangeForGamma *particleChangeForGamma,
-                                 G4double tmin,
-                                 G4double tmax);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*, const G4DynamicParticle*, G4double tmin, G4double tmax) override;
 
-protected:
-
-private:
-
-  G4int verboseLevel; ///< verbose level
+ private:
+  G4int verboseLevel = 0;  ///< verbose level
 
   // copy constructor and hide assignment operator
-  G4DNAVacuumModel(const  G4DNAVacuumModel&); // prevent copy-construction
-  G4DNAVacuumModel & operator=(const  G4DNAVacuumModel &right); // prevent assignement
+  G4DNAVacuumModel(const G4DNAVacuumModel&) = delete;  // prevent copy-construction
+  G4DNAVacuumModel& operator=(const G4DNAVacuumModel& right) = delete;  // prevent assignement
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

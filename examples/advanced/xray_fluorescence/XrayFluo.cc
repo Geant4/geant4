@@ -39,7 +39,7 @@
 
 int main(int argc, char* argv[]){
 
-  XrayFluoSimulation * simulation = new XrayFluoSimulation(0);  
+  XrayFluoSimulation * simulation = new XrayFluoSimulation();  
 
   simulation->RunSimulation(argc,argv);
 

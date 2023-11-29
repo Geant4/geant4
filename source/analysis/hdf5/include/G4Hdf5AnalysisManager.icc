@@ -32,42 +32,35 @@
 
 //_____________________________________________________________________________
 inline
-G4bool G4Hdf5AnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}
-
-//_____________________________________________________________________________
-inline
-tools::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple() const
+toolx::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();
 }
 
 //_____________________________________________________________________________
 inline
-tools::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple(G4int ntupleId) const
+toolx::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple(G4int ntupleId) const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple(ntupleId);
 }
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::BeginNtuple()
+std::vector<toolx::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::BeginNtuple()
 {
   return fNtupleFileManager->GetNtupleManager()->BeginNtuple();
 }
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::EndNtuple()
+std::vector<toolx::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::EndNtuple()
 {
   return fNtupleFileManager->GetNtupleManager()->EndNtuple();
 }
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::hdf5::ntuple*>::const_iterator
+std::vector<toolx::hdf5::ntuple*>::const_iterator
 G4Hdf5AnalysisManager::BeginConstNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->BeginConstNtuple();
@@ -75,7 +68,7 @@ G4Hdf5AnalysisManager::BeginConstNtuple() const
 
 //_____________________________________________________________________________
 inline
-std::vector<tools::hdf5::ntuple*>::const_iterator
+std::vector<toolx::hdf5::ntuple*>::const_iterator
 G4Hdf5AnalysisManager::EndConstNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->EndConstNtuple();

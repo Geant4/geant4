@@ -33,17 +33,17 @@
 // ###                           ADJOINT DEUTERON                     ###
 // ######################################################################
 
-G4AdjointDeuteron* G4AdjointDeuteron::theInstance = 0;
+G4AdjointDeuteron* G4AdjointDeuteron::theInstance = nullptr;
 
 G4AdjointDeuteron* G4AdjointDeuteron::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
  
   const G4String name = "adj_deuteron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance =  reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -60,7 +60,7 @@ G4AdjointDeuteron* G4AdjointDeuteron::Definition()
                     2,              +1,             0,
                     0,               0,             0,
             "adjoint_nucleus",               0,            +2, 1000010020,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		false,           "static",          0,
                   0.0
               );
@@ -73,7 +73,7 @@ G4AdjointDeuteron* G4AdjointDeuteron::Definition()
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
-  theInstance = reinterpret_cast<G4AdjointDeuteron*>(anInstance);
+  theInstance = static_cast<G4AdjointDeuteron*>(anInstance);
   return theInstance;
 }
 

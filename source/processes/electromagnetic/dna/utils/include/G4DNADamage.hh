@@ -88,23 +88,23 @@ public:
     virtual void AddIndirectDamage(const G4String& baseName,
                                    const G4Molecule* molecule,
                                    const G4ThreeVector& position, 
-                                   double time);
+                                   G4double time);
 
     inline const std::vector<G4DNAIndirectHit*>* GetIndirectHits();
-    inline virtual int GetNIndirectHits() const
+    inline virtual G4int GetNIndirectHits() const
     {
         if(fJustCountDamage)
             return fNIndirectDamage;
 
-        return fIndirectHits.size();
+        return (G4int)fIndirectHits.size();
     }
 
-    inline virtual void SetOnlyCountDamage(bool flag = true)
+    inline virtual void SetOnlyCountDamage(G4bool flag = true)
     {
         fJustCountDamage = flag;
     }
 
-    inline virtual bool OnlyCountDamage() const
+    inline virtual G4bool OnlyCountDamage() const
     {
         return fJustCountDamage;
     }

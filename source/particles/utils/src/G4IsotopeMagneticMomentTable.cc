@@ -56,7 +56,7 @@ const G4double G4IsotopeMagneticMomentTable::nuclearMagneton = eplus*hbar_Planck
 G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
   :G4VIsotopeTable("MagneticMoment")
 {
-  if ( !std::getenv("G4IONMAGNETICMOMENT")) {
+  if ( std::getenv("G4IONMAGNETICMOMENT") == nullptr) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
       G4cout << "G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable():  " 
@@ -108,7 +108,7 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
 		>> ionLife >> ionLifeUnit
 		>> ionJ >> ionMu;
           
-      G4IsotopeProperty* fProperty = new G4IsotopeProperty();   
+      auto  fProperty = new G4IsotopeProperty();   
       // Set Isotope Property
       fProperty->SetAtomicNumber(ionZ);
       fProperty->SetAtomicMass(ionA);
@@ -132,8 +132,8 @@ G4IsotopeMagneticMomentTable::G4IsotopeMagneticMomentTable()
 ///////////////////////////////////////////////////////////////////////////////
 G4IsotopeMagneticMomentTable::~G4IsotopeMagneticMomentTable()
 {
-  for (size_t i = 0 ; i< fIsotopeList.size(); i++) {
-    delete fIsotopeList[i];
+  for (const auto & i : fIsotopeList) {
+    delete i;
   }
   fIsotopeList.clear();
 }
@@ -154,9 +154,7 @@ G4IsotopeMagneticMomentTable & G4IsotopeMagneticMomentTable::operator= (const  G
 ///////////////////////////////////////////////////////////////////////////////
 G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)
 {
-  for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {
-    G4IsotopeProperty*  fP = fIsotopeList[i];
-    
+  for (const auto fP : fIsotopeList) {
     // check Z
     if ( fP->GetAtomicNumber() > pP->GetAtomicNumber()) {
       // Not Found
@@ -194,11 +192,9 @@ G4IsotopeProperty*
  G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4double E,
                                           G4Ions::G4FloatLevelBase /*flb*/)
 {
-  G4IsotopeProperty* fProperty = 0;
-  for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {
-    G4IsotopeProperty*  fP = fIsotopeList[i];
- 
-     // check Z
+  G4IsotopeProperty* fProperty = nullptr;
+  for (const auto fP : fIsotopeList) {
+    // check Z
     if ( fP->GetAtomicNumber() > Z) {
       // Not Found
       break;
@@ -232,11 +228,9 @@ G4IsotopeProperty*
 G4IsotopeProperty* 
  G4IsotopeMagneticMomentTable::GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl)
 {
-  G4IsotopeProperty* fProperty = 0;
-  for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {
-    G4IsotopeProperty*  fP = fIsotopeList[i];
- 
-     // check Z
+  G4IsotopeProperty* fProperty = nullptr;
+  for (const auto fP : fIsotopeList) {
+    // check Z
     if ( fP->GetAtomicNumber() > Z) {
       // Not Found
       break;

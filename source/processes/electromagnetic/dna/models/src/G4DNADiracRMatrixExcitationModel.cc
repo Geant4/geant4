@@ -279,16 +279,18 @@ G4int G4DNADiracRMatrixExcitationModel::RandomSelect
                           G4double kineticEnergy)
 {
   G4double value = 0.;
+
+  std::size_t NOfComp = fTableData->NumberOfComponents();
  
-  G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
+  auto valuesBuffer = new G4double[NOfComp];
   
-  const size_t n(fTableData->NumberOfComponents());
+  const G4int n = (G4int)fTableData->NumberOfComponents();
   
-  size_t i(n);
+  G4int i(n);
 
   while (i > 0)
   {
-    i--;
+    --i;
     if 
     ((fLowEnergyLimit<=kineticEnergy)&&(kineticEnergy<fExperimentalEnergyLimit))
     {
@@ -306,7 +308,7 @@ G4int G4DNADiracRMatrixExcitationModel::RandomSelect
   i = n;
   while (i > 0)
   {
-    i--;
+    --i;
     if (valuesBuffer[i] > value)
     {
       delete[] valuesBuffer;

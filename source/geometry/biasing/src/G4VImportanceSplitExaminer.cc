@@ -30,10 +30,6 @@
 
 #include "G4VImportanceSplitExaminer.hh"
 
-G4VImportanceSplitExaminer::G4VImportanceSplitExaminer()
-{
-}
+G4VImportanceSplitExaminer::G4VImportanceSplitExaminer() = default;
 
-G4VImportanceSplitExaminer::~G4VImportanceSplitExaminer()
-{
-}
+G4VImportanceSplitExaminer::~G4VImportanceSplitExaminer() = default;

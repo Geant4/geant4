@@ -1,18 +1,24 @@
--------------------------------------------------------------------
+# Category phys-ctor History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     	    Hadronic physics-list-constructors History
-     	    ------------------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-24 Gabriele Cosmo (phys-ctor-V11-00-02)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-05-16 Guilherme Amadio (phys-ctor-V11-00-01)
+- Replace getenv() calls for data variables with G4FindDataDir()
+
+## 2021-12-10 Ben Morgan (phys-ctor-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 15-01-2013, Gunter Folger
 
       -------- Please tag at subdirectory level----------------

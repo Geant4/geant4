@@ -30,13 +30,6 @@
 
 //_____________________________________________________________________________
 inline
-G4bool G4CsvAnalysisManager::IsOpenFileImpl() const
-{
-  return fFileManager->IsOpenFile();
-}
-
-//_____________________________________________________________________________
-inline
 tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple() const
 {
   return fNtupleFileManager->GetNtupleManager()->GetNtuple();

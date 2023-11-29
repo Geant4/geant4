@@ -47,16 +47,16 @@
 // ###                         ETA                                    ###
 // ######################################################################
 
-G4Etac* G4Etac::theInstance = 0;
+G4Etac* G4Etac::theInstance = nullptr;
 
 G4Etac* G4Etac::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "etac";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,10 +73,10 @@ G4Etac* G4Etac::Definition()
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         441,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,          "etac",           441);
   }
-  theInstance = reinterpret_cast<G4Etac*>(anInstance);
+  theInstance = static_cast<G4Etac*>(anInstance);
   return theInstance;
 }
 

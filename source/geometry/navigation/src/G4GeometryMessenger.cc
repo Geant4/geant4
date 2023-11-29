@@ -155,6 +155,12 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   errCmd->SetParameterName("maximum_errors",true);
   errCmd->SetDefaultValue(1);
 
+  parCmd = new G4UIcmdWithABool( "/geometry/test/check_parallel", this );
+  parCmd->SetGuidance( "Check for overlaps in parallel worlds." );
+  parCmd->SetGuidance( "By default, overlaps are only checked in the mass world (FALSE)." );
+  parCmd->SetParameterName("check_parallel",true);
+  parCmd->SetDefaultValue(true);
+
   recCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
   recCmd->SetGuidance( "Start running the recursive overlap check." );
   recCmd->SetGuidance( "Volumes are recursively asked to verify for overlaps" );
@@ -177,7 +183,9 @@ G4GeometryMessenger::~G4GeometryMessenger()
   delete tolCmd;
   delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
-  delete tvolume;
+  for(auto* tvolume: tvolumes) {
+      delete tvolume;
+  }
 }
 
 //
@@ -188,16 +196,18 @@ G4GeometryMessenger::Init()
 {
   // Create checker...
   //
-  if (tvolume == nullptr)
+  if (tvolumes.empty())
   {
-    // Get the world volume
+    // Get all world volumes
     //
-    G4VPhysicalVolume* world =
-      tmanager->GetNavigatorForTracking()->GetWorldVolume();
-
-    // Test the actual detector...
-    //
-    tvolume = new G4GeomTestVolume(world);
+    const auto noWorlds = tmanager->GetNoWorlds();
+    const auto fWorld = tmanager->GetWorldsIterator();
+    for(size_t i=0;i<noWorlds;++i)
+    {
+        // Test the actual detector...
+        //
+        tvolumes.push_back(new G4GeomTestVolume(fWorld[i]));
+    }
   }
 }
 
@@ -223,15 +233,24 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
     Init();
     tol = tolCmd->GetNewDoubleValue( newValues )
         * tolCmd->GetNewUnitValue( newValues );
-    tvolume->SetTolerance(tol);
+    for(auto* tvolume: tvolumes)
+    {
+      tvolume->SetTolerance(tol);
+    }
   }
   else if (command == verCmd) {
     Init();
-    tvolume->SetVerbosity(verCmd->GetNewBoolValue( newValues ));
+    for(auto* tvolume: tvolumes)
+    {
+      tvolume->SetVerbosity(verCmd->GetNewBoolValue( newValues ));
+    }
   }
   else if (command == rslCmd) {
     Init();
-    tvolume->SetResolution(rslCmd->GetNewIntValue( newValues ));
+    for(auto* tvolume: tvolumes)
+    {
+      tvolume->SetResolution(rslCmd->GetNewIntValue( newValues ));
+    }
   }
   else if (command == rcsCmd) {
     recLevel = rcsCmd->GetNewIntValue( newValues );
@@ -241,7 +260,10 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   }
   else if (command == errCmd) {
     Init();
-    tvolume->SetErrorsThreshold(errCmd->GetNewIntValue( newValues ));
+    for(auto* tvolume: tvolumes)
+    {
+      tvolume->SetErrorsThreshold(errCmd->GetNewIntValue( newValues ));
+    }
   }
   else if (command == recCmd) {
     Init();
@@ -295,14 +317,14 @@ G4GeometryMessenger::ResetNavigator()
   //
   G4ThreeVector pt(0,0,0);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
-  navigator->LocateGlobalPointAndSetup(pt,0,false);
+  navigator->LocateGlobalPointAndSetup(pt,nullptr,false);
 }
 
 //
 // Set navigator verbosity
 //
 void
-G4GeometryMessenger::SetVerbosity(G4String input)
+G4GeometryMessenger::SetVerbosity(const G4String& input)
 {
   G4int level = verbCmd->GetNewIntValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
@@ -313,7 +335,7 @@ G4GeometryMessenger::SetVerbosity(G4String input)
 // Set navigator mode
 //
 void
-G4GeometryMessenger::SetCheckMode(G4String input)
+G4GeometryMessenger::SetCheckMode(const G4String& input)
 {
   G4bool mode = chkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
@@ -326,7 +348,7 @@ G4GeometryMessenger::SetCheckMode(G4String input)
 // Set navigator verbosity for push notifications
 //
 void
-G4GeometryMessenger::SetPushFlag(G4String input)
+G4GeometryMessenger::SetPushFlag(const G4String& input)
 {
   G4bool mode = pchkCmd->GetNewBoolValue(input);
   G4Navigator* navigator = tmanager->GetNavigatorForTracking();
@@ -345,5 +367,15 @@ G4GeometryMessenger::RecursiveOverlapTest()
 
   // Make test on single line supplied by user recursively
   //
-  tvolume->TestRecursiveOverlap( recLevel, recDepth );
+  if (checkParallelWorlds)
+  {
+    for(auto* tvolume: tvolumes)
+    {
+      tvolume->TestRecursiveOverlap( recLevel, recDepth );
+    }
+  }
+  else
+  {
+    tvolumes.front()->TestRecursiveOverlap( recLevel, recDepth );
+  }
 }

@@ -55,7 +55,7 @@ using namespace CLHEP;
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
 
-G4Tubs::G4Tubs( const G4String &pName,
+G4Tubs::G4Tubs( const G4String& pName,
                       G4double pRMin, G4double pRMax,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi )
@@ -97,13 +97,7 @@ G4Tubs::G4Tubs( const G4String &pName,
 //                            for usage restricted to object persistency.
 //
 G4Tubs::G4Tubs( __void__& a )
-  : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
-    fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.),
-    sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
-    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    fPhiFullTube(false), fInvRmax(0.), fInvRmin(0.),
-    halfCarTolerance(0.), halfRadTolerance(0.),
-    halfAngTolerance(0.)
+  : G4CSGSolid(a)
 {
 }
 
@@ -111,29 +105,13 @@ G4Tubs::G4Tubs( __void__& a )
 //
 // Destructor
 
-G4Tubs::~G4Tubs()
-{
-}
+G4Tubs::~G4Tubs() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4Tubs::G4Tubs(const G4Tubs& rhs)
-  : G4CSGSolid(rhs),
-    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
-    fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
-    fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
-    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
-    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube),
-    fInvRmax(rhs.fInvRmax), fInvRmin(rhs.fInvRmin),
-    halfCarTolerance(rhs.halfCarTolerance),
-    halfRadTolerance(rhs.halfRadTolerance),
-    halfAngTolerance(rhs.halfAngTolerance)
-{
-}
+G4Tubs::G4Tubs(const G4Tubs&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -246,7 +224,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Get parameters of the solid
@@ -346,7 +324,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
   {
     r2 = p.x()*p.x() + p.y()*p.y() ;
 
-    if (fRMin) { tolRMin = fRMin + halfRadTolerance ; }
+    if (fRMin != 0.0) { tolRMin = fRMin + halfRadTolerance ; }
     else       { tolRMin = 0 ; }
 
     tolRMax = fRMax - halfRadTolerance ;
@@ -533,7 +511,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
       distSPhi = std::fabs( pPhi - fSPhi );
       distEPhi = std::fabs( pPhi - fSPhi - fDPhi );
     }
-    else if ( !fRMin )
+    else if ( fRMin == 0.0 )
     {
       distSPhi = 0.;
       distEPhi = 0.;
@@ -548,7 +526,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     ++noSurfaces;
     sumnorm += nR;
   }
-  if( fRMin && (distRMin <= halfCarTolerance) )
+  if( (fRMin != 0.0) && (distRMin <= halfCarTolerance) )
   {
     ++noSurfaces;
     sumnorm -= nR;
@@ -577,7 +555,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
     G4Exception("G4Tubs::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, "Point p is not on surface !?" );
-    G4int oldprc = G4cout.precision(20);
+    G4long oldprc = G4cout.precision(20);
     G4cout<< "G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
           << G4endl << G4endl;
     G4cout.precision(oldprc) ;
@@ -634,7 +612,7 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       side    = kNRMax   ;
     }
   }
-  if (!fPhiFullTube  &&  rho ) // Protected against (0,0,z)
+  if (!fPhiFullTube  &&  (rho != 0.0) ) // Protected against (0,0,z)
   {
     phi = std::atan2(p.y(),p.x()) ;
 
@@ -776,7 +754,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if ((tolIRMin2 <= rho2) && (rho2 <= tolIRMax2))
       {
-        if (!fPhiFullTube && rho2)
+        if (!fPhiFullTube && (rho2 != 0.0))
         {
           // Psi = angle made with central (average) phi of shape
           //
@@ -935,7 +913,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         } // end if   (!fPhiFullTube)
       }   // end if   (t3>tolIRMin2)
     }     // end if   (Inside Outer Radius)
-    if ( fRMin )    // Try inner cylinder intersection
+    if ( fRMin != 0.0 )    // Try inner cylinder intersection
     {
       c = (t3 - fRMin*fRMin)/t1 ;
       d = b*b - c ;
@@ -1117,7 +1095,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
   else                 { safe = safe2; }
   if ( safe3 > safe )  { safe = safe3; }
 
-  if ( (!fPhiFullTube) && (rho) )
+  if ( (!fPhiFullTube) && ((rho) != 0.0) )
   {
     // Psi=angle from central phi to point
     //
@@ -1264,7 +1242,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
     {
       roMin2 = t3 - t2*t2/t1 ; // min ro2 of the plane of movement
 
-      if ( fRMin && (roMin2 < fRMin*(fRMin - kRadTolerance)) )
+      if ( (fRMin != 0.0) && (roMin2 < fRMin*(fRMin - kRadTolerance)) )
       {
         deltaR = t3 - fRMin*fRMin ;
         b      = t2/t1 ;
@@ -1351,7 +1329,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       else if ( vphi > fSPhi + fDPhi + halfAngTolerance ) { vphi -= twopi; }
 
 
-      if ( p.x() || p.y() )  // Check if on z axis (rho not needed later)
+      if ( (p.x() != 0.0) || (p.y() != 0.0) )  // Check if on z axis (rho not needed later)
       {
         // pDist -ve when inside
 
@@ -1367,8 +1345,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
         if( ( (fDPhi <= pi) && ( (pDistS <= halfCarTolerance)
                               && (pDistE <= halfCarTolerance) ) )
-         || ( (fDPhi >  pi) && !((pDistS >  halfCarTolerance)
-                              && (pDistE >  halfCarTolerance) ) )  )
+         || ( (fDPhi >  pi) && ((pDistS <=  halfCarTolerance)
+                              || (pDistE <=  halfCarTolerance) ) )  )
         {
           // Inside both phi *full* planes
 
@@ -1431,8 +1409,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               {
                 // Leaving via ending phi
                 //
-                if( !((fSPhi-halfAngTolerance <= vphi)
-                     &&(fSPhi+fDPhi+halfAngTolerance >= vphi)) )
+                if( (fSPhi-halfAngTolerance > vphi)
+                     ||(fSPhi+fDPhi+halfAngTolerance < vphi) )
                 {
                   sidephi = kEPhi ;
                   if ( pDistE <= -halfCarTolerance )  { sphi = sphi2 ; }
@@ -1541,7 +1519,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl ;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -1577,7 +1555,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-    G4int oldprc = G4cout.precision(16) ;
+    G4long oldprc = G4cout.precision(16) ;
     G4cout << G4endl ;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl ;
@@ -1590,7 +1568,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  if ( fRMin )
+  if ( fRMin != 0.0 )
   {
     safeR1 = rho   - fRMin ;
     safeR2 = fRMax - rho ;
@@ -1631,7 +1609,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Tubs::GetEntityType() const
 {
-  return G4String("G4Tubs");
+  return {"G4Tubs"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1649,7 +1627,7 @@ G4VSolid* G4Tubs::Clone() const
 
 std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1695,11 +1673,11 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
   //
   G4double select = ssurf[5]*G4QuickRand();
   G4int k = 5;
-  k -= (select <= ssurf[4]);
-  k -= (select <= ssurf[3]);
-  k -= (select <= ssurf[2]);
-  k -= (select <= ssurf[1]);
-  k -= (select <= ssurf[0]);
+  k -= (G4int)(select <= ssurf[4]);
+  k -= (G4int)(select <= ssurf[3]);
+  k -= (G4int)(select <= ssurf[2]);
+  k -= (G4int)(select <= ssurf[1]);
+  k -= (G4int)(select <= ssurf[0]);
 
   // Generate point on selected surface
   //
@@ -1708,24 +1686,24 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
     case 0: // start phi cut
     {
       G4double r = Rmin + (Rmax - Rmin)*G4QuickRand();
-      return G4ThreeVector(r*cosSPhi, r*sinSPhi, hz*G4QuickRand() - fDz);
+      return { r*cosSPhi, r*sinSPhi, hz*G4QuickRand() - fDz };
     }
     case 1: // end phi cut
     {
       G4double r = Rmin + (Rmax - Rmin)*G4QuickRand();
-      return G4ThreeVector(r*cosEPhi, r*sinEPhi, hz*G4QuickRand() - fDz);
+      return { r*cosEPhi, r*sinEPhi, hz*G4QuickRand() - fDz };
     }
     case 2: // base at -dz
     {
       G4double r = std::sqrt(RRmin + (RRmax - RRmin)*G4QuickRand());
       G4double phi = fSPhi + fDPhi*G4QuickRand();
-      return G4ThreeVector(r*std::cos(phi), r*std::sin(phi), -fDz);
+      return { r*std::cos(phi), r*std::sin(phi), -fDz };
     }
     case 3: // base at +dz
     {
       G4double r = std::sqrt(RRmin + (RRmax - RRmin)*G4QuickRand());
       G4double phi = fSPhi + fDPhi*G4QuickRand();
-      return G4ThreeVector(r*std::cos(phi), r*std::sin(phi), fDz);
+      return { r*std::cos(phi), r*std::sin(phi), fDz };
     }
     case 4: // external lateral surface
     {
@@ -1733,7 +1711,7 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
       G4double z = hz*G4QuickRand() - fDz;
       G4double x = Rmax*std::cos(phi);
       G4double y = Rmax*std::sin(phi);
-      return G4ThreeVector(x,y,z);
+      return { x,y,z };
     }
     case 5: // internal lateral surface
     {
@@ -1741,10 +1719,10 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
       G4double z = hz*G4QuickRand() - fDz;
       G4double x = Rmin*std::cos(phi);
       G4double y = Rmin*std::sin(phi);
-      return G4ThreeVector(x,y,z);
+      return { x,y,z };
     }
   }
-  return G4ThreeVector(0., 0., 0.);
+  return {0., 0., 0.};
 }
 
 ///////////////////////////////////////////////////////////////////////////

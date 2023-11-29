@@ -46,16 +46,16 @@
 // ###                      AntiLambdacPlus                           ###
 // ######################################################################
 
-G4AntiLambdacPlus* G4AntiLambdacPlus::theInstance = 0;
+G4AntiLambdacPlus* G4AntiLambdacPlus::theInstance = nullptr;
 
 G4AntiLambdacPlus* G4AntiLambdacPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_lambda_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -72,12 +72,12 @@ G4AntiLambdacPlus* G4AntiLambdacPlus::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -4122,
-                false,     0.200e-3*ns,          NULL,
+                false,     0.200e-3*ns,          nullptr,
                 false,       "lambda_c");
   
   // decay mode is not defined here, with expectation of pre-assigned.
   } 
-  theInstance = reinterpret_cast<G4AntiLambdacPlus*>(anInstance);
+  theInstance = static_cast<G4AntiLambdacPlus*>(anInstance);
   return theInstance;
 }
 

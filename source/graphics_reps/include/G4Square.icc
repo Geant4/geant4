@@ -28,7 +28,7 @@
 // 
 // John Allison  17/11/96.
 
-inline G4Square::G4Square () {}
+inline G4Square::G4Square () = default;
 
 inline G4Square::G4Square (const G4Point3D& pos):
 G4VMarker (pos) {}

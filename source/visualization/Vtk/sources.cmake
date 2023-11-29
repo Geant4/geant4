@@ -1,73 +1,94 @@
-#------------------------------------------------------------------------------
-# sources.cmake
-# Module : G4visVtk
-# Package: Geant4.src.G4visualization.G4visQt3D
-#
-# Sources description for a library.
-# Lists the sources and headers of the code explicitely.
-# Lists include paths needed.
-# Lists the internal granular and global dependencies of the library.
-# Source specific properties should be added at the end.
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
-
-#
-# Define the Geant4 Module.
-#
-
-set(G4VIS_MODULE_VTK_HEADERS
+# - G4visVTK module build definition
+# Define the Geant4 Module
+geant4_add_module(G4visVtk
+  PUBLIC_HEADERS
     G4Vtk.hh
+  PRIVATE_HEADERS
+    G4VtkUtility.hh
     G4VtkMessenger.hh
     G4VtkSceneHandler.hh
     G4VtkViewer.hh
-    vtkTensorGlyphColor.h)
+    G4VtkInteractorStyle.hh
+    G4VtkStore.hh
+    G4VtkVisContext.hh
+    G4VVtkPipeline.hh
+    G4VtkCutterPipeline.hh
+    G4VtkClipClosedSurfacePipeline.hh
+    G4VtkClipOpenPipeline.hh
+    #G4VtkClipperClosedPipeline.hh
+    G4VtkImagePipeline.hh
+    G4VtkPolydataPipeline.hh
+    G4VtkPolydataInstancePipeline.hh
+    G4VtkPolydataInstanceTensorPipeline.hh
+    G4VtkPolydataInstanceAppendPipeline.hh
+    G4VtkPolydataInstanceBakePipeline.hh
+    G4VtkPolydataPolylinePipeline.hh
+    G4VtkPolydataPolyline2DPipeline.hh
+    G4VtkPolydataSpherePipeline.hh
+    G4VtkPolydataCubePipeline.hh
+    G4VtkPolydataPolygonPipeline.hh
+    G4VtkTextPipeline.hh
+    G4VtkText2DPipeline.hh
+    G4VtkStructuredGridPipeline.hh
+    G4VtkUnstructuredGridPipeline.hh
+    vtkTensorGlyphColor.h
 
-set(G4VIS_MODULE_VTK_SOURCES
+  SOURCES
     G4Vtk.cc
+    G4VtkUtility.cc
     G4VtkMessenger.cc
     G4VtkSceneHandler.cc
     G4VtkViewer.cc
+    G4VtkInteractorStyle.cc
+    G4VtkStore.cc
+    G4VtkCutterPipeline.cc
+    G4VtkClipClosedSurfacePipeline.cc
+    G4VtkClipOpenPipeline.cc
+    #G4VtkClipperClosedPipeline.cc
+    G4VtkImagePipeline.cc
+    G4VtkPolydataPipeline.cc
+    G4VtkPolydataInstancePipeline.cc
+    G4VtkPolydataInstanceTensorPipeline.cc
+    G4VtkPolydataInstanceAppendPipeline.cc
+    G4VtkPolydataInstanceBakePipeline.cc
+    G4VtkPolydataPolylinePipeline.cc
+    G4VtkPolydataPolyline2DPipeline.cc
+    G4VtkPolydataSpherePipeline.cc
+    G4VtkPolydataPolygonPipeline.cc
+    G4VtkTextPipeline.cc
+    G4VtkText2DPipeline.cc
+    G4VtkUnstructuredGridPipeline.cc
     vtkTensorGlyphColor.cxx)
 
-set(G4VIS_MODULE_VTK_DEFINITIONS
-    -DG4VIS_USE_VTK)
-
-if(GEANT4_USE_QT)
-    list(APPEND G4VIS_MODULE_VTK_HEADERS
-          G4VtkQt.hh
-          G4VtkQtSceneHandler.hh
-          G4VtkQtViewer.hh)
-
-    list(APPEND G4VIS_MODULE_VTK_SOURCES
-         G4VtkQt.cc
-         G4VtkQtSceneHandler.cc
-         G4VtkQtViewer.cc)
-
-    list(APPEND G4VIS_MODULE_VTK_DEFINITIONS -DG4VIS_USE_VTK_QT)
-endif()
-
-add_definitions(${G4VIS_MODULE_VTK_DEFINITIONS})
-
-geant4_add_module(G4visVtk
-        PUBLIC_HEADERS ${G4VIS_MODULE_VTK_HEADERS}
-        SOURCES ${G4VIS_MODULE_VTK_SOURCES})
-
-geant4_module_compile_definitions(G4visVtk PRIVATE ${G4VIS_MODULE_VTK_DEFINITIONS})
-geant4_module_compile_definitions(G4UIcommon PRIVATE ${G4VIS_MODULE_VTK_DEFINITIONS})
+geant4_module_compile_definitions(G4visVtk PUBLIC G4VIS_USE_VTK)
 
 geant4_module_link_libraries(G4visVtk
-    PUBLIC
-        G4modeling
-        G4globman
-        G4hepgeometry
-        G4vis_management
-        ${VTK_LIBRARIES}
-    PRIVATE
-        G4graphics_reps
-        G4UIbasic
-        G4UIcommon)
+  PUBLIC
+    G4vis_management
+  PRIVATE
+    G4csg
+    G4geometrymng
+    G4globman
+    G4graphics_reps
+    G4intercoms
+    G4materials
+    G4modeling
+    ${VTK_LIBRARIES})
 
+# - VTK-Qt if Qt enabled
+if(GEANT4_USE_QT)
+  geant4_module_sources(G4visVtk
+    PUBLIC_HEADERS
+      G4VtkQt.hh
+    PRIVATE_HEADERS
+      G4VtkQtSceneHandler.hh
+      G4VtkQtViewer.hh
+    SOURCES
+      G4VtkQt.cc
+      G4VtkQtSceneHandler.cc
+      G4VtkQtViewer.cc)
+
+  geant4_module_compile_definitions(G4visVtk PUBLIC G4VIS_USE_VTK_QT)
+  geant4_module_link_libraries(G4visVtk PRIVATE G4UIimplementation)
+endif()
 

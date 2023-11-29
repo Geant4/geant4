@@ -42,6 +42,8 @@
 #include "G4Transform3D.hh"
 #include "G4GeometryTolerance.hh"
 
+#include <cmath>
+
 G4ArrowModel::~G4ArrowModel ()
 {
   delete fpHeadPolyhedron;
@@ -77,26 +79,33 @@ G4ArrowModel::G4ArrowModel
   // Make a cylinder slightly shorter than the arrow length so that it
   // doesn't stick out of the head.
   const G4double tolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
-  G4double shaftLength = std::sqrt
-    (std::pow(x2-x1,2)+std::pow(y2-y1,2)+std::pow(z2-z1,2));
-  if (shaftLength < tolerance) shaftLength = tolerance;
-  G4double shaftRadius = width/2.;
-  if (shaftRadius > shaftLength/100.) shaftRadius = shaftLength/100.;
-  if (shaftRadius < tolerance) shaftRadius = tolerance;
-  const G4double halfShaftLength = shaftLength/2.;
-  const G4double halfReduction = 4.*shaftRadius;
-  G4double halfLength = halfShaftLength - halfReduction;
-  if (halfLength < tolerance) halfLength = tolerance;
-  const G4Tubs shaft("shaft",0.,shaftRadius,halfLength,0.,twopi);
+  
+  G4double totalLength = std::hypot(x2-x1, y2-y1, z2-z1);
+  if (totalLength < tolerance)
+    {totalLength = tolerance;}
+  
+  G4double shaftRadius = width/6.;
+  if (shaftRadius < tolerance)
+    {shaftRadius = tolerance;}
+
+  // case 1 - arrow length >> width -> arrow head is width and 1.5x width tall
+  // case 2 - arrow length <  width -> arrow head is made to be 0.5x length
+  G4double arrowLength = std::min(1.5*width, 0.5*totalLength);
+
+  G4double shaftLength = totalLength - arrowLength;
+  if (shaftLength < 2*tolerance)
+    {shaftLength = 2*tolerance;}
+
+  const G4Tubs shaft("shaft",0.,shaftRadius,0.5*shaftLength,0.,twopi);
   fpShaftPolyhedron = shaft.CreatePolyhedron();
-  // Move it a little so that the tail is at z = -halfShaftLength.
+  // translate the polyhedron down w.r.t. the centre of the whole arrow
   if (fpShaftPolyhedron)
-    fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
+    {fpShaftPolyhedron->Transform(G4Translate3D(0,0,-0.5*arrowLength));}
 
   // Locate the head at +halfShaftLength.
-  const G4double zHi  = halfShaftLength;
-  const G4double zLow = halfShaftLength - 12.*shaftRadius;
-  const G4double rExt = 8. * shaftRadius;
+  const G4double zHi  = 0.5*totalLength;
+  const G4double zLow = zHi - arrowLength;
+  const G4double rExt = 0.5*width;
   const G4double xExt = std::sqrt(3.)*rExt/2.;
   const G4Tet head("head",
                    G4ThreeVector(0.,0.,zHi),

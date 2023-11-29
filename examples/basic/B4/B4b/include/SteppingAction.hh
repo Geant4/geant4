@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file SteppingAction.hh
+/// \file B4/B4b/include/SteppingAction.hh
 /// \brief Definition of the B4b::SteppingAction class
 
 #ifndef B4bSteppingAction_h
@@ -50,7 +50,7 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
   SteppingAction(const B4::DetectorConstruction* detConstruction);
-  ~SteppingAction() override;
+  ~SteppingAction() override = default;
 
   void UserSteppingAction(const G4Step* step) override;
 

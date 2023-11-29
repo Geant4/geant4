@@ -1,22 +1,46 @@
+# Category detutil History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-05-24 Makoto Asai (detutil-V11-01-01)
+- Additional fix for probe scorer.
 
-October 17th, 2022 M. Asai (detutil-V10-07-07)
+## 2023-04-28 Makoto Asai (detutil-V11-01-00)
+- Fixed probe scorer with alternative material setting, that didn't properly 
+  work in tasking mode.
+
+## 2022-11-29 I. Hrivnacova (detutil-V11-00-06)
+- Added support for ntuple merging in G4TScoreNtupleWriter;
+  it can be activated with
+     G4TScoreNtupleWriter::SetNtupleMerging()
+
+## 2022-11-17 Gabriele Cosmo (detutil-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-05 Ben Morgan (detutil-V11-00-04)
+- Remove large commented-out blocks of dead code
+
+## 2022-09-27 Ben Morgan (detutil-V11-00-03)
+- Remove inclusion of unused interfaces from G4detscorer
+- Apply core+recommended clang-tidy fixes, plus some code cleanup
+
+## 2022-09-01 Gabriele Cosmo (detutil-V11-00-02)
+- G4VScoringMesh: fixed reported Coverity defects for use of auto&.
+  Some minor code cleanup.
+
+## 2022-05-17 Makoto Asai (detutil-V11-00-01)
 - G4VScoringMesh.hh : Fixing virtual keyword.
+
+## 2021-12-10 Ben Morgan (detutil-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 7th, 2021  I. Hrivnacova (detutil-V10-07-06)
 - Updated G4TScoreNtupleWriter for changes in the analysis category:

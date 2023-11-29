@@ -76,10 +76,10 @@ template<typename Position>
   {
     G4KDNode_Base* aParent = 0;
     G4KDNode_Base* next = this;
-    int split = -1;
+    G4int split = -1;
     while(next)
     {
-      split = next->fAxis;
+      split = (G4int)next->fAxis;
       aParent = next;
 
       // works if node called "next" is valid
@@ -98,7 +98,7 @@ template<typename PointT>
 
     G4KDNode_Base* newNode = new G4KDNode<PointT>(fTree, point, aParent);
 
-    if((*point)[aParent->fAxis] > (*aParent)[aParent->fAxis])
+    if((*point)[(G4int)aParent->fAxis] > (*aParent)[aParent->fAxis])
     {
       aParent->fRight = newNode;
       newNode->fSide = 1;

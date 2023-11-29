@@ -1,38 +1,41 @@
 #
-# Macro file for the initialization phase of "exampleN02.cc"
-# when runing in interactive mode
+# Verbosity settings
 #
-# Sets some default verbose
-#
+
 /control/verbose 2
 /run/verbose 2
-#/tracking/verbose 2
+/tracking/verbose 0
+
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphics system)
 #
-#/vis/open OGL 600x600-0+0
-/vis/open OGL
-/vis/ogl/set/displayListLimit 100000
-#
-####/vis/open OGLSXm
-####/vis/open HepRepFile
-#
+
 #/vis/open DAWNFILE
+#/vis/open HepRepFile
+#/vis/open OGL
+/vis/open OGL 600x600-0+0
+#/vis/open OGLSXm
+#/vis/ogl/set/displayListLimit 10000
+
 #
-#draw scene
+# Draw the scene
 #
+
 /vis/drawVolume
-#
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/set/viewpointThetaPhi 45 180 deg
 /vis/viewer/zoom 1.4
-#
-# for drawing the tracks
+
+# for drawing tracks, uncomment the next line
 /vis/scene/add/trajectories smooth
-# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
-# for drawing the hits, uncomment next line
-# /vis/scene/add/hits
-# (if you prefer refreshing each event, comment out next line)
+
+# if too many tracks cause core dump, then set /tracking/storeTrajectory 0
+/tracking/storeTrajectory 1
+
+# for drawing hits, uncomment the next line
+/vis/scene/add/hits
+
+# for refreshing each event, comment out the next line
 /vis/scene/endOfEventAction accumulate
-#
+
 /run/beamOn 100

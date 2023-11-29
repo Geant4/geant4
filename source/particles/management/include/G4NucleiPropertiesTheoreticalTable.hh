@@ -44,7 +44,7 @@ class G4NucleiPropertiesTheoreticalTable
 {
   public:
 
-    ~G4NucleiPropertiesTheoreticalTable(){}
+    ~G4NucleiPropertiesTheoreticalTable()= default;
 
     enum {nEntries = 8979, shortTableSize = 137}; 
 

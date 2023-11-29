@@ -272,7 +272,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     newDirection = v0.vect().unit();
     newDirection.rotateUz(dir);
-    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, newDirection, trec);
+    auto newdp  = new G4DynamicParticle(ion, newDirection, trec);
     fvect->push_back(newdp);
   } else if(trec > 0.0) {
     edep = trec;

@@ -75,7 +75,7 @@ NT* G4TNtupleManager<NT, FT>::GetNtupleInFunction(
   auto ntupleDescription = GetNtupleDescriptionInFunction(id, functionName);
   if ( ! ntupleDescription ) return nullptr;
 
-  if ( ! ntupleDescription->fNtuple ) {
+  if ( ! ntupleDescription->GetNtuple() ) {
     if ( warn ) {
       G4Analysis::Warn("Ntuple " + to_string(id) + " does not exist.",
         fkClass, functionName);
@@ -83,7 +83,7 @@ NT* G4TNtupleManager<NT, FT>::GetNtupleInFunction(
     return nullptr;
   }
 
-  return ntupleDescription->fNtuple;
+  return ntupleDescription->GetNtuple();
 }
 
 //_____________________________________________________________________________
@@ -92,6 +92,11 @@ template <typename T>
 G4bool G4TNtupleManager<NT, FT>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const T& value)
 {
+  if (fNewCycle && fNtupleVector.empty()) {
+    CreateNtuplesFromBooking(*fNtupleBookingVector);
+    fNewCycle = false;
+  }
+
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
     //G4cout << "Skipping FillNtupleIColumn for " << ntupleId << G4endl;
     return false;
@@ -149,32 +154,25 @@ G4int G4TNtupleManager<NT, FT>::CreateNtuple(G4NtupleBooking* ntupleBooking)
   // The ntuple index
   auto index = ntupleBooking->fNtupleId - fFirstId;
 
-  // Check if the ntuple description of this id already exists
-  // (what should normally never happen)
-  // delete it and print a warning
-  if ( index < G4int(fNtupleDescriptionVector.size()) &&
-       fNtupleDescriptionVector[index] ) {
-    delete fNtupleDescriptionVector[index];
-    G4Analysis::Warn(
-      "Ntuple description " + to_string(ntupleBooking->fNtupleId) +
-      " already exists.", fkClass, "CreateNtuple");
-  }
-
-  // Allocate the vector element(s)
+  // Allocate the vector element(s) if needed
   while ( index >= G4int(fNtupleDescriptionVector.size()) ) {
     fNtupleDescriptionVector.push_back(nullptr);
   }
 
-  // Create ntuple description from ntuple booking.
-  auto ntupleDescription = new G4TNtupleDescription<NT, FT>(ntupleBooking);
-  fNtupleDescriptionVector[index] = ntupleDescription;
+  auto ntupleDescription = fNtupleDescriptionVector[index];
+  if (ntupleDescription == nullptr) {
+    // Create ntuple description from ntuple booking
+    // if it does not yet exist
+    ntupleDescription = new G4TNtupleDescription<NT, FT>(ntupleBooking);
+    fNtupleDescriptionVector[index] = ntupleDescription;
+  }
 
   // Do not create ntuple if it is inactivated
   if ( fState.GetIsActivation() &&
-       ( ! ntupleDescription->fActivation ) ) return G4Analysis::kInvalidId;
+       ( ! ntupleDescription->GetActivation() ) ) return G4Analysis::kInvalidId;
 
   // Do not create ntuple if it already exists
-  if ( ntupleDescription->fNtuple ) {
+  if ( ntupleDescription->GetNtuple() != nullptr ) {
     G4Analysis::Warn(
       "Ntuple " + to_string(ntupleBooking->fNtupleId) +
       " already exists.", fkClass, "CreateNtuple");
@@ -201,6 +199,9 @@ void G4TNtupleManager<NT, FT>::CreateNtuplesFromBooking(
 {
 // Create ntuple from ntuple bookings.
 
+  // Save the ntuple booking for new cycle
+  fNtupleBookingVector = &ntupleBookings;
+
   // Create ntuple descriptions from ntuple booking.
   for ( auto ntupleBooking : ntupleBookings ) {
     CreateNtuple(ntupleBooking);
@@ -212,11 +213,14 @@ template <typename NT, typename FT>
 G4bool
 G4TNtupleManager<NT, FT>::Reset()
 {
+  // Reset ntuple description, this will delete ntuple if present and
+  // we have its ownership.
+  // The ntuples will be recreated with new cycle or new open file.
+
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
-    delete ntupleDescription;
+    ntupleDescription->Reset();
   }
 
-  fNtupleDescriptionVector.clear();
   fNtupleVector.clear();
 
   return true;
@@ -227,8 +231,14 @@ template <typename NT, typename FT>
 void
 G4TNtupleManager<NT, FT>::Clear()
 {
-  // Reset function clears all data
-  Reset();
+  // Clear all data
+
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    delete ntupleDescription;
+  }
+
+  fNtupleDescriptionVector.clear();
+  fNtupleVector.clear();
 
   Message(G4Analysis::kVL2, "clear", "ntuples");
 }
@@ -282,7 +292,7 @@ G4bool G4TNtupleManager<NT, FT>::AddNtupleRow(
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
   if ( ! ntupleDescription ) return false;
 
-  auto ntuple = ntupleDescription->fNtuple;
+  auto ntuple = ntupleDescription->GetNtuple();
   if ( ! ntuple ) return false;
 
   auto result = ntuple->add_row();
@@ -292,7 +302,7 @@ G4bool G4TNtupleManager<NT, FT>::AddNtupleRow(
       fkClass, "AddTNtupleRow");
   }
 
-  ntupleDescription->fHasFill = true;
+  ntupleDescription->SetHasFill(true);
 
   if ( IsVerbose(G4Analysis::kVL4) ) {
     Message(G4Analysis::kVL4, "add", "ntuple row",
@@ -308,7 +318,7 @@ void  G4TNtupleManager<NT, FT>::SetActivation(
   G4bool activation)
 {
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
-    ntupleDescription->fActivation = activation;
+    ntupleDescription->SetActivation(activation);
   }
 }
 
@@ -320,7 +330,7 @@ void  G4TNtupleManager<NT, FT>::SetActivation(
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetActivation");
   if ( ! ntupleDescription ) return;
 
-  ntupleDescription->fActivation = activation;
+  ntupleDescription->SetActivation(activation);
 }
 
 //_____________________________________________________________________________
@@ -331,7 +341,21 @@ G4bool  G4TNtupleManager<NT, FT>::GetActivation(
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetActivation");
   if ( ! ntupleDescription ) return false;
 
-  return ntupleDescription->fActivation;
+  return ntupleDescription->GetActivation();
+}
+
+//_____________________________________________________________________________
+template <typename NT, typename FT>
+void G4TNtupleManager<NT, FT>::SetNewCycle(G4bool value)
+{
+  fNewCycle = value;
+}
+
+//_____________________________________________________________________________
+template <typename NT, typename FT>
+G4bool G4TNtupleManager<NT, FT>::GetNewCycle() const
+{
+  return fNewCycle;
 }
 
 //_____________________________________________________________________________
@@ -350,7 +374,7 @@ G4TNtupleManager<NT, FT>::GetNtuple(G4int ntupleId) const
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetNtuple");
   if ( ! ntupleDescription ) return nullptr;
 
-  return ntupleDescription->fNtuple;
+  return ntupleDescription->GetNtuple();
 }
 
 //_____________________________________________________________________________
@@ -390,4 +414,70 @@ template <typename NT, typename FT>
 G4int G4TNtupleManager<NT, FT>::GetNofNtuples() const
 {
   return G4int(fNtupleVector.size());
+}
+
+//_____________________________________________________________________________
+template <typename NT, typename FT>
+G4bool G4TNtupleManager<NT, FT>::List(std::ostream& output, G4bool onlyIfActive)
+{
+  // Save current output stream formatting
+  std::ios_base::fmtflags outputFlags(output.flags() );
+
+  // Define optimal field widths
+  size_t maxNameLength = 0;
+  size_t maxTitleLength = 0;
+  // size_t maxEntries = 0;
+  size_t nofActive = 0;
+  for (size_t i = 0; i < fNtupleDescriptionVector.size(); ++i) {
+    // auto ntuple = fNtupleVector[i];
+    const auto& ntupleBooking = fNtupleDescriptionVector[i]->GetNtupleBooking();
+    if (ntupleBooking.name().length() > maxNameLength) {
+      maxNameLength = ntupleBooking.name().length();
+    }
+    if (ntupleBooking.title().length() > maxTitleLength) {
+      maxTitleLength = ntupleBooking.title().length();
+    }
+    // if (ntuple->entries() > maxEntries) {
+    //   maxEntries = ntuple->entries();
+    // }
+    if (fNtupleDescriptionVector[i]->GetActivation()) {
+      ++nofActive;
+    }
+  }
+  size_t maxIdWidth = std::to_string(fNtupleVector.size() + GetFirstId()).length();
+  // size_t maxEntriesWidth = std::to_string(maxEntries).length();
+  // update string width for adde double quotas
+  maxNameLength += 2;
+  maxTitleLength += 2;
+
+  // List general info
+  output << "Ntuple: " << nofActive << " active ";
+  if (! onlyIfActive) {
+     output << " of " << GetNofNtuples() << " defined ";
+  }
+  output << G4endl;
+
+  // List objects
+  for (size_t i = 0; i < fNtupleDescriptionVector.size(); ++i) {
+    // auto ntuple = fNtupleVector[i];
+    const auto& ntupleBooking = fNtupleDescriptionVector[i]->GetNtupleBooking();
+
+    // skip inactivated objcets
+    if (fState.GetIsActivation() && onlyIfActive && (! fNtupleDescriptionVector[i]->GetActivation())) continue;
+
+    // print selected info
+    output << "   id: " << std::setw((G4int)maxIdWidth) << GetFirstId() + i
+      << " name: \"" << std::setw((G4int)maxNameLength) << std::left << ntupleBooking.name() + "\""
+      << " title: \"" << std::setw((G4int)maxTitleLength) << std::left << ntupleBooking.title() + "\"";
+      // << " entries: " << std::setw((G4int)maxEntriesWidth) << ntuple->entries();
+    if (! onlyIfActive) {
+      output << " active: " << std::boolalpha << fNtupleDescriptionVector[i]->GetActivation();
+    }
+    output  << G4endl;
+  }
+
+  // Restore the output stream formatting
+  output.flags(outputFlags);
+
+  return output.good();
 }

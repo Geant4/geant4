@@ -21,18 +21,18 @@
 
 #pragma once
 
-#include "PTL/Types.hh"
-
-#include <chrono>
+#include <cctype>
 #include <cstdlib>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <mutex>
 #include <set>
-#include <sstream>
+#include <sstream>  // IWYU pragma: keep
 #include <string>
 #include <tuple>
+#include <utility>
 
 namespace PTL
 {
@@ -41,7 +41,7 @@ namespace PTL
 //
 template <typename... Args>
 void
-ConsumeParameters(Args...)
+ConsumeParameters(Args&&...)
 {}
 
 //--------------------------------------------------------------------------------------//
@@ -59,10 +59,10 @@ using EnvChoiceList = std::set<EnvChoice<Tp>>;
 class EnvSettings
 {
 public:
-    typedef std::mutex                        mutex_t;
-    typedef std::string                       string_t;
-    typedef std::multimap<string_t, string_t> env_map_t;
-    typedef std::pair<string_t, string_t>     env_pair_t;
+    using mutex_t    = std::mutex;
+    using string_t   = std::string;
+    using env_map_t  = std::multimap<string_t, string_t>;
+    using env_pair_t = std::pair<string_t, string_t>;
 
 public:
     static EnvSettings* GetInstance()
@@ -189,7 +189,7 @@ GetEnv(const std::string& env_id, bool _default)
         else
         {
             for(auto& itr : var)
-                itr = tolower(itr);
+                itr = (char)std::tolower(itr);
             if(var == "off" || var == "false")
                 val = false;
         }
@@ -247,7 +247,7 @@ GetEnv(const std::string& env_id, const EnvChoiceList<Tp>& _choices, Tp _default
 {
     auto asupper = [](std::string var) {
         for(auto& itr : var)
-            itr = toupper(itr);
+            itr = (char)std::toupper(itr);
         return var;
     };
 
@@ -312,11 +312,11 @@ GetEnv(const std::string& env_id, const EnvChoiceList<Tp>& _choices, Tp _default
 
 template <typename Tp>
 Tp
-GetChoice(const EnvChoiceList<Tp>& _choices, const std::string str_var)
+GetChoice(const EnvChoiceList<Tp>& _choices, const std::string& str_var)
 {
     auto asupper = [](std::string var) {
         for(auto& itr : var)
-            itr = toupper(itr);
+            itr = (char)std::toupper(itr);
         return var;
     };
 
@@ -360,6 +360,42 @@ PrintEnv(std::ostream& os = std::cout)
 {
     os << (*EnvSettings::GetInstance());
 }
+
+//--------------------------------------------------------------------------------------//
+
+struct ScopeDestructor
+{
+    template <typename FuncT>
+    ScopeDestructor(FuncT&& _func)
+    : m_functor(std::forward<FuncT>(_func))
+    {}
+
+    // delete copy operations
+    ScopeDestructor(const ScopeDestructor&) = delete;
+    ScopeDestructor& operator=(const ScopeDestructor&) = delete;
+
+    // allow move operations
+    ScopeDestructor(ScopeDestructor&& rhs) noexcept
+    : m_functor(std::move(rhs.m_functor))
+    {
+        rhs.m_functor = []() {};
+    }
+
+    ScopeDestructor& operator=(ScopeDestructor&& rhs) noexcept
+    {
+        if(this != &rhs)
+        {
+            m_functor     = std::move(rhs.m_functor);
+            rhs.m_functor = []() {};
+        }
+        return *this;
+    }
+
+    ~ScopeDestructor() { m_functor(); }
+
+private:
+    std::function<void()> m_functor = []() {};
+};
 
 //--------------------------------------------------------------------------------------//
 

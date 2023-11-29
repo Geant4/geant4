@@ -47,16 +47,16 @@
 // ###                           XiMinus                              ###
 // ######################################################################
 
-G4XiMinus* G4XiMinus::theInstance = 0;
+G4XiMinus* G4XiMinus::theInstance = nullptr;
 
 G4XiMinus* G4XiMinus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "xi-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4XiMinus* G4XiMinus::Definition()
                     1,              +1,             0,
                     1,              -1,             0,
              "baryon",               0,            +1,        3312,
-                false,       0.1639*ns,          NULL,
+                false,       0.1639*ns,          nullptr,
                 false,       "xi");
 
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4XiMinus* G4XiMinus::Definition()
     anInstance->SetPDGMagneticMoment( -0.6507 * mN);
  
     //create Decay Table
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
-    G4VDecayChannel** mode = new G4VDecayChannel*[1];
+    auto  mode = new G4VDecayChannel*[1];
     // xi- -> lambda + pi-
     mode[0] = new G4PhaseSpaceDecayChannel("xi-",1.000,2,"lambda","pi-");
     
@@ -93,7 +93,7 @@ G4XiMinus* G4XiMinus::Definition()
 
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4XiMinus*>(anInstance);
+  theInstance = static_cast<G4XiMinus*>(anInstance);
   return theInstance;
 }
 

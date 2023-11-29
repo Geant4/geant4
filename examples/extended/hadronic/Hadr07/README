@@ -44,12 +44,12 @@
   way gives more freedom to register physics.
   
   Physics constructors are either constructors provided in Geant4 (with G4 prefix)
-  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
-  RadioactiveDecay and Electomagnetic.
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic,
+  GammaNuclear, RadioactiveDecay and Electomagnetic.
   (see geant4/source/physics_lists/constructors)
 
-  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
-  defined in NeutronHPMesseger.
+  HadronElasticPhysicsHP include a model for thermalized neutrons,
+  under the control of a comman defined in NeutronHPMesseger.
 
   GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
 
@@ -92,7 +92,10 @@
             ...........................................
             9     "total energy deposited in absorber 9
             10    "Edep (MeV/mm) profile along absorbers"
-   
+            11    "total Energy deposited in all absorbers"
+	    12    "total Energy leakage"
+            13    "total Energy released"
+		     
   One can control the name of the histograms file with the command:
   /analysis/setFileName  name  (default Hadr07)
 

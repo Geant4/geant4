@@ -80,9 +80,9 @@ public:
   virtual void out(std::ostream& aOut) const {
     std::string _fname;
     fullName(_fname);
-    char s[256];
-    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",fTypeName.c_str(),_fname.c_str(),fOffset,fType,fTitle.c_str());
-    aOut << s << std::endl;
+    char _s[256];
+    snpf(_s,sizeof(_s),"  %-14s%-15s offset=%3d type=%2d %-20s",fTypeName.c_str(),_fname.c_str(),fOffset,fType,fTitle.c_str());
+    aOut << _s << std::endl;
   }
 public:
   streamer_element(const std::string& aName,const std::string& aTitle,

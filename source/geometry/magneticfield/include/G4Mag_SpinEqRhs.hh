@@ -44,19 +44,19 @@ class G4MagneticField;
 
 class G4Mag_SpinEqRhs : public G4Mag_EqRhs
 {
-   public:  // with description
+   public:
 
      G4Mag_SpinEqRhs( G4MagneticField* MagField );
-    ~G4Mag_SpinEqRhs();
+    ~G4Mag_SpinEqRhs() override;
        // Constructor and destructor. No actions.
 
      void SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
-                                G4double mass); 
+                                G4double mass) override; 
 
      void EvaluateRhsGivenB( const  G4double y[],
                              const  G4double B[3],
-                                    G4double dydx[] ) const;
+                                    G4double dydx[] ) const override;
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
 

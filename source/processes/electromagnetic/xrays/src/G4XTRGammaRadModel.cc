@@ -47,7 +47,7 @@ G4XTRGammaRadModel::G4XTRGammaRadModel(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4XTRGammaRadModel::~G4XTRGammaRadModel() {}
+G4XTRGammaRadModel::~G4XTRGammaRadModel() = default;
 
 void G4XTRGammaRadModel::ProcessDescription(std::ostream& out) const
 {

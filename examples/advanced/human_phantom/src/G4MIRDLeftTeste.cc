@@ -45,40 +45,30 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftTeste::G4MIRDLeftTeste()
-{
-}
-
-G4MIRDLeftTeste::~G4MIRDLeftTeste()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftTeste::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 					      const G4String& colourName, G4bool wireFrame, G4bool)
 { 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 1.3*cm;
   G4double by= 1.5*cm;
   G4double cz= 2.3*cm;
 
-  G4Ellipsoid* OneTeste = new G4Ellipsoid("OneTeste",
+  auto* OneTeste = new G4Ellipsoid("OneTeste",
 					  ax, by, cz);
 
 
-  G4LogicalVolume* logicLeftTeste = new G4LogicalVolume(OneTeste,
+  auto* logicLeftTeste = new G4LogicalVolume(OneTeste,
 							soft,
 							"logical" + volumeName,
-							0, 0, 0);
+							nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physLeftTeste = new G4PVPlacement(0,
+  G4VPhysicalVolume* physLeftTeste = new G4PVPlacement(nullptr,
 						       G4ThreeVector(1.4 *cm,3.*cm, 0*cm),
 						       "physicalLeftTeste",
 						       logicLeftTeste,
@@ -89,11 +79,11 @@ G4VPhysicalVolume* G4MIRDLeftTeste::Construct(const G4String& volumeName,G4VPhys
 
   // Visualization Attributes
   //G4VisAttributes* LeftTesteVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   delete colourPointer;
 
-  G4VisAttributes* LeftTesteVisAtt = new G4VisAttributes(colour);
+  auto* LeftTesteVisAtt = new G4VisAttributes(colour);
   LeftTesteVisAtt->SetForceSolid(wireFrame);
   logicLeftTeste->SetVisAttributes(LeftTesteVisAtt);
 

@@ -28,7 +28,7 @@
 // Class description:
 //
 // This class represents any action taking place by the user at the
-// start/end point of processing one track. 
+// start/end point of processing one track.
 
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -41,24 +41,22 @@
 class G4TrackingManager;
 class G4Track;
 
-class G4UserTrackingAction 
+class G4UserTrackingAction
 {
-  public:
+ public:
+  // Constructor & Destructor
 
-    // Constructor & Destructor
+  G4UserTrackingAction();
+  virtual ~G4UserTrackingAction() = default;
 
-    G4UserTrackingAction();
-    virtual ~G4UserTrackingAction();
+  // Member functions
 
-    // Member functions
+  virtual void SetTrackingManagerPointer(G4TrackingManager* pValue);
+  virtual void PreUserTrackingAction(const G4Track*) {}
+  virtual void PostUserTrackingAction(const G4Track*) {}
 
-    virtual void SetTrackingManagerPointer(G4TrackingManager* pValue);
-    virtual void PreUserTrackingAction(const G4Track*){}
-    virtual void PostUserTrackingAction(const G4Track*){}
-
-  protected:
-
-    G4TrackingManager* fpTrackingManager = nullptr;
+ protected:
+  G4TrackingManager* fpTrackingManager = nullptr;
 };
 
 #endif

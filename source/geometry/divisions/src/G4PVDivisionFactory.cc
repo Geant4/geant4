@@ -34,8 +34,7 @@
 
 //_____________________________________________________________________________
 
-G4PVDivisionFactory::G4PVDivisionFactory()
-  : G4VPVDivisionFactory()
+G4PVDivisionFactory::G4PVDivisionFactory()   
 {
   // Protected singleton constructor.
   // ---
@@ -43,9 +42,7 @@ G4PVDivisionFactory::G4PVDivisionFactory()
 
 //_____________________________________________________________________________
 
-G4PVDivisionFactory::~G4PVDivisionFactory()
-{
-}
+G4PVDivisionFactory::~G4PVDivisionFactory() = default;
 
 //_____________________________________________________________________________
 
@@ -123,8 +120,7 @@ G4PVDivisionFactory::CreatePVDivision(const G4String& pName,
 
   // Get parameterisation data
   //
-  const G4VDivisionParameterisation* divParam
-    = dynamic_cast<const G4VDivisionParameterisation*>(param);
+  const auto divParam = dynamic_cast<const G4VDivisionParameterisation*>(param);
 
   if (divParam == nullptr)
   {
@@ -152,6 +148,6 @@ G4bool G4PVDivisionFactory::IsPVDivision(const G4VPhysicalVolume* pv) const
   // Returns true if pv is division
   // ---
 
-  return (dynamic_cast<const G4PVDivision*>(pv) != nullptr) ? true : false;
+  return dynamic_cast<const G4PVDivision*>(pv) != nullptr;
 }
 

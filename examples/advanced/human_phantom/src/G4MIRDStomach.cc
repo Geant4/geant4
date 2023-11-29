@@ -46,24 +46,13 @@
 #include "G4SubtractionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDStomach::G4MIRDStomach()
-{
-}
-
-G4MIRDStomach::~G4MIRDStomach()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDStomach::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					    const G4String& colourName, G4bool wireFrame, G4bool)
 {
-
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
- 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double ax = 4. * cm;
@@ -72,7 +61,7 @@ G4VPhysicalVolume* G4MIRDStomach::Construct(const G4String& volumeName,G4VPhysic
   //G4double zcut1 = -8. * cm;
   //G4double zcut2 = 8* cm;
 
-  G4Ellipsoid* stomach_out = new G4Ellipsoid("stomach_out", 
+  auto* stomach_out = new G4Ellipsoid("stomach_out", 
 					     ax, by, cz);
   // zcut1, zcut2);
   /*
@@ -86,11 +75,11 @@ G4VPhysicalVolume* G4MIRDStomach::Construct(const G4String& volumeName,G4VPhysic
 
     G4SubtractionSolid* stomach = new G4SubtractionSolid("stomach",stomach_out, cavity);
   */
-  G4LogicalVolume* logicStomach = new G4LogicalVolume(stomach_out, soft,
-						      "logical" + volumeName, 0, 0, 0);
+  auto* logicStomach = new G4LogicalVolume(stomach_out, soft,
+						      "logical" + volumeName, nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physStomach = new G4PVPlacement(0,G4ThreeVector(8. *cm,-4. * cm, 0),
+  auto* physStomach = new G4PVPlacement(nullptr,G4ThreeVector(8. *cm,-4. * cm, 0),
 						     "physicalStomach",
 						     logicStomach,
 						     mother,
@@ -99,10 +88,10 @@ G4VPhysicalVolume* G4MIRDStomach::Construct(const G4String& volumeName,G4VPhysic
 
 
   // Visualization Attributes
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
   
-  G4VisAttributes* StomachVisAtt = new G4VisAttributes(colour);
+  auto* StomachVisAtt = new G4VisAttributes(colour);
   StomachVisAtt->SetForceSolid(wireFrame);
   logicStomach->SetVisAttributes(StomachVisAtt);
   

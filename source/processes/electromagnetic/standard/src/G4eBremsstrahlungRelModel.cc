@@ -68,7 +68,10 @@
 #include "G4ElementVector.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ModifiedTsai.hh"
-//#include "G4DipBustGenerator.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
+#include "G4EmParameters.hh"
+#include "G4AutoLock.hh"
 
 const G4int G4eBremsstrahlungRelModel::gMaxZet = 120;
 
@@ -113,6 +116,11 @@ G4eBremsstrahlungRelModel::LPMFuncs  G4eBremsstrahlungRelModel::gLPMFuncs;
 // special data structure per element i.e. per Z
 std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::gElementData;
 
+namespace
+{
+  G4Mutex theBremRelMutex = G4MUTEX_INITIALIZER;
+}
+
 G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
                                                      const G4String& nam)
 : G4VEmModel(nam)
@@ -124,9 +132,6 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   //
   fLPMEnergyThreshold  = 1.e+39;
   fLPMEnergy           = 0.;
-
-  SetLPMFlag(true);
-  //
   SetAngularDistribution(new G4ModifiedTsai());
   //
   if (nullptr != p) {
@@ -136,16 +141,12 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
 G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 {
-  if (IsMaster()) {
+  if (fIsFirstInstance) {
     // clear ElementData container
-    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
-      if (nullptr != gElementData[iz]) {
-        delete gElementData[iz];
-      }
-    }
+    for (auto const & ptr : gElementData) { delete ptr; }
     gElementData.clear();
     // clear LPMFunctions (if any)
-    if (LPMFlag()) {
+    if (fUseLPM) {
       gLPMFuncs.fLPMFuncG.clear();
       gLPMFuncs.fLPMFuncPhi.clear();
       gLPMFuncs.fIsInitialized = false;
@@ -156,18 +157,33 @@ G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
                                            const G4DataVector& cuts)
 {
-  if (nullptr != p) {
+  // parameters in each thread
+  if (fPrimaryParticle != p) {
     SetParticle(p);
   }
+  fUseLPM = G4EmParameters::Instance()->LPM();
   fCurrentIZ = 0;
-  // init element data and precompute LPM functions (only if lpmflag is true)
-  if (IsMaster()) {
-    InitialiseElementData();
-    if (LPMFlag()) { InitLPMFunctions(); }
-    if (LowEnergyLimit() < HighEnergyLimit()) {
-      InitialiseElementSelectors(p, cuts);
+
+  // init static element data and precompute LPM functions only once
+  // for all treads and derived classes
+  if (gElementData.empty()) {
+    G4AutoLock l(&theBremRelMutex);
+    if (gElementData.empty()) {
+      fIsFirstInstance = true;
+      gElementData.resize(gMaxZet+1, nullptr);
     }
+    l.unlock();
   }
+  if (fIsFirstInstance) {
+    InitialiseElementData();
+    if (fUseLPM) { InitLPMFunctions(); }
+  }
+
+  // element selectors are initialized in the master thread
+  if (IsMaster()) {
+    InitialiseElementSelectors(p, cuts);
+  }
+  // initialisation in all threads
   if (nullptr == fParticleChange) { 
     fParticleChange = GetParticleChangeForLoss(); 
   }
@@ -180,9 +196,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
                                                 G4VEmModel* masterModel)
 {
-  if (LowEnergyLimit() < HighEnergyLimit()) {
-    SetElementSelectors(masterModel->GetElementSelectors());
-  }
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
@@ -202,7 +216,7 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
   fDensityFactor = gMigdalConstant*mat->GetElectronDensity();
   fLPMEnergy     = gLPMconstant*mat->GetRadlen();
   // threshold for LPM effect (i.e. below which LPM hidden by density effect)
-  if (LPMFlag()) {
+  if (fUseLPM) {
     fLPMEnergyThreshold = std::sqrt(fDensityFactor)*fLPMEnergy;
   } else {
     fLPMEnergyThreshold = 1.e+39;   // i.e. do not use LPM effect
@@ -212,7 +226,7 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
   fPrimaryTotalEnergy = kineticEnergy+fPrimaryParticleMass;
   fDensityCorr        = fDensityFactor*fPrimaryTotalEnergy*fPrimaryTotalEnergy;
   // set activation flag for LPM effects in the DCS
-  fIsLPMActive        = (fPrimaryTotalEnergy>fLPMEnergyThreshold);
+  fIsLPMActive = (fPrimaryTotalEnergy>fLPMEnergyThreshold);
 }
 
 // minimum primary (e-/e+) energy at which discrete interaction is possible
@@ -248,15 +262,14 @@ G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(const G4Material* material,
   // get element compositions of the material
   const G4ElementVector* theElemVector = material->GetElementVector();
   const G4double* theAtomNumDensVector = material->GetAtomicNumDensityVector();
-  const size_t        numberOfElements = theElemVector->size();
+  const std::size_t numberOfElements = theElemVector->size();
   // loop over the elements of the material and compute their contributions to
   // the restricted dE/dx by numerical integration of the dependent part of DCS
-  for (size_t ie = 0; ie < numberOfElements; ++ie) {
+  for (std::size_t ie = 0; ie < numberOfElements; ++ie) {
     G4VEmModel::SetCurrentElement((*theElemVector)[ie]);
-    //SetCurrentElement((*theElementVector)[i]->GetZasInt());
-    const G4double zet = (*theElemVector)[ie]->GetZ();
-    fCurrentIZ         = std::min(G4lrint(zet), gMaxZet);
-    dedx              += theAtomNumDensVector[ie]*zet*zet*ComputeBremLoss(tmax);
+    G4int zet = (*theElemVector)[ie]->GetZasInt();
+    fCurrentIZ = std::min(zet, gMaxZet);
+    dedx              += (zet*zet)*theAtomNumDensVector[ie]*ComputeBremLoss(tmax);
   }
   // apply the constant factor C/Z = 16\alpha r_0^2/3
   dedx *= gBremFactor;
@@ -332,7 +345,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
   if (tmin >= tmax) {
     return crossSection;
   }
-  fCurrentIZ   = std::min(G4lrint(Z), gMaxZet);
+  fCurrentIZ = std::min(G4lrint(Z), gMaxZet);
   // integrate numerically (dependent part of) the DCS between the kin. limits:
   // a. integrate between tmin and kineticEnergy of the e-
   crossSection = ComputeXSectionPerAtom(tmin);
@@ -592,8 +605,7 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
     GetAngularDistribution()->SampleDirection(dp,fPrimaryTotalEnergy-gammaEnergy,
                                               fCurrentIZ, couple->GetMaterial());
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* gamma = new G4DynamicParticle(fGammaParticle, gamDir,
-                                                   gammaEnergy);
+  auto gamma = new G4DynamicParticle(fGammaParticle, gamDir, gammaEnergy);
   vdp->push_back(gamma);
   // compute post-interaction kinematics of primary e-/e+ based on
   // energy-momentum conservation
@@ -608,7 +620,7 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
   if (gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* el = new G4DynamicParticle(
+    auto el = new G4DynamicParticle(
               const_cast<G4ParticleDefinition*>(fPrimaryParticle), dir, finalE);
     vdp->push_back(el);
   } else { // continue tracking the primary e-/e+ otherwise
@@ -619,19 +631,13 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
 
 void G4eBremsstrahlungRelModel::InitialiseElementData()
 {
-  const G4int size = gElementData.size();
-  if (size < gMaxZet+1) {
-    gElementData.resize(gMaxZet+1, nullptr);
-  }
   // create for all elements that are in the detector
-  const G4ElementTable* elemTable = G4Element::GetElementTable();
-  size_t numElems = (*elemTable).size();
-  for (size_t ielem=0; ielem<numElems; ++ielem) {
-    const G4Element* elem = (*elemTable)[ielem];
-    const G4double    zet = elem->GetZ();
-    const G4int      izet = std::min(G4lrint(zet),gMaxZet);
-    if (!gElementData[izet]) {
-      ElementData *elemData  = new ElementData();
+  auto elemTable = G4Element::GetElementTable();
+  for (auto const & elem : *elemTable) {
+    const G4double zet = elem->GetZ();
+    const G4int izet = std::min(elem->GetZasInt(), gMaxZet);
+    if (nullptr == gElementData[izet]) {
+      auto elemData  = new ElementData();
       const G4double fc = elem->GetfCoulomb();
       G4double Fel      = 1.;
       G4double Finel    = 1.;

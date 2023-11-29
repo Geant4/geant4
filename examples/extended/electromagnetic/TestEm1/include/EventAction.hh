@@ -42,8 +42,8 @@
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction();
-   ~EventAction() override;
+    EventAction() = default;
+   ~EventAction() override = default;
 
     void BeginOfEventAction(const G4Event*) override;
     void   EndOfEventAction(const G4Event*) override;
@@ -53,8 +53,8 @@ class EventAction : public G4UserEventAction
     inline G4double GetEnergyDeposit()    {return fTotalEnergyDeposit;};
     
   private:
-    G4double fTotalEnergyDeposit;
-    G4double fNIEL;
+    G4double fTotalEnergyDeposit = 0.;
+    G4double fNIEL = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

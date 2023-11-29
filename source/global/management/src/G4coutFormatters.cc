@@ -122,8 +122,7 @@ namespace G4coutFormatters
   void SetupStyleGlobally(const G4String& news)
   {
     static G4coutDestination ss;
-    G4coutbuf.SetDestination(&ss);
-    G4cerrbuf.SetDestination(&ss);
+    G4iosSetDestination(&ss);
     G4coutFormatters::HandleStyle(&ss, news);
     G4coutFormatters::SetMasterStyle(news);
   }

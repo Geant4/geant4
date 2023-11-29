@@ -35,9 +35,6 @@
 G4FermiDecayProbability::G4FermiDecayProbability()
 {}
 
-G4FermiDecayProbability::~G4FermiDecayProbability()
-{}
-
 G4double 
 G4FermiDecayProbability::ComputeProbability(G4int, G4int A, G4int spin,
 					    G4double etot, 
@@ -54,8 +51,8 @@ G4FermiDecayProbability::ComputeProbability(G4int, G4int A, G4int spin,
   G4double ekin = etot - mass1 - mass2;
 
   // mass factors
-  G4double massFactor = mass1*mass2/(mass1 + mass2);
-  massFactor *= std::sqrt(massFactor);
+  G4double x = mass1*mass2/(mass1 + mass2);
+  G4double massFactor = x*std::sqrt(x);
 
   // Spin factor S_n
   G4double S_n = 1.0;

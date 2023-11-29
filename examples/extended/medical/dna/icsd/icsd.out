@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,7 +19,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0xdfacb0
+##### Create analysis manager   0x9ccda0
 Using  analysis manager
 e-_G4DNAPTBAugerModel is constructed
 =======================================================================
@@ -28,8 +28,10 @@ e-_G4DNAPTBAugerModel is constructed
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -45,7 +47,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -55,8 +57,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -97,18 +100,36 @@ Screening factor                                   1
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
+=======================================               Materials of    DNA_e-_elastic      ================================================
+      Material#     Particle                              Model    LowLimit(MeV)   HighLimit(MeV)         Fast   Stationary    Chemistry
+       G4_WATER           e-  DNAScreenedRutherfordElasticModel                0                1           no           no           no
+            THF           e-                 DNAPTBElasticModel            1e-05            0.001           no           no           no
+             N2           e-                 DNAPTBElasticModel            1e-05             1.02           no           no           no
+==========================================================================================================================================
+=======================================               Materials of DNA_e-_excitation      ================================================
+      Material#     Particle                              Model    LowLimit(MeV)   HighLimit(MeV)         Fast   Stationary    Chemistry
+       G4_WATER           e-     DNAEmfietzoglouExcitationModel            8e-06             0.01           no           no           no
+            THF           e-              DNAPTBExcitationModel            9e-06            0.001           no           no           no
+             N2           e-              DNAPTBExcitationModel          1.3e-05             1.02           no           no           no
+==========================================================================================================================================
+=======================================               Materials of DNA_e-_ionisation      ================================================
+      Material#     Particle                              Model    LowLimit(MeV)   HighLimit(MeV)         Fast   Stationary    Chemistry
+       G4_WATER           e-     DNAEmfietzoglouIonisationModel            1e-05             0.01           no           no           no
+            THF           e-              DNAPTBIonisationModel          1.2e-05            0.001           no           no           no
+             N2           e-              DNAPTBIonisationModel         1.55e-05             1.02           no           no           no
+==========================================================================================================================================
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_elastic_interaction : Emin=    0 eV  Emax=  100 TeV
+      DNA_e-_elastic : Emin=    0 eV  Emax=  100 TeV
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_excitation_interaction : Emin=    0 eV  Emax=  100 TeV
+   DNA_e-_excitation : Emin=    0 eV  Emax=  100 TeV
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_ionisation_interaction : Emin=    0 eV  Emax=  100 TeV
+   DNA_e-_ionisation : Emin=    0 eV  Emax=  100 TeV
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : Analysis_W001

@@ -57,7 +57,6 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector& vt0,
                                       const G4ThreeVector& vt1,
                                       const G4ThreeVector& vt2,
                                             G4FacetVertexType vertexType)
-  : G4VFacet()
 {
   fVertices = new vector<G4ThreeVector>(3);
 
@@ -142,7 +141,6 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector& vt0,
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4TriangularFacet::G4TriangularFacet ()
-  : fSqrDist(0.)
 {
   fVertices = new vector<G4ThreeVector>(3);
   G4ThreeVector zero(0,0,0);
@@ -170,7 +168,7 @@ G4TriangularFacet::~G4TriangularFacet ()
 //
 void G4TriangularFacet::CopyFrom (const G4TriangularFacet& rhs)
 {
-  char *p = (char *) &rhs;
+  auto p = (char *) &rhs;
   copy(p, p + sizeof(*this), (char *)this);
 
   if (fIndices[0] < 0 && fVertices == nullptr)
@@ -184,17 +182,17 @@ void G4TriangularFacet::CopyFrom (const G4TriangularFacet& rhs)
 //
 void G4TriangularFacet::MoveFrom (G4TriangularFacet& rhs)
 {
-  fSurfaceNormal = move(rhs.fSurfaceNormal);
-  fArea = move(rhs.fArea);
-  fCircumcentre = move(rhs.fCircumcentre);
-  fRadius = move(rhs.fRadius);
-  fIndices = move(rhs.fIndices);
-  fA = move(rhs.fA); fB = move(rhs.fB); fC = move(rhs.fC);
-  fDet = move(rhs.fDet);
-  fSqrDist = move(rhs.fSqrDist);
-  fE1 = move(rhs.fE1); fE2 = move(rhs.fE2);
-  fIsDefined = move(rhs.fIsDefined);
-  fVertices = move(rhs.fVertices);
+  fSurfaceNormal = std::move(rhs.fSurfaceNormal);
+  fArea = rhs.fArea;
+  fCircumcentre = std::move(rhs.fCircumcentre);
+  fRadius = rhs.fRadius;
+  fIndices = rhs.fIndices;
+  fA = rhs.fA; fB = rhs.fB; fC = rhs.fC;
+  fDet = rhs.fDet;
+  fSqrDist = rhs.fSqrDist;
+  fE1 = std::move(rhs.fE1); fE2 = std::move(rhs.fE2);
+  fIsDefined = rhs.fIsDefined;
+  fVertices = rhs.fVertices;
   rhs.fVertices = nullptr;
 }
 
@@ -208,7 +206,7 @@ G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet& rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4TriangularFacet::G4TriangularFacet (G4TriangularFacet&& rhs)
+G4TriangularFacet::G4TriangularFacet (G4TriangularFacet&& rhs) noexcept
   : G4VFacet(rhs)
 {
   MoveFrom(rhs);
@@ -233,7 +231,7 @@ G4TriangularFacet::operator=(const G4TriangularFacet& rhs)
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4TriangularFacet&
-G4TriangularFacet::operator=(G4TriangularFacet&& rhs)
+G4TriangularFacet::operator=(G4TriangularFacet&& rhs) noexcept
 {
   SetVertices(nullptr);
 
@@ -254,8 +252,8 @@ G4TriangularFacet::operator=(G4TriangularFacet&& rhs)
 //
 G4VFacet* G4TriangularFacet::GetClone ()
 {
-  G4TriangularFacet* fc =
-    new G4TriangularFacet (GetVertex(0), GetVertex(1), GetVertex(2), ABSOLUTE);
+  auto fc = new G4TriangularFacet (GetVertex(0), GetVertex(1),
+                                   GetVertex(2), ABSOLUTE);
   return fc;
 }
 
@@ -268,8 +266,8 @@ G4VFacet* G4TriangularFacet::GetClone ()
 //
 G4TriangularFacet* G4TriangularFacet::GetFlippedFacet ()
 {
-  G4TriangularFacet* flipped =
-    new G4TriangularFacet (GetVertex(0), GetVertex(1), GetVertex(2), ABSOLUTE);
+  auto flipped = new G4TriangularFacet (GetVertex(0), GetVertex(1),
+                                        GetVertex(2), ABSOLUTE);
   return flipped;
 }
 
@@ -811,7 +809,7 @@ G4ThreeVector G4TriangularFacet::GetSurfaceNormal () const
 
 ////////////////////////////////////////////////////////////////////////
 //
-void G4TriangularFacet::SetSurfaceNormal (G4ThreeVector normal)
+void G4TriangularFacet::SetSurfaceNormal (const G4ThreeVector& normal)
 {
   fSurfaceNormal = normal;
 }

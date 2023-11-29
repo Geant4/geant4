@@ -30,57 +30,57 @@
 
 // Class Description
 // Cross-section data set for a high precision (based on JENDL_HE evaluated data
-// libraries) description of elastic scattering 20 MeV ~ 3 GeV; 
+// libraries) description of elastic scattering 20 MeV ~ 3 GeV;
 // Class Description - End
 
 // 15-Nov-06 First Implementation is done by T. Koi (SLAC/SCCS)
 // 080422 Add IsZAApplicable method (return false) by T. Koi
 //
 
-#include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Neutron.hh"
 #include "G4Element.hh"
+#include "G4Neutron.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicsVector.hh"
-#include <map> 
+#include "G4VCrossSectionDataSet.hh"
+
+#include <map>
 
 class G4ParticleHPJENDLHEData : public G4VCrossSectionDataSet
 {
-   public:
-   
-   G4ParticleHPJENDLHEData();
-   G4ParticleHPJENDLHEData( G4String , G4ParticleDefinition* );
+  public:
+    G4ParticleHPJENDLHEData();
+    G4ParticleHPJENDLHEData(G4String, G4ParticleDefinition*);
 
-   
-   ~G4ParticleHPJENDLHEData();
-   
-   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
+    ~G4ParticleHPJENDLHEData() override;
 
-   G4bool IsZAApplicable( const G4DynamicParticle* , G4double /*ZZ*/, G4double /*AA*/)
-   { return false; }
+    G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
-   G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
+    G4bool IsZAApplicable(const G4DynamicParticle*, G4double /*ZZ*/, G4double /*AA*/)
+    {
+      return false;
+    }
 
-   void BuildPhysicsTable(const G4ParticleDefinition&);
+    G4double GetCrossSection(const G4DynamicParticle*, const G4Element*, G4double aT);
 
-   void DumpPhysicsTable(const G4ParticleDefinition&);
-   
-   private:
-   
-      std::vector< G4bool > vElement;
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-      std::map< G4int , std::map< G4int , G4PhysicsVector* >* > mIsotope; 
+    void DumpPhysicsTable(const G4ParticleDefinition&) override;
 
-      G4bool isThisInMap ( G4int , G4int );
-      G4bool isThisNewIsotope ( G4int z , G4int a ) { return !( isThisInMap( z , a ) ); };
-      G4PhysicsVector* readAFile ( std::fstream* );
-      void registAPhysicsVector ( G4int , G4int , G4PhysicsVector* );
+  private:
+    std::vector<G4bool> vElement;
 
-      G4double getXSfromThisIsotope ( G4int , G4int , G4double );
+    std::map<G4int, std::map<G4int, G4PhysicsVector*>*> mIsotope;
 
-      G4String reactionName;
-      G4String particleName;
+    G4bool isThisInMap(G4int, G4int);
+    G4bool isThisNewIsotope(G4int z, G4int a) { return !(isThisInMap(z, a)); };
+    G4PhysicsVector* readAFile(std::fstream*);
+    void registAPhysicsVector(G4int, G4int, G4PhysicsVector*);
+
+    G4double getXSfromThisIsotope(G4int, G4int, G4double);
+
+    G4String reactionName;
+    G4String particleName;
 };
 
 #endif

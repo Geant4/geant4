@@ -40,9 +40,7 @@ G4String G4CsvHnRFileManager<HT>::GetHnFileName(
   if ( isUserFileName ) {
     return fRFileManager->GetFullFileName(fileName);
   }
-  else {
-    return fRFileManager->GetHnFileName(hnType, hnName);
-  }
+  return fRFileManager->GetHnFileName(hnType, hnName);
 }
 
 //_____________________________________________________________________________
@@ -61,7 +59,7 @@ HT*  G4CsvHnRFileManager<HT>::ReadT(
       fkClass, inFunction);
     return nullptr;
   }
-  if ( objectTypeInFile.compare(HT::s_class()) != 0 ) {
+  if (objectTypeInFile != HT::s_class()) {
     G4Analysis::Warn(
       "Object type read in " + G4Analysis::GetHnType<HT>() +" does not match",
       fkClass, inFunction);

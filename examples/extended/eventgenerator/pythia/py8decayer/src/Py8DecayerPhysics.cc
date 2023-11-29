@@ -69,59 +69,66 @@ void Py8DecayerPhysics::ConstructParticle()
 
 void Py8DecayerPhysics::ConstructProcess()
 {
+   // Adding external decayer to G4Decay process (per each thread).
+   // G4Decay will use the external decayer if G4Decay process is
+   // assigned to an unstable particle and that particle does not
+   // have its decay table.
 
-   // Loop over all particles instantiated and add external decayer
-   // to all decay processes where there's no decay table, plus tau's
+   // Loop over all particles instantiated and remove already-assigned
+   // decay table for tau's and B+/- so that they will decay through
+   // the external decayer (Pythia8).
 
-   // Create external decayer for G4Decay process
    // NOTE: The extDecayer will be deleted in G4Decay destructor
+   
    Py8Decayer* extDecayer = new Py8Decayer();
+   G4bool setOnce = true;
 
    auto particleIterator=GetParticleIterator();
    particleIterator->reset();
    while ((*particleIterator)())
    {    
       G4ParticleDefinition* particle = particleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();    
+
+      // remove native/existing decay table for
+      // a)tau's 
+      // b) B+/- 
+      // so that G4Decay will use the external decayer
+      if ( std::abs(particle->GetPDGEncoding()) == 15 ||
+      std::abs(particle->GetPDGEncoding()) == 521 )
+      {
+        if ( particle->GetDecayTable() )
+        {
+          delete particle->GetDecayTable();
+          particle->SetDecayTable(nullptr);
 /*
-      if ( verboseLevel > 1 ) {
-         G4cout << "Setting ext decayer for: " 
+          if ( verboseLevel > 1 ) {
+             G4cout << "Use ext decayer for: " 
                 <<  particleIterator->value()->GetParticleName()
                 << G4endl;
-      } 
+          } 
 */    
-      G4ProcessVector* processVector = pmanager->GetProcessList();
-      for ( size_t i=0; i<processVector->length(); ++i ) 
-      {    
-         G4Decay* decay = dynamic_cast<G4Decay*>((*processVector)[i]);
-         if ( decay ) 
-         {
-            // remove native/existing decay table for
-            // a)tau's 
-            // b) B+/- 
-            // and replace with external decayer
-            if ( std::abs(particle->GetPDGEncoding()) == 15 ||
-                 std::abs(particle->GetPDGEncoding()) == 521 )
-            {
-               if ( particle->GetDecayTable() )
-               {
-                  delete particle->GetDecayTable();
-                  particle->SetDecayTable(nullptr);
-               }
-               decay->SetExtDecayer(extDecayer);
-            }
-            // now set external decayer to all particles 
-            // that don't yet have a decay table
-            if ( !particle->GetDecayTable() )
-            {
-               decay->SetExtDecayer(extDecayer);
-            }
-         }
+        }
+      }
+
+      if(setOnce)
+      // One G4Decay object is shared by all unstable particles (per thread).
+      // Thus, we set the external decayer only once.
+      {
+        G4ProcessManager* pmanager = particle->GetProcessManager();    
+        G4ProcessVector* processVector = pmanager->GetProcessList();
+        for ( size_t i=0; i<processVector->length(); ++i ) 
+        {    
+           G4Decay* decay = dynamic_cast<G4Decay*>((*processVector)[i]);
+           if ( decay ) 
+           {
+             decay->SetExtDecayer(extDecayer);
+             setOnce = false;
+           }
+        }
       }              
    }
 
    return;
-   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

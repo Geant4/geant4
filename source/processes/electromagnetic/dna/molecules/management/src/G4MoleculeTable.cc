@@ -33,12 +33,14 @@
 #include "G4MoleculeTable.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeDefinition.hh"
+#include "G4MoleculeTableMessenger.hh"
 
 G4MoleculeTable* G4MoleculeTable::fpgMoleculeTable(0);
 
 //------------------------------------------------------------------------------
 
 G4MoleculeTable::G4MoleculeTable()
+  : fMoleculeDefTableMessenger(new G4MoleculeTableMessenger())
 {
 }
 

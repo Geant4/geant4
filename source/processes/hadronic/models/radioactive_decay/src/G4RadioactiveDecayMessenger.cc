@@ -73,13 +73,6 @@ G4RadioactiveDecayMessenger::G4RadioactiveDecayMessenger
   deallvolumesCmd->SetGuidance(" RDM is not applied to any logical volumes");
   //  deallvolumesCmd->SetParameterName("RemoveAVolume",true);
 
-  // Command to invoke internal conversion or not
-  icmCmd = new G4UIcmdWithABool("/process/had/rdm/applyICM",this);
-  icmCmd->SetGuidance("Command not active; kept for backward compatibility.");
-  icmCmd->SetGuidance("Internal conversion is always turned on.");
-  icmCmd->SetParameterName("ApplyICM",true);
-  icmCmd->SetDefaultValue(true);
-  
   // Command to invoke atomic relaxation or not
   armCmd = new G4UIcmdWithABool("/process/had/rdm/applyARM",this);
   armCmd->SetGuidance("True: ARM is applied; false: no");
@@ -153,7 +146,6 @@ G4RadioactiveDecayMessenger::~G4RadioactiveDecayMessenger ()
   delete deavolumeCmd;
   delete allvolumesCmd;
   delete deallvolumesCmd;
-  delete icmCmd;
   delete armCmd;
   delete userDecayDataCmd;
   delete userEvaporationDataCmd;
@@ -177,12 +169,10 @@ G4RadioactiveDecayMessenger::SetNewValue(G4UIcommand *command, G4String newValue
     theRadioactiveDecayContainer->SelectAllVolumes();
   } else if ( command == deallvolumesCmd ) {
     theRadioactiveDecayContainer->DeselectAllVolumes();
-  } else if ( command == verboseCmd ) {
-    theRadioactiveDecayContainer->SetVerboseLevel( verboseCmd->GetNewIntValue( newValues ) );
-  } else if ( command == icmCmd ) {
-    theRadioactiveDecayContainer->SetICM( icmCmd->GetNewBoolValue( newValues ) );
-  } else if ( command == armCmd ) {
-    theRadioactiveDecayContainer->SetARM( armCmd->GetNewBoolValue( newValues ) );
+  } else if (command == verboseCmd) {
+    theRadioactiveDecayContainer->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues) );
+  } else if (command == armCmd) {
+    theRadioactiveDecayContainer->SetARM(armCmd->GetNewBoolValue(newValues) );
   } else if ( command == userDecayDataCmd ) {
     G4int Z,A;
     G4String file_name;
@@ -201,8 +191,8 @@ G4RadioactiveDecayMessenger::SetNewValue(G4UIcommand *command, G4String newValue
     theRadioactiveDecayContainer->SetDecayDirection( colldirCmd->GetNew3VectorValue( newValues ) );
   } else if ( command == collangleCmd ) {
     theRadioactiveDecayContainer->SetDecayHalfAngle( collangleCmd->GetNewDoubleValue( newValues ) );
-  } else if ( command == thresholdForVeryLongDecayTimeCmd ) {
-    theRadioactiveDecayContainer->SetThresholdForVeryLongDecayTime( thresholdForVeryLongDecayTimeCmd->GetNewDoubleValue( newValues ) );
+  } else if (command == thresholdForVeryLongDecayTimeCmd) {
+    theRadioactiveDecayContainer->SetThresholdForVeryLongDecayTime(thresholdForVeryLongDecayTimeCmd->GetNewDoubleValue(newValues) );
   }
 }
 

@@ -17,28 +17,48 @@ namespace tools {
 
 typedef int int32;
 typedef __int64 int64;
-inline const char* int32_format() {static const char s[] = "%d";return s;}
-inline const char* int64_format() {static const char s[] = "%ld";return s;}
+inline const char* int32_format() {static const char s_v[] = "%d";return s_v;}
+inline const char* int64_format() {static const char s_v[] = "%ld";return s_v;}
 
 typedef unsigned int uint32;
 typedef unsigned __int64 uint64;
-inline const char* uint32_format() {static const char s[] = "%u";return s;}
-inline const char* uint64_format() {static const char s[] = "%lu";return s;}
-
-#ifdef _WIN64
-typedef unsigned long long diff_pointer_t;
-#else
-typedef unsigned long diff_pointer_t;
-#endif
+inline const char* uint32_format() {static const char s_v[] = "%u";return s_v;}
+inline const char* uint64_format() {static const char s_v[] = "%lu";return s_v;}
 
 #ifdef _WIN64
 typedef unsigned long long upointer;
-inline const char* upointer_format() {static const char s[] = "%llu";return s;}
-inline const char* upointer_format_x() {static const char s[] = "0x%llx";return s;}
+inline const char* upointer_format() {static const char s_v[] = "%llu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%llx";return s_v;}
+typedef unsigned long long diff_pointer_t;
 #else
 typedef unsigned long upointer;
-inline const char* upointer_format() {static const char s[] = "%lu";return s;}
-inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
+inline const char* upointer_format() {static const char s_v[] = "%lu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%lx";return s_v;}
+typedef unsigned long diff_pointer_t;
+#endif
+
+#elif defined(__MINGW32__)
+
+typedef int int32;
+typedef long long int64;
+inline const char* int32_format() {static const char s_v[] = "%d";return s_v;}
+inline const char* int64_format() {static const char s_v[] = "%ld";return s_v;}
+
+typedef unsigned int uint32;
+typedef unsigned long long uint64;
+inline const char* uint32_format() {static const char s_v[] = "%u";return s_v;}
+inline const char* uint64_format() {static const char s_v[] = "%lu";return s_v;}
+
+#ifdef __MINGW64__
+typedef unsigned long long upointer;
+inline const char* upointer_format() {static const char s_v[] = "%llu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%llx";return s_v;}
+typedef unsigned long long diff_pointer_t;
+#else
+typedef unsigned long upointer;
+inline const char* upointer_format() {static const char s_v[] = "%lu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%lx";return s_v;}
+typedef unsigned long diff_pointer_t;
 #endif
 
 #elif defined(_LP64)
@@ -46,38 +66,38 @@ inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s
 // 64 Bit Platforms
 typedef int int32;
 typedef long int64;
-inline const char* int32_format() {static const char s[] = "%d";return s;}
-inline const char* int64_format() {static const char s[] = "%ld";return s;}
+inline const char* int32_format() {static const char s_v[] = "%d";return s_v;}
+inline const char* int64_format() {static const char s_v[] = "%ld";return s_v;}
 
 typedef unsigned int uint32;
 typedef unsigned long uint64;
-inline const char* uint32_format() {static const char s[] = "%u";return s;}
-inline const char* uint64_format() {static const char s[] = "%lu";return s;}
+inline const char* uint32_format() {static const char s_v[] = "%u";return s_v;}
+inline const char* uint64_format() {static const char s_v[] = "%lu";return s_v;}
 
 typedef unsigned long diff_pointer_t;
 
 typedef unsigned long upointer;
-inline const char* upointer_format() {static const char s[] = "%lu";return s;}
-inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
+inline const char* upointer_format() {static const char s_v[] = "%lu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%lx";return s_v;}
 
 #else
 
 // 32-Bit Platforms
 typedef int int32;
 typedef long long int64;
-inline const char* int32_format() {static const char s[] = "%d";return s;}
-inline const char* int64_format() {static const char s[] = "%lld";return s;}
+inline const char* int32_format() {static const char s_v[] = "%d";return s_v;}
+inline const char* int64_format() {static const char s_v[] = "%lld";return s_v;}
 
 typedef unsigned int uint32;
 typedef unsigned long long uint64;
-inline const char* uint32_format() {static const char s[] = "%u";return s;}
-inline const char* uint64_format() {static const char s[] = "%llu";return s;}
+inline const char* uint32_format() {static const char s_v[] = "%u";return s_v;}
+inline const char* uint64_format() {static const char s_v[] = "%llu";return s_v;}
 
 typedef unsigned long diff_pointer_t;
 
 typedef unsigned long upointer;
-inline const char* upointer_format() {static const char s[] = "%lu";return s;}
-inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
+inline const char* upointer_format() {static const char s_v[] = "%lu";return s_v;}
+inline const char* upointer_format_x() {static const char s_v[] = "0x%lx";return s_v;}
 
 #endif
 
@@ -115,17 +135,17 @@ inline unsigned int size_float()  {return 4;}
 inline unsigned int size_double() {return 8;}
 
 // used in arrout :
-inline const char* type_format(float)  {static const char s[] = "%g";return s;}
-inline const char* type_format(double) {static const char s[] = "%g";return s;}
+inline const char* type_format(float)  {static const char s_v[] = "%g";return s_v;}
+inline const char* type_format(double) {static const char s_v[] = "%g";return s_v;}
 
-inline const char* type_format(char)   {static const char s[] = "%d";return s;}
-inline const char* type_format(short)  {static const char s[] = "%d";return s;}
-inline const char* type_format(int)    {static const char s[] = "%d";return s;}
+inline const char* type_format(char)   {static const char s_v[] = "%d";return s_v;}
+inline const char* type_format(short)  {static const char s_v[] = "%d";return s_v;}
+inline const char* type_format(int)    {static const char s_v[] = "%d";return s_v;}
 inline const char* type_format(int64)  {return int64_format();}
 
-inline const char* type_format(unsigned char)  {static const char s[] = "%u";return s;}
-inline const char* type_format(unsigned short) {static const char s[] = "%u";return s;}
-inline const char* type_format(unsigned int)   {static const char s[] = "%u";return s;}
+inline const char* type_format(unsigned char)  {static const char s_v[] = "%u";return s_v;}
+inline const char* type_format(unsigned short) {static const char s_v[] = "%u";return s_v;}
+inline const char* type_format(unsigned int)   {static const char s_v[] = "%u";return s_v;}
 inline const char* type_format(uint64)         {return uint64_format();}
 
 typedef unsigned int key_code;

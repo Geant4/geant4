@@ -1,18 +1,26 @@
---------------------------------------------------
+# Example B3 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example B3 History file
-                    -----------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-29 I. Hrivnacova (exampleB3-V11-00-02)
+- Activated merging ntuples with score ntuple writer
+- Added commented setting in run2.mac:
+  /control/cout/ignoreThreadsExcept 0
+
+## 2022-03-02 I. Hrivnacova (exampleB3-V11-00-01)
+- Set new analysis file name for the second run
+  in run2.mac to avoid overwriting the output from
+  the first run
+
+## 2021-12-10 Ben Morgan (exampleB3-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06-10-21 I. Hrivnacova (exampleB3-V10-07-03)
 - Migration to new G4AnalysisManager.hh header;

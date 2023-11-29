@@ -31,19 +31,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
-#include "PhysicsListMessenger.hh"
-
-#include "PhysicsListEmSpecialized.hh"
-#include "PhysicsListEmStandardTracking.hh"
-
-#include "G4EmStandardPhysics.hh"
 
 #include "G4BaryonConstructor.hh"
 #include "G4BosonConstructor.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+#include "PhysicsListEmSpecialized.hh"
+#include "PhysicsListEmStandardTracking.hh"
+#include "PhysicsListMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,25 +79,20 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::SetMode(const G4String& name)
 {
-  if(verboseLevel > -1)
-  {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::SetMode: <" << name << ">" << G4endl;
   }
 
-  if(name == "processes")
-  {
+  if (name == "processes") {
     fEmPhysicsList.reset(new G4EmStandardPhysics(GetVerboseLevel()));
   }
-  else if(name == "tracking")
-  {
+  else if (name == "tracking") {
     fEmPhysicsList.reset(new PhysicsListEmStandardTracking(GetVerboseLevel()));
   }
-  else if(name == "specialized")
-  {
+  else if (name == "specialized") {
     fEmPhysicsList.reset(new PhysicsListEmSpecialized(GetVerboseLevel()));
   }
-  else
-  {
+  else {
     G4cout << "PhysicsList::SetMode: <" << name << ">"
            << " is not defined" << G4endl;
   }

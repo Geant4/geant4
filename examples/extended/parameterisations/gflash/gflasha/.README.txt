@@ -18,6 +18,22 @@ include/ExGflashHomoShowerTuning.hh
 
 in this example.
 
+\section gflasha_s0 Physics List
+
+
+The Physics list factory is used in this example.
+The default physics list is FTFP_BERT which has EM opt0.
+Additionally the G4FastSimulationPhysics physics
+constructor was created to insert the G4FastSimulationManagerProcess
+that is making the interface between the fast simulation and the tracking.
+
+THe default PHYSICS list may be changed via setting of the PHYSLIST environment
+variable, e.g:
+
+\verbatim
+export PHYSLIST=FTFP_BERT_EMZ # for FTFP_BERT with opt 4 EM physics
+\endverbatim
+
 \section gflasha_s1 Geometry Definition
 
 In this example the calorimeter is a simple cube,
@@ -29,18 +45,18 @@ Geometry, sensitive detector and hits are defined respectively in:
 - ExGflashHit
 
 Materials can be choosen from Nist Materials: G4_Air G4_WATER ...
-eg: 
+eg:
 \verbatim
-/exgflash/det/setMat G4_PbWO4 
+/exgflash/det/setMat G4_PbWO4
 \endverbatim
-see also: csi1.mac 
+see also: csi1.mac
 
 \section gflasha_s2 Hit Scoring
 
 The virtual cylinder sliced longitudinally (slice) and radially (ring) was used.
-The size of the slices and rings are expressed in radiation 
+The size of the slices and rings are expressed in radiation
 length units and can be changed.
-eg: 
+eg:
 \verbatim
 /exgflash/det/setLbin 20   1.    ---> 20 slices of 1. radl
 /exgflash/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
@@ -110,7 +126,7 @@ The macros to run in batch mode:
 - test.mac - default macro for example testing
 
 - run01.mac - show how redefine the histograms
-  
+
 - csi1.mac - macro which produce profiles in CsI Material
 
 - test0.mac - profile caparison, long run without GFLASH

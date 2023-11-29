@@ -42,18 +42,18 @@
 // ######################################################################
 // ###                            GAMMA                               ###
 // ######################################################################
-G4Gamma* G4Gamma::theInstance = 0;
+G4Gamma* G4Gamma::theInstance = nullptr;
 
 
 G4Gamma*  G4Gamma::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "gamma";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -69,11 +69,11 @@ G4Gamma*  G4Gamma::Definition()
 		    2,              -1,            -1,          
 		    0,               0,             0,             
 	      "gamma",               0,             0,          22,
-	      true,               -1.0,          NULL,
+	      true,               -1.0,          nullptr,
              false,           "photon",          22
 	      );
   }
-  theInstance = reinterpret_cast<G4Gamma*>(anInstance);
+  theInstance = static_cast<G4Gamma*>(anInstance);
   return theInstance;
 }
 

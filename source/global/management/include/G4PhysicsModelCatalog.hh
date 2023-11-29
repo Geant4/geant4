@@ -45,7 +45,7 @@
 class G4PhysicsModelCatalog {
   public:
     static void Initialize();
-    ~G4PhysicsModelCatalog();
+    ~G4PhysicsModelCatalog()                              = default;
     G4PhysicsModelCatalog( const G4PhysicsModelCatalog& ) = delete;
     G4PhysicsModelCatalog& operator=( const G4PhysicsModelCatalog& ) = delete;
 
@@ -84,7 +84,7 @@ class G4PhysicsModelCatalog {
     // Returns the two limits, min and max respectively, that the modelID value can have.
   
   private:
-    G4PhysicsModelCatalog();
+    G4PhysicsModelCatalog() = default;
   
     static void SanityCheck();
     // Check that the two vectors (of model IDs and model names) have the same size,

@@ -30,13 +30,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-#include "ActionInitialization.hh"
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 
 #include <memory>
 
@@ -44,18 +44,15 @@
 
 int main(int argc, char** argv)
 {
-  if(argc < 2)
-  {
+  if (argc < 2) {
     G4cerr << "No macro file provided, exiting!" << G4endl;
     return 1;
   }
 
   // Creating run manager
-  std::unique_ptr<G4RunManager> runManager(
-    G4RunManagerFactory::CreateRunManager());
+  std::unique_ptr<G4RunManager> runManager(G4RunManagerFactory::CreateRunManager());
 
-  if(argc == 3)
-  {
+  if (argc == 3) {
     G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
     runManager->SetNumberOfThreads(nThreads);
   }
@@ -71,7 +68,7 @@ int main(int argc, char** argv)
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  G4String command  = "/control/execute ";
+  G4String command = "/control/execute ";
   G4String fileName = argv[1];
   UImanager->ApplyCommand(command + fileName);
 

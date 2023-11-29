@@ -25,9 +25,6 @@
 //
 /// \file electromagnetic/TestEm4/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
-//
-//
-//
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,14 +42,14 @@ class PhysicsList: public G4VUserPhysicsList
 {
   public:
     PhysicsList();
-   ~PhysicsList();
+   ~PhysicsList() override = default;
 
   protected:
     // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
  
-    virtual void SetCuts();
+    void SetCuts() override;
     
   protected:
     // these methods Construct particles 

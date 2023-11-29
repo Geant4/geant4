@@ -4,16 +4,17 @@
 # Original author: Gabriele Cosmo - CERN
 #
 ifeq ($(G4SYSTEM),Linux-clang)
-  CXX       := clang++
+  GCCBASE   := $(shell which g++ | sed -e "s=/bin/g++==")
+  CXX       := clang++ --gcc-toolchain=$(GCCBASE)
   CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe -pthread
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
   CPPFLAGS  += -std=c++17
   CXXFLAGS  += -std=c++17
   G4USE_STD17 := 1
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec
+    CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
@@ -45,7 +46,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
   G4RUNPATHOPTION := -Wl,-rpath, 
   G4STATIC_MODE += -Wl,--whole-archive
   G4NOSTATIC_MODE += -Wl,--no-whole-archive
-  CC := clang
+  CC := clang --gcc-toolchain=$(GCCBASE)
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
@@ -105,7 +106,6 @@ ifeq ($(G4SYSTEM),Linux-clang)
       QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
       QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
       QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
-      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
     endif
   else                          # Qt4
     ifndef QTFLAGS
@@ -124,13 +124,13 @@ ifeq ($(G4SYSTEM),Linux-clang)
   endif
   ifeq ($(QT_VERSION),5)
     ifndef QTLIBS              # Qt5
-      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets
     endif
     ifndef QT3DLIBS
-      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender -lQt5PrintSupport
+      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender
     endif
     ifndef GLQTLIBS
-      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL
     endif
   else                         # Qt4
     ifndef QTLIBS

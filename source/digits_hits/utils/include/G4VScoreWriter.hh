@@ -40,8 +40,8 @@ class G4VScoringMesh;
 class G4VScoreWriter
 {
  public:
-  G4VScoreWriter();
-  virtual ~G4VScoreWriter();
+  G4VScoreWriter() = default;
+  virtual ~G4VScoreWriter() = default;
 
  public:
   // store a quantity into a file
@@ -64,10 +64,10 @@ class G4VScoreWriter
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
  protected:
-  G4int fNMeshSegments[3];  // number of segments of the mesh
-  G4VScoringMesh* fScoringMesh;
-  G4int verboseLevel;
-  G4double fact;
+  G4int fNMeshSegments[3] = {0, 0, 0};  // number of segments of the mesh
+  G4VScoringMesh* fScoringMesh = nullptr;
+  G4int verboseLevel = 0;
+  G4double fact = 1.0;
 };
 
 #endif

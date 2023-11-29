@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -45,9 +44,8 @@
 #include "G4eIonisation.hh"
 #include "G4Electron.hh"
 #include "G4MollerBhabhaModel.hh"
-#include "G4UniversalFluctuation.hh"
-#include "G4UnitsTable.hh"
 #include "G4EmParameters.hh"
+#include "G4EmStandUtil.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,8 +61,7 @@ G4eIonisation::G4eIonisation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eIonisation::~G4eIonisation()
-{}
+G4eIonisation::~G4eIonisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -96,8 +93,9 @@ void G4eIonisation::InitialiseEnergyLossProcess(
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
-    if (nullptr == FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
-                
+    if (nullptr == FluctModel()) {
+      SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
+    }
     AddEmModel(1, EmModel(), FluctModel());
     isInitialised = true;
   }

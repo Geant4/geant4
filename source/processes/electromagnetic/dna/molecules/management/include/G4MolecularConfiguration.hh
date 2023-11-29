@@ -293,6 +293,9 @@ public:
 
   inline void Finalize();
   static void FinalizeAll();
+  static void PrintAll(); //hoang added
+  inline void UnFinalize();
+  void SetUserID(const G4String& userID);//hoang moved it to public
 
   inline const G4String& GetUserID() const;
 
@@ -331,7 +334,6 @@ protected:
 
   void CheckElectronOccupancy(const char* line) const;
   void MakeExceptionIfFinalized();
-  void SetUserID(const G4String& userID);
 
   void CreateDefaultDiffCoeffParam();
   static void ScaleAllDiffusionCoefficientsOnWater(double temperature_K);
@@ -589,6 +591,11 @@ G4MolecularConfiguration::GetDiffusionCoefficient(const G4Material* material,
                                                   double temperature) const
 {
   return fDiffParam(material, temperature, this);
+}
+
+inline void G4MolecularConfiguration::UnFinalize()
+{
+  fIsFinalized = false;
 }
 
 #endif

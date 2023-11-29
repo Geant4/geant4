@@ -43,32 +43,21 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLowerLargeIntestine::G4MIRDLowerLargeIntestine()
-{
-}
-
-G4MIRDLowerLargeIntestine::~G4MIRDLowerLargeIntestine()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeName,
 							G4VPhysicalVolume* mother,
 							const G4String& colourName, G4bool wireFrame,G4bool)
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double dx = 1.88 * cm; //a
   G4double dy = 2.13 *cm; //b
   G4double dz = 7.64 *cm; //(z1-z2)/2
 
-  G4EllipticalTube* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
-
+  auto* DescendingColonLowerLargeIntestine = new G4EllipticalTube("DiscendingColon",dx, dy, dz);
 
   G4double rmin= 0.0 *cm;
   G4double rmax = 1.88 * cm;//a
@@ -76,30 +65,30 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
   G4double startphi= 0. * degree;
   G4double deltaphi= 90. * degree;
 
-  G4Torus* SigmoidColonUpLowerLargeIntestine = new G4Torus("SigmoidColonUpLowerLargeIntestine",
+  auto* SigmoidColonUpLowerLargeIntestine = new G4Torus("SigmoidColonUpLowerLargeIntestine",
 							   rmin, rmax,rtor,
 							   startphi, deltaphi);
-
+							   
   rtor = 3. * cm;//R2
   G4VSolid* SigmoidColonDownLowerLargeIntestine = new G4Torus("SigmoidColonDownLowerLargeIntestine",
 							      rmin, rmax,
 							      rtor,startphi,deltaphi);
 
-  G4RotationMatrix* relative_rm =  new G4RotationMatrix();
+  auto* relative_rm =  new G4RotationMatrix();
   relative_rm -> rotateY(180. * degree);
   relative_rm -> rotateZ(90. * degree);
 
-  G4UnionSolid*  SigmoidColonLowerLargeIntestine = new G4UnionSolid( "SigmoidColonLowerLargeIntestine",
+  auto*  SigmoidColonLowerLargeIntestine = new G4UnionSolid( "SigmoidColonLowerLargeIntestine",
 								     SigmoidColonUpLowerLargeIntestine,
 								     SigmoidColonDownLowerLargeIntestine,
 								     relative_rm,
 								     G4ThreeVector(0.0,8.72*cm,0.0));
   // R1 + R2
  
-  G4RotationMatrix* relative_rm_2 =  new G4RotationMatrix();
+  auto* relative_rm_2 =  new G4RotationMatrix();
   relative_rm_2 -> rotateX(90. * degree);
 
-  G4UnionSolid* LowerLargeIntestine = new G4UnionSolid( "LowerLargeIntestine",
+  auto* LowerLargeIntestine = new G4UnionSolid( "LowerLargeIntestine",
 							DescendingColonLowerLargeIntestine,
 							SigmoidColonLowerLargeIntestine,
 							relative_rm_2,
@@ -107,11 +96,11 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
 							); // -rtor,0, -dz
 
 
-  G4LogicalVolume* logicLowerLargeIntestine = new G4LogicalVolume( LowerLargeIntestine, soft,
+  auto* logicLowerLargeIntestine = new G4LogicalVolume( LowerLargeIntestine, soft,
 								   "logical" + volumeName,
-								   0, 0, 0);
+								   nullptr, nullptr, nullptr);
   
-  G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(0,           // R1+ R2, -2.36 (y0), z0 
+  G4VPhysicalVolume* physLowerLargeIntestine = new G4PVPlacement(nullptr,           // R1+ R2, -2.36 (y0), z0 
 								 G4ThreeVector(8.72*cm, -2.36*cm,-18.64 *cm),
 								 "physicalLowerLargeIntestine",
 								 logicLowerLargeIntestine,
@@ -122,9 +111,9 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
 
   // Visualization Attributes
   //G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LowerLargeIntestineVisAtt = new G4VisAttributes(colour);
+  auto* LowerLargeIntestineVisAtt = new G4VisAttributes(colour);
   LowerLargeIntestineVisAtt->SetForceSolid(wireFrame);
   logicLowerLargeIntestine->SetVisAttributes(LowerLargeIntestineVisAtt);
 
@@ -146,6 +135,5 @@ G4VPhysicalVolume* G4MIRDLowerLargeIntestine::Construct(const G4String& volumeNa
   G4double LowerLargeIntestineMass = (LowerLargeIntestineVol)*LowerLargeIntestineDensity;
   G4cout << "Mass of LowerLargeIntestine = " << LowerLargeIntestineMass/gram << " g" << G4endl;
 
-  
   return physLowerLargeIntestine;
 }

@@ -56,13 +56,16 @@ class SensitiveDetectorHit : public G4VHit
     virtual void Print();
 
     // Set methods
-    void SetEdep     (G4double de)      { fEdep = de; };
-   
-    G4double GetEdep() const     { return fEdep; };
+    void SetEdep (G4double de) { fEdep = de; };
+    G4double GetEdep() const { return fEdep; };
+
+    void SetPath(G4double len) { fPath = len; };
+    G4double GetPath() const { return fPath; };
  
   private:
 
-      G4double      fEdep;
+    G4double fEdep;
+    G4double fPath;
 };
 
 typedef G4THitsCollection<SensitiveDetectorHit> SensitiveDetectorHitsCollection;

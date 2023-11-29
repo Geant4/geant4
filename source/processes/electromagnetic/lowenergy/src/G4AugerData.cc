@@ -24,15 +24,14 @@
 // ********************************************************************
 //
 //
-// 
-//
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
 // Based on G4FluoData by Elena Guardincerri
 // 
-// Modified: 30.07.02 VI Add select active Z + clean up against pedantic compiler
+// Modified: 
+// 30.07.02 VI Add select active Z + clean up against pedantic compiler
 //
 // -------------------------------------------------------------------
 
@@ -50,20 +49,13 @@
 
 G4AugerData::G4AugerData()
 {
-  G4int n = 0;
-  numberOfVacancies.resize(100,n);
-
+  numberOfVacancies.resize(105, 0);
   BuildAugerTransitionTable(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AugerData::~G4AugerData()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-size_t G4AugerData::NumberOfVacancies(G4int Z) const
+std::size_t G4AugerData::NumberOfVacancies(G4int Z) const
 {
   return numberOfVacancies[Z];
 }
@@ -92,9 +84,9 @@ G4int G4AugerData::VacancyId(G4int Z, G4int vacancyIndex) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Attention: this method wants the vacancy index, not the Id
-size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
+std::size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
 {
-  G4int n = 0;
+  std::size_t n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", JustWarning, "Energy deposited locally");
@@ -108,16 +100,16 @@ size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
 	return 0;
       }
     std::vector<G4AugerTransition> dataSet = (*element).second;
-    n = (G4int)dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
+    n = dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
   }
- return  n;
+  return  n;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) const
+std::size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) const
 {
-  size_t n = 0;
+  std::size_t n = 0;
   if (initIndex<0 || initIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
@@ -130,7 +122,8 @@ size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) con
       return 0;
     }
     std::vector<G4AugerTransition> dataSet = (*element).second;
-    const std::vector<G4int>* temp =  dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
+    const std::vector<G4int>* temp =
+      dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
     n = temp->size();
   }
   return n;
@@ -138,9 +131,9 @@ size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) con
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4AugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4int augerIndex) const
+std::size_t G4AugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4int augerIndex) const
 {
-  size_t n = 0;  
+  std::size_t n = 0;  
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z])
     {
       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
@@ -164,11 +157,10 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
 {
   G4int n = 0; 
 
-   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) 
-     {
-       G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
-       return 0;
-     }
+  if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies[Z]) {
+    G4Exception("G4AugerData::VacancyId()","de0002", FatalErrorInArgument,"");
+    return 0;
+  }
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {
@@ -178,7 +170,7 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
     std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].TransitionOriginatingShellId(transitionShellIndex);
   } 
- return n;
+  return n;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -242,8 +234,8 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
   }
   G4String name(ost.str());
   
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+  const char* path = G4FindDataDir("G4LEDATA");
+  if (nullptr == path)
     { 
       G4String excep = "G4AugerData::LoadData";
       G4Exception(excep,"em0006", FatalException,"" );
@@ -309,7 +301,7 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    delete newEnergyMap;
 	    delete newProbabilityMap;
 	    
-	    G4int n = initIds->size();	    
+	    G4int n = (G4int)initIds->size();	    
 	    nInitShells.push_back(n);
 	    numberOfVacancies[Z]++;
 	    delete initIds;
@@ -320,11 +312,13 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    newIds = new std::vector<G4int>;
 	    transEnergies = new G4DataVector;
 	    transProbabilities = new G4DataVector;
-	    newIdMap = new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
+	    newIdMap = 
+	      new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
 	    newEnergyMap = new std::map<G4int,G4DataVector,std::less<G4int> >;
-	    newProbabilityMap = new std::map<G4int,G4DataVector,std::less<G4int> >;	
+	    newProbabilityMap =
+	      new std::map<G4int,G4DataVector,std::less<G4int> >;	
 	  }      
-	sLocal++;
+	++sLocal;
 	if (sLocal == nColumns)
 	  {
 	    sLocal = 0;
@@ -336,13 +330,13 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	if (k%nColumns == 3){
 	  // 3rd column is the transition probabilities
 	  transProbabilities->push_back(a);	  
-	  k++;
+	  ++k;
 	}
 	else if(k%nColumns == 2){	 
 	  // 2nd column is new auger vacancy	  
 	  G4int l = (G4int)a;
 	  newIds->push_back(l);
-	  k++;
+	  ++k;
 	}
 	else if (k%nColumns == 1)
 	  {
@@ -407,10 +401,9 @@ std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 
 void G4AugerData::BuildAugerTransitionTable()
 {
-  for (G4int element = 6; element < 100; ++element)
-    {     
-      augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
-    }
+  for (G4int element = 6; element < 105; ++element) { 
+    augerTransitionTable.insert(trans_Table::value_type(element,LoadData(element)));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -426,18 +419,18 @@ void G4AugerData::PrintData(G4int Z)
 	     <<"----- "
 	     <<G4endl;
       
-      for (size_t k = 0; k<=NumberOfTransitions(Z,i); k++)
+      for (G4int k = 0; k<=(G4int)NumberOfTransitions(Z,i); ++k)
 	{ 
 	  G4int id = StartShellId(Z,i,k);
 	  
-	  for (size_t a = 0; a <= NumberOfAuger(Z,i,id); a++) {
+	  for (G4int a = 0; a <= (G4int)NumberOfAuger(Z,i,id); ++a) {
 	    G4double e = StartShellEnergy(Z,i,id,a)/MeV;
 	    G4double p = StartShellProb(Z,i,id,a);
-	    G4int augerId = AugerShellId(Z, i, id, a);
+	    std::size_t augerId = AugerShellId(Z, i, id, a);
 	    G4cout << k <<") Shell id: " << id <<G4endl;
 	    G4cout << "    Auger Originatig Shell Id :"<< augerId <<G4endl;
 	    G4cout << " - Transition energy = " << e << " MeV "<<G4endl;
-	    G4cout   << " - Transition probability = " << p <<G4endl;
+	    G4cout << " - Transition probability = " << p <<G4endl;
 	  }
 	}
       G4cout << "-------------------------------------------------" 
@@ -447,10 +440,12 @@ void G4AugerData::PrintData(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4AugerTransition* G4AugerData::GetAugerTransition(G4int Z,G4int vacancyShellIndex)
+G4AugerTransition* 
+G4AugerData::GetAugerTransition(G4int Z, G4int vacancyShellIndex)
 {
   std::vector<G4AugerTransition>* dataSet = &augerTransitionTable[Z];
-  std::vector<G4AugerTransition>::iterator vectorIndex = dataSet->begin() + vacancyShellIndex;
+  std::vector<G4AugerTransition>::iterator vectorIndex =
+    dataSet->begin() + vacancyShellIndex;
   
   G4AugerTransition* augerTransition = &(*vectorIndex);
   return augerTransition;

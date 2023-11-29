@@ -69,6 +69,7 @@ This directory contains a set of Geant4-DNA examples.
              and LET.
    - scavenger
              Activation of the scavenging process in chemistry
+   - UHDR    Ultra High Dose Rate
 
   Geometry and other
 
@@ -83,6 +84,13 @@ This directory contains a set of Geant4-DNA examples.
 
    - neuron 
        Irradiation of a realistic neuron cell.
+
+   - moleculardna
+       Damage simulation on DNA geometries.
+
+   - jetcounter
+      A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
+
    
 See the README page inside each example for more detail.
 

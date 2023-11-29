@@ -95,7 +95,7 @@ public:
                    const G4Region* r = nullptr);
   inline G4double GetDEDX(G4double kinEnergy, const G4String& part, 
 		   const G4String& mat,
-                   const G4String& s = "world");
+                   const G4String& regname = "world");
 
   G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 				     const G4ParticleDefinition*, 
@@ -104,28 +104,28 @@ public:
   inline G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 					    const G4String& part, 
 					    const G4String& mat,
-					    const G4String& s = "world");
+					    const G4String& regname = "world");
 
   G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetRange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, 
 			const G4Material*,
 			const G4Region* r = nullptr);
   inline G4double GetKinEnergy(G4double range, const G4String& part, 
 			const G4String& mat,
-			const G4String& s = "world");
+			const G4String& regname = "world");
 
   G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4ParticleDefinition*,
@@ -133,7 +133,7 @@ public:
 		   const G4Region* r = nullptr);
   inline G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
-                   const G4String& mat, const G4String& s = "world");
+                   const G4String& mat, const G4String& regname = "world");
 
   G4double GetShellIonisationCrossSectionPerAtom(
                    const G4String& part, G4int Z, 
@@ -145,7 +145,7 @@ public:
 			   const G4Region* r = nullptr);
   inline G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, 
 				  const G4String& proc, const G4String& mat, 
-				  const G4String& s = "world");
+				  const G4String& regname = "world");
 
   void PrintDEDXTable(const G4ParticleDefinition*);
 
@@ -264,6 +264,8 @@ public:
 
   void SetVerbose(G4int val);
 
+  inline void SetApplySmoothing(G4int val);
+
   // hide copy and assign
   G4EmCalculator & operator=(const  G4EmCalculator &right) = delete;
   G4EmCalculator(const  G4EmCalculator&) = delete;
@@ -281,8 +283,6 @@ private:
   G4bool FindEmModel(const G4ParticleDefinition*, 
                      const G4String& processName,
                            G4double kinEnergy);
-
-  G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
 
   G4VEnergyLossProcess* FindEnLossProcess(const G4ParticleDefinition*,
 					  const G4String& processName);
@@ -334,6 +334,7 @@ private:
 
   G4bool                       isIon = false;
   G4bool                       isApplicable = false;
+  G4bool                       applySmoothing = true;
 
   std::vector<const G4Material*>            localMaterials;
   std::vector<const G4MaterialCutsCouple*>  localCouples;
@@ -550,6 +551,13 @@ G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
 {
   return ComputeMeanFreePath(kinEnergy,FindParticle(particle),processName,
                              FindMaterial(material),cut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4EmCalculator::SetApplySmoothing(G4int val)
+{
+  applySmoothing = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

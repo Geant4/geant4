@@ -38,9 +38,9 @@
 #ifndef G4VUserDetectorConstruction_hh
 #define G4VUserDetectorConstruction_hh 1
 
-#include <vector>
-
 #include "globals.hh"
+
+#include <vector>
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -50,15 +50,14 @@ class G4VSensitiveDetector;
 class G4VUserDetectorConstruction
 {
   public:
-
-    G4VUserDetectorConstruction();
-    virtual ~G4VUserDetectorConstruction();
+    G4VUserDetectorConstruction() = default;
+    virtual ~G4VUserDetectorConstruction() = default;
 
     virtual G4VPhysicalVolume* Construct() = 0;
 
+    // This method is used in multi-threaded applications to build
+    // per-worker non-shared objects: SensitiveDetectors and Field managers.
     virtual void ConstructSDandField();
-      // This method is used in multi-threaded applications to build
-      // per-worker non-shared objects: SensitiveDetectors and Field managers.
 
     virtual void CloneSD();
     virtual void CloneF();
@@ -72,13 +71,11 @@ class G4VUserDetectorConstruction
     G4VUserParallelWorld* GetParallelWorld(G4int i) const;
 
   protected:
+    void SetSensitiveDetector(const G4String& logVolName, G4VSensitiveDetector* aSD,
+                              G4bool multi = false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD);
 
-    void SetSensitiveDetector(const G4String& logVolName,
-                              G4VSensitiveDetector* aSD, G4bool multi = false);
-    void SetSensitiveDetector(G4LogicalVolume* logVol,
-                              G4VSensitiveDetector* aSD);
   private:
-
     std::vector<G4VUserParallelWorld*> parallelWorld;
 };
 

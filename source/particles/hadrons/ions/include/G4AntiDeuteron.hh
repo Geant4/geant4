@@ -52,7 +52,7 @@ class G4AntiDeuteron : public G4Ions
  private:
    static G4AntiDeuteron* theInstance;
    G4AntiDeuteron(){}
-   ~G4AntiDeuteron(){}
+   ~G4AntiDeuteron() override= default;
 
  public:
    static G4AntiDeuteron* Definition();

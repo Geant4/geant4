@@ -40,7 +40,7 @@ class G4VAccumulable
   friend class G4AccumulableManager;
 
   public:
-    G4VAccumulable(const G4String& name = "");
+    G4VAccumulable(G4String name = "");
     G4VAccumulable(const G4VAccumulable& rhs) = default;
     G4VAccumulable(G4VAccumulable&& rhs) = default;
     virtual ~G4VAccumulable() = default;

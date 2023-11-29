@@ -1,27 +1,32 @@
--------------------------------------------------------------------
+# Category vis History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     *********************************************************
-     * Note that sub-categories have their own History files *
-     *********************************************************
+## 2022-12-12 Ben Morgan (vis-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-28 John Allison (vis-V11-00-04)
+  - Numerous tags for 11.1 in vis sub-categories - see History files therein.
 
-History file for visualization category
----------------------------------------
+## 2022-11-25 Gabriele Cosmo (vis-V11-00-03)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-07-14 Ben Morgan (vis-V11-00-02)
+- Remove obsolete externals gl2ps subcategory
+
+## 2022-03-25 Ben Morgan (vis-V11-00-01)
+- Remove retired G4tasking library as link dependency of vis libraries 
+
+## 2021-12-10 Ben Morgan (vis-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 14 November 2021 John Allison (vis-V10-07-15)
 - Category tag, comprising:

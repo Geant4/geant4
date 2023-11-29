@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -30,6 +30,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -37,6 +39,12 @@ Registered graphics systems are:
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
+  Qt3D (Qt3D)
+  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -107,13 +115,15 @@ PhysicsList::AddPhysicsList: <dna_opt2>
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
-Min kinetic energy for tables                      100 eV 
-Max kinetic energy for tables                      100 TeV
-Number of bins per decade of a table               7
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      300 MeV
+Number of bins per decade of a table               20
 Verbose level                                      1
 Verbose level for worker thread                    0
 Bremsstrahlung energy threshold above which 
@@ -124,22 +134,23 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
-Step function for e+-                              (0.2, 1 mm)
-Step function for muons/hadrons                    (0.2, 0.1 mm)
-Step function for light ions                       (0.2, 0.1 mm)
-Step function for general ions                     (0.2, 0.1 mm)
-Lowest e+e- kinetic energy                         1 keV
+Step function for e+-                              (0.2, 0.01 mm)
+Step function for muons/hadrons                    (0.1, 0.05 mm)
+Step function for light ions                       (0.1, 0.02 mm)
+Step function for general ions                     (0.1, 0.001 mm)
+Lowest e+e- kinetic energy                         0 eV 
 Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Use ICRU90 data                                    0
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
-Enable angular generator interface                 0
+Enable angular generator interface                 1
 Max kinetic energy for CSDA tables                 1 GeV
 Max kinetic energy for NIEL computation            0 eV 
 Linear loss limit                                  0.01
@@ -147,18 +158,18 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for e+-           2
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for e+-            0.08
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
-Skin parameter for msc step limitation of e+-      1
+Skin parameter for msc step limitation of e+-      3
 Lambda limit for msc step limit for e+-            1 mm
-Use Mott correction for e- scattering              0
+Use Mott correction for e- scattering              1
 Factor used for dynamic computation of angular 
   limit between single and multiple scattering     1
 Fixed angular limit between single 
@@ -171,8 +182,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     1
 PIXE atomic de-excitation enabled                  1
 De-excitation module ignores cuts                  1
@@ -181,7 +191,7 @@ Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 ======                 DNA Physics Parameters                  ========
 =======================================================================
-Use fast sampling in DNA models                    0
+Use fast sampling in DNA models                    1
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
 Use DNA e- solvation model type                    11003
@@ -197,68 +207,141 @@ Use DNA e- solvation model type                    11003
 ### ===  PIXE model for e+-:     Livermore
 
 phot:  for gamma SubType=12 BuildTable=0
-      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      LambdaPrime table from 200 keV to 300 MeV in 59 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+ LivermorePhElectric : Emin=    0 eV  Emax=  300 MeV  SauterGavrila Fluo
 
 compt:  for gamma SubType=13 BuildTable=1
-      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
-      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      Lambda table from 10 eV  to 1 MeV, 19 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 300 MeV in 46 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton : Emin=    0 eV  Emax=  100 TeV Fluo
+   LowEPComptonModel : Emin=    0 eV  Emax=   20 MeV Fluo
+        KleinNishina : Emin=   20 MeV Emax=  300 MeV Fluo
 
 conv:  for gamma SubType=14 BuildTable=1
-      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      Lambda table from 1.022 MeV to 300 MeV, 30 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  300 MeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      Lambda table from 10 eV  to 150 keV, 19 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 300 MeV in 62 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+   LivermoreRayleigh : Emin=    0 eV  Emax=  300 MeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=    1 MeV Emax=  300 MeV Nbins=40   1 MeV - 300 MeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
+
+eIoni:  for e-  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    1 MeV Emax=  300 MeV  deltaVI
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 0.3 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    1 MeV Emax=  300 MeV  AngularGen2BS
 
 e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
+          DummyModel : Emin=  7.4 eV  Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAChampionElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornExcitationModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornIonisationModel : Emin=    0 eV  Emax=  100 TeV  deltaBorn Fluo
+DNABornIonisationModel : Emin=    0 eV  Emax=    1 MeV  deltaBorn Fluo
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAVibExcitation:  for e- SubType=54 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNASancheExcitationModel : Emin=    0 eV  Emax=  100 eV 
+          DummyModel : Emin=  100 eV  Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 e-_G4DNAAttachment:  for e- SubType=55 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMeltonAttachmentModel : Emin=    0 eV  Emax=   13 eV 
+          DummyModel : Emin=   13 eV  Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
-          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+  GoudsmitSaunderson : Emin=    0 eV  Emax=  300 MeV Nbins=120 100 eV  - 300 MeV
+          StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-eIoni:  for e+  XStype:1  SubType=2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+eIoni:  for e+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.2, 0.01 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+        MollerBhabha : Emin=    0 eV  Emax=  300 MeV  deltaVI
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 0.3 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=  300 MeV  AngularGen2BS
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  300 MeV
+
+proton_G4DNAElastic:  for proton SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+proton_G4DNAExcitation:  for proton SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  500 keV
+DNABornExcitationModel : Emin=  500 keV Emax=  100 MeV
+DNARPWBAExcitationModel : Emin=  100 MeV Emax=  300 MeV
+
+proton_G4DNAIonisation:  for proton SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  500 keV  deltaRudd Fluo
+DNABornIonisationModel : Emin=  500 keV Emax=  100 MeV  deltaBorn Fluo
+DNARPWBAIonisationModel : Emin=  100 MeV Emax=  300 MeV  deltaBorn Fluo
+
+proton_G4DNAChargeDecrease:  for proton SubType=56 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+GenericIon_G4DNAIonisation:  for GenericIon SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel : Emin=    0 eV  Emax=  100 eV 
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-Max life time                                     0.14427 ps
+min MeanLife (from G4NuclideTable)                0.14427 ps 
+Max life time (from G4DeexPrecoParameters)        0.14427 ps 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
@@ -266,7 +349,205 @@ Auger electron emission enabled                   1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        1e+27  ns
+Threshold for very long decay time at rest        3.171e+10 y  
+======================================================================
+
+alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+alpha_G4DNAExcitation:  for alpha SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+
+alpha_G4DNAIonisation:  for alpha SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel : Emin=    0 eV  Emax=  100 eV 
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
+
+alpha_G4DNAChargeDecrease:  for alpha SubType=56 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+alpha+_G4DNAElastic:  for alpha+ SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+alpha+_G4DNAExcitation:  for alpha+ SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+
+alpha+_G4DNAIonisation:  for alpha+ SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel : Emin=    0 eV  Emax=  100 eV 
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
+
+alpha+_G4DNAChargeIncrease:  for alpha+ SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+alpha+_G4DNAChargeDecrease:  for alpha+ SubType=56 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
+          BetheBloch : Emin=    2 MeV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+helium_G4DNAElastic:  for helium SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+helium_G4DNAExcitation:  for helium SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+
+helium_G4DNAIonisation:  for helium SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel : Emin=    0 eV  Emax=  100 eV 
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
+
+helium_G4DNAChargeIncrease:  for helium SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+hydrogen_G4DNAElastic:  for hydrogen SubType=51 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel : Emin=    0 eV  Emax=    1 MeV
+          DummyModel : Emin=    1 MeV Emax=  300 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+hydrogen_G4DNAExcitation:  for hydrogen SubType=52 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel : Emin=    0 eV  Emax=  300 MeV
+
+hydrogen_G4DNAIonisation:  for hydrogen SubType=53 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel : Emin=    0 eV  Emax=  100 eV 
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+DNARuddIonisationExtendedModel : Emin=  100 eV  Emax=  300 MeV  deltaRudd Fluo
+
+hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  300 MeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for kaon+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for kaon-  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
+          BetheBloch : Emin=1.05231 MeV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for mu+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=225.219 keV  deltaVI
+          BetheBloch : Emin=225.219 keV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for mu-  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=225.219 keV  deltaVI
+          BetheBloch : Emin=225.219 keV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for pi+  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  300 MeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=3 Llim=1 mm
+
+hIoni:  for pi-  XStype:3  SubType=2
+      dE/dx and range tables from 10 eV  to 300 MeV in 140 bins
+      Lambda tables from threshold to 300 MeV, 20 bins/decade, spline: 1
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
+          BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
+      ===== Limit on energy threshold has been applied 
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                0.14427 ps 
+Max life time (from G4DeexPrecoParameters)        0.14427 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        3.171e+10 y  
 ======================================================================
 
 ========= Table of registered couples ============================
@@ -274,7 +555,7 @@ Threshold for very long decay time at rest        1e+27  ns
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -286,7 +567,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.240000s Real=0.241422s Sys=0.000000s
+  User=0.230000s Real=0.235739s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -306,9 +587,9 @@ Run Summary
  Nb of steps of primary track  = 43.48 +- 42.08
 
  Step size                     = 3.201 Ang +- 83299.677 fm 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 200 eV
 /run/beamOn 1000
 
@@ -317,7 +598,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -327,7 +608,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.420000s Real=0.430594s Sys=0.000000s
+  User=0.420000s Real=0.423479s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -347,9 +628,9 @@ Run Summary
  Nb of steps of primary track  = 50.72 +- 45.14
 
  Step size                     = 3.961 Ang +- 1.121 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 300 eV
 /run/beamOn 1000
 
@@ -358,7 +639,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -368,7 +649,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.610000s Real=0.619991s Sys=0.000000s
+  User=0.610000s Real=0.611152s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -388,9 +669,9 @@ Run Summary
  Nb of steps of primary track  = 53.30 +- 39.45
 
  Step size                     = 4.700 Ang +- 1.313 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 400 eV
 /run/beamOn 1000
 
@@ -399,7 +680,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -409,7 +690,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.810000s Real=0.812739s Sys=0.000000s
+  User=0.800000s Real=0.797564s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -429,9 +710,9 @@ Run Summary
  Nb of steps of primary track  = 58.72 +- 40.37
 
  Step size                     = 5.482 Ang +- 1.675 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 500 eV
 /run/beamOn 1000
 
@@ -440,7 +721,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -450,7 +731,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.990000s Real=1.003565s Sys=0.000000s
+  User=0.960000s Real=0.965937s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -470,9 +751,9 @@ Run Summary
  Nb of steps of primary track  = 60.09 +- 37.44
 
  Step size                     = 6.220 Ang +- 1.880 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 600 eV
 /run/beamOn 1000
 
@@ -481,7 +762,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -491,7 +772,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.200000s Real=1.206246s Sys=0.000000s
+  User=1.160000s Real=1.164032s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -511,9 +792,9 @@ Run Summary
  Nb of steps of primary track  = 68.03 +- 41.33
 
  Step size                     = 6.926 Ang +- 2.131 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 700 eV
 /run/beamOn 1000
 
@@ -522,7 +803,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -532,7 +813,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.370000s Real=1.386410s Sys=0.000000s
+  User=1.340000s Real=1.347869s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -552,9 +833,9 @@ Run Summary
  Nb of steps of primary track  = 69.85 +- 37.85
 
  Step size                     = 7.780 Ang +- 2.314 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 800 eV
 /run/beamOn 1000
 
@@ -563,7 +844,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -573,7 +854,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.580000s Real=1.591916s Sys=0.000000s
+  User=1.540000s Real=1.546781s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -593,9 +874,9 @@ Run Summary
  Nb of steps of primary track  = 75.25 +- 40.33
 
  Step size                     = 8.558 Ang +- 2.628 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 900 eV
 /run/beamOn 1000
 
@@ -604,7 +885,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -614,7 +895,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.750000s Real=1.817678s Sys=0.000000s
+  User=1.710000s Real=1.720424s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -634,9 +915,9 @@ Run Summary
  Nb of steps of primary track  = 77.65 +- 39.50
 
  Step size                     = 9.337 Ang +- 2.703 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 1 keV
 /run/beamOn 1000
 
@@ -645,7 +926,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -655,7 +936,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.930000s Real=1.949277s Sys=0.000000s
+  User=1.910000s Real=1.923085s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -675,9 +956,9 @@ Run Summary
  Nb of steps of primary track  = 80.54 +- 37.61
 
  Step size                     = 1.016 nm  +- 2.826 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 2 keV
 /run/beamOn 1000
 
@@ -686,7 +967,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -696,7 +977,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.870000s Real=3.908892s Sys=0.000000s
+  User=3.800000s Real=3.811435s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -716,9 +997,9 @@ Run Summary
  Nb of steps of primary track  = 121.71 +- 45.00
 
  Step size                     = 1.787 nm  +- 4.505 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 3 keV
 /run/beamOn 1000
 
@@ -727,7 +1008,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -737,29 +1018,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.230000s Real=6.373039s Sys=0.000000s
+  User=5.610000s Real=5.640624s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 3.00 keV
 
- Total Energy deposited in cytoplasm = 37.121 eV  +- 73.144 eV 
+ Total Energy deposited in cytoplasm = 36.862 eV  +- 72.897 eV 
 
- S value for cytoplasm (C<-C) = 59.466 Gy/Bq.s  +- 117.170 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 59.050 Gy/Bq.s  +- 116.776 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 120.594 eV  +- 244.212 eV 
+ Total Energy deposited in nucleus = 119.198 eV  +- 242.018 eV 
 
- S value for nucleus (N<-C) = 36.901 Gy/Bq.s  +- 74.727 Gy/Bq.s 
+ S value for nucleus (N<-C) = 36.474 Gy/Bq.s  +- 74.056 Gy/Bq.s 
 
- Track length of primary track = 376.152 nm  +- 90.566 nm 
- Projected range               = 167.236 nm  +- 107.693 nm 
+ Track length of primary track = 376.247 nm  +- 90.816 nm 
+ Projected range               = 166.897 nm  +- 106.840 nm 
 
- Nb of steps of primary track  = 152.22 +- 44.44
+ Nb of steps of primary track  = 152.29 +- 44.49
 
- Step size                     = 2.550 nm  +- 5.611 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 2.548 nm  +- 5.601 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 4 keV
 /run/beamOn 1000
 
@@ -768,7 +1049,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -778,29 +1059,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.710000s Real=7.784422s Sys=0.000000s
+  User=7.480000s Real=7.516755s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 4.00 keV
 
- Total Energy deposited in cytoplasm = 27.434 eV  +- 49.511 eV 
+ Total Energy deposited in cytoplasm = 29.359 eV  +- 56.532 eV 
 
- S value for cytoplasm (C<-C) = 43.947 Gy/Bq.s  +- 79.313 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 47.030 Gy/Bq.s  +- 90.559 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 100.215 eV  +- 213.599 eV 
+ Total Energy deposited in nucleus = 101.454 eV  +- 204.888 eV 
 
- S value for nucleus (N<-C) = 30.665 Gy/Bq.s  +- 65.360 Gy/Bq.s 
+ S value for nucleus (N<-C) = 31.044 Gy/Bq.s  +- 62.694 Gy/Bq.s 
 
- Track length of primary track = 594.496 nm  +- 141.796 nm 
- Projected range               = 269.783 nm  +- 174.428 nm 
+ Track length of primary track = 593.769 nm  +- 139.361 nm 
+ Projected range               = 267.991 nm  +- 171.957 nm 
 
- Nb of steps of primary track  = 182.61 +- 45.23
+ Nb of steps of primary track  = 181.46 +- 43.40
 
- Step size                     = 3.319 nm  +- 6.720 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 3.333 nm  +- 6.713 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 5 keV
 /run/beamOn 1000
 
@@ -809,7 +1090,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -819,29 +1100,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.710000s Real=9.798444s Sys=0.010000s
+  User=9.310000s Real=9.346249s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 5.00 keV
 
- Total Energy deposited in cytoplasm = 22.406 eV  +- 45.644 eV 
+ Total Energy deposited in cytoplasm = 23.330 eV  +- 45.554 eV 
 
- S value for cytoplasm (C<-C) = 35.892 Gy/Bq.s  +- 73.118 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 37.374 Gy/Bq.s  +- 72.974 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 75.723 eV  +- 172.441 eV 
+ Total Energy deposited in nucleus = 81.933 eV  +- 180.339 eV 
 
- S value for nucleus (N<-C) = 23.171 Gy/Bq.s  +- 52.766 Gy/Bq.s 
+ S value for nucleus (N<-C) = 25.071 Gy/Bq.s  +- 55.183 Gy/Bq.s 
 
- Track length of primary track = 866.759 nm  +- 208.344 nm 
- Projected range               = 414.403 nm  +- 239.328 nm 
+ Track length of primary track = 853.552 nm  +- 204.405 nm 
+ Projected range               = 402.541 nm  +- 243.993 nm 
 
- Nb of steps of primary track  = 216.94 +- 53.92
+ Nb of steps of primary track  = 212.23 +- 51.55
 
- Step size                     = 4.062 nm  +- 7.889 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 4.078 nm  +- 7.540 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 6 keV
 /run/beamOn 1000
 
@@ -850,7 +1131,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -860,29 +1141,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=11.520000s Real=11.632281s Sys=0.000000s
+  User=11.120000s Real=11.163798s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 6.00 keV
 
- Total Energy deposited in cytoplasm = 20.544 eV  +- 42.518 eV 
+ Total Energy deposited in cytoplasm = 20.277 eV  +- 46.872 eV 
 
- S value for cytoplasm (C<-C) = 32.910 Gy/Bq.s  +- 68.110 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 32.483 Gy/Bq.s  +- 75.086 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 67.521 eV  +- 152.081 eV 
+ Total Energy deposited in nucleus = 79.073 eV  +- 179.211 eV 
 
- S value for nucleus (N<-C) = 20.661 Gy/Bq.s  +- 46.536 Gy/Bq.s 
+ S value for nucleus (N<-C) = 24.196 Gy/Bq.s  +- 54.837 Gy/Bq.s 
 
- Track length of primary track = 1.145 um  +- 265.175 nm 
- Projected range               = 545.286 nm  +- 321.156 nm 
+ Track length of primary track = 1.154 um  +- 251.748 nm 
+ Projected range               = 567.230 nm  +- 311.695 nm 
 
- Nb of steps of primary track  = 242.22 +- 53.16
+ Nb of steps of primary track  = 244.09 +- 50.68
 
- Step size                     = 4.773 nm  +- 8.351 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 4.783 nm  +- 8.492 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 7 keV
 /run/beamOn 1000
 
@@ -891,7 +1172,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -901,29 +1182,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=13.330000s Real=13.492521s Sys=0.000000s
+  User=13.010000s Real=13.066670s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 7.00 keV
 
- Total Energy deposited in cytoplasm = 17.642 eV  +- 39.041 eV 
+ Total Energy deposited in cytoplasm = 21.191 eV  +- 46.524 eV 
 
- S value for cytoplasm (C<-C) = 28.262 Gy/Bq.s  +- 62.541 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 33.947 Gy/Bq.s  +- 74.527 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 53.637 eV  +- 129.394 eV 
+ Total Energy deposited in nucleus = 57.963 eV  +- 148.077 eV 
 
- S value for nucleus (N<-C) = 16.413 Gy/Bq.s  +- 39.594 Gy/Bq.s 
+ S value for nucleus (N<-C) = 17.736 Gy/Bq.s  +- 45.311 Gy/Bq.s 
 
- Track length of primary track = 1.491 um  +- 333.333 nm 
- Projected range               = 742.031 nm  +- 413.549 nm 
+ Track length of primary track = 1.487 um  +- 339.975 nm 
+ Projected range               = 727.058 nm  +- 426.536 nm 
 
- Nb of steps of primary track  = 270.23 +- 56.23
+ Nb of steps of primary track  = 269.13 +- 56.48
 
- Step size                     = 5.554 nm  +- 8.792 Ang
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 5.563 nm  +- 9.321 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 8 keV
 /run/beamOn 1000
 
@@ -932,7 +1213,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -942,29 +1223,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=15.340000s Real=15.482310s Sys=0.000000s
+  User=14.980000s Real=15.045502s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 8.00 keV
 
- Total Energy deposited in cytoplasm = 14.986 eV  +- 35.817 eV 
+ Total Energy deposited in cytoplasm = 15.251 eV  +- 38.892 eV 
 
- S value for cytoplasm (C<-C) = 24.006 Gy/Bq.s  +- 57.376 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 24.431 Gy/Bq.s  +- 62.303 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 48.635 eV  +- 138.413 eV 
+ Total Energy deposited in nucleus = 55.385 eV  +- 154.544 eV 
 
- S value for nucleus (N<-C) = 14.882 Gy/Bq.s  +- 42.353 Gy/Bq.s 
+ S value for nucleus (N<-C) = 16.947 Gy/Bq.s  +- 47.289 Gy/Bq.s 
 
- Track length of primary track = 1.841 um  +- 430.855 nm 
- Projected range               = 905.772 nm  +- 495.995 nm 
+ Track length of primary track = 1.851 um  +- 416.219 nm 
+ Projected range               = 908.080 nm  +- 516.266 nm 
 
- Nb of steps of primary track  = 296.47 +- 60.79
+ Nb of steps of primary track  = 297.96 +- 62.40
 
- Step size                     = 6.234 nm  +- 1.000 nm 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 6.250 nm  +- 9.969 Ang
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 9 keV
 /run/beamOn 1000
 
@@ -973,7 +1254,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -983,29 +1264,29 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=17.220000s Real=17.432392s Sys=0.010000s
+  User=16.990000s Real=17.069615s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 9.00 keV
 
- Total Energy deposited in cytoplasm = 13.037 eV  +- 31.007 eV 
+ Total Energy deposited in cytoplasm = 14.504 eV  +- 33.068 eV 
 
- S value for cytoplasm (C<-C) = 20.884 Gy/Bq.s  +- 49.672 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 23.234 Gy/Bq.s  +- 52.972 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 45.935 eV  +- 109.565 eV 
+ Total Energy deposited in nucleus = 45.458 eV  +- 116.289 eV 
 
- S value for nucleus (N<-C) = 14.056 Gy/Bq.s  +- 33.526 Gy/Bq.s 
+ S value for nucleus (N<-C) = 13.910 Gy/Bq.s  +- 35.584 Gy/Bq.s 
 
- Track length of primary track = 2.279 um  +- 496.900 nm 
- Projected range               = 1.127 um  +- 601.529 nm 
+ Track length of primary track = 2.299 um  +- 502.826 nm 
+ Projected range               = 1.161 um  +- 620.021 nm 
 
- Nb of steps of primary track  = 327.70 +- 60.61
+ Nb of steps of primary track  = 329.39 +- 62.43
 
- Step size                     = 6.975 nm  +- 1.059 nm 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 6.999 nm  +- 1.026 nm 
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 /gun/energy 10 keV
 /run/beamOn 1000
 
@@ -1014,7 +1295,7 @@ Run Summary
 Index : 0     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 meV
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 100 meV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1024,34 +1305,32 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=19.620000s Real=19.823501s Sys=0.010000s
+  User=18.720000s Real=18.807907s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 1000 e- of 10.00 keV
 
- Total Energy deposited in cytoplasm = 11.453 eV  +- 31.859 eV 
+ Total Energy deposited in cytoplasm = 10.917 eV  +- 30.266 eV 
 
- S value for cytoplasm (C<-C) = 18.347 Gy/Bq.s  +- 51.036 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 17.488 Gy/Bq.s  +- 48.483 Gy/Bq.s 
 
- Total Energy deposited in nucleus = 38.928 eV  +- 94.168 eV 
+ Total Energy deposited in nucleus = 40.915 eV  +- 109.283 eV 
 
- S value for nucleus (N<-C) = 11.912 Gy/Bq.s  +- 28.815 Gy/Bq.s 
+ S value for nucleus (N<-C) = 12.520 Gy/Bq.s  +- 33.440 Gy/Bq.s 
 
- Track length of primary track = 2.737 um  +- 576.239 nm 
- Projected range               = 1.377 um  +- 745.673 nm 
+ Track length of primary track = 2.762 um  +- 569.005 nm 
+ Projected range               = 1.352 um  +- 738.073 nm 
 
- Nb of steps of primary track  = 354.98 +- 65.42
+ Nb of steps of primary track  = 358.85 +- 64.76
 
- Step size                     = 7.732 nm  +- 1.094 nm 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+ Step size                     = 7.717 nm  +- 1.069 nm 
+There are 11 h1 histograms
+List them with "/analysis/list".
+View them with "/vis/plot" or "/vis/reviewPlots".
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.16 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.17 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

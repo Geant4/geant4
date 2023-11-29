@@ -112,7 +112,7 @@ public :
 
 #define ITDef(T)\
 public:\
-static G4ITType fType;\
+inline static G4ITType fType= G4ITTypeManager::Instance()->NewType();\
 static const G4ITType ITType()\
 {\
     return fType;\
@@ -131,8 +131,5 @@ virtual G4bool diff(const G4IT &right) const\
     const T& right_mol = (const T&)right ;\
     return (this->operator<(right_mol));\
 }
-
-#define ITImp(T) \
-G4ITType T::fType = G4ITTypeManager::Instance()->NewType();
 
 #endif // G4ITTYPE_HH

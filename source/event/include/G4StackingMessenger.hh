@@ -51,12 +51,12 @@ class G4StackingMessenger : public G4UImessenger
   public:
 
     G4StackingMessenger(G4StackManager* fCont);
-   ~G4StackingMessenger();
-    void SetNewValue(G4UIcommand* command, G4String newValues);
+   ~G4StackingMessenger() override;
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
   private:
 
-    G4StackManager* fContainer = nullptr;
+    G4StackManager* fContainer = nullptr; // Cannot be null after construction
     G4UIdirectory* stackDir;
     G4UIcmdWithoutParameter* statusCmd;
     G4UIcmdWithAnInteger* clearCmd;

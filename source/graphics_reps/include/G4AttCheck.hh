@@ -61,7 +61,7 @@ public: // With description
   (const std::vector<G4AttValue>* values,
    const std::map<G4String,G4AttDef>* definitions);
 
-  ~G4AttCheck();
+  ~G4AttCheck() = default;
 
   const std::vector<G4AttValue>* GetAttValues() const {
     return fpValues;

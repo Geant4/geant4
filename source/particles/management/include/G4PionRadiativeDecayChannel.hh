@@ -49,15 +49,15 @@ class G4PionRadiativeDecayChannel : public G4VDecayChannel
 
     G4PionRadiativeDecayChannel(const G4String& theParentName,
                                 G4double        theBR);
-    virtual ~G4PionRadiativeDecayChannel();
+    ~G4PionRadiativeDecayChannel() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);
+    G4DecayProducts* DecayIt(G4double) override;
 
   protected:
 
-    G4PionRadiativeDecayChannel();
+    G4PionRadiativeDecayChannel() = default;
 
-    G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel&);
+    G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel&) = default;
     G4PionRadiativeDecayChannel& operator=(const G4PionRadiativeDecayChannel&);
       // Copy constructor and assignment operator
 };

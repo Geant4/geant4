@@ -43,16 +43,16 @@
 // ######################################################################
 // ###                   ANTI  MU NEUTRINO                            ###
 // ######################################################################
-G4AntiNeutrinoMu* G4AntiNeutrinoMu::theInstance = 0;
+G4AntiNeutrinoMu* G4AntiNeutrinoMu::theInstance = nullptr;
 
 G4AntiNeutrinoMu* G4AntiNeutrinoMu::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_nu_mu";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -68,11 +68,11 @@ G4AntiNeutrinoMu* G4AntiNeutrinoMu::Definition()
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,          -14,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
                 false,           "mu"
               );
   }
-  theInstance = reinterpret_cast<G4AntiNeutrinoMu*>(anInstance);
+  theInstance = static_cast<G4AntiNeutrinoMu*>(anInstance);
   return theInstance;
 }
 

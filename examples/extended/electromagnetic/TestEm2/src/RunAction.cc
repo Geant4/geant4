@@ -47,9 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
- :G4UserRunAction(),
-  fDet(det),fKin(kin),fAnalysisManager(nullptr),fRun(nullptr),
-  fVerbose(0), fEdeptrue(1.), fRmstrue(1.), fLimittrue(DBL_MAX)
+ :fDet(det),fKin(kin)
 {
   fRunMessenger = new RunActionMessenger(this);
 

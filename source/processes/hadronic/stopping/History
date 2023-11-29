@@ -1,18 +1,27 @@
--------------------------------------------------------------------
+# Category hadr-stopping History
 
-          ==================================================
-          Geant4 - an Object-Oriented Toolkit for Simulation
-          ==================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/stopping directory
-            ----------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-05-15 Alberto Ribon (hadr-stopping-V11-01-00)
+- G4HadronicAbsorptionINCLXX : new class to handle annihilation at rest by INCLXX;
+  for the time being, only antiproton.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-11-26 Gabriele Cosmo (hadr-stopping-V11-00-02)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-04-13 Ben Morgan (hadr-stopping-V11-00-01)
+- Add needed dependencies
+
+## 2021-12-10 Ben Morgan (hadr-stopping-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 04 August 2021 A. Ribon (hadr-stopping-V10-07-07)
  --------------------------------------------------------------------

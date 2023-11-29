@@ -28,10 +28,11 @@
 // Original author: H.Kurashige (Kobe University), 12 November 2000
 // --------------------------------------------------------------------
 
-#include <algorithm>
-
 #include "G4VPhysicsConstructor.hh"
+
 #include "G4PhysicsBuilderInterface.hh"
+
+#include <algorithm>
 
 // This field helps to use the class G4VPCManager
 //
@@ -41,30 +42,23 @@ G4VPCManager G4VPhysicsConstructor::subInstanceManager;
 void G4VPCData::initialize()
 {
   _aParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
-  _builders          = new PhysicsBuilders_V;
+  _builders = new PhysicsBuilders_V;
 }
 
 // --------------------------------------------------------------------
-G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name)
-  : namePhysics(name)
+G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name) : namePhysics(name)
 {
   g4vpcInstanceID = subInstanceManager.CreateSubInstance();
-  // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
 }
 
 // --------------------------------------------------------------------
 G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name, G4int type)
-  : namePhysics(name)
-  , typePhysics(type)
+  : namePhysics(name), typePhysics(type)
 {
   g4vpcInstanceID = subInstanceManager.CreateSubInstance();
-  // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  // aParticleIterator = theParticleTable->GetIterator();
-
-  if(type < 0)
-    typePhysics = 0;
+  if (type < 0) typePhysics = 0;
 }
 
 // --------------------------------------------------------------------
@@ -75,21 +69,18 @@ G4VPhysicsConstructor::~G4VPhysicsConstructor()
 }
 
 // --------------------------------------------------------------------
-G4ParticleTable::G4PTblDicIterator*
-G4VPhysicsConstructor::GetParticleIterator() const
+G4ParticleTable::G4PTblDicIterator* G4VPhysicsConstructor::GetParticleIterator() const
 {
   return (subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator;
 }
 
 // --------------------------------------------------------------------
-G4VPhysicsConstructor::PhysicsBuilder_V
-G4VPhysicsConstructor::GetBuilders() const
+G4VPhysicsConstructor::PhysicsBuilder_V G4VPhysicsConstructor::GetBuilders() const
 {
   const auto& tls = *((subInstanceManager.offset[g4vpcInstanceID])._builders);
   PhysicsBuilder_V copy(tls.size());
   G4int i = 0;
-  for(const auto& el : tls)
-  {
+  for (const auto& el : tls) {
     copy[i++] = el;
   }
   return copy;
@@ -104,8 +95,7 @@ void G4VPhysicsConstructor::AddBuilder(G4PhysicsBuilderInterface* bld)
 // --------------------------------------------------------------------
 void G4VPhysicsConstructor::TerminateWorker()
 {
-  if(subInstanceManager.offset[g4vpcInstanceID]._builders != nullptr)
-  {
+  if (subInstanceManager.offset[g4vpcInstanceID]._builders != nullptr) {
     std::for_each(subInstanceManager.offset[g4vpcInstanceID]._builders->begin(),
                   subInstanceManager.offset[g4vpcInstanceID]._builders->end(),
                   [](PhysicsBuilder_V::value_type bld) { delete bld; });

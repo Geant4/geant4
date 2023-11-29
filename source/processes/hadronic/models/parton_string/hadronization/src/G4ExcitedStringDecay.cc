@@ -170,8 +170,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 	  if (generatedKineticTracks == nullptr || generatedKineticTracks->size() == 0)
 	  {
              // G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl; 
-             // continue;                                                             
-             success=false; NeedEnergyCorrector=false; break;                      
+             continue;
 	  }
 
           G4LorentzVector KTsum1(0.,0.,0.,0.);

@@ -37,6 +37,7 @@
 #include "G4HadronNucleonXsc.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh" 
 #include "G4NuclearRadii.hh"
+#include "G4Pow.hh"
 
 static const G4double inve = 1./CLHEP::eplus;
 
@@ -47,6 +48,7 @@ G4ComponentGGNuclNuclXsc::G4ComponentGGNuclNuclXsc()
 {
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
+  theLambda  = G4Lambda::Lambda();
   fHNXsc = new G4HadronNucleonXsc();
   fHadrNucl = new G4ComponentGGHadronNucleusXsc(); 
 }
@@ -169,14 +171,18 @@ void G4ComponentGGNuclNuclXsc::ComputeCrossSections(
   fZ = Z;
   fA = A;
   fEnergy = kinEnergy;
-
+  G4Pow* pG4Pow=G4Pow::GetInstance();
+  
   G4int pZ = G4lrint(aParticle->GetPDGCharge()*inve);
   G4int pA = aParticle->GetBaryonNumber();
+  G4int pL = aParticle->GetNumberOfLambdasInHypernucleus();
+  G4bool pHN = aParticle->IsHypernucleus();
+  G4double cHN(0.88);
 
   // hydrogen
   if(1 == Z && 1 == A) {
     G4double e = kinEnergy*CLHEP::proton_mass_c2/aParticle->GetPDGMass();
-    fHadrNucl->ComputeCrossSections(theProton, e, pZ, pA);
+    fHadrNucl->ComputeCrossSections( theProton, e, pZ, pA, pL );
     fTotalXsc = fHadrNucl->GetTotalGlauberGribovXsc(); 
     fElasticXsc = fHadrNucl->GetElasticGlauberGribovXsc(); 
     fInelasticXsc = fHadrNucl->GetInelasticGlauberGribovXsc(); 
@@ -193,13 +199,16 @@ void G4ComponentGGNuclNuclXsc::ComputeCrossSections(
   G4int tN = A - Z;
 
   G4double tR = G4NuclearRadii::Radius(Z, A);  
-  G4double pR = G4NuclearRadii::Radius(pZ, pA); 
-
+  G4double pR = G4NuclearRadii::Radius(pZ, pA);
+  
+  if(pHN) pR *= std::sqrt( pG4Pow->Z23( pA - pL ) + cHN*pG4Pow->Z23( pL ) )/pG4Pow->Z13(pA);
+  
   G4double cB = ComputeCoulombBarier(aParticle, kinEnergy, Z, A, pR, tR);
 
   if ( cB > 0. ) 
   {
     G4double sigma = (pZ*Z+pN*tN)*fHNXsc->HadronNucleonXscNS(theProton, theProton, pTkin);
+    if(pHN) sigma += pL*A*fHNXsc->HadronNucleonXsc(theLambda, theProton, pTkin);
     G4double ppInXsc = fHNXsc->GetInelasticHadronNucleonXsc();
 
     sigma += (pZ*tN+pN*Z)*fHNXsc->HadronNucleonXscNS(theNeutron, theProton, pTkin);

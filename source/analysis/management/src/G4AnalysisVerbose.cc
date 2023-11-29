@@ -31,8 +31,7 @@
 #include "G4ios.hh"
 
 //_____________________________________________________________________________
-G4AnalysisVerbose::G4AnalysisVerbose()
-{}
+G4AnalysisVerbose::G4AnalysisVerbose() = default;
 
 //
 // public method
@@ -57,16 +56,16 @@ void G4AnalysisVerbose::Message(G4int level,
          << action
          << " "
          << object;
-  if ( objectName.size() ) {
-    G4cout
-         << " : "
-         << objectName;
+  if (objectName.size() != 0u) {
+     G4cout << " : " << objectName;
   }
 
-  if ( success )
+  if (success) {
      G4cout << " " << fDoneText[level-1];
-  else
+  }
+  else {
      G4cout << " " << fFailureText;
+  }
 
   G4cout << G4endl;
 }

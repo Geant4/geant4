@@ -58,8 +58,7 @@ G4BraggIonGasModel::G4BraggIonGasModel(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BraggIonGasModel::~G4BraggIonGasModel()
-{}
+G4BraggIonGasModel::~G4BraggIonGasModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

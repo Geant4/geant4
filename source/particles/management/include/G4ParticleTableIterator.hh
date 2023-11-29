@@ -49,7 +49,7 @@ template < class K, class V > class G4ParticleTableIterator
     {
       if(!defined) return false;
       ++it;
-      return it!=mydict->end() ? true : false;
+      return static_cast<bool>(it!=mydict->end());
     }
       
     G4bool operator()()

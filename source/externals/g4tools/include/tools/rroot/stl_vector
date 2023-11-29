@@ -42,8 +42,8 @@ public:
     std::vector<T>::clear();
 
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     //::printf("debug : stl_vector::stream<%s> : version %d, byte count %d\n",
     //   stype(T()).c_str(),v,c);
@@ -67,7 +67,7 @@ public:
       delete [] vec;
     }
 
-    return a_buffer.check_byte_count(s,c,s_store_class());
+    return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   stl_vector(){
@@ -128,8 +128,8 @@ public:
     std::vector<vec_t>::clear();
 
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     //::printf("debug : stl_vector_vector::stream<%s> : version %d, byte count %d\n",stype(T()).c_str(),v,c);
 
@@ -161,7 +161,7 @@ public:
       }
     }
 
-    return a_buffer.check_byte_count(s,c,s_store_class());
+    return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   stl_vector_vector(){
@@ -220,8 +220,8 @@ public:
     //WARNING : not tested yet.
 
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     //::printf("debug : stl_vector_string::stream : version %d, byte count %d\n",v,c);
 
@@ -239,9 +239,9 @@ public:
       }
     }
 
-    //a_buffer.set_offset(startpos+c+sizeof(unsigned int));
+    //a_buffer.set_offset(startpos+_c+sizeof(unsigned int));
 
-    return a_buffer.check_byte_count(s,c,s_store_class());
+    return a_buffer.check_byte_count(_s,_c,s_store_class());
   }
 public:
   stl_vector_string(){

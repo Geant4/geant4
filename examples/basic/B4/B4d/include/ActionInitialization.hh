@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.hh
+/// \file B4/B4d/include/ActionInitialization.hh
 /// \brief Definition of the B4d::ActionInitialization class
 
 #ifndef B4dActionInitialization_h
@@ -40,8 +40,8 @@ namespace B4d
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization();
-    ~ActionInitialization() override;
+    ActionInitialization() = default;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;

@@ -66,7 +66,7 @@ List of fixes included in this public patch since the public release 11.0.1:
   o Persistency:
     -----------
     + GDML:
-      o In G4GDMLReadMaterials, fixed default temperature to 20°C
+      o In G4GDMLReadMaterials, fixed default temperature to 20Â°C
         (NTP_Temperature).
       o Addressing to the case of solid/volume name duplication when reading
         more than one GDML files.

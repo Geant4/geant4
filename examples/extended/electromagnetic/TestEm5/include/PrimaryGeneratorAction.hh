@@ -47,20 +47,20 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+   ~PrimaryGeneratorAction() override;
 
   public:
     void SetDefaultKinematic();
     void SetRndmBeam(G4double val) {fRndmBeam = val;};   
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
     G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:
-    G4ParticleGun*         fParticleGun;
-    DetectorConstruction*  fDetector;
-    G4double               fRndmBeam;
+    G4ParticleGun*         fParticleGun = nullptr;
+    DetectorConstruction*  fDetector = nullptr;
+    G4double               fRndmBeam = 0.;
     
-    PrimaryGeneratorMessenger* fGunMessenger;     
+    PrimaryGeneratorMessenger* fGunMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

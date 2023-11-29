@@ -127,7 +127,7 @@ void G4DNAEmfietzoglouIonisationModel::Initialise(const G4ParticleDefinition* pa
 
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
 
   // *** ELECTRON
 
@@ -751,18 +751,17 @@ G4int G4DNAEmfietzoglouIonisationModel::RandomSelect(G4double k,
 {
   G4int level = 0;
 
-  std::map<G4String, G4DNACrossSectionDataSet*, std::less<G4String> >::iterator pos;
-  pos = tableData.find(particle);
+  auto pos = tableData.find(particle);
 
-  if(pos != tableData.end())
+  if(pos != tableData.cend())
   {
     G4DNACrossSectionDataSet* table = pos->second;
 
     if(table != 0)
     {
       G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-      const size_t n(table->NumberOfComponents());
-      size_t i(n);
+      const G4int n = (G4int)table->NumberOfComponents();
+      G4int i(n);
       G4double value = 0.;
 
       while(i > 0)

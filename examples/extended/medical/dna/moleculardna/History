@@ -1,0 +1,78 @@
+# Example molecularDNA History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-05-31 Hoang Tran (molecularDNA-V11-01-04)
+- restore the correction of the material bug
+
+## 2023-04-20 Ronny Stanzani (molecularDNA-V11-01-03)
+- Add the ability to read particles from a space phase file (csv)
+- Overall code revision with clang-tidy
+
+## 2023-02-07 Hoang Tran (molecularDNA-V11-01-02)
+- correct the material bug in moleculardna example
+- add /scheduler/endTime 1 us in ecoli.mac and cylinders.mac
+
+## 2023-01-13 Ben Morgan (molecularDNA-V11-01-01)
+- Migrate data download to CERN EOS area for examples
+
+## 2022-12-12 Hoang Tran (molecularDNA-V11-01-00)
+- update ecoli.mac file (Nathanael's parameter)
+
+## 2022-11-15 Hoang Tran (molecularDNA-V11-00-11)
+- correct ecoli.mac file
+
+## 2022-10-24 Konstantinos Chatzipapas (molecularDNA-V11-00-10)
+- Add repair-survival-models
+	- molecularDNArepair.py
+	- molecularDNAsurvival.py (beta)
+- Update ecoli files (fix bug)
+- Update vis.mac and cylinders.mac
+
+## 2022-09-20 Hoang Tran (molecularDNA-V11-00-09)
+- Fixed the examples naming conventions violations
+- reduce event number of ecoli.mac
+
+## 2022-08-30 Vladimir Ivanchenko (molecularDNA-V11-00-08)
+- ChemistryList - added forgotten header
+
+## 2022-08-27 Hoang Tran (molecularDNA-V11-00-07)
+- Fix smart pointer warning in gcc 12.1.
+- Fix typo in the human_cell.C.
+
+## 2022-07-12 Konstantinos Chatzipapas (molecularDNA-V11-00-06)
+- Fix ecoli.C minor bug on filename.
+
+## 2022-06-10 Sergio Losilla (molecularDNA-V11-00-05)
+- Added missing headers.
+
+## 2022-05-03 Konstantinos Chatzipapas (molecularDNA-V11-00-04)
+- add ecoli.C macro file
+- add createSDD.py
+
+## 2022-04-14 Hoang Tran (molecularDNA-V11-00-03)
+- correct a minor mistake in AnalysisManager
+- Add Complexity Frequency in cylinder.C
+- add human_cell.C macro file
+
+## 2022-02-27 Vladimir Ivanchenko (molecularDNA-V11-00-02)
+- PhysicsList - added DecayPhysics and RadioactiveDecayPhysics
+- ParallelWorldPhysics - minor clean-up
+- molecular.cc - updated according to the recent recommendations:
+    removed ifdef, removed RanecuEngine, use visualisation in 
+    the interactive session only, use G4RunManagerFactory
+
+## 2022-02-17 Hoang Tran (molecularDNA-V11-00-01)
+- modify Chemistry list
+- timeout for the geometry data download
+- the exception message in DNAGeometryMessenger::SetNewValue
+
+## 2022-01-07 Hoang Tran (molecularDNA-V11-00-00)
+- initial tag
+
+
+

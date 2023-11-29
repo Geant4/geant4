@@ -1,18 +1,26 @@
--------------------------------------------------------------------
+# Example TestEm11 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    TestEm11 History file
-                    ---------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2023-03-24 Michel Maire (testem11-V11-01-01)
+- PhysicsList::RadioactiveDecay(): setARM = false
+- continue revision of header files
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-01-25 Michel Maire (testem11-V11-01-00)
+- compute and plot energy leakage and total energy
+- revision of all header files
+
+## 2022-10-11 Michel Maire (testem11-V11-00-01)
+- PhysicsList::AddRadioactiveDecay(): update lifeTime threshold
+ 
+## 2021-12-10 Ben Morgan (testem11-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06-10-21 I. Hrivnacova (testem11-V10-07-05)
 - Migration to new G4AnalysisManager.hh header;

@@ -1,11 +1,22 @@
- -------------------------------------------------------------------------------
-History File, 2011/09/08 C. Casarino, Created
-carlo.casarino@polooncologicocefalu.it
--------------------------------------------------------------------------------
+# Example iort_therapy History
 
-         ====================================================
-             History file of the IORT application
-         ====================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-09-09 Susanna Guatelli (iort_therapy-V11-00-02)
+- Ranecu engine removed.
+
+## 2022-06-20 Sergio Losilla (iort_therapy-V11-00-01)
+- Simplified calls to SetProductionCut.
+
+## 2021-12-10 Ben Morgan (iort_therapy-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 24.05.2021 - B. Morgan (iort_therapy-V10-07-01)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4
 

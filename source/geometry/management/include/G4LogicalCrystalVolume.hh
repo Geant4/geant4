@@ -59,9 +59,9 @@ class G4LogicalCrystalVolume : public G4LogicalVolume
                            G4int l = 0,
                            G4double rot = 0.0);
 
-    ~G4LogicalCrystalVolume();
+    ~G4LogicalCrystalVolume() override;
     
-    G4bool IsExtended() const { return true; }
+    G4bool IsExtended() const override { return true; }
       // Return true if it is not a base-class object.
 
     void SetMillerOrientation(G4int h, G4int k, G4int l, G4double rot = 0.0);

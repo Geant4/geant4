@@ -39,21 +39,21 @@ public:
   G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition* p = 0, 
               const G4String& nam = "DNAUeharaScreenedRutherfordElasticModel");
 
-  virtual ~G4DNAUeharaScreenedRutherfordElasticModel();
+  ~G4DNAUeharaScreenedRutherfordElasticModel() override = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
-                                         const G4ParticleDefinition* p,
-                                         G4double ekin,
-                                         G4double emin,
-                                         G4double emax);
+  G4double CrossSectionPerVolume(const G4Material* material,
+				 const G4ParticleDefinition* p,
+				 G4double ekin,
+				 G4double emin,
+				 G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-                                 const G4MaterialCutsCouple*,
-                                 const G4DynamicParticle*,
-                                 G4double tmin,
-                                 G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy) override;
 
   inline void SelectFasterComputation(G4bool input);
   
@@ -64,27 +64,14 @@ public:
   inline void SelectHighEnergyLimit(G4double threshold);
   //---
 
-private:
-  G4double intermediateEnergyLimit;
-  
-  // -- Brenner & Zaider
-  std::vector<G4double> betaCoeff;
-  std::vector<G4double> deltaCoeff;
-  std::vector<G4double> gamma035_10Coeff;
-  std::vector<G4double> gamma10_100Coeff;
-  std::vector<G4double> gamma100_200Coeff;
+  //
+  G4DNAUeharaScreenedRutherfordElasticModel&
+    operator=(const G4DNAUeharaScreenedRutherfordElasticModel &right) = delete;
+  G4DNAUeharaScreenedRutherfordElasticModel(
+      const G4DNAUeharaScreenedRutherfordElasticModel&) = delete;
 
-  // -- Water density table
-  const std::vector<G4double>* fpWaterDensity;
-  
-protected:
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
-  
 private:
-  G4int verboseLevel;
-  G4bool fasterCode;
-  G4bool isInitialised;
-  
+
   // -- Cross section
   G4double RutherfordCrossSection(G4double energy, G4double z);
   G4double ScreeningFactor(G4double energy, G4double z);
@@ -98,11 +85,29 @@ private:
   G4double ScreenedRutherfordRandomizeCosTheta(G4double k,
                                                G4double z);
 
-  //
-  G4DNAUeharaScreenedRutherfordElasticModel&
-    operator=(const G4DNAUeharaScreenedRutherfordElasticModel &right);
-  G4DNAUeharaScreenedRutherfordElasticModel(
-      const G4DNAUeharaScreenedRutherfordElasticModel&);
+protected:
+  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+
+private:
+  G4double iLowEnergyLimit;
+  G4double intermediateEnergyLimit;
+  G4double iHighEnergyLimit;
+  
+  // -- Brenner & Zaider
+  std::vector<G4double> betaCoeff;
+  std::vector<G4double> deltaCoeff;
+  std::vector<G4double> gamma035_10Coeff;
+  std::vector<G4double> gamma10_100Coeff;
+  std::vector<G4double> gamma100_200Coeff;
+
+  // -- Water density table
+  const std::vector<G4double>* fpWaterDensity = nullptr;
+  
+  G4int verboseLevel;
+  G4bool isInitialised = false;
+  // Selection of computation method
+  // We do not recommend "true" usage with the current cumul. proba. settings
+  G4bool fasterCode = false;
 };
  
 

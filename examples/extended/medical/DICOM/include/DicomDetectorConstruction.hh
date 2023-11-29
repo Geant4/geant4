@@ -142,7 +142,7 @@ class DicomDetectorConstruction : public G4VUserDetectorConstruction
     G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position wall)
     G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position wall)
 
-    std::map<G4int,G4Material*> thePhantomMaterialsOriginal;
+    std::map<G4int,G4Material*> fPhantomMaterialsOriginal;
     // map numberOfMaterial to G4Material. They are the list of materials as
     // built from .geom file
 

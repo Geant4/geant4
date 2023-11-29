@@ -45,6 +45,8 @@
 #include "moc_G4SoQt.cpp"
 #endif
 
+#define G4warn G4cout
+
 G4SoQt* G4SoQt::instance = NULL;
 
 static G4bool QtInited = FALSE;
@@ -142,7 +144,7 @@ void G4SoQt::SecondaryLoop()
    //     "ENTERING OIQT VIEWER SECONDARY LOOP" << G4endl;
    //   else
 
-   G4cout <<
+   G4warn <<
       "ENTERING OIQT VIEWER SECONDARY LOOP... PRESS E KEY TO EXIT" << G4endl;
 
    SoQt::mainLoop();

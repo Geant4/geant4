@@ -24,7 +24,7 @@
 #
 function(geant4_add_test test)
   if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
-    message(WARNING "function GEANT4_ADD_TEST is only for internal Geant4 usage")
+    message(WARNING "geant4_add_test is only for internal Geant4 usage, test '${test}' is disabled")
     return()
   endif()
 
@@ -116,9 +116,11 @@ function(geant4_add_test test)
   endif()
 
   #- Locate the test driver
-  set(_driver ${CMAKE_SOURCE_DIR}/cmake/Modules/G4TestDriver.cmake)
+  # This is one of the few cases where we require ..._SOURCE_DIR to be scoped to Geant4
+  # because we may have called geant4_add_test after a project() call, as in the integration tests
+  set(_driver ${Geant4_SOURCE_DIR}/cmake/Modules/G4TestDriver.cmake)
   if(NOT EXISTS ${_driver})
-    message(FATAL_ERROR "GEANT4_ADD_TEST: G4TestDriver.cmake not found!")
+    message(FATAL_ERROR "geant4_add_test: G4TestDriver.cmake not found!")
   endif()
   set(_command ${_command} -P ${_driver})
 
@@ -147,6 +149,8 @@ function(geant4_add_test test)
     endif()
 
     # Build part of the test
+    # Again, note that we scope Geant4_DIR to Geant4_BINARY_DIR so we don't accidentally pickup
+    # local or higher scopes
     add_test(NAME ${__build_test_name} COMMAND ${CMAKE_CTEST_COMMAND}
         --build-and-test  ${ARG_SOURCE_DIR} ${ARG_BINARY_DIR}
         --build-generator ${CMAKE_GENERATOR}
@@ -157,12 +161,22 @@ function(geant4_add_test test)
         --build-noclean
         --build-options
           --no-warn-unused-cli
-          -DGeant4_DIR=${CMAKE_BINARY_DIR}
+          -DGeant4_DIR=${Geant4_BINARY_DIR}
           -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+          -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+          -DCMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}
+          -DCMAKE_C_FLAGS_MINSIZEREL=${CMAKE_C_FLAGS_MINSIZEREL}
+          -DCMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}
+          -DCMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}
           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+          -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+          -DCMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}
+          -DCMAKE_CXX_FLAGS_MINSIZEREL=${CMAKE_CXX_FLAGS_MINSIZEREL}
+          -DCMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}
+          -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
           -DCMAKE_DISABLE_FIND_PACKAGE_ROOT=$<BOOL:${CMAKE_DISABLE_FIND_PACKAGE_ROOT}>
     )
-    set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT Geant4_DIR=${CMAKE_BINARY_DIR})
+    set_property(TEST ${__build_test_name} PROPERTY ENVIRONMENT Geant4_DIR=${Geant4_BINARY_DIR})
 
     # Build part of the test should have additional regex, and *must* have same labels
     if(ARG_FAILREGEX)

@@ -1,0 +1,73 @@
+/run/verbose 2
+/control/verbose 1
+/dnageom/verbose 1
+#/tracking/verbose 2
+
+/world/worldSize 8 um
+/scheduler/endTime 1 us
+/dnageom/setSmartVoxels 1
+
+/dnageom/radicalKillDistance 4 nm
+/dnageom/interactionDirectRange 6 angstrom
+
+/dnageom/placementSize 50 50 50 nm
+/dnageom/fractalScaling 50 50 50 nm
+
+/dnageom/definitionFile geometries/bacteria-XFXFXFX-4.txt
+/dnageom/placementVolume turn geometries/8strands_50nm_turn.txt
+/dnageom/placementVolume turntwist geometries/8strands_50nm_turn.txt true
+/dnageom/placementVolume straight geometries/8strands_50nm_straight.txt
+
+/chem/activate true
+/scheduler/verbose 0
+
+/dnadamage/directDamageLower 17.5 eV
+/dnadamage/directDamageUpper 17.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.4
+/dnadamage/inductionOHChance 0.
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.4
+/dnadamage/inductionHChance 0.00
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.4
+/dnadamage/inductionEaqChance 0.00
+
+
+/chromosome/add bacteria ellipse 900 400 400 0 0 0 nm 0 0 0
+# /chromosome/add bacteria rod 450 950 25 0 0 nm 0 90 0
+
+
+#/chromosome/plotData chromosome.txt
+#/dnatests/chromosome
+
+/analysisDNA/saveStrands false
+/analysisDNA/strandDir ./damage_maps/
+
+/run/initialize
+
+/dnatests/uniqueid
+
+/dnatests/basepairs
+
+/run/printProgress 1
+
+# Source Geometry
+
+/gps/pos/type Surface
+/gps/pos/shape Ellipsoid
+/gps/pos/centre 0 0 0 nm
+/gps/pos/halfx 900 nm
+/gps/pos/halfy 400 nm
+/gps/pos/halfz 400 nm
+/gps/ang/type cos
+
+# Source Energy
+
+/gps/particle e-
+/gps/energy 9.999 keV
+
+/run/beamOn 10

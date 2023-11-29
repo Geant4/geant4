@@ -40,35 +40,52 @@
 #define G4MESH_HH
 
 #include "G4Transform3D.hh"
+#include "geomdefs.hh"
 
 class G4VPhysicalVolume;
 
 class G4Mesh
 {
- public:  // With description
-  enum MeshType
-  {
-    invalid,
-    rectangle,
-    cylinder,
-    sphere
+ public:
+
+  enum MeshType {
+    invalid
+    , rectangle
+    , nested3DRectangular
+    , cylinder
+    , sphere
+    , tetrahedron
+  };
+
+  struct ThreeDRectangleParameters {
+    EAxis fAxis1 = kUndefined, fAxis2 = kUndefined, fAxis3 = kUndefined;
+    G4int fNreplica1 = 0, fNreplica2 = 0, fNreplica3 = 0;
+    G4double fOffset1 = 0., fOffset2 = 0., fOffset3 = 0.;
+    G4double fWidth1 = 0., fWidth2 = 0., fWidth3 = 0.;
+    G4bool fConsuming1 = false, fConsuming2 = false, fConsuming3 = false;
+    G4double fHalfX = 0., fHalfY = 0., fHalfZ = 0.;
   };
 
   G4Mesh(G4VPhysicalVolume* containerVolume, const G4Transform3D&);
   virtual ~G4Mesh();
 
-  const std::map<G4int,G4String>& GetEnumMap() const { return fEnumMap; }
-  G4VPhysicalVolume* GetContainerVolume() const { return fpContainerVolume; }
-  MeshType GetMeshType() const { return fMeshType; }
-  G4int GetMeshDepth() const { return fMeshDepth; }
-  const G4Transform3D& GetTransform() const { return fTransform; }
+  const std::map<G4int,G4String>& GetEnumMap() const {return fEnumMap;}
+  G4VPhysicalVolume* GetContainerVolume() const {return fpContainerVolume;}
+  G4VPhysicalVolume* GetParameterisedVolume() const {return fpParameterisedVolume;}
+  MeshType GetMeshType() const {return fMeshType;}
+  G4int GetMeshDepth() const {return fMeshDepth;}
+  const G4Transform3D& GetTransform() const {return fTransform;}
+  const ThreeDRectangleParameters& GetThreeDRectParameters() const {return f3DRPs;}
 
  private:
+
   static std::map<G4int,G4String> fEnumMap;
   G4VPhysicalVolume* fpContainerVolume;
+  G4VPhysicalVolume* fpParameterisedVolume;
   MeshType fMeshType;
   G4int fMeshDepth;
   G4Transform3D fTransform;
+  ThreeDRectangleParameters f3DRPs;
 };
 
 std::ostream& operator << (std::ostream& os, const G4Mesh& mesh);

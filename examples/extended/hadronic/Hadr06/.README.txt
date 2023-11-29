@@ -67,12 +67,7 @@
 
 \section Hadr06_s5 HISTOGRAMS
          
-   The test contains 23 built-in 1D histograms, which are managed by
-   G4AnalysisManager and its Messenger. The histos can be individually 
-   activated with the command :
-   /analysis/h1/set id nbBins  valMin valMax unit 
-   where unit is the desired unit for the histo (MeV or keV, etc..)
-   (see the macros xxxx.mac).
+   The test contains 24 built-in 1D histograms : 
 
             1     "total energy deposit"
             2     "Edep (MeV/mm) profile along radius"		  
@@ -96,14 +91,15 @@
             20    "energy spectrum of all others emerging ions"
             21    "energy spectrum of all others emerging baryons"
             22    "energy spectrum of all others emerging mesons"
-            23    "energy spectrum of all others emerging leptons (neutrinos)"   
+            23    "energy spectrum of all others emerging leptons (neutrinos)"
+	    24    "total energy released : edep + eflow"	
 
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
 \verbatim
 /analysis/h1/set id nbBins  valMin valMax unit 
 \endverbatim   
-   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   where unit is the desired unit for the histo (MeV or keV, cm or mm, etc..)
    
    One can control the name of the histograms file with the command:
 \verbatim

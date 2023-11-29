@@ -29,53 +29,49 @@
 #ifndef G4ParticleHPPolynomExpansion_h
 #define G4ParticleHPPolynomExpansion_h 1
 
-#include <fstream>
+#include "G4ios.hh"
+#include "globals.hh"
+
 #include <CLHEP/Units/SystemOfUnits.h>
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include <fstream>
 
 class G4ParticleHPPolynomExpansion
 {
   public:
-  G4ParticleHPPolynomExpansion()
-  {
-    theCoeff = 0;
-    nPoly=0;
-  }
-  ~G4ParticleHPPolynomExpansion()
-  {
-    if(theCoeff!=0) delete [] theCoeff;
-  }
-  
-  inline void Init(std::istream & theData)
-  {
-    theData >> nPoly;
-    theCoeff = new G4double[nPoly];
-    G4int i;
-    for(i=0;i<nPoly;i++)
+    G4ParticleHPPolynomExpansion()
     {
-      theData >> theCoeff[i];
+      theCoeff = nullptr;
+      nPoly = 0;
     }
-  }
-  
-  inline G4double GetValue(G4double anEnergy) 
-  {
-    G4int i;
-    G4double result=0;
-    G4double base = anEnergy/CLHEP::eV;
-    G4double running = 1;
-    for(i=0; i<nPoly; i++)
+    ~G4ParticleHPPolynomExpansion() { delete[] theCoeff; }
+
+    inline void Init(std::istream& theData)
     {
-      result+=theCoeff[i]*running;
-      running *= base;
+      theData >> nPoly;
+      theCoeff = new G4double[nPoly];
+      G4int i;
+      for (i = 0; i < nPoly; i++) {
+        theData >> theCoeff[i];
+      }
     }
-    return result;
-  }
+
+    inline G4double GetValue(G4double anEnergy)
+    {
+      G4int i;
+      G4double result = 0;
+      G4double base = anEnergy / CLHEP::eV;
+      G4double running = 1;
+      for (i = 0; i < nPoly; i++) {
+        result += theCoeff[i] * running;
+        running *= base;
+      }
+      return result;
+    }
+
   private:
-  
-  G4int nPoly;
-  G4double * theCoeff;
+    G4int nPoly;
+    G4double* theCoeff;
 };
 
 #endif

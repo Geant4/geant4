@@ -32,8 +32,6 @@
 #include <tools/forit>
 #include <tools/tokenize>
 
-#include <tools/xml/xml_style>  //it uses expat.
-
 G4PlotterManager& G4PlotterManager::GetInstance () {
   static G4PlotterManager s_instance;
   return s_instance;

@@ -1,3 +1,4 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
@@ -10,7 +11,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,642 +19,55 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-
-***** Table : Nb of materials = 11 *****
-
- Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.319 cm 
-                       Imean:  74.266 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
-
-   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:  62.49 %  ElmAbundance  45.45 % 
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-
- Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.282 cm 
-                       Imean:  54.941 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:  14.40 %  ElmAbundance  66.67 % 
-
-   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:  85.60 %  ElmAbundance  33.33 % 
-
-
- Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.949 m  
-                       Imean: 352.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
-         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
-         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
-         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
-         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance: 11.490 %
-         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance: 57.000 %
-         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance: 17.300 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:    Argon    density:  1.784 mg/cm3  RadL: 109.604 m    Nucl.Int.Length: 670.814 m  
-                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Argon (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
-         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
-         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
-         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:       N2    density:  1.251 mg/cm3  RadL: 303.846 m    Nucl.Int.Length: 674.714 m  
-                       Imean:  82.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Nitrogen (N)   Z =  7.0   N =    14   A = 14.010 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:       O2    density:  1.429 mg/cm3  RadL: 239.621 m    Nucl.Int.Length: 617.219 m  
-                       Imean:  95.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:      Air    density:  0.000 mg/cm3  RadL: 28329262.634 km   Nucl.Int.Length: 66178558.148 km 
-                       Imean:  85.664 eV   temperature: 273.15 K  pressure:   0.00 atm
-
-   --->  Element: Nitrogen (N)   Z =  7.0   N =    14   A = 14.010 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
-          ElmMassFraction:  75.57 %  ElmAbundance  78.48 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  23.15 %  ElmAbundance  21.05 % 
-
-   --->  Element: Argon (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
-         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
-         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
-         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
-          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
-
-
- Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.668 m  
-                       Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
-         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
-         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
-         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
-         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
-         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
-         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
-         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
-         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:      CO2    density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.037 m  
-                       Imean:  90.026 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:  27.29 %  ElmAbundance  33.33 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
-
-
- Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.034 m  
-                       Imean: 412.201 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.292 g/mole
-         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
-         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
-         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
-         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
-         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
-         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.91 g/mole   abundance: 21.180 %
-         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
-         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
-         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
-          ElmMassFraction:  92.20 %  ElmAbundance  56.91 % 
-
-   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:   2.13 %  ElmAbundance  14.36 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:   5.67 %  ElmAbundance  28.73 % 
-
-
- Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.157 m    Nucl.Int.Length: 391.554 m  
-                       Imean: 296.542 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Kr (Kr)   Z = 36.0   N =    84   A = 83.799 g/mole
-         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:  0.350 %
-         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:  2.280 %
-         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance: 11.580 %
-         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance: 11.490 %
-         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance: 57.000 %
-         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance: 17.300 %
-          ElmMassFraction:  89.00 %  ElmAbundance  58.62 % 
-
-   --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:   3.00 %  ElmAbundance  13.79 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:   8.00 %  ElmAbundance  27.59 % 
-
-
-
+F01DetectorConstruction: not printing material table - to see it edit the source.
 <<< Geant4 Physics List simulation engine: FTFP_BERT
 
+field01: Using G4TransportationParameters to set looper parameters.
+-- Calorimeter Absorber z-coords:  Start= 21989.5 End= 21990.5
 
  The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
  The ABSORBER is made of 1mm of Air, the transverse size (R) is 20000 mm. 
  Z position of the (middle of the) absorber 21990  mm.
 
- F01FieldSetup: magnetic field set to Uniform( (0.0033,0,0) ) 
+ F01FieldSetup: magnetic field set to Uniform( (0,0,0.0033) ) 
  F01FieldSetup::CreateStepperAndChordFinder() called. 
-                 1. Creating Stepper.
+   1. Creating Stepper.
 G4ExplicitEuler is chosen.
-The minimal step is equal to 1 mm
-                 2. Creating ChordFinder.
-                 3. Updating Field Manager.
-                 4. Updating Field Manager.
-
- hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
- for pions :   3 to 6 GeV
- for kaons :   3 to 6 GeV
- for proton :  3 to 6 GeV
- for neutron : 3 to 6 GeV
-
+The minimal step is equal to 0.003 mm
+   2. Creating ChordFinder.
+ G4ChordFinder: stepperDriverId: 2
+   3. Updating Field Manager (chord finder, field-ptr).
+   4/5. Updating eps_min and eps_max in Field Manager.
+F01FieldSetup: requesting Max(imum) Epsilon = 0.005
+ Changed FieldManager epsilon values to  epsilon_min= 1e-05 and epsilon_max= 0.005
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Registered graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
-  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByAttribute
-  drawByCharge
-  drawByOriginVolume
-  drawByParticleID
-  drawByEncounteredVolume
-
-Registered models:
-  None
-
-Registered filter factories:
-  attributeFilter
-  chargeFilter
-  originVolumeFilter
-  particleFilter
-  encounteredVolumeFilter
-
-Registered filters:
-  None
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-"/vis/list" to see available colours.
  F01FieldSetup::CreateStepperAndChordFinder() called. 
-                 1. Creating Stepper.
+   1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
-The minimal step is equal to 1 mm
-                 2. Creating ChordFinder.
-                 3. Updating Field Manager.
+The minimal step is equal to 0.003 mm
+   2. Creating ChordFinder.
+ G4ChordFinder: stepperDriverId: 2
+   3. Updating Field Manager (chord finder, field-ptr).
  F01FieldSetup::CreateStepperAndChordFinder() called. 
-                 1. Creating Stepper.
+   1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
-The minimal step is equal to 0.1 mm
-                 2. Creating ChordFinder.
-                 3. Updating Field Manager.
-
-====================================================================
-                  HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-  Process: neutronInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-  Process: nKiller
-
----------------------------------------------------
-                           Hadronic Processes for B-
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: B-Inelastic
-        Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for D-
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: D-Inelastic
-        Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for GenericIon
-
-  Process: ionInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
-        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
----------------------------------------------------
-                           Hadronic Processes for He3
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-  Process: He3Inelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
-        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
----------------------------------------------------
-                           Hadronic Processes for alpha
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-  Process: alphaInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
-        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
----------------------------------------------------
-                           Hadronic Processes for anti_He3
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
-        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_He3Inelastic
-        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_alpha
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
-        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_alphaInelastic
-        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_deuteron
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
-        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_deuteronInelastic
-        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_lambda
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: anti_lambdaInelastic
-        Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_neutron
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
-        Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_neutronInelastic
-        Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_proton
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
-        Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_protonInelastic
-        Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for anti_triton
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
-        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: anti_tritonInelastic
-        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-  Process: hFritiofCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for deuteron
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-  Process: dInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
-        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
----------------------------------------------------
-                           Hadronic Processes for e+
-
-  Process: positronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for e-
-
-  Process: electronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for gamma
-
-  Process: photonNuclear
-        Model:               GammaNPreco: 0 eV  ---> 200 MeV
-        Model:            BertiniCascade: 199 MeV ---> 6 GeV
-        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
-     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for kaon+
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: kaon+Inelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for kaon-
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: kaon-Inelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: hBertiniCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for lambda
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: lambdaInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for mu+
-
-  Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for mu-
-
-  Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-  Process: muMinusCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for pi+
-
-  Process: hadElastic
-        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-  Process: pi+Inelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for pi-
-
-  Process: hadElastic
-        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-  Process: pi-Inelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-  Process: hBertiniCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for proton
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-  Process: protonInelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for sigma-
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: sigma-Inelastic
-        Model:                      FTFP: 3 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-  Process: hBertiniCaptureAtRest
-
----------------------------------------------------
-                           Hadronic Processes for triton
-
-  Process: hadElastic
-        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-  Process: tInelastic
-        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
-        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
-     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-================================================================
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Pre-compound model active                           1
-Pre-compound excitation low energy (MeV)            0.1
-Pre-compound excitation high energy (MeV)           30
-Type of de-excitation inverse x-section             3
-Type of de-excitation factory                       Evaporation+GEM
-Number of de-excitation channels                    68
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 2e+05
-Limit excitation energy for Fermi BreakUp (MeV)     20
-Level density (1/MeV)                               0.075
-Use simple level density model                      1
-Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1
-Isomer production flag                              1
-Internal e- conversion flag                         1
-Store e- internal conversion data                   0
-Correlated gamma emission flag                      0
-Max 2J for sampling of angular correlations         10
-=======================================================================
+The minimal step is equal to 0.01 mm
+   2. Creating ChordFinder.
+ G4ChordFinder: stepperDriverId: 2
+   3. Updating Field Manager (chord finder, field-ptr).
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
-G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
-See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-### Run 0 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -661,33 +75,81 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    1.01183 m     21.9895 m           0 8.14791e-13          1      500 MeV3.87639 meV   1.58938 m     1.58938 m       World  Transportation
-    2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV0.00243893 meV         1 mm    1.59038 m    Absorber  Transportation
-    3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV0.0231716 meV   9.50075 mm    1.59988 m  OutOfWorld  Transportation
+    1          0 fm          0 fm    17.5806 m           0          0         -1      500 MeV    10.7487 meV    4.40895 m      4.40895 m        World  Transportation
+    2          0 fm          0 fm    13.6125 m           0          0         -1      500 MeV    9.67384 meV    3.96806 m      8.37701 m        World  Transportation
+    3          0 fm          0 fm    10.0412 m           0          0         -1      500 MeV    8.70646 meV    3.57125 m      11.9483 m        World  Transportation
+    4          0 fm          0 fm    6.82712 m           0          0         -1      500 MeV    7.83581 meV    3.21412 m      15.1624 m        World  Transportation
+    5          0 fm          0 fm    3.93441 m           0          0         -1      500 MeV    7.05223 meV    2.89271 m      18.0551 m        World  Transportation
+    6          0 fm          0 fm    1.33097 m           0          0         -1      500 MeV    6.34701 meV    2.60344 m      20.6585 m        World  Transportation
+    7          0 fm          0 fm   -1.01213 m           0          0         -1      500 MeV    5.71231 meV     2.3431 m      23.0016 m        World  Transportation
+    8          0 fm          0 fm   -3.12092 m           0          0         -1      500 MeV    5.14107 meV    2.10879 m      25.1104 m        World  Transportation
+    9          0 fm          0 fm   -5.01882 m           0          0         -1      500 MeV    4.62697 meV    1.89791 m      27.0083 m        World  Transportation
+   10          0 fm          0 fm   -6.72694 m           0          0         -1      500 MeV    4.16427 meV    1.70812 m      28.7164 m        World  Transportation
+   11          0 fm          0 fm   -8.26425 m           0          0         -1      500 MeV    3.74784 meV    1.53731 m      30.2537 m        World  Transportation
+   12          0 fm          0 fm   -9.64782 m           0          0         -1      500 MeV    3.37306 meV    1.38358 m      31.6373 m        World  Transportation
+   13          0 fm          0 fm    -10.893 m           0          0         -1      500 MeV    3.03575 meV    1.24522 m      32.8825 m        World  Transportation
+   14          0 fm          0 fm   -12.0137 m           0          0         -1      500 MeV    2.73218 meV     1.1207 m      34.0032 m        World  Transportation
+   15          0 fm          0 fm   -13.0224 m           0          0         -1      500 MeV    2.45896 meV    1.00863 m      35.0119 m        World  Transportation
+   16          0 fm          0 fm   -13.9301 m           0          0         -1      500 MeV    2.21306 meV    90.7764 cm     35.9196 m        World  Transportation
+   17          0 fm          0 fm   -14.7471 m           0          0         -1      500 MeV    1.99176 meV    81.6987 cm     36.7366 m        World  Transportation
+   18          0 fm          0 fm   -15.4824 m           0          0         -1      500 MeV    1.79258 meV    73.5289 cm     37.4719 m        World  Transportation
+   19          0 fm          0 fm   -16.1442 m           0          0         -1      500 MeV    1.61332 meV     66.176 cm     38.1337 m        World  Transportation
+   20          0 fm          0 fm   -16.7397 m           0          0         -1      500 MeV    1.45199 meV    59.5584 cm     38.7292 m        World  Transportation
+   21          0 fm          0 fm   -17.2758 m           0          0         -1      500 MeV    1.30679 meV    53.6025 cm     39.2653 m        World  Transportation
+   22          0 fm          0 fm   -17.7582 m           0          0         -1      500 MeV    1.17611 meV    48.2423 cm     39.7477 m        World  Transportation
+   23          0 fm          0 fm   -18.1924 m           0          0         -1      500 MeV     1.0585 meV    43.4181 cm     40.1819 m        World  Transportation
+   24          0 fm          0 fm   -18.5831 m           0          0         -1      500 MeV   0.952652 meV    39.0763 cm     40.5726 m        World  Transportation
+   25          0 fm          0 fm   -18.9348 m           0          0         -1      500 MeV   0.857386 meV    35.1686 cm     40.9243 m        World  Transportation
+   26          0 fm          0 fm   -19.2513 m           0          0         -1      500 MeV   0.771648 meV    31.6518 cm     41.2408 m        World  Transportation
+   27          0 fm          0 fm   -19.5362 m           0          0         -1      500 MeV   0.694483 meV    28.4866 cm     41.5257 m        World  Transportation
+   28          0 fm          0 fm   -19.7926 m           0          0         -1      500 MeV   0.625035 meV    25.6379 cm     41.7821 m        World  Transportation
+   29          0 fm          0 fm   -20.0233 m           0          0         -1      500 MeV   0.562531 meV    23.0741 cm     42.0128 m        World  Transportation
+   30          0 fm          0 fm    -20.231 m           0          0         -1      500 MeV   0.506278 meV    20.7667 cm     42.2205 m        World  Transportation
+   31          0 fm          0 fm   -20.4179 m           0          0         -1      500 MeV    0.45565 meV      18.69 cm     42.4074 m        World  Transportation
+   32          0 fm          0 fm   -20.5861 m           0          0         -1      500 MeV   0.410085 meV     16.821 cm     42.5756 m        World  Transportation
+   33          0 fm          0 fm   -20.7375 m           0          0         -1      500 MeV   0.369077 meV    15.1389 cm      42.727 m        World  Transportation
+   34          0 fm          0 fm   -20.8737 m           0          0         -1      500 MeV   0.332169 meV     13.625 cm     42.8632 m        World  Transportation
+   35          0 fm          0 fm   -20.9964 m           0          0         -1      500 MeV   0.298952 meV    12.2625 cm     42.9859 m        World  Transportation
+   36          0 fm          0 fm   -21.1067 m           0          0         -1      500 MeV   0.269057 meV    11.0363 cm     43.0962 m        World  Transportation
+   37          0 fm          0 fm   -21.2061 m           0          0         -1      500 MeV   0.242151 meV    9.93266 cm     43.1956 m        World  Transportation
+   38          0 fm          0 fm   -21.2955 m           0          0         -1      500 MeV   0.217936 meV    8.93939 cm      43.285 m        World  Transportation
+   39          0 fm          0 fm   -21.3759 m           0          0         -1      500 MeV   0.196143 meV    8.04545 cm     43.3654 m        World  Transportation
+   40          0 fm          0 fm   -21.4483 m           0          0         -1      500 MeV   0.176528 meV    7.24091 cm     43.4378 m        World  Transportation
+   41          0 fm          0 fm   -21.5135 m           0          0         -1      500 MeV   0.158875 meV    6.51682 cm      43.503 m        World  Transportation
+   42          0 fm          0 fm   -21.5721 m           0          0         -1      500 MeV   0.142988 meV    5.86514 cm     43.5616 m        World  Transportation
+   43          0 fm          0 fm   -21.6249 m           0          0         -1      500 MeV   0.128689 meV    5.27862 cm     43.6144 m        World  Transportation
+   44          0 fm          0 fm   -21.6724 m           0          0         -1      500 MeV    0.11582 meV    4.75076 cm     43.6619 m        World  Transportation
+   45          0 fm          0 fm   -21.7152 m           0          0         -1      500 MeV   0.104238 meV    4.27568 cm     43.7047 m        World  Transportation
+   46          0 fm          0 fm   -21.7537 m           0          0         -1      500 MeV  0.0938144 meV    3.84812 cm     43.7432 m        World  Transportation
+   47          0 fm          0 fm   -21.7883 m           0          0         -1      500 MeV  0.0844329 meV     3.4633 cm     43.7778 m        World  Transportation
+   48          0 fm          0 fm   -21.8195 m           0          0         -1      500 MeV  0.0759896 meV    3.11697 cm      43.809 m        World  Transportation
+   49          0 fm          0 fm   -21.8475 m           0          0         -1      500 MeV  0.0683907 meV    2.80528 cm      43.837 m        World  Transportation
+   50          0 fm          0 fm   -21.8728 m           0          0         -1      500 MeV  0.0615516 meV    2.52475 cm     43.8623 m        World  Transportation
+   51          0 fm          0 fm   -21.8955 m           0          0         -1      500 MeV  0.0553964 meV    2.27227 cm      43.885 m        World  Transportation
+   52          0 fm          0 fm   -21.9159 m           0          0         -1      500 MeV  0.0498568 meV    2.04505 cm     43.9054 m        World  Transportation
+   53          0 fm          0 fm   -21.9344 m           0          0         -1      500 MeV  0.0448711 meV    1.84054 cm     43.9239 m        World  Transportation
+   54          0 fm          0 fm   -21.9509 m           0          0         -1      500 MeV   0.040384 meV    1.65649 cm     43.9404 m        World  Transportation
+   55          0 fm          0 fm   -21.9658 m           0          0         -1      500 MeV  0.0363456 meV    1.49084 cm     43.9553 m        World  Transportation
+   56          0 fm          0 fm   -21.9792 m           0          0         -1      500 MeV   0.032711 meV    1.34175 cm     43.9687 m        World  Transportation
+   57          0 fm          0 fm   -21.9913 m           0          0         -1      500 MeV  0.0294399 meV    1.20758 cm     43.9808 m        World  Transportation
+   58          0 fm          0 fm        -22 m           0          0         -1      500 MeV  0.0211665 meV    8.68215 mm     43.9895 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000879s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.001220s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 1 starts.
-### Run 1 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -695,33 +157,81 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.19203e-09          1      250 MeV1.8311 meV   79.5502 cm    79.5502 cm      World  Transportation
-    2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV0.00230182 meV         1 mm    79.6502 cm   Absorber  Transportation
-    3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV0.0218742 meV   9.50301 mm    80.6005 cm OutOfWorld  Transportation
+    1          0 fm          0 fm    17.5806 m           0          0         -1      250 MeV    10.1442 meV    4.40895 m      4.40895 m        World  Transportation
+    2          0 fm          0 fm    13.6125 m           0          0         -1      250 MeV    9.12977 meV    3.96806 m      8.37701 m        World  Transportation
+    3          0 fm          0 fm    10.0412 m           0          0         -1      250 MeV    8.21679 meV    3.57125 m      11.9483 m        World  Transportation
+    4          0 fm          0 fm    6.82712 m           0          0         -1      250 MeV    7.39511 meV    3.21412 m      15.1624 m        World  Transportation
+    5          0 fm          0 fm    3.93441 m           0          0         -1      250 MeV     6.6556 meV    2.89271 m      18.0551 m        World  Transportation
+    6          0 fm          0 fm    1.33097 m           0          0         -1      250 MeV    5.99004 meV    2.60344 m      20.6585 m        World  Transportation
+    7          0 fm          0 fm   -1.01213 m           0          0         -1      250 MeV    5.39104 meV     2.3431 m      23.0016 m        World  Transportation
+    8          0 fm          0 fm   -3.12092 m           0          0         -1      250 MeV    4.85193 meV    2.10879 m      25.1104 m        World  Transportation
+    9          0 fm          0 fm   -5.01882 m           0          0         -1      250 MeV    4.36674 meV    1.89791 m      27.0083 m        World  Transportation
+   10          0 fm          0 fm   -6.72694 m           0          0         -1      250 MeV    3.93007 meV    1.70812 m      28.7164 m        World  Transportation
+   11          0 fm          0 fm   -8.26425 m           0          0         -1      250 MeV    3.53706 meV    1.53731 m      30.2537 m        World  Transportation
+   12          0 fm          0 fm   -9.64782 m           0          0         -1      250 MeV    3.18335 meV    1.38358 m      31.6373 m        World  Transportation
+   13          0 fm          0 fm    -10.893 m           0          0         -1      250 MeV    2.86502 meV    1.24522 m      32.8825 m        World  Transportation
+   14          0 fm          0 fm   -12.0137 m           0          0         -1      250 MeV    2.57852 meV     1.1207 m      34.0032 m        World  Transportation
+   15          0 fm          0 fm   -13.0224 m           0          0         -1      250 MeV    2.32066 meV    1.00863 m      35.0119 m        World  Transportation
+   16          0 fm          0 fm   -13.9301 m           0          0         -1      250 MeV     2.0886 meV    90.7764 cm     35.9196 m        World  Transportation
+   17          0 fm          0 fm   -14.7471 m           0          0         -1      250 MeV    1.87974 meV    81.6987 cm     36.7366 m        World  Transportation
+   18          0 fm          0 fm   -15.4824 m           0          0         -1      250 MeV    1.69176 meV    73.5289 cm     37.4719 m        World  Transportation
+   19          0 fm          0 fm   -16.1442 m           0          0         -1      250 MeV    1.52259 meV     66.176 cm     38.1337 m        World  Transportation
+   20          0 fm          0 fm   -16.7397 m           0          0         -1      250 MeV    1.37033 meV    59.5584 cm     38.7292 m        World  Transportation
+   21          0 fm          0 fm   -17.2758 m           0          0         -1      250 MeV     1.2333 meV    53.6025 cm     39.2653 m        World  Transportation
+   22          0 fm          0 fm   -17.7582 m           0          0         -1      250 MeV    1.10997 meV    48.2423 cm     39.7477 m        World  Transportation
+   23          0 fm          0 fm   -18.1924 m           0          0         -1      250 MeV    0.99897 meV    43.4181 cm     40.1819 m        World  Transportation
+   24          0 fm          0 fm   -18.5831 m           0          0         -1      250 MeV   0.899073 meV    39.0763 cm     40.5726 m        World  Transportation
+   25          0 fm          0 fm   -18.9348 m           0          0         -1      250 MeV   0.809166 meV    35.1686 cm     40.9243 m        World  Transportation
+   26          0 fm          0 fm   -19.2513 m           0          0         -1      250 MeV   0.728249 meV    31.6518 cm     41.2408 m        World  Transportation
+   27          0 fm          0 fm   -19.5362 m           0          0         -1      250 MeV   0.655424 meV    28.4866 cm     41.5257 m        World  Transportation
+   28          0 fm          0 fm   -19.7926 m           0          0         -1      250 MeV   0.589882 meV    25.6379 cm     41.7821 m        World  Transportation
+   29          0 fm          0 fm   -20.0233 m           0          0         -1      250 MeV   0.530894 meV    23.0741 cm     42.0128 m        World  Transportation
+   30          0 fm          0 fm    -20.231 m           0          0         -1      250 MeV   0.477804 meV    20.7667 cm     42.2205 m        World  Transportation
+   31          0 fm          0 fm   -20.4179 m           0          0         -1      250 MeV   0.430024 meV      18.69 cm     42.4074 m        World  Transportation
+   32          0 fm          0 fm   -20.5861 m           0          0         -1      250 MeV   0.387021 meV     16.821 cm     42.5756 m        World  Transportation
+   33          0 fm          0 fm   -20.7375 m           0          0         -1      250 MeV   0.348319 meV    15.1389 cm      42.727 m        World  Transportation
+   34          0 fm          0 fm   -20.8737 m           0          0         -1      250 MeV   0.313487 meV     13.625 cm     42.8632 m        World  Transportation
+   35          0 fm          0 fm   -20.9964 m           0          0         -1      250 MeV   0.282139 meV    12.2625 cm     42.9859 m        World  Transportation
+   36          0 fm          0 fm   -21.1067 m           0          0         -1      250 MeV   0.253925 meV    11.0363 cm     43.0962 m        World  Transportation
+   37          0 fm          0 fm   -21.2061 m           0          0         -1      250 MeV   0.228532 meV    9.93266 cm     43.1956 m        World  Transportation
+   38          0 fm          0 fm   -21.2955 m           0          0         -1      250 MeV   0.205679 meV    8.93939 cm      43.285 m        World  Transportation
+   39          0 fm          0 fm   -21.3759 m           0          0         -1      250 MeV   0.185111 meV    8.04545 cm     43.3654 m        World  Transportation
+   40          0 fm          0 fm   -21.4483 m           0          0         -1      250 MeV     0.1666 meV    7.24091 cm     43.4378 m        World  Transportation
+   41          0 fm          0 fm   -21.5135 m           0          0         -1      250 MeV    0.14994 meV    6.51682 cm      43.503 m        World  Transportation
+   42          0 fm          0 fm   -21.5721 m           0          0         -1      250 MeV   0.134946 meV    5.86514 cm     43.5616 m        World  Transportation
+   43          0 fm          0 fm   -21.6249 m           0          0         -1      250 MeV   0.121451 meV    5.27862 cm     43.6144 m        World  Transportation
+   44          0 fm          0 fm   -21.6724 m           0          0         -1      250 MeV   0.109306 meV    4.75076 cm     43.6619 m        World  Transportation
+   45          0 fm          0 fm   -21.7152 m           0          0         -1      250 MeV  0.0983756 meV    4.27568 cm     43.7047 m        World  Transportation
+   46          0 fm          0 fm   -21.7537 m           0          0         -1      250 MeV  0.0885381 meV    3.84812 cm     43.7432 m        World  Transportation
+   47          0 fm          0 fm   -21.7883 m           0          0         -1      250 MeV  0.0796843 meV     3.4633 cm     43.7778 m        World  Transportation
+   48          0 fm          0 fm   -21.8195 m           0          0         -1      250 MeV  0.0717158 meV    3.11697 cm      43.809 m        World  Transportation
+   49          0 fm          0 fm   -21.8475 m           0          0         -1      250 MeV  0.0645443 meV    2.80528 cm      43.837 m        World  Transportation
+   50          0 fm          0 fm   -21.8728 m           0          0         -1      250 MeV  0.0580898 meV    2.52475 cm     43.8623 m        World  Transportation
+   51          0 fm          0 fm   -21.8955 m           0          0         -1      250 MeV  0.0522809 meV    2.27227 cm      43.885 m        World  Transportation
+   52          0 fm          0 fm   -21.9159 m           0          0         -1      250 MeV  0.0470528 meV    2.04505 cm     43.9054 m        World  Transportation
+   53          0 fm          0 fm   -21.9344 m           0          0         -1      250 MeV  0.0423475 meV    1.84054 cm     43.9239 m        World  Transportation
+   54          0 fm          0 fm   -21.9509 m           0          0         -1      250 MeV  0.0381127 meV    1.65649 cm     43.9404 m        World  Transportation
+   55          0 fm          0 fm   -21.9658 m           0          0         -1      250 MeV  0.0343015 meV    1.49084 cm     43.9553 m        World  Transportation
+   56          0 fm          0 fm   -21.9792 m           0          0         -1      250 MeV  0.0308713 meV    1.34175 cm     43.9687 m        World  Transportation
+   57          0 fm          0 fm   -21.9913 m           0          0         -1      250 MeV  0.0277842 meV    1.20758 cm     43.9808 m        World  Transportation
+   58          0 fm          0 fm        -22 m           0          0         -1      250 MeV   0.019976 meV    8.68215 mm     43.9895 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000166s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.000746s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 2 starts.
-### Run 2 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -729,33 +239,81 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      200 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    40.5352 cm    21.9895 m           0 -2.20161e-09          1      200 MeV1.43753 meV   63.6725 cm    63.6725 cm      World  Transportation
-    2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV0.0022577 meV         1 mm    63.7725 cm   Absorber  Transportation
-    3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV0.0214587 meV   9.50471 mm     64.723 cm OutOfWorld  Transportation
+    1          0 fm          0 fm    17.5806 m           0          0         -1      200 MeV    9.94964 meV    4.40895 m      4.40895 m        World  Transportation
+    2          0 fm          0 fm    13.6125 m           0          0         -1      200 MeV    8.95468 meV    3.96806 m      8.37701 m        World  Transportation
+    3          0 fm          0 fm    10.0412 m           0          0         -1      200 MeV    8.05921 meV    3.57125 m      11.9483 m        World  Transportation
+    4          0 fm          0 fm    6.82712 m           0          0         -1      200 MeV    7.25329 meV    3.21412 m      15.1624 m        World  Transportation
+    5          0 fm          0 fm    3.93441 m           0          0         -1      200 MeV    6.52796 meV    2.89271 m      18.0551 m        World  Transportation
+    6          0 fm          0 fm    1.33097 m           0          0         -1      200 MeV    5.87516 meV    2.60344 m      20.6585 m        World  Transportation
+    7          0 fm          0 fm   -1.01213 m           0          0         -1      200 MeV    5.28765 meV     2.3431 m      23.0016 m        World  Transportation
+    8          0 fm          0 fm   -3.12092 m           0          0         -1      200 MeV    4.75888 meV    2.10879 m      25.1104 m        World  Transportation
+    9          0 fm          0 fm   -5.01882 m           0          0         -1      200 MeV    4.28299 meV    1.89791 m      27.0083 m        World  Transportation
+   10          0 fm          0 fm   -6.72694 m           0          0         -1      200 MeV    3.85469 meV    1.70812 m      28.7164 m        World  Transportation
+   11          0 fm          0 fm   -8.26425 m           0          0         -1      200 MeV    3.46923 meV    1.53731 m      30.2537 m        World  Transportation
+   12          0 fm          0 fm   -9.64782 m           0          0         -1      200 MeV     3.1223 meV    1.38358 m      31.6373 m        World  Transportation
+   13          0 fm          0 fm    -10.893 m           0          0         -1      200 MeV    2.81007 meV    1.24522 m      32.8825 m        World  Transportation
+   14          0 fm          0 fm   -12.0137 m           0          0         -1      200 MeV    2.52907 meV     1.1207 m      34.0032 m        World  Transportation
+   15          0 fm          0 fm   -13.0224 m           0          0         -1      200 MeV    2.27616 meV    1.00863 m      35.0119 m        World  Transportation
+   16          0 fm          0 fm   -13.9301 m           0          0         -1      200 MeV    2.04854 meV    90.7764 cm     35.9196 m        World  Transportation
+   17          0 fm          0 fm   -14.7471 m           0          0         -1      200 MeV    1.84369 meV    81.6987 cm     36.7366 m        World  Transportation
+   18          0 fm          0 fm   -15.4824 m           0          0         -1      200 MeV    1.65932 meV    73.5289 cm     37.4719 m        World  Transportation
+   19          0 fm          0 fm   -16.1442 m           0          0         -1      200 MeV    1.49339 meV     66.176 cm     38.1337 m        World  Transportation
+   20          0 fm          0 fm   -16.7397 m           0          0         -1      200 MeV    1.34405 meV    59.5584 cm     38.7292 m        World  Transportation
+   21          0 fm          0 fm   -17.2758 m           0          0         -1      200 MeV    1.20964 meV    53.6025 cm     39.2653 m        World  Transportation
+   22          0 fm          0 fm   -17.7582 m           0          0         -1      200 MeV    1.08868 meV    48.2423 cm     39.7477 m        World  Transportation
+   23          0 fm          0 fm   -18.1924 m           0          0         -1      200 MeV   0.979812 meV    43.4181 cm     40.1819 m        World  Transportation
+   24          0 fm          0 fm   -18.5831 m           0          0         -1      200 MeV   0.881831 meV    39.0763 cm     40.5726 m        World  Transportation
+   25          0 fm          0 fm   -18.9348 m           0          0         -1      200 MeV   0.793647 meV    35.1686 cm     40.9243 m        World  Transportation
+   26          0 fm          0 fm   -19.2513 m           0          0         -1      200 MeV   0.714283 meV    31.6518 cm     41.2408 m        World  Transportation
+   27          0 fm          0 fm   -19.5362 m           0          0         -1      200 MeV   0.642854 meV    28.4866 cm     41.5257 m        World  Transportation
+   28          0 fm          0 fm   -19.7926 m           0          0         -1      200 MeV   0.578569 meV    25.6379 cm     41.7821 m        World  Transportation
+   29          0 fm          0 fm   -20.0233 m           0          0         -1      200 MeV   0.520712 meV    23.0741 cm     42.0128 m        World  Transportation
+   30          0 fm          0 fm    -20.231 m           0          0         -1      200 MeV   0.468641 meV    20.7667 cm     42.2205 m        World  Transportation
+   31          0 fm          0 fm   -20.4179 m           0          0         -1      200 MeV   0.421777 meV      18.69 cm     42.4074 m        World  Transportation
+   32          0 fm          0 fm   -20.5861 m           0          0         -1      200 MeV   0.379599 meV     16.821 cm     42.5756 m        World  Transportation
+   33          0 fm          0 fm   -20.7375 m           0          0         -1      200 MeV   0.341639 meV    15.1389 cm      42.727 m        World  Transportation
+   34          0 fm          0 fm   -20.8737 m           0          0         -1      200 MeV   0.307475 meV     13.625 cm     42.8632 m        World  Transportation
+   35          0 fm          0 fm   -20.9964 m           0          0         -1      200 MeV   0.276728 meV    12.2625 cm     42.9859 m        World  Transportation
+   36          0 fm          0 fm   -21.1067 m           0          0         -1      200 MeV   0.249055 meV    11.0363 cm     43.0962 m        World  Transportation
+   37          0 fm          0 fm   -21.2061 m           0          0         -1      200 MeV   0.224149 meV    9.93266 cm     43.1956 m        World  Transportation
+   38          0 fm          0 fm   -21.2955 m           0          0         -1      200 MeV   0.201735 meV    8.93939 cm      43.285 m        World  Transportation
+   39          0 fm          0 fm   -21.3759 m           0          0         -1      200 MeV   0.181561 meV    8.04545 cm     43.3654 m        World  Transportation
+   40          0 fm          0 fm   -21.4483 m           0          0         -1      200 MeV   0.163405 meV    7.24091 cm     43.4378 m        World  Transportation
+   41          0 fm          0 fm   -21.5135 m           0          0         -1      200 MeV   0.147064 meV    6.51682 cm      43.503 m        World  Transportation
+   42          0 fm          0 fm   -21.5721 m           0          0         -1      200 MeV   0.132358 meV    5.86514 cm     43.5616 m        World  Transportation
+   43          0 fm          0 fm   -21.6249 m           0          0         -1      200 MeV   0.119122 meV    5.27862 cm     43.6144 m        World  Transportation
+   44          0 fm          0 fm   -21.6724 m           0          0         -1      200 MeV    0.10721 meV    4.75076 cm     43.6619 m        World  Transportation
+   45          0 fm          0 fm   -21.7152 m           0          0         -1      200 MeV   0.096489 meV    4.27568 cm     43.7047 m        World  Transportation
+   46          0 fm          0 fm   -21.7537 m           0          0         -1      200 MeV  0.0868401 meV    3.84812 cm     43.7432 m        World  Transportation
+   47          0 fm          0 fm   -21.7883 m           0          0         -1      200 MeV  0.0781561 meV     3.4633 cm     43.7778 m        World  Transportation
+   48          0 fm          0 fm   -21.8195 m           0          0         -1      200 MeV  0.0703405 meV    3.11697 cm      43.809 m        World  Transportation
+   49          0 fm          0 fm   -21.8475 m           0          0         -1      200 MeV  0.0633064 meV    2.80528 cm      43.837 m        World  Transportation
+   50          0 fm          0 fm   -21.8728 m           0          0         -1      200 MeV  0.0569758 meV    2.52475 cm     43.8623 m        World  Transportation
+   51          0 fm          0 fm   -21.8955 m           0          0         -1      200 MeV  0.0512782 meV    2.27227 cm      43.885 m        World  Transportation
+   52          0 fm          0 fm   -21.9159 m           0          0         -1      200 MeV  0.0461504 meV    2.04505 cm     43.9054 m        World  Transportation
+   53          0 fm          0 fm   -21.9344 m           0          0         -1      200 MeV  0.0415354 meV    1.84054 cm     43.9239 m        World  Transportation
+   54          0 fm          0 fm   -21.9509 m           0          0         -1      200 MeV  0.0373818 meV    1.65649 cm     43.9404 m        World  Transportation
+   55          0 fm          0 fm   -21.9658 m           0          0         -1      200 MeV  0.0336436 meV    1.49084 cm     43.9553 m        World  Transportation
+   56          0 fm          0 fm   -21.9792 m           0          0         -1      200 MeV  0.0302793 meV    1.34175 cm     43.9687 m        World  Transportation
+   57          0 fm          0 fm   -21.9913 m           0          0         -1      200 MeV  0.0272513 meV    1.20758 cm     43.9808 m        World  Transportation
+   58          0 fm          0 fm        -22 m           0          0         -1      200 MeV  0.0195929 meV    8.68215 mm     43.9895 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000161s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.000725s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 3 starts.
-### Run 3 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -763,33 +321,81 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m  5.03276e-08 3.37364e-08          1      100 MeV0.676951 meV   31.9182 cm    31.9182 cm      World  Transportation
-    2    50328.4 fm    20.3185 cm    21.9905 m  5.03276e-08 -0.00984295   0.999952      100 MeV0.00222072 meV   1.04707 mm    32.0229 cm   Absorber  Transportation
-    3    5.29388 Ang   20.2645 cm         22 m  1.48908e-07  -0.103352   0.994645      100 MeV0.0203566 meV   9.59814 mm    32.9827 cm OutOfWorld  Transportation
+    1    8.92113 mm   -1.78691 cm    17.5806 m  6.28145e-08 -3.40789e-08         -1      100 MeV    9.34671 meV    4.40903 m      4.40903 m        World  Transportation
+    2    8.92403 mm   -1.78679 cm    13.6125 m  -1.23559e-05 2.85155e-05         -1      100 MeV    8.41188 meV    3.96806 m      8.37709 m        World  Transportation
+    3    8.91722 mm   -1.78731 cm    10.0412 m  3.96458e-05 -3.85094e-05         -1      100 MeV    7.57069 meV    3.57125 m      11.9483 m        World  Transportation
+    4   -967.158 um    -1.5954 cm    6.82712 m  6.58553e-05 -5.02286e-05         -1      100 MeV    6.81368 meV    3.21415 m      15.1625 m        World  Transportation
+    5   -958.285 um   -1.59381 cm    3.93441 m  -9.10665e-05 3.71204e-05         -1      100 MeV    6.13226 meV    2.89271 m      18.0552 m        World  Transportation
+    6   -963.758 um   -1.59356 cm    1.33097 m  -0.000115374 -1.67489e-05         -1      100 MeV    5.51903 meV    2.60344 m      20.6586 m        World  Transportation
+    7   -949.121 um   -1.59515 cm   -1.01213 m  4.12576e-05 0.000127324         -1      100 MeV    4.96728 meV    2.34317 m      23.0018 m        World  Transportation
+    8   -962.698 um   -1.59313 cm   -3.12092 m  -0.000157685 -6.31324e-06         -1      100 MeV    4.47044 meV     2.1088 m      25.1106 m        World  Transportation
+    9   -960.719 um     -1.593 cm   -5.01882 m  -0.000170399 1.31717e-05         -1      100 MeV    4.02354 meV    1.89799 m      27.0086 m        World  Transportation
+   10   -945.594 um   -1.59565 cm   -6.72694 m  9.04455e-05 0.000162039         -1      100 MeV    3.62104 meV    1.70812 m      28.7167 m        World  Transportation
+   11   -972.522 um   -1.59296 cm   -8.26425 m  -0.000174202 -0.000103012         -1      100 MeV    3.25893 meV    1.53731 m       30.254 m        World  Transportation
+   12   -984.115 um   -1.59485 cm   -9.64782 m  1.19868e-05 -0.000217118         -1      100 MeV    2.93304 meV    1.38358 m      31.6376 m        World  Transportation
+   13   -984.877 um   -1.59421 cm    -10.893 m  -5.08682e-05 -0.000224623         -1      100 MeV    2.63974 meV    1.24522 m      32.8828 m        World  Transportation
+   14    800.786 um   -1.17185 cm   -12.0137 m  -0.000243515 3.73474e-05         -1      100 MeV     2.3758 meV    1.12071 m      34.0035 m        World  Transportation
+   15    15.2238 um   -4.43631 mm   -13.0224 m  0.000236792 9.4724e-05         -1      100 MeV    2.13829 meV    1.00868 m      35.0122 m        World  Transportation
+   16   -2.61206 mm    1.70801 mm   -13.9301 m  -0.000267891 2.1271e-05         -1      100 MeV    1.92446 meV    90.7809 cm       35.92 m        World  Transportation
+   17   -4.00024 mm   -6.32998 mm   -14.7471 m  3.9528e-05 -0.000285409         -1      100 MeV    1.73209 meV    81.7063 cm     36.7371 m        World  Transportation
+   18   -3.98467 mm   -6.35405 mm   -15.4824 m  0.000276508 -0.000132098         -1      100 MeV    1.55874 meV    73.5289 cm     37.4724 m        World  Transportation
+   19   -3.97751 mm   -6.35879 mm   -16.1442 m  0.000323174 -6.15286e-05         -1      100 MeV    1.40286 meV     66.176 cm     38.1341 m        World  Transportation
+   20   -514.338 um   -8.12297 mm   -16.7397 m  0.000282701 -0.000188329         -1      100 MeV    1.26263 meV    59.5608 cm     38.7297 m        World  Transportation
+   21   -457.327 um   -1.45866 cm   -17.2758 m  -1.70759e-07 -0.000357301         -1      100 MeV    1.13648 meV      53.61 cm     39.2658 m        World  Transportation
+   22   -423.016 um   -1.45486 cm   -17.7582 m  -0.000374209 -1.95608e-05         -1      100 MeV    1.02269 meV    48.2423 cm     39.7483 m        World  Transportation
+   23    880.064 um   -1.42544 cm   -18.1924 m  0.000142683 0.000367796         -1      100 MeV   0.920428 meV    43.4185 cm     40.1824 m        World  Transportation
+   24    802.829 um   -1.42546 cm   -18.5831 m  0.00014445 -0.000392422         -1      100 MeV   0.828378 meV    39.0763 cm     40.5732 m        World  Transportation
+   25    876.238 um   -1.42123 cm   -18.9348 m  -0.000271515 0.000330125         -1      100 MeV    0.74554 meV    35.1687 cm     40.9249 m        World  Transportation
+   26    807.893 um   -1.42677 cm   -19.2513 m  0.000273734 -0.000342592         -1      100 MeV   0.671084 meV    31.6564 cm     41.2415 m        World  Transportation
+   27    886.273 um   -1.42241 cm   -19.5362 m  -0.00015545 0.000428891         -1      100 MeV   0.603888 meV    28.4866 cm     41.5263 m        World  Transportation
+   28    795.255 um   -1.42272 cm   -19.7926 m  -0.000124947 -0.000466972         -1      100 MeV   0.543499 meV     25.638 cm     41.7827 m        World  Transportation
+   29    865.433 um   -1.42878 cm   -20.0233 m  0.00047133 0.000223749         -1      100 MeV   0.489149 meV    23.0742 cm     42.0134 m        World  Transportation
+   30    1.40242 mm   -1.41072 cm    -20.231 m  -0.000433155 0.000324557         -1      100 MeV   0.440237 meV    20.7669 cm     42.2211 m        World  Transportation
+   31    1.31721 mm   -1.41312 cm   -20.4179 m  -0.000196196 -0.000514169         -1      100 MeV   0.396213 meV    18.6902 cm      42.408 m        World  Transportation
+   32   -319.037 um   -1.49261 cm   -20.5861 m  0.00053364 -0.00014956         -1      100 MeV   0.356629 meV    16.8229 cm     42.5762 m        World  Transportation
+   33    898.805 um   -1.84475 cm   -20.7375 m  0.000190615 0.000522034         -1      100 MeV   0.321114 meV    15.1476 cm     42.7277 m        World  Transportation
+   34   -1.46189 mm   -1.92746 cm   -20.8737 m  -0.00046609 0.000303764         -1      100 MeV   0.288929 meV    13.6294 cm      42.864 m        World  Transportation
+   35    247.118 um   -2.13265 cm   -20.9964 m  -0.000449498 -0.000328146         -1      100 MeV   0.260073 meV    12.2682 cm     42.9867 m        World  Transportation
+   36    224.518 um   -2.13804 cm   -21.1067 m  8.14043e-05 -0.000550583         -1      100 MeV   0.233958 meV    11.0363 cm     43.0971 m        World  Transportation
+   37    256.062 um   -2.14231 cm   -21.2061 m  0.000502151 -0.000240152         -1      100 MeV   0.210562 meV    9.93266 cm     43.1964 m        World  Transportation
+   38    304.238 um   -2.14234 cm   -21.2955 m  0.000505007 0.000233991         -1      100 MeV   0.189506 meV    8.93939 cm     43.2858 m        World  Transportation
+   39     333.68 um   -2.13912 cm   -21.3759 m  0.000188219 0.000523807         -1      100 MeV   0.170555 meV    8.04545 cm     43.3662 m        World  Transportation
+   40    231.893 um   -2.23569 cm   -21.4483 m  -0.000200163 0.000519247         -1      100 MeV   0.153528 meV    7.24223 cm     43.4387 m        World  Transportation
+   41    209.238 um   -2.23293 cm   -21.5135 m  -0.000471082 0.000296287         -1      100 MeV    0.13815 meV    6.51681 cm     43.5038 m        World  Transportation
+   42    178.239 um   -2.23207 cm   -21.5721 m  -0.000556512 -8.86477e-06         -1      100 MeV   0.124335 meV    5.86513 cm     43.5625 m        World  Transportation
+   43    150.285 um   -2.23286 cm   -21.6249 m  -0.00047868 -0.000283965         -1      100 MeV   0.111901 meV    5.27862 cm     43.6153 m        World  Transportation
+   44    131.461 um   -2.23468 cm   -21.6724 m  -0.000299297 -0.000469293         -1      100 MeV   0.100711 meV    4.75076 cm     43.6628 m        World  Transportation
+   45    123.199 um   -2.23689 cm   -21.7152 m  -8.14392e-05 -0.000550543         -1      100 MeV  0.0906401 meV    4.27568 cm     43.7055 m        World  Transportation
+   46    829.389 um   -2.06493 cm   -21.7537 m  0.000127906 -0.00054162         -1      100 MeV  0.0817583 meV    3.85671 cm     43.7441 m        World  Transportation
+   47      836.9 um   -2.06669 cm   -21.7883 m  0.000301625 -0.000467655         -1      100 MeV  0.0734183 meV    3.46329 cm     43.7787 m        World  Transportation
+   48    671.265 um   -2.21725 cm   -21.8195 m  0.000428784 -0.000354743         -1      100 MeV  0.0662205 meV    3.12376 cm       43.81 m        World  Transportation
+   49   -454.602 um   -2.22725 cm   -21.8475 m  0.000509221 -0.000224405         -1      100 MeV  0.0595614 meV    2.80964 cm     43.8381 m        World  Transportation
+   50    592.901 um   -2.29551 cm   -21.8728 m  0.000548798 -9.22693e-05         -1      100 MeV  0.0536423 meV    2.53042 cm     43.8634 m        World  Transportation
+   51    605.501 um   -2.29558 cm   -21.8955 m  0.000555569 3.17603e-05         -1      100 MeV  0.0481699 meV    2.27227 cm     43.8861 m        World  Transportation
+   52    616.721 um    -2.2954 cm   -21.9159 m  0.000538039 0.000142242         -1      100 MeV  0.0433529 meV    2.04504 cm     43.9065 m        World  Transportation
+   53    626.333 um   -2.29505 cm   -21.9344 m  0.00050362 0.000236858         -1      100 MeV  0.0390176 meV    1.84054 cm     43.9249 m        World  Transportation
+   54     1.0511 mm   -2.32086 cm   -21.9509 m  0.000458528 0.000315441         -1      100 MeV   0.035145 meV    1.65786 cm     43.9415 m        World  Transportation
+   55    1.05756 mm   -2.32034 cm   -21.9658 m  0.000407455 0.000379071         -1      100 MeV  0.0316043 meV    1.49084 cm     43.9564 m        World  Transportation
+   56    778.914 um   -2.36491 cm   -21.9792 m  0.000353979 0.000429397         -1      100 MeV  0.0284859 meV    1.34374 cm     43.9699 m        World  Transportation
+   57    782.871 um   -2.36437 cm   -21.9913 m  0.000300612 0.000468301         -1      100 MeV  0.0255994 meV    1.20758 cm     43.9819 m        World  Transportation
+   58    785.258 um   -2.36395 cm        -22 m  0.000259545 0.00049225         -1      100 MeV  0.0184973 meV    8.72558 mm     43.9907 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000196s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.001013s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 4 starts.
-### Run 4 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -797,24 +403,75 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m  -8.42505e-09 -9.58672e-08          1       50 MeV0.318344 meV   16.0398 cm    16.0398 cm      World  Transportation
-    2   -8425.59 fm    10.2098 cm    21.9905 m  -2.94296e-08 -0.0195872   0.999808       50 MeV0.00202487 meV   1.02023 mm    16.1418 cm   Absorber  Transportation
-    3   -2.90229 Ang   10.1016 cm         22 m  -2.94296e-08  -0.205667   0.978622       50 MeV0.0190161 meV   9.58127 mm    17.0999 cm OutOfWorld  Transportation
+    1          0 fm          0 fm    17.5806 m  7.87373e-08 -2.1489e-08         -1       50 MeV    8.74614 meV    4.40895 m      4.40895 m        World  Transportation
+    2    2.37466 mm    6.43751 mm    13.6125 m  -2.07479e-05 -3.19225e-05         -1       50 MeV    7.87155 meV    3.96807 m      8.37702 m        World  Transportation
+    3    2.37319 mm    6.43584 mm    10.0412 m  1.21732e-05 -6.07707e-05         -1       50 MeV    7.08437 meV    3.57125 m      11.9483 m        World  Transportation
+    4    2.37181 mm    6.43491 mm    6.82712 m  3.04114e-05 -8.79238e-05         -1       50 MeV    6.37593 meV    3.21412 m      15.1624 m        World  Transportation
+    5      2.371 mm    6.43365 mm    3.93441 m  5.50149e-05 -0.000103704         -1       50 MeV    5.73834 meV    2.89271 m      18.0551 m        World  Transportation
+    6    411.125 um     8.9523 mm    1.33097 m  0.000126557 -3.87707e-05         -1       50 MeV    5.16451 meV    2.60344 m      20.6585 m        World  Transportation
+    7    4.45511 mm    5.18768 mm   -1.01213 m  -1.44385e-05 0.000144825         -1       50 MeV    4.64808 meV    2.34311 m      23.0017 m        World  Transportation
+    8    4.44083 mm     5.1821 mm   -3.12092 m  9.48136e-05 -0.000134994         -1       50 MeV    4.18325 meV    2.10879 m      25.1104 m        World  Transportation
+    9    4.43795 mm    5.18544 mm   -5.01883 m  2.93519e-05 -0.000191319         -1       50 MeV    3.76493 meV    1.89791 m      27.0084 m        World  Transportation
+   10    4.45474 mm    5.17837 mm   -6.72694 m  0.000167812 0.000137626         -1       50 MeV    3.38845 meV    1.70813 m      28.7165 m        World  Transportation
+   11     5.2981 mm    4.94247 mm   -8.26425 m  0.000193433 -0.00012672         -1       50 MeV    3.04959 meV    1.53731 m      30.2538 m        World  Transportation
+   12    5.31686 mm    4.95057 mm   -9.64782 m  3.47183e-05 0.000240658         -1       50 MeV    2.74463 meV    1.38358 m      31.6374 m        World  Transportation
+   13    5.31354 mm    4.94228 mm    -10.893 m  0.000197154 0.000175724         -1       50 MeV    2.47017 meV    1.24522 m      32.8826 m        World  Transportation
+   14    4.94463 mm    6.62255 mm   -12.0137 m  -0.00021083 -0.000188129         -1       50 MeV    2.22316 meV     1.1207 m      34.0033 m        World  Transportation
+   15    4.93931 mm    6.61036 mm   -13.0224 m  2.78677e-05 -0.000292308         -1       50 MeV    2.00084 meV    1.00863 m      35.0119 m        World  Transportation
+   16    4.94492 mm    6.62445 mm   -13.9301 m  -0.00024809 -0.000182291         -1       50 MeV    1.80079 meV    90.7781 cm     35.9197 m        World  Transportation
+   17    4.96809 mm     6.6021 mm   -14.7471 m  0.000189772 0.000271517         -1       50 MeV    1.62068 meV    81.6987 cm     36.7367 m        World  Transportation
+   18     4.9597 mm    6.62866 mm   -15.4824 m  -0.000330468 0.00010718         -1       50 MeV    1.45861 meV    73.5289 cm      37.472 m        World  Transportation
+   19    6.71437 mm     9.1502 mm   -16.1442 m  -0.000365004 -4.53075e-05         -1       50 MeV    1.31277 meV    66.1773 cm     38.1337 m        World  Transportation
+   20    4.69372 mm     8.2853 mm   -16.7397 m  -0.000288659 0.00026666         -1       50 MeV    1.18149 meV    59.5591 cm     38.7293 m        World  Transportation
+   21    4.68764 mm    8.25057 mm   -17.2758 m  0.000391529 0.000147512         -1       50 MeV    1.06333 meV    53.6025 cm     39.2653 m        World  Transportation
+   22    5.14662 mm    1.07258 cm   -17.7582 m  -0.00041027 -0.000183852         -1       50 MeV   0.957017 meV    48.2435 cm     39.7478 m        World  Transportation
+   23    5.14498 mm     1.0683 cm   -18.1924 m  0.000427422 -0.000215866         -1       50 MeV   0.861294 meV     43.418 cm      40.182 m        World  Transportation
+   24    5.17644 mm    1.06897 cm   -18.5831 m  0.000297298 0.000400231         -1       50 MeV   0.775165 meV    39.0762 cm     40.5727 m        World  Transportation
+   25     5.1834 mm    1.07047 cm   -18.9348 m  3.59145e-06 0.000536641         -1       50 MeV   0.697648 meV    35.1686 cm     40.9244 m        World  Transportation
+   26    2.64818 mm    1.04618 cm   -19.2513 m  3.52087e-05 0.000580327         -1       50 MeV   0.627922 meV    31.6537 cm      41.241 m        World  Transportation
+   27    2.64152 mm    1.04425 cm   -19.5362 m  0.000412194 0.000449833         -1       50 MeV   0.565095 meV    28.4866 cm     41.5258 m        World  Transportation
+   28    1.73522 mm    9.18034 mm   -19.7926 m  0.000591228 -0.000259722         -1       50 MeV   0.508602 meV    25.6388 cm     41.7822 m        World  Transportation
+   29    3.08935 mm    9.34211 mm   -20.0233 m  -0.000381037 -0.000567698         -1       50 MeV   0.457742 meV    23.0749 cm      42.013 m        World  Transportation
+   30    4.03641 mm    1.09866 cm    -20.231 m  -0.000250922 0.000684187         -1       50 MeV   0.411986 meV    20.7683 cm     42.2206 m        World  Transportation
+   31    3.97729 mm     1.0944 cm   -20.4179 m  0.000584659 -0.000473714         -1       50 MeV   0.370759 meV      18.69 cm     42.4075 m        World  Transportation
+   32    4.02087 mm    1.10081 cm   -20.5861 m  -0.000671639 0.000379973         -1       50 MeV   0.333683 meV     16.821 cm     42.5757 m        World  Transportation
+   33    3.50556 mm    1.03454 cm   -20.7375 m  0.000623593 -0.000504032         -1       50 MeV   0.300322 meV    15.1393 cm     42.7271 m        World  Transportation
+   34    5.00415 mm    1.09826 cm   -20.8737 m  -0.000351706 0.00077248         -1       50 MeV   0.270316 meV    13.6267 cm     42.8634 m        World  Transportation
+   35    4.91884 mm    1.09799 cm   -20.9964 m  -0.000298376 -0.000898467         -1       50 MeV   0.243255 meV    12.2625 cm      42.986 m        World  Transportation
+   36     4.9788 mm    1.09156 cm   -21.1067 m  0.000961045 0.000276045         -1       50 MeV   0.218929 meV    11.0363 cm     43.0964 m        World  Transportation
+   37     5.0059 mm     1.0997 cm   -21.2061 m  -0.000633251 0.000806877  -0.999999       50 MeV   0.197036 meV    9.93266 cm     43.1957 m        World  Transportation
+   38    4.92479 mm    1.09995 cm   -21.2955 m  -0.000681426 -0.000781939  -0.999999       50 MeV   0.177333 meV    8.93939 cm     43.2851 m        World  Transportation
+   39    5.66189 mm    1.03258 cm   -21.3759 m  0.000792555 -0.00067658  -0.999999       50 MeV    0.15962 meV    8.04649 cm     43.3656 m        World  Transportation
+   40    5.73136 mm     1.0326 cm   -21.4483 m  0.000788521 0.000684164  -0.999999       50 MeV    0.14364 meV    7.24092 cm      43.438 m        World  Transportation
+   41    5.74509 mm    1.03881 cm   -21.5135 m  -0.000427785 0.000953042  -0.999999       50 MeV   0.129276 meV    6.51683 cm     43.5032 m        World  Transportation
+   42    5.69639 mm    1.04196 cm   -21.5721 m  -0.00104487 -1.01416e-06  -0.999999       50 MeV   0.116348 meV    5.86514 cm     43.5618 m        World  Transportation
+   43    5.65056 mm    1.03935 cm   -21.6249 m  -0.000533107 -0.000898665  -0.999999       50 MeV   0.104713 meV    5.27863 cm     43.6146 m        World  Transportation
+   44    5.64721 mm    1.03458 cm   -21.6724 m  0.000402347 -0.000964259  -0.999999       50 MeV  0.0942421 meV    4.75077 cm     43.6621 m        World  Transportation
+   45    5.34471 mm    1.05795 cm   -21.7152 m  0.000985704 -0.000346341  -0.999999       50 MeV  0.0848257 meV    4.27609 cm     43.7049 m        World  Transportation
+   46    4.75814 mm    9.88485 mm   -21.7537 m  0.000955632 0.000422045  -0.999999       50 MeV  0.0763784 meV    3.85025 cm     43.7434 m        World  Transportation
+   47    5.23034 mm    1.03408 cm   -21.7883 m  0.000479218 0.000928324  -0.999999       50 MeV  0.0687229 meV    3.46434 cm      43.778 m        World  Transportation
+   48     5.7075 mm    1.08572 cm   -21.8195 m  -0.000139574 0.00103536  -0.999999       50 MeV  0.0618594 meV    3.11835 cm     43.8092 m        World  Transportation
+   49    5.69599 mm    1.08838 cm   -21.8475 m  -0.000659808 0.000810078  -0.999999       50 MeV   0.055649 meV    2.80528 cm     43.8372 m        World  Transportation
+   50    5.67505 mm    1.08994 cm   -21.8728 m  -0.000965142 0.000400008  -0.999999       50 MeV  0.0500841 meV    2.52475 cm     43.8625 m        World  Transportation
+   51    5.65185 mm    1.09034 cm   -21.8955 m  -0.00104335 -5.44518e-05  -0.999999       50 MeV  0.0450757 meV    2.27228 cm     43.8852 m        World  Transportation
+   52     5.6313 mm    1.08981 cm   -21.9159 m  -0.000939503 -0.000456925  -0.999999       50 MeV  0.0405681 meV    2.04505 cm     43.9057 m        World  Transportation
+   53    5.79144 mm    1.10557 cm   -21.9344 m  -0.000717893 -0.000758935  -0.999999       50 MeV  0.0365173 meV    1.84085 cm     43.9241 m        World  Transportation
+   54    5.78178 mm    1.10415 cm   -21.9509 m  -0.000438536 -0.000948153  -0.999999       50 MeV  0.0328601 meV    1.65649 cm     43.9406 m        World  Transportation
+   55    5.77738 mm    1.10266 cm   -21.9658 m  -0.000146998 -0.00103428  -0.999999       50 MeV  0.0295741 meV    1.49084 cm     43.9555 m        World  Transportation
+   56    5.77725 mm    1.10126 cm   -21.9792 m  0.00012675 -0.00103694  -0.999999       50 MeV  0.0266167 meV    1.34175 cm      43.969 m        World  Transportation
+   57    5.78024 mm    1.10004 cm   -21.9913 m  0.000366204 -0.000978412  -0.999999       50 MeV   0.023955 meV    1.20758 cm      43.981 m        World  Transportation
+   58    5.78429 mm    1.09923 cm        -22 m  0.000526478 -0.000902285  -0.999999       50 MeV  0.0172467 meV    8.69412 mm     43.9897 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000151s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.001193s Sys=0.000000s
  F01FieldSetup::CreateStepperAndChordFinder() called. 
-                 1. Creating Stepper.
+   1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
-The minimal step is equal to 0.1 mm
-                 2. Creating ChordFinder.
-                 3. Updating Field Manager.
+The minimal step is equal to 0.01 mm
+   2. Creating ChordFinder.
+ G4ChordFinder: stepperDriverId: 2
+   3. Updating Field Manager (chord finder, field-ptr).
 Setting Field strength to (1000,0,0) Gauss.
 
 ========= Table of registered couples ============================
@@ -822,15 +479,13 @@ Setting Field strength to (1000,0,0) Gauss.
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 5 starts.
-### Run 5 start.
- Calling F01RunAction::ChangeLooperParameters() 
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -838,33 +493,47 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    3.36956 m     21.9895 m  5.03344e-08 4.10621e-08          1       50 MeV10.5049 meV    5.2929 m      5.2929 m       World  Transportation
-    2    50334.4 fm    3.36956 m     21.9905 m  2.97687e-07 -0.000593498          1       50 MeV0.00202487 meV   1.02023 mm    5.29392 m    Absorber  Transportation
-    3    2.87839 nm    3.36953 m          22 m  5.20032e-07 -0.00623232   0.999981       50 MeV0.018855 meV   9.50007 mm    5.30342 m  OutOfWorld  Transportation
+    1          0 fm    3.14294 m     21.1456 m  -1.32443e-07   0.500921   0.865493       50 MeV    8.74614 meV    4.40895 m      4.40895 m        World  Transportation
+    2   -14.3996 nm    3.19433 m     21.2413 m  6.62848e-08   0.444064   0.895995       50 MeV   0.215676 meV    10.8723 cm     4.51767 m        World  Transportation
+    3   -8.12436 nm    3.23397 m     21.3273 m  7.91725e-08   0.393042    0.91952       50 MeV   0.187802 meV    9.46713 cm     4.61234 m        World  Transportation
+    4   -892.306 um    3.26539 m     21.4043 m  3.0827e-08   0.347197   0.937792       50 MeV   0.164988 meV    8.31708 cm     4.69552 m        World  Transportation
+    5   -892.303 um     3.2894 m     21.4738 m  -6.44151e-08   0.305956   0.952046       50 MeV   0.145843 meV    7.35201 cm     4.76904 m        World  Transportation
+    6   -892.308 um    3.30817 m     21.5363 m  -5.65069e-08   0.268852   0.963182       50 MeV    0.12948 meV     6.5271 cm     4.83431 m        World  Transportation
+    7   -180.157 um    3.32241 m     21.5927 m  -1.42529e-08   0.235459   0.971884       50 MeV   0.115359 meV     5.8153 cm     4.89246 m        World  Transportation
+    8   -180.158 um    3.33385 m     21.6433 m  -1.42529e-08   0.205406   0.978677       50 MeV   0.102978 meV    5.19114 cm     4.94437 m        World  Transportation
+    9   -180.158 um    3.34276 m     21.6889 m  1.0064e-08   0.178351   0.983967       50 MeV   0.092138 meV     4.6447 cm     4.99082 m        World  Transportation
+   10   -180.158 um    3.34968 m     21.7299 m  4.26018e-08   0.153993   0.988072       50 MeV  0.0825597 meV    4.16185 cm     5.03244 m        World  Transportation
+   11   -668.616 um    3.35563 m     21.7668 m  6.24563e-09   0.132061   0.991242       50 MeV  0.0740905 meV    3.73492 cm     5.06979 m        World  Transportation
+   12   -726.708 um    3.36023 m        21.8 m  -1.60593e-08   0.112311   0.993673       50 MeV  0.0665231 meV    3.35345 cm     5.10332 m        World  Transportation
+   13   -726.708 um    3.36335 m       21.83 m  -7.16612e-08  0.0945255   0.995522       50 MeV  0.0597626 meV    3.01265 cm     5.13345 m        World  Transportation
+   14    -726.71 um    3.36569 m      21.857 m  -7.88289e-08  0.0785131   0.996913       50 MeV  0.0537176 meV    2.70792 cm     5.16053 m        World  Transportation
+   15   -726.712 um    3.36743 m     21.8812 m  -7.88289e-08  0.0640975   0.997944       50 MeV  0.0483084 meV    2.43524 cm     5.18488 m        World  Transportation
+   16   -220.431 um    3.36884 m     21.9031 m  8.87042e-09  0.0511201   0.998693       50 MeV  0.0434688 meV    2.19127 cm     5.20679 m        World  Transportation
+   17    -220.43 um    3.36974 m     21.9228 m  -3.89961e-08  0.0394372   0.999222       50 MeV  0.0390859 meV    1.97033 cm     5.22649 m        World  Transportation
+   18    8.10732 um    3.36987 m     21.9405 m  -2.52886e-08  0.0289207   0.999582       50 MeV  0.0351974 meV    1.77431 cm     5.24424 m        World  Transportation
+   19   -421.563 um    3.36992 m     21.9565 m  -5.22072e-08  0.0194554   0.999811       50 MeV  0.0316777 meV    1.59688 cm     5.26021 m        World  Transportation
+   20   -842.116 um    3.37044 m     21.9708 m  -1.00195e-07  0.0109363    0.99994       50 MeV  0.0285099 meV    1.43719 cm     5.27458 m        World  Transportation
+   21   -842.117 um    3.37053 m     21.9837 m  -7.60224e-08 0.00326836   0.999995       50 MeV  0.0256278 meV     1.2919 cm      5.2875 m        World  Transportation
+   22   -842.117 um    3.37054 m     21.9895 m  -6.41401e-08 -0.000156396          1       50 MeV   0.011446 meV    5.76994 mm     5.29327 m        World  Transportation
+   23   -842.117 um    3.37054 m     21.9905 m  -6.71101e-08 -0.000749925          1       50 MeV 0.00202385 meV    1.02023 mm     5.29429 m     Absorber  Transportation
+   24   -842.118 um     3.3705 m          22 m  -5.56673e-08 -0.00638862    0.99998       50 MeV  0.0188455 meV    9.50007 mm     5.30379 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000181s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.000000s Real=0.000404s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 6 starts.
-### Run 6 start.
- Calling F01RunAction::ChangeLooperParameters() 
 --> Event 0 starts.
 --> Event 10 starts.
 --> Event 20 starts.
@@ -878,24 +547,24 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.008880s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
+  User=0.020000s Real=0.014555s Sys=0.000000s
 #
 /calor/setAbsMat Xe20CO2
 /calor/setWorldMat Kr20CO2
 /calor/setAbsThick 0.8 mm
+-- Calorimeter Absorber z-coords:  Start= 21989.6 End= 21990.4
 /run/reinitializeGeometry
 /calor/setAbsRad 1900 mm
+-- Calorimeter Absorber z-coords:  Start= 21989.6 End= 21990.4
 /run/reinitializeGeometry
 /calor/setAbsZpos 20990 mm
+-- Calorimeter Absorber z-coords:  Start= 20989.6 End= 20990.4
 /run/reinitializeGeometry
 /calor/setWorldZ 45000 mm
+-- Calorimeter Absorber z-coords:  Start= 20989.6 End= 20990.4
 /run/reinitializeGeometry
 /calor/setWorldR 23000 mm
+-- Calorimeter Absorber z-coords:  Start= 20989.6 End= 20990.4
 /run/reinitializeGeometry
 /field/setFieldZ 1.0 kG
 Setting Field strength to (0,0,1000) Gauss.
@@ -912,6 +581,7 @@ Setting Field strength to (0,0,1000) Gauss.
 Start re-initialization because 
   Geometry
 has been modified since last Run.
+-- Calorimeter Absorber z-coords:  Start= 20989.6 End= 20990.4
 
  The  WORLD   is made of 45000mm of Kr20CO2, the transverse size (R) of the world is 23000 mm. 
  The ABSORBER is made of 0.8mm of Xe20CO2, the transverse size (R) is 1900 mm. 
@@ -923,42 +593,31 @@ has been modified since last Run.
 Index : 0     used in the geometry : No 
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
 
 Index : 1     used in the geometry : Yes
  Material : Kr20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : Xe20CO2
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  1 keV    e-  1.135618566062 keV    e+  1.1127384428498 keV proton 70 keV
+ Energy thresholds :  gamma  990 eV     e-  1.1371297826313 keV    e+  1.1142639816587 keV proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ==================================================================
 
 ### Run 7 starts.
-### Run 7 start.
- Calling F01RunAction::ChangeLooperParameters() 
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.020000s Real=0.016525s Sys=0.000000s
- G4Transportation: Statistics for looping particles 
- No looping tracks found or killed. 
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
-Graphics systems deleted.
-Visualization Manager deleting...
-G4 kernel has come to Quit state.
+  User=0.000000s Real=0.005287s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.29 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.3 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

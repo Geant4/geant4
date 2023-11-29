@@ -50,7 +50,7 @@ class G4Upsilon : public G4ParticleDefinition
  private:
    static G4Upsilon* theInstance;
    G4Upsilon(){}
-   ~G4Upsilon(){}
+   ~G4Upsilon() override= default;
 
  public:
    static G4Upsilon* Definition();

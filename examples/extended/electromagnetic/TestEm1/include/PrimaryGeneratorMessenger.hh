@@ -47,16 +47,16 @@ class PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-   ~PrimaryGeneratorMessenger();
+   ~PrimaryGeneratorMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
-    PrimaryGeneratorAction* fAction;
+    PrimaryGeneratorAction* fAction     = nullptr;
     
-    G4UIdirectory*          fGunDir; 
-    G4UIcmdWithAnInteger*   fDefaultCmd;
-    G4UIcmdWithADouble*     fRndmCmd;
+    G4UIdirectory*          fGunDir     = nullptr;
+    G4UIcmdWithAnInteger*   fDefaultCmd = nullptr;
+    G4UIcmdWithADouble*     fRndmCmd    = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

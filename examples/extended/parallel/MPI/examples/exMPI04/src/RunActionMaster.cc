@@ -70,6 +70,7 @@ RunActionMaster::RunActionMaster(G4bool useNtuple, G4bool mergeNtuple)
   Analysis* myana = Analysis::GetAnalysis();
   myana->SetUseNtuple(useNtuple);
   myana->SetMergeNtuple(mergeNtuple);
+  G4cout<<"Book analysis on master on rank: " << G4MPImanager::GetManager()-> GetRank() << G4endl;;
   myana->Book();
 }
 
@@ -213,7 +214,8 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
     }
   
     //Save histograms *before* MPI merging for rank #0
-    if (rank == 0) {
+    //Can be done only if MPI merging is not activated
+    if (rank == 0 && (fMPIntupleMerger == nullptr) ) {
       Analysis* myana = Analysis::GetAnalysis();
       myana-> Save();
       myana-> Close(false);  // close without resetting histograms
@@ -241,7 +243,9 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
   if (rank == 0) {
     // Rename files
     G4fs::rename("dose-rank0.root", "dose-merged.root");
-    G4fs::rename("dose-rank0-part.root", "dose-rank0.root");
+    if (fMPIntupleMerger == nullptr) {
+      G4fs::rename("dose-rank0-part.root", "dose-rank0.root");
+    }
   }
 
   G4cout << "===================================================" << G4endl;

@@ -1,0 +1,248 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: Study all XS.
+md5: d41d8cd98f00b204e9800998ecf8427e
+Input:
+EndInput
+
+Page: Flair
+plotengine: Gnuplot
+
+Plot: elastic_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 1
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Elastic XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-3
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+	ylog: 1
+	ymax: 10
+	ymin: 1
+End
+Plot: inelastic_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	det.0: 1
+	det.1: 1
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 2
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Inelastic XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-3
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+	ylog: 1
+	ymax: 3
+	ymin: 1
+End
+Plot: capture_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	det.0: 2
+	det.1: 2
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 3
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Capture XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-3
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+End
+Plot: fission_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	det.0: 3
+	det.1: 3
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 4
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Fission XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-3
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+End
+Plot: charge_exchange_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	det.0: 4
+	det.1: 4
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 5
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Charge exchange XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-3
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+End
+Plot: total_XS_elementary_material
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+		|set ytics add ('1pb' 1e-12, '10pb' 1e-11, '100pb' 1e-10, '1nb' 1e-9, '10nb' 1e-8,'100nb' 1e-7,'1ub' 1e-6, '10ub' 1e-5, '100ub' 1e-4, '1mb' 1e-3, '10mb' 0.01, '100mb' 0.1, '1b' 1, '2b' 2, '3b' 3, '10b' 10, '100b' 100, '1kb' 1000, '10kb' 1e4, '100kb' 1e5, '1Mb' 1e6)
+	det.0: 5
+	det.1: 5
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 6
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Total XS
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-6
+	y.0: 2
+	y.1: 2
+	ylabel: XS
+	ylog: 1
+End
+Plot: elastic_XS_volume
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 6
+	det.1: 6
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 7
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Elastic XS in volume (scaled by density)
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-6
+	y.0: 2
+	y.1: 2
+	ylabel: XS [barn / (g/cm2)]
+	ylog: 1
+End
+Plot: inelastic_XS_volume
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 7
+	det.1: 7
+	file.0: results/G4_HP_CernFLUKAHadronInelastic/all_XS.hist
+	file.1: results/FTFP_BERT_HP/all_XS.hist
+	grid: 1
+	index: 8
+	lc.0: green
+	lc.1: dark-blue
+	lw.0: 2
+	name.0: G4_HP_CernFLUKAHadronInelastic
+	name.1: FTFP_BERT_HP
+	ndetectors: 2
+	title: Proton on Pb: Inelastic XS in volume (scaled by density)
+	with.0: histogram
+	with.1: histogram
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmin: 1E-6
+	y.0: 2
+	y.1: 2
+	ylabel: XS [barn / (g/cm2)]
+	ylog: 1
+End

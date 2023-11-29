@@ -44,17 +44,17 @@
 // ######################################################################
 // ###                         ADJOINT ELECTRON                       ###
 // ######################################################################
-G4AdjointElectron* G4AdjointElectron::theInstance = 0;
+G4AdjointElectron* G4AdjointElectron::theInstance = nullptr;
 
 G4AdjointElectron* G4AdjointElectron::Definition()
 { 
   
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_e-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   
   // create particle
@@ -79,7 +79,7 @@ G4AdjointElectron* G4AdjointElectron::Definition()
 		    1,                 0,             0,          
 		    0,                 0,             0,             
 	     "adjoint",                1,             0,     10000011,
-	 	  true,             -1.0,          NULL,
+	 	  true,             -1.0,          nullptr,
                  false,           "adj_lepton"
               );
    // Bohr Magnetron
@@ -87,7 +87,7 @@ G4AdjointElectron* G4AdjointElectron::Definition()
    anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
 
   }
-  theInstance = reinterpret_cast<G4AdjointElectron*>(anInstance);
+  theInstance = static_cast<G4AdjointElectron*>(anInstance);
   return theInstance;
 }
 

@@ -94,9 +94,9 @@ namespace G4INCL {
     A[nParticles] = ARem[remnantIndex];
     Z[nParticles] = ZRem[remnantIndex];
     S[nParticles] = SRem[remnantIndex];
-    
-	ParticleSpecies pt(A[nParticles],Z[nParticles],S[nParticles]);
-	PDGCode[nParticles] = pt.getPDGCode();
+
+    ParticleSpecies pt(A[nParticles],Z[nParticles],S[nParticles]);
+    PDGCode[nParticles] = pt.getPDGCode();
 	
     ParticleBias[nParticles] = Particle::getTotalBias();
     emissionTime[nParticles] = stoppingTime;
@@ -105,22 +105,30 @@ namespace G4INCL {
     py[nParticles] = pyRem[remnantIndex];
     pz[nParticles] = pzRem[remnantIndex];
 
-    const G4double plab = std::sqrt(pxRem[remnantIndex]*pxRem[remnantIndex]
-                                  +pyRem[remnantIndex]*pyRem[remnantIndex]
-                                  +pzRem[remnantIndex]*pzRem[remnantIndex]);
-    G4double pznorm = pzRem[remnantIndex]/plab;
-    if(pznorm>1.)
-      pznorm = 1.;
-    else if(pznorm<-1.)
-      pznorm = -1.;
-    theta[nParticles] = Math::toDegrees(Math::arcCos(pznorm));
-    phi[nParticles] = Math::toDegrees(std::atan2(pyRem[remnantIndex],pxRem[remnantIndex]));
-
-    EKin[nParticles] = EKinRem[remnantIndex];
+    const G4double plab = std::sqrt( pxRem[remnantIndex]*pxRem[remnantIndex]
+                                    +pyRem[remnantIndex]*pyRem[remnantIndex]
+                                    +pzRem[remnantIndex]*pzRem[remnantIndex]);
+    if(plab != 0.0){
+      G4double pznorm = pzRem[remnantIndex]/plab;
+      if(pznorm>1.)       pznorm = 1.;
+      else if(pznorm<-1.) pznorm = -1.;
+      theta[nParticles] = Math::toDegrees(Math::arcCos(pznorm));
+      phi[nParticles] = Math::toDegrees(std::atan2(pyRem[remnantIndex],pxRem[remnantIndex]));
+      EKin[nParticles] = EKinRem[remnantIndex];
+    }
+    else{
+      theta[nParticles] = 0.0;
+      phi[nParticles] = 0.0;
+      EKin[nParticles] = 0.0;
+    }
     origin[nParticles] = -1; // Origin: cascade
+#ifdef INCLXX_IN_GEANT4_MODE
+    parentResonancePDGCode[nParticles] = 0;  // No parent resonance
+    parentResonanceID[nParticles] = 0;       // No parent resonance
+#endif
     history.push_back(""); // history
     nParticles++;
-// assert(history.size()==(unsigned int)nParticles);
+    // assert(history.size()==(unsigned int)nParticles);
   }
 }
 

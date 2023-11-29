@@ -24,8 +24,15 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ------------------------------------------------------------
+//      GEANT 4 class implementation file
+//      CERN Geneva Switzerland
+//
+//
+//      ------------ GammaRayTelActionInitializer ------
+//           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
+//
+// ************************************************************
 
 #ifndef GammaRayTelActionInitializer_h
 #define GammaRayTelActionInitializer_h 1
@@ -33,21 +40,15 @@
 #include "G4VUserActionInitialization.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class GammaRayTelActionInitializer : public G4VUserActionInitialization
-{
+class GammaRayTelActionInitializer : public G4VUserActionInitialization {
 public:
+    explicit GammaRayTelActionInitializer();
 
-  GammaRayTelActionInitializer();
-  ~GammaRayTelActionInitializer(){;};
-  
-  void Build() const;
-  void BuildForMaster() const;
-  
+    ~GammaRayTelActionInitializer(){;};
+
+    void Build() const override;
+
+    void BuildForMaster() const override;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

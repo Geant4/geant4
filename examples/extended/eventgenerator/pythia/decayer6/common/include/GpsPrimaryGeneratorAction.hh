@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file GpsPrimaryGeneratorAction.hh
-/// \brief Definition of the GpsPrimaryGeneratorActionclass
+/// \file common/include/GpsPrimaryGeneratorAction.hh
+/// \brief Definition of the Common::GpsPrimaryGeneratorAction class
 //
 
 #ifndef GpsPrimaryGeneratorAction_h
@@ -42,23 +42,24 @@ class G4Event;
 ///
 /// \author I. Hrivnacova; IPN Orsay
 
+namespace Common
+{
+
 class GpsPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
 {
   public:
-    GpsPrimaryGeneratorAction();    
-    ~GpsPrimaryGeneratorAction();
+    GpsPrimaryGeneratorAction();
+    ~GpsPrimaryGeneratorAction() override;
 
     // methods
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
 
   private:
-    // static data members
-    static const G4String fgkDefaultParticleName;
-    static const G4double fgkDefaultEnergy;
-
     // data members
-    G4GeneralParticleSource*  fGeneralParticleSource;
+    G4GeneralParticleSource*  fGeneralParticleSource = nullptr;
 };
+
+}
 
 #endif
 

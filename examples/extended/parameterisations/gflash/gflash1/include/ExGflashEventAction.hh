@@ -30,22 +30,23 @@
 #ifndef ExGflashEventAction_h
 #define ExGflashEventAction_h
 
-#include "G4UserEventAction.hh"
 #include "G4Timer.hh"
+#include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class ExGflashEventAction: public G4UserEventAction {
-public:
-  ExGflashEventAction();
-  ~ExGflashEventAction();
-  
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
-  
-private:
-  G4int    fNevent;
-  G4double fDtime;
-  G4int    fCalorimeterCollectionId;
-  G4Timer  fTimerIntern;
+class ExGflashEventAction : public G4UserEventAction
+{
+  public:
+    ExGflashEventAction();
+    ~ExGflashEventAction() override;
+
+    void BeginOfEventAction(const G4Event*) override;
+    void EndOfEventAction(const G4Event*) override;
+
+  private:
+    G4int fNevent{0};
+    G4double fDtime{0.0};
+    G4int fCalorimeterCollectionId{-1};
+    G4Timer fTimerIntern;
 };
 #endif

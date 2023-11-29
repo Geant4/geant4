@@ -36,6 +36,7 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
+#include <memory>
 #include "G4VUserPrimaryGeneratorAction.hh"
 class G4ParticleGun;
 
@@ -49,10 +50,10 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     virtual void GeneratePrimaries(G4Event* );
 
-    G4ParticleGun* GetParticleGun() {return fParticleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun.get();}
   
   private:
-    G4ParticleGun*          fParticleGun;
+    std::unique_ptr<G4ParticleGun>          fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -46,22 +46,20 @@
 
 class G4PSEnergyDeposit : public G4VPrimitivePlotter
 {
- public:                                              // with description
+ public:
   G4PSEnergyDeposit(G4String name, G4int depth = 0);  // default unit
   G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth = 0);
-  virtual ~G4PSEnergyDeposit();
-
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+  ~G4PSEnergyDeposit() override = default;
 
  public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
+
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
  private:
   G4int HCID;

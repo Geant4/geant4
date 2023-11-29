@@ -145,7 +145,7 @@ G4Mutex& G4TypeMutex(const unsigned int& _n = 0)
 template <typename _Tp>
 G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
 {
-  static G4RecursiveMutex* _mutex = new G4RecursiveMutex();
+  static auto* _mutex = new G4RecursiveMutex();
   if(_n == 0)
     return *(_mutex);
 

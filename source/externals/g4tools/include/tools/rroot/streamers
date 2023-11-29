@@ -51,8 +51,8 @@ inline bool AttAxis_stream(buffer& a_buffer){
 
     // Version 4 streaming (ROOT/v3-00-6).
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     if(!a_buffer.read(fNdivisions)) return false;
     if(!a_buffer.read(fAxisColor)) return false;
@@ -66,15 +66,15 @@ inline bool AttAxis_stream(buffer& a_buffer){
     if(!a_buffer.read(fTitleColor)) return false;
     if(!a_buffer.read(fTitleFont)) return false;
 
-    if(!a_buffer.check_byte_count(s, c,"TAttAxis")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TAttAxis")) return false;
     return true;
 }
 
 inline bool Axis_stream(buffer& a_buffer,histo::axis<double,unsigned int>& a_fAxis){
     // Version 6 streaming (ROOT/v3-00-6).
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     std::string name;
     std::string title;
@@ -127,7 +127,7 @@ inline bool Axis_stream(buffer& a_buffer,histo::axis<double,unsigned int>& a_fAx
       if(!dummy_TXxx_pointer_stream(a_buffer,fac)) return false;
     }
 
-    if(!a_buffer.check_byte_count(s,c,"TAxis")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TAxis")) return false;
     return true;
 }
 
@@ -143,9 +143,9 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     a_Sxw = 0;
     a_Sx2w = 0;
 
-    unsigned int s, c;
+    unsigned int _s,_c;
     short vers;
-    if(!a_buffer.read_version(vers,s,c)) return false;
+    if(!a_buffer.read_version(vers,_s,_c)) return false;
 
     //::printf("debug : tools::rroot::TH_read_1D : version %d\n",vers);
 
@@ -275,7 +275,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
       a_data.m_bin_Sw2.assign(binn,0);
     }
 
-    if(!a_buffer.check_byte_count(s,c,"TH")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TH")) return false;
 
     return true;
 }
@@ -284,9 +284,9 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
                        double& a_entries,double& a_Sw,double& a_Sw2,
                        double& a_Sxw,double& a_Sx2w,double& a_Syw,double& a_Sy2w){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -306,7 +306,7 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
     if(!a_buffer.read(Tsumwxy)) return false;
     a_data.m_in_range_plane_Sxyw[0] = Tsumwxy;
 
-    if(!a_buffer.check_byte_count(s,c,"TH2")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TH2")) return false;
 
     return true;
 }
@@ -316,9 +316,9 @@ inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
                        double& a_Sxw,double& a_Sx2w,
                        double& a_Syw,double& a_Sy2w,
                        double& a_Szw,double& a_Sz2w){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
 
     if(!TH_read_1D(a_buffer,a_data,a_entries,a_Sw,a_Sw2,a_Sxw,a_Sx2w)) return false;
     if(!Att3D_stream(a_buffer)) return false;
@@ -345,15 +345,15 @@ inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
     a_data.m_in_range_plane_Sxyw[1] = Tsumwyz;
     a_data.m_in_range_plane_Sxyw[2] = Tsumwxz;
 
-    if(!a_buffer.check_byte_count(s,c,"TH3")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TH3")) return false;
 
     return true;
 }
 
 inline histo::h1d* TH1F_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 1 streaming (ROOT/v3-00-6).
 
@@ -379,7 +379,7 @@ inline histo::h1d* TH1F_stream(buffer& a_buffer){
 
     std::vector<float> bins; //fArray TArrayF
     if(!Array_stream<float>(a_buffer,bins)) return 0;
-    if(!a_buffer.check_byte_count(s,c,"TH1F")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TH1F")) return 0;
 
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw.resize(binn,0);
@@ -407,9 +407,9 @@ inline histo::h1d* TH1F_stream(buffer& a_buffer){
 }
 
 inline histo::h1d* TH1D_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 1 streaming (ROOT/v3-00-6).
 
@@ -433,7 +433,7 @@ inline histo::h1d* TH1D_stream(buffer& a_buffer){
 
     std::vector<double> bins; //fArray TArrayD
     if(!Array_stream<double>(a_buffer,bins)) return 0;
-    if(!a_buffer.check_byte_count(s,c,"TH1D")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TH1D")) return 0;
 
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw = bins;
@@ -459,9 +459,9 @@ inline histo::h1d* TH1D_stream(buffer& a_buffer){
 }
 
 inline histo::h2d* TH2F_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -490,7 +490,7 @@ inline histo::h2d* TH2F_stream(buffer& a_buffer){
 
     std::vector<float> bins; //fArray TArrayF
     if(!Array_stream<float>(a_buffer,bins)) return 0;
-    if(!a_buffer.check_byte_count(s,c,"TH2F")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TH2F")) return 0;
 
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw.resize(binn,0);
@@ -521,9 +521,9 @@ inline histo::h2d* TH2F_stream(buffer& a_buffer){
 }
 
 inline histo::h2d* TH2D_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -552,7 +552,7 @@ inline histo::h2d* TH2D_stream(buffer& a_buffer){
 
     std::vector<double> bins; //fArray TArrayD
     if(!Array_stream<double>(a_buffer,bins)) return 0;
-    if(!a_buffer.check_byte_count(s,c,"TH2D")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TH2D")) return 0;
 
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw = bins;
@@ -580,9 +580,9 @@ inline histo::h2d* TH2D_stream(buffer& a_buffer){
 }
 
 inline histo::h3d* TH3D_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Now we have to reconstruct a valid Histogram from a_buffer :
     hd_data data;
@@ -611,7 +611,7 @@ inline histo::h3d* TH3D_stream(buffer& a_buffer){
 
     std::vector<double> bins; //fArray TArrayD
     if(!Array_stream<double>(a_buffer,bins)) return 0;
-    if(!a_buffer.check_byte_count(s,c,"TH3D")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TH3D")) return 0;
 
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw = bins;
@@ -641,9 +641,9 @@ inline histo::h3d* TH3D_stream(buffer& a_buffer){
 }
 
 inline histo::p1d* TProfile_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -680,7 +680,7 @@ inline histo::p1d* TProfile_stream(buffer& a_buffer){
       if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
     }
 
-    if(!a_buffer.check_byte_count(s,c,"TProfile")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TProfile")) return 0;
 
     data.m_is_profile = true;
     data.m_cut_v = true;
@@ -710,9 +710,9 @@ inline histo::p1d* TProfile_stream(buffer& a_buffer){
 }
 
 inline histo::p2d* TProfile2D_stream(buffer& a_buffer){
-    unsigned int s, c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return 0;
+    if(!a_buffer.read_version(v,_s,_c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
@@ -747,7 +747,7 @@ inline histo::p2d* TProfile2D_stream(buffer& a_buffer){
       std::vector<double> bins_sumw2; //fBinSumw2 TArrayD
       if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
     }
-    if(!a_buffer.check_byte_count(s,c,"TProfile2D")) return 0;
+    if(!a_buffer.check_byte_count(_s,_c,"TProfile2D")) return 0;
 
     data.m_is_profile = true;
     data.m_cut_v = true;

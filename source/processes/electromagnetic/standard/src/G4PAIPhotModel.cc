@@ -42,14 +42,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Region.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4MaterialTable.hh"
-#include "G4SandiaTable.hh"
-#include "G4OrderedTable.hh"
 #include "G4RegionStore.hh"
 
 #include "Randomize.hh"
@@ -92,7 +87,6 @@ G4PAIPhotModel::G4PAIPhotModel(const G4ParticleDefinition* p, const G4String& na
 
 G4PAIPhotModel::~G4PAIPhotModel()
 {
-  //G4cout << "G4PAIPhotModel::~G4PAIPhotModel() " << this << G4endl;
   if(IsMaster()) { delete fModelData; fModelData = nullptr; }
 }
 
@@ -101,7 +95,7 @@ G4PAIPhotModel::~G4PAIPhotModel()
 void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
  			        const G4DataVector& cuts)
 {
-  if(fVerbose > 0) 
+  if(fVerbose > 1) 
   {
     G4cout<<"G4PAIPhotModel::Initialise for "<<p->GetParticleName()<<G4endl;
   }
@@ -110,9 +104,6 @@ void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
 
   if( IsMaster() ) 
   { 
-
-    InitialiseElementSelectors(p, cuts);
-
     delete fModelData;
     fMaterialCutsCoupleVector.clear(); 
 
@@ -143,10 +134,9 @@ void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
       {
 	G4Material* mat = (*theMaterialTable)[jMat];
 	const G4MaterialCutsCouple* cutCouple = reg->FindCouple(mat);
-	//G4cout << "Couple <" << fCutCouple << G4endl;
-	if(cutCouple) 
+	if(nullptr != cutCouple) 
         {
-	  if(fVerbose>0)
+	  if(fVerbose > 1)
 	  {
 	    G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
 	    << mat->GetName() << ">  fCouple= " 
@@ -178,6 +168,7 @@ void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
 	}
       }
     }
+    InitialiseElementSelectors(p, cuts);
   }
 }
 
@@ -210,10 +201,9 @@ G4double G4PAIPhotModel::ComputeDEDXPerVolume(const G4Material*,
   if(0 > coupleIndex) { return 0.0; }
 
   G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
-
   G4double scaledTkin = kineticEnergy*fRatio;
- 
-  return fChargeSquare*fModelData->DEDXPerVolume(coupleIndex, scaledTkin, cut);
+  G4double dedx = fChargeSquare*fModelData->DEDXPerVolume(coupleIndex, scaledTkin, cut);
+  return dedx;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -225,18 +215,15 @@ G4double G4PAIPhotModel::CrossSectionPerVolume( const G4Material*,
 					    G4double maxEnergy  ) 
 {
   G4int coupleIndex = FindCoupleIndex(CurrentCouple());
-
-  if(0 > coupleIndex) return 0.0; 
+  if(0 > coupleIndex) { return 0.0; } 
 
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
-
-  if(tmax <= cutEnergy)  return 0.0; 
+  if(tmax <= cutEnergy) { return 0.0; } 
 
   G4double scaledTkin = kineticEnergy*fRatio;
-  G4double xsc = fChargeSquare*fModelData->CrossSectionPerVolume(coupleIndex, 
-							 scaledTkin, 
-							 cutEnergy, tmax);
-  return xsc;
+  G4double xs = fChargeSquare*fModelData->CrossSectionPerVolume(coupleIndex,
+                                          scaledTkin, cutEnergy, tmax);
+  return xs;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -277,17 +264,17 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
     if( deltaTkin <= 0. && fVerbose > 0) 
     {
-    G4cout<<"G4PAIPhotModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
+      G4cout<<"G4PAIPhotModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
     }
-    if( deltaTkin <= 0.) return; 
+    if( deltaTkin <= 0.) { return; } 
 
-    if( deltaTkin > tmax) deltaTkin = tmax;
+    if( deltaTkin > tmax) { deltaTkin = tmax; }
 
     const G4Element* anElement = SelectTargetAtom(matCC,fParticle,kineticEnergy,
                                                   dp->GetLogKineticEnergy());
-    G4int Z = G4lrint(anElement->GetZ());
+    G4int Z = anElement->GetZasInt();
  
-    G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
+    auto deltaRay = new G4DynamicParticle(fElectron,
 	    GetAngularDistribution()->SampleDirection(dp, deltaTkin,
 		 				      Z, matCC->GetMaterial()),
 						      deltaTkin);
@@ -300,7 +287,6 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     {
       fParticleChange->SetProposedKineticEnergy(0.0);
       fParticleChange->ProposeLocalEnergyDeposit(kineticEnergy+deltaTkin);
-      // fParticleChange->ProposeTrackStatus(fStopAndKill);
       return; 
     }
     else
@@ -351,7 +337,7 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     }
     // create G4DynamicParticle object for photon ray
  
-    G4DynamicParticle* photonRay = new G4DynamicParticle;
+    auto photonRay = new G4DynamicParticle;
     photonRay->SetDefinition( G4Gamma::Gamma() );
     photonRay->SetKineticEnergy( deltaTkin );
     photonRay->SetMomentumDirection(deltaDirection); 
@@ -375,22 +361,18 @@ G4double G4PAIPhotModel::SampleFluctuations(
 
   SetParticle(aParticle->GetDefinition());
 
-  
   // G4cout << "G4PAIPhotModel::SampleFluctuations step(mm)= "<< step/mm
   // << "  Eloss(keV)= " << eloss/keV  << " in " 
   // << matCC->GetMaterial()->GetName() << G4endl;
-  
 
   G4double Tkin       = aParticle->GetKineticEnergy();
   G4double scaledTkin = Tkin*fRatio;
 
   G4double loss = fModelData->SampleAlongStepPhotonTransfer(coupleIndex, Tkin,
-						      scaledTkin,
-						      step*fChargeSquare);
-           loss += fModelData->SampleAlongStepPlasmonTransfer(coupleIndex, Tkin,
-						      scaledTkin,
-							      step*fChargeSquare);
-
+						            scaledTkin,
+						            step*fChargeSquare);
+  loss += fModelData->SampleAlongStepPlasmonTransfer(coupleIndex, Tkin,
+                                                     scaledTkin, step*fChargeSquare);
   
   // G4cout<<"  PAIPhotModel::SampleFluctuations loss = "<<loss/keV<<" keV, on step = "
   // <<step/mm<<" mm"<<G4endl; 

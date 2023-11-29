@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // G4PhysicsListOrderingParameter
-// 
+//
 // Class description:
 //
 // This class defins a parameter ordering used by G4PhysicsListHelper.
@@ -40,12 +40,11 @@
 class G4PhysicsListHelper;
 class G4PhysicsListOrderingParameter
 {
-  friend class G4PhysicsListHelper;
+    friend class G4PhysicsListHelper;
 
   public:
-
-    G4PhysicsListOrderingParameter();
-    virtual ~G4PhysicsListOrderingParameter();
+    G4PhysicsListOrderingParameter() = default;
+    virtual ~G4PhysicsListOrderingParameter() = default;
 
     inline const G4String& GetTypeName() const { return processTypeName; }
     inline G4int GetType() const { return processType; }
@@ -57,11 +56,10 @@ class G4PhysicsListOrderingParameter
     inline G4bool GetDuplicable() const { return isDuplicable; }
 
   private:
-
     G4String processTypeName = "NONE";
     G4int processType = -1;
     G4int processSubType = -1;
-    G4int ordering[3];
+    G4int ordering[3] = {-1, -1, -1};
     G4bool isDuplicable = false;
 };
 

@@ -29,12 +29,10 @@
 // ---------------------------------------------------------------
 
 #include "PTL/TaskGroup.hh"
-#include "PTL/Globals.hh"
-#include "PTL/Task.hh"
+
 #include "PTL/TaskRunManager.hh"
 #include "PTL/ThreadData.hh"
 #include "PTL/ThreadPool.hh"
-#include "PTL/VTask.hh"
 
 //======================================================================================//
 
@@ -52,8 +50,13 @@ task_group_counter()
 ThreadPool*
 get_default_threadpool()
 {
-    if(TaskRunManager::GetMasterRunManager())
-        return TaskRunManager::GetMasterRunManager()->GetThreadPool();
+    auto* mrm = TaskRunManager::GetMasterRunManager();
+    if(mrm)
+    {
+        if(!mrm->GetThreadPool())
+            mrm->Initialize();
+        return mrm->GetThreadPool();
+    }
     return nullptr;
 }
 

@@ -54,6 +54,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4VVisManager.hh"
 
+#define G4warn G4cout
+
 G4VFigureFileMaker * G4TheRayTracer::theFigMaker = 0;
 G4VRTScanner * G4TheRayTracer::theScanner = 0;
 
@@ -113,13 +115,13 @@ void G4TheRayTracer::Trace(const G4String& fileName)
   G4ApplicationState currentState = theStateMan->GetCurrentState();
   if(currentState!=G4State_Idle)
   {
-    G4cerr << "Illegal application state - Trace() ignored." << G4endl;
+    G4warn << "Illegal application state - Trace() ignored." << G4endl;
     return;
   }
 
   if(!theFigMaker)
   {
-    G4cerr << "Figure file maker class is not specified - Trace() ignored." << G4endl;
+    G4warn << "Figure file maker class is not specified - Trace() ignored." << G4endl;
     return;
   }
 
@@ -139,8 +141,8 @@ void G4TheRayTracer::Trace(const G4String& fileName)
   if(succeeded)
   { CreateFigureFile(fileName); }
   else
-  { G4cerr << "Could not create figure file" << G4endl;
-    G4cerr << "You might set the eye position outside of the world volume" << G4endl; }
+  { G4warn << "Could not create figure file" << G4endl;
+    G4warn << "You might set the eye position outside of the world volume" << G4endl; }
   RestoreUserActions();
 
   if(storeTrajectory==0) UI->ApplyCommand("/tracking/storeTrajectory 0");
@@ -209,7 +211,7 @@ G4bool G4TheRayTracer::CreateBitMap()
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(pWorld);
   G4ProcessVector* pVector
     = G4Geantino::GeantinoDefinition()->GetProcessManager()->GetProcessList();
-  for (std::size_t j=0; j < pVector->size(); ++j) {
+  for (G4int j=0; j < (G4int)pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*(G4Geantino::GeantinoDefinition()));
   }
 

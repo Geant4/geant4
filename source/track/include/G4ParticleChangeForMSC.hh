@@ -31,6 +31,7 @@
 
 // Author: Hisaya Kurashige, 23 March 1998  
 // Revision: Vladimir Ivantchenko, 16 January 2004
+//                                 23 August 2022
 // --------------------------------------------------------------------
 #ifndef G4ParticleChangeForMSC_hh
 #define G4ParticleChangeForMSC_hh 1
@@ -38,78 +39,72 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ThreeVector.hh"
 #include "G4VParticleChange.hh"
 
-class G4DynamicParticle;
-
-class G4ParticleChangeForMSC : public G4VParticleChange
+class G4ParticleChangeForMSC final : public G4VParticleChange
 {
-  public:
+public:
 
-    G4ParticleChangeForMSC();
-      // Default constructor
+  G4ParticleChangeForMSC();
 
-    virtual ~G4ParticleChangeForMSC();
-      // Destructor
+  ~G4ParticleChangeForMSC() override = default;
 
-  // --- the following methods are for updating G4Step -----
-  // Return the pointer to the G4Step after updating the Step information
-  // by using final state information of the track given by a physics
-  // process
+  G4ParticleChangeForMSC(const G4ParticleChangeForMSC& right) = delete;
+  G4ParticleChangeForMSC& operator=
+  (const G4ParticleChangeForMSC& right) = delete;
 
-    virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
-    virtual G4Step* UpdateStepForPostStep(G4Step* Step);
-      // A physics process gives the final state of the particle
-      // based on information of G4Track (or equivalently the PreStepPoint)
+  // A multiple scattering process gives the final state of the particle
+  G4Step* UpdateStepForAlongStep(G4Step* step) final;
 
-    virtual void Initialize(const G4Track&);
-      // Initialize all properties by using G4Track information
+  // Initialise only properties changed by multiple scattering
+  inline void InitialiseMSC(const G4Track&, const G4Step& step);
 
-  // --- methods to keep information of the final state ---
-  // IMPORTANT NOTE: despite the name, what the class stores through its
-  //                 methods are the "FINAL" values of the Position,
-  //                 Momentum, etc.
+  inline void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+  inline const G4ThreeVector* GetProposedMomentumDirection() const;
 
-    void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
-    void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
-    const G4ThreeVector* GetMomentumDirection() const;
-    const G4ThreeVector* GetProposedMomentumDirection() const;
-    void SetProposedMomentumDirection(const G4ThreeVector& Pfinal);
-      // Get/Set theMomentumDirectionChange vector: it is the final momentum
-      // direction
+  inline void ProposePosition(const G4ThreeVector& finalPosition);
+  inline const G4ThreeVector& GetProposedPosition() const;
 
-    const G4ThreeVector* GetPosition() const;
-    void ProposePosition(const G4ThreeVector& finalPosition);
-    const G4ThreeVector* GetProposedPosition() const;
-    void SetProposedPosition(const G4ThreeVector& finalPosition);
-      // Get/Set the final position of the current particle
+private:
 
-  // --- Dump and debug methods ---
+  G4ThreeVector theMomentumDirection;
+  // It is the vector containing the final momentum direction
+  // after multiple scattering is applied along step
 
-    virtual void DumpInfo() const;
-
-    virtual G4bool CheckIt(const G4Track&);
-
-  protected:
-
-    G4ParticleChangeForMSC(const G4ParticleChangeForMSC& right);
-    G4ParticleChangeForMSC& operator=(const G4ParticleChangeForMSC& right);
-      // Hidden copy constructor and assignment operator
-
-  private:
-
-    G4ThreeVector theMomentumDirection;
-      // It is the vector containing the final momentum direction
-      // after the invoked process. The application of the change
-      // of the momentum direction of the particle is not done here.
-      // The responsibility to apply the change is up the entity
-      // which invoked the process
-
-    G4ThreeVector thePosition;
-      // The changed (final) position of a given particle
+  G4ThreeVector thePosition;
+  // The changed of post step position after multiple scattering
 };
 
-#include "G4ParticleChangeForMSC.icc"
+inline void G4ParticleChangeForMSC::ProposeMomentumDirection(
+  const G4ThreeVector& P)
+{
+  theMomentumDirection = P;
+}
+
+inline const G4ThreeVector*
+G4ParticleChangeForMSC::GetProposedMomentumDirection() const
+{
+  return &theMomentumDirection;
+}
+
+inline void G4ParticleChangeForMSC::ProposePosition(const G4ThreeVector& P)
+{
+  thePosition = P;
+}
+
+inline const G4ThreeVector& G4ParticleChangeForMSC::GetProposedPosition() const
+{
+  return thePosition;
+}
+
+inline void
+G4ParticleChangeForMSC::InitialiseMSC(const G4Track& track, const G4Step& step)
+{
+  theStatusChange = track.GetTrackStatus();
+  auto poststep = step.GetPostStepPoint();
+  thePosition = poststep->GetPosition();
+  theMomentumDirection = poststep->GetMomentumDirection();  
+  theCurrentTrack = &track;
+}
 
 #endif

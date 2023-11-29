@@ -36,6 +36,7 @@
 #ifdef G4MULTITHREADED
 #include "G4Threading.hh"
 #endif
+#include "G4UIQt.hh"
 
 #include <qapplication.h>
 #include <qtabwidget.h>
@@ -47,14 +48,14 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   G4OpenGLViewer (sceneHandler),
   G4OpenGLQtViewer (sceneHandler),
   G4OpenGLStoredViewer (sceneHandler),             // FIXME : gerer le pb du parent !
-  QGLWidget()
+  G4QGLWidgetType()
 {
   if (fViewId < 0) return;  // In case error in base class instantiation.
 
   fQGLWidgetInitialiseCompleted = false;
 
     // Indicates that the widget has no background, i.e. when the widget receives paint events, the background is not automatically repainted. Note: Unlike WA_OpaquePaintEvent, newly exposed areas are never filled with the background (e.g., after showing a window for the first time the user can see "through" it until the application processes the paint events). This flag is set or cleared by the widget's author.
-  QGLWidget::setAttribute (Qt::WA_NoSystemBackground);
+  G4QGLWidgetType::setAttribute (Qt::WA_NoSystemBackground);
 
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
@@ -78,8 +79,8 @@ void G4OpenGLStoredQtViewer::Initialise() {
   glDrawBuffer (GL_BACK);
 
    // set the good tab active
-  if (QGLWidget::parentWidget()) {
-    QTabWidget *parentTab = dynamic_cast<QTabWidget*> (QGLWidget::parentWidget()->parent()) ;
+  if (G4QGLWidgetType::parentWidget()) {
+    auto *parentTab = dynamic_cast<QTabWidget*> (G4QGLWidgetType::parentWidget()->parent()) ;
     if (parentTab) {
       parentTab->setCurrentIndex(parentTab->count()-1);
     }
@@ -141,7 +142,8 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()))
+      (lastVP.IsSpecialMeshRendering() != fVP.IsSpecialMeshRendering()) ||
+      (lastVP.GetSpecialMeshRenderingOption() != fVP.GetSpecialMeshRenderingOption()))
     return true;
 
   // Don't check VisAttributesModifiers if this comparison has been
@@ -170,6 +172,7 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   /**************************************************************
    If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
+   if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
    for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
@@ -196,7 +199,7 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
 
 G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
 {
-  return isTouchableVisible(POListIndex);
+  return isTouchableVisible((int)POListIndex);
 }
 
 G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
@@ -351,7 +354,12 @@ void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
     // The widget's rendering context will become the current context and initializeGL()
     // will be called if it hasn't already been called.
     // Copies the back buffer of a double-buffered context to the front buffer.
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     updateGL();
+#else
+    // Not sure this is correct....
+    paintGL();
+#endif
   }
 }
 
@@ -451,5 +459,5 @@ void G4OpenGLStoredQtViewer::ShowView (
 void G4OpenGLStoredQtViewer::DisplayTimePOColourModification (
 G4Colour& c,
 size_t poIndex) {
-  c = getColorForPoIndex(poIndex);
+  c = getColorForPoIndex((int)poIndex);
 }

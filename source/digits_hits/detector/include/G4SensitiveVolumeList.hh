@@ -37,11 +37,12 @@
 #ifndef G4SensitiveVolumeList_h
 #define G4SensitiveVolumeList_h 1
 
-//#include "g4rw/tpordvec.h"
-//#include "g4rw/tvordvec.h"
-#include <vector>
+// #include "g4rw/tpordvec.h"
+// #include "g4rw/tvordvec.h"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
+
+#include <vector>
 
 // class description:
 //
@@ -54,22 +55,14 @@
 class G4SensitiveVolumeList
 {
  public:
-  // Constructors
-  G4SensitiveVolumeList();
-  G4SensitiveVolumeList(const G4SensitiveVolumeList& right);
-
-  // Destructor
-  ~G4SensitiveVolumeList();
-
-  // Assignment Operation
-  G4SensitiveVolumeList& operator=(const G4SensitiveVolumeList& right);
-
   // Equality Operations
   G4bool operator==(const G4SensitiveVolumeList& right) const;
   G4bool operator!=(const G4SensitiveVolumeList& right) const;
 
-  // Other Operations
+  // Return true if given physical volume is in list
   G4bool CheckPV(const G4VPhysicalVolume* pvp) const;
+
+  // Return true if given logical volume is in list
   G4bool CheckLV(const G4LogicalVolume* lvp) const;
 
   // Get and Set Operations for Has Relationships

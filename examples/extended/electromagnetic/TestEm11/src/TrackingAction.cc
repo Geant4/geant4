@@ -34,15 +34,17 @@
 
 #include "DetectorConstruction.hh"
 #include "Run.hh"
+#include "EventAction.hh"
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4StepStatus.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det)
-:G4UserTrackingAction(),fDetector(det)
+TrackingAction::TrackingAction(DetectorConstruction* det,EventAction* evt)
+:fDetector(det),fEventAct(evt)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,13 +86,20 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //status of primary particle : absorbed, transmited, reflected ?
  //
  if (trackID == 1) {
-  G4int status = 0;
+  G4int flag = 0;
   if (!track->GetNextVolume()) {
-    if (track->GetMomentumDirection().x() > 0.) status = 1;
-    else                                        status = 2;
+    if (track->GetMomentumDirection().x() > 0.) flag = 1;
+    else                                        flag = 2;
   }
-  run->AddTrackStatus(status);
- }   
+  run->AddTrackStatus(flag);
+ }
+ 
+  // where are we ?
+  G4StepStatus status = track->GetStep()->GetPostStepPoint()->GetStepStatus();
+    if (status == fWorldBoundary) {
+      G4double energy = track->GetKineticEnergy();
+      fEventAct->AddEleak(energy);
+    }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

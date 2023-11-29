@@ -29,42 +29,37 @@
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomColour.hh"
 #include "G4Colour.hh"
+
 G4HumanPhantomColour::G4HumanPhantomColour()
 {
-  white = G4Colour(1.0, 1.0, 1.0);
-  pink = G4Colour(0.94, 0.5, 0.5);
-  grey = G4Colour(0.46, 0.53, 0.6);
-  yellow = G4Colour(1.0, 1.0, 0.);
-  blue = G4Colour(0.25,0.41, 0.88 );
-  lightBlue = G4Colour(0.28, 0.82, 0.8);
-  green = G4Colour(0., 1., 0.);
-  brown = G4Colour(0.5, 0.5, 0.);
-  purple = G4Colour(0.85,0.44,0.84);
-  red = G4Colour(1.0, 0.0, 0.0);
-  orange = G4Colour(1.,0.5,0.); 
-  black =  G4Colour(0.,0.,0.); 
-}
-
-G4HumanPhantomColour::~G4HumanPhantomColour()
-{ 
-
+  fWhite = G4Colour(1.0, 1.0, 1.0);
+  fPink = G4Colour(0.94, 0.5, 0.5);
+  fGrey = G4Colour(0.46, 0.53, 0.6);
+  fYellow = G4Colour(1.0, 1.0, 0.);
+  fBlue = G4Colour(0.25,0.41, 0.88 );
+  fLightBlue = G4Colour(0.28, 0.82, 0.8);
+  fGreen = G4Colour(0., 1., 0.);
+  fBrown = G4Colour(0.5, 0.5, 0.);
+  fPurple = G4Colour(0.85,0.44,0.84);
+  fRed = G4Colour(1.0, 0.0, 0.0);
+  fOrange = G4Colour(1.,0.5,0.); 
+  fBlack =  G4Colour(0.,0.,0.); 
 }
 
 G4Colour G4HumanPhantomColour::GetColour(const G4String& colourName)
 {
-  
  // Returns the colour
-  if (colourName == "pink") return pink;
-  else if(colourName == "white") return white;
-  else if (colourName == "grey") return grey;
-  else if (colourName == "yellow") return yellow;
-  else if (colourName == "blue") return blue;
-  else if (colourName == "lightBlue") return lightBlue;
-  else if (colourName == "green") return green;
-  else if (colourName == "brown") return brown;
-  else if (colourName == "purple") return purple;
-  else if (colourName == "red") return red;
-  else if (colourName == "orange") return orange;
-  else if  (colourName == "black") return black; 
-else {G4cout<< colourName << "does not exist !!!"<< G4endl; return white;}
+  if (colourName == "pink") return fPink;
+  else if(colourName == "white") return fWhite;
+  else if (colourName == "grey") return fGrey;
+  else if (colourName == "yellow") return fYellow;
+  else if (colourName == "blue") return fBlue;
+  else if (colourName == "lightBlue") return fLightBlue;
+  else if (colourName == "green") return fGreen;
+  else if (colourName == "brown") return fBrown;
+  else if (colourName == "purple") return fPurple;
+  else if (colourName == "red") return fRed;
+  else if (colourName == "orange") return fOrange;
+  else if  (colourName == "black") return fBlack; 
+else {G4cout<< colourName << "does not exist !!!"<< G4endl; return fWhite;}
 }

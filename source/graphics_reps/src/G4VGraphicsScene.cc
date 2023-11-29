@@ -30,9 +30,9 @@
 
 #include "G4VisExtent.hh"
 
-G4VGraphicsScene::G4VGraphicsScene() {}
+G4VGraphicsScene::G4VGraphicsScene() = default;
 
-G4VGraphicsScene::~G4VGraphicsScene() {}
+G4VGraphicsScene::~G4VGraphicsScene() = default;
 
 const G4VisExtent& G4VGraphicsScene::GetExtent() const
 {

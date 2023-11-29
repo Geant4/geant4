@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -44,6 +44,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 
+ G4ChordFinder: stepperDriverId: 2
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -56,6 +57,8 @@ Registered graphics systems are:
   RayTracer (RayTracer)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
   OpenGLImmediateQt (OGLIQt, OGLI)
   OpenGLStoredQt (OGLSQt, OGL, OGLS)
   OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
@@ -63,6 +66,12 @@ Registered graphics systems are:
   OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
   OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
   RayTracerX (RayTracerX)
+  Qt3D (Qt3D)
+  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
 
 Registering model factories...
 
@@ -106,14 +115,14 @@ Some /vis commands (optionally) take a string to specify colour.
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  1 keV    e+  -1 MeV proton 100 keV
+ Energy thresholds :  gamma  -1 MeV    e-  990 eV     e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Ni
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  1.4556 MeV    e+  -1 MeV proton 100 keV
+ Energy thresholds :  gamma  -1 MeV    e-  1.45561 MeV    e+  -1 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -152,7 +161,7 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.131111543263neV
- MomDir:   (0.19314099204705,-0.98115702460316,0.0052392998539152)
+ MomDir:   (0.19314099204705,-0.98115702460316,0.0052392998539151)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -166,7 +175,7 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.144740858644neV
- MomDir:   (0.17286310795848,-0.9849319275816,0.005238696146947)
+ MomDir:   (0.17286310795848,-0.9849319275816,0.0052386961469469)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -194,7 +203,7 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.170547362866neV
- MomDir:   (0.12402046301375,-0.99226583776016,0.0052375536260129)
+ MomDir:   (0.12402046301376,-0.99226583776016,0.0052375536260129)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -207,22 +216,22 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.181039703755neV
- MomDir:   (0.09620916515466,-0.99534736119394,0.0052370893165457)
+ Ekin:     59.181039703756neV
+ MomDir:   (0.096209165154662,-0.99534736119394,0.0052370893165457)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.027556185071neV
- MomDir:   (-0.086572231600535,0.99622991851547,0.0055855322354659)
+ Ekin:     52.02755618507neV
+ MomDir:   (-0.086572231600536,0.99622991851547,0.0055855322354659)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.188958621767neV
- MomDir:   (0.066729769835732,-0.99775734243485,0.0052367389685322)
+ MomDir:   (0.066729769835733,-0.99775734243485,0.0052367389685322)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -250,49 +259,49 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.195166239641neV
- MomDir:   (0.0048002320238681,-0.99997476828833,0.0052364643808524)
+ MomDir:   (0.0048002320238675,-0.99997476828833,0.0052364643808523)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     52.017109649702neV
- MomDir:   (0.012177443569161,0.99991024868849,0.0055860930752663)
+ MomDir:   (0.012177443569162,0.99991024868849,0.0055860930752663)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.193037955872neV
- MomDir:   (-0.026567108807605,-0.9996333163638,0.0052365585184601)
+ MomDir:   (-0.026567108807606,-0.9996333163638,0.00523655851846)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     52.021489797705neV
- MomDir:   (0.045451458671523,0.99895093127549,0.005585857899096)
+ MomDir:   (0.045451458671525,0.99895093127549,0.0055858578990959)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.187533603363neV
- MomDir:   (-0.057466511752617,-0.99833369968749,0.0052368020088722)
+ Ekin:     59.187533603364neV
+ MomDir:   (-0.057466511752619,-0.99833369968749,0.0052368020088722)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     52.02953089856neV
- MomDir:   (0.077917121499852,0.99694419361914,0.0055854262386376)
+ MomDir:   (0.077917121499854,0.99694419361914,0.0055854262386376)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     59.179022381624neV
- MomDir:   (-0.087358404641599,-0.99616317995548,0.0052371785779573)
+ MomDir:   (-0.087358404641601,-0.99616317995548,0.0052371785779573)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -305,1184 +314,1184 @@ G4UCNBoundaryProcess -> BELOW critical velocity
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.168071895326neV
+ Ekin:     59.168071895327neV
  MomDir:   (-0.11573112598173,-0.9932667684783,0.0052376631889745)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.054229162354neV
- MomDir:   (0.13819589495449,0.99038917221138,0.0055841010178042)
+ Ekin:     52.054229162355neV
+ MomDir:   (0.13819589495449,0.99038917221138,0.0055841010178041)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.15540657949neV
- MomDir:   (-0.14211330545892,-0.98983653671824,0.0052382238571538)
+ Ekin:     59.155406579491neV
+ MomDir:   (-0.14211330545893,-0.98983653671824,0.0052382238571538)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.069247715544neV
- MomDir:   (0.16500558299584,0.9862768294906,0.0055832956367962)
+ Ekin:     52.069247715545neV
+ MomDir:   (0.16500558299584,0.9862768294906,0.0055832956367961)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.141856139305neV
- MomDir:   (-0.16608319862886,-0.98609782773175,0.0052388239074266)
+ Ekin:     59.141856139306neV
+ MomDir:   (-0.16608319862886,-0.98609782773175,0.0052388239074265)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.084767797061neV
- MomDir:   (0.18902015143659,0.98195734044287,0.0055824637269767)
+ Ekin:     52.084767797062neV
+ MomDir:   (0.1890201514366,0.98195734044286,0.0055824637269766)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.128298587468neV
- MomDir:   (-0.18727462292813,-0.98229362414619,0.0052394244790435)
+ Ekin:     59.128298587469neV
+ MomDir:   (-0.18727462292814,-0.98229362414619,0.0052394244790435)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.099789476764neV
- MomDir:   (0.20988639534544,0.97770984761992,0.0055816588866082)
+ Ekin:     52.099789476765neV
+ MomDir:   (0.20988639534544,0.97770984761992,0.0055816588866081)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.115602421881neV
- MomDir:   (-0.20537960691593,-0.97866836037468,0.0052399870803433)
+ Ekin:     59.115602421882neV
+ MomDir:   (-0.20537960691594,-0.97866836037467,0.0052399870803432)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.113357367067neV
- MomDir:   (0.22731498109964,0.9738052949964,0.0055809322373461)
+ Ekin:     52.113357367068neV
+ MomDir:   (0.22731498109965,0.9738052949964,0.005580932237346)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.104571945295neV
- MomDir:   (-0.22014826071538,-0.97545234671669,0.0052404760176321)
+ Ekin:     59.104571945296neV
+ MomDir:   (-0.22014826071539,-0.97545234671669,0.005240476017632)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.124619010516neV
- MomDir:   (0.24107813109448,0.97048966745282,0.0055803293181759)
+ Ekin:     52.124619010518neV
+ MomDir:   (0.24107813109449,0.97048966745282,0.0055803293181757)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.09589888502neV
- MomDir:   (-0.23138665392576,-0.97284775261377,0.0052408605561341)
+ Ekin:     59.095898885022neV
+ MomDir:   (-0.23138665392576,-0.97284775261377,0.005240860556134)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.132874367371neV
- MomDir:   (0.25100563171028,0.96796954379026,0.0055798874718906)
+ Ekin:     52.132874367373neV
+ MomDir:   (0.25100563171028,0.96796954379026,0.0055798874718905)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.090122541369neV
- MomDir:   (-0.23895362200146,-0.97101683673766,0.0052411167095359)
+ Ekin:     59.09012254137neV
+ MomDir:   (-0.23895362200147,-0.97101683673766,0.0052411167095358)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.137614591651neV
- MomDir:   (0.25698029550132,0.96640053570483,0.0055796338112705)
+ Ekin:     52.137614591652neV
+ MomDir:   (0.25698029550132,0.96640053570483,0.0055796338112704)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.087599856384neV
- MomDir:   (-0.24275741569471,-0.97007286666935,0.0052412285904157)
+ Ekin:     59.087599856385neV
+ MomDir:   (-0.24275741569471,-0.97007286666935,0.0052412285904156)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.13854914579neV
- MomDir:   (0.25893390601918,0.96587892644897,0.0055795838051491)
+ Ekin:     52.138549145792neV
+ MomDir:   (0.25893390601919,0.96587892644897,0.005579583805149)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.088486161255neV
- MomDir:   (-0.24275297673391,-0.97007397770569,0.0052411892820482)
+ Ekin:     59.088486161257neV
+ MomDir:   (-0.24275297673391,-0.97007397770569,0.0052411892820481)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.135620877628neV
- MomDir:   (0.25684445959797,0.96643664565756,0.0055797404954112)
+ Ekin:     52.135620877629neV
+ MomDir:   (0.25684445959797,0.96643664565756,0.0055797404954111)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.092726934789neV
- MomDir:   (-0.23894042173029,-0.97102008566746,0.0052410012124098)
+ Ekin:     59.092726934791neV
+ MomDir:   (-0.23894042173029,-0.97102008566746,0.0052410012124096)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.129008962467neV
- MomDir:   (0.25073522785979,0.96803962111951,0.0055800943444651)
+ Ekin:     52.129008962468neV
+ MomDir:   (0.25073522785979,0.96803962111951,0.005580094344465)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.100060669135neV
- MomDir:   (-0.23136504702039,-0.97285289244164,0.0052406760240544)
+ Ekin:     59.100060669137neV
+ MomDir:   (-0.23136504702039,-0.97285289244164,0.0052406760240543)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.119119687198neV
- MomDir:   (0.24067581475211,0.97058951613562,0.0055806237132641)
+ Ekin:     52.1191196872neV
+ MomDir:   (0.2406758147521,0.97058951613562,0.005580623713264)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.110032855605neV
- MomDir:   (-0.22011882502598,-0.97545899084351,0.0052402339400258)
+ Ekin:     59.110032855607neV
+ MomDir:   (-0.22011882502598,-0.97545899084351,0.0052402339400257)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.106565093783neV
- MomDir:   (0.22678497995699,0.97392885879882,0.0055812959725263)
+ Ekin:     52.106565093784neV
+ MomDir:   (0.22678497995698,0.97392885879882,0.0055812959725261)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.122020834616neV
- MomDir:   (-0.20534310089771,-0.97867602220038,0.005239702640534)
+ Ekin:     59.122020834618neV
+ MomDir:   (-0.2053431008977,-0.97867602220038,0.0052397026405339)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.092129744321neV
- MomDir:   (0.20923474642712,0.97784950855976,0.0055820692407473)
+ Ekin:     52.092129744323neV
+ MomDir:   (0.20923474642711,0.97784950855976,0.0055820692407472)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.135268994874neV
- MomDir:   (-0.18723193184025,-0.98230176390266,0.0052391156785588)
+ Ekin:     59.135268994876neV
+ MomDir:   (-0.18723193184024,-0.98230176390266,0.0052391156785587)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.076726229293neV
- MomDir:   (0.1882549524636,0.98210432447852,0.0055828947259155)
+ Ekin:     52.076726229295neV
+ MomDir:   (0.18825495246358,0.98210432447852,0.0055828947259154)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.148933266102neV
- MomDir:   (-0.16603527512207,-0.98610589969993,0.0052385104873182)
+ Ekin:     59.148933266104neV
+ MomDir:   (-0.16603527512206,-0.98610589969993,0.005238510487318)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.061340776397neV
- MomDir:   (0.16413720818288,0.98642171456495,0.0055837196088077)
+ Ekin:     52.061340776399neV
+ MomDir:   (0.16413720818286,0.98642171456495,0.0055837196088075)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.162133100319neV
- MomDir:   (-0.14206111153877,-0.98984403050122,0.0052379260651236)
+ Ekin:     59.16213310032neV
+ MomDir:   (-0.14206111153876,-0.98984403050122,0.0052379260651234)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.046971321267neV
- MomDir:   (0.137237122178,0.99052248120062,0.0055844903498245)
+ Ekin:     52.046971321269neV
+ MomDir:   (0.13723712217798,0.99052248120062,0.0055844903498243)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.174008233225neV
- MomDir:   (-0.11567558395741,-0.9932732398049,0.005237400461138)
+ Ekin:     59.174008233227neV
+ MomDir:   (-0.1156755839574,-0.9932732398049,0.0052374004611378)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.034561558658neV
- MomDir:   (0.10797372760753,0.99413805891152,0.0055851562348245)
+ Ekin:     52.034561558659neV
+ MomDir:   (0.10797372760751,0.99413805891152,0.0055851562348243)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.183776606489neV
- MomDir:   (-0.087300364065362,-0.99616826921855,0.0052369682228052)
+ Ekin:     59.183776606491neV
+ MomDir:   (-0.087300364065345,-0.99616826921856,0.005236968222805)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.024935579797neV
- MomDir:   (0.076825278482769,0.9970289247781,0.0055856729111895)
+ Ekin:     52.024935579798neV
+ MomDir:   (0.076825278482751,0.9970289247781,0.0055856729111893)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.190789117065neV
- MomDir:   (-0.05740673723663,-0.99833713941378,0.0052366579939387)
+ Ekin:     59.190789117067neV
+ MomDir:   (-0.057406737236613,-0.99833713941379,0.0052366579939386)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.018738439358neV
- MomDir:   (0.044320998136827,0.99900172455575,0.0055860056198405)
+ Ekin:     52.01873843936neV
+ MomDir:   (0.044320998136808,0.99900172455575,0.0055860056198403)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.194576556699neV
- MomDir:   (-0.026506292172543,-0.99963493118383,0.0052364904630224)
+ Ekin:     59.194576556701neV
+ MomDir:   (-0.026506292172524,-0.99963493118383,0.0052364904630223)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.01638811904neV
- MomDir:   (0.011028898473575,0.9999235763446,0.0055861318180894)
+ Ekin:     52.016388119042neV
+ MomDir:   (0.011028898473555,0.9999235763446,0.0055861318180893)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.194884382982neV
- MomDir:   (0.0048614427542199,-0.99997447251646,0.0052364768475597)
+ Ekin:     59.194884382984neV
+ MomDir:   (0.0048614427542394,-0.99997447251646,0.0052364768475595)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.018043695474neV
- MomDir:   (-0.022459651825693,0.99973214420881,0.0055860429225724)
+ Ekin:     52.018043695476neV
+ MomDir:   (-0.022459651825714,0.99973214420881,0.0055860429225722)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.191691872807neV
- MomDir:   (0.036143623053848,-0.99933288565114,0.0052366180606225)
+ Ekin:     59.191691872809neV
+ MomDir:   (0.036143623053868,-0.99933288565114,0.0052366180606224)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.023593083091neV
- MomDir:   (-0.055547402964625,0.99844042660386,0.0055857449813663)
+ Ekin:     52.023593083093neV
+ MomDir:   (-0.055547402964646,0.99844042660385,0.0055857449813661)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.185213688793neV
- MomDir:   (0.066789825798315,-0.99775332322152,0.0052369046427353)
+ Ekin:     59.185213688795neV
+ MomDir:   (0.066789825798335,-0.99775332322152,0.0052369046427352)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.032661682564neV
- MomDir:   (-0.087649221305656,0.9961357432074,0.005585258199702)
+ Ekin:     52.032661682566neV
+ MomDir:   (-0.087649221305677,0.9961357432074,0.0055852581997018)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.175883696037neV
- MomDir:   (0.096267585408629,-0.99534171142646,0.0052373174659462)
+ Ekin:     59.175883696039neV
+ MomDir:   (0.096267585408649,-0.99534171142646,0.0052373174659461)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.044640988824neV
- MomDir:   (-0.1182089954389,0.99297303360588,0.0055846153730077)
+ Ekin:     52.044640988825neV
+ MomDir:   (-0.11820899543892,0.99297303360588,0.0055846153730075)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.164322705145neV
- MomDir:   (0.12407643709583,-0.99225883866233,0.00523782913936)
+ Ekin:     59.164322705147neV
+ MomDir:   (0.12407643709585,-0.99225883866233,0.0052378291393598)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.05873411504neV
- MomDir:   (-0.14671402407998,0.98916318959637,0.0055838593997975)
+ Ekin:     52.058734115042neV
+ MomDir:   (-0.14671402408,0.98916318959637,0.0055838593997974)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.151293360589neV
- MomDir:   (0.14975942857483,-0.98870858833922,0.0052384059798565)
+ Ekin:     59.15129336059neV
+ MomDir:   (0.14975942857485,-0.98870858833922,0.0052384059798564)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.07401362217neV
- MomDir:   (-0.17270585949589,0.98495762130086,0.0055830401343614)
+ Ekin:     52.074013622172neV
+ MomDir:   (-0.17270585949591,0.98495762130085,0.0055830401343613)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.137646421197neV
- MomDir:   (0.17291142448684,-0.98492344476731,0.0052390103671585)
+ Ekin:     59.137646421198neV
+ MomDir:   (0.17291142448686,-0.98492344476731,0.0052390103671584)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.089486243451neV
- MomDir:   (-0.19578711599093,0.98063053395946,0.0055822108817842)
+ Ekin:     52.089486243452neV
+ MomDir:   (-0.19578711599095,0.98063053395946,0.0055822108817841)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.124263065714neV
- MomDir:   (0.19318399968043,-0.98114855594089,0.0052396032842377)
+ Ekin:     59.124263065716neV
+ MomDir:   (0.19318399968044,-0.98114855594089,0.0052396032842376)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.104159088413neV
- MomDir:   (-0.2156243273631,0.97646044320599,0.0055814248343417)
+ Ekin:     52.104159088414neV
+ MomDir:   (-0.21562432736311,0.97646044320598,0.0055814248343415)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.111997645169neV
- MomDir:   (0.21028716429911,-0.9776256182159,0.0052401468507469)
+ Ekin:     59.11199764517neV
+ MomDir:   (0.21028716429913,-0.9776256182159,0.0052401468507467)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.117102558919neV
- MomDir:   (-0.23194743328147,0.97271231287968,0.0055807317078037)
+ Ekin:     52.11710255892neV
+ MomDir:   (-0.23194743328149,0.97271231287968,0.0055807317078035)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.101624646212neV
- MomDir:   (0.22398852861926,-0.97457769063763,0.0052406066828862)
+ Ekin:     59.101624646214neV
+ MomDir:   (0.22398852861927,-0.97457769063763,0.005240606682886)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.127506256521neV
- MomDir:   (-0.24454682788619,0.96962142644451,0.0055801747739842)
+ Ekin:     52.127506256523neV
+ MomDir:   (-0.2445468278862,0.96962142644451,0.005580174773984)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.093792737517neV
- MomDir:   (0.23411075099784,-0.97219580778202,0.0052409539494206)
+ Ekin:     59.093792737518neV
+ MomDir:   (0.23411075099786,-0.97219580778201,0.0052409539494204)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.134725323787neV
- MomDir:   (-0.25326908127884,0.96737977983281,0.0055797884187152)
+ Ekin:     52.134725323788neV
+ MomDir:   (-0.25326908127886,0.9673797798328,0.005579788418715)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.088987854132neV
- MomDir:   (0.24052820228713,-0.97062799983962,0.0052411670319386)
+ Ekin:     59.088987854134neV
+ MomDir:   (0.24052820228715,-0.97062799983962,0.0052411670319385)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.138315704999neV
- MomDir:   (-0.25801244926957,0.96612548052885,0.0055795962959726)
+ Ekin:     52.138315705neV
+ MomDir:   (-0.25801244926958,0.96612548052884,0.0055795962959724)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.087506491219neV
- MomDir:   (0.24316373397004,-0.96997109645659,0.0052412327312909)
+ Ekin:     59.087506491221neV
+ MomDir:   (0.24316373397006,-0.96997109645659,0.0052412327312907)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.1380575779neV
- MomDir:   (-0.25872314121252,0.96593540371609,0.0055796101077954)
+ Ekin:     52.138057577901neV
+ MomDir:   (-0.25872314121254,0.96593540371609,0.0055796101077952)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.089439819112neV
- MomDir:   (0.24198627102425,-0.97026551779089,0.0052411469875069)
+ Ekin:     59.089439819113neV
+ MomDir:   (0.24198627102427,-0.97026551779089,0.0052411469875068)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.133966708225neV
- MomDir:   (-0.25539308181479,0.96682120336146,0.0055798290150787)
+ Ekin:     52.133966708226neV
+ MomDir:   (-0.25539308181481,0.96682120336146,0.0055798290150785)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.094668847011neV
- MomDir:   (0.2370097502771,-0.97149313486123,0.0052409150993295)
+ Ekin:     59.094668847012neV
+ MomDir:   (0.23700975027712,-0.97149313486123,0.0052409150993294)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.126293653147neV
- MomDir:   (-0.24805958848303,0.96872870375908,0.0055802396788425)
+ Ekin:     52.126293653149neV
+ MomDir:   (-0.24805958848305,0.96872870375908,0.0055802396788423)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.102870721143neV
- MomDir:   (0.22829359649444,-0.97357823025182,0.0052405514383359)
+ Ekin:     59.102870721145neV
+ MomDir:   (0.22829359649446,-0.97357823025181,0.0052405514383357)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.115510800974neV
- MomDir:   (-0.23680700520956,0.97154068199229,0.0055808169329705)
+ Ekin:     52.115510800976neV
+ MomDir:   (-0.23680700520959,0.97154068199228,0.0055808169329703)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** MR Model Diffuse Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     54.76243652602neV
- MomDir:   (0.69691111717517,-0.45468808563316,0.55459321988365)
+ Ekin:     54.762436526021neV
+ MomDir:   (0.69691111717527,-0.4546880856331,0.55459321988358)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.005117192276neV
- MomDir:   (-0.39719171284253,-0.74617743019563,0.53428268352611)
+ Ekin:     59.005117192277neV
+ MomDir:   (-0.39719171284233,-0.74617743019579,0.53428268352604)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     57.137617146323neV
- MomDir:   (-0.78156273055703,0.30719982535483,0.5429437958999)
+ Ekin:     57.137617146327neV
+ MomDir:   (-0.78156273055723,0.30719982535447,0.54294379589982)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.423097123577neV
- MomDir:   (0.27116127345647,0.77792846260064,0.56683231281683)
+ Ekin:     52.42309712358neV
+ MomDir:   (0.27116127345593,0.77792846260089,0.56683231281674)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.965712666774neV
- MomDir:   (0.78167505135527,-0.27725368361377,0.55867209435529)
+ Ekin:     53.965712666773neV
+ MomDir:   (0.78167505135556,-0.27725368361308,0.55867209435523)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     58.662795994311neV
- MomDir:   (-0.22053347734605,-0.81500996090496,0.53583929400088)
+ MomDir:   (-0.22053347734522,-0.81500996090522,0.53583929400081)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     57.831912752223neV
- MomDir:   (-0.8328459012966,0.12295848269298,0.53967482452612)
+ Ekin:     57.831912752228neV
+ MomDir:   (-0.83284590129681,0.12295848269198,0.53967482452602)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.916341835235neV
- MomDir:   (0.075779708494582,0.822163889662,0.5641843442673)
+ Ekin:     52.91634183524neV
+ MomDir:   (0.07577970849336,0.82216388966218,0.5641843442672)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.254779992neV
- MomDir:   (0.82262110727232,-0.083745957498484,0.56238876986718)
+ Ekin:     53.254779991997neV
+ MomDir:   (0.8226211072725,-0.083745957497098,0.56238876986713)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.164704566985neV
- MomDir:   (-0.032475783046279,-0.84223678396774,0.53812872367791)
+ Ekin:     58.164704566982neV
+ MomDir:   (-0.032475783044795,-0.84223678396783,0.53812872367786)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.406791703815neV
- MomDir:   (-0.84091024227638,-0.066990417604168,0.5370123354113)
+ Ekin:     58.406791703821neV
+ MomDir:   (-0.84091024227631,-0.066990417605797,0.53701233541121)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.561084390874neV
- MomDir:   (-0.12312095835213,0.81876055434135,0.56077837357471)
+ Ekin:     53.561084390882neV
+ MomDir:   (-0.12312095835399,0.81876055434115,0.5607783735746)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.673415210915neV
- MomDir:   (0.81667080451867,0.11522510115781,0.56548383983099)
+ Ekin:     52.673415210911neV
+ MomDir:   (0.81667080451842,0.11522510115985,0.56548383983094)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     57.532573228277neV
- MomDir:   (0.15769332730476,-0.82605601663018,0.54107695562889)
+ Ekin:     57.53257322827neV
+ MomDir:   (0.15769332730684,-0.82605601662981,0.54107695562885)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.837083921079neV
- MomDir:   (-0.80598297096922,-0.25321576368663,0.53504507055783)
+ Ekin:     58.837083921085neV
+ MomDir:   (-0.8059829709686,-0.25321576368878,0.53504507055773)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     54.316224098313neV
- MomDir:   (-0.31427112894496,0.76885191955868,0.55686657585332)
+ Ekin:     54.316224098324neV
+ MomDir:   (-0.31427112894729,0.76885191955782,0.55686657585318)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.259979729989neV
- MomDir:   (0.7632758417899,0.30839626887638,0.56771624134161)
+ Ekin:     52.259979729986neV
+ MomDir:   (0.76327584178892,0.30839626887891,0.56771624134156)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.794462346316neV
- MomDir:   (0.34035512841242,-0.76654373545856,0.54458157166086)
+ Ekin:     56.794462346306neV
+ MomDir:   (0.34035512841494,-0.76654373545745,0.54458157166084)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.103913935893neV
- MomDir:   (-0.73008065187246,-0.42661624541457,0.53383594943565)
+ Ekin:     59.103913935897neV
+ MomDir:   (-0.73008065187107,-0.42661624541705,0.53383594943556)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     55.136497730931neV
- MomDir:   (-0.4872390081429,0.67609997322097,0.55270876160463)
+ Ekin:     55.136497730946neV
+ MomDir:   (-0.48723900814547,0.67609997321924,0.55270876160449)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     52.044193826052neV
- MomDir:   (0.66473378113082,0.48424264625099,0.56889195791061)
+ MomDir:   (0.66473378112887,0.48424264625375,0.56889195791054)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     55.985500062994neV
- MomDir:   (0.50569492755579,-0.66589659713088,0.54850192540579)
+ Ekin:     55.985500062981neV
+ MomDir:   (0.50569492755851,-0.66589659712882,0.54850192540578)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** MR Model Diffuse Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     54.011922469468neV
- MomDir:   (-0.77460153473416,0.18475062595859,-0.60486334704245)
+ Ekin:     54.011922469483neV
+ MomDir:   (-0.77460153473506,0.18475062595534,-0.60486334704229)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.597654048491neV
- MomDir:   (0.59158200288944,-0.55928748290413,-0.58071356564496)
+ Ekin:     58.597654048484neV
+ MomDir:   (0.59158200289168,-0.55928748290181,-0.58071356564491)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.064121217246neV
- MomDir:   (-0.30190338093235,0.72753507833418,-0.61607390658499)
+ Ekin:     52.06412121725neV
+ MomDir:   (-0.30190338093553,0.72753507833295,-0.61607390658489)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.045495593442neV
- MomDir:   (-0.049038228705248,-0.81420192652629,-0.57850710882956)
+ Ekin:     59.045495593447neV
+ MomDir:   (-0.049038228702101,-0.81420192652655,-0.57850710882946)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.095600704987neV
- MomDir:   (0.42683244416324,0.6675630340349,-0.61006037422517)
+ Ekin:     53.095600704978neV
+ MomDir:   (0.42683244416051,0.66756303403667,-0.61006037422514)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     57.020012663859neV
- MomDir:   (-0.65307598755806,-0.47637486186345,-0.5886924030932)
+ Ekin:     57.020012663872neV
+ MomDir:   (-0.65307598755636,-0.47637486186597,-0.58869240309305)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.099582321991neV
- MomDir:   (0.80181924520163,0.069578268601082,-0.59350211672981)
+ Ekin:     56.099582321979neV
+ MomDir:   (0.80181924520139,0.069578268604068,-0.59350211672979)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.906049063668neV
- MomDir:   (-0.76764194488317,0.21011333704346,-0.60545704228496)
+ Ekin:     53.906049063681neV
+ MomDir:   (-0.76764194488407,0.21011333704061,-0.6054570422848)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.65861433138neV
- MomDir:   (0.57391913069326,-0.57770152036587,-0.58041173729625)
+ Ekin:     58.658614331375neV
+ MomDir:   (0.57391913069531,-0.57770152036388,-0.5804117372962)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.045890252409neV
- MomDir:   (-0.27638161286355,0.73751826793849,-0.61618179827706)
+ Ekin:     52.045890252412neV
+ MomDir:   (-0.27638161286639,0.73751826793751,-0.61618179827696)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.011441307493neV
- MomDir:   (-0.074754509097579,-0.81212570269209,-0.57867400701643)
+ Ekin:     59.011441307498neV
+ MomDir:   (-0.074754509094822,-0.81212570269242,-0.57867400701633)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.183827137997neV
- MomDir:   (0.44950838225025,0.65298235155904,-0.609554150867)
+ Ekin:     53.183827137989neV
+ MomDir:   (0.44950838224792,0.65298235156068,-0.60955415086697)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.914534933965neV
- MomDir:   (-0.66759040396224,-0.45510662684404,-0.58923765217455)
+ Ekin:     56.914534933977neV
+ MomDir:   (-0.66759040396082,-0.4551066268463,-0.58923765217441)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.213105380855neV
- MomDir:   (0.80407531766739,0.043925887503716,-0.59290252143594)
+ Ekin:     56.213105380845neV
+ MomDir:   (0.80407531766727,0.043925887506325,-0.59290252143592)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.801721681838neV
- MomDir:   (-0.75983341100009,0.2352958190721,-0.60604378146727)
+ Ekin:     53.801721681849neV
+ MomDir:   (-0.75983341100097,0.23529581906965,-0.60604378146713)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.71659168475neV
- MomDir:   (0.55565701730796,-0.59556706661731,-0.58012511433075)
+ Ekin:     58.716591684745neV
+ MomDir:   (0.5556570173098,-0.59556706661565,-0.58012511433069)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.031965069857neV
- MomDir:   (-0.25049393960282,0.74663991649169,-0.6162642463453)
+ Ekin:     52.031965069859neV
+ MomDir:   (-0.2504939396053,0.74663991649094,-0.6162642463452)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.9739707652neV
- MomDir:   (-0.10041613297376,-0.80922199063683,-0.57885781510519)
+ Ekin:     58.973970765205neV
+ MomDir:   (-0.10041613297139,-0.8092219906372,-0.5788578151051)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.274702801819neV
- MomDir:   (0.47166343144587,0.63766068015008,-0.60903404209227)
+ Ekin:     53.274702801811neV
+ MomDir:   (0.47166343144392,0.63766068015155,-0.60903404209223)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.807551134646neV
- MomDir:   (-0.68142670215336,-0.43336216559291,-0.58979223716917)
+ Ekin:     56.807551134656neV
+ MomDir:   (-0.68142670215222,-0.43336216559488,-0.58979223716904)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.325951853812neV
- MomDir:   (0.80550534228983,0.018221545895131,-0.59230829709513)
+ Ekin:     56.325951853803neV
+ MomDir:   (0.8055053422898,0.018221545897356,-0.5923082970951)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.699079150679neV
- MomDir:   (-0.75117866535004,0.2602681250331,-0.60662271290703)
+ Ekin:     53.699079150688neV
+ MomDir:   (-0.75117866535086,0.26026812503104,-0.6066227129069)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.77151692277neV
- MomDir:   (0.53681290260033,-0.61286318163798,-0.57985397143969)
+ Ekin:     58.771516922766neV
+ MomDir:   (0.53681290260193,-0.61286318163663,-0.57985397143963)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.022380481869neV
- MomDir:   (-0.22427315225699,0.75488407123189,-0.61632101390191)
+ Ekin:     52.022380481871neV
+ MomDir:   (-0.22427315225911,0.75488407123134,-0.61632101390182)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.933113755089neV
- MomDir:   (-0.12599423050126,-0.80549164043859,-0.57905843493032)
+ Ekin:     58.933113755093neV
+ MomDir:   (-0.12599423049929,-0.80549164043896,-0.57905843493022)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.368105763219neV
- MomDir:   (0.49327207680952,0.62161834683609,-0.60850085383406)
+ Ekin:     53.368105763213neV
+ MomDir:   (0.49327207680795,0.62161834683739,-0.60850085383402)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.699157426581neV
- MomDir:   (-0.69456864984997,-0.41116237863798,-0.59035573092699)
+ Ekin:     56.69915742659neV
+ MomDir:   (-0.69456864984909,-0.41116237863965,-0.59035573092687)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.438012938538neV
- MomDir:   (0.80610860505657,-0.0075093580831249,-0.59171997295589)
+ Ekin:     56.438012938531neV
+ MomDir:   (0.80610860505662,-0.0075093580812883,-0.59171997295585)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.598252411986neV
- MomDir:   (-0.74168087192281,0.28500196362533,-0.60719302116669)
+ Ekin:     53.598252411994neV
+ MomDir:   (-0.74168087192355,0.28500196362367,-0.60719302116656)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.823329458813neV
- MomDir:   (0.51740319288343,-0.62957085792829,-0.57959854282207)
+ Ekin:     58.823329458811neV
+ MomDir:   (0.51740319288478,-0.62957085792724,-0.57959854282201)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.017164090947neV
- MomDir:   (-0.1977510010712,0.76223674608317,-0.61635191611276)
+ Ekin:     52.017164090948neV
+ MomDir:   (-0.19775100107294,0.76223674608279,-0.61635191611267)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.888903082549neV
- MomDir:   (-0.15146142253109,-0.80093634853984,-0.5792757573665)
+ Ekin:     58.888903082553neV
+ MomDir:   (-0.15146142252951,-0.8009363485402,-0.57927575736641)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.463916867025neV
- MomDir:   (0.51431071811674,0.6048758152887,-0.60795537114913)
+ Ekin:     53.463916867021neV
+ MomDir:   (0.51431071811552,0.60487581528979,-0.60795537114908)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.589450702507neV
- MomDir:   (-0.70700104459362,-0.38852796344059,-0.59092769825779)
+ Ekin:     56.589450702514neV
+ MomDir:   (-0.70700104459297,-0.38852796344195,-0.59092769825767)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.549181911615neV
- MomDir:   (0.80588508957129,-0.033241765291323,-0.59113806124034)
+ Ekin:     56.54918191161neV
+ MomDir:   (0.80588508957139,-0.033241765289875,-0.59113806124029)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.499375703819neV
- MomDir:   (-0.73134424492677,0.30946863433775,-0.60775386446622)
+ Ekin:     53.499375703825neV
+ MomDir:   (-0.7313442449274,0.30946863433647,-0.6077538644661)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.871969870353neV
- MomDir:   (0.49744551057156,-0.64567100326416,-0.57935905926813)
+ Ekin:     58.871969870352neV
+ MomDir:   (0.49744551057264,-0.64567100326338,-0.57935905926806)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.016336108182neV
- MomDir:   (-0.17096067646976,0.76868505619536,-0.6163568215595)
+ Ekin:     52.016336108183neV
+ MomDir:   (-0.17096067647111,0.76868505619513,-0.61635682155941)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.841376171549neV
- MomDir:   (-0.17678967047644,-0.79555890607253,-0.57950965426083)
+ Ekin:     58.841376171552neV
+ MomDir:   (-0.17678967047526,-0.79555890607286,-0.57950965426074)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.562012743857neV
- MomDir:   (0.534756130643,0.58745473638727,-0.60739839762374)
+ Ekin:     53.562012743854neV
+ MomDir:   (0.53475613064213,0.58745473638813,-0.60739839762368)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.47853267532neV
- MomDir:   (-0.71870895066309,-0.36548066371172,-0.59150767424405)
+ Ekin:     56.478532675326neV
+ MomDir:   (-0.71870895066266,-0.36548066371274,-0.59150767424394)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.659350119859neV
- MomDir:   (0.80483547851426,-0.058950003927447,-0.59056307839355)
+ Ekin:     56.659350119856neV
+ MomDir:   (0.80483547851439,-0.058950003926396,-0.59056307839349)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.402585832584neV
- MomDir:   (-0.72017430629705,0.33363865358326,-0.60830437889654)
+ Ekin:     53.402585832589neV
+ MomDir:   (-0.72017430629756,0.33363865358237,-0.60830437889643)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.917380545977neV
- MomDir:   (0.47695872151447,-0.66114458825714,-0.57913574521832)
+ Ekin:     58.917380545976neV
+ MomDir:   (0.47695872151526,-0.66114458825663,-0.57913574521825)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.019908667796neV
- MomDir:   (-0.1439367117614,0.77421739940306,-0.61633565649643)
+ Ekin:     52.019908667798neV
+ MomDir:   (-0.14393671176234,0.77421739940295,-0.61633565649634)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.790575329124neV
- MomDir:   (-0.20195039783332,-0.78936329153441,-0.57975997688089)
+ Ekin:     58.790575329127neV
+ MomDir:   (-0.20195039783253,-0.78936329153468,-0.5797599768808)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.662266006238neV
- MomDir:   (0.55458560776869,0.56937794148018,-0.60683075351504)
+ Ekin:     53.662266006236neV
+ MomDir:   (0.55458560776814,0.56937794148078,-0.60683075351497)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.3665097567neV
- MomDir:   (-0.72967782523941,-0.34204325425975,-0.59209516428467)
+ Ekin:     56.366509756705neV
+ MomDir:   (-0.72967782523917,-0.34204325426043,-0.59209516428457)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.76840740553neV
- MomDir:   (0.80296124983629,-0.084607863566003,-0.58999554293583)
+ Ekin:     56.768407405529neV
+ MomDir:   (0.80296124983641,-0.084607863565347,-0.58999554293576)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.308021414617neV
- MomDir:   (-0.70817799371647,0.35748188622442,-0.60884368292456)
+ Ekin:     53.308021414621neV
+ MomDir:   (-0.70817799371682,0.3574818862239,-0.60884368292446)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.959506312436neV
- MomDir:   (0.45596294372901,-0.67597279532758,-0.57892881593767)
+ Ekin:     58.959506312437neV
+ MomDir:   (0.45596294372949,-0.67597279532732,-0.57892881593759)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.02788523571neV
- MomDir:   (-0.1167148630626,0.77882362467249,-0.61628840845199)
+ Ekin:     52.027885235711neV
+ MomDir:   (-0.11671486306313,0.77882362467248,-0.6162884084519)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.736547938959neV
- MomDir:   (-0.22691462166163,-0.78235474712365,-0.58002655467594)
+ Ekin:     58.736547938961neV
+ MomDir:   (-0.22691462166123,-0.78235474712383,-0.58002655467586)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     53.764545515728neV
- MomDir:   (0.57377710074218,0.55066941716428,-0.60625327352836)
+ MomDir:   (0.57377710074194,0.55066941716461,-0.60625327352828)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.253492879222neV
- MomDir:   (-0.7398936399151,-0.31823951198272,-0.5926896444398)
+ Ekin:     56.253492879225neV
+ MomDir:   (-0.73989363991504,-0.31823951198304,-0.59268964443971)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     56.876242558706neV
- MomDir:   (0.80026476160869,-0.11018867814116,-0.5894359732294)
+ MomDir:   (0.80026476160878,-0.11018867814091,-0.58943597322933)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.215822082603neV
- MomDir:   (-0.69536375341332,0.38096768674391,-0.60937088221865)
+ Ekin:     53.215822082605neV
+ MomDir:   (-0.69536375341347,0.38096768674376,-0.60937088221857)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.998295028559neV
- MomDir:   (0.43447953996646,-0.69013716539735,-0.57873847486395)
+ Ekin:     58.99829502856neV
+ MomDir:   (0.43447953996661,-0.69013716539732,-0.57873847486387)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.040260121042neV
- MomDir:   (-0.089331971411992,0.78249518435393,-0.61621512911204)
+ Ekin:     52.040260121044neV
+ MomDir:   (-0.089331971412094,0.78249518435398,-0.61621512911195)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.679346589357neV
- MomDir:   (-0.25165308909341,-0.7745398386978,-0.58030919432638)
+ Ekin:     58.679346589359neV
+ MomDir:   (-0.2516530890934,-0.77453983869786,-0.5803091943263)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.868716666965neV
- MomDir:   (0.59230935148441,0.53135426413473,-0.60566680454682)
+ Ekin:     53.868716666967neV
+ MomDir:   (0.59230935148447,0.53135426413476,-0.60566680454673)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.139595134914neV
- MomDir:   (-0.74934307562703,-0.29409394861667,-0.59329057332548)
+ Ekin:     56.139595134916neV
+ MomDir:   (-0.74934307562711,-0.29409394861661,-0.5932905733254)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     56.982745774146neV
- MomDir:   (0.79674925115292,-0.13566589420335,-0.58888487494353)
+ Ekin:     56.982745774148neV
+ MomDir:   (0.79674925115296,-0.13566589420349,-0.58888487494345)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.126124211953neV
- MomDir:   (-0.68174121264226,0.40406570060733,-0.60988509456928)
+ Ekin:     53.126124211954neV
+ MomDir:   (-0.6817412126422,0.40406570060755,-0.6098850945692)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.033699047957neV
- MomDir:   (0.41253025991092,-0.70362023378353,-0.57856490670299)
+ Ekin:     59.033699047959neV
+ MomDir:   (0.41253025991073,-0.70362023378371,-0.57856490670291)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.057018551261neV
- MomDir:   (-0.061824506112232,0.78522537313944,-0.61611593375111)
+ Ekin:     52.057018551263neV
+ MomDir:   (-0.061824506111899,0.78522537313953,-0.61611593375103)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     58.619024850448neV
- MomDir:   (-0.27613777996999,-0.76592599173755,-0.58060770030555)
+ Ekin:     58.619024850449neV
+ MomDir:   (-0.27613777997036,-0.76592599173747,-0.58060770030548)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     53.974648782862neV
- MomDir:   (0.61016316565071,0.51145731803761,-0.60507216355479)
+ Ekin:     53.974648782865neV
+ MomDir:   (0.61016316565104,0.51145731803732,-0.6050721635547)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     56.02492196455neV
- MomDir:   (-0.7580142029965,-0.26962992118714,-0.5938974437192)
+ MomDir:   (-0.75801420299671,-0.26962992118669,-0.59389744371913)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     57.087817567332neV
- MomDir:   (0.79241842785692,-0.161015241175,-0.58834269546084)
+ Ekin:     57.087817567336neV
+ MomDir:   (0.79241842785688,-0.16101524117555,-0.58834269546074)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
  Ekin:     53.03905148113neV
- MomDir:   (-0.66731977180714,0.42674800234569,-0.61038550494686)
+ MomDir:   (-0.66731977180684,0.42674800234626,-0.61038550494679)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     59.065674971092neV
- MomDir:   (0.39013544396177,-0.71640644765521,-0.57840827891966)
+ Ekin:     59.065674971094neV
+ MomDir:   (0.39013544396121,-0.71640644765558,-0.57840827891958)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
  UCN at Boundary! 
  vol1: World, vol2: Guide
- Ekin:     52.078136374571neV
- MomDir:   (-0.034226845711855,0.78700928047579,-0.61599100275701)
+ Ekin:     52.078136374573neV
+ MomDir:   (-0.034226845711076,0.7870092804759,-0.61599100275693)
 G4UCNBoundaryProcess -> BELOW critical velocity
  *** Specular Reflection *** 
  *** StepTooSmall *** 
@@ -1492,7 +1501,7 @@ Terminate current event processing.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.030000s Real=0.034928s Sys=0.000000s
+  User=0.020000s Real=0.029590s Sys=0.000000s
 Sum NoMT:                            0
 Sum NoMRT:                           0
 Sum NoMRCondition:                   0
@@ -1508,18 +1517,13 @@ Sum No. E > V SnellTransmit:         0
 Sum No. E > V MR SnellTransmit:      0
 Sum No. E > V DiffuseTransmit:       0
                                      
-0 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them one by one.
-  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Maximum number of tracks in the urgent stack : 576460752303423487
+ Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.015 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

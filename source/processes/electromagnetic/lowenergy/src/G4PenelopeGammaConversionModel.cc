@@ -167,13 +167,13 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition* part
       G4ProductionCutsTable* theCoupleTable =
 	G4ProductionCutsTable::GetProductionCutsTable();
 
-      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+      for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i)
 	{
 	  const G4Material* material =
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
 	  const G4ElementVector* theElementVector = material->GetElementVector();
 
-	  for (size_t j=0;j<material->GetNumberOfElements();j++)
+	  for (std::size_t j=0;j<material->GetNumberOfElements();++j)
 	    {
 	      G4int iZ = theElementVector->at(j)->GetZasInt();
 	      //read data files only in the master
@@ -523,8 +523,8 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
       G4cout << "Going to read Gamma Conversion data files for Z=" << Z << G4endl;
     }
 
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep =
 	"G4PenelopeGammaConversionModel - G4LEDATA environment variable not set!";
@@ -552,7 +552,7 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
 
   //I have to know in advance how many points are in the data list
   //to initialize the G4PhysicsFreeVector()
-  size_t ndata=0;
+  std::size_t ndata=0;
   G4String line;
   while( getline(file, line) )
     ndata++;
@@ -578,7 +578,7 @@ void G4PenelopeGammaConversionModel::ReadDataFile(const G4int Z)
 
   fLogAtomicCrossSection[Z] = new G4PhysicsFreeVector(ndata);
   G4double ene=0,xs=0;
-  for (size_t i=0;i<ndata;i++)
+  for (std::size_t i=0;i<ndata;++i)
     {
       file >> ene >> xs;
       //dimensional quantities
@@ -603,7 +603,7 @@ void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Materi
   //
   G4double zeff = 0;
   G4int intZ = 0;
-  G4int nElements = material->GetNumberOfElements();
+  G4int nElements = (G4int)material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
 
   //avoid calculations if only one building element!

@@ -1,0 +1,121 @@
+
+***** Table : Nb of materials = 1 *****
+
+ Material:    G4_Fe    density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.990 cm 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:  0.282 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+
+
+ #### Gamma : CrossSectionPerAtom and MeanFreePath for G4_Fe
+
+ Energy 	 PhotoElec 	 Compton 	 Conversion 		 PhotoElec 	 Compton 	 Conversion
+
+ 1.01 MeV	31.5206 mbarn 	5.50395 barn  	0 pbarn 	 	3.73632 m  	2.13976 cm 	5.82593e+288 pc 
+ 1.11 MeV	26.1169 mbarn 	5.25115 barn  	1.19069 mbarn 	 	4.50939 m  	2.24277 cm 	98.9097 m  
+ 1.21 MeV	22.1214 mbarn 	5.02506 barn  	5.43424 mbarn 	 	5.32386 m  	2.34368 cm 	21.6721 m  
+ 1.31 MeV	19.0741 mbarn 	4.82133 barn  	12.7528 mbarn 	 	6.17439 m  	2.44271 cm 	9.23494 m  
+ 1.41 MeV	16.6897 mbarn 	4.63654 barn  	23.1463 mbarn 	 	7.0565 m  	2.54007 cm 	5.08812 m  
+ 1.51 MeV	14.7834 mbarn 	4.46798 barn  	36.512 mbarn 	 	7.96645 m  	2.63589 cm 	3.22554 m  
+ 1.61 MeV	13.2312 mbarn 	4.31345 barn  	51.7366 mbarn 	 	8.90102 m  	2.73033 cm 	2.27636 m  
+ 1.71 MeV	11.9473 mbarn 	4.17114 barn  	69.0718 mbarn 	 	9.85751 m  	2.82348 cm 	1.70505 m  
+ 1.81 MeV	10.8709 mbarn 	4.03955 barn  	88.012 mbarn 	 	10.8336 m  	2.91545 cm 	1.33813 m  
+ 1.91 MeV	9.95761 mbarn 	3.91745 barn  	108.167 mbarn 	 	11.8273 m  	3.00632 cm 	1.08879 m  
+
+ #### e+ annihilation : CrossSectionPerAtom and MeanFreePath for G4_Fe
+
+ Energy 	 e+ annihil 		 e+ annihil
+
+ 1.01 MeV	4.44752 barn  	 	2.64802 cm 
+ 1.11 MeV	4.23495 barn  	 	2.78094 cm 
+ 1.21 MeV	4.04467 barn  	 	2.91176 cm 
+ 1.31 MeV	3.87306 barn  	 	3.04077 cm 
+ 1.41 MeV	3.71732 barn  	 	3.16817 cm 
+ 1.51 MeV	3.5752 barn  	 	3.29411 cm 
+ 1.61 MeV	3.4449 barn  	 	3.41871 cm 
+ 1.71 MeV	3.32492 barn  	 	3.54207 cm 
+ 1.81 MeV	3.21404 barn  	 	3.66427 cm 
+ 1.91 MeV	3.11121 barn  	 	3.78538 cm 
+
+ ####electron: CrossSection, MeanFreePath and StoppingPower for G4_Fe	Energy cut = 100 keV
+
+ Energy 	 ionization 	 bremsstra 		 ionization 	 bremsstra 		 ionization 	 bremsstra
+
+ 1.01 MeV	58.6857 barn  	-nan km2   	 	2.00681 mm 	1.11963 cm 	 	9.25654 MeV/cm	72.8959 keV/cm
+ 11.01 MeV	65.8351 barn  	10.5188 barn  	 	1.78888 mm 	3.4444 mm 	 	9.301 MeV/cm	80.1401 keV/cm
+ 21.01 MeV	66.0784 barn  	34.192 barn  	 	1.7823 mm 	2.85591 mm 	 	9.46881 MeV/cm	79.1689 keV/cm
+ 31.01 MeV	66.1546 barn  	41.2377 barn  	 	1.78024 mm 	2.60145 mm 	 	9.54968 MeV/cm	77.5209 keV/cm
+ 41.01 MeV	66.191 barn  	45.2713 barn  	 	1.77926 mm 	2.44404 mm 	 	9.5979 MeV/cm	76.1843 keV/cm
+ 51.01 MeV	66.2121 barn  	48.187 barn  	 	1.7787 mm 	2.33558 mm 	 	9.63003 MeV/cm	74.7733 keV/cm
+ 61.01 MeV	66.2258 barn  	50.4249 barn  	 	1.77833 mm 	2.25293 mm 	 	9.65294 MeV/cm	73.4943 keV/cm
+ 71.01 MeV	66.2353 barn  	52.2747 barn  	 	1.77807 mm 	2.18867 mm 	 	9.67006 MeV/cm	72.1716 keV/cm
+ 81.01 MeV	66.2424 barn  	53.8095 barn  	 	1.77788 mm 	2.13592 mm 	 	9.68328 MeV/cm	70.8773 keV/cm
+ 91.01 MeV	66.2479 barn  	55.1384 barn  	 	1.77774 mm 	2.09162 mm 	 	9.69377 MeV/cm	69.6192 keV/cm
+ 101.01 MeV	66.2521 barn  	56.3063 barn  	 	1.77762 mm 	2.05363 mm 	 	9.70224 MeV/cm	68.3818 keV/cm
+
+ #### proton : CrossSection, MeanFreePath and StoppingPower for G4_Fe	Energy cut = 100 keV
+
+ Energy 	 ionization 		 ionization 		 ionization
+
+ 1.01 MeV	0 pbarn 	 	5.82593e+288 pc 	 	1.04362 GeV/cm
+ 11.01 MeV	0 pbarn 	 	5.82593e+288 pc 	 	205.594 MeV/cm
+ 21.01 MeV	0 pbarn 	 	5.82593e+288 pc 	 	127.911 MeV/cm
+ 31.01 MeV	0 pbarn 	 	5.82593e+288 pc 	 	95.2497 MeV/cm
+ 41.01 MeV	0 pbarn 	 	5.82593e+288 pc 	 	77.0087 MeV/cm
+ 51.01 MeV	73.4715 barn  	 	1.60295 mm 	 	64.5858 MeV/cm
+ 61.01 MeV	136.191 barn  	 	864.75 um 	 	55.6733 MeV/cm
+ 71.01 MeV	164.26 barn  	 	716.981 um 	 	49.1171 MeV/cm
+ 81.01 MeV	176.146 barn  	 	668.601 um 	 	44.0715 MeV/cm
+ 91.01 MeV	179.973 barn  	 	654.383 um 	 	40.097 MeV/cm
+ 101.01 MeV	179.641 barn  	 	655.593 um 	 	36.9279 MeV/cm
+
+ #### proton : low energy model (Bragg) 	Energy cut = 10 keV
+
+ Energy 	 ionization 		 ionization 		 ionization
+
+ 1.1 keV	0 pbarn 	 	5.82593e+288 pc 	 	310.766 MeV/cm
+ 301.1 keV	0 pbarn 	 	5.82593e+288 pc 	 	1.93398 GeV/cm
+ 601.1 keV	0 pbarn 	 	5.82593e+288 pc 	 	1.36403 GeV/cm
+ 901.1 keV	0 pbarn 	 	5.82593e+288 pc 	 	1.09453 GeV/cm
+ 1.2011 MeV	0 pbarn 	 	5.82593e+288 pc 	 	929.077 MeV/cm
+ 1.5011 MeV	0 pbarn 	 	5.82593e+288 pc 	 	814.594 MeV/cm
+ 1.8011 MeV	0 pbarn 	 	5.82593e+288 pc 	 	727.03 MeV/cm
+
+ ####muon: CrossSection and MeanFreePath for G4_Fe	Energy cut = 10 MeV
+
+ Energy 	 ionization 	 bremsstra 	 pair_prod 		 ionization 	 bremsstra 	 pair_prod
+
+ 1.01 GeV	457.217 mbarn 	694.657 mubarn	685.688 mubarn	 	25.7582 cm 	169.539 m  	171.756 m  
+ 11.01 GeV	675.132 mbarn 	2.02862 mbarn 	26.2282 mbarn 	 	17.4442 cm 	58.0548 m  	4.49025 m  
+ 21.01 GeV	684.489 mbarn 	2.41403 mbarn 	46.3852 mbarn 	 	17.2057 cm 	48.786 m  	2.53898 m  
+ 31.01 GeV	688.689 mbarn 	2.63939 mbarn 	62.3763 mbarn 	 	17.1008 cm 	44.6205 m  	1.88808 m  
+ 41.01 GeV	691.358 mbarn 	2.79745 mbarn 	75.7828 mbarn 	 	17.0348 cm 	42.0994 m  	1.55406 m  
+ 51.01 GeV	693.309 mbarn 	2.91866 mbarn 	87.4123 mbarn 	 	16.9868 cm 	40.3511 m  	1.34731 m  
+ 61.01 GeV	694.846 mbarn 	3.01671 mbarn 	97.7334 mbarn 	 	16.9492 cm 	39.0396 m  	1.20502 m  
+ 71.01 GeV	696.113 mbarn 	3.09883 mbarn 	107.045 mbarn 	 	16.9184 cm 	38.0051 m  	1.10021 m  
+ 81.01 GeV	697.191 mbarn 	3.16935 mbarn 	115.548 mbarn 	 	16.8922 cm 	37.1594 m  	1.01924 m  
+ 91.01 GeV	698.129 mbarn 	3.23108 mbarn 	123.39 mbarn 	 	16.8695 cm 	36.4495 m  	95.446 cm 
+ 101.01 GeV	698.96 mbarn 	3.28584 mbarn 	130.678 mbarn 	 	16.8495 cm 	35.8421 m  	90.1234 cm 
+
+ ####muon: StoppingPower for G4_Fe	Energy cut = 10 MeV
+
+ Energy 	 ionization 	 bremsstra 	 pair_prod 	
+
+ 1.01 GeV	11.6473 MeV/cm	276.185 eV/cm 	522.435 eV/cm 
+ 11.01 GeV	12.2762 MeV/cm	346.158 eV/cm 	5.01672 keV/cm
+ 21.01 GeV	12.3502 MeV/cm	347.718 eV/cm 	6.63066 keV/cm
+ 31.01 GeV	12.3789 MeV/cm	348.061 eV/cm 	7.62215 keV/cm
+ 41.01 GeV	12.3936 MeV/cm	348.191 eV/cm 	8.33952 keV/cm
+ 51.01 GeV	12.4022 MeV/cm	348.254 eV/cm 	8.90194 keV/cm
+ 61.01 GeV	12.4077 MeV/cm	348.29 eV/cm 	9.36461 keV/cm
+ 71.01 GeV	12.4114 MeV/cm	348.313 eV/cm 	9.75763 keV/cm
+ 81.01 GeV	12.4141 MeV/cm	348.328 eV/cm 	10.0993 keV/cm
+ 91.01 GeV	12.4161 MeV/cm	348.339 eV/cm 	10.4014 keV/cm
+ 101.01 GeV	12.4176 MeV/cm	348.347 eV/cm 	10.6723 keV/cm

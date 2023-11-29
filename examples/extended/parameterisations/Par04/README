@@ -8,11 +8,12 @@
                             -------------
 
  This example demonstrates how to use the Machine Learning (ML) inference
- to create energy deposits as a fast simulation model using ONNX runtime [1]
- and LWTNN [2] libraries.
+ to create energy deposits as a fast simulation model using ONNX Runtime [1],
+ LWTNN [2], and LibTorch [3] libraries.
 
  The model used in this example was trained externally (in Python) on data
- from this examples' full simulation and can be applied to perform fast simulation
+ from this examples' full simulation and can be applied to perform fast simulation.
+ The python scripts are available in the training folder.
 
  The geometry used in the example is a cylindrical setup of layers: tungsten
  absorber and silicon as the active material. 3D readout geometry (cylindrical)
@@ -23,6 +24,7 @@
 
  [1]: https://github.com/microsoft/onnxruntime
  [2]: https://github.com/lwtnn/lwtnn
+ [3]: https://pytorch.org/cppdocs/frontend.html
 
  1. Detector description
  -----------------------
@@ -34,7 +36,7 @@
 
  Input macro can specify which layer is considered an active layer (sensitive
  detector is attached to it). For fast simulation both layers should be marked
- as sensitive. It is connected to the wway the deposits are created: position is
+ as sensitive. It is connected to the way the deposits are created: position is
  centre of the layer, which may often fall within the absorber (which is thicker
  than the active material). In a realistic detector setup, the positions used in
  fast simulation would be calculated properly, to deposit energy within the active
@@ -79,7 +81,7 @@
 
  6. ML Inference
  ----------------------------------------------------------
- - Par04MLFastSimModel : model used for parametrisation of źelectrons, positrons,
+ - Par04MLFastSimModel : model used for parametrisation of electrons, positrons,
       and gammas. Energy is deposited and
       distributed according to inferred values from the ML model.
       This class triggers the inference setup, asks for values,
@@ -97,8 +99,8 @@
  - Par04InferenceInterface : is a base class that allows to read in the ML model, configure
        and execute inference.
 
- - Par04OnnxInference and Par04LWTNNInference : inference library specific classes that inherit
-      from the base class Par04InferenceInterface.
+ - Par04OnnxInference and Par04LWTNNInference and Par04TorchInference : inference library specific
+      classes that inherit from the base class Par04InferenceInterface.
 
 
  7. Output
@@ -107,36 +109,45 @@
  The execution of the program (examplePar04) produces an output with histograms.
  Ntuples are also stored. They are not merged if the application is run on multiple threads.
 
- The macro file examplePar04.in is used to run full simulation. It will simulate 100
+ The macro file examplePar04.mac is used to run full simulation. It will simulate 100
  events, for single 10 GeV electron beams.
- If CMake is able to find inference libraries (lwtnn and/or ONNX Runtime), a configuration
- macro will be available for that library (examplePar04_lwtnn.in and/or examplePar04_onnx.in).
- It will use a trained model to run inference and create showers in the detector by directly
- depositing energy.
+ If CMake is able to find inference libraries (LWTNN and/or ONNX Runtime and/or LibTorch), a configuration
+ macro will be available for that library (examplePar04_lwtnn.mac and/or examplePar04_onnx.mac
+ and/or examplePar04_torch.mac). It will use a trained model to run inference and create showers
+ in the detector by directly depositing energy.
 
  8. How to build and run the example
  -----------------------------------
-- LWTNN and ONNX Runtime are available on LCG. In order to use them, one can setup the envirnment:
-  % source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc10-opt/setup.sh
+- LWTNN, ONNX Runtime, and LibTorch are available on LCG. In order to use them, you can set a CMAKE_PREFIX_PATH:
+  % source /cvmfs/sft.cern.ch/lcg/contrib/gcc/11.3.0/x86_64-centos7/setup.sh
+  % cmake -DCMAKE_PREFIX_PATH="/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/lwtnn/2.11.1/x86_64-centos7-gcc11-opt/;/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/onnxruntime/1.11.1/x86_64-centos7-gcc11-opt/;/cvmfs/sft.cern.ch/lcg/releases/LCG_102b/torch/1.11.0/x86_64-centos7-gcc11-opt/lib/python3.9/site-packages/torch/" <Par04_SOURCE>
 
-- Compile and link to generate the executable (in your CMAKE build directory):
+- Compile and link to generate the executable (in your CMake build directory):
   % cmake <Par04_SOURCE>
   % make
 
 - Execute the application (in batch mode):
-  % ./examplePar04 -m examplePar04.in
+  % ./examplePar04 -m examplePar04.mac
   which produces two root file for full simulation.
 
 - Execute the application (in interactive mode):
-  % ./examplePar04
-  which allows to visualize hits.
+  % ./examplePar04 -i -m vis.mac
+  which allows to visualize hits (from full simulation).
 
 - If ONNX Runtime is available:
-  % ./examplePar04 -m examplePar04_onnx.in
+  % ./examplePar04 -m examplePar04_onnx.mac
+  For interactive mode with visualization:
+  % ./examplePar04 -i -m vis_onnx.mac
 
 - If LWTNN is available:
-  % ./examplePar04 -m examplePar04_lwtnn.in
-
+  % ./examplePar04 -m examplePar04_lwtnn.mac
+  For interactive mode with visualization:
+  % ./examplePar04 -i -m vis_lwtnn.mac
+- If LibTorch is available:
+  % ./examplePar04 -m examplePar04_torch.mac
+  For interactive mode with visualization:
+  % ./examplePar04 -i -m vis_torch.mac
+  
  By default, CMake will attempt to build fast simulation with ONNX Runtime and LWTNN. However, if none
  of those libraries is found, it will proceed with full simulation only. The search can be switched
  off manually switching CMake flag INFERENCE_LIB to OFF (-DINFERENCE_LIB=OFF)
@@ -144,17 +155,32 @@
  9. Macros
  ---------
 
- vis.mac - Allows to run visualization. It will be automatically run in interactive mode, if no
-           argument is passed to the executable (examplePar04)
+ vis.mac - Allows to run visualization. Pass it to the example in interactive mode ("-i" passed to the executable).
+           It can be used to visualize full simulation.
 
- examplePar04.in - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
+ vis_onnx.mac - Allows to run visualization with ONNX Runtime inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ vis_lwtnn.mac - Allows to run visualization with LWTNN inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ vis_torch.mac - Allows to run visualization with LibTorch inference. Pass it to the example in interactive mode
+              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
+              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+
+ examplePar04.mac - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
                    along y axis.
 
- examplePar04_onnx.in - Available only if ONNX Runtime is found by CMake. Runs fast simulation with
+ examplePar04_onnx.mac - Available only if ONNX Runtime is found by CMake. Runs fast simulation with
                         a NN stored in onnx file.
 
- examplePar04_lwtnn.in - Available only if LWTNN is found by CMake. Runs fast simulation with
+ examplePar04_lwtnn.mac - Available only if LWTNN is found by CMake. Runs fast simulation with
                         a NN stored in json file.
+
+ examplePar04_torch.mac - Available only if LibTorch is found by CMake. Runs fast simulation with
+                        a NN stored in pt file.
 
  10. UI commands
  --------------
@@ -198,3 +224,17 @@
     /Par04/inference/setNbOfRhoCells 18
     /Par04/inference/setNbOfPhiCells 50
     /Par04/inference/setNbOfZCells 45
+
+ 11. Python scripts for training
+ --------------
+
+ The scripts available in the training folder were used to train
+ the VAE model of this example. More details can be found in 
+ training/README.
+
+
+ 12. Public data
+ --------------
+
+ Data generated with full simulation with this example has been published on zenodo:
+ https://doi.org/10.5281/zenodo.6082201

@@ -45,6 +45,7 @@
 #include "G4Abla.hh"
 
 class G4ExcitationHandler;
+class G4HadFinalState;
 
 class G4AblaInterface : public G4VPreCompoundModel
 {
@@ -54,10 +55,7 @@ class G4AblaInterface : public G4VPreCompoundModel
 
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment);
 
-  virtual G4HadFinalState* ApplyYourself(G4HadProjectile const&, G4Nucleus&)
-  {
-return nullptr;
-  }
+  virtual G4HadFinalState* ApplyYourself(G4HadProjectile const&, G4Nucleus&) final;
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
@@ -68,6 +66,7 @@ return nullptr;
   virtual void DeExciteModelDescription(std::ostream& outFile) const;
 
  private:
+  G4HadFinalState applyYourselfResult;
   G4VarNtp* ablaResult;
   G4Volant* volant;
   G4Abla* theABLAModel;

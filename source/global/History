@@ -1,36 +1,176 @@
--------------------------------------------------------------------
+# Category global History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the log-message one should put at every
-commit in the repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-30 Gabriele Cosmo (global-V11-01-13)
+- Updated tag IDs for geant4-11-01-ref-06.
 
-May 23, 2022 Gabriele Cosmo (global-V10-07-39)
-- Updated tag IDs for geant4-11-00-patch-02.
+## 2023-06-14 Ben Morgan (global-V11-01-12)
+- Add `G4VERSION_REFERENCE_TAG` macro to distinguish release/development versions
+  and cycle of the latter.
 
-April 1, 2022 Jonas Hahnfeld
+## 2023-05-31 Alberto Ribon (global-V11-01-11)
+- G4PhysicsModelCatalog.cc: added the new INCLXX model of antiproton 
+  annihilation at rest.
+
+## 2023-05-31 Gabriele Cosmo (global-V11-01-10)
+- Updated tag IDs for geant4-11-01-ref-05.
+
+## 2023-04-30 Gabriele Cosmo (global-V11-01-09)
+- Updated tag IDs for geant4-11-01-ref-04.
+
+## 2023-04-06 Gabriele Cosmo (global-V11-01-08)
+- Fixed typo in G4Backtrace class description.
+  Reported in [GitHub PR#57](https://github.com/Geant4/geant4/pull/57).
+
+## 2023-03-31 Gabriele Cosmo (global-V11-01-07)
+- Updated tag IDs for geant4-11-01-ref-03.
+
+## 2023-02-28 Gabriele Cosmo (global-V11-01-06)
+- Updated tag IDs for geant4-11-01-ref-02.
+
+## 2023-01-31 Gabriele Cosmo (global-V11-01-05)
+- Removed obsolete and no longer used G4SIunits.hh header.
+
+## 2023-01-30 Gabriele Cosmo (global-V11-01-04)
+- Updated tag IDs for geant4-11-01-ref-01.
+
+## 2023-01-09 Ben Morgan (global-V11-01-03)
+- Add G4debug output stream for logging messages at lower priority than
+  G4cout.
+
+## 2022-12-20 Vladimir Ivanchenko (global-V11-01-02)
+- G4DataVector - simplified inline methods in order to remove compilation
+    warnings at some CMSSW platforms
+
+## 2022-12-14 Ben Morgan (global-V11-01-01)
+- Remove public interface to G4strstreambuf
+  - G4strstreambuf becomes a private implementation detail of G4ios
+  - Minimized G4cout/G4strstreambuf/G4coutDestination coupling
+ 
+## 2022-12-12 Ben Morgan (global-V11-01-00)
+- Remove obsolete GNUmakefile scripts
+
+## 2022-11-29 Gabriele Cosmo (global-V11-00-33)
+- Updated tag IDs for geant4-11-01-ref-00.
+
+## 2022-11-18 Gabriele Cosmo (global-V11-00-32)
+- More compilation warnings fixes for implicit type conversions.
+
+## 2022-11-09 Gabriele Cosmo (global-V11-00-31)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-31 Gabriele Cosmo (global-V11-00-30)
+- Updated tag IDs for geant4-11-00-ref-09.
+
+## 2022-10-04 Gabriele Cosmo (global-V11-00-29)
+- Fixed compilation warning on Intel-icx compiler for variable set but not
+  used, in G4AnalyticalPolSolver::QuarticRoots().
+
+## 2022-09-30 Gabriele Cosmo (global-V11-00-28)
+- Updated tag IDs for geant4-11-00-ref-08.
+
+## 2022-09-22 Ben Morgan (global-V11-00-27)
+- Apply patch for MinGW from [GitHub PR#51](https://github.com/Geant4/geant4/pull/51)
+
+## 2022-08-29 Gabriele Cosmo (global-V11-00-26)
+- Updated tag IDs for geant4-11-00-ref-07.
+
+## 2022-08-04 Ben Morgan (global-V11-00-25)
+- Move implementation details of G4Exception to source file.
+- Remove obsolete re-declaration of G4Exception in G4Timer.
+
+## 2022-07-03 Ben Morgan (global-V11-00-24)
+- Additional clang-tidy fixes for header-only code or missed in global-V11-00-06)
+
+## 2022-06-24 Gabriele Cosmo (global-V11-00-23)
+- Updated tag IDs for geant4-11-00-ref-06 and geant4-11-01-beta-01.
+
+## 2022-06-12 Gabriele Cosmo (global-V11-00-22)
+- G4FindDataDir: fixed compilation with GNUmake build.
+
+## 2022-06-09 Igor Semeniouk (global-V11-00-21)
+- G4FindDataDir: correction for windows runtime, G4MULTITHREADED flag.
+  Use the environment variable GEANT4_DATA_DIR as top data dir.
+
+## 2022-06-07 Ben Morgan (global-V11-00-20)
+- Remove dependency on TBB which is not a direct dependency of the global
+  category.
+
+## 2022-05-31 Gabriele Cosmo (global-V11-00-19)
+- Commented out debug printout in G4ThreadLocalSingleton constructor.
+
+## 2022-05-28 Gabriele Cosmo (global-V11-00-18)
+- Updated tag IDs for geant4-11-00-ref-05.
+
+## 2022-05-23 Gabriele Cosmo (global-V11-00-17)
+- Corrected G4ErrorPropagatorData destructor.
+
+## 2022-05-25 Ben Morgan (global-V11-00-16)
+- Support GNUmake builds of G4FindDataDir
+
+## 2022-05-12 Guilherme Amadio (global-V11-00-15)
+- Make dataset environment variables optional.
+
+## 2022-04-27 Gabriele Cosmo (global-V11-00-14)
+- Updated tag IDs for geant4-11-00-ref-04.
+
+## 2022-04-01 Jonas Hahnfeld (global-V11-00-13)
 - Fix two typos in Bremsstrahlung.
 
-March 18, 2022 Ben Morgan
+## 2022-03-29 Gabriele Cosmo (global-V11-00-12)
+- Updated tag IDs for geant4-11-00-ref-03.
+
+## 2022-03-25 Ben Morgan (global-V11-00-11)
+- Move core Tasking interfaces that only depend on PTL to global category from
+  tasking category
+
+## 2022-03-18 Ben Morgan (global-V11-00-10)
 - Replace use of deprecated std::result_of with std::invoke_result_t.
 
-March 8, 2022 Gabriele Cosmo (global-V10-07-38)
-- Updated tag IDs for geant4-11-00-patch-01.
+## 2022-03-10 Ben Morgan (global-V11-00-09)
+- Remove obsolete management/CMakeLists.txt script
+- Declare G4hepgeometry dependencies as INTERFACE as the module is header-only
 
-February 18, 2022 Ben Morgan (global-V10-07-37)
-- Provide overload G4String::operator[](int) to workaround MSVC compiler
-  error C2666. Addressing problem report #2463.
+## 2022-03-01 Ben Morgan (global-V11-00-08)
+- Revert clang-tidy pass-by-value
+  - Provides no benefit for short strings, which are the case in the global use case
+
+## 2022-02-18 Gabriele Cosmo (global-V11-00-07)
+- Updated tag IDs for geant4-11-00-ref-02.
+
+## 2022-02-24 Ben Morgan (global-V11-00-06)
+- Apply set of clang-tidy modernize, readability and performance fixes.
+
+## 2022-02-18 Ben Morgan (global-V11-00-05)
+- Provide overload `G4String::operator[](int)` to workaround MSVC compiler
+  error C2666.
+  Addressing [Problem report #2463](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2463).
+
+## 2022-02-08 Gabriele Cosmo (global-V11-00-04)
+- Fixed compilation warnings for shadowing variables in G4String.
+
+## 2022-01-31 Ben Morgan (global-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-31 Gabriele Cosmo (global-V11-00-02)
+- Updated tag IDs for geant4-11-00-ref-01.
+
+## 2022-01-24 Daren Sawkey (global-V11-00-01)
+- Replace G4lrint with std::lrint; remove G4lint and G4rint.
+  Addressing issue #116.
+
+## 2021-12-10 Ben Morgan (global-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 December 3, 2021 Gabriele Cosmo (global-V10-07-36)
 - Updated tag IDs for geant4-11-00-ref-00.

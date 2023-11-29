@@ -379,6 +379,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     {
       fDetector->SetSurfaceType(dielectric_LUTDAVIS);
     }
+    else if(newValue == "coated")
+    {
+      fDetector->SetSurfaceType(coated);
+    }
     else
     {
       G4ExceptionDescription ed;

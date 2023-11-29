@@ -116,23 +116,23 @@ class G4PVReplica : public G4VPhysicalVolume
     G4PVReplica& operator=(const G4PVReplica&) = delete;
       // Copy constructor and assignment operator not allowed
 
-    virtual ~G4PVReplica();
+    ~G4PVReplica() override;
 
-    virtual EVolume VolumeType() const;
+    EVolume VolumeType() const override;
 
-    G4bool IsMany() const;
-    G4bool IsReplicated() const;
+    G4bool IsMany() const override;
+    G4bool IsReplicated() const override;
 
-    virtual G4int GetCopyNo() const;
-    virtual void  SetCopyNo(G4int CopyNo);
-    virtual G4bool IsParameterised() const;
-    virtual G4VPVParameterisation* GetParameterisation() const;
-    virtual G4int GetMultiplicity() const;
-    virtual void GetReplicationData(EAxis& axis,
+    G4int GetCopyNo() const override;
+    void  SetCopyNo(G4int CopyNo) override;
+    G4bool IsParameterised() const override;
+    G4VPVParameterisation* GetParameterisation() const override;
+    G4int GetMultiplicity() const override;
+    void GetReplicationData(EAxis& axis,
                                     G4int& nReplicas,
                                     G4double& width,
                                     G4double& offset,
-                                    G4bool& consuming) const;
+                                    G4bool& consuming) const override;
 
     virtual void SetRegularStructureId( G4int code ); 
       // This method must set a unique code for each type of regular structure.
@@ -140,8 +140,8 @@ class G4PVReplica : public G4VPhysicalVolume
       // - It can also be used to prepare any corresponding special
       //  navigation 'conditions'.
 
-    G4bool IsRegularStructure() const; 
-    G4int GetRegularStructureId() const;
+    G4bool IsRegularStructure() const override; 
+    G4int GetRegularStructureId() const override;
       // Accessors for specialised geometries
 
     // Methods for handling of MT instances

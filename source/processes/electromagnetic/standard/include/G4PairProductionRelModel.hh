@@ -57,12 +57,10 @@
 
 #include "G4VEmModel.hh"
 #include "G4Log.hh"
-#include "G4Exp.hh"
-#include "G4Pow.hh"
-
 #include <vector>
 
 class G4ParticleChangeForGamma;
+class G4Pow;
 
 class G4PairProductionRelModel : public G4VEmModel
 {
@@ -168,6 +166,7 @@ protected:
   static std::vector<ElementData*>  gElementData;  
   static LPMFuncs                   gLPMFuncs;
   // 
+  G4bool isFirstInstance{false};
   G4bool                            fIsUseLPMCorrection;
   G4bool                            fIsUseCompleteScreening;
   //

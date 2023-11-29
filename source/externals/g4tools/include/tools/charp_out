@@ -13,13 +13,13 @@ class charp_out : public std::string {
   typedef std::string parent;
 public:
   charp_out(const char* a_value) {
-    char s[512];
+    char _s[512];
     if(sizeof(unsigned long)==sizeof(char*)) { //majority of cases.
-      snpf(s,sizeof(s),"%lu",a_value);
-      parent::operator+=(s);
+      snpf(_s,sizeof(_s),"%lu",a_value);
+      parent::operator+=(_s);
     } else if(sizeof(unsigned long long)==sizeof(char*)) { //majority of cases.
-      snpf(s,sizeof(s),"%llu",a_value);
-      parent::operator+=(s);
+      snpf(_s,sizeof(_s),"%llu",a_value);
+      parent::operator+=(_s);
     } else {
       parent::operator+=("charp_out_failed");
     }

@@ -35,26 +35,27 @@
 #include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 
-#include <vector>
 #include <memory>
+#include <utility>
+#include <vector>
 
 class G4Hdf5FileManager;
 
 // Types alias
 using G4Hdf5File = std::tuple<hid_t, hid_t, hid_t>;
-using Hdf5NtupleDescription = G4TNtupleDescription<tools::hdf5::ntuple, G4Hdf5File>;
+using Hdf5NtupleDescription = G4TNtupleDescription<toolx::hdf5::ntuple, G4Hdf5File>;
 
 // template specialization used by this class defined below
 
 template <>
 template <>
-G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
+G4bool G4TNtupleManager<toolx::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value);
 
 
-class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple,
+class G4Hdf5NtupleManager : public G4TNtupleManager<toolx::hdf5::ntuple,
                                                     G4Hdf5File>
 {
   friend class G4Hdf5AnalysisManager;
@@ -63,7 +64,7 @@ class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple,
   public:
     explicit G4Hdf5NtupleManager(const G4AnalysisManagerState& state);
     G4Hdf5NtupleManager() = delete;
-    virtual ~G4Hdf5NtupleManager() = default;
+    ~G4Hdf5NtupleManager() override = default;
 
   private:
     // Set methods
@@ -77,12 +78,9 @@ class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple,
 
     // Methods from the templated base class
     //
-    virtual void CreateTNtupleFromBooking(
-                    Hdf5NtupleDescription* ntupleDescription) final;
+    void CreateTNtupleFromBooking(Hdf5NtupleDescription* ntupleDescription) final;
 
-    virtual void FinishTNtuple(
-                    Hdf5NtupleDescription* ntupleDescription,
-                    G4bool fromBooking) final;
+    void FinishTNtuple(Hdf5NtupleDescription* ntupleDescription, G4bool fromBooking) final;
 
     // Static data members
     static constexpr std::string_view fkClass { "G4Hdf5NtupleManager" };
@@ -97,7 +95,9 @@ using std::to_string;
 
 inline void
 G4Hdf5NtupleManager::SetFileManager(std::shared_ptr<G4Hdf5FileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline const std::vector<Hdf5NtupleDescription*>&
 G4Hdf5NtupleManager::GetNtupleDescriptionVector() const
@@ -105,7 +105,7 @@ G4Hdf5NtupleManager::GetNtupleDescriptionVector() const
 
 template <>
 template <>
-inline G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
+inline G4bool G4TNtupleManager<toolx::hdf5::ntuple, G4Hdf5File>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value)
 {
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
@@ -115,7 +115,7 @@ inline G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColu
 
   // get ntuple
   auto ntuple = GetNtupleInFunction(ntupleId, "FillNtupleTColumn");
-  if ( ! ntuple ) return false;
+  if (ntuple == nullptr) return false;
 
   // get generic column
   auto index = columnId - fFirstNtupleColumnId;
@@ -128,8 +128,8 @@ inline G4bool G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>::FillNtupleTColu
   auto icolumn =  ntuple->columns()[index];
 
   // get column and check its type
-  auto column = dynamic_cast<tools::hdf5::ntuple::column_string* >(icolumn);
-  if ( ! column ) {
+  auto column = dynamic_cast<toolx::hdf5::ntuple::column_string* >(icolumn);
+  if (column == nullptr) {
     G4Analysis::Warn(
       "Column type does not match: ntupleId " + to_string(ntupleId) +
       " columnId " + to_string(columnId) + " value " + value,

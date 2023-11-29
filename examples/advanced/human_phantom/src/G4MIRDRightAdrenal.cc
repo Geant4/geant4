@@ -49,38 +49,29 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDRightAdrenal::G4MIRDRightAdrenal()
-{
-}
-
-G4MIRDRightAdrenal::~G4MIRDRightAdrenal()
-{
-}
-
 
 G4VPhysicalVolume* G4MIRDRightAdrenal::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 						 const G4String& colourName, G4bool wireFrame, G4bool)
 {
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
-
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 1.5 *cm; //a
   G4double by= 0.5 *cm; //b
   G4double cz= 5.0 *cm; //c
  
-  G4VSolid* rightAdrenal = new G4Ellipsoid("OneRightAdrenal",ax, by, cz, 0. *cm, cz); 
+  auto* rightAdrenal = new G4Ellipsoid("OneRightAdrenal",ax, by, cz, 0. *cm, cz); 
  
  
-  G4LogicalVolume* logicRightAdrenal = new G4LogicalVolume(rightAdrenal,
+  auto* logicRightAdrenal = new G4LogicalVolume(rightAdrenal,
 							   soft,
 							   "logical" + volumeName,
-							   0, 0, 0);
+							   nullptr, nullptr, nullptr);
 
-  G4VPhysicalVolume* physRightAdrenal = new G4PVPlacement(0 ,G4ThreeVector(-4.5*cm,  // xo
+  G4VPhysicalVolume* physRightAdrenal = new G4PVPlacement(nullptr, G4ThreeVector(-4.5*cm,  // xo
 									   6.5 *cm, //yo
 									   3. *cm),//zo
 							  "physicalRightAdrenal", logicRightAdrenal,
@@ -90,9 +81,9 @@ G4VPhysicalVolume* G4MIRDRightAdrenal::Construct(const G4String& volumeName,G4VP
 
   // Visualization Attributes
   //  G4VisAttributes* RightAdrenalVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* RightAdrenalVisAtt = new G4VisAttributes(colour);
+  auto* RightAdrenalVisAtt = new G4VisAttributes(colour);
   RightAdrenalVisAtt->SetForceSolid(wireFrame);
   logicRightAdrenal->SetVisAttributes(RightAdrenalVisAtt);
 
@@ -113,7 +104,6 @@ G4VPhysicalVolume* G4MIRDRightAdrenal::Construct(const G4String& volumeName,G4VP
   // Testing Mass
   G4double RightAdrenalMass = (RightAdrenalVol)*RightAdrenalDensity;
   G4cout << "Mass of RightAdrenal = " << RightAdrenalMass/gram << " g" << G4endl;
-
   
   return physRightAdrenal;
 }

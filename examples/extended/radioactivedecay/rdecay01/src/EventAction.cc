@@ -58,7 +58,7 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- fDecayChain = " ";
+ fDecayChain = G4String(" ");
  fEvisTot = 0.;
 }
 

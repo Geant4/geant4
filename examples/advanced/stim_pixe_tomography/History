@@ -1,0 +1,8 @@
+# Example stim_pixe_tomography History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2023-03-15 Z.Li (stim_pixe_tomography-V11-01-00)
+- Added first version of stim_pixe_tomography example

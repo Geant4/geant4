@@ -29,19 +29,18 @@
 // --------------------------------------------------------------------
 
 #include "G4WorkerThread.hh"
-#include "G4MTRunManager.hh"
-#include "G4WorkerRunManager.hh"
 
 #include "G4GeometryWorkspace.hh"
-#include "G4ParticlesWorkspace.hh"
-#include "G4PhysicsListWorkspace.hh"
-#include "G4SolidsWorkspace.hh"
-
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4MTRunManager.hh"
+#include "G4ParticlesWorkspace.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4PhysicsListWorkspace.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4SolidsWorkspace.hh"
+#include "G4WorkerRunManager.hh"
 
 // --------------------------------------------------------------------
 void G4WorkerThread::SetThreadId(G4int tid)
@@ -99,19 +98,14 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
   // First remember SD and Filed Associated with worker
   // in order to re-use it
   // (note that all the stuff after this will reset SD and Field)
-  using LV2SDFM = std::map<G4LogicalVolume*,
-                  std::pair<G4VSensitiveDetector*, G4FieldManager*>>;
+  using LV2SDFM = std::map<G4LogicalVolume*, std::pair<G4VSensitiveDetector*, G4FieldManager*>>;
   LV2SDFM lvmap;
 
-  using R2FSM = std::map<G4Region*,
-                std::pair<G4FastSimulationManager*, G4UserSteppingAction*>>;
+  using R2FSM = std::map<G4Region*, std::pair<G4FastSimulationManager*, G4UserSteppingAction*>>;
   R2FSM rgnmap;
 
   G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
-  for(std::size_t ip = 0; ip < mLogVolStore->size(); ++ip)
-  {
-    G4LogicalVolume* lv = (*mLogVolStore)[ip];
-
+  for (auto lv : *mLogVolStore) {
     // The following needs an explanation.
     // Consider the case in which the user adds one LogVolume between
     // the runs. The problem is that the thread-local part (split class)
@@ -136,28 +130,22 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // associated with LV, we get the values and we remember them.
     //
     G4VSensitiveDetector* sd = nullptr;
-    G4FieldManager* fmgr     = nullptr;
-    if(lv->GetMasterSensitiveDetector() != nullptr)
-    {
+    G4FieldManager* fmgr = nullptr;
+    if (lv->GetMasterSensitiveDetector() != nullptr) {
       sd = lv->GetSensitiveDetector();
     }
-    if(lv->GetMasterFieldManager() != nullptr)
-    {
+    if (lv->GetMasterFieldManager() != nullptr) {
       fmgr = lv->GetFieldManager();
     }
-    if(sd != nullptr || fmgr != nullptr)
-    {
+    if (sd != nullptr || fmgr != nullptr) {
       lvmap[lv] = std::make_pair(sd, fmgr);
     }
   }
   G4RegionStore* mRegStore = G4RegionStore::GetInstance();
-  for(std::size_t ir = 0; ir < mRegStore->size(); ++ir)
-  {
-    G4Region* reg                = (*mRegStore)[ir];
+  for (auto reg : *mRegStore) {
     G4FastSimulationManager* fsm = reg->GetFastSimulationManager();
-    G4UserSteppingAction* usa    = reg->GetRegionalSteppingAction();
-    if(reg != nullptr || usa != nullptr)
-    {
+    G4UserSteppingAction* usa = reg->GetRegionalSteppingAction();
+    if (reg != nullptr || usa != nullptr) {
       rgnmap[reg] = std::make_pair(fsm, usa);
     }
   }
@@ -165,11 +153,9 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
   //===========================
   // Step-1: Clean the workspace
   //===========================
-  G4GeometryWorkspace* geomWorkspace =
-    G4GeometryWorkspace::GetPool()->GetWorkspace();
+  G4GeometryWorkspace* geomWorkspace = G4GeometryWorkspace::GetPool()->GetWorkspace();
   geomWorkspace->DestroyWorkspace();
-  G4SolidsWorkspace* solidWorkspace =
-    G4SolidsWorkspace::GetPool()->GetWorkspace();
+  G4SolidsWorkspace* solidWorkspace = G4SolidsWorkspace::GetPool()->GetWorkspace();
   solidWorkspace->DestroyWorkspace();
 
   //===========================
@@ -181,51 +167,44 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
   //===================================================
   // Step-4: Restore sensitive detector and field manaer
   //===================================================
-  for(auto it = lvmap.cbegin(); it != lvmap.cend(); ++it)
-  {
-    G4LogicalVolume* lv      = it->first;
-    G4VSensitiveDetector* sd = (it->second).first;
-    G4FieldManager* fmgr     = (it->second).second;
-    if(fmgr != nullptr)  // What should be the second parameter?
-    {                    // We use always false for MT mode
+  for (const auto& it : lvmap) {
+    G4LogicalVolume* lv = it.first;
+    G4VSensitiveDetector* sd = (it.second).first;
+    G4FieldManager* fmgr = (it.second).second;
+    if (fmgr != nullptr)  // What should be the second parameter?
+    {  // We use always false for MT mode
       lv->SetFieldManager(fmgr, false);
     }
-    if(sd)
-    {
+    if (sd != nullptr) {
       lv->SetSensitiveDetector(sd);
     }
   }
-  for(auto it3 = rgnmap.cbegin(); it3 != rgnmap.cend(); ++it3)
-  {
-    G4Region* reg                = it3->first;
-    G4FastSimulationManager* fsm = (it3->second).first;
-    if(fsm != nullptr)
-      reg->SetFastSimulationManager(fsm);
-    G4UserSteppingAction* usa = (it3->second).second;
-    if(usa != nullptr)
-      reg->SetRegionalSteppingAction(usa);
+  for (const auto& it3 : rgnmap) {
+    G4Region* reg = it3.first;
+    G4FastSimulationManager* fsm = (it3.second).first;
+    if (fsm != nullptr) reg->SetFastSimulationManager(fsm);
+    G4UserSteppingAction* usa = (it3.second).second;
+    if (usa != nullptr) reg->SetRegionalSteppingAction(usa);
   }
 }
 
 // --------------------------------------------------------------------
 void G4WorkerThread::SetPinAffinity(G4int affinity) const
 {
-  if(affinity == 0)
-    return;
+  if (affinity == 0) return;
 
 #if !defined(WIN32)
   G4cout << "AFFINITY SET" << G4endl;
   // Assign this thread to cpus in a round robin way
-  G4int offset   = affinity;
+  G4int offset = affinity;
   G4int cpuindex = 0;
-  if(std::abs(offset) > G4Threading::G4GetNumberOfCores())
-  {
+  if (std::abs(offset) > G4Threading::G4GetNumberOfCores()) {
     G4Exception("G4WorkerThread::SetPinAffinity()", "Run0100", JustWarning,
                 "Cannot set thread affinity, affinity parameter larger than "
                 "number of cores");
     return;
   }
-  if(offset > 0)  // Start assigning affinity to given CPU
+  if (offset > 0)  // Start assigning affinity to given CPU
   {
     --offset;
     cpuindex = (GetThreadId() + offset) % G4Threading::G4GetNumberOfCores();
@@ -236,7 +215,7 @@ void G4WorkerThread::SetPinAffinity(G4int affinity) const
     offset *= -1;
     --offset;
     G4int myidx = GetThreadId() % (G4Threading::G4GetNumberOfCores() - 1);
-    cpuindex    = myidx + (myidx >= offset);
+    cpuindex = myidx + static_cast<G4int>(myidx >= offset);
   }
   G4cout << "Setting affinity to:" << cpuindex << G4endl;
 
@@ -247,8 +226,7 @@ void G4WorkerThread::SetPinAffinity(G4int affinity) const
   G4NativeThread t;
 #  endif
   G4bool success = G4Threading::G4SetPinAffinity(cpuindex, t);
-  if(!success)
-  {
+  if (!success) {
     G4Exception("G4MTRunManagerKernel::StarThread()", "Run0101", JustWarning,
                 "Cannot set thread affinity.");
   }

@@ -103,7 +103,7 @@ G4DimensionedType<T, ConversionErrorPolicy>::G4DimensionedType(const T& value, c
 }
 
 template <typename T, typename ConversionErrorPolicy>
-G4DimensionedType<T, ConversionErrorPolicy>::~G4DimensionedType() {}
+G4DimensionedType<T, ConversionErrorPolicy>::~G4DimensionedType() = default;
 
 template <typename T, typename ConversionErrorPolicy>
 T

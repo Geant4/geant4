@@ -4,6 +4,7 @@
 #
 /control/execute geometry.mac
 /control/execute physics.mac
+/control/execute output.mac
 /run/initialize
 /control/execute primary.mac
 # Use these open statements to open selected visualization

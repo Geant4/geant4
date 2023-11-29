@@ -44,7 +44,7 @@
 //
 // we ask that you please cite the following reference papers on chemistry:
 //
-// Diﬀusion-controlled reactions modelling in Geant4-DNA,
+// Diffusion-controlled reactions modelling in Geant4-DNA,
 // M. Karamitros et al., 2014
 // Modeling Radiation Chemistry in the Geant4 Toolkit,
 // M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508

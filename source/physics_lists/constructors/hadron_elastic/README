@@ -24,12 +24,26 @@
    - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,
                     Gheisha below.
+ - charm and bottom hadrons, light hypernuclei
+   - cross section: Glauber-Gribov
+   - final-state:   Gheisha
+ - light anti-hypernuclei
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   Gheisha
 
  G4HadronElasticPhysicsHP
  ------------------------
  As G4HadronElasticPhysics, with the only difference that for neutrons
  below 20 MeV, NeutronHP elastic is used (for both cross section and
  final-state model).
+
+ G4HadronElasticPhysicsHPT
+ -------------------------
+ As G4HadronElasticPhysicsHP, with the only difference that for neutrons
+ below 4 eV, a special treatment of elastic scattering is activated.
+ This special treatment, called Thermal Scattering Law (TSL), is based on
+ the S(alpha, beta) approach, which relieas on both experimental measurements
+ and molecular dynamics calculations.
 
  G4HadronElasticPhysicsLEND
  --------------------------

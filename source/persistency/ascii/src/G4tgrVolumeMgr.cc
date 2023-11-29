@@ -81,9 +81,9 @@ G4tgrSolid* G4tgrVolumeMgr::CreateSolid(const std::vector<G4String>& wl,
   }
 
   G4String wl2 = wlc[2];
-  for(std::size_t ii = 0; ii < wl2.length(); ++ii)
+  for(G4int ii = 0; ii < (G4int)wl2.length(); ++ii)
   {
-    wl2[ii] = toupper(wl2[ii]);
+    wl2[ii] = (char)std::toupper(wl2[ii]);
   }
   if((wl2 == "UNION") || (wl2 == "SUBTRACTION") || (wl2 == "INTERSECTION"))
   {

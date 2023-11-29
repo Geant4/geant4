@@ -32,19 +32,15 @@
 
 // ********************************************************************
 // Constructor
-// *********V***********************************************************
+// ********************************************************************
 //
-G4VExternalNavigation::G4VExternalNavigation()
-{
-}
+G4VExternalNavigation::G4VExternalNavigation() = default;
 
 // ********************************************************************
 // Destructor
 // ********************************************************************
 //
-G4VExternalNavigation::~G4VExternalNavigation()
-{
-}
+G4VExternalNavigation::~G4VExternalNavigation() = default;
 
 // ********************************************************************
 // Inside call Inside() of a solid

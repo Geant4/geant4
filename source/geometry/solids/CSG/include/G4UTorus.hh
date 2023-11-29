@@ -54,13 +54,13 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
                    G4double sphi, G4double dphi);
       // Constructs a torus with name and geometrical parameters
 
-   ~G4UTorus();
+   ~G4UTorus() override;
 
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetRmin() const;
     G4double GetRmax() const;
@@ -81,16 +81,16 @@ class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
     void SetAllParameters(G4double arg1, G4double arg2,
                           G4double arg3, G4double arg4, G4double arg5);
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
 

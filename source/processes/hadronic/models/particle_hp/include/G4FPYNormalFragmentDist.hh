@@ -31,22 +31,20 @@
  */
 
 #ifndef G4FPYNORMALFRAGMENTDIST_HH
-#define	G4FPYNORMALFRAGMENTDIST_HH
-
-#include "G4Ions.hh"
-#include "globals.hh"
+#define G4FPYNORMALFRAGMENTDIST_HH
 
 #include "G4FFGEnumerations.hh"
 #include "G4FissionProductYieldDist.hh"
+#include "G4Ions.hh"
+#include "globals.hh"
 
 /** G4FPYNormalFragmentDist is an inherited class of G4FissionProductYield
  *  that samples fission fragments from the entire data set.
  */
-class G4FPYNormalFragmentDist
-    : public G4FissionProductYieldDist
+class G4FPYNormalFragmentDist : public G4FissionProductYieldDist
 {
-public:
-// Constructor definition
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage:
      *      - \p WhichIsotope: Isotope number of the element in ZZZAAA form
@@ -56,11 +54,10 @@ public:
      *
      *  - Notes:
      */
-    G4FPYNormalFragmentDist( G4int WhichIsotope,
-                             G4FFGEnumerations::MetaState WhichMetaState,
-                             G4FFGEnumerations::FissionCause WhichCause,
-                             G4FFGEnumerations::YieldType WhichYieldType,
-                             std::istringstream& dataFile);
+    G4FPYNormalFragmentDist(G4int WhichIsotope, G4FFGEnumerations::MetaState WhichMetaState,
+                            G4FFGEnumerations::FissionCause WhichCause,
+                            G4FFGEnumerations::YieldType WhichYieldType,
+                            std::istringstream& dataFile);
 
     /** Overloaded constructor
      *  - Usage:
@@ -72,30 +69,28 @@ public:
      *
      *  - Notes:
      */
-    G4FPYNormalFragmentDist( G4int WhichIsotope,
-                             G4FFGEnumerations::MetaState WhichMetaState,
-                             G4FFGEnumerations::FissionCause WhichCause,
-                             G4FFGEnumerations::YieldType WhichYieldType,
-                             G4int Verbosity,
-                             std::istringstream& dataFile);
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( void );
+    G4FPYNormalFragmentDist(G4int WhichIsotope, G4FFGEnumerations::MetaState WhichMetaState,
+                            G4FFGEnumerations::FissionCause WhichCause,
+                            G4FFGEnumerations::YieldType WhichYieldType, G4int Verbosity,
+                            std::istringstream& dataFile);
 
-protected:
-// Functions
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize();
+
+  protected:
+    // Functions
     /** Selects a fission product from the probability tree, limited by the
      *  number of nucleons available to the system.
      */
-    virtual G4Ions* GetFissionProduct( void );
+    G4Ions* GetFissionProduct() override;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor. It is a virtual function since
      *  G4FPYNormalFragmentDist inherits from G4FissionProductYieldDist
      */
-    virtual ~G4FPYNormalFragmentDist( void );
+    ~G4FPYNormalFragmentDist() override;
 };
 
-#endif	/* G4FPYNORMALFRAGMENTDIST_HH */
-
+#endif /* G4FPYNORMALFRAGMENTDIST_HH */

@@ -108,7 +108,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    static const G4String muAtom("MuonicAtom"); 
 
    g4particleDefinitionInstanceID = -1;
-   theProcessManagerShadow = 0;
+   theProcessManagerShadow = nullptr;
 
    theParticleTable = G4ParticleTable::GetParticleTable();
 
@@ -195,15 +195,14 @@ G4ParticleDefinition::~G4ParticleDefinition()
                   "PART117", JustWarning, msg);
       return ;
     }
-    else
-    {
-#ifdef G4VERBOSE
+    
+    #ifdef G4VERBOSE
       if (verboseLevel>0)
       {
         G4cout << GetParticleName() << " will be deleted..." << G4endl;
       }
 #endif
-    }
+   
   }
   delete theDecayTable;
 }
@@ -435,10 +434,9 @@ G4double G4ParticleDefinition::CalculateAnomaly()  const
     return 0.5*std::fabs(thePDGMagneticMoment/muB
            - 2.*thePDGCharge/CLHEP::eplus);   
   }
-  else
-  {
-    return 0.0;
-  }
+  
+      return 0.0;
+ 
 }
 
 // --------------------------------------------------------------------

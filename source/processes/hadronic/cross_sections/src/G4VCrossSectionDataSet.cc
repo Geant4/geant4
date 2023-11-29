@@ -79,8 +79,8 @@ G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle*,
 
 G4double 
 G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part, 
-					    const G4Element* elm,
-					    const G4Material* mat)
+                                            const G4Element* elm,
+                                            const G4Material* mat)
 {
   G4int Z = elm->GetZasInt();
 
@@ -91,15 +91,14 @@ G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part,
   // isotope-wise cross section making sum over available
   // isotope cross sections, which may be incomplete, so
   // the result is corrected 
-  size_t nIso = elm->GetNumberOfIsotopes();    
+  std::size_t nIso = elm->GetNumberOfIsotopes();    
   G4double fact = 0.0;
   G4double xsec = 0.0;
 
   // user-defined isotope abundances        
   const G4IsotopeVector* isoVector = elm->GetIsotopeVector();
   const G4double* abundVector = elm->GetRelativeAbundanceVector();
-
-  for (size_t j=0; j<nIso; ++j) {
+  for (std::size_t j=0; j<nIso; ++j) {
     const G4Isotope* iso = (*isoVector)[j];
     G4int A = iso->GetN();
     if(abundVector[j] > 0.0 && IsIsoApplicable(part, Z, A, elm, mat)) {
@@ -111,6 +110,26 @@ G4VCrossSectionDataSet::ComputeCrossSection(const G4DynamicParticle* part,
 }
 
 G4double 
+G4VCrossSectionDataSet::ComputeCrossSectionPerElement(
+                        G4double kinEnergy, G4double loge,
+                        const G4ParticleDefinition* pd, 
+                        const G4Element* elm, const G4Material* mat)
+{
+  G4int Z = elm->GetZasInt();
+  std::size_t nIso = elm->GetNumberOfIsotopes();    
+  G4double xsec = 0.0;
+  const G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+  const G4double* abundVector = elm->GetRelativeAbundanceVector();
+  for (std::size_t j=0; j<nIso; ++j) {
+    const G4Isotope* iso = (*isoVector)[j];
+    G4int A = iso->GetN();
+    xsec += abundVector[j]*
+      ComputeIsoCrossSection(kinEnergy, loge, pd, Z, A, iso, elm, mat);
+  }
+  return xsec;
+}
+
+G4double 
 G4VCrossSectionDataSet::GetElementCrossSection(const G4DynamicParticle* dynPart,
 					       G4int Z,
 					       const G4Material* mat)
@@ -119,7 +138,7 @@ G4VCrossSectionDataSet::GetElementCrossSection(const G4DynamicParticle* dynPart,
   ed << "GetElementCrossSection is not implemented in <" << name << ">\n"
      << "Particle: " << dynPart->GetDefinition()->GetParticleName()
      << "  Ekin(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
-  if(mat) { ed << "  material: " << mat->GetName(); }
+  if(nullptr != mat) { ed << "  material: " << mat->GetName(); }
   ed << " target Z= " << Z << G4endl;
   G4Exception("G4VCrossSectionDataSet::GetElementCrossSection", "had001", 
               FatalException, ed);
@@ -137,8 +156,28 @@ G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* dynPart,
   ed << "GetIsoCrossSection is not implemented in <" << name << ">\n"
      << "Particle: " << dynPart->GetDefinition()->GetParticleName()
      << "  Ekin(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
-  if(mat) { ed << "  material: " << mat->GetName(); }
-  if(elm) { ed << " element: " << elm->GetName(); }
+  if(nullptr != mat) { ed << "  material: " << mat->GetName(); }
+  if(nullptr != elm) { ed << " element: " << elm->GetName(); }
+  ed << " target Z= " << Z << " A= " << A << G4endl;
+  G4Exception("G4VCrossSectionDataSet::GetIsoCrossSection", "had001", 
+              FatalException, ed);
+  return 0.0;
+}
+
+G4double 
+G4VCrossSectionDataSet::ComputeIsoCrossSection(G4double kinEnergy, G4double,
+			 		       const G4ParticleDefinition* pd,
+					       G4int Z, G4int A,
+					       const G4Isotope*,
+					       const G4Element* elm,
+					       const G4Material* mat)
+{
+  G4ExceptionDescription ed;
+  ed << "GetIsoCrossSection is not implemented in <" << name << ">\n"
+     << "Particle: " << pd->GetParticleName()
+     << "  Ekin(MeV)= "  << kinEnergy/CLHEP::MeV;
+  if(nullptr != mat) { ed << "  material: " << mat->GetName(); }
+  if(nullptr != elm) { ed << " element: " << elm->GetName(); }
   ed << " target Z= " << Z << " A= " << A << G4endl;
   G4Exception("G4VCrossSectionDataSet::GetIsoCrossSection", "had001", 
               FatalException, ed);
@@ -149,7 +188,7 @@ const G4Isotope*
 G4VCrossSectionDataSet::SelectIsotope(const G4Element* anElement, 
                                       G4double, G4double)
 {
-  size_t nIso = anElement->GetNumberOfIsotopes();
+  G4int nIso = (G4int)anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
   // more than 1 isotope
@@ -157,7 +196,7 @@ G4VCrossSectionDataSet::SelectIsotope(const G4Element* anElement,
     const G4double* abundVector = anElement->GetRelativeAbundanceVector();
     G4double sum = 0.0;
     G4double q = G4UniformRand();
-    for (size_t j=0; j<nIso; ++j) {
+    for (G4int j=0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
 	iso = anElement->GetIsotope(j);

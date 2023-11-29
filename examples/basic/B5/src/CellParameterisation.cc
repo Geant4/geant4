@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CellParameterisation.cc
+/// \file B5/src/CellParameterisation.cc
 /// \brief Implementation of the B5::CellParameterisation class
 
 #include "CellParameterisation.hh"
@@ -48,11 +48,6 @@ CellParameterisation::CellParameterisation()
     fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-CellParameterisation::~CellParameterisation()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

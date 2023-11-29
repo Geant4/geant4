@@ -38,7 +38,7 @@
 #include "G4ProcessManager.hh"
 #include "G4DNAChemistryManager.hh"
 
-G4VUserChemistryList::G4VUserChemistryList(bool flag) :
+G4VUserChemistryList::G4VUserChemistryList(G4bool flag) :
 fIsPhysicsConstructor(flag)
 {
   verboseLevel = 1;
@@ -47,14 +47,14 @@ fIsPhysicsConstructor(flag)
 G4VUserChemistryList::~G4VUserChemistryList()
 {
   G4DNAChemistryManager* chemMan = G4DNAChemistryManager::GetInstanceIfExists();
-  if (chemMan)
+  if (chemMan != nullptr)
   {
     chemMan->Deregister(*this);
   }
 }
 
 void G4VUserChemistryList::RegisterTimeStepModel(G4VITStepModel* timeStepModel,
-                                                 double startingTime)
+                                                 G4double startingTime)
 {
   G4VScheduler::Instance()->RegisterModel(timeStepModel, startingTime);
 }
@@ -79,7 +79,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
   //Get processes from master thread;
   G4ProcessManager* pManager = moleculeDef->GetProcessManager();
 
-  if (!pManager)
+  if (pManager == nullptr)
   {
 #ifdef G4VERBOSE
     if (verboseLevel > 0)
@@ -99,7 +99,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
 
   G4ProcessManager* pManagerShadow = moleculeDef->GetMasterProcessManager();
   G4ProcessVector* pVector = pManager->GetProcessList();
-  if (!pVector)
+  if (pVector == nullptr)
   {
 #ifdef G4VERBOSE
     if (verboseLevel > 0)
@@ -121,7 +121,7 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
            << moleculeDef->GetParticleName() << G4endl;
     G4cout << " ProcessManager : " << pManager
            << " ProcessManagerShadow : " << pManagerShadow << G4endl;
-    for(std::size_t iv1=0;iv1<pVector->size();++iv1)
+    for(G4int iv1=0;iv1<(G4int)pVector->size();++iv1)
     {
       G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName()
           << G4endl;
@@ -130,14 +130,14 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
         << G4endl;
     G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
-    for(std::size_t iv2=0;iv2<pVectorShadow->size();++iv2)
+    for(G4int iv2=0;iv2<(G4int)pVectorShadow->size();++iv2)
     {
       G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName()
       << G4endl;
     }
   }
 #endif
-  for (std::size_t j = 0; j < pVector->size(); ++j)
+  for (G4int j = 0; j < (G4int)pVector->size(); ++j)
   {
     //Andrea July 16th 2013 : migration to new interface...
     //Infer if we are in a worker thread or master thread

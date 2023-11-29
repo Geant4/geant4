@@ -10,13 +10,13 @@
 namespace tools {
 
 inline void toss(const char* a_from,char a_s[],unsigned int& a_l) {
-  char* s = (char*)a_from;
+  char* _s = (char*)a_from;
   a_l = 0;
   char* pos = a_s;
-  while(*s) {
-    *pos = *s;pos++;
+  while(*_s) {
+    *pos = *_s;pos++;
     a_l++;
-    s++;
+    _s++;
   }
   *pos = 0;
 }

@@ -1,6 +1,7 @@
 /control/execute geometry.mac
 #control the physics
 /control/execute physics.mac
+/control/execute output.mac
 #/tracking/verbose 1
 /run/initialize
 /control/execute primary.mac

@@ -130,28 +130,28 @@ protected:
 
 private:
 
-  G4IonTable*               theIonTable;
-  G4ParticleChangeForGamma* fParticleChange;
+  G4IonTable* theIonTable;
+  G4ParticleChangeForGamma* fParticleChange = nullptr;
   G4WentzelOKandVIxSection* wokvi;
-  G4NistManager*            fNistManager;
+  G4NistManager* fNistManager;
 
-  const std::vector<G4double>* pCuts;
+  const std::vector<G4double>* pCuts = nullptr;
 
-  const G4ParticleDefinition* particle;
+  const G4ParticleDefinition* particle = nullptr;
   const G4ParticleDefinition* theProton;
 
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material*           currentMaterial;
-  G4int                       currentMaterialIndex;
+  const G4MaterialCutsCouple* currentCouple = nullptr;
+  const G4Material* currentMaterial = nullptr;
+  G4int currentMaterialIndex = 0;
 
-  G4double                  cosThetaMin;
-  G4double                  cosThetaMax;
-  G4double                  recoilThreshold;
-  G4double                  elecRatio;
-  G4double                  mass;
-  G4double                  fixedCut;
+  G4double cosThetaMin = 1.0;
+  G4double cosThetaMax = -1.0;
+  G4double recoilThreshold = 0.0;
+  G4double elecRatio = 0.0;
+  G4double fixedCut = -1.0;
+  G4double mass;
 
-  G4bool                    isCombined;  
+  G4bool isCombined;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

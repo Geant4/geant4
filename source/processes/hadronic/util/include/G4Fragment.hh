@@ -80,10 +80,11 @@ public:
   G4Fragment(const G4Fragment &right);
 
   // A,Z and 4-momentum - main constructor for fragment
-  G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum, G4bool warning=true);
+  G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum);
 
   // A,Z,numberOfLambdas and 4-momentum
-  G4Fragment(G4int A, G4int Z, G4int numberOfLambdas, const G4LorentzVector& aMomentum, G4bool warning=true);
+  G4Fragment(G4int A, G4int Z, G4int numberOfLambdas,
+             const G4LorentzVector& aMomentum);
 
   // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
@@ -105,24 +106,41 @@ public:
 
   inline G4int GetZ_asInt() const;
   inline G4int GetA_asInt() const;
-  inline void SetZandA_asInt(G4int Znew, G4int Anew);
+
+  // update number of nucleons without check on input
+  // ground state mass is not recomputed
+  inline void SetZandA_asInt(G4int Znew, G4int Anew, G4int Lnew=0);
+
+  // non-negative number of lambdas/anti-lambdas
+  // ground state mass is not recomputed
+  void SetNumberOfLambdas(G4int numberOfLambdas);
 
   inline G4int GetNumberOfLambdas() const;
-  inline void SetNumberOfLambdas(G4int numberOfLambdas);
-  // Non-negative number of lambdas/anti-lambdas inside the nucleus/anti-nucleus
 
   inline G4double GetExcitationEnergy() const;
-  inline void SetExcEnergyAndMomentum(G4double eexc, const G4LorentzVector&);
 
   inline G4double GetGroundStateMass() const;
    
-  inline G4double GetBindingEnergy() const;
-  
   inline const G4LorentzVector& GetMomentum() const;
+
+  // ground state mass and excitation energy are recomputed
+  inline G4double RecomputeGroundStateMass();
+
+  // update main fragment parameters full check on input 
+  // ground state mass and excitation energy are recomputed
   inline void SetMomentum(const G4LorentzVector& value);
-  
-  // computation of mass for any Z, A and numberOfLambdas
-  inline G4double ComputeGroundStateMass(G4int Z, G4int A, G4int numberOfLambdas = 0) const;
+  inline void SetZAandMomentum(const G4LorentzVector&,
+                               G4int Z, G4int A,
+                               G4int nLambdas = 0);
+
+  // ground state mass is not recomputed
+  void SetExcEnergyAndMomentum(G4double eexc, const G4LorentzVector&);
+  G4double GetBindingEnergy() const;
+    
+  // computation of mass for any imput Z, A and number of Lambdas
+  // no check on input values
+  inline G4double ComputeGroundStateMass(G4int Z, G4int A,
+                                         G4int nLambdas = 0) const;
 
   // extra methods
   inline G4double GetSpin() const;
@@ -131,8 +149,10 @@ public:
   inline G4int GetCreatorModelID() const;
   inline void SetCreatorModelID(G4int value);
 
+  inline G4bool IsLongLived() const;
+  inline void SetLongLived(G4bool value);
+
   // obsolete methods
-  
   inline G4double GetZ() const;
   inline G4double GetA() const;
   inline void SetZ(G4double value);
@@ -181,13 +201,11 @@ public:
 
 private:
 
+  void CalculateMassAndExcitationEnergy();
+
   void ExcitationEnergyWarning();
 
   void NumberOfExitationWarning(const G4String&);
-
-  inline void CalculateExcitationEnergy(G4bool warning=true);
-
-  inline void CalculateGroundStateMass();
 
   // ============= DATA MEMBERS ==================
 
@@ -195,7 +213,8 @@ private:
   
   G4int theZ;
 
-  G4int theL;  // Non-negative number of lambdas/anti-lambdas inside the nucleus/anti-nucleus
+  // Non-negative number of lambdas/anti-lambdas inside the nucleus/anti-nucleus
+  G4int theL;  
   
   G4double theExcitationEnergy;
 
@@ -224,7 +243,7 @@ private:
   G4double spin;
   G4double theCreationTime;
 
-  static const G4double minFragExcitation;
+  G4bool isLongLived = false; 
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
@@ -237,7 +256,9 @@ private:
 
 inline void * G4Fragment::operator new(size_t)
 {
-  if (!pFragmentAllocator()) { pFragmentAllocator() = new G4Allocator<G4Fragment>; }
+  if (!pFragmentAllocator()) { 
+    pFragmentAllocator() = new G4Allocator<G4Fragment>;
+  }
   return (void*) pFragmentAllocator()->MallocSingle();
 }
 
@@ -246,26 +267,18 @@ inline void G4Fragment::operator delete(void * aFragment)
   pFragmentAllocator()->FreeSingle((G4Fragment *) aFragment);
 }
 
-inline void G4Fragment::CalculateExcitationEnergy(G4bool warning)
+inline G4double 
+G4Fragment::ComputeGroundStateMass(G4int Z, G4int A, G4int nLambdas) const
 {
-  theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
-  if(theExcitationEnergy < minFragExcitation) { 
-    if(theExcitationEnergy < -minFragExcitation && warning) {  ExcitationEnergyWarning(); }
-    theExcitationEnergy = 0.0;
-  }
+  return ( nLambdas <= 0 ) 
+    ? G4NucleiProperties::GetNuclearMass(A, Z) 
+    : G4HyperNucleiProperties::GetNuclearMass(A, Z, nLambdas); 
 }
 
-inline G4double 
-G4Fragment::ComputeGroundStateMass(G4int Z, G4int A, G4int numberOfLambdas) const
+inline G4double G4Fragment::RecomputeGroundStateMass()
 {
-  if ( numberOfLambdas <= 0 ) return G4NucleiProperties::GetNuclearMass(A, Z); 
-  else                        return G4HyperNucleiProperties::GetNuclearMass(A, Z, numberOfLambdas); 
-}
-	 
-inline void G4Fragment::CalculateGroundStateMass() 
-{
-  if ( theL <= 0 ) theGroundStateMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-  else             theGroundStateMass = G4HyperNucleiProperties::GetNuclearMass(theA, theZ, theL); 
+  CalculateMassAndExcitationEnergy();
+  return theGroundStateMass;
 }
 
 inline G4int G4Fragment::GetA_asInt() const
@@ -278,22 +291,22 @@ inline G4int G4Fragment::GetZ_asInt()  const
   return theZ;
 }
 
-inline void G4Fragment::SetZandA_asInt(G4int Znew, G4int Anew)
+inline void 
+G4Fragment::SetZandA_asInt(G4int Znew, G4int Anew, G4int Lnew)
 {
   theZ = Znew;
   theA = Anew;
-  CalculateGroundStateMass();
+  theL = std::max(Lnew, 0);
+}
+
+inline void G4Fragment::SetNumberOfLambdas(G4int Lnew)
+{
+  theL = std::max(Lnew, 0);
 }
 
 inline G4int G4Fragment::GetNumberOfLambdas() const
 {
   return theL;
-}
-
-inline void G4Fragment::SetNumberOfLambdas(G4int numberOfLambdas)
-{
-  theL = std::max( numberOfLambdas, 0 );  // Cannot be negative
-  CalculateGroundStateMass();
 }
 
 inline G4double G4Fragment::GetExcitationEnergy()  const
@@ -306,20 +319,6 @@ inline G4double G4Fragment::GetGroundStateMass() const
   return theGroundStateMass; 
 }
 
-inline void G4Fragment::SetExcEnergyAndMomentum(G4double eexc, 
-						const G4LorentzVector& v)
-{
-  theExcitationEnergy = eexc;
-  theMomentum.set(0.0, 0.0, 0.0, theGroundStateMass + eexc);
-  theMomentum.boost(v.boostVector());
-}
-
-inline G4double G4Fragment::GetBindingEnergy() const
-{
-  return (theA-theZ)*CLHEP::neutron_mass_c2 + theZ*CLHEP::proton_mass_c2 
-    - theGroundStateMass;
-}
-
 inline const G4LorentzVector& G4Fragment::GetMomentum()  const
 {
   return theMomentum;
@@ -328,29 +327,35 @@ inline const G4LorentzVector& G4Fragment::GetMomentum()  const
 inline void G4Fragment::SetMomentum(const G4LorentzVector& value)
 {
   theMomentum = value;
-  CalculateExcitationEnergy();
+  CalculateMassAndExcitationEnergy();
+}
+
+inline void 
+G4Fragment::SetZAandMomentum(const G4LorentzVector& v,
+                             G4int Z, G4int A, G4int nLambdas)
+{
+  SetZandA_asInt(Z, A, nLambdas);
+  SetMomentum(v);
 }
 
 inline G4double G4Fragment::GetZ()  const
 {
-  return G4double(theZ);
+  return static_cast<G4double>(theZ);
 }
 
 inline G4double G4Fragment::GetA() const
 {
-  return G4double(theA);
+  return static_cast<G4double>(theA);
 }
 
 inline void G4Fragment::SetZ(const G4double value)
 {
   theZ = G4lrint(value);
-  CalculateGroundStateMass();
 }
 
 inline void G4Fragment::SetA(const G4double value)
 {
   theA = G4lrint(value);
-  CalculateGroundStateMass();
 }
 
 inline G4int G4Fragment::GetNumberOfExcitons()  const
@@ -440,6 +445,16 @@ inline void G4Fragment::SetSpin(G4double value)
   spin = value;
 }
 
+inline G4bool G4Fragment::IsLongLived() const
+{
+  return isLongLived;
+}
+
+inline void G4Fragment::SetLongLived(G4bool value)
+{
+  isLongLived = value;
+}
+
 inline G4int G4Fragment::GetFloatingLevelNumber() const
 {
   return xLevel;
@@ -487,5 +502,3 @@ inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
 }
 
 #endif
-
-

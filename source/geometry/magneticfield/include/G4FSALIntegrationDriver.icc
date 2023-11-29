@@ -36,12 +36,7 @@ G4FSALIntegrationDriver ( G4double hminimum, T* pStepper,
                           G4int numComponents, G4int statisticsVerbose )
     : Base(pStepper),
       fMinimumStep(hminimum),
-      fSmallestFraction(1e-12),
-      fVerboseLevel(statisticsVerbose),
-      fNoQuickAvanceCalls(0),
-      fNoAccurateAdvanceCalls(0),
-      fNoAccurateAdvanceBadSteps(0),
-      fNoAccurateAdvanceGoodSteps(0)
+      fVerboseLevel(statisticsVerbose)
 {
     if (numComponents != Base::GetStepper()->GetNumberOfVariables())
     {
@@ -60,11 +55,13 @@ G4FSALIntegrationDriver<T>::~G4FSALIntegrationDriver()
 {
 #ifdef G4VERBOSE
     if( fVerboseLevel > 0 )
+    {
        G4cout << "G4FSALIntegration Driver Stats: "
               << "#QuickAdvance " << fNoQuickAvanceCalls
               << " - #AccurateAdvance " << fNoAccurateAdvanceCalls << G4endl
               << "#good steps " << fNoAccurateAdvanceGoodSteps << " "
               << "#bad steps " << fNoAccurateAdvanceBadSteps << G4endl;
+    }
 #endif
 }
 
@@ -173,18 +170,15 @@ OneGoodStep(G4double y[],
     // Set stepsize to the initial trial value
     G4double hstep = htry;
 
-    static G4ThreadLocal G4int tot_no_trials = 0;
     const G4int max_trials = 100;
 
     for (G4int iter = 0; iter < max_trials; ++iter)
     {
-        ++tot_no_trials;
-
         Base::GetStepper()->Stepper(y, dydx, hstep, yOut, yError, dydxOut);
         error2 = field_utils::relativeError2(y, yError, hstep, eps_rel_max);
 
         // Step succeeded.
-        if (error2 <= 1)  break;
+        if (error2 <= 1) {  break; }
 
         hstep = Base::ShrinkStepSize2(hstep, error2);
     }

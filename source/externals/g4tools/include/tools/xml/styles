@@ -172,8 +172,8 @@ public:
 
   bool res_color(const style_t& a_sty,const std::string& a_key,colorf& a_color,const std::string& a_msg) const {
     //NOTE : if ret false, we do not set a_color to something.
-    std::string s;
-    if(!find(a_sty,a_key,s)) {
+    std::string _s;
+    if(!find(a_sty,a_key,_s)) {
       if(a_msg.size()) {
         m_out << "tools::xml::styles::res_color :"
               << " key " << sout(a_key) << " not found"
@@ -182,7 +182,7 @@ public:
       }
       return false;
     }
-    if(!sg::find_color(m_cmaps,s,a_color)) {
+    if(!sg::find_color(m_cmaps,_s,a_color)) {
       m_out << "tools::xml::styles::res_color :"
             << " key " << sout(a_key) << " is not a color"
             << " in style " << sout(a_msg) << "."
@@ -212,8 +212,8 @@ public:
 
   bool res_bool(const style_t& a_sty,const std::string& a_key,bool& a_v,const std::string& a_msg) const {
     //NOTE : if ret false, we do not set a_v to something.
-    std::string s;
-    if(!find(a_sty,a_key,s)) {
+    std::string _s;
+    if(!find(a_sty,a_key,_s)) {
       if(a_msg.size()) {
         m_out << "tools::xml::styles::res_bool :"
               << " key " << sout(a_key) << " not found"
@@ -223,11 +223,11 @@ public:
       return false;
     }
     bool v;
-    if(!to(s,v)) {
+    if(!to(_s,v)) {
       m_out << "tools::xml::styles::res_bool :"
             << " for key " << sout(a_key) << " not found"
             << " in style " << sout(a_msg) << "."
-            << " can't convert " << sout(s) << " to bool."
+            << " can't convert " << sout(_s) << " to bool."
             << std::endl;
       return false;
     }

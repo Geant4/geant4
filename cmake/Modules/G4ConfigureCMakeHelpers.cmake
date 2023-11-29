@@ -51,9 +51,6 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
 set(Geant4_BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
 endif()
 
-# Core compile definitions...
-set(GEANT4_CORE_DEFINITIONS )
-
 # Third party includes (libraries *should* be handled by the imports)
 set(GEANT4_THIRD_PARTY_INCLUDES )
 
@@ -188,19 +185,13 @@ configure_file(
 )
 
 configure_file(
-  ${PROJECT_SOURCE_DIR}/cmake/Modules/G4VecGeomShim.cmake
-  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
-  COPYONLY
-  )
-
-configure_file(
   ${PROJECT_SOURCE_DIR}/cmake/Modules/G4X11Shim.cmake
   ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
   COPYONLY
 )
 
 
-foreach(_mod HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
+foreach(_mod FLUKAInterface HepMC Pythia6 Pythia8 StatTest TBB XQuartzGL)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake
@@ -225,7 +216,7 @@ configure_file(
 # - Generate Install Tree Configuration Files
 #-----------------------------------------------------------------------
 # Set needed variables for the install tree
-set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})
+set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 # Header path for install tree is dependent on whether we have a relocatable
 # install.
@@ -274,7 +265,6 @@ install(FILES
   ${PROJECT_BINARY_DIR}/G4EXPATShim.cmake
   ${PROJECT_BINARY_DIR}/G4FreetypeShim.cmake
   ${PROJECT_BINARY_DIR}/G4HDF5Shim.cmake
-  ${PROJECT_BINARY_DIR}/G4VecGeomShim.cmake
   ${PROJECT_BINARY_DIR}/G4MotifShim.cmake
   ${PROJECT_BINARY_DIR}/G4X11Shim.cmake
   ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake

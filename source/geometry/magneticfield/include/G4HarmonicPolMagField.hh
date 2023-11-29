@@ -43,14 +43,14 @@
 
 class G4HarmonicPolMagField : public G4MagneticField
 {
-  public:  // with description
+  public:
                        
     G4HarmonicPolMagField();
-   ~G4HarmonicPolMagField();
+   ~G4HarmonicPolMagField() override;
      
     void GetFieldValue(const G4double yTrack[] ,
-                             G4double B[]      ) const  ;
-    G4HarmonicPolMagField* Clone() const;
+                             G4double B[]      ) const override  ;
+    G4HarmonicPolMagField* Clone() const override;
 };
 
 #endif

@@ -63,7 +63,6 @@
 #include "G4NuclearFormfactorType.hh"
 #include "G4ThreeVector.hh"
 #include "G4Pow.hh"
-#include "G4Threading.hh"
 
 class G4ParticleDefinition;
 class G4ScreeningMottCrossSection;
@@ -75,7 +74,7 @@ class G4WentzelOKandVIxSection
 
 public:
 
-  explicit G4WentzelOKandVIxSection(G4bool comb=true);
+  explicit G4WentzelOKandVIxSection(G4bool combined=true);
 
   virtual ~G4WentzelOKandVIxSection();
 
@@ -140,7 +139,10 @@ protected:
   G4double coeff;
   G4double cosTetMaxElec = 1.0;
   G4double cosTetMaxNuc = 1.0;
-  G4double cosThetaMax = -1.0;
+
+  // for the combined mode it is cos(thetaMax)
+  // for single scattering it is cos(thetaMin)
+  G4double cosThetaMax = 1.0;
 
   G4double chargeSquare = 0.0;
   G4double charge3 = 0.0;
@@ -176,11 +178,6 @@ protected:
   static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex WentzelOKandVIxSectionMutex;
-#endif
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

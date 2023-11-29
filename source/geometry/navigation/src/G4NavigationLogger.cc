@@ -41,9 +41,7 @@ G4NavigationLogger::G4NavigationLogger(const G4String& id)
 {
 }
 
-G4NavigationLogger::~G4NavigationLogger()
-{
-}
+G4NavigationLogger::~G4NavigationLogger() = default;
 
 // ********************************************************************
 // PreComputeStepLog
@@ -109,7 +107,7 @@ G4NavigationLogger::PreComputeStepLog(const G4VPhysicalVolume* motherPhysical,
   if ( fVerbose > 1 )
   {
     static const G4int precVerf = 16;  // Precision 
-    G4int oldprec = G4cout.precision(precVerf);
+    G4long oldprec = G4cout.precision(precVerf);
     G4cout << " - Information on mother / key daughters ..." << G4endl;
     G4cout << "  Type   " << std::setw(12) << "Solid-Name"   << " " 
            << std::setw(3*(6+precVerf))    << " local point" << " "
@@ -236,7 +234,7 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
     if ( fVerbose > 1 )
     {
       static const G4int precVerf= 20;  // Precision 
-      G4int oldprec = G4cout.precision(precVerf);
+      G4long oldprec = G4cout.precision(precVerf);
       G4cout << "Daughter "
              << std::setw(12)         << sampleSolid->GetName() << " "
              << std::setw(4+precVerf) << samplePoint  << " "
@@ -451,8 +449,8 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
   if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
   {
     G4String fType = fId + "::ComputeStep()";
-    G4int oldPrOut = G4cout.precision(16); 
-    G4int oldPrErr = G4cerr.precision(16);
+    G4long oldPrOut = G4cout.precision(16); 
+    G4long oldPrErr = G4cerr.precision(16);
     std::ostringstream message;
     message << "Current point is outside the current solid !" << G4endl
             << "        Problem in Navigation"  << G4endl
@@ -468,7 +466,7 @@ G4NavigationLogger::PostComputeStepLog(const G4VSolid* motherSolid,
   if ( fVerbose > 1 )
   {
     static const G4int precVerf = 20;  // Precision 
-    G4int oldprec = G4cout.precision(precVerf);
+    G4long oldprec = G4cout.precision(precVerf);
     G4cout << "  Mother " << std::setw(12) << motherSolid->GetName() << " "
            << std::setw(4+precVerf)       << localPoint   << " "
            << std::setw(4+precVerf)       << motherSafety << " "
@@ -493,12 +491,12 @@ G4NavigationLogger::ComputeSafetyLog(const G4VSolid* solid,
 {
   if( banner < 0 )
   {
-    banner = isMotherVolume;
+    banner = static_cast<G4int>(isMotherVolume);
   }
   if( fVerbose >= 1 )
   {
     G4String volumeType = isMotherVolume ? " Mother " : "Daughter";
-    if (banner)
+    if (banner != 0)
     {
       G4cout << "************** " << fId << "::ComputeSafety() ****************"
              << G4endl;
@@ -526,7 +524,7 @@ G4NavigationLogger::PrintDaughterLog (const G4VSolid* sampleSolid,
 {
   if ( fVerbose >= 1 )
   {
-    G4int oldPrec = G4cout.precision(8);
+    G4long oldPrec = G4cout.precision(8);
     G4cout << "Daughter "
            << std::setw(15) << sampleSafety << " ";
     if (withStep)  // (sampleStep != -1.0 )
@@ -663,9 +661,9 @@ G4NavigationLogger::ReportOutsideMother(const G4ThreeVector& localPoint,
                                         const G4VPhysicalVolume* physical,
                                               G4double triggerDist) const                                   
 {
-  const G4LogicalVolume* logicalVol = physical
+  const G4LogicalVolume* logicalVol = physical != nullptr
                                     ? physical->GetLogicalVolume() : nullptr;
-  const G4VSolid* solid = logicalVol
+  const G4VSolid* solid = logicalVol != nullptr
                         ? logicalVol->GetSolid() : nullptr;
 
   G4String fMethod = fId + "::ComputeStep()";
@@ -784,9 +782,9 @@ ReportVolumeAndIntersection( std::ostream& os,
                              const G4VPhysicalVolume* physical ) const 
 {
   G4String fMethod = fId + "::ComputeStep()";   
-  const G4LogicalVolume* logicalVol = physical
+  const G4LogicalVolume* logicalVol = physical != nullptr
                                     ? physical->GetLogicalVolume() : nullptr;
-  const G4VSolid* solid = logicalVol
+  const G4VSolid* solid = logicalVol != nullptr
                         ? logicalVol->GetSolid() : nullptr;
   if( solid == nullptr )
   {

@@ -34,6 +34,7 @@
 
 #include "DetConstruction.hh"
 #include "SingleParticleGun.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
 #include "FTFP_BERT.hh"
@@ -56,13 +57,13 @@ void PrintAvailable(G4int verb=1);
 int main(int argc,char** argv)
 {
 
-  // pick physics list
-  std::string physListName = "FTFP_BERT+PY8DK";
+   // pick physics list
+   std::string physListName = "FTFP_BERT+PY8DK";
 
-  for ( G4int i=1; i<argc; i=i+2 ) {
-    G4String g4argv(argv[i]);  // convert only once
-    if ( g4argv == "-p" ) physListName = argv[i+1];
-  }
+   for ( G4int i=1; i<argc; i=i+2 ) {
+      G4String g4argv(argv[i]);  // convert only once
+      if ( g4argv == "-p" ) physListName = argv[i+1];
+   }
 
    // Choose the Random engine
    //
@@ -72,12 +73,16 @@ int main(int argc,char** argv)
    //
    auto runManager =
       G4RunManagerFactory::CreateRunManager( G4RunManagerType::SerialOnly );
+
+   // NOTE: in practice, it will only work in MT mode
+   //
+   runManager->SetNumberOfThreads(5);
+
    // Set mandatory initialization classes
    //
    // Geometry
    //
    runManager->SetUserInitialization(new DetConstruction);
-   runManager->GeometryHasBeenModified();
    //
    // Physics
    //
@@ -111,14 +116,14 @@ int main(int argc,char** argv)
    runManager->SetUserInitialization(physicsList);
    //
    // Set user action classes, e.g. prim.generator (tau- gun), etc.
-   // NOTE: one can also set tau+, or B+/- - for all those particles
-   //       Geant4 native decay tables are overriden with Pythia8-bases ones
+   // NOTE: setting particle gun (prim. generator) is done in
+   //       ActionInit class (see src/ActionInitialization.cc)
    //
-   //                                               prt_name prt_mom
-   runManager->SetUserAction( new SingleParticleGun( "tau-", 25.0 ) );
+   runManager->SetUserInitialization( new ActionInitialization() );
 
    // Run initialization
    //
+   runManager->GeometryHasBeenModified();
    runManager->InitializeGeometry();
    runManager->InitializePhysics();
    runManager->Initialize();
@@ -136,14 +141,14 @@ int main(int argc,char** argv)
    // It speaks for itself ^_^
    //
    runManager->RunTermination();
+    
+   // Job termination
+   // Free the store: user actions, physics_list and detector_description are
+   //                 owned and deleted by the run manager, so they should not
+   //                 be deleted in the main() program !
+   delete runManager;
 
-  // Job termination
-  // Free the store: user actions, physics_list and detector_description are
-  //                 owned and deleted by the run manager, so they should not
-  //                 be deleted in the main() program !
-  delete runManager;
-
-  return 0;
+   return 0;
 
 }
 

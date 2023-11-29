@@ -37,7 +37,7 @@
 
 
 // THIS IS NECESSARY FOR MT MODE
-G4ThreadLocal G4Allocator<G4HumanPhantomHit>* G4HumanPhantomHitAllocator=0;
+G4ThreadLocal G4Allocator<G4HumanPhantomHit>* G4HumanPhantomHitAllocator=nullptr;
 
 G4HumanPhantomHit::G4HumanPhantomHit() {}
 

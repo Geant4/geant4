@@ -38,9 +38,10 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4PolyhedronArbitrary.hh"
 #include "HepPolyhedronProcessor.h"
 
-/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Transfer all data members to G4BooleanSolid which is responsible
 // for them. pName will be in turn sent to G4VSolid
@@ -53,7 +54,7 @@ G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
 {
 } 
 
-///////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 
 G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
@@ -65,7 +66,7 @@ G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
 {
 }
 
-//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // 
  
@@ -77,7 +78,7 @@ G4IntersectionSolid::G4IntersectionSolid( const G4String& pName,
 {
 } 
 
-//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
@@ -87,24 +88,19 @@ G4IntersectionSolid::G4IntersectionSolid( __void__& a )
 {
 }
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4IntersectionSolid::~G4IntersectionSolid()
-{
-}
+G4IntersectionSolid::~G4IntersectionSolid() = default;
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4IntersectionSolid::G4IntersectionSolid(const G4IntersectionSolid& rhs)
-  : G4BooleanSolid (rhs)
-{
-}
+G4IntersectionSolid::G4IntersectionSolid(const G4IntersectionSolid&) = default;
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
 
@@ -190,7 +186,7 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
   return out; // It exists in this slice only if both exist in it.
 }
  
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Touching ? Empty intersection ?
 
@@ -206,7 +202,7 @@ EInside G4IntersectionSolid::Inside(const G4ThreeVector& p) const
   return kSurface;                            // surface A & B
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 
 G4ThreeVector 
@@ -267,7 +263,7 @@ G4IntersectionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   return normal;
 }
 
-/////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // The same algorithm as in DistanceToIn(p)
 
@@ -301,8 +297,8 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     G4double      dB = 0., dB1=0., dB2=0.;
     G4bool        doA = true, doB = true;
 
-    static const size_t max_trials=10000;
-    for (size_t trial=0; trial<max_trials; ++trial) 
+    static const std::size_t max_trials=10000;
+    for (std::size_t trial=0; trial<max_trials; ++trial) 
     {
       if(doA) 
       {
@@ -373,7 +369,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
   return dist ;  
 }
 
-////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Approximate nearest distance from the point p to the intersection of
 // two solids
@@ -417,7 +413,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
   return dist ;
 }
 
-//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // The same algorithm as DistanceToOut(p)
 
@@ -425,8 +421,8 @@ G4double
 G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
                                     const G4ThreeVector& v,
                                     const G4bool calcNorm,
-                                          G4bool *validNorm,
-                                          G4ThreeVector *n ) const 
+                                          G4bool* validNorm,
+                                          G4ThreeVector* n ) const 
 {
   G4bool         validNormA, validNormB;
   G4ThreeVector  nA, nB;
@@ -476,7 +472,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
   return dist ; 
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Inverted algorithm of DistanceToIn(p)
 
@@ -502,24 +498,24 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
 
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // ComputeDimensions
 
 void 
 G4IntersectionSolid::ComputeDimensions( G4VPVParameterisation*,
-                                  const G4int,
+                                        const G4int,
                                         const G4VPhysicalVolume* ) 
 {
 }
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
 
 G4GeometryType G4IntersectionSolid::GetEntityType() const 
 {
-  return G4String("G4IntersectionSolid");
+  return {"G4IntersectionSolid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -531,7 +527,7 @@ G4VSolid* G4IntersectionSolid::Clone() const
   return new G4IntersectionSolid(*this);
 }
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // DescribeYourselfTo
 
@@ -541,18 +537,33 @@ G4IntersectionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
   scene.AddSolid (*this);
 }
 
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron
 
 G4Polyhedron* 
 G4IntersectionSolid::CreatePolyhedron () const 
 {
-  HepPolyhedronProcessor processor;
-  // Stack components and components of components recursively
-  // See G4BooleanSolid::StackPolyhedron
-  G4Polyhedron* top = StackPolyhedron(processor, this);
-  G4Polyhedron* result = new G4Polyhedron(*top);
-  if (processor.execute(*result)) { return result; }
-  else { return nullptr; }
+  if (fExternalBoolProcessor == nullptr)
+  {
+    HepPolyhedronProcessor processor;
+    // Stack components and components of components recursively
+    // See G4BooleanSolid::StackPolyhedron
+    G4Polyhedron* top = StackPolyhedron(processor, this);
+    auto result = new G4Polyhedron(*top);
+    if (processor.execute(*result))
+    {
+      return result;
+    }
+    else
+    {
+      return nullptr;
+    }
+  }
+  else
+  {
+    return fExternalBoolProcessor
+            ->Intersection(GetConstituentSolid(0)->GetPolyhedron(),
+                           GetConstituentSolid(1)->GetPolyhedron());
+  }
 }

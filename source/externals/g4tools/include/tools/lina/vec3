@@ -260,7 +260,7 @@ public: //operators
   bool operator==(const vec3& a_v) const {return equal(a_v);}
   bool operator!=(const vec3& a_v) const {return !operator==(a_v);}
 
-public: //for inlib/sg/sf_vec
+public: //for tools/sg/sf_vec
   typedef unsigned int size_type;
   size_type size() const {return 3;}
   const T* data() const {return m_data;}

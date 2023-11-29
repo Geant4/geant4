@@ -131,12 +131,12 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume* anEnvelope,
            << G4endl;
 
   // index of plate material
-  fMatIndex1 = foilMat->GetIndex();
+  fMatIndex1 = (G4int)foilMat->GetIndex();
   if(verboseLevel > 0)
     G4cout << "plate material = " << foilMat->GetName() << G4endl;
 
   // index of gas material
-  fMatIndex2 = gasMat->GetIndex();
+  fMatIndex2 = (G4int)gasMat->GetIndex();
   if(verboseLevel > 0)
     G4cout << "gas material = " << gasMat->GetName() << G4endl;
 
@@ -336,18 +336,14 @@ void G4VXTRenergyLoss::BuildEnergyTable()
   }
   for(iTkin = 0; iTkin < fTotBin; ++iTkin)  // Lorentz factor loop
   {
-    G4PhysicsLogVector* energyVector =
+    auto energyVector =
       new G4PhysicsLogVector(fMinEnergyTR, fMaxEnergyTR, fBinTR);
 
     fGamma =
       1.0 + (fProtonEnergyVector->GetLowEdgeEnergy(iTkin) / proton_mass_c2);
 
-    fMaxThetaTR = 25. * 2500.0 / (fGamma * fGamma);  // theta^2
-
-    if(fMaxThetaTR > fTheMaxAngle)
-      fMaxThetaTR = fTheMaxAngle;
-    else if(fMaxThetaTR < fTheMinAngle)
-      fMaxThetaTR = fTheMinAngle;
+    // if(fMaxThetaTR > fTheMaxAngle)     fMaxThetaTR = fTheMaxAngle;
+    // else if(fMaxThetaTR < fTheMinAngle)     fMaxThetaTR = fTheMinAngle;
 
     energySum = 0.0;
 
@@ -418,7 +414,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
   else
     fMaxEnergyTR = fTheMaxEnergyTR;
 
-  G4PhysicsLogVector* energyVector =
+  auto energyVector =
     new G4PhysicsLogVector(fMinEnergyTR, fMaxEnergyTR, fBinTR);
 
   G4Integrator<G4VXTRenergyLoss, G4double (G4VXTRenergyLoss::*)(G4double)>
@@ -446,7 +442,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
       fEnergy  = energyVector->GetLowEdgeEnergy(iTR);
       
      // log-vector to increase number of thin bins for small angles
-      G4PhysicsLogVector* angleVector = new G4PhysicsLogVector(fMinThetaTR, fMaxThetaTR, fBinTR);
+      auto angleVector = new G4PhysicsLogVector(fMinThetaTR, fMaxThetaTR, fBinTR);
  
       
 
@@ -556,7 +552,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
            angleSum = 0.;
   G4int iTheta, k, kMin;
 
-  G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(n);
+  auto angleVector = new G4PhysicsFreeVector(n);
 
   cofPHC = 4. * pi * hbarc;
   tmp    = (fSigma1 - fSigma2) / cofPHC / energy;
@@ -671,7 +667,7 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
       if(fMaxThetaTR < fTheMinAngle)
         fMaxThetaTR = fTheMinAngle;
     }
-    G4PhysicsLinearVector* angleVector =
+    auto angleVector =
     // G4PhysicsLogVector* angleVector =
       new G4PhysicsLinearVector(0.0, fMaxThetaTR, fBinTR);
     //  new G4PhysicsLogVector(1.e-8, fMaxThetaTR, fBinTR);
@@ -808,7 +804,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt(const G4Track& aTrack,
       directionTR.rotateUz(direction);
       directionTR.unit();
 
-      G4DynamicParticle* aPhotonTR =
+      auto aPhotonTR =
         new G4DynamicParticle(G4Gamma::Gamma(), directionTR, energyTR);
 
       // A XTR photon is set on the particle track inside the radiator
@@ -1192,7 +1188,7 @@ G4double G4VXTRenergyLoss::GetPlateCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex1]->GetNumberOfElements();
+  numberOfElements = (G4int)(*theMaterialTable)[fMatIndex1]->GetNumberOfElements();
 
   for(i = 0; i < numberOfElements; ++i)
   {
@@ -1213,7 +1209,7 @@ G4double G4VXTRenergyLoss::GetGasCompton(G4double omega)
   G4double xSection = 0., nowZ, sumZ = 0.;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfElements = (*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
+  numberOfElements = (G4int)(*theMaterialTable)[fMatIndex2]->GetNumberOfElements();
 
   for(i = 0; i < numberOfElements; ++i)
   {

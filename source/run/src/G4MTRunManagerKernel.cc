@@ -28,20 +28,24 @@
 // Author: M.Asai - July 2013
 // --------------------------------------------------------------------
 #include "G4MTRunManagerKernel.hh"
-#include "G4AutoLock.hh"
-#include "G4RegionStore.hh"
-#include "G4StateManager.hh"
 
+#include "G4AutoLock.hh"
+#include "G4DecayTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4PVParameterised.hh"
 #include "G4PVReplica.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleTableIterator.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4StateManager.hh"
 #include "G4UImanager.hh"
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserWorkerThreadInitialization.hh"
@@ -54,12 +58,6 @@
 #include "G4WorkerRunManager.hh"
 #include "G4WorkerThread.hh"
 
-#include "G4DecayTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleTableIterator.hh"
-#include "G4VDecayChannel.hh"
-
 std::vector<G4WorkerRunManager*>* G4MTRunManagerKernel::workerRMvector = nullptr;
 
 G4ThreadLocal G4WorkerThread* G4MTRunManagerKernel::wThreadContext = nullptr;
@@ -67,12 +65,11 @@ G4ThreadLocal G4WorkerThread* G4MTRunManagerKernel::wThreadContext = nullptr;
 // --------------------------------------------------------------------
 namespace
 {
-  G4Mutex workerRMMutex = G4MUTEX_INITIALIZER;
+G4Mutex workerRMMutex = G4MUTEX_INITIALIZER;
 }
 
 // --------------------------------------------------------------------
-G4MTRunManagerKernel::G4MTRunManagerKernel()
-  : G4RunManagerKernel(masterRMK)
+G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
 {
   // This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -82,12 +79,10 @@ G4MTRunManagerKernel::G4MTRunManagerKernel()
          "is set to off).";
   msg << " This type of RunManager can only be used in mult-threaded "
          "applications.";
-  G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0109",
-              FatalException, msg);
+  G4Exception("G4RunManagerKernel::G4RunManagerKernel()", "Run0109", FatalException, msg);
 #endif
   G4AutoLock l(&workerRMMutex);
-  if(workerRMvector == nullptr)
-    workerRMvector = new std::vector<G4WorkerRunManager*>;
+  if (workerRMvector == nullptr) workerRMvector = new std::vector<G4WorkerRunManager*>;
   l.unlock();
   // Set flag that a MT-type kernel has been instantiated
   G4Threading::SetMultithreadedApplication(true);
@@ -97,15 +92,12 @@ G4MTRunManagerKernel::G4MTRunManagerKernel()
 G4MTRunManagerKernel::~G4MTRunManagerKernel()
 {
   G4AutoLock l(&workerRMMutex);
-  if(workerRMvector != nullptr)
-  {
-    if(workerRMvector->size() > 0)
-    {
+  if (workerRMvector != nullptr) {
+    if (!workerRMvector->empty()) {
       G4ExceptionDescription msg;
-      msg << "G4MTRunManagerKernel is to be deleted while "
-          << workerRMvector->size() << " G4WorkerRunManager are still alive.";
-      G4Exception("G4RunManagerKernel::~G4RunManagerKernel()", "Run10035",
-                  FatalException, msg);
+      msg << "G4MTRunManagerKernel is to be deleted while " << workerRMvector->size()
+          << " G4WorkerRunManager are still alive.";
+      G4Exception("G4RunManagerKernel::~G4RunManagerKernel()", "Run10035", FatalException, msg);
     }
     delete workerRMvector;
     workerRMvector = nullptr;
@@ -139,11 +131,11 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
   // All the rest that is not invariant should be incapsulated into
   // the context (or, as for wThreadContext be G4ThreadLocal)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
-  //#ifdef G4MULTITHREADED
-  //    turnontpmalloc();
-  //#endif
+  // #ifdef G4MULTITHREADED
+  //     turnontpmalloc();
+  // #endif
   G4Threading::WorkerThreadJoinsPool();
-  wThreadContext           = context;
+  wThreadContext = context;
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
 
   //============================
@@ -166,30 +158,24 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
   // Step-1: Random number engine
   //============================
   // RNG Engine needs to be initialised by "cloning" the master one.
-  const CLHEP::HepRandomEngine* masterEngine =
-    masterRM->getMasterRandomEngine();
+  const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
   masterRM->GetUserWorkerThreadInitialization()->SetupRNGEngine(masterEngine);
 
   //============================
   // Step-2: Initialise worker thread
   //============================
-  if(masterRM->GetUserWorkerInitialization())
-  {
+  if (masterRM->GetUserWorkerInitialization() != nullptr) {
     masterRM->GetUserWorkerInitialization()->WorkerInitialize();
   }
-  if(masterRM->GetUserActionInitialization())
-  {
-    G4VSteppingVerbose* sv =
-      masterRM->GetUserActionInitialization()->InitializeSteppingVerbose();
-    if(sv != nullptr)
-    {
+  if (masterRM->GetUserActionInitialization() != nullptr) {
+    G4VSteppingVerbose* sv = masterRM->GetUserActionInitialization()->InitializeSteppingVerbose();
+    if (sv != nullptr) {
       G4VSteppingVerbose::SetInstance(sv);
     }
   }
   // Now initialise worker part of shared objects (geometry/physics)
   wThreadContext->BuildGeometryAndPhysicsVector();
-  G4WorkerRunManager* wrm =
-    masterRM->GetUserWorkerThreadInitialization()->CreateWorkerRunManager();
+  G4WorkerRunManager* wrm = masterRM->GetUserWorkerThreadInitialization()->CreateWorkerRunManager();
   wrm->SetWorkerThread(wThreadContext);
   G4AutoLock wrmm(&workerRMMutex);
   workerRMvector->push_back(wrm);
@@ -199,22 +185,18 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
   // Step-3: Setup worker run manager
   //================================
   // Set the detector and physics list to the worker thread. Share with master
-  const G4VUserDetectorConstruction* detector =
-    masterRM->GetUserDetectorConstruction();
-  wrm->G4RunManager::SetUserInitialization(
-    const_cast<G4VUserDetectorConstruction*>(detector));
+  const G4VUserDetectorConstruction* detector = masterRM->GetUserDetectorConstruction();
+  wrm->G4RunManager::SetUserInitialization(const_cast<G4VUserDetectorConstruction*>(detector));
   const G4VUserPhysicsList* physicslist = masterRM->GetUserPhysicsList();
   wrm->SetUserInitialization(const_cast<G4VUserPhysicsList*>(physicslist));
 
   //================================
   // Step-4: Initialise worker run manager
   //================================
-  if(masterRM->GetUserActionInitialization())
-  {
+  if (masterRM->GetUserActionInitialization() != nullptr) {
     masterRM->GetNonConstUserActionInitialization()->Build();
   }
-  if(masterRM->GetUserWorkerInitialization())
-  {
+  if (masterRM->GetUserWorkerInitialization() != nullptr) {
     masterRM->GetUserWorkerInitialization()->WorkerStart();
   }
   wrm->Initialize();
@@ -230,17 +212,13 @@ void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
   //===============================
   // Step-6: Terminate worker thread
   //===============================
-  if(masterRM->GetUserWorkerInitialization())
-  {
+  if (masterRM->GetUserWorkerInitialization() != nullptr) {
     masterRM->GetUserWorkerInitialization()->WorkerStop();
   }
 
   wrmm.lock();
-  for(auto itrWrm = workerRMvector->cbegin();
-           itrWrm != workerRMvector->cend(); ++itrWrm)
-  {
-    if((*itrWrm) == wrm)
-    {
+  for (auto itrWrm = workerRMvector->cbegin(); itrWrm != workerRMvector->cend(); ++itrWrm) {
+    if ((*itrWrm) == wrm) {
       workerRMvector->erase(itrWrm);
       break;
     }
@@ -262,14 +240,11 @@ void G4MTRunManagerKernel::SetUpDecayChannels()
 {
   auto pItr = G4ParticleTable::GetParticleTable()->GetIterator();
   pItr->reset();
-  while((*pItr)())
-  {
+  while ((*pItr)()) {
     G4DecayTable* dt = pItr->value()->GetDecayTable();
-    if(dt != nullptr)
-    {
+    if (dt != nullptr) {
       G4int nCh = dt->entries();
-      for(G4int i = 0; i < nCh; ++i)
-      {
+      for (G4int i = 0; i < nCh; ++i) {
         dt->GetDecayChannel(i)->GetDaughter(0);
       }
     }
@@ -280,9 +255,8 @@ void G4MTRunManagerKernel::SetUpDecayChannels()
 void G4MTRunManagerKernel::BroadcastAbortRun(G4bool softAbort)
 {
   G4AutoLock wrmm(&workerRMMutex);
-  
-  for(auto itr = workerRMvector->cbegin(); itr != workerRMvector->cend(); ++itr)
-  {
-    (*itr)->AbortRun(softAbort);
+
+  for (const auto& itr : *workerRMvector) {
+    itr->AbortRun(softAbort);
   }
 }

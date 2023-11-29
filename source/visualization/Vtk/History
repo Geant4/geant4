@@ -1,21 +1,81 @@
--------------------------------------------------------------------
+# Category visVtk History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-05-23 Gabriele Cosmo (visVtk-V11-01-09)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode>=14.1.
 
-History file for visualization/Vtk sub-category
------------------------------------------------
+## 2023-04-07 Stewart Boogert (visVtk-v11-01-08)
+- Add vtkUnstructuredGridPipeline for special mesh rendering
+
+## 2023-03-27 Ben Morgan (visVtk-V11-01-07)
+- Apply clang-tidy and clang-format fixes.
+- Remove dead code and no-ops.
+
+## 2023-03-23 Ben Morgan (visVtk-V11-01-06)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-03-22 Stewart Boogert (visVtk-V11-01-05)
+- Separate pipelines into source and include files
+- Class inheritance for pipelines G4VVtkPipeline and ability to chain pipelines
+- Separate interactive cutters, clippers.
+- 2D transparent image overlay
+- Improved geant4 commands (/vis/vtk/..)
+
+## 2023-02-14 Stewart Boogert (visVtk-V11-01-04)
+- Removed unused variables in preparation for special rendering pipeline
+
+## 2023-02-13 Stewart Boogert (visVtk-V11-01-03)
+- Refactor of VTK viewer with pipelines, geometry stores, improved 2D rendering,
+  streamlined VTK cmake components.
+
+## 2023-02-06 Ben Morgan (visVtk-V11-01-02)
+- Isolate private headers and update dependencies
+
+## 2023-02-03 Igor Semeniouk (visVtk-V11-01-01)
+- G4VtkSceneHandler.cc : text justification to given coordinate
+
+## 2023-01-30 Ben Morgan (visVtk-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2022-11-25 Gabriele Cosmo (visVtk-V11-00-07)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-14 I. Hrivnacova (visVtk-V11-00-06)
+- Replaced reinterpret_cast with static_cast where possible
+
+## 2022-10-10 Igor Semeniouk (visVtk-V11-00-05)
+- G4VtkViewer.hh : replaced sprintf by snprintf.
+
+## 2022-09-06 Ben Morgan (visVtk-V11-00-04)
+- Resolve inconsistencies in module dependencies
+
+## 2022-03-22 Ben Morgan (visVtk-V11-00-03)
+- Use geant4_module_sources to add optional sources
+- Move setting of G4VIS_USE_VTK_QT flag on G4UIcommon module to that module's
+  build script.
+
+## 2022-01-28 Ben Morgan (visVtk-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-16 John Allison (visVtk-V11-00-01)
+- `G4TVtkViewer`: Fix window location for VTKN;
+  Introduce `pixelFactor` for Apple Mac.
+- `G4VtkMessenger`: Fix typo (OpenGL -> Vtk) in message.
+
+## 2021-12-10 Ben Morgan (visVtk-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
+
 8 November 2021 - Ben Morgan (visVtk-V10-07-03)
 - Retire G4UI/G4INTY_... preprocessor symbols in toolkit build, only required
   by obsolete GNUmake system

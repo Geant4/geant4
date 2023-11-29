@@ -57,11 +57,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- : G4VUserDetectorConstruction(),
-   fAbsorberMaterial(nullptr),fWorldMaterial(nullptr),
-   fSolidWorld(nullptr),fLogicWorld(nullptr),fPhysiWorld(nullptr),
-   fSolidAbsorber(nullptr),fLogicAbsorber(nullptr),fPhysiAbsorber(nullptr),
-   fDetectorMessenger(nullptr)
 {
   // default parameter values of the calorimeter
   fAbsorberThickness = 1.*cm;

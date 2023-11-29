@@ -37,7 +37,7 @@ inline const G4String& G4Scene::GetName () const {
 }
 
 inline G4bool G4Scene::IsEmpty () const {
-  return fRunDurationModelList.size () == 0;
+  return fExtent == G4VisExtent::GetNullExtent();
 }
 
 inline const std::vector<G4Scene::Model>&

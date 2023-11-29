@@ -55,12 +55,12 @@ public:
     
 private:
 
-  PhysicsListMessenger* fMessenger; 
+  PhysicsListMessenger* fMessenger = nullptr;
 
-  G4String fEmName;
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fDecayPhysics;
-  G4VPhysicsConstructor*  fHadPhysicsList;
+  G4String fEmName = " ";
+  G4VPhysicsConstructor*  fEmPhysicsList = nullptr;
+  G4VPhysicsConstructor*  fDecayPhysics = nullptr;
+  G4VPhysicsConstructor*  fHadPhysicsList = nullptr ;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

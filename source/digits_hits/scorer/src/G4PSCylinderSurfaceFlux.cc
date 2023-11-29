@@ -61,16 +61,8 @@
 
 G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
                                                  G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fDirection(direction)
-  , EvtMap(0)
-  , weighted(true)
-  , divideByArea(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-}
+  : G4PSCylinderSurfaceFlux(name, direction, "percm2", depth) 
+{}
 
 G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
                                                  const G4String& unit,
@@ -78,7 +70,7 @@ G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
   , fDirection(direction)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
   , divideByArea(true)
 {
@@ -86,15 +78,13 @@ G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, G4int direction,
   SetUnit(unit);
 }
 
-G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux() { ; }
-
 G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4VSolid* solid      = ComputeCurrentSolid(aStep);
   assert(dynamic_cast<G4Tubs*>(solid));
 
-  G4Tubs* tubsSolid = static_cast<G4Tubs*>(solid);
+  auto  tubsSolid = static_cast<G4Tubs*>(solid);
 
   G4int dirFlag = IsSelectedSurface(aStep, tubsSolid);
 
@@ -102,7 +92,7 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   {
     if(fDirection == fFlux_InOut || dirFlag == fDirection)
     {
-      G4StepPoint* thisStep = 0;
+      G4StepPoint* thisStep = nullptr;
       if(dirFlag == fFlux_In)
       {
         thisStep = preStep;
@@ -113,7 +103,7 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       }
       else
       {
-        return FALSE;
+        return false;
       }
 
       G4TouchableHandle theTouchable = thisStep->GetTouchableHandle();
@@ -147,10 +137,10 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       G4int index = GetIndex(aStep);
       EvtMap->add(index, flux);
 
-      if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+      if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
       {
         auto filler = G4VScoreHistFiller::Instance();
-        if(!filler)
+        if(filler == nullptr)
         {
           G4Exception("G4PSCylinderSurfaceFlux::ProcessHits", "SCORER0123",
                       JustWarning,
@@ -163,17 +153,13 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
         }
       }
 
-      return TRUE;
+      return true;
     }
-    else
-    {
-      return FALSE;
-    }
+    
+    return false;
   }
-  else
-  {
-    return FALSE;
-  }
+  
+  return false;
 }
 
 G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep,
@@ -242,22 +228,17 @@ void G4PSCylinderSurfaceFlux::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSCylinderSurfaceFlux::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSCylinderSurfaceFlux::clear() { EvtMap->clear(); }
-
-void G4PSCylinderSurfaceFlux::DrawAll() { ; }
 
 void G4PSCylinderSurfaceFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer" << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, flux] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  flux  : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  flux  : " << *(flux) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }
@@ -270,7 +251,7 @@ void G4PSCylinderSurfaceFlux::SetUnit(const G4String& unit)
   }
   else
   {
-    if(unit == "")
+    if(unit.empty())
     {
       unitName  = unit;
       unitValue = 1.0;

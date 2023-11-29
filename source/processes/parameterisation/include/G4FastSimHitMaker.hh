@@ -31,6 +31,9 @@
 #include "G4Navigator.hh"
 #include "G4FastHit.hh"
 #include "G4FastTrack.hh"
+class G4Step;
+class G4StepPoint;
+class G4VProcess;
 
 /**
  * @brief Helper class for hit creation
@@ -63,6 +66,7 @@ class G4FastSimHitMaker
   {
     fWorldWithSdName = aName;
   };
+  inline void SetProcess(G4VProcess* proc) { fpProcess = proc; }
 
  private:
   /// Touchable
@@ -74,5 +78,9 @@ class G4FastSimHitMaker
   /// Name of the world containing the sensitive detector. If empty, default
   /// mass world is used.
   G4String fWorldWithSdName;
+
+  G4Step* fpSpotS;
+  G4StepPoint* fpSpotP;
+  G4VProcess* fpProcess = nullptr;
 };
 #endif

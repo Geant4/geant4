@@ -44,7 +44,7 @@ G4XTRTransparentRegRadModel::G4XTRTransparentRegRadModel(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4XTRTransparentRegRadModel::~G4XTRTransparentRegRadModel() {}
+G4XTRTransparentRegRadModel::~G4XTRTransparentRegRadModel() = default;
 
 ///////////////////////////////////////////////////////////////////////////
 void G4XTRTransparentRegRadModel::ProcessDescription(std::ostream& out) const

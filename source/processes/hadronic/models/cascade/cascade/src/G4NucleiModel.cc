@@ -819,7 +819,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     
     // Select quasideuteron interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
-      for (size_t i=0; i<qdeutrons.size(); i++) {
+      for (std::size_t i=0; i<qdeutrons.size(); i++) {
 	G4cout << " acsecs[" << qdeutrons[i].getDefinition()->GetParticleName()
 	       << "] " << acsecs[i];
       }
@@ -833,7 +833,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	G4double sl = inuclRndm() * tot_invmfp;
 	G4double as = 0.0;
 	
-	for (size_t i = 0; i < qdeutrons.size(); i++) {
+	for (std::size_t i = 0; i < qdeutrons.size(); i++) {
 	  as += acsecs[i];
 	  if (sl < as) { 
 	    if (verboseLevel > 2)
@@ -886,7 +886,7 @@ generateParticleFate(G4CascadParticle& cparticle,
     return;
   }
 
-  G4int npart = thePartners.size();	// Last item is a total-path placeholder
+  std::size_t npart = thePartners.size();	// Last item is a total-path placeholder
 
   if (npart == 1) { 		// cparticle is on the next zone entry
     if (verboseLevel > 1) 
@@ -914,7 +914,7 @@ generateParticleFate(G4CascadParticle& cparticle,
   G4bool no_interaction = true;
   G4int zone = cparticle.getCurrentZone();
   
-  for (G4int i=0; i<npart-1; i++) {	// Last item is a total-path placeholder
+  for (std::size_t i=0; i<npart-1; ++i) {	// Last item is a total-path placeholder
     if (i > 0) cparticle.updatePosition(old_position); 
     
     G4InuclElementaryParticle& target = thePartners[i].first; 
@@ -965,7 +965,7 @@ generateParticleFate(G4CascadParticle& cparticle,
     
     // NOTE:  Embedded temporary is optimized away (no copying gets done)
     G4int nextGen = cparticle.getGeneration()+1;
-    for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
+    for (std::size_t ip = 0; ip < outgoing_particles.size(); ++ip) { 
       outgoing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
 						     new_position, zone,
 						     0.0, nextGen));
@@ -1311,7 +1311,7 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
   
   // Choose random point along trajectory, weighted by density
   G4double rand = G4UniformRand();
-  G4int ir = std::upper_bound(wtlen.begin(),wtlen.end(),rand) - wtlen.begin();
+  G4long ir = std::upper_bound(wtlen.begin(),wtlen.end(),rand) - wtlen.begin();
 
   G4double frac = (rand-wtlen[ir-1]) / (wtlen[ir]-wtlen[ir-1]);
   G4double drand = (1.-frac)*len[ir-1] + frac*len[ir];

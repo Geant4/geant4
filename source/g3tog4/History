@@ -1,6 +1,36 @@
---------------------------------------------------------------------
-G3toG4 Modification History (reverse chronological order, please !)
---------------------------------------------------------------------
+# Category g3tog4 History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2022-12-12 Ben Morgan (g3tog4-V11-01-00)
+- Remove obsolete GNUmakefile scripts
+
+## 2022-11-16 Gabriele Cosmo (g3tog4-V11-00-04)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-07 Gabriele Cosmo (g3tog4-V11-00-03)
+- Fixed compilation warnings on Intel/icc compiler for deprecated conversion
+  of string literal to char* in G3EleTable.
+- Fixed compilation warning on Intel/icx compiler for variable set
+  but not used in clparse source code.
+
+## 2022-10-05 Ben Morgan (g3tog4-V11-00-02)
+- Replace sprintf with std::to_string to address macOS 13 deprecation warnings.
+
+## 2022-01-28 Ben Morgan (g3tog4-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2021-12-10 Ben Morgan (g3tog4-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 g3tog4-V10-07-04 15-November-2021 I.Hrivnacova
 - Fixed Coverity: uninitialized variable in G3EleTable.cc

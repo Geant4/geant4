@@ -29,173 +29,153 @@
 //
 // Users are requested to cite the following papers:
 // - M. Terrissol, A. Baudre, Radiat. Prot. Dosim. 31 (1990) 175-177
-// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries, 
+// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries,
 //   M. Bardies, N. Lampe, S. Incerti, Phys. Med. 32 (2016) 1833-1840
 //
-// Authors of this class: 
+// Authors of this class:
 // M.C. Bordage, M. Terrissol, S. Edel, J. Bordes, S. Incerti
 //
 // 15.01.2014: creation
 //
+// Based on the study by S. Zein et. al. Nucl. Inst. Meth. B 488 (2021) 70-82
+// 1/2/2023 : Hoang added modification for DNA cross sections
 
 #ifndef G4DNACPA100IonisationModel_h
 #define G4DNACPA100IonisationModel_h 1
 
-#include "G4VEmModel.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4ProductionCutsTable.hh"
-
+#include "G4DNACPA100IonisationStructure.hh"
 #include "G4DNACrossSectionDataSet.hh"
 #include "G4Electron.hh"
-#include "G4Proton.hh"
-
 #include "G4LogLogInterpolation.hh"
-//#include "G4DNACPA100LogLogInterpolation.hh"
-
-#include "G4DNACPA100WaterIonisationStructure.hh"
-#include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4VDNAModel.hh"
 
-
-class G4DNACPA100IonisationModel : public G4VEmModel
+class G4DNACPA100IonisationModel : public G4VDNAModel
 {
+    using TriDimensionMap =
+      std::map<std::size_t,
+               std::map<const G4ParticleDefinition*,
+                        std::map<G4int, std::map<G4double, std::map<G4double, G4double>>>>>;
+    using VecMap =
+      std::map<std::size_t,
+               std::map<const G4ParticleDefinition*, std::map<G4double, std::vector<G4double>>>>;
+    using VecMapWithShell =
+      std::map<std::size_t,
+               std::map<const G4ParticleDefinition*,
+                        std::map<G4double, std::map<G4double, std::vector<G4double>>>>>;
+    using PartKineticInMat =
+      const std::tuple<std::size_t /*Mat*/, G4double /*Energy*/, G4int /*shell*/>&;
 
-public:
+  public:
+    explicit G4DNACPA100IonisationModel(const G4ParticleDefinition* p = nullptr,
+                                        const G4String& nam = "DNACPA100IonisationModel");
 
-  G4DNACPA100IonisationModel(const G4ParticleDefinition* p = 0, 
-             const G4String& nam = "DNACPA100IonisationModel");
+    ~G4DNACPA100IonisationModel() override = default;
 
-  virtual ~G4DNACPA100IonisationModel();
+    void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()));
+    G4double CrossSectionPerVolume(const G4Material* material, const G4ParticleDefinition* p,
+                                   G4double ekin, G4double emin, G4double emax) override;
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
-     const G4ParticleDefinition* p,
-     G4double ekin,
-     G4double emin,
-     G4double emax);
+    void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+                           const G4DynamicParticle*, G4double tmin, G4double maxEnergy) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-     const G4MaterialCutsCouple*,
-     const G4DynamicParticle*,
-     G4double tmin,
-     G4double maxEnergy);
-    
-  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
+    G4double DifferentialCrossSection(PartKineticInMat info, const G4double& energyTransfer);
 
-  inline void SelectFasterComputation(G4bool input); 
+    // G4double DifferentialCrossSection(const G4double& k,
+    //                                   const G4double& energyTransfer, const G4int&
+    //                                   ionizationLevelIndex, const std::size_t& materialID);
 
-  inline void SelectUseDcs(G4bool input); 
+    inline void SelectFasterComputation(G4bool input);
 
-  inline void SelectStationary(G4bool input); 
+    inline void SelectUseDcs(G4bool input);
 
-protected:
+    inline void SelectStationary(G4bool input);
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+    G4DNACPA100IonisationModel& operator=(const G4DNACPA100IonisationModel& right) = delete;
+    G4DNACPA100IonisationModel(const G4DNACPA100IonisationModel&) = delete;
+    void ReadDiffCSFile(const std::size_t& materialID, const G4ParticleDefinition* p,
+                        const G4String& file, const G4double& scaleFactor) override;
 
-private:
+  protected:
+    G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
-  G4bool statCode;
+  private:
+    G4bool statCode = false;
+    G4bool fasterCode = true;
+    G4bool useDcs = false;
 
-  G4bool fasterCode;
-  G4bool useDcs;
+    //  const std::vector<G4double>* fpMolMaterialDensity;
 
-  // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
+    // Deexcitation manager to produce fluo photons and e-
+    G4VAtomDeexcitation* fAtomDeexcitation = nullptr;
 
-  // Deexcitation manager to produce fluo photons and e-
-  G4VAtomDeexcitation*      fAtomDeexcitation;
+    G4bool isInitialised = false;
+    G4int verboseLevel = 0;
 
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
+    G4DNACPA100IonisationStructure iStructure;
 
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
+    G4double RandomizeEjectedElectronEnergy(PartKineticInMat info);
 
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
+    G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(PartKineticInMat info);
 
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-  
-  // Final state
-  
-  G4DNACPA100WaterIonisationStructure waterStructure;
+    G4double RandomizeEjectedElectronEnergyFromanalytical(PartKineticInMat info);
 
-  G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+    G4double RandomTransferedEnergy(PartKineticInMat info);
 
-  G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+    void RandomizeEjectedElectronDirection(G4ParticleDefinition* aParticleDefinition,
+                                           G4double incomingParticleEnergy,
+                                           G4double outgoingParticleEnergy, G4double& cosTheta,
+                                           G4double& phi);
 
-  G4double RandomizeEjectedElectronEnergyFromCompositionSampling(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+    G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
 
-  G4double RandomTransferedEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
+    G4double QuadInterpolator(G4double e11, G4double e12, G4double e21, G4double e22, G4double x11,
+                              G4double x12, G4double x21, G4double x22, G4double t1, G4double t2,
+                              G4double t, G4double e);
 
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
-                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
-   
-  G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double QuadInterpolator( G4double e11, 
-        G4double e12, 
-        G4double e21, 
-        G4double e22, 
-        G4double x11,
-        G4double x12, 
-        G4double x21, 
-        G4double x22, 
-        G4double t1, 
-        G4double t2, 
-        G4double t, 
-        G4double e);
+    TriDimensionMap diffCrossSectionData, fEnergySecondaryData;
+    std::map<std::size_t, std::map<const G4ParticleDefinition*, std::vector<G4double>>>
+      fTMapWithVec;
+    VecMap fEMapWithVector;
+    VecMapWithShell fProbaShellMap;
 
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
-  
-  TriDimensionMap eDiffCrossSectionData[6];
-  TriDimensionMap eNrjTransfData[6]; // for cumulated dcs
-  
-  std::vector<G4double> eTdummyVec;
-
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
-  
-  VecMap eVecm;
-  
-  VecMap eProbaShellMap[6]; // for cumulated dcs
-  
-  // Partial cross section
-  
-  G4int RandomSelect(G4double energy,const G4String& particle );
-
-  //
-   
-  G4DNACPA100IonisationModel & operator=(const  G4DNACPA100IonisationModel &right);
-  G4DNACPA100IonisationModel(const  G4DNACPA100IonisationModel&);
-
+    const G4Material* fpGuanine = nullptr;
+    const G4Material* fpG4_WATER = nullptr;
+    const G4Material* fpDeoxyribose = nullptr;
+    const G4Material* fpCytosine = nullptr;
+    const G4Material* fpThymine = nullptr;
+    const G4Material* fpAdenine = nullptr;
+    const G4Material* fpPhosphate = nullptr;
+    const G4ParticleDefinition* fpParticle = nullptr;
+    G4DNACPA100IonisationModel* fpModelData = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4DNACPA100IonisationModel::SelectFasterComputation (G4bool input) 
-{ 
-    fasterCode = input; 
-}   
+inline void G4DNACPA100IonisationModel::SelectFasterComputation(G4bool input)
+{
+  fasterCode = input;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4DNACPA100IonisationModel::SelectUseDcs (G4bool input) 
-{ 
-    useDcs = input; 
-}   
+inline void G4DNACPA100IonisationModel::SelectUseDcs(G4bool input)
+{
+  useDcs = input;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4DNACPA100IonisationModel::SelectStationary (G4bool input)
-{ 
-    statCode = input; 
-}  
+inline void G4DNACPA100IonisationModel::SelectStationary(G4bool input)
+{
+  statCode = input;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

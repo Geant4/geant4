@@ -78,22 +78,22 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
  
   fDensity         = matCC->GetMaterial()->GetDensity();
   fElectronDensity = matCC->GetMaterial()->GetElectronDensity();
-  matIndex         = matCC->GetMaterial()->GetIndex();
+  matIndex         = (G4int)matCC->GetMaterial()->GetIndex();
 
   fSandia          = new G4SandiaTable(matIndex);
   fIntervalNumber  = fSandia->GetMaxInterval()-1;
 
   fMatSandiaMatrix = new G4OrderedTable();
  
-  for (i = 0; i < fIntervalNumber; i++)
+  for (i = 0; i < fIntervalNumber; ++i)
   {
     fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }	         	
-  for (i = 0; i < fIntervalNumber; i++)
+  for (i = 0; i < fIntervalNumber; ++i)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
 
-    for(j = 1; j < 5 ; j++)
+    for(j = 1; j < 5 ; ++j)
     {
       (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
     }     
@@ -113,12 +113,12 @@ G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
 
 G4InitXscPAI::~G4InitXscPAI()
 {
-  if(fPAIxscVector)      delete fPAIxscVector;  
-  if(fPAIdEdxVector)     delete fPAIdEdxVector;  
-  if(fPAIphotonVector)   delete fPAIphotonVector;  
-  if(fPAIelectronVector) delete fPAIelectronVector;  
-  if(fChCosSqVector)     delete fChCosSqVector;  
-  if(fChWidthVector)     delete fChWidthVector;  
+  delete fPAIxscVector;
+  delete fPAIdEdxVector;
+  delete fPAIphotonVector;
+  delete fPAIelectronVector;
+  delete fChCosSqVector;
+  delete fChWidthVector;
   delete fSandia;
   delete fMatSandiaMatrix;
 }
@@ -601,7 +601,7 @@ void G4InitXscPAI::IntegralPAIxSection(G4double bg2, G4double Tmax)
   fBetaGammaSq = bg2;
   fTmax        = Tmax;
 
-  if(fPAIxscVector) delete fPAIxscVector;  
+  delete fPAIxscVector;
   
   fPAIxscVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
   fPAIxscVector->PutValue(fPAIbin-1,result);
@@ -682,7 +682,7 @@ void G4InitXscPAI::IntegralPAIdEdx(G4double bg2, G4double Tmax)
   fBetaGammaSq = bg2;
   fTmax        = Tmax;
 
-  if(fPAIdEdxVector) delete fPAIdEdxVector;  
+  delete fPAIdEdxVector;
   
   fPAIdEdxVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
   fPAIdEdxVector->PutValue(fPAIbin-1,result);
@@ -763,9 +763,9 @@ void G4InitXscPAI::IntegralCherenkov(G4double bg2, G4double Tmax)
   fTmax        = Tmax;
   beta2        = bg2/(1+bg2);
 
-  if(fPAIphotonVector) delete fPAIphotonVector;  
-  if(fChCosSqVector)   delete fChCosSqVector;  
-  if(fChWidthVector)   delete fChWidthVector;  
+  delete fPAIphotonVector;
+  delete fChCosSqVector;
+  delete fChWidthVector;
   
   fPAIphotonVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
   fChCosSqVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
@@ -858,7 +858,7 @@ void G4InitXscPAI::IntegralPlasmon(G4double bg2, G4double Tmax)
   fBetaGammaSq = bg2;
   fTmax        = Tmax;
 
-  if(fPAIelectronVector) delete fPAIelectronVector;  
+  delete fPAIelectronVector;
   
   fPAIelectronVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
   fPAIelectronVector->PutValue(fPAIbin-1,result);

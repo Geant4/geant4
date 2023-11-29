@@ -36,112 +36,101 @@
 //
 // ************************************************************
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "GammaRayTelRunAction.hh"
-
 #include "GammaRayTelAnalysis.hh"
 
-#include <stdlib.h>
+#include <cstdlib>
+
+#include "G4ios.hh"
 #include "G4Run.hh"
+#include "G4Threading.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
-#include "G4Threading.hh"
-
-GammaRayTelRunAction::GammaRayTelRunAction() :
-  outFile(0),fileName("NULL"),fRunID(-1)
-{;}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelRunAction::~GammaRayTelRunAction()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
-{  
-  fRunID = aRun->GetRunID();
-
-  //Master mode or sequential
-  if (IsMaster())    
-    G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
-  else
-    G4cout << "### Run " << aRun->GetRunID() << " starts (worker)." << G4endl;
- 
-  // Prepare the visualization
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
-
-  // If analysis is used reset the histograms
-  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  //  analysis->BeginOfRun(aRun->GetRunID());
-  analysis->BeginOfRun();
+GammaRayTelRunAction::GammaRayTelRunAction() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
-{
-  G4cout << "End of Run " << aRun->GetRunID() << G4endl;
+GammaRayTelRunAction::~GammaRayTelRunAction() {
+}
 
-  // Close the file with the hits information
-#ifdef G4STORE_DATA
-  if (outFile)
-    {
-      G4cout << "File " << fileName << G4endl;
-      outFile->close();
-      delete outFile;
-      outFile = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelRunAction::BeginOfRunAction(const G4Run *run) {
+    fRunID = run->GetRunID();
+
+    // Master mode or sequential
+    if (IsMaster()) {
+        G4cout << "### Run " << run->GetRunID() << " starts (master)." << G4endl;
+    } else {
+        G4cout << "### Run " << run->GetRunID() << " starts (worker)." << G4endl;
     }
+
+    // Prepare the visualization
+    if (G4VVisManager::GetConcreteInstance() != nullptr) {
+        auto *userInterface = G4UImanager::GetUIpointer();
+        userInterface->ApplyCommand("/vis/scene/notifyHandlers");
+    }
+
+    // If analysis is used reset the histograms
+    auto *analysis = GammaRayTelAnalysis::getInstance();
+    // analysis->BeginOfRun(run->GetRunID());
+    analysis->BeginOfRun();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void GammaRayTelRunAction::EndOfRunAction(const G4Run *run) {
+    G4cout << "End of Run " << run->GetRunID() << G4endl;
+
+    // Close the file with the hits information
+#ifdef G4STORE_DATA
+	if (outFile != nullptr) {
+		G4cout << "File " << fileName << G4endl;
+		outFile->close();
+		delete outFile;
+		outFile = nullptr;
+	}
 #endif
 
-  // If analysis is used, print out the histograms
-  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  analysis->EndOfRun();
+    // If analysis is used, print out the histograms
+    auto *analysis = GammaRayTelAnalysis::getInstance();
+    analysis->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-std::ofstream* GammaRayTelRunAction::GetOutputFile()
-{
-  if (!outFile)
-    OpenFile();
-  return outFile;
+auto GammaRayTelRunAction::GetOutputFile() -> std::ofstream* {
+    if (outFile == nullptr) {
+        OpenFile();
+    }
+    return outFile;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void GammaRayTelRunAction::OpenFile()
-{
-  // Open the file for the tracks of this run
+
+void GammaRayTelRunAction::OpenFile() {
+    // Open the file for the tracks of this run
 #ifdef G4STORE_DATA
-  //check that we are in a worker: returns -1 in a master and -2 in sequential
-  //one file per thread is produced 
-  //Tracks_runR.N.dat, where R=run number, N=thread ID
+	// check that we are in a worker: returns -1 in a master and -2 in sequential
+	// one file per thread is produced
+	// Tracks_runR.N.dat, where R = run number, N = thread ID
     std::stringstream name;
-    if (G4Threading::G4GetThreadId() >= 0)          
-    name << "Tracks_run" << fRunID << "."
-         << G4Threading::G4GetThreadId() << ".dat";
-  else
-    name << "Tracks_run" << fRunID << "."
-         << G4Threading::G4GetThreadId() << ".dat";
 
-  if (!outFile)
-    {
-      outFile = new std::ofstream;
-      outFile->open(name.str());
-      fileName = G4String(name.str());
+    if (G4Threading::G4GetThreadId() >= 0) {
+    	name << "Tracks_run" << fRunID << "." << G4Threading::G4GetThreadId() << ".dat";
+    } else {
+    	name << "Tracks_run" << fRunID << "." << G4Threading::G4GetThreadId() << ".dat";
     }
-  G4cout << "Open file: " << fileName << G4endl;
+
+    if (outFile == nullptr) {
+		outFile = new std::ofstream;
+		outFile->open(name.str());
+		fileName = G4String(name.str());
+    }
+    G4cout << "Open file: " << fileName << G4endl;
 #endif
 }
-
-

@@ -41,18 +41,15 @@
 class G4UIdirectory : public G4UIcommand
 {
   public:
-
+    // Constructors. The argument is a full path directory which
+    // starts and ends with "/".
     G4UIdirectory(char* theCommandPath, G4bool commandsToBeBroadcasted = true);
-    G4UIdirectory(const char* theCommandPath,
-                  G4bool commandsToBeBroadcasted = true);
-      // Constructors. The argument is a full path directory which
-      // starts and ends with "/".
+    G4UIdirectory(const char* theCommandPath, G4bool commandsToBeBroadcasted = true);
 
-    void Sort(G4bool val = true)
-    { ifSort = val; }
-    G4bool IfSort() const
-    { return ifSort; }
-      // N.B. ifSort is defined in the base class G4UIcommand
+    void Sort(G4bool val = true) { ifSort = val; }
+
+    // N.B. ifSort is defined in the base class G4UIcommand
+    G4bool IfSort() const { return ifSort; }
 };
 
 #endif

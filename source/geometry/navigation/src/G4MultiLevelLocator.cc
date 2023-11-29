@@ -44,9 +44,9 @@ G4MultiLevelLocator::G4MultiLevelLocator(G4Navigator *theNavigator)
   // Initialise the array of Pointers [max_depth+1] to do this  
   
   G4ThreeVector zeroV(0.0,0.0,0.0);
-  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    ptrInterMedFT[ idepth ] = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
+    idepth = new G4FieldTrack( zeroV, zeroV, 0., 0., 0., 0.);
   }
 
   if (fCheckMode)
@@ -60,9 +60,9 @@ G4MultiLevelLocator::G4MultiLevelLocator(G4Navigator *theNavigator)
 
 G4MultiLevelLocator::~G4MultiLevelLocator()
 {
-  for ( auto idepth=0; idepth<max_depth+1; ++idepth )
+  for (auto & idepth : ptrInterMedFT)
   {
-    delete ptrInterMedFT[idepth];
+    delete idepth;
   }
 #ifdef G4DEBUG_FIELD
   ReportStatistics(); 
@@ -236,9 +236,9 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   // Final_section boolean store
   //
   G4bool fin_section_depth[max_depth];
-  for ( auto idepth=0; idepth<max_depth; ++idepth )
+  for (bool & idepth : fin_section_depth)
   {
-    fin_section_depth[idepth] = true;
+    idepth = true;
   }
   // 'SubStartPoint' is needed to calculate the length of the divided step
   //
@@ -253,21 +253,48 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
  
     do // Loop checking, 07.10.2016, J.Apostolakis
     { // REPEAT param
-
-#ifdef G4DEBUG_FIELD       
-      if( CurrentA_PointVelocity.GetCurveLength() >=
-          CurrentB_PointVelocity.GetCurveLength() )
+      G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
+      G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();
+       
+#ifdef G4DEBUG_FIELD
+      const G4double lenA = CurrentA_PointVelocity.GetCurveLength() ;
+      const G4double lenB = CurrentB_PointVelocity.GetCurveLength() ;            
+      G4double curv_lenAB = lenB - lenA;
+      G4double     distAB = (Point_B - Point_A).mag();
+      if( curv_lenAB < distAB * ( 1. - 10.*fiEpsilonStep ) )
       {
         G4cerr << "ERROR> (Start) Point A coincides with or has gone past (end) point B"           
                << "MLL: iters = " << substep_no << G4endl;
-     // G4LocatorChangeRecord::ReportVector(G4cerr, "endPointB", endChangeB );
-     // G4cerr<<"EndPoints A(start) and B(end): combined changes " << G4endl;
-        G4LocatorChangeLogger::ReportEndChanges(G4cerr, endChangeA, endChangeB);
+        G4long op=G4cerr.precision(6);
+        G4cerr << "       Difference = " << distAB - curv_lenAB
+               << " exceeds limit of relative dist (10*epsilon)= " << 10*fiEpsilonStep
+               << "  i.e. limit = " << 10 * fiEpsilonStep * distAB << G4endl;
+        G4cerr.precision(9);        
+        G4cerr << "        Len A, B = " << lenA << " " << lenB << G4endl
+               << "        Position A: " << Point_A << G4endl
+               << "        Position B: " << Point_B << G4endl;
+        G4cerr.precision(op);
+        // G4LocatorChangeRecord::ReportVector(G4cerr, "endPointB", endChangeB );
+        // G4cerr<<"EndPoints A(start) and B(end): combined changes " << G4endl;
+        if (fCheckMode)
+        {
+          G4LocatorChangeLogger::ReportEndChanges(G4cerr, endChangeA, endChangeB);
+        }
       }
 #endif    
-      G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
-      G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();
-
+      if( !validIntersectP )
+      {
+        G4ExceptionDescription errmsg;
+        errmsg << "Assertion FAILURE - invalid (stale) Interection point. Substep: "
+               << substep_no << " call: " << fNumCalls << G4endl;
+        if (fCheckMode)
+        {
+          G4LocatorChangeRecord::ReportEndChanges(errmsg, endChangeA, endChangeB );
+        }
+        G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint", "GeomNav0004",
+                    JustWarning, errmsg);
+      }
+      
       // F = a point on true AB path close to point E 
       // (the closest if possible)
       //
@@ -282,26 +309,25 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       recApproxPoint.push_back(G4LocatorChangeRecord(G4LocatorChangeRecord::kInvalidCL,
                                                   substep_no, eventCount, ApproxIntersecPointV ) );
       G4double lenIntsc= ApproxIntersecPointV.GetCurveLength();
-      G4double lenB    = CurrentB_PointVelocity.GetCurveLength();
       G4double checkVsEnd= lenB - lenIntsc;
 
       if( lenIntsc > lenB ) 
       {
-         std::ostringstream errmsg;
-         errmsg.precision(17);
-         G4double ratio    = checkVsEnd / lenB;         
-         G4double ratioTol = std::fabs(ratio) / tolerance;
-         errmsg << "Intermediate F point is past end B point" << G4endl
-                << "   l( intersection ) = " << lenIntsc << G4endl
-                << "   l( endpoint     ) = " << lenB     << G4endl;
-         errmsg.precision(8);
-         errmsg << "   l_end - l_inters  = " << checkVsEnd << G4endl
-                << "          / l_end      = " << ratio << G4endl
-                << "   ratio  / tolerance  = " << ratioTol  << G4endl;
-         if( ratioTol < 1.0 ) 
-            G4Exception(MethodName, "GeomNav0003", JustWarning, errmsg );
-         else
-            G4Exception(MethodName, "GeomNav0003", FatalException, errmsg );
+        std::ostringstream errmsg;
+        errmsg.precision(17);
+        G4double ratio    = checkVsEnd / lenB;
+        G4double ratioTol = std::fabs(ratio) / tolerance;
+        errmsg << "Intermediate F point is past end B point" << G4endl
+        << "   l( intersection ) = " << lenIntsc << G4endl
+        << "   l( endpoint     ) = " << lenB     << G4endl;
+        errmsg.precision(8);
+        errmsg << "   l_end - l_inters  = " << checkVsEnd << G4endl
+        << "          / l_end      = " << ratio << G4endl
+        << "   ratio  / tolerance  = " << ratioTol  << G4endl;
+        if( ratioTol < 1.0 )
+          G4Exception(MethodName, "GeomNav0003", JustWarning, errmsg );
+        else
+          G4Exception(MethodName, "GeomNav0003", FatalException, errmsg );
       }
 #endif
 
@@ -476,6 +502,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           }
           else  // not Intersects_FB
           {
+            validIntersectP = false;    // Intersections are now stale
             if( fin_section_depth[depth] )
             {
               // If B is the original endpoint, this means that whatever
@@ -560,11 +587,6 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
             //     [ Implementation: a counter for # of recomputations
             //       => avoids extra work]
           }
-          // else
-          //  Move forward the other points 
-          //   - or better flag it, so that they are re-computed when next used
-          //     [ Implementation: a counter for # of recomputations
-          //       => avoids extra work]
           if (fCheckMode)
           {
             ++eventCount;
@@ -575,26 +597,36 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         }
         else
         {
-          if( CurrentB_PointVelocity.GetCurveLength() < CurrentA_PointVelocity.GetCurveLength() )
+          if( CurrentB_PointVelocity.GetCurveLength()
+            < CurrentA_PointVelocity.GetCurveLength() )
+          {
             errorEndPt = 2;
+          }
         }
-        
+
         if( errorEndPt > 1 )  // errorEndPt = 1 is milder, just: len(B)=len(A)
         {
-           std::ostringstream errmsg; 
-           ReportReversedPoints(errmsg, 
-                     CurveStartPointVelocity, CurveEndPointVelocity,
-                     NewSafety, fiEpsilonStep, 
-                     CurrentA_PointVelocity, CurrentB_PointVelocity,
-                     SubStart_PointVelocity, CurrentE_Point,
-                     ApproxIntersecPointV, substep_no, substep_no_p, depth);
-           errmsg << G4endl << " * Location: " << MethodName
-                  << "- After EndIf(Intersects_AF)" << G4endl;
-           errmsg << " * Bool flags:  Recalculated = " << recalculatedB
-                  << "   Intersects_AF = " << Intersects_AF
-                  << "   Intersects_FB = " << Intersects_FB << G4endl;
-           errmsg << " * Number of calls to MLL:EIP= " << fNumCalls << G4endl;
-           G4Exception(MethodName, "GeomNav0003", FatalException, errmsg); 
+          std::ostringstream errmsg;
+
+          ReportReversedPoints(errmsg,
+                               CurveStartPointVelocity, CurveEndPointVelocity,
+                               NewSafety, fiEpsilonStep,
+                               CurrentA_PointVelocity, CurrentB_PointVelocity,
+                               SubStart_PointVelocity, CurrentE_Point,
+                               ApproxIntersecPointV, substep_no, substep_no_p, depth);
+          
+          if (fCheckMode)
+          {
+            G4LocatorChangeRecord::ReportEndChanges(errmsg, endChangeA, endChangeB );
+          }
+
+          errmsg << G4endl << " * Location: " << MethodName
+                 << "- After EndIf(Intersects_AF)" << G4endl;
+          errmsg << " * Bool flags:  Recalculated = " << recalculatedB
+                 << "   Intersects_AF = " << Intersects_AF
+                 << "   Intersects_FB = " << Intersects_FB << G4endl;
+          errmsg << " * Number of calls to MLL:EIP= " << fNumCalls << G4endl;
+          G4Exception(MethodName, "GeomNav0003", FatalException, errmsg);
         }
         if( restoredFullEndpoint )
         {
@@ -619,10 +651,12 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           G4cout << " Start:   ";
           printStatus( CurveStartPointVelocity, CurveEndPointVelocity,
                        -1.0, NewSafety, 0 );
-
-          G4cout << " ** Change records: " << G4endl;
-          G4cout <<  "endPoints  A (start) and B (end): combined changes of AB intervals" << G4endl;          
-          G4LocatorChangeRecord::ReportEndChanges(G4cout, endChangeA, endChangeB );
+          if( fCheckMode ) {
+            G4LocatorChangeRecord::ReportEndChanges(G4cout, endChangeA, endChangeB );
+          } else {
+            G4cout << " ** For more information enable 'check mode' in G4MultiLevelLocator "
+                   << "-- (it saves and can output change records) " << G4endl;
+          }
         }
         G4cout << " Point A: "; 
         printStatus( CurrentA_PointVelocity, CurrentA_PointVelocity,
@@ -637,6 +671,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
 
     } while (  ( ! found_approximate_intersection )
             && ( ! there_is_no_intersection )     
+            && validIntersectP        // New condition:  must refresh intersection !!
             && ( substep_no_p <= param_substeps) );  // UNTIL found or
                                                      // failed param substep
 
@@ -761,15 +796,11 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
         }
       } // if did_len
 
-      unsigned int levelPops = 0;
-      
       G4bool unfinished = Second_half;
       while ( unfinished && (depth>0) )  // Loop checking, 07.10.2016, JA
       {
         // Second part of curve (InterMed[depth],Intermed[depth-1])) 
         // On the depth-1 level normally we are on the 'second_half'
-
-        ++levelPops;
 
         //  Find new trial intersection point needed at start of the loop
         //
@@ -817,8 +848,11 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           }
           else
           {          
-            if( CurrentB_PointVelocity.GetCurveLength() < CurrentA_PointVelocity.GetCurveLength() )
+            if( CurrentB_PointVelocity.GetCurveLength()
+              < CurrentA_PointVelocity.GetCurveLength() )
+            {
               errorEndPt = 2;
+            }
           }
           
           if (fCheckMode)
@@ -878,7 +912,6 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
          G4cout << "MLL - WARNING Potential FAILURE: Conditions not met!"
                 << G4endl
                 << " Depth = " << depth << G4endl
-                << " Levels popped = " << levelPops
                 << " Num Substeps= " << substep_no << G4endl;
          G4cout << " Found intersection= " << found_approximate_intersection
                 << G4endl;
@@ -987,9 +1020,9 @@ void G4MultiLevelLocator::ReportFieldValue( const G4FieldTrack& locationPV,
    G4double startPoint[4] = { position.x(), position.y(), position.z(),
                               locationPV.GetLabTimeOfFlight() };
    G4double FieldVec[maxNumFieldComp]; // 24 ;
-   for (auto i=0; i<maxNumFieldComp; ++i )
+   for (double & i : FieldVec)
    {
-     FieldVec[i] = 0.0;
+     i = 0.0;
    }
    equation->GetFieldValue( startPoint, FieldVec);
    G4cout << "  B-field value (" << nameLoc << ")=   "

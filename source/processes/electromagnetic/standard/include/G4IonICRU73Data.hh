@@ -74,7 +74,8 @@ public:
 
 private:
 
-  void ReadMaterialData(const G4String& name, G4bool type);
+  void ReadMaterialData(const G4Material* mat, const G4double fact, 
+                        const G4bool type);
 
   void ReadElementData(const G4Material* mat, G4bool type);
 
@@ -89,8 +90,11 @@ private:
   G4double fEmax;
 
   std::vector<G4int> fMatIndex;
+  // projectile (3<= Z <= 80), target element (1 <= Z <= 92)
+  const G4int ZPROJMAX = 80;
+  const G4int ZTARGMAX = 92;
   std::vector<G4PhysicsLogVector*>* fMatData[81] = {nullptr};
-  G4PhysicsLogVector* fElmData[81][81] = {{nullptr}};
+  G4PhysicsLogVector* fElmData[81][93] = {{nullptr}};
   G4PhysicsFreeVector* fVector = nullptr;
 
   G4int fNmat = 0;

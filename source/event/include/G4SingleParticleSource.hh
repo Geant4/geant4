@@ -75,10 +75,10 @@ class G4SingleParticleSource : public G4VPrimaryGenerator
       // Constructor: initializes variables and instantiates the 
       // messenger and navigator classes
 
-   ~G4SingleParticleSource();
+   ~G4SingleParticleSource() override;
       // Destructor: deletes messenger and prints out run information
 
-    void GeneratePrimaryVertex(G4Event *evt);
+    void GeneratePrimaryVertex(G4Event *evt) override;
       // Generate the particles initial parameters
 
     inline G4SPSPosDistribution* GetPosDist() const { return posGenerator; }

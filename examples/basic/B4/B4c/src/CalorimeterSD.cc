@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CalorimeterSD.cc
+/// \file B4/B4c/src/CalorimeterSD.cc
 /// \brief Implementation of the B4c::CalorimeterSD class
 
 #include "CalorimeterSD.hh"
@@ -46,12 +46,6 @@ CalorimeterSD::CalorimeterSD(const G4String& name,
    fNofCells(nofCells)
 {
   collectionName.insert(hitsCollectionName);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-CalorimeterSD::~CalorimeterSD()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

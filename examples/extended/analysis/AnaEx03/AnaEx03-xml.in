@@ -1,0 +1,8 @@
+#
+# Macro file for the test of AnaEx03 example
+# with xml file type
+#
+
+/control/alias defaultFileType xml
+
+/control/execute AnaEx03.in

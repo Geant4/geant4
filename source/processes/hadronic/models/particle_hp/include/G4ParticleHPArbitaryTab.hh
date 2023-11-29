@@ -30,94 +30,89 @@
 #ifndef G4ParticleHPArbitaryTab_h
 #define G4ParticleHPArbitaryTab_h 1
 
-#include <fstream>
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
-#include "Randomize.hh"
+#include "G4InterpolationManager.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
-#include "G4InterpolationManager.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include <fstream>
 
 // we will need a List of these .... one per term.
 
 class G4ParticleHPArbitaryTab : public G4VParticleHPEDis
 {
   public:
-  G4ParticleHPArbitaryTab()
-  {
-   theDistFunc = 0;
-   nDistFunc = 0;
-  }
-  ~G4ParticleHPArbitaryTab()
-  {
-   if(theDistFunc!=0) delete [] theDistFunc;
-  }
-  
-  inline void Init(std::istream & theData)
-  {
-    G4int i;
-    theFractionalProb.Init(theData, CLHEP::eV);
-    theData >> nDistFunc; // = number of incoming n energy points
-    theDistFunc = new G4ParticleHPVector [nDistFunc];
-    theManager.Init(theData);
-    G4double currentEnergy;
-    for(i=0; i<nDistFunc; i++)
+    G4ParticleHPArbitaryTab()
     {
-      theData >> currentEnergy;
-      theDistFunc[i].SetLabel(currentEnergy*CLHEP::eV);
-      theDistFunc[i].Init(theData, CLHEP::eV);
-      theDistFunc[i].IntegrateAndNormalise();
+      theDistFunc = nullptr;
+      nDistFunc = 0;
+    }
+    ~G4ParticleHPArbitaryTab() override { delete[] theDistFunc; }
+
+    inline void Init(std::istream& theData) override
+    {
+      G4int i;
+      theFractionalProb.Init(theData, CLHEP::eV);
+      theData >> nDistFunc;  // = number of incoming n energy points
+      theDistFunc = new G4ParticleHPVector[nDistFunc];
+      theManager.Init(theData);
+      G4double currentEnergy;
+      for (i = 0; i < nDistFunc; i++) {
+        theData >> currentEnergy;
+        theDistFunc[i].SetLabel(currentEnergy * CLHEP::eV);
+        theDistFunc[i].Init(theData, CLHEP::eV);
+        theDistFunc[i].IntegrateAndNormalise();
+        //************************************************************************
+        // EMendoza:
+        // ThinOut() assumes that the data is linear-linear, what is false:
+        // theDistFunc[i].ThinOut(0.02); // @@@ optimization to be finished.
+        //************************************************************************
+      }
+
       //************************************************************************
-      //EMendoza:
-      //ThinOut() assumes that the data is linear-linear, what is false:
-      //theDistFunc[i].ThinOut(0.02); // @@@ optimization to be finished.
+      // EMendoza:
+      // Here we calculate the thresholds for the 2D sampling:
+      for (i = 0; i < nDistFunc; i++) {
+        G4int np = theDistFunc[i].GetVectorLength();
+        theLowThreshold[i] = theDistFunc[i].GetEnergy(0);
+        theHighThreshold[i] = theDistFunc[i].GetEnergy(np - 1);
+        for (G4int j = 0; j < np - 1; j++) {
+          if (theDistFunc[i].GetXsec(j + 1) > 1.e-20) {
+            theLowThreshold[i] = theDistFunc[i].GetEnergy(j);
+            break;
+          }
+        }
+        for (G4int j = 1; j < np; j++) {
+          if (theDistFunc[i].GetXsec(j - 1) > 1.e-20) {
+            theHighThreshold[i] = theDistFunc[i].GetEnergy(j);
+          }
+        }
+      }
       //************************************************************************
     }
 
-    //************************************************************************
-    //EMendoza:
-    //Here we calculate the thresholds for the 2D sampling:
-    for(i=0; i<nDistFunc; i++){
-      G4int np=theDistFunc[i].GetVectorLength();
-      theLowThreshold[i]=theDistFunc[i].GetEnergy(0);
-      theHighThreshold[i]=theDistFunc[i].GetEnergy(np-1);
-      for(G4int j=0;j<np-1;j++){
-	if(theDistFunc[i].GetXsec(j+1)>1.e-20){
-	  theLowThreshold[i]=theDistFunc[i].GetEnergy(j);
-	  break;
-	}
-      }
-      for(G4int j=1;j<np;j++){
-	if(theDistFunc[i].GetXsec(j-1)>1.e-20){
-	  theHighThreshold[i]=theDistFunc[i].GetEnergy(j);
-	}
-      }
+    inline G4double GetFractionalProbability(G4double anEnergy) override
+    {
+      return theFractionalProb.GetY(anEnergy);
     }
-     //************************************************************************
-  }
-  
-  inline G4double GetFractionalProbability(G4double anEnergy)
-  {
-    return theFractionalProb.GetY(anEnergy);
-  }
-  
-  G4double Sample(G4double anEnergy) ;
-  
+
+    G4double Sample(G4double anEnergy) override;
+
   private:
-  
-  G4ParticleHPVector theFractionalProb;
-  G4int nDistFunc;
-  G4InterpolationManager theManager; // knows the interpolation between stores
-  G4ParticleHPVector * theDistFunc; // one per incoming energy
-  G4ParticleHPVector theBuffer;
-  //************************************************************************
-  //EMendoza:
-  G4double theLowThreshold[1000];
-  G4double theHighThreshold[1000];
-  //************************************************************************
-
+    G4ParticleHPVector theFractionalProb;
+    G4int nDistFunc;
+    G4InterpolationManager theManager;  // knows the interpolation between stores
+    G4ParticleHPVector* theDistFunc;  // one per incoming energy
+    G4ParticleHPVector theBuffer;
+    //************************************************************************
+    // EMendoza:
+    G4double theLowThreshold[1000];
+    G4double theHighThreshold[1000];
+    //************************************************************************
 };
 
 #endif

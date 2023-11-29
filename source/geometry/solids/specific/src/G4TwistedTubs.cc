@@ -66,8 +66,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4double  halfzlen,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi), 
-     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fLowerEndcap(nullptr), fUpperEndcap(nullptr), fLatterTwisted(nullptr),
+     fFormerTwisted(nullptr), fInnerHype(nullptr), fOuterHype(nullptr)
 {
    if (endinnerrad < DBL_MIN)
    {
@@ -98,11 +98,11 @@ G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4int     nseg,
                                    G4double  totphi)
    : G4VSolid(pname),
-     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fLowerEndcap(nullptr), fUpperEndcap(nullptr), fLatterTwisted(nullptr),
+     fFormerTwisted(nullptr), fInnerHype(nullptr), fOuterHype(nullptr)
 {
 
-   if (!nseg)
+   if (nseg == 0)
    {
       std::ostringstream message;
       message << "Invalid number of segments." << G4endl
@@ -140,8 +140,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4double  positiveEndz,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi),
-     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fLowerEndcap(nullptr), fUpperEndcap(nullptr), fLatterTwisted(nullptr),
+     fFormerTwisted(nullptr), fInnerHype(nullptr), fOuterHype(nullptr)
 {
    if (innerrad < DBL_MIN)
    {
@@ -162,10 +162,10 @@ G4TwistedTubs::G4TwistedTubs(const G4String& pname,
                                    G4int     nseg,
                                    G4double  totphi)
    : G4VSolid(pname),
-     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fLowerEndcap(nullptr), fUpperEndcap(nullptr), fLatterTwisted(nullptr),
+     fFormerTwisted(nullptr), fInnerHype(nullptr), fOuterHype(nullptr)
 {
-   if (!nseg)
+   if (nseg == 0)
    {
       std::ostringstream message;
       message << "Invalid number of segments." << G4endl
@@ -188,11 +188,10 @@ G4TwistedTubs::G4TwistedTubs(const G4String& pname,
 //* Fake default constructor ------------------------------------------
 
 G4TwistedTubs::G4TwistedTubs( __void__& a )
-  : G4VSolid(a), fPhiTwist(0.), fInnerRadius(0.), fOuterRadius(0.), fDPhi(0.),
-    fZHalfLength(0.), fInnerStereo(0.), fOuterStereo(0.), fTanInnerStereo(0.),
-    fTanOuterStereo(0.), fKappa(0.), fInnerRadius2(0.), fOuterRadius2(0.),
-    fTanInnerStereo2(0.), fTanOuterStereo2(0.), fLowerEndcap(0), fUpperEndcap(0),
-    fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+  : G4VSolid(a),
+    fLowerEndcap(nullptr), fUpperEndcap(nullptr),
+    fLatterTwisted(nullptr), fFormerTwisted(nullptr),
+    fInnerHype(nullptr), fOuterHype(nullptr)
 {
 }
 
@@ -201,13 +200,13 @@ G4TwistedTubs::G4TwistedTubs( __void__& a )
 
 G4TwistedTubs::~G4TwistedTubs()
 {
-   if (fLowerEndcap)   { delete fLowerEndcap;   }
-   if (fUpperEndcap)   { delete fUpperEndcap;   }
-   if (fLatterTwisted) { delete fLatterTwisted; }
-   if (fFormerTwisted) { delete fFormerTwisted; }
-   if (fInnerHype)     { delete fInnerHype;     }
-   if (fOuterHype)     { delete fOuterHype;     }
-   if (fpPolyhedron)   { delete fpPolyhedron; fpPolyhedron = nullptr; }
+   delete fLowerEndcap;   
+   delete fUpperEndcap;   
+   delete fLatterTwisted; 
+   delete fFormerTwisted; 
+   delete fInnerHype;     
+   delete fOuterHype;     
+   delete fpPolyhedron; fpPolyhedron = nullptr;
 }
 
 //=====================================================================
@@ -222,8 +221,8 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fKappa(rhs.fKappa), fInnerRadius2(rhs.fInnerRadius2), 
     fOuterRadius2(rhs.fOuterRadius2), fTanInnerStereo2(rhs.fTanInnerStereo2),
     fTanOuterStereo2(rhs.fTanOuterStereo2),
-    fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
-    fInnerHype(0), fOuterHype(0),
+    fLowerEndcap(nullptr), fUpperEndcap(nullptr), fLatterTwisted(nullptr), fFormerTwisted(nullptr),
+    fInnerHype(nullptr), fOuterHype(nullptr),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
@@ -266,8 +265,8 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    fKappa= rhs.fKappa; fInnerRadius2= rhs.fInnerRadius2; 
    fOuterRadius2= rhs.fOuterRadius2; fTanInnerStereo2= rhs.fTanInnerStereo2;
    fTanOuterStereo2= rhs.fTanOuterStereo2;
-   fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= 0;
-   fInnerHype= fOuterHype= 0;
+   fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= nullptr;
+   fInnerHype= fOuterHype= nullptr;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
@@ -438,12 +437,9 @@ G4ThreeVector G4TwistedTubs::SurfaceNormal(const G4ThreeVector& p) const
    {
       return fLastNormal.vec;
    }    
-   G4ThreeVector *tmpp          =
-     const_cast<G4ThreeVector*>(&(fLastNormal.p));
-   G4ThreeVector *tmpnormal     =
-     const_cast<G4ThreeVector*>(&(fLastNormal.vec));
-   G4VTwistSurface **tmpsurface =
-     const_cast<G4VTwistSurface**>(fLastNormal.surface);
+   auto tmpp       = const_cast<G4ThreeVector*>(&(fLastNormal.p));
+   auto tmpnormal  = const_cast<G4ThreeVector*>(&(fLastNormal.vec));
+   auto tmpsurface = const_cast<G4VTwistSurface**>(fLastNormal.surface);
    tmpp->set(p.x(), p.y(), p.z());
 
    G4double      distance = kInfinity;
@@ -552,9 +548,9 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    
    G4ThreeVector xx;
    G4ThreeVector bestxx;
-   for (auto i=0; i<6; ++i)
+   for (const auto & surface : surfaces)
    {
-      G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
+      G4double tmpdistance = surface->DistanceToIn(p, v, xx);
       if (tmpdistance < distance)
       {
          distance = tmpdistance;
@@ -623,9 +619,9 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
 
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (auto i=0; i<6; ++i)
+         for (const auto & surface : surfaces)
          {
-            G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+            G4double tmpdistance = surface->DistanceTo(p, xx);
             if (tmpdistance < distance)
             {
                distance = tmpdistance;
@@ -814,9 +810,9 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
 
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (auto i=0; i<6; ++i)
+         for (const auto & surface : surfaces)
          {
-            G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+            G4double tmpdistance = surface->DistanceTo(p, xx);
             if (tmpdistance < distance)
             {
                distance = tmpdistance;
@@ -845,7 +841,7 @@ std::ostream& G4TwistedTubs::StreamInfo(std::ostream& os) const
   //
   // Stream object contents to an output stream
   //
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -887,9 +883,9 @@ G4VisExtent G4TwistedTubs::GetExtent() const
   //
   G4ThreeVector pmin,pmax;
   BoundingLimits(pmin,pmax);
-  return G4VisExtent(pmin.x(),pmax.x(),
-                     pmin.y(),pmax.y(),
-                     pmin.z(),pmax.z());
+  return { pmin.x(),pmax.x(),
+           pmin.y(),pmax.y(),
+           pmin.z(),pmax.z() };
 }
 
 //=====================================================================
@@ -909,11 +905,11 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
-  G4Polyhedron* ph = new G4Polyhedron;
+  auto ph = new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
-  G4double3* xyz = new G4double3[nnodes];  // number of nodes 
-  G4int4*  faces = new G4int4[nfaces] ;    // number of faces
+  auto xyz = new G4double3[nnodes];  // number of nodes 
+  auto faces = new G4int4[nfaces] ;  // number of faces
   fLowerEndcap->GetFacets(k,k,xyz,faces,0) ;
   fUpperEndcap->GetFacets(k,k,xyz,faces,1) ;
   fInnerHype->GetFacets(k,n,xyz,faces,2) ;
@@ -1014,7 +1010,7 @@ void G4TwistedTubs::CreateSurfaces()
 
 G4GeometryType G4TwistedTubs::GetEntityType() const
 {
-  return G4String("G4TwistedTubs");
+  return {"G4TwistedTubs"};
 }
 
 //=====================================================================
@@ -1051,11 +1047,93 @@ G4double G4TwistedTubs::GetCubicVolume()
 }
 
 //=====================================================================
+//* GetLateralArea ----------------------------------------------------
+
+G4double
+G4TwistedTubs::GetLateralArea(G4double a, G4double r, G4double z) const
+{
+  if (z == 0) return 0.;
+  G4double h = std::abs(z);
+  G4double area = h*a;
+  if (std::abs(a - r) > kCarTolerance)
+  {
+    G4double aa = a*a;
+    G4double hh = h*h;
+    G4double rr = r*r;
+    G4double cc = aa*hh/(rr - aa);
+    G4double k  = std::sqrt(aa + cc)/cc;
+    G4double kh = k*h;
+    area = 0.5*a*(h*std::sqrt(1. + kh*kh) + std::asinh(kh)/k);
+  }
+  return GetDPhi()*area;
+}
+
+//=====================================================================
+//* GetPhiCutArea -----------------------------------------------------
+
+G4double
+G4TwistedTubs::GetPhiCutArea(G4double a, G4double r, G4double z) const
+{
+  if (GetDPhi() >= CLHEP::twopi || r <= 0 || z == 0) return 0.;
+  G4double h = std::abs(z);
+  G4double area = h*a;
+  if (GetPhiTwist() > kCarTolerance)
+  {
+    G4double sinw = std::sin(0.5*GetPhiTwist())*h/GetZHalfLength();
+    G4double p = sinw*r/h;
+    G4double q = sinw*r/a;
+    G4double pp = p*p;
+    G4double qq = q*q;
+    G4double pq = p*q;
+    G4double sqroot = std::sqrt(pp + qq + 1);
+    area = (pq*sqroot +
+            0.5*p*(pp + 3.)*std::atanh(q/sqroot) +
+            0.5*q*(qq + 3.)*std::atanh(p/sqroot) +
+            std::atan(sqroot/(pq)) - CLHEP::halfpi)*h*a/(3.*pq);
+  }
+  return area;
+}
+
+//=====================================================================
 //* GetSurfaceArea ----------------------------------------------------
 
 G4double G4TwistedTubs::GetSurfaceArea()
 {
-  if (fSurfaceArea == 0.) fSurfaceArea = G4VSolid::GetSurfaceArea();
+  if (fSurfaceArea == 0.)
+  {
+    G4double dphi = GetDPhi();
+    G4double Ainn = GetInnerRadius();
+    G4double Aout = GetOuterRadius();
+    G4double Rinn0 = GetEndInnerRadius(0);
+    G4double Rout0 = GetEndOuterRadius(0);
+    G4double Rinn1 = GetEndInnerRadius(1);
+    G4double Rout1 = GetEndOuterRadius(1);
+    G4double z0 = GetEndZ(0);
+    G4double z1 = GetEndZ(1);
+
+    G4double base0 = 0.5*dphi*(Rout0*Rout0 - Rinn0*Rinn0); // lower base
+    G4double inner0 = GetLateralArea(Ainn, Rinn0, z0); // lower inner surface
+    G4double outer0 = GetLateralArea(Aout, Rout0, z0); // lower outer surface
+    G4double cut0 =                                    // lower phi cut
+      GetPhiCutArea(Aout, Rout0, z0) - GetPhiCutArea(Ainn, Rinn0, z0);
+
+    G4double base1 = base0;
+    G4double inner1 = inner0;
+    G4double outer1 = outer0;
+    G4double cut1 = cut0;
+    if (std::abs(z0) != std::abs(z1))
+    {
+      base1 = 0.5*dphi*(Rout1*Rout1 - Rinn1*Rinn1); // upper base
+      inner1 = GetLateralArea(Ainn, Rinn1, z1); // upper inner surface
+      outer1 = GetLateralArea(Aout, Rout1, z1); // upper outer surface
+      cut1 =                                    // upper phi cut
+      GetPhiCutArea(Aout, Rout1, z1) - GetPhiCutArea(Ainn, Rinn1, z1);
+    }
+    fSurfaceArea = base0 + base1 +
+      ((z0*z1 < 0) ?
+      (inner0 + inner1 + outer0 + outer1 + 2.*(cut0 + cut1)) :
+      std::abs(inner0 - inner1 + outer0 - outer1 + 2.*(cut0 - cut1)));
+  }
   return fSurfaceArea;
 }
 

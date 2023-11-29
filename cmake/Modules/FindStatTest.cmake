@@ -25,7 +25,7 @@ endif()
 #Note that the second suggested path is G4 specific...
 find_path(STATTEST_APP_DIR
 		NAMES StatTestVersion.py
-		PATHS ${STATTEST_ROOT_DIR} ${CMAKE_SOURCE_DIR}/verification/StatTest
+		PATHS ${STATTEST_ROOT_DIR} ${PROJECT_SOURCE_DIR}/verification/StatTest
 		NO_DEFAULT_PATH
     )
 

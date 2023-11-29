@@ -50,8 +50,11 @@ Run::Run(DetectorConstruction* detector)
   fDetector(detector),
   fParticle(0), fEkin(0.)
 {
-  for (G4int i=0; i<3; ++i) { fStatus[i] = 0; fTotEdep[i] = 0.; }
-  fTotEdep[1] = joule;
+  for (G4int i=0; i<3; ++i) {
+     fStatus[i] = 0; fTotEdep[i] = fEleak[i] = fEtotal[i] = 0.;
+  }
+  fTotEdep[1] = fEleak[1] = fEtotal[1] = joule;
+  
   for (G4int i=0; i<kMaxAbsor; ++i) {
     fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
   }  
@@ -129,6 +132,28 @@ void Run::AddTotEdep (G4double e)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddEleak (G4double e)        
+{
+  if (e > 0.) {
+    fEleak[0]  += e;
+    if (e < fEleak[1]) fEleak[1] = e;
+    if (e > fEleak[2]) fEleak[2] = e;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddEtotal (G4double e)        
+{
+  if (e > 0.) {
+    fEtotal[0]  += e;
+    if (e < fEtotal[1]) fEtotal[1] = e;
+    if (e > fEtotal[2]) fEtotal[2] = e;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
       
 void Run::AddTrackStatus (G4int i)    
 {
@@ -165,7 +190,19 @@ void Run::Merge(const G4Run* run)
   min = localRun->fTotEdep[1]; max = localRun->fTotEdep[2];
   if (fTotEdep[1] > min) fTotEdep[1] = min;
   if (fTotEdep[2] < max) fTotEdep[2] = max;
-
+  
+  // Eleak
+  fEleak[0] += localRun->fEleak[0];
+  min = localRun->fEleak[1]; max = localRun->fEleak[2];
+  if (fEleak[1] > min) fEleak[1] = min;
+  if (fEleak[2] < max) fEleak[2] = max;
+  
+  // Etotal
+  fEtotal[0] += localRun->fEtotal[0];
+  min = localRun->fEtotal[1]; max = localRun->fEtotal[2];
+  if (fEtotal[1] > min) fEtotal[1] = min;
+  if (fEtotal[2] < max) fEtotal[2] = max;
+    
   //map: processes count
   std::map<G4String,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
@@ -275,16 +312,34 @@ void Run::EndOfRun()
   if (nbOfAbsor > 1) {
     fTotEdep[0] /= numberOfEvent;
     G4cout 
-      << "\n Edep in all absorbers = " << G4BestUnit(fTotEdep[0],"Energy")
+      << "\n Edep in all absorb = " << G4BestUnit(fTotEdep[0],"Energy")
       << "\t(" << G4BestUnit(fTotEdep[1], "Energy")
       << "-->" << G4BestUnit(fTotEdep[2], "Energy")
       << ")" << G4endl;
   }
-
+  
+  //Eleak
+  //  
+  fEleak[0] /= numberOfEvent;
+  G4cout 
+    << " Energy leakage     = " << G4BestUnit(fEleak[0],"Energy")
+    << "\t(" << G4BestUnit(fEleak[1], "Energy")
+    << "-->" << G4BestUnit(fEleak[2], "Energy")
+    << ")" << G4endl;
+    
+  //Etotal
+  //  
+  fEtotal[0] /= numberOfEvent;
+  G4cout 
+    << " Energy total       = " << G4BestUnit(fEtotal[0],"Energy")
+    << "\t(" << G4BestUnit(fEtotal[1], "Energy")
+    << "-->" << G4BestUnit(fEtotal[2], "Energy")
+    << ")" << G4endl;
+          
   //particles count in absorbers
   //
   for (G4int k=1; k<= nbOfAbsor; k++) {
-  G4cout << "\n List of created particles (with meanLife != 0) in absorber " 
+  G4cout << "\n List of created particles in absorber " 
          << k << ":" << G4endl;
 
     std::map<G4String,ParticleData>::iterator itc;               

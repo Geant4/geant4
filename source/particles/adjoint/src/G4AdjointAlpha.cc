@@ -33,16 +33,16 @@
 // ###                           ADJOINT ALPHA                                ###
 // ######################################################################
 
-G4AdjointAlpha* G4AdjointAlpha::theInstance = 0;
+G4AdjointAlpha* G4AdjointAlpha::theInstance = nullptr;
 
 G4AdjointAlpha* G4AdjointAlpha::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance = reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance = static_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -59,7 +59,7 @@ G4AdjointAlpha* G4AdjointAlpha::Definition()
                     0,              +1,             0,
                     0,               0,             0,
             "adjoint_nucleus",               0,            +4,  1000020040,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		 false,       "static",          0,
                  0.0
                );
@@ -69,7 +69,7 @@ G4AdjointAlpha* G4AdjointAlpha::Definition()
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
-  theInstance = reinterpret_cast<G4AdjointAlpha*>(anInstance);
+  theInstance = static_cast<G4AdjointAlpha*>(anInstance);
   return theInstance;
 }
 

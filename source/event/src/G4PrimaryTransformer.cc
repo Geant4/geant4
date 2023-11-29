@@ -47,22 +47,12 @@ G4PrimaryTransformer::G4PrimaryTransformer()
   CheckUnknown();
 }
 
-G4PrimaryTransformer::~G4PrimaryTransformer()
-{
-}
-
 void G4PrimaryTransformer::CheckUnknown()
 {
   unknown = particleTable->FindParticle("unknown");
-  if(unknown != nullptr) 
-  { unknownParticleDefined = true; }
-  else
-  { unknownParticleDefined = false; }
+  unknownParticleDefined = unknown != nullptr;
   opticalphoton = particleTable->FindParticle("opticalphoton");
-  if(opticalphoton != nullptr) 
-  { opticalphotonDefined = true; }
-  else
-  { opticalphotonDefined = false; }
+  opticalphotonDefined = opticalphoton != nullptr;
 }
     
 G4TrackVector*
@@ -149,7 +139,7 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
              << G4endl;
     }
 #endif
-    G4DynamicParticle* DP = 
+    auto* DP = 
       new G4DynamicParticle(partDef,
                             primaryParticle->GetMomentumDirection(),
                             primaryParticle->GetKineticEnergy());
@@ -264,7 +254,7 @@ SetDecayProducts(G4PrimaryParticle* mother, G4DynamicParticle* motherDP)
 {
   G4PrimaryParticle* daughter = mother->GetDaughter();
   if(daughter == nullptr) return;
-  G4DecayProducts* decayProducts
+  auto* decayProducts
     = (G4DecayProducts*)(motherDP->GetPreAssignedDecayProducts() );
   if(decayProducts == nullptr)
   {
@@ -295,7 +285,7 @@ SetDecayProducts(G4PrimaryParticle* mother, G4DynamicParticle* motherDP)
                << G4endl;
       }
 #endif
-      G4DynamicParticle* DP 
+      auto* DP 
         = new G4DynamicParticle(partDef,daughter->GetMomentum());
       DP->SetPrimaryParticle(daughter);
 
@@ -341,7 +331,7 @@ SetDecayProducts(G4PrimaryParticle* mother, G4DynamicParticle* motherDP)
 void G4PrimaryTransformer::SetUnknnownParticleDefined(G4bool vl)
 {
   unknownParticleDefined = vl;
-  if(unknownParticleDefined && !unknown)
+  if(unknownParticleDefined && (unknown == nullptr))
   {
     G4cerr << "unknownParticleDefined cannot be set true because" << G4endl
            << "G4UnknownParticle is not defined in the physics list." << G4endl
@@ -353,7 +343,7 @@ void G4PrimaryTransformer::SetUnknnownParticleDefined(G4bool vl)
 G4bool G4PrimaryTransformer::CheckDynamicParticle(G4DynamicParticle* DP)
 {
   if(IsGoodForTrack(DP->GetDefinition())) return true;
-  G4DecayProducts* decayProducts
+  auto* decayProducts
     = (G4DecayProducts*)(DP->GetPreAssignedDecayProducts());
   if(decayProducts != nullptr && decayProducts->entries()>0) return true;
   G4cerr << G4endl
@@ -374,7 +364,7 @@ G4PrimaryTransformer::GetDefinition(G4PrimaryParticle* pp)
   {
     partDef = particleTable->FindParticle(pp->GetPDGcode());
   }
-  if(unknownParticleDefined && ((!partDef)||partDef->IsShortLived()))
+  if(unknownParticleDefined && ((partDef == nullptr)||partDef->IsShortLived()))
   {
     partDef = unknown;
   }
@@ -385,14 +375,14 @@ G4bool G4PrimaryTransformer::IsGoodForTrack(G4ParticleDefinition* pd)
 {
   if(pd == nullptr)
   { return false; }
-  else if(!(pd->IsShortLived()))
+  if(!(pd->IsShortLived()))
   { return true; }
   //
   // Following two lines should be removed if the user does not want to make
   // shortlived primary particle with proper decay table to be converted into
   // a track.
   //
-  else if(pd->GetDecayTable() != nullptr)
+  if(pd->GetDecayTable() != nullptr)
   { return true; }
 
   return false;

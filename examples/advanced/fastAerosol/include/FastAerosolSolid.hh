@@ -58,93 +58,94 @@
 
 class FastAerosolSolid : public G4VSolid
 {
-	public: 
-		FastAerosolSolid(const G4String& pName,
-							   FastAerosol* pCloud,
-							   G4VSolid* pDroplet,
-							   std::function<G4RotationMatrix (G4ThreeVector)> pRotation);
+public: 
+ FastAerosolSolid(const G4String& pName, FastAerosol* pCloud,
+			  G4VSolid* pDroplet,
+							std::function<G4RotationMatrix (G4ThreeVector)> pRotation);
 
-		FastAerosolSolid(const G4String& pName,
-							   FastAerosol* pCloud,
-							   G4VSolid* pDroplet);
-		~FastAerosolSolid();
+ FastAerosolSolid(const G4String& pName, FastAerosol* pCloud,
+		   G4VSolid* pDroplet);
+ ~FastAerosolSolid()=default;
 
-		// Access functions
-		inline G4double GetCubicVolume();
-		inline G4double GetSurfaceArea();
+// Access functions
+ inline G4double GetCubicVolume();
+ inline G4double GetSurfaceArea();
 
-		// Solid standard methods
-		G4bool CalculateExtent(const EAxis pAxis,
-							   const G4VoxelLimits& pVoxelLimit,
-							   const G4AffineTransform& pTransform,
-							   G4double& pmin, G4double& pmax) const;
-		EInside Inside(const G4ThreeVector& p) const;
-		G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
-		G4double DistanceToIn(const G4ThreeVector& p,
-													const G4ThreeVector& v) const;
-		G4double DistanceToIn(const G4ThreeVector& p) const;
-		G4double DistanceToOut(const G4ThreeVector& p,
-													 const G4ThreeVector& v,
-													 const G4bool calcNorm=G4bool(false),
-																 G4bool *validNorm=0,
-																 G4ThreeVector *n=0) const;
-		G4double DistanceToOut(const G4ThreeVector& p) const;
+// Solid standard methods
+ G4bool CalculateExtent(const EAxis pAxis,
+		        const G4VoxelLimits& pVoxelLimit,
+		        const G4AffineTransform& pTransform,
+		        G4double& pmin, G4double& pmax) const;
 
-		G4GeometryType GetEntityType() const;
+ EInside Inside(const G4ThreeVector& p) const;
+ 
+ G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
+ 
+ G4double DistanceToIn(const G4ThreeVector& p,
+		        const G4ThreeVector& v) const;
 
-		G4VSolid* Clone() const;
+ G4double DistanceToIn(const G4ThreeVector& p) const;
+ G4double DistanceToOut(const G4ThreeVector& p,	
+                       const G4ThreeVector& v,  
+                       const G4bool calcNorm=G4bool(false), 
+                       G4bool *validNorm=0, G4ThreeVector *n=0) const;
+		
+ G4double DistanceToOut(const G4ThreeVector& p) const;
 
-		std::ostream& StreamInfo(std::ostream& os) const;
+ G4GeometryType GetEntityType() const;
 
-		G4ThreeVector GetPointOnSurface() const;
+ G4VSolid* Clone() const;
 
-		G4Polyhedron* GetPolyhedron () const;
-		void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-		G4VisExtent GetExtent() const;
-		G4Polyhedron* CreatePolyhedron() const;
+ std::ostream& StreamInfo(std::ostream& os) const;
 
+ G4ThreeVector GetPointOnSurface() const;
 
-	public:  // without description
-	 
-		FastAerosolSolid(__void__&);
-			//
-			// Fake default constructor for usage restricted to direct object
-			// persistency for clients requiring preallocation of memory for
-			// persistifiable objects.
+ G4Polyhedron* GetPolyhedron () const;
+ void DescribeYourselfTo(G4VGraphicsScene& scene) const;
+ G4VisExtent GetExtent() const;
+ G4Polyhedron* CreatePolyhedron() const;
 
-		FastAerosolSolid(const FastAerosolSolid& rhs);
-		FastAerosolSolid& operator=(const FastAerosolSolid& rhs); 
-			// Copy constructor and assignment operator.
+public:  // without description
+ FastAerosolSolid(__void__&);
+//
+// Fake default constructor for usage restricted to direct object
+// persistency for clients requiring preallocation of memory for
+// persistifiable objects.
 
-		inline void SetStepLim(G4double newLim);
+ FastAerosolSolid(const FastAerosolSolid& rhs);
+ FastAerosolSolid& operator=(const FastAerosolSolid& rhs); 
+ // Copy constructor and assignment operator.
 
-	private:
+ inline void SetStepLim(G4double newLim);
+ 
+ private:
 
-		inline void Initialize();
-			//
-			// Reset relevant values to zero
+ inline void Initialize();
+//
+// Reset relevant values to zero
 
-		G4double fStepLim = DBL_MAX;		// Maximum step length. Allows speed up in droplet search
+ G4double fStepLim = DBL_MAX; // Maximum step length. Allows speed up in droplet search
 
-		FastAerosol* fCloud;				// FastAerosol which handles brunt of work
-		G4VSolid* fDroplet;					// Droplet shape
-		G4VSolid* fBulk;					// Aerosol bulk
+ FastAerosol* fCloud; // FastAerosol which handles brunt of work
+ G4VSolid* fDroplet; // Droplet shape
+ G4VSolid* fBulk;   // Aerosol bulk
 
-		G4double fR = 0.0;					// Droplet bounding radius
+ G4double fR = 0.0; // Droplet bounding radius
 
-		G4double fVisDx, fVisDy, fVisDz;	// Visual extent
+ G4double fVisDx, fVisDy, fVisDz; // Visual extent
 
-		G4double fCubicVolume = 0.0;		// Cubic volume of all droplets
-		G4double fSurfaceArea = 0.0;		// Surface area of all droplets
+ G4double fCubicVolume = 0.0; // Cubic volume of all droplets
+ G4double fSurfaceArea = 0.0; // Surface area of all droplets
 
-		G4double farFromCloudDist;
+ G4double farFromCloudDist;
 
-		std::function<G4RotationMatrix (G4ThreeVector)> fRotation;	// rotation function
+ std::function<G4RotationMatrix (G4ThreeVector)> fRotation;	
+ // rotation function
 
-	protected:  // without description
+ protected:  // without description
 
-		mutable G4bool fRebuildPolyhedron;
-		mutable G4Polyhedron* fpPolyhedron;
+ mutable G4bool fRebuildPolyhedron;
+ mutable G4Polyhedron* fpPolyhedron;
 };
 
 #include "FastAerosolSolid.icc"

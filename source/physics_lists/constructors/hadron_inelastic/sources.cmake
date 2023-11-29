@@ -4,6 +4,7 @@
 geant4_add_module(G4phys_ctor_hinelastic
   PUBLIC_HEADERS
     G4HadronInelasticQBBC.hh
+    G4HadronInelasticQBBC_ABLA.hh
     G4HadronPhysicsFTF_BIC.hh
     G4HadronPhysicsFTFP_BERT.hh
     G4HadronPhysicsFTFP_BERT_HP.hh
@@ -24,6 +25,7 @@ geant4_add_module(G4phys_ctor_hinelastic
     G4HadronPhysicsQGSP_BIC_AllHP.hh
   SOURCES
     G4HadronInelasticQBBC.cc
+    G4HadronInelasticQBBC_ABLA.cc
     G4HadronPhysicsFTF_BIC.cc
     G4HadronPhysicsFTFP_BERT.cc
     G4HadronPhysicsFTFP_BERT_HP.cc
@@ -57,6 +59,7 @@ geant4_module_link_libraries(G4phys_ctor_hinelastic
     G4had_string_diff
     G4had_string_frag
     G4had_theo_max
+    G4hadronic_abla
     G4hadronic_bert_cascade
     G4hadronic_binary
     G4hadronic_deex_photon_evaporation

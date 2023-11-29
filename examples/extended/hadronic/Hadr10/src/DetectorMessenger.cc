@@ -77,7 +77,7 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet ) : G4UImessen
   fUpdateCommand->SetGuidance( "Update calorimeter geometry." );
   fUpdateCommand->SetGuidance( "This command MUST be applied before \"beamOn\" " );
   fUpdateCommand->SetGuidance( "if you changed geometrical value(s)." );
-  fUpdateCommand->AvailableForStates( G4State_Idle ); 
+  fUpdateCommand->AvailableForStates( G4State_PreInit, G4State_Idle ); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

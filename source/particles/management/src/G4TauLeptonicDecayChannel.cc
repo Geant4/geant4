@@ -39,11 +39,6 @@
 #include "G4LorentzRotation.hh"
 
 
-G4TauLeptonicDecayChannel::G4TauLeptonicDecayChannel()
-  : G4VDecayChannel()
-{
-}
-
 // --------------------------------------------------------------------
 G4TauLeptonicDecayChannel::
 G4TauLeptonicDecayChannel(const G4String& theParentName, 
@@ -102,18 +97,6 @@ G4TauLeptonicDecayChannel(const G4String& theParentName,
 }
 
 // --------------------------------------------------------------------
-G4TauLeptonicDecayChannel::~G4TauLeptonicDecayChannel()
-{
-}
-
-// --------------------------------------------------------------------
-G4TauLeptonicDecayChannel::
-G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel& right)
-  : G4VDecayChannel(right)
-{
-}
-
-// --------------------------------------------------------------------
 G4TauLeptonicDecayChannel&
 G4TauLeptonicDecayChannel::operator=(const G4TauLeptonicDecayChannel& right)
 {
@@ -133,7 +116,7 @@ G4TauLeptonicDecayChannel::operator=(const G4TauLeptonicDecayChannel& right)
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 )
     {
-      if (daughters_name !=0) ClearDaughtersName();
+      if (daughters_name !=nullptr) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       // copy daughters name
       for (G4int index=0; index<numberOfDaughters; ++index)
@@ -172,10 +155,10 @@ G4DecayProducts* G4TauLeptonicDecayChannel::DecayIt(G4double)
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle(G4MT_parent, dummy, 0.0);
   // create G4Decayproducts
-  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
+  auto  products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // calculate daughter momentum
@@ -206,7 +189,7 @@ G4DecayProducts* G4TauLeptonicDecayChannel::DecayIt(G4double)
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-  G4DynamicParticle * daughterparticle 
+  auto  daughterparticle 
     = new G4DynamicParticle(G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
@@ -223,9 +206,9 @@ G4DecayProducts* G4TauLeptonicDecayChannel::DecayIt(G4double)
   G4double cosphin = std::cos(phin);
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
-  G4DynamicParticle * daughterparticle1 
+  auto  daughterparticle1 
        = new G4DynamicParticle( G4MT_daughters[1], direction1*(vmass/2.));
-  G4DynamicParticle * daughterparticle2
+  auto  daughterparticle2
        = new G4DynamicParticle( G4MT_daughters[2], direction1*(-1.0*vmass/2.));
 
   // boost to the muon rest frame

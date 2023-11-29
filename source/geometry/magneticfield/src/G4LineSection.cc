@@ -37,7 +37,7 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   fABdistanceSq = VecAtoB.mag2();  
 }
 
-G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
+G4double G4LineSection::Dist( const G4ThreeVector& OtherPnt ) const
 {
   G4double       dist_sq;  
   G4ThreeVector  VecAZ;
@@ -80,7 +80,10 @@ G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
   {
      dist_sq = (OtherPnt - EndpointA).mag2() ;   
   }  
-  if( dist_sq < 0.0 ) dist_sq = 0.0 ;
+  if( dist_sq < 0.0 )
+  {
+    dist_sq = 0.0 ;
+  }
 
   return std::sqrt(dist_sq) ;  
 }

@@ -29,10 +29,11 @@
 //      CERN Geneva Switzerland
 //
 //
-//      ------------ GammaRayTelDigi  ------
+//      ------------ GammaRayTelDigi ------
 //           by F.Longo, R.Giannitrapani & G.Santin (24 oct 2001)
 //
 // ************************************************************
+
 // This Class describe the digits 
 
 #ifndef GammaRayTelDigi_h
@@ -43,80 +44,94 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelDigi : public G4VDigi
-{
-
+class GammaRayTelDigi: public G4VDigi {
 public:
-  
-  GammaRayTelDigi();
-  ~GammaRayTelDigi();
-  GammaRayTelDigi(const GammaRayTelDigi&);
-  const GammaRayTelDigi& operator=(const GammaRayTelDigi&);
-  G4bool operator==(const GammaRayTelDigi&) const;
-  
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
-  
-  void Draw();
-  void Print();
+	explicit GammaRayTelDigi();
+
+	~GammaRayTelDigi() override;
+
+	GammaRayTelDigi(const GammaRayTelDigi&);
+
+	auto operator=(const GammaRayTelDigi& right) -> const GammaRayTelDigi&;
+
+	auto operator==(const GammaRayTelDigi &right) const -> G4bool;
+
+	inline auto operator new(size_t) -> void*;
+
+	inline auto operator delete(void *digit) -> void;
+
+	void Draw() override;
+
+	void Print() override;
+
+	inline void SetPlaneNumber(G4int value) {
+		planeNumber = value;
+	}
+
+	inline void SetPlaneType(G4int value) {
+		planeType = value;
+	}
+
+	inline void SetStripNumber(G4int value) {
+		stripNumber = value;
+	}
+
+	inline void SetDigitType(G4int value) {
+		digitType = value;
+	}
+
+	inline void SetEnergy(G4double value) {
+		energy = value;
+	}
+
+	[[nodiscard]]
+	inline auto GetPlaneNumber() const -> G4int {
+		return planeNumber;
+	}
+
+	[[nodiscard]]
+	inline auto GetPlaneType() const -> G4int {
+		return planeType;
+	}
+
+	[[nodiscard]]
+	inline auto GetStripNumber() const -> G4int {
+		return stripNumber;
+	}
+
+	[[nodiscard]]
+	inline auto GetDigitType() const -> G4int {
+		return digitType;
+	}
+
+	[[nodiscard]]
+	inline auto GetEnergy() const -> G4double {
+		return energy;
+	}
 
 private:
-  
-  G4int PlaneNumber;    //  (active detector)
-  G4int PlaneType;      // (0 or 1 for X or Y plane)
-  G4int StripNumber; // strip number
-  G4int DigiType;        // (0 == TKR, 1 == CAL, 2 == ACD)
-  G4double Energy; // only for CAL 
-  
-public:
-  
-  inline void SetPlaneNumber(G4int PlaneNum)   {PlaneNumber = PlaneNum;};
-  inline void SetPlaneType(G4int PlaneTyp)   {PlaneType = PlaneTyp;};
-  inline void SetStripNumber(G4int StripNum)  {StripNumber = StripNum;};
-  inline void SetDigiType(G4int DigiID)  {DigiType = DigiID;};
-  inline void SetEnergy(G4double Ene)  {Energy = Ene;};
+    G4int planeType{0}; // (0: X plane, 1: Y plane)
 
-  inline G4int GetPlaneNumber() {return PlaneNumber;};
-  inline G4int GetPlaneType()   {return PlaneType;};
-  inline G4int GetStripNumber() {return StripNumber;};
-  inline G4int GetDigiType() {return DigiType;};
-  inline G4double GetEnergy()  {return Energy;};
-  
+    G4int planeNumber{0}; //  (active detector)
 
+    G4int stripNumber{0}; // strip number
+
+    G4int digitType{0}; // (0: TKR, 1: CAL, 2: ACD)
+
+    G4double energy{0.}; // only for CAL
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+using GammaRayTelDigitsCollection = G4TDigiCollection<GammaRayTelDigi>;
+extern G4ThreadLocal G4Allocator<GammaRayTelDigi> *digitAllocator;
 
-typedef G4TDigiCollection<GammaRayTelDigi> GammaRayTelDigitsCollection;
-
-extern G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void* GammaRayTelDigi::operator new(size_t)
-{
-  if (!GammaRayTelDigiAllocator)
-    GammaRayTelDigiAllocator = new G4Allocator<GammaRayTelDigi>;
-  return (void*) GammaRayTelDigiAllocator->MallocSingle();
+inline auto GammaRayTelDigi::operator new(size_t) -> void* {
+	if (digitAllocator == nullptr) {
+	    digitAllocator = new G4Allocator<GammaRayTelDigi>;
+	}
+	return (void*) digitAllocator->MallocSingle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void GammaRayTelDigi::operator delete(void* aDigi)
-{
-  GammaRayTelDigiAllocator->FreeSingle((GammaRayTelDigi*) aDigi);
+inline auto GammaRayTelDigi::operator delete(void *digit) -> void {
+    digitAllocator->FreeSingle((GammaRayTelDigi*) digit);
 }
-
 #endif
-
-
-
-
-
-
-
-
-

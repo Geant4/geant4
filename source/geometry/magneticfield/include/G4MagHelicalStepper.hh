@@ -49,19 +49,19 @@
 
 class G4MagHelicalStepper : public G4MagIntegratorStepper
 {
-  public:  // with description
+  public:
 
     G4MagHelicalStepper(G4Mag_EqRhs *EqRhs);
-    virtual ~G4MagHelicalStepper();
+   ~G4MagHelicalStepper() override;
   
     G4MagHelicalStepper(const G4MagHelicalStepper&) = delete;
     G4MagHelicalStepper& operator=(const G4MagHelicalStepper&) = delete;
  
-    virtual void Stepper( const G4double y[], // VIRTUAL for ExactHelix
-                          const G4double dydx[],
-                                G4double h,
-                                G4double yout[],
-                                G4double yerr[] );
+    void Stepper( const G4double y[], // VIRTUAL for ExactHelix
+                  const G4double dydx[],
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[] ) override;
       // The stepper for the Runge Kutta integration.
       // The stepsize is fixed, equal to h.
       // Integrates ODE starting values y[0 to 6]
@@ -73,10 +73,10 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
                                      G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
   
-    G4double DistChord()const ;
+    G4double DistChord()const override ;
       // Estimate maximum distance of curved solution and chord ... 
 
-  protected:  // with description
+  protected:
 
     inline void LinearStep( const G4double yIn[],
                                   G4double h,
@@ -84,9 +84,9 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
       // A linear Step in regions without magnetic field.
 
     void AdvanceHelix( const G4double yIn[],
-                             G4ThreeVector Bfld,
+                       const G4ThreeVector& Bfld,
                              G4double h,
-                             G4double yHelix[], G4double yHelix2[] = 0);
+                             G4double yHelix[], G4double yHelix2[] = nullptr);
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );

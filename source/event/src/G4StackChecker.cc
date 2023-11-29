@@ -33,13 +33,6 @@
 #include "G4Event.hh"
 #include "G4ios.hh"
 
-G4StackChecker::G4StackChecker()
-  : nullDirection(G4ThreeVector(0.0,0.0,0.0))
-{}
-
-G4StackChecker::~G4StackChecker()
-{}
-
 G4ClassificationOfNewTrack
 G4StackChecker::ClassifyNewTrack(const G4Track* track)
 {
@@ -66,9 +59,3 @@ G4StackChecker::ClassifyNewTrack(const G4Track* track)
   }
   return result;
 }
-
-void G4StackChecker::NewStage()
-{}
-
-void G4StackChecker::PrepareNewEvent()
-{}

@@ -39,7 +39,7 @@
 class G4HumanPhantomRunAction : public G4UserRunAction
 {
   public:
-    G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis);
+    explicit G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis);
    ~G4HumanPhantomRunAction();
 
   public:
@@ -48,12 +48,10 @@ class G4HumanPhantomRunAction : public G4UserRunAction
     void Fill(G4String bodypartName, G4double energyDeposit);
 private:
     void totalRunEnergyDeposit();
-    std::map<std::string,G4double> energyTotal;
-    G4String bodypartName;
+    std::map<std::string,G4double> fEnergyTotal;
+    G4String fBodypartName;
 
-#ifdef ANALYSIS_USE
-    G4HumanPhantomAnalysisManager* analysisMan;
-#endif
+    G4HumanPhantomAnalysisManager* fAnalysisMan;
 };
 #endif
 

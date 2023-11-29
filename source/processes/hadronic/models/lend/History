@@ -1,32 +1,49 @@
-# -----------------------------------------------------------
+# Category hadr-lend History
 
-          ==================================================
-          Geant4 - an Object-Oriented Toolkit for Simulation
-          ==================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for LEND Cross Section and Model
-            ---------------------------------------------
+-------------------------------------------------------------------------------
+## 2023-04-06 Dennis Wright (hadr-lend-V11-01-01)
+- Fix coverity bug 104071: G4LENDGammaCrossSection::SelectChannel may return 
+  negative atrray index.  Same for G4LENDGammaCombinedCrossSection::SelectChannel.
+  Initialize iChannel to positive number.
+  
+## 2023-02-06 Gabriele Cosmo (hadr-lend-V11-01-00)
+- Fixed potential uninitialised variables in MCGIDI_energy_parseMadlandNixFromTOM().
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-11-26 Gabriele Cosmo (hadr-lend-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-10-12 Gabriele Cosmo (hadr-lend-V11-00-06)
+- Replaced use of sprintf() with snprintf(), to fix deprecation compilation
+  warnings on macOS-13 SDK.
 
-26 April 2022 Alberto Ribon (hard-lend-V10-07-03)
--------------------------------------------------
+## 2022-09-22 Ben Morgan (hadr-lend-V11-00-05)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
+## 2022-05-23 Gabriele Cosmo (hadr-lend-V11-00-04)
+- Fixed potential use of pointer after free in nf_utilities/nfu_realloc(..)
+  function.
+
+## 2022-04-26 Alberto Ribon (hard-lend-V11-00-03)
 - MCGIDI_energy.cc : fixed compilation warnings for 'may be used uninitialized'
   variables.
 
-20 April 2022 Alberto Ribon
----------------------------
+## 2022-04-20 Alberto Ribon (hadr-lend-V11-00-02)
 - MCGIDI_energy.cc, ptwXY_methods.cc, ptwXY_misc.cc : fixed compilation
   warnings for 'may be used uninitialized' variables.
 
-9 February 2022 Gabriele Cosmo
-------------------------------
+## 2022-02-09 Gabriele Cosmo (hadr-lend-V11-00-01)
 - Fixed compilation warning on Intel compilers for unused variable.
+
+## 2021-12-10 Ben Morgan (hadr-lend-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 4 August 2021 Alberto Ribon (hadr-lend-V10-07-02)
 -------------------------------------------------

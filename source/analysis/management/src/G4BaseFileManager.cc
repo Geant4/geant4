@@ -79,7 +79,7 @@ G4String G4BaseFileManager::GetFullFileName(const G4String& baseFileName,
 
   // Add (back if it was present or is defined) file extension
   auto extension = G4Analysis::GetExtension(fileName, GetFileType());
-  if ( extension.size() ) {
+  if (extension.size() != 0u) {
     name.append(".");
     name.append(extension);
   }
@@ -95,15 +95,33 @@ G4String G4BaseFileManager::GetHnFileName(const G4String& hnType,
 }
 
 //_____________________________________________________________________________
-G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const
+G4String  G4BaseFileManager::GetHnFileName(const G4String& fileName,
+                                           G4int cycle) const
 {
-  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleName);
+  // Do nothing if cycle is supported by the output type
+  if (HasCycles()) return fileName;
+
+  return G4Analysis::GetHnFileName(fileName, GetFileType(), cycle);
 }
 
 //_____________________________________________________________________________
-G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const
+G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName,
+                                              G4int cycle) const
 {
-  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleFileNumber);
+  // Do not pass cycle if supported by the output type
+  auto cycleToPass = (HasCycles()) ? 0 : cycle;
+
+  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleName, cycleToPass);
+}
+
+//_____________________________________________________________________________
+G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber,
+                                              G4int cycle) const
+{
+  // Do not pass cycle if supported by the output type
+  auto cycleToPass = (HasCycles()) ? 0 : cycle;
+
+  return G4Analysis::GetNtupleFileName(fFileName, GetFileType(), ntupleFileNumber, cycleToPass);
 }
 
 //_____________________________________________________________________________

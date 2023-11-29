@@ -37,33 +37,33 @@
 
 #include "G4coutDestination.hh"
 #include "globals.hh"
+
 #include "icomsdefs.hh"
 
 class G4UIsession : public G4coutDestination
 {
   public:
-
     G4UIsession();
     G4UIsession(G4int iBatch);
-    virtual ~G4UIsession();
+    ~G4UIsession() override;
 
+    // This method will be invoked by main().
+    // Optionally, it can be invoked by another session
     virtual G4UIsession* SessionStart();
-      // This method will be invoked by main().
-      // Optionally, it can be invoked by another session
 
+    // This method will be invoked by G4UImanager
+    // when the kernel comes to Pause state
     virtual void PauseSessionStart(const G4String& Prompt);
-      // This method will be invoked by G4UImanager
-      // when the kernel comes to Pause state
 
-    virtual G4int ReceiveG4cout(const G4String& coutString);
-    virtual G4int ReceiveG4cerr(const G4String& cerrString);
-      // These two methods will be invoked by G4strstreambuf
+    // These methods will be invoked by G4strstreambuf
+    G4int ReceiveG4debug(const G4String& debugString) override;
+    G4int ReceiveG4cout(const G4String& coutString) override;
+    G4int ReceiveG4cerr(const G4String& cerrString) override;
 
     static G4int InSession();
     inline G4int GetLastReturnCode() const { return lastRC; }
 
   protected:
-
     G4ICOMS_DLL static G4int inSession;
     G4int ifBatch = 0;
     G4int lastRC = 0;

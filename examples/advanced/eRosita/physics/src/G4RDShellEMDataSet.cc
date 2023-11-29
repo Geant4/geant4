@@ -266,7 +266,7 @@ void G4RDShellEMDataSet::CleanUpComponents(void)
 
 G4String G4RDShellEMDataSet::FullFileName(const G4String& fileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     G4Exception("G4RDShellEMDataSet::FullFileName()", "InvalidSetup",
                 FatalException, "G4LEDATA environment variable not set!");

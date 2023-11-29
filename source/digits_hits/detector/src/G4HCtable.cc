@@ -27,51 +27,39 @@
 //
 
 #include "G4HCtable.hh"
+
 #include "G4VSensitiveDetector.hh"
-
-G4HCtable::G4HCtable() { ; }
-
-G4HCtable::~G4HCtable() { ; }
 
 G4int G4HCtable::Registor(G4String SDname, G4String HCname)
 {
-  for(size_t i = 0; i < HClist.size(); i++)
-  {
-    if(HClist[i] == HCname && SDlist[i] == SDname)
-      return -1;
+  for (std::size_t i = 0; i < HClist.size(); ++i) {
+    if (HClist[i] == HCname && SDlist[i] == SDname) return -1;
   }
   HClist.push_back(HCname);
   SDlist.push_back(SDname);
-  return HClist.size();
+  return (G4int)HClist.size();
 }
 
 G4int G4HCtable::GetCollectionID(G4String HCname) const
 {
   G4int i = -1;
-  if(HCname.find("/") == std::string::npos)  // HCname only
+  if (HCname.find('/') == std::string::npos)  // HCname only
   {
-    for(size_t j = 0; j < HClist.size(); j++)
-    {
-      if(HClist[j] == HCname)
-      {
-        if(i >= 0)
-          return -2;
-        i = j;
+    for (std::size_t j = 0; j < HClist.size(); ++j) {
+      if (HClist[j] == HCname) {
+        if (i >= 0) return -2;
+        i = (G4int)j;
       }
     }
   }
-  else
-  {
-    for(size_t j = 0; j < HClist.size(); j++)
-    {
+  else {
+    for (std::size_t j = 0; j < HClist.size(); ++j) {
       G4String tgt = SDlist[j];
       tgt += "/";
       tgt += HClist[j];
-      if(tgt == HCname)
-      {
-        if(i >= 0)
-          return -2;
-        i = j;
+      if (tgt == HCname) {
+        if (i >= 0) return -2;
+        i = (G4int)j;
       }
     }
   }
@@ -80,28 +68,23 @@ G4int G4HCtable::GetCollectionID(G4String HCname) const
 
 G4int G4HCtable::GetCollectionID(G4VSensitiveDetector* aSD) const
 {
-  if(aSD->GetNumberOfCollections() < 1)
-  {
+  if (aSD->GetNumberOfCollections() < 1) {
     G4cerr << "Sensitive detector <" << aSD->GetName()
            << "> does not have a registered hits collection." << G4endl;
     return -1;
   }
-  if(aSD->GetNumberOfCollections() > 1)
-  {
+  if (aSD->GetNumberOfCollections() > 1) {
     G4cerr << "Sensitive detector <" << aSD->GetName()
            << "> has more than one registered hits collections." << G4endl;
     G4cerr << "Candidates are : ";
-    for(G4int j = 0; j < aSD->GetNumberOfCollections(); j++)
-    {
+    for (G4int j = 0; j < aSD->GetNumberOfCollections(); ++j) {
       G4cerr << aSD->GetCollectionName(j) << " ";
     }
     G4cerr << G4endl;
     return -1;
   }
-  for(size_t k = 0; k < SDlist.size(); k++)
-  {
-    if(SDlist[k] == aSD->GetName())
-      return k;
+  for (std::size_t k = 0; k < SDlist.size(); ++k) {
+    if (SDlist[k] == aSD->GetName()) return (G4int)k;
   }
   return -1;
 }

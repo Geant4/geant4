@@ -102,7 +102,7 @@ G4bool G4AccumulableManager::RegisterAccumulable(G4VAccumulable* accumulable)
   if ( ! CheckName(name, "RegisterAccumulable") ) return false;
 
   // generate name if empty
-  if ( ! name.length() ) {
+  if (name.length() == 0u) {
     name =  GenerateName();
     accumulable->fName = name;
   }
@@ -154,10 +154,10 @@ void G4AccumulableManager::Merge()
 {
   // Do nothing if  there are no accumulables registered
   // or if master thread
-  if ( (! fVector.size()) ||  (! G4Threading::IsWorkerThread()) ) return;
+  if ((fVector.size() == 0u) || (! G4Threading::IsWorkerThread())) return;
 
   // The manager on mastter must exist
-  if ( ! fgMasterInstance ) {
+  if (fgMasterInstance == nullptr) {
     G4ExceptionDescription description;
     description
       << "No master G4AccumulableManager instance exists." << G4endl

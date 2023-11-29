@@ -35,21 +35,16 @@ G4Field::G4Field( G4bool gravityOn )
 {
 }
  
-G4Field::~G4Field()
-{
-}
+G4Field::~G4Field() = default;
 
 G4Field& G4Field::operator = (const G4Field& p)
 {
-   if (&p == this) return *this;
+   if (&p == this) { return *this; }
    fGravityActive= p.fGravityActive;
    return *this;
 }
 
-G4Field::G4Field (const G4Field &p)
-  : fGravityActive(p.fGravityActive)
-{
-}
+G4Field::G4Field (const G4Field &p) = default;
 
 G4Field* G4Field::Clone() const
 {

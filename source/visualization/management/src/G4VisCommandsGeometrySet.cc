@@ -36,6 +36,8 @@
 
 #include <sstream>
 
+#define G4warn G4cout
+
 void G4VVisCommandGeometrySet::Set
 (G4String requestedName,
  const G4VVisCommandGeometrySetFunction& setFunction,
@@ -44,7 +46,7 @@ void G4VVisCommandGeometrySet::Set
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4LogicalVolumeStore* pLVStore = G4LogicalVolumeStore::GetInstance();
   G4bool found = false;
-  for (size_t iLV = 0; iLV < pLVStore->size(); iLV++ ) {
+  for (std::size_t iLV = 0; iLV < pLVStore->size(); ++iLV ) {
     G4LogicalVolume* pLV = (*pLVStore)[iLV];
     const G4String& logVolName = pLV->GetName();
     if (logVolName == requestedName) found = true;
@@ -54,7 +56,7 @@ void G4VVisCommandGeometrySet::Set
   }
   if (requestedName != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Logical volume \"" << requestedName
+      G4warn << "ERROR: Logical volume \"" << requestedName
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;
@@ -102,7 +104,7 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
 	   << G4endl;
   }
   if (requestedDepth < 0 || depth < requestedDepth) {
-    G4int nDaughters = pLV->GetNoDaughters();
+    G4int nDaughters = (G4int)pLV->GetNoDaughters();
     for (G4int i = 0; i < nDaughters; ++i) {
       SetLVVisAtts(pLV->GetDaughter(i)->GetLogicalVolume(),
 		   setFunction, ++depth, requestedDepth);
@@ -218,7 +220,7 @@ void G4VisCommandGeometrySetDaughtersInvisible::SetNewValue
   if (requestedDepth !=0) {
     requestedDepth = 0;
     if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-      G4cout << "Recursive application suppressed for this attribute."
+      G4warn << "Recursive application suppressed for this attribute."
 	     << G4endl;
     }
   }
@@ -232,7 +234,7 @@ void G4VisCommandGeometrySetDaughtersInvisible::SetNewValue
     const G4ViewParameters& viewParams = pViewer->GetViewParameters();
     if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
       if (!viewParams.IsCulling()) {
-	G4cout <<
+	G4warn <<
 	  "Culling must be on - \"/vis/viewer/set/culling global true\" - to see effect."
 	       << G4endl;
       }
@@ -658,7 +660,7 @@ void G4VisCommandGeometrySetVisibility::SetNewValue
     if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
       if (!viewParams.IsCulling() ||
 	  !viewParams.IsCullingInvisible()) {
-	G4cout <<
+	G4warn <<
 	  "Culling must be on - \"/vis/viewer/set/culling global true\" and"
 	  "\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
 	       << G4endl;
@@ -681,7 +683,7 @@ void G4VisCommandGeometrySetVisibility::SetNewValueOnLV
     if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
       if (!viewParams.IsCulling() ||
 	  !viewParams.IsCullingInvisible()) {
-	G4cout <<
+	G4warn <<
 	  "Culling must be on - \"/vis/viewer/set/culling global true\" and"
 	  "\n  \"/vis/viewer/set/culling invisible true\" - to see effect."
 	       << G4endl;

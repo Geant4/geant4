@@ -1213,7 +1213,7 @@ G4bool G4SPSPosDistribution::IsSourceConfined(G4ThreeVector& pos)
 {
   // Method to check point is within the volume specified
 
-  if(Confine == false)
+  if(!Confine)
   {
     G4cout << "Error: Confine is false" << G4endl;
   }
@@ -1237,10 +1237,9 @@ G4bool G4SPSPosDistribution::IsSourceConfined(G4ThreeVector& pos)
     }
     return true;
   }
-  else
-  {
-    return false;
-  }
+  
+  return false;
+ 
 }
 
 G4ThreeVector G4SPSPosDistribution::GenerateOne()
@@ -1248,7 +1247,7 @@ G4ThreeVector G4SPSPosDistribution::GenerateOne()
   G4ThreeVector localP;
   G4bool srcconf = false;
   G4int LoopCount = 0;
-  while(srcconf == false)
+  while(!srcconf)
   {
     if(SourcePosType == "Point")
       GeneratePointSource(localP);
@@ -1269,13 +1268,13 @@ G4ThreeVector G4SPSPosDistribution::GenerateOne()
                   "G4GPS001", JustWarning, msg);
       GeneratePointSource(localP);
     }
-    if(Confine == true)
+    if(Confine)
     {
       srcconf = IsSourceConfined(localP);
       // if source in confined srcconf = true terminating the loop
       // if source isnt confined srcconf = false and loop continues
     }
-    else if(Confine == false)
+    else if(!Confine)
     {
       srcconf = true; // terminate loop
     }

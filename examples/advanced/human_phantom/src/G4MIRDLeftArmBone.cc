@@ -43,26 +43,17 @@
 #include "G4EllipticalCone.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftArmBone::G4MIRDLeftArmBone()
-{
-}
-
-G4MIRDLeftArmBone::~G4MIRDLeftArmBone()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftArmBone::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,   
 						const G4String& colourName, G4bool wireFrame, G4bool)
 {
   // Remind! the elliptical cone gives problems! Intersections of volumes, 
   // wrong calculation of the volume!
    
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
    
   G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
    
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* skeleton = material -> GetMaterial("skeleton");
   
   delete material;
 
@@ -70,15 +61,14 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::Construct(const G4String& volumeName,G4VPh
   G4double dy = 2.7 * cm;//b
   // G4double dz= 46. * cm;//z0
 
-  //G4EllipticalCone* arm = new G4EllipticalCone("OneLeftArmBone",dx/2.,dy/2.,dz, 34.5 *cm);
-  G4EllipticalTube* leftArm = new G4EllipticalTube("OneLeftArmBone",dx,dy,34.5 *cm);
+  auto* leftArm = new G4EllipticalTube("OneLeftArmBone",dx,dy,34.5 *cm);
 
-  G4LogicalVolume* logicLeftArmBone = new G4LogicalVolume(leftArm,
+  auto* logicLeftArmBone = new G4LogicalVolume(leftArm,
 							  skeleton,
 							  "logical" + volumeName,
-							  0, 0,0);
+							  nullptr, nullptr, nullptr);
 
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree);
   G4VPhysicalVolume* physLeftArmBone = new G4PVPlacement(rm,
 							 G4ThreeVector(18.4 * cm, 0.0, -0.5*cm),
@@ -90,9 +80,9 @@ G4VPhysicalVolume* G4MIRDLeftArmBone::Construct(const G4String& volumeName,G4VPh
 			      
   // Visualization Attributes
 
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftArmBoneVisAtt = new G4VisAttributes(colour);
+  auto* LeftArmBoneVisAtt = new G4VisAttributes(colour);
   LeftArmBoneVisAtt->SetForceSolid(wireFrame);
   logicLeftArmBone->SetVisAttributes(LeftArmBoneVisAtt);
 

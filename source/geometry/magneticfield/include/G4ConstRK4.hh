@@ -44,10 +44,10 @@
 
 class G4ConstRK4 : public G4MagErrorStepper 
 {
-   public:  // with description
+   public:
 
-    G4ConstRK4(G4Mag_EqRhs* EquationMotion, G4int numberOfStateVariables=8);
-    ~G4ConstRK4();
+     G4ConstRK4(G4Mag_EqRhs* EquationMotion, G4int numberOfStateVariables=8);
+    ~G4ConstRK4() override;
 
      G4ConstRK4(const G4ConstRK4&) = delete;
      G4ConstRK4& operator=(const G4ConstRK4&) = delete;
@@ -57,21 +57,19 @@ class G4ConstRK4 : public G4MagErrorStepper
                    const G4double dydx[],
                          G4double h,
                          G4double yout[],
-                         G4double yerr[]  );
+                         G4double yerr[]  ) override;
      void DumbStepper( const G4double yIn[],
                        const G4double dydx[],
                              G4double h,
-                             G4double yOut[] ) ;
-     G4double DistChord() const;   
+                             G4double yOut[] ) override ;
+     G4double DistChord() const override;   
  
      inline void  RightHandSideConst(const G4double y[],
                                            G4double dydx[] ) const;
 
      inline void  GetConstField(const G4double y[], G4double Field[]);
 
-   public:  // without description
-
-     G4int IntegratorOrder() const { return 4; }
+     G4int IntegratorOrder() const override { return 4; }
 
    private:
 

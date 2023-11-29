@@ -47,7 +47,7 @@ private:
 };
 
 
-#include "G4Types.hh"
+#include "G4String.hh"
 
 //#include "G4OpenInventorViewer.hh"
 
@@ -182,6 +182,7 @@ private:
    int uiQtTabIndex;
 
    int processSoEventCount;
+   G4String empty = "";
 
 public:
 
@@ -192,6 +193,8 @@ public:
                                   SoQtViewer::Type type = BROWSER);
 
    ~G4OpenInventorQtExaminerViewer();
+
+   G4UIQt* GetUIQt() {return uiQt;}
 
    template <class T> void parseString(T &t, const std::string &s, bool &error);
 

@@ -73,7 +73,7 @@ G4Box::G4Box(const G4String& pName,
 //                            for usage restricted to object persistency
 
 G4Box::G4Box( __void__& a )
-  : G4CSGSolid(a), delta(0.)
+  : G4CSGSolid(a)
 {
 }
 
@@ -81,18 +81,13 @@ G4Box::G4Box( __void__& a )
 //
 // Destructor
 
-G4Box::~G4Box()
-{
-}
+G4Box::~G4Box() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4Box::G4Box(const G4Box& rhs)
-  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), delta(rhs.delta)
-{
-}
+G4Box::G4Box(const G4Box&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -309,11 +304,11 @@ G4ThreeVector G4Box::ApproxSurfaceNormal(const G4ThreeVector& p) const
   G4double distz = std::abs(p.z()) - fDz;
 
   if (distx >= disty && distx >= distz)
-    return G4ThreeVector(std::copysign(1.,p.x()), 0., 0.);
+    return {std::copysign(1.,p.x()), 0., 0.};
   if (disty >= distx && disty >= distz)
-    return G4ThreeVector(0., std::copysign(1.,p.y()), 0.);
+    return {0., std::copysign(1.,p.y()), 0.};
   else
-    return G4ThreeVector(0., 0., std::copysign(1.,p.z()));
+    return {0., 0., std::copysign(1.,p.z())};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -470,7 +465,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 
 G4GeometryType G4Box::GetEntityType() const
 {
-  return G4String("G4Box");
+  return {"G4Box"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -479,7 +474,7 @@ G4GeometryType G4Box::GetEntityType() const
 
 std::ostream& G4Box::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -505,17 +500,11 @@ G4ThreeVector G4Box::GetPointOnSurface() const
   G4double v = 2.*G4QuickRand() - 1.;
 
   if (select < sxy)
-    return G4ThreeVector(u*fDx,
-                         v*fDy,
-                         ((select < 0.5*sxy) ? -fDz : fDz));
+    return { u*fDx, v*fDy, ((select < 0.5*sxy) ? -fDz : fDz) };
   else if (select < sxy + sxz)
-    return G4ThreeVector(u*fDx,
-                         ((select < sxy + 0.5*sxz) ? -fDy : fDy),
-                         v*fDz);
+    return { u*fDx, ((select < sxy + 0.5*sxz) ? -fDy : fDy), v*fDz };
   else
-    return G4ThreeVector(((select < sxy + sxz + 0.5*syz) ? -fDx : fDx),
-                         u*fDy,
-                         v*fDz);
+    return { ((select < sxy + sxz + 0.5*syz) ? -fDx : fDx), u*fDy, v*fDz };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -538,7 +527,7 @@ void G4Box::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4Box::GetExtent() const
 {
-  return G4VisExtent (-fDx, fDx, -fDy, fDy, -fDz, fDz);
+  return { -fDx, fDx, -fDy, fDy, -fDz, fDz };
 }
 
 G4Polyhedron* G4Box::CreatePolyhedron () const

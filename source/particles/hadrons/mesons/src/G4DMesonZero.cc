@@ -42,16 +42,16 @@
 // ###                          DMesonZero                            ###
 // ######################################################################
 
-G4DMesonZero* G4DMesonZero::theInstance = 0;
+G4DMesonZero* G4DMesonZero::theInstance = nullptr;
 
 G4DMesonZero* G4DMesonZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "D0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -67,11 +67,11 @@ G4DMesonZero* G4DMesonZero::Definition()
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,         421,
-                false,    0.4101e-3*ns,          NULL,
+                false,    0.4101e-3*ns,          nullptr,
              false,           "D"
               );
   }
-  theInstance = reinterpret_cast<G4DMesonZero*>(anInstance);
+  theInstance = static_cast<G4DMesonZero*>(anInstance);
   return theInstance;
 }
 

@@ -44,53 +44,53 @@
 class G4MagInt_Driver : public G4VIntegrationDriver,
                         public G4ChordFinderDelegate<G4MagInt_Driver>
 {
-  public:  // with description
+  public:
 
     G4MagInt_Driver(G4double hminimum,
                     G4MagIntegratorStepper* pItsStepper,
                     G4int numberOfComponents = 6,
                     G4int statisticsVerbosity = 0);
-    virtual ~G4MagInt_Driver() override;
+   ~G4MagInt_Driver() override;
       // Constructor, destructor.
 
     G4MagInt_Driver(const G4MagInt_Driver&) = delete;
     G4MagInt_Driver& operator=(const G4MagInt_Driver&) = delete;
 
-    inline virtual G4double AdvanceChordLimited(G4FieldTrack& track, 
-                                         G4double stepMax, 
-                                         G4double epsStep,
-                                         G4double chordDistance) override;
+    inline G4double AdvanceChordLimited(G4FieldTrack& track, 
+                                        G4double stepMax, 
+                                        G4double epsStep,
+                                        G4double chordDistance) override;
 
-    inline virtual void OnStartTracking() override;
-    inline virtual void  OnComputeStep() override {};
-    virtual G4bool DoesReIntegrate() const override { return true; }
+    inline void OnStartTracking() override;
+    inline void OnComputeStep(const G4FieldTrack* = nullptr) override {}
+    G4bool DoesReIntegrate() const override { return true; }
    
-    virtual G4bool AccurateAdvance(G4FieldTrack& y_current,
-                                   G4double hstep,
-                                   G4double eps,  // Requested y_err/hstep
-                                   G4double hinitial = 0.0) override;
+    G4bool AccurateAdvance(G4FieldTrack& y_current,
+                           G4double hstep,
+                           G4double eps,  // Requested y_err/hstep
+                           G4double hinitial = 0.0) override;
       // Above drivers for integrator (Runge-Kutta) with stepsize control.
       // Integrates ODE starting values y_current
       // from current s (s=s0) to s=s0+h with accuracy eps.
       // On output ystart is replaced by value at end of interval.
       // The concept is similar to the odeint routine from NRC p.721-722.
 
-    virtual G4bool QuickAdvance(G4FieldTrack& y_val,      // INOUT
-                                const G4double dydx[],
-                                G4double hstep,
-                                G4double& dchord_step,
-                                G4double& dyerr) override;
+    G4bool QuickAdvance(      G4FieldTrack& y_val,      // INOUT
+                        const G4double dydx[],
+                              G4double hstep,
+                              G4double& dchord_step,
+                              G4double& dyerr) override;
       // QuickAdvance just tries one Step - it does not ensure accuracy.
 
     void  StreamInfo( std::ostream& os ) const override;
      // Write out the parameters / state of the driver
 
-    G4bool QuickAdvance(G4FieldTrack& y_posvel,   // INOUT
+    G4bool QuickAdvance(      G4FieldTrack& y_posvel,   // INOUT
                         const G4double dydx[],
-                        G4double hstep,           // IN
-                        G4double& dchord_step,
-                        G4double& dyerr_pos_sq,
-                        G4double& dyerr_mom_rel_sq );
+                              G4double hstep,           // IN
+                              G4double& dchord_step,
+                              G4double& dyerr_pos_sq,
+                              G4double& dyerr_mom_rel_sq );
       // New QuickAdvance that also just tries one Step
       //    (so also does not ensure accuracy)
       //    but does return the errors in  position and
@@ -102,18 +102,18 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
     inline G4double GetPshrnk() const;
     inline G4double GetPgrow() const;
     inline G4double GetErrcon() const;
-    virtual void GetDerivatives(const G4FieldTrack& y_curr,      // INput
-                                G4double dydx[]) const override; // OUTput
+    void GetDerivatives(const G4FieldTrack& y_curr,            // INput
+                              G4double dydx[]) const override; // OUTput
 
-    virtual void GetDerivatives(const G4FieldTrack& track,
-                                G4double dydx[],
-                                G4double field[]) const override;
+    void GetDerivatives(const G4FieldTrack& track,
+                              G4double dydx[],
+                              G4double field[]) const override;
     // Accessors
 
-    virtual G4EquationOfMotion* GetEquationOfMotion() override;
-    virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
+    G4EquationOfMotion* GetEquationOfMotion() override;
+    void SetEquationOfMotion(G4EquationOfMotion* equation) override;
    
-    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper* pItsStepper) override;
+    void RenewStepperAndAdjust(G4MagIntegratorStepper* pItsStepper) override;
       // Sets a new stepper pItsStepper for this driver. Then it calls
       // ReSetParameters to reset its parameters accordingly.
 
@@ -131,22 +131,22 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
 
     inline G4double ComputeAndSetErrcon();
 
-    virtual const G4MagIntegratorStepper* GetStepper() const override;
-    virtual       G4MagIntegratorStepper* GetStepper() override;
+    const G4MagIntegratorStepper* GetStepper() const override;
+          G4MagIntegratorStepper* GetStepper() override;
 
-    void OneGoodStep(G4double  ystart[], // Like old RKF45step()
+    void OneGoodStep(      G4double  ystart[], // Like old RKF45step()
                      const G4double  dydx[],
-                     G4double& x,
-                     G4double htry,
-                     G4double  eps,      //  memb variables ?
-                     G4double& hdid,
-                     G4double& hnext ) ;
+                           G4double& x,
+                           G4double htry,
+                           G4double  eps,      //  memb variables ?
+                           G4double& hdid,
+                           G4double& hnext ) ;
       // This takes one Step that is as large as possible while
       // satisfying the accuracy criterion of:
       // yerr < eps * |y_end-y_start|
 
-    virtual G4double ComputeNewStepSize(G4double errMaxNorm, // normalised
-                                        G4double hstepCurrent) override;
+    G4double ComputeNewStepSize(G4double errMaxNorm, // normalised
+                                G4double hstepCurrent) override;
       // Taking the last step's normalised error, calculate
       // a step size for the next step.
       // Does it limit the next step's size within a factor of the current?
@@ -173,16 +173,14 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
       // taken for the integration of a single segment -
       // (i.e. a single call to AccurateAdvance).
 
-  public:  // without description
-
     inline void SetHmin(G4double newval);
-    virtual void SetVerboseLevel(G4int newLevel) override;
-    virtual G4int GetVerboseLevel() const override;
+    void SetVerboseLevel(G4int newLevel) override;
+    G4int GetVerboseLevel() const override;
 
     inline G4double GetSmallestFraction() const;
     void SetSmallestFraction( G4double val );
 
-  protected:  // without description
+  protected:
 
     void WarnSmallStepSize(G4double hnext, G4double hstep,
                            G4double h, G4double xDone,
@@ -196,33 +194,33 @@ class G4MagInt_Driver : public G4VIntegrationDriver,
       // Issue warnings for undesirable situations
 
     void PrintStatus(const G4double* StartArr,
-                     G4double xstart,
+                           G4double xstart,
                      const G4double* CurrentArr,
-                     G4double xcurrent,
-                     G4double requestStep,
-                     G4int subStepNo);
+                           G4double xcurrent,
+                           G4double requestStep,
+                           G4int subStepNo);
     void PrintStatus(const G4FieldTrack& StartFT,
                      const G4FieldTrack& CurrentFT,
-                     G4double requestStep,
-                     G4int subStepNo);
+                           G4double requestStep,
+                           G4int subStepNo);
     void PrintStat_Aux(const G4FieldTrack& aFieldTrack,
-                       G4double requestStep,
-                       G4double actualStep,
-                       G4int subStepNo,
-                       G4double subStepSize,
-                       G4double dotVelocities);
+                             G4double requestStep,
+                             G4double actualStep,
+                             G4int subStepNo,
+                             G4double subStepSize,
+                             G4double dotVelocities);
       // Verbose output for debugging
 
     void PrintStatisticsReport();
       // Report on the number of steps, maximum errors etc.
 
 #ifdef QUICK_ADV_TWO
-     G4bool QuickAdvance(      G4double  yarrin[],     // In
-                         const G4double  dydx[],  
-                               G4double  hstep,        
-                               G4double  yarrout[],    // Out
-                               G4double& dchord_step,  // Out
-                               G4double& dyerr );      // in length
+    G4bool QuickAdvance(      G4double  yarrin[],     // In
+                        const G4double  dydx[],  
+                              G4double  hstep,        
+                              G4double  yarrout[],    // Out
+                              G4double& dchord_step,  // Out
+                              G4double& dyerr );      // in length
 #endif
 
   private:

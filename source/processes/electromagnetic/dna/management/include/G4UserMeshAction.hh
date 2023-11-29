@@ -27,7 +27,7 @@
 #ifndef G4USERMESHACTION_HH
 #define G4USERMESHACTION_HH
 
-#include "G4DNAMesh.hh"
+#include "G4VDNAMesh.hh"
 
 class G4UserMeshAction
 {
@@ -36,8 +36,8 @@ class G4UserMeshAction
   virtual ~G4UserMeshAction() = default;
 
  public:
-  virtual void BeginOfMesh(const G4DNAMesh* /*aMesh*/, G4double /*time*/){};
-  virtual void InMesh(const G4DNAMesh* /*pMesh*/, G4double /*time*/){};
-  virtual void EndOfMesh(const G4DNAMesh* /*aMesh*/, G4double /*time*/){};
+  virtual void BeginOfMesh(const G4VDNAMesh* /*aMesh*/, G4double /*time*/){};
+  virtual void InMesh(const G4VDNAMesh* /*pMesh*/, G4double /*time*/){};
+  virtual void EndOfMesh(const G4VDNAMesh* /*aMesh*/, G4double /*time*/){};
 };
 #endif  // G4USERMESHACTION_HH

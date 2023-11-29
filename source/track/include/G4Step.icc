@@ -43,6 +43,13 @@ inline void G4Step::SetPreStepPoint(G4StepPoint* value)
   fpPreStepPoint = value;
 }
 
+inline G4StepPoint* G4Step::ResetPreStepPoint(G4StepPoint* value)
+{
+  G4StepPoint* previousSP = fpPreStepPoint;
+  fpPreStepPoint = value;
+  return previousSP;
+}
+
 inline G4StepPoint* G4Step::GetPostStepPoint() const
 {
   return fpPostStepPoint;
@@ -52,6 +59,13 @@ inline void G4Step::SetPostStepPoint(G4StepPoint* value)
 {
   delete fpPostStepPoint;
   fpPostStepPoint = value;
+}
+
+inline G4StepPoint* G4Step::ResetPostStepPoint(G4StepPoint* value)
+{
+  G4StepPoint* previousSP = fpPostStepPoint;
+  fpPostStepPoint = value;
+  return previousSP;
 }
 
 inline G4double G4Step::GetStepLength() const
@@ -169,7 +183,7 @@ inline void G4Step::InitializeStep(G4Track* aValue)
   // and G4StepPoint, G4Step has to manage the copy actions.
   //
   fpPreStepPoint->SetSafety(0.0);
-  fpPreStepPoint->SetProcessDefinedStep(0);
+  fpPreStepPoint->SetProcessDefinedStep(nullptr);
   fpPreStepPoint->SetStepStatus(fUndefined);
 
   // G4Track properties
@@ -215,7 +229,7 @@ inline void G4Step::UpdateTrack()
   fpTrack->SetGlobalTime(fpPostStepPoint->GetGlobalTime());
   fpTrack->SetLocalTime(fpPostStepPoint->GetLocalTime());
   //  mass, charge, proper time
-  G4DynamicParticle* pParticle =
+  auto* pParticle =
     (G4DynamicParticle*) (fpTrack->GetDynamicParticle());
   pParticle->SetMass(fpPostStepPoint->GetMass());
   pParticle->SetCharge(fpPostStepPoint->GetCharge());

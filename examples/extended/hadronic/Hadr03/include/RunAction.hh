@@ -53,23 +53,23 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction();
+   ~RunAction() override;
 
   public:
-    virtual G4Run* GenerateRun();   
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    G4Run* GenerateRun() override;   
+    void BeginOfRunAction(const G4Run*) override;
+    void   EndOfRunAction(const G4Run*) override;
     
     void SetPrintFlag(G4bool);
                                 
   private:
-    DetectorConstruction*      fDetector;
-    PrimaryGeneratorAction*    fPrimary;
-    Run*                       fRun;        
-    HistoManager*              fHistoManager;
-    RunMessenger*              fRunMessenger;
+    DetectorConstruction*      fDetector     = nullptr;
+    PrimaryGeneratorAction*    fPrimary      = nullptr;
+    Run*                       fRun          = nullptr;
+    HistoManager*              fHistoManager = nullptr;
+    RunMessenger*              fRunMessenger = nullptr;
      
-    G4bool   fPrint;      //optional printing           
+    G4bool   fPrint = true;      //optional printing           
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

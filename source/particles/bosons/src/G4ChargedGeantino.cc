@@ -43,17 +43,17 @@
 // ######################################################################
 // ###                          ChargedGeantino                       ###
 // ######################################################################
-G4ChargedGeantino* G4ChargedGeantino::theInstance = 0;
+G4ChargedGeantino* G4ChargedGeantino::theInstance = nullptr;
 
 G4ChargedGeantino*  G4ChargedGeantino::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "chargedgeantino";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -69,11 +69,11 @@ G4ChargedGeantino*  G4ChargedGeantino::Definition()
 		    0,               0,             0,          
 		    0,               0,             0,             
 	   "geantino",               0,             0,           0,
-    	         true,            -1.0,          NULL,
+    	         true,            -1.0,          nullptr,
 		 false,     "geantino",             0
 	  );
   }
-  theInstance = reinterpret_cast<G4ChargedGeantino*>(anInstance);
+  theInstance = static_cast<G4ChargedGeantino*>(anInstance);
   return theInstance;
 }
 

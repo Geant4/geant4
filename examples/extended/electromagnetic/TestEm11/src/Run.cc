@@ -46,26 +46,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.),  
-  fTrackLen(0.),  fTrackLen2(0.),
-  fProjRange(0.), fProjRange2(0.),
-  fNbOfSteps(0), fNbOfSteps2(0),
-  fStepSize(0.),  fStepSize2(0.)
+: fDetector(detector)
 {
-  for (G4int i=0; i<3; ++i) { fStatus[i] = 0; fTotEdep[i] = 0.; }
-  fTotEdep[1] = joule;
+  for (G4int i=0; i<3; ++i) { 
+     fStatus[i] = 0; fTotEdep[i] = fEleak[i] = fEtotal[i]= 0.;
+  }
+  fTotEdep[1] = fEleak[1] = fEtotal[1] = joule;
+  
   for (G4int i=0; i<kMaxAbsor; ++i) {
     fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
     fCsdaRange[i] = 0.; fXfrontNorm[i] = 0.;
   }  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,6 +88,29 @@ void Run::AddTotEdep (G4double e)
     if (e > fTotEdep[2]) fTotEdep[2] = e;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddEleak (G4double e)        
+{
+  if (e > 0.) {
+    fEleak[0]  += e;
+    if (e < fEleak[1]) fEleak[1] = e;
+    if (e > fEleak[2]) fEleak[2] = e;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddEtotal (G4double e)        
+{
+  if (e > 0.) {
+    fEtotal[0]  += e;
+    if (e < fEtotal[1]) fEtotal[1] = e;
+    if (e > fEtotal[2]) fEtotal[2] = e;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
     
 void Run::AddTrackLength (G4double t) 
@@ -195,9 +210,21 @@ void Run::Merge(const G4Run* run)
   fTotEdep[0] += localRun->fTotEdep[0];
   G4double min,max;
   min = localRun->fTotEdep[1]; max = localRun->fTotEdep[2];
-if (fTotEdep[1] > min) fTotEdep[1] = min;
-if (fTotEdep[2] < max) fTotEdep[2] = max;
+  if (fTotEdep[1] > min) fTotEdep[1] = min;
+  if (fTotEdep[2] < max) fTotEdep[2] = max;
 
+  // Eleak
+  fEleak[0] += localRun->fEleak[0];
+  min = localRun->fEleak[1]; max = localRun->fEleak[2];
+  if (fEleak[1] > min) fEleak[1] = min;
+  if (fEleak[2] < max) fEleak[2] = max;
+  
+  // Etotal
+  fEtotal[0] += localRun->fEtotal[0];
+  min = localRun->fEtotal[1]; max = localRun->fEtotal[2];
+  if (fEtotal[1] > min) fEtotal[1] = min;
+  if (fEtotal[2] < max) fEtotal[2] = max;
+  
   G4Run::Merge(run); 
 } 
 
@@ -238,6 +265,8 @@ void Run::EndOfRun()
   G4cout.precision(3);
   G4double rms (0);
   
+  //Edep in absorbers
+  //  
   for (G4int i=1; i<= nbOfAbsor; i++) {
      fEdeposit[i] /= numberOfEvent;
 
@@ -259,6 +288,24 @@ void Run::EndOfRun()
       << ")" << G4endl;
   }
   
+  //Eleak
+  //  
+  fEleak[0] /= numberOfEvent;
+  G4cout 
+    << " Energy leakage     = " << G4BestUnit(fEleak[0],"Energy")
+    << "\t(" << G4BestUnit(fEleak[1], "Energy")
+    << "-->" << G4BestUnit(fEleak[2], "Energy")
+    << ")" << G4endl;
+    
+  //Etotal
+  //  
+  fEtotal[0] /= numberOfEvent;
+  G4cout 
+    << " Energy total       = " << G4BestUnit(fEtotal[0],"Energy")
+    << "\t(" << G4BestUnit(fEtotal[1], "Energy")
+    << "-->" << G4BestUnit(fEtotal[2], "Energy")
+    << ")" << G4endl;
+      
   //compute track length of primary track
   //
   fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;
@@ -321,7 +368,7 @@ void Run::EndOfRun()
   G4cout 
     << "\n absorbed = "  << absorbed  << " %"
     << "   transmit = "  << transmit  << " %"
-    << "   reflected = " << reflected << " %" << G4endl;
+    << "   reflected = " << reflected << " % \n" << G4endl;
 
     // normalize histograms of longitudinal energy profile
     //

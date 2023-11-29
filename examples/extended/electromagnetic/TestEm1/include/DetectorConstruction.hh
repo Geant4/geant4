@@ -51,10 +51,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-    virtual ~DetectorConstruction();
+   ~DetectorConstruction() override;
   
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
      
     void SetSize     (G4double);              
     void SetMaterial (const G4String&);
@@ -68,15 +68,15 @@ class DetectorConstruction : public G4VUserDetectorConstruction
                        
   private:
   
-    G4VPhysicalVolume*    fPBox;
-    G4LogicalVolume*      fLBox;
-    G4Box*                fBox;
+    G4VPhysicalVolume*    fPBox = nullptr;
+    G4LogicalVolume*      fLBox = nullptr;
+    G4Box*                fBox  = nullptr;
      
-    G4double              fBoxSize;
-    G4Material*           fMaterial;
+    G4double              fBoxSize  = 0.;
+    G4Material*           fMaterial = nullptr;
 
-    DetectorMessenger* fDetectorMessenger;
-    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+    DetectorMessenger* fDetectorMessenger = nullptr;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

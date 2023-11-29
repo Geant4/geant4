@@ -55,7 +55,7 @@ G4TransitionRadiation::G4TransitionRadiation(const G4String& processName,
 
 //////////////////////////////////////////////////////////////////////
 // Destructor
-G4TransitionRadiation::~G4TransitionRadiation() {}
+G4TransitionRadiation::~G4TransitionRadiation() = default;
 
 void G4TransitionRadiation::ProcessDescription(std::ostream& out) const
 {

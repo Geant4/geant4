@@ -76,7 +76,8 @@
 class G4VSensitiveDetector;
 
 #ifndef PrepareState
-#define PrepareState() G4ITTransportationState* __state = this->GetState<G4ITTransportationState>();
+#  define PrepareState()                                                       \
+    G4ITTransportationState* __state = this->GetState<G4ITTransportationState>()
 #endif
 
 #ifndef State
@@ -256,7 +257,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
                                       G4double& currentSafety,
                                       G4GPILSelection* selection)
 {
-  PrepareState()
+  PrepareState();
   G4double geometryStepLength(-1.0), newSafety(-1.0);
 
   State(fParticleIsLooping) = false;
@@ -650,7 +651,7 @@ void G4ITTransportation::ComputeStep(const G4Track& track,
                                      const double timeStep,
                                      double& oPhysicalStep)
 {
-  PrepareState()
+  PrepareState();
   const G4DynamicParticle* pParticle = track.GetDynamicParticle();
   G4ThreeVector startMomentumDir = pParticle->GetMomentumDirection();
   G4ThreeVector startPosition = track.GetPosition();
@@ -698,8 +699,8 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt(const G4Track& track,
   mem_first = MemoryUsage();
 #endif
 
-  PrepareState()
-  
+  PrepareState();
+
   // G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
   // set  pdefOpticalPhoton
   // Andrea Dotti: the following statement should be in a single line:
@@ -872,8 +873,8 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
                                                     const G4Step&)
 {
   //    G4cout << "G4ITTransportation::PostStepDoIt" << G4endl;
- 
-  PrepareState()
+
+  PrepareState();
   G4TouchableHandle retCurrentTouchable; // The one to return
   G4bool isLastStep = false;
 
@@ -943,7 +944,7 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
 
     // Update the Step flag which identifies the Last Step in a volume
     isLastStep = fLinearNavigator->ExitedMotherVolume()
-              || fLinearNavigator->EnteredDaughterVolume();
+               || fLinearNavigator->EnteredDaughterVolume();
 
 #ifdef G4DEBUG_TRANSPORT
     //  Checking first implementation of flagging Last Step in Volume
@@ -990,7 +991,7 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume();
   const G4Material* pNewMaterial = 0;
-  const G4VSensitiveDetector* pNewSensitiveDetector = 0;
+  G4VSensitiveDetector* pNewSensitiveDetector = 0;
 
   if (pNewVol != 0)
   {
@@ -999,11 +1000,9 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
   }
 
   // ( <const_cast> pNewMaterial ) ;
-  // ( <const_cast> pNewSensitiveDetector) ;
 
   fParticleChange.SetMaterialInTouchable((G4Material *) pNewMaterial);
-  fParticleChange.SetSensitiveDetectorInTouchable(
-      (G4VSensitiveDetector *) pNewSensitiveDetector);
+  fParticleChange.SetSensitiveDetectorInTouchable(pNewSensitiveDetector);
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if (pNewVol != 0)
@@ -1085,7 +1084,7 @@ void G4ITTransportation::StartTracking(G4Track* track)
 
   // Update the current touchable handle  (from the track's)
   //
-  PrepareState()
+  PrepareState();
   State(fCurrentTouchableHandle) = track->GetTouchableHandle();
 
   G4VITProcess::StartTracking(track);

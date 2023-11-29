@@ -28,11 +28,33 @@
 // 
 // John Allison  May 2021
 //
-// G4Mesh encapsulates and validates a nested parameterisation, which we
-// call a "mesh". If a valid mesh cannot be created out of this
-// G4VPhysicalVolume* (which will probably be most common), it will
-// have a type "invalid". Then, usually, it may simply be destroyed.
-// The overhead of an invalid attempt is expected to be small.
+// G4Mesh captures and validates a parameterisation, which we
+// call a "mesh". This is typically intended for meshes with
+// a large number of parameterisations, such as a medical phantom.
+//
+// G4Mesh is used by G4PhysicalVolumeModel if and only if
+// G4ModelingParameters::fSpecialMeshRendering is set and if the
+// name matches one in G4ModelingParameters::fSpecialMeshVolumes,
+// if any. Then, if a valid mesh is found it calls the overriding
+// implementation of G4VGraphicsScene::AddCompound(const G4Mesh&).
+//
+// To set the above parameters use the following commands in the
+// standard Geant4 Visualisation System:
+//    /vis/viewer/set/specialMeshRendering
+//    /vis/viewer/set/specialMeshRenderingOption
+//    /vis/viewer/set/specialMeshVolumes
+// See guidance on the above commmands for more detail.
+//
+// Note that if no special mesh volumes are specified,
+// G4PhysicalVolumeModel will test all volumes, and therefore
+// it will capture *all* parameterisations. This is not usually
+// a problem, since there is usually only one, but to be
+// selective you have to /vis/viewer/set/specialMeshVolumes.
+//
+// The specified G4VPhysicalVolume is searched for a
+// parameterisation. If none is found it will have a type "invalid"
+// and it should simply be destroyed (as in G4PhysicalVolumeModel).
+// The overhead of an invalid attempt is small.
 
 #include "G4Mesh.hh"
 
@@ -43,70 +65,95 @@
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
+#include "G4Tet.hh"
 
-std::map<G4int,G4String> G4Mesh::fEnumMap;
+std::map<G4int,G4String> G4Mesh::fEnumMap = {
+  {invalid,"invalid"},
+  {rectangle,"rectangle"},
+  {nested3DRectangular,"nested3Drectangular"},
+  {cylinder,"cylinder"},
+  {sphere,"sphere"},
+  {tetrahedron,"tetrahedron"}
+};
 
 G4Mesh::G4Mesh (G4VPhysicalVolume* containerVolume,const G4Transform3D& transform)
 : fpContainerVolume(containerVolume)
+, fpParameterisedVolume(nullptr)
 , fMeshType(invalid)
 , fMeshDepth(0)
 , fTransform(transform)
 {
   if (fpContainerVolume == nullptr) return;
+    
+  G4VPhysicalVolume* pv0 = fpContainerVolume;
+  G4VPhysicalVolume* pv1 = nullptr;
+  G4VPhysicalVolume* pv2 = nullptr;
+  G4VPhysicalVolume* pv3 = nullptr;
+  G4LogicalVolume*   lv0 = pv0->GetLogicalVolume();
+  G4LogicalVolume*   lv1 = nullptr;
+  G4LogicalVolume*   lv2 = nullptr;
 
-  static G4bool first = true;
-  if (first) {
-    first = false;
-    fEnumMap[invalid]   = "invalid";
-    fEnumMap[rectangle] = "rectangle";
-    fEnumMap[cylinder]  = "cylinder";
-    fEnumMap[sphere]    = "sphere";
-  }
-
-  const G4LogicalVolume* pLV = fpContainerVolume->GetLogicalVolume();
-
-  // check if this is a container for a nested parameterisation
+  // Check if this is a container for a parameterisation.
+  // A simple parameterisation may only be one level.
+  // Nested parameterisations may be 2- or 3-level.
   G4bool isContainer = false;
-  if (pLV->GetNoDaughters()) {
+  if (lv0->GetNoDaughters()) {
     fMeshDepth++;
-    const auto d0 = pLV->GetDaughter(0);
-    const auto d0LV = d0->GetLogicalVolume();
-    if (d0LV->GetNoDaughters()) {
+    pv1 = lv0->GetDaughter(0);
+    lv1 = pv1->GetLogicalVolume();
+    if (dynamic_cast<G4PVParameterised*>(pv1)) {
+      isContainer = true;
+      fpParameterisedVolume = pv1;
+    } else if (lv1->GetNoDaughters()) {
       fMeshDepth++;
-      const auto d00 = d0LV->GetDaughter(0);
-      const auto pvParam00 = dynamic_cast<G4PVParameterised*>(d00);
-      if (pvParam00) {
-	const auto param00 = pvParam00->GetParameterisation();
-	const auto nestedParam00 = dynamic_cast<G4VNestedParameterisation*>(param00);
-	if (nestedParam00) { // 2-deep mesh
-	  isContainer = true;
-	}
-      } else {
-	const auto d00LV = d00->GetLogicalVolume();
-	if (d00LV->GetNoDaughters()) {
-	  fMeshDepth++;
-	  const auto d000 = d00LV->GetDaughter(0);
-	  const auto pvParam000 = dynamic_cast<G4PVParameterised*>(d000);
-	  if (pvParam000) {
-	    const auto param000 = pvParam000->GetParameterisation();
-	    const auto nestedParam000 = dynamic_cast<G4VNestedParameterisation*>(param000);
-	    if (nestedParam000) {  // 3-deep mesh
-	      isContainer = true;
-	    }
-	  }
-	}
+      pv2 = lv1->GetDaughter(0);
+      lv2 = pv2->GetLogicalVolume();
+      if (dynamic_cast<G4PVParameterised*>(pv2) &&
+          dynamic_cast<G4VNestedParameterisation*>(pv2->GetParameterisation())) {
+        isContainer = true;
+        fpParameterisedVolume = pv2;
+      } else if (lv2->GetNoDaughters()) {
+        fMeshDepth++;
+        pv3 = lv2->GetDaughter(0);
+        if (dynamic_cast<G4PVParameterised*>(pv3) &&
+            dynamic_cast<G4VNestedParameterisation*>(pv3->GetParameterisation())) {
+          isContainer = true;
+          fpParameterisedVolume = pv3;
+        }
       }
     }
   }
+
   if (isContainer) {
+
     // Get type
-    G4VSolid* pSol = pLV -> GetSolid ();
-    if (dynamic_cast<G4Box*>(pSol)) {
+    G4VSolid* pEndSol = fpParameterisedVolume->GetLogicalVolume()->GetSolid ();
+    if (dynamic_cast<G4Box*>(pEndSol)) {
       fMeshType = rectangle;
-    } else if (dynamic_cast<G4Tubs*>(pSol)) {
+      auto pBox = static_cast<G4Box*>(pEndSol);
+      f3DRPs.fHalfX = pBox->GetXHalfLength();
+      f3DRPs.fHalfY = pBox->GetYHalfLength();
+      f3DRPs.fHalfZ = pBox->GetZHalfLength();
+    } else if (dynamic_cast<G4Tet*>(pEndSol)) {
+      fMeshType = tetrahedron;
+    } else if (dynamic_cast<G4Tubs*>(pEndSol)) {
       fMeshType = cylinder;
-    } else if (dynamic_cast<G4Sphere*>(pSol)) {
+    } else if (dynamic_cast<G4Sphere*>(pEndSol)) {
       fMeshType = sphere;
+    }
+    
+    // Special case for rectangular nested paramaterisation - extra information
+    if (fMeshDepth == 3 && fMeshType == rectangle) {
+      auto nestedParam3 = dynamic_cast<G4VNestedParameterisation*>(pv3);
+      if (nestedParam3) {
+        fMeshType = nested3DRectangular;
+        pv1->GetReplicationData
+        (f3DRPs.fAxis1,f3DRPs.fNreplica1,f3DRPs.fWidth1,f3DRPs.fOffset1,f3DRPs.fConsuming1);
+        pv2->GetReplicationData
+        (f3DRPs.fAxis2,f3DRPs.fNreplica2,f3DRPs.fWidth2,f3DRPs.fOffset2,f3DRPs.fConsuming2);
+        pv3->GetReplicationData
+        (f3DRPs.fAxis3,f3DRPs.fNreplica3,f3DRPs.fWidth3,f3DRPs.fOffset3,f3DRPs.fConsuming3);
+      }
     }
   }
 }
@@ -116,9 +163,21 @@ G4Mesh::~G4Mesh () {}
 std::ostream& operator << (std::ostream& os, const G4Mesh& mesh) {
   os << "G4Mesh: ";
   os << "\nContainer: " << mesh.GetContainerVolume()->GetName();
-  os << "\nType: " << mesh.GetEnumMap().find(mesh.GetMeshType())->second;
+  const auto& map = mesh.GetEnumMap();
+  const auto& typeEntry = map.find(mesh.GetMeshType());
+  G4String type;
+  if (typeEntry != map.end()) {
+    type = typeEntry->second;
+  } else {
+    type = "unrecognised";
+  }
+  os << "\nType: " << type;
   os << "\nDepth: " << mesh.GetMeshDepth();
   os << "\nTranslation: " << mesh.GetTransform().getTranslation();
   os << "\nRotation: " << mesh.GetTransform().getRotation();
+  if (mesh.GetMeshType() == G4Mesh::rectangle &&
+      mesh.GetMeshDepth() == 3) {
+    // Print ThreeDRectangleParameters
+  }
   return os;
 }

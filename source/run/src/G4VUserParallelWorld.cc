@@ -44,67 +44,50 @@ G4VUserParallelWorld::G4VUserParallelWorld(const G4String& worldName)
 }
 
 // --------------------------------------------------------------------
-G4VUserParallelWorld::~G4VUserParallelWorld()
-{
-}
-
-// --------------------------------------------------------------------
-void G4VUserParallelWorld::ConstructSD()
-{
-}
-
-// --------------------------------------------------------------------
 G4VPhysicalVolume* G4VUserParallelWorld::GetWorld()
 {
   G4VPhysicalVolume* pWorld =
-    G4TransportationManager::GetTransportationManager()
-    ->GetParallelWorld(fWorldName);
+    G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
   pWorld->SetName(fWorldName);
   return pWorld;
 }
 
 // --------------------------------------------------------------------
 void G4VUserParallelWorld::SetSensitiveDetector(const G4String& logVolName,
-                                                G4VSensitiveDetector* aSD,
-                                                G4bool multi)
+                                                G4VSensitiveDetector* aSD, G4bool multi)
 {
-  G4bool found                = false;
+  G4bool found = false;
   G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
   auto volmap = store->GetMap();
   auto pos = volmap.find(logVolName);
-  if(pos != volmap.cend())
-  {
-    if ((pos->second.size()>1) && !multi)
-    {
+  if (pos != volmap.cend()) {
+    if ((pos->second.size() > 1) && !multi) {
       G4String eM = "More than one logical volumes of name <";
       eM += pos->first;
       eM += "> are found and thus the sensitive detector <";
       eM += aSD->GetName();
       eM += "> cannot be uniquely assigned.";
-      G4Exception("G4VUserParallelWorld::SetSensitiveDetector()",
-                  "Run0052", FatalErrorInArgument, eM);
+      G4Exception("G4VUserParallelWorld::SetSensitiveDetector()", "Run0052", FatalErrorInArgument,
+                  eM);
     }
     found = true;
-    for (std::size_t i = 0; i < pos->second.size(); ++i)
-    {
-      SetSensitiveDetector(pos->second[i], aSD);
+    for (auto& i : pos->second) {
+      SetSensitiveDetector(i, aSD);
     }
   }
-  if(!found)
-  {
+  if (!found) {
     G4String eM2 = "No logical volume of name <";
     eM2 += logVolName;
     eM2 += "> is found. The specified sensitive detector <";
     eM2 += aSD->GetName();
     eM2 += "> couldn't be assigned to any volume.";
-    G4Exception("G4VUserParallelWorld::SetSensitiveDetector()",
-                "Run0053", FatalErrorInArgument, eM2);
+    G4Exception("G4VUserParallelWorld::SetSensitiveDetector()", "Run0053", FatalErrorInArgument,
+                eM2);
   }
 }
 
 // --------------------------------------------------------------------
-void G4VUserParallelWorld::SetSensitiveDetector(G4LogicalVolume* logVol,
-                                                G4VSensitiveDetector* aSD)
+void G4VUserParallelWorld::SetSensitiveDetector(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
   logVol->SetSensitiveDetector(aSD);

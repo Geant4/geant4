@@ -55,8 +55,8 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="SpineMid" dx="1.73" dy="2.45" dz="15.645" />
-  <eltube aunit="cm" lunit="cm" name="SpineLow" dx="1.73" dy="2.45" dz="5.905" />
+  <eltube lunit="cm" name="SpineMid" dx="1.73" dy="2.45" dz="15.645" />
+  <eltube lunit="cm" name="SpineLow" dx="1.73" dy="2.45" dz="5.905" />
   <union name="MiddleLowerSpine">
    <first ref="SpineMid" />
    <second ref="SpineLow" />

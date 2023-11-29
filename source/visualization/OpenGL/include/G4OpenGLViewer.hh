@@ -34,12 +34,9 @@
 
 #include "G4VViewer.hh"
 #include "G4OpenGL.hh"
-#ifdef G4OPENGL_VERSION_2
-#include "G4OpenGLVboDrawer.hh"
-#endif
 
 class G4OpenGLSceneHandler;
-class G4OpenGL2PSAction;
+class G4gl2ps;
 class G4Text;
 
 class G4OpenGLViewerPickMap {
@@ -109,16 +106,6 @@ public:
 
   virtual bool exportImage(std::string name="", int width=-1, int height=-1);
   bool setExportImageFormat(std::string format,bool quiet = false);
-
-#ifdef G4OPENGL_VERSION_2
-
-  void setVboDrawer(G4OpenGLVboDrawer* drawer);
-  G4OpenGLVboDrawer* fVboDrawer;
-
-  inline bool isInitialized() {
-    return fGlViewInitialized;
-  }
-#endif
 
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
@@ -200,7 +187,7 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-  G4OpenGL2PSAction* fGL2PSAction;
+  G4gl2ps* fGL2PSAction;
 
   G4double     fRot_sens;        // Rotation sensibility in degrees
   G4double     fPan_sens;        // Translation sensibility
@@ -241,39 +228,6 @@ private :
   bool fIsGettingPickInfos;
   // Block SetView() during picking
   
-#ifdef G4OPENGL_VERSION_2
-public:
-  inline GLuint getShaderProgram() {
-    return fShaderProgram;
-  }
-  inline GLuint getShaderProjectionMatrix() {
-    return fpMatrixUniform;
-  }
-  inline GLuint getShaderTransformMatrix() {
-    return ftMatrixUniform;
-  }
-  inline GLuint getShaderViewModelMatrix() {
-    return fmvMatrixUniform;
-  }
-
-protected :
-  
-  // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#define Shader GLuint
-
-  // define some attributes and variables for OpenGL and WebGL
-  GLuint fShaderProgram;
-  
-  // Program and related variables
-  GLuint fVertexPositionAttribute;
-  GLuint fVertexNormalAttribute;
-  GLuint fpMatrixUniform;
-  GLuint fcMatrixUniform;
-  GLuint fmvMatrixUniform;
-  GLuint fnMatrixUniform;
-  GLuint ftMatrixUniform;
-
-#endif
 };
 
 #endif

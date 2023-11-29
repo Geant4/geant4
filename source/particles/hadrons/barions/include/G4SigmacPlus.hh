@@ -51,7 +51,7 @@ class G4SigmacPlus : public G4ParticleDefinition
  private:
    static G4SigmacPlus* theInstance;
    G4SigmacPlus(){}
-   ~G4SigmacPlus(){}
+   ~G4SigmacPlus() override= default;
 
  public:
    static G4SigmacPlus* Definition();

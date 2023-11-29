@@ -190,7 +190,7 @@ public:
 				        const Hep2Vector & b);
   // v1-v2
 
-  enum { ZMpvToleranceTicks = 100 };
+  static const int ZMpvToleranceTicks = 100;
 
 private:
 

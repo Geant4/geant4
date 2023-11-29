@@ -42,17 +42,17 @@
 // ######################################################################
 // ###                          Unknown Particle                      ###
 // ######################################################################
-G4UnknownParticle* G4UnknownParticle::theInstance = 0;
+G4UnknownParticle* G4UnknownParticle::theInstance = nullptr;
 
 G4UnknownParticle*  G4UnknownParticle::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "unknown";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -68,11 +68,11 @@ G4UnknownParticle*  G4UnknownParticle::Definition()
 		    0,               0,             0,          
 		    0,               0,             0,             
 	   "geantino",               0,             0,           0,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
 		false,      "geantino",            0
 		);
   }
-  theInstance = reinterpret_cast<G4UnknownParticle*>(anInstance);
+  theInstance = static_cast<G4UnknownParticle*>(anInstance);
   return theInstance;
 
 }

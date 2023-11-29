@@ -13,6 +13,8 @@ geant4_add_module(G4muons
     G4MuMultipleScattering.hh
     G4MuPairProduction.hh
     G4MuPairProductionModel.hh
+    G4MuonToMuonPairProduction.hh
+    G4MuonToMuonPairProductionModel.hh
     G4TablesForExtrapolator.hh
     G4ePairProduction.hh
   SOURCES
@@ -26,6 +28,8 @@ geant4_add_module(G4muons
     G4MuMultipleScattering.cc
     G4MuPairProduction.cc
     G4MuPairProductionModel.cc
+    G4MuonToMuonPairProduction.cc
+    G4MuonToMuonPairProductionModel.cc
     G4TablesForExtrapolator.cc
     G4ePairProduction.cc)
 

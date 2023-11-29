@@ -62,7 +62,7 @@ class G4VParameterisationTubs : public G4VDivisionParameterisation
                             G4double offset, G4double step,
                             G4VSolid* msolid, DivisionType divType );
   
-    virtual ~G4VParameterisationTubs();
+    ~G4VParameterisationTubs() override;
 };
 
 class G4ParameterisationTubsRho : public G4VParameterisationTubs
@@ -72,41 +72,41 @@ class G4ParameterisationTubsRho : public G4VParameterisationTubs
     G4ParameterisationTubsRho( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
                                G4VSolid* motherSolid, DivisionType divType );
-   ~G4ParameterisationTubsRho();
+   ~G4ParameterisationTubsRho() override;
 
-    G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const override;
 
     void ComputeTransformation(const G4int copyNo,
-                                     G4VPhysicalVolume* physVol) const;
+                                     G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
-                           const G4VPhysicalVolume* physVol) const;
+                           const G4VPhysicalVolume* physVol) const override;
 
   private:  // Dummy declarations to get rid of warnings ...
 
     void ComputeDimensions (G4Trd&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trap&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Box&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Sphere&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Orb&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Ellipsoid&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Torus&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Para&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Hype&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Cons&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polycone&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
 };
 
 
@@ -117,41 +117,41 @@ class G4ParameterisationTubsPhi : public G4VParameterisationTubs
     G4ParameterisationTubsPhi( EAxis axis, G4int nCopies,
                                G4double offset, G4double step,
                                G4VSolid* motherSolid, DivisionType divType );
-   ~G4ParameterisationTubsPhi();
+   ~G4ParameterisationTubsPhi() override;
 
-    G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const override;
 
     void ComputeTransformation(const G4int copyNo,
-                                     G4VPhysicalVolume* physVol) const;
+                                     G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
-                           const G4VPhysicalVolume* physVol) const;
+                           const G4VPhysicalVolume* physVol) const override;
 
   private:  // Dummy declarations to get rid of warnings ...
 
     void ComputeDimensions (G4Trd&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trap&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Box&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Sphere&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Orb&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Ellipsoid&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Torus&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Para&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Hype&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Cons&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polycone&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
 };
 
 
@@ -162,41 +162,41 @@ class G4ParameterisationTubsZ : public G4VParameterisationTubs
     G4ParameterisationTubsZ( EAxis axis, G4int nCopies,
                              G4double offset, G4double step,
                              G4VSolid* motherSolid, DivisionType divType );
-   ~G4ParameterisationTubsZ();
+   ~G4ParameterisationTubsZ() override;
 
-    G4double GetMaxParameter() const;
+    G4double GetMaxParameter() const override;
 
     void ComputeTransformation(const G4int copyNo,
-                                     G4VPhysicalVolume* physVol) const;
+                                     G4VPhysicalVolume* physVol) const override;
     void ComputeDimensions(G4Tubs& tubs, const G4int copyNo,
-                           const G4VPhysicalVolume* physVol) const;
+                           const G4VPhysicalVolume* physVol) const override;
 
   private:  // Dummy declarations to get rid of warnings ...
 
     void ComputeDimensions (G4Trd&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trap&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Box&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Sphere&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Orb&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Ellipsoid&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Torus&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Para&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Hype&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Cons&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polycone&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Polyhedra&,const G4int,
-                            const G4VPhysicalVolume*) const {}
+                            const G4VPhysicalVolume*) const override {}
 };
 
 #endif

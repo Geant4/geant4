@@ -202,16 +202,6 @@ ScoreSpecies::AbsorbResultsFromWorkerScorer(G4VPrimitiveScorer* workerScorer)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ScoreSpecies::clear()
-{
-  fEvtMap->clear();
-  fNEvent = 0;
-  fEdep = 0;
-  fSpeciesInfoPerTime.clear();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ScoreSpecies::DrawAll()
 {;}
 

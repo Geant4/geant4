@@ -25,11 +25,6 @@
 //
 
 #include "G4HnManager.hh"
-#include "G4VH1Manager.hh"
-#include "G4VH2Manager.hh"
-#include "G4VH3Manager.hh"
-#include "G4VP1Manager.hh"
-#include "G4VP2Manager.hh"
 #include "G4VRFileManager.hh"
 
 //_____________________________________________________________________________
@@ -45,42 +40,42 @@ void G4VAnalysisReader::Message(
 inline
 G4int G4VAnalysisReader::GetH1Id(const G4String& name, G4bool warn) const
 {
-  return fVH1Manager->GetH1Id(name, warn);
+  return fVH1Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH2Id(const G4String& name, G4bool warn) const
 {
-  return fVH2Manager->GetH2Id(name, warn);
+  return fVH2Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH3Id(const G4String& name, G4bool warn) const
 {
-  return fVH3Manager->GetH3Id(name, warn);
+  return fVH3Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetP1Id(const G4String& name, G4bool warn) const
 {
-  return fVP1Manager->GetP1Id(name, warn);
+  return fVP1Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetP2Id(const G4String& name, G4bool warn) const
 {
-  return fVP2Manager->GetP2Id(name, warn);
+  return fVP2Manager->GetId(name, warn);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH1Nbins(G4int id) const
 {
-  return fVH1Manager->GetH1Nbins(id);
+  return fVH1Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -89,28 +84,28 @@ G4double G4VAnalysisReader::GetH1Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH1Manager->GetH1Xmin(id);
+  return fVH1Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH1Xmax(G4int id) const
 {
-  return fVH1Manager->GetH1Xmax(id);
+  return fVH1Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH1Width(G4int id) const
 {
-  return fVH1Manager->GetH1Width(id);
+  return fVH1Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH2Nxbins(G4int id) const
 {
-  return fVH2Manager->GetH2Nxbins(id);
+  return fVH2Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -119,28 +114,28 @@ G4double G4VAnalysisReader::GetH2Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH2Manager->GetH2Xmin(id);
+  return fVH2Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH2Xmax(G4int id) const
 {
-  return fVH2Manager->GetH2Xmax(id);
+  return fVH2Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH2XWidth(G4int id) const
 {
-  return fVH2Manager->GetH2XWidth(id);
+  return fVH2Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH2Nybins(G4int id) const
 {
-  return fVH2Manager->GetH2Nybins(id);
+  return fVH2Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -149,29 +144,28 @@ G4double G4VAnalysisReader::GetH2Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH2Manager->GetH2Ymin(id);
+  return fVH2Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH2Ymax(G4int id) const
 {
-  return fVH2Manager->GetH2Ymax(id);
+  return fVH2Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH2YWidth(G4int id) const
 {
-  return fVH2Manager->GetH2YWidth(id);
+  return fVH2Manager->GetWidth(G4Analysis::kY, id);
 }
-
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH3Nxbins(G4int id) const
 {
-  return fVH3Manager->GetH3Nxbins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -180,28 +174,28 @@ G4double G4VAnalysisReader::GetH3Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Xmin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3Xmax(G4int id) const
 {
-  return fVH3Manager->GetH3Xmax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3XWidth(G4int id) const
 {
-  return fVH3Manager->GetH3XWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH3Nybins(G4int id) const
 {
-  return fVH3Manager->GetH3Nybins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -210,28 +204,28 @@ G4double G4VAnalysisReader::GetH3Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Ymin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3Ymax(G4int id) const
 {
-  return fVH3Manager->GetH3Ymax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3YWidth(G4int id) const
 {
-  return fVH3Manager->GetH3YWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetH3Nzbins(G4int id) const
 {
-  return fVH3Manager->GetH3Nzbins(id);
+  return fVH3Manager->GetNbins(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
@@ -240,28 +234,28 @@ G4double G4VAnalysisReader::GetH3Zmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVH3Manager->GetH3Zmin(id);
+  return fVH3Manager->GetMinValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3Zmax(G4int id) const
 {
-  return fVH3Manager->GetH3Zmax(id);
+  return fVH3Manager->GetMaxValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetH3ZWidth(G4int id) const
 {
-  return fVH3Manager->GetH3ZWidth(id);
+  return fVH3Manager->GetWidth(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetP1Nbins(G4int id) const
 {
-  return fVP1Manager->GetP1Nbins(id);
+  return fVP1Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -270,21 +264,21 @@ G4double G4VAnalysisReader::GetP1Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP1Manager->GetP1Xmin(id);
+  return fVP1Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP1Xmax(G4int id) const
 {
-  return fVP1Manager->GetP1Xmax(id);
+  return fVP1Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP1XWidth(G4int id) const
 {
-  return fVP1Manager->GetP1XWidth(id);
+  return fVP1Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -293,21 +287,21 @@ G4double G4VAnalysisReader::GetP1Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP1Manager->GetP1Ymin(id);
+  return fVP1Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP1Ymax(G4int id) const
 {
-  return fVP1Manager->GetP1Ymax(id);
+  return fVP1Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetP2Nxbins(G4int id) const
 {
-  return fVP2Manager->GetP2Nxbins(id);
+  return fVP2Manager->GetNbins(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
@@ -316,28 +310,28 @@ G4double G4VAnalysisReader::GetP2Xmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Xmin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP2Xmax(G4int id) const
 {
-  return fVP2Manager->GetP2Xmax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP2XWidth(G4int id) const
 {
-  return fVP2Manager->GetP2XWidth(id);
+  return fVP2Manager->GetWidth(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4int G4VAnalysisReader::GetP2Nybins(G4int id) const
 {
-  return fVP2Manager->GetP2Nybins(id);
+  return fVP2Manager->GetNbins(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -346,21 +340,21 @@ G4double G4VAnalysisReader::GetP2Ymin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Ymin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP2Ymax(G4int id) const
 {
-  return fVP2Manager->GetP2Ymax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP2YWidth(G4int id) const
 {
-  return fVP2Manager->GetP2YWidth(id);
+  return fVP2Manager->GetWidth(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
@@ -369,140 +363,140 @@ G4double G4VAnalysisReader::GetP2Zmin(G4int id) const
 {
 // Returns xmin value with applied unit and histogram function
 
-  return fVP2Manager->GetP2Zmin(id);
+  return fVP2Manager->GetMinValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4double G4VAnalysisReader::GetP2Zmax(G4int id) const
 {
-  return fVP2Manager->GetP2Zmax(id);
+  return fVP2Manager->GetMaxValue(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH1Title(G4int id) const
 {
-  return fVH1Manager->GetH1Title(id);
+  return fVH1Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH1XAxisTitle(G4int id) const
 {
-  return fVH1Manager->GetH1XAxisTitle(id);
+  return fVH1Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH1YAxisTitle(G4int id) const
 {
-  return fVH1Manager->GetH1YAxisTitle(id);
+  return fVH1Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH2Title(G4int id) const
 {
-  return fVH2Manager->GetH2Title(id);
+  return fVH2Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH2XAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2XAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH2YAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2YAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH2ZAxisTitle(G4int id) const
 {
-  return fVH2Manager->GetH2ZAxisTitle(id);
+  return fVH2Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH3Title(G4int id) const
 {
-  return fVH3Manager->GetH3Title(id);
+  return fVH3Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH3XAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3XAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH3YAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3YAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetH3ZAxisTitle(G4int id) const
 {
-  return fVH3Manager->GetH3ZAxisTitle(id);
+  return fVH3Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP1Title(G4int id) const
 {
-  return fVP1Manager->GetP1Title(id);
+  return fVP1Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP1XAxisTitle(G4int id) const
 {
-  return fVP1Manager->GetP1XAxisTitle(id);
+  return fVP1Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP1YAxisTitle(G4int id) const
 {
-  return fVP1Manager->GetP1YAxisTitle(id);
+  return fVP1Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP2Title(G4int id) const
 {
-  return fVP2Manager->GetP2Title(id);
+  return fVP2Manager->GetTitle(id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP2XAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2XAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kX, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP2YAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2YAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kY, id);
 }
 
 //_____________________________________________________________________________
 inline
 G4String G4VAnalysisReader::GetP2ZAxisTitle(G4int id) const
 {
-  return fVP2Manager->GetP2ZAxisTitle(id);
+  return fVP2Manager->GetAxisTitle(G4Analysis::kZ, id);
 }
 
 //_____________________________________________________________________________

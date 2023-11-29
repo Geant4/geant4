@@ -29,46 +29,41 @@
 #include "globals.hh"
 #include <fstream>
 
-
-
 class AnalysisManager {
 
- public:
-   // The analysis class is designed to be a singleton (i.e. only one instance
-   // can exist). A member function called Instance is defined, which allows 
-   // the user to get a pointer to the existing instance or to create it if 
-   // it does not yet exist
-   // 
-   static AnalysisManager* Instance();
+public:
+    // The analysis class is designed to be a singleton (i.e. only one instance can exist).
+    // A member function called Instance is defined, which allows the user to get
+    // a pointer to the existing instance or to create it, if it does not yet exist.
+    static auto Instance() -> AnalysisManager*;
 
-   // The analysis class instance can be deleted by calling the Destroy
-   // method (NOTE: The class destructor is protected, and can thus not be
-   // called directly):
-   static void Destroy(); 
+    // The analysis class instance can be deleted by calling the Destroy method.
+    // (NOTE: The class destructor is protected, and can thus not be called directly)
+    static void Destroy();
 
-//    // Member function used to score the total energy deposit
-//   void ScoreTot(G4double eTot);
+    // Member function used to score the total energy deposit
+    void ScoreTotalEnergy(G4double totalDepositedEnergy);
 
-   // Member function used to dump hits
-  void Score(G4double eDep);
+    // Member function used to dump hits
+    void Score(G4double depositedEnergy);
 
- protected:
-   // Constructor (protected):
-   AnalysisManager();    
+protected:
+    // Constructor (protected)
+    explicit AnalysisManager();
 
-   // Destructor (protected): 
-   virtual ~AnalysisManager();
+    // Destructor (protected)
+    virtual ~AnalysisManager();
 
-   // Prevent copying
-   AnalysisManager(const AnalysisManager& only);
-   const AnalysisManager& operator=(const AnalysisManager& only);
+    // Prevent copying
+    AnalysisManager(const AnalysisManager& only);
+    
+    auto operator=(const AnalysisManager& only) -> const AnalysisManager&;
 
-private:
-  // The static instance of the AnalysisManager class:
-  static AnalysisManager* instance;
-  std::ofstream outFile;
-  std::ofstream outFileT;
+private:    
+    static AnalysisManager* instance; // The static instance of the AnalysisManager class
+    
+    std::ofstream dataFile1;
+    
+    std::ofstream dataFile2;
 };
-
-
 #endif // ANALYSISMANAGER_HH

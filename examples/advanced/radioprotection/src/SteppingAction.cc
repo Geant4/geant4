@@ -57,8 +57,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   // Retrieve the secondary particles
     fSecondary = steppingManager -> GetfSecondary();
-	
-	
+
+
 
 #ifdef ANALYSIS_USE  
    for(size_t lp1=0;lp1<(*fSecondary).size(); lp1++)
@@ -70,8 +70,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       // G4String process = (*fSecondary)[lp1]-> GetCreatorProcess()-> GetProcessName();   // process creating it
        G4double charge = (*fSecondary)[lp1] -> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
        G4int AA = (*fSecondary)[lp1] -> GetDynamicParticle() -> GetDefinition() -> GetBaryonNumber();
-          
-     if (volumeName == "SV_phys1" || volumeName == "sen_bridge" || volumeName == "physSensitiveBridgeVolume") 
+
+     if (G4StrUtil::contains(volumeName, "SV_phys") || volumeName == "sen_bridge" || volumeName == "physSensitiveBridgeVolume") 
 //Testing with larger volume!
 //if (volumeName == "DiaVol_phys")
 	 {

@@ -40,18 +40,6 @@ G4AllocatorPool::G4AllocatorPool(unsigned int sz)
 {}
 
 // ************************************************************
-// G4AllocatorPool copy constructor
-// ************************************************************
-//
-G4AllocatorPool::G4AllocatorPool(const G4AllocatorPool& right)
-  : esize(right.esize)
-  , csize(right.csize)
-  , chunks(right.chunks)
-  , head(right.head)
-  , nchunks(right.nchunks)
-{}
-
-// ************************************************************
 // G4AllocatorPool operator=
 // ************************************************************
 //
@@ -83,7 +71,7 @@ void G4AllocatorPool::Reset()
   //
   G4PoolChunk* n = chunks;
   G4PoolChunk* p = nullptr;
-  while(n)
+  while(n != nullptr)
   {
     p = n;
     n = n->next;
@@ -103,7 +91,7 @@ void G4AllocatorPool::Grow()
   // Allocate new chunk, organize it as a linked list of
   // elements of size 'esize'
   //
-  G4PoolChunk* n = new G4PoolChunk(csize);
+  auto* n        = new G4PoolChunk(csize);
   n->next        = chunks;
   chunks         = n;
   ++nchunks;

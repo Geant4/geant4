@@ -48,7 +48,6 @@ G4DNAScavengerProcess::G4DNAScavengerProcess(const G4String& aName,
   : G4VITProcess(aName, type)
   , fpBoundingBox(&box)
   , fpScavengerMaterial(nullptr)
-  , fVerbose(1)
 {
   pParticleChange     = &fParticleChange;
   enableAtRestDoIt    = false;
@@ -113,7 +112,7 @@ void G4DNAScavengerProcess::SetReaction(MolType molConf, Data* pData)
   }
   auto materialConf = pData->GetReactant1() == molConf ? pData->GetReactant2()
                                                        : pData->GetReactant1();
-  if(fVerbose > 0)
+  if(verboseLevel > 0)
   {
     G4cout << "G4DNAScavengerProcess::SetReaction : " << molConf->GetName()
            << "   materialConf : " << materialConf->GetName() << G4endl;
@@ -157,7 +156,7 @@ G4double G4DNAScavengerProcess::PostStepGetPhysicalInteractionLength(
     {
       continue;
     }
-    if(fVerbose > 1)
+    if(verboseLevel > 1)
     {
       G4cout << " Material of " << matConf->GetName() << " : " << numMol
              << G4endl;
@@ -254,11 +253,10 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
   auto molConf         = molecule->GetMolecularConfiguration();
   if(fpMolecularConfiguration != molConf)
   {
-    G4cout << "fpMolecularConfiguration : "
-           << fpMolecularConfiguration->GetName()
-           << "  molConf : " << molConf->GetName() << G4endl;
-
-    assert(false);
+    fReturnedValue = DBL_MAX;
+    fParticleChange.Initialize(track);
+    State(fPreviousTimeAtPreStepPoint) = -1;
+    return &fParticleChange;
   }
   std::vector<G4Track*> products;
 #ifdef G4VERBOSE
@@ -301,7 +299,7 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
   }
 
 #ifdef G4VERBOSE
-  if(fVerbose != 0)
+  if(verboseLevel != 0)
   {
     G4cout << "At time : " << std::setw(7) << G4BestUnit(reactionTime, "Time")
            << " Reaction : " << GetIT(track)->GetName() << " ("
@@ -315,12 +313,12 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
     for(G4int i = 0; i < nbSecondaries; ++i)
     {
 #ifdef G4VERBOSE
-      if((fVerbose != 0) && i != 0)
+      if((verboseLevel != 0) && i != 0)
       {
         G4cout << " + ";
       }
 
-      if(fVerbose != 0)
+      if(verboseLevel != 0)
       {
         G4cout << GetIT(products.at(i))->GetName() << " ("
                << products.at(i)->GetTrackID() << ")";
@@ -331,14 +329,14 @@ G4VParticleChange* G4DNAScavengerProcess::PostStepDoIt(const G4Track& track,
   else
   {
 #ifdef G4VERBOSE
-    if(fVerbose != 0)
+    if(verboseLevel != 0)
     {
       G4cout << "No product";
     }
 #endif
   }
 #ifdef G4VERBOSE
-  if(fVerbose != 0)
+  if(verboseLevel != 0)
   {
     G4cout << G4endl;
   }

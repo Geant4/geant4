@@ -1,0 +1,107 @@
+
+                 Geant4 11.0 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                           16 September 2022
+
+List of fixes included in this public patch since the public release 11.0.2:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Update extraction of include paths from VecGeom to use imported target
+        property. Addressing problem report #2485.
+
+  o Geometry:
+    --------
+    + management:
+      o Added protection in G4GeometryManager for Open/CloseGeometry() to
+        be executed only by master thread. Addressing problem report #2502.
+
+  o Global:
+    ------
+    + Commented out debug printout in G4ThreadLocalSingleton method.
+    + Updated date and version for 11.0.3.
+
+  o Parameterisations:
+    -----------------
+    + gflash:
+      o GFlashHitMaker: fix to make it compatible with command-based scorer.
+
+  o Particles:
+    ---------
+    + Fixes for transportation of hypernuclei and anti-hypernuclei: in G4Ion,
+      set (forgotten) 'isGeneralIon' to false for hypernuclei and
+      anti-hypernuclei, to avoid they get assigned same processes as
+      'GenericIon'.
+      In G4DoubleHyperDoubleNeutron and G4AntiDoubleHyperDoubleNeutron, added
+      (forgotten) call to SetDecayTable(), to have the decay table defined for
+      these particles.
+      In G4ParticleDefinition, protect methods GetNumberOfLambdasInHypernucleus()
+      and GetNumberOfAntiLambdasInAntiHypernucleus() against baryonic resonances
+      with high spins (such as N(2220), N(2250) and their anti-particles) which
+      have 8-digits PDG codes, but which are not hypernuclei or anti-hypernuclei.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4GammaGeneralProcess: fixed problem of Compton scattering selection
+        in the low energy interval < 150 keV.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + utils
+      o G4EmExtraParametersMessenger: fixed typo.
+        Addressing problem report #2492.
+
+  o Processes - Generic:
+    -------------------
+    + cuts
+      o G4VRangeToEnergyConverter: fixed static methods to provide correct
+        initialisation of energy limits.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/particle_hp
+      o G4ParticleHPInelastic, G4ParticleHPCapture, G4ParticleHPFission,
+        G4ParticleHPElastic, G4ParticleHPThermalScattering: replaced the
+        threshold used for checking the absolute energy non-conservation from
+        DLB_MAX (implying no checking at all) to 350 GeV (this value allows for
+        cases where the residual nucleus is not produced, even when super-heavy
+        nuclides are involved).
+      o G4ParticleHPContAngularPar: added protections against evaluations of
+        arrays at negative index (-1), fixing rare reproducibility problems.
+    + models/parton_string
+      o Fixes to get isotropic distributions in annihilations at rest: in
+        G4DiffractiveSplitableHadron, set proper parton index.
+        In G4DiffractiveExcitation, in the CreateStrings() method, take into
+        account that strings are created in G4FTFAnnihilation; by default, the
+        method CreateStrings() creates a string from a wounded nucleon/hadron,
+        but this is not needed in the case of annihilation.
+        In G4FTFAnnihilation, removed splitting of hadron; fixed bugs in the 
+        calculations of kinematical properties; set quark momenta at string
+        ends, to properly account for string order on rapidity.
+      o G4VSplitableHadron: changed the method Splitting() from "protected" to
+        "public" (needed to change the status of SplitableHadron in
+        G4FTFAnnihilation, to get isotropic distributions in annihilations
+        at rest).
+
+  o Track:
+    -----
+    + G4Step: added ResetPre/PostStepPoint() methods to replace a StepPoint
+      without deleting the previous object.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.0 series.
+  o  Technical notes distributed for release 11.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.0.3 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

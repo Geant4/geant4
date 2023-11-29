@@ -105,7 +105,7 @@ void GIDI_settings_group::print( bool outline, int valuesPerLine ) const {
     std::cout << "GROUP: label = '" << mLabel << "': length = " << nbs << std::endl;
     if( outline ) return;
     for( int ib = 0; ib < nbs; ib++ ) {
-        sprintf( buffer, "%16.8e", mBoundaries[ib] );
+        snprintf( buffer, sizeof buffer, "%16.8e", mBoundaries[ib] );
         std::cout << buffer;
         if( ( ( ib + 1 ) % valuesPerLine ) == 0 ) std::cout << std::endl;
     }
@@ -160,7 +160,7 @@ void GIDI_settings_groups_from_bdfls::initialize2( cbdfls_file const *bdfls ) {
     ng = cbdflsGIDs( (cbdfls_file *) bdfls, &gids );
     for( int ig = 0; ig < ng; ++ig ) {
         ngbs = cbdflsGetGroup( (cbdfls_file *) bdfls, gids[ig], &boundaries );
-        sprintf( cLabel, "LLNL_gid_%.3d", gids[ig] );
+        snprintf( cLabel, sizeof xLabel, "LLNL_gid_%.3d", gids[ig] );
         label = cLabel;
         mGroups.push_back( GIDI_settings_group( label, ngbs, boundaries ) );
     }
@@ -179,7 +179,7 @@ GIDI_settings_group GIDI_settings_groups_from_bdfls::getViaGID( int gid ) const 
     std::string label( "" );
     char cLabel[100];
 
-    sprintf( cLabel, "LLNL_gid_%.3d", gid );
+    snprintf( cLabel, sizeof cLabel, "LLNL_gid_%.3d", gid );
     label = cLabel;
     for( int ig = 0; ig < (int) mGroups.size( ); ++ig ) {
         if( mGroups[ig].isLabel( label ) ) return( mGroups[ig] );

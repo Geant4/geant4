@@ -155,9 +155,15 @@ The AF human phantom is voxelised in x,y,z with 299 x 137 x 348 voxels with dime
   
 - Compile and link to generate the executable (in your CMAKE build directory):
  	      % make
+  This should make two executables - ICRP110phantoms and ICRP110standalone.
 
 - Execute the application in 'interactive' mode with visualization:
  	      % ./ICRP110phantoms
+              
+- Execute the "standalone" application in 'interactive' mode with visualization:
+ 	      % ./ICRP110standalone
+  This allows you to visualise the phantom without the overhead of the run manager and initialising all the physics tables.
+  Of course, you cannot run or visualise trajectories.
               
 - Execute the application in 'batch' mode from macro files:
         % ./ICRP110phantoms female_head.in
@@ -165,7 +171,7 @@ The AF human phantom is voxelised in x,y,z with 299 x 137 x 348 voxels with dime
 -----------------------------
     AVAILABLE MACRO FILES 																																	
 -----------------------------	
-For the users convinience, macro files have been created which are designed to construct partial head 
+For the users convenience, macro files have been created which are designed to construct partial head 
 and trunk phantoms for both the male and female models. These macro files can be called upon in batch
 mode when executing the application as specified above. If the user wishes to construct a completed/full
 male or female phantom, the macros male.in and female.in can be called upon, respectively. 
@@ -178,7 +184,7 @@ male or female phantom, the macros male.in and female.in can be called upon, res
                                   'ICRPdata/FemaleData.dat' if the user wishes to create their own custom partial phantom section.  
  - openGLVis.mac                 : macro for visualisation with openGL. 
  - vis.mac (default)             : Executed by default when the simulation is run in 'interactive' mode.	
- - primary.mac                   : Contains the definition of the primary radiation field.					
+ - primary.mac                   : Contains the definition of the primary radiation field.
 
 At the very top of the various '.in' macro files (pre-initialization), there are a series of commands 
 which define the sex and section of the phantom to create. These commands are listed below:

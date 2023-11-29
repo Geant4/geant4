@@ -208,8 +208,11 @@ void F01DetectorConstruction::DefineMaterials()
   Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 );
   Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 );
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
+  // Print material table -- silence it for now
+  // G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4cout << "F01DetectorConstruction: not printing material table - to see it edit the source."
+         << G4endl;
+  
   // default materials of the calorimeter
   
   fAbsorberMaterial = air; //  Kr20CO2;   // XeCO2CF4;
@@ -379,6 +382,7 @@ void F01DetectorConstruction::SetAbsorberZpos(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4FieldManager.hh"
 
 void F01DetectorConstruction::ConstructSDandField()
 {
@@ -390,11 +394,11 @@ void F01DetectorConstruction::ConstructSDandField()
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fCalorimeterSD.Get());
   SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
-
+  
   // Construct the field creator - this will register the field it creates
   if (!fEmFieldSetup.Get()) {
     F01FieldSetup* fieldSetup
-       = new F01FieldSetup(G4ThreeVector( 3.3*tesla, 0.0, 0.0 ),
+       = new F01FieldSetup(G4ThreeVector( 0.0, 0.0, 3.3*tesla ),
                            fUseFSALstepper );
     G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
     fEmFieldSetup.Put(fieldSetup);

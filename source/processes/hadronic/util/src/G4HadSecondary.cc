@@ -25,11 +25,13 @@
 //
 #include "G4HadSecondary.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4HadronicException.hh"
 
 G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight, 
 			       G4int mod) :
-  theP(aT), theWeight(aWeight), theTime(-1), theCreatorModel(mod)
+  theP(aT), theWeight(aWeight), theTime(-1), theCreatorModel(mod),
+  theParentResonanceDef(nullptr), theParentResonanceID(0)
 {
   if(aT->GetKineticEnergy()<0)
   {

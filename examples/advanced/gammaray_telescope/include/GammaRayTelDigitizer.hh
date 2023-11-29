@@ -38,41 +38,35 @@
 #ifndef GammaRayTelDigitizer_h
 #define GammaRayTelDigitizer_h 1
 
-#include "G4VDigitizerModule.hh"
 #include "GammaRayTelDigi.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4VDigitizerModule.hh"
 #include "globals.hh"
-//#include "g4std/vector"
 
 class GammaRayTelDigitizerMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelDigitizer : public G4VDigitizerModule
-{
+class GammaRayTelDigitizer: public G4VDigitizerModule {
 public:
-  
-  GammaRayTelDigitizer(G4String name);
-  ~GammaRayTelDigitizer();
-  
-  void Digitize();
-  void SetThreshold(G4double val) { Energy_Threshold = val;}
-  
+    explicit GammaRayTelDigitizer(G4String name);
+
+    ~GammaRayTelDigitizer() override;
+
+    void Digitize() override;
+
+    void SetThreshold(G4double value) {
+        energyThreshold = value;
+    }
+
 private:
-  
-  GammaRayTelDigitsCollection*  DigitsCollection;
-  G4double Energy_Threshold; // for TKR digi
-  G4double TotalEnergy; // for CAL analysis
-  G4double ACDThreshold; // for ACD analysis
-  GammaRayTelDigitizerMessenger* digiMessenger;
+    GammaRayTelDigitsCollection *digitsCollection;
 
+    G4double energyThreshold{120. * keV}; // for TKR digi
+
+    G4double totalEnergy{0.}; // for CAL analysis
+
+    G4double acdThreshold{15 * keV}; // for ACD analysis
+
+    GammaRayTelDigitizerMessenger *digitizerMessenger;
 };
-
 #endif
-
-
-
-
-
-
-
-

@@ -36,9 +36,16 @@
 
 #include <memory>
 #include <string_view>
+#include <utility>
 
 class G4VNtupleManager;
 class G4NtupleBookingManager;
+
+enum class G4NtupleMergeMode {
+  kNone,
+  kMain,
+  kSlave
+};
 
 class G4VNtupleFileManager
 {
@@ -47,8 +54,7 @@ class G4VNtupleFileManager
   friend class G4VAnalysisManager;
 
   public:
-    G4VNtupleFileManager(const G4AnalysisManagerState& state,
-                         const G4String& fileType);
+    G4VNtupleFileManager(const G4AnalysisManagerState& state, G4String fileType);
     G4VNtupleFileManager() = delete;
     virtual ~G4VNtupleFileManager() = default;
 
@@ -69,9 +75,10 @@ class G4VNtupleFileManager
     // Methods to be performed at file management
     virtual G4bool ActionAtOpenFile(const G4String& /*fileName*/) = 0;
     virtual G4bool ActionAtWrite() = 0;
-    virtual G4bool ActionAtCloseFile(G4bool /*reset*/) = 0;
+    virtual G4bool ActionAtCloseFile() = 0;
     virtual G4bool Reset() = 0;
     virtual G4bool IsNtupleMergingSupported() const;
+    virtual G4NtupleMergeMode GetMergeMode() const;
 
     // Get methods
     G4String GetFileType() const;
@@ -98,7 +105,9 @@ class G4VNtupleFileManager
 
 inline void G4VNtupleFileManager::SetBookingManager(
   std::shared_ptr<G4NtupleBookingManager> bookingManager)
-{ fBookingManager = bookingManager; }
+{
+  fBookingManager = std::move(bookingManager);
+}
 
 inline G4bool G4VNtupleFileManager::IsNtupleMergingSupported() const {
   return false;
@@ -113,6 +122,10 @@ inline void G4VNtupleFileManager::Message(
   const G4String& objectName, G4bool success) const
 {
   fState.Message(level, action, objectType, objectName, success);
+}
+
+inline G4NtupleMergeMode G4VNtupleFileManager::GetMergeMode() const {
+  return G4NtupleMergeMode::kNone;
 }
 
 #endif

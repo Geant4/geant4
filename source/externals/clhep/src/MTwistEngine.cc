@@ -303,7 +303,7 @@ std::ostream & MTwistEngine::put ( std::ostream& os ) const
    char beginMarker[] = "MTwistEngine-begin";
    char endMarker[]   = "MTwistEngine-end";
 
-   int pr = os.precision(20);
+   long pr = os.precision(20);
    os << " " << beginMarker << " ";
    os << theSeed << " ";
    for (int i=0; i<624; ++i) {
@@ -381,9 +381,9 @@ bool MTwistEngine::getState (const std::vector<unsigned long> & v) {
     return false;
   }
   for (int i=0; i<624; ++i) {
-     mt[i]=v[i+1];
+     mt[i]=(unsigned int)v[i+1];
   }
-  count624 = v[625];
+  count624 = (int)v[625];
   return true;
 }
 

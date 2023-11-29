@@ -80,7 +80,7 @@ namespace G4INCL {
         // Keep track of the first entering particle
         if(intersection.time < theFirstEntryTime) {
           theFirstEntryTime = intersection.time;
-          theFirstID = (*p)->getID();
+          theFirstID = (G4int)(*p)->getID();
         }
       }
     }

@@ -47,16 +47,16 @@
 // ###                           AntiOmegaMinus                       ###
 // ######################################################################
 
-G4AntiOmegaMinus* G4AntiOmegaMinus::theInstance = 0;
+G4AntiOmegaMinus* G4AntiOmegaMinus::theInstance = nullptr;
 
 G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_omega-";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
                     3,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -3334,
-                false,       0.0821*ns,          NULL,
+                false,       0.0821*ns,          nullptr,
                 false,       "omega");
 
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
     anInstance->SetPDGMagneticMoment( -2.02 * mN);
  
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
-    G4VDecayChannel** mode = new G4VDecayChannel*[3];
+    auto  mode = new G4VDecayChannel*[3];
     // anti_omega- -> anti_lambda + kaon+
     mode[0] = new G4PhaseSpaceDecayChannel("anti_omega-",0.678,2,"anti_lambda","kaon+");
     // anti_omega- -> anti_xi0 + pi+
@@ -97,7 +97,7 @@ G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4AntiOmegaMinus*>(anInstance);
+  theInstance = static_cast<G4AntiOmegaMinus*>(anInstance);
   return theInstance;
 }
 

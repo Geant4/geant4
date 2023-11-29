@@ -39,11 +39,9 @@ class G4LogicalVolume;
 class G4MIRDRightLeg:public G4VOrgan
 {
 public:
-
-  G4MIRDRightLeg();
-  ~G4MIRDRightLeg();
+  G4MIRDRightLeg() = default;
+  ~G4MIRDRightLeg() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&,G4bool, G4bool);
-private:
+				    const G4String&,G4bool, G4bool) override;
 };
 #endif

@@ -60,15 +60,15 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {
-  G4int n = material->GetNumberOfElements();
+  G4int n = (G4int)material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
-    G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins,false);
+    auto v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins,false);
     xSections.push_back(v0);
     for(G4int i=1; i<n; ++i) {
-      G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
+      auto v = new G4PhysicsLogVector(*v0);
       xSections.push_back(v);
     }
   }

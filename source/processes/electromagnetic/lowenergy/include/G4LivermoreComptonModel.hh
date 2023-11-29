@@ -49,7 +49,7 @@ public:
 
   explicit G4LivermoreComptonModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "LivermoreCompton");
-  virtual ~G4LivermoreComptonModel();
+  ~G4LivermoreComptonModel() override;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
@@ -75,7 +75,8 @@ public:
   G4LivermoreComptonModel(const  G4LivermoreComptonModel&) = delete;
 
 private:
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(const G4int ZZ);
+  const G4String& FindDirectoryPath();
   G4double ComputeScatteringFunction(G4double x, G4int Z);
 
   G4ParticleChangeForGamma* fParticleChange;
@@ -87,10 +88,11 @@ private:
 
   static G4PhysicsFreeVector* data[101]; // 101 because Z range is 1-100
   static const G4double ScatFuncFitParam[101][16];
+  static G4String gDataDirectory;
 
   G4int verboseLevel;
-  G4int maxZ;
-  G4bool isInitialised;
+  G4int maxZ = 100;
+  G4bool isInitialised = false;
 
 };
 

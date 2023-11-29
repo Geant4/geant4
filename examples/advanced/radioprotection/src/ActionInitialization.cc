@@ -35,10 +35,11 @@
 #include "RunAction.hh"
 #include "G4GeneralParticleSource.hh"
 
-ActionInitialization::ActionInitialization(AnalysisManager* analysisMan):
+ActionInitialization::ActionInitialization(AnalysisManager* analysisMan, DetectorMessenger* detectorMess):
 G4VUserActionInitialization()
 {
  analysis = analysisMan;
+ detector = detectorMess;
 }
 
 
@@ -63,9 +64,9 @@ PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(analysis);
 SetUserAction(primary); 
 
 #ifdef ANALYSIS_USE
- RunAction* run = new RunAction(analysis);
+ RunAction* run = new RunAction(analysis, detector);
 #else
- RunAction* run = new RunAction();
+ RunAction* run = new RunAction(detector);
 #endif
 
 SetUserAction(run); 

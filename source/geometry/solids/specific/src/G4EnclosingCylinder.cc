@@ -81,14 +81,8 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon* rz,
 //                            for usage restricted to object persistency.
 //
 G4EnclosingCylinder::G4EnclosingCylinder( __void__& )
-: radius(0.), zLo(0.), zHi(0.), phiIsOpen(0.), startPhi(0.), totalPhi(0.),
+: radius(0.), zLo(0.), zHi(0.), phiIsOpen(false), startPhi(0.), totalPhi(0.),
   concave(false)
-{
-}
-
-// Destructor
-//
-G4EnclosingCylinder::~G4EnclosingCylinder()
 {
 }
 

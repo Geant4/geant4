@@ -34,8 +34,6 @@
 //
 // ClassName:   TrackingAction
 //
-// Description: Implementation file for control on MC truth
-//
 // Author:      V.Ivanchenko 13/03/01
 //
 // Modified:
@@ -57,18 +55,16 @@ class TrackingAction : public G4UserTrackingAction
 
 public:
   TrackingAction();
-  virtual ~TrackingAction();
+  ~TrackingAction() override = default;
 
-  virtual void PreUserTrackingAction(const G4Track*);
-  virtual void PostUserTrackingAction(const G4Track*);
+  void PreUserTrackingAction(const G4Track*) override;
+
+  TrackingAction & operator=(const TrackingAction &right) = delete;
+  TrackingAction(const TrackingAction&) = delete;
 
 private:
-
-  TrackingAction & operator=(const TrackingAction &right);
-  TrackingAction(const TrackingAction&);
-
+    
   HistoManager* fHisto;
-
 };
 
 #endif

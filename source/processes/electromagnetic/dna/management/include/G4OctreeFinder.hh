@@ -34,7 +34,6 @@
 #include "G4ITType.hh"
 #include "G4memory.hh"
 #include "G4TrackList.hh"
-#include "G4IRTUtils.hh"
 
 #undef DEBUG
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

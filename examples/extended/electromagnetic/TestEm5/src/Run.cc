@@ -44,30 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), 
-  fParticle(0), fEkin(0.)
-{
-  fEnergyDeposit  = fEnergyDeposit2  = 0.;
-  fTrakLenCharged = fTrakLenCharged2 = 0.;
-  fTrakLenNeutral = fTrakLenNeutral2 = 0.;
-  fNbStepsCharged = fNbStepsCharged2 = 0.;
-  fNbStepsNeutral = fNbStepsNeutral2 = 0.;
-  fMscProjecTheta = fMscProjecTheta2 = 0.;
-  fMscThetaCentral = 0.;
-
-  fNbGamma = fNbElect = fNbPosit = 0;
-
-  fTransmit[0] = fTransmit[1] = fReflect[0] = fReflect[1] = 0;
-  
-  fMscEntryCentral = 0;
-  
-  fEnergyLeak[0] = fEnergyLeak[1] = fEnergyLeak2[0] = fEnergyLeak2[1] = 0.;
- }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
+: fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,6 +85,10 @@ void Run::Merge(const G4Run* run)
   fMscProjecTheta  += localRun->fMscProjecTheta;
   fMscProjecTheta2 += localRun->fMscProjecTheta2;
 
+  fTypes[0] += localRun->fTypes[0];
+  fTypes[1] += localRun->fTypes[1];
+  fTypes[2] += localRun->fTypes[2];
+  fTypes[3] += localRun->fTypes[3];
     
   fNbGamma += localRun->fNbGamma;
   fNbElect += localRun->fNbElect;      
@@ -303,6 +284,14 @@ void Run::EndOfRun()
   G4cout << "  central part defined as +- "
          << fMscThetaCentral/mrad << " mrad; " 
          << "  Tail ratio = " << tailMsc << " %" << G4endl;
+
+  // gamma process counts
+  //
+  G4cout << "\n Gamma process counts:" << G4endl;
+  G4cout << "   Photoeffect " << fTypes[0] << G4endl;
+  G4cout << "   Compton     " << fTypes[1] << G4endl;
+  G4cout << "   Conversion  " << fTypes[2] << G4endl;
+  G4cout << "   Rayleigh    " << fTypes[3] << G4endl;
          
   // normalize histograms
   //

@@ -29,4 +29,4 @@
 #include "G4ParticleHPThermalScatteringNames.hh"
 using G4NeutronHPThermalScatteringNames = G4ParticleHPThermalScatteringNames;
 
-#endif 
+#endif

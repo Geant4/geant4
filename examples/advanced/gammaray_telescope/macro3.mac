@@ -29,7 +29,7 @@
 #/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a DAWN view:
-/vis/open DAWN
+/vis/open DAWNFILE
 #
 # Use this open statement to create a .heprep file suitable for
 # viewing in HepRApp:
@@ -95,5 +95,3 @@
 
 # run 10 events
 /run/beamOn 10
-
-

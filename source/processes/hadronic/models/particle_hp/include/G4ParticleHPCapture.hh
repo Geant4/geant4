@@ -25,15 +25,15 @@
 //
 //
 //
- // Hadronic Process: Very Low Energy Neutron X-Sections
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
- 
+// Hadronic Process: Very Low Energy Neutron X-Sections
+// original by H.P. Wellisch, TRIUMF, 14-Feb-97
+// Builds and has the Cross-section data for one material.
+
 // Class Description
 // Final state production model for a high precision (based on evaluated data
-// libraries) description of neutron capture below 20 MeV; 
+// libraries) description of neutron capture below 20 MeV;
 // To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
+// In this case you want to register an object of this class with
 // the corresponding process.
 // Class Description - End
 
@@ -42,35 +42,34 @@
 #ifndef G4ParticleHPCapture_h
 #define G4ParticleHPCapture_h 1
 
-#include "globals.hh"
-#include "G4ParticleHPChannel.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4ParticleHPChannel.hh"
+#include "globals.hh"
 
 class G4ParticleHPCapture : public G4HadronicInteraction
 {
-  public: 
-  
-  G4ParticleHPCapture();
+  public:
+    G4ParticleHPCapture();
 
-  ~G4ParticleHPCapture();
+    ~G4ParticleHPCapture() override;
 
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& aTargetNucleus) override;
 
-  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const override;
 
-   public:
-      G4int GetVerboseLevel() const;
-      void SetVerboseLevel( G4int );
-      void BuildPhysicsTable(const G4ParticleDefinition&);
-      virtual void ModelDescription(std::ostream& outFile) const;
-  
+  public:
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel(G4int);
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
+    void ModelDescription(std::ostream& outFile) const override;
+
   private:
-  
-      std::vector<G4ParticleHPChannel*>* theCapture;
-  G4String dirName;
-  G4int numEle;
-  
-  G4HadFinalState theResult;
+    std::vector<G4ParticleHPChannel*>* theCapture{nullptr};
+    G4String dirName;
+    G4int numEle{0};
+
+    G4HadFinalState theResult;
 };
 
 #endif

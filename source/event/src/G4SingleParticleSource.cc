@@ -126,7 +126,7 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event* evt)
   pp.position = posGenerator->GenerateOne();
 
   // Create a new vertex
-  G4PrimaryVertex* vertex = new G4PrimaryVertex(pp.position,time);
+  auto* vertex = new G4PrimaryVertex(pp.position,time);
 
   for (G4int i=0; i<NumberOfParticlesToBeGenerated; ++i)
   {
@@ -144,7 +144,7 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event* evt)
     // Create new primaries and set them to the vertex
     //
     G4double mass = definition->GetPDGMass();
-    G4PrimaryParticle* particle = new G4PrimaryParticle(definition);
+    auto* particle = new G4PrimaryParticle(definition);
     particle->SetKineticEnergy(pp.energy );
     particle->SetMass( mass );
     particle->SetMomentumDirection( pp.momentum_direction );

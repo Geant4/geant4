@@ -68,7 +68,7 @@ void G4MolecularDissociationChannel::AddProduct(Product* pProduct,
 
 G4int G4MolecularDissociationChannel::GetNbProducts() const
 {
-    return fProductsVector.size();
+    return (G4int)fProductsVector.size();
 }
 
 //______________________________________________________________________________

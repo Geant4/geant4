@@ -50,6 +50,7 @@
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4HadronicParameters.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,6 +120,21 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fVerbCmd->SetGuidance("Set verbose for ");
   fVerbCmd->SetParameterName("verb",false);
   fVerbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fBCCmd = new G4UIcmdWithABool("/testhadr/BCParticles",this);
+  fBCCmd->SetGuidance("Enable b-, c- hadronic physics");
+  fBCCmd->SetParameterName("BCparticles",false);
+  fBCCmd->AvailableForStates(G4State_PreInit);
+
+  fHNCmd = new G4UIcmdWithABool("/testhadr/HyperNuclei",this);
+  fHNCmd->SetGuidance("Enable hyper-nuclei hadronic physics");
+  fHNCmd->SetParameterName("HyperNuclei",false);
+  fHNCmd->AvailableForStates(G4State_PreInit);
+
+  fNGPCmd = new G4UIcmdWithABool("/testhadr/NeutronGeneralProcess",this);
+  fNGPCmd->SetGuidance("Enable neutron general process");
+  fNGPCmd->SetParameterName("NeutronGeneralProcess",false);
+  fNGPCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,6 +151,9 @@ DetectorMessenger::~DetectorMessenger()
   delete fBeamCmd;
   delete fVerbCmd;
   delete fEdepCmd;
+  delete fBCCmd;
+  delete fHNCmd;
+  delete fNGPCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,6 +179,12 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     h->SetDefaultBeamPositionFlag(fBeamCmd->GetNewBoolValue(newValue));
   } else if (command == fEdepCmd) {
     h->SetMaxEnergyDeposit(fEdepCmd->GetNewDoubleValue(newValue));
+  } else if( command == fBCCmd ) {
+    G4HadronicParameters::Instance()->SetEnableBCParticles(fBCCmd->GetNewBoolValue(newValue));
+  } else if( command == fHNCmd ) {
+    G4HadronicParameters::Instance()->SetEnableHyperNuclei(fHNCmd->GetNewBoolValue(newValue));
+  } else if( command == fNGPCmd ) {
+    G4HadronicParameters::Instance()->SetEnableNeutronGeneralProcess(fNGPCmd->GetNewBoolValue(newValue));
   }
 }
 

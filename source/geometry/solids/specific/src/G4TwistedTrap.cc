@@ -76,9 +76,7 @@ G4TwistedTrap::G4TwistedTrap( __void__& a )
 //=====================================================================
 //* Destructor --------------------------------------------------------
 
-G4TwistedTrap::~G4TwistedTrap()
-{
-}
+G4TwistedTrap::~G4TwistedTrap() = default;
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -144,7 +142,7 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 
 G4GeometryType G4TwistedTrap::GetEntityType() const
 {
-  return G4String("G4TwistedTrap");
+  return {"G4TwistedTrap"};
 }
 
 //=====================================================================

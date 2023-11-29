@@ -343,7 +343,7 @@ G4int G4AnalyticalPolSolver::QuarticRoots(G4double p[5], G4double r[3][5])
   G4double a, b, c, d, ds;
 
   G4double reRoot[4];
-  G4int k, noReRoots = 0;
+  G4int k;
 
   for(k = 0; k < 4; k++)
   {
@@ -375,11 +375,12 @@ G4int G4AnalyticalPolSolver::QuarticRoots(G4double p[5], G4double r[3][5])
   {
     if(r[2][k] == 0.)  // find a real root
     {
-      noReRoots++;
       reRoot[k] = r[1][k];
     }
     else
+    {
       reRoot[k] = DBL_MAX;  // kInfinity;
+    }
   }
   y1 = DBL_MAX;  // kInfinity;
   for(k = 1; k < 4; k++)

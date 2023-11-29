@@ -42,7 +42,7 @@ class G4IsotopeProperty
 {
   public:
 
-    G4IsotopeProperty();
+    G4IsotopeProperty() = default;
     virtual ~G4IsotopeProperty();
       // Constructor & destructor
 
@@ -106,7 +106,7 @@ class G4IsotopeProperty
     G4DecayTable* fDecayTable = nullptr;      // decay Table
     G4double      fMagneticMoment = 0.0;      // magnetic moment 
     G4int         fIsomerLevel = -1;          // isomer level 
-    G4Ions::G4FloatLevelBase fFloatLevelBase; // floating level base
+    G4Ions::G4FloatLevelBase fFloatLevelBase{G4Ions::G4FloatLevelBase::no_Float}; // floating level base
 };
 
 // ------------------------

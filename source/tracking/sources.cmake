@@ -35,7 +35,6 @@ geant4_add_module(G4tracking
     G4SmoothTrajectory.cc
     G4SmoothTrajectoryPoint.cc
     G4SteppingManager.cc
-    G4SteppingManager2.cc
     G4SteppingVerbose.cc
     G4SteppingVerboseWithUnits.cc
     G4TrackingManager.cc
@@ -48,8 +47,9 @@ geant4_add_module(G4tracking
     G4MultiTrackingAction.cc
     G4VSteppingVerbose.cc
     G4VTrajectory.cc
-    G4VTrajectoryPoint.cc
     G4MultiSteppingAction.cc)
+
+geant4_module_compile_definitions(G4tracking PRIVATE G4TRACKING_ALLOC_EXPORT)
 
 geant4_module_link_libraries(G4tracking
   PUBLIC
@@ -63,7 +63,5 @@ geant4_module_link_libraries(G4tracking
     G4track
     G4volumes
   PRIVATE
-    G4cuts
     G4detector
-    G4emutils
     G4graphics_reps)

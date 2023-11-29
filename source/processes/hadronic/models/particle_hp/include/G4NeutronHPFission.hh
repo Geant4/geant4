@@ -29,4 +29,4 @@
 #include "G4ParticleHPFission.hh"
 using G4NeutronHPFission = G4ParticleHPFission;
 
-#endif 
+#endif

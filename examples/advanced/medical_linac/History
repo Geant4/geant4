@@ -1,18 +1,28 @@
--------------------------------------------------------------------
+# Example medical_linac History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-10-04 Ben Morgan (medical_linac-V11-00-03)
+- Replace sprintf use with std::to_string
+  - sprintf deprecated on macOS 13, leading to compile warnings
+
+## 2022-10-04 Gabriele Cosmo (medical_linac-V11-00-02)
+- Fixed compilation warnings on Intel-icx compiler for set but
+  not used variables in ML2Acc1 and ML2Acc2 source.
+
+## 2022-09-09 Susanna Guatelli (medical_linac-V11-00-01)
+- Ranecu Engine removed. Default one now used
+
+## 2021-12-10 Ben Morgan (medical_linac-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 24.05.2021  B. Morgan (medical_linac-V10-07-00)
 - Bump required CMake version range to 3.12...3.20, matching core Geant4

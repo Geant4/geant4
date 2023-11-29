@@ -1,7 +1,3 @@
-#------------------------------------------------------------------------------
-# Module : G4ToolsSG
-# Package: Geant4.src.G4visualization.G4ToolsSG
-#------------------------------------------------------------------------------
-
-geant4_global_library_target(COMPONENTS sources.cmake)
-
+# - G4ToolsSG category build
+include(sources.cmake)
+geant4_add_category(G4ToolsSG MODULES G4ToolsSG)

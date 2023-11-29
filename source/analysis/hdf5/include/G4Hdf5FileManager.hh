@@ -35,30 +35,30 @@
 #include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple" // for hid_t
+#include "toolx/hdf5/ntuple" // for hid_t
 
 #include <memory>
 #include <tuple>
 #include <string_view>
 
 using G4Hdf5File = std::tuple<hid_t, hid_t, hid_t>;
-using Hdf5NtupleDescription = G4TNtupleDescription<tools::hdf5::ntuple, G4Hdf5File>;
+using Hdf5NtupleDescription = G4TNtupleDescription<toolx::hdf5::ntuple, G4Hdf5File>;
 
 class G4Hdf5FileManager : public G4VTFileManager<G4Hdf5File>
 {
   public:
     explicit G4Hdf5FileManager(const G4AnalysisManagerState& state);
     G4Hdf5FileManager() = delete;
-    ~G4Hdf5FileManager() = default;
+    ~G4Hdf5FileManager() override = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<G4Hdf5File>::WriteFile;
     using G4VTFileManager<G4Hdf5File>::CloseFile;
 
     // Methods to manipulate output files
-    virtual G4bool OpenFile(const G4String& fileName) final;
+    G4bool OpenFile(const G4String& fileName) final;
 
-    virtual G4String GetFileType() const final { return "hdf5"; }
+    G4String GetFileType() const final { return "hdf5"; }
 
     // Specific methods for files per objects
     G4bool CreateNtupleFile(Hdf5NtupleDescription* ntupleDescription);
@@ -74,9 +74,9 @@ class G4Hdf5FileManager : public G4VTFileManager<G4Hdf5File>
 
   protected:
     // // Methods derived from base class
-    virtual std::shared_ptr<G4Hdf5File> CreateFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteFileImpl(std::shared_ptr<G4Hdf5File> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<G4Hdf5File> file) final;
+    std::shared_ptr<G4Hdf5File> CreateFileImpl(const G4String& fileName) final;
+    G4bool WriteFileImpl(std::shared_ptr<G4Hdf5File> file) final;
+    G4bool CloseFileImpl(std::shared_ptr<G4Hdf5File> file) final;
 
   private:
     hid_t CreateDirectory(hid_t& file, const G4String& directoryName,

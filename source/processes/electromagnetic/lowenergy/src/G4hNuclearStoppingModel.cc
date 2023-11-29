@@ -154,7 +154,7 @@ G4double G4hNuclearStoppingModel::StoppingPower(
                                 G4double z1, G4double m1) const
 {
   // Target nucleus
-  G4int NumberOfElements = material->GetNumberOfElements() ;
+  std::size_t NumberOfElements = material->GetNumberOfElements() ;
   if(0 == NumberOfElements) return 0.0 ;
 
   const G4ElementVector* theElementVector = 
@@ -166,7 +166,7 @@ G4double G4hNuclearStoppingModel::StoppingPower(
 
   G4double nloss = 0.0;
 
-  for (G4int iel=0; iel<NumberOfElements; iel++) {
+  for (std::size_t iel=0; iel<NumberOfElements; ++iel) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
     G4double m2Local = element->GetA()*mole/g ;
@@ -179,11 +179,3 @@ G4double G4hNuclearStoppingModel::StoppingPower(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-

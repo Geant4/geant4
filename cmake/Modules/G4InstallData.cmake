@@ -402,19 +402,28 @@ function(geant4_install_dataset _name _destination _timeout)
 
   message(STATUS "Configuring download of missing dataset ${_name} (${_ds_version})")
 
-  # - Dispatch to ExternalProject or our own implementation.
-  # Use of URL_MD5 *and* TIMEOUT require CMake 2.8.2 or higher.
+  # - Dispatch to ExternalProject 
   include(ExternalProject)
-  ExternalProject_Add(${_name}
+
+  # - We want to retain timestamps in extracted archives as the data files
+  #   are "constants". CMake >= 3.24 changed this behaviour, so we setup
+  #   ExternalProject based on running version
+  set(__ep_extract_timestamp_arg )
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(__ep_extract_timestamp_arg DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+  endif()
+
+  ExternalProject_add(${_name}
     PREFIX Externals/${_name}-${_ds_version}
     SOURCE_DIR ${GEANT4_BUILD_FULL_DATADIR}/${_ds_dir}
     URL ${_ds_url}
     URL_MD5 ${_ds_md5sum}
     TIMEOUT ${_timeout}
+    ${__ep_extract_timestamp_arg}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-    )
+    INSTALL_COMMAND "")
+
   # - Configure the dataset's build and install locations
   geant4_set_dataset_property(${_name} BUILD_DIR "${PROJECT_BINARY_DIR}/data/${_ds_dir}")
   geant4_set_dataset_property(${_name} INSTALL_DIR "${_destination}/${_ds_dir}")

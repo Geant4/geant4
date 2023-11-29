@@ -53,8 +53,8 @@
 
  <solids>
 
-  <eltube aunit="cm" lunit="cm" name="FirstLiver" dx="14.19" dy="7.84" dz="7.21" />
-  <box aunit="cm" lunit="cm" name="SubtrLiver" x="20.00" y="50.00" z="50.00" /> 
+  <eltube lunit="cm" name="FirstLiver" dx="14.19" dy="7.84" dz="7.21" />
+  <box lunit="cm" name="SubtrLiver" x="20.00" y="50.00" z="50.00" /> 
 
   <subtraction name="Liver">
    <first ref="FirstLiver" />

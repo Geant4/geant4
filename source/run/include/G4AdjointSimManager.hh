@@ -137,11 +137,11 @@
 #ifndef G4AdjointSimManager_hh
 #define G4AdjointSimManager_hh 1
 
-#include <vector>
-
-#include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4UserRunAction.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4UserEventAction;
 class G4VUserPrimaryGeneratorAction;
@@ -162,23 +162,22 @@ class G4Run;
 class G4AdjointSimManager : public G4UserRunAction
 {
   public:
-
     static G4AdjointSimManager* GetInstance();
 
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
+    void BeginOfRunAction(const G4Run* aRun) override;
+    void EndOfRunAction(const G4Run* aRun) override;
     void RunAdjointSimulation(G4int nb_evt);
 
     inline G4int GetNbEvtOfLastRun() { return nb_evt_of_last_run; }
 
     void SetAdjointTrackingMode(G4bool aBool);
     G4bool GetAdjointTrackingMode();
-      // true if an adjoint track is being processed
+    // true if an adjoint track is being processed
 
     inline G4bool GetAdjointSimMode()
     {
       return adjoint_sim_mode;
-    } // true if an adjoint simulation is running
+    }  // true if an adjoint simulation is running
 
     G4bool GetDidAdjParticleReachTheExtSource();
     void RegisterAtEndOfAdjointTrack();
@@ -207,28 +206,23 @@ class G4AdjointSimManager : public G4UserRunAction
     std::size_t GetNbOfPrimaryFwdParticles();
 
     G4bool DefineSphericalExtSource(G4double radius, G4ThreeVector pos);
-    G4bool DefineSphericalExtSourceWithCentreAtTheCentreOfAVolume(
-           G4double radius, const G4String& volume_name);
+    G4bool DefineSphericalExtSourceWithCentreAtTheCentreOfAVolume(G4double radius,
+                                                                  const G4String& volume_name);
     G4bool DefineExtSourceOnTheExtSurfaceOfAVolume(const G4String& volume_name);
     void SetExtSourceEmax(G4double Emax);
 
     // Definition of adjoint source
     //----------------------------
     G4bool DefineSphericalAdjointSource(G4double radius, G4ThreeVector pos);
-    G4bool DefineSphericalAdjointSourceWithCentreAtTheCentreOfAVolume(
-           G4double radius, const G4String& volume_name);
-    G4bool DefineAdjointSourceOnTheExtSurfaceOfAVolume(
-           const G4String& volume_name);
+    G4bool DefineSphericalAdjointSourceWithCentreAtTheCentreOfAVolume(G4double radius,
+                                                                      const G4String& volume_name);
+    G4bool DefineAdjointSourceOnTheExtSurfaceOfAVolume(const G4String& volume_name);
     void SetAdjointSourceEmin(G4double Emin);
     void SetAdjointSourceEmax(G4double Emax);
-    inline G4double GetAdjointSourceArea()
-    {
-      return area_of_the_adjoint_source;
-    }
+    inline G4double GetAdjointSourceArea() { return area_of_the_adjoint_source; }
     void ConsiderParticleAsPrimary(const G4String& particle_name);
     void NeglectParticleAsPrimary(const G4String& particle_name);
-    void SetPrimaryIon(G4ParticleDefinition* adjointIon,
-                       G4ParticleDefinition* fwdIon);
+    void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
     const G4String& GetPrimaryIonName();
 
     inline void SetNormalisationMode(G4int n) { normalisation_mode = n; }
@@ -254,11 +248,9 @@ class G4AdjointSimManager : public G4UserRunAction
     }
 
     // Set nb of primary fwd gamma
-    //---------------------------
     void SetNbOfPrimaryFwdGammasPerEvent(G4int);
 
     // Set nb of adjoint primaries for reverse splitting
-    //-------------------------------------------------
     void SetNbAdjointPrimaryGammasPerEvent(G4int);
     void SetNbAdjointPrimaryElectronsPerEvent(G4int);
 
@@ -276,7 +268,6 @@ class G4AdjointSimManager : public G4UserRunAction
     void BackToFwdSimulationMode();
 
   private:  // methods
-
     static G4ThreadLocal G4AdjointSimManager* instance;
 
     void SetRestOfAdjointActions();
@@ -287,12 +278,11 @@ class G4AdjointSimManager : public G4UserRunAction
     void ResetUserActions();
     void DefineUserActions();
 
+    // private constructor and destructor
     G4AdjointSimManager();
-   ~G4AdjointSimManager();
-      // private constructor and destructor
+    ~G4AdjointSimManager() override;
 
   private:  // attributes
-
     // Messenger
     //----------
     G4AdjointSimMessenger* theMessenger = nullptr;
@@ -307,7 +297,7 @@ class G4AdjointSimManager : public G4UserRunAction
     G4UserTrackingAction* fUserTrackingAction = nullptr;
     G4UserSteppingAction* fUserSteppingAction = nullptr;
     G4UserStackingAction* fUserStackingAction = nullptr;
-    G4bool use_user_StackingAction = false; // only for fwd part of adjoint sim
+    G4bool use_user_StackingAction = false;  // only for fwd part of adjoint sim
     G4bool use_user_TrackingAction = false;
 
     // action for adjoint simulation
@@ -339,7 +329,7 @@ class G4AdjointSimManager : public G4UserRunAction
     G4ThreeVector last_pos;
     G4ThreeVector last_direction;
     G4double last_ekin = 0.0, last_ekin_nuc = 0.0;
-      // last_ekin_nuc=last_ekin/nuc, nuc is 1 if not a nucleus
+    // last_ekin_nuc=last_ekin/nuc, nuc is 1 if not a nucleus
     G4double last_cos_th = 0.0;
     G4String last_fwd_part_name;
     G4int last_fwd_part_PDGEncoding = 0;
@@ -356,24 +346,7 @@ class G4AdjointSimManager : public G4UserRunAction
     G4double nb_nuc = 1.0;
     G4double theAdjointPrimaryWeight = 0.0;
 
-    // Weight Analysis
-    //----------
-    /*G4PhysicsLogVector* electron_last_weight_vector;
-      G4PhysicsLogVector* proton_last_weight_vector;
-      G4PhysicsLogVector* gamma_last_weight_vector;*/
-
     G4bool welcome_message = true;
-
-    /* For the future
-      //Convergence test
-      //----------------
-
-       G4double normalised_signal;
-       G4double error_signal;
-       G4bool convergence_test_is_used;
-       G4bool power_law_spectrum_for_convergence_test; // true PowerLaw
-       G4ParticleDefinition* the_par_def_for_convergence_test;
-    */
 };
 
 #endif

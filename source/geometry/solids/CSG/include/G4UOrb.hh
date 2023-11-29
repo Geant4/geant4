@@ -51,28 +51,28 @@ class G4UOrb : public G4UAdapter<vecgeom::UnplacedOrb>
 
     G4UOrb(const G4String& pName, G4double pRmax);
        
-   ~G4UOrb() ;
+   ~G4UOrb() override ;
     
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetRadius() const;
     void SetRadius(G4double newRmax);
     G4double GetRadialTolerance() const;
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
 

@@ -48,7 +48,6 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ThreeVector.hh"
 #include "G4VParticleChange.hh"
 
 class G4DynamicParticle;
@@ -60,18 +59,17 @@ class G4ParticleChange : public G4VParticleChange
     G4ParticleChange();
       // Default constructor
 
-    virtual ~G4ParticleChange();
+    ~G4ParticleChange() override = default;
       // Destructor
 
-    G4bool operator==(const G4ParticleChange& right) const;
-    G4bool operator!=(const G4ParticleChange& right) const;
-      // Equality operators
+    G4ParticleChange(const G4ParticleChange& right) = delete;
+    G4ParticleChange& operator=(const G4ParticleChange& right) = delete;
 
   // --- the following methods are for updating G4Step -----
   // Return the pointer to G4Step after updating the Step information
   // by using final state of the track given by a physics process
 
-    virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
+    G4Step* UpdateStepForAlongStep(G4Step* Step) override;
       // A physics process gives the final state of the particle
       // relative to the initial state at the beginning of the Step,
       // i.e., based on information of G4Track (or equivalently
@@ -82,12 +80,12 @@ class G4ParticleChange : public G4VParticleChange
       // pointer to G4ParticleMomentum. Also it is a normalized
       // momentum vector
 
-    virtual G4Step* UpdateStepForAtRest(G4Step* Step);
-    virtual G4Step* UpdateStepForPostStep(G4Step* Step);
+    G4Step* UpdateStepForAtRest(G4Step* Step) override;
+    G4Step* UpdateStepForPostStep(G4Step* Step) override;
       // A physics process gives the final state of the particle
       // based on information of G4Track (or equivalently the PreStepPoint)
 
-    virtual void Initialize(const G4Track&);
+    void Initialize(const G4Track&) override;
       // Initialize all propoerties by using G4Track information
 
   // --- methods to keep information of the final state ---
@@ -95,62 +93,63 @@ class G4ParticleChange : public G4VParticleChange
   //  The ProposeXXX methods store (and return in GetXXX methods)
   //  the "FINAL" values of the Position, Momentum, etc.
 
-    const G4ThreeVector* GetMomentumDirection() const;
-    void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
-    void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+    inline const G4ThreeVector* GetMomentumDirection() const;
+    inline void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
+    inline void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
       // Get/Propose the MomentumDirection vector: it is the final momentum
       // direction
 
-    const G4ThreeVector* GetPolarization() const;
-    void ProposePolarization(G4double Px, G4double Py, G4double Pz);
-    void ProposePolarization(const G4ThreeVector& finalPoralization);
+    inline const G4ThreeVector* GetPolarization() const;
+    inline void ProposePolarization(G4double Px, G4double Py, G4double Pz);
+    inline void ProposePolarization(const G4ThreeVector& finalPoralization);
       // Get/Propose the final Polarization vector
 
-    G4double GetEnergy() const;
-    void ProposeEnergy(G4double finalEnergy);
+    inline G4double GetEnergy() const;
+    inline void ProposeEnergy(G4double finalEnergy);
       // Get/Propose the final kinetic energy of the current particle
 
-    G4double GetVelocity() const;
-    void ProposeVelocity(G4double finalVelocity);
+    inline G4double GetVelocity() const;
+    inline void ProposeVelocity(G4double finalVelocity);
       // Get/Propose the final velocity of the current particle
 
-    G4double GetProperTime() const;
-    void ProposeProperTime(G4double finalProperTime);
+    inline G4double GetProperTime() const;
+    inline void ProposeProperTime(G4double finalProperTime);
       // Get/Propose the final ProperTime
 
-    const G4ThreeVector* GetPosition() const;
-    void ProposePosition(G4double x, G4double y, G4double z);
-    void ProposePosition(const G4ThreeVector& finalPosition);
+    inline const G4ThreeVector* GetPosition() const;
+    inline void ProposePosition(G4double x, G4double y, G4double z);
+    inline void ProposePosition(const G4ThreeVector& finalPosition);
       // Get/Propose the final position of the current particle
 
-    void ProposeGlobalTime(G4double t);
-    void ProposeLocalTime(G4double t);
+    inline void ProposeGlobalTime(G4double t);
+    inline void ProposeLocalTime(G4double t);
       // Get/Propose the final global/local Time.
       // NOTE: DO NOT INVOKE both methods in a step
       //       Each method affects both local and global time
 
-    G4double GetGlobalTime(G4double timeDelay = 0.0) const;
-    G4double GetLocalTime(G4double timeDelay = 0.0) const;
+    inline G4double GetGlobalTime(G4double timeDelay = 0.0) const;
+    inline G4double GetLocalTime(G4double timeDelay = 0.0) const;
       // Convert the time delay to the glocbal/local time.
       // Can get the final global/local time without argument
 
-    G4double GetMass() const;
-    void ProposeMass(G4double finalMass);
+    inline G4double GetMass() const;
+    inline void ProposeMass(G4double finalMass);
       // Get/Propose the final dynamical mass in G4DynamicParticle
 
-    G4double GetCharge() const;
-    void ProposeCharge(G4double finalCharge);
+    inline G4double GetCharge() const;
+    inline void ProposeCharge(G4double finalCharge);
       // Get/Propose the final dynamical charge in G4DynamicParticle
 
-    G4double GetMagneticMoment() const;
-    void ProposeMagneticMoment(G4double finalMagneticMoment);
+    inline G4double GetMagneticMoment() const;
+    inline void ProposeMagneticMoment(G4double finalMagneticMoment);
       // Get/Propose the final MagneticMoment in G4DynamicParticle
 
-    G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;
+    inline G4ThreeVector
+    GetGlobalPosition(const G4ThreeVector& displacement) const;
       // Convert the position displacement to the global position
 
-    G4ThreeVector CalcMomentum(G4double energy, G4ThreeVector direction,
-                               G4double mass) const;
+    inline G4ThreeVector CalcMomentum(G4double energy, G4ThreeVector direction,
+                                      G4double mass) const;
       // Calculate momentum by using Energy, Momentum Direction, and Mass
 
   // --- methods for adding secondaries ---
@@ -175,15 +174,9 @@ class G4ParticleChange : public G4VParticleChange
 
   // --- Dump and debug methods ---
 
-    virtual void DumpInfo() const;
-
-    virtual G4bool CheckIt(const G4Track&);
+    void DumpInfo() const override;
 
   protected:
-
-    G4ParticleChange(const G4ParticleChange& right);
-    G4ParticleChange& operator=(const G4ParticleChange& right);
-      // Hidden copy constructor and assignment operator
 
     G4Step* UpdateStepInfo(G4Step* Step);
       // Update the G4Step specific attributes
@@ -228,8 +221,6 @@ class G4ParticleChange : public G4VParticleChange
 
     G4double theMagneticMomentChange = 0.0;
      // The Changed (final) MagneticMoment of a given track
-
-    const G4Track* theCurrentTrack = nullptr;
 };
 
 #include "G4ParticleChange.icc"

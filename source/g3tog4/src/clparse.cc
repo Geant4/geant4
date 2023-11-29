@@ -111,13 +111,11 @@ void G3CLRead(G4String & fname, char *select = 0)
     ofile.open(ofname);
     ofile << "Output file open\n";
 
-    G4int count = 0;
     G4int ntokens = 0;
     std::ifstream istr(fname);
     
     while (G4StrUtil::readline(istr, line) && ! istr.eof())
     {
-        count++;
         ntokens = G3CLTokens(&line,tokens);  // tokenize the line
         for (G4int i=0; i < ntokens; i++)
         {

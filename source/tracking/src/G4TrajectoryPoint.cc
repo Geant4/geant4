@@ -33,14 +33,14 @@
 
 #include "G4TrajectoryPoint.hh"
 
-#include "G4AttDefStore.hh"
 #include "G4AttDef.hh"
+#include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 
 // #define G4ATTDEBUG
 #ifdef G4ATTDEBUG
-#include "G4AttCheck.hh"
+#  include "G4AttCheck.hh"
 #endif
 
 G4Allocator<G4TrajectoryPoint>*& aTrajectoryPointAllocator()
@@ -49,47 +49,31 @@ G4Allocator<G4TrajectoryPoint>*& aTrajectoryPointAllocator()
   return _instance;
 }
 
-G4TrajectoryPoint::G4TrajectoryPoint()
-{
-  fPosition = G4ThreeVector(0.,0.,0.);
-}
+G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos) { fPosition = pos; }
 
-G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
-{
-  fPosition = pos;
-}
+G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint& right) : fPosition(right.fPosition) {}
 
-G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint& right)
-  : G4VTrajectoryPoint(),fPosition(right.fPosition)
-{
-}
+G4TrajectoryPoint::~G4TrajectoryPoint() = default;
 
-G4TrajectoryPoint::~G4TrajectoryPoint()
-{
-}
-
-const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
+const std::map<G4String, G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
 {
   G4bool isNew;
-  std::map<G4String,G4AttDef>* store
-    = G4AttDefStore::GetInstance("G4TrajectoryPoint",isNew);
-  if (isNew)
-  {
+  std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("G4TrajectoryPoint", isNew);
+  if (isNew) {
     G4String Pos("Pos");
-    (*store)[Pos] =
-      G4AttDef(Pos, "Position", "Physics","G4BestUnit","G4ThreeVector");
+    (*store)[Pos] = G4AttDef(Pos, "Position", "Physics", "G4BestUnit", "G4ThreeVector");
   }
   return store;
 }
 
 std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto values = new std::vector<G4AttValue>;
 
-  values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
+  values->push_back(G4AttValue("Pos", G4BestUnit(fPosition, "Length"), ""));
 
 #ifdef G4ATTDEBUG
-  G4cout << G4AttCheck(values,GetAttDefs());
+  G4cout << G4AttCheck(values, GetAttDefs());
 #endif
 
   return values;

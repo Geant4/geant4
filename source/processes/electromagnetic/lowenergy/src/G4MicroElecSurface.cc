@@ -109,7 +109,7 @@ void G4MicroElecSurface::BuildPhysicsTable(const G4ParticleDefinition&)
   
   G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   G4cout << "G4MicroElecSurface::Initialise: Ncouples= " 
          << numOfCouples << G4endl;
   

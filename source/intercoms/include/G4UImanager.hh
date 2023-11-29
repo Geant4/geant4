@@ -35,13 +35,14 @@
 #ifndef G4UImanager_hh
 #define G4UImanager_hh 1
 
-#include <vector>
-#include <fstream>
-
-#include "globals.hh"
-#include "icomsdefs.hh"
-#include "G4VStateDependent.hh"
 #include "G4UIcommandStatus.hh"
+#include "G4VStateDependent.hh"
+#include "globals.hh"
+
+#include "icomsdefs.hh"
+
+#include <fstream>
+#include <vector>
 
 class G4UIcommandTree;
 class G4UIcommand;
@@ -57,144 +58,134 @@ class G4ProfilerMessenger;
 class G4UImanager : public G4VStateDependent
 {
   public:
-
+    // A static method to get the pointer to the only existing object
+    // of this class
     static G4UImanager* GetUIpointer();
     static G4UImanager* GetMasterUIpointer();
-      // A static method to get the pointer to the only existing object
-      // of this class
 
-    ~G4UImanager();
+    ~G4UImanager() override;
 
     G4UImanager(const G4UImanager&) = delete;
     const G4UImanager& operator=(const G4UImanager&) = delete;
     G4bool operator==(const G4UImanager&) const = delete;
     G4bool operator!=(const G4UImanager&) const = delete;
 
+    // This method returns a string which represents the current value(s)
+    // of the parameter(s) of the specified command. Null string will be
+    // returned if the given command is not defined or the command does
+    // not support the GetCurrentValues() method
     G4String GetCurrentValues(const char* aCommand);
-      // This method returns a string which represents the current value(s)
-      // of the parameter(s) of the specified command. Null string will be
-      // returned if the given command is not defined or the command does
-      // not support the GetCurrentValues() method
 
+    // This method register a new command
     void AddNewCommand(G4UIcommand* newCommand);
-      // This method register a new command
 
+    // This command removes the registered command. After invokation of this
+    // command, that particular command cannot be applied
     void RemoveCommand(G4UIcommand* aCommand);
-      // This command removes the registered command. After invokation of this
-      // command, that particular command cannot be applied
 
+    // A macro file defined by the argument will be read by G4UIbatch object
     void ExecuteMacroFile(const char* fileName);
-      // A macro file defined by the argument will be read by G4UIbatch object
 
-    void Loop(const char* macroFile, const char* variableName,
-              G4double initialValue, G4double finalValue,
-              G4double stepSize = 1.0);
-      // Execute a macro file more than once with a loop counter
+    // Execute a macro file more than once with a loop counter
+    void Loop(const char* macroFile, const char* variableName, G4double initialValue,
+              G4double finalValue, G4double stepSize = 1.0);
 
-    void Foreach(const char* macroFile, const char* variableName,
-                 const char* candidates);
-      // Execute a macro file more than once with an aliased variable which
-      // takes a value in the candidate list
+    // Execute a macro file more than once with an aliased variable which
+    // takes a value in the candidate list
+    void Foreach(const char* macroFile, const char* variableName, const char* candidates);
 
+    // A command (and parameter(s)) given
+    // by the method's argument will be applied. Zero will be returned in
+    // case the command is successfully executed. Positive non-zero value
+    // will be returned if the command cannot be executed. The meaning of
+    // this non-zero value is the following:
+    //   The returned number : xyy
+    //        x00 : G4CommandStatus.hh enumeration
+    //         yy : the problematic parameter (first found)
     G4int ApplyCommand(const char* aCommand);
     G4int ApplyCommand(const G4String& aCommand);
-      // A command (and parameter(s)) given
-      // by the method's argument will be applied. Zero will be returned in
-      // case the command is successfully executed. Positive non-zero value
-      // will be returned if the command cannot be executed. The meaning of
-      // this non-zero value is the following:
-      //   The returned number : xyy
-      //        x00 : G4CommandStatus.hh enumeration
-      //         yy : the problematic parameter (first found)
 
+    // Find the G4UIcommand object. Null pointer is returned if command
+    // is not found.
+    // Please note that each thread returns different objects if this
+    // method is used in multi-threaded mode.
     G4UIcommand* FindCommand(const char* aCommand);
     G4UIcommand* FindCommand(const G4String& aCommand);
-      // Find the G4UIcommand object. Null pointer is returned if command
-      // is not found.
-      // Please note that each thread returns different objects if this
-      // method is used in multi-threaded mode.
 
+    // The executed commands will be stored in the defined file. If
+    // "historySwitch" is false, saving will be suspended
     void StoreHistory(const char* fileName = "G4history.macro");
-    void StoreHistory(G4bool historySwitch,
-                      const char* fileName = "G4history.macro");
-      // The executed commands will be stored in the defined file. If
-      // "historySwitch" is false, saving will be suspended
+    void StoreHistory(G4bool historySwitch, const char* fileName = "G4history.macro");
 
+    // All commands registered under the given directory will be listed to
+    // standard output
     void ListCommands(const char* direc);
-      // All commands registered under the given directory will be listed to
-      // standard output
 
+    // Define an alias. The first word of "aliasLine" string is the
+    // alias name and the remaining word(s) is(are) string value
+    // to be aliased
     void SetAlias(const char* aliasLine);
-      // Define an alias. The first word of "aliasLine" string is the
-      // alias name and the remaining word(s) is(are) string value
-      // to be aliased
 
+    // Remove the defined alias
     void RemoveAlias(const char* aliasName);
-      // Remove the defined alias
 
+    // Print all aliases
     void ListAlias();
-      // Print all aliases
 
+    // Convert a command string which contains alias(es)
     G4String SolveAlias(const char* aCmd);
-      // Convert a command string which contains alias(es)
 
+    // Generate HTML files for defined UI commands
     void CreateHTML(const char* dir = "/");
-      // Generate HTML files for defined UI commands
 
+    // These methods are used by G4UIcontrolMessenger to use Loop()
+    // and Foreach() methods
     void LoopS(const char* valueList);
     void ForeachS(const char* valueList);
-      // These methods are used by G4UIcontrolMessenger to use Loop()
-      // and Foreach() methods
 
-    virtual G4bool Notify(G4ApplicationState requestedState);
-      // This method is exclusively invoked by G4StateManager
+    // This method is exclusively invoked by G4StateManager
+    G4bool Notify(G4ApplicationState requestedState) override;
 
-    G4String GetCurrentStringValue(const char* aCommand,
-                                   G4int parameterNumber = 1,
-                                   G4bool reGet          = true);
-    G4int GetCurrentIntValue(const char* aCommand, G4int parameterNumber = 1,
-                             G4bool reGet = true);
-    G4double GetCurrentDoubleValue(const char* aCommand,
-                                   G4int parameterNumber = 1,
-                                   G4bool reGet          = true);
-    G4String GetCurrentStringValue(const char* aCommand,
-                                   const char* aParameterName,
+    // These six methods return the current value of a parameter of the
+    // given command. For the first three methods, the ordering number of
+    // the parameter (1 is the first parameter) can be given, whereas,
+    // other three methods can give the parameter name.
+    // If "reGet" is true, actual request of returning the current value
+    // will be sent to the corresponding messenger, while, if it is false,
+    // the value stored in G4Umanager will be used. The later case is valid
+    // for the sequential invokation for the same command
+    G4String GetCurrentStringValue(const char* aCommand, G4int parameterNumber = 1,
                                    G4bool reGet = true);
-    G4int GetCurrentIntValue(const char* aCommand, const char* aParameterName,
-                             G4bool reGet = true);
-    G4double GetCurrentDoubleValue(const char* aCommand,
-                                   const char* aParameterName,
-                                 G4bool reGet = true);
-      // These six methods return the current value of a parameter of the
-      // given command. For the first three methods, the ordering number of
-      // the parameter (1 is the first parameter) can be given, whereas,
-      // other three methods can give the parameter name.
-      // If "reGet" is true, actual request of returning the current value
-      // will be sent to the corresponding messenger, while, if it is false,
-      // the value stored in G4Umanager will be used. The later case is valid
-      // for the sequential invokation for the same command
+    G4int GetCurrentIntValue(const char* aCommand, G4int parameterNumber = 1, G4bool reGet = true);
+    G4double GetCurrentDoubleValue(const char* aCommand, G4int parameterNumber = 1,
+                                   G4bool reGet = true);
+    G4String GetCurrentStringValue(const char* aCommand, const char* aParameterName,
+                                   G4bool reGet = true);
+    G4int GetCurrentIntValue(const char* aCommand, const char* aParameterName, G4bool reGet = true);
+    G4double GetCurrentDoubleValue(const char* aCommand, const char* aParameterName,
+                                   G4bool reGet = true);
 
+    // If the Boolean flags are true, Pause() method of G4StateManager is
+    // invoked at the very beginning (before generating a G4Event object)
+    // or at the end of each event. So that, in case a (G)UI session is
+    // defined, the user can interact
     inline void SetPauseAtBeginOfEvent(G4bool vl) { pauseAtBeginOfEvent = vl; }
     inline G4bool GetPauseAtBeginOfEvent() const { return pauseAtBeginOfEvent; }
     inline void SetPauseAtEndOfEvent(G4bool vl) { pauseAtEndOfEvent = vl; }
     inline G4bool GetPauseAtEndOfEvent() const { return pauseAtEndOfEvent; }
-      // If the Boolean flags are true, Pause() method of G4StateManager is
-      // invoked at the very beginning (before generating a G4Event object)
-      // or at the end of each event. So that, in case a (G)UI session is
-      // defined, the user can interact
 
     inline G4UIcommandTree* GetTree() const { return treeTop; }
     inline G4UIsession* GetSession() const { return session; }
     inline G4UIsession* GetG4UIWindow() const { return g4UIWindow; }
 
+    // These methods define the active (G)UI session
     inline void SetSession(G4UIsession* const value) { session = value; }
     inline void SetG4UIWindow(G4UIsession* const value) { g4UIWindow = value; }
-      // These methods define the active (G)UI session
 
+    // This method defines the destination of G4cout/G4cerr stream.
+    // For usual cases, this method will be invoked by a concrete
+    // (G)UI session class object and thus the user needs not to invoke this
     void SetCoutDestination(G4UIsession* const value);
-      // This method defines the destination of G4cout/G4cerr stream.
-      // For usual cases, this method will be invoked by a concrete
-      // (G)UI session class object and thus the user needs not to invoke this
 
     inline void SetVerboseLevel(G4int val) { verboseLevel = val; }
     inline G4int GetVerboseLevel() const { return verboseLevel; }
@@ -202,8 +193,7 @@ class G4UImanager : public G4VStateDependent
     inline G4String GetPreviousCommand(G4int i) const
     {
       G4String st;
-      if(i >= 0 && i < G4int(histVec.size()))
-      {
+      if (i >= 0 && i < G4int(histVec.size())) {
         st = histVec[i];
       }
       return st;
@@ -220,9 +210,8 @@ class G4UImanager : public G4VStateDependent
     {
       isMaster = val;
       stackCommandsForBroadcast = val;
-      if(val && !bridges)
-      {
-        bridges            = new std::vector<G4UIbridge*>;
+      if (val && (bridges == nullptr)) {
+        bridges = new std::vector<G4UIbridge*>;
         fMasterUImanager() = this;
       }
     }
@@ -231,17 +220,15 @@ class G4UImanager : public G4VStateDependent
     std::vector<G4String>* GetCommandStack();
     void RegisterBridge(G4UIbridge* brg);
 
+    // Setups as above but for a non-worker thread (e.g. vis)
     void SetUpForAThread(G4int tId);
-      // Setups as above but for a non-worker thread (e.g. vis)
 
-    void SetUpForSpecialThread(G4String aPrefix);
+    void SetUpForSpecialThread(const G4String& aPrefix);
 
     inline G4int GetThreadID() const { return threadID; }
 
-    void SetCoutFileName(const G4String& fileN = "G4cout.txt",
-                         G4bool ifAppend       = true);
-    void SetCerrFileName(const G4String& fileN = "G4cerr.txt",
-                         G4bool ifAppend       = true);
+    void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
+    void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
     void SetThreadPrefixString(const G4String& prefix = "W");
     void SetThreadUseBuffer(G4bool flg = true);
     void SetThreadIgnore(G4int tid = 0);
@@ -257,11 +244,9 @@ class G4UImanager : public G4VStateDependent
     inline void SetLastCommandOutputTreated() { fLastCommandOutputTreated = true; }
 
   protected:
-
     G4UImanager();
 
   private:
-
     void AddWorkerCommand(G4UIcommand* newCommand);
     void RemoveWorkerCommand(G4UIcommand* aCommand);
 
@@ -270,8 +255,7 @@ class G4UImanager : public G4VStateDependent
     G4UIcommandTree* FindDirectory(const char* dirName);
 
   private:
-
-    G4ICOMS_DLL static G4UImanager*& fUImanager();         // thread-local
+    G4ICOMS_DLL static G4UImanager*& fUImanager();  // thread-local
     G4ICOMS_DLL static G4bool& fUImanagerHasBeenKilled();  // thread-local
     G4ICOMS_DLL static G4UImanager*& fMasterUImanager();
     G4UIcommandTree* treeTop = nullptr;
@@ -280,7 +264,7 @@ class G4UImanager : public G4VStateDependent
     G4UIcontrolMessenger* UImessenger = nullptr;
     G4UnitsMessenger* UnitsMessenger = nullptr;
     G4LocalThreadCoutMessenger* CoutMessenger = nullptr;
-    G4ProfilerMessenger* ProfileMessenger     = nullptr;
+    G4ProfilerMessenger* ProfileMessenger = nullptr;
     G4String savedParameters;
     G4UIcommand* savedCommand = nullptr;
     G4int verboseLevel = 0;

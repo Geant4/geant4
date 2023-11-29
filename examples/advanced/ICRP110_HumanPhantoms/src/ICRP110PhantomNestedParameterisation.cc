@@ -48,7 +48,7 @@ ICRP110PhantomNestedParameterisation(const G4ThreeVector& halfVoxelSize,
   fdX(halfVoxelSize.x()), fdY(halfVoxelSize.y()), fdZ(halfVoxelSize.z()), 
   fnX(fnX_), fnY(fnY_), fnZ(fnZ_), // number of voxels along X, Y and Z
   fMaterials(mat), // vector of defined materials
-  fMaterialIndices(0) // vector which associates MaterialID to voxels
+  fMaterialIndices(nullptr) // vector which associates MaterialID to voxels
 {
  ReadColourData();//Define the color of each material
                   // from ColourMap.dat
@@ -56,13 +56,13 @@ ICRP110PhantomNestedParameterisation(const G4ThreeVector& halfVoxelSize,
 
 ICRP110PhantomNestedParameterisation::~ICRP110PhantomNestedParameterisation()
 {}
-
+ 
 void ICRP110PhantomNestedParameterisation::ReadColourData()
 {
     // By default the tissues are not visible. Then
     // the visualisation attributes are defined based on 
     // ColourMap.dat 
-    G4VisAttributes* blankAtt = new G4VisAttributes;
+    auto blankAtt = new G4VisAttributes;
     blankAtt->SetVisibility( FALSE );
     fColours["Default"] = blankAtt;
 
@@ -74,10 +74,12 @@ void ICRP110PhantomNestedParameterisation::ReadColourData()
     G4String mateName;
     G4double cred, cgreen, cblue, copacity;
     fin >> nMate;
+    G4VisAttributes* visAtt=nullptr;
+    
     for( G4int ii = 0; ii < nMate; ii++ ){
         fin >> mateName >> cred >> cgreen >> cblue >> copacity;
         G4Colour colour( cred, cgreen, cblue, copacity );
-        G4VisAttributes* visAtt = new G4VisAttributes( colour );
+        visAtt = new G4VisAttributes( colour );
         visAtt->SetForceSolid(true);
         fColours[mateName] = visAtt;
        // G4cout << mateName << " colour set :  "  << colour << G4endl;

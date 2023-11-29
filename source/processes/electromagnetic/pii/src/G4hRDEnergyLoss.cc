@@ -257,7 +257,7 @@ void G4hRDEnergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   // create/fill proton or antiproton tables depending on the charge
   Charge = aParticleType.GetPDGCharge()/eplus;
@@ -309,7 +309,7 @@ void G4hRDEnergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 	  G4bool isOutRange ;
 	  G4PhysicsTable* pointer ;
 
-	  for (size_t J=0; J<numOfCouples; J++)
+	  for (std::size_t J=0; J<numOfCouples; ++J)
 	    {
 	      // create physics vector and fill it
 	      G4PhysicsLogVector* aVector =
@@ -387,7 +387,7 @@ void G4hRDEnergyLoss::BuildRangeTable(const G4ParticleDefinition& aParticleType)
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   if( Charge >0.)
     {
@@ -408,7 +408,7 @@ void G4hRDEnergyLoss::BuildRangeTable(const G4ParticleDefinition& aParticleType)
 
   // loop for materials
 
-  for (size_t J=0;  J<numOfCouples; J++)
+  for (G4int J=0;  J<numOfCouples; ++J)
     {
       G4PhysicsLogVector* aVector;
       aVector = new G4PhysicsLogVector(LowestKineticEnergy,
@@ -425,7 +425,7 @@ void G4hRDEnergyLoss::BuildTimeTables(const G4ParticleDefinition& aParticleType)
 {
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   if(&aParticleType == G4Proton::Proton())
     {
@@ -457,7 +457,7 @@ void G4hRDEnergyLoss::BuildTimeTables(const G4ParticleDefinition& aParticleType)
       theProperTimeTable = theProperTimepbarTable ;
     }
 
-  for (size_t J=0;  J<numOfCouples; J++)
+  for (G4int J=0;  J<numOfCouples; ++J)
     {
       G4PhysicsLogVector* aVector;
       G4PhysicsLogVector* bVector;
@@ -773,7 +773,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffATable( const G4ParticleDefinition& )
   // Build tables of coefficients for the energy loss calculation
   //  create table for coefficients "A"
 
-  G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+  G4int numOfCouples = (G4int)G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(Charge>0.)
     {
@@ -857,7 +857,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffBTable( const G4ParticleDefinition& )
   //  create table for coefficients "B"
 
   G4int numOfCouples =
-        G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+        (G4int)G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(Charge>0.)
     {
@@ -933,7 +933,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffCTable( const G4ParticleDefinition& )
   //  create table for coefficients "C"
 
   G4int numOfCouples =
-        G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
+        (G4int)G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
   if(Charge>0.)
     {
@@ -1007,7 +1007,7 @@ BuildInverseRangeTable(const G4ParticleDefinition& aParticleType)
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   if(&aParticleType == G4Proton::Proton())
     {
@@ -1038,11 +1038,11 @@ BuildInverseRangeTable(const G4ParticleDefinition& aParticleType)
     }
 
   // loop for materials 
-  for (size_t i=0;  i<numOfCouples; i++)
+  for (std::size_t i=0;  i<numOfCouples; ++i)
     {
 
       G4PhysicsVector* pv = (*theRangeTable)[i];
-      size_t nbins   = pv->GetVectorLength();
+      std::size_t nbins   = pv->GetVectorLength();
       G4double elow  = pv->GetLowEdgeEnergy(0);
       G4double ehigh = pv->GetLowEdgeEnergy(nbins-1);
       G4double rlow  = pv->GetValue(elow, b);
@@ -1069,10 +1069,10 @@ BuildInverseRangeTable(const G4ParticleDefinition& aParticleType)
       G4double range1  = rlow;
       G4double energy2 = elow;
       G4double range2  = rlow;
-      size_t ilow      = 0;
-      size_t ihigh;
+      std::size_t ilow = 0;
+      std::size_t ihigh;
 
-      for (size_t j=1; j<nbins; j++) {
+      for (std::size_t j=1; j<nbins; ++j) {
 
 	G4double range = v->GetLowEdgeEnergy(j);
 
@@ -1156,9 +1156,9 @@ G4bool G4hRDEnergyLoss::CutsWhereModified()
   G4bool wasModified = false;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
-  for (size_t j=0; j<numOfCouples; j++){
+  for (G4int j=0; j<numOfCouples; ++j){
     if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
       wasModified = true;
       break;

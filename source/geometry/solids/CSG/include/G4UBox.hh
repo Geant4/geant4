@@ -52,13 +52,13 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
     G4UBox(const G4String& pName, G4double pX, G4double pY, G4double pZ);
       // Constructs a box with name, and half lengths pX,pY,pZ
 
-   ~G4UBox();
+   ~G4UBox() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetXHalfLength() const;
     G4double GetYHalfLength() const;
@@ -68,16 +68,16 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
     void SetYHalfLength(G4double dy);
     void SetZHalfLength(G4double dz);
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
+                           G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
 

@@ -1,0 +1,91 @@
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            AnaEx03
+                            -------
+
+ Example AnaEx03 demonstrates usage of analysis commands for file management
+ (new since Geant4 11.1), in particular writing histograms and ntuples in a file
+ multiple times.
+
+ It uses the same scenario (detector description, primary generator
+ and physics) as AnaEx02 and AnaEx02. In difference from these examples
+ the analysis manipulations (histograms and ntuples booking and filling)
+ are performed directly with G4AnalysisManager. The classes that are same
+ in all three examples are located in shared directory.
+
+ For detector description, primary generator, physics and the example output
+ see README in AnaEx01 example.
+
+ Histograms, Ntuple:
+ --------------------
+
+ The example produces the same 4 histograms and 2 ntuples as in AnaEx01.
+
+ These histos and ntuples are booked in the RunAction constructor and filled from
+ EventAction.
+
+ The file managent in this example, usually performed via calls to G4AnalysisManager
+ OpenFile(), Write() and CloseFile() in the code, is in this example performed
+ via UI commands in a macro:
+ /analysis/openFile
+ /analysis/write
+ /analysis/closeFile
+
+ Note that the file need not to be closed at each end of run, but the histograms and ntuples
+ can be saved in the same file multiple time. In that case we need to reset the  histograms
+ and ntuples data before a new run:
+ /analysis/reset
+
+ We can define the default file type and set it to the analysis manager via
+ /analysis/setDefaultFileType root    # or csv hdf5 xml
+
+ The file names then need not to be provided with the file extension and the same macro
+ can be used with different output types.
+
+ It should be notes that using UI commands for writing histograms and ntuples in a file
+ multiple times is not necessary, the same can be achieved by calls to G4AnalysisManager
+ functions from the code using conditional statements.
+
+ Macros:
+ --------
+
+ The AnaEx03.in macro performs 5 runs and produces 2 files: e-.root, containg data from first
+ 3 runs, and proton.root, containing data from the next 2 runs.
+ The macro uses the defaultFileType parameter (alias), which default value, "root" is
+ defined in main.
+
+ AnaEx03-csv.in, AnaEx03-hdf5.in, AnaEx03-root.in, AnaEx03-xml.in:
+
+ In these macros, the default value of the defaultFileType is overritten with
+
+ /control/alias defaultFileType cvs   # or hdf5 root xml
+
+ and then the AnaEx03.in macro is called.
+
+
+ How to run
+ --------------
+
+ - It is preferable to execute the exampole in the 'batch' mode from macro files:
+   % ./AnaEx03 AnaEx03.in
+   % ./AnaEx03 AnaEx03.in >& output
+
+ - When executing AnaEx03 in the 'interactive mode' with visualization, be careful not
+   to forget to issue the /analysis/openFile command befor starting a run:
+
+   % ./AnaEx03
+   and type in the commands from AnaEx03[-xyz].mac line by line:
+      Idle> /analysis/openFile myFile
+      Idle> /tracking/verbose 1
+      Idle> /run/beamOn 10
+      Idle> ...
+      Idle> /analysis/write
+      Idle> /analysis/closeFile
+      ....
+      Idle> exit
+
+  All AnaEx03-*.in macros are used in Geant4 testing.

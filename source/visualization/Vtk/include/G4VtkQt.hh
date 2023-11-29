@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-
 #ifndef G4VTKQT_HH
 #define G4VTKQT_HH
 
 #include "G4VGraphicsSystem.hh"
 
-class G4VtkQt: public G4VGraphicsSystem {
-public:
-  G4VtkQt();
-  virtual ~G4VtkQt();
-  G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
-  G4bool IsUISessionCompatible () const;
+class G4VtkQt : public G4VGraphicsSystem
+{
+  public:
+    G4VtkQt();
+    ~G4VtkQt() override = default;
+    G4VSceneHandler* CreateSceneHandler(const G4String& name = "") override;
+    G4VViewer* CreateViewer(G4VSceneHandler&, const G4String& name = "") override;
+    G4bool IsUISessionCompatible() const override;
 };
 
 #endif

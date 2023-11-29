@@ -48,7 +48,7 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
   using Shape_t = vecgeom::UnplacedTet;
   using Base_t = G4UAdapter<vecgeom::UnplacedTet>;
 
-  public:  // with description
+  public:
 
     G4UTet(const G4String& pName,
            const G4ThreeVector& anchor,
@@ -57,17 +57,15 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
            const G4ThreeVector& p3,
                  G4bool* degeneracyFlag = nullptr);
 
-   ~G4UTet();
+   ~G4UTet() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:   // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UTet(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -79,14 +77,14 @@ class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
       // Copy constructor and assignment operator.
 
     void SetBoundingLimits(const G4ThreeVector& pMin, const G4ThreeVector& pMax);
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
     void SetVertices(const G4ThreeVector& anchor,
                      const G4ThreeVector& p1,

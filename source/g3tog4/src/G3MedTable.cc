@@ -67,7 +67,7 @@ G3MedTableEntry* G3MedTable::GetMTE(G4int i) const
     
 G4int G3MedTable::GetSize() const
 {
-  return fMedVector->size();
+  return (G4int)fMedVector->size();
 }    
 
 void G3MedTable::Clear()

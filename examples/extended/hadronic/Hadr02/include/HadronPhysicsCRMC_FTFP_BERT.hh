@@ -69,10 +69,10 @@ class HadronPhysicsCRMC_FTFP_BERT : public G4HadronPhysicsFTFP_BERT {
     virtual void Kaon() override;
 
   private:
-    G4int model;                                            // 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
-    static const std::array< std::string, 13 > modelNames;  // 7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
-    G4double minCRMC;
-    G4double maxFTFP;
+    G4int fModel;                                            // 0:EPOS-LHC, 1:EPOS-1.99, 2:QGSJET:01, 6:SIBYLL-2.3,
+    static const std::array< std::string, 13 > fModelNames;  // 7:QGSJETII-04, 11:QGSJETII-03, 12:DPMJET-3.06
+    G4double fMinCRMC;
+    G4double fMaxFTFP;
 };
 
 #endif

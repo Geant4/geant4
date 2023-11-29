@@ -49,8 +49,8 @@ G4SauterGavrilaAngularDistribution::G4SauterGavrilaAngularDistribution()
   : G4VEmAngularDistribution("SauterGavrila")
 {}    
 
-G4SauterGavrilaAngularDistribution::~G4SauterGavrilaAngularDistribution() 
-{}
+G4SauterGavrilaAngularDistribution::~G4SauterGavrilaAngularDistribution()
+  = default;
 
 G4ThreeVector&  G4SauterGavrilaAngularDistribution::SampleDirection( 
        const G4DynamicParticle* dp, G4double, G4int, const G4Material*)

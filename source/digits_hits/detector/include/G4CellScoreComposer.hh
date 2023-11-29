@@ -49,30 +49,24 @@ class G4Step;
 
 class G4CellScoreComposer
 {
- public:  // with description
-  G4CellScoreComposer();
-
-  ~G4CellScoreComposer();
-
+ public:
+  // get values for estimators based on track length
   void EstimatorCalculation(const G4Step& step);
-  // get values for estimators based on
-  // track length
 
+  // Called when a track enters the cell
   void TrackEnters();
-  // to be called if a track enters the cell
 
+  // Called if the cell population is increased
   void NewTrackPopedUp();
-  // to be caled if the cell popultion is increased
 
+  // Called for every collision in the cell, taking weight of the colliding particle
   void SetCollisionWeight(G4double weight);
-  // to be called for every collision
-  // in the cell with the weight of the colliding particle
 
+  // Set the importance of the cell
   void SetImportnace(G4double importance);
-  // informs G4CellScoreComposer about  the importance of the cell
 
+  // Return scores stored in G4CellScoreValues
   const G4CellScoreValues& GetStandardCellScoreValues() const;
-  // return scores in G4CellScoreValues
 
  private:
   mutable G4CellScoreValues fSCScoreValues;

@@ -39,12 +39,11 @@ class G4PhantomBuilder;
 class G4MaleBuilder: public G4PhantomBuilder
 {
 public:
-  G4MaleBuilder();
+  G4MaleBuilder() = default;
   ~G4MaleBuilder();
 
-  void BuildMaleGenitalia(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
-  void BuildLeftTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
-  void BuildRightTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
-  // void SetModel(G4String);
+  void BuildMaleGenitalia(const G4String& colourName, G4bool solidVis, G4bool sensitivity) override;
+  void BuildLeftTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity) override;
+  void BuildRightTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity) override;
 };
 #endif

@@ -34,16 +34,16 @@
 // ######################################################################
 // ###                           PROTON                               ###
 // ######################################################################
-G4AdjointProton* G4AdjointProton::theInstance = 0;
+G4AdjointProton* G4AdjointProton::theInstance = nullptr;
 
 G4AdjointProton* G4AdjointProton::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_proton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance =  pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -62,7 +62,7 @@ G4AdjointProton* G4AdjointProton::Definition()
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "adjoint",               0,            +1,        100002212,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
 		false,       "adjoint_ion",             0,
                   0.0 
              );
@@ -71,7 +71,7 @@ G4AdjointProton* G4AdjointProton::Definition()
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
     anInstance->SetPDGMagneticMoment( 2.792847351 * mN);
   }
-  theInstance = reinterpret_cast<G4AdjointProton*>(anInstance);
+  theInstance = static_cast<G4AdjointProton*>(anInstance);
   return theInstance;
 }
 

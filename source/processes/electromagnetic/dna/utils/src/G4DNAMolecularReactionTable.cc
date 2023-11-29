@@ -168,7 +168,7 @@ void G4DNAMolecularReactionData::AddProduct(Reactant* pMolecule)
 
 G4int G4DNAMolecularReactionData::GetNbProducts() const
 {
-    return fProducts.size();
+    return (G4int)fProducts.size();
 }
 
 G4DNAMolecularReactionData::Reactant* G4DNAMolecularReactionData::GetProduct(G4int i) const
@@ -406,7 +406,7 @@ void G4DNAMolecularReactionTable::SetReaction(G4DNAMolecularReactionData* pReact
     }
 
     fVectorOfReactionData.emplace_back(pReactionData);
-    pReactionData->SetReactionID(fVectorOfReactionData.size());
+    pReactionData->SetReactionID((G4int)fVectorOfReactionData.size());
 }
 
 //_____________________________________________________________________________________
@@ -439,7 +439,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     G4cout << "Number of chemical species involved in reactions = "
            << fReactantsMV.size() << G4endl;
 
-    G4int nbPrintable = fReactantsMV.size() * fReactantsMV.size();
+    std::size_t nbPrintable = fReactantsMV.size() * fReactantsMV.size();
 
     G4String* outputReaction = new G4String[nbPrintable];
     G4String* outputReactionRate = new G4String[nbPrintable];
@@ -447,14 +447,14 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     G4int n = 0;
 
     for (itReactives = fReactantsMV.begin(); itReactives != fReactantsMV.end();
-         itReactives++)
+         ++itReactives)
     {
         Reactant* moleculeA = (Reactant*)itReactives->first;
         const vector<Reactant*>* reactivesVector = CanReactWith(moleculeA);
 
         if (pReactionModel) pReactionModel->InitialiseToPrint(moleculeA);
 
-        G4int nbReactants = fReactantsMV[itReactives->first].size();
+        G4int nbReactants = (G4int)fReactantsMV[itReactives->first].size();
 
         for (G4int iReact = 0; iReact < nbReactants; iReact++)
         {
@@ -520,15 +520,15 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     G4int maxlengthOutputReaction = -1;
     G4int maxlengthOutputReactionRate = -1;
 
-    for (G4int i = 0; i < n; i++)
+    for (G4int i = 0; i < n; ++i)
     {
         if (maxlengthOutputReaction < (G4int)outputReaction[i].length())
         {
-            maxlengthOutputReaction = outputReaction[i].length();
+            maxlengthOutputReaction = (G4int)outputReaction[i].length();
         }
         if (maxlengthOutputReactionRate < (G4int)outputReactionRate[i].length())
         {
-            maxlengthOutputReactionRate = outputReactionRate[i].length();
+            maxlengthOutputReactionRate = (G4int)outputReactionRate[i].length();
         }
     }
 
@@ -830,4 +830,12 @@ G4DNAMolecularReactionTable::GetReaction(int reactionID) const
 size_t G4DNAMolecularReactionTable::GetNReactions() const
 {
     return fVectorOfReactionData.size();
+}
+
+void G4DNAMolecularReactionTable::Reset()
+{
+    fReactionData.clear();
+    fReactantsMV.clear();
+    fReactionDataMV.clear();
+    fVectorOfReactionData.clear();
 }

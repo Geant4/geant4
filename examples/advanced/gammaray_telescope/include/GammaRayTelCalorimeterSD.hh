@@ -37,48 +37,46 @@
 #ifndef GammaRayTelCalorimeterSD_h
 #define GammaRayTelCalorimeterSD_h 1
 
+#include "GammaRayTelCalorimeterHit.hh"
+
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 
 class GammaRayTelDetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
-#include "GammaRayTelCalorimeterHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelCalorimeterSD : public G4VSensitiveDetector
-{
+class GammaRayTelCalorimeterSD: public G4VSensitiveDetector {
 public:
-  
-  GammaRayTelCalorimeterSD(G4String);
-  ~GammaRayTelCalorimeterSD();
-  
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step* astep,G4TouchableHistory* ROHist);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-  
+	explicit GammaRayTelCalorimeterSD(G4String name);
+
+	~GammaRayTelCalorimeterSD() override;
+
+	void Initialize(G4HCofThisEvent* event) override;
+
+	auto ProcessHits(G4Step *step, G4TouchableHistory *history) -> G4bool  override;
+
+	void EndOfEvent(G4HCofThisEvent *collection) override;
+
+	void clear() override;
+
+	void DrawAll() override;
+
+	void PrintAll() override;
+
 private:
-  
-  GammaRayTelCalorimeterHitsCollection*  CalorimeterCollection;      
-  GammaRayTelDetectorConstruction* Detector;
+	GammaRayTelCalorimeterHitsCollection *calorimeterCollection;
 
-  G4int* ChitXID;
-  G4int* ChitYID;
+	GammaRayTelDetectorConstruction *detector;
 
-  G4int NbOfCALLayers;
-  G4int NbOfCALBars; 
-  G4int NbOfCALChannels; 
+	G4int *calHitXID;
 
+	G4int *calHitYID;
+
+	G4int numberOfCALLayers;
+
+	G4int numberOfCALBars;
+
+	G4int numberOfCALChannels;
 };
-
 #endif
-
-
-
-
-
-

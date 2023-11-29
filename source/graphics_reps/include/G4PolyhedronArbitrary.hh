@@ -76,8 +76,12 @@ class G4PolyhedronArbitrary : public G4Polyhedron
 {
   public:
     G4PolyhedronArbitrary (const G4int nVertices, const G4int nFacets);
-    virtual ~G4PolyhedronArbitrary ();
-    
+    ~G4PolyhedronArbitrary () override;
+    // Private copy constructor and assignment operator added to satisfy
+    // Coverity - JA 11/11/11.
+    G4PolyhedronArbitrary(const G4PolyhedronArbitrary&) = delete;
+    G4PolyhedronArbitrary& operator= (const G4PolyhedronArbitrary&) = delete;    
+
     void AddVertex (const G4ThreeVector& v);
     void AddFacet (const G4int iv1, const G4int iv2, const G4int iv3,
       const G4int iv4=0);
@@ -92,11 +96,6 @@ class G4PolyhedronArbitrary : public G4Polyhedron
     G4int nVertexCount;
     G4int nFacetCount;
 
-  private:
-    // Private copy constructor and assignment operator added to satisfy
-    // Coverity - JA 11/11/11.
-    G4PolyhedronArbitrary(const G4PolyhedronArbitrary&);
-    G4PolyhedronArbitrary& operator= (const G4PolyhedronArbitrary&);
 };
 #endif
 ///////////////////////////////////////////////////////////////////////////////

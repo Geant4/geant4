@@ -31,15 +31,16 @@
 #include "G4AnalysisUtilities.hh"
 #include "G4AutoLock.hh"
 
+#include <iomanip>
+
 using std::to_string;
 
 //_____________________________________________________________________________
 template <typename HT>
-G4THnManager<HT>::G4THnManager(const G4AnalysisManagerState& state,
-                              const G4String& hnType)
+G4THnManager<HT>::G4THnManager(const G4AnalysisManagerState& state)
   : fState(state)
 {
-  fHnManager = std::make_shared<G4HnManager>(hnType, state);
+  fHnManager = std::make_shared<G4HnManager>(G4Analysis::GetHnType<HT>(), state);
 }
 
 //_____________________________________________________________________________
@@ -57,25 +58,32 @@ G4THnManager<HT>::~G4THnManager()
 
 //_____________________________________________________________________________
 template <typename HT>
-HT*  G4THnManager<HT>::GetTInFunction(G4int id,
-                                      std::string_view functionName, G4bool warn,
-                                      G4bool onlyIfActive) const
+std::pair<HT*, G4HnInformation*>  G4THnManager<HT>::GetTHnInFunction(
+  G4int id, std::string_view functionName, G4bool warn, G4bool onlyIfActive) const
 {
   G4int index = id - fHnManager->GetFirstId();
-  if ( index < 0 || index >= G4int(fTVector.size()) ) {
+  if ( index < 0 || index >= G4int(fTHnVector.size()) ) {
     if ( warn) {
       G4Analysis::Warn("Histogram " + to_string(id) + " does not exist.",
         fkClass, functionName);
     }
-    return nullptr;
+    return {nullptr, nullptr};
   }
 
   // Do not return histogram if inactive
   if ( fState.GetIsActivation() && onlyIfActive && ( ! fHnManager->GetActivation(id) ) ) {
-    return nullptr;
+    return {nullptr, nullptr};
   }
 
-  return fTVector[index];
+  return fTHnVector[index];
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+HT* G4THnManager<HT>::GetTInFunction(
+  G4int id, std::string_view functionName, G4bool warn, G4bool onlyIfActive) const
+{
+  return GetTHnInFunction(id, functionName, warn, onlyIfActive).first;
 }
 
 //_____________________________________________________________________________
@@ -122,7 +130,8 @@ void G4THnManager<HT>::AddTVector(const std::vector<HT*>& tVector)
   // }
   auto itw = tVector.begin();
   for ( auto t : fTVector ) {
-    t->add(*(*itw++));
+    t->add(*(*itw));
+    (*itw++)->reset();
   }
 
   Message(G4Analysis::kVL1, "merge", "all " + fHnManager->GetHnType());
@@ -172,10 +181,11 @@ typename std::vector<HT*>::const_iterator G4THnManager<HT>::EndConstT() const
 
 //_____________________________________________________________________________
 template <typename HT>
-G4int G4THnManager<HT>::RegisterT(HT* t, const G4String& name)
+G4int G4THnManager<HT>::RegisterT(const G4String& name, HT* ht, G4HnInformation* info)
 {
-  G4int index = fTVector.size();
-  fTVector.push_back(t);
+  G4int index = (G4int)fTVector.size();
+  fTVector.push_back(ht);
+  fTHnVector.push_back({ht, info});
 
   fHnManager->SetLockFirstId(true);
   fNameIdMap[name] = index + fHnManager->GetFirstId();
@@ -207,6 +217,7 @@ G4THnManager<HT>::ClearData()
   }
 
   fTVector.clear();
+  fTHnVector.clear();
   fNameIdMap.clear();
 
   if ( fHnManager != nullptr ) {
@@ -225,7 +236,97 @@ G4bool G4THnManager<HT>::IsEmpty() const
 
 //_____________________________________________________________________________
 template <typename HT>
-HT* G4THnManager<HT>::GetT(G4int id) const
+HT* G4THnManager<HT>::GetT(G4int id, G4bool warn, G4bool onlyIfActive) const
 {
-  return GetTInFunction(id, "GetT");
+  return GetTInFunction(id, "GetT", warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+std::vector<HT*>* G4THnManager<HT>::GetTVector()
+{
+  return &fTVector;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+const std::vector<HT*>& G4THnManager<HT>::GetTVectorRef() const
+{
+  return fTVector;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+std::vector<std::pair<HT*, G4HnInformation*>>* G4THnManager<HT>::GetTHnVector()
+{
+  return &fTHnVector;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+const std::vector<std::pair<HT*, G4HnInformation*>>& G4THnManager<HT>::GetTHnVectorRef() const
+{
+  return fTHnVector;
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool G4THnManager<HT>::List(std::ostream& output, G4bool onlyIfActive) const
+{
+  // Save current output stream formatting
+  std::ios_base::fmtflags outputFlags(output.flags() );
+
+  // List general info
+  output << fHnManager->GetHnType() << ": " << fHnManager->GetNofActiveHns() << " active ";
+  if (! onlyIfActive) {
+     output << " of " << fHnManager->GetNofHns() << " defined ";
+  }
+  output << G4endl;
+
+  // Define optimal field widths
+  size_t maxNameLength = 0;
+  size_t maxTitleLength = 0;
+  size_t maxEntries = 0;
+  for ( const auto& [ht, hnInfo] : fTHnVector) {
+    if (hnInfo->GetName().length() > maxNameLength) {
+      maxNameLength = hnInfo->GetName().length();
+    }
+    if (ht->title().length() > maxTitleLength) {
+      maxTitleLength = ht->title().length();
+    }
+    if (ht->entries() > maxEntries) {
+      maxEntries = ht->entries();
+    }
+  }
+  size_t maxIdWidth = std::to_string(fTVector.size() + fHnManager->GetFirstId()).length();
+  size_t maxEntriesWidth = std::to_string(maxEntries).length();
+  // update string width for adde double quotas
+  maxNameLength += 2;
+  maxTitleLength += 2;
+
+  // List objects
+  auto id = fHnManager->GetFirstId();
+  for (const auto& [ht, hnInfo] : fTHnVector) {
+
+    // skip inactivated objects
+    if (fState.GetIsActivation() && onlyIfActive && (! hnInfo->GetActivation())) {
+      id++;
+      continue;
+    }
+
+    // print selected info
+    output << "   id: " << std::setw((G4int)maxIdWidth) << id++
+      << " name: \"" << std::setw((G4int)maxNameLength) << std::left << hnInfo->GetName() + "\""
+      << " title: \"" << std::setw((G4int)maxTitleLength) << std::left << ht->title() + "\""
+      << " entries: " << std::setw((G4int)maxEntriesWidth) << ht->entries();
+    if (! onlyIfActive) {
+      output << " active: " << std::boolalpha << hnInfo->GetActivation();
+    }
+    output  << G4endl;
+  }
+
+  // Restore the output stream formatting
+  output.flags(outputFlags);
+
+  return output.good();
 }

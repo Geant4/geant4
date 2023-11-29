@@ -51,7 +51,7 @@ class G4NeutrinoE : public G4ParticleDefinition
  private:
    static G4NeutrinoE* theInstance;
    G4NeutrinoE(){}
-   ~G4NeutrinoE(){}
+   ~G4NeutrinoE() override= default;
 
  public:
    static G4NeutrinoE* Definition();

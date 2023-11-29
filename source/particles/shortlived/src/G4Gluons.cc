@@ -58,6 +58,3 @@ G4Gluons::G4Gluons(
 {
    SetParticleSubType("gluon");
 }
-
-G4Gluons::~G4Gluons() {}
-

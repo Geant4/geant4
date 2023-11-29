@@ -47,33 +47,33 @@ class G4RKIntegrationDriver : public G4VIntegrationDriver
     G4RKIntegrationDriver(const G4RKIntegrationDriver&) = delete;
     G4RKIntegrationDriver& operator=(const G4RKIntegrationDriver&) = delete;
 
-    virtual void GetDerivatives(const G4FieldTrack& track,
-                                      G4double dydx[]) const override;
+    void GetDerivatives(const G4FieldTrack& track,
+                              G4double dydx[]) const override;
 
-    virtual void GetDerivatives(const G4FieldTrack& track,
-                                      G4double dydx[],
-                                      G4double field[]) const override;
+    void GetDerivatives(const G4FieldTrack& track,
+                              G4double dydx[],
+                              G4double field[]) const override;
 
-    virtual G4double ComputeNewStepSize(G4double errMaxNorm, // normalised error
-                                        G4double hstepCurrent) override final;
+    G4double ComputeNewStepSize(G4double errMaxNorm, // normalised error
+                                G4double hstepCurrent) final;
       // Taking the last step's normalised error, calculate
       // a step size for the next step.
       // - Limits the next step's size within a factor of the current one.
 
-    virtual G4EquationOfMotion* GetEquationOfMotion() override;
-    virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
+    G4EquationOfMotion* GetEquationOfMotion() override;
+    void SetEquationOfMotion(G4EquationOfMotion* equation) override;
 
-    virtual const T* GetStepper() const override;
-    virtual T* GetStepper() override;
+    const T* GetStepper() const override;
+    T* GetStepper() override;
 
-    virtual void  StreamInfo( std::ostream& os ) const override;
+    void  StreamInfo( std::ostream& os ) const override;
    
     // Accessors.
     G4double GetSafety() const;
     G4double GetPshrnk() const;
     G4double GetPgrow() const;
 
-    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper* stepper) override;
+    void RenewStepperAndAdjust(G4MagIntegratorStepper* stepper) override;
 
     void ReSetParameters(G4double safety = 0.9);
     void SetSafety(G4double valS);

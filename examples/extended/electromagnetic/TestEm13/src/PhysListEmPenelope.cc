@@ -99,11 +99,6 @@ PhysListEmPenelope::PhysListEmPenelope(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmPenelope::~PhysListEmPenelope()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysListEmPenelope::ConstructProcess()
 {
   // Add standard EM Processes

@@ -55,10 +55,10 @@ class G4EmExtraPhysics;
 class G4EmMessenger: public G4UImessenger
 {
 public:
-  G4EmMessenger(G4EmExtraPhysics* af);
-  virtual ~G4EmMessenger();
+  explicit G4EmMessenger(G4EmExtraPhysics* af);
+  ~G4EmMessenger() override;
 
-  void SetNewValue(G4UIcommand* aComm, G4String aS);
+  void SetNewValue(G4UIcommand* aComm, G4String aS) override;
 
 private:
   G4EmExtraPhysics*   theB;
@@ -70,6 +70,7 @@ private:
   G4UIcmdWithABool*   theEN;
   G4UIcmdWithABool*   theMUN;
   G4UIcmdWithABool*   theGMM;
+  G4UIcmdWithABool*   theMMM;
   G4UIcmdWithABool*   thePMM;
   G4UIcmdWithABool*   thePH;
   G4UIcmdWithABool*   theNu;

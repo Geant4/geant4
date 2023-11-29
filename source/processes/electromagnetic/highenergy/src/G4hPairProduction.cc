@@ -54,18 +54,6 @@ G4hPairProduction::G4hPairProduction(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hPairProduction::~G4hPairProduction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4hPairProduction::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4hPairProduction::InitialiseEnergyLossProcess(
                          const G4ParticleDefinition* part,
 			 const G4ParticleDefinition* bpart)

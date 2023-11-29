@@ -49,32 +49,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
-{
-  fParticleGun  = new G4ParticleGun(1);
+PrimaryGeneratorAction::PrimaryGeneratorAction() {
+  fParticleGun = new G4ParticleGun(1);
   fParticleGun->SetParticleDefinition(G4Electron::Electron());
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+  fParticleGun->SetParticleEnergy(1. * GeV);
   fParam = TestParameters::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
-  delete fParticleGun;
-}
+PrimaryGeneratorAction::~PrimaryGeneratorAction() { delete fParticleGun; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   G4double z = fParam->GetPositionZ();
   fParam->SetBeamParticle(fParticleGun->GetParticleDefinition());
   fParam->SetBeamEnergy(fParticleGun->GetParticleEnergy());
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,z));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., z));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

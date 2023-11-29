@@ -33,7 +33,7 @@
 
 #include "G4VTHnFileManager.hh"
 
-#include "tools/hdf5/ntuple" // for hid_t
+#include "toolx/hdf5/ntuple" // for hid_t
 
 #include <string_view>
 
@@ -45,14 +45,14 @@ class G4Hdf5HnFileManager : public G4VTHnFileManager<HT>
   public:
     explicit G4Hdf5HnFileManager(G4Hdf5FileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
-    G4Hdf5HnFileManager() = delete;  
-    virtual ~G4Hdf5HnFileManager() = default;
+    G4Hdf5HnFileManager() = delete;
+    ~G4Hdf5HnFileManager() override = default;
 
     // Methods for writing objects
     // Write to a new file (the file is closed after write)
-    virtual G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
+    G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
     // Write to the default file  (handled with OpenFile()/CloseFile methods)
-    virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
+    G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
   private:
     // Methods

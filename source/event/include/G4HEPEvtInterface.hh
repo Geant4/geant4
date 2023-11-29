@@ -79,13 +79,13 @@ class G4HEPEvtInterface : public G4VPrimaryGenerator
 {
   public:
 
-    G4HEPEvtInterface(const char* evfile, G4int vl=0);
+    explicit G4HEPEvtInterface(const char* evfile, G4int vl=0);
     // Constructor, "evfile" is the file name (with directory path).
   
-    ~G4HEPEvtInterface();
+    ~G4HEPEvtInterface() override = default;
     // Destructor
 
-    void GeneratePrimaryVertex(G4Event* evt);
+    void GeneratePrimaryVertex(G4Event* evt) override;
 
   private:
 

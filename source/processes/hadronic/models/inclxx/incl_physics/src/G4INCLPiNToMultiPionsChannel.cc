@@ -74,33 +74,40 @@ namespace G4INCL {
       nucleon = particle2;
       pion = particle1;
     }
-      G4int ipi=ParticleTable::getIsospin(pion->getType());
-      ind2=ParticleTable::getIsospin(nucleon->getType());
+#ifdef INCLXX_IN_GEANT4_MODE
+    // Erase the parent resonance information of the nucleon and pion
+    nucleon->setParentResonancePDGCode(0);
+    nucleon->setParentResonanceID(0);
+    pion->setParentResonancePDGCode(0);
+    pion->setParentResonanceID(0);
+#endif
+    G4int ipi=ParticleTable::getIsospin(pion->getType());
+    ind2=ParticleTable::getIsospin(nucleon->getType());
 
-      ParticleList list;
-      list.push_back(nucleon);
-      list.push_back(pion);
-      fs->addModifiedParticle(nucleon);
-      fs->addModifiedParticle(pion);
+    ParticleList list;
+    list.push_back(nucleon);
+    list.push_back(pion);
+    fs->addModifiedParticle(nucleon);
+    fs->addModifiedParticle(pion);
 
-      isospinRepartition(ipi);
+    isospinRepartition(ipi);
 
-      const ParticleType tn=ParticleTable::getNucleonType(ind2);
-      nucleon->setType(tn);
-      ParticleType pionType=ParticleTable::getPionType(isosp[0]);
-      pion->setType(pionType);
-      const ThreeVector &rcolpion = pion->getPosition();
-      const ThreeVector zero;
-      for(G4int i=1; i<npion; ++i) {
-        pionType=ParticleTable::getPionType(isosp[i]);
-        Particle *newPion = new Particle(pionType,zero,rcolpion);
-        newPion->setType(pionType);
-        list.push_back(newPion);
-        fs->addCreatedParticle(newPion);
-      }
+    const ParticleType tn=ParticleTable::getNucleonType(ind2);
+    nucleon->setType(tn);
+    ParticleType pionType=ParticleTable::getPionType(isosp[0]);
+    pion->setType(pionType);
+    const ThreeVector &rcolpion = pion->getPosition();
+    const ThreeVector zero;
+    for(G4int i=1; i<npion; ++i) {
+      pionType=ParticleTable::getPionType(isosp[i]);
+      Particle *newPion = new Particle(pionType,zero,rcolpion);
+      newPion->setType(pionType);
+      list.push_back(newPion);
+      fs->addCreatedParticle(newPion);
+    }
 
-      const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, pion);
-      PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+    const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, pion);
+    PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
 
   }
 

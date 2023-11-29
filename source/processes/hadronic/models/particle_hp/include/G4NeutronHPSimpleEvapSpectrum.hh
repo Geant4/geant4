@@ -29,4 +29,4 @@
 #include "G4ParticleHPSimpleEvapSpectrum.hh"
 using G4NeutronHPSimpleEvapSpectrum = G4ParticleHPSimpleEvapSpectrum;
 
-#endif 
+#endif

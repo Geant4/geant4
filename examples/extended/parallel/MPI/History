@@ -1,13 +1,34 @@
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+# Example MPI History
 
-                      Category History file
-                      ---------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-01-09 Ben Morgan (MPI-V11-01-00)
+- Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
+  scope version to ease use of Geant4 as a CMake subproject. 
+  - Fixes [GitHub PR #52](https://github.com/Geant4/geant4/pull/52)
+
+## 2022-11-09 I. Hrivnacova (MPI-V11-00-03)
+- Updated analysis classes for changes in analysis
+  in analysis-V11-00-*
+- Fixed exMPI04 example failing in sequential mode when
+  MPI ntuple merging is activated   
+
+## 2022-05-18 Guy Barrand (MPI-V11-00-02)
+- have "toolx" namespace for g4tools code related to MPI, then:
+  - namespace tools::mpi becomes toolx::mpi.
+  - includes #include <tools/mpi/...> become #include <toolx/mpi/...>
+
+## 2022-03-10 Ben Morgan (MPI-V11-00-01)
+- Remove use of obsolete G4DeveloperAPI functions
+
+## 2021-12-10 Ben Morgan (MPI-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 9 Novemeber 2021,  I. Hrivnacova (MPI-V10-07-03)
 - Updated analysis classes for changes in analysis

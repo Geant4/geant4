@@ -131,6 +131,13 @@ private:
   G4DNAMillerGreenExcitationModel & operator=(const  G4DNAMillerGreenExcitationModel &right);
   G4DNAMillerGreenExcitationModel(const  G4DNAMillerGreenExcitationModel&);
 
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef = nullptr;
+  G4ParticleDefinition* hydrogenDef = nullptr;
+  G4ParticleDefinition* alphaPlusPlusDef = nullptr;
+  G4ParticleDefinition* alphaPlusDef = nullptr;
+  G4ParticleDefinition* heliumDef = nullptr;
+  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

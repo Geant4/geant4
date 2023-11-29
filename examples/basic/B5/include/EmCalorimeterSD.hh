@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EmCalorimeterSD.hh
+/// \file B5/include/EmCalorimeterSD.hh
 /// \brief Definition of the B5::EmCalorimeterSD class
 
 #ifndef B5EmCalorimeterSD_h
@@ -47,7 +47,7 @@ class EmCalorimeterSD : public G4VSensitiveDetector
 {
   public:
     EmCalorimeterSD(G4String name);
-    ~EmCalorimeterSD() override;
+    ~EmCalorimeterSD() override = default;
 
     void Initialize(G4HCofThisEvent*HCE) override;
     G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) override;

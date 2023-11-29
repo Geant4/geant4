@@ -1,11 +1,11 @@
 # - G4persistency category build
+include(ascii/sources.cmake)
+geant4_add_category(G4geomtext MODULES G4geomtext)
 
-set(G4persistency_COMPONENTS
-  ascii/sources.cmake
-  mctruth/sources.cmake)
+include(mctruth/sources.cmake)
+geant4_add_category(G4mctruth MODULES G4mctruth)
 
 if(GEANT4_USE_GDML)
-  list(APPEND G4persistency_COMPONENTS gdml/sources.cmake)
+  include(gdml/sources.cmake)
+  geant4_add_category(G4gdml MODULES G4gdml)
 endif()
-
-geant4_global_library_target(NAME G4persistency COMPONENTS ${G4persistency_COMPONENTS})

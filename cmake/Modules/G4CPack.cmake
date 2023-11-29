@@ -16,7 +16,7 @@ include(InstallRequiredSystemLibraries)
 
 #-----------------------------------------------------------------------
 # Copy/Generate common resource files into formats CPack generators like
-file(WRITE ${CMAKE_BINARY_DIR}/README.txt "
+file(WRITE ${PROJECT_BINARY_DIR}/README.txt "
 Geant4
 ======
 A toolkit for the simulation of the passage of particles through matter.
@@ -45,6 +45,7 @@ configure_file(LICENSE LICENSE.txt COPYONLY) # Suffix must be .txt
 #
 set(CPACK_PACKAGE_NAME "geant4")
 set(CPACK_PACKAGE_VENDOR "Geant4 Collaboration")
+set(CPACK_PACKAGE_CONTACT "Geant4 Collaboration <https://geant4.cern.ch/collaboration/contacts>")
 set(CPACK_PACKAGE_VERSION ${Geant4_VERSION})
 set(CPACK_PACKAGE_VERSION_MAJOR ${Geant4_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${Geant4_VERSION_MINOR})
@@ -53,6 +54,15 @@ set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_BINARY_DIR}/README.txt")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Geant4-${Geant4_VERSION_MAJOR}.${Geant4_VERSION_MINOR}")
 set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/cmake/Templates/g4_small.bmp")
 set(CPACK_PACKAGE_CHECKSUM "SHA256")
+
+set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
+set(CPACK_DEBIAN_PACKAGE_SECTION "science")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS TRUE)
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS TRUE)
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS_POLICY "=")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "cmake, make, g++")
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "libexpat1-dev, libxerces-c-dev, zlib1g-dev")
+set(CPACK_DEBIAN_PACKAGE_SUGGESTS "")
 
 # - Common Resource files
 set(CPACK_RESOURCE_FILE_README  "${PROJECT_BINARY_DIR}/README.txt")
@@ -127,7 +137,6 @@ list(APPEND CPACK_INSTALL_SCRIPTS "${CMAKE_CURRENT_BINARY_DIR}/source_package_ex
 # Binary package common settings
 #
 set(CPACK_PACKAGE_RELOCATABLE ${CMAKE_INSTALL_IS_NONRELOCATABLE})
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Geant4-${Geant4_VERSION_MAJOR}.${Geant4_VERSION_MINOR}")
 
 if(WIN32)
   set(CPACK_GENERATOR "NSIS;ZIP")
@@ -146,7 +155,7 @@ configure_file(
   CMakeCPackOptions.cmake
   @ONLY
   )
-set(CPACK_PROJECT_CONFIG_FILE ${CMAKE_BINARY_DIR}/CMakeCPackOptions.cmake)
+set(CPACK_PROJECT_CONFIG_FILE ${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake)
 include(CPack)
 
 #-----------------------------------------------------------------------

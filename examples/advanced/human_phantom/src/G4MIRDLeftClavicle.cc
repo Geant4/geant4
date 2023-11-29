@@ -46,22 +46,14 @@
 #include "G4Box.hh"
 #include "G4Torus.hh"
 
-G4MIRDLeftClavicle::G4MIRDLeftClavicle()
-{
-}
-
-G4MIRDLeftClavicle::~G4MIRDLeftClavicle()
-{
-}
-
 G4VPhysicalVolume* G4MIRDLeftClavicle::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 						const G4String& colourName, G4bool wireFrame,G4bool)
 {
   
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* skeleton = material -> GetMaterial("skeleton");
  
   G4double rMin = 0*cm;
   G4double rMax = 0.7883*cm;
@@ -69,16 +61,15 @@ G4VPhysicalVolume* G4MIRDLeftClavicle::Construct(const G4String& volumeName, G4V
   G4double pSPhi = 298.15*degree;
   G4double pDPhi = 0.7*rad;
  
+  auto* clavicle = new G4Torus("Clavicle",rMin,rMax,rTor,pSPhi,pDPhi);
 
-  G4Torus* clavicle = new G4Torus("Clavicle",rMin,rMax,rTor,pSPhi,pDPhi);
-
-  G4LogicalVolume* logicLeftClavicle = new G4LogicalVolume(clavicle,
+  auto* logicLeftClavicle = new G4LogicalVolume(clavicle,
 							   skeleton,
 							   "logical" + volumeName,
-							   0, 0, 0);
+							   nullptr, nullptr, nullptr);
   
   
-  G4VPhysicalVolume* physLeftClavicle = new G4PVPlacement(0,
+  G4VPhysicalVolume* physLeftClavicle = new G4PVPlacement(nullptr,
 							  G4ThreeVector(0.*cm,2. *cm,33.25*cm),
 							  "physicalLeftClavicle",
 							  logicLeftClavicle,
@@ -88,9 +79,9 @@ G4VPhysicalVolume* G4MIRDLeftClavicle::Construct(const G4String& volumeName, G4V
   
   // Visualization Attributes
   //G4VisAttributes* LeftClavicleVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftClavicleVisAtt = new G4VisAttributes(colour);
+  auto* LeftClavicleVisAtt = new G4VisAttributes(colour);
   LeftClavicleVisAtt->SetForceSolid(wireFrame);
   logicLeftClavicle->SetVisAttributes(LeftClavicleVisAtt);
 

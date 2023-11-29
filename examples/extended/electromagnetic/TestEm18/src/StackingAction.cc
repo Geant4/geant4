@@ -38,7 +38,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
-:G4UserStackingAction(), fTrackSecondaries(false)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -47,7 +46,7 @@ StackingAction::StackingAction()
 
 StackingAction::~StackingAction()
 {
-  ///delete fStackMessenger;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

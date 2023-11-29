@@ -51,14 +51,14 @@ void G4SmartVoxelProxy::operator delete(void* aProxy)
 inline
 G4bool G4SmartVoxelProxy::IsHeader() const
 {
-  return (fHeader) ? true : false;
+  return (fHeader) != nullptr;
 }   
 
 // --------------------------------------------------------------------
 inline
 G4bool G4SmartVoxelProxy::IsNode() const
 {
-  return (fNode) ? true : false;
+  return (fNode) != nullptr;
 }
 
 // --------------------------------------------------------------------
@@ -81,5 +81,5 @@ G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
 inline
 G4bool G4SmartVoxelProxy::operator == (const G4SmartVoxelProxy& right) const
 {
-  return (this==&right) ? true : false;
+  return this==&right;
 }

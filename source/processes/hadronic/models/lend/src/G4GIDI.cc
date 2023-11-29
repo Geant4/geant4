@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/*
-# <<BEGIN-copyright>>
-# <<END-copyright>>
-*/
+
 #include <iostream>
 
 #include "G4GIDI.hh"
@@ -37,7 +34,7 @@ using namespace GIDI;
 /*
 ***************************************************************
 */
-G4GIDI::G4GIDI( int ip, string &dataDirectory ) {
+G4GIDI::G4GIDI( G4int ip, string &dataDirectory ) {
 
     init( ip );
     addDataDirectory( dataDirectory );
@@ -45,12 +42,11 @@ G4GIDI::G4GIDI( int ip, string &dataDirectory ) {
 /*
 ***************************************************************
 */
-G4GIDI::G4GIDI( int ip, list<string> &dataDirectoryList ) {
-
-    list<string>::iterator iter;
+G4GIDI::G4GIDI( G4int ip, list<string> &dataDirectoryList ) {
 
     init( ip );
-    for( iter = dataDirectoryList.begin( ); iter != dataDirectoryList.end( ); ++iter ) addDataDirectory( *iter );
+    for( auto iter = dataDirectoryList.begin( ); iter != dataDirectoryList.end( ); ++iter )
+      addDataDirectory( *iter );
 }
 /*
 ***************************************************************
@@ -58,7 +54,7 @@ G4GIDI::G4GIDI( int ip, list<string> &dataDirectoryList ) {
 G4GIDI::~G4GIDI( void ) {
 
     G4GIDI_target *target;
-    list<G4GIDI_map *>::iterator iter;
+    auto iter = dataDirectories.cbegin();
 
     while( targets.size( ) > 0 ) {
         target = targets.back( );
@@ -66,7 +62,7 @@ G4GIDI::~G4GIDI( void ) {
         delete target;
     } // Loop checking, 11.06.2015, T. Koi
 
-    while( ( iter = dataDirectories.begin( ) ) != dataDirectories.end( ) ) {
+    while( iter != dataDirectories.cend() ) {
         delete *iter;
         dataDirectories.pop_front( );
     }// Loop checking, 11.06.2015, T. Koi
@@ -74,7 +70,7 @@ G4GIDI::~G4GIDI( void ) {
 /*
 ***************************************************************
 */
-int G4GIDI::init( int ip ) {
+G4int G4GIDI::init( G4int ip ) {
 
     projectileID = ip;
     if( ip == 0 ) {
@@ -100,18 +96,16 @@ int G4GIDI::init( int ip ) {
 /*
 ***************************************************************
 */
-int G4GIDI::numberOfDataDirectories( void ) {
+G4int G4GIDI::numberOfDataDirectories( void ) {
 
-    return( dataDirectories.size( ) );
+    return (G4int)dataDirectories.size( );
 }
 /*
 ***************************************************************
 */
-int G4GIDI::addDataDirectory( string &dataDirectory ) {
+G4int G4GIDI::addDataDirectory( string &dataDirectory ) {
 
-    list<G4GIDI_map *>::iterator iter;
-
-    for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
+    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
         if( (*iter)->path( ) == dataDirectory ) return( 0 );
     }
 
@@ -123,11 +117,9 @@ int G4GIDI::addDataDirectory( string &dataDirectory ) {
 /*
 ***************************************************************
 */
-int G4GIDI::removeDataDirectory( string &dataDirectory ) {
+G4int G4GIDI::removeDataDirectory( string &dataDirectory ) {
 
-    list<G4GIDI_map *>::iterator iter;
-
-    for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
+    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
         if( dataDirectory == (*iter)->path( ) ) {
             
         }
@@ -137,16 +129,14 @@ int G4GIDI::removeDataDirectory( string &dataDirectory ) {
 /*
 ***************************************************************
 */
-string G4GIDI::getDataDirectoryAtIndex( int index ) {
+string G4GIDI::getDataDirectoryAtIndex( G4int index ) {
 
-    list<G4GIDI_map *>::iterator iter;
     unsigned i = (unsigned) index;
 
     if( index >= 0 ) {
         if( i >= dataDirectories.size( ) ) return( "" );
-        for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++, index-- ) {
-            if( index == 0 ) return( (*iter)->fileName( ) );
-        }
+        for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter, --index )
+          if( index == 0 ) return( (*iter)->fileName( ) );
     }
 
     return( "" );
@@ -156,22 +146,22 @@ string G4GIDI::getDataDirectoryAtIndex( int index ) {
 */
 vector<string> *G4GIDI::getDataDirectories( void ) {
 
-    int i = 0;
-    list<G4GIDI_map *>::iterator iter;
+    std::size_t i = 0;
     vector<string> *v = new vector<string>( numberOfDataDirectories( ) );
 
-    for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++, i++ ) (*v)[i] = string( (*iter)->fileName( ) );
+    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter, ++i )
+      (*v)[i] = string( (*iter)->fileName( ) );
     return( v );
 }
 /*
 ***************************************************************
 */
-bool G4GIDI::isThisDataAvailable( string &lib_name, int iZ, int iA, int iM ) {
+G4bool G4GIDI::isThisDataAvailable( string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
-    bool b;
+    G4bool b;
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
 
-    if( targetName == NULL ) return( false );
+    if( targetName == nullptr ) return( false );
     string targetSymbol( targetName );
     b = isThisDataAvailable( lib_name, targetSymbol );
     smr_freeMemory( (void **) &targetName );
@@ -180,11 +170,11 @@ bool G4GIDI::isThisDataAvailable( string &lib_name, int iZ, int iA, int iM ) {
 /*
 ***************************************************************
 */
-bool G4GIDI::isThisDataAvailable( string &lib_name, string &targetName ) {
+G4bool G4GIDI::isThisDataAvailable( string &lib_name, string &targetName ) {
 
     char *path = dataFilename( lib_name, targetName );
 
-    if( path != NULL ) {
+    if( path != nullptr ) {
         smr_freeMemory( (void **) &path );
         return( true );
     }
@@ -193,11 +183,11 @@ bool G4GIDI::isThisDataAvailable( string &lib_name, string &targetName ) {
 /*
 ***************************************************************
 */
-char *G4GIDI::dataFilename( string &lib_name, int iZ, int iA, int iM ) {
+char *G4GIDI::dataFilename( string &lib_name, G4int iZ, G4int iA, G4int iM ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM ), *fileName;
 
-    if( targetName == NULL ) return( NULL );
+    if( targetName == nullptr ) return( nullptr );
     string targetSymbol( targetName );
     fileName = dataFilename( lib_name, targetSymbol );
     smr_freeMemory( (void **) &targetName );
@@ -208,38 +198,23 @@ char *G4GIDI::dataFilename( string &lib_name, int iZ, int iA, int iM ) {
 */
 char *G4GIDI::dataFilename( string &lib_name, string &targetSymbol ) {
 
-/*
-    char *path;
-    list<G4GIDI_map *>::iterator iter;
-
-    for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
-        if( ( path = MCGIDI_map_findTarget( &((*iter)->smr), (*iter)->map, lib_name.c_str( ), projectile.c_str( ), targetSymbol.c_str( ) ) ) != NULL ) {
-            return( path );
-        }
-    }
-    return( NULL );
-*/
-//150121
-//
    char *path;
-   list<G4GIDI_map *>::iterator iter;
 
-   for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
-      if( ( path = MCGIDI_map_findTarget( NULL, (*iter)->map, lib_name.c_str(), projectile.c_str( ), targetSymbol.c_str( ) ) ) != NULL ) {
+   for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter )
+      if( ( path = MCGIDI_map_findTarget( nullptr, (*iter)->map, lib_name.c_str(), projectile.c_str( ), targetSymbol.c_str( ) ) ) != nullptr )
          return( path );
-      }
-   }
-   return( NULL );
+
+   return( nullptr );
 }
 /*
 ***************************************************************
 */
-vector<string> *G4GIDI::getNamesOfAvailableLibraries( int iZ, int iA, int iM ) {
+vector<string> *G4GIDI::getNamesOfAvailableLibraries( G4int iZ, G4int iA, G4int iM ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
     vector<string> *listOfLibraries;
 
-    if( targetName == NULL ) return( new vector<string>( ) );
+    if( targetName == nullptr ) return( new vector<string>( ) );
     string targetSymbol( targetName );
     listOfLibraries = getNamesOfAvailableLibraries( targetSymbol );
     smr_freeMemory( (void **) &targetName );
@@ -250,18 +225,17 @@ vector<string> *G4GIDI::getNamesOfAvailableLibraries( int iZ, int iA, int iM ) {
 */
 vector<string> *G4GIDI::getNamesOfAvailableLibraries( string &targetName ) {
 
-    list<G4GIDI_map *>::iterator iter;
     vector<string> *listOfLibraries = new vector<string>( );
 
     MCGIDI_map *map;
     MCGIDI_mapEntry *entry;
 
-    for( iter = dataDirectories.begin( ); iter != dataDirectories.end( ); iter++ ) {
+    for( auto iter = dataDirectories.cbegin( ); iter != dataDirectories.cend( ); ++iter ) {
         map = MCGIDI_map_findAllOfTarget( &((*iter)->smr), (*iter)->map, projectile.c_str( ), targetName.c_str( ) );
-        for( entry = MCGIDI_map_getFirstEntry( map ); entry != NULL; entry = MCGIDI_map_getNextEntry( entry ) ) {
+        for( entry = MCGIDI_map_getFirstEntry( map ); entry != nullptr; entry = MCGIDI_map_getNextEntry( entry ) ) {
             listOfLibraries->push_back( entry->evaluation );
         }
-        MCGIDI_map_free( NULL, map );
+        MCGIDI_map_free( nullptr, map );
     }
     return( listOfLibraries );
 }
@@ -271,14 +245,13 @@ vector<string> *G4GIDI::getNamesOfAvailableLibraries( string &targetName ) {
 vector<string> *G4GIDI::getNamesOfAvailableTargets( void ) {
 
     vector<string> *listOfTargets;
-    list<G4GIDI_map *>::iterator iter_map;
 
     listOfTargets = new vector<string>( );
-    if( listOfTargets == NULL ) return( NULL );
-    for( iter_map = dataDirectories.begin( ); iter_map != dataDirectories.end( ); iter_map++ ) {
-        if( MCGIDI_map_walkTree( NULL, (*iter_map)->map, getNamesOfAvailableTargets_walker, (void *) listOfTargets ) != 0 ) {
+    if( listOfTargets == nullptr ) return( nullptr );
+    for( auto iter_map = dataDirectories.cbegin( ); iter_map != dataDirectories.cend( ); ++iter_map ) {
+        if( MCGIDI_map_walkTree( nullptr, (*iter_map)->map, getNamesOfAvailableTargets_walker, (void *) listOfTargets ) != 0 ) {
             delete listOfTargets;
-            return( NULL );
+            return( nullptr );
         }
     }
     return( listOfTargets );
@@ -286,12 +259,12 @@ vector<string> *G4GIDI::getNamesOfAvailableTargets( void ) {
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::readTarget( string &lib_name, int iZ, int iA, int iM, bool bind ) {
+G4GIDI_target *G4GIDI::readTarget( string &lib_name, G4int iZ, G4int iA, G4int iM, G4bool bind ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
     G4GIDI_target *target;
 
-    if( targetName == NULL ) return( NULL );
+    if( targetName == nullptr ) return( nullptr );
     string targetSymbol( targetName );
     target = readTarget( lib_name, targetSymbol, bind );
     smr_freeMemory( (void **) &targetName );
@@ -300,15 +273,13 @@ G4GIDI_target *G4GIDI::readTarget( string &lib_name, int iZ, int iA, int iM, boo
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::readTarget( string &lib_name, string &targetName, bool bind ) {
+G4GIDI_target *G4GIDI::readTarget( string &lib_name, string &targetName, G4bool bind ) {
 
-    vector<G4GIDI_target *>::iterator iter_targets;
-
-    for( iter_targets = targets.begin( ); iter_targets != targets.end( ); iter_targets++ ) {
-        if( (*iter_targets)->name == targetName ) return( NULL );
+    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
+        if( (*iter_targets)->name == targetName ) return( nullptr );
     }
     char *path = dataFilename( lib_name, targetName );
-    if( path == NULL ) return( NULL );
+    if( path == nullptr ) return( nullptr );
 
     G4GIDI_target *target = new G4GIDI_target( path );
     if( bind ) targets.push_back( target );
@@ -318,12 +289,12 @@ G4GIDI_target *G4GIDI::readTarget( string &lib_name, string &targetName, bool bi
 /*
 ***************************************************************
 */
-G4GIDI_target *G4GIDI::getAlreadyReadTarget( int iZ, int iA, int iM ) {
+G4GIDI_target *G4GIDI::getAlreadyReadTarget( G4int iZ, G4int iA, G4int iM ) {
 
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
     G4GIDI_target *target;
 
-    if( targetName == NULL ) return( NULL );
+    if( targetName == nullptr ) return( nullptr );
     string targetSymbol( targetName );
     target = getAlreadyReadTarget( targetSymbol );
     smr_freeMemory( (void **) &targetName );
@@ -334,21 +305,17 @@ G4GIDI_target *G4GIDI::getAlreadyReadTarget( int iZ, int iA, int iM ) {
 */
 G4GIDI_target *G4GIDI::getAlreadyReadTarget( string &targetSymbol ) {
 
-    vector<G4GIDI_target *>::iterator iter_targets;
-
-    for( iter_targets = targets.begin( ); iter_targets != targets.end( ); iter_targets++ ) {
+    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( ( (*iter_targets)->name == targetSymbol ) ) return( *iter_targets );
     }
-    return( NULL );
+    return( nullptr );
 }
 /*
 ***************************************************************
 */
-int G4GIDI::freeTarget( G4GIDI_target *target ) {
+G4int G4GIDI::freeTarget( G4GIDI_target *target ) {
 
-    vector<G4GIDI_target *>::iterator iter_targets;
-
-    for( iter_targets = targets.begin( ); iter_targets != targets.end( ); iter_targets++ ) {
+    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( *iter_targets == target ) {
             targets.erase( iter_targets );
             delete target;
@@ -360,12 +327,12 @@ int G4GIDI::freeTarget( G4GIDI_target *target ) {
 /*
 ***************************************************************
 */
-int G4GIDI::freeTarget( int iZ, int iA, int iM ) {
+G4int G4GIDI::freeTarget( G4int iZ, G4int iA, G4int iM ) {
 
-    int status;
+    G4int status;
     char *targetName = G4GIDI_Misc_Z_A_m_ToName( iZ, iA, iM );
 
-    if( targetName == NULL ) return( 1 );
+    if( targetName == nullptr ) return( 1 );
     string targetSymbol( targetName );
     status = freeTarget( targetSymbol );
     smr_freeMemory( (void **) &targetName );
@@ -374,11 +341,9 @@ int G4GIDI::freeTarget( int iZ, int iA, int iM ) {
 /*
 ***************************************************************
 */
-int G4GIDI::freeTarget( string &targetSymbol ) {
+G4int G4GIDI::freeTarget( string &targetSymbol ) {
 
-    vector<G4GIDI_target *>::iterator iter_targets;
-
-    for( iter_targets = targets.begin( ); iter_targets != targets.end( ); iter_targets++ ) {
+    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         if( (*iter_targets)->name == targetSymbol ) return( freeTarget( *iter_targets ) );
     }
     return( 1 );
@@ -388,12 +353,11 @@ int G4GIDI::freeTarget( string &targetSymbol ) {
 */
 vector<string> *G4GIDI::getListOfReadTargetsNames( void ) {
 
-    vector<G4GIDI_target *>::iterator iter_targets;
     vector<string> *listOfTargets;
 
     listOfTargets = new vector<string>( );
-    if( listOfTargets == NULL ) return( NULL );
-    for( iter_targets = targets.begin( ); iter_targets != targets.end( ); iter_targets++ ) {
+    if( listOfTargets == nullptr ) return( nullptr );
+    for( auto iter_targets = targets.cbegin( ); iter_targets != targets.cend( ); ++iter_targets ) {
         listOfTargets->push_back( *(*iter_targets)->getName( ) );
     }
     return( listOfTargets );

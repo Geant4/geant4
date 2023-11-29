@@ -188,6 +188,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
   if(fVerbose > 1) {
     G4cout << "### G4Evaporation::BreakItUp loop" << G4endl;
   }
+  CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
 
   // Starts loop over evaporated particles, loop is limited by number
   // of nucleons
@@ -218,7 +219,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      if(fVerbose > 2 && prob > 0.0) {
+      if(fVerbose > 1 && prob > 0.0) {
 	G4cout << "    Channel# " << i << "  prob= " << prob << G4endl; 
       }
       totprob += prob;
@@ -241,16 +242,23 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 	G4cout << "$$$ Start chain of gamma evaporation" << G4endl;
       }
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
+
+      // release residual stable fragment 
+      if(abun > 0.0) {
+	theResidualNucleus->SetLongLived(true);
+	break;
+      }
+      // release residual fragment known to FBU
+      Eex = theResidualNucleus->GetExcitationEnergy();
+      if(theFBU->IsApplicable(Z, A, Eex)) { break; }
+
+      // release residual fragment with non-zero life time
+      if(theResidualNucleus->IsLongLived()) { break; }
       totprob = 0.0;
     }
 
-    // stable fragment - evaporation is finished
-    if(0.0 == totprob) {
-
-      // release fragment known to DB
-      if(fLevelData->GetLevelManager(Z, A)) { break; }
-
-      // if fragment is exotic, then it forced to decay 
+    if(0.0 == totprob && A < 30) {
+      // if residual fragment is exotic, then it forced to decay 
       // if success, then decay product is added to results 
       if(fVerbose > 1) { 
 	G4cout << "$$$ Decay exotic fragment" << G4endl; 
@@ -263,7 +271,8 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     }
 
     // select channel
-    totprob *= G4UniformRand();
+    totprob *= rndm->flat();
+
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
@@ -272,7 +281,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     if(fVerbose > 2 && frag) { G4cout << "   " << *frag << G4endl; }
 
     // normaly a fragment should be created
-    if(frag) { theResult->push_back(frag); }
-    else     { break; }
+    if(nullptr != frag) { theResult->push_back(frag); }
+    else { break; }
   }
 }

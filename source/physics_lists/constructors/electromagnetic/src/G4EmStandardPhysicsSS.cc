@@ -63,6 +63,8 @@
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermorePolarizedRayleighModel.hh"
 #include "G4PhotoElectricAngularGeneratorPolarized.hh"
+#include "G4LindhardSorensenIonModel.hh"
+#include "G4IonFluctuations.hh"
 
 //#include "G4eSingleCoulombScatteringModel.hh"
 #include "G4eDPWACoulombScatteringModel.hh"
@@ -180,11 +182,11 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   // e-
   particle = G4Electron::Electron();
 
-  G4CoulombScattering* ss = new G4CoulombScattering();
+  G4CoulombScattering* ss = new G4CoulombScattering(false);
   if(param->UseMottCorrection()) {
     ss->SetEmModel(new G4eDPWACoulombScatteringModel());
   } else {
-    ss->SetEmModel(new G4eCoulombScatteringModel()); 
+    ss->SetEmModel(new G4eCoulombScatteringModel(false));
   }
   ph->RegisterProcess(new G4eIonisation(), particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
@@ -196,11 +198,11 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   // e+
   particle = G4Positron::Positron();
 
-  ss = new G4CoulombScattering();
+  ss = new G4CoulombScattering(false);
   if(param->UseMottCorrection()) {
     ss->SetEmModel(new G4eDPWACoulombScatteringModel());
   } else {
-    ss->SetEmModel(new G4eCoulombScatteringModel()); 
+    ss->SetEmModel(new G4eCoulombScatteringModel(false));
   }
   ph->RegisterProcess(new G4eIonisation(), particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
@@ -211,8 +213,12 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
+  auto fluc = new G4IonFluctuations();
+  ionIoni->SetFluctModel(fluc);
+  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(ionIoni, particle);
-  ph->RegisterProcess(new G4CoulombScattering(), particle);
+  ss = new G4CoulombScattering(false);
+  ph->RegisterProcess(ss, particle);
 
   // muons, hadrons, ions
   G4EmBuilder::ConstructChargedSS(hmsc);

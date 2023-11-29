@@ -246,9 +246,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
       G4int i =  GetTargetAngle();
 
-      char c[4];
-      sprintf(c,"%d",i);
-      G4String angle = c;
+      G4String angle = std::to_string(i);
       G4StrUtil::strip(angle);
       angle = "Y" + angle;
 

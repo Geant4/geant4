@@ -98,7 +98,7 @@ void G4DNAQuinnPlasmonExcitationModel::Initialise
   G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
       
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
   for(G4int i=0;i<numOfCouples;i++){
     
@@ -109,10 +109,19 @@ void G4DNAQuinnPlasmonExcitationModel::Initialise
     
     const G4ElementVector* theElementVector =material->GetElementVector();
     
-    G4int nelm = material->GetNumberOfElements();
-    if (nelm==1){// Protection: only for single element
+    std::size_t nelm = material->GetNumberOfElements();
+    if (nelm==1) // Protection: only for single element
+    {
       G4int z = G4lrint((*theElementVector)[0]->GetZ());
-      if(z<=100){nValenceElectron[z]  = GetNValenceElectron(z);}
+      if(z<=100)
+      {
+        nValenceElectron[z]  = GetNValenceElectron(z);
+      }
+      else
+      {
+        G4Exception("G4DNAQuinnPlasmonExcitationModel::Initialise","em0002",
+          FatalException,"The model is not applied for z>100");
+      }
     }
     //for(G4int j=0;j<nelm;j++){
     //    G4int z=G4lrint((*theElementVector)[j]->GetZ());
@@ -322,7 +331,7 @@ G4int G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron(G4int z)
   
   if(!datadir)
   {
-     datadir = getenv("G4LEDATA");
+     datadir = G4FindDataDir("G4LEDATA");
      if(!datadir)
      {
        G4Exception("G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron()"

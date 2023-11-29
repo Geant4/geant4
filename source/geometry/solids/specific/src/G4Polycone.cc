@@ -116,8 +116,7 @@ G4Polycone::G4Polycone( const G4String& name,
   //
   // Build RZ polygon using special PCON/PGON GEANT3 constructor
   //
-  G4ReduciblePolygon *rz =
-    new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
+  auto rz = new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
 
   //
   // Do the real work
@@ -138,7 +137,7 @@ G4Polycone::G4Polycone( const G4String& name,
   : G4VCSGfaceted( name )
 {
 
-  G4ReduciblePolygon* rz = new G4ReduciblePolygon( r, z, numRZ );
+  auto rz = new G4ReduciblePolygon( r, z, numRZ );
 
   Create( phiStart, phiTotal, rz );
 
@@ -318,7 +317,7 @@ void G4Polycone::Create( G4double phiStart,
   //
   // We might have dropped a face or two: recalculate numFace
   //
-  numFace = face-faces;
+  numFace = (G4int)(face-faces);
 
   //
   // Make enclosingCylinder
@@ -370,7 +369,7 @@ G4Polycone &G4Polycone::operator=( const G4Polycone& source )
   G4VCSGfaceted::operator=( source );
 
   delete [] corners;
-  if (original_parameters) delete original_parameters;
+  delete original_parameters;
 
   delete enclosingCylinder;
 
@@ -406,7 +405,7 @@ void G4Polycone::CopyStuff( const G4Polycone& source )
   //
   // Original parameters
   //
-  if (source.original_parameters)
+  if (source.original_parameters != nullptr)
   {
     original_parameters =
       new G4PolyconeHistorical( *source.original_parameters );
@@ -449,11 +448,10 @@ G4bool G4Polycone::Reset()
   //
   // Rebuild polycone
   //
-  G4ReduciblePolygon *rz =
-    new G4ReduciblePolygon( original_parameters->Rmin,
-                            original_parameters->Rmax,
-                            original_parameters->Z_values,
-                            original_parameters->Num_z_planes );
+  auto rz = new G4ReduciblePolygon( original_parameters->Rmin,
+                                    original_parameters->Rmax,
+                                    original_parameters->Z_values,
+                                    original_parameters->Num_z_planes );
   Create( original_parameters->Start_angle,
           original_parameters->Opening_angle, rz );
   delete rz;
@@ -573,7 +571,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -590,7 +588,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyconeSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);
@@ -640,7 +638,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
   // main loop along triangles
   pMin = kInfinity;
   pMax =-kInfinity;
-  G4int ntria = triangles.size()/3;
+  G4int ntria = (G4int)triangles.size()/3;
   for (G4int i=0; i<ntria; ++i)
   {
     G4int i3 = i*3;
@@ -696,7 +694,7 @@ void G4Polycone::ComputeDimensions(       G4VPVParameterisation* p,
 //
 G4GeometryType  G4Polycone::GetEntityType() const
 {
-  return G4String("G4Polycone");
+  return {"G4Polycone"};
 }
 
 // Make a clone of the object
@@ -711,7 +709,7 @@ G4VSolid* G4Polycone::Clone() const
 //
 std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -853,10 +851,10 @@ void G4Polycone::SetSurfaceElements() const
     for (G4int i=0; i<nrz; ++i)
     {
       G4PolyconeSideRZ corner = GetCorner(i);
-      contourRZ.push_back(G4TwoVector(corner.r, corner.z));
+      contourRZ.emplace_back(corner.r, corner.z);
     }
     G4GeomTools::TriangulatePolygon(contourRZ, triangles);
-    G4int ntria = triangles.size();
+    auto ntria = (G4int)triangles.size();
     for (G4int i=0; i<ntria; i+=3)
     {
       G4Polycone::surface_element selem;
@@ -886,7 +884,7 @@ void G4Polycone::SetSurfaceElements() const
 G4ThreeVector G4Polycone::GetPointOnSurface() const
 {
   // Set surface elements
-  if (!fElements)
+  if (fElements == nullptr)
   {
     G4AutoLock l(&surface_elementsMutex);
     SetSurfaceElements();
@@ -941,7 +939,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
     r = (p1.r - p0.r)*u +  (p2.r - p0.r)*v + p0.r;
     z = (p1.z - p0.z)*u +  (p2.z - p0.z)*v + p0.z;
   }
-  return G4ThreeVector(r*std::cos(phi), r*std::sin(phi), z);
+  return { r*std::cos(phi), r*std::sin(phi), z };
 }
 
 //////////////////////////////////////////////////////////////////////////

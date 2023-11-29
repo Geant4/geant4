@@ -46,21 +46,21 @@ class G4UIcmdWith3Vector;
 
 class ExGflashMessenger : public G4UImessenger
 {
- public:
-  ExGflashMessenger(ExGflashDetectorConstruction*);
-  ~ExGflashMessenger() override;
+  public:
+    ExGflashMessenger(ExGflashDetectorConstruction*);
+    ~ExGflashMessenger() override;
 
-  void SetNewValue(G4UIcommand*, G4String) override;
+    void SetNewValue(G4UIcommand*, G4String) override;
 
- private:
-  ExGflashDetectorConstruction* fDetector;
+  private:
+    ExGflashDetectorConstruction* fDetector;
 
-  G4UIdirectory* fExGflashDir;
-  G4UIcmdWithAnInteger* fVerbose;
-  G4UIdirectory* fDetDir;
-  G4UIcmdWithAString* fMaterCmd;
-  G4UIcmdWith3Vector* fLBinCmd;
-  G4UIcmdWith3Vector* fRBinCmd;
+    G4UIdirectory* fExGflashDir;
+    G4UIcmdWithAnInteger* fVerbose;
+    G4UIdirectory* fDetDir;
+    G4UIcmdWithAString* fMaterCmd;
+    G4UIcmdWith3Vector* fLBinCmd;
+    G4UIcmdWith3Vector* fRBinCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

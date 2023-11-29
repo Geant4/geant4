@@ -29,11 +29,11 @@
 #ifndef g4hdf5_defs_h
 #define g4hdf5_defs_h
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 #include "g4hntools_defs.hh"
 
 // Hdf5 output specific types
-using G4Hdf5Ntuple = tools::hdf5::ntuple;
-using G4Hdf5RNtuple = tools::hdf5::ntuple;
+using G4Hdf5Ntuple = toolx::hdf5::ntuple;
+using G4Hdf5RNtuple = toolx::hdf5::ntuple;
 
 #endif

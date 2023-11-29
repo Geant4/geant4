@@ -30,7 +30,7 @@
 
 #include "G4VGraphicsSystem.hh"
 
-namespace tools {namespace Xt {class session;}}
+namespace toolx {namespace Xt {class session;}}
 
 class G4ToolsSGXtGLES: public G4VGraphicsSystem {
   typedef G4VGraphicsSystem parent;
@@ -43,11 +43,10 @@ protected:
 public:  
   G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
   G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name = "");
-  G4bool IsUISessionCompatible () const;
 protected:  
   void Initialise();
 protected:
-  tools::Xt::session* fSGSession;
+  toolx::Xt::session* fSGSession;
 };
 
 #endif

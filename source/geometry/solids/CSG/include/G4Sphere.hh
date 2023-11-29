@@ -79,7 +79,7 @@ class G4VisExtent;
 
 class G4Sphere : public G4CSGSolid
 {
-  public:  // with description
+  public:
 
     G4Sphere(const G4String& pName,
                    G4double pRmin, G4double pRmax,
@@ -89,7 +89,7 @@ class G4Sphere : public G4CSGSolid
       // Constructs a sphere or sphere shell section
       // with the given name and dimensions
 
-   ~G4Sphere();
+   ~G4Sphere() override;
       //
       // Destructor
 
@@ -121,52 +121,50 @@ class G4Sphere : public G4CSGSolid
 
     // Methods for solid
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
+                           const G4VPhysicalVolume* pRep) override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
 
-    EInside Inside(const G4ThreeVector& p) const;
+    EInside Inside(const G4ThreeVector& p) const override;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const override;
 
     G4double DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const;
+                          const G4ThreeVector& v) const override;
 
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
 
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
+                                 G4ThreeVector* n = nullptr) const override;
 
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     // Visualisation functions
 
-    G4VisExtent   GetExtent          () const;
-    void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4Polyhedron* CreatePolyhedron() const;
-
-  public:  // without description
+    G4VisExtent   GetExtent          () const override;
+    void          DescribeYourselfTo(G4VGraphicsScene& scene) const override;
+    G4Polyhedron* CreatePolyhedron() const override;
 
     G4Sphere(__void__&);
       //
@@ -197,7 +195,7 @@ class G4Sphere : public G4CSGSolid
       //
       // Recompute relevant trigonometric values and cache them
 
-    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
       //
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface

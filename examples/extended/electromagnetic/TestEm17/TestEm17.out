@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -150,8 +150,10 @@ physicsList->setCut() start.
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
-Use general process                                0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -167,7 +169,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -177,8 +179,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -229,8 +232,8 @@ conv:  for gamma SubType=14 BuildTable=1
      BetheHeitlerLPM : Emin=    0 eV  Emax= 1000 PeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 7 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 1000 PeV in 91 bins 
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 1000 PeV in 90 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -258,7 +261,7 @@ eBrem:  for e-  XStype:4  SubType=3
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -290,7 +293,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -309,20 +312,20 @@ hIoni:  for proton  XStype:1  SubType=2
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 33x1001 from 7.50618 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -335,7 +338,6 @@ ionIoni:  for GenericIon  XStype:1  SubType=2
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
       Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.02
-      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax= 1000 PeV
@@ -368,20 +370,20 @@ hIoni:  for anti_proton  XStype:1  SubType=2
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 33x1001 from 7.50618 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -400,20 +402,20 @@ hIoni:  for kaon+  XStype:1  SubType=2
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 34x1001 from 3.94942 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -432,20 +434,20 @@ hIoni:  for kaon-  XStype:1  SubType=2
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 34x1001 from 3.94942 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -460,25 +462,24 @@ muIoni:  for mu+  XStype:1  SubType=2
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax= 1000 PeV
+        MuBetheBloch : Emin=  200 keV Emax= 1000 PeV
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
-      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
+      Sampling table 37x1001 from 0.85 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -493,25 +494,24 @@ muIoni:  for mu-  XStype:1  SubType=2
       StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax= 1000 PeV
+        MuBetheBloch : Emin=  200 keV Emax= 1000 PeV
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
-      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
+      Sampling table 37x1001 from 0.85 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -530,20 +530,20 @@ hIoni:  for pi+  XStype:1  SubType=2
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 36x1001 from 1.11656 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 1000 PeV, 7 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -562,20 +562,20 @@ hIoni:  for pi-  XStype:1  SubType=2
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 1000 PeV in 112 bins
-      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 1000 PeV, 7 bins/decade, spline: 1
       Sampling table 36x1001 from 1.11656 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax= 1000 PeV  ModifiedMephi
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -597,7 +597,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -629,13 +629,12 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.430000s Real=1.453049s Sys=0.000000s
+  User=1.280000s Real=1.281203s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	CoulombScat : 5609	muIoni : 465460	muPairProd : 63845	muBrems : 633
-
- Simulation: total CrossSection = 0.53555 /cm	 MeanFreePath = 1.8672 cm 	 massicCrossSection = 0.068049 cm2/g
+ Number of process calls --->	CoulombScat : 5688	muIoni : 466248	muPairProd : 63850	muBrems : 683
+ Simulation: total CrossSection = 0.53647 /cm	 MeanFreePath = 1.864 cm 	 massicCrossSection = 0.068166 cm2/g
  Theory:     total CrossSection = 0.52947 /cm	 MeanFreePath = 1.8887 cm 	 massicCrossSection = 0.067277 cm2/g
 #
 /gun/particle pi+
@@ -659,7 +658,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -671,7 +670,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 187519902960746374, 2009087781667608690, 499409753739204757, 315019246073380315, 890600977740292910, 1101614299214045087, 2159612907541538825, 270857188699032576, 1714019803938225423, 2267951935475200266, 1986260144364270885, 1667965121016590776, 525930192876433815, 1296107385891854908} counter= 5sumtot= 321912947749704871
+N=17 V[N]={356575979127036268, 1480344814211241319, 2291742542844202723, 146288999262253291, 815740629441340169, 218920248175661370, 1679249731997911238, 1121119735214013805, 834864434497145169, 1977634818097967088, 614506221639392962, 1486901145154293240, 1756070025476213748, 333002099507933239, 1322572251886485279, 2008397415645341301, 1658420199214869219} counter= 4sumtot= 1655607217683749820
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -686,13 +685,12 @@ N=17 V[N]={235111648556098168, 316769674826657036, 1324819056878075668, 18751990
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.340000s Real=1.365755s Sys=0.000000s
+  User=1.200000s Real=1.207309s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 436817	hPairProd : 59767	CoulombScat : 5577	hBrems : 355
-
- Simulation: total CrossSection = 0.50252 /cm	 MeanFreePath = 1.99 cm 	 massicCrossSection = 0.063852 cm2/g
+ Number of process calls --->	hIoni : 438019	hPairProd : 59540	CoulombScat : 5727	hBrems : 334
+ Simulation: total CrossSection = 0.50362 /cm	 MeanFreePath = 1.9856 cm 	 massicCrossSection = 0.063992 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -715,7 +713,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7499 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
+ Energy thresholds :  gamma  20.7519 keV    e-  1.28828 MeV    e+  1.21724 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -727,7 +725,7 @@ Index : 0     used in the geometry : Yes
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 2007935747096887633, 1306443592768877490, 992133989202938259, 1974062234776938355, 846884695187391062, 2152429126693427328, 715130086937459148, 1131541624573232947, 1993804955950227479, 2049477571311589037, 1926698848375365154, 250494825515888879, 1258619328067853475, 304836802032966014} counter= 14sumtot= 890606261064939387
+N=17 V[N]={760258473299029110, 1090172941071924422, 730805950373528576, 1426355128780926841, 1832682333153411383, 21763228272667036, 250244081359252734, 1197931393794946046, 1295942629544953430, 817500520015246316, 2096373134087038825, 2003234735921190503, 122518389828444412, 116412624708721403, 404206958726084366, 1673411469761409521, 2253087791001170062} counter= 5sumtot= 1952000719204087329
 ---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -742,13 +740,12 @@ N=17 V[N]={1508607969306287352, 1791867730457931969, 1738067224946617316, 200793
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.290000s Real=1.346359s Sys=0.000000s
+  User=1.130000s Real=1.211861s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 435956	hPairProd : 34092	CoulombScat : 5620	hBrems : 6
-
- Simulation: total CrossSection = 0.47567 /cm	 MeanFreePath = 2.1023 cm 	 massicCrossSection = 0.060441 cm2/g
+ Number of process calls --->	hIoni : 437619	hPairProd : 34338	CoulombScat : 5611	hBrems : 10
+ Simulation: total CrossSection = 0.47758 /cm	 MeanFreePath = 2.0939 cm 	 massicCrossSection = 0.060683 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -768,15 +765,15 @@ G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.0154 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0154 MB
-Pool ID '7G4Track', size : 0.0308 MB
+Pool ID '7G4Track', size : 0.0298 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.058 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

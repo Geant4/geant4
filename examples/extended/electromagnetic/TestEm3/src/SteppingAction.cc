@@ -44,12 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
-:G4UserSteppingAction(),fDetector(det),fEventAct(evt) 
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
+:fDetector(det),fEventAct(evt) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,7 +126,7 @@ G4double SteppingAction::BirksAttenuation(const G4Step* aStep)
  //Example of Birk attenuation law in organic scintillators.
  //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
  //
- G4Material* material = aStep->GetTrack()->GetMaterial();
+ const G4Material* material = aStep->GetTrack()->GetMaterial();
  G4double birk1       = material->GetIonisation()->GetBirksConstant();
  G4double destep      = aStep->GetTotalEnergyDeposit();
  G4double stepl       = aStep->GetStepLength();  

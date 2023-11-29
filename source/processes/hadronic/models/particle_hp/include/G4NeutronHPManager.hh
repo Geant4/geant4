@@ -29,4 +29,4 @@
 #include "G4ParticleHPManager.hh"
 using G4NeutronHPManager = G4ParticleHPManager;
 
-#endif 
+#endif

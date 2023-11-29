@@ -55,7 +55,7 @@ class G4BogackiShampine45 : public G4MagIntegratorStepper
     G4BogackiShampine45(G4EquationOfMotion* EqRhs,
                         G4int numberOfVariables = 6,
                         G4bool primary =  true);
-    ~G4BogackiShampine45();
+    ~G4BogackiShampine45() override;
     
     G4BogackiShampine45(const G4BogackiShampine45&) = delete;
     G4BogackiShampine45& operator=(const G4BogackiShampine45&) = delete;
@@ -64,7 +64,7 @@ class G4BogackiShampine45 : public G4MagIntegratorStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) ;
+                        G4double yerr[] ) override ;
 
     // This Stepper provides 'dense output'. After a successful
     // step, it is possible to obtain an estimate of the value
@@ -72,9 +72,9 @@ class G4BogackiShampine45 : public G4MagIntegratorStepper
     // This requires only two additional evaluations of the
     // derivative (and thus the field).
 
-   inline void SetupInterpolation()
+    inline void SetupInterpolation()
     {
-       SetupInterpolationHigh(); // ( yInput, dydx, Step);
+      SetupInterpolationHigh(); // ( yInput, dydx, Step);
     }
     
     // For calculating the output at the tau fraction of Step
@@ -82,8 +82,8 @@ class G4BogackiShampine45 : public G4MagIntegratorStepper
     inline void Interpolate( G4double tau, 
                              G4double yOut[] ) // Output value
     {
-       InterpolateHigh( tau, yOut);       
-       // InterpolateHigh( yInput, dydx, Step, yOut, tau);
+      InterpolateHigh( tau, yOut);       
+      // InterpolateHigh( yInput, dydx, Step, yOut, tau);
     }
     
     void SetupInterpolationHigh();
@@ -93,8 +93,8 @@ class G4BogackiShampine45 : public G4MagIntegratorStepper
     void InterpolateHigh( G4double tau,
                           G4double yOut[] ) const;
     
-    G4double  DistChord()   const;
-    G4int IntegratorOrder() const { return 4; }
+    G4double  DistChord()   const override;
+    G4int IntegratorOrder() const override { return 4; }
 
     void GetLastDydx( G4double dyDxLast[] );
 

@@ -32,117 +32,94 @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPDeExGammas.hh"
+
+#include "G4RandomDirection.hh"
+#include "G4ReactionProduct.hh"
 #include "G4SystemOfUnits.hh"
 
-void G4ParticleHPDeExGammas::Init(std::istream & aDataFile)
+G4ParticleHPDeExGammas::G4ParticleHPDeExGammas() = default;
+
+G4ParticleHPDeExGammas::~G4ParticleHPDeExGammas()
 {
-  //  G4cout << this << "ExGammas Init LEVEL " << G4endl; //GDEB
-  G4ParticleHPGamma ** theGammas = new G4ParticleHPGamma * [50];
-  G4int nGammas = 0;
-  G4int nBuff = 50;
-  for(;;)
-  {
-    G4ParticleHPGamma * theNew = new G4ParticleHPGamma;
-    if(!theNew->Init(aDataFile))
-    {
-      delete theNew;
+  for (auto& ptr : theLevels) {
+    delete ptr;
+  }
+}
+
+void G4ParticleHPDeExGammas::Init(std::istream& aDataFile)
+{
+  // G4cout << "### G4ParticleHPDeExGammas::Init new file " <<  G4endl;
+  // ground state
+  auto level = new G4ParticleHPNucLevel(0.0);
+
+  G4double elevel0 = 0.0;
+  G4double elevel = 0.0;
+  G4double egamma = 0.0;
+  G4double prob = 0.0;
+  constexpr G4double eps = 1 * CLHEP::eV;
+  for (;;) {
+    if (aDataFile >> elevel) {
+      // next line
+      aDataFile >> egamma >> prob;
+      egamma *= CLHEP::keV;
+      elevel *= CLHEP::keV;
+      prob = std::max(prob, 1.e-6);
+      // G4cout << "    El0=" << elevel0 << " El=" << elevel
+      //  << " Eg=" << egamma << " w=" << prob << G4endl;
+
+      // save previous level and start a new level
+      if (std::abs(elevel - elevel0) > eps) {
+        level->Normalize();
+        theLevels.push_back(level);
+        ++nLevels;
+        level = new G4ParticleHPNucLevel(elevel);
+        elevel0 = elevel;
+        // G4cout << "  New level " << nLevels << "  E=" << elevel << G4endl;
+      }
+
+      // find the next level
+      G4double e = elevel - egamma;
+      G4int next = -1;
+      G4double del = DBL_MAX;
+      for (G4int i = 0; i < nLevels; ++i) {
+        G4double de = std::abs(theLevels[i]->GetLevelEnergy() - e);
+        if (de < del) {
+          next = i;
+          del = de;
+        }
+      }
+      // save level data
+      if (next >= 0) {
+        level->AddGamma(egamma, prob, next);
+        // G4cout << "      NLevel=" << nLevels << " Elevel=" << elevel
+        //      << " Egamma=" << egamma << " W=" << prob << " next=" << next << G4endl;
+      }
+    }
+    else {
+      // end of file - save recent level
+      level->Normalize();
+      theLevels.push_back(level);
+      ++nLevels;
+      // G4cout << "### End of file Nlevels=" << nLevels << G4endl;
       break;
     }
-    else
-    {
-      if(nGammas==nBuff)
-      {
-        nBuff+=50;
-        G4ParticleHPGamma ** buffer = new G4ParticleHPGamma * [nBuff];
-        for(G4int i=0;i<nGammas;i++) buffer[i] = theGammas[i];
-        delete [] theGammas;
-        theGammas = buffer;
-      }
-      theGammas[nGammas] = theNew;
-      nGammas++;
+  }
+}
+
+G4ReactionProductVector* G4ParticleHPDeExGammas::GetDecayGammas(G4int i) const
+{
+  G4int idx = i;
+  if (idx >= nLevels || idx <= 0) return nullptr;
+  auto result = new G4ReactionProductVector();
+
+  for (;;) {
+    if (idx <= 0) {
+      break;
+    }
+    auto ptr = theLevels[idx]->GetDecayGamma(idx);
+    if (nullptr != ptr) {
+      result->push_back(ptr);
     }
   }
-  // all gammas are in. Now sort them into levels.
-
-  // count the levels
-
-  G4double currentE = 0;
-  G4double nextE = 0;
-  G4int i;
-  G4double epsilon = 0.01*keV;
-  for(i=0; i<nGammas; i++)
-  {
-    nextE = theGammas[i]->GetLevelEnergy();
-    if(std::abs(currentE-nextE)>epsilon) nLevels++;
-    currentE = nextE;
-  }
-
-  //  G4cout << this << "LEVEL " << nLevels << G4endl; //GDEB
-  // Build the levels
-
-  theLevels = new G4ParticleHPLevel[nLevels];
-  levelStart = new G4int [nLevels];
-  levelSize = new G4int [nLevels];
-
-  // fill the levels
-
-  currentE = 0;
-  nextE = 0;
-  G4int levelCounter=-1;
-  for(i=0; i<nGammas; i++)
-  {
-    nextE = theGammas[i]->GetLevelEnergy();
-    if(std::abs(currentE-nextE)>epsilon) 
-    {
-      levelCounter++;
-      levelStart[levelCounter] = i;
-      levelSize[levelCounter] = 0;
-    }
-    levelSize[levelCounter]++;
-    currentE = nextE;
-  }
-
-  for(i=0; i<nLevels; i++)
-  {
-    theLevels[i].SetNumberOfGammas(levelSize[i]);
-    for(G4int ii=levelStart[i]; ii<levelStart[i]+levelSize[i]; ii++)
-    {
-      theLevels[i].SetGamma(ii-levelStart[i], theGammas[ii]);
-    }
-  }
-
-// set the next relation in the gammas.
-  G4double levelE, gammaE, currentLevelE;
-  G4double min; 
-  for(i=0; i<nGammas; i++)
-  {
-    G4int it=-1;
-    gammaE = theGammas[i]->GetGammaEnergy();
-    currentLevelE = theGammas[i]->GetLevelEnergy();
-    min = currentLevelE-gammaE-epsilon;
-    for(G4int ii=0; ii<nLevels; ii++)
-    {
-      levelE = theLevels[ii].GetLevelEnergy();
-      if(std::abs(currentLevelE-(levelE+gammaE))<min)
-      {
-        min = std::abs(currentLevelE-(levelE+gammaE));
-        it = ii;
-      }
-    }
-//080728
-    if ( it != -1 && currentLevelE == theLevels[it].GetLevelEnergy() )
-    {
-       //TK Comment; Some data file in /Inelastic/Gammas has inconsistent level data (no level to transit)
-       //G4cout << "DeExGammas Transition level error: it " << it << " " << currentLevelE << " " << gammaE << " " << theLevels[it-1].GetLevelEnergy() << " " << currentLevelE - theLevels[it-1].GetLevelEnergy() << G4endl;
-       // Forced to connect the next(previous) level 
-       it +=-1;
-    }
-//080728
-    if(it!=-1) theGammas[i]->SetNext(&theLevels[it]);
-  }
-  // some garbage collection
-
-  delete [] theGammas;
-
-  // and we are Done.
+  return result;
 }

@@ -30,9 +30,9 @@
 #define G4SDStructure_h 1
 
 // Globals
-#include "globals.hh"
-// G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
+#include "globals.hh"
+
 #include <vector>
 
 class G4HCofThisEvent;
@@ -55,10 +55,20 @@ class G4SDStructure
   void Activate(const G4String& aName, G4bool sensitiveFlag);
   void Initialize(G4HCofThisEvent* HCE);
   void Terminate(G4HCofThisEvent* HCE);
-  G4VSensitiveDetector* FindSensitiveDetector(const G4String& aName,
-                                              G4bool warning = true);
+  G4VSensitiveDetector* FindSensitiveDetector(const G4String& aName, G4bool warning = true);
   G4VSensitiveDetector* GetSD(const G4String& aName);
   void ListTree();
+
+  inline void SetVerboseLevel(G4int vl)
+  {
+    verboseLevel = vl;
+    for (auto& i : structure) {
+      i->SetVerboseLevel(vl);
+    }
+    for (auto& j : detector) {
+      j->SetVerboseLevel(vl);
+    }
+  };
 
  private:
   G4SDStructure* FindSubDirectory(const G4String& subD);
@@ -70,21 +80,7 @@ class G4SDStructure
   std::vector<G4VSensitiveDetector*> detector;
   G4String pathName;
   G4String dirName;
-  G4int verboseLevel;
-
- public:
-  inline void SetVerboseLevel(G4int vl)
-  {
-    verboseLevel = vl;
-    for(size_t i = 0; i < structure.size(); i++)
-    {
-      structure[i]->SetVerboseLevel(vl);
-    }
-    for(size_t j = 0; j < detector.size(); j++)
-    {
-      detector[j]->SetVerboseLevel(vl);
-    }
-  };
+  G4int verboseLevel{0};
 };
 
 #endif

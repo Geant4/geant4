@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.hh
+/// \file B5/include/EventAction.hh
 /// \brief Definition of the B5::EventAction class
 
 #ifndef B5EventAction_h
@@ -54,7 +54,7 @@ class EventAction : public G4UserEventAction
 {
 public:
     EventAction();
-    ~EventAction() override;
+    ~EventAction() override = default;
 
     void BeginOfEventAction(const G4Event*) override;
     void EndOfEventAction(const G4Event*) override;

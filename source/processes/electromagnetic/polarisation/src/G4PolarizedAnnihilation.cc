@@ -138,7 +138,7 @@ G4double G4PolarizedAnnihilation::PostStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4PolarizedAnnihilation::ComputeSaturationFactor(const G4Track& track)
 {
-  G4Material* aMaterial       = track.GetMaterial();
+  const G4Material* aMaterial = track.GetMaterial();
   G4VPhysicalVolume* aPVolume = track.GetVolume();
   G4LogicalVolume* aLVolume   = aPVolume->GetLogicalVolume();
 
@@ -172,7 +172,7 @@ G4double G4PolarizedAnnihilation::ComputeSaturationFactor(const G4Track& track)
       G4cout << " Material     " << aMaterial << G4endl;
     }
 
-    size_t midx                    = CurrentMaterialCutsCoupleIndex();
+    std::size_t midx               = CurrentMaterialCutsCoupleIndex();
     const G4PhysicsVector* aVector = nullptr;
     const G4PhysicsVector* bVector = nullptr;
     if(midx < fAsymmetryTable->size())
@@ -246,8 +246,8 @@ void G4PolarizedAnnihilation::BuildAsymmetryTables(
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-  for(size_t i = 0; i < numOfCouples; ++i)
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+  for(G4int i = 0; i < numOfCouples; ++i)
   {
     if(fAsymmetryTable->GetFlag(i))
     {
@@ -258,7 +258,7 @@ void G4PolarizedAnnihilation::BuildAsymmetryTables(
       // use same parameters as for lambda
       G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
       G4PhysicsVector* tVector = LambdaPhysicsVector(couple);
-      G4int nn = aVector->GetVectorLength();
+      G4int nn = (G4int)aVector->GetVectorLength();
       for(G4int j = 0; j < nn; ++j)
       {
         G4double energy = aVector->Energy(j);

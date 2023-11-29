@@ -38,11 +38,6 @@
 class G4BosonConstructor
 {
   //This class is a utility class for constructBoson 
-
-  public:
-    G4BosonConstructor();
-    ~G4BosonConstructor();
-  
   public:
     static void ConstructParticle();
 };

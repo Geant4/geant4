@@ -69,7 +69,7 @@ void G4ThermalNeutrons::ConstructProcess() {
     return;
   }
 
-  G4int ni = (hpel->GetHadronicInteractionList()).size();
+  std::size_t ni = (hpel->GetHadronicInteractionList()).size();
   if(ni < 1) {
     G4cout << "### " << GetPhysicsName() 
 	   << " WARNING: Fail to add thermal neutron scattering - Nint= " 

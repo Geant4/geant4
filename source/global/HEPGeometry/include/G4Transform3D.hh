@@ -28,29 +28,28 @@
 #ifndef G4TRANSFORM3D_HH
 #define G4TRANSFORM3D_HH
 
-#include "globals.hh"
 #include <CLHEP/Geometry/Transform3D.h>
 
-typedef HepGeom::Transform3D G4Transform3D;
+using G4Transform3D = HepGeom::Transform3D;
 
-typedef HepGeom::Rotate3D G4Rotate3D;
-typedef HepGeom::RotateX3D G4RotateX3D;
-typedef HepGeom::RotateY3D G4RotateY3D;
-typedef HepGeom::RotateZ3D G4RotateZ3D;
+using G4Rotate3D = HepGeom::Rotate3D;
+using G4RotateX3D = HepGeom::RotateX3D;
+using G4RotateY3D = HepGeom::RotateY3D;
+using G4RotateZ3D = HepGeom::RotateZ3D;
 
-typedef HepGeom::Translate3D G4Translate3D;
-typedef HepGeom::TranslateX3D G4TranslateX3D;
-typedef HepGeom::TranslateY3D G4TranslateY3D;
-typedef HepGeom::TranslateZ3D G4TranslateZ3D;
+using G4Translate3D = HepGeom::Translate3D;
+using G4TranslateX3D = HepGeom::TranslateX3D;
+using G4TranslateY3D = HepGeom::TranslateY3D;
+using G4TranslateZ3D = HepGeom::TranslateZ3D;
 
-typedef HepGeom::Reflect3D G4Reflect3D;
-typedef HepGeom::ReflectX3D G4ReflectX3D;
-typedef HepGeom::ReflectY3D G4ReflectY3D;
-typedef HepGeom::ReflectZ3D G4ReflectZ3D;
+using G4Reflect3D = HepGeom::Reflect3D;
+using G4ReflectX3D = HepGeom::ReflectX3D;
+using G4ReflectY3D = HepGeom::ReflectY3D;
+using G4ReflectZ3D = HepGeom::ReflectZ3D;
 
-typedef HepGeom::Scale3D G4Scale3D;
-typedef HepGeom::ScaleX3D G4ScaleX3D;
-typedef HepGeom::ScaleY3D G4ScaleY3D;
-typedef HepGeom::ScaleZ3D G4ScaleZ3D;
+using G4Scale3D = HepGeom::Scale3D;
+using G4ScaleX3D = HepGeom::ScaleX3D;
+using G4ScaleY3D = HepGeom::ScaleY3D;
+using G4ScaleZ3D = HepGeom::ScaleZ3D;
 
 #endif /* G4TRANSFORM3D_HH */

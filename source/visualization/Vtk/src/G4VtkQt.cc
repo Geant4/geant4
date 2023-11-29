@@ -24,46 +24,38 @@
 // ********************************************************************
 
 #include "G4VtkQt.hh"
+
+#include "G4UIQt.hh"
+#include "G4UIbatch.hh"
+#include "G4UImanager.hh"
 #include "G4VtkQtSceneHandler.hh"
 #include "G4VtkQtViewer.hh"
 
-#include "G4UIQt.hh"
-#include "G4UImanager.hh"
-#include "G4UIbatch.hh"
-
-G4VtkQt::G4VtkQt(): G4VGraphicsSystem("VtkQt","VTKQt","VTK with Qt",
-                                  G4VGraphicsSystem::noFunctionality)
+G4VtkQt::G4VtkQt()
+  : G4VGraphicsSystem("VtkQt", "VTKQt", "VTK with Qt", G4VGraphicsSystem::noFunctionality)
 {}
 
-G4VtkQt::~G4VtkQt() {}
-
-G4VSceneHandler* G4VtkQt::CreateSceneHandler(const G4String& name) {
-  G4VSceneHandler* pScene = new G4VtkQtSceneHandler(*this, name);
-  return pScene;
+G4VSceneHandler* G4VtkQt::CreateSceneHandler(const G4String& name)
+{
+  return new G4VtkQtSceneHandler(*this, name);
 }
 
-G4VViewer* G4VtkQt::CreateViewer(G4VSceneHandler& scene,
-                                 const G4String& name) {
-  G4VViewer* pView = new G4VtkQtViewer((G4VtkQtSceneHandler&) scene, name);
-  if (pView) {
-    if (pView->GetViewId() < 0) {
-      G4cerr << "G4VtkQt::CreateViewer: ERROR flagged by negative"
-                " view id in G4VtkViewer creation."
-                "\n Destroying view and returning null pointer."
-                << G4endl;
-      delete pView;
-      pView = nullptr;
-    }
-  }
-  else {
-    G4cerr << "G4Vtk::CreateViewer: ERROR: null pointer on new G4VtkViewer." << G4endl;
+G4VViewer* G4VtkQt::CreateViewer(G4VSceneHandler& scene, const G4String& name)
+{
+  G4VViewer* pView = new G4VtkQtViewer((G4VtkQtSceneHandler&)scene, name);
+  if (pView->GetViewId() < 0) {
+    G4cerr << "G4VtkQt::CreateViewer: ERROR flagged by negative"
+              " view id in G4VtkViewer creation."
+              "\n Destroying view and returning null pointer."
+           << G4endl;
+    delete pView;
+    pView = nullptr;
   }
   return pView;
 }
 
-G4bool G4VtkQt::IsUISessionCompatible () const
+G4bool G4VtkQt::IsUISessionCompatible() const
 {
-  G4bool isCompatible = false;
   G4UImanager* ui = G4UImanager::GetUIpointer();
   G4UIsession* session = ui->GetSession();
 
@@ -73,18 +65,10 @@ G4bool G4VtkQt::IsUISessionCompatible () const
   //    manager creates a temporary batch session and to find out if there is
   //    a genuine UI session that the user has instantiated we must drill
   //    down through previous sessions to a possible non-batch session.
-  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
+  while (auto batch = dynamic_cast<G4UIbatch*>(session)) {
     session = batch->GetPreviousSession();
   }
 
   // Qt windows are only appropriate in a Qt session.
-  if (session) {
-    // If non-zero, this is the originating non-batch session
-    // The user has instantiated a UI session...
-    if (dynamic_cast<G4UIQt*>(session)) {
-      // ...and it's a G4UIQt session, which is OK.
-      isCompatible = true;
-    }
-  }
-  return isCompatible;
+  return dynamic_cast<G4UIQt*>(session) != nullptr;
 }

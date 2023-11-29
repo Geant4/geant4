@@ -47,7 +47,7 @@ class G4HyperAlpha : public G4Ions {
   private:
     static G4HyperAlpha* theInstance;
     G4HyperAlpha()  {}
-    ~G4HyperAlpha() {}
+    ~G4HyperAlpha() override = default;
 };
 
 #endif

@@ -52,7 +52,7 @@ class G4AntiXibZero : public G4ParticleDefinition
  private:
    static G4AntiXibZero* theInstance;
    G4AntiXibZero(){}
-   ~G4AntiXibZero(){}
+   ~G4AntiXibZero() override= default;
 
  public:
    static G4AntiXibZero* Definition();

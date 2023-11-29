@@ -586,7 +586,7 @@ protected:
   static void decode_PAW(const std::string& a_s,sencoded& a_sed){
     a_sed.clear();
 
-    font_type font = sg::latin;
+    font_type hershey_font = sg::latin;
     hchar::e_move move = hchar::none;
     bool back = false;
     bool bar = false;
@@ -596,16 +596,16 @@ protected:
       char c = *it;
       // Control characters :
       if(c=='[') {
-        font = sg::greek;
+        hershey_font = sg::greek;
         continue;
       } else if(c==']') {
-        font = sg::latin;
+        hershey_font = sg::latin;
         continue;
       } else if(c=='"') {
-        font = sg::special;
+        hershey_font = sg::special;
         continue;
       } else if(c=='#') {
-        font = sg::latin;
+        hershey_font = sg::latin;
         continue;
       } else if(c=='!') {
         move = hchar::none;
@@ -631,7 +631,7 @@ protected:
       hc.m_y_move = move;
       hc.m_back = back;
       hc.m_bar = bar;
-      hc.m_font = font;
+      hc.m_font = hershey_font;
       hc.m_char = c;
 
       a_sed.push_back(hc);

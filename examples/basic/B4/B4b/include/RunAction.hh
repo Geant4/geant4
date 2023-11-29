@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.hh
+/// \file B4/B4b/include/RunAction.hh
 /// \brief Definition of the B4b::RunAction class
 
 #ifndef B4bRunAction_h
@@ -60,7 +60,7 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-    ~RunAction() override;
+    ~RunAction() override = default;
 
     G4Run* GenerateRun() override;
 

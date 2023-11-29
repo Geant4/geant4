@@ -33,16 +33,21 @@
 #ifndef G4OPENINVENTORTRANSFORM3D_HH
 #define G4OPENINVENTORTRANSFORM3D_HH
 
+#include "G4Types.hh"
 #include "G4Transform3D.hh"
 
 class SbMatrix;
 
-class G4OpenInventorTransform3D : public G4Transform3D {
-public:
-  G4OpenInventorTransform3D (const G4Transform3D &t);
-  SbMatrix* GetSbMatrix () const;
-private:
-  G4float m[16];
+class G4OpenInventorTransform3D : public G4Transform3D
+{
+  public:
+
+    G4OpenInventorTransform3D (const G4Transform3D &t);
+    SbMatrix* GetSbMatrix () const;
+
+  private:
+
+    G4float m[16];
 };
 
 #endif

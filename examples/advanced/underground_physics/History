@@ -1,12 +1,19 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example underground_physics History
 
-     =========================================================
-            Geant4 - Underground Dark Matter experiment
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+## 2022-09-09 Susanna Guatelli (DMX-V11-00-01)
+- Ranecu Engine removed. Default one now used
+
+## 2021-12-10 Ben Morgan (DMX-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 29.11.2021 - I. Hrivnacova    (DMX-V10-07-10)
              Removed obsolete reference to  AIDA/Anaphe from README_stt
 

@@ -31,12 +31,12 @@
  */
 
 #ifndef G4SHIFTEDGAUSSIAN_HH
-#define	G4SHIFTEDGAUSSIAN_HH
+#define G4SHIFTEDGAUSSIAN_HH
+
+#include "globals.hh"
 
 #include <utility>
 #include <vector>
-
-#include "globals.hh"
 
 /** G4ShiftedGaussian is a class for storing the shifted values used for
  *  sampling a Gaussian distribution and returning only positive values; it is
@@ -44,36 +44,35 @@
  */
 class G4ShiftedGaussian
 {
-public:
-// Constructor definition
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage: No arguments required
      *  - Notes:
      */
-    G4ShiftedGaussian( void );
+    G4ShiftedGaussian();
     /** Overloaded constructor
      *  - Usage:
      *      - \p Verbosity: Verbosity level
      *  - Notes:
      */
-    G4ShiftedGaussian( G4int Verbosity );
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( void );
+    G4ShiftedGaussian(G4int Verbosity);
 
-public:
-// Functions
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize();
+
+  public:
+    // Functions
     /** Returns the shifted mean that correlates to a \p RequestedMean and
      *  \p RequestedStdDev pair. 0 is returned if there is no associated value.
      */
-    G4double G4FindShiftedMean( G4double RequestedMean,
-                                G4double RequestedStdDev );
+    G4double G4FindShiftedMean(G4double RequestedMean, G4double RequestedStdDev);
     /** Inserts a \p ShiftedMean indexed by the \p RequestedMean and
      * \p RequestedStdDev
      */
-    void G4InsertShiftedMean( G4double ShiftedMean,
-                              G4double RequestedMean,
-                              G4double RequestedStdDev );
+    void G4InsertShiftedMean(G4double ShiftedMean, G4double RequestedMean,
+                             G4double RequestedStdDev);
     /** Sets the verbosity levels
      *  - Usage:
      *      - \p WhichVerbosity: Combination of  levels
@@ -86,33 +85,25 @@ public:
      *      - \p GAMMA_INFO: Displays information about gamma sampling
      *      - \p ALPHA_INFO: Displays information about alpha sampling
      *      - \p MOMENTUM_INFO: Displays information about momentum balancing
-     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation or interpolation that occurs
+     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation
+     * or interpolation that occurs
      *      - \p DEBUG: Reports program flow as it steps through functions
      *      - \p PRINT_ALL: Displays any and all output
      */
-    void G4SetVerbosity( G4int WhatVerbosity );
+    void G4SetVerbosity(G4int WhatVerbosity);
 
-protected:
+  protected:
     /** Contains the adjusted mean of the POSITIVE only Gaussian distribution
      *  associated with a \p RequestedMean and \p RequestedStdDev pair.
      */
-    std::vector<
-        std::pair<
-            std::pair<
-                G4double,
-                G4double
-            >,
-            G4double
-        >
-    > ShiftedMean_;
+    std::vector<std::pair<std::pair<G4double, G4double>, G4double>> ShiftedMean_;
     /** Verbosity level */
     G4int Verbosity_;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor. */
-    ~G4ShiftedGaussian( void );
+    ~G4ShiftedGaussian();
 };
 
-#endif	/* G4SHIFTEDGAUSSIAN_HH */
-
+#endif /* G4SHIFTEDGAUSSIAN_HH */

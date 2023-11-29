@@ -29,11 +29,6 @@
 #include "G4VAnalysisReader.hh"
 #include "G4AnalysisUtilities.hh"
 #include "G4HnManager.hh"
-#include "G4VH1Manager.hh"
-#include "G4VH2Manager.hh"
-#include "G4VH3Manager.hh"
-#include "G4VP1Manager.hh"
-#include "G4VP2Manager.hh"
 #include "G4VRNtupleManager.hh"
 #include "G4VRFileManager.hh"
 #include "G4Threading.hh"
@@ -53,31 +48,31 @@ G4VAnalysisReader::~G4VAnalysisReader() = default;
 //
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH1Manager(G4VH1Manager* h1Manager)
+void G4VAnalysisReader::SetH1Manager(G4VTBaseHnManager<1>* h1Manager)
 {
   fVH1Manager.reset(h1Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH2Manager(G4VH2Manager* h2Manager)
+void G4VAnalysisReader::SetH2Manager(G4VTBaseHnManager<2>* h2Manager)
 {
   fVH2Manager.reset(h2Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH3Manager(G4VH3Manager* h3Manager)
+void G4VAnalysisReader::SetH3Manager(G4VTBaseHnManager<3>* h3Manager)
 {
   fVH3Manager.reset(h3Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetP1Manager(G4VP1Manager* p1Manager)
+void G4VAnalysisReader::SetP1Manager(G4VTBaseHnManager<2>* p1Manager)
 {
   fVP1Manager.reset(p1Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetP2Manager(G4VP2Manager* p2Manager)
+void G4VAnalysisReader::SetP2Manager(G4VTBaseHnManager<3>* p2Manager)
 {
   fVP2Manager.reset(p2Manager);
 }
@@ -124,14 +119,11 @@ G4int G4VAnalysisReader::ReadH1(const G4String& h1Name,
   if ( fileName != "" ) {
     return ReadH1Impl(h1Name, fileName, dirName, true);
   }
-  else {
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot get H1 " + h1Name + ". File name has to be set first.",
-        fkClass, "ReadH1");
-      return kInvalidId;
-    }
-    return ReadH1Impl(h1Name, fVFileManager->GetFileName(), dirName, false);
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot get H1 " + h1Name + ". File name has to be set first.", fkClass, "ReadH1");
+    return kInvalidId;
   }
+  return ReadH1Impl(h1Name, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________
@@ -142,14 +134,11 @@ G4int G4VAnalysisReader::ReadH2(const G4String& h2Name,
   if ( fileName != "" ) {
     return ReadH2Impl(h2Name, fileName, dirName, true);
   }
-  else {
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot get H2 " + h2Name + ". File name has to be set first.",
-        fkClass, "ReadH2");
-      return kInvalidId;
-    }
-    return ReadH2Impl(h2Name, fVFileManager->GetFileName(), dirName, false);
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot get H2 " + h2Name + ". File name has to be set first.", fkClass, "ReadH2");
+    return kInvalidId;
   }
+  return ReadH2Impl(h2Name, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________
@@ -160,14 +149,11 @@ G4int G4VAnalysisReader::ReadH3(const G4String& h3Name,
   if ( fileName != "" ) {
     return ReadH3Impl(h3Name, fileName, dirName, true);
   }
-  else {
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot get H3 " + h3Name + ". File name has to be set first.",
-        fkClass, "ReadH3");
-      return kInvalidId;
-    }
-    return ReadH3Impl(h3Name, fVFileManager->GetFileName(), dirName, false);
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot get H3 " + h3Name + ". File name has to be set first.", fkClass, "ReadH3");
+    return kInvalidId;
   }
+  return ReadH3Impl(h3Name, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________
@@ -178,14 +164,11 @@ G4int G4VAnalysisReader::ReadP1(const G4String& p1Name,
   if ( fileName != "" ) {
     return ReadP1Impl(p1Name, fileName, dirName, true);
   }
-  else {
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot get P1 " + p1Name + ". File name has to be set first.",
-        fkClass, "ReadP1");
-      return kInvalidId;
-    }
-    return ReadP1Impl(p1Name, fVFileManager->GetFileName(), dirName, false);
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot get P1 " + p1Name + ". File name has to be set first.", fkClass, "ReadP1");
+    return kInvalidId;
   }
+  return ReadP1Impl(p1Name, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________
@@ -196,14 +179,11 @@ G4int G4VAnalysisReader::ReadP2(const G4String& p2Name,
   if ( fileName != "" ) {
     return ReadP2Impl(p2Name, fileName, dirName, true);
   }
-  else {
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot get P2 " + p2Name + ". File name has to be set first.",
-        fkClass, "ReadP2");
-      return kInvalidId;
-    }
-    return ReadP2Impl(p2Name, fVFileManager->GetFileName(), dirName, false);
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot get P2 " + p2Name + ". File name has to be set first.", fkClass, "ReadP2");
+    return kInvalidId;
   }
+  return ReadP2Impl(p2Name, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________
@@ -273,16 +253,13 @@ G4int G4VAnalysisReader::GetNtuple(const G4String& ntupleName,
   if ( fileName != "" ) {
     return fVNtupleManager->ReadNtupleImpl(ntupleName, fileName, dirName, true);
   }
-  else {
-    // Check if fileName was set
-    if ( fVFileManager->GetFileName() == "" ) {
-      Warn("Cannot read Ntuple " + ntupleName += ". File name has to be set first.",
-        fkClass, "ReadNtuple");
-      return kInvalidId;
-    }
-    return fVNtupleManager->ReadNtupleImpl(
-             ntupleName, fVFileManager->GetFileName(), dirName, false);
+  // Check if fileName was set
+  if (fVFileManager->GetFileName() == "") {
+    Warn("Cannot read Ntuple " + ntupleName += ". File name has to be set first.", fkClass,
+      "ReadNtuple");
+    return kInvalidId;
   }
+  return fVNtupleManager->ReadNtupleImpl(ntupleName, fVFileManager->GetFileName(), dirName, false);
 }
 
 //_____________________________________________________________________________

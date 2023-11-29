@@ -49,10 +49,10 @@ class G4EvManMessenger : public G4UImessenger
 {
   public:
 
-    G4EvManMessenger(G4EventManager* fEvMan);
-    ~G4EvManMessenger();
-    void SetNewValue(G4UIcommand* command, G4String newValues);
-    G4String GetCurrentValue(G4UIcommand* command);
+    explicit G4EvManMessenger(G4EventManager* fEvMan);
+    ~G4EvManMessenger() override;
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
 

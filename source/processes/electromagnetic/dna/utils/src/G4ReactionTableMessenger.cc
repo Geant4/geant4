@@ -37,22 +37,17 @@
 #include <G4UnitsTable.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4UIcmdWithoutParameter.hh>
+#include <G4UIcmdWithABool.hh>
 
 //------------------------------------------------------------------------------
 
-G4ReactionTableMessenger::G4ReactionTableMessenger(G4DNAMolecularReactionTable* table) :
-    G4UImessenger()
+G4ReactionTableMessenger::G4ReactionTableMessenger(G4DNAMolecularReactionTable* table)
+  : G4UImessenger()
+  , fpTable(table)
+  , fpActivateReactionUI(new G4UIcmdWithoutParameter("/chem/reaction/UI", this))
 {
-  fpTable = table;
-
   fpNewDiffContReaction = new G4UIcmdWithAString("/chem/reaction/new", this);
   fpAddReaction = new G4UIcmdWithAString("/chem/reaction/add", this);
-//  fpNewPartDiffContReactionByRadius =
-//      new G4UIcmdWithAString("/chem/reaction/newPartDiffByRadius", this);
-//
-//  fpNewPartDiffContReactionByReactionRate =
-//      new G4UIcmdWithAString("/chem/reaction/newPartDiffByRate", this);
-
   fpPrintTable = new G4UIcmdWithoutParameter("/chem/reaction/print", this);
 }
 
@@ -66,10 +61,14 @@ G4ReactionTableMessenger::~G4ReactionTableMessenger()
 }
 
 //------------------------------------------------------------------------------
-
 void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
                                            G4String newValue)
 {
+  if(command == fpActivateReactionUI.get())
+  {
+    //assert(false);
+      fpTable->Reset();//release reaction data
+  }
 
   if(command == fpNewDiffContReaction)
   {
@@ -91,7 +90,7 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
 //        G4UIcmdWithADoubleAndUnit::ConvertToDimensionedDouble((reactionRate
 //            + G4String(" ") + reactionRateUnit).c_str());
 
-    G4DNAMolecularReactionData* reactionData =
+    auto reactionData =
         new G4DNAMolecularReactionData(dimensionedReactionRate,
                                        species1,
                                        species2);
@@ -290,13 +289,17 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
           && iss.eof() == false
           )
       {
-        G4cout << marker << G4endl;
+        //G4cout << marker << G4endl;
         if(marker == "+")
         {
           iss >> marker; // doit etre species name
           continue;
         }
-        reactionData->AddProduct(marker);
+        if(marker != "H2O")
+        {
+          reactionData->AddProduct(marker);
+        }
+
         iss >> marker; // peut etre species name, +, |
       };
     }
@@ -315,6 +318,19 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
 
       double dimensionedReactionRate = reactionRate * (1e-3 * m3 / (mole * s));
       reactionData->SetObservedReactionRateConstant(dimensionedReactionRate);
+      reactionData->ComputeEffectiveRadius();
+      G4String markerType;
+      iss >> markerType; // must be |
+      if(markerType == "|")
+      {
+        G4int reactionType;
+        iss >> reactionType;
+        if(reactionType == 1)
+        {
+          reactionData->SetReactionType(reactionType);
+        }
+      }
+
 
 //      G4String productionRate;
 //      iss >> productionRate;

@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 //
+/// \file ExGflash2ParallelWorld.hh
+/// \brief Definition of the ExGflash2ParallelWorld class
 //
 #ifndef ExGflash2ParallelWorld_h
 #define ExGflash2ParallelWorld_h 1
@@ -42,41 +44,20 @@ class GFlashParticleBounds;
 
 class ExGflash2ParallelWorld : public G4VUserParallelWorld
 {
-public:
-  ExGflash2ParallelWorld(G4String aWorldName);
-  ~ExGflash2ParallelWorld();
-  
-  virtual void Construct() final;
-  virtual void ConstructSD() final;
-  
-  
-private:
-  G4Region*           fRegion;
+  public:
+    ExGflash2ParallelWorld(G4String aWorldName);
+    ~ExGflash2ParallelWorld() override;
 
-  static G4ThreadLocal GFlashShowerModel* fFastShowerModel; 
-  static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation;
-  static G4ThreadLocal GFlashParticleBounds* fParticleBounds;
-  static G4ThreadLocal GFlashHitMaker* fHitMaker;
+    void Construct() final;
+    void ConstructSD() final;
+
+  private:
+    G4Region* fRegion{nullptr};
+
+    inline static G4ThreadLocal GFlashShowerModel* fFastShowerModel = nullptr;
+    inline static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation = nullptr;
+    inline static G4ThreadLocal GFlashParticleBounds* fParticleBounds = nullptr;
+    inline static G4ThreadLocal GFlashHitMaker* fHitMaker = nullptr;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

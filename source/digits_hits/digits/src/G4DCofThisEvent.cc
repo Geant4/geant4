@@ -27,6 +27,7 @@
 //
 
 #include "G4DCofThisEvent.hh"
+
 #include <algorithm>
 
 G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_()
@@ -35,69 +36,44 @@ G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_()
   return _instance;
 }
 
-G4DCofThisEvent::G4DCofThisEvent()
-{
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  DC = new std::vector<G4VDigiCollection*>;
-}
+G4DCofThisEvent::G4DCofThisEvent() { DC = new std::vector<G4VDigiCollection*>; }
 
 G4DCofThisEvent::G4DCofThisEvent(G4int cap)
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  DC = new std::vector<G4VDigiCollection*>;
-  for(G4int i = 0; i < cap; i++)
-  {
-    DC->push_back((G4VDigiCollection*) 0);
-  }
+  DC = new std::vector<G4VDigiCollection*>(cap, nullptr);
 }
 
 G4DCofThisEvent::~G4DCofThisEvent()
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  // DC->clearAndDestroy();
-  for(size_t i = 0; i < DC->size(); i++)
-  {
-    delete(*DC)[i];
+  for (const G4VDigiCollection* d : *DC) {
+    delete d;
   }
-  DC->clear();
   delete DC;
 }
 
 void G4DCofThisEvent::AddDigiCollection(G4int DCID, G4VDigiCollection* aDC)
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  if(DCID >= 0 && DCID < G4int(DC->size()))
-  {
+  if (DCID >= 0 && DCID < G4int(DC->size())) {
     (*DC)[DCID] = aDC;
   }
 }
 
 G4DCofThisEvent::G4DCofThisEvent(const G4DCofThisEvent& rhs)
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
   DC = new std::vector<G4VDigiCollection*>(rhs.DC->size());
-  for(unsigned int i = 0; i < rhs.DC->size(); ++i)
+  for (unsigned int i = 0; i < rhs.DC->size(); ++i)
     *(DC->at(i)) = *(rhs.DC->at(i));
 }
 
 G4DCofThisEvent& G4DCofThisEvent::operator=(const G4DCofThisEvent& rhs)
 {
-  if(this == &rhs)
-    return *this;
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  for(std::vector<G4VDigiCollection*>::const_iterator it = DC->begin();
-      it != DC->end(); ++it)
-  {
-    delete *it;
+  if (this == &rhs) return *this;
+
+  for (const G4VDigiCollection* d : *DC) {
+    delete d;
   }
   DC->resize(rhs.DC->size());
-  for(unsigned int i = 0; i < rhs.DC->size(); ++i)
+  for (unsigned int i = 0; i < rhs.DC->size(); ++i)
     *(DC->at(i)) = *(rhs.DC->at(i));
   return *this;
 }

@@ -29,4 +29,4 @@
 #include "G4ParticleHPJENDLHEInelasticData.hh"
 using G4NeutronHPJENDLHEInelasticData = G4ParticleHPJENDLHEInelasticData;
 
-#endif 
+#endif

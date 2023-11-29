@@ -40,8 +40,8 @@
 class EmAcceptance
 {
 public:
-  EmAcceptance();
-  ~EmAcceptance();
+  EmAcceptance() = default;
+ ~EmAcceptance() = default;
 
   void BeginOfAcceptance(const G4String& title, G4int stat);
   void EndOfAcceptance();
@@ -51,7 +51,7 @@ public:
                          G4double rms, G4double limit);
 
 private:
-  G4bool fIsAccepted;
+  G4bool fIsAccepted = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

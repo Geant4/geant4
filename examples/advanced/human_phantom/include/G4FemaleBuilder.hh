@@ -38,13 +38,13 @@
 class G4FemaleBuilder: public G4PhantomBuilder
 {
 public:
-  G4FemaleBuilder();
+  G4FemaleBuilder() = default;
   ~G4FemaleBuilder();
 
-  void BuildLeftBreast(const G4String&, G4bool, G4bool);
-  void BuildRightBreast(const G4String&, G4bool, G4bool);
-  void BuildLeftOvary(const G4String&, G4bool, G4bool);
-  void BuildRightOvary(const G4String&, G4bool, G4bool);
-  void BuildUterus(const G4String&, G4bool, G4bool);
+  void BuildLeftBreast(const G4String&, G4bool, G4bool) override;
+  void BuildRightBreast(const G4String&, G4bool, G4bool) override;
+  void BuildLeftOvary(const G4String&, G4bool, G4bool) override;
+  void BuildRightOvary(const G4String&, G4bool, G4bool) override;
+  void BuildUterus(const G4String&, G4bool, G4bool) override;
 };
 #endif

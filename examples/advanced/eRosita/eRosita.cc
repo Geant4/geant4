@@ -23,77 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
+
 #include "eRositaActionInitialization.hh"
 #include "eRositaDetectorConstruction.hh"
+#include "eRositaEventAction.hh"
 #include "eRositaPhysicsList.hh"
 #include "eRositaPrimaryGeneratorAction.hh"
 #include "eRositaRunAction.hh"
-#include "eRositaEventAction.hh"
 #include "eRositaSteppingAction.hh"
 #include "eRositaSteppingVerbose.hh"
+
 #include "G4RunManagerFactory.hh"
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
-#include "G4UIExecutive.hh"
 
-
-int main(int argc,char** argv)
+auto main(int argumentCount, char** argumentVector) -> int
 {
-  // User Verbose output class
-  //
-  G4VSteppingVerbose* verbosity = new eRositaSteppingVerbose;
-  G4VSteppingVerbose::SetInstance(verbosity);
-  
-  // Run manager
-  //
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
-  G4int nThreads = 4;
-  runManager->SetNumberOfThreads(nThreads);
- 
-  G4cout << "***********************" << G4endl;
-  G4cout << "*** Seed: " << G4Random::getTheSeed() << " ***" << G4endl;
-  G4cout << "***********************" << G4endl;
+    // User verbose output class
+    //
+    auto *verbosity = new eRositaSteppingVerbose();
+    G4VSteppingVerbose::SetInstance(verbosity);
 
-  runManager->SetUserInitialization(new eRositaDetectorConstruction);
-  runManager->SetUserInitialization(new eRositaPhysicsList);
-  runManager->SetUserInitialization(new eRositaActionInitialization());
+    // Run manager
+    //
+    auto *runManager = G4RunManagerFactory::CreateRunManager();
 
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
-      
-  // Get the pointer to the User Interface manager
-  //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
+    constexpr auto NUMBER_OF_THREADS{4};
+    runManager->SetNumberOfThreads(NUMBER_OF_THREADS);
 
-  if (argc != 1)   // batch mode  
-  {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
-  }
-  else // interactive mode : define visualization and UI terminal
-  { 
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
+    G4cout << "***********************" << G4endl;
+    G4cout << "** Seed: " << G4Random::getTheSeed() << " **" << G4endl;
+    G4cout << "***********************" << G4endl;
 
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-      ui->SessionStart();
-      delete ui;
+    runManager->SetUserInitialization(new eRositaDetectorConstruction);
+    runManager->SetUserInitialization(new eRositaPhysicsList);
+    runManager->SetUserInitialization(new eRositaActionInitialization());
 
-      delete visManager;
+    // Initialize GEANT4 kernel
+    //
+    runManager->Initialize();
+
+    // Get the pointer to the User Interface (UI) manager
+    //
+    auto *userInterfaceManager = G4UImanager::GetUIpointer();
+
+    if (argumentCount != 1) { // batch mode
+        G4String command = "/control/execute ";
+        G4String fileName = argumentVector[1];
+        userInterfaceManager->ApplyCommand(command + fileName);
+    } else { // interactive mode : define visualization and UI terminal
+        auto *visualizationManager = new G4VisExecutive;
+        visualizationManager->Initialize();
+
+        auto *userInterface = new G4UIExecutive(argumentCount, argumentVector);
+        userInterfaceManager->ApplyCommand("/control/execute vis.mac");
+        userInterface->SessionStart();
+        
+        delete userInterface;
+        delete visualizationManager;
     }
 
-  // Free the store: user actions, physics_list and detector_description are
-  //                 owned and deleted by the run manager, so they should not
-  //                 be deleted in the main() program !
+    // Free the store:
+    // user actions, physics list and detector description are
+    // owned and deleted by the run manager,
+    // so they should not be deleted in the main() program!
 
-  delete runManager;
-  delete verbosity;
+    delete runManager;
+    delete verbosity;
 
-  return 0;
+    return 0;
 }

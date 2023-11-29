@@ -39,11 +39,10 @@ class G4VPhysicalVolume;
 class G4VFlavoredParallelWorld
 {
   public:
+    virtual ~G4VFlavoredParallelWorld() = default;
 
-    virtual ~G4VFlavoredParallelWorld() {}
-
+    // Interface for visualisation
     virtual G4VPhysicalVolume* GetThePhysicalVolumeWorld() const = 0;
-      // Interface for visualisation
 };
 
 #endif

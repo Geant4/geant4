@@ -90,8 +90,6 @@
 
 /** @} */
 
-/** @} */
-
 /** @defgroup extended_hadronic_Hadr09 Hadr09
  *  The Hadr09 hadronic classes have their
  *  <a href="../html_Hadr09/html/index.html">standalone documentation </a>
@@ -123,6 +121,24 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_FlukaCern_exFlukaCernCrossSection exFlukaCernCrossSection
+*  Hadronic FlukaCern exFlukaCernCrossSection example has its 
+ *  <a href="../html_CrossSection/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_FlukaCern_exFlukaCernFinalState exFlukaCernFinalState
+*  Hadronic FlukaCern exFlukaCernFinalState example has its 
+ *  <a href="../html_FinalState/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_hadronic_NeutronSource NeutronSource
  *  The NeutronSource hadronic classes have their
  *  <a href="../html_NeutronSource/html/index.html">standalone documentation </a>
@@ -132,4 +148,47 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_ParticleFluence ParticleFluence
+ *  Extended examples hadronic ParticleFluence classes
+ *  @{
+ */
+
+/** @defgroup extended_hadronic_ParticleFluence_Calo Calo
+ *  The Calo classes have their
+ *  <a href="../html_Calo/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic_ParticleFluence
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_ParticleFluence_ConcentricSpheres ConcentricSpheres
+ *  The ConcentricSpheres classes have their
+ *  <a href="../html_ConcentricSpheres/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic_ParticleFluence
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_ParticleFluence_Layer Layer
+ *  The Layer classes have their
+ *  <a href="../html_Layer/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic_ParticleFluence
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_ParticleFluence_Sphere Sphere
+ *  The Sphere classes have their
+ *  <a href="../html_Sphere/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic_ParticleFluence
+ *  @{
+ */
+
+/** @} */
+
+
+/** @} */
 /** @} */

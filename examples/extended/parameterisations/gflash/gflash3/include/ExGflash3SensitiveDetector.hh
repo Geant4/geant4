@@ -30,9 +30,10 @@
 #ifndef EX1GFLASHSENSITIVEDETECTOR_H
 #define EX1GFLASHSENSITIVEDETECTOR_H
 
-#include "G4VSensitiveDetector.hh"
-#include "G4VGFlashSensitiveDetector.hh"
 #include "ExGflashHitsCollection.hh"
+
+#include "G4VGFlashSensitiveDetector.hh"
+#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 
 class G4GFlashSpot;
@@ -42,21 +43,21 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-class ExGflash3SensitiveDetector: public G4VSensitiveDetector, 
-                                 public G4VGFlashSensitiveDetector {
-public:
-  ExGflash3SensitiveDetector(G4String, ExGflash3ParallelWorld* det);
-  ~ExGflash3SensitiveDetector();
-  
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  virtual G4bool ProcessHits(G4GFlashSpot*aSpot,G4TouchableHistory*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
+class ExGflash3SensitiveDetector : public G4VSensitiveDetector, public G4VGFlashSensitiveDetector
+{
+  public:
+    ExGflash3SensitiveDetector(G4String, ExGflash3ParallelWorld* det);
+    ~ExGflash3SensitiveDetector() override;
 
-private:
-  ExGflashHitsCollection* fCaloHitsCollection;
-  ExGflash3ParallelWorld* fDetector;
-  G4int fHCID;
+    void Initialize(G4HCofThisEvent*) override;
+    G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+    G4bool ProcessHits(G4GFlashSpot* aSpot, G4TouchableHistory*) override;
+    void EndOfEvent(G4HCofThisEvent*) override;
+
+  private:
+    ExGflashHitsCollection* fCaloHitsCollection;
+    ExGflash3ParallelWorld* fDetector;
+    G4int fHCID{-1};
 };
 
 #endif

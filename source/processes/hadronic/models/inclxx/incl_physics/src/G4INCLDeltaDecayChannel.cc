@@ -133,10 +133,16 @@ namespace G4INCL {
     theParticle->setHelicity(0.0);
 
     ParticleType pionType;
+#ifdef INCLXX_IN_GEANT4_MODE
+    G4int deltaPDGCode = 0;
+#endif    
     switch(theParticle->getType()) {
       case DeltaPlusPlus:
         theParticle->setType(Proton);
         pionType = PiPlus;
+#ifdef INCLXX_IN_GEANT4_MODE
+  deltaPDGCode = 2224;
+#endif    
         break;
       case DeltaPlus:
         if(Random::shoot() < 1.0/3.0) {
@@ -146,6 +152,9 @@ namespace G4INCL {
           theParticle->setType(Proton);
           pionType = PiZero;
         }
+#ifdef INCLXX_IN_GEANT4_MODE
+  deltaPDGCode = 2214;
+#endif    
         break;
       case DeltaZero:
         if(Random::shoot() < 1.0/3.0) {
@@ -155,10 +164,16 @@ namespace G4INCL {
           theParticle->setType(Neutron);
           pionType = PiZero;
         }
+#ifdef INCLXX_IN_GEANT4_MODE
+  deltaPDGCode = 2114;
+#endif    
         break;
       case DeltaMinus:
         theParticle->setType(Neutron);
         pionType = PiMinus;
+#ifdef INCLXX_IN_GEANT4_MODE
+  deltaPDGCode = 1114;
+#endif    
         break;
       default:
         INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << '\n');
@@ -179,6 +194,16 @@ namespace G4INCL {
     Particle *pion = new Particle(pionType, pionMomentum, pionPosition);
     theParticle->setMomentum(-pionMomentum);
     theParticle->adjustEnergyFromMomentum();
+
+#ifdef INCLXX_IN_GEANT4_MODE
+    // Set the information about the parent resonance for the two daughters
+    // (as unique, integer ID, we take the rounded integer of the resonance mass in keV)
+    G4int parentResonanceID = static_cast<G4int>(round(deltaMass/CLHEP::keV));
+    pion->setParentResonancePDGCode(deltaPDGCode);
+    pion->setParentResonanceID(parentResonanceID);
+    theParticle->setParentResonancePDGCode(deltaPDGCode);
+    theParticle->setParentResonanceID(parentResonanceID);
+#endif    
 
     fs->addModifiedParticle(theParticle);
     fs->addCreatedParticle(pion);

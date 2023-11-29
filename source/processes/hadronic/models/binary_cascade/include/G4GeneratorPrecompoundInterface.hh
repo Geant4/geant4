@@ -95,6 +95,7 @@ private:
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
+  const G4ParticleDefinition* lambda;
 
   const G4ParticleDefinition* deuteron;
   const G4ParticleDefinition* triton;

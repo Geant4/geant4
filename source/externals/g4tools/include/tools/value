@@ -413,14 +413,14 @@ public:
     return tmp;
   }
   value operator+=(const value& a_from) {
-    value s = operator+(a_from);
-    *this = s;
-    return s;
+    value _s = operator+(a_from);
+    *this = _s;
+    return _s;
   }
   value operator-=(const value& a_from) {
-    value s = operator-(a_from);
-    *this = s;
-    return s;
+    value _s = operator-(a_from);
+    *this = _s;
+    return _s;
   }
 */
 private:
@@ -1007,15 +1007,15 @@ public:
 public: // for valop :
 
   std::string stype() const {
-    std::string s;
-    if(!s_type(s)) return "unknown";
-    return s;
+    std::string _s;
+    if(!s_type(_s)) return "unknown";
+    return _s;
   }
 
   static std::string stype(e_type a_type) {
-    std::string s;
-    if(!s_type(a_type,s)) return "unknown";
-    return s;
+    std::string _s;
+    if(!s_type(a_type,_s)) return "unknown";
+    return _s;
   }
 
   static std::string error_div_zero() {return "divide by zero.";}

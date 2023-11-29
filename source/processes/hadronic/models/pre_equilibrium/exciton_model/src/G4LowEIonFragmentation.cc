@@ -208,12 +208,12 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   }
 
   // Fill the particle change and clear intermediate vectors
-  G4int nexc = (nullptr != theExcitationResult) ? 
+  std::size_t nexc = (nullptr != theExcitationResult) ? 
     theExcitationResult->size() : 0;
-  G4int npre = (nullptr != thePreCompoundResult) ?
+  std::size_t npre = (nullptr != thePreCompoundResult) ?
     thePreCompoundResult->size() : 0;
   
-  for(G4int k=0; k<nexc; ++k) {
+  for(std::size_t k=0; k<nexc; ++k) {
     G4ReactionProduct* p = (*theExcitationResult)[k];
     G4HadSecondary secondary(new G4DynamicParticle(p->GetDefinition(), p->GetMomentum()));
     secondary.SetTime(p->GetTOF());
@@ -221,7 +221,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     theResult.AddSecondary(secondary);
     delete p;
   }
-  for(G4int k=0; k<npre; ++k) {
+  for(std::size_t k=0; k<npre; ++k) {
     G4ReactionProduct* p = (*thePreCompoundResult)[k];
     G4HadSecondary secondary(new G4DynamicParticle(p->GetDefinition(), p->GetMomentum()));
     secondary.SetTime(p->GetTOF());

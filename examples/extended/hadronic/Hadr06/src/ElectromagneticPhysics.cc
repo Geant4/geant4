@@ -69,7 +69,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectromagneticPhysics::ElectromagneticPhysics(const G4String& name)
-   :  G4VPhysicsConstructor(name)
+: G4VPhysicsConstructor(name)
 {
     SetPhysicsType(bElectromagnetic);
 
@@ -81,11 +81,6 @@ ElectromagneticPhysics::ElectromagneticPhysics(const G4String& name)
     param->SetStepFunctionIons(0.1, 1*um);
     param->SetDeexcitationIgnoreCut(true);      
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ElectromagneticPhysics::~ElectromagneticPhysics()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

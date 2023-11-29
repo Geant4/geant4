@@ -156,11 +156,11 @@ class G4FieldManager
       // Set accuracy of  intersection of a volume.  (only)
 
     inline G4double  GetMinimumEpsilonStep() const;
-    inline void      SetMinimumEpsilonStep( G4double newEpsMin );
+    G4bool           SetMinimumEpsilonStep( G4double newEpsMin );
       // Minimum for Relative accuracy of a Step 
 
     inline G4double  GetMaximumEpsilonStep() const;
-    inline void      SetMaximumEpsilonStep( G4double newEpsMax );
+    G4bool           SetMaximumEpsilonStep( G4double newEpsMax );
       // Maximum for Relative accuracy of a Step 
  
     inline G4bool   DoesFieldChangeEnergy() const;
@@ -171,6 +171,23 @@ class G4FieldManager
     virtual G4FieldManager* Clone() const;
       // Needed for multi-threading, create a clone of this object
 
+  public:
+    static G4double GetMaxAcceptedEpsilon();
+    static G4bool   SetMaxAcceptedEpsilon(G4double maxEps, G4bool softFail= false);
+     // Set value -- within limits.
+     // If it fails, with softFail=true it gives Warning, else FatalException
+   
+  protected:
+    static G4double fMaxAcceptedEpsilon;
+    static constexpr G4double fMinAcceptedEpsilon= 1000.0 * std::numeric_limits<G4double>::epsilon();
+      // Epsilon_min/max values must be smaller than this - for robust integration
+
+    static constexpr G4double fMaxWarningEpsilon= 0.001; // Setting larger value will give warning.
+    static constexpr G4double fMaxFinalEpsilon=   0.02;  // Will not accept larger values
+   
+    static G4bool             fVerboseConstruction;
+      // Control verbosity of constructors
+
   private:
 
     void InitialiseFieldChangesEnergy();
@@ -178,7 +195,11 @@ class G4FieldManager
       // and sets the data member accordingly
       // Note: does not handle special cases - this must be done
       // separately  (e.g. magnetic monopole in B field )
-   
+  
+  protected:
+     void ReportBadEpsilonValue(G4ExceptionDescription& erm, G4double value,
+                                G4String& name) const;
+  
   private:
 
     G4Field* fDetectorField = nullptr;

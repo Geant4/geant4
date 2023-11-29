@@ -23,11 +23,14 @@
 #
 /analysis/setFileName Cu-lAr
 /analysis/h1/set 1 100   3.    5. GeV	#edep in absor1
-/analysis/h1/set 2 100   0.  500. MeV	#edep in absor2
+/analysis/h1/set 2 100   0.  300. MeV	#edep in absor2
 /analysis/h1/set 11 52   0.   52.  none	#long. profile in absor1
 /analysis/h1/set 12 52   0.   52.  none	#long. profile in absor2
 /analysis/h1/set 21 102  0.   102. none	#energy flow
+/analysis/h1/set 22 100  1.1   5.1 GeV	#energy deposit
+/analysis/h1/set 23 100  0.    1.5 GeV	#energy leakage
+/analysis/h1/set 24 100  3.1   5.1 GeV	#energy total
 #
-/run/printProgress 100
-/run/beamOn 1000
+/run/printProgress 400
+/run/beamOn 4000
 

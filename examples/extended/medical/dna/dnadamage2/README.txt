@@ -1,0 +1,336 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - dnadamage2 example
+     =========================================================
+
+                            DNADAMAGE2
+                            ----------
+
+CORRESPONDING AUTHORS
+J. Naoki D. Kondo
+J. Ramos-Mendez
+B. Faddegon
+(a) JorgeNaoki _ DominguezKondo _ ucsf _ edu
+(b) Jose _ RamosMendez _ ucsf _ edu
+(c) Bruce _ Faddegon _ ucsf _ edu
+
+CONTACT EMAIL
+JorgeNaoki.DominguezKondo@ucsf.edu
+
+This example is provided by the Geant4-DNA collaboration.
+(http://geant4-dna.org)
+
+Any report or published results obtained using this example shall 
+cite the following publications:
+
+[1] J.N. D-Kondo, et al., (2021) DNA damage modeled with Geant4-DNA: effects of 
+plasmid DNA conformation and experimental conditions. 
+Physics in Medicine and Biology, 66 (24). https://doi.org/10.1088/1361-6560/ac3a22
+
+[2] J. Ramos-Méndez, et al., (2020). Independent reaction times method in Geant4-DNA: 
+Implementation and performance.Medical Physics, 47(11), 5919–5930. 
+https://doi.org/10.1002/mp.14490
+
+In addition, cite the main Geant4-DNA collaboration publications:
+
+[3] J. Appl. Phys. 125 (2019) 104301
+[4] Med. Phys. 45 (2018) e722-e739
+[5] Phys. Med. 31 (2015) 861-874
+[6] Med. Phys. 37 (2010) 4692-4708
+[7] Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178
+
+ 0 - INTRODUCTION
+    This examples provides scoring of plasmid DNA strand breaks using 
+    the IRT method [2]. The DNADAMAGE2 example extends the chem6 example 
+    by adding DNA molecule information and the scoring of Strand Breaks. 
+    Experimental conditions are considered such as oxygen and DMSO molar
+    concentrations.
+
+    The details are described in the following papers [1][2] for both
+    the IRT method and this example's validation.
+
+ 1 - GEOMETRY DEFINITION
+
+    The geometry is composed of three main components:
+      - The world: A 2 um water cube which hostess the rest of the components.
+      - The Plasmid Envelope: A water sphere of 1 um in diameter by default.
+                              This envelope can be resized using the "/det/setSize"
+                              command. So users can modify their DNA concentration
+                              without increasing the number of plasmids, but by lowering
+                              the amount of water.
+      - The Plasmids: Plasmids must be supplied to the geometry. The plasmid file must
+                      be in ASCII format. Three columns which represent the X, Y and 
+                      Z position of the plasmid vertices (bps). To control the 
+                      parameters to setup the plasmid geomtery, the following commands
+                      shall be used:
+                         + /det/NbOfPlasmids :Set the number of plasmid copies. G4Box Volumes
+                                              are used to enclose the plasmid. 
+                         + /det/OffSetFile : The file format is ASCII. It contains three columns 
+                                             indicating the X, Y and Z position of the center of 
+                                             the plasmid envelopes (G4Box volumes enclosing the plasmid)
+                         + /det/PlasmidFile  : Set the ASCII file name containing the plasmid 
+                                               information. 
+                         + /det/UseDNAVolumes : Boolean to activate/deactivate the solid 
+                                                volumes defining the DNA nucleotides. If set to false, 
+                                                virtual molecules are created from the DNA nucleotides
+                                                position for simulating indirect strand breaks. See
+                                                reference [2].
+
+   The definition of the sensitive volumes is also made in the Geometry Definition.
+   Inside the method ConstructSDandField() (see section 5).
+
+ 2 - PHYSICS AND CHEMISTRY LISTS
+
+    By default, if no Physics list is assigned using the "/physics/SetPhysics" the simulation
+    will run using:
+    
+      + G4EmDNAPhysics_option4 constructor
+
+    The full list of physics lists available for the user are:
+      + G4EmDNAPhysics_option1
+      + G4EmDNAPhysics_option2
+      + G4EmDNAPhysics_option3
+      + G4EmDNAPhysics_option4
+      + G4EmDNAPhysics_option5
+      + G4EmDNAPhysics_option6
+      + G4EmDNAPhysics_option7
+      + G4EmDNAPhysics_option8
+
+    By default, if no chemistry list is assigned using the "/physics/SetChemistry" 
+    the simulation will run using:
+
+       + G4EmDNAChemistry_ForPlasmids
+         - Custom chemistry constructor based on the G4EmDNAChemistry_option3 
+           constructor.
+         - It includes DNA reactions as well as DMSO and oxygen background reactions.
+         - The chemistry constructor is based on the pre-chemical stage of PARTRAC
+           and chemical parameters of RITRACKS.
+         - This chemistry constructor uses the Independent Reaction Times method.
+
+    By using this Chemistry List, users can set oxygen and DMSO concentration
+    with the following commands "/chem/scavenger/DMSO" and "/chem/scavenger/Oxygen".
+    The concentrations unit must be given as molar concentaration M (mol/dm3).
+
+   *Of note, while other chemistry modules are also available, only the  
+     G4EmDNAChemistry_ForPlasmids is capable of scoring DNA strand breaks.
+
+ 3 - ACTION INITALIZATION
+
+    The class ActionInitialization instantiates and registers
+    to Geant4 kernel all user action classes.
+
+    While in sequential mode the action classes are instantiated just once,
+    via invoking the method:
+    ActionInitialization::Build()
+    In multi-threading mode the same method is invoked for each thread worker
+    and so all user action classes are defined thread-local.
+
+    A run action class is instantiated both thread-local
+    and global that's why its instance is created also in the method:
+    ActionInitialization::BuildForMaster()
+    which is invoked only in multi-threading mode.
+
+    The following actions are initialized in this example:
+      + PrimaryGenerationAction: The primary particle gun.
+      + RunAction: Defines the actions conducted at the start and end of each
+                   Geant4 Run. It contains the call to the output functions of
+                   the scorers.
+      + StackingAction: Needed in order to start the chemistry (See section 7)
+      + TimeStepAction: Defines actions conducted at each Step-By-Step (SBS) 
+                        Chemistry algorithm step (see section 6).
+
+ 4 - AN EVENT: THE PRIMARY GENERATOR
+
+    The primary kinematic consists of N electrons with random position and
+    momentum in the water sphere. The kinetic energy of the electrons are 
+    sampled from an energy spectrum suplied by the user using the "/fpGun/SourceFile"
+    command. The user can set the number of primary electrons per event in order 
+    to accumulate a certain dose before running the chemistry. 
+
+    This example provides the specrum of the kinetic energy of secondary electrons 
+    at the time they were produced by cobalt-60/cesium-137 gamma rays (see section 11
+    and [1] for more information).
+
+    The chemistry module is triggered in the StackingAction class when all
+    physical tracks have been processed (see section 7).
+
+ 5 - DETECTOR RESPONSE: Scorers
+
+   5.1 - Species scorer
+
+    This scorer computes the energy deposition and the number of species along
+    time in order to extract the radiochemical yields as in chem6 or chem4 examples.
+
+    Run::RecordEvent(), called at end of event, collects informations
+    event per event from the hits collections, and accumulates statistics for
+    RunAction::EndOfRunAction().
+
+    In multi-threading mode the statistics accumulated per worker is merged
+    to the master in Run::Merge().
+
+    The following macro commands can be used to control the scoring time:
+
+    /scheduler/endTime : IRT chemistry time end, must be acompanied by time units.
+
+    /scorer/species/addTimeToRecord : Adds a specific time point to report.
+
+    /scorer/species/nOfTimeBins : Sets the number of time bins separated
+                                  logaritmically even from 1 ps to the endTime
+                                  specified.
+
+    The information about all the molecular species is scored and can be saved
+    in a ASCII, ROOT or BINARY file, as specified by the user. The specific name
+    of the file can also be specified by the user by using the following commands:
+      -/scorer/species/OutputFile
+      -/scorer/species/OutputFormat
+
+   ASCII results are given in a 5 column file which are:
+      - Time
+      - GValues per 100 eV
+      - GValues Error
+      - GValues number of molecules
+      - Molecule name
+
+   ROOT or BINARY use the Geant4 Analysis Manager with the following columns:
+      - Species ID
+      - Number
+      - Number of Event
+      - Species Name
+      - Time
+      - Sum of G Value
+      - Sum of G2 Value
+
+   5.2. - LET scorer
+
+    An restricted, dose-averaged LET scorer is provided with this example, 
+    it is the same scorer from the chem6 example. For more details visit the
+    chem6 example
+
+    A macro command can be used to control the energy cut of the scorer:
+    /scorer/LET/cutoff
+
+   5.4. - DNA Strand Break Scorer
+
+   The DNA Strand Breaks are obtained by this class, both direct and indirect. 
+   This class needs access to the DetectorConstruction class in order to obtain 
+   the DNA position information.
+
+   Contained within this scorer is a "MoleculeGun" as a mean to insert the DNA 
+   molecules and keep track of them in order to know where a strand break occurs.
+   This helps to calculate SSBs, DSBs and other more complex DNA Strand Breaks.
+   The user is responsible for the Strand Break classification since this example
+   doesn't include any analysis tool.
+
+   Users can change the output type and output file name in the same way of the
+   "ScoreSpecies" scorer, with the commands:
+      -/scorer/StrandBreak/OutputFile
+      -/scorer/StrandBreak/OutputFormat
+
+   The output formats available are the same as with the ScoreSpecies scorer:
+   ASCII, ROOT and BINARY.
+
+   The number of direct Strand Breaks are scored when a certain energy
+   threshold is reached for a certain deoxyribose + phosphate geometry. Users can
+   change the direct energy treshold by using the following command:
+      -/scorer/StrandBreak/BreakEnergy
+
+   Of note, the following parameter must be set to true to score the breaks produced
+   by direct effect
+      -/det/UseDNAVolumes true
+
+   The BreakEnergy is set to 17.5 eV by default.
+
+   The "ScoreStrandBreak" class takes the LET value at the end of the simulation from
+   5.2 and saves it into the file of the ASCII output, so that users may get the number
+   of Strand Breaks as a function of LET if so they desire.
+   The current example only allows the use of electron sources, but the user is free to
+   use different electron energies.
+
+ 6 - IRT specific details 
+
+    The IRT is run after the few step-by-step (SBS) steps following the water dissociation 
+    (pre-chemical) stage have finished (between 2 to 3 SBS steps), see UserPreTimeStepAction()
+    and UserPostTimeStepAction(). At that point, 
+    SBS is stopped and the position of molecules and DNA molecules are passed to the IRT
+    method. No DNA radiolysis is considered, so every specie created inside the DNA 
+    nucleotide territory is exclude by using the UserPreTimeStepAction as a filters, see
+    justification in [1]
+
+    In sumary:
+    The following two method are called before and after every SBS time step to pass molecules
+    to the IRT method:
+      + TimeStepAction::UserPreTimeStepAction()
+      + TimeStepAction::UserPostTimeStepAction()
+
+ 7 - STACKING ACTION
+
+    StackingAction::NewStage is called when a stack of tracks has been processed
+    (for more details, look at the Geant4 documentation).
+    A verification on whether physical tracks remain to be processed is done.
+    If no tracks remain to be processed, the chemical module is then triggered.
+
+ 8 - OUTPUT
+
+    The same output specifications from the chem6 example applies here, with the
+    following remarkable differences:
+      + Both the ScoreSpecies and the ScoreStrandBreaks scorers have their own
+        output methods. Both call OutputAndClear(), which writes the output
+        files and cleans all the information currently stored in the scorers,
+        in preparation for the next run.
+      + The OutputAndClear() method is called in the RunAction::EndOfRunAction()
+        method.
+
+ 9 - RELEVANT MACRO FILES
+
+    Two user macro files can be used:
+
+    - RunExample.in
+      + Single Run example.
+      + 100 repetitions of 880 electrons (~5 Gys) in a 1 um diameter volume 
+        containing 1 plasmids.
+      + Caesium source.
+
+    - RunDoseDependance.in
+      + This macro will repproduce results from S2 [1] (SBs Dose dependance).
+      + DMSO conentration is set to 2.28E-4 M. 
+      + Oxygen Concentration is set to 0.27E-3 M.
+      + Absorbed dose will be between ~1 - ~100 Gy.
+      + 5 plasmids (28.1 ug/ml DNA concentration).
+      + To reduce simulation time, the number of repetitions was lowered to 10.
+      + Currently, only 1 Thread is used. Users are advised to increase the number
+        of threads.
+      + Simulation time can take up to a couple of days depending on the specific PC.
+
+    - init_vis.in
+      + Default macro file to be used if user doesn't specify any macro file at run.
+      + It calls the vis.in macro which will draw the OpenGL visualizer.
+
+    - vis.in
+      + Visualization parameters for the default macro file. 1 plasmid will be draw at the center.
+
+10 - PLOT
+
+    - No PLOT/Analysis files are prodived due to the default ASCII output.
+    - ASCII files can be handled by most of the plot tools.
+
+11 - EXTRA FILES
+
+    - CaesiumSource.src
+      + Sample electron spectrum for the simulation.
+      + Secondary electrons generated by a Caesium Gamma Source [1].
+
+    - CobaltSource.src
+      + Sample electron spectrum for the simulation.
+      + Secondary electrons generated by a Cobalt Gamma Source [1].
+
+    - pUC19.xyz
+      + A sample pUC19 (2686 base pairs) plasmid with -0.03 super helix density generated at 20 C.
+        The plasmid file has the position of each individual base pair. Values are given in nm
+
+    - PlasmidOffsets.txt
+      + A sample plasmid centroid file. Users can change this values manually as long
+        as they do not fall outside of the water sphere. In this way is possible to move
+        the plasmids generated in the simulation. Values are given in nm.
+

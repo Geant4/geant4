@@ -47,16 +47,16 @@
 // ######################################################################
 // ###                          ANTI NEUTRON                          ###
 // ######################################################################
-G4AntiNeutron* G4AntiNeutron::theInstance = 0;
+G4AntiNeutron* G4AntiNeutron::theInstance = nullptr;
 
 G4AntiNeutron* G4AntiNeutron::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -75,21 +75,21 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,
-		 true,    880.2*second,          NULL,
+		false,    880.2*second,          nullptr,
 	        false,       "nucleon",          2112
               );
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
     anInstance->SetPDGMagneticMoment( 1.9130427 * mN);
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     // create a decay channel
     G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("anti_neutron",1.00);
     table->Insert(mode);
     anInstance->SetDecayTable(table);
  
   }
-  theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);
+  theInstance = static_cast<G4AntiNeutron*>(anInstance);
   return theInstance;
 }
 

@@ -33,15 +33,16 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 #include "AnalysisManager.hh"
+#include "DetectorMessenger.hh"
 #include <map>
 
 class RunAction : public G4UserRunAction
 {
 public:
 #ifdef ANALYSIS_USE
-    RunAction(AnalysisManager* analysis);
+    RunAction(AnalysisManager* analysis, DetectorMessenger* detector);
 #else
-    RunAction();
+    RunAction(DetectorMessenger* detector);
 #endif
 
    ~RunAction();
@@ -54,6 +55,7 @@ private:
 #ifdef ANALYSIS_USE
  AnalysisManager* analysisMan;
 #endif
+ DetectorMessenger* detectorMess;
 
 };
 #endif

@@ -139,13 +139,13 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
       G4ProductionCutsTable* theCoupleTable =
 	G4ProductionCutsTable::GetProductionCutsTable();
 
-      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+      for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i)
 	{
 	  const G4Material* material =
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
 	  const G4ElementVector* theElementVector = material->GetElementVector();
 
-	  for (size_t j=0;j<material->GetNumberOfElements();j++)
+	  for (std::size_t j=0;j<material->GetNumberOfElements();++j)
 	    {
 	      G4int iZ = theElementVector->at(j)->GetZasInt();
 	      //read data files only in the master
@@ -307,7 +307,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   //             4-8 --> M shells
   //             9 --> outer shells cumulatively
   //
-  size_t shellIndex = SelectRandomShell(Z,photonEnergy);
+  std::size_t shellIndex = SelectRandomShell(Z,photonEnergy);
 
   if (fVerboseLevel > 2)
     G4cout << "Selected shell " << shellIndex << " of element " << anElement->GetName() << G4endl;
@@ -321,7 +321,7 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
   //In order to avoid a warning message from the G4AtomicTransitionManager, I
   //add this protection. Results are anyway changed, because when G4AtomicTransitionManager
   //has a shellID>maxID, it sets the shellID to the last valid shell.
-  size_t numberOfShells = (size_t) transitionManager->NumberOfShells(Z);
+  std::size_t numberOfShells = (std::size_t) transitionManager->NumberOfShells(Z);
   if (shellIndex >= numberOfShells)
     shellIndex = numberOfShells-1;
 
@@ -375,13 +375,13 @@ void G4PenelopePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicPartic
       G4int index = couple->GetIndex();
       if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
 	{
-	  size_t nBefore = fvect->size();
+	  std::size_t nBefore = fvect->size();
 	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
-	  size_t nAfter = fvect->size();
+	  std::size_t nAfter = fvect->size();
 
 	  if (nAfter > nBefore) //actual production of fluorescence
 	    {
-	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
+	      for (std::size_t j=nBefore;j<nAfter;++j) //loop on products
 		{
 		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
 		  if (itsEnergy < bindingEnergy) // valid secondary, generate it
@@ -517,8 +517,8 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
       G4cout << "Going to read PhotoElectric data files for Z=" << Z << G4endl;
     }
 
-  char* path = std::getenv("G4LEDATA");
-  if (!path)
+    const char* path = G4FindDataDir("G4LEDATA");
+    if(!path)
     {
       G4String excep = "G4PenelopePhotoElectricModel - G4LEDATA environment variable not set!";
       G4Exception("G4PenelopePhotoElectricModel::ReadDataFile()",
@@ -543,7 +543,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
     }
   //I have to know in advance how many points are in the data list
   //to initialize the G4PhysicsFreeVector()
-  size_t ndata=0;
+  std::size_t ndata=0;
   G4String line;
   while( getline(file, line) )
     ndata++;
@@ -555,7 +555,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
   file.open(ost.str().c_str());
 
   G4int readZ =0;
-  size_t nShells= 0;
+  std::size_t nShells= 0;
   file >> readZ >> nShells;
 
   if (fVerboseLevel > 3)
@@ -578,11 +578,11 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
 
   //reserve space for the vectors
   //everything is log-log
-  for (size_t i=0;i<nShells+1;i++)
+  for (std::size_t i=0;i<nShells+1;++i)
     thePhysicsTable->push_back(new G4PhysicsFreeVector(ndata));
 
-  size_t k =0;
-  for (k=0;k<ndata && !file.eof();k++)
+  std::size_t k =0;
+  for (k=0;k<ndata && !file.eof();++k)
     {
       G4double energy = 0;
       G4double aValue = 0;
@@ -590,7 +590,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
       energy *= eV;
       G4double logene = G4Log(energy);
       //loop on the columns
-      for (size_t i=0;i<nShells+1;i++)
+      for (std::size_t i=0;i<nShells+1;++i)
 	{
 	  file >> aValue;
 	  aValue *= barn;
@@ -615,7 +615,7 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
+std::size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
 {
   if (!IsMaster())
     //Should not be here!
@@ -634,16 +634,16 @@ size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
 		   "em2038",FatalException,ed);
      }
   //one vector is allocated for the _total_ cross section
-  size_t nEntries = fLogAtomicShellXS[Z]->entries();
+  std::size_t nEntries = fLogAtomicShellXS[Z]->entries();
   return  (nEntries-1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,size_t shellID,G4double energy)
+G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,std::size_t shellID,G4double energy)
 {
   //this forces also the loading of the data
-  size_t entries = GetNumberOfShellXS(Z);
+  std::size_t entries = GetNumberOfShellXS(Z);
 
   if (shellID >= entries)
     {
@@ -672,7 +672,7 @@ G4double G4PenelopePhotoElectricModel::GetShellCrossSection(G4int Z,size_t shell
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4String G4PenelopePhotoElectricModel::WriteTargetShell(size_t shellID)
+G4String G4PenelopePhotoElectricModel::WriteTargetShell(std::size_t shellID)
 {
   G4String theShell = "outer shell";
   if (shellID == 0)
@@ -708,7 +708,7 @@ void G4PenelopePhotoElectricModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 
-size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
+std::size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
 {
   G4double logEnergy = G4Log(energy);
 
@@ -736,7 +736,7 @@ size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
   //
   G4double random = G4UniformRand()*totalXS;
 
-  for (size_t k=1;k<theTable->entries();k++)
+  for (std::size_t k=1;k<theTable->entries();++k)
     {
       //Add one shell
       G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];

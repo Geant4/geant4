@@ -63,7 +63,9 @@
 #include "HEPVis/nodes/SoTrap.h"
 #endif
 #include "HEPVis/nodes/SoMarkerSet.h"
-typedef HEPVis_SoMarkerSet SoMarkerSet;
+
+using SoMarkerSet = HEPVis_SoMarkerSet;
+
 #include "HEPVis/nodekits/SoDetectorTreeKit.h"
 #include "HEPVis/misc/SoStyleCache.h"
 
@@ -94,6 +96,8 @@ typedef HEPVis_SoMarkerSet SoMarkerSet;
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
+
+#define G4warn G4cout
 
 G4int G4OpenInventorSceneHandler::fSceneIdCount = 0;
 
@@ -198,13 +202,13 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
   AddProperties(pVA);  // Colour, etc.
   AddTransform();      // Transformation
 
-  G4int nPoints = line.size();
+  G4int nPoints = (G4int)line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
-  for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
-    pCoords[iPoint].setValue((float)line[iPoint].x(),
-                             (float)line[iPoint].y(),
-                             (float)line[iPoint].z());
+  for (G4int iPoint = 0; iPoint < nPoints ; ++iPoint) {
+    pCoords[iPoint].setValue((G4float)line[iPoint].x(),
+                             (G4float)line[iPoint].y(),
+                             (G4float)line[iPoint].z());
   }
 
   //
@@ -226,7 +230,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
   if (fpViewer->GetViewParameters().IsPicking()) LoadAtts(line, pLine);
 
 #ifdef INVENTOR2_0
-  pLine->numVertices.setValues(0,1,(const long *)&nPoints);
+  pLine->numVertices.setValues(0,1,(const G4long *)&nPoints);
 #else 
   pLine->numVertices.setValues(0,1,&nPoints);
 #endif
@@ -257,14 +261,14 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   AddProperties(pVA);  // Colour, etc.
   AddTransform();      // Transformation
 
-  G4int pointn = polymarker.size();
+  G4int pointn = (G4int)polymarker.size();
   if(pointn<=0) return;
 
   SbVec3f* points = new SbVec3f[pointn];
-  for (G4int iPoint = 0; iPoint < pointn ; iPoint++) {
-    points[iPoint].setValue((float)polymarker[iPoint].x(),
-                            (float)polymarker[iPoint].y(),
-                            (float)polymarker[iPoint].z());
+  for (G4int iPoint = 0; iPoint < pointn ; ++iPoint) {
+    points[iPoint].setValue((G4float)polymarker[iPoint].x(),
+                            (G4float)polymarker[iPoint].y(),
+                            (G4float)polymarker[iPoint].z());
   }
 
   SoCoordinate3* coordinate3 = new SoCoordinate3;
@@ -376,10 +380,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
   //
   const G4Colour& c = GetTextColour (text);
   SoMaterial* material = 
-    fStyleCache->getMaterial((float)c.GetRed(),
-                             (float)c.GetGreen(),
-                             (float)c.GetBlue(),
-                             (float)(1-c.GetAlpha()));
+    fStyleCache->getMaterial((G4float)c.GetRed(),
+                             (G4float)c.GetGreen(),
+                             (G4float)c.GetBlue(),
+                             (G4float)(1-c.GetAlpha()));
   fCurrentSeparator->addChild(material);
 
   MarkerSizeType sizeType;
@@ -473,9 +477,9 @@ void G4OpenInventorSceneHandler::AddCircleSquare
 
   // Borrowed from AddPrimitive(G4Polymarker) - inefficient? JA
   SbVec3f* points = new SbVec3f[1];
-  points[0].setValue((float)centre.x(),
-		     (float)centre.y(),
-		     (float)centre.z());
+  points[0].setValue((G4float)centre.x(),
+		     (G4float)centre.y(),
+		     (G4float)centre.z());
   SoCoordinate3* coordinate3 = new SoCoordinate3;
   coordinate3->point.setValues(0,1,points);
   fCurrentSeparator->addChild(coordinate3);
@@ -581,6 +585,10 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
   fCurrentSeparator->addChild(soPolyhedron);  
 }
 
+void G4OpenInventorSceneHandler::AddCompound(const G4Mesh& mesh) {
+  StandardSpecialMeshRendering(mesh);
+}
+
 void G4OpenInventorSceneHandler::GeneratePrerequisites()
 {
   // Utility for PreAddSolid and BeginPrimitives.
@@ -611,8 +619,8 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
     // PVNodeID object, which is a physical volume and copy number.  It
     // is a vector of PVNodeIDs corresponding to the geometry hierarchy
     // actually selected, i.e., not culled.
-    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-    typedef std::vector<PVNodeID> PVPath;
+    using PVNodeID = G4PhysicalVolumeModel::G4PhysicalVolumeNodeID;
+    using PVPath = std::vector<PVNodeID>;
     const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
     //G4int currentDepth = pPVModel->GetCurrentDepth();
     G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
@@ -664,10 +672,10 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
 
       // First find the color attributes...
       const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
-      const double red = g4Col.GetRed ();
-      const double green = g4Col.GetGreen ();
-      const double blue = g4Col.GetBlue ();
-      double transparency = 1 - g4Col.GetAlpha();
+      const G4double red = g4Col.GetRed ();
+      const G4double green = g4Col.GetGreen ();
+      const G4double blue = g4Col.GetBlue ();
+      G4double transparency = 1 - g4Col.GetAlpha();
 
       // Drawing style...
       G4ViewParameters::DrawingStyle drawing_style =
@@ -687,10 +695,10 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
       }
 
       SoMaterial* material = 
-	fStyleCache->getMaterial((float)red,
-				 (float)green,
-				 (float)blue,
-				 (float)transparency);
+	fStyleCache->getMaterial((G4float)red,
+				 (G4float)green,
+				 (G4float)blue,
+				 (G4float)transparency);
       detectorTreeKit->setPart("appearance.material",material);
 
       SoLightModel* lightModel = 
@@ -714,7 +722,7 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
 	  // G4PhysicalVolumeModel sends volumes as it encounters them,
 	  // i.e., mothers before daughters, in its descent of the
 	  // geometry tree.  Error!
-	  G4cout <<
+	  G4warn <<
 	    "ERROR: G4OpenInventorSceneHandler::GeneratePrerequisites: Mother "
 		 << ri->GetPhysicalVolume()->GetName()
 		 << ':' << ri->GetCopyNo()
@@ -744,7 +752,7 @@ void G4OpenInventorSceneHandler::GeneratePrerequisites()
 	  // G4PhysicalVolumeModel sends volumes as it encounters them,
 	  // i.e., mothers before daughters, in its descent of the
 	  // geometry tree.  Error!
-	  G4cout << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
+	  G4warn << "ERROR: G4OpenInventorSceneHandler::PreAddSolid: Mother "
 		 << ri->GetPhysicalVolume()->GetName()
 		 << ':' << ri->GetCopyNo()
 		 << " not previously encountered."
@@ -777,10 +785,10 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
 
   // First find the color attributes...
   const G4Colour& g4Col =  pApplicableVisAttribs->GetColour ();
-  const double red = g4Col.GetRed ();
-  const double green = g4Col.GetGreen ();
-  const double blue = g4Col.GetBlue ();
-  double transparency = 1 - g4Col.GetAlpha();
+  const G4double red = g4Col.GetRed ();
+  const G4double green = g4Col.GetGreen ();
+  const G4double blue = g4Col.GetBlue ();
+  G4double transparency = 1 - g4Col.GetAlpha();
 
   // Drawing style...
   G4ViewParameters::DrawingStyle drawing_style =
@@ -804,10 +812,10 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
   fReducedWireFrame = !isAuxEdgeVisible;
 
   SoMaterial* material = 
-    fStyleCache->getMaterial((float)red,
-			     (float)green,
-			     (float)blue,
-			     (float)transparency);
+    fStyleCache->getMaterial((G4float)red,
+			     (G4float)green,
+			     (G4float)blue,
+			     (G4float)transparency);
   fCurrentSeparator->addChild(material);
 
   SoLightModel* lightModel = 
@@ -830,7 +838,7 @@ void G4OpenInventorSceneHandler::AddTransform(const G4Point3D& translation)
   const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();
   SbMatrix sbScale;
   sbScale.setScale
-    (SbVec3f((float)scale.x(),(float)scale.y(),(float)scale.z()));
+    (SbVec3f((G4float)scale.x(),(G4float)scale.y(),(G4float)scale.z()));
   sbMatrix->multRight(sbScale);
 
   matrixTransform->matrix.setValue(*sbMatrix);

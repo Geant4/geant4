@@ -102,17 +102,9 @@ void G4HadronicProcessStore::Clean()
 
 G4HadronicProcessStore::G4HadronicProcessStore()
 {
-  n_proc = 0;
-  n_part = 0;
-  n_model= 0;
-  n_extra= 0;
-  currentProcess  = nullptr;
-  currentParticle = nullptr;
   theGenericIon = 
     G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
   param = G4HadronicParameters::Instance();
-  buildTableStart = true;
-  buildXSTable = false;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
 }
 
@@ -482,7 +474,7 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) { return; }
   }
-  G4HadronicProcess* hproc = reinterpret_cast<G4HadronicProcess*>(proc);
+  G4HadronicProcess* hproc = static_cast<G4HadronicProcess*>(proc);
   if(hproc) {
     for(G4int i=0; i<n_proc; ++i) {
       if(process[i] == hproc) { return; }
@@ -566,7 +558,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
   if(buildTableStart && part == particle[n_part - 1]) {
     buildTableStart = false;
     Dump(param->GetVerboseLevel());
-    if (std::getenv("G4PhysListDocDir") ) DumpHtml();
+    if (!(param->GetPhysListDocDir()).empty()) DumpHtml();
     G4HadronicInteractionRegistry::Instance()->InitialiseModels();
   }
 }
@@ -579,12 +571,12 @@ void G4HadronicProcessStore::DumpHtml()
   // List processes, models and cross sections for the most important
   // particles in descending order of importance
 
-  char* dirName = std::getenv("G4PhysListDocDir");
-  char* physListName = std::getenv("G4PhysListName");
-  if (dirName && physListName) {
+  const G4String& dir = param->GetPhysListDocDir();
+  const G4String& pl = param->GetPhysListName();
+  if (!dir.empty() && !pl.empty()) {
 
     // Open output file with path name
-    G4String pathName = G4String(dirName) + "/" + G4String(physListName) + ".html";
+    G4String pathName = dir + "/" + pl + ".html";
     std::ofstream outFile;
     outFile.open(pathName);
 
@@ -594,8 +586,8 @@ void G4HadronicProcessStore::DumpHtml()
     outFile << "<title>Physics List Summary</title>\n";
     outFile << "</head>\n";
     outFile << "<body>\n";
-    outFile << "<h2> Summary of Hadronic Processes, Models and Cross Sections for Physics List "
-            << G4String(physListName) << "</h2>\n";
+    outFile << "<h2> Summary of Hadronic Processes, Models and Cross Sections"
+	    << " for Physics List " << pl << "</h2>\n";
     outFile << "<ul>\n";
 
     PrintHtml(G4Proton::Proton(), outFile);
@@ -604,7 +596,7 @@ void G4HadronicProcessStore::DumpHtml()
     PrintHtml(G4PionMinus::PionMinus(), outFile);
     PrintHtml(G4Gamma::Gamma(), outFile);
     PrintHtml(G4Electron::Electron(), outFile);
-//    PrintHtml(G4MuonMinus::MuonMinus(), outFile);
+    //    PrintHtml(G4MuonMinus::MuonMinus(), outFile);
     PrintHtml(G4Positron::Positron(), outFile);
     PrintHtml(G4KaonPlus::KaonPlus(), outFile);
     PrintHtml(G4KaonMinus::KaonMinus(), outFile);
@@ -637,30 +629,26 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   std::pair<PDHPmap::iterator, PDHPmap::iterator> itpart =
                         p_map.equal_range(theParticle);
 
-  // Loop over processes assigned to particle
+  const G4String& pl = param->GetPhysListName();
 
+  // Loop over processes assigned to particle
   G4HadronicProcess* theProcess;
   for (PDHPmap::iterator it = itpart.first; it != itpart.second; ++it) {
     theProcess = (*it).second;
-    //  description is inline
-    //outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : <a href=\""
-    //        << theProcess->GetProcessName() << ".html\"> "
-    //        << theProcess->GetProcessName() << "</a></font></b>\n";
     outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : "
             << theProcess->GetProcessName() << "</font></b>\n";
     outFile << "<ul>\n";
     outFile << "  <li>";
-   theProcess->ProcessDescription(outFile);
-   outFile << "  <li><b><font color=\" 00AA00 \">models : </font></b>\n";
+    theProcess->ProcessDescription(outFile);
+    outFile << "  <li><b><font color=\" 00AA00 \">models : </font></b>\n";
     // Loop over models assigned to process
     std::pair<HPHImap::iterator, HPHImap::iterator> itmod =
                         m_map.equal_range(theProcess);
 
     outFile << "    <ul>\n";
-	 G4String physListName(std::getenv("G4PhysListName"));
 
     for (HPHImap::iterator jt = itmod.first; jt != itmod.second; ++jt) {
-      outFile << "    <li><b><a href=\"" << physListName << "_" 
+      outFile << "    <li><b><a href=\"" << pl << "_" 
 		        << HtmlFileName((*jt).second->GetModelName()) << "\"> "
               << (*jt).second->GetModelName() << "</a>" 
               << " from " << (*jt).second->GetMinEnergy()/GeV
@@ -687,7 +675,6 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   }
 
   // Loop over extra (G4VProcess) processes
-
   std::multimap<PD,G4VProcess*,std::less<PD> >::iterator itp;
   for (itp=ep_map.lower_bound(theParticle); itp!=ep_map.upper_bound(theParticle); ++itp) {
     if (itp->first == theParticle) {
@@ -709,38 +696,36 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 void 
 G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
-	G4String dirName(std::getenv("G4PhysListDocDir"));
-	G4String physListName(std::getenv("G4PhysListName"));
-	G4String pathName = dirName + "/" + physListName + "_" + HtmlFileName(mod->GetModelName());
-	std::ofstream outModel;
-	outModel.open(pathName);
-	outModel << "<html>\n";
-	outModel << "<head>\n";
-	outModel << "<title>Description of " << mod->GetModelName() 
-		 << "</title>\n";
-	outModel << "</head>\n";
-	outModel << "<body>\n";
+  const G4String& dir = param->GetPhysListDocDir();
+  const G4String& pl = param->GetPhysListName();
+  G4String pathName = dir + "/" + pl + "_" + HtmlFileName(mod->GetModelName());
+  std::ofstream outModel;
+  outModel.open(pathName);
+  outModel << "<html>\n";
+  outModel << "<head>\n";
+  outModel << "<title>Description of " << mod->GetModelName() 
+	   << "</title>\n";
+  outModel << "</head>\n";
+  outModel << "<body>\n";
 
-	mod->ModelDescription(outModel);
+  mod->ModelDescription(outModel);
 
-	outModel << "</body>\n";
-	outModel << "</html>\n";
-
+  outModel << "</body>\n";
+  outModel << "</html>\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//private 
+
 G4String G4HadronicProcessStore::HtmlFileName(const G4String & in) const
 {
-   G4String str(in);
+  G4String str(in);
 
-   // replace blanks:
-   std::transform(str.begin(), str.end(), str.begin(), [](char ch)
-   {
-     return ch == ' ' ? '_' : ch;
-   });
-   str=str + ".html";		
-   return str;
+  // replace blanks:
+  std::transform(str.begin(), str.end(), str.begin(), [](char ch) {
+      return ch == ' ' ? '_' : ch;
+    });
+  str=str + ".html";		
+  return str;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -781,12 +766,14 @@ void G4HadronicProcessStore::Dump(G4int verb)
 		       pname == "D-" ||
 		       pname == "B-" ||
 		       pname == "GenericIon" ||
+		       pname == "hypertriton" ||
 		       pname == "anti_neutron" ||
 		       pname == "anti_proton" ||
                        pname == "anti_deuteron" ||
                        pname == "anti_triton" ||
                        pname == "anti_He3" ||
-                       pname == "anti_alpha")) yes = true;
+                       pname == "anti_alpha" ||
+                       pname == "anti_hypertriton")) yes = true;
     if (level > 1) yes = true;	   
     if (yes) {
       // main processes
@@ -963,8 +950,8 @@ void G4HadronicProcessStore::SetEpReportLevel(G4int level)
 {
   G4cout << " Setting energy/momentum report level to " << level 
          << " for " << process.size() << " hadronic processes " << G4endl;
-  for (G4int i = 0; i < G4int(process.size()); ++i) {
-    process[i]->SetEpReportLevel(level);
+  for (auto& theProcess : process) {
+    theProcess->SetEpReportLevel(level);
   }
 }
 
@@ -974,11 +961,8 @@ void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
 {
   G4cout << " Setting absolute energy/momentum test level to " << abslevel 
 	 << G4endl;
-  G4double rellevel = 0.0;
-  G4HadronicProcess* theProcess = 0;
-  for (G4int i = 0; i < G4int(process.size()); ++i) {
-    theProcess = process[i];
-    rellevel = theProcess->GetEnergyMomentumCheckLevels().first;
+  for (auto& theProcess : process) {
+    G4double rellevel = theProcess->GetEnergyMomentumCheckLevels().first;
     theProcess->SetEnergyMomentumCheckLevels(rellevel, abslevel);
   }
 }
@@ -989,11 +973,8 @@ void G4HadronicProcessStore::SetProcessRelLevel(G4double rellevel)
 {
   G4cout << " Setting relative energy/momentum test level to " << rellevel 
 	 << G4endl;
-  G4double abslevel = 0.0;
-  G4HadronicProcess* theProcess = 0;
-  for (G4int i = 0; i < G4int(process.size()); ++i) {
-    theProcess = process[i];
-    abslevel = theProcess->GetEnergyMomentumCheckLevels().second;
+  for (auto& theProcess : process) {
+    G4double abslevel = theProcess->GetEnergyMomentumCheckLevels().second;
     theProcess->SetEnergyMomentumCheckLevels(rellevel, abslevel);
   }
 }

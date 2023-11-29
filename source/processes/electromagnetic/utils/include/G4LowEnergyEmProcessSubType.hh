@@ -56,7 +56,8 @@ enum G4LowEnergyEmProcessSubType
   fLowEnergyDoubleIonisation = 62,
   fLowEnergyDoubleCap = 63,
   fLowEnergyIoniTransfer = 64,
-  fLowEnergyStaticMol = 65
+  fLowEnergyStaticMol = 65,
+  fLowEnergyScavenger = 66
 };
 
 #endif

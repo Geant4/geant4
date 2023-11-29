@@ -142,7 +142,7 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
   //           NOTE: cannot be read with a istream_iterator,
   //           because it uses G4cout, and then doesn't read '\n'
   //----- Clear wordlist
-  G4int wsiz = wordlist.size();
+  G4int wsiz = (G4int)wordlist.size();
   G4int ii;
   for(ii = 0; ii < wsiz; ++ii)
   {
@@ -237,7 +237,7 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
       {
         break;
       }
-      G4int comment = stemp.find(G4String("//"));
+      G4int comment = (G4int)stemp.find(G4String("//"));
 #ifdef G4VERBOSE
       if(G4tgrMessenger::GetVerboseLevel() >= 3)
       {
@@ -290,7 +290,7 @@ G4int G4tgrFileIn::GetWordsInLine(std::vector<G4String>& wordlist)
     {
       imerge = 1;
     }
-    if(wordlist[jj][wordlist[jj].size() - 1] == '\"')
+    if(wordlist[jj][G4int(wordlist[jj].size() - 1)] == '\"')
     {
       if(imerge != 1)
       {

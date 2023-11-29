@@ -1,24 +1,31 @@
--------------------------------------------------------------------
+# Example vecGeomNavigation History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                 VecGeomNavigation  History file
-                 -------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-01-09 Ben Morgan (VecGeomNavigation-V11-01-00)
+- Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
+  scope version to ease use of Geant4 as a CMake subproject. 
+  - Fixes [GitHub PR #52](https://github.com/Geant4/geant4/pull/52)
 
-07/04/2022 B.Morgan (VecGeomNavigation-V10-07-03)
+## 2022-11-04  I. Hrivnacova (VecGeomNavigation-V11-00-03)
+- Fixed Doxygen file descriptions
+
+## 2022-04-07 Ben Morgan (VecGeomNavigation-V11-00-02)
 - Build g4vecgeomnav as a static library if only Geant4 static libs are available
 
-25/03/2022 G.Cosmo
+## 2022-03-25 Gabriele Cosmo (VecGeomNavigation-V11-00-01)
 - Removed unused setting of threads causing compilation warning.
+
+## 2021-12-10 Ben Morgan (VecGeomNavigation-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 09/07/2021 G.Cosmo (VecGeomNavigation-V10-07-02)
 - Switched to use "master" for G4VecGeomNav package (instead of hardcoded

@@ -50,7 +50,7 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Spleen" ax="2.90" by="1.88" cz="5.19" />
+  <ellipsoid lunit="cm" name="Spleen" ax="2.90" by="1.88" cz="5.19" />
  </solids>
 
  <structure>

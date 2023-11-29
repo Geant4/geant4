@@ -115,11 +115,14 @@ Idle> exit
   - radioactive.mac: use radioactive ion as primary particle
   - range.mac: compute the csda range of the primary particle
                with or without fluctuations
+  - erange.mac, pRange.mac, alphaRange.mac, ionRange.mac: variants of range.mac
+               to play with StepFunction()	       	       
   - runs.mac: electron 100 MeV; all processes
 
   Macros to be run interactively:
   - annihil.mac: To visualise 100 MeV e+ annihilation
   - decayinfly.mac: To visualise decay in fly of N16
+  - etaDecay.mac: to visualise decay of eta particle
   - gammaconversion.mac: To visualise gamma conversion and e+ annihilation
   - photon.mac: To visualiza p300 keV photon beam
   - stepMax.mac: to test command /testem/stepMax

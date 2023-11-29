@@ -52,7 +52,7 @@ class G4Neutron : public G4Ions
  private:
    static G4Neutron* theInstance;
    G4Neutron(){}
-   ~G4Neutron(){}
+   ~G4Neutron() override= default;
 
  public:
    static G4Neutron* Definition();

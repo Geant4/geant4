@@ -36,12 +36,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
-
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-
-#include "G4NistManager.hh"
 
 #include "GB02BOptrMultiParticleForceCollision.hh"
 

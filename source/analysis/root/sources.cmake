@@ -20,6 +20,7 @@ geant4_add_module(G4root
     G4RootPNtupleDescription.hh
     G4RootPNtupleManager.hh
     G4RootPNtupleManager.icc
+    G4RootRFileDef.hh
     G4RootRFileManager.hh
     G4RootRNtupleManager.hh
     g4root_defs.hh

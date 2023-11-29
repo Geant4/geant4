@@ -29,34 +29,29 @@
 // ----------------------------------------------------------------------
 
 #include "G4Types.hh"
-#include <sstream>
 #include "Randomize.hh"
 #include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 #include "G4ImportanceAlgorithm.hh"
 
-#ifdef G4MULTITHREADED
-G4Mutex G4ImportanceAlgorithm::ImportanceMutex = G4MUTEX_INITIALIZER;
-#endif
+#include <sstream>
 
-G4ImportanceAlgorithm::G4ImportanceAlgorithm()
+namespace
 {
+  G4Mutex ImportanceMutex = G4MUTEX_INITIALIZER;
 }
 
-G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
-{
-}
+G4ImportanceAlgorithm::G4ImportanceAlgorithm() = default;
+
+G4ImportanceAlgorithm::~G4ImportanceAlgorithm() = default;
 
 G4Nsplit_Weight
 G4ImportanceAlgorithm::Calculate(G4double ipre,
                                  G4double ipost,
                                  G4double init_w) const
 {
-
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
-#endif
-
+  G4AutoLock l(&ImportanceMutex);
   G4Nsplit_Weight nw;
   if (ipost>0.)
   {
@@ -123,9 +118,8 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
       }
     }
   }
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
-#endif
+  l.unlock();
+
   return nw;
 }
 

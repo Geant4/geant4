@@ -59,10 +59,10 @@ public:
   // obsolete
   G4EmExtraPhysics(const G4String& name);
 
-  virtual ~G4EmExtraPhysics();
+  ~G4EmExtraPhysics() override;
 
-  void ConstructParticle();
-  void ConstructProcess();
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
   void Synch(G4bool val);
   void SynchAll(G4bool val);
@@ -71,6 +71,7 @@ public:
   void ElectroNuclear(G4bool val);
   void MuonNuclear(G4bool val);
   void GammaToMuMu(G4bool val);
+  void MuonToMuMu(G4bool val);
   void PositronToMuMu(G4bool val);
   void PositronToHadrons(G4bool val);
   void GammaToMuMuFactor(G4double val);
@@ -93,28 +94,29 @@ private:
   void ConstructLENDGammaNuclear(G4CascadeInterface* cascade,
                                  G4HadronInelasticProcess* gnuc);
 
-  G4bool gnActivated;
-  G4bool eActivated;
-  G4bool gLENDActivated;
-  G4bool munActivated;
-  G4bool synActivated;
-  G4bool synActivatedForAll;
-  G4bool gmumuActivated;
-  G4bool pmumuActivated;
-  G4bool phadActivated;
-  G4bool fNuActivated;
-  G4bool fNuETotXscActivated;
-  G4bool fUseGammaNuclearXS;
+  G4bool gnActivated = true;
+  G4bool eActivated = true;
+  G4bool gLENDActivated = false;
+  G4bool munActivated = true;
+  G4bool synActivated = false;
+  G4bool synActivatedForAll = false;
+  G4bool gmumuActivated = false;
+  G4bool mmumuActivated = false;
+  G4bool pmumuActivated = false;
+  G4bool phadActivated = false;
+  G4bool fNuActivated = false;
+  G4bool fNuETotXscActivated = false;
+  G4bool fUseGammaNuclearXS = true;
 
-  G4double gmumuFactor;
-  G4double pmumuFactor;
-  G4double phadFactor;
-  G4double fNuEleCcBias;
-  G4double fNuEleNcBias;
-  G4double fNuNucleusBias;
+  G4double gmumuFactor = 1.0;
+  G4double pmumuFactor = 1.0;
+  G4double phadFactor = 1.0;
+  G4double fNuEleCcBias = 1.0;
+  G4double fNuEleNcBias = 1.0;
+  G4double fNuNucleusBias = 1.0;
   G4double fGNLowEnergyLimit;
 
-  G4String fNuDetectorName;
+  G4String fNuDetectorName = "0";
 
   G4EmMessenger* theMessenger;
   G4int verbose;

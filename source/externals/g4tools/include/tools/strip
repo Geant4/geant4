@@ -58,9 +58,9 @@ inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
 
 #ifdef TOOLS_DEPRECATED
 inline std::string strp(const std::string& a_string,what a_type = both,char a_char = ' '){
-  std::string s(a_string);
-  strip(s,a_type,a_char);
-  return s;
+  std::string _s(a_string);
+  strip(_s,a_type,a_char);
+  return _s;
 }
 #endif //TOOLS_DEPRECATED
 

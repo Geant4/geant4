@@ -44,60 +44,58 @@ class G4ScaleTransform;
 
 class G4ScaledSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4ScaledSolid( const G4String& pName,
                          G4VSolid* pSolid ,
                    const G4Scale3D& pScale  );
 
-    virtual ~G4ScaledSolid();
+    ~G4ScaledSolid() override;
 
-    EInside Inside( const G4ThreeVector& p ) const;
+    EInside Inside( const G4ThreeVector& p ) const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const override;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v  ) const;
+                           const G4ThreeVector& v  ) const override;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const;
+    G4double DistanceToIn( const G4ThreeVector& p) const override;
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
                             const G4bool calcNorm = false,
                                   G4bool* validNorm = nullptr,
-                                  G4ThreeVector* n = nullptr ) const;
+                                  G4ThreeVector* n = nullptr ) const override;
 
-    G4double DistanceToOut( const G4ThreeVector& p ) const;
+    G4double DistanceToOut( const G4ThreeVector& p ) const override;
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep );
+                            const G4VPhysicalVolume* pRep ) override;
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
     void CleanTransformations();
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
     G4Scale3D GetScaleTransform() const; 
     void SetScaleTransform(const G4Scale3D& scale); 
 
     G4VSolid* GetUnscaledSolid() const;
 
-    G4GeometryType  GetEntityType() const;
-    G4VSolid* Clone() const;
+    G4GeometryType  GetEntityType() const override;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4ScaledSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -108,9 +106,9 @@ class G4ScaledSolid : public G4VSolid
     G4ScaledSolid& operator=(const G4ScaledSolid& rhs);
       // Copy constructor and assignment operator.
 
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const;
-    G4Polyhedron* CreatePolyhedron () const;
-    G4Polyhedron* GetPolyhedron    () const;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron    () const override;
       // For creating graphical representations (i.e. for visualisation).
 
   private:
@@ -121,6 +119,6 @@ class G4ScaledSolid : public G4VSolid
     G4double fSurfaceArea = -1.0;
     mutable G4bool fRebuildPolyhedron = false;
     mutable G4Polyhedron* fpPolyhedron = nullptr;
-} ;
+};
 
 #endif

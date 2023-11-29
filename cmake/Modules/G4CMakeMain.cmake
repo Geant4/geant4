@@ -72,19 +72,12 @@ include(G4CTest)
 #-----------------------------------------------------------------------
 # Add the source and environments subdirectories
 # source       : Process all the Geant4 core targets
-# environments : Process optional wrappings of Geant4 (NOTYETIMPLEMENTED)
 add_subdirectory(source)
 
-option(GEANT4_USE_PYTHON "Build Python bindings for Geant4" OFF)
 if(GEANT4_USE_PYTHON)
-  # We can only build g4py with MT geant4 if TLS is global-dynamic (or auto?)
-  if(GEANT4_BUILD_MULTITHREADED AND (NOT GEANT4_BUILD_TLS_MODEL MATCHES "global-dynamic"))
-    message(FATAL_ERROR "Geant4Py only supports 'global-dynamic' thread local storage, but
-'${GEANT4_BUILD_TLS_MODEL}' selected by GEANT4_BUILD_TLS_MODEL option
-")
-  endif()
-
-  add_subdirectory(environments/g4py)
+  message(WARNING "Geant4Py is no longer distributed with the Geant4 toolkit."
+  " It can be downloaded from:\n  https://github.com/koichi-murakami/g4python \n"
+  "and requests for support on installation and use should be directed there.\n")
 endif()
 
 #-----------------------------------------------------------------------
@@ -110,10 +103,10 @@ if(GEANT4_ENABLE_TESTING)
   if(EXISTS ${PROJECT_SOURCE_DIR}/tests)
     add_subdirectory(tests)
   endif()
-  if(EXISTS ${CMAKE_SOURCE_DIR}/benchmarks)
+  if(EXISTS ${PROJECT_SOURCE_DIR}/benchmarks)
     add_subdirectory(benchmarks)
   endif()
-  if(EXISTS ${CMAKE_SOURCE_DIR}/verification)
+  if(EXISTS ${PROJECT_SOURCE_DIR}/verification)
     add_subdirectory(verification)
   endif()
 endif()

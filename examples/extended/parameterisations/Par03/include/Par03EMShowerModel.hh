@@ -123,13 +123,13 @@ class Par03EMShowerModel : public G4VFastSimulationModel
 
  private:
   /// Gamma distribution
-  inline G4double gamma(G4double x, G4double alpha, G4double beta)
+  inline G4double Gamma(G4double x, G4double alpha, G4double beta)
   {
     return (std::pow(beta, alpha) / std::tgamma(alpha) * std::pow(x, alpha - 1) *
             std::exp(-beta * x));
   }
   /// Gaussian distribution
-  inline G4double gaussian(G4double x, G4double sigma = 1, G4double x0 = 0)
+  inline G4double Gaussian(G4double x, G4double sigma = 1, G4double x0 = 0)
   {
     G4double tmp = (x - x0) / sigma;
     return (1.0 / (std::sqrt(2 * CLHEP::pi) * sigma)) * std::exp(-tmp * tmp / 2);

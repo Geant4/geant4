@@ -1,17 +1,41 @@
--------------------------------------------------------------------
+# Category phys-ctor-hinelastic History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-    Hadronic physics-list/constructors/hadron_inelastic History
-    -----------------------------------------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
+## 2023-04-19 Alberto Ribon (phys-ctor-hinelastic-V11-01-00)
+- Created the new class G4HadronInelasticQBBC_ABLA, which is similar to
+  G4HadronInelasticQBBC_ABLA, except that, for the final-state of nuclear
+  inelastic interactions of charged pions and nucleons projectiles,
+  the ABLA model (instead of the usual Precompound/de-excitation) is utilized
+  for nuclear de-excitation.
+  This is meant for testing purposes of the coupling between the hadronic
+  string models (FTF and QGS) and ABLA (via G4GeneratorPrecompoundInterface),
+  as well as of the coupling between intra-nuclear cascade models (BERT and BIC)
+  and ABLA.
+  In principle, these couplings with ABLA nuclear de-excitation can be
+  extended to all types of projectiles, and to other reference physics lists,
+  but, for the time being, in order to minimize code changes or new code,
+  it is restricted to pion+, pion-, proton and neutron, and only for QBBC.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-11 Alberto Ribon (phys-ctor-hinelastic-V11-00-02)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsINCLXX : extension to inelastic
+  nuclear interactions of light hypernuclei (with either FTFP only or 
+  FTFP+INCLXX) and anti-hypernuclei (with only FTFP for all energies).
+  Notice that the QGSP string model cannot currently handle nuclear 
+  projectiles of any kind.
+
+## 2022-08-21 Vladimir Ivanchenko (phys-ctor-hinelastic-V11-00-01)
+- G4HadronInelasticQBBC - use G4HadProcesses utility to build neutron 
+    elastic, which allows to use an option of neutron general process
+
+## 2021-12-10 Ben Morgan (phys-ctor-hinelastic-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 20-May-2021 Vladimir Ivanchenko (phys-ctor-hinelastic-V10-07-05)
 - Migrate all constructors: printouts are controlled by verbosity level

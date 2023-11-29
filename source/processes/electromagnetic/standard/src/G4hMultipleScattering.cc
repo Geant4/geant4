@@ -59,8 +59,7 @@ G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4hMultipleScattering::~G4hMultipleScattering()
-{}
+G4hMultipleScattering::~G4hMultipleScattering() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

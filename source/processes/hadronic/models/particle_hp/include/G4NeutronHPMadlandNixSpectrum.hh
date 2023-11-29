@@ -29,4 +29,4 @@
 #include "G4ParticleHPMadlandNixSpectrum.hh"
 using G4NeutronHPMadlandNixSpectrum = G4ParticleHPMadlandNixSpectrum;
 
-#endif 
+#endif

@@ -84,11 +84,6 @@ PhysListEmStandard::PhysListEmStandard(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::~PhysListEmStandard()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysListEmStandard::ConstructProcess()
 {
   G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();

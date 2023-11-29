@@ -33,9 +33,10 @@
 #ifndef EventAction_h
 #define EventAction_h 1
 
-#include "DetectorConstruction.hh"
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -41,8 +41,7 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4TheoFSGenerator.hh"
-#include "G4HadronicInteractionRegistry.hh"
-#include "G4VPreCompoundModel.hh"
+#include "G4CascadeInterface.hh"
 #include "G4INCLXXInterface.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4NeutronInelasticXS.hh"
@@ -59,15 +58,14 @@ BiasingOperation::BiasingOperation( G4String name ) : G4VBiasingOperation( name 
   fNeutronInelasticProcess =
     new G4HadronInelasticProcess( "neutronInelastic", G4Neutron::Definition() );
   fPionPlusInelasticProcess =
-    new G4HadronInelasticProcess( "pi+Inelastic", G4PionPlus::Definition() );    
+    new G4HadronInelasticProcess( "pi+Inelastic", G4PionPlus::Definition() );
   fPionMinusInelasticProcess =
     new G4HadronInelasticProcess( "pi-Inelastic", G4PionMinus::Definition() );
 
   // Set the energy ranges
-  const G4double minPreco = 0.0;
-  const G4double maxPreco = 2.0 * CLHEP::MeV;
-  const G4double maxBERT = 12.0 * CLHEP::GeV;
-  const G4double minINCLXX = 1.0 * CLHEP::MeV;
+  const G4double maxBERT = 41.0 * CLHEP::MeV;
+  const G4double maxINCLXX = 12.0 * CLHEP::GeV;
+  const G4double minINCLXX = 40.0 * CLHEP::MeV;
   const G4double minFTFP = 3.0 * CLHEP::GeV;
   const G4double maxFTFP = G4HadronicParameters::Instance()->GetMaxEnergy();
 
@@ -87,32 +85,30 @@ BiasingOperation::BiasingOperation( G4String name ) : G4VBiasingOperation( name 
   theHighEnergyModel->SetTransport( thePrecoInterface );
   theHighEnergyModel->SetMinEnergy( minFTFP );
   theHighEnergyModel->SetMaxEnergy( maxFTFP );
-  // Preco : create a new model to be used only for INCLXX for nucleons
-  G4VPreCompoundModel* thePreCompoundModel = new G4PreCompoundModel;
-  thePreCompoundModel->SetMinEnergy( minPreco );
-  thePreCompoundModel->SetMaxEnergy( maxPreco );  
+  // Bertini : create a new model to be used below INCLXX limit
+  G4CascadeInterface* theBertiniModel = new G4CascadeInterface();
+  theBertiniModel->SetMinEnergy( 0.0 );
+  theBertiniModel->SetMaxEnergy( maxBERT );  
   // --- Preco ---
   // --- INCLXX model ---
   // The instance for nucleons:
-  G4INCLXXInterface* theInclxxModel = new G4INCLXXInterface( thePreCompoundModel );
+  G4INCLXXInterface* theInclxxModel = new G4INCLXXInterface();
   theInclxxModel->SetMinEnergy( minINCLXX );
-  theInclxxModel->SetMaxEnergy( maxBERT );  // Use the same as for Bertini
-  // The instance for pions:
-  G4INCLXXInterface* theInclxxModel_forPions = new G4INCLXXInterface;
-  theInclxxModel_forPions->SetMinEnergy( minPreco );
-  theInclxxModel_forPions->SetMaxEnergy( maxBERT );  // Use the same as for Bertini
+  theInclxxModel->SetMaxEnergy( maxINCLXX ); // Use the same as for FTFP_BERT
 
   // Register the models
   fProtonInelasticProcess->RegisterMe( theHighEnergyModel );
   fProtonInelasticProcess->RegisterMe( theInclxxModel );
-  fProtonInelasticProcess->RegisterMe( thePreCompoundModel );
+  fProtonInelasticProcess->RegisterMe( theBertiniModel );
   fNeutronInelasticProcess->RegisterMe( theHighEnergyModel );
   fNeutronInelasticProcess->RegisterMe( theInclxxModel );
-  fNeutronInelasticProcess->RegisterMe( thePreCompoundModel );
+  fNeutronInelasticProcess->RegisterMe( theBertiniModel );
   fPionPlusInelasticProcess->RegisterMe( theHighEnergyModel );
-  fPionPlusInelasticProcess->RegisterMe( theInclxxModel_forPions );
+  fPionPlusInelasticProcess->RegisterMe( theInclxxModel );
+  fPionPlusInelasticProcess->RegisterMe( theBertiniModel );
   fPionMinusInelasticProcess->RegisterMe( theHighEnergyModel );
-  fPionMinusInelasticProcess->RegisterMe( theInclxxModel_forPions );
+  fPionMinusInelasticProcess->RegisterMe( theInclxxModel );
+  fPionMinusInelasticProcess->RegisterMe( theBertiniModel );
 
   G4VCrossSectionDataSet* theProtonXSdata = new G4BGGNucleonInelasticXS( G4Proton::Definition() );
   theProtonXSdata->BuildPhysicsTable( *(G4Proton::Definition()) );

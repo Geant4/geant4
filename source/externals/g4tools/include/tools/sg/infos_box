@@ -323,17 +323,17 @@ public:
     /// middle spaces //////////////////////////////////////////
     ////////////////////////////////////////////////////////////
     base_text* mtext = 0;
-   {std::string s(num_spaces,' ');
+   {std::string _s(num_spaces,' ');
     if(font==font_hershey()) {
       text_hershey* text = new text_hershey;
       mtext = text;
-      text->strings.add(s);
+      text->strings.add(_s);
       text->hjust = left;
     } else {
       base_freetype* text = base_freetype::create(m_ttf);
       //TTNODE* text = new TTNODE;
       mtext = text;
-      text->strings.add(s);
+      text->strings.add(_s);
       text->hjust = left;
       text->font = font;
       text->modeling = font_modeling;

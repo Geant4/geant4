@@ -43,21 +43,18 @@
 
 class G4SimpleHeum : public G4MagErrorStepper
 {
-
-  public:  // with description
+  public:
 
     G4SimpleHeum(G4EquationOfMotion* EqRhs, G4int num_variables = 6);
-   ~G4SimpleHeum();
+   ~G4SimpleHeum() override;
       // Constructor and destructor.
 
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
-                            G4double yout[] );
-
-  public:  // without description
+                            G4double yout[] ) override;
   
-    inline G4int IntegratorOrder() const { return 3; }
+    inline G4int IntegratorOrder() const override { return 3; }
 
   private:
 
@@ -67,7 +64,6 @@ class G4SimpleHeum : public G4MagErrorStepper
     G4double* dydxTemp2 = nullptr;
     G4double* yTemp = nullptr;
     G4double* yTemp2 = nullptr;
-      // scratch space    
 };
 
 #endif

@@ -1,16 +1,25 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example CaTS History
 
-     =========================================================
- 		      Geant4 - CaTS example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                       Package History file
+-------------------------------------------------------------------------------
 
-26 March 2022 - tag CaTS-V10-07-02 - G. Cosmo
+## 2022-10-31 Gabriele Cosmo (CaTS-V11-00-02)
+- Fixed compilation warnings on latest gcc compilers.
+
+## 2022-03-26 Gabriele Cosmo (CaTS-V11-00-01)
 - Fixed compilation warnings for unused arguments.
 
-19 November 2021 - tag CaTS-V10-07-01 - I. Hrivnacova
+## 2021-12-10 Ben Morgan (CaTS-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
+19 Novemebr 2021 - tag CaTS-V10-07-01 - I. Hrivnacova
 - Fixed PrimaryGeneratorAction destructor
 
 22 October 2021 - tag CaTS-V10-07-00 - H. Wenzel

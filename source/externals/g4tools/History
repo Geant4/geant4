@@ -1,6 +1,119 @@
-# g4tools Category History
-# - It is NOT a substitute for good git commit messages!
-# - All entries must be in reverse time order (most recent data on top)!
+# Category g4tools History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-06-15 Gabriele Cosmo (g4tools-V11-01-04)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1
+  in toolsx/Xt/zb_viewer.
+
+## 2023-05-29 Guy Barrand (g4tools-V11-01-03)
+- toolx/Qt: zb_viewer, pixwin, session, s2q: have a Qt viewer for the tools/zbuffer rendering.
+- toolx/Xt: zb_viewer, ImageArea, session: have a Xt viewer for the tools/zbuffer rendering.
+- toolx/X11: zb_viewer, pixwin, colors, base_session: have a X11 viewer for the tools/zbuffer rendering.
+- toolx/Windows: zb_viewer, pixwin, ession: have a Windows viewer for the tools/zbuffer rendering.
+- tools/sg/zb_viewer: generic code used by the upper zb_viewer doing the connection with a windowing system.
+- tools: sg/zb_action, sg/write_paper, mat4f, buffer, mat4: modifications used by the upper files.
+- tools: zb/buffer: optimizations. In particular by avoiding the usage of the point_writer class (now removed).
+
+## 2023-04-13 Guy Barrand (g4tools-V11-01-02)
+- toolx/Xt/session: quiet coverity: remove unused field m_app_owner.
+- toolx/sg/GL_manager: quiet coverity: remove unused field m_gsto_on_cardsy.
+- toolx/sg/gl: quiet coverity: in gl_dump_if_errors(), avoid to set the std::hex format on arg a_out. Have a local std::ostringstream.
+- tools/version: pass to 6.1.2.
+
+## 2023-01-18 Guy Barrand (g4tools-V11-01-01)
+- toolx/Qt/glarea: handle Qt6.
+- toolx/Qt/glarea: for Qt5, Qt6: in paintGL(), use devicePixelRatio() to set the size of the toolx::sg::GL_viewer.
+
+## 2023-01-16 Guy Barrand (g4tools-V11-01-00)
+- tools/ccontour: intel-icx: fix compilation warnings about argument of type 'double[]' with mismatched bound.
+- tools/rcsv_histo: coverity: quiet coverity about some "Unchecked return value (CHECKED_RETURN)".
+- tools/version: pass to 6.1.1.
+
+## 2022-11-25 Gabriele Cosmo (g4tools-V11-00-13)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1
+  in files: spline, THistogram and zlib.
+
+## 2022-10-13 Guy Barrand (g4tools-V11-00-12)
+- tools/fpng, fpng.icc: a pure header, thread safe, png writer.
+- tools/toojpeg, toojpeg.icc: a pure header, thread safe, jpeg writer.
+- tools/offscreen/session, sg_viewer: to handle offscreen graphics.
+- tools/sg/gl2ps_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: revisit lightening logic to be closer than the OpenGL one.
+- tools/sg/zb_action: handle blending (transparency).
+- tools/sg/plots_viewer: handle blending (transparency).
+- tools/zb/buffer: handle blending (transparency).
+- tools/sg/torche, head_light, gl2ps_action, render_action: handle ambient color lightening.
+- toolx/sg/GL_action: handle ambient color lightening.
+- tools/sg/write_paper: gl2ps, zb formats: handle transparency.
+- tools/gl2ps: handle the TOOLS_GL2PS_PORTABLE_SORT to be able to produce same output
+  file on all platforms. (Related to the fact that qsort, for "same objects", may not
+  produce the same "equal" sub lists on all platforms).
+- tools/version: pass to 6.1.0.
+
+## 2022-10-10 Guy Barrand (g4tools-V11-00-11)
+- intel-icx: fix compilation warnings for the variable "size"
+  set but not used glutess/render/static_RenderFan, static_RenderStrip.
+- intel-icx: fix compilation warnings #3179: deprecated conversion of string literal to char*.
+
+## 2022-10-05 Guy Barrand (g4tools-V11-00-10)
+- tools/typedefs, rroot/file, wroot/file and toolx/Windows/glarea, Qt/session, mpi/wrmpi:
+  some #ifdef for MinGW. The ones in wroot/file are important to produce good .root files.
+- tools/gl2ps: replace the usage of sprintf, by strcpy or std::ostringstream.
+
+## 2022-10-04 Gabriele Cosmo (g4tools-V11-00-09)
+- Fixed compilation warnings on Intel-icx compiler for variables
+  set but not used in plotter::rep_bins2D_xy_random_one() and
+  plots::update_sg().
+
+## 2022-09-22 Ben Morgan (g4tools-V11-00-08)
+- Apply patch for MinGW from [GitHub PR 51](https://github.com/Geant4/geant4/pull/51)
+
+## 2022-06-09 Guy Barrand (g4tools-V11-00-07)
+- toolx/X11/base_session: show_window(): check that the window is not already mapped. (Else it hangs in the XIfEvent).
+- tools/version: pass to 6.0.1.
+
+## 2022-05-18 Guy Barrand (g4tools-V11-00-06)
+- have code related to "externals" under toolx directory and namespaced with "toolx". It concerns code related to Qt, Windows, X11, Xt, OpenGL, hdf5, expat, mpi, zlib.
+- tools/version: pass to 6.0.0.
+
+## 2022-05-03 Guy Barrand (g4tools-V11-00-05)
+- tools/version: pass to 5.7.1.
+- gl2ps: gl2psPrintPostScriptPixmap(): pass greyscale, nbit in arguments to avoid a "Logically dead code" issue.
+- gl2ps: gl2psPDFgroupListInit(): have a gl2psPDFgroupObjectInit(&gro) to avoid an "Uninitialized pointer read" issue.
+- gl2ps: remove commented out code about a "class gl2ps" at end.
+- sg/text: corrections in update_sg() about "Copy-paste error". 
+
+## 2022-03-30 Guy Barrand (g4tools-V11-00-04)
+- tools/version: pass to 5.7.0.
+- gl2ps, gl2ps_def.h, sg/gl2ps_action: have, use a thread safe version of gl2ps-1.4.2.
+- gl2ps_begin.icc, gl2ps_end.icc: remove.
+
+## 2022-03-11 Guy Barrand (g4tools-V11-00-03)
+- tools/version: pass to 5.6.3.
+- in a lot of files (see History_tools for a list): for intel compiler: quiet "hides variable" warnings; mainly by renaming "s" to "_s" to avoid a clash with CLHEP::s.
+
+## 2022-02-11 Guy Barrand (g4tools-V11-00-02)
+- tools/version: pass to 5.6.2.
+- tools/gl2ps: in tools_gl2psFindRoot(), have a '*root = 0" initialisation before the first in "if()" return.
+- tools/gl2ps: in tools_gl2psBuildBspTree(), initialize *prim to NULL.
+
+## 2022-02-09 Guy Barrand (g4tools-V11-00-01)
+- tools/version: pass to 5.6.1.
+- tools/sg/text_hershey: in decode_PAW(), font_type font => font_type hershey_font to quiet "hides variable" warnings with intel compiler.
+- tools/typedefs: static const char s[] => static const char s_v[] to quiet "hides variable" warnings with intel compiler.
+- tools/rroot/rall: in find_dir(), have a "delete tdir;" in the "if(!tdir->stream(b)) {}". Seen by Coverity.
+
+## 2021-12-10 Ben Morgan (g4tools-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 9 November 2021  I. Hrivnacova (g4tools-V10-07-11)
 - Restored files for MPI

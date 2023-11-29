@@ -45,17 +45,14 @@
 #include <memory>
 #include <string_view>
 
+#include "G4VTBaseHnManager.hh"  // make forward declaration if possible
+
 class G4AnalysisMessenger;
 class G4NtupleBookingManager;
 class G4HnManager;
-class G4VH1Manager;
-class G4VH2Manager;
-class G4VH3Manager;
-class G4VP1Manager;
-class G4VP2Manager;
 class G4VNtupleManager;
+class G4VNtupleFileManager;
 class G4VFileManager;
-class G4PlotManager;
 
 namespace tools {
 namespace histo{
@@ -65,7 +62,11 @@ class hmpi;
 
 class G4VAnalysisManager
 {
+  friend class G4AnalysisMessenger;
+
   public:
+    G4VAnalysisManager() = delete;
+
     // Methods for handling files
     G4bool OpenFile(const G4String& fileName = "");
     G4bool Write();
@@ -418,6 +419,15 @@ class G4VAnalysisManager
     G4int GetP1Id(const G4String& name, G4bool warn = true) const;
     G4int GetP2Id(const G4String& name, G4bool warn = true) const;
 
+    // List objects
+    G4bool ListH1(G4bool onlyIfActive = true) const;
+    G4bool ListH2(G4bool onlyIfActive = true) const;
+    G4bool ListH3(G4bool onlyIfActive = true) const;
+    G4bool ListP1(G4bool onlyIfActive = true) const;
+    G4bool ListP2(G4bool onlyIfActive = true) const;
+    G4bool ListNtuple(G4bool onlyIfActive = true) const;
+    G4bool List(G4bool onlyIfActive = true) const;
+
     // Methods to manipulate histogram, profiles & ntuples additional information
     //
     void  SetH1Activation(G4bool activation);
@@ -632,7 +642,6 @@ class G4VAnalysisManager
 
   protected:
     G4VAnalysisManager(const G4String& type);
-    G4VAnalysisManager() = delete;
     virtual ~G4VAnalysisManager();
 
     // Virtual methods
@@ -653,14 +662,14 @@ class G4VAnalysisManager
                  G4bool success = true) const;
 
     // Methods
-    void SetH1Manager(G4VH1Manager* h1Manager);
-    void SetH2Manager(G4VH2Manager* h2Manager);
-    void SetH3Manager(G4VH3Manager* h3Manager);
-    void SetP1Manager(G4VP1Manager* p1Manager);
-    void SetP2Manager(G4VP2Manager* p2Manager);
+    void SetH1Manager(G4VTBaseHnManager<1>* h1Manager);
+    void SetH2Manager(G4VTBaseHnManager<2>* h2Manager);
+    void SetH3Manager(G4VTBaseHnManager<3>* h3Manager);
+    void SetP1Manager(G4VTBaseHnManager<2>* p1Manager);
+    void SetP2Manager(G4VTBaseHnManager<3>* p2Manager);
     void SetNtupleManager(std::shared_ptr<G4VNtupleManager> ntupleManager);
+    void SetNtupleFileManager(std::shared_ptr<G4VNtupleFileManager> ntupleFileManager);
     void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
-    void SetPlotManager(std::shared_ptr<G4PlotManager> plotManager);
 
     // Methods to manipulate additional information
     G4bool  WriteAscii(const G4String& fileName);
@@ -668,16 +677,30 @@ class G4VAnalysisManager
     // File manager access
     virtual std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName);
 
+    // Static data members
+    static constexpr unsigned int kDim1 { 1 };
+    static constexpr unsigned int kDim2 { 2 };
+    static constexpr unsigned int kDim3 { 3 };
+
     // Data members
     G4AnalysisManagerState fState;
     std::shared_ptr<G4VFileManager>  fVFileManager { nullptr };
-    std::shared_ptr<G4PlotManager>   fPlotManager { nullptr };
     std::shared_ptr<G4NtupleBookingManager> fNtupleBookingManager { nullptr };
     std::shared_ptr<G4VNtupleManager> fVNtupleManager { nullptr };
+    std::shared_ptr<G4VNtupleFileManager> fVNtupleFileManager { nullptr };
 
   private:
+    // Method invoked from UI commands
+    G4bool WriteFromUI();
+    G4bool CloseFileFromUI(G4bool reset = true);
+    G4bool ResetFromUI();
+
     // Static data members
     static constexpr std::string_view fkClass { "G4VAnalysisManager" };
+
+    // Static data members
+    inline static G4VAnalysisManager* fgMasterInstance { nullptr };
+       // For registering worker managers needed in "FromUI" functions
 
     // Data members
     std::unique_ptr<G4AnalysisMessenger>  fMessenger;
@@ -686,11 +709,14 @@ class G4VAnalysisManager
     std::shared_ptr<G4HnManager>   fH3HnManager { nullptr };
     std::shared_ptr<G4HnManager>   fP1HnManager { nullptr };
     std::shared_ptr<G4HnManager>   fP2HnManager { nullptr };
-    std::unique_ptr<G4VH1Manager>  fVH1Manager;
-    std::unique_ptr<G4VH2Manager>  fVH2Manager;
-    std::unique_ptr<G4VH3Manager>  fVH3Manager;
-    std::unique_ptr<G4VP1Manager>  fVP1Manager;
-    std::unique_ptr<G4VP2Manager>  fVP2Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim1>> fVH1Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim2>> fVH2Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim3>> fVH3Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim2>> fVP1Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim3>> fVP2Manager;
+
+    std::vector<G4VAnalysisManager*> fWorkerManagers;
+       // Used only in "FromUI" functions
 };
 
 // inline functions

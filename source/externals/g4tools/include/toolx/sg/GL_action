@@ -1,0 +1,662 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_sg_GL_action
+#define toolx_sg_GL_action
+
+#include "GL_manager"
+
+#include <tools/sg/render_action>
+
+//#include <tools/mathf>
+//#include <tools/lina/matout>
+
+namespace toolx {
+namespace sg {
+
+class GL_action : public tools::sg::render_action {
+  TOOLS_ACTION(GL_action,toolx::sg::GL_action,tools::sg::render_action)
+public:
+  virtual void draw_vertex_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs){
+    size_t num = a_floatn/3;
+    if(!num) return;
+    _draw_v(a_mode,num,a_xyzs);
+  }
+
+  virtual void draw_vertex_array_xy(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xys){
+    size_t num = a_floatn/2;
+    if(!num) return;
+#ifdef _WIN32
+    float* vp = new float[num*3];
+    if(!vp) return;
+    float* pos = vp;
+    float* pda = (float*)a_xys;
+    for(size_t index=0;index<num;index++){
+      *pos = *pda;pos++;pda++;
+      *pos = *pda;pos++;pda++;
+      *pos = 0;pos++; //Windows GL needs a z = 0.
+    }
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glVertexPointer(3,GL_FLOAT,0,vp);
+    ::glDrawArrays(a_mode,0,(GLsizei)num);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+    delete [] vp;
+#else
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glVertexPointer(2,GL_FLOAT,0,a_xys);
+    ::glDrawArrays(a_mode,0,(GLsizei)num);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+#endif
+  }
+
+  virtual void draw_vertex_color_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,const float* a_rgbas){
+    // Used in atb_vertices.
+    // We expect a_rgbas of size : 4*(a_floatn/3)
+    // (then one RGBA color per 3D point).
+    size_t num = a_floatn/3;
+    if(!num) return;
+    _draw_vc(a_mode,num,a_xyzs,a_rgbas);
+  }
+
+  virtual void draw_vertex_normal_array(tools::gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,const float* a_nms){
+    // We expect a_nms of size : 3*(a_floatn/3)
+    // (then one normal per 3D point).
+    size_t num = a_floatn/3;
+    if(!num) return;
+    _draw_vn(a_mode,num,a_xyzs,a_nms);
+  }
+
+  virtual void draw_vertex_color_normal_array(tools::gl::mode_t a_mode,
+                                       size_t a_floatn,const float* a_xyzs,const float* a_rgbas,const float* a_nms){
+    // Used in atb_vertices.
+    // We expect a_nms of size : 3*(a_floatn/3)
+    // (then one normal per 3D point).
+    // We expect a_rgbas of size : 4*(a_floatn/3)
+    // (then one RGBA color per 3D point).
+    size_t num = a_floatn/3;
+    if(!num) return;
+    _draw_vcn(a_mode,num,a_xyzs,a_rgbas,a_nms);
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// texture /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  virtual void draw_vertex_array_texture(tools::gl::mode_t a_mode,
+                                         size_t a_floatn,
+                                         const float* a_xyzs,
+                                         gstoid a_tex,
+                                         const float* a_tex_coords) {
+    size_t num = a_floatn/3;
+    if(!num) return;
+
+    //expect 2*num a_tex_coords.
+
+    ::glEnable(GL_TEXTURE_2D);
+
+    m_mgr.bind_gsto(a_tex);
+
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    ::glVertexPointer(3,GL_FLOAT,0,a_xyzs);
+    ::glTexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
+    ::glDrawArrays(a_mode,0,(GLsizei)num);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+    ::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    ::glBindTexture(GL_TEXTURE_2D,0);
+
+    ::glDisable(GL_TEXTURE_2D);
+  }
+
+  virtual void draw_vertex_normal_array_texture(tools::gl::mode_t a_mode,
+                                         size_t a_floatn,
+                                         const float* a_xyzs,
+                                         const float* a_nms,
+                                         gstoid a_tex,
+                                         const float* a_tex_coords) {
+    size_t num = a_floatn/3;
+    if(!num) return;
+
+    //expect 2*num a_tex_coords.
+
+    ::glEnable(GL_TEXTURE_2D);
+
+    m_mgr.bind_gsto(a_tex);
+
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glEnableClientState(GL_NORMAL_ARRAY);
+    ::glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    ::glVertexPointer(3,GL_FLOAT,0,a_xyzs);
+    ::glNormalPointer(GL_FLOAT,0,a_nms);
+    ::glTexCoordPointer(2,GL_FLOAT,0,a_tex_coords);
+    ::glDrawArrays(a_mode,0,(GLsizei)num);
+    ::glDisableClientState(GL_NORMAL_ARRAY);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+    ::glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    ::glBindTexture(GL_TEXTURE_2D,0);
+
+    ::glDisable(GL_TEXTURE_2D);
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /// VBO /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
+  virtual void begin_gsto(gstoid a_id) {
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      m_mgr.bind_gsto(a_id);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      m_gsto = a_id;
+      m_created = false;
+      m_gl_id = m_mgr.gsto_gl_list_id(a_id,m_created);
+      if(m_gl_id && m_created) {
+        ::glNewList(m_gl_id,GL_COMPILE);
+      }
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      m_gsto = a_id;
+      }break;
+    }
+  }
+
+  virtual void end_gsto() {
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      ::glBindBuffer(GL_ARRAY_BUFFER,0);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      if(m_gl_id && m_created) {
+        ::glEndList();
+      }
+      if(m_gl_id) ::glCallList(m_gl_id);
+      m_created = false;
+      m_gl_id = 0;
+      m_gsto = 0;
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      m_gsto = 0;
+      }break;
+    }
+  }
+
+  typedef tools::sg::bufpos bufpos;
+  virtual void draw_gsto_v(tools::gl::mode_t a_mode,size_t a_elems,bufpos a_pos_xyzs){
+
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      _draw_v(a_mode,a_elems,(char*)NULL+a_pos_xyzs);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      if(m_gl_id && m_created) {
+        ::glBegin(a_mode);
+        float* pos = (float*)pos_xyzs;
+        for(size_t index=0;index<a_elems;index++,pos+=3) {
+          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+        }
+        ::glEnd();
+      }
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      _draw_v(a_mode,a_elems,pos_xyzs);
+      }break;
+    }
+  }
+
+  virtual void draw_gsto_vc(tools::gl::mode_t a_mode,size_t a_elems,bufpos a_pos_xyzs,bufpos a_pos_rgbas){
+
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      _draw_vc(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_rgbas);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      if(m_gl_id && m_created) {
+        ::glBegin(a_mode);
+        float* pos = (float*)pos_xyzs;
+        float* pco = (float*)pos_rgbas;
+        for(size_t index=0;index<a_elems;index++,pos+=3,pco+=4) {
+          ::glColor4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
+          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+        }
+        ::glEnd();
+      }
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      _draw_vc(a_mode,a_elems,pos_xyzs,pos_rgbas);
+      }break;
+    }
+  }
+
+  virtual void draw_gsto_vn(tools::gl::mode_t a_mode,size_t a_elems,bufpos a_pos_xyzs,bufpos a_pos_nms){
+
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      _draw_vn(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_nms);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      //void* pos_nms = (char*)buffer+a_pos_nms;
+      if(m_gl_id && m_created) {
+        ::glBegin(a_mode);
+        float* pos = (float*)pos_xyzs;
+        for(size_t index=0;index<a_elems;index++,pos+=3) {
+          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+        }
+        ::glEnd();
+      }
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      void* pos_nms = (char*)buffer+a_pos_nms;
+      _draw_vn(a_mode,a_elems,pos_xyzs,pos_nms);
+      }break;
+    }
+  }
+
+  virtual void draw_gsto_vcn(tools::gl::mode_t a_mode,size_t a_elems,bufpos a_pos_xyzs,bufpos a_pos_rgbas,bufpos a_pos_nms){
+
+    switch(m_mgr.get_gsto_mode()){
+
+    case tools::sg::gsto_gl_vbo:{
+#ifdef TOOLX_HAS_GL_VBO
+      _draw_vcn(a_mode,a_elems,(char*)NULL+a_pos_xyzs,(char*)NULL+a_pos_rgbas,(char*)NULL+a_pos_nms);
+#endif
+      }break;
+
+    case tools::sg::gsto_gl_list:{
+#ifdef TOOLX_HAS_GL_LIST
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      void* pos_nms = (char*)buffer+a_pos_nms;
+      if(m_gl_id && m_created) {
+        ::glBegin(a_mode);
+        float* pos = (float*)pos_xyzs;
+        float* pco = (float*)pos_rgbas;
+        float* pnm = (float*)pos_nms;
+        for(size_t index=0;index<a_elems;
+            index++,pos+=3,pco+=4,pnm+=3) {
+          ::glVertex3f(*(pos+0),*(pos+1),*(pos+2));
+          ::glColor4f (*(pco+0),*(pco+1),*(pco+2),*(pco+3));
+          ::glNormal3f(*(pnm+0),*(pnm+1),*(pnm+2));
+        }
+        ::glEnd();
+      }
+#endif
+      }break;
+
+    case tools::sg::gsto_memory:{
+      float* buffer = m_mgr.gsto_data(m_gsto);
+      if(!buffer) return;
+      void* pos_xyzs = (char*)buffer+a_pos_xyzs;
+      void* pos_rgbas = (char*)buffer+a_pos_rgbas;
+      void* pos_nms = (char*)buffer+a_pos_nms;
+      _draw_vcn(a_mode,a_elems,pos_xyzs,pos_rgbas,pos_nms);
+      }break;
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
+  virtual void clear_color(float a_r,float a_g,float a_b,float a_a){
+    ::glClearColor(a_r,a_g,a_b,a_a);
+    ::glClear(GL_COLOR_BUFFER_BIT);
+  }
+  virtual void color4f(float a_r,float a_g,float a_b,float a_a){
+    ::glColor4f(a_r,a_g,a_b,a_a);
+  }
+  virtual void line_width(float a_v){::glLineWidth(a_v);}
+  virtual void point_size(float a_v){::glPointSize(a_v);}
+  virtual void set_polygon_offset(bool a_v) {
+    if(a_v) ::glEnable(GL_POLYGON_OFFSET_FILL);
+    else    ::glDisable(GL_POLYGON_OFFSET_FILL);
+    ::glPolygonOffset(1.,1.);
+  }
+  virtual void normal(float a_x,float a_y,float a_z) {
+    ::glNormal3f(a_x,a_y,a_z);
+  }
+
+  virtual void set_winding(tools::sg::winding_type a_v) {
+    if(a_v==tools::sg::winding_ccw)
+      ::glFrontFace(GL_CCW);
+    else
+      ::glFrontFace(GL_CW);
+  }
+
+  virtual void set_shade_model(tools::sg::shade_type a_v) {
+    if(a_v==tools::sg::shade_smooth)
+      ::glShadeModel(GL_SMOOTH);
+    else
+      ::glShadeModel(GL_FLAT);
+  }
+
+  virtual void set_cull_face(bool a_on) {
+    if(a_on) ::glEnable(GL_CULL_FACE);
+    else     ::glDisable(GL_CULL_FACE);
+  }
+
+  virtual void set_point_smooth(bool a_on) {
+    if(a_on) ::glEnable(GL_POINT_SMOOTH);
+    else     ::glDisable(GL_POINT_SMOOTH);
+  }
+
+  virtual void set_line_smooth(bool a_on) {
+    if(a_on) ::glEnable(GL_LINE_SMOOTH);
+    else     ::glDisable(GL_LINE_SMOOTH);
+  }
+
+  virtual void set_depth_test(bool a_on) {
+    if(a_on) ::glEnable(GL_DEPTH_TEST);
+    else     ::glDisable(GL_DEPTH_TEST);
+  }
+
+  virtual void load_proj_matrix(const tools::mat4f& a_mtx) {
+    ::glMatrixMode(GL_PROJECTION);
+    ::glLoadMatrixf(a_mtx.data());
+  }
+
+  virtual void load_model_matrix(const tools::mat4f& a_mtx) {
+    ::glMatrixMode(GL_MODELVIEW);
+    ::glLoadMatrixf(a_mtx.data());
+/*
+    tools::mat4f tmp(a_mtx);
+    tmp.no_translate();
+    tools::mat4f normal_matrix;
+    if(!tmp.invert(normal_matrix)) {
+      m_out << "toolx::sg::GL_action::render::load_model_matrix :"
+            << " can't invert model matrix."
+            << std::endl;
+    }
+    normal_matrix.transpose();
+
+    tools::mat4f to_check(a_mtx);
+    to_check.no_translate();
+    float fepsilon = 1e-10;
+    if(!normal_matrix.equal_prec(to_check,fepsilon,tools::ffabs)) {
+      mat_dump(m_out,"problem with normal_matrix ",normal_matrix);
+      mat_dump(m_out,"expected",to_check);
+    }
+*/
+  }
+
+  virtual unsigned int max_lights() {return GL_MAX_LIGHTS;}
+
+  virtual void enable_light(unsigned int a_light,
+                            float a_dx,float a_dy,float a_dz,
+                            float a_r,float a_g,float a_b,float a_a,
+                            float a_ar,float a_ag,float a_ab,float a_aa){
+    ::glEnable(GL_LIGHTING);
+    GLenum light = GL_LIGHT0+a_light;
+    //::printf("debug : GL_MAX_LIGHTS %d\n",GL_MAX_LIGHTS);
+
+    float params[4];
+    params[0] = -a_dx;
+    params[1] = -a_dy;
+    params[2] = -a_dz;
+    params[3] = 0; //0 tells that it is a directional light.
+    ::glLightfv(light,GL_POSITION,params);
+
+    //params[0] = a_dir[0];
+    //params[1] = a_dir[1];
+    //params[2] = a_dir[2];
+    //::glLightfv(light,GL_SPOT_DIRECTION,params);
+
+    params[0] = a_r;
+    params[1] = a_g;
+    params[2] = a_b;
+    params[3] = a_a;
+    ::glLightfv(light,GL_DIFFUSE,params);
+    ::glLightfv(light,GL_SPECULAR,params); //coin/SoDirectionalLight does that.
+
+    params[0] = a_ar;
+    params[1] = a_ag;
+    params[2] = a_ab;
+    params[3] = a_aa;
+    ::glLightfv(light,GL_AMBIENT,params); //coin/SoDirectionalLight does that.
+
+    // coin/SoDirectionalLight does the below :
+    ::glLightf(light, GL_SPOT_EXPONENT, 0.0);
+    ::glLightf(light, GL_SPOT_CUTOFF, 180.0);
+    ::glLightf(light, GL_CONSTANT_ATTENUATION, 1);
+    ::glLightf(light, GL_LINEAR_ATTENUATION, 0);
+    ::glLightf(light, GL_QUADRATIC_ATTENUATION, 0);
+
+    //::printf("debug : GL_MAX_LIGHTS %d\n",GL_MAX_LIGHTS);
+
+    ::glEnable(light);
+  }
+
+  virtual void set_lighting(bool a_on) {
+    if(a_on) ::glEnable(GL_LIGHTING);
+    else     ::glDisable(GL_LIGHTING);
+  }
+  virtual void set_blend(bool a_on) {
+    if(a_on) ::glEnable(GL_BLEND);
+    else     ::glDisable(GL_BLEND);
+  }
+
+  virtual void restore_state(unsigned int a_ret_num_light) {
+    const tools::sg::state& _state = state();
+    ::glMatrixMode(GL_PROJECTION);
+    ::glLoadMatrixf(_state.m_proj.data());
+
+    ::glMatrixMode(GL_MODELVIEW);
+    ::glLoadMatrixf(_state.m_model.data());
+
+    if(_state.m_GL_LIGHTING) ::glEnable(GL_LIGHTING);
+    else                     ::glDisable(GL_LIGHTING);
+
+    if(_state.m_GL_DEPTH_TEST) ::glEnable(GL_DEPTH_TEST);
+    else                       ::glDisable(GL_DEPTH_TEST);
+
+    if(_state.m_GL_CULL_FACE) ::glEnable(GL_CULL_FACE);
+    else                      ::glDisable(GL_CULL_FACE);
+
+    if(_state.m_GL_POINT_SMOOTH) ::glEnable(GL_POINT_SMOOTH);
+    else                         ::glDisable(GL_POINT_SMOOTH);
+
+    if(_state.m_GL_LINE_SMOOTH) ::glEnable(GL_LINE_SMOOTH);
+    else                        ::glDisable(GL_LINE_SMOOTH);
+
+    if(_state.m_GL_POLYGON_OFFSET_FILL) ::glEnable(GL_POLYGON_OFFSET_FILL);
+    else                                ::glDisable(GL_POLYGON_OFFSET_FILL);
+
+    if(_state.m_GL_TEXTURE_2D) ::glEnable(GL_TEXTURE_2D);
+    else                       ::glDisable(GL_TEXTURE_2D);
+
+    if(_state.m_GL_BLEND) ::glEnable(GL_BLEND);
+    else                  ::glDisable(GL_BLEND);
+
+    if(_state.m_winding==tools::sg::winding_ccw) {
+      ::glFrontFace(GL_CCW);
+    } else {
+      ::glFrontFace(GL_CW);
+    }
+
+    if(_state.m_shade_model==tools::sg::shade_smooth)
+      ::glShadeModel(GL_SMOOTH);
+    else
+      ::glShadeModel(GL_FLAT);
+
+    ::glColor4f(_state.m_color.r(),
+                _state.m_color.g(),
+                _state.m_color.b(),
+                _state.m_color.a());
+
+    ::glNormal3f(_state.m_normal.x(),
+                 _state.m_normal.y(),
+                 _state.m_normal.z());
+
+    // The "return of separator" state had ret_num_light.
+    // The restored state has m_light.
+    // We have to glDisable lights with index in [m_light,ret_num_light-1]
+    for(unsigned int index=_state.m_light;index<a_ret_num_light;index++) {
+      ::glDisable(GL_LIGHT0+index);
+    }
+
+    ::glLineWidth(_state.m_line_width);
+
+    ::glPointSize(_state.m_point_size);
+
+#if TARGET_OS_IPHONE
+// GL-ES
+#elif defined(ANDROID)
+// GL-ES
+#else
+    ::glDisable(GL_POLYGON_STIPPLE); //CoinGL : reading a .wrl having Material::transparency may enable GL_POLYGON_STIPPLE.
+#endif
+  }
+
+  virtual tools::sg::render_manager& render_manager() {return m_mgr;}
+public:
+  GL_action(GL_manager& a_mgr,std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
+  :parent(a_out,a_ww,a_wh)
+  ,m_mgr(a_mgr)
+  ,m_gsto(0)
+#ifdef TOOLX_HAS_GL_LIST
+  ,m_created(false)
+  ,m_gl_id(0)
+#endif
+  {}
+  virtual ~GL_action(){}
+public:
+  GL_action(const GL_action& a_from)
+  :parent(a_from)
+  ,m_mgr(a_from.m_mgr)
+  ,m_gsto(0)
+#ifdef TOOLX_HAS_GL_LIST
+  ,m_created(false)
+  ,m_gl_id(0)
+#endif
+  {}
+  GL_action& operator=(const GL_action& a_from){
+    render_action::operator=(a_from);
+    m_gsto = 0;
+#ifdef TOOLX_HAS_GL_LIST
+    m_created = false;
+    m_gl_id = 0;
+#endif
+    return *this;
+  }
+protected:
+  void _draw_v(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs){
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+  }
+
+  void _draw_vc(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas){
+
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glEnableClientState(GL_COLOR_ARRAY);
+
+    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    ::glColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
+
+    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    ::glDisableClientState(GL_COLOR_ARRAY);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+  }
+
+  void _draw_vn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_nms){
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glEnableClientState(GL_NORMAL_ARRAY);
+
+    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    ::glNormalPointer(GL_FLOAT,0,a_pos_nms);
+
+    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    ::glDisableClientState(GL_NORMAL_ARRAY);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+  }
+
+  void _draw_vcn(tools::gl::mode_t a_mode,size_t a_elems,const void* a_pos_xyzs,const void* a_pos_rgbas,const void* a_pos_nms){
+    ::glEnableClientState(GL_VERTEX_ARRAY);
+    ::glEnableClientState(GL_COLOR_ARRAY);
+    ::glEnableClientState(GL_NORMAL_ARRAY);
+
+    ::glVertexPointer(3,GL_FLOAT,0,a_pos_xyzs);
+    ::glColorPointer(4,GL_FLOAT,0,a_pos_rgbas);
+    ::glNormalPointer(GL_FLOAT,0,a_pos_nms);
+
+    ::glDrawArrays(a_mode,0,(GLsizei)a_elems);
+
+    ::glDisableClientState(GL_COLOR_ARRAY);
+    ::glDisableClientState(GL_NORMAL_ARRAY);
+    ::glDisableClientState(GL_VERTEX_ARRAY);
+  }
+
+protected:
+  GL_manager& m_mgr;
+  gstoid m_gsto;
+#ifdef TOOLX_HAS_GL_LIST
+  bool m_created;
+  gstoid m_gl_id;
+#endif
+};
+
+}}
+
+
+#endif

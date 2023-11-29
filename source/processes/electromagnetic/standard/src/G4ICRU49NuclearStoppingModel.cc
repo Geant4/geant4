@@ -57,15 +57,17 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Step.hh"
+#include "G4AutoLock.hh"
 #include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU49NuclearStoppingModel::Z23[] = {0.0};
 
-#ifdef G4MULTITHREADED
-G4Mutex G4ICRU49NuclearStoppingModel::ICRU49NuclearMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex ICRU49NuclearMutex = G4MUTEX_INITIALIZER;
+}
 
 G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam) 
   : G4VEmModel(nam)
@@ -77,8 +79,7 @@ G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ICRU49NuclearStoppingModel::~G4ICRU49NuclearStoppingModel()
-{}
+G4ICRU49NuclearStoppingModel::~G4ICRU49NuclearStoppingModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,20 +91,15 @@ void G4ICRU49NuclearStoppingModel::Initialise(const G4ParticleDefinition*,
 
 void G4ICRU49NuclearStoppingModel::InitialiseArray()
 {
+  if(0.0 != Z23[1]) { return; }
+  G4AutoLock l(&ICRU49NuclearMutex);
   if(0.0 == Z23[1]) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&G4ICRU49NuclearStoppingModel::ICRU49NuclearMutex);
-    if(0.0 == Z23[1]) {
-#endif
-      for(G4int i=2; i<100; ++i) { 
-        Z23[i] = g4calc->powZ(i, 0.23);
-      }
-      Z23[1] = 1.0;
-#ifdef G4MULTITHREADED
+    for(G4int i=2; i<100; ++i) { 
+      Z23[i] = g4calc->powZ(i, 0.23);
     }
-    G4MUTEXUNLOCK(&G4ICRU49NuclearStoppingModel::ICRU49NuclearMutex);
-#endif
+    Z23[1] = 1.0;
   }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,11 +134,11 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(
   mass1 /= amu_c2;
 
   //  loop for the elements in the material
-  G4int numberOfElements = mat->GetNumberOfElements();
+  std::size_t numberOfElements = mat->GetNumberOfElements();
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* atomDensity  = mat->GetAtomicNumDensityVector();
  
-  for (G4int iel=0; iel<numberOfElements; ++iel) {
+  for (std::size_t iel=0; iel<numberOfElements; ++iel) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
     G4double mass2 = element->GetN();

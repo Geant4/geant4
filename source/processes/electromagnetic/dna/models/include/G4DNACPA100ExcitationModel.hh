@@ -29,102 +29,75 @@
 //
 // Users are requested to cite the following papers:
 // - M. Terrissol, A. Baudre, Radiat. Prot. Dosim. 31 (1990) 175-177
-// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries, 
+// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries,
 //   M. Bardies, N. Lampe, S. Incerti, Phys. Med. 32 (2016) 1833-1840
 //
-// Authors of this class: 
+// Authors of this class:
 // M.C. Bordage, M. Terrissol, S. Edel, J. Bordes, S. Incerti
 //
 // 15.01.2014: creation
 //
+// Based on the study by S. Zein et. al. Nucl. Inst. Meth. B 488 (2021) 70-82
+// 1/2/2023 : Hoang added modification for DNA cross sections
 
 #ifndef G4DNACPA100ExcitationModel_h
 #define G4DNACPA100ExcitationModel_h 1
 
-#include "G4VEmModel.hh"
+#include "G4DNACPA100ExcitationStructure.hh"
+#include "G4DNACrossSectionDataSet.hh"
+#include "G4Electron.hh"
+#include "G4LogLogInterpolation.hh"
+#include "G4NistManager.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4DNACrossSectionDataSet.hh"
-#include "G4LogLogInterpolation.hh"
-//#include "G4DNACPA100LogLogInterpolation.hh"
-#include "G4Electron.hh"
 #include "G4Proton.hh"
-#include "G4DNACPA100WaterExcitationStructure.hh"
-#include "G4NistManager.hh"
+#include "G4VDNAModel.hh"
 
-class G4DNACPA100ExcitationModel : public G4VEmModel
+class G4DNACPA100ExcitationModel : public G4VDNAModel
 {
+  public:
+    explicit G4DNACPA100ExcitationModel(const G4ParticleDefinition* p = nullptr,
+                                        const G4String& nam = "DNACPA100ExcitationModel");
 
-public:
+    ~G4DNACPA100ExcitationModel() override = default;
 
-  G4DNACPA100ExcitationModel(const G4ParticleDefinition* p = 0, 
-            const G4String& nam = "DNACPA100ExcitationModel");
+    void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual ~G4DNACPA100ExcitationModel();
+    G4double CrossSectionPerVolume(const G4Material* material, const G4ParticleDefinition* p,
+                                   G4double ekin, G4double emin, G4double emax) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()) );
+    void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+                           const G4DynamicParticle*, G4double tmin, G4double maxEnergy) override;
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
-     const G4ParticleDefinition* p,
-     G4double ekin,
-     G4double emin,
-     G4double emax);
+    inline void SelectStationary(G4bool input);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-     const G4MaterialCutsCouple*,
-     const G4DynamicParticle*,
-     G4double tmin,
-     G4double maxEnergy);
+    G4DNACPA100ExcitationModel& operator=(const G4DNACPA100ExcitationModel& right) = delete;
 
-  inline void SelectStationary(G4bool input); 
+    G4DNACPA100ExcitationModel(const G4DNACPA100ExcitationModel&) = delete;
+    G4int verboseLevel = 0;
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
-
-private:
-
-  G4bool statCode;
-
-  // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
-
-  std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
-  std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
-
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
-
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
-
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-
-  // Partial cross section
-  
-  G4int RandomSelect(G4double energy,const G4String& particle );
-  
-  // Final state
-
-  G4DNACPA100WaterExcitationStructure waterStructure;
-   
-  //
-  
-  G4DNACPA100ExcitationModel & operator=(const  G4DNACPA100ExcitationModel &right);
-  G4DNACPA100ExcitationModel(const  G4DNACPA100ExcitationModel&);
-
+  private:
+    G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+    G4bool statCode = false;
+    G4bool isInitialised = false;
+    G4DNACPA100ExcitationStructure eStructure;
+    const G4Material* fpGuanine = nullptr;
+    const G4Material* fpG4_WATER = nullptr;
+    const G4Material* fpDeoxyribose = nullptr;
+    const G4Material* fpCytosine = nullptr;
+    const G4Material* fpThymine = nullptr;
+    const G4Material* fpAdenine = nullptr;
+    const G4Material* fpPhosphate = nullptr;
+    const G4ParticleDefinition* fpParticle = nullptr;
+    G4DNACPA100ExcitationModel* fpModelData = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4DNACPA100ExcitationModel::SelectStationary (G4bool input)
-{ 
-    statCode = input; 
-}  
+inline void G4DNACPA100ExcitationModel::SelectStationary(G4bool input)
+{
+  statCode = input;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

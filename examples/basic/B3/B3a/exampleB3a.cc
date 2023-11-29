@@ -85,11 +85,15 @@ int main(int argc,char** argv)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Activate score ntuple writer
-  // The Root output type (Root) is selected in B3Analysis.hh.
   // The verbose level can be also set via UI commands
   // /score/ntuple/writerVerbose level
+  // The default file type ("root") can be changed in xml, csv, hdf5
+  // scoreNtupleWriter.SetDefaultFileType("xml");
   G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
   scoreNtupleWriter.SetVerboseLevel(1);
+  scoreNtupleWriter.SetNtupleMerging(true);
+    // Note: merging ntuples is available only with Root output
+    // (the default in G4TScoreNtupleWriter)
 
   // Process macro or start UI session
   //

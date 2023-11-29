@@ -51,7 +51,30 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
   - this chemistry constructor uses independent reaction time method as a
   default.
 
-\section CHEM6_s4  ACTION INITALIZATION
+
+\section CHEM6_s4 CHEMISTRY MODEL AND CHEMICAL REACTION LIST
+
+  - UI species are defined by format :
+  username [ molecule | charge | D(m2/s) | Radius(nm) ]
+  where : *username* is decided by users, *molecule* is used by Geant4,
+  *D* is diffusion constant, *Radius* is reaction radius.
+  Spaces between characters are needed.
+
+  - UI reactions are defined by format :
+  /chem/reaction/add H + H -> H2  | Fix |  1.2e10 | 0
+  where : *H* is username, *1.2e10* is reaction rate, *0* is reaction type.
+  Spaces between characters are needed.
+
+  - UI time step model is defined only for: Step-by-Step (SBS),
+  independent reaction time (IRT) or synchronized IRT (IRT_syn).
+  *Note* : SBS is supposed for totally diffusion-controlled (TDC) reaction
+  only then please set reaction type 0 if use this model.
+  Only G4EmDNAChemistry_option3 can change time step model
+
+  (parameters can be found in Med. Phys. 48 (2021) 890-901
+  and Med. Phys. 47 (2020) 5919-5930)
+
+\section CHEM6_s5  ACTION INITALIZATION
 
   The class ActionInitialization instantiates and registers
   to Geant4 kernel all user action classes.
@@ -67,7 +90,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
       ActionInitialization::BuildForMaster()
   which is invoked only in multi-threading mode.
 
-\section CHEM6_s5 AN EVENT: PRIMARY GENERATOR
+\section CHEM6_s6 AN EVENT: PRIMARY GENERATOR
 
   The primary kinematic consists of a single particle starting at the center
    of the box. The type of the particle and its energy are set in the
@@ -77,9 +100,9 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
   The chemistry module is triggered in the StackingAction class when all
   physical tracks have been processed.
 
-\section CHEM6_s6 DETECTOR RESPONSE : Scorers
+\section CHEM6_s7 DETECTOR RESPONSE : Scorers
 
-\subsection CHEM6_s6_sub1 Species scorer
+\subsection CHEM6_s7_sub1 Species scorer
 
   This scorer computes the energy deposition and the number of species along
   time in order to extract the radiochemical yields as chem4 example.
@@ -110,7 +133,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
   The G versus LET results are accumulated all along, thus, user should remove Species.txt
   file directly in order to initialize the results.
   
-\subsection CHEM6_s6_sub2 Primary Killer
+\subsection CHEM6_s7_sub2 Primary Killer
   The G-values are computing for a range of deposited energy. 
   We are in an infinite volume. Therefore the energy lost by the 
   primary equals the deposited energy since all secondary particles 
@@ -146,7 +169,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
 # kill the particles (primary and secondary) outside of the virtual volume
 \endverbatim
 
-\subsection CHEM6_s6_sub3 LET scorer
+\subsection CHEM6_s7_sub3 LET scorer
   In order to obtain G versus LET results, LET values are simultaneously calculated 
   during the simulation in ScorerLET class.
 
@@ -157,7 +180,7 @@ Int. J. Model. Simul. Sci . Comput. 1 (2010) 157-178      \n
 # select cut-off energy for restricted LET.
 \endverbatim
 
-\section CHEM6_s7 TIMESTEP ACTION
+\section CHEM6_s8 TIMESTEP ACTION
   The user defined time steps can be given by G4UserTimeStepAction::AddTimeStep() method.
   This method is not recommended for IRT method.
 
@@ -175,14 +198,14 @@ G4Molecule* thisIsMyMolecule = GetMolecule(thisIsMyTrack);
 const G4String& moleculeName = thisIsMyMolecule->GetName();
 \endverbatim
 
-\section CHEM6_s8 STACKING ACTION
+\section CHEM6_s9 STACKING ACTION
 
   StackingAction::NewStage is called when a stack of tracks has been processed
   (for more details, look at the Geant4 documentation).
   A verification on whether physical tracks remain to be processed is done.
   If no tracks remain to be processed, the chemical module is then triggered.
 
-\section CHEM6_s9 OUTPUT
+\section CHEM6_s10 OUTPUT
 
   Physics initialization and the defined reaction table are printed.
   G4Scheduler processes the chemical stage time step after time step.
@@ -191,7 +214,7 @@ const G4String& moleculeName = thisIsMyMolecule->GetName();
   The molecular reaction as a function of the elapsed time can be displayed
   setting the macro command /scheduler/verbose 1
    
-\section CHEM6_s10 RELEVANT MACRO FILES
+\section CHEM6_s11 RELEVANT MACRO FILES
 
   Two user macro files can be used:
 
@@ -204,15 +227,16 @@ const G4String& moleculeName = thisIsMyMolecule->GetName();
 \endverbatim
 
 
-\section CHEM6_s11 PLOT
+\section CHEM6_s12 PLOT
 
   Two root macros can be used:
 
 \verbatim
-root plotG_time.root
+root plotG_time.C
 # plot G values as a function of time according to the molecular species by importing Species0.root.
+# The function (plotG_time()) should have the same name as the file without file extension (plotG_time).
   
-root plotG_LET.root
+root plotG_LET.C
 # plot G values as a function of LET according to the molecular species by importing Species.txt.
 \endverbatim
 */

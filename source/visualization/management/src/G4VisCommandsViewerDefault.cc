@@ -33,6 +33,8 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 
+#define G4warn G4cout
+
 ////////////// /vis/viewer/default/hiddenEdge ///////////////////////////////////////
 
 G4VisCommandViewerDefaultHiddenEdge::G4VisCommandViewerDefaultHiddenEdge()
@@ -193,7 +195,7 @@ void G4VisCommandViewerDefaultStyle::SetNewValue(G4UIcommand*, G4String newValue
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: \"" << newValue << "\" not recognised."
+      G4warn << "ERROR: \"" << newValue << "\" not recognised."
 	"  Looking for 'w' or 's' or 'c' first character." << G4endl;
     }
     return;

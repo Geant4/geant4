@@ -9,7 +9,6 @@ geant4_add_module(G4modeling
     G4AttributeFilterT.hh
     G4AxesModel.hh
     G4BoundingExtentScene.hh
-    G4BoundingSphereScene.hh
     G4CallbackModel.hh
     G4DigiFilterFactories.hh
     G4DigiModel.hh
@@ -32,7 +31,6 @@ geant4_add_module(G4modeling
     G4PSHitsModel.hh
     G4PhysicalVolumeMassScene.hh
     G4PhysicalVolumeModel.hh
-    G4PhysicalVolumeSearchScene.hh
     G4PhysicalVolumesSearchScene.hh
     G4PseudoScene.hh
     G4TextModel.hh
@@ -66,7 +64,6 @@ geant4_add_module(G4modeling
     G4AttFilterUtils.cc
     G4AxesModel.cc
     G4BoundingExtentScene.cc
-    G4BoundingSphereScene.cc
     G4DigiFilterFactories.cc
     G4DigiModel.cc
     G4ElectricFieldModel.cc
@@ -82,7 +79,6 @@ geant4_add_module(G4modeling
     G4PSHitsModel.cc
     G4PhysicalVolumeMassScene.cc
     G4PhysicalVolumeModel.cc
-    G4PhysicalVolumeSearchScene.cc
     G4PhysicalVolumesSearchScene.cc
     G4PseudoScene.cc
     G4TextModel.cc
@@ -128,6 +124,5 @@ geant4_module_link_libraries(G4modeling
     G4materials
     G4volumes
     G4run
-    G4tasking
     G4detutils
     G4detector)

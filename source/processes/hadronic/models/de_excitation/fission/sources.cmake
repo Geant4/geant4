@@ -27,6 +27,6 @@ geant4_module_link_libraries(G4hadronic_deex_fission
     G4hadronic_deex_management
     G4hadronic_deex_util
     G4hadronic_util
-    G4partman
   PRIVATE
-    G4heprandom)
+    G4heprandom
+    G4partman)

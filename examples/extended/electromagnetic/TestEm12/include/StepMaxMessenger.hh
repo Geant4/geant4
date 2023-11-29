@@ -46,14 +46,14 @@ class StepMaxMessenger: public G4UImessenger
 {
   public:
     StepMaxMessenger(StepMax*);
-   ~StepMaxMessenger();
+   ~StepMaxMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
-    StepMax*                   fStepMax;
-    G4UIcmdWithADoubleAndUnit* fStepMax1Cmd;    
-    G4UIcmdWithABool*          fStepMax2Cmd;
+    StepMax*                   fStepMax = nullptr;
+    G4UIcmdWithADoubleAndUnit* fStepMax1Cmd = nullptr;    
+    G4UIcmdWithABool*          fStepMax2Cmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

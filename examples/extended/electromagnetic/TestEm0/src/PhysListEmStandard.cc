@@ -63,18 +63,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
-   :  G4VPhysicsConstructor(name)
+:G4VPhysicsConstructor(name)
 {
     G4EmParameters* param = G4EmParameters::Instance();
     param->SetDefaults();
     param->SetVerbose(0);
     SetPhysicsType(bElectromagnetic);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysListEmStandard::~PhysListEmStandard()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

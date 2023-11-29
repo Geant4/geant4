@@ -89,7 +89,7 @@ void G4LogicalCrystalVolume::SetMillerOrientation(G4int h,
 {
   // Align Miller normal vector (hkl) with +Z axis, and rotation about axis
 
-  if (verboseLevel)
+  if (verboseLevel != 0)
   {
     G4cout << "G4LatticePhysical::SetMillerOrientation(" << h << " "
            << k << " " << l << ", " << rot/CLHEP::deg << " deg)" << G4endl;

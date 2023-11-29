@@ -26,14 +26,15 @@
 #ifdef USE_INFERENCE
 #ifndef PAR04INFERENCEMESSENGER_H
 #define PAR04INFERENCEMESSENGER_H
-#include "G4UImessenger.hh"
 
-class Par04InferenceSetup;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
+#include <G4String.hh>           // for G4String
+#include "G4UImessenger.hh"      // for G4UImessenger
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcommand;
+class G4UIdirectory;
+class Par04InferenceSetup;
 
 /**
  * @brief Inference messenger.

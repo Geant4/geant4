@@ -52,8 +52,8 @@ class G4VUserEventInformation
 {
   public:
 
-    G4VUserEventInformation() {;}
-    virtual ~G4VUserEventInformation() {;}
+    G4VUserEventInformation() = default;
+    virtual ~G4VUserEventInformation() = default;
 
   public:
 

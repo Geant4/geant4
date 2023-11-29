@@ -295,7 +295,7 @@ void G4IonParametrisedLossModel::Initialise(
   EnergyRangeTable::iterator iterEnergy = E.begin();
   EnergyRangeTable::iterator iterEnergy_end = E.end();
 
-  for(;iterEnergy != iterEnergy_end; iterEnergy++) {
+  for(;iterEnergy != iterEnergy_end; ++iterEnergy) {
     delete iterEnergy->second;
   }
   E.clear();
@@ -306,7 +306,7 @@ void G4IonParametrisedLossModel::Initialise(
   // All dE/dx vectors are built
   const G4ProductionCutsTable* coupleTable=
                      G4ProductionCutsTable::GetProductionCutsTable();
-  size_t nmbCouples = coupleTable->GetTableSize();
+  G4int nmbCouples = (G4int)coupleTable->GetTableSize();
 
 #ifdef PRINT_TABLE_BUILT
     G4cout << "G4IonParametrisedLossModel::Initialise():"
@@ -314,7 +314,7 @@ void G4IonParametrisedLossModel::Initialise(
            << G4endl;
 #endif
 
-  for (size_t i = 0; i < nmbCouples; ++i) {
+  for (G4int i = 0; i < nmbCouples; ++i) {
 
     const G4MaterialCutsCouple* couple = coupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
@@ -928,7 +928,7 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
   if(kineticEnergy == eloss) { return; }
 
   G4double cutEnergy = DBL_MAX;
-  size_t cutIndex = couple -> GetIndex();
+  std::size_t cutIndex = couple -> GetIndex();
   cutEnergy = cutEnergies[cutIndex];
 
   UpdateDEDXCache(particle, material, cutEnergy);
@@ -1053,7 +1053,7 @@ void G4IonParametrisedLossModel::BuildRangeVector(
                      const G4MaterialCutsCouple* matCutsCouple) {
 
   G4double cutEnergy = DBL_MAX;
-  size_t cutIndex = matCutsCouple -> GetIndex();
+  std::size_t cutIndex = matCutsCouple -> GetIndex();
   cutEnergy = cutEnergies[cutIndex];
 
   const G4Material* material = matCutsCouple -> GetMaterial();
@@ -1087,11 +1087,11 @@ void G4IonParametrisedLossModel::BuildRangeVector(
   energyRangeVector -> PutValues(0, lowerEnergy, range);
 
   G4double logEnergy = std::log(lowerEnergy);
-  for(size_t i = 1; i < nmbBins+1; i++) {
+  for(std::size_t i = 1; i < nmbBins+1; ++i) {
 
       G4double logEnergyIntegr = logEnergy;
 
-      for(size_t j = 0; j < nmbSubBins; j++) {
+      for(std::size_t j = 0; j < nmbSubBins; ++j) {
 
           G4double binLowerBoundary = G4Exp(logEnergyIntegr);
           logEnergyIntegr += logDeltaIntegr;
@@ -1148,7 +1148,7 @@ void G4IonParametrisedLossModel::BuildRangeVector(
 			      upperRangeEdge,
 			      /*spline=*/true);
 
-  for(size_t i = 0; i < nmbBins+1; i++) {
+  for(std::size_t i = 0; i < nmbBins+1; ++i) {
       G4double energy = energyRangeVector -> Energy(i);
       rangeEnergyVector ->
              PutValues(i, energyRangeVector -> Value(energy), energy);

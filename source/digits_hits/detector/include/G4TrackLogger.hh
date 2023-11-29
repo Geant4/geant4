@@ -41,26 +41,22 @@
 #define G4TrackLogger_hh G4TrackLogger_hh
 
 #include "globals.hh"
+
 #include <set>
 
 class G4TrackLogger
 {
  public:
-  G4TrackLogger();
-  ~G4TrackLogger();
-
-  void SetEventID(G4int id);
   // inform the object about the event number
   // if the event number changes the loggs are cleared.
+  void SetEventID(G4int id);
 
-  G4bool FirstEnterance(G4int trid);
   // returns true if the track is new to this event.
-
-  typedef std::set<G4int> TrackIDsSet;
-  // log for the track ids.
+  G4bool FirstEnterance(G4int trid);
 
  private:
-  G4int fPreviousEventID;
+  G4int fPreviousEventID = -1;
+  using TrackIDsSet = std::set<G4int>;
   TrackIDsSet fTrackIDsSet;
 };
 

@@ -36,7 +36,7 @@ class G4DNAMolecularReactionData;
 class G4DNAUpdateSystemModel : public G4VUpdateSystemModel
 {
  public:
-  using Index        = G4Voxel::Index;
+  using Index        = G4VDNAMesh::Index;
   using MolType      = const G4MolecularConfiguration*;
   using JumpingData  = std::pair<MolType, Index>;
   using ReactionData = const G4DNAMolecularReactionData;
@@ -45,21 +45,18 @@ class G4DNAUpdateSystemModel : public G4VUpdateSystemModel
   ~G4DNAUpdateSystemModel() override = default;
   void UpdateSystem(const Index& index, const ReactionData& data);
   void UpdateSystem(const Index& index, const JumpingData& data);
-
-  void KillMolecule(const Index& index, MolType type);
-  void CreateMolecule(const Index& index, MolType);
-
-  void JumpTo(const Index& index, MolType type);
-  void JumpIn(const Index& index, MolType);
-
   void SetMesh(G4DNAMesh*);
   void SetGlobalTime(const G4double& globalTime) { fGlobalTime = globalTime; }
   void SetVerbose(G4int verbose) { fVerbose = verbose; }
 
  private:
-  G4DNAMesh* fpMesh;
-  G4int fVerbose;
-  G4double fGlobalTime;
+  void KillMolecule(const Index& index, MolType type);
+  void CreateMolecule(const Index& index, MolType);
+  void JumpTo(const Index& index, MolType type);
+  void JumpIn(const Index& index, MolType);
+  G4DNAMesh* fpMesh  = nullptr;
+  G4int fVerbose = 0;
+  G4double fGlobalTime = DBL_MAX;
 };
 
 #endif  // G4DNAUPDATESYSTEMMODEL_HH

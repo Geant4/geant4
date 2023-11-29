@@ -73,13 +73,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(G4int ver)
-  : G4VPhysicsConstructor("local"), verbose(ver)
+PhysListEmStandard::PhysListEmStandard(G4int verbose)
+  : G4VPhysicsConstructor("local")
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
   SetPhysicsType(bElectromagnetic);
+  SetVerboseLevel(verbose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +100,7 @@ void PhysListEmStandard::ConstructParticle()
 
 void PhysListEmStandard::ConstructProcess()
 {
-  if(verbose > 1) {
+  if(verboseLevel > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4EmBuilder::PrepareEMPhysics();

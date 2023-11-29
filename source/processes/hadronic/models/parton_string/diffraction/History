@@ -1,18 +1,105 @@
--------------------------------------------------------------------
+# Category hadr-string-diff History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-      History file for hadronic/models/parton_string/diffraction directory
-      -------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-11-26 Gabriele Cosmo (hadr-string-diff-V11-00-12)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-11-13 Alberto Ribon (hadr-string-diff-V11-00-11)
+- G4DiffractiveSplitableHadron : Vladimir Uzhinsky's fix of rare large energy
+  violations seen with FTF when dealing with charm and bottom hadron nuclear
+  interactions.
+
+## 2022-11-11 Alberto Ribon (hadr-string-diff-V11-00-10)
+- G4FTFModel : in the methods AdjustNucleonsAlgorithm_beforeSampling and
+  ComputeNucleusProperties, before calling either G4HyperNucleiProperties
+  or G4IonTable to get the mass of the residual, check if the residual
+  is a single nucleon (or lambda) or a pair of nucleons (or lambdas);
+  moreover, in the same two methods, the absolute value of the nuclear 
+  residual charge is used, to take into account the case of anti-nuclei
+  projectiles.
+
+## 2022-11-04 Alberto Ribon (hadr-string-diff-V11-00-09)
+- G4FTFModel : Vladimir Uzhinsky's extension of the FTF model to deal with
+  the annihilation of light anti-hypernuclei.
+- G4FTFAnnihilation : Vladimir Uzhinsky's reorganization of the two methods
+  Create2QuarkAntiQuarkStrings and Create3QuarkAntiQuarkStrings in order
+  to better handle unphysical configurations that need to be rejected.
+  The algorithm has been also speed-up by changing the order of the sampling:
+  light-cone variables are sampled first, then transverse momenta.
+  Moreover, the positions of quark and anti-quark in strings have been
+  corrected: this is expected to improve the kinematical properties of the
+  produced hadrons.
+
+## 2022-10-27 Julia Yarba (hadr-string-diff-V11-00-08)
+- Minor cleanup in tune naming
+
+## 2022-10-27 Julia Yarba (hadr-string-diff-V11-00-07)
+- G4FTFTunings - rename tune2022-v0 (#1) to baryon-tune2022-v0;
+  add pion-tune2022-v0 (#2) and combined-tune2022-v0 (#3, combo of #1&#2)
+
+## 2022-10-19 Alberto Ribon (hadr-string-diff-V11-00-07)
+- G4DiffractiveExcitation : Vladimir Uzhinsky's improvements in the method
+  ExciteParticipants_doChargeExchange.
+  For a projectile meson in the case of quark exchange, a more correct ratio
+  between pseudo-scalar and vector mesons is included: the pion after the
+  exchange can transform into pi0, eta, eta', rho0 and omega mesons.
+  This allows to improve the description of leading particle spectra in
+  meson-nucleon interactions.
+
+## 2022-08-31 Vladimir Ivanchenko (hadr-string-diff-V11-00-06)
+- G4FTFTunings - added extra braces at initialisation of std::array to
+    allow CMSSW compile Geant4
+
+## 2022-08-16 Gabriele Cosmo (hadr-string-diff-V11-00-05)
+- Added missing dependency on G4intercoms in sources.cmake and GNUmakefile.
+
+## 2022-08-02 Alberto Ribon (hadr-string-diff-V11-00-04)
+- G4FTFTuningsMessenger : created new messenger class for G4FTFTunings.
+  This allows to avoid the use of G4FTFTunings in G4HadronicParametersMessenger,
+  which created a circular dependency between G4hadronic_util and G4had_string_diff.
+- G4FTFTunings : updated to use G4FTFTuningsMessenger instead of 
+  G4HadronicParameterMessenger.
+
+## 2022-07-28 Alberto Ribon (hadr-string-diff-V11-00-03)
+- G4FTFTunings : created a new (singleton) class to allow the possibility
+  to specify alternative sets of FTF parameters, called "tunes".
+  Moved into this class some special, internal classes - useful for tuning
+  of parameters - that were originally in G4FTFParameters.
+- G4FTFParameters : use of the new G4FTFTunings class; instead of having
+  one, single set of parameters, it has now an array of set of parameters,
+  with each element corresponding to one specific "tune";
+  clean-up of the class by moving to G4FTFTunings some code originally
+  present in G4FTFParameters.
+These changes should not alter any results, nor even the random sequence.
+
+## 2021-06-09 Laurie Nevay (hadr-string-diff-V11-00-02)
+- Allow control of diffraction for baryon number greater than 10
+  in G4FPFParameters. The option comes from G4HadronicParameters and
+  the default behaviour remains the same (off).
+
+## 2022-06-07 Alberto Ribon (hadr-string-diff-V11-00-01)
+Fixes made by Vladimir Uzhinsky to get isotropic distributions in
+annihilations at rest:
+- G4DiffractiveSplitableHadron : set proper parton index.
+- G4DiffractiveExcitation : in the CreateStrings method, take into account
+  that strings are created in G4FTFAnnihilation; by default, the method 
+  CreateStrings creates a string from a wounded nucleon/hadron, but this 
+  is not needed in the case of annihilation.
+- G4FTFAnnihilation : splitting of hadron is removed; fixed bugs in the 
+  calculations of kinematical properties; set quark momenta at string ends
+  to properly account for string order on rapidity.
+
+## 2021-12-10 Ben Morgan (hadr-string-diff-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 10-Nov-2021 A. Ribon          (hadr-string-diff-V10-07-04)
 - G4FTFModel, G4FTFParticipants : Vladimir Uzhinsky interface extension

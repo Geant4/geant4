@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B4/B4c/src/RunAction.cc
 /// \brief Implementation of the B4::RunAction class
 
 #include "RunAction.hh"
@@ -61,9 +61,9 @@ RunAction::RunAction()
   //
 
   // Creating histograms
-  analysisManager->CreateH1("Eabs","Edep in absorber", 100, 0., 800*MeV);
-  analysisManager->CreateH1("Egap","Edep in gap", 100, 0., 100*MeV);
-  analysisManager->CreateH1("Labs","trackL in absorber", 100, 0., 1*m);
+  analysisManager->CreateH1("Eabs","Edep in absorber", 110, 0., 330*MeV);
+  analysisManager->CreateH1("Egap","Edep in gap", 100, 0., 30*MeV);
+  analysisManager->CreateH1("Labs","trackL in absorber", 100, 0., 50*cm);
   analysisManager->CreateH1("Lgap","trackL in gap", 100, 0., 50*cm);
 
   // Creating ntuple
@@ -74,12 +74,6 @@ RunAction::RunAction()
   analysisManager->CreateNtupleDColumn("Labs");
   analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

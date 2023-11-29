@@ -88,7 +88,7 @@ G4TwistTrapAlphaSide(const G4String& name,
   fa1md1 = 2*fDx2 - 2*fDx1  ; 
   fa2md2 = 2*fDx4 - 2*fDx3 ;
 
-  fPhiTwist = PhiTwist ;     // dphi
+  fPhiTwist = PhiTwist ;    // dphi
   fAngleSide = AngleSide ;  // 0,90,180,270 deg
 
   fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi);
@@ -110,11 +110,7 @@ G4TwistTrapAlphaSide(const G4String& name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTrapAlphaSide::G4TwistTrapAlphaSide( __void__& a )
-  : G4VTwistSurface(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.), 
-    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
-    fAngleSide(0.), fDx4plus2(0.), fDx4minus2(0.), fDx3plus1(0.), fDx3minus1(0.), 
-    fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), fa2md2(0.), fdeltaX(0.),
-    fdeltaY(0.)
+  : G4VTwistSurface(a)
 {
 }
 
@@ -122,9 +118,7 @@ G4TwistTrapAlphaSide::G4TwistTrapAlphaSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistTrapAlphaSide::~G4TwistTrapAlphaSide()
-{
-}
+G4TwistTrapAlphaSide::~G4TwistTrapAlphaSide() = default;
 
 
 //=====================================================================
@@ -256,7 +250,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
   // special case vz = 0
 
   if ( v.z() == 0. )
- {
+  {
     if ( std::fabs(p.z()) <= L )   // intersection possible in z
     {
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
@@ -372,7 +366,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
     }  // end loop i    
   }    // end general case
 
-  nxx = xbuf.size() ;  // save the number of  solutions
+  nxx = (G4int)xbuf.size() ;  // save the number of  solutions
 
   G4ThreeVector xxonsurface  ;    // point on surface
   G4ThreeVector surfacenormal  ;  // normal vector  
@@ -381,7 +375,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
   G4double factor;  // a scaling factor
   G4int maxint=30;  // number of iterations
 
-  for ( size_t k = 0 ; k<xbuf.size() ; ++k )
+  for (auto & k : xbuf)
   {
 #ifdef G4TWISTDEBUG
     G4cout << "Solution " << k << " : " 
@@ -389,8 +383,8 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
            << ", uR = " << xbuf[k].u << G4endl ; 
 #endif
     
-    phi = xbuf[k].phi ;  // get the stored values for phi and u
-    u = xbuf[k].u ;
+    phi = k.phi ;  // get the stored values for phi and u
+    u = k.u ;
 
     IsConverged = false ;   // no convergence at the beginning
     
@@ -472,10 +466,10 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
 
     // store the found values
     // 
-    xbuf[k].xx = tmpxx ;
-    xbuf[k].distance = tmpdist ;
-    xbuf[k].areacode = tmpareacode ;
-    xbuf[k].isvalid = tmpisvalid ;
+    k.xx = tmpxx ;
+    k.distance = tmpdist ;
+    k.areacode = tmpareacode ;
+    k.isvalid = tmpisvalid ;
 
   }  // end loop over physical solutions (variable k)
 
@@ -494,7 +488,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
 
   // add guesses
   //
-  G4int nxxtmp = xbuf.size() ;
+  auto nxxtmp = (G4int)xbuf.size() ;
 
   if ( nxxtmp<2 || IsParallel  )  // positive end
   {
@@ -529,7 +523,7 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
     
     xbuf.push_back(xbuftmp) ;  // store it to xbuf
 
-    for ( size_t k = nxxtmp ; k<xbuf.size() ; ++k )
+    for ( std::size_t k = nxxtmp ; k<xbuf.size() ; ++k )
     {
 
 #ifdef G4TWISTDEBUG
@@ -639,9 +633,9 @@ G4TwistTrapAlphaSide::DistanceToSurface(const G4ThreeVector& gp,
   G4cout << G4endl << G4endl ;
 #endif
 
-  nxx = xbuf.size() ;   // determine number of solutions again.
+  nxx = (G4int)xbuf.size() ;   // determine number of solutions again.
 
-  for ( size_t i = 0 ; i<xbuf.size() ; ++i )
+  for ( G4int i = 0 ; i<(G4int)xbuf.size() ; ++i )
   {
     distance[i] = xbuf[i].distance;
     gxx[i]      = ComputeGlobalPoint(xbuf[i].xx);
@@ -832,7 +826,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin)); 
 
-            if   (areacode & sBoundary)   // xx is on the corner
+            if   ((areacode & sBoundary) != 0)   // xx is on the corner
               { areacode |= sCorner; }
 
             else
@@ -843,7 +837,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax));
 
-            if   (areacode & sBoundary)   // xx is on the corner
+            if   ((areacode & sBoundary) != 0)   // xx is on the corner
                { areacode |= sCorner; }
             else
                { areacode |= sBoundary; }
@@ -882,7 +876,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
          if (xx.z() < fAxisMin[zaxis])
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMin));
-            if   (areacode & sBoundary)   // xx is on the corner
+            if   ((areacode & sBoundary) != 0)   // xx is on the corner
               { areacode |= sCorner; }
             else
               { areacode |= sBoundary; }
@@ -890,7 +884,7 @@ G4TwistTrapAlphaSide::GetAreaCode(const G4ThreeVector& xx, G4bool withTol)
          else if (xx.z() > fAxisMax[zaxis])
          {
             areacode |= (sAxis1 & (sAxisZ | sAxisMax)) ;
-            if   (areacode & sBoundary)   // xx is on the corner
+            if   ((areacode & sBoundary) != 0)   // xx is on the corner
               { areacode |= sCorner; }
             else
               { areacode |= sBoundary; }
@@ -1030,7 +1024,7 @@ void G4TwistTrapAlphaSide::SetBoundaries()
 //* GetPhiUAtX --------------------------------------------------------
 
 void
-G4TwistTrapAlphaSide::GetPhiUAtX( G4ThreeVector p, G4double& phi, G4double& u ) 
+G4TwistTrapAlphaSide::GetPhiUAtX( const G4ThreeVector& p, G4double& phi, G4double& u ) 
 {
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction

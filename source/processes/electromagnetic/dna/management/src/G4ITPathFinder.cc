@@ -373,7 +373,7 @@ G4ITPathFinder::PrepareNewTrack( const G4ThreeVector& position,
   //
   std::vector<G4ITNavigator*>::iterator pNavigatorIter;
 
-  fNoActiveNavigators=  fpTransportManager-> GetNoActiveNavigators();
+  fNoActiveNavigators = (G4int)fpTransportManager-> GetNoActiveNavigators();
   if( fNoActiveNavigators > G4ITNavigator::fMaxNav )
   {
     std::ostringstream message;
@@ -443,7 +443,7 @@ void G4ITPathFinder::ReportMove( const G4ThreeVector& OldVector,
 {
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
-    G4int prc= G4cerr.precision(12); 
+    G4long prc = G4cerr.precision(12); 
     std::ostringstream message;
     message << "Endpoint moved between value returned by ComputeStep()"
             << " and call to Locate(). " << G4endl
@@ -1105,7 +1105,7 @@ void G4ITPathFinder::PrintLimited()
     { 
       stepLen = fTrueMinStep;     // did not limit (went as far as asked)
     }
-    G4int oldPrec= G4cout.precision(9); 
+    G4long oldPrec = G4cout.precision(9); 
 
     G4cout << std::setw(5) << fCurrentStepNo  << " " 
            << std::setw(5) << num  << " "

@@ -29,8 +29,8 @@
 //
 // This class extends G4Trajectory, which includes the following:
 //   1) List of trajectory points which compose the trajectory,
-//   2) static information of particle which generated the 
-//      trajectory, 
+//   2) static information of particle which generated the
+//      trajectory,
 //   3) trackID and parent particle ID of the trajectory.
 // The extended information, only publicly accessible through AttValues,
 // includes:
@@ -50,66 +50,64 @@
 #ifndef G4RICHTRAJECTORY_HH
 #define G4RICHTRAJECTORY_HH
 
-#include "trkgdefs.hh"
-#include "G4Trajectory.hh"
 #include "G4TouchableHandle.hh"
+#include "G4Trajectory.hh"
+
+#include "trkgdefs.hh"
 
 class G4RichTrajectory : public G4Trajectory
-{  
+{
   using RichTrajectoryPointsContainer = std::vector<G4VTrajectoryPoint*>;
 
-  public:
-  
-    // Constructors/destructor
-    //
-    G4RichTrajectory();
-    G4RichTrajectory(const G4Track* aTrack);
-    G4RichTrajectory(G4RichTrajectory &);
-    virtual ~G4RichTrajectory();
+ public:
+  // Constructors/destructor
+  //
+  G4RichTrajectory() = default;
+  G4RichTrajectory(const G4Track* aTrack);
+  ~G4RichTrajectory() override;
+  G4RichTrajectory(G4RichTrajectory&);
+  G4RichTrajectory& operator=(const G4RichTrajectory&) = delete;
 
-    // Operators
-    //
-    G4RichTrajectory& operator= (const G4RichTrajectory &) = delete;
-    G4int operator == (const G4RichTrajectory& r) const { return (this==&r); } 
+  // Operators
+  //
+  G4bool operator==(const G4RichTrajectory& r) const { return (this == &r); }
 
-    inline void* operator new(size_t);
-    inline void  operator delete(void*);
-  
-    // Other (virtual) member functions
-    //
-    void ShowTrajectory(std::ostream& os=G4cout) const;
-    void DrawTrajectory() const;
-    void AppendStep(const G4Step* aStep);
-    void MergeTrajectory(G4VTrajectory* secondTrajectory);
-    inline G4int GetPointEntries() const;
-    inline G4VTrajectoryPoint* GetPoint(G4int i) const;
+  inline void* operator new(size_t);
+  inline void operator delete(void*);
 
-    // Get methods for HepRep style attributes
-    //
-    virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
-    virtual std::vector<G4AttValue>* CreateAttValues() const;
+  // Other (virtual) member functions
+  //
+  void ShowTrajectory(std::ostream& os = G4cout) const override;
+  void DrawTrajectory() const override;
+  void AppendStep(const G4Step* aStep) override;
+  void MergeTrajectory(G4VTrajectory* secondTrajectory) override;
+  inline G4int GetPointEntries() const override;
+  inline G4VTrajectoryPoint* GetPoint(G4int i) const override;
 
-  private:
+  // Get methods for HepRep style attributes
+  //
+  const std::map<G4String, G4AttDef>* GetAttDefs() const override;
+  std::vector<G4AttValue>* CreateAttValues() const override;
 
-    // Extended information (only publicly accessible through AttValues)...
-    //
-    RichTrajectoryPointsContainer* fpRichPointsContainer = nullptr;
-    G4TouchableHandle fpInitialVolume;
-    G4TouchableHandle fpInitialNextVolume;
-    const G4VProcess* fpCreatorProcess = nullptr;
-    G4int             fCreatorModelID = 0;
-    G4TouchableHandle fpFinalVolume;
-    G4TouchableHandle fpFinalNextVolume;
-    const G4VProcess* fpEndingProcess = nullptr;
-    G4double          fFinalKineticEnergy = 0.0;
+ private:
+  // Extended information (only publicly accessible through AttValues)...
+  //
+  RichTrajectoryPointsContainer* fpRichPointsContainer = nullptr;
+  G4TouchableHandle fpInitialVolume;
+  G4TouchableHandle fpInitialNextVolume;
+  const G4VProcess* fpCreatorProcess = nullptr;
+  G4int fCreatorModelID = 0;
+  G4TouchableHandle fpFinalVolume;
+  G4TouchableHandle fpFinalNextVolume;
+  const G4VProcess* fpEndingProcess = nullptr;
+  G4double fFinalKineticEnergy = 0.0;
 };
 
 extern G4TRACKING_DLL G4Allocator<G4RichTrajectory>*& aRichTrajectoryAllocator();
 
 inline void* G4RichTrajectory::operator new(size_t)
 {
-  if (aRichTrajectoryAllocator() == nullptr)
-  {
+  if (aRichTrajectoryAllocator() == nullptr) {
     aRichTrajectoryAllocator() = new G4Allocator<G4RichTrajectory>;
   }
   return (void*)aRichTrajectoryAllocator()->MallocSingle();

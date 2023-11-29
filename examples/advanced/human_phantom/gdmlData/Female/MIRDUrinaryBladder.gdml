@@ -110,7 +110,7 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="UrinaryBladder" ax="4.27" by="3.38" cz="3.11" zcut1="-3.11" zcut2="3.11" />
+  <ellipsoid lunit="cm" name="UrinaryBladder" ax="4.27" by="3.38" cz="3.11" zcut1="-3.11" zcut2="3.11" />
  </solids>
  <structure>
   <volume name="UrinaryBladderVolume" >

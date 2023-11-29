@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file ScoreSpecies.cc
-/// \brief Implementation of the ScoreSpecies class
+/// \file scavenger/src/ScoreSpecies.cc
+/// \brief Implementation of the scavenger::ScoreSpecies class
 
 #include "ScoreSpecies.hh"
 
@@ -38,13 +38,6 @@
 #include "G4AnalysisManager.hh"
 #include "G4Event.hh"
 #include "G4UImessenger.hh"
-
-/**
-  This is a primitive scorer class for molecular species.
-  The number of species is recorded for all times (predetermined or 
-  user chosen). It also scores the energy deposition in order to compute the 
-  radiochemical yields.
-*/
 
 namespace scavenger
 {

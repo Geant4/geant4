@@ -95,7 +95,7 @@ G4double relativeError(const G4double y[],
    return std::sqrt(relativeError2(y, yError, h, errorTolerance));
 }
 
-void copy(G4double dst[], const G4double src[], size_t size)
+void copy(G4double dst[], const G4double src[], std::size_t size)
 {
    std::memcpy(dst, src, sizeof(G4double) * size);
 }

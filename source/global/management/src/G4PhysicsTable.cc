@@ -44,13 +44,7 @@
 #include "G4PhysicsVectorType.hh"
 
 // --------------------------------------------------------------------
-G4PhysicsTable::G4PhysicsTable()
-  : G4PhysCollection()
-{}
-
-// --------------------------------------------------------------------
 G4PhysicsTable::G4PhysicsTable(std::size_t cap)
-  : G4PhysCollection()
 {
   reserve(cap);
   vecFlag.reserve(cap);
@@ -108,9 +102,9 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName, G4bool ascii)
   }
 
   // Physics Vector
-  for(auto itr = cbegin(); itr != cend(); ++itr)
+  for(const auto itr : *this)
   {
-    G4int vType = (*itr)->GetType();
+    G4int vType = itr->GetType();
     if(!ascii)
     {
       fOut.write((char*) (&vType), sizeof vType);
@@ -119,7 +113,7 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName, G4bool ascii)
     {
       fOut << vType << G4endl;
     }
-    (*itr)->Store(fOut, ascii);
+    itr->Store(fOut, ascii);
   }
   fOut.close();
   return true;

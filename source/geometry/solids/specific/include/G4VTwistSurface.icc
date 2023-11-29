@@ -42,7 +42,7 @@ G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector& p,
 {
    G4double q = n0 * v;
    G4double t = kInfinity;
-   if (q) { t = (n0 * (x0 - p)) / q; }
+   if (q != 0.0) { t = (n0 * (x0 - p)) / q; }
    xx = p + t * v;
    return t;
 }
@@ -150,8 +150,7 @@ G4double G4VTwistSurface::DistanceToLine(const G4ThreeVector& p,
 inline
 G4bool G4VTwistSurface::IsAxis0(G4int areacode) const 
 {
-   if (areacode & sAxis0) return true;
-   return false;
+   return (areacode & sAxis0) != 0;
 }
 
 //=====================================================================
@@ -160,8 +159,7 @@ G4bool G4VTwistSurface::IsAxis0(G4int areacode) const
 inline
 G4bool G4VTwistSurface::IsAxis1(G4int areacode) const 
 {
-   if (areacode & sAxis1) return true;
-   return false;
+   return (areacode & sAxis1) != 0;
 }
 
 //=====================================================================
@@ -170,8 +168,7 @@ G4bool G4VTwistSurface::IsAxis1(G4int areacode) const
 inline
 G4bool G4VTwistSurface::IsOutside(G4int areacode) const 
 {
-   if (areacode & sInside) return false;
-   return true;
+   return (areacode & sInside) == 0;
 }
 
 //=====================================================================
@@ -180,11 +177,11 @@ G4bool G4VTwistSurface::IsOutside(G4int areacode) const
 inline
 G4bool G4VTwistSurface::IsInside(G4int areacode, G4bool testbitmode) const 
 {
-   if (areacode & sInside) {
+   if ((areacode & sInside) != 0) {
       if (testbitmode) {
          return true;
       } else {
-       if (!((areacode & sBoundary) || (areacode & sCorner))) return true;
+       if (((areacode & sBoundary) == 0) && ((areacode & sCorner) == 0)) return true;
       }
    }
    return false;
@@ -354,7 +351,7 @@ G4VTwistSurface::GetNeighbours(G4int areacode, G4VTwistSurface** surfaces)
 inline
 G4ThreeVector G4VTwistSurface::GetCorner(G4int areacode) const
 {
-   if (!(areacode & sCorner))
+   if ((areacode & sCorner) == 0)
    {
       std::ostringstream message;
       message << "Area code must represent corner." << G4endl

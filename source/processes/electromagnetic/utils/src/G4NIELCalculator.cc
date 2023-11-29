@@ -69,11 +69,6 @@ G4NIELCalculator::G4NIELCalculator(G4VEmModel* mod, G4int verb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4NIELCalculator::~G4NIELCalculator()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4NIELCalculator::AddEmModel(G4VEmModel* mod) 
 {
   if(mod && mod != fModel) { 

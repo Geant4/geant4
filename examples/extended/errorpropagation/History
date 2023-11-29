@@ -1,66 +1,10 @@
--------------------------------------------------------------------
+# Example errorpropagation History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-May 24, 2021 B. Morgan (exerrprop-V10-07-00)
-- Bump required CMake version range to 3.12...3.20, matching core Geant4
-
-Nov 03, 2020 B.Morgan (exerrprop-V10-06-00)
-- Support same CMake version range as core Geant4
-
-Jun 13, 2018  G.Cosmo (exerrprop-V10-04-00)
-- Use implicit destructor in ExErrorMagneticField.
-- Updated README.
-
-Oct 16, 2014  I.Hrivnacova (exerrprop-V10-00-00)
-- Fixed coding guidelines (long lines) in errprop.cc, ExErrorDetectorConstruction.cc
-
-Feb 13, 2013  I.Hrivnacova (exerrprop-V09-06-00)
-- Applied coding guidelines (virtual keyword, data member initialization)
-
-Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-05)
-- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
-  where needed
-- Replaced tabulators with space characters
-
-Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-04)
-- Updated CMakeLists.txt:
-  adding copying macros (empty), install target and comment lines
-
-Jul 17, 2012  I.Hrivnacova (exerrprop-V09-05-03)
-- Restored files descriptions and moved class descriptions in .hh
-  at the right place
-
-Jul 17, 2012  I.Hrivnacova (exerrprop-V09-05-02)
-- Improved .README file
-
-Jul 6, 2012  P.Arce (exerrprop-V09-05-01)
-- Reviewed examples according to coding guidelines
-
-Oct 3, 2011  G.Folger (exerrprop-V09-04-01)
-- Fix one left old style G4Exception.
-
-Oct 3, 2011  G.Folger (exerrprop-V09-04-00)
-- Fix gcc46 compilation warning in errprop.cc
-
-Mar 6, 2009  G.Barrand (exerrprop-V09-02-00)
-- GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
-  since it already handled in the internal configuration scripts.
-- Replaced usare of 'uint' with 'size_t' in errprop.cc (G.Cosmo).
-
-May 28, 2007  P.Arce
-- First version
+## 2022-13-09 I. Hrivnacova (exErrorpropagation-V11-00-00)
+- Introduced 'errorpropagation' category to avoid having the errProp 
+  example directly in 'extended' category

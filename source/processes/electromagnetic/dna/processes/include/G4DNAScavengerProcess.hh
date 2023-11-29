@@ -39,7 +39,7 @@ class G4DNAScavengerProcess : public G4VITProcess
   using Data    = const G4DNAMolecularReactionData;
   explicit G4DNAScavengerProcess(const G4String& aName,
                                  const G4DNABoundingBox& box,
-                                 G4ProcessType type = fDecay);
+                                 G4ProcessType type = fUserDefined);
   ~G4DNAScavengerProcess() override;
   G4DNAScavengerProcess(const G4DNAScavengerProcess&) = delete;
   G4DNAScavengerProcess& operator=(const G4DNAScavengerProcess&) = delete;
@@ -100,6 +100,5 @@ class G4DNAScavengerProcess : public G4VITProcess
   MolType fpMaterialConf;
   const G4DNABoundingBox* fpBoundingBox;
   G4DNAScavengerMaterial* fpScavengerMaterial;
-  G4int fVerbose;
 };
 #endif  // FLASH1_G4DNASCAVENGERPROCESS_HH

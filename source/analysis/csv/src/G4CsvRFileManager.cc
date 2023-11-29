@@ -89,9 +89,8 @@ G4bool G4CsvRFileManager::OpenRFile(const G4String& fileName)
 std::ifstream* G4CsvRFileManager::GetRFile(const G4String& fileName) const
 {
   auto it = fRFiles.find(fileName);
-  if  ( it != fRFiles.end() )
+  if (it != fRFiles.end()) {
     return it->second;
-  else {
-    return nullptr;
   }
+  return nullptr;
 }

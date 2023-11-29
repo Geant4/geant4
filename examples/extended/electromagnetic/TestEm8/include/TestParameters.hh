@@ -53,21 +53,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class TestParameters
-{
+class TestParameters {
 
 public:
   // With description
 
-  static TestParameters* GetPointer();
+  static TestParameters *GetPointer();
 
 private:
-
   TestParameters();
 
 public: // Without description
-
-  ~TestParameters();
+  ~TestParameters() = default;
 
   void SetMaxEnergy(G4double value);
 
@@ -105,26 +102,25 @@ public: // Without description
 
   G4double GetBeamEnergy() const;
 
-  void SetBeamParticle(const G4ParticleDefinition*);
+  void SetBeamParticle(const G4ParticleDefinition *);
 
-  const G4ParticleDefinition* GetBeamParticle() const;
+  const G4ParticleDefinition *GetBeamParticle() const;
 
 private:
-
-  static TestParameters* fManager;
+  static TestParameters *fManager;
 
   G4double fMaxEnergy;
-  G4double fFactorALICE;
-  G4double fNormFactor;
-  G4double fEnergySmear;
-  G4double fPositionZ;
-  G4double fBeamEnergy;
+  G4double fFactorALICE = 325;
+  G4double fNormFactor = 1.0;
+  G4double fEnergySmear = 0.0;
+  G4double fPositionZ = 0.0;
+  G4double fBeamEnergy = 0.0;
 
-  G4int fBinsE; 
-  G4int fBinsCluster;
-  G4int fMaxCluster;
+  G4int fBinsE = 100;
+  G4int fBinsCluster = 1;
+  G4int fMaxCluster = 1500;
 
-  const G4ParticleDefinition* fParticle;
+  const G4ParticleDefinition *fParticle = nullptr;
 };
 
 #endif

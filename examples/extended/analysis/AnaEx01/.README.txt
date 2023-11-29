@@ -96,9 +96,29 @@
  One can control the name of the histograms file and its format:
  - default name     : AnaEx01
  The format of the histogram file can be : root (default),
- xml, csv. Include correct g4nnn.hh in HistoManager.hh
+ xml, csv.
 
-\section AnaEx01_s7 How to build
+ We can define the default file type and set it to the analysis manager via
+\verbatim
+/analysis/setDefaultFileType root    # or csv hdf5 xml
+\endverbatim
+
+ The file names then need not to be provided with the file extension and the same macro
+ can be used with different output types.
+
+ \section AnaEx03_s7 Macros
+
+ - The AnaEx01.in macro uses the defaultFileType parameter (alias), which default value,
+ "root" is defined in main.
+
+ - AnaEx01-csv.in, AnaEx01-hdf5.in, AnaEx01-root.in, AnaEx01-xml.in:
+   In these macros, the default value of the defaultFileType is overritten with
+\verbatim
+/control/alias defaultFileType cvs   # or hdf5 root xml
+\endverbatim
+   and then the AnaEx01.in macro is called.
+
+\section AnaEx01_s8 How to build
 
  An additional step is needed when building the example with GNUmake
  due to using the extra shared directory:
@@ -114,7 +134,7 @@
 % gmake clean_setup
 \endverbatim
 
-\section AnaEx01_s8 HOW TO RUN
+\section AnaEx01_s9 HOW TO RUN
 
 - Execute AnaEx01 in the 'interactive mode' with visualization
 \verbatim

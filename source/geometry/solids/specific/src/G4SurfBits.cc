@@ -38,7 +38,7 @@ G4SurfBits::G4SurfBits(unsigned int nBits) : fNBits(nBits)
   // G4SurfBits constructor.  All bits set to 0
 
   if (fNBits <= 0) fNBits = 0;
-  fNBytes  = fNBits ? ((fNBits-1)/8) + 1 : 1;
+  fNBytes  = fNBits != 0u ? ((fNBits-1)/8) + 1 : 1;
   fAllBits = new unsigned char[fNBytes];
   // this is redundant only with libNew
   std::memset(fAllBits,0,fNBytes);
@@ -101,7 +101,7 @@ void G4SurfBits::Compact()
 {
   // Reduce the storage used by the object to a minimun
 
-  if (!fNBits || !fAllBits) return;
+  if ((fNBits == 0u) || (fAllBits == nullptr)) return;
   unsigned int needed;
   for(needed=fNBytes-1; needed > 0 && fAllBits[needed]==0; ) { --needed; }
   ++needed;
@@ -144,7 +144,7 @@ void G4SurfBits::Print() const
     unsigned char val = fAllBits[i];
     for (unsigned int j=0; j<8; ++j)
     {
-      if (val & 1) G4cout << " bit:" << count << " = 1" << G4endl;
+      if ((val & 1) != 0) G4cout << " bit:" << count << " = 1" << G4endl;
       ++count;
       val = val >> 1;
     }
@@ -165,7 +165,7 @@ void G4SurfBits::ReserveBytes(unsigned int nbytes)
   if (nbytes > fNBytes)
   {
     // do it in this order to remain exception-safe.
-    unsigned char *newBits = new unsigned char[nbytes];
+    auto newBits = new unsigned char[nbytes];
     delete [] fAllBits;
     fNBytes = nbytes;
     fAllBits = newBits;

@@ -122,7 +122,7 @@ private:
   G4int theStructureNMaxROI;
 
 public:
-  static int verbose;
+  static G4int verbose;
   G4bool bMaterialsDensity;
 };
 

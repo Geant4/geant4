@@ -38,7 +38,6 @@
 #include "G4NistManager.hh"
 
 #include "G4MultiFunctionalDetector.hh"
-#include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 
 #include "G4ScoringManager.hh"
@@ -68,13 +67,11 @@ G4ScoringProbe::G4ScoringProbe(G4String lvName, G4double half_size,
   }
 }
 
-G4ScoringProbe::~G4ScoringProbe() {}
-
 void G4ScoringProbe::List() const
 {
   G4cout << "G4ScoringProbe : " << logVolName << G4endl;
-  G4int np = posVec.size();
-  for(G4int i = 0; i < np; i++)
+  std::size_t np = posVec.size();
+  for(std::size_t i = 0; i < np; ++i)
   {
     G4cout << " >> probe #" << i << " at " << posVec[i] << G4endl;
   }
@@ -102,17 +99,17 @@ void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)
     fMeshElementLogical =
       new G4LogicalVolume(boxSolid, layeredMaterial, logVolName + "_log");
 
-    G4int np = posVec.size();
-    for(G4int i = 0; i < np; i++)
+    std::size_t np = posVec.size();
+    for(std::size_t i = 0; i < np; ++i)
     {
-      new G4PVPlacement(0, posVec[i], fMeshElementLogical, logVolName + "_phy",
-                        worldLog, false, i, chkOverlap);
+      new G4PVPlacement(nullptr, posVec[i], fMeshElementLogical, logVolName + "_phy",
+                        worldLog, false, (G4int)i, chkOverlap);
     }
 
-    G4VisAttributes* wisatt = new G4VisAttributes(G4Colour(.5, .5, .5));
+    auto  wisatt = new G4VisAttributes(G4Colour(.5, .5, .5));
     wisatt->SetVisibility(false);
     worldLog->SetVisAttributes(wisatt);
-    G4VisAttributes* visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
+    auto  visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
     visatt->SetVisibility(true);
     fMeshElementLogical->SetVisAttributes(visatt);
   }
@@ -130,28 +127,30 @@ void G4ScoringProbe::SetupGeometry(G4VPhysicalVolume* worldPhys)
 
 G4bool G4ScoringProbe::SetMaterial(G4String val)
 {
-  if(G4Threading::IsMasterThread())
+  if(val == "none")
   {
-    if(val == "none")
+    layeredMaterialName = val;
+    layeredMassFlg      = false;
+    layeredMaterial     = nullptr;
+  }
+  else
+  {
+    G4AutoLock l(&logvolmutex);
+    auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
+    if(mat == nullptr)
     {
-      layeredMaterialName = val;
-      layeredMassFlg      = false;
-      layeredMaterial     = nullptr;
+      return false;
     }
-    else
+    layeredMaterialName = val;
+    layeredMassFlg      = true;
+    layeredMaterial     = mat;
+    if(G4Threading::IsMasterThread())
     {
-      auto mat = G4NistManager::Instance()->FindOrBuildMaterial(val);
-      if(!mat)
-      {
-        return false;
-      }
-      layeredMaterialName = val;
-      layeredMassFlg      = true;
-      layeredMaterial     = mat;
+      auto region = G4RegionStore::GetInstance()->GetRegion(regName);
+      assert(region != nullptr);
+      region->UpdateMaterialList();
     }
-    auto region = G4RegionStore::GetInstance()->GetRegion(regName);
-    assert(region != nullptr);
-    region->UpdateMaterialList();
+    l.unlock();
   }
   return true;
 }

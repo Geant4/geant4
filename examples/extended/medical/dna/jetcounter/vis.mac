@@ -1,0 +1,17 @@
+/control/execute init_phys.in
+
+/vis/open OGL 600x600-0+0
+/vis/drawVolume
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/add/axes 0 0 0 0.05 m
+/vis/ogl/set/displayListLimit 1000000
+
+/run/numberOfThreads 1
+/run/initialize
+
+/control/execute primaries.in
+/run/beamOn 1

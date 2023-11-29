@@ -44,44 +44,44 @@ class G4PVDivisionFactory : public G4VPVDivisionFactory
 {
   public:  // with description
 
-    virtual ~G4PVDivisionFactory();
+    ~G4PVDivisionFactory() override;
     
-    virtual G4VPhysicalVolume* CreatePVDivision(
+    G4VPhysicalVolume* CreatePVDivision(
                              const G4String& pName,
                                    G4LogicalVolume* pLogical,
                                    G4LogicalVolume* pMother,
                              const EAxis pAxis,
                              const G4int nReplicas,
                              const G4double width,
-                             const G4double offset );
+                             const G4double offset ) override;
       // Create division - with number of divisions and width.
 
-    virtual G4VPhysicalVolume* CreatePVDivision(
+    G4VPhysicalVolume* CreatePVDivision(
                              const G4String& pName,
                                    G4LogicalVolume* pLogical,
                                    G4LogicalVolume* pMotherLogical,
                              const EAxis pAxis,
                              const G4int nReplicas,
-                             const G4double offset );
+                             const G4double offset ) override;
       // Create division - with number of divisions.
 
-    virtual G4VPhysicalVolume* CreatePVDivision(
+    G4VPhysicalVolume* CreatePVDivision(
                              const G4String& pName,
                                    G4LogicalVolume* pLogical,
                                    G4LogicalVolume* pMotherLogical,
                              const EAxis pAxis,
                              const G4double width,
-                             const G4double offset );
+                             const G4double offset ) override;
       // Create division - with width.
 
-    virtual G4VPhysicalVolume* CreatePVDivision(
+    G4VPhysicalVolume* CreatePVDivision(
                              const G4String& pName,
                                    G4LogicalVolume* pLogical,
                                    G4LogicalVolume* pMotherLogical,
-                             const G4VPVParameterisation* param);
+                             const G4VPVParameterisation* param) override;
       // Create division - with parameterisation.
 
-    virtual G4bool IsPVDivision(const G4VPhysicalVolume* pv) const; 
+    G4bool IsPVDivision(const G4VPhysicalVolume* pv) const override; 
       // Returns true if pv is division.
     
     static G4PVDivisionFactory* GetInstance(); 

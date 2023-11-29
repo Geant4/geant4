@@ -61,10 +61,10 @@ PrimaryGeneratorAction2::~PrimaryGeneratorAction2()
 
 void PrimaryGeneratorAction2::GeneratePrimaries(G4Event* anEvent)
 {
-  //cosAlpha uniform in [cos(0), cos(pi)]
-  G4double cosAlpha = 1. - 2*G4UniformRand();
+  // uniform solid angle
+  G4double cosAlpha = 1. - 2*G4UniformRand();   //cosAlpha uniform in [-1,+1]
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi      = twopi*G4UniformRand();  //psi uniform in [0, 2*pi]  
+  G4double psi      = twopi*G4UniformRand();   //psi uniform in [0, 2*pi]  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
 
   fParticleGun->SetParticleMomentumDirection(dir);
@@ -126,7 +126,8 @@ G4double PrimaryGeneratorAction2::RejectAccept()
 {
   // tabulated function 
   // Y is assumed positive, linear per segment, continuous
-  //  
+  // (see Particle Data Group: pdg.lbl.gov --> Monte Carlo techniques)
+  // 
   G4double Xrndm = 0., Yrndm = 0., Yinter = -1.;
   
   while (Yrndm > Yinter) {
@@ -149,6 +150,7 @@ G4double PrimaryGeneratorAction2::InverseCumul()
   // tabulated function
   // Y is assumed positive, linear per segment, continuous 
   // --> cumulative function is second order polynomial
+  // (see Particle Data Group: pdg.lbl.gov --> Monte Carlo techniques)
   
   //choose y randomly
   G4double Yrndm = G4UniformRand()*fYC[fNPoints-1];

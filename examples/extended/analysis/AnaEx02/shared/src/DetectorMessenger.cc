@@ -25,10 +25,6 @@
 //
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
-//
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,57 +41,48 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
-: G4UImessenger(),
- fDetector(Det),
- fDetDir(0),
- fAbsMaterCmd(0),
- fGapMaterCmd(0),
- fAbsThickCmd(0),
- fGapThickCmd(0),
- fSizeYZCmd(0),
- fNbLayersCmd(0)    
-{ 
+: fDetector(Det)
+{
   G4bool broadcast = false;
   fDetDir = new G4UIdirectory("/det/",broadcast);
   fDetDir->SetGuidance("Detector control");
-       
+
   fAbsMaterCmd = new G4UIcmdWithAString("/det/setAbsMat",this);
   fAbsMaterCmd->SetGuidance("Select Material of the Absorber.");
-  fAbsMaterCmd->SetParameterName("choice",false);
+  fAbsMaterCmd->SetParameterName("AbsMat",false);
   fAbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
+
   fGapMaterCmd = new G4UIcmdWithAString("/det/setGapMat",this);
   fGapMaterCmd->SetGuidance("Select Material of the Gap.");
-  fGapMaterCmd->SetParameterName("choice",false);
+  fGapMaterCmd->SetParameterName("GapMat",false);
   fGapMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    
+
   fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/det/setAbsThick",this);
   fAbsThickCmd->SetGuidance("Set Thickness of the Absorber");
-  fAbsThickCmd->SetParameterName("Size",false);
-  fAbsThickCmd->SetRange("Size>=0.");
+  fAbsThickCmd->SetParameterName("AbsThick",false);
+  fAbsThickCmd->SetRange("AbsThick>=0.");
   fAbsThickCmd->SetUnitCategory("Length");
   fAbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
+
   fGapThickCmd = new G4UIcmdWithADoubleAndUnit("/det/setGapThick",this);
   fGapThickCmd->SetGuidance("Set Thickness of the Gap");
-  fGapThickCmd->SetParameterName("Size",false);
-  fGapThickCmd->SetRange("Size>=0.");
-  fGapThickCmd->SetUnitCategory("Length");  
+  fGapThickCmd->SetParameterName("GapThick",false);
+  fGapThickCmd->SetRange("GapThick>=0.");
+  fGapThickCmd->SetUnitCategory("Length");
   fGapThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
+
   fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/det/setSizeYZ",this);
   fSizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
-  fSizeYZCmd->SetParameterName("Size",false);
-  fSizeYZCmd->SetRange("Size>0.");
-  fSizeYZCmd->SetUnitCategory("Length");    
+  fSizeYZCmd->SetParameterName("SizeYZ",false);
+  fSizeYZCmd->SetRange("SizeYZ>0.");
+  fSizeYZCmd->SetUnitCategory("Length");
   fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
+
   fNbLayersCmd = new G4UIcmdWithAnInteger("/det/setNbOfLayers",this);
   fNbLayersCmd->SetGuidance("Set number of layers.");
   fNbLayersCmd->SetParameterName("NbLayers",false);
   fNbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
   fNbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,34 +90,46 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
 DetectorMessenger::~DetectorMessenger()
 {
   delete fNbLayersCmd;
-  delete fAbsMaterCmd; delete fGapMaterCmd;
-  delete fAbsThickCmd; delete fGapThickCmd;
-  delete fSizeYZCmd;   
+  delete fAbsMaterCmd;
+  delete fGapMaterCmd;
+  delete fAbsThickCmd;
+  delete fGapThickCmd;
+  delete fSizeYZCmd;
   delete fDetDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == fAbsMaterCmd ) { 
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if( command == fAbsMaterCmd ) {
     fDetector->SetAbsorberMaterial(newValue);
-  } 
-  else if( command == fGapMaterCmd ) { 
+    return;
+  }
+
+  if( command == fGapMaterCmd ) {
     fDetector->SetGapMaterial(newValue);
+    return;
   }
-  else if( command == fAbsThickCmd ) { 
-    fDetector
-       ->SetAbsorberThickness(fAbsThickCmd->GetNewDoubleValue(newValue));
-  } 
-  else if( command == fGapThickCmd ) { 
+
+  if( command == fAbsThickCmd ) {
+    fDetector->SetAbsorberThickness(fAbsThickCmd->GetNewDoubleValue(newValue));
+    return;
+  }
+
+  if( command == fGapThickCmd ) {
     fDetector->SetGapThickness(fGapThickCmd->GetNewDoubleValue(newValue));
+    return;
   }
-  else if( command == fSizeYZCmd ) { 
+
+  if( command == fSizeYZCmd ) {
     fDetector->SetCalorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));
-  } 
-  else if( command == fNbLayersCmd ) { 
+    return;
+  }
+
+  if( command == fNbLayersCmd ) {
     fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));
+    return;
   }
 }
 

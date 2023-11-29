@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -36,34 +34,29 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef GammaRayTelDigitizerMessenger_h
 #define GammaRayTelDigitizerMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <memory>
+
 class GammaRayTelDigitizer;
+
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelDigitizerMessenger: public G4UImessenger
-{
+class GammaRayTelDigitizerMessenger: public G4UImessenger {
 public:
-  GammaRayTelDigitizerMessenger(GammaRayTelDigitizer*);
-  ~GammaRayTelDigitizerMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
+	explicit GammaRayTelDigitizerMessenger(GammaRayTelDigitizer*);
+
+	~GammaRayTelDigitizerMessenger() override;
+
+	void SetNewValue(G4UIcommand *command, G4String newValue) override;
+
 private:
-  GammaRayTelDigitizer* GammaRayTelAction; 
-  G4UIcmdWithADoubleAndUnit*  ThresholdCmd;
+	GammaRayTelDigitizer *GammaRayTelAction;
 
+	G4UIcmdWithADoubleAndUnit *thresholdCmd;
 };
-
 #endif
-
-

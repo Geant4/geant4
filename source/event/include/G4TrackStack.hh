@@ -45,9 +45,8 @@ class G4TrackStack : public std::vector<G4StackedTrack>
 {
   public:
 
-    G4TrackStack()
-      : safetyValue1(0), safetyValue2(0), nstick(0) {}
-    G4TrackStack(std::size_t n)
+    G4TrackStack() = default;
+    explicit G4TrackStack(std::size_t n)
       : safetyValue1(G4int(4*n/5)),
         safetyValue2(G4int(4*n/5-100)), nstick(100) { reserve(n); }
    ~G4TrackStack();
@@ -57,7 +56,10 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     G4bool operator!=(const G4TrackStack&) const = delete;
   
     inline void PushToStack(const G4StackedTrack& aStackedTrack)
-      { push_back(aStackedTrack); }
+      {
+        push_back(aStackedTrack);
+        if(size()>maxEntry) maxEntry = size();
+      }
     inline G4StackedTrack PopFromStack()
       { G4StackedTrack st = back(); pop_back(); return st; }
     void TransferTo(G4TrackStack* aStack);
@@ -66,19 +68,20 @@ class G4TrackStack : public std::vector<G4StackedTrack>
     void clearAndDestroy();
 
     inline std::size_t GetNTrack() const { return size(); }
-    inline std::size_t GetMaxNTrack() const { return max_size(); }
+    inline std::size_t GetMaxNTrack() const { return maxEntry; }
     inline G4int GetSafetyValue1() const { return safetyValue1; }
     inline G4int GetSafetyValue2() const { return safetyValue2; }
     inline G4int GetNStick() const { return nstick; }
   
-    G4double getTotalEnergy(void) const;
+    G4double getTotalEnergy() const;
     inline void SetSafetyValue2(G4int x) { safetyValue2 = x  < 0 ? 0 : x; }
   
   private:
 
-    G4int safetyValue1;
-    G4int safetyValue2;
-    G4int nstick;
+    G4int safetyValue1{0};
+    G4int safetyValue2{0};
+    G4int nstick{0};
+    std::size_t maxEntry{0};
 };
 
 #endif

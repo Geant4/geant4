@@ -19,7 +19,7 @@ endif()
 #
 include(${Geant4_USE_FILE})
 # Setup of ROOT ANALYSIS : optional.
-option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
+option(WITH_ANALYSIS_USE "Build example with analysis objects" ON)
 if(WITH_ANALYSIS_USE)
 add_definitions(-DANALYSIS_USE)
 else()
@@ -45,7 +45,7 @@ target_link_libraries(radioprotection ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(radioprotection_SCRIPTS
-   vis.mac physics.mac primary.mac run.mac geometry.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C
+   vis.mac physics.mac primary.mac run.mac geometry.mac output.mac  MergeFiles LoadPlotNtuple.C ProcessMicro.C 1_plot_distributions.py 2_calculate_means_rbe.py weight_function.csv
   )
 
 foreach(_script ${radioprotection_SCRIPTS})

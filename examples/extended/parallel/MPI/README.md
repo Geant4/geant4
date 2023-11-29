@@ -241,13 +241,13 @@ This example is the same as exMPI03 with added ntuple.
 
 - Root output files from application run with `mpiexec -n 4`
   - Sequential application:
-    (3 working ranks, 1 rank dedicated for collecting ntuple data)
-    - dose-merged.root - merged histograms
-    - dose-rank0,1,2.root - histograms data collected on rank 0  before merge
+    (3 working ranks, the last rank dedicated for collecting ntuple data)
+    - dose-merged.root - merged histograms from ranks 0, 1 and 2
+    - dose-rank1,2.root - histograms data collected on rank N before merge
     - dose-rank3  - ntuples merged from ranks 0, 1 and 2
   - MT application:
     (4 working ranks)
-    - dose-merged.root - merged histograms
-    - dose-rank0, 1, 2, 3.root -  histograms data collected on rank N before merge;
-         ntuples merged on rank N from rank threads
+    - dose-merged.root - merged histograms from ranks 0, 1, 2 and 3
+    - dose-rank0,1,2,3.root -  histograms data collected on rank N before merge;
+         ntuples merged on each rank N from rank threads
 

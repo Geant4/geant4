@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file CellParameterisation.hh
+/// \file B5/include/CellParameterisation.hh
 /// \brief Definition of the B5::CellParameterisation class
 
 #ifndef B5CellParameterisation_H
@@ -48,7 +48,7 @@ class CellParameterisation : public G4VPVParameterisation
 {
   public:
     CellParameterisation();
-    ~CellParameterisation() override;
+    ~CellParameterisation() override = default;
 
     void ComputeTransformation(
                    const G4int copyNo,G4VPhysicalVolume *physVol) const override;

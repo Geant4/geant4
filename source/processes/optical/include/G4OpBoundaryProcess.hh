@@ -110,7 +110,10 @@ enum G4OpBoundaryProcessStatus
   GroundTyvekAirReflection,
   GroundVM2000AirReflection,
   GroundVM2000GlueReflection,
-  Dichroic
+  Dichroic,
+  CoatedDielectricReflection,
+  CoatedDielectricRefraction,
+  CoatedDielectricFrustratedTransmission
 };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
@@ -162,6 +165,7 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   void DielectricLUTDAVIS();
 
   void DielectricDichroic();
+  void CoatedDielectricDielectric();
 
   void ChooseReflection();
   void DoAbsorption();
@@ -173,11 +177,16 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   G4double GetReflectivity(G4double E1_perp, G4double E1_parl,
                            G4double incidentangle, G4double RealRindex,
                            G4double ImaginaryRindex);
-  // Returns the Reflectivity on a metalic surface
+  // Returns the Reflectivity on a metallic surface
 
-  void CalculateReflectivity(void);
+  G4double GetReflectivityThroughThinLayer(G4double sinTL, G4double E1_perp,
+                                           G4double E1_parl, G4double wavelength,
+                                           G4double cost1, G4double cost2);
+  // Returns the Reflectivity on a coated surface
 
-  void BoundaryProcessVerbose(void) const;
+  void CalculateReflectivity();
+
+  void BoundaryProcessVerbose() const;
 
   // Invoke SD for post step point if the photon is 'detected'
   G4bool InvokeSD(const G4Step* step);
@@ -191,8 +200,8 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   G4ThreeVector fGlobalNormal;
   G4ThreeVector fFacetNormal;
 
-  G4Material* fMaterial1;
-  G4Material* fMaterial2;
+  const G4Material* fMaterial1;
+  const G4Material* fMaterial2;
 
   G4OpticalSurface* fOpticalSurface;
 
@@ -214,11 +223,16 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   G4double fProb_sl, fProb_ss, fProb_bs;
   G4double fCarTolerance;
 
+  // Used by CoatedDielectricDielectric()
+  G4double fCoatedRindex, fCoatedThickness;
+
   G4OpBoundaryProcessStatus fStatus;
   G4OpticalSurfaceModel fModel;
   G4OpticalSurfaceFinish fFinish;
 
   G4int f_iTE, f_iTM;
+
+  G4int fNumWarnings; // number of times small step warning printed
 
   size_t idx_dichroicX      = 0;
   size_t idx_dichroicY      = 0;
@@ -234,6 +248,10 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
   size_t idx_groupvel       = 0;
   size_t idx_rrindex        = 0;
   size_t idx_irindex        = 0;
+  size_t idx_coatedrindex   = 0;
+
+  // Used by CoatedDielectricDielectric()
+  G4bool fCoatedFrustratedTransmission = true;
 
   G4bool fInvokeSD;
 };

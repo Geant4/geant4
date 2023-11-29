@@ -477,7 +477,7 @@ void G4OpticalParameters::PrintWarning(G4ExceptionDescription& ed) const
 
 void G4OpticalParameters::StreamInfo(std::ostream& os) const
 {
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os
     << "======================================================================="
     << "\n";

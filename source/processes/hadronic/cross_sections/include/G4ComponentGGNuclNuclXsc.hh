@@ -131,6 +131,7 @@ private:
  
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
+  const G4ParticleDefinition* theLambda;
 
   G4ComponentGGHadronNucleusXsc* fHadrNucl; 
   G4HadronNucleonXsc* fHNXsc;

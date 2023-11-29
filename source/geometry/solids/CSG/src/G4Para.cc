@@ -105,7 +105,7 @@ G4Para::G4Para( const G4String& pName,
     if (discrepancy > 0.1*kCarTolerance)
     {
       std::ostringstream message;
-      G4int oldprc = message.precision(16);
+      G4long oldprc = message.precision(16);
       message << "Invalid vertice coordinates for Solid: " << GetName()
               << "\nVertix #" << i << ", discrepancy = " << discrepancy
               << "\n  original   : " << pt[i]
@@ -134,9 +134,7 @@ G4Para::G4Para( __void__& a )
 //
 // Destructor
 
-G4Para::~G4Para()
-{
-}
+G4Para::~G4Para() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -373,7 +371,7 @@ G4bool G4Para::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent
@@ -483,7 +481,7 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 
   // Return normal
   //
-  if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
+  if (nsurf == 1)      return {nx,ny,nz};
   else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
   {
@@ -526,9 +524,9 @@ G4ThreeVector G4Para::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 
   G4double distz = std::abs(p.z()) - fDz;
   if (dist > distz)
-    return G4ThreeVector(fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c);
+    return { fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c };
   else
-    return G4ThreeVector(0, 0, (p.z() < 0) ? -1 : 1);
+    return { 0, 0, (G4double)((p.z() < 0) ? -1 : 1) };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -793,7 +791,7 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Para::GetEntityType() const
 {
-  return G4String("G4Para");
+  return {"G4Para"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -816,7 +814,7 @@ std::ostream& G4Para::StreamInfo( std::ostream& os ) const
                                        fTthetaSphi*fTthetaSphi));
   G4double phi   = std::atan2(fTthetaSphi,fTthetaCphi);
 
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"

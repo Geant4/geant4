@@ -38,21 +38,14 @@
 
 ActionInitialization::ActionInitialization(DetectorConstruction* detector, 
                                            PhysicsList* physics)
- : G4VUserActionInitialization(),
-   fDetector(detector),
-   fPhysics(physics)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
+ : fDetector(detector), fPhysics(physics)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  RunAction* runAction = new RunAction(fDetector, fPhysics, 0);
+  RunAction* runAction = new RunAction(fDetector, fPhysics, nullptr);
   SetUserAction(runAction);
 }
 

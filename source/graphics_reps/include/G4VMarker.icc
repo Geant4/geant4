@@ -104,7 +104,3 @@ inline void G4VMarker::SetScreenRadius (G4double scr) {
 inline void G4VMarker::SetFillStyle (G4VMarker::FillStyle style) {
   fFillStyle = style;
 }
-
-inline const G4String& G4VMarker::GetInfo() const {return fInfo;}
-
-inline void G4VMarker::SetInfo(const G4String& info) {fInfo = info;}

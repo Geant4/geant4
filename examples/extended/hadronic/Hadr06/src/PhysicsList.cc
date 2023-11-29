@@ -34,6 +34,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4NuclideTable.hh"
+
 #include "HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
@@ -59,7 +61,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList()
 {
   G4int verb = 1;
   SetVerboseLevel(verb);
@@ -68,14 +69,19 @@ PhysicsList::PhysicsList()
   //
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-
+  
+  // mandatory for G4NuclideTable
+  //
+  const G4double meanLife = 1*nanosecond, halfLife = meanLife*std::log(2);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(halfLife);
+  
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   ////RegisterPhysics( new G4HadronElasticPhysicsXS(verb) );
     
   // Hadron Inelastic Physics
   ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
@@ -106,11 +112,6 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new RadioactiveDecayPhysics());
   ////RegisterPhysics(new G4RadioactiveDecayPhysics());  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

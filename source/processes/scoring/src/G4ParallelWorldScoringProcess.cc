@@ -29,29 +29,27 @@
 
 #include "G4ParallelWorldScoringProcess.hh"
 
-#include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Step.hh"
-#include "G4Navigator.hh"
-#include "G4VTouchable.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ParticleChange.hh"
-#include "G4PathFinder.hh"
-#include "G4TransportationManager.hh"
-#include "G4ParticleChange.hh"
-#include "G4StepPoint.hh"
 #include "G4FieldTrackUpdator.hh"
+#include "G4Navigator.hh"
+#include "G4ParticleChange.hh"
 #include "G4ParticleDefinition.hh"
-
+#include "G4PathFinder.hh"
 #include "G4SDManager.hh"
+#include "G4Step.hh"
+#include "G4StepPoint.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4VSensitiveDetector.hh"
+#include "G4VTouchable.hh"
+#include "G4ios.hh"
 
 //--------------------------------
 // Constructor with name and type:
 //--------------------------------
-G4ParallelWorldScoringProcess::
-G4ParallelWorldScoringProcess(const G4String& processName,G4ProcessType theType)
-:G4VProcess(processName,theType), fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
+G4ParallelWorldScoringProcess::G4ParallelWorldScoringProcess(const G4String& processName,
+                                                             G4ProcessType theType)
+  : G4VProcess(processName, theType), fFieldTrack('0')
 {
   pParticleChange = &aDummyParticleChange;
 
@@ -62,12 +60,11 @@ G4ParallelWorldScoringProcess(const G4String& processName,G4ProcessType theType)
   fTransportationManager = G4TransportationManager::GetTransportationManager();
   fPathFinder = G4PathFinder::GetInstance();
 
-  fGhostWorld = 0;
+  fGhostWorld = nullptr;
   fGhostSafety = 0.;
   fOnBoundary = false;
 
-  if (verboseLevel>0)
-  {
+  if (verboseLevel > 0) {
     G4cout << GetProcessName() << " is created " << G4endl;
   }
 }
@@ -82,53 +79,47 @@ G4ParallelWorldScoringProcess::~G4ParallelWorldScoringProcess()
 
 //------------------------------------------------------
 //
-// SetParallelWorld 
+// SetParallelWorld
 //
 //------------------------------------------------------
-void G4ParallelWorldScoringProcess::
-SetParallelWorld(G4String parallelWorldName)
+void G4ParallelWorldScoringProcess::SetParallelWorld(G4String parallelWorldName)
 {
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Get pointers of the parallel world and its navigator
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Get pointers of the parallel world and its navigator
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostWorldName = parallelWorldName;
   fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
-void G4ParallelWorldScoringProcess::
-SetParallelWorld(G4VPhysicalVolume* parallelWorld)
+void G4ParallelWorldScoringProcess::SetParallelWorld(G4VPhysicalVolume* parallelWorld)
 {
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Get pointer of navigator
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Get pointer of navigator
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
-G4bool G4ParallelWorldScoringProcess::
-IsAtRestRequired(G4ParticleDefinition* partDef)
+G4bool G4ParallelWorldScoringProcess::IsAtRestRequired(G4ParticleDefinition* partDef)
 {
   G4int pdgCode = partDef->GetPDGEncoding();
-  if(pdgCode==0)
-  {
+  if (pdgCode == 0) {
     G4String partName = partDef->GetParticleName();
-    if(partName=="geantino") return false;
-    if(partName=="chargedgeantino") return false;
+    if (partName == "geantino") return false;
+    if (partName == "chargedgeantino") return false;
   }
-  else
-  {
-    if(pdgCode==11 || pdgCode==2212) return false; // electrons and proton
+  else {
+    if (pdgCode == 11 || pdgCode == 2212) return false;  // electrons and proton
     pdgCode = std::abs(pdgCode);
-    if(pdgCode==22) return false; // gamma and optical photons
-    if(pdgCode==12 || pdgCode==14 || pdgCode==16) return false; // all neutronos
+    if (pdgCode == 22) return false;  // gamma and optical photons
+    if (pdgCode == 12 || pdgCode == 14 || pdgCode == 16) return false;  // all neutronos
   }
   return true;
 }
-
 
 //------------------------------------------------------
 //
@@ -137,36 +128,26 @@ IsAtRestRequired(G4ParticleDefinition* partDef)
 //------------------------------------------------------
 void G4ParallelWorldScoringProcess::StartTracking(G4Track* trk)
 {
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Activate navigator and get the navigator ID
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// G4cout << " G4ParallelWorldScoringProcess::StartTracking" << G4endl;
-  if(fGhostNavigator)
-  { fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator); }
-  else
-  {
-    G4Exception("G4ParallelWorldScoringProcess::StartTracking",
-       "ProcParaWorld000",FatalException,
-       "G4ParallelWorldScoringProcess is used for tracking without having a parallel world assigned");
+  // Activate navigator and get the navigator ID
+  if (fGhostNavigator != nullptr) {
+    fNavigatorID = fTransportationManager->ActivateNavigator(fGhostNavigator);
   }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  else {
+    G4Exception("G4ParallelWorldScoringProcess::StartTracking", "ProcParaWorld000", FatalException,
+                "G4ParallelWorldScoringProcess is used for tracking without having a parallel "
+                "world assigned");
+  }
 
-// G4cout << "G4ParallelWorldScoringProcess::StartTracking <<<<<<<<<<<<<<<<<< " << G4endl;
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Let PathFinder initialize
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  fPathFinder->PrepareNewTrack(trk->GetPosition(),trk->GetMomentumDirection());
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Let PathFinder initialize
+  fPathFinder->PrepareNewTrack(trk->GetPosition(), trk->GetMomentumDirection());
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Setup initial touchables for the first step
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Setup initial touchables for the first step
   fOldGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fNewGhostTouchable = fOldGhostTouchable;
   fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
 
-  // Initialize 
+  // Initialize
   fGhostSafety = -1.;
   fOnBoundary = false;
   fGhostPreStepPoint->SetStepStatus(fUndefined);
@@ -178,10 +159,9 @@ void G4ParallelWorldScoringProcess::StartTracking(G4Track* trk)
 //  AtRestGetPhysicalInteractionLength()
 //
 //----------------------------------------------------------
-G4double 
-G4ParallelWorldScoringProcess::AtRestGetPhysicalInteractionLength(
-         const G4Track& /*track*/, 
-         G4ForceCondition* condition)
+G4double
+G4ParallelWorldScoringProcess::AtRestGetPhysicalInteractionLength(const G4Track& /*track*/,
+                                                                  G4ForceCondition* condition)
 {
   *condition = Forced;
   return DBL_MAX;
@@ -192,35 +172,34 @@ G4ParallelWorldScoringProcess::AtRestGetPhysicalInteractionLength(
 //             AtRestDoIt()
 //
 //------------------------------------
-G4VParticleChange* G4ParallelWorldScoringProcess::AtRestDoIt(
-     const G4Track& track,
-     const G4Step& step)
-{ 
+G4VParticleChange* G4ParallelWorldScoringProcess::AtRestDoIt(const G4Track& track,
+                                                             const G4Step& step)
+{
   fOldGhostTouchable = fGhostPostStepPoint->GetTouchableHandle();
-  G4VSensitiveDetector* aSD = 0;
-  if(fOldGhostTouchable->GetVolume())
-  { aSD = fOldGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector(); }
+  G4VSensitiveDetector* aSD = nullptr;
+  if (fOldGhostTouchable->GetVolume() != nullptr) {
+    aSD = fOldGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector();
+  }
   fOnBoundary = false;
   CopyStep(step);
   fGhostPreStepPoint->SetSensitiveDetector(aSD);
 
   fNewGhostTouchable = fOldGhostTouchable;
-  
+
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
-  if(fNewGhostTouchable->GetVolume())
-  {
+  if (fNewGhostTouchable->GetVolume() != nullptr) {
     fGhostPostStepPoint->SetSensitiveDetector(
       fNewGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector());
   }
-  else
-  { fGhostPostStepPoint->SetSensitiveDetector(0); }
+  else {
+    fGhostPostStepPoint->SetSensitiveDetector(nullptr);
+  }
 
-  if (verboseLevel>1) Verbose(step);
+  if (verboseLevel > 1) Verbose(step);
 
   G4VSensitiveDetector* sd = fGhostPreStepPoint->GetSensitiveDetector();
-  if(sd)
-  {
+  if (sd != nullptr) {
     sd->Hit(fGhostStep);
   }
 
@@ -233,11 +212,8 @@ G4VParticleChange* G4ParallelWorldScoringProcess::AtRestDoIt(
 //  PostStepGetPhysicalInteractionLength()
 //
 //----------------------------------------------------------
-G4double 
-G4ParallelWorldScoringProcess::PostStepGetPhysicalInteractionLength(
-         const G4Track& /*track*/, 
-         G4double   /*previousStepSize*/, 
-         G4ForceCondition* condition)
+G4double G4ParallelWorldScoringProcess::PostStepGetPhysicalInteractionLength(
+  const G4Track& /*track*/, G4double /*previousStepSize*/, G4ForceCondition* condition)
 {
   // I must be invoked anyway to score the hit.
   *condition = StronglyForced;
@@ -249,69 +225,47 @@ G4ParallelWorldScoringProcess::PostStepGetPhysicalInteractionLength(
 //             PostStepDoIt()
 //
 //------------------------------------
-G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
-     const G4Track& track,
-     const G4Step& step)
-{ 
+G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(const G4Track& track,
+                                                               const G4Step& step)
+{
   fOldGhostTouchable = fGhostPostStepPoint->GetTouchableHandle();
-  G4VSensitiveDetector* aSD = 0;
-  if(fOldGhostTouchable->GetVolume())
-  { aSD = fOldGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector(); }
+  G4VSensitiveDetector* aSD = nullptr;
+  if (fOldGhostTouchable->GetVolume() != nullptr) {
+    aSD = fOldGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector();
+  }
   CopyStep(step);
   fGhostPreStepPoint->SetSensitiveDetector(aSD);
 
-  //  fPathFinder->Locate( track.GetPosition(),
-  //                       track.GetMomentumDirection(),
-  //                       true);
-
-  //  fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
-  //                      step.GetPostStepPoint()->GetMomentumDirection());
-
-  if(fOnBoundary)
-  {
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Locate the point and get new touchable
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  //??  fPathFinder->Locate(step.GetPostStepPoint()->GetPosition(),
-  //??                      step.GetPostStepPoint()->GetMomentumDirection());
+  if (fOnBoundary) {
+    // Locate the point and get new touchable
     fNewGhostTouchable = fPathFinder->CreateTouchableHandle(fNavigatorID);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   }
-  else
-  {
-// Do I need this ??????????????????????????????????????????????????????????
-// fGhostNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
-// ?????????????????????????????????????????????????????????????????????????
-
-    // fPathFinder->ReLocate(track.GetPosition());
-
+  else {
     // reuse the touchable
     fNewGhostTouchable = fOldGhostTouchable;
   }
-    
+
   fGhostPreStepPoint->SetTouchableHandle(fOldGhostTouchable);
   fGhostPostStepPoint->SetTouchableHandle(fNewGhostTouchable);
 
-  if(fNewGhostTouchable->GetVolume())
-  {
+  if (fNewGhostTouchable->GetVolume() != nullptr) {
     fGhostPostStepPoint->SetSensitiveDetector(
       fNewGhostTouchable->GetVolume()->GetLogicalVolume()->GetSensitiveDetector());
   }
-  else
-  { fGhostPostStepPoint->SetSensitiveDetector(0); }
+  else {
+    fGhostPostStepPoint->SetSensitiveDetector(nullptr);
+  }
 
-  if (verboseLevel>1) Verbose(step);
+  if (verboseLevel > 1) Verbose(step);
 
   G4VSensitiveDetector* sd = fGhostPreStepPoint->GetSensitiveDetector();
-  if(sd)
-  {
+  if (sd != nullptr) {
     sd->Hit(fGhostStep);
   }
 
-  pParticleChange->Initialize(track); // Does not change the track properties
+  pParticleChange->Initialize(track);  // Does not change the track properties
   return pParticleChange;
 }
-
 
 //---------------------------------------
 //
@@ -319,60 +273,54 @@ G4VParticleChange* G4ParallelWorldScoringProcess::PostStepDoIt(
 //
 //---------------------------------------
 G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
-            const G4Track& track, G4double  previousStepSize, G4double  currentMinimumStep,
-            G4double& proposedSafety, G4GPILSelection* selection)
+  const G4Track& track, G4double previousStepSize, G4double currentMinimumStep,
+  G4double& proposedSafety, G4GPILSelection* selection)
 {
-  static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
-  static G4ThreadLocal ELimited *eLimited_G4MT_TLS_ = 0 ; if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;  ELimited &eLimited = *eLimited_G4MT_TLS_;
-  
+  static G4ThreadLocal G4FieldTrack* endTrack_G4MT_TLS_ = nullptr;
+  if (endTrack_G4MT_TLS_ == nullptr) endTrack_G4MT_TLS_ = new G4FieldTrack('0');
+  G4FieldTrack& endTrack = *endTrack_G4MT_TLS_;
+  static G4ThreadLocal ELimited* eLimited_G4MT_TLS_ = nullptr;
+  if (eLimited_G4MT_TLS_ == nullptr) eLimited_G4MT_TLS_ = new ELimited;
+  ELimited& eLimited = *eLimited_G4MT_TLS_;
+
   *selection = NotCandidateForSelection;
   G4double returnedStep = DBL_MAX;
 
-  if (previousStepSize > 0.)
-  { fGhostSafety -= previousStepSize; }
-//  else
-//  { fGhostSafety = -1.; }
+  if (previousStepSize > 0.) {
+    fGhostSafety -= previousStepSize;
+  }
   if (fGhostSafety < 0.) fGhostSafety = 0.0;
-      
-  // ------------------------------------------
+
   // Determination of the proposed STEP LENGTH:
-  // ------------------------------------------
-  if (currentMinimumStep <= fGhostSafety && currentMinimumStep > 0.)
-  {
+  if (currentMinimumStep <= fGhostSafety && currentMinimumStep > 0.) {
     // I have no chance to limit
     returnedStep = currentMinimumStep;
     fOnBoundary = false;
     proposedSafety = fGhostSafety - currentMinimumStep;
   }
-  else // (currentMinimumStep > fGhostSafety: I may limit the Step)
+  else  // (currentMinimumStep > fGhostSafety: I may limit the Step)
   {
-    G4FieldTrackUpdator::Update(&fFieldTrack,&track);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// ComputeStep
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    returnedStep
-      = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
-                     track.GetCurrentStepNumber(),fGhostSafety,eLimited,
-                     endTrack,track.GetVolume());
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    if(eLimited == kDoNot)
-    {
+    G4FieldTrackUpdator::Update(&fFieldTrack, &track);
+    // ComputeStep
+    returnedStep = fPathFinder->ComputeStep(fFieldTrack, currentMinimumStep, fNavigatorID,
+                                            track.GetCurrentStepNumber(), fGhostSafety, eLimited,
+                                            endTrack, track.GetVolume());
+    if (eLimited == kDoNot) {
       // Track is not on the boundary
       fOnBoundary = false;
       fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());
     }
-    else
-    {
+    else {
       // Track is on the boundary
       fOnBoundary = true;
-      // fEndGhostSafety = 0.0;  // Will apply at the end of the step ...
     }
     proposedSafety = fGhostSafety;
-    if(eLimited == kUnique || eLimited == kSharedOther) {
-       *selection = CandidateForSelection;
-    }else if (eLimited == kSharedTransport) { 
-       returnedStep *= (1.0 + 1.0e-9);  
-         // Expand to disable its selection in Step Manager comparison
+    if (eLimited == kUnique || eLimited == kSharedOther) {
+      *selection = CandidateForSelection;
+    }
+    else if (eLimited == kSharedTransport) {
+      returnedStep *= (1.0 + 1.0e-9);
+      // Expand to disable its selection in Step Manager comparison
     }
   }
 
@@ -384,17 +332,15 @@ G4double G4ParallelWorldScoringProcess::AlongStepGetPhysicalInteractionLength(
   return returnedStep;
 }
 
-G4VParticleChange* G4ParallelWorldScoringProcess::AlongStepDoIt(
-    const G4Track& track, const G4Step& )
+G4VParticleChange* G4ParallelWorldScoringProcess::AlongStepDoIt(const G4Track& track, const G4Step&)
 {
   // Dummy ParticleChange ie: does nothing
   // Expecting G4Transportation to move the track
   pParticleChange->Initialize(track);
-  return pParticleChange; 
+  return pParticleChange;
 }
 
-
-void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
+void G4ParallelWorldScoringProcess::CopyStep(const G4Step& step)
 {
   G4StepStatus prevStat = fGhostPostStepPoint->GetStepStatus();
 
@@ -407,75 +353,77 @@ void G4ParallelWorldScoringProcess::CopyStep(const G4Step & step)
   *fGhostPreStepPoint = *(step.GetPreStepPoint());
   *fGhostPostStepPoint = *(step.GetPostStepPoint());
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Set StepStatus for ghost world
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  // Set StepStatus for ghost world
   fGhostPreStepPoint->SetStepStatus(prevStat);
-  if(fOnBoundary)
-  { fGhostPostStepPoint->SetStepStatus(fGeomBoundary); }
-  else if(fGhostPostStepPoint->GetStepStatus()==fGeomBoundary)
-  { fGhostPostStepPoint->SetStepStatus(fPostStepDoItProc); }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  if (fOnBoundary) {
+    fGhostPostStepPoint->SetStepStatus(fGeomBoundary);
+  }
+  else if (fGhostPostStepPoint->GetStepStatus() == fGeomBoundary) {
+    fGhostPostStepPoint->SetStepStatus(fPostStepDoItProc);
+  }
 }
 
 void G4ParallelWorldScoringProcess::Verbose(const G4Step& step) const
 {
   G4cout << "In mass geometry ------------------------------------------------" << G4endl;
-  G4cout << " StepLength : " << step.GetStepLength()/mm << "      TotalEnergyDeposit : "
-         << step.GetTotalEnergyDeposit()/MeV << G4endl;
-  G4cout << " PreStepPoint : "
-         << step.GetPreStepPoint()->GetPhysicalVolume()->GetName() << " - ";
-  if(step.GetPreStepPoint()->GetProcessDefinedStep())
-  { G4cout << step.GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName(); }
-  else
-  { G4cout << "NoProcessAssigned"; }
+  G4cout << " StepLength : " << step.GetStepLength() / mm
+         << "      TotalEnergyDeposit : " << step.GetTotalEnergyDeposit() / MeV << G4endl;
+  G4cout << " PreStepPoint : " << step.GetPreStepPoint()->GetPhysicalVolume()->GetName() << " - ";
+  if (step.GetPreStepPoint()->GetProcessDefinedStep() != nullptr) {
+    G4cout << step.GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  }
+  else {
+    G4cout << "NoProcessAssigned";
+  }
   G4cout << G4endl;
   G4cout << "                " << step.GetPreStepPoint()->GetPosition() << G4endl;
   G4cout << " PostStepPoint : ";
-  if(step.GetPostStepPoint()->GetPhysicalVolume()) 
-  { G4cout << step.GetPostStepPoint()->GetPhysicalVolume()->GetName(); }
-  else
-  { G4cout << "OutOfWorld"; }
+  if (step.GetPostStepPoint()->GetPhysicalVolume() != nullptr) {
+    G4cout << step.GetPostStepPoint()->GetPhysicalVolume()->GetName();
+  }
+  else {
+    G4cout << "OutOfWorld";
+  }
   G4cout << " - ";
-  if(step.GetPostStepPoint()->GetProcessDefinedStep())
-  { G4cout << step.GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); }
-  else
-  { G4cout << "NoProcessAssigned"; }
+  if (step.GetPostStepPoint()->GetProcessDefinedStep() != nullptr) {
+    G4cout << step.GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  }
+  else {
+    G4cout << "NoProcessAssigned";
+  }
   G4cout << G4endl;
   G4cout << "                 " << step.GetPostStepPoint()->GetPosition() << G4endl;
 
   G4cout << "In ghost geometry ------------------------------------------------" << G4endl;
-  G4cout << " StepLength : " << fGhostStep->GetStepLength()/mm
-         << "      TotalEnergyDeposit : "
-         << fGhostStep->GetTotalEnergyDeposit()/MeV << G4endl;
-  G4cout << " PreStepPoint : "
-         << fGhostStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() << " ["
-           << fGhostStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber()
-           << " ]" << " - ";
-  if(fGhostStep->GetPreStepPoint()->GetProcessDefinedStep())
-  { G4cout << fGhostStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName(); }
-  else
-  { G4cout << "NoProcessAssigned"; }
+  G4cout << " StepLength : " << fGhostStep->GetStepLength() / mm
+         << "      TotalEnergyDeposit : " << fGhostStep->GetTotalEnergyDeposit() / MeV << G4endl;
+  G4cout << " PreStepPoint : " << fGhostStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()
+         << " [" << fGhostStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber() << " ]"
+         << " - ";
+  if (fGhostStep->GetPreStepPoint()->GetProcessDefinedStep() != nullptr) {
+    G4cout << fGhostStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  }
+  else {
+    G4cout << "NoProcessAssigned";
+  }
   G4cout << G4endl;
   G4cout << "                " << fGhostStep->GetPreStepPoint()->GetPosition() << G4endl;
   G4cout << " PostStepPoint : ";
-  if(fGhostStep->GetPostStepPoint()->GetPhysicalVolume()) 
-  {
+  if (fGhostStep->GetPostStepPoint()->GetPhysicalVolume() != nullptr) {
     G4cout << fGhostStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() << " ["
-           << fGhostStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber()
-           << " ]";
+           << fGhostStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber() << " ]";
   }
-  else
-  { G4cout << "OutOfWorld"; }
+  else {
+    G4cout << "OutOfWorld";
+  }
   G4cout << " - ";
-  if(fGhostStep->GetPostStepPoint()->GetProcessDefinedStep())
-  { G4cout << fGhostStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); }
-  else
-  { G4cout << "NoProcessAssigned"; }
+  if (fGhostStep->GetPostStepPoint()->GetProcessDefinedStep() != nullptr) {
+    G4cout << fGhostStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  }
+  else {
+    G4cout << "NoProcessAssigned";
+  }
   G4cout << G4endl;
-  G4cout << "                 " << fGhostStep->GetPostStepPoint()->GetPosition() << " == "
-         << fGhostStep->GetTrack()->GetMomentumDirection() 
-         << G4endl;
-
+  G4cout << "                 " << fGhostStep->GetPostStepPoint()->GetPosition()
+         << " == " << fGhostStep->GetTrack()->GetMomentumDirection() << G4endl;
 }
-

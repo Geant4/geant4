@@ -1,0 +1,34 @@
+/control/verbose 2
+/phantom/setPhantomSection full
+
+/vis/open OGL
+
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+# The above creates a scene handler and a viewer but needs a scene.
+# (Normally this would be /vis/drawVolume but we need to specialise.)
+/vis/scene/create
+/vis/scene/add/userAction
+/vis/scene/add/axes
+/vis/scene/add/scale
+/vis/sceneHandler/attach
+
+# View parameters
+/vis/viewer/set/specialMeshRendering
+/vis/viewer/set/hiddenMarker true
+/vis/viewer/set/rotationStyle freeRotation
+/vis/viewer/set/viewpointVector -0.47 -0.88 0.069
+/vis/viewer/set/upVector 0.83 -0.42 0.37
+/vis/viewer/zoomTo 3.4
+
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+# Try "/vis/viewer/interpolate g4views 1000 0", which runs a cutaway
+#   plane through the phantom.
+# (See examples/extended/visualization/movies for how to create view
+#   files for interpolation.)
+

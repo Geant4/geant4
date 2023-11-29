@@ -88,12 +88,16 @@
 #include "G4IonTable.hh"
 #include "CLHEP/Random/Randomize.h" 
 #include "CLHEP/Random/Ranlux64Engine.h" 
+#include "G4HadronicParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main( int , char** ) {
   
   G4cout << "=== Test of the HadronicGenerator ===" << G4endl;
+
+  // Enable light hypernuclei and anti-hypernuclei
+  G4HadronicParameters::Instance()->SetEnableHyperNuclei( true );
 
   // See the HadronicGenerator class for the possibilities and meaning of the "physics cases".
   // ( In short, it is the name of the Geant4 hadronic model used for the simulation of
@@ -125,7 +129,9 @@ int main( int , char** ) {
   const G4int  printingGap = 100;                  //***LOOKHERE***  GAP IN PRINTING
   
   // Vector of Geant4 names of hadron projectiles: one of this will be sampled randomly
-  // (with uniform probability) for each collision, when the projectile is not an ion.
+  // (with uniform probability) for each collision, when the projectile is not a generic ion
+  // (note that the 6 light hypernuclei and anti-hypernuclei are treated here as for the
+  // other hadrons, not as generic ions).
   // Note: comment out the corresponding line in order to exclude a particle.
   std::vector< G4String > vecProjectiles;  //***LOOKHERE***  POSSIBLE HADRON PROJECTILES
   vecProjectiles.push_back( "pi-" );
@@ -163,53 +169,86 @@ int main( int , char** ) {
   vecProjectiles.push_back( "anti_triton" );
   vecProjectiles.push_back( "anti_He3" );
   vecProjectiles.push_back( "anti_alpha" );
-  // Charm and bottom hadrons
-  vecProjectiles.push_back( "D+" );
-  vecProjectiles.push_back( "D-" );
-  vecProjectiles.push_back( "D0" );
-  vecProjectiles.push_back( "anti_D0" );
-  vecProjectiles.push_back( "Ds+" );
-  vecProjectiles.push_back( "Ds-" );
-  //Note: vecProjectiles.push_back( "etac" );              // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "J/psi" );             // Excluded because too short-lived
-  vecProjectiles.push_back( "B+" );
-  vecProjectiles.push_back( "B-" );
-  vecProjectiles.push_back( "B0" );
-  vecProjectiles.push_back( "anti_B0" );
-  vecProjectiles.push_back( "Bs0" );
-  vecProjectiles.push_back( "anti_Bs0" );
-  vecProjectiles.push_back( "Bc+" );
-  vecProjectiles.push_back( "Bc-" );
-  //Note: vecProjectiles.push_back( "Upsilon" );           // Excluded because too short-lived
-  vecProjectiles.push_back( "lambda_c+" );
-  vecProjectiles.push_back( "anti_lambda_c+" );
-  //Note: vecProjectiles.push_back( "sigma_c+" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "anti_sigma_c+" );     // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "sigma_c0" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "anti_sigma_c0" );     // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "sigma_c++" );         // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "anti_sigma_c++" );    // Excluded because too short-lived
-  vecProjectiles.push_back( "xi_c+" );
-  vecProjectiles.push_back( "anti_xi_c+" );
-  vecProjectiles.push_back( "xi_c0" );
-  vecProjectiles.push_back( "anti_xi_c0" );
-  vecProjectiles.push_back( "omega_c0" );
-  vecProjectiles.push_back( "anti_omega_c0" );
-  vecProjectiles.push_back( "lambda_b" );
-  vecProjectiles.push_back( "anti_lambda_b" );
-  //Note: vecProjectiles.push_back( "sigma_b+" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "anti_sigma_b+" );     // Excluded because too short-lived  
-  //Note: vecProjectiles.push_back( "sigma_b0" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "sigma_b0" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "sigma_b-" );          // Excluded because too short-lived
-  //Note: vecProjectiles.push_back( "anti_sigma_b-" );     // Excluded because too short-lived  
-  vecProjectiles.push_back( "xi_b0" );
-  vecProjectiles.push_back( "anti_xi_b0" );
-  vecProjectiles.push_back( "xi_b-" );
-  vecProjectiles.push_back( "anti_xi_b-" );
-  vecProjectiles.push_back( "omega_b-" );
-  vecProjectiles.push_back( "anti_omega_b-" );
 
+  // Only FTFP and QGSP can handle nuclear interaction of charm and bottom hadrons
+  if ( namePhysics == "FTFP_BERT"  ||  namePhysics == "FTFP_BERT_ATL"  ||
+       namePhysics == "QGSP_BERT"  ||  namePhysics == "QGSP_BIC"  ||
+       namePhysics == "FTFP"  || namePhysics == "QGSP" ) {
+    // Charm and bottom hadrons
+    vecProjectiles.push_back( "D+" );
+    vecProjectiles.push_back( "D-" );
+    vecProjectiles.push_back( "D0" );
+    vecProjectiles.push_back( "anti_D0" );
+    vecProjectiles.push_back( "Ds+" );
+    vecProjectiles.push_back( "Ds-" );
+    //Note: vecProjectiles.push_back( "etac" );   // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "J/psi" );  // Excluded because too short-lived
+    vecProjectiles.push_back( "B+" );
+    vecProjectiles.push_back( "B-" );
+    vecProjectiles.push_back( "B0" );
+    vecProjectiles.push_back( "anti_B0" );
+    vecProjectiles.push_back( "Bs0" );
+    vecProjectiles.push_back( "anti_Bs0" );
+    vecProjectiles.push_back( "Bc+" );
+    vecProjectiles.push_back( "Bc-" );
+    //Note: vecProjectiles.push_back( "Upsilon" );         // Excluded because too short-lived
+    vecProjectiles.push_back( "lambda_c+" );
+    vecProjectiles.push_back( "anti_lambda_c+" );
+    //Note: vecProjectiles.push_back( "sigma_c+" );        // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "anti_sigma_c+" );   // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "sigma_c0" );        // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "anti_sigma_c0" );   // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "sigma_c++" );       // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "anti_sigma_c++" );  // Excluded because too short-lived
+    vecProjectiles.push_back( "xi_c+" );
+    vecProjectiles.push_back( "anti_xi_c+" );
+    vecProjectiles.push_back( "xi_c0" );
+    vecProjectiles.push_back( "anti_xi_c0" );
+    vecProjectiles.push_back( "omega_c0" );
+    vecProjectiles.push_back( "anti_omega_c0" );
+    vecProjectiles.push_back( "lambda_b" );
+    vecProjectiles.push_back( "anti_lambda_b" );
+    //Note: vecProjectiles.push_back( "sigma_b+" );       // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "anti_sigma_b+" );  // Excluded because too short-lived  
+    //Note: vecProjectiles.push_back( "sigma_b0" );       // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "sigma_b0" );       // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "sigma_b-" );       // Excluded because too short-lived
+    //Note: vecProjectiles.push_back( "anti_sigma_b-" );  // Excluded because too short-lived  
+    vecProjectiles.push_back( "xi_b0" );
+    vecProjectiles.push_back( "anti_xi_b0" );
+    vecProjectiles.push_back( "xi_b-" );
+    vecProjectiles.push_back( "anti_xi_b-" );
+    vecProjectiles.push_back( "omega_b-" );
+    vecProjectiles.push_back( "anti_omega_b-" );
+  }
+
+  // If the hadronic interactions of light hypernuclei and anti-hypernuclei
+  // are swtiched on, then only FTFP and INCL can handle the nuclear interactions
+  // of light hypernuclei, and only FTFP is capable of handling the nuclear
+  // interactions of light anti-hypernuclei.
+  if ( G4HadronicParameters::Instance()->EnableHyperNuclei() ) {
+    if ( namePhysics == "FTFP_BERT"  ||  namePhysics == "FTFP_INCLXX"  ||
+         namePhysics == "FTFP"  || namePhysics == "INCL" ) {
+      // Light hypernuclei
+      vecProjectiles.push_back( "hypertriton" );
+      vecProjectiles.push_back( "hyperalpha" );
+      vecProjectiles.push_back( "hyperH4" );
+      vecProjectiles.push_back( "doublehyperH4" );
+      vecProjectiles.push_back( "doublehyperdoubleneutron" );
+      vecProjectiles.push_back( "hyperHe5" );
+    }
+    if ( namePhysics == "FTFP_BERT"  ||  namePhysics == "FTFP_INCLXX"  ||
+         namePhysics == "FTFP" ) {
+      // Light anti-hypernuclei  
+      vecProjectiles.push_back( "anti_hypertriton" );
+      vecProjectiles.push_back( "anti_hyperalpha" );
+      vecProjectiles.push_back( "anti_hyperH4" );
+      vecProjectiles.push_back( "anti_doublehyperH4" );
+      vecProjectiles.push_back( "anti_doublehyperdoubleneutron" );
+      vecProjectiles.push_back( "anti_hyperHe5" );
+    }
+  }
+    
   G4ParticleDefinition* projectileNucleus = nullptr;
   G4GenericIon* gion = G4GenericIon::GenericIon();
   gion->SetProcessManager( new G4ProcessManager( gion ) );
@@ -219,7 +258,7 @@ int main( int , char** ) {
   ions->CreateAllIon();
   ions->CreateAllIsomer();
   
-  const G4bool isProjectileIon = false;  //***LOOKHERE***  HADRON (false) OR ION (true) PROJECTILE ?
+  const G4bool isProjectileIon = false;  //***LOOKHERE***  HADRON (false) OR ION (true) PROJECTILE?
   if ( isProjectileIon ) {
     minEnergy = 40.0*13.0*CLHEP::GeV;    //***LOOKHERE***  ION PROJECTILE MIN Ekin
     maxEnergy = 40.0*13.0*CLHEP::GeV;    //***LOOKHERE***  ION PROJECTILE MAX Ekin
@@ -256,7 +295,7 @@ int main( int , char** ) {
          << "Number of collisions:  " << numCollisions << G4endl
          << "Number of hadron projectiles: " << numProjectiles << G4endl
          << "Number of materials:   " << numMaterials   << G4endl
-	 << "IsIonProjectile: " << ( projectileNucleus != nullptr ? "true \t" : "false" )
+         << "IsIonProjectile: " << ( projectileNucleus != nullptr ? "true \t" : "false" )
          << ( projectileNucleus != nullptr ? projectileNucleus->GetParticleName() : "") << G4endl
          << "===================================================" << G4endl
          << G4endl;
@@ -296,8 +335,8 @@ int main( int , char** ) {
     if ( projectileEnergy <= 0.0 ) projectileEnergy = minEnergy; 
     // Sample the projectile direction
     normalization = 1.0 / std::sqrt( rnd2*rnd2 + rnd3*rnd3 + rnd4*rnd4 );
-    const G4bool isOnSmearingDirection = true ;                 //***LOOKHERE***  IF true THEN SMEAR DIRECTION 
-    G4ThreeVector aDirection = G4ThreeVector( 0.0, 0.0, 1.0 );  //***LOOKHERE***  ELSE USE THIS FIXED DIRECTION
+    const G4bool isOnSmearingDirection = true ;                 //***LOOKHERE***
+    G4ThreeVector aDirection = G4ThreeVector( 0.0, 0.0, 1.0 );  //***LOOKHERE***
     if ( isOnSmearingDirection ) {
       aDirection = G4ThreeVector( normalization*rnd2, normalization*rnd3, normalization*rnd4 );
     } 
@@ -322,7 +361,7 @@ int main( int , char** ) {
       G4cout << "\t Collision " << i << " ; projectile=" << nameProjectile;
       if ( projectileNucleus ) {
         G4cout << " ; Ekin[MeV]/nucleon=" << projectileEnergy / 
-	  static_cast< G4double >( std::abs( projectileNucleus->GetBaryonNumber() ) );
+          static_cast< G4double >( std::abs( projectileNucleus->GetBaryonNumber() ) );
       } else {
         G4cout << " ; Ekin[MeV]=" << projectileEnergy; 
       }
@@ -338,9 +377,11 @@ int main( int , char** ) {
     if ( isPrintingEnabled ) {
       G4cout << G4endl << "\t --> #secondaries=" << nsec 
              << " ; impactParameter[fm]=" << theHadronicGenerator->GetImpactParameter() / fermi
-	     << " ; #projectileSpectatorNucleons=" << theHadronicGenerator->GetNumberOfProjectileSpectatorNucleons()
-	     << " ; #targetSpectatorNucleons=" << theHadronicGenerator->GetNumberOfTargetSpectatorNucleons()
-	     << " ; #NNcollisions=" << theHadronicGenerator->GetNumberOfNNcollisions() << G4endl;
+             << " ; #projectileSpectatorNucleons="
+             << theHadronicGenerator->GetNumberOfProjectileSpectatorNucleons()
+             << " ; #targetSpectatorNucleons="
+             << theHadronicGenerator->GetNumberOfTargetSpectatorNucleons()
+             << " ; #NNcollisions=" << theHadronicGenerator->GetNumberOfNNcollisions() << G4endl;
       if ( i % printingGap == 0 ) {
         isPrintingOfSecondariesEnabled = true;
         G4cout << "\t \t List of produced secondaries: " << G4endl;

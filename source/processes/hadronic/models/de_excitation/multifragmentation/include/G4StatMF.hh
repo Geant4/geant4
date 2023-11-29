@@ -28,7 +28,6 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
-
 #ifndef G4StatMF_h
 #define G4StatMF_h 1
 
@@ -46,23 +45,19 @@
 class G4StatMF : public G4VMultiFragmentation
 {
 public:
-    // Default constructor
+
     G4StatMF();
-    // Destructor
     ~G4StatMF();
 
-private:
     // Copy constructor	
-    G4StatMF(const G4StatMF & right);
+    G4StatMF(const G4StatMF & right) = delete;
 
     // Operators
-    G4StatMF & operator=(const G4StatMF & right);
-    G4bool operator==(const G4StatMF & right);
-    G4bool operator!=(const G4StatMF & right);
+    G4StatMF & operator=(const G4StatMF & right) = delete;
+    G4bool operator==(const G4StatMF & right) = delete;
+    G4bool operator!=(const G4StatMF & right) = delete;
 
-public:
-
-    G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+    G4FragmentVector* BreakItUp(const G4Fragment &theNucleus) override;
 
 private:
 
@@ -71,18 +66,12 @@ private:
 					    const G4StatMFChannel * aChannel,
 					    G4double & Temperature);
 
-    // 
     G4double CalcEnergy(G4int A, G4int Z, 
 			const G4StatMFChannel * aChannel,
 			G4double T);
 
-
-private:
-
-    G4VStatMFEnsemble * _theEnsemble;
-
-    G4int _secID;  // Creator model ID for the secondaries created by this model
-
+    G4VStatMFEnsemble* _theEnsemble = nullptr;
+    G4int _secID = -1;  // Creator model ID for the secondaries created by this model
 };
 
 #endif

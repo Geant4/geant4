@@ -178,8 +178,7 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle& right)
   : theMomentumDirection(right.theMomentumDirection),
     thePolarization(right.thePolarization),
     theParticleDefinition(right.theParticleDefinition),
-    theElectronOccupancy(nullptr),
-    thePreAssignedDecayProducts(nullptr), // Don't copy preassignedDecayProducts
+     // Don't copy preassignedDecayProducts
     primaryParticle(right.primaryParticle),
     theKineticEnergy(right.theKineticEnergy),
     theLogKineticEnergy(right.theLogKineticEnergy),
@@ -189,7 +188,7 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle& right)
     theDynamicalCharge(right.theDynamicalCharge),
     theDynamicalSpin(right.theDynamicalSpin),
     theDynamicalMagneticMoment(right.theDynamicalMagneticMoment),
-    thePreAssignedDecayTime(-1.0),
+    
     verboseLevel(right.verboseLevel),
     thePDGcode(right.thePDGcode)
 {
@@ -205,7 +204,7 @@ G4DynamicParticle::G4DynamicParticle(G4DynamicParticle&& from)
     thePolarization(from.thePolarization),
     theParticleDefinition(from.theParticleDefinition),
     theElectronOccupancy(from.theElectronOccupancy),
-    thePreAssignedDecayProducts(nullptr), // Don't move preassignedDecayProducts
+     // Don't move preassignedDecayProducts
     primaryParticle(from.primaryParticle),
     theKineticEnergy(from.theKineticEnergy),
     theLogKineticEnergy(from.theLogKineticEnergy),
@@ -215,7 +214,7 @@ G4DynamicParticle::G4DynamicParticle(G4DynamicParticle&& from)
     theDynamicalCharge(from.theDynamicalCharge),
     theDynamicalSpin(from.theDynamicalSpin),
     theDynamicalMagneticMoment(from.theDynamicalMagneticMoment),
-    thePreAssignedDecayTime(-1.0),
+    
     verboseLevel(from.verboseLevel),
     thePDGcode(from.thePDGcode)
 {
@@ -231,11 +230,11 @@ G4DynamicParticle::G4DynamicParticle(G4DynamicParticle&& from)
 ////////////////////
 G4DynamicParticle::~G4DynamicParticle()
 {
-  if (thePreAssignedDecayProducts != nullptr)
+  
     delete thePreAssignedDecayProducts;
   thePreAssignedDecayProducts = nullptr;
 
-  if (theElectronOccupancy != nullptr)
+  
     delete theElectronOccupancy;
   theElectronOccupancy = nullptr;
 }
@@ -258,7 +257,7 @@ G4DynamicParticle& G4DynamicParticle::operator=(const G4DynamicParticle& right)
     theDynamicalSpin = right.theDynamicalSpin;
     theDynamicalMagneticMoment = right.theDynamicalMagneticMoment;
 
-    if (theElectronOccupancy != nullptr) { delete theElectronOccupancy; }
+    delete theElectronOccupancy; 
     if (right.theElectronOccupancy != nullptr)
     {
       theElectronOccupancy =
@@ -298,7 +297,7 @@ G4DynamicParticle& G4DynamicParticle::operator=(G4DynamicParticle&& from)
     theDynamicalSpin = from.theDynamicalSpin;
     theDynamicalMagneticMoment = from.theDynamicalMagneticMoment;
 
-    if (theElectronOccupancy != nullptr) { delete theElectronOccupancy; }
+    delete theElectronOccupancy; 
     theElectronOccupancy = from.theElectronOccupancy;
     from.theElectronOccupancy = nullptr;
 

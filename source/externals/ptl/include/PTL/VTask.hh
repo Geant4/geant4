@@ -29,36 +29,28 @@
 
 #pragma once
 
-#include "PTL/AutoLock.hh"
-#include "PTL/Globals.hh"
-#include "PTL/Threading.hh"
-
-#include <atomic>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
-#include <future>
-#include <string>
 #include <thread>
-#include <tuple>
-#include <utility>
 
 namespace PTL
 {
-class ThreadPool;
-
 //======================================================================================//
 
 /// \brief VTask is the abstract class stored in thread_pool
 class VTask
 {
 public:
-    typedef std::thread::id       tid_type;
-    typedef size_t                size_type;
-    typedef std::function<void()> void_func_t;
+    using tid_type    = std::thread::id;
+    using size_type   = size_t;
+    using void_func_t = std::function<void()>;
 
 public:
-    VTask(bool _is_native, intmax_t _depth);
+    VTask(bool _is_native, intmax_t _depth)
+    : m_is_native{ _is_native }
+    , m_depth{ _depth }
+    {}
 
     VTask()          = default;
     virtual ~VTask() = default;

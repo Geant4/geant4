@@ -25,12 +25,17 @@
 //
 #ifdef USE_INFERENCE
 #include "Par04InferenceMessenger.hh"
-#include "Par04InferenceSetup.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#include <CLHEP/Units/SystemOfUnits.h>   // for pi
+#include <G4ApplicationState.hh>         // for G4State_Idle
+#include <G4ThreeVector.hh>              // for G4ThreeVector
+#include <G4UImessenger.hh>              // for G4UImessenger
+#include <string>                        // for stoi
+#include "G4UIcmdWithADoubleAndUnit.hh"  // for G4UIcmdWithADoubleAndUnit
+#include "G4UIcmdWithAString.hh"         // for G4UIcmdWithAString
+#include "G4UIcmdWithAnInteger.hh"       // for G4UIcmdWithAnInteger
+#include "G4UIdirectory.hh"              // for G4UIdirectory
+#include "Par04InferenceSetup.hh"        // for Par04InferenceSetup
+class G4UIcommand;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

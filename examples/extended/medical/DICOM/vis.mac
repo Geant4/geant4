@@ -23,16 +23,18 @@
 /vis/verbose errors
 #
 # Draw geometry:
+/vis/viewer/set/specialMeshRendering
+/vis/viewer/set/specialMeshRenderingOption surfaces
 /vis/drawVolume
 #
 # Specify view angle:
 /vis/viewer/set/viewpointThetaPhi 45. 60.
 #
 # Specify zoom value:
-/vis/viewer/zoom 5.
+#/vis/viewer/zoom 5.
 #
 # Specify style (surface or wireframe):
-#/vis/viewer/set/style wireframe
+/vis/viewer/set/style surface
 #
 # Draw coordinate axes:
 #/vis/scene/add/axes 0 0 0 1 m
@@ -72,5 +74,5 @@
 #/vis/viewer/flush
 #
 /tracking/verbose 1
-/run/beamOn 10
+#/run/beamOn 10
 #/vis/viewer/update

@@ -100,10 +100,10 @@ class G4SmartVoxelHeader
     G4double GetMinExtent() const;
       // Return the minimum coordinate limit along the current axis.
     
-    size_t GetNoSlices() const;
+    std::size_t GetNoSlices() const;
       // Return the no of slices along the current axis.
     
-    G4SmartVoxelProxy* GetSlice(G4int n) const;
+    G4SmartVoxelProxy* GetSlice(std::size_t n) const;
       // Return ptr to the proxy for the nth slice (numbering from 0,
       // no bounds checking performed).
 

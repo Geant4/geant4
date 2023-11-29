@@ -160,7 +160,7 @@ G4VIntersectionLocator::IntersectChord( const G4ThreeVector&  StartPointA,
        IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
     }
   }
-  if( ptrCalledNavigator )
+  if( ptrCalledNavigator != nullptr )
   { 
     *ptrCalledNavigator = CalledNavigator; 
   }

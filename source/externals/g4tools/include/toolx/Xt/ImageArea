@@ -1,0 +1,222 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Xt_ImageArea
+#define toolx_Xt_ImageArea
+
+#include <X11/IntrinsicP.h>
+#include <X11/CoreP.h>
+#include <X11/CompositeP.h>
+#include <X11/StringDefs.h>
+
+//#define TOOLX_XT_IMAGEAREA_DEBUG
+
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+#include <stdio.h>
+#endif
+
+namespace toolx {
+namespace Xt {
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+typedef struct _ImageAreaClassRec* ImageAreaWidgetClass;
+typedef struct _ImageAreaRec* ImageAreaWidget;
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+typedef struct {
+  void* extension;
+} ImageAreaClassPart;
+
+typedef struct _ImageAreaClassRec {
+  CoreClassPart core_class;
+  CompositeClassPart composite_class;
+  ImageAreaClassPart imageArea_class;
+} ImageAreaClassRec;
+
+typedef struct {
+  XtCallbackList resizeCallback;
+  XtCallbackList paintCallback;
+  XtCallbackList eventCallback;
+} ImageAreaPart;
+
+typedef struct _ImageAreaRec {
+  CorePart core;
+  CompositePart composite;
+  ImageAreaPart imageArea;
+} ImageAreaRec;
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+class ImageArea {
+protected:
+  static const char* class_name() {static const char* s_s = "ImageArea";return s_s;}
+public:
+  typedef struct {
+    int reason;
+    XEvent* event;
+  } XoAnyCallbackStruct;
+
+  static int XoCR_RESIZE() {return 1;}
+  static int XoCR_PAINT()  {return 2;}
+  static int XoCR_EVENT()  {return 3;}
+  
+  static const char* XoN_resizeCallback() {static const char* s_s = "resizeCallback";return s_s;}
+  static const char* XoN_paintCallback()  {static const char* s_s = "paintCallback";return s_s;}
+  static const char* XoN_eventCallback()  {static const char* s_s = "eventCallback";return s_s;}
+public:
+  static void paint(Widget a_this) {
+    if(!XtIsRealized(a_this)) return;
+    XoAnyCallbackStruct value;
+    value.reason = XoCR_PAINT();
+    value.event = 0;
+    ::XtCallCallbacks(a_this,XoN_paintCallback(),(XtPointer)&value);
+  }
+protected:
+  static void initialize_class(void) {
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: initialize_class.\n");
+#endif
+  }
+
+  static void initialize_widget(Widget a_request,Widget a_this,ArgList,Cardinal*) {
+    if(a_request->core.width<=0)  a_this->core.width  = 100;
+    if(a_request->core.height<=0) a_this->core.height = 100;
+
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: initialize_widget: %s\n",::XtName(a_this));
+#endif
+
+    ::XtAddEventHandler
+       (a_this,ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|KeyPressMask|KeyReleaseMask,0,event_handler,NULL);
+
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: initialize_widget: end\n");
+#endif
+  }
+
+  static void destroy_widget(Widget) {
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: destroy_widget.\n");
+#endif
+  }
+
+  static void change_widget_size(Widget a_this) {
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: change_widget_size: %s\n",XtName(a_this));
+#endif
+
+    if(widget_class()->core_class.superclass->core_class.resize!=NULL)
+      (widget_class()->core_class.superclass->core_class.resize)(a_this);
+
+    XoAnyCallbackStruct value;
+    value.reason = XoCR_RESIZE();
+    value.event = 0;
+    ::XtCallCallbacks(a_this,XoN_resizeCallback(),(XtPointer)&value);
+
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: change_widget_size: end\n");
+#endif
+}
+
+  static void draw_widget(Widget  a_this,XEvent* a_event,Region a_region) {
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: draw_widget: %s\n",XtName(a_this));
+#endif
+
+    if(widget_class()->core_class.superclass->core_class.expose!=NULL)
+      (widget_class()->core_class.superclass->core_class.expose)(a_this,a_event,a_region);
+
+    XoAnyCallbackStruct value;
+    value.reason = XoCR_PAINT();
+    value.event = a_event;
+    ::XtCallCallbacks(a_this,XoN_paintCallback(),(XtPointer)&value);
+  
+#ifdef TOOLX_XT_IMAGEAREA_DEBUG
+    ::printf("debug: toolx::Xt::ImageArea: draw_widget: end\n");
+#endif
+  }
+
+protected:
+  static void event_handler(Widget a_this,XtPointer,XEvent* a_event ,Boolean*) {
+    XoAnyCallbackStruct value;
+    value.reason = XoCR_EVENT();
+    value.event = a_event;
+    ::XtCallCallbacks(a_this,XoN_eventCallback(),(XtPointer)&value);
+  }
+
+public:
+  static WidgetClass widget_class() {
+    static XtResource s_resources[] = {
+      {(String)XoN_resizeCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
+       XtOffset(ImageAreaWidget,imageArea.resizeCallback),XtRImmediate,(XtPointer)NULL},
+      {(String)XoN_paintCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
+       XtOffset(ImageAreaWidget,imageArea.paintCallback),XtRImmediate,(XtPointer)NULL},
+      {(String)XoN_eventCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
+       XtOffset(ImageAreaWidget,imageArea.eventCallback),XtRImmediate,(XtPointer)NULL}
+    };
+
+    static ImageAreaClassRec s_imageAreaClassRec = {
+      // Core Class Part :
+      {
+        (WidgetClass) &compositeClassRec, // pointer to superclass ClassRec   
+        (String)class_name(),             // widget resource class name
+        sizeof(ImageAreaRec),            // size in bytes of widget record
+        initialize_class,                // class_initialize                 
+        NULL,                            // dynamic initialization           
+        FALSE,                           // has class been initialized?      
+        initialize_widget,               // initialize                       
+        NULL,                            // notify that initialize called    
+        XtInheritRealize,                // XCreateWindow for widget
+        NULL,                            // widget semantics name to proc mapWidget
+        0,                               // number of entries in actions     
+        s_resources,                     // resources for subclass fields    
+        XtNumber(s_resources),           // number of entries in resources   
+        NULLQUARK,                       // resource class quarkified        
+        TRUE,                            // compress MotionNotify for widget 
+        TRUE,                            // compress Expose events for widget
+        TRUE,                            // compress enter and leave events  
+        TRUE,                            // select for VisibilityNotify      
+        destroy_widget,                  // free data for subclass pointers  
+        change_widget_size,              // geom manager changed widget size 
+        draw_widget,                     // rediplay window                  
+        NULL,                            // set subclass resource values
+        NULL,                            // notify that SetValues called    
+        XtInheritSetValuesAlmost,        // SetValues got "Almost" geo reply
+        NULL,                            // notify that get_values called    
+        XtInheritAcceptFocus,            // assign input focus to widget     
+        XtVersion,                       // version of intrinsics used       
+        NULL,                            // list of callback offsets         
+        XtInheritTranslations,           // translations                     
+        XtInheritQueryGeometry,          // return preferred geometry        
+        XtInheritDisplayAccelerator,     // display your accelerator         
+        NULL                             // pointer to extension record      
+      },
+      // Composite Class Part :
+      {
+        XtInheritGeometryManager,   // geometry manager for children   
+        XtInheritChangeManaged,     // change managed state of child   
+        XtInheritInsertChild,       // physically add child to parent  
+        XtInheritDeleteChild,       // physically remove child             
+        NULL                        // pointer to extension record     
+      },
+      // ImageArea :
+      {
+        NULL
+      }
+    };
+    return (WidgetClass)&s_imageAreaClassRec;
+  }
+};
+
+}}
+
+
+#endif

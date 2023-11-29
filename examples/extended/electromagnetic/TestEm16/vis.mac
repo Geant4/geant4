@@ -93,5 +93,3 @@
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
 #
-/run/beamOn 1
-#

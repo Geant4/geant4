@@ -40,6 +40,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 
+#define G4warn G4cout
+
 G4PhysicalVolumeMassScene::G4PhysicalVolumeMassScene
 (G4PhysicalVolumeModel* pPVModel):
   fpPVModel (pPVModel),
@@ -123,7 +125,7 @@ void G4PhysicalVolumeMassScene::ProcessVolume (const G4VSolid& solid)
 	 << G4endl;
   */
   if (fMass < 0.) {
-    G4cout <<
+    G4warn <<
       "G4PhysicalVolumeMassScene::AccrueMass: WARNING:"
       "\n  Mass going negative for \""
 	   << pCurrentPV->GetName() <<

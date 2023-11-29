@@ -6193,7 +6193,7 @@ G4int G4Abla::secnds(G4int x)
     return(mylocaltime->tm_hour*60*60 + mylocaltime->tm_min*60 + mylocaltime->tm_sec);
   }
   else {
-    return(mytime - x);
+    return G4int(mytime - x);
   }
 }
 
@@ -10219,7 +10219,7 @@ G4double G4Abla::haz(G4int k)
 {
  // const G4int pSize = 110;
  // static G4ThreadLocal G4double p[pSize];
-  static G4ThreadLocal G4long ix = 0;
+  static G4ThreadLocal G4int ix = 0;
   static G4ThreadLocal G4double x = 0.0, y = 0.0;
   //  k =< -1 on initialise                                        
   //  k = -1 c'est reproductible                                   
@@ -10239,7 +10239,7 @@ G4double G4Abla::haz(G4int k)
       y = secnds(G4int(x));
       ix = G4int(y * 100 + 43543000);
       if(mod(ix,2) == 0) {
-	ix = ix + 1;
+        ix = ix + 1;
       }
     }}
 

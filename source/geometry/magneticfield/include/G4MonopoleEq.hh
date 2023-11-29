@@ -42,19 +42,18 @@
 
 class G4MonopoleEq : public G4EquationOfMotion
 {
-  public:  // with description
+  public:
 
     G4MonopoleEq(G4ElectroMagneticField* emField );
-
-    ~G4MonopoleEq();
+   ~G4MonopoleEq() override;
 
     void  SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
-                                G4double mass);
+                                G4double mass) override;
 
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
-                                 G4double dydx[] ) const;
+                                 G4double dydx[] ) const override;
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 

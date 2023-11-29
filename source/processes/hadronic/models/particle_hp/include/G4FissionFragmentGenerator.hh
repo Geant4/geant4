@@ -31,16 +31,15 @@
  */
 
 #ifndef G4FISSIONFRAGMENTGENERATOR_HH
-#define	G4FISSIONFRAGMENTGENERATOR_HH
-
-#include "G4Ions.hh"
-#include "globals.hh"
-#include "G4HadFinalState.hh"
-#include "G4HadProjectile.hh"
+#define G4FISSIONFRAGMENTGENERATOR_HH
 
 #include "G4FFGEnumerations.hh"
 #include "G4FissionProductYieldDist.hh"
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
+#include "G4Ions.hh"
 #include "G4TableTemplate.hh"
+#include "globals.hh"
 
 /** G4FissionFragmentGenerator is the front end class to be used by the user for
  *  handling all fission event generation.
@@ -51,9 +50,10 @@
  *  class in constructed. A new class must be created by the user for each type
  *  of fission event, if such functionality is desired.
  */
-class G4FissionFragmentGenerator{
-public:
-// Constructor definition
+class G4FissionFragmentGenerator
+{
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage: No arguments required
      *
@@ -80,7 +80,7 @@ public:
      *          - Alpha production probability: \p 0
      *          - Sampling scheme: \p NORMAL
      */
-    G4FissionFragmentGenerator( void );
+    G4FissionFragmentGenerator();
     /** Overloaded constructor
      *  - Usage:
      *      - \p Verbosity: Verbosity level
@@ -89,13 +89,14 @@ public:
             - Refer to the documentation for the default constructor for
      *        setting up the operating parameters.
      */
-    G4FissionFragmentGenerator( G4int Verbosity );
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( void );
+    G4FissionFragmentGenerator(G4int Verbosity);
 
-public:
-// Functions
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize();
+
+  public:
+    // Functions
     /** Generates a single fission event
      *  - Usage: No arguments required
      *
@@ -103,16 +104,16 @@ public:
      *      - Generates a single fission event by calling the overloaded function
      *        and passing an argument of '1'
      */
-    G4DynamicParticleVector* G4GenerateFission( void );
+    G4DynamicParticleVector* G4GenerateFission();
     /** Generates a single fission event
      *  - Usage:
-	 *		-\p Projectile: G4HadProjectile of the fission-inducing particle
+     *		-\p Projectile: G4HadProjectile of the fission-inducing particle
      *
      *  - Notes:
      *      - Generates a single fission event by calling the overloaded function
      *        and passing an argument of '1'
      */
-    G4DynamicParticleVector* G4GenerateFission( const G4HadProjectile& Projectile );
+    G4DynamicParticleVector* G4GenerateFission(const G4HadProjectile& Projectile);
     /** Generates NumberOfFissions fission events
      *  - Usage:
      *      -\p NumberOfFissions: The number of fission events to generate
@@ -120,30 +121,30 @@ public:
      *  - Notes:
      *      - Generates \p NumberOfFissions fission events
      */
-    const std::vector< G4DynamicParticleVector* > G4GenerateFission( G4long NumberOfFissions,
-                                                                     const G4HadProjectile& Projectile );
+    const std::vector<G4DynamicParticleVector*>
+    G4GenerateFission(G4long NumberOfFissions, const G4HadProjectile& Projectile);
     /** Returns a randomly sampled fission product */
-    G4Ions* G4GenerateFissionProduct( void );
+    G4Ions* G4GenerateFissionProduct();
     /** Returns the production rate of alpha particles for fission events */
-    G4double G4GetAlphaProduction( void );
+    G4double G4GetAlphaProduction();
     /** Returns the probability of ternary fission */
-    G4double G4GetTernaryProbability( void );
+    G4double G4GetTernaryProbability();
     /** Returns the FissionCause of the fission event. */
-    G4FFGEnumerations::FissionCause G4GetCause( void );
+    G4FFGEnumerations::FissionCause G4GetCause();
     /** Returns the energy of the fission inducing particle. */
-    G4double G4GetIncidentEnergy( void );
+    G4double G4GetIncidentEnergy();
     /** Returns the code of the fission isotope in ZZZAAA format. */
-    G4int G4GetIsotope( void );
+    G4int G4GetIsotope();
     /** Returns the MetaState of the fission isotope. */
-    G4FFGEnumerations::MetaState G4GetMetaState( void );
+    G4FFGEnumerations::MetaState G4GetMetaState();
     /** Returns the FissionSamplingScheme that is currently in use. */
-    G4FFGEnumerations::FissionSamplingScheme G4GetSamplingScheme( void );
+    G4FFGEnumerations::FissionSamplingScheme G4GetSamplingScheme();
     /** Returns the yield type that is currently in use */
-    G4FFGEnumerations::YieldType G4GetYieldType( void );
+    G4FFGEnumerations::YieldType G4GetYieldType();
     /** Initializes a new \p G4FPY...Dist class based on the class descriptor
      *  variables of G4FissionFragmentGenerator.
      */
-    bool InitializeFissionProductYieldClass( std::istringstream& dataFile );
+    bool InitializeFissionProductYieldClass(std::istringstream& dataFile);
     /** Converts the Z, A and M of an isotope into an integer representation **/
     static G4int G4MakeIsotopeCode(G4int Z, G4int A, G4int M);
     /** Sets the number of alpha particles produced in fission.
@@ -157,7 +158,7 @@ public:
      *        Setting the AlphaProduction too high will have unpredictable
      *        results on the sampling of the fission products.
      */
-    void G4SetAlphaProduction( G4double WhatAlphaProduction );
+    void G4SetAlphaProduction(G4double WhatAlphaProduction);
     /** Sets the probability of ternary fission
      *  - Usage:
      *      - \p WhatAlphaProductionProbability: Probability of generating alpha
@@ -165,7 +166,7 @@ public:
      *
      *  - Notes:
      */
-    void G4SetTernaryProbability( G4double WhatTernaryProbability );
+    void G4SetTernaryProbability(G4double WhatTernaryProbability);
     /** Sets the cause of fission event.
      *  - Usage:
      *      - \p WhichCause: \p SPONTANEOUS, \p N_INDUCED, \p P_INDUCED, or
@@ -173,28 +174,28 @@ public:
      *
      *  - Notes:
      */
-    void G4SetCause( G4FFGEnumerations::FissionCause WhichCause );
+    void G4SetCause(G4FFGEnumerations::FissionCause WhichCause);
     /** Sets the incident energy, if any, of the particle that cause fission.
      *  - Usage:
      *      - \p WhatIncidentEnergy: Kinetic energy of the particle with units applied;
      *
      *  - Notes:
      */
-    void G4SetIncidentEnergy( G4double WhatIncidentEnergy );
+    void G4SetIncidentEnergy(G4double WhatIncidentEnergy);
     /** Sets the fission isotope
      *  - Usage:
      *      - \p WhichIsotope: Code of the isotope in ZZZAAA format
      *
      *  - Notes:
      */
-    void G4SetIsotope( G4int WhichIsotope );
+    void G4SetIsotope(G4int WhichIsotope);
     /** Sets the metastable state of the fission isotope.
      *  - Usage:
      *      - \p WhichMetaState: \p GROUND_STATE, \p META_1, or \p META_2
      *
      *  - Notes:
      */
-    void G4SetMetaState( G4FFGEnumerations::MetaState WhichMetaState );
+    void G4SetMetaState(G4FFGEnumerations::MetaState WhichMetaState);
     /** Set the sampling scheme.
      *  - Usage:
      *      - NewScheme: The G4FissionSamplingScheme value for the sampling
@@ -211,14 +212,14 @@ public:
      *           the code documentation for G4FPYWendtSamplingDist for a more
      *           detailed explanation.
      */
-    void G4SetSamplingScheme( G4FFGEnumerations::FissionSamplingScheme NewScheme );
+    void G4SetSamplingScheme(G4FFGEnumerations::FissionSamplingScheme NewScheme);
     /** Sets the ENDF yield type to be used for the data
      *  - Usage:
      *      - \p WhichYieldType: \p INDEPENDENT or \p COMULATIVE
      *
      *  - Notes:
      */
-    void G4SetYieldType( G4FFGEnumerations::YieldType WhichYieldType );
+    void G4SetYieldType(G4FFGEnumerations::YieldType WhichYieldType);
     /** Sets the verbosity levels
      *  - Usage:
      *      - \p WhichVerbosity: Combination of  levels
@@ -231,57 +232,57 @@ public:
      *      - \p GAMMA_INFO: Displays information about gamma sampling
      *      - \p ALPHA_INFO: Displays information about alpha sampling
      *      - \p MOMENTUM_INFO: Displays information about momentum balancing
-     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation or interpolation that occurs
+     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation
+     * or interpolation that occurs
      *      - \p DEBUG: Reports program flow as it steps through functions
      *      - \p PRINT_ALL: Displays any and all output
      */
-    void G4SetVerbosity( G4int WhatVerbosity );
+    void G4SetVerbosity(G4int WhatVerbosity);
 
-protected:
-// Variables
+  protected:
+    // Variables
     // Class descriptor variables
-        /** Number in ZZZAAA format of the isotope that
-         *  G4FissionFragmentGenerator references
-         */
-        G4int Isotope_;
-        /** MetaState information of the isotope that G4FissionFragmentGenerator
-         *  references
-         *  \n A value of 0 refers to the ground state
-         */
-        G4FFGEnumerations::MetaState MetaState_;
-        /** The cause of fission: \p SPONTANEOUS or \p N_INDUCED. */
-        G4FFGEnumerations::FissionCause Cause_;
-        /** Kinetic energy, if any, of the incident particle in GeV. */
-        G4double IncidentEnergy_;
-        /** The type of yield to be used: \p INDEPENDET or \p CUMULATIVE */
-        G4FFGEnumerations::YieldType YieldType_;
-        /** Sets the ternary fission probability. Valid ranges are [0, 1] */
-        G4double TernaryProbability_;
-        /** Controls whether alpha particles are emitted, and how many */
-        G4double AlphaProduction_;
-        /** If Isotope_, MetaState_, Cause_, or IncidentEnergy_ are changed in
-         *  the middle of a run then the class pointed at by YieldData_ will
-         *  need to be reconstructed
-         */
-        G4bool IsReconstructionNeeded_;
-        /** Verbosity level */
-        G4int Verbosity_;
+    /** Number in ZZZAAA format of the isotope that
+     *  G4FissionFragmentGenerator references
+     */
+    G4int Isotope_;
+    /** MetaState information of the isotope that G4FissionFragmentGenerator
+     *  references
+     *  \n A value of 0 refers to the ground state
+     */
+    G4FFGEnumerations::MetaState MetaState_;
+    /** The cause of fission: \p SPONTANEOUS or \p N_INDUCED. */
+    G4FFGEnumerations::FissionCause Cause_;
+    /** Kinetic energy, if any, of the incident particle in GeV. */
+    G4double IncidentEnergy_;
+    /** The type of yield to be used: \p INDEPENDET or \p CUMULATIVE */
+    G4FFGEnumerations::YieldType YieldType_;
+    /** Sets the ternary fission probability. Valid ranges are [0, 1] */
+    G4double TernaryProbability_;
+    /** Controls whether alpha particles are emitted, and how many */
+    G4double AlphaProduction_;
+    /** If Isotope_, MetaState_, Cause_, or IncidentEnergy_ are changed in
+     *  the middle of a run then the class pointed at by YieldData_ will
+     *  need to be reconstructed
+     */
+    G4bool IsReconstructionNeeded_;
+    /** Verbosity level */
+    G4int Verbosity_;
 
     // Defines the current sampling scheme and the respective class
-        /** The sampling scheme that is used: \p NORMAL, \p LIGHT_FRAGMENT, or
-         *  \p WENDT.
-         */
-        G4FFGEnumerations::FissionSamplingScheme SamplingScheme_;
-        /** Pointer to G4FissionProductYieldDist class that holds all the
-         *  probabilistic yield data
-         */
-        G4FissionProductYieldDist* YieldData_;
+    /** The sampling scheme that is used: \p NORMAL, \p LIGHT_FRAGMENT, or
+     *  \p WENDT.
+     */
+    G4FFGEnumerations::FissionSamplingScheme SamplingScheme_;
+    /** Pointer to G4FissionProductYieldDist class that holds all the
+     *  probabilistic yield data
+     */
+    G4FissionProductYieldDist* YieldData_;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default deconstructor */
     ~G4FissionFragmentGenerator();
 };
 
-#endif	/* G4FISSIONFRAGMENTGENERATOR_HH */
-
+#endif /* G4FISSIONFRAGMENTGENERATOR_HH */

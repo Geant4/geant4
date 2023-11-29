@@ -1,18 +1,20 @@
--------------------------------------------------------------------
+# Category hadr-prtn History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-        History file for hadronic/models/parton_string directory
-        --------------------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the 
-code and to keep track of all tags.
+## 2022-11-26 Gabriele Cosmo (hadr-prtn-V11-00-01)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2021-12-10 Ben Morgan (hadr-prtn-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 --------------------------------------------------
 07 December 2016,  A. Ribon (hadr-prtn-stable-V10-02-06/hadr-prtn-V10-02-03)

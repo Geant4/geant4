@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -74,9 +74,9 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
          --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:  0.926 %
           ElmMassFraction:   8.00 %  ElmAbundance   7.54 % 
 
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.6
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
 #
 /process/inactivate hadElastic
 /run/physicsModified
@@ -93,9 +93,11 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 ======================================================================
 ======          Radioactive Decay Physics Parameters           =======
 ======================================================================
-Max life time                                     1.4427e+06 ps
+min MeanLife (from G4NuclideTable)                1 ns 
+Max life time (from G4DeexPrecoParameters)        1 ns 
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    0
 Enable correlated gamma emission                  0
 Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      0
@@ -103,7 +105,7 @@ Auger electron emission enabled                   0
 Check EM cuts disabled for atomic de-excitation   0
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        1e+27  ns
+Threshold for very long decay time at rest        3.171e+10 y  
 ======================================================================
 
 =======================================================
@@ -116,9 +118,10 @@ Threshold for very long decay time at rest        1e+27  ns
  ProduceFissionFragments ? 0
  UseWendtFissionModel ?    0
  UseNRESP71Model ?         0
+ UseDBRC ?                 0
 =======================================================
 
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.6/Inelastic
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -130,10 +133,12 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:          NNDiffuseElastic: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
 
   Process: Radioactivation
 
@@ -144,10 +149,12 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for alpha
@@ -156,10 +163,12 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_He3
@@ -169,9 +178,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_alpha
@@ -181,9 +192,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_deuteron
@@ -193,9 +206,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_lambda
@@ -204,10 +219,12 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
   Process: anti_lambdaInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 0 eV  ---> 25 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
@@ -217,9 +234,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_proton
@@ -229,9 +248,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_triton
@@ -241,9 +262,11 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
 
+
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for deuteron
@@ -252,10 +275,12 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
@@ -265,6 +290,7 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:            BertiniCascade: 199 MeV ---> 10 GeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
 
+
 ---------------------------------------------------
                            Hadronic Processes for kaon+
 
@@ -272,11 +298,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
   Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
@@ -285,11 +313,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
   Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for lambda
@@ -298,11 +328,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
   Process: lambdaInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for neutron
@@ -311,7 +343,9 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:             hElasticCHIPS: 19.5 MeV ---> 100 TeV
         Model:          NeutronHPElastic: 0 eV  ---> 20 MeV
      Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
+
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
 
   Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
@@ -319,19 +353,25 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:            Binary Cascade: 19.9 MeV ---> 6 GeV
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
+
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
         Model:               nRadCapture: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
+
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
 
   Process: nFission
         Model:          NeutronHPFission: 0 eV  ---> 20 MeV
         Model:                G4LFission: 19.9 MeV ---> 100 TeV
      Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
+
      Cr_sctns:                    ZeroXS: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
@@ -340,11 +380,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
+
   Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
@@ -353,11 +395,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
+
   Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for proton
@@ -366,11 +410,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
 
+
   Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            Binary Cascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for sigma-
@@ -379,11 +425,13 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
   Process: sigma-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 3 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -392,29 +440,40 @@ Threshold for very long decay time at rest        1e+27  ns
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:     G4ParticleInelasticXS: 0 eV  ---> 25.6 PeV
 
+
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound excitation low energy (MeV)            0.1
-Pre-compound excitation high energy (MeV)           30
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 2e+05
-Limit excitation energy for Fermi BreakUp (MeV)     20
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1442.7
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
@@ -427,21 +486,21 @@ Max 2J for sampling of angular correlations         10
 Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 0 fm 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 0 eV 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : Stainless-Steel
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 0 fm 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 0 eV 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : BeO
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 0 fm 
- Energy thresholds :  gamma  9.54993 GeV    e-  9.54993 GeV    e+  9.54993 GeV proton 0 eV 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -466,57 +525,70 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.480000s Real=3.738942s Sys=0.010000s
+  User=2.770000s Real=3.300536s Sys=0.000000s
 
  The run is 10000 Am241 of 0 eV  within BeO (D =  3 cm  L = 6 cm )
 
  Process calls frequency :
-            NoProcess=  10006       Radioactivation= 224907                  Rayl=   2550
-       Transportation= 169906        alphaInelastic=      6                 compt=  22254
-                eIoni= 194377               ionIoni= 286325                   msc=  11245
-                 phot=  13100 
+            NoProcess=  10002       Radioactivation= 225289                  Rayl=   2498
+       Transportation= 169747        alphaInelastic=      5               annihil=      1
+                compt=  22373                  conv=      1                 eIoni= 195762
+              ionIoni= 323991                   msc=  10456                  phot=  13087
 
- List of generated particles (with meanLife != 0):
-          Ac225:    9997  Emean =  165.58 meV	( 2.6193 meV --> 1.1334 eV )	mean life = 14.427 d  
-          At217:    9988  Emean =  116.35 keV	( 106.73 keV --> 117.05 keV)	mean life = 46.599 ms 
-            Be9:       1  Emean =    4.99 MeV	( 4.99 MeV --> 4.99 MeV)	stable
-          Bi209:   10000  Emean =  1.2173 eV 	( 3.2596 meV --> 2.733 eV )	stable
-          Bi213:    9988  Emean =  132.94 keV	( 121.49 keV --> 132.95 keV)	mean life = 1.0962 h  
-            C12:       5  Emean =  1.2239 MeV	( 378.16 keV --> 2.528 MeV)	stable
-          Fr221:   10000  Emean =  104.85 keV	( 18.19 meV --> 105.65 keV)	mean life = 7.0692 min
-          Np237:   10000  Emean =  92.569 keV	( 89.673 keV --> 93.678 keV)	mean life = 3.0953e+06 y  
-          Pa233:   10000  Emean =  81.949 keV	( 77.803 keV --> 83.776 keV)	mean life = 38.917 d  
-          Pb209:   10000  Emean =  157.73 keV	( 5.2021 eV  --> 160.59 keV)	mean life = 4.6931 h  
-          Po213:    9822  Emean =  181.18 eV 	( 13.068 meV --> 145.62 keV)	mean life = 5.3668 us 
-          Ra221:      12  Emean =  278.69 meV	( 106.96 meV --> 541.86 meV)	mean life = 40.395 s  
-          Ra225:   10000  Emean =  96.728 keV	( 16.997 meV --> 339.82 keV)	mean life = 21.496 d  
-          Rn217:      12  Emean =  122.89 keV	( 120.41 keV --> 124.71 keV)	mean life = 779.06 us 
-          Rn221:       3  Emean =  90.714 keV	( 90.714 keV --> 90.714 keV)	mean life = 36.067 min
-          Th229:    8835  Emean =  84.324 keV	( 81.436 keV --> 84.358 keV)	mean life = 11376 y  
-          Tl209:     178  Emean =  111.86 keV	( 106.1 keV --> 112.51 keV)	mean life = 3.1739 min
-           U233:   10000  Emean =  357.78 meV	( 3.7544 meV --> 2.044 eV )	mean life = 2.2983e+05 y  
-          alpha:   80001  Emean =   5.928 MeV	( 1.5807 MeV --> 8.3755 MeV)	stable
-      anti_nu_e:   40000  Emean =  422.79 keV	( 6.137 keV --> 1.8193 MeV)	stable
-             e-:  154961  Emean =   83.32 keV	( 5.1689 eV  --> 1.6559 MeV)	stable
-          gamma:   25054  Emean =  195.95 keV	( 5.4389 keV --> 9.7227 MeV)	stable
-        neutron:       5  Emean =  3.5168 MeV	( 726.54 keV --> 6.1477 MeV)	mean life = 14.67 min
 
- Mean energy deposit per event = 49.581 MeV  rms = 460.6 keV
- Mean energy flow per event    = 2.0229 MeV  rms = 501.87 keV
+ List of generated particles (with meanLife != 0) :
+          Ac225:    9999  Emean =  161.58 meV	( 3.4051 meV --> 1.1521 eV )	mean life = 14.427 d  
+  Ac225[40.090]:    7014  Emean =  375.31 meV	( 1.397 meV --> 995.35 meV)	mean life = 1.0387 ns 
+          At217:    9988  Emean =  116.33 keV	( 101.67 keV --> 117.05 keV)	mean life = 46.599 ms 
+          Bi209:   10000  Emean =  1.2129 eV 	( 2.9686 meV --> 2.7137 eV )	stable
+          Bi213:    9989  Emean =  132.93 keV	( 1.4517 eV  --> 132.95 keV)	mean life = 1.0962 h  
+            C12:       2  Emean =  2.2692 MeV	( 1.3724 MeV --> 3.166 MeV)	stable
+          Fr221:    9999  Emean =  77.282 keV	( 3.2596 meV --> 105.65 keV)	mean life = 7.0692 min
+  Fr221[36.640]:    2642  Emean =  104.39 keV	( 94.645 keV --> 105 keV)	mean life = 2.164 ns 
+          Np237:   10000  Emean =  671.68 eV 	( 2.5029 meV --> 93.678 keV)	mean life = 3.0953e+06 y  
+  Np237[59.541]:    9928  Emean =  92.565 keV	( 88.441 keV --> 92.688 keV)	mean life = 96.949 ns 
+          Pa233:   10000  Emean =  37.162 keV	( 7.5088 meV --> 83.776 keV)	mean life = 38.917 d  
+  Pa233[86.468]:    5466  Emean =  81.938 keV	( 78.476 keV --> 82.314 keV)	mean life = 51.504 ns 
+          Pb209:   10000  Emean =  157.26 keV	( 1.5582 eV  --> 160.59 keV)	mean life = 4.6931 h  
+  Pb209[1423.000]:       2  Emean =  8.4493 eV 	( 6.9681 eV  --> 9.9306 eV )	mean life = 2.0198 ns 
+  Pb209[2149.430]:     200  Emean =  7.2558 eV 	( 424.86 meV --> 13.282 eV )	mean life = 5.7131 ns 
+          Pb213:       1  Emean =  122.98 keV	( 122.98 keV --> 122.98 keV)	mean life = 14.715 min
+          Po213:    9793  Emean =   166.8 eV 	( 35.187 meV --> 145.62 keV)	mean life = 5.3668 us 
+          Po217:       1  Emean =  111.69 keV	( 111.69 keV --> 111.69 keV)	mean life = 2.1063 s  
+          Ra221:      11  Emean =  338.59 meV	( 79.57 meV --> 768.31 meV)	mean life = 40.395 s  
+          Ra225:   10000  Emean =  1.0269 keV	( 2.3865 meV --> 330.28 keV)	mean life = 21.496 d  
+  Ra225[25.410]:    8077  Emean =  65.368 keV	( 0.7276 meV --> 341.2 keV)	mean life = 1.2696 ns 
+  Ra225[31.560]:     516  Emean =  96.298 keV	( 10.681 meV --> 337.8 keV)	mean life = 3.0297 ns 
+  Ra225[42.770]:    3942  Emean =  96.078 keV	( 7.9744 meV --> 336.73 keV)	mean life = 4.3281 ns 
+          Rn217:      11  Emean =   45.35 keV	( 21.42 meV --> 124.71 keV)	mean life = 779.06 us 
+  Rn217[149.180]:       6  Emean =   121.9 keV	( 121.39 keV --> 122.01 keV)	mean life = 2.164 ns 
+  Rn217[174.300]:       1  Emean =  121.55 keV	( 121.55 keV --> 121.55 keV)	mean life = 2.164 ns 
+  Rn217[93.020]:       1  Emean =  99.972 meV	( 99.972 meV --> 99.972 meV)	mean life = 5.7708 ns 
+          Rn221:       1  Emean =  90.204 keV	( 90.204 keV --> 90.204 keV)	mean life = 36.067 min
+          Th229:    8734  Emean =  84.326 keV	( 80.731 keV --> 84.358 keV)	mean life = 11376 y  
+          Tl209:     207  Emean =  111.94 keV	( 106.08 keV --> 112.51 keV)	mean life = 3.1739 min
+           U233:   10000  Emean =  360.18 meV	( 3.7544 meV --> 1.9473 eV )	mean life = 2.2983e+05 y  
+          alpha:   80000  Emean =  5.9272 MeV	( 4.4847 MeV --> 8.3755 MeV)	stable
+      anti_nu_e:   40000  Emean =   423.6 keV	( 5.0486 keV --> 1.8213 MeV)	stable
+             e+:       1  Emean =  682.87 keV	( 682.87 keV --> 682.87 keV)	stable
+             e-:  155519  Emean =  83.314 keV	( 650.31 meV --> 1.6218 MeV)	stable
+          gamma:   24993  Emean =  195.87 keV	( 5.4363 keV --> 9.5148 MeV)	stable
+        neutron:       2  Emean =  6.5182 MeV	( 569.68 keV --> 12.467 MeV)	mean life = 14.67 min
+
+ Mean energy deposit per event = 49.578 MeV  rms = 472.88 keV
+ Mean energy flow per event    = 2.0232 MeV  rms = 498.2 keV
 
  List of particles emerging from the container :
-      anti_nu_e:   40000  Emean =  422.79 keV	( 6.137 keV --> 1.8193 MeV) 	Eflow/event = 1.6912 MeV
-             e-:      19  Emean =  217.31 keV	( 45.323 keV --> 1.2046 MeV) 	Eflow/event = 412.9 eV 
-          gamma:   11954  Emean =  275.72 keV	( 39.943 keV --> 9.7227 MeV) 	Eflow/event = 329.59 keV
-        neutron:       5  Emean =  3.5168 MeV	( 726.54 keV --> 6.1477 MeV) 	Eflow/event = 1.7584 keV
+      anti_nu_e:   40000  Emean =   423.6 keV	( 5.0486 keV --> 1.8213 MeV) 	Eflow/event = 1.6944 MeV
+             e-:      14  Emean =  153.86 keV	( 18.982 keV --> 421.47 keV) 	Eflow/event = 215.4 eV 
+          gamma:   11905  Emean =  274.89 keV	( 40.09 keV --> 9.5148 MeV) 	Eflow/event = 327.26 keV
+        neutron:       2  Emean =  6.5182 MeV	( 569.68 keV --> 12.467 MeV) 	Eflow/event = 1.3036 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 674301575, 7710055
+ Current couple of seeds = 2144625660, 172261950
 ----------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.029 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.033 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

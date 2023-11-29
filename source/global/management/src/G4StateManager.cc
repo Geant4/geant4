@@ -48,7 +48,7 @@ G4StateManager::~G4StateManager()
 {
   G4VStateDependent* state = nullptr;
 
-  while(theDependentsList.size() > 0)
+  while(!theDependentsList.empty())
   {
     state = theDependentsList.back();
     theDependentsList.pop_back();
@@ -92,7 +92,7 @@ G4bool G4StateManager::RegisterDependent(G4VStateDependent* aDependent,
   }
   else
   {
-    if(theBottomDependent)
+    if(theBottomDependent != nullptr)
     {
       theDependentsList.push_back(theBottomDependent);
     }
@@ -164,7 +164,7 @@ G4bool G4StateManager::SetNewState(const G4ApplicationState& requestedState,
     ack = theDependentsList[i]->Notify(requestedState);
     ++i;
   }
-  if(theBottomDependent)
+  if(theBottomDependent != nullptr)
   {
     ack = theBottomDependent->Notify(requestedState);
   }

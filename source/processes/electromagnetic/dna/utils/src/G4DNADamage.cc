@@ -27,7 +27,7 @@
 #include "G4DNADamage.hh"
 #include "G4UnitsTable.hh"
 
-G4ThreadLocal G4DNADamage* G4DNADamage::fpInstance(0);
+G4ThreadLocal G4DNADamage* G4DNADamage::fpInstance(nullptr);
 
 G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
                                    const G4Molecule* molecule,
@@ -42,8 +42,8 @@ G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
 
 G4DNAIndirectHit::~G4DNAIndirectHit()
 {
-  if (fpMolecule) delete fpMolecule;
-  fpMolecule = 0;
+  if (fpMolecule != nullptr) delete fpMolecule;
+  fpMolecule = nullptr;
 }
 
 void G4DNAIndirectHit::Print()
@@ -55,7 +55,7 @@ void G4DNAIndirectHit::Print()
 
 G4DNADamage* G4DNADamage::Instance()
 {
-  if (!fpInstance) new G4DNADamage();
+  if (fpInstance == nullptr) new G4DNADamage();
 
   return fpInstance;
 }
@@ -69,7 +69,7 @@ G4DNADamage::G4DNADamage()
 
 G4DNADamage::~G4DNADamage()
 {
-  for (int i = 0; i < (int) fIndirectHits.size(); i++)
+  for (G4int i = 0; i < (G4int) fIndirectHits.size(); ++i)
   {
     if (fIndirectHits[i]) delete fIndirectHits[i];
   }
@@ -79,13 +79,13 @@ G4DNADamage::~G4DNADamage()
 void G4DNADamage::DeleteInstance()
 {
   if (fpInstance) delete fpInstance;
-  fpInstance = 0;
+  fpInstance = nullptr;
 }
 
 void G4DNADamage::Reset()
 {
   fNIndirectDamage = 0;
-  for (int i = 0; i < (int) fIndirectHits.size(); i++)
+  for (G4int i = 0; i < (G4int) fIndirectHits.size(); ++i)
   {
     if (fIndirectHits[i]) delete fIndirectHits[i];
   }
@@ -103,13 +103,12 @@ void G4DNADamage::AddIndirectDamage(const G4String& baseName,
     return;
   }
 
-  G4DNAIndirectHit* indirectHit = 0;
-  std::map<G4Molecule, const G4Molecule*>::iterator it = 
-   fMolMap.find(*molecule);
+  G4DNAIndirectHit* indirectHit = nullptr;
+  auto it = fMolMap.find(*molecule);
 
-  if (it == fMolMap.end())
+  if (it == fMolMap.cend())
   {
-    G4Molecule* mol(0);
+    G4Molecule* mol(nullptr);
     fMolMap[*molecule] = (mol = new G4Molecule(*molecule));
     indirectHit = new G4DNAIndirectHit(baseName, mol, position, time);
   }

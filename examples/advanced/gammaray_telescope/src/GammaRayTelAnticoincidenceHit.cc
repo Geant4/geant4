@@ -34,75 +34,59 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "GammaRayTelAnticoincidenceHit.hh"
 
-G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *GammaRayTelAnticoincidenceHitAllocator = 0;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *anticoincidenceHitAllocator{nullptr};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnticoincidenceHit::GammaRayTelAnticoincidenceHit()
-{
-  EdepACD = 0.; 
-  ACDTileNumber = 0; 
-  IsACDPlane = 0;
-  pos = G4ThreeVector(0.,0.,0.);
+GammaRayTelAnticoincidenceHit::GammaRayTelAnticoincidenceHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnticoincidenceHit::~GammaRayTelAnticoincidenceHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-GammaRayTelAnticoincidenceHit::GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit& right)
-  : G4VHit()
-{
-  EdepACD = right.EdepACD; 
-  ACDTileNumber = right.ACDTileNumber;
-  IsACDPlane = right.IsACDPlane;
-  pos = right.pos;
+GammaRayTelAnticoincidenceHit::~GammaRayTelAnticoincidenceHit() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const GammaRayTelAnticoincidenceHit& GammaRayTelAnticoincidenceHit::operator=(const GammaRayTelAnticoincidenceHit& right)
-{
-  EdepACD = right.EdepACD; 
-  ACDTileNumber = right.ACDTileNumber;
-  IsACDPlane = right.IsACDPlane;
-  pos = right.pos;
-  return *this;
+GammaRayTelAnticoincidenceHit::GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit &right) :
+    acdTileNumber(right.acdTileNumber),
+    isACDPlane(right.isACDPlane),
+    acdDepositedEnergy(right.acdDepositedEnergy),
+    position(right.position) {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit& right) const
-{
-   return((EdepACD==right.EdepACD)&&(ACDTileNumber==right.ACDTileNumber)&&(IsACDPlane==right.IsACDPlane)&& (pos==right.pos));
+auto GammaRayTelAnticoincidenceHit::operator=(const GammaRayTelAnticoincidenceHit &right) -> const GammaRayTelAnticoincidenceHit& {
+	acdTileNumber = right.acdTileNumber;
+	isACDPlane = right.isACDPlane;
+    acdDepositedEnergy = right.acdDepositedEnergy;
+	position = right.position;
+
+	return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceHit::Draw()
-{;}
+auto GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit &right) const -> G4bool {
+	return (
+		(acdTileNumber == right.acdTileNumber) &&
+		(isACDPlane == right.isACDPlane) &&
+        (acdDepositedEnergy == right.acdDepositedEnergy) &&
+		(position == right.position)
+	);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceHit::Print()
-{;}
+void GammaRayTelAnticoincidenceHit::Draw() {
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-
-
-
-
-
-
-
-
-
+void GammaRayTelAnticoincidenceHit::Print() {
+}

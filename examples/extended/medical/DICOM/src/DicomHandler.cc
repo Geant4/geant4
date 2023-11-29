@@ -680,8 +680,7 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
 {
   G4int returnvalue = 0; size_t rflag = 0;
   
-  //  READING THE PIXELS :
-  G4int w = 0;
+  //  READING THE PIXELS
   
   fTab = new G4int*[fRows];
   for ( G4int i = 0; i < fRows; ++i )
@@ -699,7 +698,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     
     for(G4int j = 0; j < fRows; ++j) {
       for(G4int i = 0; i < fColumns; ++i) {
-        w++;
         rflag = std::fread( &ch, 1, 1, dicom);
         fTab[j][i] = ch*fRescaleSlope + fRescaleIntercept;
       }
@@ -711,7 +709,6 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     short pixel;
     for( G4int j = 0; j < fRows; ++j) {
       for( G4int i = 0; i < fColumns; ++i) {
-        w++;
         rflag = std::fread(sbuff, 2, 1, dicom);
         GetValue(sbuff, pixel);
         fTab[j][i] = pixel*fRescaleSlope + fRescaleIntercept;
@@ -720,12 +717,10 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
   }
   
   // Creation of .g4 files wich contains averaged density data
-  char * nameProcessed = new char[FILENAMESIZE];
-  FILE* fileOut;
- 
-  std::sprintf(nameProcessed,"%s.g4dcmb",filename2);
-  fileOut = std::fopen(nameProcessed,"w+b");
-  std::printf("### Writing of %s ###\n",nameProcessed);
+  G4String nameProcessed = filename2 + G4String(".g4dcmb");
+  FILE* fileOut = std::fopen(nameProcessed.c_str(),"w+b");
+  
+  G4cout << "### Writing of "<< nameProcessed << " ###\n";
 
   unsigned int nMate = fMaterialIndices.size();
   rflag = std::fwrite(&nMate, sizeof(unsigned int), 1, fileOut);
@@ -1020,7 +1015,6 @@ void DicomHandler::CheckFileFormat()
     char * fCompressionc = new char[LINEBUFFSIZE];
     char * maxc = new char[LINEBUFFSIZE];
     //char name[300], inputFile[300];
-    char * name = new char[FILENAMESIZE];
     char * inputFile = new char[FILENAMESIZE];
     G4int rflag;
     lecturePref = std::fopen(fDriverFile.c_str(),"r");
@@ -1039,15 +1033,13 @@ void DicomHandler::CheckFileFormat()
      rflag = std::fscanf(lecturePref,"%s",inputFile);
       G4String path = GetDicomDataPath() + "/";
     
-     std::sprintf(name,"%s.dcm",inputFile);
+     G4String name = inputFile + G4String(".dcm");
      //Writes the results to a character string buffer.
      
-     char name2[200];
-     strcpy(name2, path.c_str());
-     strcat(name2, name);
+     G4String name2 = path + name;
      //  Open input file and give it to gestion_dicom :
-     std::printf("### Opening %s and reading :\n",name2);
-     dicom = std::fopen(name2,"rb");
+     G4cout << "### Opening " << name2 << " and reading :\n";
+     dicom = std::fopen(name2.c_str(),"rb");
      // Reading the .dcm in two steps:
      //      1.  reading the header
      //      2. reading the pixel data and store the density in Moyenne.dat
@@ -1063,14 +1055,14 @@ void DicomHandler::CheckFileFormat()
      for( G4int i = 1; i <= fNFiles; ++i ) 
      { // Begin loop on filenames
       rflag = std::fscanf(lecturePref,"%s",inputFile);
- 
-      std::sprintf(name,"%s.dcm",inputFile);
+
+      G4String name = inputFile + G4String(".dcm");
       //Writes the results to a character string buffer.
       
        //G4cout << "check: " << name << G4endl;
       //  Open input file and give it to gestion_dicom :
-      std::printf("### Opening %s and reading :\n",name);
-      dicom = std::fopen(name,"rb");
+      G4cout << "### Opening " << name << " and reading :\n";
+      dicom = std::fopen(name.c_str(),"rb");
       // Reading the .dcm in two steps:
       //      1.  reading the header
       //      2. reading the pixel data and store the density in Moyenne.dat
@@ -1090,7 +1082,6 @@ void DicomHandler::CheckFileFormat()
     
     delete [] fCompressionc;
     delete [] maxc;
-    delete [] name;
     delete [] inputFile;
     if (rflag) return;
     

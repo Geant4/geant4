@@ -37,8 +37,6 @@ G4VExceptionHandler::G4VExceptionHandler()
   stateManager->SetExceptionHandler(this);
 }
 
-G4VExceptionHandler::~G4VExceptionHandler() {}
-
 G4VExceptionHandler::G4VExceptionHandler(const G4VExceptionHandler& right)
 {
   *this = right;

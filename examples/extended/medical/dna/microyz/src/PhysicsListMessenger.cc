@@ -35,20 +35,18 @@
 
 #include "PhysicsListMessenger.hh"
 #include "PhysicsList.hh"
-
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys),
- fPhysDir(0), fListCmd(0)
+:G4UImessenger(),fPhysicsList(pPhys)
 {
-  fPhysDir = new G4UIdirectory("/microyz/phys/");
+  fPhysDir = std::make_unique<G4UIdirectory>("/microyz/phys/");
   fPhysDir->SetGuidance("physics list commands");
   
-  fListCmd = new G4UIcmdWithAString("/microyz/phys/addPhysics",this);  
+  fListCmd = std::make_unique<G4UIcmdWithAString>("/microyz/phys/addPhysics",this);
   fListCmd->SetGuidance("Add modular physics list.");
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
@@ -57,17 +55,13 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsListMessenger::~PhysicsListMessenger()
-{
-  delete fListCmd;
-  delete fPhysDir;    
-}
+PhysicsListMessenger::~PhysicsListMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {       
-  if( command == fListCmd )
+  if( command == fListCmd.get() )
    { fPhysicsList->AddPhysicsList(newValue);}
 }
 

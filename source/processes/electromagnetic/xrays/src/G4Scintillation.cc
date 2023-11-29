@@ -197,7 +197,7 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
   }
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  size_t numOfMaterials                = G4Material::GetNumberOfMaterials();
+  std::size_t numOfMaterials           = G4Material::GetNumberOfMaterials();
 
   // create new physics table
   if(!fIntegralTable1)
@@ -207,11 +207,11 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
   if(!fIntegralTable3)
     fIntegralTable3 = new G4PhysicsTable(numOfMaterials);
 
-  for(size_t i = 0; i < numOfMaterials; ++i)
+  for(std::size_t i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsFreeVector* vector1 = new G4PhysicsFreeVector();
-    G4PhysicsFreeVector* vector2 = new G4PhysicsFreeVector();
-    G4PhysicsFreeVector* vector3 = new G4PhysicsFreeVector();
+    auto vector1 = new G4PhysicsFreeVector();
+    auto vector2 = new G4PhysicsFreeVector();
+    auto vector3 = new G4PhysicsFreeVector();
 
     // Retrieve vector of scintillation wavelength intensity for
     // the material from the material's optical properties table.
@@ -241,7 +241,7 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 
           // loop over all (photon energy, intensity)
           // pairs stored for this material
-          for(size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
+          for(std::size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
           {
             currentPM = MPV->Energy(ii);
             currentIN = (*MPV)[ii];
@@ -277,7 +277,7 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 
           // loop over all (photon energy, intensity)
           // pairs stored for this material
-          for(size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
+          for(std::size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
           {
             currentPM = MPV->Energy(ii);
             currentIN = (*MPV)[ii];
@@ -312,7 +312,7 @@ void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 
           // loop over all (photon energy, intensity)
           // pairs stored for this material
-          for(size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
+          for(std::size_t ii = 1; ii < MPV->GetVectorLength(); ++ii)
           {
             currentPM = MPV->Energy(ii);
             currentIN = (*MPV)[ii];
@@ -444,11 +444,11 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.ProposeTrackStatus(fSuspend);
   }
 
-  G4int materialIndex = aMaterial->GetIndex();
+  G4int materialIndex = (G4int)aMaterial->GetIndex();
 
   // Retrieve the Scintillation Integral for this material
   // new G4PhysicsFreeVector allocated to hold CII's
-  size_t numPhot                     = fNumPhotons;
+  std::size_t numPhot                = fNumPhotons;
   G4double scintTime                 = 0.;
   G4double riseTime                  = 0.;
   G4PhysicsFreeVector* scintIntegral = nullptr;
@@ -513,7 +513,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       continue;
 
     G4double CIImax = scintIntegral->GetMaxValue();
-    for(size_t i = 0; i < numPhot; ++i)
+    for(std::size_t i = 0; i < numPhot; ++i)
     {
       // Determine photon energy
       G4double CIIvalue      = G4UniformRand() * CIImax;
@@ -542,8 +542,7 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       photonPolarization = (cosp * photonPolarization + sinp * perp).unit();
 
       // Generate a new photon:
-      G4DynamicParticle* scintPhoton =
-        new G4DynamicParticle(opticalphoton, photonMomentum);
+      auto scintPhoton = new G4DynamicParticle(opticalphoton, photonMomentum);
       scintPhoton->SetPolarization(photonPolarization);
       scintPhoton->SetKineticEnergy(sampledEnergy);
 
@@ -833,21 +832,21 @@ void G4Scintillation::DumpPhysicsTable() const
 {
   if(fIntegralTable1)
   {
-    for(size_t i = 0; i < fIntegralTable1->entries(); ++i)
+    for(std::size_t i = 0; i < fIntegralTable1->entries(); ++i)
     {
       ((G4PhysicsFreeVector*) (*fIntegralTable1)[i])->DumpValues();
     }
   }
   if(fIntegralTable2)
   {
-    for(size_t i = 0; i < fIntegralTable2->entries(); ++i)
+    for(std::size_t i = 0; i < fIntegralTable2->entries(); ++i)
     {
       ((G4PhysicsFreeVector*) (*fIntegralTable2)[i])->DumpValues();
     }
   }
   if(fIntegralTable3)
   {
-    for(size_t i = 0; i < fIntegralTable3->entries(); ++i)
+    for(std::size_t i = 0; i < fIntegralTable3->entries(); ++i)
     {
       ((G4PhysicsFreeVector*) (*fIntegralTable3)[i])->DumpValues();
     }

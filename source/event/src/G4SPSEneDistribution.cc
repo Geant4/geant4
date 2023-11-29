@@ -100,10 +100,10 @@ G4SPSEneDistribution::~G4SPSEneDistribution()
   delete BBHist;
   delete CP_x;
   delete CPHist;
-  for ( auto it=SplineInt.begin() ; it!=SplineInt.end() ; ++it )
+  for (auto & it : SplineInt)
   {
-    delete *it;
-    *it = nullptr;
+    delete it;
+    it = nullptr;
   }
   SplineInt.clear();
 }
@@ -582,19 +582,19 @@ void G4SPSEneDistribution::LinearInterpolation()  // MT: Lock in caller
   // Create a cumulative array which is then normalised Arb_Cum_Area
 
   G4double Area_seg[1024]; // Stores area under each segment
-  G4double sum = 0., Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
-  G4int i, count;
-  G4int maxi = ArbEnergyH.GetVectorLength();
+  G4double sum = 0., Arb_x[1024]={0.}, Arb_y[1024]={0.}, Arb_Cum_Area[1024]={0.};
+  std::size_t i, count;
+  std::size_t maxi = ArbEnergyH.GetVectorLength();
   for (i = 0; i < maxi; ++i)
   {
-    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(std::size_t(i));
-    Arb_y[i] = ArbEnergyH(std::size_t(i));
+    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(i);
+    Arb_y[i] = ArbEnergyH(i);
   }
 
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -606,7 +606,7 @@ void G4SPSEneDistribution::LinearInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -725,19 +725,19 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
   // Create normalised, cumulative array Arb_Cum_Area
 
   G4double Area_seg[1024]; // Stores area under each segment
-  G4double sum = 0., Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
-  G4int i, count;
-  G4int maxi = ArbEnergyH.GetVectorLength();
+  G4double sum = 0., Arb_x[1024]={0.}, Arb_y[1024]={0.}, Arb_Cum_Area[1024]={0.};
+  std::size_t i, count;
+  std::size_t maxi = ArbEnergyH.GetVectorLength();
   for (i = 0; i < maxi; ++i)
   {
-    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(std::size_t(i));
-    Arb_y[i] = ArbEnergyH(std::size_t(i));
+    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(i);
+    Arb_y[i] = ArbEnergyH(i);
   }
 
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -749,7 +749,7 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -783,8 +783,8 @@ void G4SPSEneDistribution::LogInterpolation()  // MT: Lock in caller
 
   i = 1;
 
-  if ( Arb_ezero ) { delete [] Arb_ezero; Arb_ezero = 0; }
-  if ( Arb_Const ) { delete [] Arb_Const; Arb_Const = 0; }
+  if ( Arb_ezero != nullptr ) { delete [] Arb_ezero; Arb_ezero = nullptr; }
+  if ( Arb_Const != nullptr ) { delete [] Arb_Const; Arb_Const = nullptr; }
   Arb_alpha = new G4double [1024];
   Arb_Const = new G4double [1024];
   Arb_alpha_Const_flag = true;
@@ -880,19 +880,19 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
   // Create normalised, cumulative array Arb_Cum_Area
 
   G4double Area_seg[1024]; // Stores area under each segment
-  G4double sum = 0., Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
-  G4int i, count;
-  G4int maxi = ArbEnergyH.GetVectorLength();
+  G4double sum = 0., Arb_x[1024]={0.}, Arb_y[1024]={0.}, Arb_Cum_Area[1024]={0.};
+  std::size_t i, count;
+  std::size_t maxi = ArbEnergyH.GetVectorLength();
   for (i = 0; i < maxi; ++i)
   {
-    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(std::size_t(i));
-    Arb_y[i] = ArbEnergyH(std::size_t(i));
+    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(i);
+    Arb_y[i] = ArbEnergyH(i);
   }
 
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -904,7 +904,7 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -938,8 +938,8 @@ void G4SPSEneDistribution::ExpInterpolation()  // MT: Lock in caller
 
   i = 1;
 
-  if ( Arb_ezero ) { delete[] Arb_ezero; Arb_ezero = 0; }
-  if ( Arb_Const ) { delete[] Arb_Const; Arb_Const = 0; }
+  if ( Arb_ezero != nullptr ) { delete[] Arb_ezero; Arb_ezero = nullptr; }
+  if ( Arb_Const != nullptr ) { delete[] Arb_Const; Arb_Const = nullptr; }
   Arb_ezero = new G4double [1024];
   Arb_Const = new G4double [1024];
   Arb_ezero_flag = true;
@@ -1005,20 +1005,20 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
   // Current method based on the above will not work in all cases. 
   // New method is implemented below.
   
-  G4double sum, Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
-  G4int i, count;
+  G4double sum, Arb_x[1024]={0.}, Arb_y[1024]={0.}, Arb_Cum_Area[1024]={0.};
+  std::size_t i, count;
+  std::size_t maxi = ArbEnergyH.GetVectorLength();
 
-  G4int maxi = ArbEnergyH.GetVectorLength();
   for (i = 0; i < maxi; ++i)
   {
-    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(std::size_t(i));
-    Arb_y[i] = ArbEnergyH(std::size_t(i));
+    Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(i);
+    Arb_y[i] = ArbEnergyH(i);
   }
 
   // Points are now in x,y arrays. If the spectrum is integral it has to be
   // made differential and if momentum it has to be made energy
 
-  if (DiffSpec == false)
+  if (!DiffSpec)
   {
     // Converts integral point-wise spectra to Differential
     //
@@ -1030,7 +1030,7 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
     --maxi;
   }
 
-  if (EnergySpec == false)
+  if (!EnergySpec)
   {
     // Change currently stored values (emin etc) which are actually momenta
     // to energies
@@ -1065,12 +1065,12 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
   i = 1;
   Arb_Cum_Area[0] = 0.;
   sum = 0.;
-  Splinetemp = new G4DataInterpolation(Arb_x, Arb_y, maxi, 0., 0.);
+  Splinetemp = new G4DataInterpolation(Arb_x, Arb_y, (G4int)maxi, 0., 0.);
   G4double ei[101], prob[101];
-  for ( auto it = SplineInt.begin(); it!=SplineInt.end() ; ++it)
+  for (auto & it : SplineInt)
   {
-    delete *it;
-    *it = 0;
+    delete it;
+    it = 0;
   }
   SplineInt.clear();
   SplineInt.resize(1024,nullptr);
@@ -1582,15 +1582,15 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 
   G4AutoLock l(&mutex);
 
-  if (IPDFEnergyExist == false)
+  if (!IPDFEnergyExist)
   {
-    G4int ii;
-    G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
+    std::size_t ii;
+    std::size_t maxbin = UDefEnergyH.GetVectorLength();
     G4double bins[1024], vals[1024], sum;
     for ( ii = 0 ; ii<1024 ; ++ii ) { bins[ii]=0; vals[ii]=0; }
     sum = 0.;
 
-    if ( (EnergySpec == false)
+    if ( (!EnergySpec)
       && (threadLocalData.Get().particle_definition == nullptr))
     {
       G4Exception("G4SPSEneDistribution::GenUserHistEnergies",
@@ -1606,24 +1606,24 @@ void G4SPSEneDistribution::GenUserHistEnergies()
       maxbin = 1024;
     }
 
-    if (DiffSpec == false)
+    if (!DiffSpec)
     {
       G4cout << "Histograms are Differential!!! " << G4endl;
     }
     else
     {
-      bins[0] = UDefEnergyH.GetLowEdgeEnergy(std::size_t(0));
-      vals[0] = UDefEnergyH(std::size_t(0));
+      bins[0] = UDefEnergyH.GetLowEdgeEnergy(0);
+      vals[0] = UDefEnergyH(0);
       sum = vals[0];
       for (ii = 1; ii < maxbin; ++ii)
       {
-        bins[ii] = UDefEnergyH.GetLowEdgeEnergy(std::size_t(ii));
-        vals[ii] = UDefEnergyH(std::size_t(ii)) + vals[ii - 1];
-        sum = sum + UDefEnergyH(std::size_t(ii));
+        bins[ii] = UDefEnergyH.GetLowEdgeEnergy(ii);
+        vals[ii] = UDefEnergyH(ii) + vals[ii - 1];
+        sum = sum + UDefEnergyH(ii);
       }
     }
 
-    if (EnergySpec == false)
+    if (!EnergySpec)
     {
       G4double mass = threadLocalData.Get().particle_definition->GetPDGMass();
 
@@ -1717,18 +1717,18 @@ void G4SPSEneDistribution::GenArbPointEnergies()
 
   // Find the Bin, have x, y, no of points, and cumulative area distribution
   //
-  G4int nabove = IPDFArbEnergyH.GetVectorLength(), nbelow = 0, middle;
+  std::size_t nabove = IPDFArbEnergyH.GetVectorLength(), nbelow = 0, middle;
 
   // Binary search to find bin that rndm is in
   //
   while (nabove - nbelow > 1)
   {
     middle = (nabove + nbelow) / 2;
-    if (rndm == IPDFArbEnergyH(std::size_t(middle)))
+    if (rndm == IPDFArbEnergyH(middle))
     {
       break;
     }
-    if (rndm < IPDFArbEnergyH(std::size_t(middle)))
+    if (rndm < IPDFArbEnergyH(middle))
     {
       nabove = middle;
     }
@@ -1742,30 +1742,30 @@ void G4SPSEneDistribution::GenArbPointEnergies()
   {
     // Update thread-local copy of parameters
     //
-    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow + 1));
-    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow));
+    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow + 1);
+    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow);
     params.grad = Arb_grad[nbelow + 1];
     params.cept = Arb_cept[nbelow + 1];
     GenerateLinearEnergies(true);
   }
   else if (IntType == "Log")
   {
-    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow + 1));
-    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow));
+    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow + 1);
+    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow);
     params.alpha = Arb_alpha[nbelow + 1];
     GeneratePowEnergies(true);
   }
   else if (IntType == "Exp")
   {
-    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow + 1));
-    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow));
+    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow + 1);
+    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow);
     params.Ezero = Arb_ezero[nbelow + 1];
     GenerateExpEnergies(true);
   }
   else if (IntType == "Spline")
   {
-    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow + 1));
-    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(std::size_t(nbelow));
+    params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow + 1);
+    params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(nbelow);
     params.particle_energy = -1e100;
     rndm = eneRndm->GenRandEnergy();
     while (params.particle_energy < params.Emin
@@ -1793,27 +1793,27 @@ void G4SPSEneDistribution::GenEpnHistEnergies()
 
   G4AutoLock l(&mutex);
 
-  if (Epnflag == true)  // true means spectrum is epn, false means e
+  if (Epnflag)  // true means spectrum is epn, false means e
   {
     // Convert to energy by multiplying by A number
     //
     ConvertEPNToEnergy();
   }
-  if (IPDFEnergyExist == false)
+  if (!IPDFEnergyExist)
   {
     // IPDF has not been created, so create it
     //
     G4double bins[1024], vals[1024], sum;
-    G4int ii;
-    G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
-    bins[0] = UDefEnergyH.GetLowEdgeEnergy(std::size_t(0));
-    vals[0] = UDefEnergyH(std::size_t(0));
+    std::size_t ii;
+    std::size_t maxbin = UDefEnergyH.GetVectorLength();
+    bins[0] = UDefEnergyH.GetLowEdgeEnergy(0);
+    vals[0] = UDefEnergyH(0);
     sum = vals[0];
     for (ii = 1; ii < maxbin; ++ii)
     {
-      bins[ii] = UDefEnergyH.GetLowEdgeEnergy(std::size_t(ii));
-      vals[ii] = UDefEnergyH(std::size_t(ii)) + vals[ii - 1];
-      sum = sum + UDefEnergyH(std::size_t(ii));
+      bins[ii] = UDefEnergyH.GetLowEdgeEnergy(ii);
+      vals[ii] = UDefEnergyH(ii) + vals[ii - 1];
+      sum = sum + UDefEnergyH(ii);
     }
 
     l.lock();
@@ -1857,8 +1857,8 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()  // MT: lock in caller
 
     // Change values in histogram, Read it out, delete it, re-create it
     //
-    G4int count, maxcount;
-    maxcount = G4int(EpnEnergyH.GetVectorLength());
+    std::size_t count, maxcount;
+    maxcount = EpnEnergyH.GetVectorLength();
     G4double ebins[1024], evals[1024];
     if (maxcount > 1024)
     {
@@ -1878,8 +1878,8 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()  // MT: lock in caller
     for (count = 0; count < maxcount; ++count)
     {
       // Read out
-      ebins[count] = EpnEnergyH.GetLowEdgeEnergy(std::size_t(count));
-      evals[count] = EpnEnergyH(std::size_t(count));
+      ebins[count] = EpnEnergyH.GetLowEdgeEnergy(count);
+      evals[count] = EpnEnergyH(count);
     }
 
     // Multiply the channels by the nucleon number to give energies

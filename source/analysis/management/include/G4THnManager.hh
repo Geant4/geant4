@@ -43,17 +43,17 @@
 
 class G4AnalysisManagerState;
 class G4HnManager;
+class G4HnInformation;
 
 template <typename HT>
 class G4THnManager
 {
   public:
-    G4THnManager(const G4AnalysisManagerState& state,
-                 const G4String& hnType);
+    G4THnManager(const G4AnalysisManagerState& state);
     G4THnManager() = delete;
     virtual ~G4THnManager();
 
-    G4int RegisterT(HT* t, const G4String& name);
+    G4int RegisterT(const G4String& name, HT* ht, G4HnInformation* info = nullptr);
 
     // Reset data
     G4bool Reset();
@@ -69,16 +69,31 @@ class G4THnManager
 
     // New method for merge
     void  Merge(G4Mutex& mergeMutex, G4THnManager<HT>* masterInstance);
+            // TO DO: change to shared_ptr<G4THnManager<HT>> masterInstance
 
     // Get method
-    HT*  GetT(G4int id) const;
+    // HT*  GetT(G4int id) const;
+    HT*  GetT(G4int id, G4bool warn = true, G4bool onlyIfActive = true) const;
 
-  protected:
+    std::vector<HT*>*   GetTVector();
+    const std::vector<HT*>&  GetTVectorRef() const;
+    std::vector<std::pair<HT*, G4HnInformation*>>*   GetTHnVector();
+    const std::vector<std::pair<HT*, G4HnInformation*>>&  GetTHnVectorRef() const;
+
+    // Methods to list/print histograms
+    G4bool List(std::ostream& output, G4bool onlyIfActive) const;
+
     // Iterators
     typename std::vector<HT*>::iterator BeginT();
     typename std::vector<HT*>::iterator EndT();
     typename std::vector<HT*>::const_iterator BeginConstT() const;
     typename std::vector<HT*>::const_iterator EndConstT() const;
+
+  protected:
+    std::pair<HT*, G4HnInformation*>  GetTHnInFunction(G4int id,
+                       std::string_view functionName,
+                       G4bool warn = true,
+                       G4bool onlyIfActive = true) const;
 
     HT*  GetTInFunction(G4int id,
                        std::string_view functionName,
@@ -101,6 +116,7 @@ class G4THnManager
     // Data members
     const G4AnalysisManagerState& fState;
     std::vector<HT*>  fTVector;
+    std::vector<std::pair<HT*, G4HnInformation*>> fTHnVector;
     std::map<G4String, G4int>    fNameIdMap;
     std::shared_ptr<G4HnManager> fHnManager { nullptr };
 };

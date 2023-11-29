@@ -42,20 +42,17 @@
 
 class G4HelixHeum : public G4MagHelicalStepper
 {
-
-  public: // with description
+  public:
 
     G4HelixHeum(G4Mag_EqRhs *EqRhs);
-    ~G4HelixHeum();
+   ~G4HelixHeum() override;
   
     void DumbStepper( const G4double y[],
                             G4ThreeVector Bfld,
                             G4double      h,
-                            G4double      yout[] );
+                            G4double      yout[] ) override;
 
-  public: // without description
-  
-    inline G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const override { return 2; }
 };
 
 #endif

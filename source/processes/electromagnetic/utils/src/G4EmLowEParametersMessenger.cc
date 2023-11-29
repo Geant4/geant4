@@ -40,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmLowEParametersMessenger.hh"
+#include "G4EmFluoDirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
@@ -69,14 +70,14 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dirFluoCmd->SetGuidance("Enable/disable usage of Bearden fluorescence files");
   dirFluoCmd->SetParameterName("fluoBeardenFlag",true);
   dirFluoCmd->SetDefaultValue(false);
-  dirFluoCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  dirFluoCmd->AvailableForStates(G4State_PreInit,G4State_Init);
   dirFluoCmd->SetToBeBroadcasted(false);
 
   dirFluoCmd1 = new G4UIcmdWithABool("/process/em/fluoANSTO",this);
   dirFluoCmd1->SetGuidance("Enable/disable usage of ANSTO fluorescence files");
   dirFluoCmd1->SetParameterName("fluoANSTOFlag",true);
   dirFluoCmd1->SetDefaultValue(false);
-  dirFluoCmd1->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+  dirFluoCmd1->AvailableForStates(G4State_PreInit,G4State_Init);
   dirFluoCmd1->SetToBeBroadcasted(false);
 
   auCmd = new G4UIcmdWithABool("/process/em/auger",this);
@@ -128,6 +129,13 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnamscCmd->AvailableForStates(G4State_PreInit);
   dnamscCmd->SetToBeBroadcasted(false);
 
+  direFluoCmd = new G4UIcmdWithAString("/process/em/fluoDirectory",this);
+  direFluoCmd->SetGuidance("The name of PIXE cross section");
+  direFluoCmd->SetParameterName("fluoDirectory",true);
+  direFluoCmd->SetCandidates("Default Bearden ANSTO XDB_EADL");
+  direFluoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  direFluoCmd->SetToBeBroadcasted(false);
+
   pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
   pixeXsCmd->SetGuidance("The name of PIXE cross section");
   pixeXsCmd->SetParameterName("pixeXS",true);
@@ -169,10 +177,10 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   dnaCmd->AvailableForStates(G4State_PreInit);
   dnaCmd->SetToBeBroadcasted(false);
 
-  G4UIparameter* regName = new G4UIparameter("regName",'s',false);
+  auto regName = new G4UIparameter("regName",'s',false);
   dnaCmd->SetParameter(regName);
 
-  G4UIparameter* type = new G4UIparameter("dnaType",'s',false);
+  auto type = new G4UIparameter("dnaType",'s',false);
   dnaCmd->SetParameter(type);
   type->SetParameterCandidates("DNA_Opt0 DNA_Opt2 DNA_Opt4 DNA_Opt4a DNA_Opt6 DNA_Opt6a DNA_Opt7");
 
@@ -185,16 +193,16 @@ G4EmLowEParametersMessenger::G4EmLowEParametersMessenger(G4EmLowEParameters* ptr
   deexCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
   deexCmd->SetToBeBroadcasted(false);
 
-  G4UIparameter* regNameD = new G4UIparameter("regName",'s',false);
+  auto regNameD = new G4UIparameter("regName",'s',false);
   deexCmd->SetParameter(regNameD);
 
-  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'s',false);
+  auto flagFluo = new G4UIparameter("flagFluo",'s',false);
   deexCmd->SetParameter(flagFluo);
 
-  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'s',false);
+  auto flagAuger = new G4UIparameter("flagAuger",'s',false);
   deexCmd->SetParameter(flagAuger);
 
-  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
+  auto flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
 
 }
@@ -217,6 +225,7 @@ G4EmLowEParametersMessenger::~G4EmLowEParametersMessenger()
   delete pixeeXsCmd;
   delete livCmd;
   delete dnaSolCmd;
+  delete direFluoCmd;
   delete meCmd;
   delete dnaCmd;
   delete deexCmd;
@@ -269,6 +278,12 @@ void G4EmLowEParametersMessenger::SetNewValue(G4UIcommand* command,
       ttt = fKreipl2009eSolvation;
     }
     theParameters->SetDNAeSolvationSubType(ttt);
+  } else if (command == direFluoCmd) {
+    G4EmFluoDirectory ttt = fluoDefault;
+    if(newValue == "Bearden") { ttt = fluoBearden; }
+    else if(newValue == "ANSTO") { ttt = fluoANSTO; }
+    else if(newValue == "XDB_EADL") { ttt = fluoXDB_EADL; }
+    theParameters->SetFluoDirectory(ttt);
   } else if (command == pixeXsCmd) {
     theParameters->SetPIXECrossSectionModel(newValue);
     physicsModified = true;

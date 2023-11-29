@@ -1,0 +1,230 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_zlib
+#define toolx_zlib
+
+// what is needed for root file compression with zlib.
+
+//NOTE : zlib contains deflate/inflate and also the gz functions to write/read a .gz file.
+//       The gz functions use also deflate/inflate.
+
+#include <zlib.h>
+
+#include <ostream>
+
+namespace toolx {
+
+inline bool compress_buffer(std::ostream& a_out,
+                            unsigned int a_level,
+                            unsigned int a_srcsize,const char* a_src,
+                            unsigned int a_tgtsize,char* a_tgt,
+                            unsigned int& a_irep) {
+
+  z_stream stream; // decompression stream
+
+  stream.next_in   = (Bytef*)(a_src);
+  stream.avail_in  = (uInt)(a_srcsize);
+  stream.next_out  = (Bytef*)a_tgt;
+  stream.avail_out = (uInt)(a_tgtsize);
+  stream.zalloc    = (alloc_func)0;
+  stream.zfree     = (free_func)0;
+  stream.opaque    = (voidpf)0;
+  stream.total_in  = 0; /*to quiet Coverity.*/
+  stream.total_out = 0; /*to quiet Coverity.*/
+
+  int err = deflateInit(&stream,a_level);
+  if(err!=Z_OK) {
+    a_out << "toolx::compress_buffer :"
+          << " error in zlib/deflateInit." << std::endl;
+    a_irep = 0;
+    return false;
+  }
+
+  err = deflate(&stream, Z_FINISH);
+  if(err!=Z_STREAM_END) {
+    deflateEnd(&stream);
+    a_out << "toolx::compress_buffer :"
+          << " error in zlib/deflate." << std::endl;
+    a_irep = 0;
+    return false;
+  }
+
+  deflateEnd(&stream);
+
+  //a_out << "toolx::compress_buffer : ok "
+  //      << stream.total_out << std::endl;
+
+  a_irep = (unsigned)stream.total_out;
+
+  return true;
+}
+
+inline bool decompress_buffer(std::ostream& a_out,
+                              unsigned int a_srcsize,const char* a_src,
+                              unsigned int a_tgtsize,char* a_tgt,
+                              unsigned int& a_irep) {
+
+  z_stream stream; // decompression stream
+
+  stream.next_in   = (Bytef*)(a_src);
+  stream.avail_in  = (uInt)(a_srcsize);
+  stream.next_out  = (Bytef*)a_tgt;
+  stream.avail_out = (uInt)(a_tgtsize);
+  stream.zalloc    = (alloc_func)0;
+  stream.zfree     = (free_func)0;
+  stream.opaque    = (voidpf)0;
+  stream.total_in  = 0; /*to quiet Coverity.*/
+  stream.total_out = 0; /*to quiet Coverity.*/
+
+  int err = inflateInit(&stream);
+  if (err != Z_OK) {
+    a_out << "toolx::decompress_buffer :"
+          << " error " << err << " in zlib/inflateInit." << std::endl;
+    return false;
+  }
+
+  err = inflate(&stream, Z_FINISH);
+  if (err != Z_STREAM_END) {
+    inflateEnd(&stream);
+    a_out << "toolx::decompress_buffer :"
+          << " error " << err << " in zlib/inflate." << std::endl;
+    return false;
+  }
+
+  inflateEnd(&stream);
+
+  //a_out << "toolx::decompress_buffer : zlib : ok "
+  //      << stream.total_out << std::endl;
+
+  a_irep = (unsigned)stream.total_out;
+
+  return true;
+}
+
+}
+
+#if ZLIB_VERNUM <= 0x1140
+#include <cstdio>
+#endif
+
+namespace toolx {
+
+#if ZLIB_VERNUM <= 0x1140
+inline int gunzip_get_byte(char*& a_buffer) {
+  int c = *a_buffer;a_buffer++;
+  return c;
+}
+
+inline int gunzip_check_header(char*& a_buffer) {
+#define TOOLX_ZLIB_HEAD_CRC     0x02 /* bit 1 set: header CRC present */
+#define TOOLX_ZLIB_EXTRA_FIELD  0x04 /* bit 2 set: extra field present */
+#define TOOLX_ZLIB_ORIG_NAME    0x08 /* bit 3 set: original file name present */
+#define TOOLX_ZLIB_COMMENT      0x10 /* bit 4 set: file comment present */
+#define TOOLX_ZLIB_RESERVED     0xE0 /* bits 5..7: reserved */
+
+    uInt len;
+    int c;
+
+    /* Check the gzip magic header */
+    for (len = 0; len < 2; len++) {
+        c = gunzip_get_byte(a_buffer);
+/*
+	if (c != gz_magic[len]) {
+	    if (len != 0) s->stream.avail_in++, s->stream.next_in--;
+	    if (c != EOF) {
+		s->stream.avail_in++, s->stream.next_in--;
+		s->transparent = 1;
+	    }
+	    s->z_err = s->stream.avail_in != 0 ? Z_OK : Z_STREAM_END;
+	    return;
+	}
+*/
+    }
+    int method = gunzip_get_byte(a_buffer);
+    int flags = gunzip_get_byte(a_buffer);
+    if (method != Z_DEFLATED || (flags & TOOLX_ZLIB_RESERVED) != 0) {
+	return Z_DATA_ERROR;
+    }
+
+    /* Discard time, xflags and OS code: */
+    for (len = 0; len < 6; len++) (void)gunzip_get_byte(a_buffer);
+
+    if ((flags & TOOLX_ZLIB_EXTRA_FIELD) != 0) { /* skip the extra field */
+	len  =  (uInt)gunzip_get_byte(a_buffer);
+	len += ((uInt)gunzip_get_byte(a_buffer))<<8;
+	/* len is garbage if EOF but the loop below will quit anyway */
+	while (len-- != 0 && gunzip_get_byte(a_buffer) != EOF) ;
+    }
+    if ((flags & TOOLX_ZLIB_ORIG_NAME) != 0) { /* skip the original file name */
+	while ((c = gunzip_get_byte(a_buffer)) != 0 && c != EOF) ;
+    }
+    if ((flags & TOOLX_ZLIB_COMMENT) != 0) {   /* skip the .gz file comment */
+	while ((c = gunzip_get_byte(a_buffer)) != 0 && c != EOF) ;
+    }
+    if ((flags & TOOLX_ZLIB_HEAD_CRC) != 0) {  /* skip the header crc */
+	for (len = 0; len < 2; len++) (void)gunzip_get_byte(a_buffer);
+    }
+    //s->z_err = s->z_eof ? Z_DATA_ERROR : Z_OK;
+    return Z_OK;
+
+#undef TOOLX_ZLIB_HEAD_CRC
+#undef TOOLX_ZLIB_EXTRA_FIELD
+#undef TOOLX_ZLIB_ORIG_NAME
+#undef TOOLX_ZLIB_COMMENT
+#undef TOOLX_ZLIB_RESERVED
+}
+#endif //ZLIB_VERNUM <= 0x1140
+
+inline bool gunzip_buffer(std::ostream& a_out,
+                          unsigned int a_srcsize,const char* a_src,
+                          unsigned int a_tgtsize,char* a_tgt,
+                          unsigned int& a_irep) {
+
+  z_stream stream; // decompression stream
+
+#if ZLIB_VERNUM <= 0x1140
+  char* pos = (char*)a_src;
+  if(gunzip_check_header(pos)!=Z_OK) return false;
+  stream.next_in   = (Bytef*)pos;
+  stream.avail_in  = (uInt)(a_srcsize-(pos-a_src));
+#else
+  stream.next_in   = (Bytef*)a_src;
+  stream.avail_in  = (uInt)a_srcsize;
+#endif //ZLIB_VERNUM
+
+  stream.next_out  = (Bytef*)a_tgt;
+  stream.avail_out = (uInt)a_tgtsize;
+  stream.zalloc    = (alloc_func)0;
+  stream.zfree     = (free_func)0;
+  stream.opaque    = (voidpf)0;
+
+#if ZLIB_VERNUM <= 0x1140
+  int err = inflateInit2(&stream,-MAX_WBITS);
+#else
+  int err = inflateInit2(&stream,MAX_WBITS+16);
+#endif
+  if (err != Z_OK) {
+    a_out << "toolx::gunzip_buffer :"
+          << " error " << err << " in zlib/inflateInit2." << std::endl;
+    return false;
+  }
+
+  err = inflate(&stream, Z_FINISH);
+  if (err != Z_STREAM_END) {
+    inflateEnd(&stream);
+    a_out << "toolx::gunzip_buffer :"
+          << " error " << err << " in zlib/inflate." << std::endl;
+    return false;
+  }
+
+  inflateEnd(&stream);
+
+  a_irep = (unsigned)stream.total_out;
+
+  return true;
+}
+
+}
+
+#endif

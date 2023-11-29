@@ -54,7 +54,7 @@ class G4AdjointHe3 : public G4AdjointIons
  private:
    static G4AdjointHe3* theInstance;
    G4AdjointHe3(){}
-   ~G4AdjointHe3(){}
+   ~G4AdjointHe3() override= default;
 
  public:
    static G4AdjointHe3* Definition();

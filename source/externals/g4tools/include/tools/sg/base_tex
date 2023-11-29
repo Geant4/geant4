@@ -90,7 +90,7 @@ protected:
     }
 
     //a_out << "debug : tools::sg::tex_rect::update_sg :"
-    //      << " this " << inlib::p2s(this)
+    //      << " this " << tools::p2s(this)
     //      << std::endl;
 
     // image must be power of two in width and height.
@@ -123,7 +123,7 @@ protected:
 
       if(!img4.to_texture(expand.value(),pixel,m_img)){
         a_out << "tools::sg::tex_rect::update_sg :"
-              << " problem with inlib::tex_rect::to_texture."
+              << " problem with tools::tex_rect::to_texture."
               << std::endl;
         m_img.make_empty();
         return;
@@ -132,7 +132,7 @@ protected:
     } else {
       if(!_img.to_texture(expand.value(),pixel,m_img)){
         a_out << "tools::sg::tex_rect::update_sg :"
-              << " problem with inlib::tex_rect::to_texture."
+              << " problem with tools::tex_rect::to_texture."
               << std::endl;
         m_img.make_empty();
         return;

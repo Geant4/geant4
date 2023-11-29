@@ -79,6 +79,4 @@
 #
 /tracking/verbose 0
 /GFlash/flag 1
-/run/beamOn 2
-
-
+#/run/beamOn 2

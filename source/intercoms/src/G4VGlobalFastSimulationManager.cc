@@ -30,19 +30,17 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 
-G4ThreadLocal G4VGlobalFastSimulationManager*
-  G4VGlobalFastSimulationManager::fpConcreteInstance = nullptr;
+G4ThreadLocal G4VGlobalFastSimulationManager* G4VGlobalFastSimulationManager::fpConcreteInstance =
+  nullptr;
 
 // --------------------------------------------------------------------
-G4VGlobalFastSimulationManager*
-G4VGlobalFastSimulationManager::GetConcreteInstance()
+G4VGlobalFastSimulationManager* G4VGlobalFastSimulationManager::GetConcreteInstance()
 {
   return fpConcreteInstance;
 }
 
 // --------------------------------------------------------------------
-void G4VGlobalFastSimulationManager::SetConcreteInstance(
-  G4VGlobalFastSimulationManager* m)
+void G4VGlobalFastSimulationManager::SetConcreteInstance(G4VGlobalFastSimulationManager* m)
 {
   fpConcreteInstance = m;
 }

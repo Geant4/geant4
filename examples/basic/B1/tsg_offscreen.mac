@@ -1,0 +1,102 @@
+
+#//////////////////////////////////////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////
+
+#  Default file format is zb_png. Then a picture produced by using the
+# tools::sg offscreen zbuffer, and put in a png file with the tools::fpng png
+# file writer.
+
+#  Default file name is:
+#   g4tsg_offscreen_[format]_[index].[suffix]
+# with:
+# - index: starting at one and incremented at each file production.
+# - format:
+#     zb_png: tools::sg offscreen zbuffer put in a png file.
+#     zb_jpeg: tools::sg offscreen zbuffer put in a jpeg file.
+#     zb_ps: tools::sg offscreen zbuffer put in a PostScript file.
+#     gl2ps_eps: gl2ps producing eps
+#     gl2ps_ps:  gl2ps producing ps
+#     gl2ps_pdf: gl2ps producing pdf
+#     gl2ps_svg: gl2ps producing svg
+#     gl2ps_tex: gl2ps producing tex
+#     gl2ps_pgf: gl2ps producing pgf
+# - suffix: according to the choosen file format: eps, ps, pdf, svg, tex, pgf, png, jpeg.
+
+#  You can change the file name with:
+#   /vis/tsg/offscreen/set/file <file name>
+#  You can change the automatic file name construction with:
+#   /vis/tsg/offscreen/set/file auto <prefix> <true|false to reset the index>
+
+#  Default picture size, in pixels, is the one given when doing a:
+#   /vis/open TSG_OFFSCREEN [width]x[height]
+# for example:
+#   /vis/open TSG_OFFSCREEN 1200x1200
+# or by taking the default G4/vis viewer size (600x600):
+#   /vis/open TSG_OFFSCREEN
+
+#  About the picture size, note that the gl2ps files will grow with the number of primitives
+# (gl2ps does not have a zbuffer logic). The "zb" files will not grow with the number of
+# primitives, but with the size of the viewer. It should be preferred for scenes with
+# a lot of objects to render. With zb, to have a better rendering, do not hesitate to
+# have a large viewer size.
+
+#  About transparency, the zb formats handle it. The gl2ps formats don't, in this case you can use:
+#   /vis/tsg/offscreen/set/transparency false
+# to not draw the transparent objects.
+
+#//////////////////////////////////////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////
+#//////////////////////////////////////////////////////////////////////
+#  Below is a sequence to produce files at the various formats
+# (execute vis.mac first to have some scene to visualize).
+#  Note that a TSG offscreen viewer is not an "auto refresh" one, then
+# to produce a picture, you have to do:
+#   /vis/viewer/rebuild
+# (a /vis/viewer/refresh or flush may not be sufficient, for example with plotting).
+
+/vis/verbose confirmations
+
+/vis/open TSG_OFFSCREEN
+/vis/viewer/rebuild  # to produce the default g4tsg_offscreen_zb_png_1.png file.
+/run/beamOn 10
+/vis/viewer/rebuild  # to produce g4tsg_offscreen_zb_png_2.png file.
+
+/vis/tsg/offscreen/set/file auto B1_ true  #true is to reset the index.
+/vis/viewer/rebuild  # to produce B1_1.png file.
+/run/beamOn 10
+/vis/viewer/rebuild  # to produce B1_2.png file.
+
+/vis/tsg/offscreen/set/format zb_png
+/vis/tsg/offscreen/set/file B1_zb.png
+/vis/viewer/rebuild
+
+/vis/tsg/offscreen/set/format zb_jpeg
+/vis/tsg/offscreen/set/file B1_zb.jpeg
+/vis/viewer/rebuild
+
+/vis/tsg/offscreen/set/format gl2ps_ps
+/vis/tsg/offscreen/set/file B1_gl2ps.ps
+/vis/viewer/rebuild
+
+# gl2ps does not handle transparency, it could
+# be usefull to not draw the transparent objects:
+/vis/tsg/offscreen/set/transparency false
+/vis/tsg/offscreen/set/file B1_no_transparency_gl2ps.ps
+/vis/viewer/rebuild
+/vis/tsg/offscreen/set/transparency true
+
+# change picture size:
+/vis/tsg/offscreen/set/size 2000 1500
+/vis/tsg/offscreen/set/format zb_jpeg
+/vis/tsg/offscreen/set/file B1_2000_1500_zb.jpeg
+/vis/viewer/rebuild
+
+# return to the "/vis/open" (/vis/viewer/create in fact) picture size:
+/vis/tsg/offscreen/set/size 0 0
+
+/vis/tsg/offscreen/set/format zb_jpeg
+/vis/tsg/offscreen/set/file B1_600_600_zb.jpeg
+/vis/viewer/rebuild
+
+/vis/verbose warnings

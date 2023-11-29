@@ -39,13 +39,13 @@ class G4TypeKeyT : public G4TypeKey {
 public:
   
   G4TypeKeyT() {
-    static G4ThreadLocal Key *pkey = 0 ;
-    if (!pkey) { pkey = new Key; *pkey = NextKey(); }
+    static G4ThreadLocal Key *pkey = nullptr ;
+    if (pkey == nullptr) { pkey = new Key; *pkey = NextKey(); }
     Key &key = *pkey;
     fMyKey = key;
   }
 
-  virtual ~G4TypeKeyT() {}
+  ~G4TypeKeyT() override = default;
 
 };
 

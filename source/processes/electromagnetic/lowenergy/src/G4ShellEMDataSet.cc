@@ -103,18 +103,18 @@ G4double G4ShellEMDataSet::FindValue(G4double energy, G4int /* componentId */) c
 
 void G4ShellEMDataSet::PrintData() const
 {
-  const size_t n = NumberOfComponents();
+  const G4int n = (G4int)NumberOfComponents();
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i = 0;
+  G4int i = 0;
  
   while (i < n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 
@@ -336,8 +336,8 @@ G4bool G4ShellEMDataSet::SaveData(const G4String& file) const
       G4Exception("G4EMDataSet::SaveData()","em0005",FatalException,message);
     }
  
-  const size_t n = NumberOfComponents();
-  size_t k = 0;
+  const G4int n = (G4int)NumberOfComponents();
+  G4int k = 0;
  
   while (k < n)
     {
@@ -348,9 +348,9 @@ G4bool G4ShellEMDataSet::SaveData(const G4String& file) const
 	  const G4DataVector& energies = component->GetEnergies(0);
 	  const G4DataVector& data = component->GetData(0);
  
-	  G4DataVector::const_iterator i = energies.begin();
-	  G4DataVector::const_iterator endI = energies.end();
-	  G4DataVector::const_iterator j = data.begin();
+	  G4DataVector::const_iterator i = energies.cbegin();
+	  G4DataVector::const_iterator endI = energies.cend();
+	  G4DataVector::const_iterator j = data.cbegin();
   
 	  while (i != endI)
 	    {
@@ -409,7 +409,7 @@ void G4ShellEMDataSet::CleanUpComponents()
 
 G4String G4ShellEMDataSet::FullFileName(const G4String& fileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   
   if (!path)
   {

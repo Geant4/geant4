@@ -65,17 +65,17 @@ struct G4PolyPhiFaceVertex
 
 struct G4PolyPhiFaceEdge
 {
-  G4PolyPhiFaceEdge(): v0(0), v1(0), tr(.0), tz(0.), length(0.) {}
-  G4PolyPhiFaceVertex  *v0, *v1;  // Corners
-  G4double tr, tz,                // Unit vector along edge
-           length;                // Length of edge
+  G4PolyPhiFaceEdge() {}
+  G4PolyPhiFaceVertex  *v0{nullptr}, *v1{nullptr};  // Corners
+  G4double tr{.0}, tz{0.},        // Unit vector along edge
+           length{0.};            // Length of edge
   G4ThreeVector norm3D;           // 3D edge normal vector
 };
 
 class G4PolyPhiFace : public G4VCSGface
 {
 
-  public:  // with description
+  public:
 
     G4PolyPhiFace( const G4ReduciblePolygon* rz,
                          G4double phi, G4double deltaPhi, G4double phiOther );
@@ -87,7 +87,7 @@ class G4PolyPhiFace : public G4VCSGface
       //                 |           |          +--> z
       //                [0]---------[3]
 
-    virtual ~G4PolyPhiFace();
+    ~G4PolyPhiFace() override;
       // Destructor. Removes edges and corners.
 
     G4PolyPhiFace( const G4PolyPhiFace &source );
@@ -97,32 +97,31 @@ class G4PolyPhiFace : public G4VCSGface
     G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,
                             G4bool outgoing, G4double surfTolerance,
                             G4double& distance, G4double& distFromSurface,
-                            G4ThreeVector& normal, G4bool& allBehind );
+                            G4ThreeVector& normal, G4bool& allBehind ) override;
 
-    G4double Distance( const G4ThreeVector& p, G4bool outgoing );
+    G4double Distance( const G4ThreeVector& p, G4bool outgoing ) override;
   
     EInside Inside( const G4ThreeVector& p, G4double tolerance, 
-                          G4double* bestDistance );
+                          G4double* bestDistance ) override;
     
-    G4ThreeVector Normal( const G4ThreeVector& p, G4double* bestDistance );
+    G4ThreeVector Normal( const G4ThreeVector& p,
+                                G4double* bestDistance ) override;
 
-    G4double Extent( const G4ThreeVector axis );
+    G4double Extent( const G4ThreeVector axis ) override;
   
     void CalculateExtent( const EAxis axis, 
                           const G4VoxelLimits &voxelLimit,
                           const G4AffineTransform& tranform,
-                                G4SolidExtentList& extentList );
+                                G4SolidExtentList& extentList ) override;
 
-    inline G4VCSGface* Clone();
+    inline G4VCSGface* Clone() override;
       // Allocates on the heap a clone of this face.
 
-    G4double SurfaceArea();
-    G4double SurfaceTriangle( G4ThreeVector p1, G4ThreeVector p2,
-                              G4ThreeVector p3, G4ThreeVector* p4);
-    G4ThreeVector GetPointOnFace();
+    G4double SurfaceArea() override;
+    G4double SurfaceTriangle( const G4ThreeVector& p1, const G4ThreeVector& p2,
+                              const G4ThreeVector& p3, G4ThreeVector* p4);
+    G4ThreeVector GetPointOnFace() override;
       // Auxiliary methods for determination of points on surface.
-
-  public:  // without description
 
     G4PolyPhiFace(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -156,30 +155,28 @@ class G4PolyPhiFace : public G4VCSGface
 
     void CopyStuff( const G4PolyPhiFace& source );
 
-  protected:
-
     // Functions used for Triangulation in Case of generic Polygone.
     // The triangulation is used for GetPointOnFace()
 
-    G4double Area2( G4TwoVector a, G4TwoVector b, G4TwoVector c);
+    G4double Area2( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c);
       // Calculation of 2*Area of Triangle with Sign
 
-    G4bool Left( G4TwoVector a, G4TwoVector b, G4TwoVector c );
-    G4bool LeftOn( G4TwoVector a, G4TwoVector b, G4TwoVector c );
-    G4bool Collinear( G4TwoVector a, G4TwoVector b, G4TwoVector c );
+    G4bool Left( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c );
+    G4bool LeftOn( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c );
+    G4bool Collinear( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c );
       // Boolean functions for sign of Surface
 
-    G4bool IntersectProp( G4TwoVector a, G4TwoVector b,
-                          G4TwoVector c, G4TwoVector d );
+    G4bool IntersectProp( const G4TwoVector& a, const G4TwoVector& b,
+                          const G4TwoVector& c, const G4TwoVector& d );
       // Boolean function for finding proper intersection of two
       // line segments (a,b) and (c,d).
 
-    G4bool Between( G4TwoVector a, G4TwoVector b, G4TwoVector c );
+    G4bool Between( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c );
       // Boolean function for determining if point c is between a and b
       // where the three points (a,b,c) are on the same line.
 
-    G4bool Intersect( G4TwoVector a, G4TwoVector b,
-                      G4TwoVector c, G4TwoVector d );
+    G4bool Intersect( const G4TwoVector& a, const G4TwoVector& b,
+                      const G4TwoVector& c, const G4TwoVector& d );
       // Boolean function for finding proper intersection or not
       // of two line segments (a,b) and (c,d).
 

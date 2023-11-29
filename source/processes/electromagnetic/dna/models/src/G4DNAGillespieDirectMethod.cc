@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 
-#include "G4DNAMolecularReactionTable.hh"
 #include "G4DNAGillespieDirectMethod.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
@@ -33,15 +32,10 @@
 #include "G4UnitsTable.hh"
 #include "G4DNAScavengerMaterial.hh"
 #include "G4Scheduler.hh"
-#include <cassert>
+#include "G4DNAMolecularReactionTable.hh"
 
 G4DNAGillespieDirectMethod::G4DNAGillespieDirectMethod()
   : fMolecularReactions(G4DNAMolecularReactionTable::Instance())
-  , fpMesh(nullptr)
-  , fTimeStep(0)
-  , fpEventSet(nullptr)
-  , fVerbose(0)
-  , fpScavengerMaterial(nullptr)
 {}
 
 G4DNAGillespieDirectMethod::~G4DNAGillespieDirectMethod() = default;
@@ -53,34 +47,40 @@ void G4DNAGillespieDirectMethod::SetEventSet(G4DNAEventSet* pEventSet)
 
 //#define DEBUG 1
 
-G4double G4DNAGillespieDirectMethod::VolumeOfNode(const Index& index)
+G4double G4DNAGillespieDirectMethod::VolumeOfNode(const Voxel& voxel)
 {
-  auto LengthY = fpMesh->GetBoundingBox(index).Getyhi() -
-                 fpMesh->GetBoundingBox(index).Getylo();
-  auto LengthX = fpMesh->GetBoundingBox(index).Getxhi() -
-                 fpMesh->GetBoundingBox(index).Getxlo();
-  auto LengthZ = fpMesh->GetBoundingBox(index).Getzhi() -
-                 fpMesh->GetBoundingBox(index).Getzlo();
-  G4double V = LengthY * LengthX * LengthZ;
-  assert(V > 0);
+  auto box     = std::get<1>(voxel);
+  auto LengthY = box.Getyhi() - box.Getylo();
+  auto LengthX = box.Getxhi() - box.Getxlo();
+  auto LengthZ = box.Getzhi() - box.Getzlo();
+  G4double V   = LengthY * LengthX * LengthZ;
+  if(V <= 0)
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "V > 0 !! ";
+    G4Exception("G4DNAGillespieDirectMethod::VolumeOfNode",
+                "G4DNAGillespieDirectMethod03", FatalErrorInArgument,
+                exceptionDescription);
+  }
   return V;
 }
-G4double G4DNAGillespieDirectMethod::PropensityFunction(const Index& index,
+G4double G4DNAGillespieDirectMethod::PropensityFunction(const Voxel& voxel,
                                                         MolType moleType)
 {
   if(moleType->GetDiffusionCoefficient() == 0)
   {
     return 0.;
   }
-  const auto& node = fpMesh->GetVoxelMapList(index);
-  G4double alpha   = 0;
-  auto it          = node.find(moleType);
+  const auto& node = std::get<2>(voxel);
+  const auto& box  = std::get<1>(voxel);
+
+  G4double alpha = 0;
+  auto it        = node.find(moleType);
   if(it != node.end())
   {
-    auto LengthY = fpMesh->GetBoundingBox(index).Getyhi() -
-                   fpMesh->GetBoundingBox(index).Getylo();
-    G4double d = it->first->GetDiffusionCoefficient() / std::pow(LengthY, 2);
-    alpha      = d * it->second;
+    auto LengthY = box.Getyhi() - box.Getylo();
+    G4double d   = it->first->GetDiffusionCoefficient() / std::pow(LengthY, 2);
+    alpha        = d * it->second;
 
 #ifdef DEBUG
     G4cout << it->first->GetName() << " " << it->second
@@ -92,20 +92,20 @@ G4double G4DNAGillespieDirectMethod::PropensityFunction(const Index& index,
   return alpha;
 }
 
-G4double G4DNAGillespieDirectMethod::PropensityFunction(const Index& index,
+G4double G4DNAGillespieDirectMethod::PropensityFunction(const Voxel& voxel,
                                                         ReactionData* data)
 {
   G4double value;
   auto ConfA               = data->GetReactant1();
   auto ConfB               = data->GetReactant2();
   G4double scavengerNumber = 0;
-  auto typeANumber         = FindScavenging(index, ConfA, scavengerNumber)
-                       ? scavengerNumber
-                       : ComputeNumberInNode(index, ConfA);
+  auto typeANumber         = FindScavenging(voxel, ConfA, scavengerNumber)
+                               ? scavengerNumber
+                               : ComputeNumberInNode(voxel, ConfA);
 
-  auto typeBNumber = FindScavenging(index, ConfB, scavengerNumber)
+  auto typeBNumber = FindScavenging(voxel, ConfB, scavengerNumber)
                        ? scavengerNumber
-                       : ComputeNumberInNode(index, ConfB);
+                       : ComputeNumberInNode(voxel, ConfB);
 
   if(typeANumber == 0 || typeBNumber == 0)
   {
@@ -113,7 +113,7 @@ G4double G4DNAGillespieDirectMethod::PropensityFunction(const Index& index,
   }
 
   auto k =
-    data->GetObservedReactionRateConstant() / (Avogadro * VolumeOfNode(index));
+    data->GetObservedReactionRateConstant() / (Avogadro * VolumeOfNode(voxel));
   if(ConfA == ConfB)
   {
     value = typeANumber * (typeBNumber - 1) * k;
@@ -125,17 +125,19 @@ G4double G4DNAGillespieDirectMethod::PropensityFunction(const Index& index,
 
   if(value < 0)
   {
-    G4cout << "G4DNAGillespieDirectMethod::PropensityFunction for : "
-           << ConfA->GetName() << "(" << typeANumber << ") + "
-           << ConfB->GetName() << "(" << typeBNumber
-           << ") : propensity : " << value
-           << " GetObservedReactionRateConstant : "
-           << data->GetObservedReactionRateConstant()
-           << " GetEffectiveReactionRadius : "
-           << G4BestUnit(data->GetEffectiveReactionRadius(), "Length")
-           << " k : " << k << " volume : " << VolumeOfNode(index)
-           << " Index : " << index << G4endl;
-    assert(false);
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription
+      << "G4DNAGillespieDirectMethod::PropensityFunction for : "
+      << ConfA->GetName() << "(" << typeANumber << ") + " << ConfB->GetName()
+      << "(" << typeBNumber << ") : propensity : " << value
+      << " GetObservedReactionRateConstant : "
+      << data->GetObservedReactionRateConstant()
+      << " GetEffectiveReactionRadius : "
+      << G4BestUnit(data->GetEffectiveReactionRadius(), "Length")
+      << " k : " << k << " volume : " << VolumeOfNode(voxel) << G4endl;
+    G4Exception("G4DNAGillespieDirectMethod::PropensityFunction",
+                "G4DNAGillespieDirectMethod013", FatalErrorInArgument,
+                exceptionDescription);
   }
 
 #ifdef DEBUG
@@ -161,11 +163,11 @@ void G4DNAGillespieDirectMethod::Initialize()
   auto end   = fpMesh->end();
   for(; begin != end; begin++)
   {
-    auto key = begin->first;
+    auto index = std::get<0>(*begin);
 #ifdef DEBUG
-    fpMesh->PrintVoxel(fpMesh->GetIndex(key));
+    fpMesh->PrintVoxel(index);
 #endif
-    CreateEvent(key);
+    CreateEvent(index);
   }
 }
 
@@ -173,13 +175,22 @@ void G4DNAGillespieDirectMethod::SetTimeStep(const G4double& stepTime)
 {
   fTimeStep = stepTime;
 }
-void G4DNAGillespieDirectMethod::CreateEvent(unsigned int key)
+void G4DNAGillespieDirectMethod::CreateEvent(const Index& index)
 {
+  const auto& voxel = fpMesh->GetVoxel(index);
+  if(std::get<2>(voxel).empty())
+  {
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "This voxel : " << index
+                         << " is not ready to make event" << G4endl;
+    G4Exception("G4DNAGillespieDirectMethod::CreateEvent",
+                "G4DNAGillespieDirectMethod05", FatalErrorInArgument,
+                exceptionDescription);
+  }
   G4double r1         = G4UniformRand();
   G4double r2         = G4UniformRand();
-  auto index          = fpMesh->GetIndex(key);
-  G4double dAlpha0    = DiffusiveJumping(index);
-  G4double rAlpha0    = Reaction(index);
+  G4double dAlpha0    = DiffusiveJumping(voxel);
+  G4double rAlpha0    = Reaction(voxel);
   G4double alphaTotal = dAlpha0 + rAlpha0;
 
   if(alphaTotal == 0)
@@ -202,7 +213,7 @@ void G4DNAGillespieDirectMethod::CreateEvent(unsigned int key)
              << G4endl;
     }
     auto rSelectedIter = fReactionDataMap.upper_bound(r2 * alphaTotal);
-    fpEventSet->CreateEvent(timeStep, key, rSelectedIter->second);
+    fpEventSet->CreateEvent(timeStep, index, rSelectedIter->second);
   }
   else if(dAlpha0 > 0)
   {
@@ -216,26 +227,31 @@ void G4DNAGillespieDirectMethod::CreateEvent(unsigned int key)
     auto dSelectedIter = fJumpingDataMap.upper_bound(r2 * alphaTotal - rAlpha0);
     auto pDSelected =
       std::make_unique<std::pair<MolType, Index>>(dSelectedIter->second);
-    fpEventSet->CreateEvent(timeStep, key, std::move(pDSelected));
+    fpEventSet->CreateEvent(timeStep, index, std::move(pDSelected));
   }
 #ifdef DEBUG
   G4cout << G4endl;
 #endif
 }
 
-G4double G4DNAGillespieDirectMethod::Reaction(const Index& index)
+G4double G4DNAGillespieDirectMethod::Reaction(const Voxel& voxel)
 {
   fReactionDataMap.clear();
   G4double alpha0 = 0;
-  auto dataList   = fMolecularReactions->GetVectorOfReactionData();
+  const auto& dataList =
+    fMolecularReactions->GetVectorOfReactionData();  // shoud make a member
   if(dataList.empty())
   {
-    G4cout << "MolecularReactionTable empty" << G4endl;
-    assert(false);
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "MolecularReactionTable empty" << G4endl;
+    G4Exception("G4DNAGillespieDirectMethod::Reaction",
+                "G4DNAGillespieDirectMethod01", FatalErrorInArgument,
+                exceptionDescription);
   }
+
   for(const auto& it : dataList)
   {
-    auto propensity = PropensityFunction(index, it);
+    auto propensity = PropensityFunction(voxel, it);
     if(propensity == 0)
     {
       continue;
@@ -249,10 +265,11 @@ G4double G4DNAGillespieDirectMethod::Reaction(const Index& index)
   return alpha0;
 }
 
-G4double G4DNAGillespieDirectMethod::DiffusiveJumping(const Index& index)
+G4double G4DNAGillespieDirectMethod::DiffusiveJumping(const Voxel& voxel)
 {
   fJumpingDataMap.clear();
   G4double alpha0        = 0;
+  auto index             = std::get<0>(voxel);
   auto NeighboringVoxels = fpMesh->FindNeighboringVoxels(index);
   if(NeighboringVoxels.empty())
   {
@@ -261,8 +278,8 @@ G4double G4DNAGillespieDirectMethod::DiffusiveJumping(const Index& index)
   auto iter = G4MoleculeTable::Instance()->GetConfigurationIterator();
   while(iter())
   {
-    const auto conf = iter.value();
-    auto propensity = PropensityFunction(index, conf);
+    const auto* conf = iter.value();
+    auto propensity  = PropensityFunction(voxel, conf);
     if(propensity == 0)
     {
       continue;
@@ -286,11 +303,11 @@ G4double G4DNAGillespieDirectMethod::DiffusiveJumping(const Index& index)
 }
 
 G4double G4DNAGillespieDirectMethod::ComputeNumberInNode(
-  const Index& index, MolType type)  // depend node ?
+  const Voxel& voxel, MolType type)  // depend node ?
 {
   if(type->GetDiffusionCoefficient() != 0)
   {
-    const auto& node = fpMesh->GetVoxelMapList(index);
+    const auto& node = std::get<2>(voxel);
     const auto& it   = node.find(type);
     return (it != node.end()) ? (it->second) : 0;
   }
@@ -300,7 +317,7 @@ G4double G4DNAGillespieDirectMethod::ComputeNumberInNode(
   }
 }
 
-G4bool G4DNAGillespieDirectMethod::FindScavenging(const Index& index,
+G4bool G4DNAGillespieDirectMethod::FindScavenging(const Voxel& voxel,
                                                   MolType moletype,
                                                   G4double& numberOfScavenger)
 {
@@ -309,7 +326,7 @@ G4bool G4DNAGillespieDirectMethod::FindScavenging(const Index& index,
   {
     return false;
   }
-  auto volumeOfNode = VolumeOfNode(index);
+  auto volumeOfNode = VolumeOfNode(voxel);
   if(G4MoleculeTable::Instance()->GetConfiguration("H2O") == moletype)
   {
     auto factor       = Avogadro * volumeOfNode;
@@ -326,19 +343,12 @@ G4bool G4DNAGillespieDirectMethod::FindScavenging(const Index& index,
   }
   else
   {
-    G4double numberInDouble =
-      volumeOfNode * std::floor(totalNumber) / fpMesh->GetBoundingBox().Volume();
-    auto numberInInterg = (int) (std::floor(numberInDouble));
-    G4double ram          = G4UniformRand();
-    G4double change       = numberInDouble - numberInInterg;
-    if(ram > change)
-    {
-      numberOfScavenger = numberInInterg;
-    }
-    else
-    {
-      numberOfScavenger = numberInInterg + 1;
-    }
+    G4double numberInDouble = volumeOfNode * std::floor(totalNumber) /
+                              fpMesh->GetBoundingBox().Volume();
+    auto numberInInterg = (int64_t) (std::floor(numberInDouble));
+    G4double change     = numberInDouble - numberInInterg;
+    G4UniformRand() > change ? numberOfScavenger = numberInInterg
+                                 : numberOfScavenger = numberInInterg + 1;
     return true;
   }
 }

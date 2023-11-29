@@ -55,43 +55,43 @@ class G4SolidsWorkspace
 {
   public: 
 
-     using pool_type = G4TWorkspacePool<G4SolidsWorkspace>;
+    using pool_type = G4TWorkspacePool<G4SolidsWorkspace>;
 
-      G4SolidsWorkspace(G4bool verbose = false);
-     ~G4SolidsWorkspace();
+    G4SolidsWorkspace(G4bool verbose = false);
+    ~G4SolidsWorkspace() = default;
 
-     void UseWorkspace();     // Take ownership
-     void ReleaseWorkspace(); // Release ownership
-     void DestroyWorkspace(); // Release ownership and destroy
+    void UseWorkspace();     // Take ownership
+    void ReleaseWorkspace(); // Release ownership
+    void DestroyWorkspace(); // Release ownership and destroy
 
-     void InitialiseWorkspace();
-       // To be called at start of each run (especially 2nd and further runs)
+    void InitialiseWorkspace();
+      // To be called at start of each run (especially 2nd and further runs)
 
-     void SetVerbose(G4bool v) { fVerbose=v; } 
-     G4bool GetVerbose()  { return fVerbose;   } 
+    inline void SetVerbose(G4bool v) { fVerbose=v; } 
+    inline G4bool GetVerbose()  { return fVerbose; } 
 
-     static pool_type* GetPool();
+    static pool_type* GetPool();
 
-  protected:  // Implementation methods
+  protected:
 
-     void InitialiseSolids();
+    void InitialiseSolids();
 
   private:
 
-     // Helper pointers - can be per instance or shared
-     //
-     G4PlSideManager* fpPolyconeSideSIM = nullptr;
-     G4PhSideManager* fpPolyhedraSideSIM = nullptr;
+    // Helper pointers - can be per instance or shared
+    //
+    G4PlSideManager* fpPolyconeSideSIM = nullptr;
+    G4PhSideManager* fpPolyhedraSideSIM = nullptr;
   
-     // Per Instance variables
-     // NOTE: the ownership of the Data Arrays is IN this object
+    // Per Instance variables
+    // NOTE: the ownership of the Data Arrays is IN this object
  
-     // Store SubInstanceManager object pointers (SIM pointers)
-     //
-     G4PlSideData* fPolyconeSideOffset = nullptr;
-     G4PhSideData* fPolyhedraSideOffset = nullptr;
+    // Store SubInstanceManager object pointers (SIM pointers)
+    //
+    G4PlSideData* fPolyconeSideOffset = nullptr;
+    G4PhSideData* fPolyhedraSideOffset = nullptr;
 
-     G4bool fVerbose = false;
+    G4bool fVerbose = false;
 };
 
 #endif // G4SOLIDSWORKSPACE_HH

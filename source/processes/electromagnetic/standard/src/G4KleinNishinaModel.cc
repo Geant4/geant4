@@ -81,8 +81,7 @@ G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4KleinNishinaModel::~G4KleinNishinaModel()
-{}
+G4KleinNishinaModel::~G4KleinNishinaModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -325,8 +324,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   if(eKinEnergy > lowestSecondaryEnergy) {
     G4ThreeVector eDirection = lv2.vect().unit();
     eDirection.rotateUz(direction);
-    G4DynamicParticle* dp = 
-      new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+    auto dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   } else { eKinEnergy = 0.0; }
 
@@ -339,11 +337,11 @@ void G4KleinNishinaModel::SampleSecondaries(
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
       G4int Z = elm->GetZasInt();
-      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
+      auto as = (G4AtomicShellEnumerator)(i);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-      G4int nbefore = fvect->size();
+      G4int nbefore = (G4int)fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      G4int nafter = fvect->size();
+      G4int nafter = (G4int)fvect->size();
       //G4cout << "N1= " << nbefore << "  N2= " << nafter << G4endl;
       for (G4int j=nbefore; j<nafter; ++j) {
         G4double e = ((*fvect)[j])->GetKineticEnergy();

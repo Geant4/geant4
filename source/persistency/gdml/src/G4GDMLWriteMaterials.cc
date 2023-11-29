@@ -120,13 +120,13 @@ void G4GDMLWriteMaterials::ElementWrite(const G4Element* const elementPtr)
   xercesc::DOMElement* elementElement = NewElement("element");
   elementElement->setAttributeNode(NewAttribute("name", name));
 
-  const std::size_t NumberOfIsotopes = elementPtr->GetNumberOfIsotopes();
+  const G4int NumberOfIsotopes = (G4int)elementPtr->GetNumberOfIsotopes();
 
   if(NumberOfIsotopes > 0)
   {
     const G4double* RelativeAbundanceVector
       = elementPtr->GetRelativeAbundanceVector();
-    for(std::size_t i = 0; i < NumberOfIsotopes; ++i)
+    for(G4int i = 0; i < NumberOfIsotopes; ++i)
     {
       G4String fractionref = GenerateName(elementPtr->GetIsotope(i)->GetName(),
                                           elementPtr->GetIsotope(i));
@@ -195,7 +195,7 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 
   DWrite(materialElement, materialPtr->GetDensity());
 
-  const std::size_t NumberOfElements = materialPtr->GetNumberOfElements();
+  const G4int NumberOfElements = (G4int)materialPtr->GetNumberOfElements();
 
   if((NumberOfElements > 1) ||
      (materialPtr->GetElement(0) != nullptr &&
@@ -203,7 +203,7 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
   {
     const G4double* MassFractionVector = materialPtr->GetFractionVector();
 
-    for(std::size_t i = 0; i < NumberOfElements; ++i)
+    for(G4int i = 0; i < NumberOfElements; ++i)
     {
       const G4String fractionref = GenerateName(
         materialPtr->GetElement(i)->GetName(), materialPtr->GetElement(i));

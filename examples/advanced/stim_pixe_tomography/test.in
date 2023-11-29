@@ -1,0 +1,152 @@
+#
+# macro file pixe3d.mac
+#
+/control/verbose 1
+/run/verbose 1
+#/tracking/verbose 2
+#
+#/tomography/det/setPhantomType 1
+#
+# material and size of simple cube object
+# comment out if the object is not a cubic shape
+#/tomography/det/setAbsMat Gold
+#/tomography/det/setAbsMat G4_P
+#/tomography/det/setAbsThick 50 um
+#/tomography/det/setAbsYZ    50 um
+#/tomography/det/setAbsThick 5 um
+#/tomography/det/setAbsYZ    5 um
+#
+#Physics lists
+#/tomography/phys/addPhysics local
+/tomography/phys/addPhysics  elastic
+/tomography/phys/addPhysics  binary
+/tomography/phys/addPhysics  binary_ion
+#
+#Production cuts
+#/run/setCut 0.01 mm
+#/run/setCutForAGivenParticle gamma 0.5 um
+/run/setCut 1 nm
+/cuts/setLowEdge 900 eV
+#
+#/process/em/deexcitationIgnoreCut true
+#/process/em/deexcitation world true false true
+/process/em/applyCuts true
+/process/em/fluo true
+/process/em/fluoBearden true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#
+/tomography/run/scanParameters 5 1 5
+#
+/run/initialize
+#
+/run/printProgress 500000
+#
+# Source definition : energy, type
+#
+/gps/energy 1.50 MeV
+/gps/particle proton
+#
+# SOURCE POSITION AND DIRECTION
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -28.800000 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -14.400000 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 0.000000 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 14.400000 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 28.800000 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -12.196397 -44.459959 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -20.660504 -32.810114 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -29.124612 -21.160269 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -37.588719 -9.510424 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -46.052827 2.139420 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 16.265816 -43.137724 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 2.570602 -38.687879 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -11.124612 -34.238035 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -24.819826 -29.788190 0.000000 um
+/run/beamOn 20
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -38.515039 -25.338345 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 38.515039 -25.338345 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 24.819826 -29.788190 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 11.124612 -34.238035 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -2.570602 -38.687879 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -16.265816 -43.137724 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 46.052827 2.139420 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 37.588719 -9.510424 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 29.124612 -21.160269 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 20.660504 -32.810114 0.000000 um
+/run/beamOn 20
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 12.196397 -44.459959 0.000000 um
+/run/beamOn 20
+#

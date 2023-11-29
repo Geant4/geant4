@@ -22,17 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-// 
+
 ////////////////////////////////////////////////////////////////////////
 //
 // class G4MaterialPropertyVector
 //
 // Class description:
 //
-// A one-to-one mapping from Photon Energy to some optical property 
+// A one-to-one mapping from Photon Energy to some optical property
 
 // File:        G4MaterialPropertyVector.hh
 //
@@ -44,19 +41,10 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#ifndef G4MaterialPropertyVector_h   
+#ifndef G4MaterialPropertyVector_h
 #define G4MaterialPropertyVector_h 1
 
-/////////////
-// Includes
-/////////////
-
 #include "G4PhysicsFreeVector.hh"
-
-/////////////////////
-// Class Definition
-/////////////////////
-
-typedef G4PhysicsFreeVector G4MaterialPropertyVector;
+using G4MaterialPropertyVector = G4PhysicsFreeVector;
 
 #endif /* G4MaterialPropertyVector_h */

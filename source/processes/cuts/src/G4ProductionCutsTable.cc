@@ -184,7 +184,7 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
         {
           aCouple = new G4MaterialCutsCouple((*mItr),fProductionCut);
           coupleTable.push_back(aCouple);
-          aCouple->SetIndex(coupleTable.size()-1);
+          aCouple->SetIndex(G4int(coupleTable.size()-1));
         }
 
         // Register this couple to the region
@@ -247,7 +247,7 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
     {
       for(std::size_t ptcl=0; ptcl< NumberOfG4CutIndex; ++ptcl)
       {
-        G4double rCut = aCut->GetProductionCut(ptcl);
+        G4double rCut = aCut->GetProductionCut((G4int)ptcl);
         (*(rangeCutTable[ptcl]))[idx] = rCut;
         // if(converters[ptcl] && (*cItr)->IsUsed())
         if(converters[ptcl])
@@ -560,7 +560,7 @@ G4bool G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
   
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   // number of materials in the table
-  G4int numberOfMaterial = matTable->size();
+  G4int numberOfMaterial = (G4int)matTable->size();
 
   if (ascii)
   {
@@ -598,7 +598,7 @@ G4bool G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     }
     for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
     {
-      temp[i]=key[i];
+      temp[i]=key[(G4int)i];
     }
     fOut.write(temp, FixedStringLengthForStore);
 
@@ -613,7 +613,7 @@ G4bool G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
       for (i=0; i<FixedStringLengthForStore; ++i)
         temp[i] = '\0'; 
       for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i)
-        temp[i]=name[i];
+        temp[i]=name[(G4int)i];
       fOut.write(temp, FixedStringLengthForStore);
       fOut.write( (char*)(&density), sizeof(G4double));
     }    
@@ -809,7 +809,7 @@ G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory,
                  JustWarning, "Cannot open file!");
      return false;
   }
-  G4int numberOfCouples = coupleTable.size();
+  G4int numberOfCouples = (G4int)coupleTable.size();
   if (ascii)
   {
     /////////////// ASCII mode  /////////////////
@@ -827,7 +827,7 @@ G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory,
     for (i=0; i<FixedStringLengthForStore; ++i)
       temp[i] = '\0'; 
     for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
-      temp[i]=key[i];
+      temp[i]=key[(G4int)i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -844,7 +844,7 @@ G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory,
     G4double cutValues[NumberOfG4CutIndex];
     for (std::size_t idx=0; idx <NumberOfG4CutIndex; ++idx)
     {
-      cutValues[idx] = aCut->GetProductionCut(idx);
+      cutValues[idx] = aCut->GetProductionCut((G4int)idx);
     }
     // material/region info
     G4String materialName = aCouple->GetMaterial()->GetName();
@@ -895,14 +895,14 @@ G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory,
       for (i=0; i<FixedStringLengthForStore; ++i)
         temp[i] = '\0'; 
       for (i=0; i<materialName.length() && i<FixedStringLengthForStore-1; ++i)
-        temp[i]=materialName[i];
+        temp[i]=materialName[(G4int)i];
       fOut.write(temp, FixedStringLengthForStore);
 
       // region name
       for (i=0; i<FixedStringLengthForStore; ++i)
         temp[i] = '\0'; 
       for (i=0; i<regionName.length() && i<FixedStringLengthForStore-1; ++i)
-        temp[i]=regionName[i];
+        temp[i]=regionName[(G4int)i];
       fOut.write(temp, FixedStringLengthForStore);
 
       // cut values
@@ -1052,9 +1052,9 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       for (std::size_t j=0; j< NumberOfG4CutIndex; ++j)
       {
         // check ratio only if values are not the same
-        if (cutValues[j] != aCut->GetProductionCut(j))
+        if (cutValues[j] != aCut->GetProductionCut((G4int)j))
         {  
-          G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
+          G4double ratio =  cutValues[j]/aCut->GetProductionCut((G4int)j);
           fRatio = fRatio && (0.999<ratio) && (ratio<1.001) ;
         }
       } 
@@ -1170,7 +1170,7 @@ G4bool G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
     return false;
   }
 
-  G4int numberOfCouples = coupleTable.size();
+  G4int numberOfCouples = (G4int)coupleTable.size();
   if (ascii)
   {
     /////////////// ASCII mode  /////////////////
@@ -1188,7 +1188,7 @@ G4bool G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
     for (i=0; i<FixedStringLengthForStore; ++i)
       temp[i] = '\0'; 
     for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
-      temp[i]=key[i];
+      temp[i]=key[(G4int)i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -1301,7 +1301,7 @@ G4bool G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
                  "ProcCuts109", JustWarning, 
                  "Number of Couples in the file exceeds defined couples");
   }
-  numberOfCouples = mccConversionTable.size();
+  numberOfCouples = (G4int)mccConversionTable.size();
   
   for (std::size_t idx=0; static_cast<G4int>(idx) <NumberOfG4CutIndex; ++idx)
   {

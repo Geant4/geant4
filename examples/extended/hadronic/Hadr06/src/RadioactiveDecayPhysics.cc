@@ -45,11 +45,6 @@
 RadioactiveDecayPhysics::RadioactiveDecayPhysics(const G4String& name)
 :  G4VPhysicsConstructor(name)
 {
-  // mandatory for G4NuclideTable
-  //
-  ///G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
-  ///G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
-
   // hadronic physics extra configuration
   //
   G4DeexPrecoParameters* deex = 
@@ -60,11 +55,6 @@ RadioactiveDecayPhysics::RadioactiveDecayPhysics(const G4String& name)
   deex->SetIsomerProduction(true);
   deex->SetCorrelatedGamma(false);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RadioactiveDecayPhysics::~RadioactiveDecayPhysics()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

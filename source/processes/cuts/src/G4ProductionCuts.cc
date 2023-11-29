@@ -31,16 +31,11 @@
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 
-#include <iomanip>
-
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = nullptr;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = nullptr;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = nullptr;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = nullptr;
+#include <sstream>
 
 G4ProductionCuts::G4ProductionCuts()
 {
-  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  for (G4int i=0; i<NumberOfG4CutIndex; ++i)
   {
     fRangeCuts.push_back(0.0);
   }
@@ -48,7 +43,7 @@ G4ProductionCuts::G4ProductionCuts()
 
 G4ProductionCuts::G4ProductionCuts(const G4ProductionCuts& right) 
 {
-  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  for (G4int i=0; i<NumberOfG4CutIndex; ++i)
   {
     fRangeCuts.push_back(0.0);
   }
@@ -64,7 +59,7 @@ G4ProductionCuts& G4ProductionCuts::operator=(const G4ProductionCuts& right)
 {
   if (&right==this) return *this;
 
-  for (G4int i=0; i< NumberOfG4CutIndex; ++i)
+  for (G4int i=0; i<NumberOfG4CutIndex; ++i)
   {
     fRangeCuts[i] = right.fRangeCuts[i];
   }
@@ -77,64 +72,112 @@ G4bool G4ProductionCuts::operator==(const G4ProductionCuts& right) const
   return (this == &right);
 }
 
-
 G4bool G4ProductionCuts::operator!=(const G4ProductionCuts& right) const
 {
   return (this != &right);
 }
 
+void G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
+{
+  if(index >= 0 && index < NumberOfG4CutIndex)
+  {
+    fRangeCuts[index] = cut;
+    isModified = true;
+  }
+  else
+  {
+    std::ostringstream os;
+    os << "Setting cuts for particles other than photon, e-, e+ or proton has "
+          "no effect.";
+    G4Exception("G4ProductionCuts::SetProductionCut", "ProcCuts110",
+                JustWarning, os.str().c_str());
+  }
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut)
+{
+  for(G4int i = 0; i < NumberOfG4CutIndex; ++i)
+  {
+    fRangeCuts[i] = cut;
+  }
+  isModified = true;
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut, G4ParticleDefinition* ptr)
+{
+  SetProductionCut(cut, GetIndex(ptr));
+}
+
+void G4ProductionCuts::SetProductionCut(G4double cut, const G4String& pName)
+{
+  SetProductionCut(cut, GetIndex(pName));
+}
+
+G4double G4ProductionCuts::GetProductionCut(G4int index) const
+{
+  G4double cut = -1.0;
+  if (index>=0 && index<NumberOfG4CutIndex)
+  {
+    cut = fRangeCuts[index];
+  }
+  return cut;
+}
+
+G4double G4ProductionCuts::GetProductionCut(const G4String& name) const
+{
+  return GetProductionCut(GetIndex(name));
+}
+
+
+const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
+{
+  return fRangeCuts;
+}
+
+G4bool G4ProductionCuts::IsModified() const
+{
+  return isModified;
+}
+
+void G4ProductionCuts::PhysicsTableUpdated()
+{
+  isModified = false;
+}
+
 G4int G4ProductionCuts::GetIndex(const G4String& name)
 {
-  static const G4String gamma ("gamma");
-  static const G4String electron("e-");
-  static const G4String positron("e+");
-  static const G4String proton("proton");
-  
-  G4int index;
-  if       ( name == gamma )        { index =  0; }
-  else  if ( name == electron )     { index =  1; }
-  else  if ( name == positron )     { index =  2; }
-  else  if ( name == proton )       { index =  3; }
-  else                              { index = -1; }
+  G4int index = -1;
+  if ( name == "gamma" ) { index = 0; }
+  else if ( name == "e-" ) { index = 1; }
+  else if ( name == "e+" ) { index = 2; }
+  else if ( name == "proton" ) { index = 3; }
 
   return index;
 }
 
 
-G4int G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
-{ 
-  if(!ptcl) return -1;
-
-  // In the first call, pointers are set 
-  if(gammaDef==nullptr  && ptcl->GetParticleName()=="gamma")
-    { gammaDef = (G4ParticleDefinition*) ptcl; }
-  if(electDef==nullptr  && ptcl->GetParticleName()=="e-")
-    { electDef = (G4ParticleDefinition*) ptcl; }
-  if(positDef==nullptr  && ptcl->GetParticleName()=="e+")
-    { positDef = (G4ParticleDefinition*) ptcl; }
-  if(protonDef==nullptr && ptcl->GetParticleName()=="proton")
-    { protonDef = (G4ParticleDefinition*) ptcl; }
-
-  G4int index;
-  if(ptcl==(const G4ParticleDefinition*) gammaDef)       { index = 0;  }
-  else if(ptcl==(const G4ParticleDefinition*) electDef)  { index = 1;  }
-  else if(ptcl==(const G4ParticleDefinition*) positDef)  { index = 2;  }
-  else if(ptcl==(const G4ParticleDefinition*) protonDef) { index = 3;  }
-  else { index = -1; }
+G4int G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptr)
+{
+  G4int pdg = (nullptr == ptr) ? 0 : ptr->GetPDGEncoding();
+  G4int index = -1;
+  if (pdg == 22) { index = 0; }
+  else if (pdg == 11) { index = 1; }
+  else if (pdg == -11) { index = 2; }
+  else if (pdg == 2212) { index = 3; }
 
   return index;
 }
 
 void G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
 {  
-  G4int vSize = cut.size();
+  G4int vSize = (G4int)cut.size();
   if (vSize != NumberOfG4CutIndex)
   {
 #ifdef G4VERBOSE
-    if ( G4ProductionCutsTable::GetProductionCutsTable()->GetVerboseLevel()>1)
+    if (G4ProductionCutsTable::GetProductionCutsTable()->GetVerboseLevel() > 1)
     {
-      G4cerr << "G4ProductionCuts::SetProductionCuts ";
-      G4cerr << " The size of given cut value vector [=" << vSize << "]  "
+      G4cout << "G4ProductionCuts::SetProductionCuts ";
+      G4cout << " The size of given cut value vector [=" << vSize << "]  "
              << " is not consistent with number of CutIndex [="  
              << NumberOfG4CutIndex << G4endl;
     }
@@ -144,7 +187,7 @@ void G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
                  JustWarning, "Given vector size is inconsistent ");
     if (NumberOfG4CutIndex<vSize)  { vSize = NumberOfG4CutIndex; }
   }
-  for(G4int i = 0; (i<vSize ); ++i)
+  for(G4int i = 0; i<vSize; ++i)
   {
     fRangeCuts[i] = cut[i];
   }

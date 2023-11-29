@@ -57,6 +57,3 @@ G4ExcitedBaryons::G4ExcitedBaryons(
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
 }
-
-G4ExcitedBaryons::~G4ExcitedBaryons() {}
-

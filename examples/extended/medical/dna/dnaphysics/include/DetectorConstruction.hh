@@ -46,26 +46,25 @@ class G4Region;
 class DetectorMessenger;
 class G4LogicalVolume;
 class G4PVPlacement;
+class PhysicsList;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
-  DetectorConstruction();
+  DetectorConstruction(PhysicsList*);
 
-  virtual ~DetectorConstruction();
-  virtual G4VPhysicalVolume* Construct();
+  ~DetectorConstruction() override;
+  G4VPhysicalVolume* Construct() override;
 
-  void SetMaterial(G4String);
+  void SetMaterial(const G4String&);
 
 private:
 
-  G4Material* fpWaterMaterial;
-
   void DefineMaterials();
 
-  G4VPhysicalVolume* ConstructDetector();
   DetectorMessenger* fDetectorMessenger;
+  G4Material*        fpWaterMaterial;
   G4LogicalVolume*   fLogicWorld;
   G4PVPlacement*     fPhysiWorld;
 };

@@ -53,13 +53,22 @@ G4EmParticleList::G4EmParticleList()
 	  "Bc-",      "omega_b-","anti_omega_b-",      "sigma_b+",   "sigma_b-",
 "anti_sigma_b+", "anti_sigma_b-",        "xi_b-",    "anti_xi_b-"
     };
-}
 
-G4EmParticleList::~G4EmParticleList() 
-{}
+  cNames = 
+    { 
+           "e-",           "e+",           "mu+",        "mu-",           "pi+",
+          "pi-",        "kaon+",         "kaon-",     "proton",   "anti_proton",
+        "alpha",          "He3",    "GenericIon",   "deuteron",        "triton"
+    };
+}
 
 const std::vector<G4String>& G4EmParticleList::PartNames() const
 {
   return pNames;
+}
+
+const std::vector<G4String>& G4EmParticleList::EmChargedPartNames() const
+{
+  return cNames;
 }
 

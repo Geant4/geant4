@@ -29,4 +29,4 @@
 #include "G4VParticleHPEDis.hh"
 using G4VNeutronHPEDis = G4VParticleHPEDis;
 
-#endif 
+#endif

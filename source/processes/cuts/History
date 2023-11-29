@@ -1,28 +1,44 @@
--------------------------------------------------------------------
+# Category proccuts History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-16 Gabriele Cosmo (proccuts-V11-00-06)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-March. 14th, 2022 - I. Hrivnacova (proccuts-V10-07-07)
+## 2022-06-01 Vladimir Ivantchenko (proccuts-V11-00-05)
+- G4VRangeToEnergyConverter - do not set lock inside private static
+    method; code clean-up
+- G4ProductionCuts - removed unnecessary thread local variables;
+    code clean-up and simplified
+
+## 2022-06-13 Sergio Losilla (proccuts-V11-00-04)
+- Added warning when trying to set cuts for particles other than
+  gamma, e-, e+ or proton.
+
+## 2022-05-07 Vladimir Ivantchenko (proccuts-V11-00-03)
+- G4VRangeToEnergyConverter - fixed static methods to provide
+    initialisation of energy limits independently on order of
+    calls in user code; use G4Autoloack to simplify the code;
+    use "s" prefix for static class members
+
+## 2022-03-14 Ivana Hrivnacova (proccuts-V11-00-02)
 - G4VRangeToEnergyConverter - fixed clearing of static data
     in destructor
 
-January. 19th, 2022 - V.Ivantchenko (proccuts-V10-07-06)
+## 2022-01-19 Vladimir Ivantchenko (proccuts-V11-00-01)
 - G4VRangeToEnergyConverter - fixed construction/destruction of
     static data (initial problem identified by I. Hrivnacova)
+
+## 2021-12-10 Ben Morgan (proccuts-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October. 12th, 2021 - V.Ivanchenko (proccuts-V10-07-05)
 - G4PhysicsTableHelper - fixed Coverity warning due to index type,

@@ -7,6 +7,7 @@ geant4_add_module(G4hadronic_stop
     G4EmCaptureCascade.hh
     G4HadronicAbsorptionFritiof.hh
     G4HadronicAbsorptionFritiofWithBinaryCascade.hh
+    G4HadronicAbsorptionINCLXX.hh
     G4HadronStoppingProcess.hh
     G4MuMinusCapturePrecompound.hh
     G4MuonMinusBoundDecay.hh
@@ -19,6 +20,7 @@ geant4_add_module(G4hadronic_stop
     G4EmCaptureCascade.cc
     G4HadronicAbsorptionFritiof.cc
     G4HadronicAbsorptionFritiofWithBinaryCascade.cc
+    G4HadronicAbsorptionINCLXX.cc
     G4HadronStoppingProcess.cc
     G4MuMinusCapturePrecompound.cc
     G4MuonMinusBoundDecay.cc
@@ -42,9 +44,11 @@ geant4_module_link_libraries(G4hadronic_stop
     G4bosons
     G4had_preequ_exciton
     G4had_string_diff
+    G4had_string_frag
     G4had_theo_max
     G4hadronic_bert_cascade
     G4hadronic_binary
+    G4hadronic_inclxx_interface
     G4hepgeometry
     G4ions
     G4leptons)

@@ -29,55 +29,50 @@
 #ifndef G4ParticleHPEvapSpectrum_h
 #define G4ParticleHPEvapSpectrum_h 1
 
-#include <fstream>
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include <fstream>
 
 // we will need a List of these .... one per term.
 
 class G4ParticleHPEvapSpectrum : public G4VParticleHPEDis
 {
   public:
-  G4ParticleHPEvapSpectrum()
-  {
-  }
-  ~G4ParticleHPEvapSpectrum()
-  {
-  }
-  
-  inline void Init(std::istream & aDataFile)
-  {
-    theFractionalProb.Init(aDataFile);
-    theThetaDist.Init(aDataFile);
-    theXDist.Init(aDataFile);
-  }
-  
-  inline G4double GetFractionalProbability(G4double anEnergy)
-  {
-    return theFractionalProb.GetY(anEnergy);
-  }
-  
-  inline G4double Sample(G4double anEnergy) 
-  {
-    // when this is called, theFractionalProb was used, and 'k' is sorted out already.
-    G4double x = theXDist.Sample();
-    G4double theta = theThetaDist.GetY(anEnergy);
-    G4double result = x*theta;
-    return result*CLHEP::eV;
-  }
-  
+    G4ParticleHPEvapSpectrum() = default;
+    ~G4ParticleHPEvapSpectrum() override = default;
+
+    inline void Init(std::istream& aDataFile) override
+    {
+      theFractionalProb.Init(aDataFile);
+      theThetaDist.Init(aDataFile);
+      theXDist.Init(aDataFile);
+    }
+
+    inline G4double GetFractionalProbability(G4double anEnergy) override
+    {
+      return theFractionalProb.GetY(anEnergy);
+    }
+
+    inline G4double Sample(G4double anEnergy) override
+    {
+      // when this is called, theFractionalProb was used, and 'k' is sorted out already.
+      G4double x = theXDist.Sample();
+      G4double theta = theThetaDist.GetY(anEnergy);
+      G4double result = x * theta;
+      return result * CLHEP::eV;
+    }
+
   private:
-  
-  G4ParticleHPVector theFractionalProb;
-  
-  G4ParticleHPVector theThetaDist;
-  G4ParticleHPVector theXDist;
-  
+    G4ParticleHPVector theFractionalProb;
+
+    G4ParticleHPVector theThetaDist;
+    G4ParticleHPVector theXDist;
 };
 
 #endif

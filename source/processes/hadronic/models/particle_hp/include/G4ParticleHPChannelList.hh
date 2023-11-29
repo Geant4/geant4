@@ -25,18 +25,18 @@
 //
 //
 //
- // Hadronic Process: Very Low Energy Neutron X-Sections
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
- 
+// Hadronic Process: Very Low Energy Neutron X-Sections
+// original by H.P. Wellisch, TRIUMF, 14-Feb-97
+// Builds and has the Cross-section data for one material.
+
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPChannelList_h
 #define G4ParticleHPChannelList_h 1
 
-#include "globals.hh"
 #include "G4ParticleHPChannel.hh"
 #include "G4StableIsotopes.hh"
+#include "globals.hh"
 
 class G4Element;
 class G4HadFinalState;
@@ -45,73 +45,66 @@ class G4ParticleHPFinalState;
 class G4ParticleDefinition;
 
 class G4ParticleHPChannelList
-{      
-
+{
   public:
-  
-  G4ParticleHPChannelList(G4int n, G4ParticleDefinition* projectile);
-  
-  G4ParticleHPChannelList();
-  
-  void Init(G4int n);
+    G4ParticleHPChannelList(G4int n, G4ParticleDefinition* projectile);
 
-  ~G4ParticleHPChannelList();
-  
-  G4HadFinalState * ApplyYourself(const G4Element * theElement, const G4HadProjectile & aTrack);
-      
-  void Init(G4Element * anElement, const G4String & dirName, G4ParticleDefinition* projectile);
-    
-  void Register(G4ParticleHPFinalState *theFS, const G4String &aName);
-  
-  inline G4double GetXsec(G4double anEnergy)
-  {
-    G4double result=0;
-    G4int i;
-    for(i=0; i<nChannels; i++)
+    G4ParticleHPChannelList();
+
+    void Init(G4int n);
+
+    ~G4ParticleHPChannelList();
+
+    G4HadFinalState* ApplyYourself(const G4Element* theElement, const G4HadProjectile& aTrack);
+
+    void Init(G4Element* anElement, const G4String& dirName, G4ParticleDefinition* projectile);
+
+    void Register(G4ParticleHPFinalState* theFS, const G4String& aName);
+
+    inline G4double GetXsec(G4double anEnergy)
     {
-      result+=std::max(0., theChannels[i]->GetXsec(anEnergy));
+      G4double result = 0;
+      G4int i;
+      for (i = 0; i < nChannels; i++) {
+        result += std::max(0., theChannels[i]->GetXsec(anEnergy));
+      }
+      return result;
     }
-    return result;
-  }
-  
-  inline G4int GetNumberOfChannels() { return nChannels; }
-      
-  inline G4bool HasDataInAnyFinalState()
-  {
-    G4bool result = false;
-    G4int i;
-    for(i=0; i<nChannels; i++)
+
+    inline G4int GetNumberOfChannels() { return nChannels; }
+
+    inline G4bool HasDataInAnyFinalState()
     {
-      if(theChannels[i]->HasDataInAnyFinalState()) result = true;
+      G4bool result = false;
+      G4int i;
+      for (i = 0; i < nChannels; i++) {
+        if (theChannels[i]->HasDataInAnyFinalState()) result = true;
+      }
+      return result;
     }
-    return result;
-  }
-  inline void RestartRegistration()
-  {
-    allChannelsCreated = true;
-    theInitCount = 0;
-  }
+    inline void RestartRegistration()
+    {
+      allChannelsCreated = true;
+      theInitCount = 0;
+    }
 
-  void DumpInfo();
+    void DumpInfo();
 
+  private:
+    static G4ThreadLocal G4int trycounter;
+    G4ParticleHPChannel** theChannels;
+    G4int nChannels;
+    G4String theDir;
+    G4Element* theElement;
 
-private:
+    G4bool allChannelsCreated;
+    G4int theInitCount;
 
-  static G4ThreadLocal G4int trycounter;
-  G4ParticleHPChannel ** theChannels;
-  G4int nChannels;
-  G4String theDir;
-  G4Element * theElement; 
-  
-  G4bool allChannelsCreated;
-  G4int theInitCount;
+    G4StableIsotopes theStableOnes;
 
-  G4StableIsotopes theStableOnes;
+    G4ParticleDefinition* theProjectile;
 
-  G4ParticleDefinition* theProjectile;  
-
-  G4HadFinalState unChanged;
-
+    G4HadFinalState unChanged;
 };
 
 #endif

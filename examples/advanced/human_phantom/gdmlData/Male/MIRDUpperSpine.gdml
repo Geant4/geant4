@@ -55,7 +55,7 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="UpperSpine" dx="1.73" dy="2.45" dz="5." />
+  <eltube lunit="cm" name="UpperSpine" dx="1.73" dy="2.45" dz="5." />
  </solids>
 
  <structure>

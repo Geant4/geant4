@@ -29,26 +29,21 @@
 #define G4VPrimitivePlotter_H 1
 
 #include "G4VPrimitiveScorer.hh"
+
 #include <map>
 
 class G4VPrimitivePlotter : public G4VPrimitiveScorer
 {
- public:  // with description
-  G4VPrimitivePlotter(G4String name, G4int depth = 0)
-    : G4VPrimitiveScorer(name, depth)
-  {
-    ;
-  }
-  virtual ~G4VPrimitivePlotter() { ; }
-
  public:
+  using G4VPrimitiveScorer::G4VPrimitiveScorer;
+  ~G4VPrimitivePlotter() override = default;
+
   void Plot(G4int copyNo, G4int histID) { hitIDMap[copyNo] = histID; }
+
+  G4int GetNumberOfHist() const { return (G4int)hitIDMap.size(); }
 
  protected:
   std::map<G4int, G4int> hitIDMap;
-
- public:
-  G4int GetNumberOfHist() const { return hitIDMap.size(); }
 };
 
 #endif

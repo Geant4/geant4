@@ -201,9 +201,8 @@ void G4CascadeCoalescence::removeNucleons() {
     G4cout << " >>> G4CascadeCoalescence::removeNucleons()" << G4endl;
 
   // Remove nucleons from output from last to first (to preserve indexing)
-  std::set<size_t>::reverse_iterator usedIter;
-  for (usedIter = usedNucleons.rbegin(); usedIter != usedNucleons.rend(); ++usedIter)
-    thisFinalState->removeOutgoingParticle(*usedIter);
+  for (auto usedIter = usedNucleons.crbegin(); usedIter != usedNucleons.crend(); ++usedIter)
+    thisFinalState->removeOutgoingParticle((G4int)*usedIter);
 
   usedNucleons.clear();
 }
@@ -323,7 +322,7 @@ bool G4CascadeCoalescence::makeLightIon(const ClusterCandidate& aCluster) {
 
   if (aCluster.size()<2) return false;		// Sanity check
 
-  G4int A = aCluster.size();
+  G4int A = (G4int)aCluster.size();
   G4int Z = -1;
 
   G4int type = clusterType(aCluster);

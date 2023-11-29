@@ -51,6 +51,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
 #include "G4Step.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -137,6 +138,7 @@ private:
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theMuonPlus;
   const G4ParticleDefinition* theMuonMinus;
+  std::vector<G4double> temp;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -103,9 +103,11 @@ aScintillationTIAllocator();
 
 inline void* G4ScintillationTrackInformation::operator new(size_t)
 {
-  if(!aScintillationTIAllocator())
+  if(aScintillationTIAllocator() == nullptr)
+  {
     aScintillationTIAllocator() =
       new G4Allocator<G4ScintillationTrackInformation>;
+  }
   return (void*) aScintillationTIAllocator()->MallocSingle();
 }
 

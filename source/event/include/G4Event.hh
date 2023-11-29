@@ -57,8 +57,8 @@ class G4Event
   using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
 
  public:
-    G4Event();
-    G4Event(G4int evID);
+    G4Event() = default;
+    explicit G4Event(G4int evID);
    ~G4Event();
 
     G4Event(const G4Event &) = delete;
@@ -138,18 +138,18 @@ class G4Event
       { 
         if( i == 0 )
         { return thePrimaryVertex; }
-        else if( i > 0 && i < numberOfPrimaryVertex )
+        if( i > 0 && i < numberOfPrimaryVertex )
         {
           G4PrimaryVertex* primaryVertex = thePrimaryVertex;
           for( G4int j=0; j<i; ++j )
           {
-            if( !primaryVertex ) return nullptr; 
+            if( primaryVertex == nullptr ) return nullptr; 
             primaryVertex = primaryVertex->GetNext();
           }
           return primaryVertex;
         }
-        else
-        { return nullptr; }
+        
+        return nullptr;
       }
       // Returns i-th primary vertex of the event.
 
@@ -234,7 +234,10 @@ extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();
 
 inline void* G4Event::operator new(std::size_t)
 { 
-  if (!anEventAllocator()) anEventAllocator() = new G4Allocator<G4Event>;
+  if (anEventAllocator() == nullptr) 
+  {
+    anEventAllocator() = new G4Allocator<G4Event>;
+  }
   return (void*)anEventAllocator()->MallocSingle();
 }
 

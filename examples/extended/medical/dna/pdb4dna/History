@@ -1,20 +1,21 @@
--------------------------------------------------------------------
+# Example pdb4dna History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      pdb4dna History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-10-04 Gabriele Cosmo (pdb4dna-V11-00-01)
+- Fixed compilation warnings on Intel-icx compiler for set but unused variables
+  in DetectorConstruction and PDBlib sources.
+
+## 2021-12-10 Ben Morgan (pdb4dna-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06-10-21 I. Hrivnacova          tag pdb4dna-V10-07-00
 - Migration to new G4AnalysisManager.hh header;

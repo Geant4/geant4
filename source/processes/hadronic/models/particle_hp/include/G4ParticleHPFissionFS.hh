@@ -29,43 +29,40 @@
 #ifndef G4ParticleHPFissionFS_h
 #define G4ParticleHPFissionFS_h 1
 
-#include "globals.hh"
-#include "G4HadProjectile.hh"
 #include "G4HadFinalState.hh"
-#include "G4ParticleHPFinalState.hh"
-#include "G4ParticleHPNames.hh"
-
+#include "G4HadProjectile.hh"
 #include "G4ParticleHPFCFissionFS.hh"
+#include "G4ParticleHPFFFissionFS.hh"
+#include "G4ParticleHPFSFissionFS.hh"
+#include "G4ParticleHPFinalState.hh"
+#include "G4ParticleHPLCFissionFS.hh"
+#include "G4ParticleHPNames.hh"
 #include "G4ParticleHPSCFissionFS.hh"
 #include "G4ParticleHPTCFissionFS.hh"
-#include "G4ParticleHPLCFissionFS.hh"
-#include "G4ParticleHPFSFissionFS.hh"
-
-#include "G4ParticleHPFFFissionFS.hh"
+#include "globals.hh"
 
 class G4ParticleHPFissionFS : public G4ParticleHPFinalState
 {
   public:
-  
-  G4ParticleHPFissionFS();
-  ~G4ParticleHPFissionFS(){}
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition* );
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack);
-  G4ParticleHPFinalState * New() 
-  {
-   G4ParticleHPFissionFS * theNew = new G4ParticleHPFissionFS;
-   return theNew;
-  }
-        
+    G4ParticleHPFissionFS();
+    ~G4ParticleHPFissionFS() override = default;
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aFSType,
+              G4ParticleDefinition*) override;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4ParticleHPFissionFS;
+      return theNew;
+    }
+
   private:
-  
-  G4ParticleHPFSFissionFS theFS;
-  G4ParticleHPFCFissionFS theFC;
-  G4ParticleHPSCFissionFS theSC;
-  G4ParticleHPTCFissionFS theTC;
-  G4ParticleHPLCFissionFS theLC;
-    
-  G4ParticleHPFFFissionFS theFF;
-  G4bool produceFissionFragments;
+    G4ParticleHPFSFissionFS theFS;
+    G4ParticleHPFCFissionFS theFC;
+    G4ParticleHPSCFissionFS theSC;
+    G4ParticleHPTCFissionFS theTC;
+    G4ParticleHPLCFissionFS theLC;
+
+    G4ParticleHPFFFissionFS theFF;
+    G4bool produceFissionFragments;
 };
 #endif

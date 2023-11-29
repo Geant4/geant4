@@ -49,6 +49,7 @@
 #include "G4ChordFinder.hh"
 #include "G4MultiLevelLocator.hh"
 
+
 // ---------------------------------------------------------------------------
 // Constructors and destructor
 //
@@ -63,12 +64,15 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator* theNavigator,
 {
   fEpsilonStep = (fDetectorFieldMgr != nullptr)
                ? fDetectorFieldMgr->GetMaximumEpsilonStep() : 1.0e-5;
-  fLargestAcceptableStep = 1000.0 * meter;
+
 
   fPreviousSftOrigin = G4ThreeVector(0.,0.,0.);
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fZeroStepThreshold = std::max( 1.0e5 * kCarTolerance, 1.0e-1 * micrometer );
 
+  fLargestAcceptableStep = 100.0 * meter;  // Reduced from 1000.0 * meter
+  fMaxStepSizeMultiplier=   0.1 ;   // 0.1 in git (larger for tests.)  // Reduced from 100;
+  fMinBigDistance= 100. * CLHEP::mm;
 #ifdef G4DEBUG_FIELD
   G4cout << " PiF: Zero Step Threshold set to "
          << fZeroStepThreshold / millimeter
@@ -122,7 +126,7 @@ G4double G4PropagatorInField::ComputeStep(
                 G4VPhysicalVolume* pPhysVol,
                 G4bool             canRelaxDeltaChord)
 {  
-  GetChordFinder()->OnComputeStep();
+  GetChordFinder()->OnComputeStep(&pFieldTrack);
   const G4double deltaChord = GetChordFinder()->GetDeltaChord();
 
   // If CurrentProposedStepLength is too small for finding Chords
@@ -136,7 +140,7 @@ G4double G4PropagatorInField::ComputeStep(
 
   // Introducing smooth trajectory display (jacek 01/11/2002)
   //
-  if (fpTrajectoryFilter)
+  if (fpTrajectoryFilter != nullptr)
   {
     fpTrajectoryFilter->CreateNewTrajectorySegment();
   }
@@ -151,10 +155,14 @@ G4double G4PropagatorInField::ComputeStep(
     G4cout << "   Starting FT: " << pFieldTrack;
     G4cout << "   Requested length = " << CurrentProposedStepLength << G4endl;
     G4cout << "   PhysVol = ";
-    if( pPhysVol )
+    if( pPhysVol != nullptr )
+    {
        G4cout << pPhysVol->GetName() << G4endl;
+    }
     else
+    {
        G4cout << " N/A ";
+    }
     G4cout << G4endl;
   }
   
@@ -192,7 +200,7 @@ G4double G4PropagatorInField::ComputeStep(
     StartPointA  = pFieldTrack.GetPosition();
     VelocityUnit = pFieldTrack.GetMomentumDir();
 
-    G4double trialProposedStep = 1.e2 * ( 10.0 * cm + 
+    G4double trialProposedStep = fMaxStepSizeMultiplier * ( fMinBigDistance +
       fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) );
     CurrentProposedStepLength = std::min( trialProposedStep,
@@ -236,14 +244,15 @@ G4double G4PropagatorInField::ComputeStep(
       // is either geometrically sharp or between very different materials.
       // Careful decreases to cope with tolerance are required
       //
-      if( stepTrial > 100.0*fZeroStepThreshold )
+      if( stepTrial > 100.0*fZeroStepThreshold ) {
         decreaseFactor = 0.35;     // Try decreasing slower
-      else if( stepTrial > 30.0*fZeroStepThreshold )
+      } else if( stepTrial > 30.0*fZeroStepThreshold ) {
         decreaseFactor= 0.5;       // Try yet slower decrease
-      else if( stepTrial > 10.0*fZeroStepThreshold )
+      } else if( stepTrial > 10.0*fZeroStepThreshold ) {
         decreaseFactor= 0.75;      // Try even slower decreases
-      else
+      } else {
         decreaseFactor= 0.9;       // Try very slow decreases
+      }
      }
      stepTrial *= decreaseFactor;
 
@@ -395,7 +404,7 @@ G4double G4PropagatorInField::ComputeStep(
     {
       StepTaken += s_length_taken;
 
-      if (fpTrajectoryFilter) // For smooth trajectory display (jacek 1/11/2002)
+      if (fpTrajectoryFilter != nullptr) // For smooth trajectory display (jacek 1/11/2002)
       {
         fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
       }
@@ -536,7 +545,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&      StartFT,
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
 
-  G4int oldprec;   // cout/cerr precision settings
+  G4long oldprec;   // cout/cerr precision settings
       
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
@@ -589,7 +598,7 @@ G4PropagatorInField::printStatus( const G4FieldTrack&      StartFT,
       { G4cout << std::setw( 9) << requestStep << " "; }
     else
       { G4cout << std::setw( 9) << "Init/NotKnown" << " "; }
-    if( startVolume != 0)
+    if( startVolume != nullptr)
       { G4cout << std::setw(12) << startVolume->GetName() << " "; }
     G4cout.precision(oldprec);
     G4cout << G4endl;
@@ -617,7 +626,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double stepTrial,
                     const G4FieldTrack& )
 {
-  G4int  iprec= G4cout.precision(8); 
+  G4long iprec= G4cout.precision(8); 
   G4cout << " " << std::setw(12) << " PiF: NoZeroStep " 
          << " " << std::setw(20) << " CurrentProposed len " 
          << " " << std::setw(18) << " Full_curvelen_last" 
@@ -655,10 +664,7 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const
   {
     return fpTrajectoryFilter->GimmeThePointsAndForgetThem();
   }
-  else
-  {
-    return nullptr;
-  }
+  return nullptr;
 }
 
 // ---------------------------------------------------------------------------
@@ -761,7 +767,7 @@ void G4PropagatorInField::ReportLoopingParticle( G4int count,
                                                  G4double StepTaken,
                                                  G4double StepRequested,
                                                  const char* methodName,
-                                                 G4ThreeVector momentumVec,
+                                                 const G4ThreeVector& momentumVec,
                                                  G4VPhysicalVolume* pPhysVol )
 {
    std::ostringstream message;
@@ -785,18 +791,20 @@ void G4PropagatorInField::ReportLoopingParticle( G4int count,
    }
    message << std::setprecision(prec) 
            << 100. * StepTaken / StepRequested << " % " << G4endl ;
-   if( pPhysVol )
+   if( pPhysVol != nullptr )
    {
-      message << " in volume " << pPhysVol->GetName() ;
-      auto material = pPhysVol->GetLogicalVolume()->GetMaterial();
-      if( material != nullptr )
-         message << " with material " << material->GetName()
-                 << " ( density = "
-                 << material->GetDensity() / ( g/(cm*cm*cm) ) << " g / cm^3 ) ";
+     message << " in volume " << pPhysVol->GetName() ;
+     auto material = pPhysVol->GetLogicalVolume()->GetMaterial();
+     if( material != nullptr )
+     {
+       message << " with material " << material->GetName()
+               << " ( density = "
+               << material->GetDensity() / ( g/(cm*cm*cm) ) << " g / cm^3 ) ";
+     }
    }
    else
    {
-      message << " in unknown (null) volume. " ;
+     message << " in unknown (null) volume. " ;
    }
    G4Exception(methodName, "GeomNav1002", JustWarning, message);   
 }
@@ -815,9 +823,63 @@ void G4PropagatorInField::ReportStuckParticle( G4int    noZeroSteps,
            << "  Proposed Step is " << proposedStep
            << " but Step Taken is "<< lastTriedStep << G4endl;
    if( physVol != nullptr )
+   {
       message << " in volume " << physVol->GetName() ; 
+   }
    else
+   {
       message << " in unknown or null volume. " ; 
+   }
    G4Exception("G4PropagatorInField::ComputeStep()",
                "GeomNav1002", JustWarning, message);
+}
+
+// ------------------------------------------------------------------------
+
+// ----------------------------------------------
+// Methods to alter Parameters
+// ----------------------------------------------
+
+// Was a data member (of an object) -- now moved to class member
+G4double  G4PropagatorInField::GetLargestAcceptableStep()
+{
+  return fLargestAcceptableStep;
+}
+
+// ------------------------------------------------------------------------
+//
+void G4PropagatorInField::SetLargestAcceptableStep( G4double newBigDist )
+{
+  if( fLargestAcceptableStep>0.0 )
+  {
+    fLargestAcceptableStep = newBigDist;
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+G4double G4PropagatorInField::GetMaxStepSizeMultiplier()
+{
+  return fMaxStepSizeMultiplier;
+}
+
+// ---------------------------------------------------------------------------
+
+void     G4PropagatorInField::SetMaxStepSizeMultiplier(G4double vm)
+{
+  fMaxStepSizeMultiplier=vm;
+}
+
+// ---------------------------------------------------------------------------
+
+G4double G4PropagatorInField::GetMinBigDistance()
+{
+  return fMinBigDistance;
+}
+
+// ---------------------------------------------------------------------------
+
+void     G4PropagatorInField::SetMinBigDistance(G4double val)
+{
+  fMinBigDistance= val;
 }

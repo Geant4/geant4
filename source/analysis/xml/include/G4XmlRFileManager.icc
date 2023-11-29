@@ -53,8 +53,7 @@ tools::raxml_out* G4XmlRFileManager::GetHandler(
     std::vector<tools::raxml_out>::iterator it;
     for (it = objects.begin(); it!=objects.end(); ++it) {
       tools::raxml_out& object = *it;
-      if ( (object.cls().compare(HT::s_class()) == 0) &&
-           (object.name().compare(objectName) == 0) ) {
+      if ((object.cls() == HT::s_class()) && (object.name() == objectName)) {
         handler = &object;
         handler->disown();
         break;

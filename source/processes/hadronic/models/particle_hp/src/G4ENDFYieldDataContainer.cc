@@ -29,89 +29,77 @@
  *
  * Created on September 6, 2011, 10:19 AM
  */
- 
-#include "globals.hh"
+
+#include "G4ENDFYieldDataContainer.hh"
 
 #include "G4ArrayOps.hh"
-#include "G4ENDFYieldDataContainer.hh"
 #include "G4FFGEnumerations.hh"
+#include "globals.hh"
 
-G4ENDFYieldDataContainer::
-G4ENDFYieldDataContainer( G4int YieldSlots )
+G4ENDFYieldDataContainer::G4ENDFYieldDataContainer(G4int YieldSlots)
 {
-    YieldSlots_ = YieldSlots;
+  YieldSlots_ = YieldSlots;
 
-    Product_ = 0;
-    MetaState_ = G4FFGEnumerations::GROUND_STATE;
-    YieldProbability_ = new G4double[YieldSlots_];
-    YieldError_ = new G4double[YieldSlots_];
+  Product_ = 0;
+  MetaState_ = G4FFGEnumerations::GROUND_STATE;
+  YieldProbability_ = new G4double[YieldSlots_];
+  YieldError_ = new G4double[YieldSlots_];
 }
 
-G4FFGEnumerations::MetaState G4ENDFYieldDataContainer::
-GetMetaState( void )
+G4FFGEnumerations::MetaState G4ENDFYieldDataContainer::GetMetaState()
 {
-    return MetaState_;
+  return MetaState_;
 }
 
-G4int G4ENDFYieldDataContainer::
-GetProduct( void )
+G4int G4ENDFYieldDataContainer::GetProduct()
 {
-    return Product_;
+  return Product_;
 }
 
-G4double* G4ENDFYieldDataContainer::
-GetYieldError( void )
+G4double* G4ENDFYieldDataContainer::GetYieldError()
 {
-    return YieldError_;
+  return YieldError_;
 }
 
-G4double* G4ENDFYieldDataContainer::
-GetYieldProbability( void )
+G4double* G4ENDFYieldDataContainer::GetYieldProbability()
 {
-    return YieldProbability_;
+  return YieldProbability_;
 }
 
-G4int G4ENDFYieldDataContainer::
-GetYieldSlots( void )
+G4int G4ENDFYieldDataContainer::GetYieldSlots()
 {
-    return YieldSlots_;
+  return YieldSlots_;
 }
 
-void G4ENDFYieldDataContainer::
-SetMetaState( G4FFGEnumerations::MetaState MetaState )
+void G4ENDFYieldDataContainer::SetMetaState(G4FFGEnumerations::MetaState MetaState)
 {
-    MetaState_ = MetaState;
+  MetaState_ = MetaState;
 }
 
-void G4ENDFYieldDataContainer::
-SetProduct( G4int Product )
+void G4ENDFYieldDataContainer::SetProduct(G4int Product)
 {
-    Product_ = Product;
+  Product_ = Product;
 }
 
-void G4ENDFYieldDataContainer::
-SetYieldError( G4double* YieldError )
+void G4ENDFYieldDataContainer::SetYieldError(G4double* YieldError)
 {
-    G4ArrayOps::Copy(YieldSlots_, YieldError_, YieldError);
+  G4ArrayOps::Copy(YieldSlots_, YieldError_, YieldError);
+}
+
+void G4ENDFYieldDataContainer::SetYieldProbability(G4double* YieldProbability)
+{
+  G4ArrayOps::Copy(YieldSlots_, YieldProbability_, YieldProbability);
 }
 
 void G4ENDFYieldDataContainer::
-SetYieldProbability( G4double* YieldProbability )
+  // G4ENDFYieldDataContainer::SetYieldSlots(G4int NumberOfSlots)
+  SetYieldSlots(G4int NumberOfSlots)
 {
-    G4ArrayOps::Copy(YieldSlots_, YieldProbability_, YieldProbability);
+  YieldSlots_ = NumberOfSlots;
 }
 
-void G4ENDFYieldDataContainer::
-//G4ENDFYieldDataContainer::SetYieldSlots(G4int NumberOfSlots)
-SetYieldSlots(G4int NumberOfSlots)
+G4ENDFYieldDataContainer::~G4ENDFYieldDataContainer()
 {
-    YieldSlots_ = NumberOfSlots;
+  delete[] YieldProbability_;
+  delete[] YieldError_;
 }
-
-G4ENDFYieldDataContainer::
-~G4ENDFYieldDataContainer( void )
-{
-    delete[] YieldProbability_;
-    delete[] YieldError_;
-}
-

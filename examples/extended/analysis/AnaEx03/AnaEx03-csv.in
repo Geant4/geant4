@@ -1,0 +1,8 @@
+#
+# Macro file for the test of AnaEx03 example
+# with csv file type
+#
+
+/control/alias defaultFileType csv
+
+/control/execute AnaEx03.in

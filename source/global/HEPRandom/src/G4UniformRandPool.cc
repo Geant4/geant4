@@ -31,14 +31,15 @@
 // ------------------------------------------------------------
 
 #include "G4UniformRandPool.hh"
+
 #include "G4AutoDelete.hh"
 #include "G4Threading.hh"
 #include "globals.hh"
 
 #include <algorithm>
 #include <climits>
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
 
 // Not aligned memory
 //
@@ -46,7 +47,7 @@ void create_pool(G4double*& buffer, G4int ps) { buffer = new G4double[ps]; }
 
 void destroy_pool(G4double*& buffer) { delete[] buffer; }
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(__MINGW32__)
 // No bother with WIN
 void create_pool_align(G4double*& buffer, G4int ps) { create_pool(buffer, ps); }
 void destroy_pool_align(G4double*& buffer) { destroy_pool(buffer); }
@@ -73,10 +74,7 @@ void create_pool_align(G4double*& buffer, G4int ps)
 void destroy_pool_align(G4double*& buffer) { free(buffer); }
 #endif
 
-G4UniformRandPool::G4UniformRandPool()
-  : size(G4UNIFORMRANDPOOL_DEFAULT_POOLSIZE)
-  , buffer(0)
-  , currentIdx(0)
+G4UniformRandPool::G4UniformRandPool() 
 {
   if(sizeof(G4double) * CHAR_BIT == 64)
   {
@@ -91,8 +89,6 @@ G4UniformRandPool::G4UniformRandPool()
 
 G4UniformRandPool::G4UniformRandPool(G4int siz)
   : size(siz)
-  , buffer(0)
-  , currentIdx(0)
 {
   if(sizeof(G4double) * CHAR_BIT == 64)
   {
@@ -208,12 +204,12 @@ void G4UniformRandPool::GetMany(G4double* rnds, G4int howmany)
 
 namespace
 {
-  G4ThreadLocal G4UniformRandPool* rndpool = 0;
+  G4ThreadLocal G4UniformRandPool* rndpool = nullptr;
 }
 
 G4double G4UniformRandPool::flat()
 {
-  if(rndpool == 0)
+  if(rndpool == nullptr)
   {
     rndpool = new G4UniformRandPool;
     G4AutoDelete::Register(rndpool);
@@ -223,7 +219,7 @@ G4double G4UniformRandPool::flat()
 
 void G4UniformRandPool::flatArray(G4int howmany, G4double* rnds)
 {
-  if(rndpool == 0)
+  if(rndpool == nullptr)
   {
     rndpool = new G4UniformRandPool;
     G4AutoDelete::Register(rndpool);

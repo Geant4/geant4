@@ -639,7 +639,7 @@ G4hhElastic:: GetTransfer( G4int iTkin, G4int iTransfer, G4double position )
   {
     if ( iTransfer >= G4int((*fTableT)(iTkin)->GetVectorLength()) )
     {
-      iTransfer = (*fTableT)(iTkin)->GetVectorLength() - 1;
+      iTransfer = G4int((*fTableT)(iTkin)->GetVectorLength() - 1);
     }
     y1 = (*(*fTableT)(iTkin))(iTransfer-1);
     y2 = (*(*fTableT)(iTkin))(iTransfer);

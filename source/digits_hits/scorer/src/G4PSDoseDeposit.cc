@@ -46,29 +46,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-{
-  SetUnit("Gy");
-}
+  : G4PSDoseDeposit(name, "Gy", depth) 
+{}
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
                                  G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
-  , EvtMap(0)
+  , EvtMap(nullptr)
 {
   SetUnit(unit);
 }
-
-G4PSDoseDeposit::~G4PSDoseDeposit() { ; }
 
 G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep == 0.)
-    return FALSE;
+    return false;
 
   G4int idx = ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
                 ->GetReplicaNumber(indexDepth);
@@ -85,10 +79,10 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4double dosew = dose * wei;
   EvtMap->add(index, dosew);
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSDoseDeposit::ProcessHits", "SCORER0123", JustWarning,
@@ -100,7 +94,7 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSDoseDeposit::Initialize(G4HCofThisEvent* HCE)
@@ -114,22 +108,17 @@ void G4PSDoseDeposit::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSDoseDeposit::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSDoseDeposit::clear() { EvtMap->clear(); }
-
-void G4PSDoseDeposit::DrawAll() { ; }
 
 void G4PSDoseDeposit::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, dose] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  dose deposit: " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  dose deposit: " << *(dose) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

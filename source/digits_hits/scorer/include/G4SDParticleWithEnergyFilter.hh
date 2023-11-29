@@ -49,13 +49,14 @@ class G4ParticleDefinition;
 
 class G4SDParticleWithEnergyFilter : public G4VSDFilter
 {
- public:  // with description
+ public:
   G4SDParticleWithEnergyFilter(G4String name, G4double elow = 0.0,
                                G4double ehigh = DBL_MAX);
-  virtual ~G4SDParticleWithEnergyFilter();
+  G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
+  G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
+  ~G4SDParticleWithEnergyFilter() override;
 
- public:  // with description
-  virtual G4bool Accept(const G4Step*) const;
+  G4bool Accept(const G4Step*) const override;
 
   void add(const G4String& particleName);
   // add the particle into accepatable particle list.
@@ -68,10 +69,6 @@ class G4SDParticleWithEnergyFilter : public G4VSDFilter
  private:
   G4SDParticleFilter* fParticleFilter;
   G4SDKineticEnergyFilter* fKineticFilter;
-
- public:
-  G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
-  G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
 };
 
 #endif

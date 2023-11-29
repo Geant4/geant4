@@ -1,11 +1,18 @@
--------------------------------------------------------------------
+# Example air_shower History
 
-     =========================================================
-                      Geant4 - Ultra Advanced example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                           History file
-                           ------------
+## 2022-02-22 Daren Sawkey (air_shower-V11-00-01)
+- All material properties in order of increasing energy
+
+## 2021-12-10 Ben Morgan (air_shower-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 11.11.2021 - B. Tome (air_shower-V10-07-04)
              Start using C++11 guidelines

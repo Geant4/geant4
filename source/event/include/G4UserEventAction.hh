@@ -50,7 +50,7 @@ class G4UserEventAction
   public:
 
     G4UserEventAction();
-    virtual ~G4UserEventAction();
+    virtual ~G4UserEventAction() = default;
     virtual void SetEventManager(G4EventManager* value);
 
     virtual void BeginOfEventAction(const G4Event* anEvent);
@@ -59,7 +59,7 @@ class G4UserEventAction
 
   protected:
 
-      G4EventManager* fpEventManager = nullptr;
+      G4EventManager* fpEventManager = nullptr; // not owned
 };
 
 #endif

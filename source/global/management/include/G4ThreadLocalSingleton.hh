@@ -150,7 +150,7 @@ class G4ThreadLocalSingleton : private G4Cache<T*>
   G4ThreadLocalSingleton();
   // Creates thread-local singleton manager
 
-  ~G4ThreadLocalSingleton();
+  ~G4ThreadLocalSingleton() override;
 
   G4ThreadLocalSingleton(const G4ThreadLocalSingleton&) = delete;
   G4ThreadLocalSingleton(G4ThreadLocalSingleton&&)      = default;
@@ -179,7 +179,7 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton()
   : G4Cache<T*>()
 {
   G4MUTEXINIT(listm);
-  G4Cache<T*>::Put(static_cast<T*>(0));
+  G4Cache<T*>::Put(nullptr);
   // Uncomment below to find the origin of where instantiation happened
   /*
   auto bt = G4Backtrace::GetDemangled<4, 1>(
@@ -193,8 +193,8 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton()
   }
   */
   G4ThreadLocalSingleton<void>::Insert([&]() {
-    printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
-           G4Demangle<T>().c_str());
+    // printf("Deleting G4ThreadLocalSingletons for type %s ...\n",
+    //       G4Demangle<T>().c_str());
     this->Clear();
   });
 }

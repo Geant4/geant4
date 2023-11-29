@@ -60,7 +60,7 @@ class G4AdjointIons : public G4ParticleDefinition
  //  the normal particle properties.
 
  protected:
-   G4AdjointIons(){};
+   G4AdjointIons() = default;
 
 
  public: //With Description
@@ -80,7 +80,7 @@ class G4AdjointIons : public G4ParticleDefinition
    );
 
  public:
-   virtual    			~G4AdjointIons();
+      			~G4AdjointIons() override = default;
    G4AdjointIons*    			IonsDefinition();
    G4AdjointIons*    			Ions();
 

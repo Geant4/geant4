@@ -64,35 +64,41 @@ namespace G4INCL {
             nucleon = particle2;
             pion = particle1;
         }
-
-		
+	
         G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
 // assert(iso == 1 || iso == -1);
         if (iso == 1) {
 			nucleon->setType(Proton);
-		}
-		else if (iso == -1) {
+	}
+	else if (iso == -1) {
 			nucleon->setType(Neutron);
         }
-		pion->setType(Omega);
-//        nucleon->setEnergy(std::sqrt((nucleon->getMass())*(nucleon->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
-//        pion->setEnergy(std::sqrt((pion->getMass())*(pion->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
-  G4double sh=nucleon->getEnergy()+pion->getEnergy();
-		G4double mn=nucleon->getMass();
-		G4double me=pion->getMass();
-		G4double en=(sh*sh+mn*mn-me*me)/(2*sh);
-		nucleon->setEnergy(en);
-		G4double ee=std::sqrt(en*en-mn*mn+me*me);
-		pion->setEnergy(ee);
-		G4double pn=std::sqrt(en*en-mn*mn);
+	pion->setType(Omega);
+#ifdef INCLXX_IN_GEANT4_MODE
+        // Erase the parent resonance information of the nucleon and pion
+        nucleon->setParentResonancePDGCode(0);
+        nucleon->setParentResonanceID(0);
+        pion->setParentResonancePDGCode(0);
+        pion->setParentResonanceID(0);
+#endif
+//      nucleon->setEnergy(std::sqrt((nucleon->getMass())*(nucleon->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
+//      pion->setEnergy(std::sqrt((pion->getMass())*(pion->getMass())+(mom_nucleon.mag()*mom_nucleon.mag())));
+        G4double sh=nucleon->getEnergy()+pion->getEnergy();
+	G4double mn=nucleon->getMass();
+	G4double me=pion->getMass();
+	G4double en=(sh*sh+mn*mn-me*me)/(2*sh);
+	nucleon->setEnergy(en);
+	G4double ee=std::sqrt(en*en-mn*mn+me*me);
+	pion->setEnergy(ee);
+	G4double pn=std::sqrt(en*en-mn*mn);
 
-		ThreeVector mom_nucleon = Random::normVector(pn);
+	ThreeVector mom_nucleon = Random::normVector(pn);
 		
-		nucleon->setMomentum(mom_nucleon);
-		pion->setMomentum(-mom_nucleon);
+	nucleon->setMomentum(mom_nucleon);
+	pion->setMomentum(-mom_nucleon);
         
-  fs->addModifiedParticle(nucleon);
-  fs->addModifiedParticle(pion);
-  }
+        fs->addModifiedParticle(nucleon);
+        fs->addModifiedParticle(pion);
+    }
 
 }

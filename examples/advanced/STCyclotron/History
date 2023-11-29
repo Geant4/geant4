@@ -1,12 +1,21 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example STCyclotron History
 
-     ==============================================================
- 		      Geant4 - Solid-target cyclotron example
-     ==============================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+## 2022-09-09 Susanna Guatelli (STCyclotron-V11-00-02)
+- Ranecu Engine removed. Default one now used
+
+## 2022-06-20 Sergio Losilla (STCyclotron-V11-00-01)
+- Removed no-op lines, simplified calls to SetProductionCut.
+
+## 2021-12-10 Ben Morgan (STCyclotron-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 07.10.2021 - I. Hrivnacova (STCyclotron-V10-07-07)
 - Migration to new G4AnalysisManager.hh header;

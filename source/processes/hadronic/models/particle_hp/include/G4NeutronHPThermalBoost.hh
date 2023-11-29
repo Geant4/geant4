@@ -29,4 +29,4 @@
 #include "G4ParticleHPThermalBoost.hh"
 using G4NeutronHPThermalBoost = G4ParticleHPThermalBoost;
 
-#endif 
+#endif

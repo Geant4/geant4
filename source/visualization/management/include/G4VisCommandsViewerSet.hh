@@ -36,6 +36,7 @@
 
 class G4UIdirectory;
 class G4UIcommand;
+class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
@@ -70,12 +71,14 @@ private:
   G4UIcommand*          fpCommandLightsVector;
   G4ThreeVector         fLightsVector;
   G4UIcmdWithAnInteger* fpCommandLineSegments;
+  G4UIcmdWithoutParameter* fpCommandLineWidth;
   G4UIcmdWithAnInteger* fpCommandNumberOfCloudPoints;
   G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
   G4UIcmdWithAString*   fpCommandRotationStyle;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithABool*     fpCommandSpecialMeshRendering;
+  G4UIcmdWithAString*   fpCommandSpecialMeshRenderingOption;
   G4UIcommand*          fpCommandSpecialMeshVolumes;
   G4UIcmdWithAString*   fpCommandStyle;
   G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;

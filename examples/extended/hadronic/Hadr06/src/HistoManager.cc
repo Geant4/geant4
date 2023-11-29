@@ -36,15 +36,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-  : fFileName("Hadr06")
 {
   Book();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HistoManager::~HistoManager()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,10 +54,10 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 24;
+  const G4int kMaxHisto = 25;
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9",
                          "10","11","12","13","14","15","16","17","18","19",
-			 "20","21","22","23" };
+			 "20","21","22","23","24" };
   const G4String title[] = 
        { "dummy",                                                        //0
          "total energy deposit",                                         //1
@@ -89,7 +82,8 @@ void HistoManager::Book()
          "energy spectrum of all others emerging ions",                  //20
          "energy spectrum of all others emerging baryons",               //21
          "energy spectrum of all others emerging mesons",                //22
-         "energy spectrum of all others emerging leptons (neutrinos)"    //23	 
+         "energy spectrum of all others emerging leptons (neutrinos)",   //23
+         "total energy released : edep + eflow"                          //24 
        };
 
   // Default values (to be reset via /analysis/h1/set command) 

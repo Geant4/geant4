@@ -44,6 +44,12 @@ G4DNABoundingBox::G4DNABoundingBox(G4DNABoundingBox&& rhs) noexcept
 
 G4DNABoundingBox::G4DNABoundingBox(const initializer_list<G4double>& l)
 {
+  fxhi = 0.;
+  fxlo = 0.;
+  fyhi = 0.;
+  fylo = 0.;
+  fzhi = 0.;
+  fzlo = 0.;
   std::copy(l.begin(), l.end(), &fxhi);
 }
 

@@ -53,8 +53,7 @@ G4LossFluctuationDummy::G4LossFluctuationDummy(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LossFluctuationDummy::~G4LossFluctuationDummy()
-{}
+G4LossFluctuationDummy::~G4LossFluctuationDummy() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

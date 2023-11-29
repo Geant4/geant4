@@ -40,9 +40,7 @@ G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs* EqRhs)
 {
 }
 
-G4ExactHelixStepper::~G4ExactHelixStepper()
-{
-} 
+G4ExactHelixStepper::~G4ExactHelixStepper() = default; 
 
 // ---------------------------------------------------------------------------
 

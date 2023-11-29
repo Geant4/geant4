@@ -69,9 +69,8 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   if (!isGamma) { 
     if(0 <= shell) {
       G4int Z = nucleus->GetZ_asInt();
-      if(Z <= 100) {
-	G4int idx = (G4int)shell;
-	idx = std::min(idx, G4AtomicShells::GetNumberOfShells(Z)-1);
+      if(Z <= 104) {
+	G4int idx = std::min(shell, G4AtomicShells::GetNumberOfShells(Z)-1);
 	bond_energy = G4AtomicShells::GetBindingEnergy(Z, idx);
       }
     }
@@ -95,7 +94,7 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   // select secondary
   G4ParticleDefinition* part;
 
-  if(isGamma) { part =  G4Gamma::Gamma(); }
+  if(isGamma) { part = G4Gamma::Gamma(); }
   else {
     part = G4Electron::Electron();
     G4int ne = std::max(nucleus->GetNumberOfElectrons() - 1, 0);

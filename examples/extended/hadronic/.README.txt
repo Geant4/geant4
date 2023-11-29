@@ -77,10 +77,18 @@ bottom hadrons, and the use of pre-assigned decays.
 \link ExampleFissionFragment FissionFragment \endlink
 
 This example demonstrates the Fission Fragment model as used within the
-neutron_hp model. It will demostrate the capability for fission product
-containmentby the cladding in a water moderated sub-critical assembly. It could
+neutron_hp model. It will demonstrate the capability for fission product
+containment by the cladding in a water moderated sub-critical assembly. It could
 also be further extended to calculate the effective multiplication factor of
 the subcritical assembly for various loading schemes.
+
+\link Examples_FlukaCern FlukaCern \endlink
+
+A set of 2 examples, demonstrating how to make use of 
+the interface to `FLUKA` hadron-nucleus inelastic physics in a G4 application. <br>
+The examples are at the process (interaction) level, but a physics list 
+(G4_HP_CernFLUKAHadronInelastic_PhysicsList) is also made available. <br>
+The interface to `FLUKA` itself is also included.
 
 \link ExampleNeutronSource NeutronSource \endlink
 
@@ -88,6 +96,15 @@ NeutronSource is an example of neutrons production. It illustrates the cooperati
 of nuclear reactions and radioactive decay processes.
 It survey energy deposition and particle's flux.
 It uses PhysicsConstructor objects.
+
+\link Examples_ParticleFluence ParticleFluence \endlink
+
+This example aims to monitor the particle fluence for various particle types
+and set-ups. The particle fluence at a given position is defined as the
+average number of particles crossing a unit surface in that position
+(normalized per one incident primary). The particle fluence is conveniently
+estimated by summing the particles' track lengths in a thin scoring volume
+and dividing for the cubic volume of such a scoring volume.
 
 */
 

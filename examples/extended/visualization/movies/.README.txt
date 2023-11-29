@@ -1,7 +1,7 @@
 ///\file "visualization/movies/.README.txt"
 ///\brief Example movies README page
 
-/*! \page ExampleMovies Example movies
+/*! \page Examplemovies Example movies
 
 examples/extended/visualization/movies
 
@@ -9,70 +9,90 @@ This example illustrates how to create a movie.
 
 See https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/Visualization/makingamovie.html#.
 
-A) USING /vis/viewer/save AND /vis/viewer/interpolate
-=====================================================
+A) USING `/vis/viewer/save` AND `/vis/viewer/interpolate`
+=========================================================
 
-1) a) To see a pre-prepared example, start this example in interactive mode
+1. a. To see a pre-prepared example, start this example in interactive mode
       (i.e., without any command line arguments). Just type
-        /vis/viewer/interpolate viewfiles/movie-1
-      If you want to see an electromagnetic shower
-        /run/beamOn
-        /vis/viewer/interpolate viewfiles/movie-1
 
-   b) To make your own movie, save a sequence of views with
-      "/vis/viewer/save". Then "fly through" with "/vis/viewer/interpolate".
+            /vis/viewer/interpolate viewfiles/movie-1
+
+      If you want to see an electromagnetic shower
+
+            /run/beamOn
+            /vis/viewer/interpolate viewfiles/movie-1
+
+   b. To make your own movie, save a sequence of views with
+
+            /vis/viewer/save
+
+      Then "fly through" with
+
+            /vis/viewer/interpolate".
 
       The procedure is: choose a view, save, choose another view, save, and
       so on until you have, say, 10 saved views. Then you may
-        /vis/viewer/interpolate
+
+            /vis/viewer/interpolate
 
       Note: This saves views to your current working directory. It is
       always good to remove any pre-existing saved files:
-        rm *.g4view
+
+            rm *.g4view
+
       or save them, e.g.
-        mkdir views
-        mv *.g4view views
+
+            mkdir views
+            mv *.g4view views
+
       which can subsequently be interpolated with
-        /vis/viewer/interpolate views
 
-   c) Then you have a choice of how to export the movie - see 3 below.
+            /vis/viewer/interpolate views
 
-2) You can use time-slicing to see particles progress through time
+   c. Then you have a choice of how to export the movie - see 3 below.
 
-   a) To see a pre-prepared example
-        /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
-        /run/beamOn
-        /vis/viewer/interpolate viewfiles/movie-2
+2. You can use time-slicing to see particles progress through time
 
-   b) To make your own movie
-        /vis/scene/add/trajectories rich
-        /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
-        # Optionally add features (see guidance on /vis/viewer/set/timeWindow/)
-        /vis/viewer/set/timeWindow/displayLightFront true 0 0 -20 cm -0.01 ns
-        /vis/viewer/set/timeWindow/displayHeadTime true
-        /vis/viewer/set/timeWindow/fadeFactor 1
-        /run/beamOn
-        # Then set a time window and save
-        /vis/viewer/set/timeWindow/startTime 0 ns .1 ns
-        /vis/viewer/save
-        # Then zoom, pan etc to a view of interest
-        # Then set the next time window and save
-        /vis/viewer/set/timeWindow/startTime .5 ns .1 ns
-        /vis/viewer/save
-        # Then zoom, pan etc to a view of interest
-        # Then set the next time window and save
-        /vis/viewer/set/timeWindow/startTime 1 ns .1 ns
-        /vis/viewer/save
-        # Then another view, the next time window, and a save...
-        # ...repeat a few more times
-        # Then try
-        /vis/viewer/interpolate
+   a. To see a pre-prepared example
 
-3) How to export images using /vis/viewer/interpolate (OpenGL only)
-        /vis/viewer/interpolate ! ! ! ! export
+         /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
+         /run/beamOn
+         /vis/viewer/interpolate viewfiles/movie-2
+
+   b. To make your own movie
+
+         /vis/scene/add/trajectories rich
+         /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
+         # Optionally add features (see guidance on /vis/viewer/set/timeWindow/)
+         /vis/viewer/set/timeWindow/displayLightFront true 0 0 -20 cm -0.01 ns
+         /vis/viewer/set/timeWindow/displayHeadTime true
+         /vis/viewer/set/timeWindow/fadeFactor 1
+         /run/beamOn
+         # Then set a time window and save
+         /vis/viewer/set/timeWindow/startTime 0 ns .1 ns
+         /vis/viewer/save
+         # Then zoom, pan etc to a view of interest
+         # Then set the next time window and save
+         /vis/viewer/set/timeWindow/startTime .5 ns .1 ns
+         /vis/viewer/save
+         # Then zoom, pan etc to a view of interest
+         # Then set the next time window and save
+         /vis/viewer/set/timeWindow/startTime 1 ns .1 ns
+         /vis/viewer/save
+         # Then another view, the next time window, and a save...
+         # ...repeat a few more times
+         # Then try
+         /vis/viewer/interpolate
+
+3. How to export images using /vis/viewer/interpolate (OpenGL only)
+
+         /vis/viewer/interpolate ! ! ! ! export
+
    This produces lots of files.
    You can change export format with (for example)
-        /vis/ogl/set/exportFormat jpg
+
+         /vis/ogl/set/exportFormat jpg
+
    Then import them into your favourite movie maker - see
    https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/Visualization/makingamovie.html#
 

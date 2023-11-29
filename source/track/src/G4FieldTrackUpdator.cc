@@ -39,14 +39,13 @@
 //---------------------------------------------------------------------
 G4FieldTrack* G4FieldTrackUpdator::CreateFieldTrack(const G4Track* trk)
 {
-  G4FieldTrack* ftrk = new G4FieldTrack(
+  return new G4FieldTrack(
     trk->GetPosition(), trk->GetGlobalTime(), trk->GetMomentumDirection(),
     trk->GetKineticEnergy(), trk->GetDynamicParticle()->GetMass(),
     trk->GetDynamicParticle()->GetCharge(),
     trk->GetDynamicParticle()->GetPolarization(),
     0.0  // magnetic dipole moment to be implemented
   );
-  return ftrk;
 }
 
 //---------------------------------------------------------------------

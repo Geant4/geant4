@@ -31,13 +31,14 @@
 // from G4Transform3D.
 
 #include "G4OpenGLTransform3D.hh"
+#include "G4Types.hh"
 
 G4OpenGLTransform3D::G4OpenGLTransform3D (const G4Transform3D &t)
 {
   GLdouble *p = m;
-  for (size_t i=0; i<4; i++)
+  for (G4int i=0; i<4; ++i)
   { 
-    for (size_t k=0; k<3; k++)
+    for (G4int k=0; k<3; ++k)
     {
       *p++ = t(k,i);
     }

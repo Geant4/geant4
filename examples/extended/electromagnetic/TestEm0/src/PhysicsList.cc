@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -93,10 +92,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(nullptr), fEmName(""),
-  fMessenger(new PhysicsListMessenger(this))
-{    
+PhysicsList::PhysicsList()  
+{ 
+  fMessenger = new PhysicsListMessenger(this);
+     
   // set default cut value
   SetDefaultCutValue(1.0*mm); 
 

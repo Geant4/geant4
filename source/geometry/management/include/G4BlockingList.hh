@@ -73,7 +73,7 @@ class G4BlockingList
       // Enlarges blocking List if current size < nv, in units of stride.
       // Clears the new part of the List.
 
-    size_t Length() const;
+    std::size_t Length() const;
       // Returns the current length of the List. Note a length of 16
       // means volumes of indices between 0 & 15 inclusive may be blocked.
 

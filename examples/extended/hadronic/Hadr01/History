@@ -1,18 +1,25 @@
--------------------------------------------------------------------
+# Example Hadr01 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Hadr01 History file
-                    --------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2023-05-22 V. Ivanchenko (exhadr01-V11-01-01)
+- HistoManager - added protection agains secondary zero-energy particles
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-12-30 V. Ivanchenko (exhadr01-V11-01-00)
+- Added UI commands to enable neutron general process and extra macro file
+
+## 2022-12-18 V. Ivanchenko (exhadr01-V11-00-01)
+- Added UI commands to enable b- and c- particle physics and
+  hyper-nuclei physics, added macro files to demonstrate this
+
+## 2021-12-10 Ben Morgan (exhadr01-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 07-11-21 I. Hrivnacova (exhadr01-V10-07-03)
 - Added analysis manager Clear() call instead of

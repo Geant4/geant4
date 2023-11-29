@@ -33,10 +33,11 @@
 G4GeometryCell::G4GeometryCell(const G4VPhysicalVolume& aVolume,
                                      G4int RepNum)
  : fVPhysicalVolume(&aVolume), fRepNum(RepNum)
-{}
+{
+}
 
-G4GeometryCell::~G4GeometryCell()
-{}
+
+G4GeometryCell::~G4GeometryCell() = default;
 
 
 const G4VPhysicalVolume& G4GeometryCell::GetPhysicalVolume() const
@@ -51,9 +52,8 @@ G4int G4GeometryCell::GetReplicaNumber() const
 
 
 G4GeometryCell::G4GeometryCell(const G4GeometryCell& rhs)
- : fVPhysicalVolume(rhs.fVPhysicalVolume), fRepNum(rhs.fRepNum)
-{
-}
+  
+= default;
 
 G4GeometryCell& G4GeometryCell::operator=(const G4GeometryCell& rhs)
 {

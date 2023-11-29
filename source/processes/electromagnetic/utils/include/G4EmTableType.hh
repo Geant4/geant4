@@ -65,6 +65,7 @@ struct G4TwoPeaksXS {
   G4double e1deep;
   G4double e2peak;
   G4double e2deep;
+  G4double e3peak;
 };
 
 #endif

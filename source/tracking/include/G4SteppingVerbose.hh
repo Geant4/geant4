@@ -27,7 +27,7 @@
 //
 // Class description:
 //
-// This class manages the verbose outputs in G4SteppingManager. 
+// This class manages the verbose outputs in G4SteppingManager.
 
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -41,41 +41,38 @@
 
 class G4SteppingVerbose : public G4VSteppingVerbose
 {
-  public:
+ public:
+  // Constructor/Destructor
 
-    // Constructor/Destructor
+  G4SteppingVerbose() = default;
+  ~G4SteppingVerbose() override = default;
 
-    G4SteppingVerbose();
-    virtual ~G4SteppingVerbose();
+  G4VSteppingVerbose* Clone() override { return new G4SteppingVerbose; }
 
-    virtual G4VSteppingVerbose* Clone()
-    { return new G4SteppingVerbose; }
+  // Methods to be invoked in the SteppingManager
 
-    // Methods to be invoked in the SteppingManager
+  void NewStep() override;
+  void AtRestDoItInvoked() override;
+  void AlongStepDoItAllDone() override;
+  void PostStepDoItAllDone() override;
+  void AlongStepDoItOneByOne() override;
+  void PostStepDoItOneByOne() override;
+  void StepInfo() override;
+  void TrackingStarted() override;
+  void DPSLStarted() override;
+  void DPSLUserLimit() override;
+  void DPSLPostStep() override;
+  void DPSLAlongStep() override;
+  void VerboseTrack() override;
+  void VerboseParticleChange() override;
+  virtual void ShowStep() const;
 
-    virtual void NewStep();
-    virtual void AtRestDoItInvoked();
-    virtual void AlongStepDoItAllDone();
-    virtual void PostStepDoItAllDone();
-    virtual void AlongStepDoItOneByOne();
-    virtual void PostStepDoItOneByOne();
-    virtual void StepInfo();
-    virtual void TrackingStarted();
-    virtual void DPSLStarted();
-    virtual void DPSLUserLimit();
-    virtual void DPSLPostStep();
-    virtual void DPSLAlongStep();
-    virtual void VerboseTrack();
-    virtual void VerboseParticleChange();
-    virtual void ShowStep() const;
+ public:
+  static void UseBestUnit(G4int prec = 4);
+  static G4int BestUnitPrecision();
 
-  private:
-    static G4int useBestUnitPrecision;
-
-  public:
-    static void UseBestUnit(G4int prec = 4);
-    static G4int BestUnitPrecision();
-
+ private:
+  static G4int useBestUnitPrecision;
 };
 
 #endif

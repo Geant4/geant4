@@ -55,14 +55,14 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
   SteppingAction();
-  virtual ~SteppingAction();
+  ~SteppingAction() override = default;
 
-  virtual void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*) override;
+
+  SteppingAction & operator=(const SteppingAction &right) = delete;
+  SteppingAction(const SteppingAction&) = delete;
 
 private:
-
-  SteppingAction & operator=(const SteppingAction &right);
-  SteppingAction(const SteppingAction&);
 
   HistoManager* fHisto;
 };

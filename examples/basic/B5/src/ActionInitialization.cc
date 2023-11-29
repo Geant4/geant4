@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.cc
+/// \file B5/src/ActionInitialization.cc
 /// \brief Implementation of the B5::ActionInitialization class
 
 #include "ActionInitialization.hh"
@@ -37,19 +37,9 @@ namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ActionInitialization::BuildForMaster() const
 {
-  EventAction* eventAction = new EventAction;
+  auto eventAction = new EventAction;
   SetUserAction(new RunAction(eventAction));
 }
 

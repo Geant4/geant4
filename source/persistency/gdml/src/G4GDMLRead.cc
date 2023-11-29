@@ -38,6 +38,8 @@
 #include "G4SolidStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4EnvironmentUtils.hh"
+#include "G4Exception.hh"
 
 // --------------------------------------------------------------------
 G4GDMLRead::G4GDMLRead()
@@ -419,6 +421,18 @@ void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
 }
 
 // --------------------------------------------------------------------
+const G4String& G4GDMLRead::GetSchemaFile() const
+{
+  return schema;
+}
+
+// --------------------------------------------------------------------
+void G4GDMLRead::SetSchemaFile(const G4String& schemaFile)
+{
+  schema = schemaFile;
+}
+
+// --------------------------------------------------------------------
 void G4GDMLRead::Read(const G4String& fileName, G4bool validation,
                       G4bool isModule, G4bool strip)
 {
@@ -442,6 +456,29 @@ void G4GDMLRead::Read(const G4String& fileName, G4bool validation,
   if(validate)
   {
     parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+   
+    // Load alternative schema path if specified by user in
+    // 1. environment variable, or
+    // 2. `schema` data member, or
+    // Will fall back to default validation otherwise (`xsi:noNamespaceSchemaLocation` in input file)
+    if(auto schemaPath = G4GetEnv<G4String>("G4GDML_SCHEMA_FILE", schema); schemaPath != "")
+    {
+      // Pre-parse grammar to check it's present/valid
+      if(parser->loadGrammar(schemaPath.c_str(), xercesc::Grammar::SchemaGrammarType, true) != nullptr)
+      {
+        G4cout << "G4GDML: Loaded alternative schema URI: " << schemaPath << G4endl;
+      }
+      else 
+      {
+        G4Exception("G4GDMLRead::Read()",
+                    "InvalidGDMLSchemaFile",
+                    FatalException,
+                    G4String("Failed to load/parse schema file '" + schemaPath + "'").c_str());
+      }
+      parser->useCachedGrammarInParse(true);
+      // If the schema has been set manually then we want to ignore path set in input file, if any
+      parser->setExternalNoNamespaceSchemaLocation(schemaPath.c_str());
+    }
   }
   parser->setValidationSchemaFullChecking(validate);
   parser->setCreateEntityReferenceNodes(false);

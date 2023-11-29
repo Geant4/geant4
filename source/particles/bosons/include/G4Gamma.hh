@@ -55,7 +55,7 @@ class G4Gamma : public G4ParticleDefinition
    G4Gamma(){}
 
  public:
-   ~G4Gamma(){}
+   ~G4Gamma() override= default;
 
    static G4Gamma* Definition();
    static G4Gamma* GammaDefinition();

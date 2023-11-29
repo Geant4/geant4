@@ -941,7 +941,7 @@ public: /*operators*/\
     return m_vec[a_r + a_c * dimension()];\
   }\
 \
-  T& operator[](size_t a_index) { /*for inlib/sg/sf_vec*/\
+  T& operator[](size_t a_index) { /*for tools/sg/sf_vec*/\
     /*WARNING : no check on a_index.*/\
     return m_vec[a_index];\
   }\
@@ -982,7 +982,7 @@ protected:\
     T* tp = (T*)m_vec;T* ap = (T*)a_m;\
     for(unsigned int i=0;i<dim2();i++,tp++,ap++) *tp = *ap;\
    /*{for(unsigned int i=0;i<dim2();i++) m_vec[i] = a_m[i];}*/\
-   /* memcpy does not work with std::complex<> and mat<symbol,4> see inlib/tests/symbolic.cpp */\
+   /* memcpy does not work with std::complex<> and mat<symbol,4> see tools/tests/symbolic.cpp */\
     /*vec_copy(m_vec,a_m,dim2());*/\
   }\
 \

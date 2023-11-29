@@ -84,8 +84,6 @@ G4double G4DNAScavengerMaterial::GetNumberMoleculePerVolumeUnitForMaterialConf(
   auto iter = fScavengerTable.find(matConf);
   if(iter == fScavengerTable.end())
   {
-    // G4cout<<matConf->GetName()<<G4endl;
-    // throw std::runtime_error("this material is not existed");
     return 0;
   }
   else
@@ -218,7 +216,7 @@ void G4DNAScavengerMaterial::Reset()
     fCounterMap[containedConf][1 * picosecond] =
       floor(Avogadro * concentration * pConfinedBox->Volume());
   }
-  PrintInfo();
+  if(fVerbose != 0){PrintInfo();}
 }
 
 //------------------------------------------------------------------------------
@@ -255,28 +253,12 @@ void G4DNAScavengerMaterial::AddAMoleculeAtTime(
       counterMap_i->second[time] = newValue;
       if(newValue != (floor)(fScavengerTable[molecule]))  // protection
       {
-        assert(false);
+        G4String errMsg = "You are trying to add wrong molecule ";
+        G4Exception("AddAMoleculeAtTime", "",
+                    FatalErrorInArgument, errMsg);
+
       }
-      // G4cout<<" AddAMoleculeAtTime : "<<molecule->GetName()<< " :
-      // "<<newValue<<G4endl;
     }
-    //        else
-    //        {
-    //
-    //            G4ExceptionDescription errMsg;
-    //            errMsg << "Time of species "
-    //                   << molecule->GetName() << " is "
-    //                   << G4BestUnit(time, "Time") << " while "
-    //                   << " global time is "
-    //                   <<" end->first : "<<end->first
-    //                   //<<
-    //                   G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(),
-    //                   "Time")
-    //                   << G4endl;
-    //            G4Exception("G4DNAScavengerMaterial::AddAMoleculeAtTime",
-    //                        "TIME_DONT_MATCH",
-    //                        FatalException, errMsg);
-    //        }
   }
 }
 
@@ -286,7 +268,7 @@ void G4DNAScavengerMaterial::RemoveAMoleculeAtTime(
   MolType pMolecule, G4double time, const G4ThreeVector* /*position*/,
   int number)
 {
-  NbMoleculeAgainstTime& nbMolPerTime = fCounterMap[pMolecule];
+  NbMoleculeInTime& nbMolPerTime = fCounterMap[pMolecule];
 
   if(fVerbose != 0)
   {
@@ -356,13 +338,13 @@ void G4DNAScavengerMaterial::Dump()
 {
   auto pConfinedBox = fpChemistryInfo->GetChemistryBoundary();
   auto V            = pConfinedBox->Volume();
-  for(auto it : fCounterMap)
+  for(const auto& it : fCounterMap)
   {
     auto pReactant = it.first;
 
     G4cout << " --- > For " << pReactant->GetName() << G4endl;
 
-    for(auto it2 : it.second)
+    for(const auto& it2 : it.second)
     {
       G4cout << " " << G4BestUnit(it2.first, "Time") << "    "
              << it2.second / (Avogadro * V * 1.0e-6 /*mm3 to L*/) << G4endl;
@@ -370,7 +352,7 @@ void G4DNAScavengerMaterial::Dump()
   }
 }
 
-int G4DNAScavengerMaterial::GetNMoleculesAtTime(MolType molecule, G4double time)
+int64_t G4DNAScavengerMaterial::GetNMoleculesAtTime(MolType molecule, G4double time)
 {
   if(!fCounterAgainstTime)
   {
@@ -379,7 +361,16 @@ int G4DNAScavengerMaterial::GetNMoleculesAtTime(MolType molecule, G4double time)
   }
 
   G4bool sameTypeOfMolecule = SearchTimeMap(molecule);
-  return SearchUpperBoundTime(time, sameTypeOfMolecule);
+  auto output = SearchUpperBoundTime(time, sameTypeOfMolecule);
+  if(output < 0)
+  {
+    G4ExceptionDescription errMsg;
+    errMsg << "N molecules not valid < 0 : "<<
+                      molecule->GetName() <<" N : "<< output << G4endl;
+    G4Exception("G4DNAScavengerMaterial::GetNMoleculesAtTime", "",
+                FatalErrorInArgument, errMsg);
+  }
+  return output;
 }
 
 G4bool G4DNAScavengerMaterial::SearchTimeMap(MolType molecule)
@@ -416,7 +407,7 @@ G4bool G4DNAScavengerMaterial::SearchTimeMap(MolType molecule)
 
 //------------------------------------------------------------------------------
 
-int G4DNAScavengerMaterial::SearchUpperBoundTime(G4double time,
+int64_t G4DNAScavengerMaterial::SearchUpperBoundTime(G4double time,
                                                  G4bool sameTypeOfMolecule)
 {
   auto mol_it = fpLastSearch->fLastMoleculeSearched;
@@ -425,7 +416,7 @@ int G4DNAScavengerMaterial::SearchUpperBoundTime(G4double time,
     return 0;
   }
 
-  NbMoleculeAgainstTime& timeMap = mol_it->second;
+  NbMoleculeInTime& timeMap = mol_it->second;
   if(timeMap.empty())
   {
     return 0;

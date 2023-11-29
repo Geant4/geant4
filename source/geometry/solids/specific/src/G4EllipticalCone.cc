@@ -216,7 +216,7 @@ G4EllipticalCone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent
@@ -285,7 +285,7 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
   {
     norm = G4ThreeVector(p.x()*invXX, p.y()*invYY, hp - p.z());
     G4double mag = norm.mag();
-    if (mag == 0) return G4ThreeVector(0,0,1); // apex
+    if (mag == 0) return {0,0,1}; // apex
     norm *= (1/mag);
     ++nsurf;
   }
@@ -304,7 +304,7 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
     //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -335,7 +335,7 @@ G4EllipticalCone::ApproxSurfaceNormal(const G4ThreeVector& p) const
   if (ds > dz && std::abs(hp - p.z()) > halfCarTol)
     return G4ThreeVector(p.x()*invXX, p.y()*invYY, hp - p.z()).unit();
   else
-    return G4ThreeVector(0., 0.,(p.z() < 0) ? -1. : 1.);
+    return { 0., 0., (G4double)((p.z() < 0) ? -1. : 1.) };
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -738,7 +738,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         default:            // Should never reach this case ...
           DumpInfo();
           std::ostringstream message;
-          G4int oldprc = message.precision(16);
+          G4long oldprc = message.precision(16);
           message << "Undefined side for valid surface normal to solid."
                   << G4endl
                   << "Position:"  << G4endl
@@ -774,7 +774,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
   if( Inside(p) == kOutside )
   {
      std::ostringstream message;
-     G4int oldprc = message.precision(16);
+     G4long oldprc = message.precision(16);
      message << "Point p is outside (!?) of solid: " << GetName() << "\n"
              << "Position:\n"
              << "   p.x() = "  << p.x()/mm << " mm\n"
@@ -799,7 +799,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 
 G4GeometryType G4EllipticalCone::GetEntityType() const
 {
-  return G4String("G4EllipticalCone");
+  return {"G4EllipticalCone"};
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -817,7 +817,7 @@ G4VSolid* G4EllipticalCone::Clone() const
 
 std::ostream& G4EllipticalCone::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -965,9 +965,7 @@ G4VisExtent G4EllipticalCone::GetExtent() const
   //
   G4ThreeVector pmin,pmax;
   BoundingLimits(pmin,pmax);
-  return G4VisExtent(pmin.x(),pmax.x(),
-                     pmin.y(),pmax.y(),
-                     pmin.z(),pmax.z());
+  return { pmin.x(), pmax.x(), pmin.y(), pmax.y(), pmin.z(), pmax.z() };
 }
 
 G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const

@@ -54,11 +54,11 @@
 #ifndef G4MTRunManagerKernel_hh
 #define G4MTRunManagerKernel_hh 1
 
-#include <vector>
-
 #include "G4MTRunManager.hh"
 #include "G4RunManagerKernel.hh"
 #include "G4Threading.hh"
+
+#include <vector>
 
 class G4WorkerThread;
 class G4WorkerRunManager;
@@ -66,30 +66,27 @@ class G4WorkerRunManager;
 class G4MTRunManagerKernel : public G4RunManagerKernel
 {
   public:
-
     G4MTRunManagerKernel();
-    virtual ~G4MTRunManagerKernel();
+    ~G4MTRunManagerKernel() override;
 
+    // Used to start a worker thread. Virtual methods to be invoked
+    // from this method are defined in G4UserWorkerInitialization class.
     static void StartThread(G4WorkerThread* context);
-      // Used to start a worker thread. Virtual methods to be invoked
-      // from this method are defined in G4UserWorkerInitialization class.
 
     static G4WorkerThread* GetWorkerThread();
 
+    // Fill decay tables with particle definition pointers of decay products.
+    // This method has to be invoked by G4MTRunManager before the event loop
+    // starts on workers.
     void SetUpDecayChannels();
-      // Fill decay tables with particle definition pointers of decay products.
-      // This method has to be invoked by G4MTRunManager before the event loop
-      // starts on workers.
 
+    // This method should be invoked by G4MTRunManager.
     void BroadcastAbortRun(G4bool softAbort);
-      // This method should be invoked by G4MTRunManager.
 
   protected:
-
-    void SetupShadowProcess() const;
+    void SetupShadowProcess() const override;
 
   private:
-
     static G4ThreadLocal G4WorkerThread* wThreadContext;
 
     static std::vector<G4WorkerRunManager*>* workerRMvector;

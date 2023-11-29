@@ -74,8 +74,7 @@ G4EmBiasingManager::G4EmBiasingManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmBiasingManager::~G4EmBiasingManager()
-{}
+G4EmBiasingManager::~G4EmBiasingManager() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -87,13 +86,13 @@ void G4EmBiasingManager::Initialise(const G4ParticleDefinition& part,
   //         << " and " << procName << G4endl;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   if(0 < nForcedRegions) { idxForcedCouple.resize(numOfCouples, -1); }
   if(0 < nSecBiasedRegions) { idxSecBiasedCouple.resize(numOfCouples, -1); }
 
   // Deexcitation
-  for (size_t j=0; j<numOfCouples; ++j) {
+  for (G4int j=0; j<numOfCouples; ++j) {
     const G4MaterialCutsCouple* couple =
       theCoupleTable->GetMaterialCutsCouple(j);
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
@@ -299,7 +298,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.;
   if(0 <= index) {
-    size_t n = vd.size();
+    std::size_t n = vd.size();
 
     // the check cannot be applied per secondary particle
     // because weight correction is common, so the first
@@ -352,7 +351,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.;
   if(0 <= index) {
-    size_t n = vd.size();
+    std::size_t n = vd.size();
 
     // the check cannot be applied per secondary particle
     // because weight correction is common, so the first
@@ -399,7 +398,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
   G4int index = idxSecBiasedCouple[coupleIdx];
   G4double weight = 1.;
   if(0 <= index) {
-    size_t n = track.size();
+    std::size_t n = track.size();
 
     // the check cannot be applied per secondary particle
     // because weight correction is common, so the first
@@ -411,11 +410,11 @@ G4EmBiasingManager::ApplySecondaryBiasing(std::vector<G4Track*>& track,
         // Russian Roulette only
       if(1 == nsplit) { 
         weight = secBiasedWeight[index];
-        for(size_t k=0; k<n; ++k) {
+        for(std::size_t k=0; k<n; ++k) {
           if(G4UniformRand()*weight > 1.0) {
             const G4Track* t = track[k];
             delete t;
-            track[k] = 0;
+            track[k] = nullptr;
           }
         }
       }
@@ -431,20 +430,20 @@ G4EmBiasingManager::ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
                                   const G4Track& track,
                                   G4double& eloss, G4double safety)
 {
-  size_t n = vd.size();
+  std::size_t n = vd.size();
   if(!eIonisation) { 
     eIonisation = 
       G4LossTableManager::Instance()->GetEnergyLossProcess(theElectron);
   }
   if(eIonisation) { 
-    for(size_t k=0; k<n; ++k) {
+    for(std::size_t k=0; k<n; ++k) {
       const G4DynamicParticle* dp = vd[k];
       if(dp->GetDefinition() == theElectron) {
         G4double e = dp->GetKineticEnergy();
         if(eIonisation->GetRange(e, track.GetMaterialCutsCouple()) < safety) {
           eloss += e;
           delete dp;
-          vd[k] = 0;
+          vd[k] = nullptr;
         }
       }
     }
@@ -477,7 +476,7 @@ G4EmBiasingManager::ApplySplitting(std::vector<G4DynamicParticle*>& vd,
   // method is applied only if 1 secondary created PostStep 
   // in the case of many secondaries there is a contradiction
   G4double weight = 1.;
-  size_t n = vd.size();
+  std::size_t n = vd.size();
   G4double w = secBiasedWeight[index];
 
   if(1 != n || 1.0 <= w) { return weight; }
@@ -500,7 +499,7 @@ G4EmBiasingManager::ApplySplitting(std::vector<G4DynamicParticle*>& vd,
       tmpSecondaries.clear();
       currentModel->SampleSecondaries(&tmpSecondaries, couple, dynParticle, 
                                       tcut);
-      for (size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
+      for (std::size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
         vd.push_back(tmpSecondaries[kk]);
       }
     }
@@ -556,7 +555,7 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
                                         track.GetMaterialCutsCouple(),
                                         track.GetDynamicParticle(), tcut);
       }
-      for (size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
+      for (std::size_t kk=0; kk<tmpSecondaries.size(); ++kk) {
         if (tmpSecondaries[kk]->GetParticleDefinition() == theGamma) {
           if (CheckDirection(pos, tmpSecondaries[kk]->GetMomentumDirection())){
             vd.push_back(tmpSecondaries[kk]);
@@ -589,9 +588,9 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
             foundPrimaryParticle = true;
             primaryWeight = weight;
           } else {
-            G4DynamicParticle* dp = new G4DynamicParticle(theGamma,
-                                    partChange->GetProposedMomentumDirection(),
-                                    partChange->GetProposedKineticEnergy());
+            auto dp = new G4DynamicParticle(theGamma,
+                          partChange->GetProposedMomentumDirection(),
+                          partChange->GetProposedKineticEnergy());
             vd.push_back(dp);
             fDirectionalSplittingWeights.push_back(1.);
           }
@@ -602,9 +601,9 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
             primaryMomdir = momdir;
             primaryWeight = 1.;
           } else {
-            G4DynamicParticle* dp = new G4DynamicParticle(theGamma,
-                                    partChange->GetProposedMomentumDirection(),
-                                    partChange->GetProposedKineticEnergy());
+            auto dp = new G4DynamicParticle(theGamma,
+                          partChange->GetProposedMomentumDirection(),
+                          partChange->GetProposedKineticEnergy());
             vd.push_back(dp);
             fDirectionalSplittingWeights.push_back(1./weight);
           }
@@ -616,7 +615,7 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
     partChange->SetProposedKineticEnergy(primaryEnergy);
     partChange->ProposeMomentumDirection(primaryMomdir);
   } else {
-    for (size_t i = 0; i < vd.size(); ++i) {
+    for (std::size_t i = 0; i < vd.size(); ++i) {
       fDirectionalSplittingWeights.push_back(1.);
     }
   }
@@ -678,7 +677,7 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
                                         track.GetDynamicParticle(), tcut);
       }
       //for (auto sec : tmpSecondaries) {
-      for (size_t kk=0; kk < tmpSecondaries.size(); ++kk) {
+      for (std::size_t kk=0; kk < tmpSecondaries.size(); ++kk) {
         if (CheckDirection(pos, tmpSecondaries[kk]->GetMomentumDirection())) {
           vd.push_back(tmpSecondaries[kk]);
           fDirectionalSplittingWeights.push_back(1.);
@@ -692,7 +691,7 @@ G4EmBiasingManager::ApplyDirectionalSplitting(
       }
     }  // end of loop over nsplit
   } else { // no splitting was done; still need weights
-    for (size_t i = 0; i < vd.size(); ++i) {
+    for (std::size_t i = 0; i < vd.size(); ++i) {
       fDirectionalSplittingWeights.push_back(1.0);
     }
   }

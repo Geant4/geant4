@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -35,14 +34,10 @@
 //
 // ************************************************************
 
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef GammaRayTelPrimaryGeneratorAction_h
 #define GammaRayTelPrimaryGeneratorAction_h 1
 
+#include "G4SystemOfUnits.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
@@ -52,37 +47,51 @@ class GammaRayTelDetectorConstruction;
 class GammaRayTelPrimaryGeneratorMessenger;
 class G4GeneralParticleSource;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
+class GammaRayTelPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction {
 public:
+	explicit GammaRayTelPrimaryGeneratorAction();
 
-  GammaRayTelPrimaryGeneratorAction();    
-  ~GammaRayTelPrimaryGeneratorAction();
-  
-public:
-  void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val) { rndmFlag = val;}
-  void SetSourceType(G4int val) { nSourceType = val;}
-  void SetSpectrumType(G4int val) { nSpectrumType = val;}
-  void SetVertexRadius(G4double val) { dVertexRadius = val;}
-  void SetSourceGen(G4bool val) { sourceGun = val;}
-  
+	~GammaRayTelPrimaryGeneratorAction() override;
+
+	void GeneratePrimaries(G4Event *event) override;
+
+	void SetRndmFlag(G4String value) {
+		rndmFlag = value;
+	}
+
+	void SetSourceType(G4int value) {
+		sourceType = value;
+	}
+
+	void SetSpectrumType(G4int value) {
+		spectrumType = value;
+	}
+
+	void SetVertexRadius(G4double value) {
+		vertexRadius = value;
+	}
+
+	void SetSourceGen(G4bool value) {
+		sourceGun = value;
+	}
+
 private:
-  G4ParticleGun*                particleGun;
-  G4GeneralParticleSource*      particleSource;	  
-  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
-  GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
-  G4String                      rndmFlag;    //flag for a random impact point
-  G4int                         nSourceType;
-  G4double                      dVertexRadius;
-  G4int                         nSpectrumType;
-  G4bool                        sourceGun; // false for GeneralParticleSource
-  
+	G4ParticleGun *particleGun;
+
+	G4GeneralParticleSource *particleSource;
+
+	const GammaRayTelDetectorConstruction *detector;
+
+	GammaRayTelPrimaryGeneratorMessenger *gunMessenger;
+
+	G4String rndmFlag{"off"}; // flag for a random impact point
+
+	G4int sourceType{0};
+
+	G4double vertexRadius{15. * cm};
+
+	G4int spectrumType{0};
+
+	G4bool sourceGun{false}; // false for GeneralParticleSource
 };
-
 #endif
-
-
-

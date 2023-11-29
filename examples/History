@@ -1,20 +1,165 @@
--------------------------------------------------------------------
+# Example examples History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-30 Gabriele Cosmo (examples-V11-01-06)
+- Updated reference outputs according to reference tag geant4-11-01-ref-06.
+- Included tags: doxygen-V11-01-01, eFLASH_radiotherapy-V11-01-00,
+                 exhadr04-V11-01-00, exhadr06-V11-01-01, molecularDNA-V11-01-04,
+                 range-V11-01-01, spower-V11-01-01, exgflash-V11-01-01.
+
+## 2023-05-31 Gabriele Cosmo (examples-V11-01-05)
+- Updated reference outputs according to reference tag geant4-11-01-ref-05.
+- Included tags: testem2-V11-01-00, testem3-V11-01-02, testem5-V11-01-00,
+                 testem12-V11-01-00, testem13-V11-01-00, testem14-V11-01-00,
+                 testem18-V11-01-00, exHadronic-V11-01-00, exhadr01-V11-01-01,
+                 exhadrParticleFluenceCalo-V11-01-00, exdna-V11-01-01,
+                 exhadrParticleFluenceConcentricSpheres-V11-01-00,
+                 exhadrParticleFluenceLayer-V11-01-00, UHDR-V11-01-00,
+                 exhadrParticleFluenceSphere-V11-01-00, dnadamage2-V11-01-00,
+                 range-V11-01-00, spower-V11-01-00.
+
+## 2023-04-30 Gabriele Cosmo (examples-V11-01-04)
+- Updated reference outputs according to reference tag geant4-11-01-ref-04.
+- Included tags: ICRP145Phantoms-V11-01-02, fastAerosol-V11-01-00,
+                 xraysiliconporeoptics-V11-01-00, testem3-V11-01-01,
+                 testem4-V11-01-00, testem7-V11-01-00, testem8-V11-01-00,
+                 testem11-V11-01-01, p8decayer-V11-01-00, exhadr03-V11-01-01,
+                 molecularDNA-V11-01-03, exgflash-V11-01-00, G01-V11-01-00.
+
+## 2023-03-31 Gabriele Cosmo (examples-V11-01-03)
+- Updated reference outputs according to reference tag geant4-11-01-ref-03.
+- Included tags: CRP110Phantoms-V11-01-01, ICRP145Phantoms-V11-01-01,
+                 stim_pixe_tomography-V11-01-00, xraytesdetector-V11-01-01,
+                 testem0-V11-01-00, testem1-V11-01-00, exhadr03-V11-01-00,
+                 exicsd-V11-01-01, exam-ext-vis-persp-V11-01-01.
+
+## 2023-02-28 Gabriele Cosmo (examples-V11-01-02)
+- Updated reference outputs according to reference tag geant4-11-01-ref-02.
+- Included tags: exampleB4-V11-01-00, exhadr10-V11-01-01, molecularDNA-V11-01-02,
+                 exam-ext-vis-persp-V11-01-00.
+
+## 2023-01-31 Gabriele Cosmo (examples-V11-01-01)
+- Updated reference outputs according to reference tag geant4-11-01-ref-01.
+- Included tags: ICRP110Phantoms-V11-01-00, ReverseMC01-V11-01-00,
+                 electromagnetic-V11-01-00, testem3-V11-01-00,
+                 testem11-V11-01-00, testem15-V11-01-00, exgps-V11-01-00,
+                 exExoticPhysics-V11-01-00, VecGeomNavigation-V11-01-00,
+                 exhadr01-V11-01-00, exhadr05-V11-01-00, exhadr06-V11-01-00,
+                 exhadr07-V11-01-00, exMedical-V11-01-00, exicsd-V11-01-00,
+                 molecularDNA-V11-01-01, exam-ext-vis-standalone-V11-01-00,
+                 MPI-V11-01-00.
+
+## 2022-10-31 Gabriele Cosmo (examples-V11-01-00)
+- Updated reference outputs according to reference tag geant4-11-01-ref-00.
+- Included tags: doxygen-V11-00-03, CaTS-V11-00-02, eRosita-V11-00-03,
+                 eFLASH_radiotherapy-V11-00-00, radioprotection-V11-00-02,
+                 gammaraytel-V11-00-01, exbasic-V11-00-02, exampleB3-V11-00-02,
+                 exampleB4-V11-00-02, analysisExample-V11-00-04,
+                 excommon-V11-00-02, testem1-V11-00-04, exerrprop-V11-00-02,
+                 p6decayer-V11-00-02, channelingExample-V11-00-01,
+                 ExUCN-V11-00-02, fieldex01-V11-00-03, fieldex04-V11-00-03,
+                 fieldex05-V11-00-01, g3tog4Tests-V11-00-02, exhadr01-V11-00-01,
+                 VecGeomNavigation-V11-00-03, exhadr03-V11-00-02,
+                 exhadr09-V11-00-01, dnaphysics-V11-00-03, exicsd-V11-00-01,
+                 jetcounter-V11-00-01, molecularDNA-V11-00-11, MPI-V11-00-03,
+                 scavenger-V11-00-05, OpNovice-V11-00-02, OpNovice2-V11-00-06
+                 ThreadsafeScorers-V11-00-01, exam-ext-vis-movies-V11-00-01,
+                 exgflash-V11-00-01, expar02-V11-00-01, expar04-V11-00-05,
+                 rdecay01-V11-00-05, exam-ext-vis-standalone-V11-00-01.
+
+## 2022-10-31 Gabriele Cosmo (examples-V11-00-09)
+- Updated reference outputs according to reference tag geant4-11-00-ref-09.
+- Included tags: doxygen-V11-00-02, ccal-V11-00-02, ICRP145Phantoms-V11-00-03,
+                 medical_linac-V11-00-03, exampleB1-V11-00-01, DICOM-V11-00-03,
+                 analysisExample-V11-00-03, AnaEx03-V11-00-00, exdna-V11-00-02,
+                 testem1-V11-00-03, testem7-V11-00-01, testem8-V11-00-01,,
+                 p6decayer-V11-00-01, p8decayer-V11-00-04, monopole-V11-00-03,
+                 fieldex01-V11-00-01, fieldex04-V11-00-02, exHadronic-V11-00-02,
+                 exExtHadFissFrag-V11-00-01, exhadrParticleFluence-V11-00-01,
+                 exhadr02-V11-00-01, clustering-V11-00-01, jetcounter-V11-00-00,
+                 neuron-V11-00-01, pdb4dna-V11-00-01, OpNovice2-V11-00-05,
+                 expar04-V11-00-03, rdecay01-V11-00-04, exampleRE02-V11-00-01.
+
+## 2022-09-30 Gabriele Cosmo (examples-V11-00-08)
+- Updated reference outputs according to reference tag geant4-11-00-ref-08.
+- Added .clang-format for examples, adapting toolkit file for examples
+  guidelines (B.Morgan).
+- Includes tags: amsEcal-V11-00-02, doiPET-V11-00-01, fastAerosol-V11-00-01,
+                 ICRP145Phantoms-V11-00-02, iort_therapy-V11-00-02,
+                 lar_calorimeter-V11-00-01, medical_linac-V11-00-01,
+                 nanobeam-V11-00-01, purgmag-V11-00-01, STCyclotron-V11-00-02,
+                 DMX-V11-00-01, XRayFluo-V11-00-02, exbiasing-V11-00-01,
+                 exErrorpropagation-V11-00-00,exerrprop-V11-00-01,
+                 exhadr08-V11-00-02, exhadrParticleFluenceCalo-V11-00-02,
+                 exhadrParticleFluenceConcentricSpheres-V11-00-02,
+                 exhadrParticleFluenceLayer-V11-00-02, chem4-V11-00-05,
+                 exhadrParticleFluenceSphere-V11-00-02, chem5-V11-00-02,
+                 chem6-V11-00-07, molecularDNA-V11-00-09, scavenger-V11-00-03,
+                 LXe-V11-00-02, expar03-V11-00-01, exampleRE07-V11-00-01.
+
+## 2022-08-31 Gabriele Cosmo (examples-V11-00-07)
+- Updated reference outputs according to reference tag geant4-11-00-ref-07.
+- Includes tags: ICRP145Phantoms-V11-00-00, human_phantom-V11-00-02,
+                 exbasic-V11-00-01, testem1-V11-00-01, testem5-V11-00-02,
+                 testem16-V11-00-01, testem17-V11-00-01, p8decayer-V11-00-02,
+                 fieldex04-V11-00-01, exhadrParticleFluenceCalo-V11-00-01,
+                 exhadrParticleFluenceConcentricSpheres-V11-00-01,
+                 exhadrParticleFluenceLayer-V11-00-01, molecularDNA-V11-00-07,
+                 exhadrParticleFluenceSphere-V11-00-01, LXe-V11-00-01,
+                 WLS-V11-00-01, rdecay01-V11-00-02.
+
+## 2022-06-30 Gabriele Cosmo (examples-V11-00-06)
+- Updated reference outputs according to reference tag geant4-11-00-ref-06.
+- Includes tags: brachy-V11-00-01, ICRP110Phantoms-V11-00-01,
+                 iort_therapy-V11-00-01, STCyclotron-V11-00-01,
+                 exHadronic-V11-00-01, exhadrParticleFluence-V11-00-00,
+                 chem6-V11-00-06, microyz-V11-00-02, molecularDNA-V11-00-05.
+
+## 2022-05-31 Gabriele Cosmo (examples-V11-00-05)
+- Updated reference outputs according to reference tag geant4-11-00-ref-05.
+- Includes tags: ChargeExchangeMC-V11-00-01, eRosita-V11-00-02,
+                 exampleB2-V11-00-01, testem9-V11-00-01, HepMCEx01-V11-00-01,
+                 chem4-V11-00-04, chem5-V11-00-01, chem6-V11-00-05,
+                 microyz-V11-00-01, molecularDNA-V11-00-04, scavenger-V11-00-01,
+                 OpNovice2-V11-00-02, MPI-V11-00-02.
+
+## 2022-04-30 Gabriele Cosmo (examples-V11-00-04)
+- Updated reference outputs according to reference tag geant4-11-00-ref-04.
+- Includes tags: testem5-V11-00-01, monopole-V11-00-02, rdecay01-V11-00-01,
+                 VecGeomNavigation-V11-00-02, NeutronSource-V11-00-01,
+                 exhadr03-V11-00-01, exhadr05-V11-00-02, exhadr06-V11-00-01,
+                 exhadr07-V11-00-01, molecularDNA-V11-00-03, OpNovice2-V11-00-01,
+                 activation-V11-00-01.
+
+## 2022-03-31 Gabriele Cosmo (examples-V11-00-03)
+- Updated reference outputs according to reference tag geant4-11-00-ref-03.
+- Includes tags: CaTS-V11-00-01, microbeam-V11-00-01, exampleB3-V11-00-01,
+                 VecGeomNavigation-V11-00-01, dnaphysics-V11-00-01,
+                 chem4-V11-00-03, chem6-V11-00-04, molecularDNA-V11-00-02,
+                 spower-V11-00-01, MPI-V11-00-01, expar04-V11-00-02.
+
+## 2022-02-28 Gabriele Cosmo (examples-V11-00-02)
+- Updated reference outputs according to reference tag geant4-11-00-ref-02.
+- Includes tags: air_shower-V11-00-01, ccal-V11-00-01, eRosita-V11-00-01,
+                 XRayFluo-V11-00-01, testem6-V11-00-01, testem15-V11-00-02,
+                 exdna-V11-00-01, chem6-V11-00-01, molecularDNA-V11-00-01.
+
+## 2022-01-31 Gabriele Cosmo (examples-V11-00-01)
+- Updated reference outputs according to reference tag geant4-11-00-ref-01.
+- Includes tags: amsEcal-V11-00-01, hadrontherapy-V11-00-01, testem3-V11-00-01,
+                 testem15-V11-00-01, particleGunExample-V11-00-01,
+                 monopole-V11-00-01, exhadr05-V11-00-01, fano-V11-00-01,
+                 fano2-V11-00-01, OpNovice-V11-00-01, expar04-V11-00-01.
+- Changed to new Markdown History format (B.Morgan).
+
+---
+
+# History entries prior to 11.0
 
 6th December 2021  Gabriele Cosmo (examples-V11-00-00)
 - Updated reference outputs according to reference tag geant4-11-00-ref-00.

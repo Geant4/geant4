@@ -29,6 +29,9 @@
 	 
   The last command triggers BuildPhysicsTable() and executes the program.
   
+  Macros provided in this example:
+  - muon.mac: muon incident
+  - ion.mac: generic ion incident  
    
                             DirectAccess
                             ------------

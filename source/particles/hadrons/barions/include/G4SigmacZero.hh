@@ -51,7 +51,7 @@ class G4SigmacZero : public G4ParticleDefinition
  private:
    static G4SigmacZero* theInstance;
    G4SigmacZero(){}
-   ~G4SigmacZero(){}
+   ~G4SigmacZero() override= default;
 
  public:
    static G4SigmacZero* Definition();

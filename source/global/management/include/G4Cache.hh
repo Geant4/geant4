@@ -88,7 +88,7 @@ template <class VALTYPE>
 class G4Cache
 {
  public:
-  typedef VALTYPE value_type;
+  using value_type = VALTYPE;
   // The stored type
 
   G4Cache();
@@ -137,11 +137,11 @@ class G4VectorCache : public G4Cache<std::vector<VALTYPE>>
  public:
   // Some useful definitions
   //
-  typedef VALTYPE value_type;
-  typedef typename std::vector<value_type> vector_type;
-  typedef typename vector_type::size_type size_type;
-  typedef typename vector_type::iterator iterator;
-  typedef typename vector_type::const_iterator const_iterator;
+  using value_type = VALTYPE;
+  using vector_type = typename std::vector<value_type>;
+  using size_type = typename vector_type::size_type;
+  using iterator = typename vector_type::iterator;
+  using const_iterator = typename vector_type::const_iterator;
 
   G4VectorCache();
   // Default constructor
@@ -177,12 +177,12 @@ class G4MapCache : public G4Cache<std::map<KEYTYPE, VALTYPE>>
  public:
   // Some useful definitions
   //
-  typedef KEYTYPE key_type;
-  typedef VALTYPE value_type;
-  typedef typename std::map<key_type, value_type> map_type;
-  typedef typename map_type::size_type size_type;
-  typedef typename map_type::iterator iterator;
-  typedef typename map_type::const_iterator const_iterator;
+  using key_type = KEYTYPE;
+  using value_type = VALTYPE;
+  using map_type = typename std::map<key_type, value_type>;
+  using size_type = typename map_type::size_type;
+  using iterator = typename map_type::iterator;
+  using const_iterator = typename map_type::const_iterator;
 
   virtual ~G4MapCache();
   // Default destructor
@@ -339,8 +339,7 @@ std::atomic<unsigned int> G4Cache<V>::dstrctr(0);
 //========== Implementation: G4VectorCache<V> ===========================
 
 template <class V>
-G4VectorCache<V>::G4VectorCache()
-{}
+G4VectorCache<V>::G4VectorCache() = default;
 
 template <class V>
 G4VectorCache<V>::~G4VectorCache()

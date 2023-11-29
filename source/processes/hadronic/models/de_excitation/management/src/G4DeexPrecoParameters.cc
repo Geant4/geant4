@@ -33,17 +33,17 @@
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4DeexParametersMessenger.hh"
 #include "G4HadronicParameters.hh"
-
-#ifdef G4MULTITHREADED
-G4Mutex G4DeexPrecoParameters::deexPrecoMutex = G4MUTEX_INITIALIZER;
-#endif
+#include "G4Threading.hh"
 
 G4DeexPrecoParameters::G4DeexPrecoParameters() 
 {
-  SetDefaults();
+  fStateManager = G4StateManager::GetStateManager();
+  theMessenger = new G4DeexParametersMessenger(this);
+  Initialise();
 }
 
 G4DeexPrecoParameters::~G4DeexPrecoParameters() 
@@ -53,12 +53,11 @@ G4DeexPrecoParameters::~G4DeexPrecoParameters()
 
 void G4DeexPrecoParameters::SetDefaults()
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
-#endif
-  fStateManager = G4StateManager::GetStateManager();
-  theMessenger = new G4DeexParametersMessenger(this);
+  if(!IsLocked()) { Initialise(); }
+}
 
+void G4DeexPrecoParameters::Initialise()
+{
   fLevelDensity = 0.075/CLHEP::MeV;
   fR0 = 1.5*CLHEP::fermi;
   fTransitionsR0 = 0.6*CLHEP::fermi;
@@ -66,33 +65,9 @@ void G4DeexPrecoParameters::SetDefaults()
   fFermiEnergy = 35.0*CLHEP::MeV; 
   fPrecoLowEnergy = 0.1*CLHEP::MeV;
   fPrecoHighEnergy = 30*CLHEP::MeV;
-  fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
   fMaxLifeTime = 1*CLHEP::nanosecond;
   fMinExPerNucleounForMF = 200*CLHEP::GeV;
-  fMinZForPreco = 3;
-  fMinAForPreco = 5;
-  fPrecoType = 3;
-  fDeexType = 3;
-  fTwoJMAX = 10;
-  fVerbose = 1;
-  fNeverGoBack = false;
-  fUseSoftCutoff = false;
-  fUseCEM = true;
-  fUseGNASH = false;
-  fUseHETC = false;
-  fUseAngularGen = false;
-  fPrecoDummy = false;
-  fCorrelatedGamma = false;
-  fStoreAllLevels = false;
-  fInternalConversion = true;
-  fLD = true;
-  fFD = false;
-  fIsomerFlag = true;
-  fDeexChannelType = fCombined;
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
-#endif
 }
 
 void G4DeexPrecoParameters::SetLevelDensity(G4double val)
@@ -291,39 +266,48 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 {
   static const G4String namm[5] = {"Evaporation","GEM","Evaporation+GEM","GEMVI","Dummy"};
   static const G4int nmm[5] = {8, 68, 68, 31, 0};
-  size_t idx = (size_t)fDeexChannelType;
+  G4int idx = fDeexChannelType;
 
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os << "=======================================================================" << "\n";
-  os << "======       Pre-compound/De-excitation Physics Parameters     ========" << "\n";
+  os << "======       Geant4 Native Pre-compound Model Parameters       ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Type of pre-compound inverse x-section              " << fPrecoType << "\n";
   os << "Pre-compound model active                           " << (!fPrecoDummy) << "\n";
-  os << "Pre-compound excitation low energy (MeV)            " 
-     << fPrecoLowEnergy/CLHEP::MeV << "\n";
-  os << "Pre-compound excitation high energy (MeV)           " 
-     << fPrecoHighEnergy/CLHEP::MeV << "\n";
+  os << "Pre-compound excitation low energy                  " 
+     << G4BestUnit(fPrecoLowEnergy, "Energy") << "\n";
+  os << "Pre-compound excitation high energy                 " 
+     << G4BestUnit(fPrecoHighEnergy, "Energy") << "\n";
+  os << "Angular generator for pre-compound model            " << fUseAngularGen << "\n";
+  os << "Use NeverGoBack option for pre-compound model       " << fNeverGoBack << "\n";
+  os << "Use SoftCutOff option for pre-compound model        " << fUseSoftCutoff << "\n";
+  os << "Use CEM transitions for pre-compound model          " << fUseCEM << "\n";
+  os << "Use GNASH transitions for pre-compound model        " << fUseGNASH << "\n";
+  os << "Use HETC submodel for pre-compound model            " << fUseHETC << "\n";
+  os << "=======================================================================" << "\n";
+  os << "======       Nuclear De-excitation Module Parameters           ========" << "\n";
+  os << "=======================================================================" << "\n";
   os << "Type of de-excitation inverse x-section             " << fDeexType << "\n";
   os << "Type of de-excitation factory                       " << namm[idx] << "\n";
   os << "Number of de-excitation channels                    " << nmm[idx] << "\n";
-  os << "Min excitation energy (keV)                         " 
-     << fMinExcitation/CLHEP::keV << "\n";
-  os << "Min energy per nucleon for multifragmentation (MeV) " 
-     << fMinExPerNucleounForMF/CLHEP::MeV << "\n";
-  os << "Limit excitation energy for Fermi BreakUp (MeV)     " 
-     << fFBUEnergyLimit/CLHEP::MeV << "\n";
+  os << "Min excitation energy                               " 
+     << G4BestUnit(fMinExcitation, "Energy") << "\n";
+  os << "Min energy per nucleon for multifragmentation       " 
+     << G4BestUnit(fMinExPerNucleounForMF, "Energy") << "\n";
+  os << "Limit excitation energy for Fermi BreakUp           " 
+     << G4BestUnit(fFBUEnergyLimit, "Energy") << "\n";
   os << "Level density (1/MeV)                               " 
      << fLevelDensity*CLHEP::MeV << "\n";
   os << "Use simple level density model                      " << fLD << "\n";
   os << "Use discrete excitation energy of the residual      " << fFD << "\n";
-  os << "Time limit for long lived isomeres (ns)             " 
-     << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Time limit for long lived isomeres                  " 
+     << G4BestUnit(fMaxLifeTime, "Time") << "\n";
   os << "Isomer production flag                              " << fIsomerFlag << "\n";
   os << "Internal e- conversion flag                         " 
      << fInternalConversion << "\n";
   os << "Store e- internal conversion data                   " << fStoreAllLevels << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
-  os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";
+  os << "Max 2J for sampling of angular correlations         " << fTwoJMAX << "\n";  
   os << "=======================================================================" << G4endl;
   os.precision(prec);
   return os;
@@ -335,9 +319,12 @@ G4int G4DeexPrecoParameters::GetVerbose() const
   return (verb > 0) ? std::max(fVerbose, verb) : verb;
 }
 
-void G4DeexPrecoParameters::Dump() const
+void G4DeexPrecoParameters::Dump()
 {
-  if ( G4Threading::IsMasterThread() && GetVerbose() > 0 ) { StreamInfo(G4cout); }
+  if(!fIsPrinted && GetVerbose() > 0 && G4Threading::IsMasterThread()) {
+    StreamInfo(G4cout);
+    fIsPrinted = true;
+  }
 }
 
 std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)

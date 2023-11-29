@@ -44,7 +44,7 @@ class G4XrayRayleighModel : public G4VEmModel
 
 public:
 
-  explicit G4XrayRayleighModel(const G4ParticleDefinition* p = 0, 
+  explicit G4XrayRayleighModel(const G4ParticleDefinition* p = nullptr,
 			       const G4String& nam = "XrayRayleigh");
 
   ~G4XrayRayleighModel() override;

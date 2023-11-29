@@ -43,19 +43,17 @@
 
 class G4HelixSimpleRunge : public G4MagHelicalStepper
 {
-
-  public:  // with description
+  public:
 
     G4HelixSimpleRunge(G4Mag_EqRhs* EqRhs);
-
-    ~G4HelixSimpleRunge();
+   ~G4HelixSimpleRunge() override;
   
     void  DumbStepper( const G4double y[],
                              G4ThreeVector Bfld,
                              G4double      h,
-                             G4double      yout[] );
+                             G4double      yout[] ) override;
 
-    inline G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const override { return 2; }
 };
 
 #endif

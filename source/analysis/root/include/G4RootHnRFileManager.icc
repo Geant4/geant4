@@ -27,6 +27,7 @@
 // Author: Ivana Hrivnacova, 26/08/2021 (ivana@ipno.in2p3.fr)
 
 #include "G4AnalysisUtilities.hh"
+#include "G4RootRFileDef.hh"
 
 #include "tools/rroot/file"
 #include "tools/rroot/rall"
@@ -35,8 +36,7 @@
 //_____________________________________________________________________________
 template <typename HT>
 inline
-std::tuple<tools::rroot::buffer*, tools::rroot::TDirectory*>
-G4RootHnRFileManager<HT>::GetBuffer(
+tools::rroot::buffer* G4RootHnRFileManager<HT>::GetBuffer(
   const G4String& fileName, const G4String& dirName, const G4String& objectName)
 {
 // Get buffer for reading histogram or profile specified by objectNmae
@@ -47,53 +47,62 @@ G4RootHnRFileManager<HT>::GetBuffer(
   G4bool isPerThread = false;
 
   // Get or open a file
-  auto rfile = fRFileManager->GetRFile(fileName, isPerThread);
-  if ( ! rfile ) {
+  auto rfileTuple = fRFileManager->GetRFile(fileName, isPerThread);
+  if (rfileTuple == nullptr) {
     if ( ! fRFileManager->OpenRFile(fileName, isPerThread) ) {
-      return std::tuple(nullptr, nullptr);
+      return nullptr;
     }
-    rfile = fRFileManager->GetRFile(fileName, isPerThread);
+    rfileTuple = fRFileManager->GetRFile(fileName, isPerThread);
+  }
+  auto rfile = std::get<0>(*rfileTuple);
+
+  // Get or open a directory if dirName is defined
+  tools::rroot::TDirectory* histoDirectory = nullptr;
+  if ( histoDirectory == nullptr ) {
+    // Retrieve directory only once as analysis manager supports only
+    // 1 histo directory par file)
+    if ( ! dirName.empty() ) {
+      histoDirectory = tools::rroot::find_dir(rfile->dir(), dirName);
+      if ( histoDirectory != nullptr ) {
+        std::get<1>(*rfileTuple) = histoDirectory;
+      }
+      else {
+        G4Analysis::Warn(
+          "Directory " + dirName + " not found in file " + fileName + ".",
+          fkClass, "ReadNtupleImpl");
+        return nullptr;
+      }
+    }
   }
 
   // Get key
   tools::rroot::key* key = nullptr;
-  tools::rroot::TDirectory* newDir = nullptr;
-  if ( ! dirName.empty() ) {
-    newDir = tools::rroot::find_dir(rfile->dir(), dirName);
-    if ( newDir ) {
-      key = newDir->find_key(objectName);
-    }
-    else {
-      G4Analysis::Warn(
-        "Directory " + dirName + " not found in file " + fileName + ".",
-        fkClass, "GetBuffer");
-      return std::tuple(nullptr, nullptr);
-    }
+  if ( histoDirectory != nullptr ) {
+    key = histoDirectory->find_key(objectName);
   }
   else {
     key = rfile->dir().find_key(objectName);
   }
-
-  if ( ! key ) {
+  if (key == nullptr) {
     G4Analysis::Warn(
       "Key " + objectName + " for Histogram/Profile not found in file " +
       fileName + ", directory " + dirName, fkClass, "GetBuffer");
-    return std::tuple(nullptr, newDir);
+    return nullptr;
   }
 
   unsigned int size;
   char* charBuffer = key->get_object_buffer(*rfile, size);
 
-  if ( ! charBuffer ) {
+  if (charBuffer == nullptr) {
     G4Analysis::Warn(
       "Cannot get " + objectName + " in file " + fileName,
       fkClass, "GetBuffer");
-    return std::tuple(nullptr, newDir);
+    return nullptr;
   }
 
   auto verbose = false;
-  return std::tuple(new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer,
-                                             key->key_length(), verbose), newDir);
+  return new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer,
+                                  key->key_length(), verbose);
 }
 
 //_____________________________________________________________________________
@@ -148,15 +157,13 @@ HT* G4RootHnRFileManager<HT>::Read(
   const G4String& htName, const G4String& fileName, const G4String& dirName,
   G4bool /*isUserFileName*/)
 {
-  auto [buffer, newDir] = GetBuffer(fileName, dirName, htName);
+  auto buffer = GetBuffer(fileName, dirName, htName);
   if ( ! buffer ) {
-    delete newDir;
     return nullptr;
   }
 
   auto ht = ReadT(buffer);
   delete buffer;
-  delete newDir;
 
   if ( ! ht ) {
     G4Analysis::Warn(

@@ -27,6 +27,7 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4GenericAnalysisManager.hh"
+#include "G4GenericAnalysisMessenger.hh"
 #include "G4GenericFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
@@ -70,6 +71,8 @@ G4bool G4GenericAnalysisManager::IsInstance()
 G4GenericAnalysisManager::G4GenericAnalysisManager()
  : G4ToolsAnalysisManager("")
 {
+  fMessenger = std::make_unique<G4GenericAnalysisMessenger>(this);
+
   if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
 
   // File manager
@@ -112,6 +115,7 @@ void G4GenericAnalysisManager::CreateNtupleFileManager(const G4String& fileName)
 
   fNtupleFileManager = fFileManager->CreateNtupleFileManager(output);
   if (fNtupleFileManager) {
+    SetNtupleFileManager(fNtupleFileManager);
     fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 
     if ( fNtupleFileManager->IsNtupleMergingSupported() ) {
@@ -142,10 +146,10 @@ G4bool G4GenericAnalysisManager::OpenFileImpl(const G4String& fileName)
 
   // Add file name extension, if missing
   auto fullFileName = fileName;
-  if ( ! GetExtension(fileName).size() ) {
+  if (GetExtension(fileName).size() == 0u) {
     auto defaultFileType = fFileManager->GetDefaultFileType();
     // G4cout << "File type is not defined, using default: " << defaultFileType << G4endl;
-    if ( ! defaultFileType.size() ) {
+    if (defaultFileType.size() == 0u) {
       G4Exception("G4GenericAnalysisManager::OpenFileImpl", "Analysis_F001",
         FatalException,
         G4String("Cannot open file \"" + fileName + "\".\n"
@@ -161,110 +165,16 @@ G4bool G4GenericAnalysisManager::OpenFileImpl(const G4String& fileName)
     CreateNtupleFileManager(fullFileName);
   }
 
-  // Create ntuple manager
-  // and set it to base class which takes then its ownership
-  if (fNtupleFileManager) {
-    SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
-  }
-
   auto result = true;
-
-  // Open file for histograms/profiles
-  result &= fFileManager->OpenFile(fullFileName);
-
-  // Open ntuple file(s) and create ntuples from bookings
   if (fNtupleFileManager) {
-    result &= fNtupleFileManager->ActionAtOpenFile(fullFileName);
-  }
-
-  Message(kVL3, "open", "file", fileName);
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4GenericAnalysisManager::WriteImpl()
-{
-  Message(kVL4, "write", "files");
-
-  auto result = true;
-  if ( G4Threading::IsWorkerThread() )  {
-    result &= G4ToolsAnalysisManager::Merge();
+    result &= G4ToolsAnalysisManager::OpenFileImpl(fullFileName);
   }
   else {
-    // Open all files registered with objects
-    fFileManager->OpenFiles();
-
-    // Write all histograms/profile on master
-    result &= G4ToolsAnalysisManager::WriteImpl();
+    // no ntuples (check if this mode is supported)
+    result &= fFileManager->OpenFile(fullFileName);
   }
 
-  // Ntuples
-  if (fNtupleFileManager) {
-    result &= fNtupleFileManager->ActionAtWrite();
-  }
-
-  // File
-  result &= fFileManager->WriteFiles();
-
-  // Write ASCII if activated
-  if ( IsAscii() ) {
-    result &= WriteAscii(fFileManager->GetFileName());
-  }
-
-  Message(kVL3, "write", "files", "", result);
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4GenericAnalysisManager::CloseFileImpl(G4bool reset)
-{
-  Message(kVL4, "close", "files");
-
-  auto result = true;
-  if (fNtupleFileManager) {
-    result &= fNtupleFileManager->ActionAtCloseFile(reset);
-  }
-
-  // close file
-  if ( ! fFileManager->CloseFiles() ) {
-    Warn("Closing files failed", fkClass, "CloseFileImpl");
-    result = false;
-  }
-
-  // delete empty files
-  if ( ! fFileManager->DeleteEmptyFiles() ) {
-    Warn("Deleting empty files failed", fkClass, "CloseFileImpl");
-    result = false;
-  }
-
-  if ( reset ) {
-    if ( ! Reset() ) {
-      Warn("Resetting data failed", fkClass, "CloseFileImpl");
-      result = false;
-    }
-  }
-
-  Message(kVL3, "close", "files", "", result);
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4GenericAnalysisManager::ResetImpl()
-{
-// Reset histograms and ntuple
-
-  Message(kVL4, "reset", "");
-
-  auto result = true;
-  result &= G4ToolsAnalysisManager::ResetImpl();
-  if ( fNtupleFileManager != nullptr ) {
-    result &= fNtupleFileManager->Reset();
-  }
-
-  Message(kVL3, "reset", "", "", result);
+  Message(kVL3, "open", "file", fileName, result);
 
   return result;
 }
@@ -279,7 +189,7 @@ G4bool G4GenericAnalysisManager::WriteH1(G4int id, const G4String& fileName)
   if ( G4Threading::IsWorkerThread() ) return false;
 
   auto h1d = GetH1(id, false);
-  if ( ! h1d ) {
+  if (h1d == nullptr) {
     WriteHnWarning("H1", id, fkClass, "WriteH1");
     return false;
   }
@@ -298,7 +208,7 @@ G4bool G4GenericAnalysisManager::WriteH2(G4int id, const G4String& fileName)
   if ( G4Threading::IsWorkerThread() ) return false;
 
   auto h2d = GetH2(id, false);
-  if ( ! h2d ) {
+  if (h2d == nullptr) {
     WriteHnWarning("H2", id, fkClass, "WriteH2");
     return false;
   }
@@ -316,7 +226,7 @@ G4bool G4GenericAnalysisManager::WriteH3(G4int id, const G4String& fileName)
   if ( G4Threading::IsWorkerThread() ) return false;
 
   auto h3d = GetH3(id, false);
-  if ( ! h3d ) {
+  if (h3d == nullptr) {
     WriteHnWarning("H3", id, fkClass, "WriteH3");
     return false;
   }
@@ -335,7 +245,7 @@ G4bool G4GenericAnalysisManager::WriteP1(G4int id, const G4String& fileName)
   if ( G4Threading::IsWorkerThread() ) return false;
 
   auto p1d = GetP1(id, false);
-  if ( ! p1d ) {
+  if (p1d == nullptr) {
     WriteHnWarning("P1", id, fkClass, "WriteP1");
     return false;
   }
@@ -353,7 +263,7 @@ G4bool G4GenericAnalysisManager::WriteP2(G4int id, const G4String& fileName)
   if ( G4Threading::IsWorkerThread() ) return false;
 
   auto p2d = GetP2(id, false);
-  if ( ! p2d ) {
+  if (p2d == nullptr) {
     WriteHnWarning("P2", id, fkClass, "WriteP2");
     return false;
   }

@@ -39,23 +39,23 @@ class ExGflashDetectorConstruction;
 
 class ExGflashHistoManager
 {
- public:
-  ExGflashHistoManager(ExGflashDetectorConstruction* myDet);
-  ~ExGflashHistoManager();
+  public:
+    ExGflashHistoManager(ExGflashDetectorConstruction* myDet);
+    ~ExGflashHistoManager();
 
-  void InitializePerEvent();
-  // void FillPerEvent();
+    void InitializePerEvent();
+    // void FillPerEvent();
 
-  // inline void FillPerTrack(G4double, G4double);
-  // inline void FillPerStep(G4double, G4int, G4int);
+    // inline void FillPerTrack(G4double, G4double);
+    // inline void FillPerStep(G4double, G4int, G4int);
 
- private:
-  void Book();
-  G4String fFileName;
+  private:
+    void Book();
+    G4String fFileName;
 
-  ExGflashDetectorConstruction* fDet;
+    ExGflashDetectorConstruction* fDet;
 
-  G4int fVerbose;
+    G4int fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

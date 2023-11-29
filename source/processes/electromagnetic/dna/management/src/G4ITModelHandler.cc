@@ -55,6 +55,10 @@ void G4ITModelHandler::Initialize()
 void G4ITModelHandler::RegisterModel(G4VITStepModel* pModel,
                                      G4double startingTime)
 {
+    if(fFinalize)
+    {
+      return;
+    }
     assert(pModel != nullptr);
 
     G4ITType type1;
@@ -106,4 +110,14 @@ bool G4ITModelHandler::GetTimeStepComputerFlag()
 bool G4ITModelHandler::GetReactionProcessFlag()
 {
     return fReactionProcessFlag;
+}
+
+void G4ITModelHandler::Reset()
+{
+    fpModelManager.reset();
+}
+
+void G4ITModelHandler::Finalize()
+{
+  fFinalize = true;
 }

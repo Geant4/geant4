@@ -87,10 +87,13 @@ int main(int argc,char** argv)
   // Activate score ntuple writer
   // The verbose level can be also set via UI commands
   // /score/ntuple/writerVerbose level
-  G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
-  scoreNtupleWriter.SetVerboseLevel(1);
   // The default file type ("root") can be changed in xml, csv, hdf5
   // scoreNtupleWriter.SetDefaultFileType("xml");
+  G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
+  scoreNtupleWriter.SetVerboseLevel(1);
+  scoreNtupleWriter.SetNtupleMerging(true);
+    // Note: merging ntuples is available only with Root output
+    // (the default in G4TScoreNtupleWriter)
 
   // Process macro or start UI session
   //

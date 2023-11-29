@@ -33,10 +33,11 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "DetectorConstruction.hh"
-
 #include "G4Run.hh"
 #include "globals.hh"
+
+#include "DetectorConstruction.hh"
+
 #include <map>
 
 class DetectorConstruction;

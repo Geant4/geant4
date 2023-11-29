@@ -42,11 +42,6 @@
 #include "G4LorentzRotation.hh"
 #include "G4RotationMatrix.hh"
 
-G4MuonDecayChannel::G4MuonDecayChannel()
-  : G4VDecayChannel()
-{
-}
-
 G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName, 
                                              G4double theBR)
   : G4VDecayChannel("Muon Decay", 1)
@@ -83,15 +78,6 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
   }
 }
 
-G4MuonDecayChannel::G4MuonDecayChannel(const G4MuonDecayChannel& right)
-  : G4VDecayChannel(right)
-{
-}
-
-G4MuonDecayChannel::~G4MuonDecayChannel()
-{
-}
-
 G4MuonDecayChannel&
 G4MuonDecayChannel::operator=(const G4MuonDecayChannel& right)
 {
@@ -111,7 +97,7 @@ G4MuonDecayChannel::operator=(const G4MuonDecayChannel& right)
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 )
     {
-      if (daughters_name !=0) ClearDaughtersName();
+      if (daughters_name !=nullptr) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       // copy daughters name
       for (G4int index=0; index < numberOfDaughters; ++index)
@@ -151,10 +137,10 @@ G4DecayProducts* G4MuonDecayChannel::DecayIt(G4double)
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
   // create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  auto products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // calculate daughter momentum
@@ -206,7 +192,7 @@ G4DecayProducts* G4MuonDecayChannel::DecayIt(G4double)
 
   direction0 *= rot;
 
-  G4DynamicParticle* daughterparticle
+  auto  daughterparticle
     = new G4DynamicParticle (G4MT_daughters[0], direction0*daughtermomentum[0]);
 
   products->PushProducts(daughterparticle);
@@ -219,7 +205,7 @@ G4DecayProducts* G4MuonDecayChannel::DecayIt(G4double)
 
   direction1 *= rot;
 
-  G4DynamicParticle* daughterparticle1
+  auto  daughterparticle1
     = new G4DynamicParticle (G4MT_daughters[1], direction1*daughtermomentum[1]);
   products->PushProducts(daughterparticle1);
 
@@ -231,7 +217,7 @@ G4DecayProducts* G4MuonDecayChannel::DecayIt(G4double)
 
   direction2 *= rot;
 
-  G4DynamicParticle* daughterparticle2
+  auto  daughterparticle2
     = new G4DynamicParticle (G4MT_daughters[2], direction2*daughtermomentum[2]);
   products->PushProducts(daughterparticle2);
 

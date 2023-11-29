@@ -110,7 +110,7 @@ class G4PDefManager
 
   private:
 
-    G4int totalobj;
+    G4int totalobj{0};
     G4Mutex mutex;
 };
 

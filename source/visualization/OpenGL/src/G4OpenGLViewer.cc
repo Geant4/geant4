@@ -34,7 +34,11 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
-#include "G4OpenGL2PSAction.hh"
+
+#include "G4gl2ps.hh"
+#define GL2PS_TEXT_B  TOOLS_GL2PS_TEXT_B
+#define GL2PS_TEXT_BL TOOLS_GL2PS_TEXT_BL
+#define GL2PS_TEXT_BR TOOLS_GL2PS_TEXT_BR
 
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
@@ -47,22 +51,12 @@
 #include "G4AttCheck.hh"
 #include "G4Text.hh"
 
-#ifdef G4OPENGL_VERSION_2
-#include "G4OpenGLVboDrawer.hh"
-#endif
-
-// GL2PS
-#include "Geant4_gl2ps.h"
-
 #include <sstream>
 #include <string>
 #include <iomanip>
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-#ifdef G4OPENGL_VERSION_2
-fVboDrawer(NULL),
-#endif
 fPrintColour (true),
 fVectoredPs (true),
 fOpenGLSceneHandler(scene),
@@ -86,22 +80,25 @@ fGl2psDefaultLineWith(1),
 fGl2psDefaultPointSize(2),
 fGlViewInitialized(false),
 fIsGettingPickInfos(false)
-#ifdef G4OPENGL_VERSION_2
-,fShaderProgram(0)
-,fVertexPositionAttribute(0)
-,fVertexNormalAttribute(0)
-,fpMatrixUniform(0)
-,fcMatrixUniform(0)
-,fmvMatrixUniform(0)
-,fnMatrixUniform(0)
-#endif
 {
   // Make changes to view parameters for OpenGL...
   fVP.SetAutoRefresh(true);
   fDefaultVP.SetAutoRefresh(true);
-
-  fGL2PSAction = new G4OpenGL2PSAction();
-
+  fGL2PSAction = new G4gl2ps();
+  tools_gl2ps_gl_funcs_t _funcs = {
+    (tools_glIsEnabled_func)glIsEnabled,
+    (tools_glBegin_func)glBegin,
+    (tools_glEnd_func)glEnd,
+    (tools_glGetFloatv_func)glGetFloatv,
+    (tools_glVertex3f_func)glVertex3f,
+    (tools_glGetBooleanv_func)glGetBooleanv,
+    (tools_glGetIntegerv_func)glGetIntegerv,
+    (tools_glRenderMode_func)glRenderMode,
+    (tools_glFeedbackBuffer_func)glFeedbackBuffer,
+    (tools_glPassThrough_func)glPassThrough
+  };
+  fGL2PSAction->setOpenGLFunctions(&_funcs);
+  
   // add supported export image format
   addExportImageFormat("eps");
   addExportImageFormat("ps");
@@ -126,54 +123,6 @@ G4OpenGLViewer::~G4OpenGLViewer ()
 
 void G4OpenGLViewer::InitializeGLView () 
 {
-#ifdef G4OPENGL_VERSION_2
-  if (fVboDrawer) {
-    
-    // First, load a simple shader
-    fShaderProgram = glCreateProgram();
-    Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const char * vSrc = fVboDrawer->getVertexShaderSrc();
-    glShaderSource(vertexShader, 1, &vSrc, NULL);
-    glCompileShader(vertexShader);
-    glAttachShader(fShaderProgram, vertexShader);
-    
-    Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char * fSrc = fVboDrawer->getFragmentShaderSrc();
-    glShaderSource(fragmentShader, 1, &fSrc, NULL);
-    glCompileShader(fragmentShader);
-    
-    glAttachShader(fShaderProgram, fragmentShader);
-    glLinkProgram(fShaderProgram);
-    glUseProgram(fShaderProgram);
-    
-    //   UniformLocation uColor = getUniformLocation(fShaderProgram, "uColor");
-    //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
-    
-    // Extract the references to the attributes from the shader.
-    
-    fVertexPositionAttribute =
-    glGetAttribLocation(fShaderProgram, "aVertexPosition");
-    
-    
-    glEnableVertexAttribArray(fVertexPositionAttribute);
-    
-    // Extract the references the uniforms from the shader
-    fpMatrixUniform  = glGetUniformLocation(fShaderProgram, "uPMatrix");
-    fcMatrixUniform  = glGetUniformLocation(fShaderProgram, "uCMatrix");
-    fmvMatrixUniform = glGetUniformLocation(fShaderProgram, "uMVMatrix");
-    fnMatrixUniform  = glGetUniformLocation(fShaderProgram, "uNMatrix");
-    ftMatrixUniform  = glGetUniformLocation(fShaderProgram, "uTMatrix");
-    
-    /*    glUniformMatrix4fv(fcMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(fpMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(ftMatrixUniform, 1, 0, identity);
-     glUniformMatrix4fv(fmvMatrixUniform, 1, 0, identity);
-     */
-    // We have to set that in order to avoid calls on opengl commands before all is ready
-    fGlViewInitialized = true;
-  }
-#endif
-  
   if (fWinSize_x == 0) {
     fWinSize_x = fVP.GetWindowSizeHintX();
   }
@@ -183,10 +132,8 @@ void G4OpenGLViewer::InitializeGLView ()
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth (1.0);
-#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LINE_SMOOTH);
   glDisable (GL_POLYGON_SMOOTH);
-#endif
 
 // clear the buffers and window?
   ClearView ();
@@ -393,8 +340,7 @@ void G4OpenGLViewer::SetView () {
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
   if (fVP.IsCutaway() &&
-      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
-      nPlanes > 0) {
+      fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection) {
     double a[4];
     a[0] = cutaways[0].a();
     a[1] = cutaways[0].b();
@@ -708,7 +654,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   delete [] pixels;
   fclose (fp);
 
-  // Reset for next time (useful is size change)
+  // Reset for next time (useful if size change)
   //  fPrintSizeX = -1;
   //  fPrintSizeY = -1;
 
@@ -775,7 +721,7 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
     case G4Text::right: align = GL2PS_TEXT_BR;
     }
     
-    gl2psTextOpt(textString.c_str(),"Times-Roman",GLshort(size),align,0);
+    fGL2PSAction->addTextOpt(textString.c_str(),"Times-Roman",GLshort(size),align,0);
 
   } else {
 
@@ -835,13 +781,13 @@ bool G4OpenGLViewer::exportImage(std::string name, int width, int height) {
   }
 
   if (fExportImageFormat == "eps") {
-    fGL2PSAction->setExportImageFormat(GL2PS_EPS);
+    fGL2PSAction->setExportImageFormat_EPS();
   } else if (fExportImageFormat == "ps") {
-    fGL2PSAction->setExportImageFormat(GL2PS_PS);
+    fGL2PSAction->setExportImageFormat_PS();
   } else if (fExportImageFormat == "svg") {
-    fGL2PSAction->setExportImageFormat(GL2PS_SVG);
+    fGL2PSAction->setExportImageFormat_SVG();
   } else if (fExportImageFormat == "pdf") {
-    fGL2PSAction->setExportImageFormat(GL2PS_PDF);
+    fGL2PSAction->setExportImageFormat_PDF();
   } else {
     setExportImageFormat(fExportImageFormat,true); // will display a message if this format is not correct for the current viewer
     return false;
@@ -918,8 +864,15 @@ bool G4OpenGLViewer::printGl2PS() {
    bool beginWriteAction = true;
    bool filePointerOk = true;
    while ((extendBuffer) && (! endWriteAction) && (filePointerOk)) {
-     
+
      beginWriteAction = fGL2PSAction->enableFileWriting();
+     if(beginWriteAction) {
+       GLint vp[4];
+       ::glGetIntegerv(GL_VIEWPORT,vp);
+       fGL2PSAction->setViewport(vp[0],vp[1],vp[2],vp[3]);
+       beginWriteAction = fGL2PSAction->beginPage();
+     }
+
      // 3 cases :
      // - true
      // - false && ! fGL2PSAction->fileWritingEnabled() => bad file name
@@ -928,7 +881,7 @@ bool G4OpenGLViewer::printGl2PS() {
      filePointerOk = fGL2PSAction->fileWritingEnabled();
        
      if (beginWriteAction) {
-       
+
        // Set the viewport
        // By default, we choose the line width (trajectories...)
        fGL2PSAction->setLineWidth(fGl2psDefaultLineWith);
@@ -936,7 +889,9 @@ bool G4OpenGLViewer::printGl2PS() {
        fGL2PSAction->setPointSize(fGl2psDefaultPointSize);
        
        DrawView ();
-       endWriteAction = fGL2PSAction->disableFileWriting();
+       
+       endWriteAction = fGL2PSAction->endPage();
+       fGL2PSAction->disableFileWriting();
      }
      if (filePointerOk) {
        if ((! endWriteAction) || (! beginWriteAction)) {
@@ -1204,7 +1159,7 @@ void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
   new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
   
   // to avoid z rotation flipping
-  // to allow more than 360∞ rotation
+  // to allow more than 360° rotation
 
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();
@@ -1488,21 +1443,6 @@ void G4OpenGLViewer::g4GlFrustum (GLdouble left, GLdouble right, GLdouble bottom
   glMultMatrixd(proj);
   
 }
-
-
-#ifdef G4OPENGL_VERSION_2
-
-// Associate the VBO drawer to the OpenGLViewer and the OpenGLSceneHandler
-void G4OpenGLViewer::setVboDrawer(G4OpenGLVboDrawer* drawer) {
-  fVboDrawer = drawer;
-  try {
-    G4OpenGLSceneHandler& sh = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
-    sh.setVboDrawer(fVboDrawer);
-  } catch(std::bad_cast exp) { }
-}
-
-#endif
-
 
 G4String G4OpenGLViewerPickMap::print() {
   std::ostringstream txt;

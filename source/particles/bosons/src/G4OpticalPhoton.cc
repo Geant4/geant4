@@ -43,17 +43,17 @@
 // ######################################################################
 // ###                         OPTICAL PHOTON                         ###
 // ######################################################################
-G4OpticalPhoton* G4OpticalPhoton::theInstance = 0;
+G4OpticalPhoton* G4OpticalPhoton::theInstance = nullptr;
 
 G4OpticalPhoton*  G4OpticalPhoton::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "opticalphoton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -69,11 +69,11 @@ G4OpticalPhoton*  G4OpticalPhoton::Definition()
                     2,              -1,            -1,
                     0,               0,             0,
       "opticalphoton",               0,             0,        -22,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 	        false,        "photon",               0
 	     );
   }
-  theInstance = reinterpret_cast<G4OpticalPhoton*>(anInstance);
+  theInstance = static_cast<G4OpticalPhoton*>(anInstance);
   return theInstance;
 }
 

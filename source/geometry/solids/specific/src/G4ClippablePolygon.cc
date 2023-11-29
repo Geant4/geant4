@@ -43,9 +43,7 @@ G4ClippablePolygon::G4ClippablePolygon()
 
 // Destructor
 //
-G4ClippablePolygon::~G4ClippablePolygon()
-{
-}
+G4ClippablePolygon::~G4ClippablePolygon() = default;
 
 // AddVertexInOrder
 //
@@ -72,7 +70,7 @@ G4bool G4ClippablePolygon::Clip( const G4VoxelLimits& voxelLimit )
     ClipAlongOneAxis( voxelLimit, kZAxis );
   }
   
-  return (vertices.size() > 0);
+  return (!vertices.empty());
 }
 
 // PartialClip
@@ -89,7 +87,7 @@ G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits& voxelLimit,
     if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
   }
   
-  return (vertices.size() > 0);
+  return (!vertices.empty());
 }
 
 // GetExtent
@@ -101,7 +99,7 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
   //
   // Okay, how many entries do we have?
   //
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   
   //
   // Return false if nothing is left
@@ -116,7 +114,7 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
   //
   // Compare to the rest
   //
-  for( G4int i=1; i<noLeft; ++i )
+  for( std::size_t i=1; i<noLeft; ++i )
   {
     G4double component = vertices[i].operator()( axis );
     if (component < min )
@@ -135,15 +133,17 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
 //
 const G4ThreeVector* G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 {
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   if (noLeft==0)
+  {
     G4Exception("G4ClippablePolygon::GetMinPoint()",
                 "GeomSolids0002", FatalException, "Empty polygon.");
-  
+  }
+
   const G4ThreeVector *answer = &(vertices[0]);
   G4double min = answer->operator()(axis);
 
-  for( G4int i=1; i<noLeft; ++i )
+  for( std::size_t i=1; i<noLeft; ++i )
   {
     G4double component = vertices[i].operator()( axis );
     if (component < min)
@@ -163,15 +163,17 @@ const G4ThreeVector* G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
 //
 const G4ThreeVector* G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
 {
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   if (noLeft==0)
+  {
     G4Exception("G4ClippablePolygon::GetMaxPoint()",
                 "GeomSolids0002", FatalException, "Empty polygon.");
-  
+  }
+
   const G4ThreeVector *answer = &(vertices[0]);
   G4double max = answer->operator()(axis);
 
-  for( G4int i=1; i<noLeft; ++i )
+  for( std::size_t i=1; i<noLeft; ++i )
   {
     G4double component = vertices[i].operator()( axis );
     if (component > max)
@@ -205,7 +207,7 @@ G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon& other,
   //
   // If things are empty, do something semi-sensible
   //
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   if (noLeft==0) return false;
   
   if (other.Empty()) return true;
@@ -269,7 +271,7 @@ G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon& other,
   //
   // If things are empty, do something semi-sensible
   //
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   if (noLeft==0) return false;
   
   if (other.Empty()) return true;
@@ -334,7 +336,7 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector& pointOnPlane,
   //
   // Okay, how many entries do we have?
   //
-  G4int noLeft = vertices.size();
+  std::size_t noLeft = vertices.size();
   
   //
   // Return false if nothing is left
@@ -349,7 +351,7 @@ G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector& pointOnPlane,
   //
   // Compare to the rest
   //
-  for( G4int i=1; i<noLeft; ++i )
+  for( std::size_t i=1; i<noLeft; ++i )
   {
     G4double component = planeNormal.dot(vertices[i] - pointOnPlane);
     if (component < min )
@@ -384,7 +386,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
   // If nothing is left from the above clip, we might as well return now
   // (but with an empty vertices)
   //
-  if (tempPolygon.size() == 0)
+  if (tempPolygon.empty())
   {
     vertices.clear();
     return;
@@ -401,7 +403,7 @@ void G4ClippablePolygon::ClipAlongOneAxis( const G4VoxelLimits& voxelLimit,
   //
   // If nothing is left, return now
   //
-  if (vertices.size() == 0) return;
+  if (vertices.empty()) return;
 }
 
 // ClipToSimpleLimits
@@ -413,12 +415,12 @@ void G4ClippablePolygon::ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
                                              G4ThreeVectorList& outputPolygon,
                                        const G4VoxelLimits& pVoxelLimit   )
 {
-  G4int noVertices = pPolygon.size();
+  std::size_t noVertices = pPolygon.size();
   G4ThreeVector vEnd,vStart;
 
   outputPolygon.clear();
     
-  for (G4int i=0; i<noVertices; ++i)
+  for (std::size_t i=0; i<noVertices; ++i)
   {
     vStart=pPolygon[i];
     if (i==noVertices-1)

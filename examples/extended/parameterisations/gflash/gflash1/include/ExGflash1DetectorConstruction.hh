@@ -44,47 +44,24 @@ class GFlashParticleBounds;
 
 class ExGflash1DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  ExGflash1DetectorConstruction();
-  ~ExGflash1DetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-  
-  const G4VPhysicalVolume* GetCristal(int aNumCrystal)
-  {return fCrystalPhys[aNumCrystal];};
-  
-  
-private:
-  G4LogicalVolume*    fCrystalLog;
-  G4VPhysicalVolume*  fCrystalPhys[100];
-  G4Region*           fRegion;
+  public:
+    ExGflash1DetectorConstruction();
+    ~ExGflash1DetectorConstruction() override;
 
-  static G4ThreadLocal GFlashShowerModel* fFastShowerModel; 
-  static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation;
-  static G4ThreadLocal GFlashParticleBounds* fParticleBounds;
-  static G4ThreadLocal GFlashHitMaker* fHitMaker;
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
+
+    const G4VPhysicalVolume* GetCristal(int aNumCrystal) { return fCrystalPhys[aNumCrystal]; };
+
+  private:
+    G4LogicalVolume* fCrystalLog{nullptr};
+    G4VPhysicalVolume* fCrystalPhys[100]{};
+    G4Region* fRegion{nullptr};
+
+    inline static G4ThreadLocal GFlashShowerModel* fFastShowerModel = nullptr;
+    inline static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation = nullptr;
+    inline static G4ThreadLocal GFlashParticleBounds* fParticleBounds = nullptr;
+    inline static G4ThreadLocal GFlashHitMaker* fHitMaker = nullptr;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

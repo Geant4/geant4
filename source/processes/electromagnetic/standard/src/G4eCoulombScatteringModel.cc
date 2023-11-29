@@ -66,30 +66,15 @@
 using namespace std;
 
 G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
-  : G4VEmModel("eCoulombScattering"),
-    cosThetaMin(1.0),
-    cosThetaMax(-1.0),
-    isCombined(combined)
+  : G4VEmModel("eCoulombScattering"), isCombined(combined)
 {
-  fParticleChange = nullptr;
   fNistManager = G4NistManager::Instance();
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
-  currentMaterial = nullptr; 
-  fixedCut = -1.0;
-
-  pCuts = nullptr;
-
-  recoilThreshold = 0.0; // by default does not work
-
-  particle = nullptr;
-  currentCouple = nullptr;
 
   wokvi = new G4WentzelOKandVIxSection(isCombined);
 
-  currentMaterialIndex = 0;
   mass = CLHEP::proton_mass_c2;
-  elecRatio = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -107,12 +92,16 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   SetupParticle(part);
   currentCouple = nullptr;
 
+  G4double tet = PolarAngleLimit();
+
   // defined theta limit between single and multiple scattering 
   if(isCombined) {
-    cosThetaMin = 1.0;
-    G4double tet = PolarAngleLimit();
-    if(tet >= pi)      { cosThetaMin = -1.0; }
-    else if(tet > 0.0) { cosThetaMin = cos(tet); }
+    if(tet >= CLHEP::pi) { cosThetaMin = -1.0; }
+    else if(tet > 0.0) { cosThetaMin = std::cos(tet); }
+
+    // single scattering without multiple
+  } else if(tet > 0.0) { 
+    cosThetaMin = std::cos(std::min(tet, CLHEP::pi));
   }
 
   wokvi->Initialise(part, cosThetaMin);
@@ -154,11 +143,11 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
 
   // find out lightest element
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
+  std::size_t nelm = material->GetNumberOfElements();
 
   // select lightest element
   G4int Z = 300;
-  for (G4int j=0; j<nelm; ++j) {
+  for (std::size_t j=0; j<nelm; ++j) {
     Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
@@ -176,7 +165,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double,
 		G4double cutEnergy, G4double)
 {
-  /*
+  /*  
   G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
 	 << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV 
 	 << G4endl; 
@@ -295,7 +284,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
-    G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
+    auto newdp = new G4DynamicParticle(ion, dir, trec);
     fvect->push_back(newdp);
   } else {
     edep = trec;

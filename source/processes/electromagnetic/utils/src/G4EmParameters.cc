@@ -55,28 +55,27 @@
 #include "G4Region.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4EmParameters* G4EmParameters::theInstance = nullptr;
 
-#ifdef G4MULTITHREADED
-  G4Mutex G4EmParameters::emParametersMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex emParametersMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4EmParameters* G4EmParameters::Instance()
 {
   if(nullptr == theInstance) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&emParametersMutex);
+    G4AutoLock l(&emParametersMutex);
     if(nullptr == theInstance) {
-#endif
       static G4EmParameters manager;
       theInstance = &manager;
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&emParametersMutex);
-#endif
+    l.unlock();
   }
   return theInstance;
 }
@@ -135,6 +134,8 @@ void G4EmParameters::Initialise()
   fSamplingTable = false;
   fPolarisation = false;
   fMuDataFromFile = false;
+  fPEKShell = true;
+  fMscPosiCorr = true;
   fDNA = false;
   fIsPrinted = false;
 
@@ -165,10 +166,14 @@ void G4EmParameters::Initialise()
   workerVerbose = 0;
   tripletConv = 0;
 
+  fTransportationWithMsc = G4TransportationWithMscType::fDisabled;
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
   nucFormfactor = fExponentialNF;
   fSStype = fWVI;
+  fFluct = fUniversalFluctuation;
+
+  fDirLEDATA = G4String(G4FindDataDir("G4LEDATA"));
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -237,15 +242,21 @@ G4bool G4EmParameters::Fluo() const
   return fCParameters->Fluo();
 }
 
+G4EmFluoDirectory G4EmParameters::FluoDirectory() const
+{
+  return fCParameters->FluoDirectory();
+}
+
+void G4EmParameters::SetFluoDirectory(G4EmFluoDirectory val)
+{
+  if(IsLocked()) { return; }
+  fCParameters->SetFluoDirectory(val);
+}
+
 void G4EmParameters::SetBeardenFluoDir(G4bool val)
 {
   if(IsLocked()) { return; }
   fCParameters->SetBeardenFluoDir(val);
-}
-
-G4bool G4EmParameters::BeardenFluoDir() const
-{
-  return fCParameters->BeardenFluoDir();
 }
 
 void G4EmParameters::SetANSTOFluoDir(G4bool val)
@@ -254,15 +265,28 @@ void G4EmParameters::SetANSTOFluoDir(G4bool val)
   fCParameters->SetANSTOFluoDir(val);
 }
 
-G4bool G4EmParameters::ANSTOFluoDir() const
+void G4EmParameters::SetXDB_EADLFluoDir(G4bool val)
 {
-  return fCParameters->ANSTOFluoDir();
+  if(IsLocked()) { return; }
+  fCParameters->SetXDB_EADLFluoDir(val);
 }
 
 void G4EmParameters::SetAuger(G4bool val)
 {
   if(IsLocked()) { return; }
   fCParameters->SetAuger(val);
+}
+
+G4bool G4EmParameters::BeardenFluoDir()
+{
+  auto dir = fCParameters->FluoDirectory();
+  return (dir == fluoBearden);
+}
+
+G4bool G4EmParameters::ANSTOFluoDir()
+{
+  auto dir = fCParameters->FluoDirectory();
+  return (dir == fluoANSTO);
 }
 
 G4bool G4EmParameters::Auger() const
@@ -479,6 +503,28 @@ void G4EmParameters::SetEnableSamplingTable(G4bool val)
 G4bool G4EmParameters::EnableSamplingTable() const
 {
   return fSamplingTable;
+}
+
+G4bool G4EmParameters::PhotoeffectBelowKShell() const
+{
+  return fPEKShell;
+}
+
+void G4EmParameters::SetPhotoeffectBelowKShell(G4bool v)
+{
+  if(IsLocked()) { return; }
+  fPEKShell = v;
+}
+
+G4bool G4EmParameters::MscPositronCorrection() const
+{
+  return fMscPosiCorr;
+}
+
+void G4EmParameters::SetMscPositronCorrection(G4bool v)
+{
+  if(IsLocked()) { return; }
+  fMscPosiCorr = v;
 }
 
 void G4EmParameters::ActivateDNA()
@@ -952,6 +998,28 @@ G4int G4EmParameters::WorkerVerbose() const
   return workerVerbose;
 }
 
+void G4EmParameters::SetTransportationWithMsc(G4TransportationWithMscType val)
+{
+  if(IsLocked()) { return; }
+  fTransportationWithMsc = val;
+}
+
+G4TransportationWithMscType G4EmParameters::TransportationWithMsc() const
+{
+  return fTransportationWithMsc;
+}
+
+void G4EmParameters::SetFluctuationType(G4EmFluctuationType val)
+{
+  if(IsLocked()) { return; }
+  fFluct = val;
+}
+
+G4EmFluctuationType G4EmParameters::FluctuationType() const
+{
+  return fFluct;
+}
+
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
   if(IsLocked()) { return; }
@@ -1225,17 +1293,30 @@ void G4EmParameters::DefineRegParamForDeex(G4VAtomDeexcitation* ptr) const
   fCParameters->DefineRegParamForDeex(ptr); 
 }
 
+const G4String& G4EmParameters::GetDirLEDATA() const
+{
+  return fDirLEDATA;
+}
+
 void G4EmParameters::StreamInfo(std::ostream& os) const
 {
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os << "=======================================================================" << "\n";
   os << "======                 Electromagnetic Physics Parameters      ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Enable creation and use of sampling tables         " <<fSamplingTable << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
+  const char* transportationWithMsc = "Disabled";
+  if(fTransportationWithMsc == G4TransportationWithMscType::fEnabled) {
+    transportationWithMsc = "Enabled";
+  } else if (fTransportationWithMsc == G4TransportationWithMscType::fMultipleSteps) {
+    transportationWithMsc = "MultipleSteps";
+  }
+  os << "Use combined TransportationWithMsc                 " <<transportationWithMsc << "\n";
   os << "Use general process                                " <<gener << "\n";
   os << "Enable linear polarisation for gamma               " <<fPolarisation << "\n";
+  os << "Enable photoeffect sampling below K-shell          " <<fPEKShell << "\n";
   os << "Enable sampling of quantum entanglement            " 
      <<fBParameters->QuantumEntanglement()  << "\n";
   os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
@@ -1283,8 +1364,12 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
      <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
   os << "Lowest muon/hadron kinetic energy                  " 
      <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
-  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
   os << "Use ICRU90 data                                    " << fICRU90 << "\n";
+  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  G4String namef = "Universal";
+  if(fFluct == fUrbanFluctuation) { namef = "Urban"; }
+  else if(fFluct == fDummyFluctuation) { namef = "Dummy"; }
+  os << "Type of fluctuation model for leptons and hadrons  " << namef << "\n";
   os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";
@@ -1328,10 +1413,12 @@ void G4EmParameters::StreamInfo(std::ostream& os) const
   os << "======                 Atomic Deexcitation Parameters          ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Fluorescence enabled                               " <<fCParameters->Fluo() << "\n";
-  os << "Fluorescence Bearden data files enabled            " 
-     <<fCParameters->BeardenFluoDir() << "\n";
-  os << "Fluorescence ANSTO data files enabled              " 
-     <<fCParameters->ANSTOFluoDir() << "\n";
+  G4String named = "fluor";
+  G4EmFluoDirectory fdir = FluoDirectory();
+  if(fdir == fluoBearden) { named = "fluor_Bearden"; }
+  else if(fdir == fluoANSTO) { named = "fluor_ANSTO"; }
+  else if(fdir == fluoXDB_EADL) { named = "fluor_XDB_EADL"; }
+  os << "Directory in G4LEDATA for fluorescence data files  " << named << "\n";
   os << "Auger electron cascade enabled                     " 
      <<fCParameters->Auger() << "\n";
   os << "PIXE atomic de-excitation enabled                  " <<fCParameters->Pixe() << "\n";

@@ -13,7 +13,14 @@ AnaEx02
 --------
 
  As AnaEx01, but direct interface to ROOT.
-  
+
+AnaEx03
+--------
+
+ Demonstrates usage of analysis commands for file management
+ (new since Geant4 11.1), in particular writing histograms and ntuples in a file
+ multiple times.
+
 B1Con
 ------
 

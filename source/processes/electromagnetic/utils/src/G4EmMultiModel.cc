@@ -59,8 +59,7 @@ G4EmMultiModel::G4EmMultiModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmMultiModel::~G4EmMultiModel()
-{}
+G4EmMultiModel::~G4EmMultiModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

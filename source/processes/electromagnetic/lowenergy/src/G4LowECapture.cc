@@ -96,7 +96,7 @@ void G4LowECapture::BuildPhysicsTable(const G4ParticleDefinition& part)
     }
     if(r) { region.push_back(r); }
   }
-  nRegions = region.size();
+  nRegions = (G4int)region.size();
 
   // ions reusing G4GenericIon parameters
   if(part.GetParticleType() == "nucleus") {

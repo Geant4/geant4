@@ -46,6 +46,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNuclearMassTable.hh"
 #include "G4INCLGlobalInfo.hh"
+#include "G4INCLNucleus.hh"
 
 #include "G4INCLPauliBlocking.hh"
 
@@ -73,6 +74,8 @@
 #include <cstring> 
 #include <cstdlib>
 #include <numeric>
+
+#include "G4INCLPbarAtrestEntryChannel.hh"
 
 namespace G4INCL {
   
@@ -200,43 +203,110 @@ namespace G4INCL {
 
     // Initialise the maximum universe radius
     initUniverseRadius(projectileSpecies, kineticEnergy, A, Z);
-
     // Initialise the nucleus
-    theZ = Z;
-    theS = S;
-    if(theConfig->isNaturalTarget())
-      theA = ParticleTable::drawRandomNaturalIsotope(Z);
-    else
-      theA = A;
-    initializeTarget(theA, theZ, theS);
 
+//D
+    //reset
+    G4bool ProtonIsTheVictim = false; 
+    G4bool NeutronIsTheVictim = false;
+    theEventInfo.annihilationP = false;
+    theEventInfo.annihilationN = false;
+
+    //G4double AnnihilationBarrier = kineticEnergy;
+    if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){
+      G4double SpOverSn = 1.331;//from experiments with deuteron (E.Klempt)
+      //INCL_WARN("theA number set to A-1 from " << A <<'\n');
+
+      G4double neutronprob;
+      if(theConfig->isNaturalTarget()){ // A = 0 in this case
+        theA = ParticleTable::drawRandomNaturalIsotope(Z) - 1; //43 and 61 are ok (Technetium and Promethium)
+        neutronprob = (theA + 1 - Z)/(theA + 1 - Z + SpOverSn*Z);  
+      }
+      else{
+        theA = A - 1;
+        neutronprob = (A - Z)/(A - Z + SpOverSn*Z);  //from experiments with deuteron (E.Klempt)
+      }
+
+      theS = S;
+      
+      G4double rndm = Random::shoot();
+      if(rndm >= neutronprob){     //proton is annihilated
+        theEventInfo.annihilationP = true;
+        theZ = Z - 1;
+        ProtonIsTheVictim = true;
+        //INCL_WARN("theZ number set to Z-1 from " << Z << '\n');
+      }  
+      else{        //neutron is annihilated
+        theEventInfo.annihilationN = true;
+        theZ = Z;
+        NeutronIsTheVictim = true;
+      }  
+    }
+    else{ // not annihilation of pbar
+      theZ = Z;
+      theS = S;
+      if(theConfig->isNaturalTarget())
+        theA = ParticleTable::drawRandomNaturalIsotope(Z); //change order
+      else
+        theA = A;
+    }
+
+    AnnihilationType theAType = Def;
+    if(ProtonIsTheVictim == true && NeutronIsTheVictim == false)
+    theAType = PType;
+    if(NeutronIsTheVictim == true && ProtonIsTheVictim == false)
+    theAType = NType;
+
+//D
+
+    initializeTarget(theA, theZ, theS, theAType);
+    
     // Set the maximum impact parameter
     maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
     INCL_DEBUG("Maximum impact parameter initialised: " << maxImpactParameter << '\n');
 
     // For forced CN events
     initMaxInteractionDistance(projectileSpecies, kineticEnergy);
-
-    // Set the geometric cross section
-    theGlobalInfo.geometricCrossSection =
-      Math::tenPi*std::pow(maxImpactParameter,2);
+// Set the geometric cross sectiony section
+    if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){
+      G4int currentA = A;
+      if(theConfig->isNaturalTarget()){
+        currentA = ParticleTable::drawRandomNaturalIsotope(Z);
+      }
+      G4double kineticEnergy2=kineticEnergy;
+      if (kineticEnergy2 <= 0.) kineticEnergy2=0.001;
+      theGlobalInfo.geometricCrossSection = 9.7* //normalization factor from Corradini
+        Math::pi*std::pow((1.840 + 1.120*std::pow(currentA,(1./3.))),2)*
+        (1. + (Z*G4INCL::PhysicalConstants::eSquared*(currentA+1))/(currentA*kineticEnergy2*(1.840 + 1.120*std::pow(currentA,(1./3.))))); 
+        //xsection formula was borrowed from Corradini et al. https://doi.org/10.1016/j.physletb.2011.09.069    
+    }
+    else{
+      theGlobalInfo.geometricCrossSection =
+        Math::tenPi*std::pow(maxImpactParameter,2);
+    }
 
     // Set the minimum remnant size
     if(projectileSpecies.theA > 0)
       minRemnantSize = std::min(theA, 4);
     else
       minRemnantSize = std::min(theA-1, 4);
-
     return true;
   }
 
-  G4bool INCL::initializeTarget(const G4int A, const G4int Z, const G4int S) {
+  G4bool INCL::initializeTarget(const G4int A, const G4int Z, const G4int S, AnnihilationType theAType) { 
     delete nucleus;
 
-    nucleus = new Nucleus(A, Z, S, theConfig, maxUniverseRadius);
+    if (theAType==PType || theAType==NType) {
+      G4double newmaxUniverseRadius=0.;
+      if (theAType==PType) newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+1, Z+1);
+      else newmaxUniverseRadius=initUniverseRadiusForAntiprotonAtRest(A+1, Z);
+      nucleus = new Nucleus(A, Z, S, theConfig, newmaxUniverseRadius, theAType);
+    }
+    else{
+      nucleus = new Nucleus(A, Z, S, theConfig, maxUniverseRadius, theAType);
+    }
     nucleus->getStore()->getBook().reset();
-    nucleus->initializeParticles();
-
+    nucleus->initializeParticles();                                 
     propagationModel->setNucleus(nucleus);
     return true;
   }
@@ -248,11 +318,194 @@ namespace G4INCL {
       const G4int targetZ,
       const G4int targetS
       ) {
+
+    ParticleList starlistH2;
+
+    if (projectileSpecies.theType==antiProton && (targetA==1 || targetA==2) && targetZ==1 && targetS==0) {
+
+      if (targetA==1) {
+        preCascade_pbarH1(projectileSpecies, kineticEnergy);
+      } else {
+        preCascade_pbarH2(projectileSpecies, kineticEnergy);
+        theEventInfo.annihilationP = false;
+        theEventInfo.annihilationN = false;
+
+        G4double SpOverSn = 1.331;  //from experiments with deuteron (E.Klempt)
+
+        ThreeVector dummy(0.,0.,0.);
+        G4double rndm = Random::shoot()*(SpOverSn+1);
+        if (rndm <= SpOverSn) {  //proton is annihilated
+          theEventInfo.annihilationP = true;
+          Particle *p2 = new Particle(Neutron, dummy, dummy);
+          starlistH2.push_back(p2);
+          //delete p2;
+        } else {                 //neutron is annihilated
+          theEventInfo.annihilationN = true;
+          Particle *p2 = new Particle(Proton, dummy, dummy);
+          starlistH2.push_back(p2);
+          //delete p2;
+        }
+      }
+
+      // File names
+#ifdef INCLXX_IN_GEANT4_MODE
+      if (!G4FindDataDir("G4INCLDATA") ) {
+        G4ExceptionDescription ed;
+        ed << " Data missing: set environment variable G4INCLDATA\n"
+           << " to point to the directory containing data files needed\n"
+           << " by the INCL++ model" << G4endl;
+        G4Exception("G4INCLDataFile::readData()","rawppbarFS.dat, ...", FatalException, ed);
+      }
+      G4String dataPath0(std::getenv("G4INCLDATA"));
+      G4String dataPathppbar(dataPath0 + "/rawppbarFS.dat");
+      G4String dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");
+      G4String dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
+      G4String dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");
+#else
+      G4string path;
+      if (theConfig) path = theConfig->getINCLXXDataFilePath();
+      G4String dataPathppbar(path + "/rawppbarFS.dat");
+      INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N ppbar final states" << dataPathppbar << '\n');
+      G4String dataPathnpbar(path + "/rawnpbarFS.dat");
+      INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N npbar final states" << dataPathnpbar << '\n');
+      G4String dataPathppbark(path + "/rawppbarFSkaonic.dat");
+      INCL_DEBUG("Reading https://doi.org/10.1016/j.physrep.2005.03.002 ppbar kaonic final states" << dataPathppbark << '\n');
+      G4String dataPathnpbark(path + "/rawnpbarFSkaonic.dat");
+      INCL_DEBUG("Reading https://doi.org/10.1007/BF02818764 and https://link.springer.com/article/10.1007/BF02754930 npbar kaonic final states" << dataPathnpbark << '\n');
+      #endif
+
+      //read probabilities and particle types from file
+      std::vector<G4double> probabilities;  //will store each FS yield
+      std::vector<std::vector<G4String>> particle_types;  //will store particle names
+      G4double sum = 0.0;  //will contain a sum of probabilities of all FS in the file
+      G4double kaonicFSprob=0.05;  //probability to kave kaonic FS
+
+      ParticleList starlist;
+      ThreeVector mommy;  //momentum to be assigned later
+
+      G4double rdm = Random::shoot();
+      ThreeVector annihilationPosition(0.,0.,0.);
+      if (rdm < (1.-kaonicFSprob)) {  // pionic FS was chosen
+        INCL_DEBUG("pionic pp final state chosen" << '\n');
+        sum = read_file(dataPathppbar, probabilities, particle_types);
+        rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
+        //now get the line number in the file where the FS particles are stored:
+        G4int n = findStringNumber(rdm, probabilities);
+        for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
+          if (particle_types[n][j] == "pi0") {
+            Particle *p = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "omega") {
+            Particle *p = new Particle(Omega, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "eta") {
+            Particle *p = new Particle(Eta, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "rho-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else if (particle_types[n][j] == "rho+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else if (particle_types[n][j] == "rho0") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+            Particle *pp = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(pp);
+          } else {
+            INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
+            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+              G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+            }
+            G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+          }
+        }
+      } else {
+        INCL_DEBUG("kaonic pp final state chosen" << '\n');
+        sum = read_file(dataPathppbark, probabilities, particle_types);
+        rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
+        //now get the line number in the file where the FS particles are stored:
+        G4int n = findStringNumber(rdm, probabilities);
+        for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
+          if (particle_types[n][j] == "pi0") {
+            Particle *p = new Particle(PiZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi-") {
+            Particle *p = new Particle(PiMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "pi+") {
+            Particle *p = new Particle(PiPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "omega") {
+            Particle *p = new Particle(Omega, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "eta") {
+            Particle *p = new Particle(Eta, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K-") {
+            Particle *p = new Particle(KMinus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K+") {
+            Particle *p = new Particle(KPlus, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K0") {
+            Particle *p = new Particle(KZero, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else if (particle_types[n][j] == "K0b") {
+            Particle *p = new Particle(KZeroBar, mommy, annihilationPosition);
+            starlist.push_back(p);
+          } else {
+            INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
+            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+              G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+            }
+            G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+          }
+        }
+      }
+
+      //compute energies of mesons with a phase-space model
+      G4double energyOfMesonStar=ParticleTable::getRealMass(Proton)+ParticleTable::getRealMass(antiProton);
+      if (starlist.size() < 2) {
+        INCL_ERROR("should never happen, at least 2 final state particles!" << '\n');
+      } else if (starlist.size() == 2) {
+        ParticleIter first = starlist.begin();
+        ParticleIter last = std::next(first, 1);
+        G4double m1 = (*first)->getMass();
+        G4double m2 = (*last)->getMass();
+        G4double s = energyOfMesonStar*energyOfMesonStar;
+        G4double mom1 = std::sqrt(s/4. - (std::pow(m1,2) + std::pow(m2,2))/2. - std::pow(m1,2)*std::pow(m2,2)/s + (std::pow(m1,4) + 2.*std::pow(m1*m2,2) + std::pow(m2,4))/(4.*s));
+        ThreeVector momentello = Random::normVector(mom1);
+        (*first)->setMomentum(momentello);
+        (*first)->adjustEnergyFromMomentum();
+        (*last)->setMomentum(-momentello);
+        (*last)->adjustEnergyFromMomentum();
+      } else {
+        PhaseSpaceGenerator::generate(energyOfMesonStar, starlist);
+      }
+
+      if (targetA==1) postCascade_pbarH1(starlist);
+      else            postCascade_pbarH2(starlist,starlistH2);
+
+      theGlobalInfo.nShots++;
+      return theEventInfo;
+    }  // pbar on H1
+
     // ReInitialize the bias vector
     Particle::INCLBiasVector.clear();
     //Particle::INCLBiasVector.Clear();
     Particle::nextBiasedCollisionID = 0;
-    
+
     // Set the target and the projectile
     targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ, targetS);
 
@@ -267,7 +520,7 @@ namespace G4INCL {
     const G4bool canRunCascade = preCascade(projectileSpecies, kineticEnergy);
     if(canRunCascade) {
       cascade();
-      postCascade();
+      postCascade(projectileSpecies, kineticEnergy);
       cascadeAction->afterCascadeAction(nucleus);
     }
     updateGlobalInfo();
@@ -277,26 +530,45 @@ namespace G4INCL {
   G4bool INCL::preCascade(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
     // Reset theEventInfo
     theEventInfo.reset();
-
+    
     EventInfo::eventNumber++;
 
     // Fill in the event information
     theEventInfo.projectileType = projectileSpecies.theType;
-    theEventInfo.Ap = projectileSpecies.theA;
-    theEventInfo.Zp = projectileSpecies.theZ;
-    theEventInfo.Sp = projectileSpecies.theS;
+    theEventInfo.Ap = (Short_t)projectileSpecies.theA;
+    theEventInfo.Zp = (Short_t)projectileSpecies.theZ;
+    theEventInfo.Sp = (Short_t)projectileSpecies.theS;
     theEventInfo.Ep = kineticEnergy;
-    theEventInfo.At = nucleus->getA();
-    theEventInfo.Zt = nucleus->getZ();
-    theEventInfo.St = nucleus->getS();
+    theEventInfo.St = (Short_t)nucleus->getS();
 
+    if(nucleus->getAnnihilationType()==PType){
+      theEventInfo.annihilationP = true;
+      theEventInfo.At = (Short_t)nucleus->getA()+1;
+      theEventInfo.Zt = (Short_t)nucleus->getZ()+1;
+    }
+    else if(nucleus->getAnnihilationType()==NType){
+      theEventInfo.annihilationN = true;
+      theEventInfo.At = (Short_t)nucleus->getA()+1;
+      theEventInfo.Zt = (Short_t)nucleus->getZ();
+    }
+    else {
+      theEventInfo.At = (Short_t)nucleus->getA();
+      theEventInfo.Zt = (Short_t)nucleus->getZ();
+    }
     // Do nothing below the Coulomb barrier
     if(maxImpactParameter<=0.) {
       // Fill in the event information
-      theEventInfo.transparent = true;
-
-      return false;
+    //Particle *pbar = new Particle;
+    //PbarAtrestEntryChannel *obj = new PbarAtrestEntryChannel(nucleus, pbar);
+      if(projectileSpecies.theType == antiProton && kineticEnergy <= theConfig->getAtrestThreshold()){         //D
+        INCL_DEBUG("at rest annihilation" << '\n');
+        //theEventInfo.transparent = false;
+      } else {       
+        theEventInfo.transparent = true;
+        return false;
+      }
     }
+    
 
     // Randomly draw an impact parameter or use a fixed value, depending on the
     // Config option
@@ -317,7 +589,6 @@ namespace G4INCL {
     if(effectiveImpactParameter < 0.) {
       // Fill in the event information
       theEventInfo.transparent = true;
-
       return false;
     }
 
@@ -374,7 +645,7 @@ namespace G4INCL {
     delete finalState;
   }
 
-  void INCL::postCascade() {
+  void INCL::postCascade(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy) {
     // Fill in the event information
     theEventInfo.stoppingTime = propagationModel->getCurrentTime();
 
@@ -382,18 +653,22 @@ namespace G4INCL {
     theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
     
     // Forced CN?
-    if(nucleus->getTryCompoundNucleus()) {
-      INCL_DEBUG("Trying compound nucleus" << '\n');
-      makeCompoundNucleus();
-      theEventInfo.transparent = forceTransparent;
+    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold())){
+      if(nucleus->getTryCompoundNucleus()) {
+        INCL_DEBUG("Trying compound nucleus" << '\n');
+        makeCompoundNucleus();
+        theEventInfo.transparent = forceTransparent;
       // Global checks of conservation laws
 #ifndef INCLXX_IN_GEANT4_MODE
       if(!theEventInfo.transparent) globalConservationChecks(true);
 #endif
       return;
+      }
     }
 
-    theEventInfo.transparent = forceTransparent || nucleus->isEventTransparent();
+    if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold())){
+      theEventInfo.transparent = forceTransparent || nucleus->isEventTransparent();
+    }
 
     if(theEventInfo.transparent) {
       ProjectileRemnant * const projectileRemnant = nucleus->getProjectileRemnant();
@@ -487,7 +762,7 @@ namespace G4INCL {
       }
 
       // Cluster decay
-      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe();
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe(); //D
 
 #ifndef INCLXX_IN_GEANT4_MODE
       // Global checks of conservation laws
@@ -645,7 +920,7 @@ namespace G4INCL {
       theEventInfo.emitKaon = nucleus->emitInsideKaon();
         
       // Cluster decay
-      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe();
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() || nucleus->decayMe(); //D
 
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);
@@ -662,7 +937,6 @@ namespace G4INCL {
     } else {
       INCL_WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << '\n');
     }
-
   }
 
 #ifndef INCLXX_IN_GEANT4_MODE
@@ -794,7 +1068,7 @@ namespace G4INCL {
       // Add the dynamical spectators to the bunch
       ParticleList rejected = theProjectileRemnant->addAllDynamicalSpectators(dynSpectators);
       // Put back the rejected spectators into the outgoing list
-      nUnmergedSpectators = rejected.size();
+      nUnmergedSpectators = (G4int)rejected.size();
       nucleus->getStore()->addToOutgoing(rejected);
 
       // Deal with the projectile remnant
@@ -862,8 +1136,34 @@ namespace G4INCL {
       const G4double interactionDistanceYN = CrossSections::interactionDistanceYN(kineticEnergy);
       maxUniverseRadius = rMax + interactionDistanceYN;
     }
+      else if(p.theType==antiProton) {
+      maxUniverseRadius = rMax;                 //check interaction distance!!!
+    }
     INCL_DEBUG("Initialised universe radius: " << maxUniverseRadius << '\n');
   }
+
+
+  G4double INCL::initUniverseRadiusForAntiprotonAtRest(const G4int A, const G4int Z) {
+    G4double rMax = 0.0;
+    if(A==0) {
+      IsotopicDistribution const &anIsotopicDistribution =
+        ParticleTable::getNaturalIsotopicDistribution(Z);
+      IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
+      for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i) {
+        const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, i->theA, Z);
+        const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, i->theA, Z);
+        const G4double maximumRadius = std::max(pMaximumRadius, nMaximumRadius);
+        rMax = std::max(maximumRadius, rMax);
+      }
+    } else {
+      const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, A, Z);
+      const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, A, Z);
+      const G4double maximumRadius = std::max(pMaximumRadius, nMaximumRadius);
+      rMax = std::max(maximumRadius, rMax);
+    }
+    return rMax;                
+    }
+    
 
   void INCL::updateGlobalInfo() {
     // Increment the global counter for the number of shots
@@ -891,6 +1191,175 @@ namespace G4INCL {
     // Counters for the number of violations of energy conservation in
     // collisions
     theGlobalInfo.nEnergyViolationInteraction += theEventInfo.nEnergyViolationInteraction;
+  }
+
+
+  G4double INCL::read_file(std::string filename, std::vector<G4double>& probabilities, 
+                           std::vector<std::vector<G4String>>& particle_types) {
+    std::ifstream file(filename);
+    G4double sum_probs = 0.0;
+    if (file.is_open()) {
+      G4String line;
+      while (getline(file, line)) {
+        std::istringstream iss(line);
+        G4double prob;
+        iss >> prob;
+        sum_probs += prob;
+        probabilities.push_back(prob);
+        std::vector<G4String> types;
+        G4String type;
+        while (iss >> type) {
+          types.push_back(type);
+        }
+        particle_types.push_back(types);
+      }
+    } else {
+      G4cout << "ERROR no fread_file " << filename << G4endl;
+    }
+    return sum_probs;
+  }
+
+
+  G4int INCL::findStringNumber(G4double rdm, std::vector<G4double> yields) {
+    G4int stringNumber = -1;
+    G4double smallestsum = 0.0;
+    G4double biggestsum = yields[0];
+    //G4cout << "initial input " << rdm << G4endl;
+    for (G4int i = 0; i < static_cast<G4int>(yields.size()); i++) {
+      if (rdm >= smallestsum && rdm <= biggestsum) {
+        //G4cout << smallestsum << " and " << biggestsum << G4endl;
+        stringNumber = i;
+      }
+      smallestsum += yields[i];
+      biggestsum += yields[i+1];
+    }
+    if(stringNumber==-1){
+      INCL_ERROR("ERROR in findStringNumber (stringNumber=-1)");
+      G4cout << "ERROR in findStringNumber" << G4endl;
+    }
+    return stringNumber;
+  }
+
+
+  void INCL::preCascade_pbarH1(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    // Reset theEventInfo
+    theEventInfo.reset();
+
+    EventInfo::eventNumber++;
+
+    // Fill in the event information
+    theEventInfo.projectileType = projectileSpecies.theType;
+    theEventInfo.Ap = -1;
+    theEventInfo.Zp = -1;
+    theEventInfo.Sp = 0;
+    theEventInfo.Ep = kineticEnergy;
+    theEventInfo.St = 0;
+    theEventInfo.At = 1;
+    theEventInfo.Zt = 1;
+  }
+
+
+  void INCL::postCascade_pbarH1(ParticleList const &outgoingParticles) {
+    theEventInfo.nParticles = 0;
+
+    // Reset the remnant counter
+    theEventInfo.nRemnants = 0;
+    theEventInfo.history.clear();
+
+    for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
+      theEventInfo.A[theEventInfo.nParticles] = (Short_t)(*i)->getA();
+      theEventInfo.Z[theEventInfo.nParticles] = (Short_t)(*i)->getZ();
+      theEventInfo.S[theEventInfo.nParticles] = (Short_t)(*i)->getS();
+      theEventInfo.EKin[theEventInfo.nParticles] = (*i)->getKineticEnergy();
+      ThreeVector mom = (*i)->getMomentum();
+      theEventInfo.px[theEventInfo.nParticles] = mom.getX();
+      theEventInfo.py[theEventInfo.nParticles] = mom.getY();
+      theEventInfo.pz[theEventInfo.nParticles] = mom.getZ();
+      theEventInfo.theta[theEventInfo.nParticles] = Math::toDegrees(mom.theta());
+      theEventInfo.phi[theEventInfo.nParticles] = Math::toDegrees(mom.phi());
+      theEventInfo.origin[theEventInfo.nParticles] = -1;
+#ifdef INCLXX_IN_GEANT4_MODE
+      theEventInfo.parentResonancePDGCode[theEventInfo.nParticles] = (*i)->getParentResonancePDGCode();
+      theEventInfo.parentResonanceID[theEventInfo.nParticles] = (*i)->getParentResonanceID();
+#endif
+      theEventInfo.history.push_back("");
+      ParticleSpecies pt((*i)->getType());
+      theEventInfo.PDGCode[theEventInfo.nParticles] = pt.getPDGCode();
+      theEventInfo.nParticles++;
+    }
+    theEventInfo.nCascadeParticles = theEventInfo.nParticles;
+  }
+
+
+  void INCL::preCascade_pbarH2(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    // Reset theEventInfo
+    theEventInfo.reset();
+
+    EventInfo::eventNumber++;
+
+    // Fill in the event information
+    theEventInfo.projectileType = projectileSpecies.theType;
+    theEventInfo.Ap = -1;
+    theEventInfo.Zp = -1;
+    theEventInfo.Sp = 0;
+    theEventInfo.Ep = kineticEnergy;
+    theEventInfo.St = 0;
+    theEventInfo.At = 2;
+    theEventInfo.Zt = 1;
+  }
+
+
+  void INCL::postCascade_pbarH2(ParticleList const &outgoingParticles, ParticleList const &H2Particles) {
+    theEventInfo.nParticles = 0;
+
+    // Reset the remnant counter
+    theEventInfo.nRemnants = 0;
+    theEventInfo.history.clear();
+
+    for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
+      theEventInfo.A[theEventInfo.nParticles] = (Short_t)(*i)->getA();
+      theEventInfo.Z[theEventInfo.nParticles] = (Short_t)(*i)->getZ();
+      theEventInfo.S[theEventInfo.nParticles] = (Short_t)(*i)->getS();
+      theEventInfo.EKin[theEventInfo.nParticles] = (*i)->getKineticEnergy();
+      ThreeVector mom = (*i)->getMomentum();
+      theEventInfo.px[theEventInfo.nParticles] = mom.getX();
+      theEventInfo.py[theEventInfo.nParticles] = mom.getY();
+      theEventInfo.pz[theEventInfo.nParticles] = mom.getZ();
+      theEventInfo.theta[theEventInfo.nParticles] = Math::toDegrees(mom.theta());
+      theEventInfo.phi[theEventInfo.nParticles] = Math::toDegrees(mom.phi());
+      theEventInfo.origin[theEventInfo.nParticles] = -1;
+#ifdef INCLXX_IN_GEANT4_MODE
+      theEventInfo.parentResonancePDGCode[theEventInfo.nParticles] = (*i)->getParentResonancePDGCode();
+      theEventInfo.parentResonanceID[theEventInfo.nParticles] = (*i)->getParentResonanceID();
+#endif
+      theEventInfo.history.push_back("");
+      ParticleSpecies pt((*i)->getType());
+      theEventInfo.PDGCode[theEventInfo.nParticles] = pt.getPDGCode();
+      theEventInfo.nParticles++;
+    }
+
+    for(ParticleIter i=H2Particles.begin(), e=H2Particles.end(); i!=e; ++i ) {
+      theEventInfo.A[theEventInfo.nParticles] = (Short_t)(*i)->getA();
+      theEventInfo.Z[theEventInfo.nParticles] = (Short_t)(*i)->getZ();
+      theEventInfo.S[theEventInfo.nParticles] = (Short_t)(*i)->getS();
+      theEventInfo.EKin[theEventInfo.nParticles] = (*i)->getKineticEnergy();
+      ThreeVector mom = (*i)->getMomentum();
+      theEventInfo.px[theEventInfo.nParticles] = mom.getX();
+      theEventInfo.py[theEventInfo.nParticles] = mom.getY();
+      theEventInfo.pz[theEventInfo.nParticles] = mom.getZ();
+      theEventInfo.theta[theEventInfo.nParticles] = Math::toDegrees(mom.theta());
+      theEventInfo.phi[theEventInfo.nParticles] = Math::toDegrees(mom.phi());
+      theEventInfo.origin[theEventInfo.nParticles] = -1;
+#ifdef INCLXX_IN_GEANT4_MODE
+      theEventInfo.parentResonancePDGCode[theEventInfo.nParticles] = (*i)->getParentResonancePDGCode();
+      theEventInfo.parentResonanceID[theEventInfo.nParticles] = (*i)->getParentResonanceID();
+#endif
+      theEventInfo.history.push_back("");
+      ParticleSpecies pt((*i)->getType());
+      theEventInfo.PDGCode[theEventInfo.nParticles] = pt.getPDGCode();
+      theEventInfo.nParticles++;
+    }
+    theEventInfo.nCascadeParticles = theEventInfo.nParticles;
   }
 
 }

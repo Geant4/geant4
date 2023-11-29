@@ -44,6 +44,8 @@
 #include "G4INCLCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4HadSecondary.hh"
+#include "G4ParticleTable.hh"
 #include "G4INCLXXInterfaceStore.hh"
 #include "G4INCLXXVInterfaceTally.hh"
 #include "G4String.hh"
@@ -191,8 +193,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     return &theResult;
   }
 
-  // For reactions on nucleons, use the backup model (without complaining)
-  if(trackA<=1 && nucleusA<=1) {
+  // For reactions on nucleons, use the backup model (without complaining),
+  // except for anti_proton projectile (in this case, INCLXX is used).
+  if(trackA<=1 && nucleusA<=1 && (trackZ>=0 || trackA==0)) {
     return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
   }
 
@@ -365,7 +368,17 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	  // Set the four-momentum of the reaction products
 	  p->Set4Momentum(momentum);
           fourMomentumOut += momentum;
-	  theResult.AddSecondary(p, secID);
+
+	  // Propagate the particle's parent resonance information
+	  G4HadSecondary secondary(p, 1.0, secID);
+	  G4ParticleDefinition* parentResonanceDef = nullptr;
+	  if ( eventInfo.parentResonancePDGCode[i] != 0 ) {
+	    parentResonanceDef = G4ParticleTable::GetParticleTable()->FindParticle(eventInfo.parentResonancePDGCode[i]);
+	  }
+	  secondary.SetParentResonanceDef(parentResonanceDef);
+	  secondary.SetParentResonanceID(eventInfo.parentResonanceID[i]);
+	  
+	  theResult.AddSecondary(secondary);
 
 	} else {
 	  G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";
@@ -378,6 +391,17 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	const G4int Z = eventInfo.ZRem[i];
 	const G4int S = eventInfo.SRem[i];
 	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << " S= " << S << G4endl;
+        // Check that the remnant is a physical bound state: if not, resample the collision.
+        if(( Z == 0  &&  S == 0  &&  A > 1 ) ||                 // No bound states for nn, nnn, nnnn, ...
+           ( Z == 0  &&  S != 0  &&  A < 4 ) ||                 // No bound states for nl, ll, nnl, nll, lll
+           ( Z != 0  &&  S != 0  &&  A == Z + std::abs(S) )) {  // No bound states for pl, ppl, pll, ...
+	  std::stringstream ss;
+	  ss << "unphysical residual fragment : Z=" << Z << "  S=" << S << "  A=" << A 
+             << "  skipping it and resampling the collision";
+	  theInterfaceStore->EmitWarning(ss.str());
+	  eventIsOK = false;
+          continue;
+	}
 	const G4double kinE = eventInfo.EKinRem[i];
 	const G4double px = eventInfo.pxRem[i];
 	const G4double py = eventInfo.pyRem[i];
@@ -431,38 +455,45 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	remnants.push_back(remnant);
       }
 
-      // Check four-momentum conservation
-      const G4LorentzVector violation4Momentum = fourMomentumOut - fourMomentumIn;
-      const G4double energyViolation = std::abs(violation4Momentum.e());
-      const G4double momentumViolation = violation4Momentum.rho();
-      if(energyViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
-        std::stringstream ss;
-        ss << "energy conservation violated by " << energyViolation/MeV << " MeV in "
-          << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
-          << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
-          << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
-        theInterfaceStore->EmitWarning(ss.str());
-        eventIsOK = false;
-        const G4int nSecondaries = theResult.GetNumberOfSecondaries();
-        for(G4int j=0; j<nSecondaries; ++j)
-          delete theResult.GetSecondary(j)->GetParticle();
+      // Give up is the event is not ok (e.g. unphysical residual)
+      if(!eventIsOK) {
+        const G4int nSecondaries = (G4int)theResult.GetNumberOfSecondaries();
+        for(G4int j=0; j<nSecondaries; ++j) delete theResult.GetSecondary(j)->GetParticle();
         theResult.Clear();
         theResult.SetStatusChange(stopAndKill);
         remnants.clear();
-      } else if(momentumViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
-        std::stringstream ss;
-        ss << "momentum conservation violated by " << momentumViolation/MeV << " MeV in "
-          << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
-          << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
-          << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
-        theInterfaceStore->EmitWarning(ss.str());
-        eventIsOK = false;
-        const G4int nSecondaries = theResult.GetNumberOfSecondaries();
-        for(G4int j=0; j<nSecondaries; ++j)
-          delete theResult.GetSecondary(j)->GetParticle();
-        theResult.Clear();
-        theResult.SetStatusChange(stopAndKill);
-        remnants.clear();
+      } else {
+        // Check four-momentum conservation
+        const G4LorentzVector violation4Momentum = fourMomentumOut - fourMomentumIn;
+        const G4double energyViolation = std::abs(violation4Momentum.e());
+        const G4double momentumViolation = violation4Momentum.rho();
+        if(energyViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
+          std::stringstream ss;
+          ss << "energy conservation violated by " << energyViolation/MeV << " MeV in "
+             << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
+             << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+             << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
+          theInterfaceStore->EmitWarning(ss.str());
+          eventIsOK = false;
+          const G4int nSecondaries = (G4int)theResult.GetNumberOfSecondaries();
+          for(G4int j=0; j<nSecondaries; ++j) delete theResult.GetSecondary(j)->GetParticle();
+          theResult.Clear();
+          theResult.SetStatusChange(stopAndKill);
+          remnants.clear();
+        } else if(momentumViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
+          std::stringstream ss;
+          ss << "momentum conservation violated by " << momentumViolation/MeV << " MeV in "
+             << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
+             << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+             << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
+          theInterfaceStore->EmitWarning(ss.str());
+          eventIsOK = false;
+          const G4int nSecondaries = (G4int)theResult.GetNumberOfSecondaries();
+          for(G4int j=0; j<nSecondaries; ++j) delete theResult.GetSecondary(j)->GetParticle();
+          theResult.Clear();
+          theResult.SetStatusChange(stopAndKill);
+          remnants.clear();
+        }
       }
     }
     nTries++;
@@ -543,6 +574,7 @@ G4INCL::ParticleType G4INCLXXInterface::toINCLParticleType(G4ParticleDefinition 
   else if(pdef == G4Triton::Triton())               return G4INCL::Composite;
   else if(pdef == G4He3::He3())                     return G4INCL::Composite;
   else if(pdef == G4Alpha::Alpha())                 return G4INCL::Composite;
+  else if(pdef == G4AntiProton::AntiProton())       return G4INCL::antiProton;
   else if(pdef->GetParticleType() == G4GenericIon::GenericIon()->GetParticleType()) return G4INCL::Composite;
   else                                              return G4INCL::UnknownParticle;
 }
@@ -588,6 +620,8 @@ G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z
   } else if(PDGCode == 1003) { return G4Triton::Triton();
   } else if(PDGCode == 2003) { return G4He3::He3();
   } else if(PDGCode == 2004) { return G4Alpha::Alpha();
+
+  } else if(PDGCode == -2212) { return G4AntiProton::AntiProton();
   } else if(S != 0) {  // Assumed that -S gives the number of Lambdas
     if (A == 3 && Z == 1 && S == -1 ) return G4HyperTriton::Definition();
     if (A == 4 && Z == 1 && S == -1 ) return G4HyperH4::Definition();
@@ -630,7 +664,7 @@ G4double G4INCLXXInterface::remnant4MomentumScaling(G4double mass,
 
 void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
    outFile
-     << "The Li�ge Intranuclear Cascade (INCL++) is a model for reactions induced\n"
+     << "The Liège Intranuclear Cascade (INCL++) is a model for reactions induced\n"
      << "by nucleons, pions and light ion on any nucleus. The reaction is\n"
      << "described as an avalanche of binary nucleon-nucleon collisions, which can\n"
      << "lead to the emission of energetic particles and to the formation of an\n"

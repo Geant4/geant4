@@ -128,8 +128,8 @@ private:
 
         G4UCNBoundaryProcessStatus theStatus;
 
-        G4Material* Material1;
-        G4Material* Material2;
+        const G4Material* Material1;
+        const G4Material* Material2;
 
         // the G4UCNMaterialPropertiesTable of PreStepPoint
         G4UCNMaterialPropertiesTable* aMaterialPropertiesTable1;

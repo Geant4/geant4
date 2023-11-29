@@ -37,7 +37,12 @@ namespace
 }
 
 // --------------------------------------------------------------------
-G4LockcoutDestination::~G4LockcoutDestination() {}
+G4int G4LockcoutDestination::ReceiveG4debug(const G4String& msg)
+{
+  G4AutoLock l(&out_mutex);
+  // Forward call to base class
+  return G4coutDestination::ReceiveG4debug(msg);
+}
 
 // --------------------------------------------------------------------
 G4int G4LockcoutDestination::ReceiveG4cout(const G4String& msg)

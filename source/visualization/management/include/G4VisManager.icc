@@ -32,6 +32,10 @@ inline void G4VisManager::Initialize () {
   Initialise ();
 }
 
+inline G4bool G4VisManager::IsEnabled () const{
+  return GetConcreteInstance();
+}
+
 inline const std::vector<G4VisManager::UserVisAction>&
 G4VisManager::GetRunDurationUserVisActions () const {
   return fRunDurationUserVisActions;
@@ -106,6 +110,14 @@ inline G4bool G4VisManager::GetAbortReviewKeptEvents() const {
   return fAbortReviewKeptEvents;
 }
 
+inline G4bool G4VisManager::GetReviewingPlots() const {
+  return fReviewingPlots;
+}
+
+inline G4bool G4VisManager::GetAbortReviewPlots() const {
+  return fAbortReviewPlots;
+}
+
 inline const G4ViewParameters& G4VisManager::GetDefaultViewParameters() const {
   return fDefaultViewParameters;
 }
@@ -162,8 +174,17 @@ inline void G4VisManager::SetRequestedEvent (const G4Event* event) {
 inline void G4VisManager::SetReviewingKeptEvents (G4bool reveiwing) {
   fReviewingKeptEvents = reveiwing;
 }
+
 inline void G4VisManager::SetAbortReviewKeptEvents (G4bool abort) {
   fAbortReviewKeptEvents = abort;
+}
+
+inline void G4VisManager::SetReviewingPlots (G4bool reveiwing) {
+  fReviewingPlots = reveiwing;
+}
+
+inline void G4VisManager::SetAbortReviewPlots (G4bool abort) {
+  fAbortReviewPlots = abort;
 }
 
 inline void G4VisManager::SetDefaultViewParameters

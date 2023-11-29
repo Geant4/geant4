@@ -48,7 +48,7 @@ GenerateMultiBody(G4double initialMass,
 
   finalState.clear();
 
-  size_t N = masses.size();
+  G4int N = (G4int)masses.size();
   finalState.resize(N);
 
   G4double mtot = std::accumulate(masses.begin(), masses.end(), 0.0);
@@ -60,7 +60,7 @@ GenerateMultiBody(G4double initialMass,
   G4LorentzVector PRestCM(0.0,0.0,0.0,0.0);
   G4LorentzVector PRestLab(0.0,0.0,0.0,Mass);
 
-  for (size_t k=N-1; k>0; --k) {
+  for (G4int k=N-1; k>0; --k) {
     mu -= masses[k];
     T *= (k>1) ? BetaKopylov(k) : 0.;
     

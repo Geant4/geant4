@@ -29,4 +29,4 @@
 #include "G4ParticleHPLegendreTable.hh"
 using G4NeutronHPLegendreTable = G4ParticleHPLegendreTable;
 
-#endif 
+#endif

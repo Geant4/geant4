@@ -59,8 +59,8 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
   else
   {
     // use mass table
-    G4int iZ = G4int(Z);
-    G4int iA = G4int(A);
+    auto  iZ = G4int(Z);
+    auto  iA = G4int(A);
     mass =GetNuclearMass(iA,iZ);
   }
   return mass;
@@ -145,8 +145,8 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
 
 G4bool G4NucleiProperties::IsInStableTable(const G4double A, const G4double Z)
 {
-  G4int iA = G4int(A);
-  G4int iZ = G4int(Z);
+  auto  iA = G4int(A);
+  auto  iZ = G4int(Z);
   return IsInStableTable(iA, iZ);
 }
 
@@ -169,8 +169,8 @@ G4bool G4NucleiProperties::IsInStableTable(const G4int A, const G4int Z)
 
 G4double G4NucleiProperties::GetMassExcess(const G4double A, const G4double Z)
 {
-  G4int iA = G4int(A);
-  G4int iZ = G4int(Z);
+  auto  iA = G4int(A);
+  auto  iZ = G4int(Z);
   return GetMassExcess(iA,iZ);
 }
 
@@ -188,18 +188,16 @@ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
     return 0.0;
     
   }
-  else
-  {
-
+  
+  
     if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ){
       // AME table
       return G4NucleiPropertiesTableAME12::GetMassExcess(Z,A);
-    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
+    } if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
       return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
-    } else {
-      return MassExcess(A,Z);
-    }
-  }
+    }       return MassExcess(A,Z);
+   
+ 
 }
 
 
@@ -217,29 +215,27 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
     return 0.0;
 
   }
-  else if (std::fabs(A - G4int(A)) > 1.e-10)
+  if (std::fabs(A - G4int(A)) > 1.e-10)
   {
     return AtomicMass(A,Z);
   }
-  else
-  {
-    G4int iA = G4int(A);
-    G4int iZ = G4int(Z);
+  
+      auto  iA = G4int(A);
+    auto  iZ = G4int(Z);
     if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
       return G4NucleiPropertiesTableAME12::GetAtomicMass(Z,A);
-    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(iZ,iA)){
+    } if (G4NucleiPropertiesTheoreticalTable::IsInTable(iZ,iA)){
       return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(iZ,iA);
-    } else {
-      return AtomicMass(A,Z);
-    }
-  }
+    }       return AtomicMass(A,Z);
+   
+ 
 }
 
 G4double
 G4NucleiProperties::GetBindingEnergy(const G4double A, const G4double Z)
 {
-  G4int iA = G4int(A);
-  G4int iZ = G4int(Z);
+  auto  iA = G4int(A);
+  auto  iZ = G4int(Z);
   return GetBindingEnergy(iA,iZ);
 }
 
@@ -257,16 +253,14 @@ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
     return 0.0;
 
   }
-  else
-  {
-    if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
+  
+      if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
       return G4NucleiPropertiesTableAME12::GetBindingEnergy(Z,A);
-    } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
+    } if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
       return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
-    }else {
-      return BindingEnergy(A,Z);
-    }
-  }
+    }       return BindingEnergy(A,Z);
+   
+ 
 }
 
 G4double G4NucleiProperties::MassExcess(G4double A, G4double Z) 

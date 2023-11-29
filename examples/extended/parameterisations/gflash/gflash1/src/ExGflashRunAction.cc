@@ -28,46 +28,32 @@
 /// \brief Implementation of the ExGflashRunAction class
 //
 #include "ExGflashRunAction.hh"
+
 #include "G4Run.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashRunAction::ExGflashRunAction()
- : G4UserRunAction(), fRunID(0)
-{}
+ExGflashRunAction::ExGflashRunAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashRunAction::~ExGflashRunAction()
-{}
+ExGflashRunAction::~ExGflashRunAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::BeginOfRunAction(const G4Run* aRun)
-{  
-   ((G4Run *)(aRun))->SetRunID(fRunID++);
-   
-   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+{
+  ((G4Run*)(aRun))->SetRunID(fRunID++);
+
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExGflashRunAction::EndOfRunAction(const G4Run* aRun)
-{ 
+{
   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-
-
-
-
-
-
-

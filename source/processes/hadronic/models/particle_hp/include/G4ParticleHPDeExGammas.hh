@@ -25,90 +25,41 @@
 //
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V.Ivanchenko 23.04.2023 Rewritten
 //
 #ifndef G4ParticleHPDeExGammas_h
 #define G4ParticleHPDeExGammas_h 1
 
-#include <fstream>
-#include <CLHEP/Units/PhysicalConstants.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4ParticleHPNucLevel.hh"
 #include "G4ReactionProductVector.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleHPLevel.hh"
-#include "G4ParticleHPGamma.hh"
-#include "G4ReactionProduct.hh"
+#include "globals.hh"
+
+#include <fstream>
+#include <vector>
 
 class G4ParticleHPDeExGammas
 {
   public:
-  
-  G4ParticleHPDeExGammas() 
-  {
-    levelStart = 0;
-    levelSize = 0;
-    nLevels = 0;
-    theLevels = 0;
-  }
-  ~G4ParticleHPDeExGammas() 
-  {
-    if(levelStart!=0) delete [] levelStart;
-    if(levelSize!=0) delete [] levelSize;
-    if(theLevels!=0) delete [] theLevels;
-  }
-  
-  void Init(std::istream & aDataFile);
+    explicit G4ParticleHPDeExGammas();
+    ~G4ParticleHPDeExGammas();
 
-  inline G4ReactionProductVector * GetDecayGammas(G4int aLevel)
-  {
-    if(aLevel>nLevels-1 || aLevel<0) return 0;
-    if(nLevels==0) return new G4ReactionProductVector();
-    G4ReactionProductVector * result = new G4ReactionProductVector;
-    G4DynamicParticleVector * theResult;
+    void Init(std::istream& aDataFile);
 
-    theResult = theLevels[aLevel]. GetDecayGammas();
-    G4ReactionProduct * theCurrent;
-    unsigned int i;
-    for(i=0; i<theResult->size(); i++)
+    G4ReactionProductVector* GetDecayGammas(G4int idx) const;
+
+    inline G4int GetNumberOfLevels() const { return nLevels; }
+
+    inline G4double GetLevelEnergy(G4int idx) const
     {
-      theCurrent = new G4ReactionProduct;
-      *theCurrent = *(theResult->operator[](i));
-      delete theResult->operator[](i);
-      G4double costheta = 2.*G4UniformRand()-1;
-      G4double theta = std::acos(costheta);
-      G4double phi = CLHEP::twopi*G4UniformRand();
-      G4double sinth = std::sin(theta);
-      G4double en = theCurrent->GetTotalMomentum();
-      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta );
-      theCurrent->SetMomentum( temp ) ;
-      result->push_back(theCurrent);
+      return (idx < nLevels && idx >= 0) ? theLevels[idx]->GetLevelEnergy() : 0.0;
     }
-    delete theResult;
-    return result;
-  }
-  
-  inline G4ParticleHPLevel * GetLevel(G4int i)
-  {
-    if(std::getenv("G4PHPTEST")) G4cout << this << " GetLEVEL " << i << " n " << nLevels << G4endl;
-    if(i>nLevels-1) return 0;
-    return theLevels+i;
-  }
-  
-  inline G4int GetNumberOfLevels() { return nLevels; }
-  
-  inline G4double GetLevelEnergy(G4int aLevel)
-  {
-    if(aLevel>nLevels-1 || aLevel<0) return 0;
-    G4double result = theLevels[aLevel].GetLevelEnergy();
-    return result;
-  }
+
+    G4ParticleHPDeExGammas(const G4ParticleHPDeExGammas&) = delete;
+    const G4ParticleHPDeExGammas& operator=(const G4ParticleHPDeExGammas&) = delete;
+
   private:
-  
-  G4int * levelStart;
-  G4int * levelSize;
-  G4int nLevels;
-  G4ParticleHPLevel * theLevels;
+    G4int nLevels = 0;
+    std::vector<G4ParticleHPNucLevel*> theLevels;
 };
 
 #endif

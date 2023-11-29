@@ -7,11 +7,6 @@ option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OF
 geant4_add_feature(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
 mark_as_advanced(GEANT4_ENABLE_TESTING)
 
-# - "BUILD_TESTS" means all 'tests' in individual categories.
-option(GEANT4_BUILD_TESTS "Build all the tests of the project" OFF)
-geant4_add_feature(GEANT4_BUILD_TESTS "Build all the tests of the project")
-mark_as_advanced(GEANT4_BUILD_TESTS)
-
 #-----------------------------------------------------------------------
 # Configure CTest and relevant Geant4 settings, if required
 #
@@ -22,7 +17,7 @@ if(GEANT4_ENABLE_TESTING)
 
   # - Geant4_DIR is needed to locate GeantConfig.cmake file required
   # by tests and examples
-  set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+  set(Geant4_DIR ${PROJECT_BINARY_DIR} CACHE PATH "Current build directory")
 
   # - Add datasets to testing environment
   geant4_get_datasetnames(_dslist)
@@ -47,17 +42,4 @@ if(GEANT4_ENABLE_TESTING)
   if(GEANT4_BUILD_MULTITHREADED AND GEANT4_USE_TBB)
     list(APPEND GEANT4_TEST_ENVIRONMENT G4RUN_MANAGER_TYPE=TBB)
   endif()
-endif()
-
-#-----------------------------------------------------------------------
-# Add Unit Tests if required
-#
-if(GEANT4_BUILD_TESTS)
-  file(GLOB_RECURSE files RELATIVE ${CMAKE_SOURCE_DIR} source/CMakeLists.txt)
-  foreach( file ${files} )
-    get_filename_component(path ${file} PATH)
-    if(path MATCHES "/test$")
-      add_subdirectory(${path})
-    endif()
-  endforeach()
 endif()

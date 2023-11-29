@@ -61,15 +61,15 @@
 G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr) 
   : theParameters(ptr)
 {
-  gconvDirectory = new G4UIdirectory("/process/gconv/");
-  gconvDirectory->SetGuidance("Commands for EM gamma conversion BH5D model.");
-  eLossDirectory = new G4UIdirectory("/process/eLoss/");
-  eLossDirectory->SetGuidance("Commands for EM processes.");
-  mscDirectory = new G4UIdirectory("/process/msc/");
-  mscDirectory->SetGuidance("Commands for EM scattering processes.");
-  emDirectory = new G4UIdirectory("/process/em/");
+  emDirectory = new G4UIdirectory("/process/em/", false);
   emDirectory->SetGuidance("General commands for EM processes.");
-  dnaDirectory = new G4UIdirectory("/process/dna/");
+  eLossDirectory = new G4UIdirectory("/process/eLoss/", false);
+  eLossDirectory->SetGuidance("Commands for energy loss processes.");
+  mscDirectory = new G4UIdirectory("/process/msc/", false);
+  mscDirectory->SetGuidance("Commands for EM scattering processes.");
+  gconvDirectory = new G4UIdirectory("/process/gconv/", false);
+  gconvDirectory->SetGuidance("Commands for EM gamma conversion BH5D model.");
+  dnaDirectory = new G4UIdirectory("/process/dna/", false);
   dnaDirectory->SetGuidance("Commands for DNA processes.");
 
   flucCmd = new G4UIcmdWithABool("/process/eLoss/fluct",this);
@@ -107,6 +107,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   aplCmd->SetToBeBroadcasted(false);
 
+  intCmd = new G4UIcmdWithABool("/process/em/integral",this);
+  intCmd->SetGuidance("Enable/disable integral method.");
+  intCmd->SetParameterName("choice",true);
+  intCmd->SetDefaultValue(true);
+  intCmd->AvailableForStates(G4State_PreInit);
+  intCmd->SetToBeBroadcasted(false);
+
   latCmd = new G4UIcmdWithABool("/process/msc/LateralDisplacement",this);
   latCmd->SetGuidance("Enable/disable sampling of lateral displacement");
   latCmd->SetParameterName("lat",true);
@@ -142,7 +149,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mottCmd->AvailableForStates(G4State_PreInit);
   mottCmd->SetToBeBroadcasted(false);
 
-  birksCmd = new G4UIcmdWithABool("/process/msc/UseG4EmSaturation",this);
+  birksCmd = new G4UIcmdWithABool("/process/em/UseG4EmSaturation",this);
   birksCmd->SetGuidance("Enable usage of built-in Birks saturation");
   birksCmd->SetParameterName("birks",true);
   birksCmd->SetDefaultValue(false);
@@ -181,6 +188,20 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mudatCmd->SetDefaultValue(false);
   mudatCmd->AvailableForStates(G4State_PreInit);
   mudatCmd->SetToBeBroadcasted(false);
+
+  peKCmd = new G4UIcmdWithABool("/process/em/PhotoeffectBelowKShell",this);
+  peKCmd->SetGuidance("Enable sampling of photoeffect below K-shell");
+  peKCmd->SetParameterName("peK",true);
+  peKCmd->SetDefaultValue(true);
+  peKCmd->AvailableForStates(G4State_PreInit);
+  peKCmd->SetToBeBroadcasted(false);
+
+  mscPCmd = new G4UIcmdWithABool("/process/msc/PositronCorrection",this);
+  mscPCmd->SetGuidance("Enable msc positron correction");
+  mscPCmd->SetParameterName("mscPC",true);
+  mscPCmd->SetDefaultValue(true);
+  mscPCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  mscPCmd->SetToBeBroadcasted(false);
 
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
@@ -335,7 +356,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   llimCmd->AvailableForStates(G4State_PreInit);
   llimCmd->SetToBeBroadcasted(false);
 
-  amCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsPerDecade",this);
+  amCmd = new G4UIcmdWithAnInteger("/process/em/binsPerDecade",this);
   amCmd->SetGuidance("Set number of bins per decade for EM tables");
   amCmd->SetParameterName("bins",true);
   amCmd->SetDefaultValue(7);
@@ -362,6 +383,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   ver2Cmd->SetDefaultValue(0);
   ver2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   ver2Cmd->SetToBeBroadcasted(false);
+
+  transWithMscCmd = new G4UIcmdWithAString("/process/em/transportationWithMsc",this);
+  transWithMscCmd->SetGuidance("Enable/disable the G4TransportationWithMsc process");
+  transWithMscCmd->SetParameterName("trans",true);
+  transWithMscCmd->SetCandidates("Disabled Enabled MultipleSteps");
+  transWithMscCmd->AvailableForStates(G4State_PreInit);
+  transWithMscCmd->SetToBeBroadcasted(false);
 
   mscCmd = new G4UIcmdWithAString("/process/msc/StepLimit",this);
   mscCmd->SetGuidance("Set msc step limitation type");
@@ -395,6 +423,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   ssCmd->SetCandidates("WVI Mott DPWA");
   ssCmd->AvailableForStates(G4State_PreInit);
   ssCmd->SetToBeBroadcasted(false);
+
+  fluc1Cmd = new G4UIcmdWithAString("/process/eloss/setFluctModel",this);
+  fluc1Cmd->SetGuidance("Define type of energy loss fluctuation model");
+  fluc1Cmd->SetParameterName("Fluc1",true);
+  fluc1Cmd->SetCandidates("Dummy Universal Urban");
+  fluc1Cmd->AvailableForStates(G4State_PreInit);
+  fluc1Cmd->SetToBeBroadcasted(false);
 
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
   tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
@@ -432,6 +467,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete lpmCmd;
   delete rsCmd;
   delete aplCmd;
+  delete intCmd;
   delete latCmd;
   delete lat96Cmd;
   delete mulatCmd;
@@ -444,6 +480,8 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete poCmd;
   delete icru90Cmd;
   delete mudatCmd;
+  delete peKCmd;
+  delete mscPCmd;
 
   delete minEnCmd;
   delete maxEnCmd;
@@ -472,12 +510,14 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete verCmd;
   delete ver1Cmd;
   delete ver2Cmd;
+  delete transWithMscCmd;
   delete tripletCmd;
 
   delete mscCmd;
   delete msc1Cmd;
   delete nffCmd;
   delete ssCmd;
+  delete fluc1Cmd;
 
   delete dumpCmd;
 }
@@ -502,6 +542,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == aplCmd) {
     theParameters->SetApplyCuts(aplCmd->GetNewBoolValue(newValue));
     physicsModified = true;
+  } else if (command == intCmd) {
+    theParameters->SetIntegral(intCmd->GetNewBoolValue(newValue));
   } else if (command == latCmd) {
     theParameters->SetLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     physicsModified = true;
@@ -527,6 +569,10 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetEnableSamplingTable(sampleTCmd->GetNewBoolValue(newValue));
   } else if (command == mudatCmd) {
     theParameters->SetRetrieveMuDataFromFile(mudatCmd->GetNewBoolValue(newValue));
+  } else if (command == peKCmd) {
+    theParameters->SetPhotoeffectBelowKShell(peKCmd->GetNewBoolValue(newValue));
+  } else if (command == mscPCmd) {
+    theParameters->SetMscPositronCorrection(mscPCmd->GetNewBoolValue(newValue));
 
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
@@ -584,6 +630,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetMscLambdaLimit(llimCmd->GetNewDoubleValue(newValue));
   } else if (command == screCmd) { 
     theParameters->SetScreeningFactor(screCmd->GetNewDoubleValue(newValue));
+  } else if (command == amCmd) {
+    theParameters->SetNumberOfBinsPerDecade(amCmd->GetNewIntValue(newValue));
   } else if (command == verCmd) {
     theParameters->SetVerbose(verCmd->GetNewIntValue(newValue));
   } else if (command == ver1Cmd) {
@@ -593,6 +641,20 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == dumpCmd) {
     theParameters->SetIsPrintedFlag(false);
     theParameters->Dump();
+  } else if (command == transWithMscCmd) {
+    G4TransportationWithMscType type = G4TransportationWithMscType::fDisabled;
+    if(newValue == "Disabled") {
+      type = G4TransportationWithMscType::fDisabled;
+    } else if(newValue == "Enabled") {
+      type = G4TransportationWithMscType::fEnabled;
+    } else if(newValue == "MultipleSteps") {
+      type = G4TransportationWithMscType::fMultipleSteps;
+    } else {
+      G4ExceptionDescription ed;
+      ed << " TransportationWithMsc type <" << newValue << "> unknown!";
+      G4Exception("G4EmParametersMessenger", "em0044", JustWarning, ed);
+    }
+    theParameters->SetTransportationWithMsc(type);
   } else if (command == mscCmd || command == msc1Cmd) {
     G4MscStepLimitType msctype = fUseSafety;
     if(newValue == "Minimal") { 
@@ -638,6 +700,11 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
       return; 
     }
     theParameters->SetSingleScatteringType(x);
+  } else if (command == fluc1Cmd) {
+    G4EmFluctuationType x = fUniversalFluctuation;
+    if(newValue == "Dummy") { x = fDummyFluctuation; }
+    else if(newValue == "Urban") { x = fUrbanFluctuation; }
+    theParameters->SetFluctuationType(x);
   } else if ( command==tripletCmd ) {
     theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
   } else if ( command==onIsolatedCmd ) {

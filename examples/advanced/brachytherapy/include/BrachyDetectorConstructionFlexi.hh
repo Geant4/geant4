@@ -52,7 +52,7 @@ class BrachyDetectorConstructionFlexi
 {
 public:
    explicit BrachyDetectorConstructionFlexi();
-  ~BrachyDetectorConstructionFlexi();
+  ~BrachyDetectorConstructionFlexi()=default;
 
   void  ConstructFlexi(G4VPhysicalVolume*);
   // Model the Flexi iridium source

@@ -69,9 +69,9 @@ G4PixeShellDataSet::G4PixeShellDataSet(G4int zeta,
   shellName.push_back("l");
   shellName.push_back("m");
 
-  size_t sizeK = modelK.size();
-  size_t sizeL = modelL.size();
-  size_t sizeM = modelM.size();
+  std::size_t sizeK = modelK.size();
+  std::size_t sizeL = modelL.size();
+  std::size_t sizeM = modelM.size();
   
   if (sizeK > 0) subShellName.push_back("k");
 
@@ -118,18 +118,18 @@ G4double G4PixeShellDataSet::FindValue(G4double energy, G4int /* componentId */)
 
 void G4PixeShellDataSet::PrintData(void) const
 {
-  const size_t n = NumberOfComponents();
+  const G4int n = (G4int)NumberOfComponents();
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i = 0;
+  G4int i = 0;
  
   while (i < n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 
@@ -162,9 +162,9 @@ G4bool G4PixeShellDataSet::LoadData(const G4String& file)
 
   // Load shell cross sections
   
-  G4int nShells = subShellName.size();
+  std::size_t nShells = subShellName.size();
   
-  for (G4int subShellIndex=0; subShellIndex<nShells; subShellIndex++)
+  for (std::size_t subShellIndex=0; subShellIndex<nShells; ++subShellIndex)
     {
       G4String subName = subShellName[subShellIndex];    
       G4String fullFileName = FullFileName(file,subName);
@@ -201,7 +201,7 @@ void G4PixeShellDataSet::CleanUpComponents(void)
 G4String G4PixeShellDataSet::FullFileName(const G4String& file,
 					  const G4String& subShell) const
 {
-  char* path = std::getenv("G4PIIDATA");
+  const char* path = G4FindDataDir("G4PIIDATA");
   if (!path)
     G4Exception("G4PixeShellDataSet::FullFileName",
 				  "pii00000320",

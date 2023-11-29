@@ -61,9 +61,7 @@ public:
 
   explicit G4hPairProduction(const G4String& processName = "hPairProd");
 
-  ~G4hPairProduction() override;
-
-  G4bool IsApplicable(const G4ParticleDefinition& p) override;
+  ~G4hPairProduction() = default;
 
   // print description in html
   void ProcessDescription(std::ostream&) const override;

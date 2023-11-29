@@ -66,7 +66,7 @@ class G4EnvSettings
 
   static G4EnvSettings* GetInstance()
   {
-    static G4EnvSettings* _instance = new G4EnvSettings();
+    static auto* _instance = new G4EnvSettings();
     return _instance;
   }
 
@@ -143,7 +143,7 @@ template <>
 inline G4bool G4GetEnv(const std::string& env_id, bool _default)
 {
   char* env_var = std::getenv(env_id.c_str());
-  if(env_var)
+  if(env_var != nullptr)
   {
     // record value defined by environment
     G4EnvSettings::GetInstance()->insert<bool>(env_id, true);
@@ -202,7 +202,7 @@ inline G4String G4GetDataEnv(const std::string& env_id,
                              const char* description)
 {
   char* env_var = std::getenv(env_id.c_str());
-  if(env_var)
+  if(env_var != nullptr)
   {
     std::string str_var = std::string(env_var);
     std::istringstream iss(str_var);
@@ -219,6 +219,8 @@ inline G4String G4GetDataEnv(const std::string& env_id,
   // return default initialized
   return "";
 }
+
+const char* G4FindDataDir(const char*);
 
 // ---------------------------------------------------------------------------
 // Use this function to print the environment

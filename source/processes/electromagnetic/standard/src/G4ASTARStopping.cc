@@ -81,7 +81,7 @@ void G4ASTARStopping::PrintWarning(G4int i) const
 void G4ASTARStopping::Initialise()
 {
   // this method may be called several times during initialisation
-  G4int nmat = G4Material::GetNumberOfMaterials();
+  G4int nmat = (G4int)G4Material::GetNumberOfMaterials();
   if(nmat == nvectors) { return; }
 
   // loop via material list to add extra data
@@ -351,7 +351,7 @@ static const G4float e73[78] = { 18.11f, 23.3f, 27.86f, 31.99f, 35.83f, 42.84f, 
 
 void G4ASTARStopping::AddData(const G4float* stop, const G4Material* mat)
 {
-  G4PhysicsFreeVector* v = new G4PhysicsFreeVector(78, true);
+  auto v = new G4PhysicsFreeVector(78, true);
   for(size_t i=0; i<78; ++i) { 
     v->PutValues(i, T0[i], stop[i]*fac);
   }

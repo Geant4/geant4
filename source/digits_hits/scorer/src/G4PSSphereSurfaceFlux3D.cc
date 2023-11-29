@@ -55,27 +55,17 @@ G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
   , fDepthj(depj)
   , fDepthk(depk)
 {
-  fNi = ni;
-  fNj = nj;
-  fNk = nk;
+  SetNijk(ni, nj, nk);
 }
 
 G4PSSphereSurfaceFlux3D::G4PSSphereSurfaceFlux3D(G4String name, G4int direction,
                                                  const G4String& unit, G4int ni,
                                                  G4int nj, G4int nk, G4int depi,
                                                  G4int depj, G4int depk)
-  : G4PSSphereSurfaceFlux(name, direction)
-  , fDepthi(depi)
-  , fDepthj(depj)
-  , fDepthk(depk)
+  : G4PSSphereSurfaceFlux3D(name, direction, ni, nj, nk, depi, depj, depk)
 {
-  fNi = ni;
-  fNj = nj;
-  fNk = nk;
   SetUnit(unit);
 }
-
-G4PSSphereSurfaceFlux3D::~G4PSSphereSurfaceFlux3D() { ; }
 
 G4int G4PSSphereSurfaceFlux3D::GetIndex(G4Step* aStep)
 {

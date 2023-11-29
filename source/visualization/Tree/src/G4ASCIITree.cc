@@ -34,6 +34,8 @@
 #include "G4ASCIITreeViewer.hh"
 #include "G4ASCIITreeMessenger.hh"
 
+#define G4warn G4cout
+
 G4ASCIITree::G4ASCIITree ():
   G4VTree ("ASCIITree",
 	   "ATree",
@@ -61,7 +63,7 @@ G4VViewer* G4ASCIITree::CreateViewer (G4VSceneHandler& scene,
     new G4ASCIITreeViewer ((G4ASCIITreeSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
-      G4cout << "G4ASCIITree::CreateViewer: ERROR flagged by negative"
+      G4warn << "G4ASCIITree::CreateViewer: ERROR flagged by negative"
         " view id in G4ASCIITreeViewer creation."
         "\n Destroying view and returning null pointer."
            << G4endl;
@@ -70,7 +72,7 @@ G4VViewer* G4ASCIITree::CreateViewer (G4VSceneHandler& scene,
     }
   }
   else {
-    G4cout << "G4ASCIITree::CreateViewer: ERROR: null pointer on"
+    G4warn << "G4ASCIITree::CreateViewer: ERROR: null pointer on"
       " new G4ASCIITreeViewer." << G4endl;
   }
   return pView;

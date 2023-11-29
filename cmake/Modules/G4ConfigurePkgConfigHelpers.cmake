@@ -60,7 +60,7 @@ function(get_system_include_dirs _dirs)
   # Only for GCC, Clang and Intel
   if("${CMAKE_CXX_COMPILER_ID}" MATCHES GNU OR "${CMAKE_CXX_COMPILER_ID}" MATCHES Clang OR "${CMAKE_CXX_COMPILER_ID}" MATCHES Intel)
     # Proceed
-    file(WRITE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy" "\n")
+    file(WRITE "${PROJECT_BINARY_DIR}/CMakeFiles/g4dummy" "\n")
 
     # Save locale, them to "C" english locale so we can parse in English
     set(_orig_lc_all      $ENV{LC_ALL})
@@ -72,12 +72,12 @@ function(get_system_include_dirs _dirs)
     set(ENV{LANG}        C)
 
     execute_process(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -v -E -x c++ -dD g4dummy
-      WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/CMakeFiles
       ERROR_VARIABLE _cxxOutput
       OUTPUT_VARIABLE _cxxStdout
       )
 
-    file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy")
+    file(REMOVE "${PROJECT_BINARY_DIR}/CMakeFiles/g4dummy")
 
     # Parse and extract search dirs
     set(_resultIncludeDirs )
@@ -214,16 +214,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   # - USolids
   if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     set(G4_BUILTWITH_USOLIDS "yes")
-    set(G4_USOLIDS_INCLUDE_DIRS "${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES}")
+    get_target_property(G4_USOLIDS_INCLUDE_DIRS VecGeom::vecgeom INTERFACE_INCLUDE_DIRECTORIES)
     list(REMOVE_DUPLICATES G4_USOLIDS_INCLUDE_DIRS)
-    if(_cxx_compiler_dirs)
-      list(REMOVE_ITEM G4_USOLIDS_INCLUDE_DIRS ${_cxx_compiler_dirs})
-    endif()
-
-    string(REPLACE ";" " " G4_USOLIDS_CFLAGS "${VECGEOM_DEFINITIONS}")
     foreach(_dir ${G4_USOLIDS_INCLUDE_DIRS})
       set(G4_USOLIDS_CFLAGS "${G4_USOLIDS_CFLAGS} -I${_dir}")
     endforeach()
+    # NB: should ALSO account for VecGeom having compile_options, but
+    # this is better handled through proper pkg-config support
   else()
     set(G4_BUILTWITH_USOLIDS "no")
   endif()
@@ -245,7 +242,15 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS} ${Qt53DCore_INCLUDE_DIRS} ${Qt53DExtras_INCLUDE_DIRS} ${Qt53DRender_INCLUDE_DIRS})
+    set(_qtcomps Core Gui Widgets OpenGL)
+    if(QT_VERSION_MAJOR VERSION_GREATER_EQUAL 5.15)
+      list(APPEND _qtcomp 3DCore 3DExtras 3DRender)
+    endif()
+
+    set(G4_QT_INCLUDE_DIRS )
+    foreach(_qtc ${_qtcomps})
+      list(APPEND G4_QT_INCLUDE_DIRS ${Qt${QT_VERSION_MAJOR}${_qtc}_INCLUDE_DIRS})
+    endforeach()
 
     list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
     if(_cxx_compiler_dirs)
@@ -259,6 +264,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
 
   else()
     set(G4_BUILTWITH_QT "no")
+  endif()
+
+  # - QT3D
+  if(GEANT4_USE_QT3D)
+    set(G4_BUILTWITH_QT3D "yes")
+  else()
+    set(G4_BUILTWITH_QT3D "no")
   endif()
 
   # - Motif
@@ -290,6 +302,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     set(G4_BUILTWITH_INVENTOR "yes")
   else()
     set(G4_BUILTWITH_INVENTOR "no")
+  endif()
+
+  # - VTK
+  if(GEANT4_USE_VTK)
+    set(G4_BUILTWITH_VTK "yes")
+  else()
+    set(G4_BUILTWITH_VTK "no")
   endif()
 
   # If we have a module that uses X11, We have to play with the X11
@@ -330,7 +349,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
 
   # Configure the build tree script
   configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    ${PROJECT_SOURCE_DIR}/cmake/Templates/geant4-config.in
     ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
     @ONLY
     )
@@ -371,7 +390,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
 
   # Configure the install tree script
   configure_file(
-    ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    ${PROJECT_SOURCE_DIR}/cmake/Templates/geant4-config.in
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/geant4-config
     @ONLY
     )
@@ -390,7 +409,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
   if(WIN32)
     # No configuration just a copy
     configure_file(
-      ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config-cmd.in
+      ${PROJECT_SOURCE_DIR}/cmake/Templates/geant4-config-cmd.in
       ${PROJECT_BINARY_DIR}/InstallTreeFiles/geant4-config.cmd
       @ONLY
       )

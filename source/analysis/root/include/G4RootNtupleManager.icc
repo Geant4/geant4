@@ -56,7 +56,7 @@ inline G4bool G4TNtupleManager<tools::wroot::ntuple, G4RootFile>::FillNtupleTCol
   }
 
   auto ntuple = GetNtupleInFunction(ntupleId, "FillNtupleTColumn");
-  if ( ! ntuple ) return false;
+  if (ntuple == nullptr) return false;
 
   auto index = columnId - fFirstNtupleColumnId;
   if ( index < 0 || index >= G4int(ntuple->columns().size()) ) {
@@ -69,7 +69,7 @@ inline G4bool G4TNtupleManager<tools::wroot::ntuple, G4RootFile>::FillNtupleTCol
 
   auto icolumn =  ntuple->columns()[index];
   auto column = dynamic_cast<tools::wroot::ntuple::column_string* >(icolumn);
-  if ( ! column ) {
+  if (column == nullptr) {
     G4Analysis::Warn(
       "Column type does not match: ntupleId " + to_string(ntupleId) +
       " columnId " + to_string(columnId) + " value " + value,

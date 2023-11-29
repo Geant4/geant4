@@ -31,16 +31,14 @@
 #include "G4UIdirectory.hh"
 
 // --------------------------------------------------------------------
-G4UIdirectory::G4UIdirectory(char* theCommandPath,
-                             G4bool commandsToBeBroadcasted)
+G4UIdirectory::G4UIdirectory(char* theCommandPath, G4bool commandsToBeBroadcasted)
   : G4UIcommand(theCommandPath, nullptr, commandsToBeBroadcasted)
 {
   SetCommandType(CmdDirectory);
 }
 
 // --------------------------------------------------------------------
-G4UIdirectory::G4UIdirectory(const char* theCommandPath,
-                             G4bool commandsToBeBroadcasted)
+G4UIdirectory::G4UIdirectory(const char* theCommandPath, G4bool commandsToBeBroadcasted)
   : G4UIcommand(theCommandPath, nullptr, commandsToBeBroadcasted)
 {
   SetCommandType(CmdDirectory);

@@ -22,10 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-//
+
 ////////////////////////////////////////////////////////////////////////
 // G4SurfaceProperty Definition
 ////////////////////////////////////////////////////////////////////////
@@ -48,15 +45,16 @@
 #ifndef G4SurfaceProperty_h
 #define G4SurfaceProperty_h 1
 
-#include <vector>
-
-#include "G4Types.hh"
 #include "G4String.hh"
+#include "G4Types.hh"
+
+#include <vector>
 
 class G4SurfaceProperty;
 
-typedef std::vector<G4SurfaceProperty*> G4SurfacePropertyTable;
+using G4SurfacePropertyTable = std::vector<G4SurfaceProperty*>;
 
+// clang-format off
 enum G4SurfaceType
 {
   dielectric_metal,       // dielectric-metal interface
@@ -65,41 +63,41 @@ enum G4SurfaceType
   dielectric_LUTDAVIS,    // dielectric-Look-Up-Table DAVIS interface
   dielectric_dichroic,    // dichroic filter interface
   firsov,                 // for Firsov Process
-  x_ray                   // for x-ray mirror process
+  x_ray,                  // for x-ray mirror process
+  coated                 // coated_dielectric-dielectric interface
 };
+// clang-format on
 
 class G4SurfaceProperty
 {
  public:
-  G4SurfaceProperty(const G4String& name, G4SurfaceType type = x_ray);
   // Constructor of a X-ray optical surface object.
-
   G4SurfaceProperty();
-  virtual ~G4SurfaceProperty();
+  G4SurfaceProperty(const G4String& name, G4SurfaceType type = x_ray);
+  virtual ~G4SurfaceProperty() = default;
 
-  const G4String& GetName() const { return theName; }
   // Returns the surface name.
-  void SetName(const G4String& name) { theName = name; }
+  const G4String& GetName() const { return theName; }
   // Sets the surface name.
+  void SetName(const G4String& name) { theName = name; }
 
-  const G4SurfaceType& GetType() const { return theType; }
   // Returns the surface type.
-  virtual void SetType(const G4SurfaceType& type) { theType = type; }
+  const G4SurfaceType& GetType() const { return theType; }
   // Sets the surface type.
+  virtual void SetType(const G4SurfaceType& type) { theType = type; }
 
+  // To handle the table of surface properties.
   static void CleanSurfacePropertyTable();
   static const G4SurfacePropertyTable* GetSurfacePropertyTable();
   static size_t GetNumberOfSurfaceProperties();
   static void DumpTableInfo();
-  // To handle the table of surface properties.
 
  protected:
   G4String theName;  // Surface name
 
   G4SurfaceType theType;  // Surface type
 
-  static G4SurfacePropertyTable theSurfacePropertyTable;
-  // The static Table of SurfaceProperties.
+  static G4SurfacePropertyTable theSurfacePropertyTable;  // The static Table of SurfaceProperties.
 };
 
 #endif /* G4SurfaceProperty_h */

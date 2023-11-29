@@ -1,6 +1,6 @@
 #
-# ------ MacOS-X ------
-#                                 macOS 11, gcc-9.3 and higher
+# ------ macOS ------
+#                                 macOS, gcc-9.3 and higher
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -18,6 +18,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXXFLAGS  += -std=c++17
 # CXXFLAGS  += -stdlib=libstdc++
   G4USE_STD17 := 1
+  ifdef G4MULTITHREADED
+    CXXFLAGS += -ftls-model=initial-exec -pthread
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
     FCFLAGS   := -O3
@@ -172,23 +175,21 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       QTFLAGS   += -I $(QTLPATH)/Qt3DCore.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
-      QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
-       QTLIBS    += -framework QtWidgets -framework QtPrintSupport
+       QTLIBS    += -framework QtWidgets
     endif   
     ifndef QT3DLIBS
        QT3DLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
        QT3DLIBS    += -framework QtWidgets
        QT3DLIBS    += -framework Qt3DCore -framework Qt3DExtras -framework Qt3DRender
-       QT3DLIBS    += -framework QtPrintSupport
     endif   
     ifndef GLQTLIBS  
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
       GLQTLIBS    += -framework QtWidgets
-      GLQTLIBS    += -framework QtOpenGL -framework QtPrintSupport
+      GLQTLIBS    += -framework QtOpenGL
     endif   
   endif
 
@@ -205,13 +206,13 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -Wl,-w -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -Wl,-w -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

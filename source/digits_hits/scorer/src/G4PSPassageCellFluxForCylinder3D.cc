@@ -59,8 +59,6 @@ G4PSPassageCellFluxForCylinder3D::G4PSPassageCellFluxForCylinder3D(
   nSegment[0] = nSegment[1] = nSegment[2] = 0;
 }
 
-G4PSPassageCellFluxForCylinder3D::~G4PSPassageCellFluxForCylinder3D() { ; }
-
 void G4PSPassageCellFluxForCylinder3D::SetCylinderSize(G4ThreeVector cylSize, G4double StartAng, G4double AngSpan)
 {
   cylinderSize = cylSize;   // rMin, rMax, halfZ

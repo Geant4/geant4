@@ -54,9 +54,7 @@ G4DrawVoxels::G4DrawVoxels()
 
 // Destructor
 //
-G4DrawVoxels::~G4DrawVoxels()
-{
-}
+G4DrawVoxels::~G4DrawVoxels() = default;
 
 // Methods that allow changing colors of the drawing
 //
@@ -153,7 +151,7 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    voxel_plane.SetVisAttributes(voxelsVisAttributes);
    
    G4SmartVoxelProxy* slice = header->GetSlice(0);
-   G4int slice_no = 0, no_slices = header->GetNoSlices();
+   std::size_t slice_no = 0, no_slices = header->GetNoSlices();
    G4double beginning = header->GetMinExtent(),
             step = (header->GetMaxExtent()-beginning)/no_slices;
 
@@ -184,7 +182,7 @@ G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 G4PlacedPolyhedronList*
 G4DrawVoxels::CreatePlacedPolyhedra(const G4LogicalVolume* lv) const
 {
-  G4PlacedPolyhedronList* pplist = new G4PlacedPolyhedronList;
+  auto  pplist = new G4PlacedPolyhedronList;
   G4VoxelLimits limits;  // Working object for recursive call.
   ComputeVoxelPolyhedra(lv,lv->GetVoxelHeader(),limits,pplist);
   return pplist; //it s up to the calling program to destroy it then!
@@ -218,10 +216,10 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
    {
      // Drawing the bounding and voxel polyhedra for the pVolume
      //
-     for (size_t i=0; i<pplist->size(); ++i)
+     for (const auto & i : *pplist)
      {
-       pVVisManager->Draw((*pplist)[i].GetPolyhedron(),
-                          (*pplist)[i].GetTransform()*transf3D);
+       pVVisManager->Draw(i.GetPolyhedron(),
+                          i.GetTransform()*transf3D);
      }
    }
    else

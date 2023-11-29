@@ -51,6 +51,7 @@
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4Element.hh"
+#include "G4EmParameters.hh"
 
 
 const std::string G4GSPWACorrections::gElemSymbols[] = {"H","He","Li","Be","B" ,
@@ -126,8 +127,8 @@ void G4GSPWACorrections::InitDataPerElement() {
   // loop over all materials, for those that are used check the list of elements and load data from file if the
   // corresponding data has not been loaded yet
   G4ProductionCutsTable *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numMatCuts = thePCTable->GetTableSize();
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
+  G4int numMatCuts = (G4int)thePCTable->GetTableSize();
+  for (G4int imc=0; imc<numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
     if (!matCut->IsUsed()) {
       continue;
@@ -135,8 +136,8 @@ void G4GSPWACorrections::InitDataPerElement() {
     const G4Material      *mat      = matCut->GetMaterial();
     const G4ElementVector *elemVect = mat->GetElementVector();
     //
-    size_t numElems = elemVect->size();
-    for (size_t ielem=0; ielem<numElems; ++ielem) {
+    std::size_t numElems = elemVect->size();
+    for (std::size_t ielem=0; ielem<numElems; ++ielem) {
       const G4Element *elem = (*elemVect)[ielem];
       G4int izet = G4lrint(elem->GetZ());
       if (izet>gMaxZet) {
@@ -152,14 +153,14 @@ void G4GSPWACorrections::InitDataPerElement() {
 
 void G4GSPWACorrections::InitDataPerMaterials() {
   // prepare size of the container
-  size_t numMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t numMaterials = G4Material::GetNumberOfMaterials();
   if (fDataPerMaterial.size()!=numMaterials) {
     fDataPerMaterial.resize(numMaterials);
   }
   // init. PWA correction data for the Materials that are used in the geometry
   G4ProductionCutsTable *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numMatCuts = thePCTable->GetTableSize();
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
+  G4int numMatCuts = (G4int)thePCTable->GetTableSize();
+  for (G4int imc=0; imc<numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
     if (!matCut->IsUsed()) {
       continue;
@@ -180,14 +181,7 @@ void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
     izet = gMaxZet;
   }
   // load data from file
-  char* tmppath = std::getenv("G4LEDATA");
-  if (!tmppath) {
-    G4Exception("G4GSPWACorrection::LoadDataElement()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  std::string path(tmppath);
+  std::string path = G4EmParameters::Instance()->GetDirLEDATA();
   if (fIsElectron) {
     path += "/msc_GS/PWACor/el/";
   } else {
@@ -201,7 +195,7 @@ void G4GSPWACorrections::LoadDataElement(const G4Element *elem) {
     return;
   }
   // allocate data structure
-  DataPerMaterial *perElem = new DataPerMaterial();
+  auto perElem = new DataPerMaterial();
   perElem->fCorScreening.resize(gNumEkin,0.0);
   perElem->fCorFirstMoment.resize(gNumEkin,0.0);
   perElem->fCorSecondMoment.resize(gNumEkin,0.0);
@@ -225,14 +219,14 @@ void G4GSPWACorrections::InitDataMaterial(const G4Material *mat) {
   G4double constFactor        = CLHEP::electron_mass_c2*CLHEP::fine_structure_const/0.88534;
   constFactor                *= constFactor;  // (mc^2)^2\alpha^2/( C_{TF}^2)
   // allocate memory
-  DataPerMaterial *perMat     = new DataPerMaterial();
+  auto perMat = new DataPerMaterial();
   perMat->fCorScreening.resize(gNumEkin,0.0);
   perMat->fCorFirstMoment.resize(gNumEkin,0.0);
   perMat->fCorSecondMoment.resize(gNumEkin,0.0);
   fDataPerMaterial[mat->GetIndex()] = perMat;
   //
   const G4ElementVector* elemVect           = mat->GetElementVector();
-  const G4int            numElems           = mat->GetNumberOfElements();
+  const G4int            numElems           = (G4int)mat->GetNumberOfElements();
   const G4double*        nbAtomsPerVolVect  = mat->GetVecNbOfAtomsPerVolume();
   G4double               totNbAtomsPerVol   = mat->GetTotNbOfAtomsPerVolume();
   //
@@ -343,7 +337,7 @@ void G4GSPWACorrections::InitDataMaterial(const G4Material *mat) {
 
 
 void G4GSPWACorrections::ClearDataPerElement() {
-  for (size_t i=0; i<fDataPerElement.size(); ++i) {
+  for (std::size_t i=0; i<fDataPerElement.size(); ++i) {
     if (fDataPerElement[i]) {
       fDataPerElement[i]->fCorScreening.clear();
       fDataPerElement[i]->fCorFirstMoment.clear();
@@ -356,7 +350,7 @@ void G4GSPWACorrections::ClearDataPerElement() {
 
 
 void G4GSPWACorrections::ClearDataPerMaterial() {
-  for (size_t i=0; i<fDataPerMaterial.size(); ++i) {
+  for (std::size_t i=0; i<fDataPerMaterial.size(); ++i) {
     if (fDataPerMaterial[i]) {
       fDataPerMaterial[i]->fCorScreening.clear();
       fDataPerMaterial[i]->fCorFirstMoment.clear();

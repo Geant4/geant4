@@ -37,7 +37,9 @@
 #include "globals.hh"
 #include "G4ErrorSurfaceTarget.hh"
 #include "G4ThreeVector.hh"
+#include "G4Normal3D.hh"
 #include "G4Plane3D.hh"
+#include "G4Point3D.hh"
 
 class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
 {
@@ -56,23 +58,23 @@ class G4ErrorPlaneSurfaceTarget : public G4ErrorSurfaceTarget, G4Plane3D
                               const G4Point3D& p3);
       // Constructs plane by three points
 
-    ~G4ErrorPlaneSurfaceTarget() = default;
+    ~G4ErrorPlaneSurfaceTarget() override = default;
 
     virtual G4ThreeVector Intersect( const G4ThreeVector& point,
                                      const G4ThreeVector& direc ) const;
       // Intersects the surface with the line given by point and direction
   
-    virtual G4double GetDistanceFromPoint( const G4ThreeVector& point,
-                                           const G4ThreeVector& direc ) const;
+    G4double GetDistanceFromPoint( const G4ThreeVector& point,
+                                   const G4ThreeVector& direc ) const override;
       // Distance from point to surface in a given direction
 
-    virtual G4double GetDistanceFromPoint( const G4ThreeVector& pt ) const;
+    G4double GetDistanceFromPoint( const G4ThreeVector& pt ) const override;
       // Closest distance from point to surface
 
-    virtual G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const;
+    G4Plane3D GetTangentPlane( const G4ThreeVector& point ) const override;
       // Get tangent plane as itself
 
-    virtual void Dump( const G4String& msg ) const;
+    void Dump( const G4String& msg ) const override;
       // Dump plane surface parameter
 };
 

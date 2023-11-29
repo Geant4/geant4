@@ -27,7 +27,6 @@
 //
 #include "G4HumanPhantomActionInitialization.hh"
 #include "G4HumanPhantomPrimaryGeneratorAction.hh"
-#include "G4HumanPhantomSteppingAction.hh"
 #include "G4RunManager.hh"
 #include "G4HumanPhantomRunAction.hh"
 #include "G4HumanPhantomEventAction.hh"
@@ -35,35 +34,23 @@
 
 G4HumanPhantomActionInitialization::G4HumanPhantomActionInitialization():
 G4VUserActionInitialization()
-{
-}
-
+{}
 
 G4HumanPhantomActionInitialization::~G4HumanPhantomActionInitialization()
-{
-}
+{}
 
 void G4HumanPhantomActionInitialization::BuildForMaster() const
-{
-	
-}
-
+{}
 
 void G4HumanPhantomActionInitialization::Build() const
 {   
 // Instantiate the analysis manager
-G4HumanPhantomAnalysisManager* analysis = new G4HumanPhantomAnalysisManager();
- 
+auto* analysis = new G4HumanPhantomAnalysisManager();
+
 SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
 
-
 SetUserAction(new G4HumanPhantomRunAction(analysis));
-
   
-G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
-SetUserAction(eventAction);
-
-SetUserAction(new G4HumanPhantomSteppingAction()); 
-	
+SetUserAction(new G4HumanPhantomEventAction());
 }  
 

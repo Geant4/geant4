@@ -41,7 +41,6 @@
 #include <string_view>
 
 class G4XmlAnalysisManager;
-class G4XmlFileManager;
 class G4XmlNtupleFileManager;
 template <class T>
 class G4ThreadLocalSingleton;
@@ -51,7 +50,7 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
   friend class G4ThreadLocalSingleton<G4XmlAnalysisManager>;
 
   public:
-    virtual ~G4XmlAnalysisManager();
+    ~G4XmlAnalysisManager() override;
 
     // Static methods
     static G4XmlAnalysisManager* Instance();
@@ -67,24 +66,14 @@ class G4XmlAnalysisManager : public G4ToolsAnalysisManager
     std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
     std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
 
-  protected:
-    // Virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl(G4bool reset) final;
-    virtual G4bool ResetImpl() final;
-    virtual G4bool IsOpenFileImpl() const final;
-
   private:
     G4XmlAnalysisManager();
 
     // Static data members
-    inline static G4XmlAnalysisManager* fgMasterInstance { nullptr };
     inline static G4ThreadLocal G4bool fgIsInstance { false };
     static constexpr std::string_view fkClass { "G4XmlAnalysisManager" };
 
     // Data members
-    std::shared_ptr<G4XmlFileManager>  fFileManager { nullptr };
     std::shared_ptr<G4XmlNtupleFileManager>  fNtupleFileManager { nullptr };
 };
 

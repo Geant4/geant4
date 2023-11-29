@@ -51,7 +51,7 @@ class G4PionMinus : public G4ParticleDefinition
  private:
    static G4PionMinus* theInstance;
    G4PionMinus(){}
-   ~G4PionMinus(){}
+   ~G4PionMinus() override= default;
 
  public:
    static G4PionMinus* Definition();

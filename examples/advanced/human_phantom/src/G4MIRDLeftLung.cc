@@ -47,24 +47,14 @@
 #include "G4Box.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDLeftLung::G4MIRDLeftLung()
-{
-}
-
-G4MIRDLeftLung::~G4MIRDLeftLung()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 					     const G4String& colourName, G4bool wireFrame,G4bool)
 {
 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* lung_material = material -> GetMaterial("lung_material");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* lung_material = material -> GetMaterial("lung_material");
   delete material;
 
   G4double ax = 5. *cm; //a
@@ -73,14 +63,14 @@ G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysi
   G4double zcut1 = 0.0 *cm; 
   G4double zcut2=24. *cm;
  
-  G4Ellipsoid* oneLung = new G4Ellipsoid("OneLung",ax, by, cz, zcut1,zcut2);
+  auto* oneLung = new G4Ellipsoid("OneLung",ax, by, cz, zcut1,zcut2);
 
   ax= 5.*cm; 
   by= 7.5*cm; 
   cz= 24.*cm;
 
 
-  G4Ellipsoid* subtrLung = new G4Ellipsoid("subtrLung",ax, by, cz);
+  auto* subtrLung = new G4Ellipsoid("subtrLung",ax, by, cz);
 
   // y<0
 
@@ -88,19 +78,19 @@ G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysi
   G4double dy = 8.5 * cm;
   G4double dz = 24. * cm;
 
-  G4Box* box = new G4Box("Box", dx, dy, dz);
+  auto* box = new G4Box("Box", dx, dy, dz);
  
 
   //G4SubtractionSolid* section = new G4SubtractionSolid("BoxSub", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
-  G4SubtractionSolid* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, 0, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
+  auto* section2 = new G4SubtractionSolid("BoxSub2", subtrLung, box, nullptr, G4ThreeVector(0.*cm, 8.5* cm, 0.*cm)); 
 
   //G4SubtractionSolid* lung1 =  new G4SubtractionSolid("Lung1", oneLung,
   //				       section,
   //				       0, G4ThreeVector(6.*cm,0*cm,0.0*cm));
  
-  G4SubtractionSolid* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
+  auto* lung2 =  new G4SubtractionSolid("Lung2", oneLung,
 						      section2,
-						      0, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
+						      nullptr, G4ThreeVector(-6.*cm,0*cm,0.0*cm));
 
   // G4RotationMatrix* matrix = new G4RotationMatrix();  
   // matrix->rotateX(180. * degree);
@@ -110,11 +100,11 @@ G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysi
   //G4UnionSolid* lungs = new G4UnionSolid("Lungs", lung1, lung2, matrix, G4ThreeVector(17*cm, 0., 0.));
 
 
-  G4LogicalVolume* logicLeftLung = new G4LogicalVolume(lung2,lung_material,
-						       "logical" + volumeName, 0, 0, 0); 
+  auto* logicLeftLung = new G4LogicalVolume(lung2,lung_material,
+						       "logical" + volumeName, nullptr, nullptr, nullptr); 
   
 
-  G4VPhysicalVolume* physLeftLung = new G4PVPlacement(0,G4ThreeVector(8.50 *cm, 0.0*cm, 8.5*cm),
+  G4VPhysicalVolume* physLeftLung = new G4PVPlacement(nullptr,G4ThreeVector(8.50 *cm, 0.0*cm, 8.5*cm),
 						      "physicalLeftLung",                    
 						      logicLeftLung,
 						      mother,
@@ -124,9 +114,9 @@ G4VPhysicalVolume* G4MIRDLeftLung::Construct(const G4String& volumeName,G4VPhysi
 
   // Visualization Attributes
   //G4VisAttributes* LeftLungVisAtt = new G4VisAttributes(G4Colour(0.25,0.41,0.88));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* LeftLungVisAtt = new G4VisAttributes(colour);
+  auto* LeftLungVisAtt = new G4VisAttributes(colour);
   LeftLungVisAtt->SetForceSolid(wireFrame);
   logicLeftLung->SetVisAttributes(LeftLungVisAtt); 
 

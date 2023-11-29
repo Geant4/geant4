@@ -83,7 +83,7 @@
 #ifdef G4MULTITHREADED
 #  include "G4Threading.hh"
 #  include "G4AutoLock.hh"
-#  include "G4GeometryWorkspace.hh"
+#  include "G4GeometryWorkspace.hh" // no_geant4_module_check(!G4MULTITHREADED)
 #  include "G4SolidsWorkspace.hh"
 #  include <deque>
 #  include <typeinfo>
@@ -91,36 +91,40 @@
 #  include <thread>
 #endif
 
+#define G4warn G4cout
+
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 
-G4VisManager::G4VisManager (const G4String& verbosityString):
-  fVerbose         (1),
-  fInitialised     (false),
-  fpGraphicsSystem (0),
-  fpScene          (0),
-  fpSceneHandler   (0),
-  fpViewer         (0),
-  fpStateDependent (0),
-  fEventRefreshing          (false),
-  fTransientsDrawnThisRun   (false),
-  fTransientsDrawnThisEvent (false),
-  fNoOfEventsDrawnThisRun   (0),
-  fNKeepRequests            (0),
-  fEventKeepingSuspended    (false),
-  fDrawEventOnlyIfToBeKept  (false),
-  fpRequestedEvent          (0),
-  fReviewingKeptEvents      (false),
-  fAbortReviewKeptEvents    (false),
-  fIsDrawGroup              (false),
-  fDrawGroupNestingDepth    (0),
-  fIgnoreStateChanges       (false)
+G4VisManager::G4VisManager (const G4String& verbosityString)
+: fVerbose         (1)
+, fInitialised     (false)
+, fpGraphicsSystem (0)
+, fpScene          (0)
+, fpSceneHandler   (0)
+, fpViewer         (0)
+, fpStateDependent (0)
+, fEventRefreshing          (false)
+, fTransientsDrawnThisRun   (false)
+, fTransientsDrawnThisEvent (false)
+, fNoOfEventsDrawnThisRun   (0)
+, fNKeepRequests            (0)
+, fEventKeepingSuspended    (false)
+, fDrawEventOnlyIfToBeKept  (false)
+, fpRequestedEvent          (0)
+, fReviewingKeptEvents      (false)
+, fAbortReviewKeptEvents    (false)
+, fReviewingPlots           (false)
+, fAbortReviewPlots         (false)
+, fIsDrawGroup              (false)
+, fDrawGroupNestingDepth    (0)
+, fIgnoreStateChanges       (false)
 #ifdef G4MULTITHREADED
 , fMaxEventQueueSize        (100)
 , fWaitOnEventQueueFull     (true)
 #endif
-  // All other objects use default constructors.
+// All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
   fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
@@ -189,8 +193,9 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   //   ...
 
   // Make top level command directory...
-  // Vis commands should *not* be broadcast to threads (2nd argument).
-  auto directory = new G4UIdirectory ("/vis/",false);
+  // vis commands should *not* be broadcast to workers
+  G4bool propagateToWorkers;
+  auto directory = new G4UIdirectory ("/vis/",propagateToWorkers=false);
   directory -> SetGuidance ("Visualization commands.");
   // Request commands in name order
   directory -> Sort();  // Ordering propagates to sub-directories
@@ -209,7 +214,7 @@ G4VisManager::~G4VisManager()
 {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->SetCoutDestination(nullptr);
-  size_t i;
+  std::size_t i;
   for (i = 0; i < fSceneList.size (); ++i) {
     delete fSceneList[i];
   }
@@ -253,7 +258,7 @@ G4VisManager* G4VisManager::GetInstance () {
 void G4VisManager::Initialise () {
 
   if (fInitialised && fVerbosity >= warnings) {
-    G4cout << "WARNING: G4VisManager::Initialise: already initialised."
+    G4warn << "WARNING: G4VisManager::Initialise: already initialised."
 	   << G4endl;
     return;
   }
@@ -600,6 +605,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerRebuild);
   RegisterMessenger(new G4VisCommandViewerRefresh);
   RegisterMessenger(new G4VisCommandViewerReset);
+  RegisterMessenger(new G4VisCommandViewerResetCameraParameters);
   RegisterMessenger(new G4VisCommandViewerSave);
   RegisterMessenger(new G4VisCommandViewerScale);
   RegisterMessenger(new G4VisCommandViewerSelect);
@@ -623,6 +629,7 @@ void G4VisManager::RegisterMessengers () {
   // (i.e., commands that invoke other commands) are instantiated here.
 
   RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandAbortReviewPlots);
   RegisterMessenger(new G4VisCommandDrawOnlyToBeKeptEvents);
   RegisterMessenger(new G4VisCommandDrawTree);
   RegisterMessenger(new G4VisCommandDrawView);
@@ -631,7 +638,9 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandPlot);
   RegisterMessenger(new G4VisCommandReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandReviewPlots);
   RegisterMessenger(new G4VisCommandSpecify);
 
   // List manager commands
@@ -659,6 +668,60 @@ void G4VisManager::RegisterMessengers () {
                     (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
+#include <tools/histo/h1d>
+#include <tools/histo/h2d>
+
+namespace {
+  template <typename HT>  // tools::histo::h1d, etc
+  G4bool PrintListOfHnPlots(const G4String& plotType) {  // h1, etc.
+    auto ui = G4UImanager::GetUIpointer();
+    G4bool thereArePlots = false;
+    auto keepControlVerbose = ui->GetVerboseLevel();
+    ui->SetVerboseLevel(0);
+    auto status = ui->ApplyCommand("/analysis/" + plotType + "/getVector");
+    ui->SetVerboseLevel(keepControlVerbose);
+    if(status==G4UIcommandStatus::fCommandSucceeded) {
+      G4String hexString = ui->GetCurrentValues(G4String("/analysis/" + plotType + "/getVector"));
+      if(hexString.size()) {
+        void* ptr;
+        std::istringstream is(hexString);
+        is >> ptr;
+        auto _v = (const std::vector<HT*>*)ptr;
+        auto _n = _v->size();
+        if (_n > 0) {
+          thereArePlots = true;
+          G4String isare("are"),plural("s");
+          if (_n == 1) {isare = "is"; plural = "";}
+          G4cout <<
+          "There " << isare << ' ' << _n << ' ' << plotType <<  " histogram" << plural
+          << G4endl;
+          if (_n <= 5) {
+            for (std::size_t i = 0; i < _n; ++i) {
+              const auto& _h = (*_v)[i];
+              G4cout
+              << std::setw(3) << i
+              << " with " << std::setw(6) << _h->entries() << " entries: "
+              << _h->get_title() << G4endl;
+            }
+          }
+        }
+      }
+    }
+    return thereArePlots;
+  }
+  void PrintListOfPlots() {
+    G4bool thereArePlots = false;
+    if (PrintListOfHnPlots<tools::histo::h1d>("h1")) thereArePlots = true;
+    if (PrintListOfHnPlots<tools::histo::h2d>("h2")) thereArePlots = true;
+    if (thereArePlots) {
+      G4cout <<
+      "List them with \"/analysis/list\"."
+      "\nView them with \"/vis/plot\" or \"/vis/reviewPlots\"."
+      << G4endl;
+    }
+  }
+}
+
 void G4VisManager::Enable() {
   if (IsValidView ()) {
     SetConcreteInstance(this);
@@ -666,19 +729,26 @@ void G4VisManager::Enable() {
       G4cout << "G4VisManager::Enable: visualization enabled." << G4endl;
     }
     if (fVerbosity >= warnings) {
-      G4int nKeptEvents = 0;
+      std::size_t nKeptEvents = 0;
       const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
       if (run) nKeptEvents = run->GetEventVector()->size();
+      G4String isare("are"),plural("s");
+      if (nKeptEvents == 1) {isare = "is"; plural = "";}
       G4cout <<
-  "There are " << nKeptEvents << " kept events."
-  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
-  "\n  \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+      "There " << isare << ' ' << nKeptEvents << " kept event" << plural << '.'
       << G4endl;
+      if (nKeptEvents > 0) {
+        G4cout <<
+  "  \"/vis/reviewKeptEvents\" to review one by one."
+  "\n  To see accumulated, \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\"."
+        << G4endl;
+      }
+      PrintListOfPlots();
     }
   }
   else {
     if (fVerbosity >= warnings) {
-      G4cout <<
+      G4warn <<
 	"G4VisManager::Enable: WARNING: visualization remains disabled for"
 	"\n  above reasons.  Rectifying with valid vis commands will"
 	"\n  automatically enable."
@@ -700,7 +770,7 @@ void G4VisManager::Disable() {
     G4int currentTrajectoryType =
     G4RunManagerKernel::GetRunManagerKernel()->GetTrackingManager()->GetStoreTrajectory();
     if (currentTrajectoryType > 0) {
-    G4cout <<
+    G4warn <<
       "You may wish to disable trajectory production too:"
       "\n  \"/tracking/storeTrajectory 0\""
       "\nbut don't forget to re-enable with"
@@ -713,10 +783,10 @@ void G4VisManager::Disable() {
 }
 
 const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
-  G4int nSystems = fAvailableGraphicsSystems.size ();
+  std::size_t nSystems = fAvailableGraphicsSystems.size ();
   if (nSystems == 0) {
     if (fVerbosity >= warnings) {
-      G4cout << "G4VisManager::GetAvailableGraphicsSystems: WARNING: no"
+      G4warn << "G4VisManager::GetAvailableGraphicsSystems: WARNING: no"
 	"\n graphics system available!"
 	"\n  1) Did you have environment variables G4VIS_BUILD_xxxx_DRIVER set"
 	"\n     when you compiled/built the visualization code?"
@@ -747,7 +817,7 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   }
   else {
     if (fVerbosity >= errors) {
-      G4cout << "G4VisManager::RegisterGraphicsSystem: null pointer!"
+      G4warn << "G4VisManager::RegisterGraphicsSystem: null pointer!"
 	     << G4endl;
     }
     happy=false;
@@ -767,8 +837,8 @@ G4VisManager::CurrentTrajDrawModel() const
     // Use G4TrajectoryDrawByCharge as a fallback.
     fpTrajDrawModelMgr->Register(new G4TrajectoryDrawByCharge("DefaultModel"));
     if (fVerbosity >= warnings) {
-      G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model."<<G4endl;
-      G4cout<<"See commands in /vis/modeling/trajectories/ for other options."<<G4endl;
+      G4warn<<"G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model."<<G4endl;
+      G4warn<<"See commands in /vis/modeling/trajectories/ for other options."<<G4endl;
     }
   }
 
@@ -1132,6 +1202,18 @@ void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
   Draw (*pSol, attribs, objectTransform);
 }
 
+void G4VisManager::DrawGeometry
+(G4VPhysicalVolume* v, const G4Transform3D& t)
+// Draws a geometry tree starting at the specified physical volume.
+{
+  auto modelingParameters = fpSceneHandler->CreateModelingParameters();
+  auto depth = G4PhysicalVolumeModel::UNLIMITED;
+  const G4bool useFullExtent = true;
+  G4PhysicalVolumeModel aPVModel(v,depth,t,modelingParameters,useFullExtent);
+  aPVModel.DescribeYourselfTo(*fpSceneHandler);
+  delete modelingParameters;
+}
+
 void G4VisManager::CreateSceneHandler (const G4String& name) {
   if (!fInitialised) Initialise ();
   if (fpGraphicsSystem) {
@@ -1143,7 +1225,7 @@ void G4VisManager::CreateSceneHandler (const G4String& name) {
     }
     else {
       if (fVerbosity >= errors) {
-	G4cout << "ERROR in G4VisManager::CreateSceneHandler during "
+	G4warn << "ERROR in G4VisManager::CreateSceneHandler during "
 	       << fpGraphicsSystem -> GetName ()
 	       << " scene handler creation.\n  No action taken."
 	       << G4endl;
@@ -1168,7 +1250,7 @@ void G4VisManager::CreateViewer
 
   if (!p) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR in G4VisManager::CreateViewer: null pointer during "
+      G4warn << "ERROR in G4VisManager::CreateViewer: null pointer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer creation.\n  No action taken."
 	     << G4endl;
@@ -1178,7 +1260,7 @@ void G4VisManager::CreateViewer
 
   if (p -> GetViewId() < 0) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+      G4warn << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer instantiation.\n  No action taken."
 	     << G4endl;
@@ -1195,7 +1277,7 @@ void G4VisManager::CreateViewer
   p -> Initialise ();  // (Viewer itself may change view parameters further.)
   if (p -> GetViewId() < 0) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+      G4warn << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer initialisation.\n  No action taken."
 	     << G4endl;
@@ -1234,7 +1316,7 @@ void G4VisManager::CreateViewer
     static G4bool warned = false;
     if (fVerbosity >= warnings) {
       if (!warned) {
-	G4cout <<
+	G4warn <<
   "WARNING: covered objects in solid mode will not be rendered!"
   "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
   "\n  Also see other \"/vis/viewer/set\" commands."
@@ -1256,14 +1338,14 @@ void G4VisManager::GeometryHasChanged () {
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   if (!pWorld) {
     if (fVerbosity >= warnings) {
-      G4cout << "WARNING: There is no world volume!" << G4endl;
+      G4warn << "WARNING: There is no world volume!" << G4endl;
     }
   }
 
   // Check scenes.
   G4SceneList& sceneList = fSceneList;
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  std::size_t iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     G4Scene* pScene = sceneList [iScene];
     std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
     if (modelList.size ()) {
@@ -1278,7 +1360,7 @@ void G4VisManager::GeometryHasChanged () {
 	  if (modelInvalid) {
 	    // Model invalid - remove and break.
 	    if (fVerbosity >= warnings) {
-	      G4cout << "WARNING: Model \""
+	      G4warn << "WARNING: Model \""
 		     << iterModel->fpModel->GetGlobalDescription ()
 		     <<
 		"\" is no longer valid - being removed\n  from scene \""
@@ -1293,14 +1375,26 @@ void G4VisManager::GeometryHasChanged () {
 
       if (modelList.size () == 0) {
 	if (fVerbosity >= warnings) {
-	  G4cout << "WARNING: No models left in this scene \""
+	  G4warn << "WARNING: No run-duration models left in this scene \""
 		 << pScene -> GetName ()
 		 << "\"."
 		 << G4endl;
 	}
+        if (pWorld) {
+          if (fVerbosity >= warnings) {
+            G4warn << "  Adding current world to \""
+            << pScene -> GetName ()
+            << "\"."
+            << G4endl;
+          }
+          pScene->AddRunDurationModel(new G4PhysicalVolumeModel(pWorld),fVerbosity>=warnings);
+          // (The above includes a re-calculation of the extent.)
+          G4UImanager::GetUIpointer () ->
+          ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
+        }
       }
       else {
-	pScene->CalculateExtent();
+	pScene->CalculateExtent();  // Recalculate extent
 	G4UImanager::GetUIpointer () ->
 	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
@@ -1310,7 +1404,7 @@ void G4VisManager::GeometryHasChanged () {
   // Check the manager's current scene...
   if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
     if (fVerbosity >= warnings) {
-      G4cout << "WARNING: The current scene \""
+      G4warn << "WARNING: The current scene \""
 	     << fpScene -> GetName ()
 	     << "\" has no run duration models."
              << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
@@ -1340,8 +1434,8 @@ void G4VisManager::NotifyHandlers () {
 
     // Check scenes.
     G4SceneList& sceneList = fSceneList;
-    G4int iScene, nScenes = sceneList.size ();
-    for (iScene = 0; iScene < nScenes; iScene++) {
+    std::size_t iScene, nScenes = sceneList.size ();
+    for (iScene = 0; iScene < nScenes; ++iScene) {
       G4Scene* pScene = sceneList [iScene];
       std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
 
@@ -1355,7 +1449,7 @@ void G4VisManager::NotifyHandlers () {
     // Check the manager's current scene...
     if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
       if (fVerbosity >= warnings) {
-        G4cout << "WARNING: The current scene \""
+        G4warn << "WARNING: The current scene \""
         << fpScene -> GetName ()
         << "\" has no run duration models."
         << "\n  Use \"/vis/scene/add/volume\" or create a new scene."
@@ -1421,7 +1515,7 @@ void G4VisManager::RegisterRunDurationUserVisAction
     fUserVisActionExtents[pVisAction] = extent;
   } else {
     if (fVerbosity >= warnings) {
-      G4cout << 
+      G4warn <<
 	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
@@ -1442,7 +1536,7 @@ void G4VisManager::RegisterEndOfEventUserVisAction
     fUserVisActionExtents[pVisAction] = extent;
   } else {
     if (fVerbosity >= warnings) {
-      G4cout << 
+      G4warn <<
 	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
@@ -1463,7 +1557,7 @@ void G4VisManager::RegisterEndOfRunUserVisAction
     fUserVisActionExtents[pVisAction] = extent;
   } else {
     if (fVerbosity >= warnings) {
-      G4cout << 
+      G4warn <<
 	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
@@ -1495,7 +1589,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   // Or clear pointers.
   if (!(fpSceneHandler && fpSceneHandler -> GetGraphicsSystem () == pSystem)) {
     const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
-    G4int nSH = sceneHandlerList.size ();  // No. of scene handlers.
+    G4int nSH = (G4int)sceneHandlerList.size ();  // No. of scene handlers.
     G4int iSH;
     for (iSH = nSH - 1; iSH >= 0; iSH--) {
       if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
@@ -1552,10 +1646,10 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
     }
   }
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
-  G4int nViewers = viewerList.size ();
+  std::size_t nViewers = viewerList.size ();
   if (nViewers) {
-    G4int iViewer;
-    for (iViewer = 0; iViewer < nViewers; iViewer++) {
+    std::size_t iViewer;
+    for (iViewer = 0; iViewer < nViewers; ++iViewer) {
       if (fpViewer == viewerList [iViewer]) break;
     }
     if (iViewer >= nViewers) {
@@ -1567,7 +1661,7 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
     }
     if (!IsValidView ()) {
       if (fVerbosity >= warnings) {
-	G4cout <<
+	G4warn <<
   "WARNING: Problem setting scene handler - please report circumstances."
 	       << G4endl;
       }
@@ -1576,7 +1670,7 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
   else {
     fpViewer = 0;
     if (fVerbosity >= warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: No viewers for this scene handler - please create one."
 	     << G4endl;
     }
@@ -1600,7 +1694,7 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   fpSceneHandler = fpViewer -> GetSceneHandler ();
   if (!fpSceneHandler) {
     if (fVerbosity >= warnings) {
-      G4cout <<
+      G4warn <<
       "WARNING: No scene handler for this viewer - please create one."
       << G4endl;
     }
@@ -1613,38 +1707,39 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
   if (!IsValidView ()) {
     if (fVerbosity >= warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: Problem setting viewer - please report circumstances."
 	     << G4endl;
     }
   }
 }
 
-void G4VisManager::PrintAvailableGraphicsSystems (Verbosity verbosity) const
+void G4VisManager::PrintAvailableGraphicsSystems
+(Verbosity verbosity, std::ostream& out) const
 {
-  G4cout << "Registered graphics systems are:\n";
+  out << "Registered graphics systems are:\n";
   if (fAvailableGraphicsSystems.size ()) {
     for (const auto& gs: fAvailableGraphicsSystems) {
       const G4String& name = gs->GetName();
       const std::vector<G4String>& nicknames = gs->GetNicknames();
       if (verbosity <= warnings) {
         // Brief output
-        G4cout << "  " << name << " (";
-        for (size_t i = 0; i < nicknames.size(); ++i) {
+        out << "  " << name << " (";
+        for (std::size_t i = 0; i < nicknames.size(); ++i) {
           if (i != 0) {
-            G4cout << ", ";
+            out << ", ";
           }
-          G4cout << nicknames[i];
+          out << nicknames[i];
         }
-        G4cout << ')';
+        out << ')';
       } else {
         // Full output
-        G4cout << *gs;
+        out << *gs;
       }
-      G4cout << G4endl;
+      out << G4endl;
     }
   } else {
-    G4cout << "  NONE!!!  None registered - yet!  Mmmmm!" << G4endl;
+    out << "  NONE!!!  None registered - yet!  Mmmmm!" << G4endl;
   }
 }
 
@@ -1717,7 +1812,7 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fRunDurationUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (size_t i = 0; i < fRunDurationUserVisActions.size(); i++) {
+    for (std::size_t i = 0; i < fRunDurationUserVisActions.size(); ++i) {
       const G4String& name = fRunDurationUserVisActions[i].fName;
       G4cout << "  " << name << G4endl;
     }
@@ -1727,7 +1822,7 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fEndOfEventUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (size_t i = 0; i < fEndOfEventUserVisActions.size(); i++) {
+    for (std::size_t i = 0; i < fEndOfEventUserVisActions.size(); ++i) {
       const G4String& name = fEndOfEventUserVisActions[i].fName;
       G4cout << "  " << name << G4endl;
     }
@@ -1737,7 +1832,7 @@ void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
   if (fEndOfRunUserVisActions.empty()) G4cout << " none" << G4endl;
   else {
     G4cout << G4endl;
-    for (size_t i = 0; i < fEndOfRunUserVisActions.size(); i++) {
+    for (std::size_t i = 0; i < fEndOfRunUserVisActions.size(); ++i) {
       const G4String& name = fEndOfRunUserVisActions[i].fName;
       G4cout << "  " << name << G4endl;
     }
@@ -1759,26 +1854,26 @@ void G4VisManager::PrintAvailableColours (Verbosity) const {
 
 void G4VisManager::PrintInvalidPointers () const {
   if (fVerbosity >= errors) {
-    G4cerr << "ERROR: G4VisManager::PrintInvalidPointers:";
+    G4warn << "ERROR: G4VisManager::PrintInvalidPointers:";
     if (!fpGraphicsSystem) {
-      G4cerr << "\n null graphics system pointer.";
+      G4warn << "\n null graphics system pointer.";
     }
     else {
-      G4cerr << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
+      G4warn << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
 	     << " but:";
       if (!fpScene)
-	G4cerr <<
+	G4warn <<
 	  "\n  Null scene pointer. Use \"/vis/drawVolume\" or"
 	  " \"/vis/scene/create\".";
       if (!fpSceneHandler)
-	G4cerr <<
+	G4warn <<
 	  "\n  Null scene handler pointer. Use \"/vis/open\" or"
 	  " \"/vis/sceneHandler/create\".";
       if (!fpViewer )
-	G4cerr <<
+	G4warn <<
 	  "\n  Null viewer pointer. Use \"/vis/viewer/create\".";
     }
-    G4cerr << G4endl;
+    G4warn << G4endl;
   }
 }
 
@@ -1819,7 +1914,7 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
   while (true) {
 
     G4MUTEXLOCK(&mtVisSubThreadMutex);
-    G4int eventQueueSize = mtVisEventQueue.size();
+    std::size_t eventQueueSize = mtVisEventQueue.size();
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
     // G4cout << "Event queue size (A): " << eventQueueSize << G4endl;
 
@@ -1984,12 +2079,6 @@ void G4VisManager::EndOfEvent ()
 
   if (!GetConcreteInstance()) return;
 
-  // Don't call IsValidView unless there is a scene handler.  This
-  // avoids WARNING message at end of event and run when the user has
-  // not instantiated a scene handler, e.g., in batch mode.
-  G4bool valid = fpSceneHandler && IsValidView();
-  if (!valid) return;
-
 //  G4cout << "G4VisManager::EndOfEvent: thread: "
 //  << G4Threading::G4GetThreadId() << G4endl;
 
@@ -1998,6 +2087,12 @@ void G4VisManager::EndOfEvent ()
   // Testing.
 //  std::this_thread::sleep_for(std::chrono::seconds(5));
 #endif
+
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids WARNING message at end of event and run when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
+  G4bool valid = fpSceneHandler && IsValidView();
+  if (!valid) return;
 
   G4RunManager* runManager = G4RunManagerFactory::GetMasterRunManager();
 
@@ -2021,18 +2116,18 @@ void G4VisManager::EndOfEvent ()
 
     // Wait if too many events in the queue.
     G4MUTEXLOCK(&mtVisSubThreadMutex);
-    G4int eventQueueSize = mtVisEventQueue.size();
+    std::size_t eventQueueSize = mtVisEventQueue.size();
     G4MUTEXUNLOCK(&mtVisSubThreadMutex);
 //    G4cout << "Event queue size (1): " << eventQueueSize << G4endl;
 
     G4bool eventQueueFull = false;
-    while (fMaxEventQueueSize > 0 && eventQueueSize >= fMaxEventQueueSize) {
+    while (fMaxEventQueueSize > 0 && (G4int)eventQueueSize >= fMaxEventQueueSize) {
 
 //      G4cout << "Event queue size (2): " << eventQueueSize << G4endl;
       if (fWaitOnEventQueueFull) {
         static G4bool warned = false;
         if (!warned) {
-          G4cout <<
+          G4warn <<
           "WARNING: The number of events in the visualisation queue has exceeded"
           "\n  the maximum, "
           << fMaxEventQueueSize <<
@@ -2056,7 +2151,7 @@ void G4VisManager::EndOfEvent ()
       } else {
         static G4bool warned = false;
         if (!warned) {
-          G4cout <<
+          G4warn <<
           "WARNING: The number of events in the visualisation queue has exceeded"
           "\n  the maximum, "
           << fMaxEventQueueSize <<
@@ -2109,7 +2204,7 @@ void G4VisManager::EndOfEvent ()
       nEventsToBeProcessed = runManager->GetNumberOfEventsToBeProcessed();
       eventID = currentEvent->GetEventID();
       const std::vector<const G4Event*>* events = currentRun->GetEventVector();
-      if (events) nKeptEvents = events->size();
+      if (events) nKeptEvents = (G4int)events->size();
     }
 
     // We are about to draw the event (trajectories, etc.), but first we
@@ -2161,12 +2256,16 @@ void G4VisManager::EndOfEvent ()
       static G4bool warned = false;
       if (!warned) {
         if (fVerbosity >= warnings) {
-          G4cout <<
+          G4warn <<
           "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
-          "\n  The number of events exceeds the maximum, "
-          << maxNumberOfKeptEvents <<
-          ", that may be kept by\n  the vis manager."
           << G4endl;
+          if (maxNumberOfKeptEvents > 0) {
+            G4warn <<
+            "\n  The number of events exceeds the maximum, "
+            << maxNumberOfKeptEvents <<
+            ", that may be kept by\n  the vis manager."
+            << G4endl;
+          }
         }
         warned = true;
       }
@@ -2181,7 +2280,6 @@ void G4VisManager::EndOfEvent ()
         eventManager->KeepTheCurrentEvent();
         fNKeepRequests++;
       }
-      
     }
   }
 }
@@ -2229,7 +2327,7 @@ void G4VisManager::EndOfRun ()
     G4int noOfEventsRequested = runManager->GetNumberOfEventsToBeProcessed();
     if (fNoOfEventsDrawnThisRun != noOfEventsRequested) {
       if (!fWaitOnEventQueueFull && fVerbosity >= warnings) {
-        G4cout
+        G4warn
         << "WARNING: Number of events drawn this run, "
         << fNoOfEventsDrawnThisRun << ", is different to number requested, "
         << noOfEventsRequested <<
@@ -2242,64 +2340,53 @@ void G4VisManager::EndOfRun ()
 
   G4int nKeptEvents = 0;
   const std::vector<const G4Event*>* events = currentRun->GetEventVector();
-  if (events) nKeptEvents = events->size();
-  if (fVerbosity >= warnings) {
-    G4cout << nKeptEvents;
-    if (nKeptEvents == 1) G4cout << " event has";
-    else G4cout << " events have";
-    G4cout << " been kept for refreshing and/or reviewing." << G4endl;
+  if (events) nKeptEvents = (G4int)events->size();
+  if (fVerbosity >= warnings && nKeptEvents > 0) {
+    G4warn << nKeptEvents;
+    if (nKeptEvents == 1) G4warn << " event has";
+    else G4warn << " events have";
+    G4warn << " been kept for refreshing and/or reviewing." << G4endl;
     if (nKeptEvents != fNKeepRequests) {
-      G4cout << "  (Note: ";
+      G4warn << "  (Note: ";
       if (fNKeepRequests == 0) {
-        G4cout << "No keep requests were";
+        G4warn << "No keep requests were";
       } else if (fNKeepRequests == 1) {
-        G4cout << "1 keep request was";
+        G4warn << "1 keep request was";
       } else {
-        G4cout << fNKeepRequests << " keep requests were";
+        G4warn << fNKeepRequests << " keep requests were";
       }
-      G4cout << " made by the vis manager.";
+      G4warn << " made by the vis manager.";
       if (fNKeepRequests == 0) {
-        G4cout <<
+        G4warn <<
         "\n  The kept events are those you have asked to be kept in your user action(s).)";
       } else {
-        G4cout <<
+        G4warn <<
         "\n  The same or further events may have been kept by you in your user action(s).)";
       }
-      G4cout << G4endl;
+      G4warn << G4endl;
     }
-    G4cout <<
-    "  \"/vis/reviewKeptEvents\" to review them one by one."
-    "\n  \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+    G4warn <<
+  "  \"/vis/reviewKeptEvents\" to review one by one."
+  "\n  To see accumulated, \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\"."
     << G4endl;
   }
 
-    //    static G4bool warned = false;
-    //    if (!valid && fVerbosity >= warnings && !warned) {
-    //      G4cout <<
-    //	"  Only useful if before starting the run:"
-    //	"\n    a) trajectories are stored (\"/vis/scene/add/trajectories [smooth|rich]\"), or"
-    //	"\n    b) the Draw method of any hits or digis is implemented."
-    //	"\n  To view trajectories, hits or digis:"
-    //	"\n    open a viewer, draw a volume, \"/vis/scene/add/trajectories\""
-    //	"\n    \"/vis/scene/add/hits\" or \"/vis/scene/add/digitisations\""
-    //	"\n    and, possibly, \"/vis/viewer/flush\"."
-    //	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
-    //  "\n  (You may need \"/vis/viewer/flush\" or even \"/vis/viewer/rebuild\".)"
-    //	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
-    //	     << G4endl;
-    //      warned = true;
-    //    }
+  if (fVerbosity >= warnings) PrintListOfPlots();
 
   if (fEventKeepingSuspended && fVerbosity >= warnings) {
-    G4cout <<
+    G4warn <<
     "WARNING: G4VisManager::EndOfRun: Automatic event keeping was suspended."
-    "\n  The number of events in the run exceeded the maximum, "
-    << fpScene->GetMaxNumberOfKeptEvents() <<
-    ", that may be\n  kept by the vis manager." <<
-    "\n  The number of events kept by the vis manager can be changed with"
-    "\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
-    "\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
     << G4endl;
+    if (fpScene->GetMaxNumberOfKeptEvents() > 0) {
+      G4warn <<
+      "\n  The number of events in the run exceeded the maximum, "
+      << fpScene->GetMaxNumberOfKeptEvents() <<
+      ", that may be\n  kept by the vis manager." <<
+      "\n  The number of events kept by the vis manager can be changed with"
+      "\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
+      "\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
+      << G4endl;
+    }
   }
 
   // Don't call IsValidView unless there is a scene handler.  This
@@ -2329,7 +2416,7 @@ void G4VisManager::EndOfRun ()
         if (fpGraphicsSystem->GetFunctionality() ==
             G4VGraphicsSystem::fileWriter) {
           if (fVerbosity >= warnings) {
-            G4cout << "\"/vis/viewer/update\" to close file." << G4endl;
+            G4warn << "\"/vis/viewer/update\" to close file." << G4endl;
           }
         }
       }
@@ -2371,8 +2458,8 @@ G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
 
 G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   G4String viewerShortName = ViewerShortName (viewerName);
-  size_t nHandlers = fAvailableSceneHandlers.size ();
-  size_t iHandler, iViewer;
+  std::size_t nHandlers = fAvailableSceneHandlers.size ();
+  std::size_t iHandler, iViewer;
   G4VViewer* viewer = 0;
   G4bool found = false;
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
@@ -2423,13 +2510,13 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
     std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
-      G4cerr << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
+      G4warn << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
 	     << verbosityString << "\"";
-      for (size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
-	G4cerr << '\n' << VerbosityGuidanceStrings[i];
+      for (std::size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
+	G4warn << '\n' << VerbosityGuidanceStrings[i];
       }
       verbosity = warnings;
-      G4cerr << "\n  Returning " << VerbosityString(verbosity)
+      G4warn << "\n  Returning " << VerbosityString(verbosity)
 	     << G4endl;
     }
     else {
@@ -2470,7 +2557,7 @@ G4bool G4VisManager::IsValidView () {
     if (noGSPrinting) {
       noGSPrinting = false;
       if (fVerbosity >= warnings) {
-	G4cout <<
+	G4warn <<
   "WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system"
   "\n  has been instantiated.  Use \"/vis/open\" or \"/vis/sceneHandler/create\"."
   "\n  Alternatively, to avoid this message, suppress instantiation of vis"
@@ -2484,7 +2571,7 @@ G4bool G4VisManager::IsValidView () {
 
   if ((!fpScene) || (!fpSceneHandler) || (!fpViewer)) {
     if (fVerbosity >= errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisManager::IsValidView(): Current view is not valid."
 	     << G4endl;
       PrintInvalidPointers ();
@@ -2494,9 +2581,9 @@ G4bool G4VisManager::IsValidView () {
 
   if (fpScene != fpSceneHandler -> GetScene ()) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR: G4VisManager::IsValidView ():";
+      G4warn << "ERROR: G4VisManager::IsValidView ():";
       if (fpSceneHandler -> GetScene ()) {
-	G4cout <<
+	G4warn <<
 	  "\n  The current scene \""
 	       << fpScene -> GetName ()
 	       << "\" is not handled by"
@@ -2517,7 +2604,7 @@ G4bool G4VisManager::IsValidView () {
 	       << G4endl;
       }
       else {
-	G4cout << "\n  Scene handler \""
+	G4warn << "\n  Scene handler \""
 	       << fpSceneHandler -> GetName ()
 	       << "\" has null scene pointer."
 	  "\n  Attach a scene with /vis/sceneHandler/attach [<scene-name>]"
@@ -2530,7 +2617,7 @@ G4bool G4VisManager::IsValidView () {
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
   if (viewerList.size () == 0) {
     if (fVerbosity >= errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisManager::IsValidView (): the current scene handler\n  \""
 	     << fpSceneHandler -> GetName ()
 	     << "\" has no viewers.  Do /vis/viewer/create."
@@ -2545,8 +2632,8 @@ G4bool G4VisManager::IsValidView () {
     G4bool successful = fpScene -> AddWorldIfEmpty (warn);
     if (!successful || fpScene -> IsEmpty ()) {        // If still empty...
       if (fVerbosity >= errors) {
-	G4cerr << "ERROR: G4VisManager::IsValidView ():";
-	G4cerr <<
+	G4warn << "ERROR: G4VisManager::IsValidView ():";
+	G4warn <<
 	  "\n  Attempt at some drawing operation when scene is empty."
 	  "\n  Maybe the geometry has not yet been defined."
 	  "  Try /run/initialize."
@@ -2558,10 +2645,10 @@ G4bool G4VisManager::IsValidView () {
     else {
       G4UImanager::GetUIpointer()->ApplyCommand ("/vis/scene/notifyHandlers");
       if (fVerbosity >= warnings) {
-	G4cout <<
+	G4warn <<
 	  "WARNING: G4VisManager: the scene was empty, \"world\" has been"
 	  "\n  added and the scene handlers notified.";
-	G4cout << G4endl;
+	G4warn << G4endl;
       }
     }
   }
@@ -2572,9 +2659,9 @@ void
 G4VisManager::RegisterModelFactories() 
 {
   if (fVerbosity >= warnings) {
-    G4cout<<"G4VisManager: No model factories registered with G4VisManager."<<G4endl;
-    G4cout<<"G4VisManager::RegisterModelFactories() should be overridden in derived"<<G4endl;
-    G4cout<<"class. See G4VisExecutive for an example."<<G4endl;
+    G4warn<<"G4VisManager: No model factories registered with G4VisManager."<<G4endl;
+    G4warn<<"G4VisManager::RegisterModelFactories() should be overridden in derived"<<G4endl;
+    G4warn<<"class. See G4VisExecutive for an example."<<G4endl;
   }
 }
 

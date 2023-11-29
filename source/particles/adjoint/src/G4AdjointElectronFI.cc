@@ -44,17 +44,17 @@
 // ######################################################################
 // ###             ADJOINT ELECTRON FOR FORCED INTERACTION            ###
 // ######################################################################
-G4AdjointElectronFI* G4AdjointElectronFI::theInstance = 0;
+G4AdjointElectronFI* G4AdjointElectronFI::theInstance = nullptr;
 
 G4AdjointElectronFI* G4AdjointElectronFI::Definition()
 { 
   
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_e-_FI";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   
   // create particle
@@ -79,7 +79,7 @@ G4AdjointElectronFI* G4AdjointElectronFI::Definition()
 		    1,                 0,             0,          
 		    0,                 0,             0,             
 	     "adjoint",                1,             0,     90000011,
-	 	  true,             -1.0,          NULL,
+	 	  true,             -1.0,          nullptr,
                  false,           "adj_lepton"
               );
    // Bohr Magnetron
@@ -87,7 +87,7 @@ G4AdjointElectronFI* G4AdjointElectronFI::Definition()
    anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
 
   }
-  theInstance = reinterpret_cast<G4AdjointElectronFI*>(anInstance);
+  theInstance = static_cast<G4AdjointElectronFI*>(anInstance);
   return theInstance;
 }
 

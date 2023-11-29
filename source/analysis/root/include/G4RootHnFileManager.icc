@@ -30,14 +30,14 @@
 
 #include "tools/wroot/to"
 #include "tools/wroot/file"
-#include "tools/zlib"
+#include "toolx/zlib"
 
 //_____________________________________________________________________________
 template <typename HT>
 G4bool G4RootHnFileManager<HT>::Write(
   tools::wroot::directory* directory, HT* ht, const G4String& htName)
 {
-  // write histpgram
+  // write histogram
   return to(*directory, *ht, htName);
 }
 
@@ -51,13 +51,13 @@ G4bool G4RootHnFileManager<HT>::WriteExtra(
   // // create a new file
   auto rfile = new tools::wroot::file(G4cout, fileName);
   // TO DO
-  // rfile->add_ziper('Z', tools::compress_buffer);
+  // rfile->add_ziper('Z', toolx::compress_buffer);
   // rfile->set_compression(fState.GetCompressionLevel());
-  if ( ! rfile ) return false;
+  if (rfile == nullptr) return false;
 
   // no directory supported in this mode
   auto hdirectory = &(rfile->dir());
-  if ( ! hdirectory ) return false;
+  if (hdirectory == nullptr) return false;
 
   // write histo
   result &= Write(hdirectory, ht, htName);

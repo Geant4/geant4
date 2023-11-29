@@ -31,7 +31,7 @@
 // ----------------
 //  Computation of K, L & M shell ECPSSR ionisation cross sections for protons and alphas
 //  Based on the work of
-//  - S. Bakr et al. (2021) NIM B, 507:11–19.
+//  - S. Bakr et al. (2021) NIM B, 507:11-19.
 //  - S. Bakr et al (2018), NIMB B, 436: 285-291. 
 // ---------------------------------------------------------------------------------------
 

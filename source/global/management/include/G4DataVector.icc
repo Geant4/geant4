@@ -45,31 +45,22 @@ inline void G4DataVector::insertAt(std::size_t pos, const G4double& a)
   }
 }
 
-inline std::size_t G4DataVector::index(const G4double& a)
+inline std::size_t G4DataVector::index(const G4double& a) const
 {
   std::size_t ptn = 0;
   for(auto i = cbegin(); i != cend(); ++i, ++ptn)
   {
-    if(!(*i != a))
+    if((*i) == a)
     {
-      return ptn;
+      break;
     }
   }
-
-  return (ptn = ~(std::size_t) 0);
+  return ptn;
 }
 
 inline G4bool G4DataVector::contains(const G4double& a) const
 {
-  for(auto i = cbegin(); i != cend(); ++i)
-  {
-    if(!(*i != a))
-    {
-      return true;
-    }
-  }
-
-  return false;
+  return (index(a) < size());
 }
 
 inline G4bool G4DataVector::remove(const G4double& a)

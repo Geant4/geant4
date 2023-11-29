@@ -63,7 +63,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume* anEnvelope,
   }
 
   // index of medium material
-  fMatIndex3 = mediumMat->GetIndex();
+  fMatIndex3 = (G4int)mediumMat->GetIndex();
   if(verboseLevel > 0)
     G4cout << "medium material = " << mediumMat->GetName() << G4endl;
 
@@ -78,7 +78,7 @@ G4StrawTubeXTRadiator::G4StrawTubeXTRadiator(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4StrawTubeXTRadiator::~G4StrawTubeXTRadiator() {}
+G4StrawTubeXTRadiator::~G4StrawTubeXTRadiator() = default;
 
 void G4StrawTubeXTRadiator::ProcessDescription(std::ostream& out) const
 {

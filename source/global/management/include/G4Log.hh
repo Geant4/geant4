@@ -64,8 +64,9 @@
 #else
 
 #  include "G4Types.hh"
+
+#  include <cstdint>
 #  include <limits>
-#  include <stdint.h>
 
 // local namespace for the constants/functions which are necessary only here
 //
@@ -83,7 +84,7 @@ namespace G4LogConsts
   //
   union ieee754
   {
-    ieee754(){};
+    ieee754()= default;
     ieee754(G4double thed) { d = thed; };
     ieee754(uint64_t thell) { ll = thell; };
     ieee754(G4float thef) { f[0] = thef; };
@@ -191,7 +192,7 @@ namespace G4LogConsts
 
     // chop the head of the number: an int contains more than 11 bits (32)
     int32_t e =
-      le;  // This is important since sums on uint64_t do not vectorise
+      (int32_t)le;  // This is important since sums on uint64_t do not vectorise
     fe = e - 1023;
 
     // This puts to 11 zeroes the exponent

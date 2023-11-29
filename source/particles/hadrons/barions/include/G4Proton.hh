@@ -52,7 +52,7 @@ class G4Proton : public G4Ions
  private:
    static G4Proton* theInstance;
    G4Proton(){}
-   ~G4Proton(){}
+   ~G4Proton() override= default;
 
  public:
    static G4Proton* Definition();

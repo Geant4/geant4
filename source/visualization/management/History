@@ -1,29 +1,558 @@
+# Category visman History
 
--------------------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+-------------------------------------------------------------------------------
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2023-06-16 John Allison (visman-V11-01-15)
+- G4VisExecutive.icc:
+  - Temporary fix to divert OGL to TSG for Qt6.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-06 John Allison (visman-V11-01-14)
+- G4VisCommandsTouchable; Introduce /vis/touchable/twinkle.
 
-      --------------------------------------------------------
-      * Started 31st May 2005.  Hitherto, management history *
-      * has been in the top visualization history file.      *
-      --------------------------------------------------------
+## 2023-06-01 John Allison (visman-V11-01-13)
+- Rework issue of implicit type conversion.
+- Improve layout in G4VViewer::SceneTreeScene::FindOrInsertModel.
+  - (No code changes.)
 
-History file for visualization management sub-category
-------------------------------------------------------
+## 2023-05-29 Guy Barrand (visman-v11-01-12)
+- G4VisExecutive.icc: declare TOOLSSG_[X11,XT,WINDOWS,QT]_ZB drivers.
+
+## 2023-05-23 Gabriele Cosmo (visman-V11-01-11)
+- Fixed compilation warning for implicit type conversion on macOS/XCode>=14.1.
+
+## 2023-05-09 John Allison (visman-V11-01-10)
+- Coworks: greps-V11-01-04 and interfaces-V11-01-15.
+- New scene tree: Implement expand and collapse of touchables.
+  - Expand only to depth 2 - thereafter sub-trees are collapsed.
+  - When the scene tree is expanded or collapsed it is remembered in
+    the viewer-side scene tree and may be propagated to other viewers.
+- G4VViewer.hh/cc:
+  - Augment SceneTreeScene::FindOrInsertTouchable to handle depth of descent.
+
+## 2023-05-02 John Allison (visman-V11-01-09)
+- Coworks: modeling-V11-01-04.
+- These two tags implement "generic cutaways"...finally...after 20 years!!!
+  - It relies on the Boolean Processor (graphics_reps/src/BooleanProcessor.src),
+    which handles the Boolean operations on polyhedral (G4Polyhedron)
+    representations of solids. It is well known that this has its
+    limitations, and the mistake, in the past, has been to ask too much of it.
+    The most demanding task is cutaways, which attempts to mimic the effect
+    of OpenGL clipping planes by using Boolean intersections and/or
+    subtraction of a "cutaway solid". This cutaway solid can itself be the
+    Boolean combination of up to 3 simple solids (boxes) to deal with up to
+    3 "cutaway planes". It then goes forward in the G4PhysicalVolumeModel to a
+    further Boolean operation on the volumes (touchables) of the detector
+    geometry, which themselves might also be Boolean solids.
+  - The most demanding case is the union of the result of 3 cutaway planes.
+    The key breakthrough in this tag is to make a subtractor of the
+    intersection of the *inverted* cutaways instead of an intersector of the
+    union of normal cutaways. ("Inverted cutaway" means
+    cutting away a*x+b*y+c*z+d>0, "normal" means a*x+b*y+c*z+d<0.) Although
+    logically equivalent, the former is much less demanding because the
+    shape of an intersection is invariably much simpler that the shape of
+    a union - at least that's how it seems to be for the case of 3 boxes.
+  - This work was triggered by an initial attempt by a Geant4 user,
+    Pooria Heidary. Demanding tests showed that there needed to be careful
+    checking of the validity of the results of the Boolean operations -
+    Evgueni Tcherniaev has made a big contribution there. Pooria will
+    hardly recognise the code compared to that submitted in the GitHub pull
+    request after these tests and other checks have been added. Hopefully
+    this update is now well tested and robust.
+  - It means that clips, sections and cutaways will now be available to *all*
+    viewers.   
+- G4VSceneHandler.cc:
+  - RequestPrimitives: Improve test for invalid Boolean solid.
+    - Algorithm by Evgueni Tcherniaev.
+  - CreateSectionSolid and CreateCutawaySolid: Improve algorithms.
+    - Algorithms suggested by Evgueni Tcherniaev.
+
+## 2023-04-30 John Allison (visman-V11-01-08)
+- G4VSceneHandler:
+  - Bug fix: Protect material pointer used to name G4Mesh item.
+    - If null, use name of container.
+  - In particular, avoids crash for a G4Mesh is a parallel world.
+
+## 2023-04-28 John Allison (visman-V11-01-07)
+- G4VViewer::SceneTreeScene::FindOrInsertTouchable:
+  - Coverity fix - protect pPVModel pointer.
+
+## 2023-04-25 John Allison (visman-V11-01-06)
+- G4VisCommandsTouchableSet.cc:
+  - /vis/touchable/set/visibility:
+    - Add one-time warning about circumstances in which the command may
+      appear not to work.
+
+## 2023-04-23 John Allison (visman-V11-01-05)
+- Correct Special Mesh Rendering Option default.
+- G4ViewParameters.cc:
+  - Initialise fSpecialMeshRenderingOption(meshAsDefault).
+- G4VisCommandsViewerSet.cc:
+  - /vis/viewer/set/specialMeshRenderingOption:
+    - SetDefaultValue("default");
+
+## 2023-04-14 John Allison (visman-V11-01-04)
+- Co-working: greps-V11-01-03, interfaces-V11-01-11, opengl-V11-01-06,
+  openinventor-V11-01-04, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  interactive scene tree.
+  - Works with touchables - a touchable is a physical volume as rolled out
+    by the geometry hierarchy.
+  - You can change the visibility of a touchable.
+    - Colour, transparency, etc., will be implemented in a future MR.
+  - Providing you are using a scene-tree-enabled interactive session (only
+    the Qt GUI at present), it works with any graphics driver...except OpenGL.
+    - OpenGL for the time being uses its existing interactive scene tree.
+  - You can prepare a view with a graphical driver, such as
+    TSG, OI or Vtk, and transfer it to Ray Tracer, TOOLSSG_OFFSCREEN, etc.,
+    simply with `/vis/open RayTracer`, etc.
+- G4VVisCommand:
+  - Add static G4SceneTreeItem fExistingSceneTree.
+    - Used for "remembering" scene tree of previous viewer.
+- G4VisCommandsSceneHandler:
+  - If there is an existing viewer, store scene tree.
+- G4VisCommandsViewer:
+  - If there is an existing viewer, store scene tree.
+  - Copy existing scene tree to the new viewer.
+  - /vis/viewer/select: Call UpdateGUISceneTree to ensure the scene tree
+    of the newly selected viewer is in sync.
+- G4VViewer:
+  - Improve G4VViewer::SceneTreeScene::FindOrInsertTouchable.
+    - Simplify ghost-touchable transition.
+    - Protect vis attributes pointer.
+  - Add "utility" function UpdateGUISceneTree.
+    - Calls GUI->UpdateSceneTree if session is interactive:
+```
+void G4VViewer::UpdateGUISceneTree()
+{
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  auto uiWindow = dynamic_cast<G4VInteractiveSession*>(UI->GetG4UIWindow());
+  if (uiWindow) uiWindow->UpdateSceneTree(fSceneTree);
+}
+```
+- sources.cmake:
+  - Add G4interfaces to geant4_module_link_libraries.
+
+## 2023-04-07 Stewart Boogert (visman-v11-01-03)
+- Default special mesh rendering for viewers which can render all objects
+
+## 2023-04-07 John Allison (visman-V11-01-02)
+- Co-works with: greps-V11-01-02.
+- Improve vis-side scene tree creation and maintenance.
+- G4VViewer::SceneTreeScene:
+  - Simplify - remove unnecessary overrides.
+  - Fix bugs in scene tree building and add some features.
+    - Add "tags" that will become the identifier in the GUI tree.
+- G4VSceneHandler::ProcessScene:
+  - Simplify scene tree processing.
+- G4VVisCommand::RefreshIfRequired:
+  - Call viewer->UpdateGUISceneTree() after refreshing.
+    - This ensures the GUI-side scene tree and vis-side scene tree
+      are in sync.
+
+## 2023-03-28 John Allison (visman-V11-01-01)
+- Co-works with: greps-V11-01-01, interfaces-V11-01-10, modeling-V11-01-02.
+- Introduce scene tree in G4VViewer.
+  - The scene tree is a tree of G4SceneTreeItem objects (see graphics-reps).
+  - Its root is a data member fSceneTree of all viewers by virtue of
+    G4VViewer inheritance, 
+  - G4SceneTreeItem is an aggregate of data members that represent
+    properties of objects in the scene (G4Scene). Its data members are
+    low-level types - G4String, G4VisAttributes and G4AttDef/Value - so
+    that it can be used across categories, avoiding coupling.
+  - The root item has children that represent the models (G4VModel
+    sub-classes) in the scene.
+  - For a G4PhysicalVolumeModel (detector components), its children and
+    children's children, etc., imitate the geometry hierarchy of that
+    model. These descendants are called "touchables".
+  - There may be more than one G4PhysicalVolumeModel, depending how
+    the user creates his/her scene.
+  - The scene tree is reviewed, and updated if necessary, at every pass
+    of G4VSceneHandler::ProcessScene.  This is called a "kernel visit".
+  - A kernel visit is triggered by some vis commands (e.g.,
+    /vis/viewer/rebuild) and by a viewer if it deems necessary. For
+    example, a kernel visit may not be required for a rotation, zoom, etc.,
+    but required for a change from surface to wireframe.
+  - The idea is that the scene tree can be passed to a GUI, the GUI can
+    create a tree widget, and interactions with it raise UI commands such as
+    /vis/scene/activateModel, /vis/set/touchable and /vis/touchable/set/...
+    The viewer decides if this requires a kernel visit, otherwise it
+    must update fSceneTree itself (utilities are provided -
+    G4VViewer::TouchableSetVisibility/Colour).
+- G4VViewer:
+  - Add scene tree and related functionality.
+- G4VSceneHandler::ProcessScene:
+  - Add code to build scene tree.
+
+## 2022-12-31 John Allison (visman-V11-01-00)
+- Clean up G4VUserVisAction:
+  - The central pure virtual Draw() method is not intended to be called
+    directly - see longer explanation in G4VUserVisAction.hh - so make
+    it protected (more hygienic).
+  - Improve comments in G4VUserVisAction.hh.
+
+## 2022-11-25 Gabriele Cosmo (visman-V11-00-31)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-05 John Allison (visman-V11-00-30)
+- Eliminate G4cerr and introduce G4warn in remaining visman files.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where `verbosity >= warnings`.
+
+## 2022-11-04 John Allison (visman-V11-00-29)
+- G4VisManager.cc: Eliminate G4cerr and introduce G4warn.
+  - Only for G4VisManager.cc for now to test the principle.
+    - Other vis files will be migrated if this MR is successful.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where `verbosity >= warnings`.
+
+## 2022-10-30 John Allison (visman-V11-00-28)
+- Implement void G4VisManager::DrawGeometry
+  (G4VPhysicalVolume* v, const G4Transform3D& t)
+  - Draws a geometry tree starting at the specified physical volume.
+
+## 2022-10-28 John Allison (visman-V11-00-27)
+- Implement generic cutaway.
+  - Prior to this tag, cutaways were implemented only in OpenGL by using
+    OpenGL's clipping plane feature. This still pertains for OpenGL because
+    it is very fast, but this tag implements cutaways using Boolean operations.
+    Evgueni Tcherniaev and I have found a way to make this reasonably
+    robust and reliable. The initial motivation and implementation on the
+    management side (G4VSceneHandler) came from a Geant4 user,
+    Pooria Heidary, via a GitHub pull request.
+  - G4VSceneHandler::CreateCutawaySolid:
+    - The initial implementation is by Pooria Heidary.
+  - G4VSceneHandler::RequestPrimitives:
+    - Check validity of Boolean solids. This is particularly pertinent
+      for cutaways, because the cutting volume (the subtractor) is
+      large and general and often the target volume is entirely within
+      or entirely outside. But it is a check that now applies to all
+      geometries, with or without cutaways, so it is a bug fix.
+      - Sometimes solids that have no substance get requested. They may
+        be part of the geometry tree but have been "spirited away", for
+        example by a Boolean subtraction in which the original volume
+        is entirely inside the subtractor.
+      - The problem is that the Boolean Processor still returns a
+        polyhedron in these cases (IMHO it should not), so the
+        workaround is to return before the damage is done.
+      - The check involves seeking a point inside the resulting
+        Boolean solid. If it cannot be found within a large number
+        of attempts, it is assumed to be invalid.
+  - G4VisCommandsViewer.cc:
+    - Make sure the normal to the cutaway plane is normalised (unit vector).
+  - G4VisCommandsViewerSet.cc:
+    - Make sure the normal to the sectioning plane is normalised (unit vector).
+
+## 2022-10-13 Guy Barrand (visman-V11-00-26)
+- G4VisExecutive.icc: add TOOLSSG_OFFSCREEN.
+
+## 2022-09-19 John Allison (visman-V11-00-25)
+- G4VSceneHandler.cc::StandardSpecialMeshRendering():
+  - Draw container if not marked invisible.
+
+## 2022-09-13 Evgueni Tcherniaev (visman-V11-00-24)
+- G4VSceneHandler: implemented GetPointInBox() and GetPointInTet()
+  to sample a random point inside a box and a tetrahedron.
+
+## 2022-09-10 Ben Morgan (visman-V11-00-23)
+- Mark compile time only and buildmode-specific headers as "no_geant4_module_check"
+
+## 2022-09-03 Ben Morgan (visman-V11-00-22)
+- Add PRIVATE dependency on G4volumes for multithreaded builds only.
+
+## 2022-08-17 John Allison (visman-V11-00-21)
+- Back out code that forces /vis/verbose and /control/verbose
+- G4VisCommandsCompound.cc, G4VisCommandsSceneAdd.cc,
+  G4VisCommandsTouchable.cc, G4VisCommandsViewer.cc:
+  - Sometimes the vis system forced extra vis messages or the echoing of
+    commands. Not sure why this was done - perhaps with a thought to
+    providing useful information - but it causes surprises, for example,
+    when the control verbosity is zero (no command echoing) a command is
+    still echoed. With this patch, there will be no such surprises - what
+    the user sets as vis and/or control verbosity will apply at all times.
+
+## 2022-06-13 Laurie Nevay (visman-V11-00-20)
+- G4VisCommandsSceneAdd - changed the default width of axes added to the scene with
+  automatic length and width determination. By default they are now 10 times wider
+  and saturate at a ratio of 1/30 (width/length). Change in G4VisCommandSceneAddAxes::SetNewValue.
+
+
+## 2022-06-01 John Allison (visman-V11-00-19)
+- G4VisManager::GeometryHasChanged(): Fix crash in AnaEx01.
+  - GeometryHasChanged is a method that is called by the run manager.
+    Sometimes the user chooses to delete the existing geometry tree and
+    ask the run manager to construct a new detector geometry. Previously
+    existing vis models of the geometry become invalid and the vis manager
+    has to pick up the new geometry.
+  - The vis manager removes invalid models from the vis scenes. In
+    `examples/extended/analysis/AnaEx01` this left a scene with no geometry,
+    and the existing strategy, namely to ask the user to add it does not work,
+    because the vis manager does not get to realise the models are invalid until
+    the next run has already started.
+  - So I have added code that, after being notified GeometryHasChanged(), and
+    if the the scene is devoid of geometry, the vis manager adds the new
+    version of the world back in.
+  - This would surprise a user in the unusual case of the original scene
+    containing just a sub-detector - the new scene would contain the whole
+    detector - but I don't see any way of knowing what the original requested
+    model was once it has become invalid. At least, this strategy will allow
+    drawing to continue without crashing.
+  - The new scene is re-appraised for size (extent).
+  - The case of a simply change of parameter, e.g., the size of a box, I
+    believe was and, with this fix, still is, handled correctly.
+  - Other types of models, trajectory drawing, for example, if specified in
+    the original scene, are kept in the new version of the scene.
+
+## 2022-05-25 John Allison (visman-V11-00-18)
+- Co-works with modeling-V11-00-09.
+- `G4VSceneHandler`: Improve Special Mesh Rendering.
+  - Handle `G4PVParameterised` volumes of any depth (up to 3).
+
+## 2022-05-18 Guy Barrand (visman-V11-00-17)
+- G4PlotterManager.cc: remove the not used #include <tools/xml/xml_style>.
+
+## 2022-04-29 John Allison (visman-V11-00-16)
+- G4VSceneHandler:
+  - For special mesh rendering, store vis attributes by value.
+  - Fix Coverity warnings.
+
+## 2022-04-27 John Allison (visman-V11-00-15)
+- Co-works with `opengl-V11-00-10`.
+- Move `G4gl2ps` from `management` to `OpenGL`.
+- `G4VSceneHandler`:
+  - Replace `NameAndColour` by `NameAndVisAtts`.
+  - Exploit move operator when creating polyhedra for Special Mesh Rendering.
+
+## 2022-04-17 John Allison (visman-V11-00-14)
+- Co-works with `modeling-V11-00-08`.
+- `G4VisCommandsSceneAdd.cc`:
+  - `/vis/scene/add/volume`:
+    - Adapt to new `G4PhysicalVolumesSearchScene` in `modeling-V11-00-08`.
+- `G4VSceneHandler.cc`:
+  - Allow for multiple meshes in a single screen.
+    - Relevant for special mesh rendering.
+
+## 2022-04-12 John Allison (visman-V11-00-13)
+- Refine and improve Special Mesh Rendering.
+  - Take advantage of recent developments in HepPolyhedron:
+    - `G4/HepPolyhedronTetMesh`:
+      - converts tetrahedra to enclosing polyhedron removing inner surfaces.
+    - `G4/HepPolyhedronBoxMesh`:
+      - converts boxes to enclosing polyhedron removing inner surfaces.
+  - Also take advantage of developments in ``G4PhysicalVolumeModel:
+    - When a mesh has been found, an "artficial" node is created and added
+      to the `PVPath` whose physical volume points to the parameterisation.
+    - It is used in `G4VSceneHandler` to transmit the material name so that,
+      for example, the Qt viewer scene tree shows items by material. In the
+      case of a medical phantom, the materials are usually given the name
+      of the organ, so users can select on them.
+- `G4VSceneHandler`:
+  - Rename `PseudoSceneFor3DRectMeshAsDots` to
+    `PseudoSceneFor3DRectMeshPositions`.
+    - Serves both dots and surfaces.
+  - Add `Draw3DRectMeshAsSurfaces`.
+  - Make sure dots (markers) are treated as "hidden", i.e., use the z-buffer
+    like other primitives. (The default is "non-hidden".)
+  - Make sure dots and vertices are in local coordinate system and ask the
+    rendering train to transform them to world coordinates in the normal
+    way through `BeginPrimitives(const G4Transform3D&)`.
+  - Numerous improvements to comments and messaging.
+
+## 2022-04-07 Guy Barrand (visman-V11-00-12)
+- Add G4gl2ps.hh, G4gl2ps.cc: a class frontend to tools/gl2ps intended to be used by vis/OpenGL and vis/OpenInventor. Note that it does not depend directly of OpenGL.
+
+## 2022-04-05 John Allison (visman-V11-00-11)
+- Re-work and rationalise special mesh rendering utilities.
+  - The idea is that these are "standard" functions that are optional. Of
+    course, they are optimised for OpenGL but they also work fine for `ToolsSG`
+    and `Qt3D`. An attempt to draw a mesh with any other driver
+    will result in a warning and only the container will be drawn. Other
+    drivers will have to implement their own `AddCompound(...G4Mesh...)` or
+    choose to use the standard functions or some thereof.
+  - To use these utilities, for example:
+    ```
+    void G4OpenGLSceneHandler::AddCompound(const G4Mesh& mesh) {
+      StandardSpecialMeshRendering(mesh);
+    }
+    ```
+    `AddCompound(const G4Mesh& mesh)` is only called if special mesh
+    rendering is requested and if a recognised mesh is found.
+  - The above change to OpenGL will be made in a future MR.
+
+## 2022-03-23 John Allison (visman-V11-00-10)
+- `G4VisCommandsViewerSet.cc`:
+  - Improve messaging for `/vis/viewer/set/lineWidth`
+    - This simply prints a message saying how *actually* to change line width.
+- `G4VisManager.cc`:
+  - Only print list of available histograms if more than one per category.
+
+## 2022-03-20 John Allison (visman-V11-00-09)
+- Introduce /vis/viewer/set/specialMeshRenderingOption <dots|surfaces>
+  - dots: draw one dot per mesh point.
+  - surfaces: group mesh points by colour and material and compute the
+    outer surface or envelope, removing internal shared faces.
+- So far, only the "dots" option is implemented for some drivers.
+
+## 2022-03-02 John Allison (visman-V11-00-08)
+- Introduce drawing of parameterised tetrahedral mesh.
+  - G4VSceneHandler::DrawTetMeshAsDots: Default tet mesh drawing.
+  - Tested on "ICRP145", a geant4 application that we hope can become
+    a Geant4 advanced example, downloaded from the supplementary material
+    of Kim et al, ICRP, 2020. Adult mesh-type reference computational phantoms,
+    ICRP Publication 145, Ann. ICRP 49(3).
+- Introduce /vis/viewer/set/lineWidth:
+  - A do-nothing command that tells how to change line width:
+    - Use /vis/viewer/set/globalLineWidthScale instead.
+    - For trajectories use /vis/modeling/trajectories/*/default/setLineWidth.
+    - For volumes use /vis/geometry/set/lineWidth.
+
+## 2022-02-27 John Allison (visman-V11-00-07)
+- Implement /vis/reviewPlots.
+
+## 2022-02-13 John Allison (visman-V11-00-06)
+- `G4VisExecutive.icc`: Introduce `FALLBACK` drivers for TSGQt and VTKQt.
+  - A `FALLBACK` vis driver selected if the user chooses a UI session that
+    is not compatible with the requested driver. For example, if the user
+    has built Geant4 with Qt, the TSGQt driver will be available and be
+    the "default" driver, so `/vis/open TSG` will attempt to open TSGQt. But
+    if the user has chosen a dumb terminal session, the vis manager selects
+    TSGX11, for example, instead.
+- Also improved messaging for the case that a driver is not found in the
+  candidate list.
+
+## 2022-01-30 John Allison (visman-V11-00-05)
+- Co-works with vis_toolssg-V11-00-03.
+- Introduce compound command: /vis/plot <h1|h2> <id>
+  - This is the first part of a programme to facilitate the drawing of
+    plots (if any have been registered with the analysis manager) at the
+    end of run. At the moment only the ToolsSG vis driver can offer this,
+    so the vis manager issues appropriate messages, such as: 
+```
+WARNING: Current viewer not able to draw plots.
+  Try "/vis/open TSG", then "/vis/plot h1 0" again.
+```
+    If there are no registered plots, or the user makes a request for a
+    non-existent plot, the following message appears (vis_toolssg-V11-00-03): 
+```
+G4ToolsSGSceneHandler::SetPlotterHistograms: cannot get histogram - maybe doesn't exist?
+  Maybe this app does not do analysis at all?
+```
+  - Later, we hope to introduce something like /vis/reviewPlots, which will
+    allow the user to view all available plots in sequence.
+- G4VisManager:
+  - Add access method: IsEnabled().
+  - Register the new commands.
+  - G4VisManager::EndOfEvent:
+    - Protect view checking with mutex lock in multithreading mode.
+  - G4VisManager::EndOfEvent and EndOfRun:
+    - Deal better with case of scene requesting no kept events.
+      - Assume this is deliberate and avoid unnecessary warnings.
+      - Avoids all event processing.
+      - Equivalent to /vis/disable but keeps vis enabled for plotting.
+      - Greatly speeds plotting.
+- G4VisCommandsSceneAdd: /vis/scene/add/plotter:
+  - Add G4PlotterModel to end-of-run list (was run-duration list).
+  - Improve messaging.
+- G4VisCommandsViewer:
+  - Introduce /vis/viewer/resetCameraParameters.
+    - Resets *only* the camera parameters (view direction, etc.).
+    - Used in /vis/plot (we don't want to reset all parameters).
+- G4VisCommandsCompound:
+  - Introduce /vis/plot <h1|h2" <id>
+  - In summary:
+```
+  ui->ApplyCommand("/vis/enable");
+  ui->ApplyCommand("/vis/viewer/resetCameraParameters");
+  ui->ApplyCommand("/vis/scene/create");
+  ui->ApplyCommand("/vis/scene/endOfEventAction accumulate 0");  // Don't keep events
+  static G4int plotterID = 0;
+  std::ostringstream ossPlotter;
+  ossPlotter << "plotter-" << plotterID++;
+  const G4String& plotterName = ossPlotter.str();
+  ui->ApplyCommand("/vis/plotter/create " + plotterName);
+  ui->ApplyCommand("/vis/scene/add/plotter " + plotterName);
+  ui->ApplyCommand("/vis/plotter/add/" + type + ' ' + id + ' ' + plotterName);
+  ui->ApplyCommand("/vis/sceneHandler/attach");
+```
+- G4VisCommandsViewer.hh:
+  - Simply re-order alphabetically.
+- G4Scene: Redefine IsEmpty():
+   - Now defined as having no extent (was defined as having no run-duration
+     models).
+   - Allows a scene containing only end-of-run model(s), as long as they have
+     an extent, e.g., a G4PlotterModel.
+   - G4Scene::AddWorldIfEmpty:
+     - Modify warning message appropriately.
+   - G4Scene::AddEndOfEventModel and G4Scene::AddEndOfRunModel:
+     - Make sure extent is (re-)calculated.
+
+## 2022-01-28 Ben Morgan (visman-V11-00-04)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-19 John Allison (visman-V11-00-03)
+- G4VViewer:
+  - Add data member and access method for KernelVisitElapsedTimeSeconds.
+  - This is measured in ProcessView().
+- G4VisCommandsViewer.cc: /vis/viewer/centreOn and centreAndZoomInOn:
+  - Only fly and twinkle if KernelVisitElapsedTimeSeconds < 0.1. It is
+    not feasible for complex scenes - in that case go straight to requested
+    volume without flying and twinkling.
+
+## 2022-01-03 John Allison (visman-V11-00-02)
+- Twinkling, i.e, the rhythmic variation of brightness of given touchables:
+  - GeVVisCommand:
+    - Add Twinkle().
+  - G4VisCommandsTouchable.cc:
+    - /vis/touchable/centreOn and centreAndZoomInOn:
+      - Exploit twinkling.
+  - G4VisCommandsViewer.cc:
+    - /vis/viewer/centreOn and centreAndZoomInOn:
+      - Exploit twinkling.
+- G4VSceneHandler:
+  - Tidy Draw3DRectMeshAsDots().
+- Ensure X-geometry string is copied correctly to a new viewer.
+  - This is the string, e.g., "600x600-0+0", that specifies the size and
+    position of the viewer window. (This does not apply to windows
+    opened inside the Qt GUI.)
+  - Impacts the following files:
+    - G4ViewParameters.cc
+    - G4VisCommandsSceneHandler.cc
+    - G4VisCommandsViewer.cc
+  - Tidy up.
+- G4VisCommandsCompound.cc:
+  - Improve command guidance of /vis/open.
+- G4VisCommandsViewer.cc:
+  - Improve command guidance of /vis/viewer/create.
+
+## 2021-12-11 John Allison (visman-V11-00-01)
+- G4VSceneHandler:
+  - Add utility function: void Draw3DRectMeshAsDots(const G4Mesh&);
+    - For a rectangular 3-D mesh, draw as coloured dots, one dot randomly
+      placed in each visible cell.
+- G4VisParameters:
+  - Add new accessors: G4bool IsWindowLocationHintX/YNegative() const;
+- G4VisCommandsTouchable:
+  - Augment /vis/touchable/draw:
+    - Add bool argument: if true, draw the extent (bounding box). Default false.
+  - /vis/touchable/dump:
+    - Fix missing dump of vis attributes.
+
+## 2021-12-10 Ben Morgan (visman-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 11 November 2021  John Allison (visman-V10-07-28)
 - G4VisManager.cc:

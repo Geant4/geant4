@@ -1,0 +1,8 @@
+# GeneralParticleSource :
+# isotropic 1 MeV-gamma point source at (0, -1 m, 0)
+/gps/ang/type iso
+/gps/energy 1 MeV
+/gps/particle gamma
+/gps/pos/type Point
+/gps/pos/centre 0 -1. 0 m
+

@@ -53,7 +53,7 @@ class G4ParticlePropertyData
 
     G4ParticlePropertyData(const G4ParticlePropertyData& right);
  
-    virtual ~G4ParticlePropertyData();
+    virtual ~G4ParticlePropertyData() = default;
       
     G4ParticlePropertyData& operator=(const G4ParticlePropertyData& right);
 

@@ -71,13 +71,14 @@
 #include "G4Log.hh"
 #include "G4Exp.hh"
 #include "G4Pow.hh"
-#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4double inveplus = 1.0/CLHEP::eplus;
-const G4double alpha2 = CLHEP::fine_structure_const*CLHEP::fine_structure_const;
-
+namespace
+{
+  constexpr G4double inveplus = 1.0/CLHEP::eplus;
+  constexpr G4double alpha2 = CLHEP::fine_structure_const*CLHEP::fine_structure_const;
+}
 const G4double G4EmCorrections::ZD[11] = 
     {0., 0., 0., 1.72, 2.09, 2.48, 2.82, 3.16, 3.53, 3.84, 4.15};
 const G4double G4EmCorrections::UK[20] = {1.9999, 2.0134, 2.0258, 2.0478, 2.0662,
@@ -107,47 +108,25 @@ G4PhysicsFreeVector* G4EmCorrections::sBarkasCorr = nullptr;
 G4PhysicsFreeVector* G4EmCorrections::sThetaK = nullptr;
 G4PhysicsFreeVector* G4EmCorrections::sThetaL = nullptr;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4EmCorrections::theCorrMutex = G4MUTEX_INITIALIZER;
-#endif
-
-G4EmCorrections::G4EmCorrections(G4int verb)
+G4EmCorrections::G4EmCorrections(G4int verb, G4bool master)
+  : verbose(verb), isMaster(master)
 {
-  verbose  = verb;
-  eth      = 2.0*CLHEP::MeV;
+  eth = 2.0*CLHEP::MeV;
   eCorrMin = 25.*CLHEP::keV;
   eCorrMax = 1.*CLHEP::GeV;
 
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
   g4calc = G4Pow::GetInstance();
 
-  // G.S. Khandelwal Nucl. Phys. A116(1968)97 - 111.
-  // "Shell corrections for K- and L- electrons
-  nK = 20;
-  nL = 26;
-  nEtaK = 29;
-  nEtaL = 28;
-
   // fill vectors
-  if(sBarkasCorr == nullptr) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&theCorrMutex);
-    if (sBarkasCorr == nullptr) {
-#endif
-      Initialise();
-      isMaster = true;
-#ifdef G4MULTITHREADED
-    }
-    G4MUTEXUNLOCK(&theCorrMutex);
-#endif
-  }
+  if(isMaster) { Initialise(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmCorrections::~G4EmCorrections()
 {
-  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
+  for(G4int i=0; i<nIons; ++i) { delete stopData[i]; }
   if(isMaster) { 
     delete sBarkasCorr;
     delete sThetaK;
@@ -181,7 +160,7 @@ void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     material = mat;
     theElementVector = material->GetElementVector();
     atomDensity  = material->GetAtomicNumDensityVector(); 
-    numberOfElements = material->GetNumberOfElements();
+    numberOfElements = (G4int)material->GetNumberOfElements();
   }
 }
 
@@ -286,7 +265,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     G4int ionPDG = p->GetPDGEncoding();
     if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
       std::vector<G4double> v;
-      for(size_t i=0; i<ncouples; ++i){
+      for(std::size_t i=0; i<ncouples; ++i){
         v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
       }
       thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
@@ -297,7 +276,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     //    it = thcorr.begin(); it != thcorr.end(); ++it){
     //  G4cout << "\t map element: first (key)=" << it->first  
     //     << "\t second (vector): vec size=" << (it->second).size() << G4endl;
-    //  for(size_t i=0; i<(it->second).size(); ++i){
+    //  for(std::size_t i=0; i<(it->second).size(); ++i){
     // G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i]
     //<< G4endl; } }
 
@@ -852,8 +831,7 @@ void G4EmCorrections::BuildCorrectionVector()
            << ion->GetParticleName() << G4endl;
   }
 
-  G4PhysicsLogVector* vv = 
-    new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr,false);
+  auto vv = new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr,false);
   const G4double eth0 = v->Energy(0);
   const G4double escal = eth/massFactor;
   G4double qe = 
@@ -904,13 +882,12 @@ void G4EmCorrections::InitialiseForNewRun()
   ncouples = tb->GetTableSize();
   if(currmat.size() != ncouples) {
     currmat.resize(ncouples);
-    for(std::map< G4int, std::vector<G4double> >::iterator it = 
-        thcorr.begin(); it != thcorr.end(); ++it){
+    for(auto it = thcorr.begin(); it != thcorr.end(); ++it){
       (it->second).clear();
     }
     thcorr.clear();
-    for(size_t i=0; i<ncouples; ++i) {
-      currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
+    for(std::size_t i=0; i<ncouples; ++i) {
+      currmat[i] = tb->GetMaterialCutsCouple((G4int)i)->GetMaterial();
       G4String nam = currmat[i]->GetName();
       for(G4int j=0; j<nIons; ++j) {
         if(nam == materialName[j]) { materialList[j] = currmat[i]; }
@@ -926,6 +903,9 @@ void G4EmCorrections::Initialise()
   // Z^3 Barkas effect in the stopping power of matter for charged particles
   // J.C Ashley and R.H.Ritchie
   // Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
+  // G.S. Khandelwal Nucl. Phys. A116(1968)97 - 111.
+  // "Shell corrections for K- and L- electrons
+
   G4int i, j;
   static const G4double fTable[47][2] = {
    { 0.02, 21.5},

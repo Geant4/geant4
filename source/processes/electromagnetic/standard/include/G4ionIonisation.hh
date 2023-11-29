@@ -72,7 +72,6 @@
 #include "G4VEnergyLossProcess.hh"
 
 class G4Material;
-class G4EmCorrections;
 
 class G4ionIonisation : public G4VEnergyLossProcess
 {
@@ -80,7 +79,7 @@ public:
 
   explicit G4ionIonisation(const G4String& name = "ionIoni");
 
-  ~G4ionIonisation() override;
+  ~G4ionIonisation() override = default;
 
   G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
@@ -98,9 +97,6 @@ public:
 
 protected:
 
-  // Print out of the class parameters
-  void StreamProcessInfo(std::ostream& outFile) const override;
-
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 				   const G4ParticleDefinition*) override;
 
@@ -111,23 +107,12 @@ protected:
 
 private:
 
-  G4EmCorrections*            corr;
 
-  const G4ParticleDefinition* theParticle;
+  const G4ParticleDefinition* theParticle = nullptr;
+  G4double eth;
 
-  G4double   eth;
-
-  G4bool     isInitialised;
-  G4bool     stopDataActive;
+  G4bool isInitialised = false;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4ionIonisation::ActivateStoppingData(G4bool val)
-{
-  stopDataActive = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

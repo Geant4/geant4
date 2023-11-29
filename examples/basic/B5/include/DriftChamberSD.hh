@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DriftChamberSD.hh
+/// \file B5/include/DriftChamberSD.hh
 /// \brief Definition of the B5::DriftChamberSD class
 
 #ifndef B5DriftChamberSD_h
@@ -47,7 +47,7 @@ class DriftChamberSD : public G4VSensitiveDetector
 {
   public:
     DriftChamberSD(G4String name);
-    ~DriftChamberSD() override;
+    ~DriftChamberSD() override = default;
 
     void Initialize(G4HCofThisEvent*HCE) override;
     G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist) override;

@@ -30,7 +30,7 @@
 
 #include "G4VGraphicsSystem.hh"
 
-namespace tools {namespace Qt {class session;}}
+namespace toolx {namespace Qt {class session;}}
 
 class G4ToolsSGQtGLES: public G4VGraphicsSystem {
   typedef G4VGraphicsSystem parent;
@@ -47,7 +47,7 @@ public:
 protected:  
   void Initialise();
 protected:
-  tools::Qt::session* fSGSession;
+  toolx::Qt::session* fSGSession;
 };
 
 #endif

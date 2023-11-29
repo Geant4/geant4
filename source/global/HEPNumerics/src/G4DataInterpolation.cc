@@ -266,7 +266,7 @@ G4double G4DataInterpolation::RationalPolInterpolation(G4double pX,
       delete[] d;
       return y;
     }
-    else if(difi < diff)
+    if(difi < diff)
     {
       k    = i;
       diff = difi;
@@ -393,12 +393,13 @@ G4int G4DataInterpolation::LocateArgument(G4double pX) const
   {
     return 1;
   }
-  else if(!(pX != fArgument[fNumber - 1]))
+  if(!(pX != fArgument[fNumber - 1]))
   {
     return fNumber - 2;
   }
-  else
-    return kLow;
+  
+  return kLow;
+ 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -459,10 +460,9 @@ void G4DataInterpolation::CorrelatedSearch(G4double pX, G4int& index) const
           index = -1;
           break;
         }
-        else
-        {
-          index = kHigh - Increment;
-        }
+        
+        index = kHigh - Increment;
+       
       }
     }  // Value bracketed
   }

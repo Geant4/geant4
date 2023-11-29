@@ -1,18 +1,24 @@
--------------------------------------------------------------------
+# Example TestEm9 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    TestEm9 History file
-                    --------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-10-26 I. Hrivnacova (testem9-V11-00-02)
+- Removed PhysListEmStandard::verbose data member,
+  use the verboseLevel defined in the base class for this purpose.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-05-05 Vladimir Ivanchenko (testem9-V11-00-01)
+- Updated all user actions: more correct count of creator process;
+  use C++11 keywards; removed not needed headers; move ScoreNewTrack(..)
+  from Tracking to Stepping action class
+
+## 2021-12-10 Ben Morgan (testem9-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 07-11-21 I. Hrivnacova (testem9-V10-07-03)
 - Added analysis manager Clear() call instead of

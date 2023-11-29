@@ -43,8 +43,10 @@ set(OpNovice2_SCRIPTS
     OpNovice2.out
     OpNovice2.mac
     boundary.mac
+    complexRindex.mac
     electron.mac
     fresnel.mac
+    coated.mac
     scint_by_particle.mac
     vis.mac
     wls.mac

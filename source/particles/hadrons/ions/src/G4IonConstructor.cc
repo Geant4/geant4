@@ -60,13 +60,6 @@
 #include "G4AntiHyperHe5.hh"
 #include "G4AntiHyperTriton.hh"
 
-G4IonConstructor::G4IonConstructor()
-{
-}
-
-G4IonConstructor::~G4IonConstructor()
-{
-}
 
 void G4IonConstructor::ConstructParticle()
 {

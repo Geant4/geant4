@@ -70,7 +70,7 @@ char** parsedir(char *directory,int *argc)
       buffer=(char*) malloc((strlen(directory)+
 			     strlen(entry->d_name)+2)*sizeof(char));
       strcpy(buffer,directory);
-      strncat(buffer,"/",1);
+      strcat(buffer,"/");
       strcat(buffer,entry->d_name);
       s=stat(buffer,&status);
       if(s==0)
@@ -294,7 +294,7 @@ int main (int argc, char** argv) {
           ptr=strtok(NULL,"/");
           while(ptr&&strcmp(ptr,"GNUmakefile"))
 	    {
-	      strncat(libmapPtr->trigger,"/",1);
+	      strcat(libmapPtr->trigger,"/");
 	      strcat(libmapPtr->trigger,ptr);
 	      ptr=strtok(NULL,"/");
 	    }
@@ -349,7 +349,7 @@ int main (int argc, char** argv) {
           }
           strcpy(workbuf,libmapPtr->lib);
 	  /* Add trailing "/" to distinguish track/ and tracking/, etc. */
-	  strncat(workbuf,"/",1);
+	  strcat(workbuf,"/");
 	  if(strstr(ptr,workbuf)) break;
 	}
       if(libmapPtr)
@@ -381,7 +381,7 @@ int main (int argc, char** argv) {
                     exit(1);
                   }
                   strcpy(workbuf,libmapPtr->trigger);
-		  strncat(workbuf,"/include",8);
+		  strcat(workbuf,"/include");
 		  ptr=strstr(bufferPtr,workbuf);
 		  if(ptr && (userLibmapPtr != libmapPtr))
 		    {
@@ -407,7 +407,7 @@ int main (int argc, char** argv) {
                     exit(1);
                   }
 		  strcpy(workbuf,libmapPtr->lib);
-		  strncat(workbuf,"/",1);
+		  strcat(workbuf,"/");
 		  ptr=strstr(bufferPtr,workbuf);
 		  if(ptr && (userLibmapPtr != libmapPtr))
 		    {
@@ -590,17 +590,17 @@ int main (int argc, char** argv) {
         /* Check existance of libraries and print out only installed ones */
 	  
 	
-	sprintf(libname, "%s/lib%s.a", libpath, libmapPtr->lib);
+	snprintf(libname, libname_usable_size+16, "%s/lib%s.a", libpath, libmapPtr->lib);
         if (access(libname,R_OK))
 	{
-	  sprintf(libname, "%s/lib%s.so", libpath, libmapPtr->lib);
+	  snprintf(libname, libname_usable_size+16, "%s/lib%s.so", libpath, libmapPtr->lib);
           if (!access(libname,R_OK))
 	  {
             printf("-l%s ",libmapPtr->lib);
 	  }
           else  /* case MacOS .dylib */
           {
-	    sprintf(libname, "%s/lib%s.dylib", libpath, libmapPtr->lib);
+	    snprintf(libname, libname_usable_size+16, "%s/lib%s.dylib", libpath, libmapPtr->lib);
             if (!access(libname,R_OK))
 	    {
               printf("-l%s ",libmapPtr->lib);

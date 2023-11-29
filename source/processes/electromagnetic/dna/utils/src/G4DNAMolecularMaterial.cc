@@ -522,7 +522,7 @@ G4MolecularConfiguration*
 G4DNAMolecularMaterial::
 GetMolecularConfiguration(const G4Material* material) const
 {
-  int material_id = material->GetIndex();
+  G4int material_id = (G4int)material->GetIndex();
   auto it = fMaterialToMolecularConf.find(material_id);
   if(it == fMaterialToMolecularConf.cend()) return nullptr;
   return it->second;
@@ -536,7 +536,7 @@ SetMolecularConfiguration(const G4Material* material,
                           G4MolecularConfiguration* molConf)
 {
   assert(material != nullptr);
-  int material_id = material->GetIndex();
+  G4int material_id = (G4int)material->GetIndex();
   fMaterialToMolecularConf[material_id] = molConf;
 }
 
@@ -547,7 +547,7 @@ G4DNAMolecularMaterial::SetMolecularConfiguration(const G4Material* material,
                                                   const G4String& molUserID)
 {
   assert(material != nullptr);
-  int material_id = material->GetIndex();
+  G4int material_id = (G4int)material->GetIndex();
   fMaterialToMolecularConf[material_id] =
     G4MoleculeTable::Instance()->GetConfiguration(molUserID, true);
 }

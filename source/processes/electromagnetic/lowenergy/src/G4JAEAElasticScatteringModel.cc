@@ -26,7 +26,7 @@
 /*
   Authors:
 
-  Updated 15 Novebmer 2019
+  Updated 15 November 2019
 
   Updates:
   1. Change reading method for cross section data.
@@ -112,10 +112,10 @@ void G4JAEAElasticScatteringModel::Initialise(const G4ParticleDefinition* partic
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
     for(G4int i=0; i<numOfCouples; ++i)
       {
@@ -123,9 +123,9 @@ void G4JAEAElasticScatteringModel::Initialise(const G4ParticleDefinition* partic
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
 	const G4ElementVector* theElementVector = material->GetElementVector();
-	G4int nelm = material->GetNumberOfElements();
+	std::size_t nelm = material->GetNumberOfElements();
 
-	for (G4int j=0; j<nelm; ++j)
+	for (std::size_t j=0; j<nelm; ++j)
 	  {
 	    G4int Z = G4lrint((*theElementVector)[j]->GetZ());
 	    if(Z < 1)          { Z = 1; }
@@ -151,7 +151,7 @@ void G4JAEAElasticScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4JAEAElasticScatteringModel::ReadData(size_t Z, const char* path)
+void G4JAEAElasticScatteringModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1)
     {
@@ -165,7 +165,7 @@ void G4JAEAElasticScatteringModel::ReadData(size_t Z, const char* path)
 
   if(!datadir)
     {
-      datadir = std::getenv("G4LEDATA");
+      datadir = G4FindDataDir("G4LEDATA");
       if(!datadir)
 	{
 	  G4Exception("G4JAEAElasticScatteringModel::ReadData()","em0006",
@@ -256,7 +256,7 @@ G4double G4JAEAElasticScatteringModel::ComputeCrossSectionPerAtom(
     if(!pv) { return xs; }
   }
 
-  G4int n = pv->GetVectorLength() - 1;
+  G4int n = G4int(pv->GetVectorLength() - 1);
 
   G4double e = GammaEnergy;
   if(e >= pv->Energy(n)) {

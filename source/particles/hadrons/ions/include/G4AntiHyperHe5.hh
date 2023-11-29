@@ -47,7 +47,7 @@ class G4AntiHyperHe5 : public G4Ions {
   private:
     static G4AntiHyperHe5* theInstance;
     G4AntiHyperHe5()  {}
-    ~G4AntiHyperHe5() {}
+    ~G4AntiHyperHe5() override = default;
 };
 
 #endif

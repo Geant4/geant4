@@ -35,11 +35,6 @@
 #include "G4ParticlePropertyData.hh"
 
 // --------------------------------------------------------------------
-G4ParticlePropertyData::~G4ParticlePropertyData()
-{
-}
-
-// --------------------------------------------------------------------
 G4ParticlePropertyData::G4ParticlePropertyData(const G4String& particleName)
   : theParticleName(particleName)
 {

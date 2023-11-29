@@ -38,6 +38,8 @@
 #include "G4ios.hh"
 #include <sstream>
 
+#define G4warn G4cout
+
 ////////////// /vis/sceneHandler/attach ///////////////////////////////////////
 
 G4VisCommandSceneHandlerAttach::G4VisCommandSceneHandlerAttach () {
@@ -80,7 +82,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: Current scene handler not defined.  Please select or create one."
 	     << G4endl;
     }
@@ -91,15 +93,15 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
 
   if (sceneList.empty ()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: No valid scenes available yet.  Please create one."
 	     << G4endl;
     }
     return;
   }
 
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  std::size_t iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     if (sceneList [iScene] -> GetName () == sceneName) break;
   }
   if (iScene < nScenes) {
@@ -125,7 +127,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Scene \"" << sceneName
+      G4warn << "ERROR: Scene \"" << sceneName
 	     << "\" not found.  Use \"/vis/scene/list\" to see possibilities."
 	     << G4endl;
     }
@@ -209,7 +211,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 
   const G4GraphicsSystemList& gsl =
     fpVisManager -> GetAvailableGraphicsSystems ();
-  G4int nSystems = gsl.size ();
+  std::size_t nSystems = gsl.size ();
   if (nSystems <= 0) {
     G4ExceptionDescription ed;
     ed <<
@@ -220,16 +222,16 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     command->CommandFailed(ed);
     return;
   }
-  G4int iGS;  // Selector index.
+  std::size_t iGS;  // Selector index.
   G4bool found = false;
-  for (iGS = 0; iGS < nSystems; iGS++) {
+  for (iGS = 0; iGS < nSystems; ++iGS) {
     const auto& gs = gsl[iGS];
     if (G4StrUtil::icompare(graphicsSystem, gs->GetName()) == 0) {
       found = true;
       break;  // Match found
     } else {
       const auto& nicknames = gs->GetNicknames();
-      for (size_t i = 0; i < nicknames.size(); ++i) {
+      for (std::size_t i = 0; i < nicknames.size(); ++i) {
         const auto& nickname = nicknames[i];
         if (G4StrUtil::icompare(graphicsSystem, nickname) == 0) {
           found = true;
@@ -243,16 +245,6 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   }
   if (!found) {
     // Shouldn't happen, since graphicsSystem should be a candidate
-    // Use set to get alphabetical order
-    std::set<G4String> candidates;
-    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
-      // Just list nicknames, but exclude FALLBACK nicknames
-      for (const auto& nickname: gs->GetNicknames()) {
-	if (!G4StrUtil::contains(nickname, "FALLBACK")) {
-	  candidates.insert(nickname);
-	}
-      }
-    }
     G4ExceptionDescription ed;
     ed <<
     "ERROR: G4VisCommandSceneHandlerCreate::SetNewValue:"
@@ -260,9 +252,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << graphicsSystem
     << "\" requested."
     << "\n  Candidates are:";
-    for (const auto& candidate: candidates) {
-      ed << ' ' << candidate;
-    };
+    fpVisManager->PrintAvailableGraphicsSystems(verbosity,ed);
     command->CommandFailed(ed);
     return;
   }
@@ -271,13 +261,13 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   G4bool fallback = false;
   G4int loopCounter = 0;
   while (!gsl[iGS]->IsUISessionCompatible()) {
-    G4int iGSBeingTested = iGS;
+    std::size_t iGSBeingTested = iGS;
     // Not compatible, search for a fallback
     fallback = false;
     G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
     for (iGS = 0; iGS < nSystems; iGS++) {
       const auto& nicknames = gsl[iGS]->GetNicknames();
-      for (size_t i = 0; i < nicknames.size(); ++i) {
+      for (std::size_t i = 0; i < nicknames.size(); ++i) {
         const auto& nickname = nicknames[i];
         if (G4StrUtil::icompare(fallbackNickname, nickname) == 0) {
           fallback = true;
@@ -288,7 +278,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
         break;  // Match found
       }
     }
-    if (iGS < 0 || iGS >= nSystems || loopCounter >=3) {
+    if (iGS >= nSystems || loopCounter >=3) {
       G4ExceptionDescription ed;
       ed << "\"" << gsl[iGSBeingTested]->GetNickname()
       << "\" is not compatible with your chosen session,"
@@ -304,7 +294,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   G4VGraphicsSystem* pSystem = gsl [iGS];
 
   if (fallback && verbosity >= G4VisManager::warnings) {
-    G4cout << "WARNING: G4VisCommandSceneHandlerCreate::SetNewValue:"
+    G4warn << "WARNING: G4VisCommandSceneHandlerCreate::SetNewValue:"
     "\n  Using fallback graphics system: "
     << pSystem -> GetName ()
     << " ("
@@ -321,8 +311,8 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   if (newName == nextName) fId++;
 
   const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
-  size_t iScene;
-  for (iScene = 0; iScene < list.size (); iScene++) {
+  std::size_t iScene;
+  for (iScene = 0; iScene < list.size (); ++iScene) {
     G4VSceneHandler* sceneHandler = list [iScene];
     if (sceneHandler -> GetName () == newName) {
       G4ExceptionDescription ed;
@@ -334,10 +324,12 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     }
   }
 
-  // If there is an existing viewer, store its view parameters
+  // If there is an existing viewer, store its view parameters and scene tree
   if (fpVisManager->GetCurrentViewer()) {
     fThereWasAViewer = true;
-    fVPExistingViewer = fpVisManager->GetCurrentViewer()->GetViewParameters();
+    auto viewer = fpVisManager->GetCurrentViewer();
+    fExistingVP = viewer->GetViewParameters();
+    fExistingSceneTree = viewer->AccessSceneTree();
   }
 
   // Set current graphics system in preparation for
@@ -421,7 +413,7 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
 
   const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   G4bool found = false;
-  for (size_t iSH = 0; iSH < list.size (); iSH++) {
+  for (std::size_t iSH = 0; iSH < list.size (); ++iSH) {
     const G4String& iName = list [iSH] -> GetName ();
     if (name != "all") {
       if (name != iName) continue;
@@ -478,7 +470,7 @@ void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand*,
   G4String& selectName = newValue;
   const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
 
-  size_t iSH;
+  std::size_t iSH;
   for (iSH = 0; iSH < list.size (); iSH++) {
     if (list [iSH] -> GetName () == selectName) break;
   }
@@ -500,7 +492,7 @@ void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Scene handler \"" << selectName << "\""
+      G4warn << "ERROR: Scene handler \"" << selectName << "\""
 	     << " not found - \"/vis/sceneHandler/list\" to see possibilities."
 	     << G4endl;
     }

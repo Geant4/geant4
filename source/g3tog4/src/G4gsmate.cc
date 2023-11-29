@@ -55,52 +55,6 @@ void PG4gsmate(G4String *tokens)
   G4gsmate(imate, name, a, z, dens, radl, nwbf, ubuf);
 }
 
-/*
-// replaced with G3EleTable 
-// only used G4Elements are created;
-// !! no checking of given A of the element;
-//
-
-G4Element* CreateElement(G4double zeff, G4double aeff, G4String matName)
-{
-  // tolerance in Z, A for element definition
-  const G4double tolerance = 0.001;
-
-  // define the symbol Z%A% of element
-  // !! symbol is not unambiguous element identifier
-  char symbol[20];
-  sprintf(symbol,"Z%dA%d",int(zeff),int(aeff/(g/mole)));
-  G4String elSymbol = symbol;
- 
-  // search element table for the element with given (Z,A)
-  // 
-  G4int index = 0;
-  const G4ElementTable* table = G4Element::GetElementTable();
-  for (G4int i=0; i<table->entries(); i++) {
-     G4Element* entry = (*table)[i];
-     if (elSymbol == entry->GetSymbol()) index++; 
-     if ( std::abs(zeff - entry->GetZ()) < tolerance &&
-         (std::abs(aeff - entry->GetA())/(g/mole)) < tolerance ){
-       return entry;
-     }
-  }  
-
-  // define a unique name En-Z%A% 
-  // (n - index of elements with the same int(Z), int(A))
-  char chIndex[4];
-  sprintf(chIndex,"%d",index);
-  G4String elName = "E";  
-  elName = elName + chIndex + "-";
-  elName = elName + elSymbol;  
-
-  // create new element if it was not found in element table
-  G4Element* element = new G4Element(elName, elSymbol, zeff, aeff);	
-  G4cout << "New element: " << element->GetName()
-         << " for " << matName << " material has been created." << G4endl;
-  return element;	
-}
-*/
-
 void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
               G4double densin, G4double, G4int, G4double*)
 {

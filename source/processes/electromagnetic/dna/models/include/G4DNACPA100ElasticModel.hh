@@ -29,126 +29,111 @@
 //
 // Users are requested to cite the following papers:
 // - M. Terrissol, A. Baudre, Radiat. Prot. Dosim. 31 (1990) 175-177
-// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries, 
+// - M.C. Bordage, J. Bordes, S. Edel, M. Terrissol, X. Franceries,
 //   M. Bardies, N. Lampe, S. Incerti, Phys. Med. 32 (2016) 1833-1840
 //
-// Authors of this class: 
+// Authors of this class:
 // M.C. Bordage, M. Terrissol, S. Edel, J. Bordes, S. Incerti
 //
 // 15.01.2014: creation
-//
+// Based on the study by S. Zein et. al. Nucl. Inst. Meth. B 488 (2021) 70-82
+// 1/2/2023 : Hoang added modification
 
 #ifndef G4DNACPA100ElasticModel_h
 #define G4DNACPA100ElasticModel_h 1
 
-#include <map>
 #include "G4DNACrossSectionDataSet.hh"
-#include "G4VEmModel.hh"
 #include "G4Electron.hh"
-#include "G4ParticleChangeForGamma.hh"
 #include "G4LogLogInterpolation.hh"
-//#include "G4DNACPA100LogLogInterpolation.hh"
-#include "G4ProductionCutsTable.hh"
 #include "G4NistManager.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4VDNAModel.hh"
 
-class G4DNACPA100ElasticModel : public G4VEmModel
+#include <map>
+
+class G4DNACPA100ElasticModel : public G4VDNAModel
 {
+    using TriDimensionMap =
+      std::map<std::size_t, std::map<const G4ParticleDefinition*,
+                                     std::map<G4double, std::map<G4double, G4double>>>>;
+    using VecMap =
+      std::map<std::size_t,
+               std::map<const G4ParticleDefinition*, std::map<G4double, std::vector<G4double>>>>;
 
-public:
+  public:
+    explicit G4DNACPA100ElasticModel(const G4ParticleDefinition* p = nullptr,
+                                     const G4String& nam = "DNACPA100ElasticModel");
 
-  G4DNACPA100ElasticModel(const G4ParticleDefinition* p = 0, 
-              const G4String& nam = "DNACPA100ElasticModel");
+    ~G4DNACPA100ElasticModel() override = default;
 
-  virtual ~G4DNACPA100ElasticModel();
+    void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+    G4double CrossSectionPerVolume(const G4Material* material, const G4ParticleDefinition* p,
+                                   G4double ekin, G4double emin, G4double emax) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
-     const G4ParticleDefinition* p,
-     G4double ekin,
-     G4double emin,
-     G4double emax);
+    void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+                           const G4DynamicParticle*, G4double tmin, G4double maxEnergy) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-     const G4MaterialCutsCouple*,
-     const G4DynamicParticle*,
-     G4double tmin,
-     G4double maxEnergy);
-     
-  inline void SelectStationary(G4bool input); 
+    inline void SelectStationary(G4bool input);
 
-protected:
+    G4DNACPA100ElasticModel& operator=(const G4DNACPA100ElasticModel& right) = delete;
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+    G4DNACPA100ElasticModel(const G4DNACPA100ElasticModel&) = delete;
 
-private:
-  
-  G4bool statCode;
+    inline G4double GetElasticLevel(const std::size_t& l)
+    {
+      return fLevels[l];
+    }
 
-  // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
+  private:
+    G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+    G4bool statCode = false;
+    G4bool isInitialised = false;
+    G4int verboseLevel = 0;
 
-  G4bool isInitialised;
-  G4int verboseLevel;
-  
-  // Cross section
-  
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
+    G4double Theta(const G4ParticleDefinition* p, G4double k, G4double integrDiff,
+                   const std::size_t& materialID);
 
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
-  
-  // Final state
+    G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
 
-  //G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
+    G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
 
-  G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
-  
-  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+    G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
 
-  G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
-  G4double QuadInterpolator(G4double e11, 
-       G4double e12, 
-       G4double e21, 
-       G4double e22, 
-       G4double x11,
-       G4double x12, 
-       G4double x21, 
-       G4double x22, 
-       G4double t1, 
-       G4double t2, 
-       G4double t, 
-       G4double e);
+    G4double QuadInterpolator(G4double e11, G4double e12, G4double e21, G4double e22, G4double x11,
+                              G4double x12, G4double x21, G4double x22, G4double t1, G4double t2,
+                              G4double t, G4double e);
 
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+    G4double fKillBelowEnergy = 0.;
+    TriDimensionMap diffCrossSectionData;
+    VecMap eValuesVect;
+    std::map<std::size_t, std::map<const G4ParticleDefinition*, std::vector<G4double>>> tValuesVec;
 
-  TriDimensionMap eDiffCrossSectionData;
-  std::vector<G4double> eTdummyVec;
+    G4double RandomizeCosTheta(G4double k, const std::size_t& materialID);
 
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
-  VecMap eVecm;
-   
-  G4double RandomizeCosTheta(G4double k);
-   
-  //
-   
-  G4DNACPA100ElasticModel & operator=(const  G4DNACPA100ElasticModel &right);
-  G4DNACPA100ElasticModel(const  G4DNACPA100ElasticModel&);
+    void ReadDiffCSFile(const std::size_t& id, const G4ParticleDefinition* p, const G4String& file,
+                        const G4double&) override;
 
+    const G4Material* fpGuanine = nullptr;
+    const G4Material* fpG4_WATER = nullptr;
+    const G4Material* fpDeoxyribose = nullptr;
+    const G4Material* fpCytosine = nullptr;
+    const G4Material* fpThymine = nullptr;
+    const G4Material* fpAdenine = nullptr;
+    const G4Material* fpPhosphate = nullptr;
+    const G4ParticleDefinition* fpParticle = nullptr;
+
+    G4DNACPA100ElasticModel* fpModelData = nullptr;
+
+    std::map<std::size_t /*MatIndex*/, G4double> fLevels;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4DNACPA100ElasticModel::SelectStationary (G4bool input)
-{ 
-    statCode = input; 
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+inline void G4DNACPA100ElasticModel::SelectStationary(G4bool input)
+{
+  statCode = input;
+}
 
 #endif

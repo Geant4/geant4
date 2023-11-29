@@ -1,6 +1,3 @@
 # - G4graphics_reps category build(s)
-
-# Add allocation export symbol for the graphics_reps category
-add_definitions(-DG4GREPS_ALLOC_EXPORT)
-
-geant4_global_library_target(NAME G4graphics_reps COMPONENTS sources.cmake)
+include(sources.cmake)
+geant4_add_category(G4graphics_reps MODULES G4graphics_reps)

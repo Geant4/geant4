@@ -180,7 +180,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
   G4RotationMatrix* retval = &IdentityRM;
 
   // Insure against frot being a null pointer
-  if(this->GetRotation())
+  if(this->GetRotation() != nullptr)
   {
      aRotM = GetRotation()->inverse();
      retval= &aRotM;
@@ -202,7 +202,7 @@ G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 
 G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
 {
-  return G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
+  return {G4MT_tx, G4MT_ty, G4MT_tz};
 }
 
 const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const

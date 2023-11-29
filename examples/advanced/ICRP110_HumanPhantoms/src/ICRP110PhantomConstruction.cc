@@ -26,10 +26,6 @@
 // Code developed by:
 // S.Guatelli, M. Large and A. Malaroda, University of Wollongong
 //
-
-
-
-
 #include "ICRP110PhantomConstruction.hh"
 #include "ICRP110PhantomNestedParameterisation.hh"
 #include "ICRP110PhantomMaterial_Female.hh"
@@ -55,7 +51,7 @@ ICRP110PhantomConstruction::ICRP110PhantomConstruction():
    fVoxelHalfDimX(0), fVoxelHalfDimY(0), fVoxelHalfDimZ(0),
    fMinX(0),fMaxX(0), fMinY(0), fMaxY(0),
    fMinZ(0), fMaxZ(0), fNoFiles(0), fNVoxels(0),
-   fMateIDs(0)
+   fMateIDs(nullptr)
 {
   fMessenger = new ICRP110PhantomMessenger(this);
   // the messenger allows to set the sex of the phantom
@@ -81,12 +77,12 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
   G4double d;  // density
   
   A = 14.01*g/mole;
-  G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
+  auto elN = new G4Element("Nitrogen","N",Z = 7.,A);
   A = 16.00*g/mole;
-  G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
+  auto elO = new G4Element("Oxygen","O",Z = 8.,A);
   
   d = 0.001 *g/cm3;
-  G4Material* matAir = new G4Material("Air",d,2);
+  auto matAir = new G4Material("Air",d,2);
   matAir -> AddElement(elN,0.8);
   matAir -> AddElement(elO,0.2); 
 
@@ -215,14 +211,14 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
   G4double worldSize = 2.*m ;
   G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(world,
-						    matAir,
-						    "logicalWorld", 0, 0,0);
+  auto logicWorld = new G4LogicalVolume(world,
+			                 matAir,
+				         "logicalWorld", nullptr, nullptr,nullptr);
 
-  fMotherVolume = new G4PVPlacement(0,G4ThreeVector(),
+  fMotherVolume = new G4PVPlacement(nullptr,G4ThreeVector(),
 				    "physicalWorld",
 				    logicWorld,
-				    0,
+				    nullptr,
 				    false,
 				    0);
 
@@ -241,10 +237,10 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
                                fNVoxelY*fVoxelHalfDimY*mm,
                                fNVoxelZ*fVoxelHalfDimZ*mm);
  
-  G4LogicalVolume*  fContainer_logic = new G4LogicalVolume( fContainer_solid,
+  auto fContainer_logic = new G4LogicalVolume( fContainer_solid,
                                                             matAir,
                                                             "phantomContainer",
-                                                             0, 0, 0 );                                                        
+                                                             nullptr, nullptr, nullptr);                                                        
     
   fMaxX = fNVoxelX*fVoxelHalfDimX*mm; // Max X along X axis of the voxelised geometry 
   fMaxY = fNVoxelY*fVoxelHalfDimY*mm; // Max Y
@@ -260,7 +256,7 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
 
    
   fPhantomContainer
-  = new G4PVPlacement(0,                     // rotation
+  = new G4PVPlacement(nullptr,                     // rotation
                       posCentreVoxels,
                       fContainer_logic,     // The logic volume
                       "phantomContainer",  // Name
@@ -278,7 +274,7 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
    G4String yRepName("RepY");
    G4VSolid* solYRep = new G4Box(yRepName,fNVoxelX*fVoxelHalfDimX,
                                   fVoxelHalfDimY, fNVoxelZ*fVoxelHalfDimZ);
-   G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep,matAir,yRepName);
+   auto logYRep = new G4LogicalVolume(solYRep,matAir,yRepName);
    new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis, fNVoxelY,fVoxelHalfDimY*2.);
 	
    logYRep -> SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));   
@@ -287,7 +283,7 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
    G4String xRepName("RepX");
    G4VSolid* solXRep = new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,
                                   fNVoxelZ*fVoxelHalfDimZ);
-   G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,matAir,xRepName);
+   auto logXRep = new G4LogicalVolume(solXRep,matAir,xRepName);
    new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
 
    logXRep -> SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
@@ -295,16 +291,16 @@ G4VPhysicalVolume* ICRP110PhantomConstruction::Construct()
    //----- Voxel solid and logical volumes
    //--- Slice along Z axis 
    G4VSolid* solidVoxel = new G4Box("phantom",fVoxelHalfDimX, fVoxelHalfDimY,fVoxelHalfDimZ);
-   G4LogicalVolume* logicVoxel = new G4LogicalVolume(solidVoxel,matAir,"phantom");
+   auto logicVoxel = new G4LogicalVolume(solidVoxel,matAir,"phantom");
 
-	 logicVoxel -> SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
+   logicVoxel -> SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
-    // Parameterisation to define the material of each voxel
-    G4ThreeVector halfVoxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
+   // Parameterisation to define the material of each voxel
+   G4ThreeVector halfVoxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
       
-    ICRP110PhantomNestedParameterisation* param =  new ICRP110PhantomNestedParameterisation(halfVoxelSize, pMaterials);
+   auto param =  new ICRP110PhantomNestedParameterisation(halfVoxelSize, pMaterials);
 
-    new G4PVParameterised("phantom",    // their name
+   new G4PVParameterised("phantom",    // their name
                           logicVoxel, // their logical volume
                           logXRep,      // Mother logical volume
                           kZAxis,       // Are placed along this axis
@@ -470,7 +466,7 @@ G4String slice;
           // Dummy method to skip the first three lines of the files
           // which are not used here
         }
-        else{      
+     
         G4int nnew = ix + (iy)*fNVoxelX + numberFile*fNVoxelX*fNVoxelY;
         G4int OrgID;
         fin >> OrgID; 
@@ -767,7 +763,7 @@ G4String slice;
 	
           fMateIDs[nnew] = mateID_out;
 	
-         }
+         
       }
    }
 }

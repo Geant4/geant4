@@ -32,5 +32,5 @@
 
 G4AttHolder::~G4AttHolder()
 {
-  for (size_t i = 0; i < fValues.size(); ++i) delete fValues[i];
+  for (auto & fValue : fValues) delete fValue;
 }

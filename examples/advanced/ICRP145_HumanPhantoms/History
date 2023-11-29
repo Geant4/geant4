@@ -1,0 +1,42 @@
+# Example ICRP145_HumanPhantoms History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+## 2023-04-08 Susanna Guatelli (ICRP145Phantoms-V11-01-02)
+- Code revision in the TETRun class
+  
+## 2023-03-21 John Allison (ICRP145Phantoms-V11-01-01)
+- standalone.mac: Disable auto refresh *before* creating scene.
+  - For auto-refresh viewers, without this change the viewer attempts
+    to draw the detector with the default view parameters, and in
+    the case of this phantom, it overwhelms the graphics system.
+  - This phantom should be displayed with special mesh rendering.
+
+## 2023-03-19 John Allison (ICRP145Phantoms-V11-01-00)
+- Introduce ICRP145standalone.
+  - "make" builds two executables - ICRP145phantoms and ICRP145standalone.
+  - ICRP145standalone allows you to visualise the phantom without the
+    overhead of the run manager and physics tables and geometry
+    initialisation. Of course, you cannot run or visualise trajectories.
+
+## 2022-10-04 Gabriele Cosmo (ICRP145Phantoms-V11-00-03)
+- Fixed compilation warnings on Intel-icx compiler for set but unused variable
+  in TETModelImport source; code formatting.
+
+## 2022-09-20 Susanna Guatelli (ICRP145Phantoms-V11-00-02)
+- README file updated
+- RunManagerFactory implemented
+- QGSP_BIC_HP physics list adopted
+- general code review
+- Migration to c++11/14/17 features
+    
+## 2022-09-09 Susanna Guatelli (ICRP145Phantoms-V11-00-01)
+- Ranecu Engine removed. Default one now used
+    
+## 2022-07-24 John Allison (ICRP145Phantoms-V11-00-00)
+- First version.
+  - New human phantom example, based on
+    https://www.icrp.org/publication.asp?id=ICRP%20Publication%20145.

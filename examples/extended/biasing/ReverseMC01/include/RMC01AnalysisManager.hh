@@ -55,7 +55,6 @@
 #define RMC01AnalysisManager_HH
 
 #include"G4ios.hh"
-#include"G4strstreambuf.hh"
 #include <vector>
 #include"globals.hh"
 #include <fstream>

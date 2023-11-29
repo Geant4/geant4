@@ -1,11 +1,19 @@
--------------------------------------------------------------------------------
-History File, 2010/11/18 G.A.P. Cirrone, Created
-cirrone@lns.infn.it
--------------------------------------------------------------------------------
+# Example ChargeExchangeMC History
 
-         ====================================================
-             History file of the ChargeExchangeMC application
-         ====================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+
+## 2022-05-20 Vladimir Ivanchenko (ChargeExchangeMC-V11-00-01)
+- CexmcHadronicProcess - disable integral method not applicable to this test
+
+## 2021-12-10 Ben Morgan (ChargeExchangeMC-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25.10.2021 - B. Morgan (ChargeExchangeMC-V10-07-01)
              Use G4StrUtil functions replacing deprecated G4String member functions

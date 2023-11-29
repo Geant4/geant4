@@ -9,5 +9,6 @@ geant4_module_link_libraries(G4had_gamma_nuclear
   PUBLIC
     G4had_lend
   PRIVATE
+    G4globman
     G4hadronic_bert_cascade
     G4partman)

@@ -1,20 +1,55 @@
--------------------------------------------------------------------
+# Category emmuons History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-04-10 V.Ivanchenko (emmuons-V11-01-00)
+- G4MuBremsstrahlung, G4MuPairProduction - fix problem #2531, spline flag
+    was lost for mu-, pi-, K-, and pbar dedx and range tables, the max observed 
+    problem was for mu- with momentum ~50 MeV/c, ~5 % biased range
+- G4MuBetheBlochModel - enable option to use angular generator for sampling
+    of delta-electron direction
+- G4MuIonisation - implement full schema of selection of the model of
+    energy loss fluctuation
+
+## 2022-11-23 Gabriele Cosmo (emmuons-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-07-22 V.Ivanchenko (emmuons-V11-00-06)
+- G4MuonToMuonPairProductionModel - code clean-up
+
+## 2022-07-18 V.Ivanchenko (emmuons-V11-00-05)
+- G4MuonToMuonPairProductionModel - added extra constant and improve 
+    formulas by Siddharth Yajaman
+
+## 2022-07-14 V.Ivanchenko (emmuons-V11-00-04)
+- G4MuonToMuonPairProductionModel, G4MuonToMuonPairProduction - new 
+  model and process proposed by Siddharth Yajaman
+
+## 2022-07-04 V.Ivanchenko (emmuons-V11-00-03)
+- G4MuPairProductionModel, G4MuPairProduction - make more public and 
+    protected method in view of coming new muon pair production by muon
+    process/model; moved one method to source; use G4lrint
+
+## 2022-06-10 V.Ivanchenko (emmuons-V11-00-02)
+- G4MuIonisation - use G4MuBetheBloch model above 0.2 MeV
+- G4MuBremsstrahlungModel - low energy limit from 1 GeV moved to 100 MeV
+- G4MuPairProductionModel - low energy limit is moved from 1 GeV to 850 MeV
+    some code cleanup for all model: formatting, removed extra spce lines
+
+## 2022-05-27 V.Ivanchenko (emmuons-V11-00-01)
+- G4MuIonisation - added selection of the model
+    of energy loss fluctuations
+
+## 2021-12-10 Ben Morgan (emmuons-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 27 September 21: V.Ivanchenko  (emmuons-V10-07-09)
 - G4MuPairProduction, G4ePairProduction, G4MuBremsstrahlung

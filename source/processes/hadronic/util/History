@@ -1,26 +1,122 @@
--------------------------------------------------------------------
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+# Category hadr-util History
 
-           History file for hadronic/util directory
-           ----------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+-------------------------------------------------------------------------------
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-05-25 Alberto Ribon (hadr-util-V11-01-06)
+- G4Fragment : replaced (fatal) G4HadronicException with G4Exception.
+  Note: in the method CalculateMassAndExcitationEnergy(), the exception type
+        is "EventMustBeAborted" to avoid rare crashes seen in INCLXX, which
+	are difficult to reproduce and fix.
 
-09 February 2022 Gabriele Cosmo (hadr-util-V10-07-09)
------------------------------------------------------
+## 2023-04-25 Vladimir Ivanchenko (hadr-util-V11-01-05)
+- G4HadronicParameters - added extra Boolean method for access to debug
+    flag for the BinaryCascade, which may be defined via environment
+    variable BINARY_CASCADE_DEBUG
+
+## 2023-03-29 Vladimir Ivanchenko (hadr-util-V11-01-04)
+- G4HadronicParameters - added two strings and extra methods to access 
+  environment variables used in G4HadronicProcessStore. These variables
+  are not used in ordinary runs but are checked in each thread and for
+  each particle. With this update these variables will be checked only once.
+  Added G4Exception for the case, when environment variable G4PARTICLEXSDATA
+  is not defined (gitlab issue #160).
+
+## 2023-03-27 Alberto Ribon (hadr-util-V11-01-03)
+- G4HadronicParameter : introduced the neutron kinetic energy threshold for 
+  applying the SVT (Sampling of the Velocity of the Target) algorithm. 
+  This is needed to have a consistent value in the two methods
+  G4Nucleus::GetBiasedThermalNucleus and 
+  G4ParticleHPElasticFS::GetBiasedThermalNucleus
+  without cycling dependencies between util/ and models/particle_hp/ .
+- G4Nucleus : in the method GetBiasedThermalNucleus, get the neutron kinetic
+  energy threshold for applying the SVT algorithm from G4HadronicParameter
+  in the method DoKinematicsOfThermalNucleus, and corrected the way to pass
+  the last parameter, by reference instead of by value.
+
+## 2023-03-04 Alberto Ribon (hadr-util-V11-01-02)
+- G4Nucleus : split the method GetBiasedThermalNucleus into two parts, by
+  introducing a new public method, DoKinematicsOfThermalNucleus (which is
+  used also by G4ParticleHPElasticFS to implement the DBRC algorithm).
+
+## 2023-01-21 Vladimir Ivanchenko (hadr-util-V11-01-01)
+- G4HadronicParameters - removed two obsolete environment variables and access
+    methods; add flag for charge exchange
+
+## 2023-01-09 Vladimir Ivanchenko (hadr-util-V11-01-00)
+- G4HadronicParameters - added class members defined via environment variable
+    and access methods for these members, this allows exclude the major part
+    of calls to std::getenv in hadronics
+
+## 2022-11-26 Gabriele Cosmo (hadr-util-V11-00-13)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-07 Alberto Ribon (hadr-util-V11-00-12)
+- G4Nucleus : corrected the method GetN_asInt for the case of hypernuclei.
+
+## 2022-08-02 Alberto Ribon (hadr-util-V11-00-11)
+- G4HadronicParametersMessenger : rolled back as it was in hadr-until-V11-00-09,
+  to avoid circular dependency between G4hadronic_util and G4had_string_diff.
+  A new messenger class is created in G4had_string_diff.
+
+## 2022-07-28 Alberto Ribon (hadr-util-V11-00-10)
+- G4HadronicParametersMessenger : added two new UI commands to select one
+  tuning of the FTF model's parameters.
+
+## 2022-07-05 Vladimir Ivanchenko (hadr-util-V11-00-09)
+- G4NuclearPolarization - fixed Coverity warning
+
+## 2022-07-05 Vladimir Ivanchenko (hadr-util-V11-00-08)
+- G4HadronicParameters - added flag to enable general neutron process
+- G4HadDataHandler - new data class
+
+## 2022-06-09 Laurie Nevay (hadr-util-V11-00-07)
+- Add option to G4HadronicParameters to control diffraction for baryon
+  number greater than 10.
+
+## 2022-05-25 Alberto Ribon (hadr-util-V11-00-06)
+- G4KineticTrack, G4HadSecondary, G4ReactionProduct, G4DecayKineticTracks,
+  G4DecayStrongResonances: propagate the information on parent resonance 
+
+## 2022-05-14 Vladimir Ivanchenko (hadr-util-V11-00-05)
+- G4HadronicParameters - changed integral flags from per particle
+    to for elastic and inelastic processes; by default enable
+    for inelastic
+
+## 2022-05-04 Vladimir Ivanchenko (hadr-util-V11-00-04)
+- G4HadronicParameters - moved G4Threading header to the source;
+    added flags for integral method per particle type for
+    protons, pions, kaons, and anti-protons
+
+## 2022-04-04 Vladimir Ivanchenko (hadr-util-V11-00-03)
+- G4Fragment - fixed computation of binding energy for hypernuclei;
+    added a new private method to recompute ground state mass, 
+    excitation energy, and to check consistency of input;
+    left inlined only simple methods; added new methods
+    SetZAandMomentum(...) and RecomputeGroundStateMass();
+    improved comments and warning messages
+
+## 2022-02-09 Gabriele Cosmo (hadr-util-V11-00-02)
 - Fixed compilation warning on Intel compilers for unused variables
   and deprecated declaration of operator=().
 
+## 2021-12-11 Vladimir Ivanchenko (hadr-util-V11-00-01)
+- G4Fragment - added IsLongLived flag and Get/Set methods needed
+  for the de-excitation module; clean-up inline methods.
+
+## 2021-12-10 Ben Morgan (hadr-util-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
+
 05 November 2021 Alberto Ribon (hadr-util-V10-07-08)
-----------------------------------------------------
+--------------------------------------------------------
 - G4Nucleus : the method  GetBiasedThermalNucleus  has been rewritten
   (by Loic Thulliez and Eric Dumonteil of CEA Saclay) according to the
   Sampling of the Velocity of the Target nucleus (SVT) algorithm.

@@ -72,7 +72,7 @@ class G4ICRU73QOModel : public G4VEmModel
 
 public:
 
-  explicit G4ICRU73QOModel(const G4ParticleDefinition* p = 0,
+  explicit G4ICRU73QOModel(const G4ParticleDefinition* p = nullptr,
                            const G4String& nam = "ICRU73QO");
 
   ~G4ICRU73QOModel() = default;

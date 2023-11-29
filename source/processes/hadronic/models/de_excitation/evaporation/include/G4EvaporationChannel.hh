@@ -57,27 +57,26 @@ public:
   
   G4Fragment* EmittedFragment(G4Fragment* theNucleus) override;
 
+  G4double ComputeInverseXSection(G4Fragment*, G4double kinEnergy) override;
+
+  G4double ComputeProbability(G4Fragment*, G4double kinEnergy) override;
+
+  inline G4int GetZ() const { return theZ; };
+
+  inline G4int GetA() const { return theA; };
+
+  inline G4EvaporationProbability* GetEvaporationProbability()
+  { return theProbability; }
+
+  G4EvaporationChannel(const G4EvaporationChannel & right) = delete;
+  const G4EvaporationChannel & operator=
+  (const G4EvaporationChannel & right) = delete;
+  G4bool operator==(const G4EvaporationChannel & right) const = delete;
+  G4bool operator!=(const G4EvaporationChannel & right) const = delete;
+
 private: 
-  
-  G4EvaporationChannel(const G4EvaporationChannel & right);
-  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right);
-  G4bool operator==(const G4EvaporationChannel & right) const;
-  G4bool operator!=(const G4EvaporationChannel & right) const;
 
-  // This data member define the channel. 
-  // They are initialised at object creation (constructor) time.
-  G4int theA;
-  G4int theZ;
-  G4int resA;
-  G4int resZ;
-
-  G4int secID;  // Creator model ID for the secondaries created by this model
-  
-  G4double mass;
-  G4double resMass;
-
-  G4double evapMass;
-  G4double evapMass2;
+  G4NuclearLevelData* theLevelData;
 
   // For evaporation probability calcualation
   G4EvaporationProbability* theProbability;
@@ -85,7 +84,21 @@ private:
   // For Coulomb Barrier calculation
   G4CoulombBarrier* theCoulombBarrier;
 
-  G4NuclearLevelData* theLevelData;
+  // This data member define the channel. 
+  // They are initialised at object creation (constructor) time.
+  G4int theA;
+  G4int theZ;
+  G4int resA = 0;
+  G4int resZ = 0;
+
+  G4int secID;  // Creator model ID for this model
+  
+  G4double mass = 0.0;
+  G4double resMass = 0.0;
+  G4double ekinmax = 0.0;
+  G4double bCoulomb = 0.0;
+  G4double evapMass;
+  G4double evapMass2;
 };
 
 #endif

@@ -222,36 +222,36 @@ inline G4ThreeVector
 G4AffineTransform::TransformPoint(const G4ThreeVector& vec) const
 {
   G4double vecx = vec.x(), vecy = vec.y(), vecz = vec.z();
-  return G4ThreeVector( vecx*rxx + vecy*ryx + vecz*rzx + tx,
-                        vecx*rxy + vecy*ryy + vecz*rzy + ty,
-                        vecx*rxz + vecy*ryz + vecz*rzz + tz );
+  return { vecx*rxx + vecy*ryx + vecz*rzx + tx,
+           vecx*rxy + vecy*ryy + vecz*rzy + ty,
+           vecx*rxz + vecy*ryz + vecz*rzz + tz };
 }
 
 inline G4ThreeVector
 G4AffineTransform::InverseTransformPoint(const G4ThreeVector& vec) const
 {
   G4double vecx = vec.x()-tx, vecy = vec.y()-ty, vecz = vec.z()-tz;
-  return G4ThreeVector( vecx*rxx + vecy*rxy + vecz*rxz,
-                        vecx*ryx + vecy*ryy + vecz*ryz,
-                        vecx*rzx + vecy*rzy + vecz*rzz );
+  return { vecx*rxx + vecy*rxy + vecz*rxz,
+           vecx*ryx + vecy*ryy + vecz*ryz,
+           vecx*rzx + vecy*rzy + vecz*rzz };
 }
 
 inline G4ThreeVector
 G4AffineTransform::TransformAxis(const G4ThreeVector& axis) const
 {
   G4double axisx = axis.x(), axisy = axis.y(), axisz = axis.z();
-  return G4ThreeVector( axisx*rxx + axisy*ryx + axisz*rzx,
-                        axisx*rxy + axisy*ryy + axisz*rzy,
-                        axisx*rxz + axisy*ryz + axisz*rzz );
+  return { axisx*rxx + axisy*ryx + axisz*rzx,
+           axisx*rxy + axisy*ryy + axisz*rzy,
+           axisx*rxz + axisy*ryz + axisz*rzz };
 }
 
 inline G4ThreeVector
 G4AffineTransform::InverseTransformAxis(const G4ThreeVector& axis) const
 {
   G4double axisx = axis.x(), axisy = axis.y(), axisz = axis.z();
-  return G4ThreeVector( axisx*rxx + axisy*rxy + axisz*rxz,
-                        axisx*ryx + axisy*ryy + axisz*ryz,
-                        axisx*rzx + axisy*rzy + axisz*rzz );
+  return { axisx*rxx + axisy*rxy + axisz*rxz,
+           axisx*ryx + axisy*ryy + axisz*ryz,
+           axisx*rzx + axisy*rzy + axisz*rzz };
 }
 
 inline
@@ -322,19 +322,19 @@ G4AffineTransform& G4AffineTransform::operator -=(const G4ThreeVector& tlate)
 inline
 G4bool G4AffineTransform::operator == (const G4AffineTransform& tf) const
 {
-  return (tx==tf.tx&&ty==tf.ty&&tz==tf.tz&&
-          rxx==tf.rxx&&rxy==tf.rxy&&rxz==tf.rxz&&
-          ryx==tf.ryx&&ryy==tf.ryy&&ryz==tf.ryz&&
-          rzx==tf.rzx&&rzy==tf.rzy&&rzz==tf.rzz) ? true : false;
+  return tx==tf.tx&&ty==tf.ty&&tz==tf.tz&&
+         rxx==tf.rxx&&rxy==tf.rxy&&rxz==tf.rxz&&
+         ryx==tf.ryx&&ryy==tf.ryy&&ryz==tf.ryz&&
+         rzx==tf.rzx&&rzy==tf.rzy&&rzz==tf.rzz;
 }
 
 inline
 G4bool G4AffineTransform::operator != (const G4AffineTransform& tf) const
 {
-  return (tx!=tf.tx||ty!=tf.ty||tz!=tf.tz||
-          rxx!=tf.rxx||rxy!=tf.rxy||rxz!=tf.rxz||
-          ryx!=tf.ryx||ryy!=tf.ryy||ryz!=tf.ryz||
-          rzx!=tf.rzx||rzy!=tf.rzy||rzz!=tf.rzz) ? true : false;
+  return tx!=tf.tx||ty!=tf.ty||tz!=tf.tz||
+         rxx!=tf.rxx||rxy!=tf.rxy||rxz!=tf.rxz||
+         ryx!=tf.ryx||ryy!=tf.ryy||ryz!=tf.ryz||
+         rzx!=tf.rzx||rzy!=tf.rzy||rzz!=tf.rzz;
 }
 
 inline
@@ -393,13 +393,13 @@ G4double G4AffineTransform::operator [] (const G4int n) const
 inline
 G4bool G4AffineTransform::IsRotated() const
 {
-  return (rxx==1.0 && ryy==1.0 && rzz==1.0) ? false : true;
+  return !(rxx==1.0 && ryy==1.0 && rzz==1.0);
 }
 
 inline 
 G4bool G4AffineTransform::IsTranslated() const
 {
-  return (tx || ty || tz) ? true:false;
+  return (tx != 0.0) || (ty != 0.0) || (tz != 0.0);
 }
 
 inline G4RotationMatrix G4AffineTransform::NetRotation() const
@@ -419,7 +419,7 @@ inline G4RotationMatrix G4AffineTransform::InverseNetRotation() const
 inline
 G4ThreeVector G4AffineTransform::NetTranslation() const
 {
-  return G4ThreeVector(tx,ty,tz);
+  return {tx,ty,tz};
 }
 
 inline
@@ -429,7 +429,7 @@ G4ThreeVector G4AffineTransform::InverseNetTranslation() const
   G4double invtx = ttx*rxx + tty*rxy + ttz*rxz;
   G4double invty = ttx*ryx + tty*ryy + ttz*ryz;
   G4double invtz = ttx*rzx + tty*rzy + ttz*rzz;
-  return G4ThreeVector(invtx,invty,invtz);
+  return {invtx,invty,invtz};
 }
 
 inline 

@@ -106,8 +106,8 @@
  </materials>
 
  <solids>
-  <ellipsoid aunit="cm" lunit="cm" name="Head1" ax="7.77" by="9.76" cz="6.92" zcut1="0.0" zcut2="6.92" />
-  <eltube aunit="cm" lunit="cm" name="Head2" dx="7.77" dy="9.76" dz="8.25" />
+  <ellipsoid lunit="cm" name="Head1" ax="7.77" by="9.76" cz="6.92" zcut1="0.0" zcut2="6.92" />
+  <eltube lunit="cm" name="Head2" dx="7.77" dy="9.76" dz="8.25" />
   <union name="Head">
    <first ref="Head2" />
    <second ref="Head1" />

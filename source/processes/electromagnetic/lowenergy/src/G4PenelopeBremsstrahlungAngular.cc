@@ -121,7 +121,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
 void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 {
    //Read information from DataBase file
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4String excep =
@@ -473,10 +473,10 @@ G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* 
 
   //Helper for the calculation
   std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
-  G4int nElements = material->GetNumberOfElements();
+  G4int nElements = (G4int)material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* fractionVector = material->GetFractionVector();
-  for (G4int i=0;i<nElements;i++)
+  for (G4int i=0;i<nElements;++i)
     {
       G4double fraction = fractionVector[i];
       G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
@@ -484,18 +484,18 @@ G4double G4PenelopeBremsstrahlungAngular::CalculateEffectiveZ(const G4Material* 
     }
   //Find max
   G4double MaxStechiometricFactor = 0.;
-  for (G4int i=0;i<nElements;i++)
+  for (G4int i=0;i<nElements;++i)
     {
       if ((*StechiometricFactors)[i] > MaxStechiometricFactor)
         MaxStechiometricFactor = (*StechiometricFactors)[i];
     }
   //Normalize
-  for (G4int i=0;i<nElements;i++)
+  for (G4int i=0;i<nElements;++i)
     (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
 
   G4double sumz2 = 0;
   G4double sums = 0;
-  for (G4int i=0;i<nElements;i++)
+  for (G4int i=0;i<nElements;++i)
     {
       G4double Z = (*elementVector)[i]->GetZ();
       sumz2 += (*StechiometricFactors)[i]*Z*Z;

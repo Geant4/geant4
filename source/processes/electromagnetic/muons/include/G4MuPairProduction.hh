@@ -99,8 +99,6 @@ protected:
   void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 			           const G4ParticleDefinition*) override;
 
-private:
-
   const G4ParticleDefinition* theParticle = nullptr;
   G4double                    lowestKinEnergy;
   G4bool                      isInitialised = false;

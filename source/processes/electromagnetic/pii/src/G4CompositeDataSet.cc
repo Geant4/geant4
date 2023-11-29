@@ -88,18 +88,18 @@ G4double G4CompositeDataSet::FindValue(G4double energy, G4int componentId) const
 
 void G4CompositeDataSet::PrintData(void) const
 {
-  const size_t n(NumberOfComponents());
+  const G4int n = (G4int)NumberOfComponents();
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i(0);
+  G4int i(0);
  
   while (i<n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 
@@ -127,7 +127,7 @@ G4bool G4CompositeDataSet::LoadData(const G4String& argFileName)
 {
   CleanUpComponents(); 
 
-  for (G4int z(minZ); z<maxZ; z++)
+  for (G4int z(minZ); z<maxZ; ++z)
     {
       G4IDataSet* component = new G4DataSet(z, algorithm->Clone(), unitEnergies, unitData);
       if (!component->LoadData(argFileName))
@@ -144,7 +144,7 @@ G4bool G4CompositeDataSet::LoadData(const G4String& argFileName)
 
 G4bool G4CompositeDataSet::SaveData(const G4String& argFileName) const
 {
-  for (G4int z=minZ; z<maxZ; z++)
+  for (G4int z=minZ; z<maxZ; ++z)
     {
       const G4IDataSet* component(GetComponent(z-minZ));
   

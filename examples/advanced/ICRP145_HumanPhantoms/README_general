@@ -1,0 +1,49 @@
+The compressed package of electronic files contains the detailed data on the adult mesh-type reference computational phantoms (MRCPs). The package is organised in two folders: 'Phantom_data' and 'MC_examples'.
+
+1. Data files in Phantom_data
+
+This folder is subdivided into two folders, one for each of the two reference phantoms (AM: adult male, AF: adult female). Each folder contains the following files:
+
+*	Data files for tetrahedral mesh (TM) version of the adult MRCPs; the file names are:
+		MRCP_AM.node
+		MRCP_AM.ele
+		MRCP_AF.node
+		MRCP_AF.ele
+	The data files consist of NODE- and ELE-format files. The NODE-format files contain a list of node coordinates composing the TM-version phantoms, with the following format:
+		-	First line: <# of nodes> <dimension (= 3)> <n/a (= 0)> <n/a (= 0)>
+		-	Remaining lines list # of points: <node ID> <x> <y> <z>
+	The ELE-format files contain a list of tetrahedrons composing the TM-version phantoms and each tetrahedron is represented as four node IDs listed in the corresponding NODE-format files and an organ ID number with respect to the tetrahedron, and the format is as follows:
+		-	First line: <# of tetrahedrons> <dimension (= 3)> <# of attributes (= 1, for organ ID)>
+		-	Remaining lines list # of tetrahedrons: <tetrahedron ID> <node 1> <node 2> <node 3> <node 4> <organ ID>
+
+*	Data files for polygon mesh (PM) version of the adult MRCPs; the file names are:
+		MRCP_AM.obj
+		MRCP_AM.mtl
+		MRCP_AF.obj
+		MRCP_AF.mtl
+	These files consist of OBJ- and MTL-format files, which contain data on PM and colours, respectively. They can be imported in various 3D commercial programs such as 3ds Max (Autodesk, USA), MAYA (Autodesk, USA), Rapidform (INUS Technology Inc., Korea) and Rhinoceros (Robert McNeel, USA).
+
+*	Lists of the media, elemental compositions and densities; the file names are:
+		MRCP_AM_media.dat
+		MRCP_AF_media.dat
+
+*	The mass ratios of bone constituents (trabecular bone, red and yellow bone marrow) in the spongiosa regions; the file names are:
+		MRCP_AM_spongiosa.dat
+		MRCP_AF_spongiosa.dat
+
+*	The mass ratios of blood in various body tissues; the file names are:
+		MRCP_AM_blood.dat
+		MRCP_AF_blood.dat
+
+*	PDF files for phantom visualisation; the file names are:
+		MRCP_AM.pdf
+		MRCP_AF.pdf
+	The PDF files visualise the MRCPs in a 3D view. The PDF files can be opened in Acrobat program (Adobe Systems, San Jose, CA, USA) where one can navigate the phantoms in detail, e.g. by rotating or enlarging each of the organ/tissue models. Detailed instruction on these 3D PDF files can be found elsewhere (https://helpx.adobe.com/acrobat/using/displaying-3d-models-pdfs.html).
+
+2. Data files in MC_examples
+
+This folder contains the following three compressed files:
+		MRCP_GEANT4.zip
+		MRCP_MCNP6.zip
+		MRCP_PHITS.zip
+The data files contain input examples for implementation of the TM-version phantoms in the three Monte Carlo codes, i.e. Geant4, MCNP6 and PHITS. Each of the compressed files include examples for internal and external exposures, where the source is defined as homogeneous liver source and a point source located at 1 m in front of the phantom, respectively, both emitting 1-MeV photons. Detailed information on the implementation is described in the 'README.txt' file included in each compressed file. Please note that neither the ICRP nor Task Group 103 shall not be liable for any result produced by any of these input examples.

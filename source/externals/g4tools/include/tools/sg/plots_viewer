@@ -80,14 +80,13 @@ public:
 
   bool write_inzb_png(png_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height) {
     // for example :
-    //   #include <tools/png>
+    //   #include <toolx/png>
     //   ...
-    //   viewer.write_inzb_png(tools::png::write,"out.png");
+    //   viewer.write_inzb_png(toolx::png::write,"out.png");
     //
     zb_action action(m_zb_mgr,m_out,a_width,a_height);
-    action.zbuffer().clear_color_buffer(0);
-    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
-    action.zbuffer().clear_depth_buffer();
+    action.clear_color_buffer(m_clear_color);
+    action.clear_depth_buffer();
     sg().render(action);
 
     unsigned int bpp = 3;
@@ -97,7 +96,7 @@ public:
       return false;
     }
     unsigned char* pos = buffer;
-    zb_action::VCol r,g,b;
+    float r,g,b;
     for(unsigned int row=0;row<a_height;row++) {
       for(unsigned int col=0;col<a_width;col++) {
         zb_action::get_rgb(&action,col,a_height-row-1,r,g,b);
@@ -123,14 +122,13 @@ public:
 
   bool write_inzb_jpeg(jpeg_writer a_writer,const std::string& a_file,unsigned int a_width,unsigned int a_height,int a_quality = 100) {
     // for example :
-    //   #include <tools/jpeg>
+    //   #include <toolx/jpeg>
     //   ...
-    //   viewer.write_inzb_jpeg(tools::jpeg::write,"out.jpeg");
+    //   viewer.write_inzb_jpeg(toolx::jpeg::write,"out.jpeg");
     //
     zb_action action(m_zb_mgr,m_out,a_width,a_height);
-    action.zbuffer().clear_color_buffer(0);
-    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
-    action.zbuffer().clear_depth_buffer();
+    action.clear_color_buffer(m_clear_color);
+    action.clear_depth_buffer();
     sg().render(action);
 
     unsigned int bpp = 3;
@@ -140,7 +138,7 @@ public:
       return false;
     }
     unsigned char* pos = buffer;
-    zb_action::VCol r,g,b;
+    float r,g,b;
     for(unsigned int row=0;row<a_height;row++) {
       for(unsigned int col=0;col<a_width;col++) {
         zb_action::get_rgb(&action,col,a_height-row-1,r,g,b);
@@ -164,9 +162,8 @@ public:
 
   bool write_inzb_ps(const std::string& a_file,unsigned int a_width,unsigned int a_height,bool a_anonymous = false) {
     zb_action action(m_zb_mgr,m_out,a_width,a_height);
-    action.zbuffer().clear_color_buffer(0);
-    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
-    action.zbuffer().clear_depth_buffer();
+    action.clear_color_buffer(m_clear_color);
+    action.clear_depth_buffer();
     sg().render(action);
     wps wps(m_out);
     if(!wps.open_file(a_file,a_anonymous)) {
@@ -194,9 +191,8 @@ public:
   }
   bool write_inzb_ps_page(unsigned int a_width,unsigned int a_height) {
     sg::zb_action action(m_zb_mgr,m_out,a_width,a_height);
-    action.zbuffer().clear_color_buffer(0);
-    action.add_color(m_clear_color.r(),m_clear_color.g(),m_clear_color.b(),m_clear_color.a());
-    action.zbuffer().clear_depth_buffer();
+    action.clear_color_buffer(m_clear_color);
+    action.clear_depth_buffer();
     sg().render(action);
     m_wps.PS_BEGIN_PAGE();
     m_wps.PS_PAGE_SCALE(float(a_width),float(a_height));

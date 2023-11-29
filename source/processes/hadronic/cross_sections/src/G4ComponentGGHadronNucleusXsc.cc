@@ -42,6 +42,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4Log.hh"
+#include "G4Lambda.hh"
+#include "G4Pow.hh"
 #include "G4NuclearRadii.hh"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +53,7 @@ G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc()
  : G4VComponentCrossSection(Default_Name()),
    fTotalXsc(0.0),fElasticXsc(0.0),fInelasticXsc(0.0),fProductionXsc(0.0),
    fDiffractionXsc(0.0),fAxsc2piR2(0.0),fModelInLog(0.0),fEnergy(0.0),
-   fParticle(nullptr),fZ(0),fA(0)
+   fParticle(nullptr),fZ(0),fA(0), fL(0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -64,7 +66,8 @@ G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc()
   theKMinus   = G4KaonMinus::KaonMinus();
   theK0S      = G4KaonZeroShort::KaonZeroShort();
   theK0L      = G4KaonZeroLong::KaonZeroLong();
- 
+  theLambda = G4Lambda::Lambda();
+  
   hnXsc = new G4HadronNucleonXsc();
 }
 
@@ -178,16 +181,17 @@ G4double G4ComponentGGHadronNucleusXsc::GetProductionIsotopeCrossSection(
 
 void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
                 const G4ParticleDefinition* aParticle, 
-                G4double kinEnergy, G4int Z, G4int A)
+                G4double kinEnergy, G4int Z, G4int A, G4int nL)
 {
   // check cache
-  if(aParticle == fParticle && fZ == Z && fA == A && kinEnergy == fEnergy)
+  if(aParticle == fParticle && fZ == Z && fA == A  && fL == nL && kinEnergy == fEnergy)
     { return; }
   fParticle = aParticle;
   fZ = Z;
   fA = A;
+  fL = nL;
   fEnergy = kinEnergy;
-
+  G4Pow* pG4Pow=G4Pow::GetInstance();
   //
   G4double cofInelastic = 2.4;
   static const G4double cofTotal = 2.0;
@@ -220,6 +224,14 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
       hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
     }
     R = G4NuclearRadii::RadiusHNGG(A);
+    if( nL > 0 ) {
+      G4double mp = theProton->GetPDGMass();
+      G4double ml = theLambda->GetPDGMass();
+      G4double kinCof = ml/mp; // moving hyperon - rest nucleon
+      G4double cHN(0.88);
+      sigma += nL*hnXsc->HadronNucleonXsc(theLambda, theProton, kinEnergy*kinCof);
+      R *= std::sqrt( pG4Pow->Z23( A - nL ) + cHN*pG4Pow->Z23( nL ) )/pG4Pow->Z13(A);
+    }
   }
 
   G4double nucleusSquare = cofTotal*pi*R*R;   // basically 2piRR

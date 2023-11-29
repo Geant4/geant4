@@ -47,11 +47,8 @@
 #include "PurgMagPhysicsList.hh"
 #include "PurgMagActionInitializer.hh"
 
-int main(int argc,char** argv) {
-
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
+int main(int argc,char** argv) 
+{
  // Construct the default run manager
  //
   auto* runManager = G4RunManagerFactory::CreateRunManager();

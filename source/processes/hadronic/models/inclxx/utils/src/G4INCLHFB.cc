@@ -45,9 +45,11 @@
 #include "G4INCLHFB.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
-#include "G4Threading.hh"
 #include <algorithm>
 #include <istream>
+#ifdef INCLXX_IN_GEANT4_MODE
+ #include "G4Threading.hh"
+#endif
 
 namespace G4INCL {
 
@@ -87,7 +89,7 @@ namespace G4INCL {
       cleanTable();
 
 #ifdef INCLXX_IN_GEANT4_MODE
-       if(!std::getenv("G4INCLDATA")) {
+       if(!G4FindDataDir("G4INCLDATA")) {
         G4ExceptionDescription ed;
         ed << " Data missing: set environment variable G4INCLDATA\n"
            << " to point to the directory containing data files needed\n"
@@ -95,7 +97,7 @@ namespace G4INCL {
            G4Exception("G4INCLDataFile::readData()","table_radius_hfb.dat",
                 FatalException, ed);
       }
-      G4String dataPath0(std::getenv("G4INCLDATA"));
+      G4String dataPath0(G4FindDataDir("G4INCLDATA"));
       G4String dataPath(dataPath0 + "/table_radius_hfb.dat");
 #else
       // File name

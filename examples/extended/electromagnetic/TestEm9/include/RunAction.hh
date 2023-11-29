@@ -30,13 +30,6 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-// -------------------------------------------------------------
-//
-//      GEANT4 
-//
-// 
-// -------------------------------------------------------------
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -48,19 +41,19 @@
 
 class RunAction : public G4UserRunAction
 {
-public: // Without description
+public:
 
   RunAction();
-  virtual ~RunAction();
+  ~RunAction() override = default;
 
-public: // With description
- 
-  virtual void BeginOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*) override;
   // In this method histogramms are booked
 
-  virtual void EndOfRunAction(const G4Run*);
-  // In this method BookHisto method is called in which histogramms are filled
+  void EndOfRunAction(const G4Run*) override;
+  // In this method histogramms are stored
 
+  RunAction & operator=(const RunAction &right) = delete;
+  RunAction(const RunAction&) = delete;
 };
 
 #endif

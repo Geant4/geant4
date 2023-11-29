@@ -50,6 +50,7 @@
 
 class G4SafetyHelper;
 class G4Molecule;
+class G4VUserBrownianAction;
 
 // experimental
 class G4BrownianAction
@@ -111,12 +112,12 @@ public:
   G4DNABrownianTransportation(const G4String& aName =
                               "DNABrownianTransportation",
                               G4int verbosityLevel = 0);
-  G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
   virtual ~G4DNABrownianTransportation();
-  G4DNABrownianTransportation(const G4DNABrownianTransportation&);
-  G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation&);
+  G4DNABrownianTransportation(const G4DNABrownianTransportation&) = delete;
+  G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation&) = delete;
 
   inline void SetBrownianAction(G4BrownianAction*);
+  inline void SetUserBrownianAction(G4VUserBrownianAction*);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -236,6 +237,8 @@ protected:
   const std::vector<G4double>* fpWaterDensity;
 
   G4BrownianAction* fpBrownianAction;
+  G4VUserBrownianAction *fpUserBrownianAction;
+
 };
 
 
@@ -243,5 +246,11 @@ inline void G4DNABrownianTransportation::SetBrownianAction(G4BrownianAction* bro
 {
   fpBrownianAction = brownianAction;
 }
+
+inline void G4DNABrownianTransportation::SetUserBrownianAction(G4VUserBrownianAction* brownianAction)
+{
+  fpUserBrownianAction = brownianAction;
+}
+
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

@@ -36,15 +36,20 @@
 
 #include <iostream>
 
+class G4coutDestination;
+
 #ifdef G4MULTITHREADED
 
+extern G4GLOB_DLL std::ostream*& _G4debug_p();
 extern G4GLOB_DLL std::ostream*& _G4cout_p();
 extern G4GLOB_DLL std::ostream*& _G4cerr_p();
+#  define G4debug (*_G4debug_p())
 #  define G4cout (*_G4cout_p())
 #  define G4cerr (*_G4cerr_p())
 
 #else  // Sequential
 
+extern G4GLOB_DLL std::ostream G4debug;
 extern G4GLOB_DLL std::ostream G4cout;
 extern G4GLOB_DLL std::ostream G4cerr;
 
@@ -52,6 +57,11 @@ extern G4GLOB_DLL std::ostream G4cerr;
 
 void G4iosInitialization();
 void G4iosFinalization();
+
+// Redirect messages sent to G4cout etc to this destination
+// Callee retains ownership of the destination pointer and must call 
+// this function again with `nullptr` on destination destruction.
+void G4iosSetDestination(G4coutDestination* sink);
 
 #define G4cin std::cin
 #define G4endl std::endl

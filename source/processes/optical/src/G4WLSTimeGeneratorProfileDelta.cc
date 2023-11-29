@@ -56,7 +56,7 @@ G4WLSTimeGeneratorProfileDelta::G4WLSTimeGeneratorProfileDelta(
 
 //
 
-G4WLSTimeGeneratorProfileDelta::~G4WLSTimeGeneratorProfileDelta() {}
+G4WLSTimeGeneratorProfileDelta::~G4WLSTimeGeneratorProfileDelta() = default;
 
 //
 

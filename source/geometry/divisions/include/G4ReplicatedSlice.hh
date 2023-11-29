@@ -123,28 +123,28 @@ class G4ReplicatedSlice : public G4PVReplica
                       const G4double offset );
       // Constructor with width
 
-    virtual ~G4ReplicatedSlice();
+    ~G4ReplicatedSlice() override;
 
     G4ReplicatedSlice(const G4ReplicatedSlice&) = delete;
     G4ReplicatedSlice& operator=(const G4ReplicatedSlice&) = delete;
 
-    virtual G4bool IsMany() const;
-    virtual G4bool IsReplicated() const;
-    virtual G4int GetMultiplicity() const;
-    virtual G4VPVParameterisation* GetParameterisation() const;
-    virtual void GetReplicationData( EAxis& axis,
-                                     G4int& nReplicas,
-                                     G4double& width,
-                                     G4double& offset,
-                                     G4bool& consuming ) const;
+    G4bool IsMany() const override;
+    G4bool IsReplicated() const override;
+    G4int GetMultiplicity() const override;
+    G4VPVParameterisation* GetParameterisation() const override;
+    void GetReplicationData( EAxis& axis,
+                             G4int& nReplicas,
+                             G4double& width,
+                             G4double& offset,
+                             G4bool& consuming ) const override;
     EAxis  GetDivisionAxis() const;
-    G4bool IsParameterised() const;
+    G4bool IsParameterised() const override;
    
     EVolume VolumeType() const final;
       // Characterise the type of volume - normal/replicated/parameterised.
 
-    G4bool IsRegularStructure() const; 
-    G4int  GetRegularStructureId() const; 
+    G4bool IsRegularStructure() const override; 
+    G4int  GetRegularStructureId() const override; 
       // Methods to identify volume that can apply 'regular' navigation.
       // Currently divisions do not qualify for this.
 

@@ -44,34 +44,34 @@ public:
   G4DNADingfelderChargeDecreaseModel(const G4ParticleDefinition* p = 0, 
 		          const G4String& nam = "DNADingfelderChargeDecreaseModel");
 
-  virtual ~G4DNADingfelderChargeDecreaseModel();
+  ~G4DNADingfelderChargeDecreaseModel() override = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double emin,
-					   G4double emax);
+					   G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SelectStationary(G4bool input); 
 
 protected:
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
 private:
 
   G4bool statCode;
 
   // Water density table
-  const std::vector<G4double>* fpMolWaterDensity;
+  const std::vector<G4double>* fpMolWaterDensity = nullptr;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
@@ -113,6 +113,13 @@ private:
    
   G4DNADingfelderChargeDecreaseModel & operator=(const  G4DNADingfelderChargeDecreaseModel &right);
   G4DNADingfelderChargeDecreaseModel(const  G4DNADingfelderChargeDecreaseModel&);
+
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef = nullptr;
+  G4ParticleDefinition* alphaPlusPlusDef = nullptr;
+  G4ParticleDefinition* alphaPlusDef = nullptr;
+  G4ParticleDefinition* hydrogenDef = nullptr;
+  G4ParticleDefinition* heliumDef = nullptr;
 
 };
 

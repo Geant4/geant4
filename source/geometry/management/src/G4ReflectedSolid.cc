@@ -104,7 +104,7 @@ G4ReflectedSolid& G4ReflectedSolid::operator=(const G4ReflectedSolid& rhs)
 
 G4GeometryType G4ReflectedSolid::GetEntityType() const 
 {
-  return G4String("G4ReflectedSolid");
+  return {"G4ReflectedSolid"};
 }
 
 const G4ReflectedSolid* G4ReflectedSolid::GetReflectedSolidPtr() const   
@@ -346,6 +346,24 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
   G4Exception("G4ReflectedSolid::ComputeDimensions()",
                "GeomMgt0001", FatalException,
                "Method not applicable in this context!");
+}
+
+//////////////////////////////////////////////////////////////
+//
+// Return volume
+
+G4double G4ReflectedSolid::GetCubicVolume()
+{
+  return fPtrSolid->GetCubicVolume();
+}
+
+//////////////////////////////////////////////////////////////
+//
+// Return surface area
+
+G4double G4ReflectedSolid::GetSurfaceArea()
+{
+  return fPtrSolid->GetSurfaceArea();
 }
 
 //////////////////////////////////////////////////////////////

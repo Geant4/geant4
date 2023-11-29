@@ -36,6 +36,11 @@
 #include <sstream>
 #include <cctype>
 
+#include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolume.hh"
+
+#define G4warn G4cout
+
 G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
 G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
 G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
@@ -49,7 +54,8 @@ G4PhysicalVolumeModel::TouchableProperties          G4VVisCommand::fCurrentTouch
 G4VisExtent                                         G4VVisCommand::fCurrentExtentForField;
 std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
 G4bool G4VVisCommand::fThereWasAViewer = false;
-G4ViewParameters G4VVisCommand::fVPExistingViewer;
+G4ViewParameters G4VVisCommand::fExistingVP;
+G4SceneTreeItem  G4VVisCommand::fExistingSceneTree;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -98,7 +104,7 @@ G4bool G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
   } else {
     G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Unrecognised unit" << G4endl;
+      G4warn << "ERROR: Unrecognised unit" << G4endl;
     }
     return false;
   }
@@ -133,14 +139,14 @@ void G4VVisCommand::ConvertToColour
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  const size_t iPos0 = 0;
+  const std::size_t iPos0 = 0;
   if (std::isalpha(redOrString[iPos0])) {
 
     // redOrString is probably alphabetic characters defining the colour
     if (!G4Colour::GetColour(redOrString, colour)) {
       // Not a recognised string
       if (verbosity >= G4VisManager::warnings) {
-        G4cout << "WARNING: Colour \"" << redOrString
+        G4warn << "WARNING: Colour \"" << redOrString
         << "\" not found.  Defaulting to " << colour
         << G4endl;
       }
@@ -159,7 +165,7 @@ void G4VVisCommand::ConvertToColour
     iss >> red;
     if (iss.fail()) {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout << "WARNING: String \"" << redOrString
+        G4warn << "WARNING: String \"" << redOrString
         << "\" cannot be parsed.  Defaulting to " << colour
         << G4endl;
       }
@@ -185,17 +191,17 @@ G4bool G4VVisCommand::ProvideValueOfUnit
   G4bool success = true;
   if (!G4UnitDefinition::IsUnitDefined(unit)) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cerr << where
+      G4warn << where
       << "\n  Unit \"" << unit << "\" not defined"
       << G4endl;
     }
     success = false;
   } else if (G4UnitDefinition::GetCategory(unit) != category) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cerr << where
+      G4warn << where
       << "\n  Unit \"" << unit << "\" not a unit of " << category;
-      if (category == "Volumic Mass") G4cerr << " (density)";
-      G4cerr << G4endl;
+      if (category == "Volumic Mass") G4warn << " (density)";
+      G4warn << G4endl;
     }
     success = false;
   } else {
@@ -210,7 +216,7 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
 
   if (!pScene) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene pointer is null."
+      G4warn << "WARNING: Scene pointer is null."
       << G4endl;
     }
     return;
@@ -219,7 +225,7 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
   G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene handler not found." << G4endl;
+      G4warn << "WARNING: Scene handler not found." << G4endl;
     }
     return;
   }
@@ -241,7 +247,7 @@ G4bool G4VVisCommand::CheckView ()
 
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
        << G4endl;
     }
@@ -255,7 +261,7 @@ void G4VVisCommand::G4VisCommandsSceneAddUnsuccessful
 (G4VisManager::Verbosity verbosity) {
   // Some frequently used error printing...
   if (verbosity >= G4VisManager::warnings) {
-    G4cout <<
+    G4warn <<
     "WARNING: For some reason, possibly mentioned above, it has not been"
     "\n  possible to add to the scene."
     << G4endl;
@@ -278,7 +284,7 @@ void G4VVisCommand::RefreshIfRequired(G4VViewer* viewer) {
     }
     else {
       if (verbosity >= G4VisManager::warnings) {
-        G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+        G4warn << "Issue /vis/viewer/refresh or flush to see effect."
         << G4endl;
       }
     }
@@ -292,7 +298,7 @@ void G4VVisCommand::InterpolateViews
  const G4int waitTimePerPointmilliseconds,
  const G4String exportString)
 {
-  const G4int safety = viewVector.size()*nInterpolationPoints;
+  const G4int safety = (G4int)viewVector.size()*nInterpolationPoints;
   G4int safetyCount = 0;
   do {
     G4ViewParameters* vp =
@@ -323,7 +329,7 @@ void G4VVisCommand::InterpolateToNewView
   viewVector.push_back(oldVP);
   viewVector.push_back(newVP);
   viewVector.push_back(newVP);
-  
+
   InterpolateViews
   (currentViewer,
    viewVector,
@@ -332,11 +338,61 @@ void G4VVisCommand::InterpolateToNewView
    exportString);
 }
 
+void G4VVisCommand::Twinkle
+// Twinkles the touchables in paths
+ (G4VViewer* currentViewer,
+  const G4ViewParameters& baseVP,
+  const std::vector<std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>>& paths)
+{
+  // Copy view parameters to temporary variables ready for adding VisAttributes Modifiers (VAMs)
+  auto loVP = baseVP;  // For black and solid VAMs
+  auto hiVP = baseVP;  // For white and solid VAMs
+
+  // Modify them with vis attribute modifiers (VAMs)
+  for (const auto& path: paths) {
+    const auto& touchable = path.back().GetPhysicalVolume();
+    auto loVisAtts
+    = *(currentViewer->GetApplicableVisAttributes
+        (touchable->GetLogicalVolume()->GetVisAttributes()));
+    auto hiVisAtts = loVisAtts;
+    loVisAtts.SetColour(G4Colour::Black());
+    loVisAtts.SetForceSolid();
+    hiVisAtts.SetColour(G4Colour::White());
+    hiVisAtts.SetForceSolid();
+    auto pvNameCopyNoPath
+    = G4PhysicalVolumeModel::GetPVNameCopyNoPath(path);
+
+    auto loVAMColour = G4ModelingParameters::VisAttributesModifier
+    (loVisAtts, G4ModelingParameters::VASColour, pvNameCopyNoPath);
+    loVP.AddVisAttributesModifier(loVAMColour);
+    auto loVAMStyle = G4ModelingParameters::VisAttributesModifier
+    (loVisAtts, G4ModelingParameters::VASForceSolid, pvNameCopyNoPath);
+    loVP.AddVisAttributesModifier(loVAMStyle);
+
+    auto hiVAMColour = G4ModelingParameters::VisAttributesModifier
+    (hiVisAtts, G4ModelingParameters::VASColour, pvNameCopyNoPath);
+    hiVP.AddVisAttributesModifier(hiVAMColour);
+    auto hiVAMStyle = G4ModelingParameters::VisAttributesModifier
+    (hiVisAtts, G4ModelingParameters::VASForceSolid, pvNameCopyNoPath);
+    hiVP.AddVisAttributesModifier(hiVAMStyle);
+  }
+
+  // Twinkle
+  std::vector<G4ViewParameters> viewVector;
+  // Just 5 twinkles is reasonable to get a human's attention
+  for (G4int i = 0; i < 5; i++) {
+    viewVector.push_back(loVP);
+    viewVector.push_back(hiVP);
+  }
+  // Just 5 interpolation points for a reasonable twinkle rate
+  InterpolateViews(currentViewer,viewVector,5);
+}
+
 void G4VVisCommand::CopyGuidanceFrom
 (const G4UIcommand* fromCmd, G4UIcommand* toCmd, G4int startLine)
 {
   if (fromCmd && toCmd) {
-    const G4int nGuideEntries = fromCmd->GetGuidanceEntries();
+    const G4int nGuideEntries = (G4int)fromCmd->GetGuidanceEntries();
     for (G4int i = startLine; i < nGuideEntries; ++i) {
       const G4String& guidance = fromCmd->GetGuidanceLine(i);
       toCmd->SetGuidance(guidance);
@@ -348,7 +404,7 @@ void G4VVisCommand::CopyParametersFrom
 (const G4UIcommand* fromCmd, G4UIcommand* toCmd)
 {
   if (fromCmd && toCmd) {
-    const G4int nParEntries = fromCmd->GetParameterEntries();
+    const G4int nParEntries = (G4int)fromCmd->GetParameterEntries();
     for (G4int i = 0; i < nParEntries; ++i) {
       G4UIparameter* parameter = new G4UIparameter(*(fromCmd->GetParameter(i)));
       toCmd->SetParameter(parameter);
@@ -369,17 +425,6 @@ void G4VVisCommand::DrawExtent(const G4VisExtent& extent)
       fpVisManager->Draw(box,visAtts,G4Translate3D(centre));
     }
   }
-}
-
-void G4VVisCommand::CopyMostViewParameters
-(G4ViewParameters& target, const G4ViewParameters& from)
-{
-  // Copy view parameters except for autoRefresh and background...
-  auto targetAutoRefresh = target.IsAutoRefresh();
-  auto targetBackground  = target.GetBackgroundColour();
-  target = from;
-  target.SetAutoRefresh(targetAutoRefresh);
-  target.SetBackgroundColour(targetBackground);
 }
 
 void G4VVisCommand::CopyCameraParameters

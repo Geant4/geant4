@@ -52,12 +52,12 @@ class G4WeightWindowStore: public G4VWeightWindowStore
     static G4WeightWindowStore* GetInstance(const G4String& ParallelWorldName);
       // return ptr to singleton instance of the class
 
-    virtual G4double GetLowerWeight(const G4GeometryCell& gCell, 
-                                          G4double partEnergy) const;
+    G4double GetLowerWeight(const G4GeometryCell& gCell, 
+                                          G4double partEnergy) const override;
       // derive a lower weight bound value of a "cell" addressed by a 
       // G4GeometryCell and the corresponding energy from the store
 
-    virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
+    G4bool IsKnown(const G4GeometryCell &gCell) const override;
       // returns true if the gCell is in the store, else false 
 
     void Clear();
@@ -67,7 +67,7 @@ class G4WeightWindowStore: public G4VWeightWindowStore
     void SetParallelWorldVolume(const G4String& paraName);
       // set a pointer to parallel world volume of the weightwindow geometry
 
-    virtual const G4VPhysicalVolume& GetWorldVolume() const;
+    const G4VPhysicalVolume& GetWorldVolume() const override;
       // return a reference to the world volume of the weightwindow geometry
     virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
       // return a pointer to parallel world volume of the weightwindow geometry
@@ -89,7 +89,7 @@ class G4WeightWindowStore: public G4VWeightWindowStore
     explicit G4WeightWindowStore(const G4String& ParallelWorldName);
       // initialise the weight window store for the given geometry
 
-   ~G4WeightWindowStore();
+   ~G4WeightWindowStore() override;
       // destructor
 
   private:

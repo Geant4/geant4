@@ -44,21 +44,18 @@
 
 class G4SimpleRunge : public G4MagErrorStepper
 {
+  public:
 
-  public:  // with description
-
-    G4SimpleRunge(G4EquationOfMotion* EquationRhs, G4int numberOfVariables = 6) ;
-   ~G4SimpleRunge();
+    G4SimpleRunge(G4EquationOfMotion* EquationRhs, G4int numberOfVariables = 6);
+   ~G4SimpleRunge() override;
       // Constructor and destructor.
 
     void DumbStepper( const G4double y[],
                       const G4double dydx[],
                             G4double h,
-                            G4double yout[] );
+                            G4double yout[] ) override;
 
-  public:  // without description
-  
-    inline G4int IntegratorOrder() const { return 2; }
+    inline G4int IntegratorOrder() const override { return 2; }
 
   private:
 
@@ -66,7 +63,6 @@ class G4SimpleRunge : public G4MagErrorStepper
 
     G4double* dydxTemp = nullptr;
     G4double* yTemp = nullptr;
-      // scratch space    
 };
 
 #endif

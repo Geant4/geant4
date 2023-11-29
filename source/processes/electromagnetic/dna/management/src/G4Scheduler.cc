@@ -540,7 +540,10 @@ void G4Scheduler::SynchronizeTracks()
 
   while(fTrackContainer.MergeNextTimeToMainList(tmpGlobalTime) && carryOn)
   {
-//    assert(tmpGlobalTime == fGlobalTime);
+    if(tmpGlobalTime != fGlobalTime)
+    {
+      fGlobalTime = tmpGlobalTime;
+    };
     fStopTime = min(fTrackContainer.GetNextTime(), fEndTime);
     while((nextWatchedTime = GetNextWatchedTime()) < fTrackContainer.GetNextTime()
         && (carryOn = CanICarryOn()))

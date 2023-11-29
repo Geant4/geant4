@@ -1,19 +1,41 @@
-$Id $
---------------------------------------------------
+# Example chem6 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example chem6 History file
-                    -----------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-09-08 Hoang Tran (chem6-V11-00-07)
+- Fix ROOT macros for error running of ROOT in Windows
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-06-10 Sergio Losilla (chem6-V11-00-06)
+- Added missing headers.
+
+## 2022-05-02 Hoang Tran (chem6-V11-00-05)
+- Add localthread for fUse of G4VMoleculeCounter
+
+## 2022-03-21 Hoang Tran (chem6-V11-00-04)
+- Add PhysicsListMessenger
+- Add macro commands to control chemistry models in PhysicsListMessenger
+- Add infomation in README
+- Add short chemical reaction list
+
+## 2022-03-15 Hoang Tran (chem6-V11-00-03)
+- remove macro commands to control chemistry models
+(due to circular dependency)
+- add infomation in README
+
+## 2022-03-04 Hoang Tran (chem6-V11-00-02)
+- Add macro commands to control chemistry models
+
+## 2022-02-21 Hoang Tran (chem6-V11-00-01)
+- add the condition for only one event of chem6 (FPE detection)
+
+## 2021-12-10 Ben Morgan (chem6-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 08-11-2021: H. Tran  chem6-V10-07-02
 - delete limit time step

@@ -53,9 +53,9 @@ G4GeneralParticleSourceData::G4GeneralParticleSourceData()
 G4GeneralParticleSourceData::~G4GeneralParticleSourceData()
 {
   G4MUTEXDESTROY(mutex);
-  for ( auto it = sourceVector.cbegin(); it != sourceVector.cend(); ++it )
+  for (const auto it : sourceVector)
   {
-    delete *it;
+    delete it;
   }
   sourceVector.clear();
 }
@@ -95,11 +95,11 @@ void G4GeneralParticleSourceData::IntensityNormalise()
   {
     if (!flat_sampling)
     {
-      GetCurrentSource(i)->GetBiasRndm()->SetIntensityWeight(1.);
+      GetCurrentSource((G4int)i)->GetBiasRndm()->SetIntensityWeight(1.);
     }
     else
     {
-      GetCurrentSource(i)->GetBiasRndm()
+      GetCurrentSource((G4int)i)->GetBiasRndm()
       ->SetIntensityWeight(sourceNormalizedIntensity[i]*sourceIntensity.size());
     }
   }
@@ -117,7 +117,7 @@ void G4GeneralParticleSourceData::AddASource(G4double intensity)
   currentSource = new G4SingleParticleSource();
   sourceVector.push_back(currentSource);
   sourceIntensity.push_back(intensity);
-  currentSourceIdx = sourceVector.size() - 1;
+  currentSourceIdx = G4int(sourceVector.size() - 1);
   normalised = false;
 }
 
@@ -146,9 +146,9 @@ void G4GeneralParticleSourceData::ClearSources()
 {
   currentSourceIdx = -1;
   currentSource = nullptr;
-  for ( auto it = sourceVector.cbegin(); it != sourceVector.cend(); ++it )
+  for (const auto it : sourceVector)
   {
-    delete *it;
+    delete it;
   }
   sourceVector.clear();
   sourceIntensity.clear();
@@ -157,9 +157,9 @@ void G4GeneralParticleSourceData::ClearSources()
 
 void G4GeneralParticleSourceData::SetVerbosityAllSources(G4int vl)
 {
-  for ( auto it = sourceVector.cbegin(); it != sourceVector.cend(); ++it )
+  for (const auto it : sourceVector)
   {
-    (*it)->SetVerbosity(vl);
+    it->SetVerbosity(vl);
   }
 }
 

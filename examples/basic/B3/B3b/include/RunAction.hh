@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.hh
+/// \file B3/B3b/include/RunAction.hh
 /// \brief Definition of the B3b::RunAction class
 
 #ifndef B3bRunAction_h
@@ -44,7 +44,7 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-    ~RunAction() override;
+    ~RunAction() override = default;
 
     G4Run* GenerateRun() override;
     void BeginOfRunAction(const G4Run*) override;

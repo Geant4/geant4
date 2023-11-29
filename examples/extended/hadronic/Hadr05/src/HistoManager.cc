@@ -63,7 +63,7 @@ void HistoManager::Book()
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
-                         "20","21"};
+                         "20","21","22","23","24"};
   G4String title;
 
   // Default values (to be reset via /analysis/h1/set command)
@@ -78,6 +78,9 @@ void HistoManager::Book()
     if (k > kMaxAbsor) title = "Edep longit. profile (MeV/event) in absorber "
                                + id[k-kMaxAbsor];
     if (k == 2*kMaxAbsor+1) title = "energy flow (MeV/event)";
+    if (k == 2*kMaxAbsor+2) title = "total energy deposited";
+    if (k == 2*kMaxAbsor+3) title = "total energy leakage";
+    if (k == 2*kMaxAbsor+4) title = "total energy relased : Edep + Eleak";        
     G4int ih = analysisManager->CreateH1(id[k], title, nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);
   }

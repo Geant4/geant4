@@ -72,11 +72,15 @@ class G4ProductionCuts
     G4bool operator!=(const G4ProductionCuts& right) const;
       // Equality operators
 
-    void SetProductionCut(G4double cut, G4int index = -1);
+    void SetProductionCut(G4double cut, G4int index);
     void SetProductionCut(G4double cut, G4ParticleDefinition* ptcl);
     void SetProductionCut(G4double cut, const G4String& pName);
-      // Set the production cut in range with an index to particle type.
-      // If index is omitted, the value is applied to all particles
+      // Set the production cut in range for a specific particle from
+      // and index, G4ParticleDefinition* or particle name. If the
+      // particle is not a photon, e-, e+ or proton, the function has
+      // no effect.
+    void SetProductionCut(G4double cut);
+      // Set the production cut in range for photons, e-, e+ and protons.
 
     G4double GetProductionCut(G4int index) const;
       // Get the production cut in range with an index to particle type
@@ -87,7 +91,7 @@ class G4ProductionCuts
     void SetProductionCuts(std::vector<G4double>&);
       // Set the vector of production cuts in range for all particles
 
-    const std::vector<G4double>&   GetProductionCuts() const;
+    const std::vector<G4double>& GetProductionCuts() const;
       // Get the vector of production cuts in range for all particles
 
     G4bool IsModified() const;
@@ -103,89 +107,7 @@ class G4ProductionCuts
   protected:
 
     std::vector<G4double> fRangeCuts;
-    G4bool                isModified = true;
-
-  private:
-
-    static G4ThreadLocal G4ParticleDefinition* gammaDef;
-    static G4ThreadLocal G4ParticleDefinition* electDef;
-    static G4ThreadLocal G4ParticleDefinition* positDef;
-    static G4ThreadLocal G4ParticleDefinition* protonDef; // for proton
+    G4bool isModified = true;
 };
-
-// ------------------
-// Inline methods
-// ------------------
-
-inline
-void G4ProductionCuts::SetProductionCut(G4double cut, G4int index)
-{
-  if (index<0)
-  {
-    for(G4int i = 0; i < NumberOfG4CutIndex; ++i)
-    {
-      fRangeCuts[i] = cut;
-    }
-    isModified = true;
-
-  }
-  else if (index < NumberOfG4CutIndex)
-  {
-    fRangeCuts[index] = cut;
-    isModified = true;
-  }     
-}
-
-inline 
-void G4ProductionCuts::SetProductionCut(G4double cut,
-                                         G4ParticleDefinition* ptcl)
-{
-  G4int idx = -1;
-  if(ptcl) idx = GetIndex(ptcl);
-  if(idx>=0) SetProductionCut(cut,idx);
-}
-
-inline
-void G4ProductionCuts::SetProductionCut(G4double cut, const G4String& pName)
-{
-  G4int idx = GetIndex(pName);
-  if(idx>=0) SetProductionCut(cut,idx);
-}
-
-inline
-G4double G4ProductionCuts::GetProductionCut(G4int index) const
-{
-  G4double cut=-1.0;
-  if ( (index>=0) && (index<NumberOfG4CutIndex) )
-  {
-    cut = fRangeCuts[index]; 
-  }
-  return cut;
-}
-
-inline
-G4double G4ProductionCuts::GetProductionCut(const G4String& name) const
-{
-  return GetProductionCut(GetIndex(name)); 
-}
-
-
-inline
-const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
-{
-  return fRangeCuts;
-}
-
-inline
-G4bool G4ProductionCuts::IsModified() const
-{
-  return isModified;
-}
-
-inline
-void G4ProductionCuts::PhysicsTableUpdated()
-{
-  isModified = false;
-}
 
 #endif

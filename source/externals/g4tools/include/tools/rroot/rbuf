@@ -248,9 +248,9 @@ public:
     int n;
     if(!read(n)) {a_a.clear();return false;}
     for(int index=0;index<n;index++) {
-      std::string s;
-      if(!read(s)) {a_a.clear();return false;}
-      a_a.push_back(s);
+      std::string _s;
+      if(!read(_s)) {a_a.clear();return false;}
+      a_a.push_back(_s);
     }
     return true;
   }

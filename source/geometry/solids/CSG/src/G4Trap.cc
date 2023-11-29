@@ -63,7 +63,7 @@ G4Trap::G4Trap( const G4String& pName,
                       G4double pDy1, G4double pDx1, G4double pDx2,
                       G4double pAlp1,
                       G4double pDy2, G4double pDx3, G4double pDx4,
-                      G4double pAlp2)
+                      G4double pAlp2 )
   : G4CSGSolid(pName), halfCarTolerance(0.5*kCarTolerance)
 {
   fDz = pDz;
@@ -90,26 +90,26 @@ G4Trap::G4Trap( const G4String& pName,
   // Start with check of centering - the center of gravity trap line
   // should cross the origin of frame
   //
-  if (!(   pt[0].z() < 0
-        && pt[0].z() == pt[1].z()
-        && pt[0].z() == pt[2].z()
-        && pt[0].z() == pt[3].z()
+  if (  pt[0].z() >= 0
+        || pt[0].z() != pt[1].z()
+        || pt[0].z() != pt[2].z()
+        || pt[0].z() != pt[3].z()
 
-        && pt[4].z() > 0
-        && pt[4].z() == pt[5].z()
-        && pt[4].z() == pt[6].z()
-        && pt[4].z() == pt[7].z()
+        || pt[4].z() <= 0
+        || pt[4].z() != pt[5].z()
+        || pt[4].z() != pt[6].z()
+        || pt[4].z() != pt[7].z()
 
-        && std::fabs( pt[0].z() + pt[4].z() ) < kCarTolerance
+        || std::fabs( pt[0].z() + pt[4].z() ) >= kCarTolerance
 
-        && pt[0].y() == pt[1].y()
-        && pt[2].y() == pt[3].y()
-        && pt[4].y() == pt[5].y()
-        && pt[6].y() == pt[7].y()
+        || pt[0].y() != pt[1].y()
+        || pt[2].y() != pt[3].y()
+        || pt[4].y() != pt[5].y()
+        || pt[6].y() != pt[7].y()
 
-        && std::fabs(pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y()) < kCarTolerance
-        && std::fabs(pt[0].x()+pt[1].x()+pt[4].x()+pt[5].x() +
-                     pt[2].x()+pt[3].x()+pt[6].x()+pt[7].x()) < kCarTolerance ))
+        || std::fabs(pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y()) >= kCarTolerance
+        || std::fabs(pt[0].x()+pt[1].x()+pt[4].x()+pt[5].x() +
+                     pt[2].x()+pt[3].x()+pt[6].x()+pt[7].x()) >= kCarTolerance )
   {
     std::ostringstream message;
     message << "Invalid vertice coordinates for Solid: " << GetName();
@@ -229,9 +229,7 @@ G4Trap::G4Trap( __void__& a )
 //
 // Destructor
 
-G4Trap::~G4Trap()
-{
-}
+G4Trap::~G4Trap() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -424,7 +422,7 @@ G4bool G4Trap::MakePlane( const G4ThreeVector& p1,
   G4double d4 = std::abs(normal.dot(p4) + plane.d);
   G4double dmax = std::max(std::max(std::max(d1,d2),d3),d4);
 
-  return (dmax > 1000 * kCarTolerance) ? false : true;
+  return dmax <= 1000 * kCarTolerance;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -519,12 +517,12 @@ G4double G4Trap::GetSurfaceArea()
       { {0,1,3,2}, {0,4,5,1}, {2,3,7,6}, {0,2,6,4}, {1,5,7,3}, {4,6,7,5} };
 
     GetVertices(pt);
-    for (G4int i=0; i<6; ++i)
+    for (const auto & i : iface)
     {
-      fSurfaceArea += G4GeomTools::QuadAreaNormal(pt[iface[i][0]],
-                                                  pt[iface[i][1]],
-                                                  pt[iface[i][2]],
-                                                  pt[iface[i][3]]).mag();
+      fSurfaceArea += G4GeomTools::QuadAreaNormal(pt[i[0]],
+                                                  pt[i[1]],
+                                                  pt[i[2]],
+                                                  pt[i[3]]).mag();
     }
   }
   return fSurfaceArea;
@@ -553,12 +551,12 @@ void G4Trap::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 
   G4double xmin = kInfinity, xmax = -kInfinity;
   G4double ymin = kInfinity, ymax = -kInfinity;
-  for (G4int i=0; i<8; ++i)
+  for (const auto & i : pt)
   {
-    G4double x = pt[i].x();
+    G4double x = i.x();
     if (x < xmin) xmin = x;
     if (x > xmax) xmax = x;
-    G4double y = pt[i].y();
+    G4double y = i.y();
     if (y < ymin) ymin = y;
     if (y > ymax) ymax = y;
   }
@@ -603,7 +601,7 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent
@@ -771,7 +769,7 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
   // Return normal
   //
   G4double mag2 = nx*nx + ny*ny + nz*nz;
-  if (mag2 == 1)      return G4ThreeVector(nx,ny,nz);
+  if (mag2 == 1)      return { nx,ny,nz };
   else if (mag2 != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
   {
@@ -779,7 +777,7 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
     //
 #ifdef G4CSGDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -814,9 +812,9 @@ G4ThreeVector G4Trap::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 
   G4double distz = std::abs(p.z()) - fDz;
   if (dist > distz)
-    return G4ThreeVector(fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c);
+    return { fPlanes[iside].a, fPlanes[iside].b, fPlanes[iside].c };
   else
-    return G4ThreeVector(0, 0, (p.z() < 0) ? -1 : 1);
+    return { 0, 0, (G4double)((p.z() < 0) ? -1 : 1) };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1039,7 +1037,7 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
   if( Inside(p) == kOutside )
   {
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: " << GetName() << G4endl;
     message << "Position:\n";
     message << "   p.x() = " << p.x()/mm << " mm\n";
@@ -1106,7 +1104,7 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Trap::GetEntityType() const
 {
-  return G4String("G4Trap");
+  return {"G4Trap"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1129,7 +1127,7 @@ std::ostream& G4Trap::StreamInfo( std::ostream& os ) const
   G4double alpha1 = GetAlpha1();
   G4double alpha2 = GetAlpha2();
 
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid: " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1188,11 +1186,11 @@ G4ThreeVector G4Trap::GetPointOnSurface() const
   //
   G4double select = fAreas[5]*G4QuickRand();
   G4int k = 5;
-  k -= (select <= fAreas[4]);
-  k -= (select <= fAreas[3]);
-  k -= (select <= fAreas[2]);
-  k -= (select <= fAreas[1]);
-  k -= (select <= fAreas[0]);
+  k -= (G4int)(select <= fAreas[4]);
+  k -= (G4int)(select <= fAreas[3]);
+  k -= (G4int)(select <= fAreas[2]);
+  k -= (G4int)(select <= fAreas[1]);
+  k -= (G4int)(select <= fAreas[0]);
 
   // Select sub-triangle
   //

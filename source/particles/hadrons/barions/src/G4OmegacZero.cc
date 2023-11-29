@@ -46,16 +46,16 @@
 // ###                           OmegacZero                           ###
 // ######################################################################
 
-G4OmegacZero* G4OmegacZero::theInstance = 0;
+G4OmegacZero* G4OmegacZero::theInstance = nullptr;
 
 G4OmegacZero* G4OmegacZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "omega_c0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -72,10 +72,10 @@ G4OmegacZero* G4OmegacZero::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4332,
-                false,     0.069e-3*ns,          NULL,
+                false,      2.68e-4*ns,          nullptr,
                 false,       "omega_c");
   }
-  theInstance = reinterpret_cast<G4OmegacZero*>(anInstance);
+  theInstance = static_cast<G4OmegacZero*>(anInstance);
   return theInstance;
 }
 

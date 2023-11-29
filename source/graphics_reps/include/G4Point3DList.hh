@@ -45,7 +45,7 @@ class G4Point3DList: public std::vector<G4Point3D> {
   
 public:
 
-  typedef std::vector<G4Point3D>::iterator iterator;
+  using iterator = std::vector<G4Point3D>::iterator;
 
   virtual ~G4Point3DList();
 

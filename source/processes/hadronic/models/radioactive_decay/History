@@ -1,24 +1,74 @@
--------------------------------------------------------------------
+# Category radioactive_decay History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                 Radiative decay History file
-                 -------------------------------------
-This file should be used by responsible rdm developers to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-17 Vladimir Ivantchenko (radioactive_decay-V11-01-02)
+- G4RadioactiveDecay, G4BetaSpectrumSampler - fixed Coverity reports on
+    non-initialized class members
 
-8 April 2022 Alberto Ribon radioactive_decay-V10-07-14
-------------------------------------------------------
+## 2023-03-24 Dennis Wright (radioactive_decay-V11-01-01)
+- Fix coverity bug 104867: uninitialized integers in G4BetaSpectrumSampler.cc
+  Do initialization in ctor.
+  
+## 2023-03-24 Dennis Wright (radioactive_decay-V11-01-00)
+- Fix of bug #2367: stairstep beta decay spectrum
+  Create new class G4BetaSpectrumSampler to sample a sloped distribution
+  instead of a flat one. Add this to sources.cmake.
+  Change G4BetaMinusDecay and G4BetaPlusDecay to use the above sampler.
+  Add protection against very large arguments in std::exp within 
+    G4BetaDecayCorrections::ModSquared
+
+## 2022-11-26 Gabriele Cosmo (radioactive_decay-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-14 Vladimir Ivanchenko (radioactive_decay-V11-00-09)
+- G4RadioactiveDecay - added printout of the flag of atomic relaxation
+
+## 2022-11-03 Vladimir Ivanchenko (radioactive_decay-V11-00-08)
+- G4ECDecay, G4ITDecay - extended upper limit of atomic de-excitation 
+  from Z=100 to Z=104 by R. Chakma
+
+## 2022-10-20 Dennis Wright (radioactive_decay-V11-00-07)
+- G4RadioactiveDecay - remove SetICM() method.  Has been deprecated 
+  for some time and is no longer used.  ICM now set exclusively in 
+  G4PhotonEvaporation.
+- G4RadioactiveDecayMessenger - remove icmCmd corresponding to SetICM
+  above 
+
+## 2022-10-13 Dennis Wright (radioactive_decay-V11-00-06)
+- G4ECDecay - remove negative neutrino energy warning but keep 
+  protection against negative values. Negative values are due to 
+  negative Q values from ENSDF for only four nuclides.
+
+## 2022-10-05 Vladimir Ivanchenko (radioactive_decay-V11-00-05)
+- G4ECDecay - print warning introduced in the previous MR only
+    once in each thread and only in verbose mode
+
+## 2022-09-24 Vladimir Ivanchenko (radioactive_decay-V11-00-04)
+- G4ECDecay - added protection against negative neutrino energy
+    to fix problem #2509
+
+## 2022-09-05 Ben Morgan (radioactive_decay-V11-00-03)
+- Update dependencies to address warnings from consistency check
+
+## 2022-04-08 Alberto Ribon (radioactive_decay-V11-00-02)
 - G4RadioactiveDecay : fixed memory leak (due to decay products
   that were not deleted) in the case of a radioactive decay 
   happening later than the time threshold.
+
+## 2022-04-04 Michel Maire (radioactive_decay-V11-00-01)
+- cosmetics in G4RadioactiveDecay::StreamInfo()
+
+## 2021-12-10 Ben Morgan (radioactive_decay-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 29 October 2021 Vladimir Ivanchenko radioactive_decay-V10-07-13
 ---------------------------------------------------------------

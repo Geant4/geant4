@@ -52,6 +52,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
+#include "G4StoppingPhysicsWithINCLXX.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -99,7 +100,7 @@ template<class T, bool withNeutronHP, bool withFTFP> TINCLXXPhysicsListHelper<T,
   this->RegisterPhysics( new G4HadronPhysicsINCLXX(G4String(1,static_cast<char>(ver)),true,withNeutronHP,withFTFP));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4StoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysicsWithINCLXX(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonINCLXXPhysics(ver));

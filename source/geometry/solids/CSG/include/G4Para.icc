@@ -120,7 +120,7 @@ void G4Para::SetTanAlpha(G4double val)
 }
 
 inline
-void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
+void G4Para::SetThetaAndPhi(G4double pTheta, G4double pPhi)
 {
   G4double tanTheta = std::tan(pTheta);
   fTthetaCphi = tanTheta*std::cos(pPhi);

@@ -12,7 +12,7 @@ static char versionStr[64] = "";
 */
 const char *MCGIDI_version( void ) {
 
-    if( versionStr[0] == 0 ) sprintf( versionStr, "MCGIDI version %d.%d.%d", MCGIDI_VERSION_MAJOR, MCGIDI_VERSION_MINOR, MCGIDI_VERSION_PATCHLEVEL );
+    if( versionStr[0] == 0 ) snprintf( versionStr, sizeof versionStr, "MCGIDI version %d.%d.%d", MCGIDI_VERSION_MAJOR, MCGIDI_VERSION_MINOR, MCGIDI_VERSION_PATCHLEVEL );
     return( versionStr );
 }
 /*

@@ -108,7 +108,7 @@ namespace G4INCL {
       InterpolationTable(std::vector<G4double> const &x, std::vector<G4double> const &y);
       virtual ~InterpolationTable() {}
 
-      unsigned int getNumberOfNodes() const { return nodes.size(); }
+      std::size_t getNumberOfNodes() const { return nodes.size(); }
 
       std::vector<G4double> getNodeAbscissae() const;
 

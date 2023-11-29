@@ -40,6 +40,8 @@
 #include "G4RadioactiveDecayMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4NuclideTable.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"
@@ -135,7 +137,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // DHW deex->SetCorrelatedGamma(true);
 
   // Check data directory
-  char* path_var = std::getenv("G4RADIOACTIVEDATA");
+  const char* path_var = G4FindDataDir("G4RADIOACTIVEDATA");
   if (!path_var) {
     G4Exception("G4RadioactiveDecay()","HAD_RDM_200",FatalException,
                 "Environment variable G4RADIOACTIVEDATA is not set");
@@ -163,7 +165,6 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
   // Apply default values
   applyARM = true;
-  applyICM = true;  // Always on; keep only for backward compatibility
  
   // RDM applies to all logical volumes by default
   isAllVolumesMode = true;
@@ -470,20 +471,25 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
   G4DeexPrecoParameters* deex =
     G4NuclearLevelData::GetInstance()->GetParameters();
   G4EmParameters* emparam = G4EmParameters::Instance();
+  G4double minMeanLife = G4NuclideTable::GetInstance()->GetMeanLifeThreshold();
 
-  G4int prec = os.precision(5);
+  G4long prec = os.precision(5);
   os << "======================================================================"
      << endline;
   os << "======          Radioactive Decay Physics Parameters           ======="
      << endline;
   os << "======================================================================"
      << endline;
-  os << "Max life time                                     "
-     << deex->GetMaxLifeTime()/CLHEP::ps << " ps" << endline;
+  os << "min MeanLife (from G4NuclideTable)                "
+     << G4BestUnit(minMeanLife, "Time") << endline;     
+  os << "Max life time (from G4DeexPrecoParameters)        "
+     << G4BestUnit(deex->GetMaxLifeTime(), "Time") << endline;
   os << "Internal e- conversion flag                       "
      << deex->GetInternalConversionFlag() << endline;
   os << "Stored internal conversion coefficients           "
      << deex->StoreICLevelData() << endline;
+  os << "Enabled atomic relaxation mode                    "
+     << applyARM << endline;
   os << "Enable correlated gamma emission                  "
      << deex->CorrelatedGamma() << endline;
   os << "Max 2J for sampling of angular correlations       "
@@ -499,7 +505,7 @@ G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
   os << "Use ANSTO fluorescence model                      "
      << emparam->ANSTOFluoDir() << endline;
   os << "Threshold for very long decay time at rest        "
-     << fThresholdForVeryLongDecayTime/CLHEP::ns << "  ns" << endline;
+     << G4BestUnit(fThresholdForVeryLongDecayTime, "Time") << endline;
   os << "======================================================================"
      << G4endl;
   os.precision(prec);
@@ -950,7 +956,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
                << " is not selected for the RDM"<< G4endl;
         G4cout << " There are " << ValidVolumes.size() << " volumes" << G4endl;
         G4cout << " The Valid volumes are " << G4endl;
-        for (size_t i = 0; i< ValidVolumes.size(); i++)
+        for (std::size_t i = 0; i< ValidVolumes.size(); ++i)
                                   G4cout << ValidVolumes[i] << G4endl;
       }
 #endif

@@ -34,7 +34,7 @@ G4DNAWaterIonisationStructure::G4DNAWaterIonisationStructure(): nLevels(5)
   energyConstant.push_back(32.30*eV);
   energyConstant.push_back(539.0*eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
 
 

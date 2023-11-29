@@ -44,7 +44,7 @@ class G4FSALBogackiShampine45 : public G4VFSALIntegrationStepper
     G4FSALBogackiShampine45(G4EquationOfMotion* EqRhs,
                             G4int numberOfVariables = 6,
                             G4bool primary = true);
-    ~G4FSALBogackiShampine45();
+   ~G4FSALBogackiShampine45() override;
     
     G4FSALBogackiShampine45(const G4FSALBogackiShampine45&) = delete;
     G4FSALBogackiShampine45& operator=(const G4FSALBogackiShampine45&) = delete;
@@ -54,7 +54,7 @@ class G4FSALBogackiShampine45 : public G4VFSALIntegrationStepper
                         G4double h,
                         G4double yout[],
                         G4double yerr[],
-                        G4double nextDydx[]) ;
+                        G4double nextDydx[]) override ;
     
     void interpolate( const G4double yInput[],
                       const G4double dydx[],
@@ -62,10 +62,10 @@ class G4FSALBogackiShampine45 : public G4VFSALIntegrationStepper
                             G4double Step,
                             G4double tau ) ;
 
-    G4double DistChord() const;
-    inline G4int IntegratorOrder() const { return 4; }
+    G4double DistChord() const override;
+    inline G4int IntegratorOrder() const override { return 4; }
     
-  private :
+  private:
     
     void PrepareConstants(); 
    

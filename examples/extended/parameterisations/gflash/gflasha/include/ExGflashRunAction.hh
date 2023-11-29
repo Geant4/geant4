@@ -31,6 +31,7 @@
 #define ExGflashRunAction_h
 
 #include "ExGflashHistoManager.hh"
+
 #include "G4Timer.hh"
 #include "G4UserRunAction.hh"
 
@@ -39,19 +40,19 @@ class ExGflashDetectorConstruction;
 
 class ExGflashRunAction : public G4UserRunAction
 {
- public:
-  ExGflashRunAction(ExGflashDetectorConstruction* det);
-  ~ExGflashRunAction() override;
+  public:
+    ExGflashRunAction(ExGflashDetectorConstruction* det);
+    ~ExGflashRunAction() override;
 
-  void BeginOfRunAction(const G4Run* aRun) override;
-  void EndOfRunAction(const G4Run* aRun) override;
+    void BeginOfRunAction(const G4Run* aRun) override;
+    void EndOfRunAction(const G4Run* aRun) override;
 
- private:
-  //  G4int fRunID;
-  ExGflashHistoManager* fHistoManager;
-  ExGflashDetectorConstruction* fDetector;
+  private:
+    //  G4int fRunID;
+    ExGflashHistoManager* fHistoManager;
+    ExGflashDetectorConstruction* fDetector;
 
-  G4Timer fRunTimer;
+    G4Timer fRunTimer;
 };
 
 #endif

@@ -39,22 +39,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellCharge::G4PSCellCharge(G4String name, G4int depth)
-  : G4VPrimitiveScorer(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-{
-  SetUnit("e+");
-}
+  : G4PSCellCharge(name, "e+", depth) 
+{}
 
 G4PSCellCharge::G4PSCellCharge(G4String name, const G4String& unit, G4int depth)
   : G4VPrimitiveScorer(name, depth)
   , HCID(-1)
-  , EvtMap(0)
+  , EvtMap(nullptr)
 {
   SetUnit(unit);
 }
-
-G4PSCellCharge::~G4PSCellCharge() { ; }
 
 G4bool G4PSCellCharge::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -79,7 +73,7 @@ G4bool G4PSCellCharge::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     EvtMap->add(index, CellCharge);
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSCellCharge::Initialize(G4HCofThisEvent* HCE)
@@ -90,22 +84,17 @@ void G4PSCellCharge::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSCellCharge::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSCellCharge::clear() { EvtMap->clear(); }
-
-void G4PSCellCharge::DrawAll() { ; }
 
 void G4PSCellCharge::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, charge] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  cell charge : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  cell charge : " << *(charge) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

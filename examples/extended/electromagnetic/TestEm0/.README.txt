@@ -30,6 +30,9 @@ Idle> /run/beamOn
 	 
   The last command triggers BuildPhysicsTable() and executes the program.
   
+  Macros provided in this example:
+  - muon.mac: muon incident
+  - ion.mac: generic ion incident    
    
 \section TestEm0_s1  DirectAccess
 			    

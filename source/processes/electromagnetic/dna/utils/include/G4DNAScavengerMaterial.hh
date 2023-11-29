@@ -36,16 +36,15 @@ class G4Material;
 class G4MolecularConfiguration;
 class G4VChemistryWorld;
 
-using NbMoleculeAgainstTime =
-  std::map<G4double, G4int, G4::MoleculeCounter::TimePrecision>;
-
 class G4DNAScavengerMaterial : public G4VScavengerMaterial
 {
  public:
+  using NbMoleculeInTime =
+    std::map<G4double, int64_t, G4::MoleculeCounter::TimePrecision>;
   using MolType            = const G4MolecularConfiguration*;
-  using MaterialMap        = std::map<MolType, G4double>;
+  using MaterialMap        = std::map<MolType, int64_t>;
   using ReactantList       = std::vector<MolType>;
-  using CounterMapType     = std::map<MolType, NbMoleculeAgainstTime>;
+  using CounterMapType     = std::map<MolType, NbMoleculeInTime>;
   G4DNAScavengerMaterial() = default;
   explicit G4DNAScavengerMaterial(G4VChemistryWorld*);
   ~G4DNAScavengerMaterial() override                          = default;
@@ -98,14 +97,14 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   }
 
   void Dump();
-  G4int GetNMoleculesAtTime(MolType molecule, G4double time);
+  int64_t GetNMoleculesAtTime(MolType molecule, G4double time);
   G4bool SearchTimeMap(MolType molecule);
-  G4int SearchUpperBoundTime(G4double time, G4bool sameTypeOfMolecule);
+  int64_t SearchUpperBoundTime(G4double time, G4bool sameTypeOfMolecule);
 
  private:
   G4VChemistryWorld* fpChemistryInfo;
   G4bool fIsInitialized;
-  std::map<MolType, G4double> fScavengerTable;
+  MaterialMap fScavengerTable;
   CounterMapType fCounterMap;
   G4bool fCounterAgainstTime;
   G4int fVerbose;
@@ -113,7 +112,7 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   {
     Search() { fLowerBoundSet = false; }
     CounterMapType::iterator fLastMoleculeSearched;
-    NbMoleculeAgainstTime::iterator fLowerBoundTime;
+    NbMoleculeInTime::iterator fLowerBoundTime;
     G4bool fLowerBoundSet;
   };
 

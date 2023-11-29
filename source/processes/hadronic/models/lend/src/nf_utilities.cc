@@ -134,7 +134,7 @@ void *nfu_realloc( size_t size, void *old ) {
 
     void *p = realloc( old, size );
 
-    if( nfu_debugging ) printf( "nfu_realloc %12p size = %8llu, old = %12p\n", p, (long long unsigned) size, old );
+    if( nfu_debugging ) printf( "nfu_realloc %12p size = %8llu", p, (long long unsigned) size );
     return( p );
 }
 /*

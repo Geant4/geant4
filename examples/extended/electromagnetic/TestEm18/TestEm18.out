@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -25,8 +25,10 @@
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -42,7 +44,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -52,8 +54,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -104,8 +107,10 @@ Screening factor                                   1
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -121,7 +126,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -131,8 +136,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -194,7 +200,7 @@ Screening factor                                   1
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
+ Energy thresholds :  gamma  2.93515 keV    e-  351.291 keV    e+  341.598 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -209,14 +215,14 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.480000s Real=0.489784s Sys=0.000000s
+  User=0.530000s Real=0.533965s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
  Process defining step :
-      Edep alone=     40   Transportation=  99997            eBrem=  37471            eIoni=  23966
+      Edep alone=     40   Transportation=  99997            eBrem=  37461            eIoni=  23988
 
 
  TrackLength = 1 cm   nb of steps = 1.615  stepSize = 6.193 mm   (86.42 nm --> 1.008 cm )
@@ -226,29 +232,27 @@ Run Summary
  Evaluation of dE1 from reading restricted Range table : dE1_table = 1.744 MeV   ---> dE1/dE1_table = 1
 
  Energy transfered to secondary particles :
-       due to eBrem:  dE2 =  2.323 MeV  (2.938 keV --> 98.4 MeV)
-       due to eIoni:  dE2 =  446.2 keV  (351.3 keV --> 51.82 MeV)
+       due to eBrem:  dE2 =  2.324 MeV  (2.938 keV --> 98.4 MeV)
+       due to eIoni:  dE2 =    446 keV  (351.3 keV --> 51.82 MeV)
 
- Total energy transfered to secondaries : dE3 = sum of dE2 = 2.769 MeV  (2.938 keV --> 98.4 MeV)
+ Total energy transfered to secondaries : dE3 = sum of dE2 = 2.77 MeV  (2.938 keV --> 98.4 MeV)
 
- Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.513 MeV  (1.329 MeV --> 100 MeV)
+ Total energy lost by incident particle : dE4 = dE1 + dE3 = 4.514 MeV  (1.329 MeV --> 100 MeV)
 
- calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.513 MeV  (1.329 MeV --> 100 MeV)
+ calcul of dE4 from energy balance : dE4_bal = E_in - E_out = 4.514 MeV  (1.329 MeV --> 100 MeV)
 
- Evaluation of dE4 from reading full Range table : dE4_table = 4.578 MeV   ---> dE4/dE4_table = 0.9858
+ Evaluation of dE4 from reading full Range table : dE4_table = 4.578 MeV   ---> dE4/dE4_table = 0.9861
 
  Energy spectrum of secondary particles :
-             e-:   23966  Emean =  1.862 MeV  (351.3 keV --> 49.39 MeV)
-          gamma:   37457  Emean =  6.201 MeV  (2.938 keV --> 98.4 MeV)
+             e-:   23988  Emean =  1.859 MeV  (351.3 keV --> 49.39 MeV)
+          gamma:   37449  Emean =  6.206 MeV  (2.938 keV --> 98.4 MeV)
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1678481677, 1961356788
+ Current couple of seeds = 487149134, 312236109
 ----------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.017 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

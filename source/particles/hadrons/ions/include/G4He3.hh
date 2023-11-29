@@ -52,7 +52,7 @@ class G4He3 : public G4Ions
  private:
    static G4He3* theInstance;
    G4He3(){}
-   ~G4He3(){}
+   ~G4He3() override= default;
 
  public:
    static G4He3* Definition();

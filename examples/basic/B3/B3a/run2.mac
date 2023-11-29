@@ -4,6 +4,8 @@
 # % exampleB3 run3.mac
 #
 #/run/numberOfThreads 4
+#/control/cout/ignoreThreadsExcept 0
+#
 /run/initialize
 #
 /control/verbose 2
@@ -15,5 +17,6 @@
 /gun/particle ion
 /gun/ion 6 11
 #
+/analysis/setFileName scoring2
 /run/printProgress 10000
 /run/beamOn 40000

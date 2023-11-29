@@ -44,8 +44,8 @@ class G4VUserPrimaryVertexInformation
 {
   public:
 
-    G4VUserPrimaryVertexInformation();
-    virtual ~G4VUserPrimaryVertexInformation();
+    G4VUserPrimaryVertexInformation() = default;
+    virtual ~G4VUserPrimaryVertexInformation() = default;
 
     virtual void Print() const = 0;
 };

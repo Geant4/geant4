@@ -78,94 +78,93 @@ class G4VNestedParameterisation : public G4VPVParameterisation,
   public:
 
     G4VNestedParameterisation() = default; 
-    virtual ~G4VNestedParameterisation() = default; 
+    ~G4VNestedParameterisation() override = default; 
 
     // Methods required in derived classes
     // -----------------------------------
 
     virtual G4Material* ComputeMaterial(G4VPhysicalVolume* currentVol,
                                  const G4int repNo, 
-                                 const G4VTouchable* parentTouch = nullptr) = 0;
+                                 const G4VTouchable* parentTouch = nullptr)=0;
       // Required method, as it is the reason for this class.
       // Must cope with parentTouch=nullptr for navigator's SetupHierarchy.
 
-    virtual G4int       GetNumberOfMaterials() const=0;
-    virtual G4Material* GetMaterial(G4int idx) const=0;
+    G4int       GetNumberOfMaterials() const override =0;
+    G4Material* GetMaterial(G4int idx) const override =0;
       // Needed to define materials for instances of Nested Parameterisation 
       // Current convention: each call should return the materials 
       // of all instances with the same mother/ancestor volume.
 
-    virtual void ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume* currentPV) const = 0;
+    void ComputeTransformation(const G4int no,
+                               G4VPhysicalVolume* currentPV) const override=0;
 
     // Methods optional in derived classes
     // -----------------------------------
 
-    virtual G4VSolid* ComputeSolid(const G4int no, G4VPhysicalVolume* thisVol);
+    G4VSolid* ComputeSolid(const G4int no, G4VPhysicalVolume* thisVol) override;
       // Additional standard parameterisation methods, 
       // which can be optionally defined, in case solid is used.
 
-    virtual void ComputeDimensions(G4Box &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Box &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Tubs &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Tubs &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Trd &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Trd &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Trap &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Trap &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Cons &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Cons &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Sphere &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Sphere &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Orb &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Orb &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Ellipsoid &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Ellipsoid &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Torus &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Torus &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Para &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Para &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Polycone &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Polycone &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Polyhedra &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
+    void ComputeDimensions(G4Polyhedra &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
-    virtual void ComputeDimensions(G4Hype &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
- 
+    void ComputeDimensions(G4Hype &,
+                           const G4int,
+                           const G4VPhysicalVolume *) const override {}
 
     G4Material* ComputeMaterial(const G4int repNo, 
-                                      G4VPhysicalVolume* currentVol,
-                                const G4VTouchable* parentTouch = nullptr);
+                           G4VPhysicalVolume* currentVol,
+                           const G4VTouchable* parentTouch = nullptr) override;
       // Method implemented in this class in terms of the above
       // ComputeMaterial() method.
 
-    virtual G4bool IsNested() const;
-    virtual G4VVolumeMaterialScanner* GetMaterialScanner(); 
+    G4bool IsNested() const override;
+    G4VVolumeMaterialScanner* GetMaterialScanner() override; 
       // Methods to identify nested parameterisations. Required in order
       // to enable material scan for nested parameterisations.
 };

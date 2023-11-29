@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file StackingAction.hh
+/// \file B3/B3b/include/StackingAction.hh
 /// \brief Definition of the B3::StackingAction class
 
 #ifndef B3StackingAction_h
@@ -44,8 +44,8 @@ namespace B3
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction();
-    ~StackingAction() override;
+    StackingAction() = default;
+    ~StackingAction() override = default;
 
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
 };

@@ -55,7 +55,7 @@ G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
   fZmax = centre.z () + halfSide;
 }
 
-G4VisExtent::~G4VisExtent () {}
+G4VisExtent::~G4VisExtent () = default;
 
 const G4VisExtent& G4VisExtent::GetNullExtent () {
   static const G4VisExtent nullExtent = G4VisExtent();
@@ -101,8 +101,8 @@ G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
 
 G4VisExtent& G4VisExtent::Transform (const G4Transform3D& transform)
 {
-  auto rotation = transform.getRotation();
-  auto translation = transform.getTranslation();
+  const auto& rotation = transform.getRotation();
+  const auto& translation = transform.getTranslation();
 
   G4ThreeVector nnn(fXmin,fYmin,fZmin);
   G4ThreeVector nnx(fXmin,fYmin,fZmax);

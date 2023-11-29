@@ -111,7 +111,7 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
       if (shellIndex > -1) {
         G4VAtomDeexcitation* atomDeex =
           G4LossTableManager::Instance()->AtomDeexcitation();
-        if (atomDeex->IsFluoActive() && parentZ > 5 && parentZ < 100) {
+        if (atomDeex->IsFluoActive() && parentZ > 5 && parentZ < 105) {
           G4int nShells = G4AtomicShells::GetNumberOfShells(parentZ);
           if (shellIndex >= nShells) shellIndex = nShells;
           G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIndex);
@@ -145,10 +145,10 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
             armProducts.push_back(extra);
           } 
 
-          G4int nArm = armProducts.size();
+          std::size_t nArm = armProducts.size();
           if (nArm > 0) {
             G4ThreeVector bst = dynDaughter->Get4Momentum().boostVector();
-            for (G4int i = 0; i < nArm; ++i) {
+            for (std::size_t i = 0; i < nArm; ++i) {
               G4DynamicParticle* dp = armProducts[i];
               G4LorentzVector lv = dp->Get4Momentum().boost(bst);
               dp->Set4Momentum(lv);

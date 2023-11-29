@@ -70,13 +70,11 @@ G4VScoringMesh::G4VScoringMesh(const G4String& wName)
   fDivisionAxisNames[0] = fDivisionAxisNames[1] = fDivisionAxisNames[2] = "";
 }
 
-G4VScoringMesh::~G4VScoringMesh() { ; }
-
 void G4VScoringMesh::ResetScore()
 {
   if(verboseLevel > 9)
     G4cout << "G4VScoringMesh::ResetScore() is called." << G4endl;
-  for(auto mp : fMap)
+  for(const auto& mp : fMap)
   {
     if(verboseLevel > 9)
       G4cout << "G4VScoringMesh::ResetScore()" << mp.first << G4endl;
@@ -89,7 +87,7 @@ void G4VScoringMesh::SetSize(G4double size[3])
   if(!sizeIsSet)
   {
     sizeIsSet = true;
-    for(int i = 0; i < 3; i++)
+    for(G4int i = 0; i < 3; ++i)
     {
       fSize[i] = size[i];
     }
@@ -102,13 +100,14 @@ void G4VScoringMesh::SetSize(G4double size[3])
                 "DigiHitsUtilsScoreVScoringMesh000", JustWarning, message);
   }
 }
+
 G4ThreeVector G4VScoringMesh::GetSize() const
 {
   if(sizeIsSet)
     return G4ThreeVector(fSize[0], fSize[1], fSize[2]);
-  else
-    return G4ThreeVector(0., 0., 0.);
+  return G4ThreeVector(0., 0., 0.);
 }
+
 void G4VScoringMesh::SetAngles(G4double startAngle, G4double spanAngle)
 {
   fAngle[0] = startAngle;
@@ -120,12 +119,13 @@ void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3])
   fCenterPosition =
     G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);
 }
+
 void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3])
 {
   if(!nMeshIsSet || fShape == MeshShape::realWorldLogVol ||
      fShape == MeshShape::probe)
   {
-    for(int i = 0; i < 3; i++)
+    for(G4int i = 0; i < 3; ++i)
       fNSegment[i] = nSegment[i];
     nMeshIsSet = true;
   }
@@ -137,28 +137,30 @@ void G4VScoringMesh::SetNumberOfSegments(G4int nSegment[3])
                 "DigiHitsUtilsScoreVScoringMesh000", JustWarning, message);
   }
 }
+
 void G4VScoringMesh::GetNumberOfSegments(G4int nSegment[3])
 {
-  for(int i = 0; i < 3; i++)
+  for(G4int i = 0; i < 3; ++i)
     nSegment[i] = fNSegment[i];
 }
+
 void G4VScoringMesh::RotateX(G4double delta)
 {
-  if(!fRotationMatrix)
+  if(fRotationMatrix == nullptr)
     fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateX(delta);
 }
 
 void G4VScoringMesh::RotateY(G4double delta)
 {
-  if(!fRotationMatrix)
+  if(fRotationMatrix == nullptr)
     fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateY(delta);
 }
 
 void G4VScoringMesh::RotateZ(G4double delta)
 {
-  if(!fRotationMatrix)
+  if(fRotationMatrix == nullptr)
     fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateZ(delta);
 }
@@ -182,14 +184,14 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer* prs)
   prs->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = prs;
   fMFD->RegisterPrimitive(prs);
-  G4THitsMap<G4StatDouble>* map =
+  auto  map =
     new G4THitsMap<G4StatDouble>(fWorldName, prs->GetName());
   fMap[prs->GetName()] = map;
 }
 
 void G4VScoringMesh::SetFilter(G4VSDFilter* filter)
 {
-  if(!fCurrentPS)
+  if(fCurrentPS == nullptr)
   {
     G4cerr << "ERROR : G4VScoringMesh::SetSDFilter() : a quantity must be "
               "defined first. This method is ignored."
@@ -201,7 +203,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter* filter)
            << " is set to " << fCurrentPS->GetName() << G4endl;
 
   G4VSDFilter* oldFilter = fCurrentPS->GetFilter();
-  if(oldFilter)
+  if(oldFilter != nullptr)
   {
     G4cout << "WARNING : G4VScoringMesh::SetFilter() : " << oldFilter->GetName()
            << " is overwritten by " << filter->GetName() << G4endl;
@@ -212,7 +214,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter* filter)
 void G4VScoringMesh::SetCurrentPrimitiveScorer(const G4String& name)
 {
   fCurrentPS = GetPrimitiveScorer(name);
-  if(!fCurrentPS)
+  if(fCurrentPS == nullptr)
   {
     G4cerr << "ERROR : G4VScoringMesh::SetCurrentPrimitiveScorer() : The "
               "primitive scorer <"
@@ -222,29 +224,25 @@ void G4VScoringMesh::SetCurrentPrimitiveScorer(const G4String& name)
 
 G4bool G4VScoringMesh::FindPrimitiveScorer(const G4String& psname)
 {
-  MeshScoreMap::iterator itr = fMap.find(psname);
-  if(itr == fMap.end())
-    return false;
-  return true;
+  const auto itr = fMap.find(psname);
+  return itr != fMap.cend();
 }
 
 G4String G4VScoringMesh::GetPSUnit(const G4String& psname)
 {
-  MeshScoreMap::iterator itr = fMap.find(psname);
-  if(itr == fMap.end())
+  const auto itr = fMap.find(psname);
+  if(itr == fMap.cend())
   {
     return G4String("");
   }
-  else
-  {
-    return GetPrimitiveScorer(psname)->GetUnit();
-  }
+  
+  return GetPrimitiveScorer(psname)->GetUnit();
 }
 
 G4String G4VScoringMesh::GetCurrentPSUnit()
 {
   G4String unit = "";
-  if(!fCurrentPS)
+  if(fCurrentPS == nullptr)
   {
     G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
     msg += " Current primitive scorer is null.";
@@ -259,7 +257,7 @@ G4String G4VScoringMesh::GetCurrentPSUnit()
 
 void G4VScoringMesh::SetCurrentPSUnit(const G4String& unit)
 {
-  if(!fCurrentPS)
+  if(fCurrentPS == nullptr)
   {
     G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
     msg += " Current primitive scorer is null.";
@@ -273,30 +271,28 @@ void G4VScoringMesh::SetCurrentPSUnit(const G4String& unit)
 
 G4double G4VScoringMesh::GetPSUnitValue(const G4String& psname)
 {
-  MeshScoreMap::iterator itr = fMap.find(psname);
-  if(itr == fMap.end())
+  const auto itr = fMap.find(psname);
+  if(itr == fMap.cend())
   {
     return 1.;
   }
-  else
-  {
-    return GetPrimitiveScorer(psname)->GetUnitValue();
-  }
+  
+  return GetPrimitiveScorer(psname)->GetUnitValue();
 }
 
 void G4VScoringMesh::GetDivisionAxisNames(G4String divisionAxisNames[3])
 {
-  for(int i = 0; i < 3; i++)
+  for(G4int i = 0; i < 3; ++i)
     divisionAxisNames[i] = fDivisionAxisNames[i];
 }
 
 G4VPrimitiveScorer* G4VScoringMesh::GetPrimitiveScorer(const G4String& name)
 {
-  if(!fMFD)
+  if(fMFD == nullptr)
     return nullptr;
 
   G4int nps = fMFD->GetNumberOfPrimitives();
-  for(G4int i = 0; i < nps; i++)
+  for(G4int i = 0; i < nps; ++i)
   {
     G4VPrimitiveScorer* prs = fMFD->GetPrimitive(i);
     if(name == prs->GetName())
@@ -305,6 +301,7 @@ G4VPrimitiveScorer* G4VScoringMesh::GetPrimitiveScorer(const G4String& name)
 
   return nullptr;
 }
+
 void G4VScoringMesh::List() const
 {
   G4cout << " # of segments: (" << fNSegment[0] << ", " << fNSegment[1] << ", "
@@ -312,7 +309,7 @@ void G4VScoringMesh::List() const
   G4cout << " displacement: (" << fCenterPosition.x() / cm << ", "
          << fCenterPosition.y() / cm << ", " << fCenterPosition.z() / cm
          << ") [cm]" << G4endl;
-  if(fRotationMatrix != 0)
+  if(fRotationMatrix != nullptr)
   {
     G4cout << " rotation matrix: " << fRotationMatrix->xx() << "  "
            << fRotationMatrix->xy() << "  " << fRotationMatrix->xz() << G4endl
@@ -325,11 +322,11 @@ void G4VScoringMesh::List() const
   G4cout << " registered primitve scorers : " << G4endl;
   G4int nps = fMFD->GetNumberOfPrimitives();
   G4VPrimitiveScorer* prs;
-  for(int i = 0; i < nps; i++)
+  for(G4int i = 0; i < nps; ++i)
   {
     prs = fMFD->GetPrimitive(i);
     G4cout << "   " << i << "  " << prs->GetName();
-    if(prs->GetFilter() != 0)
+    if(prs->GetFilter() != nullptr)
       G4cout << "     with  " << prs->GetFilter()->GetName();
     G4cout << G4endl;
   }
@@ -339,7 +336,7 @@ void G4VScoringMesh::Dump()
 {
   G4cout << "scoring mesh name: " << fWorldName << G4endl;
   G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
-  for(auto mp : fMap)
+  for(const auto& mp : fMap)
   {
     G4cout << "[" << mp.first << "]" << G4endl;
     mp.second->PrintAllHits();
@@ -350,9 +347,9 @@ void G4VScoringMesh::Dump()
 void G4VScoringMesh::DrawMesh(const G4String& psName,
                               G4VScoreColorMap* colorMap, G4int axflg)
 {
-  fDrawPSName                          = psName;
-  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr != fMap.end())
+  fDrawPSName = psName;
+  const auto fMapItr = fMap.find(psName);
+  if(fMapItr != fMap.cend())
   {
     fDrawUnit      = GetPSUnit(psName);
     fDrawUnitValue = GetPSUnitValue(psName);
@@ -368,9 +365,9 @@ void G4VScoringMesh::DrawMesh(const G4String& psName,
 void G4VScoringMesh::DrawMesh(const G4String& psName, G4int idxPlane,
                               G4int iColumn, G4VScoreColorMap* colorMap)
 {
-  fDrawPSName                          = psName;
-  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr != fMap.end())
+  fDrawPSName = psName;
+  const auto fMapItr = fMap.find(psName);
+  if(fMapItr != fMap.cend())
   {
     fDrawUnit      = GetPSUnit(psName);
     fDrawUnitValue = GetPSUnitValue(psName);
@@ -385,8 +382,8 @@ void G4VScoringMesh::DrawMesh(const G4String& psName, G4int idxPlane,
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double>* map)
 {
-  G4String psName                      = map->GetName();
-  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
+  G4String psName = map->GetName();
+  const auto fMapItr = fMap.find(psName);
   *(fMapItr->second) += *map;
 
   if(verboseLevel > 9)
@@ -394,7 +391,7 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double>* map)
     G4cout << G4endl;
     G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
     G4cout << "  PS name : " << psName << G4endl;
-    if(fMapItr == fMap.end())
+    if(fMapItr == fMap.cend())
     {
       G4cout << "  " << psName << " was not found." << G4endl;
     }
@@ -409,8 +406,8 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double>* map)
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4StatDouble>* map)
 {
-  G4String psName                      = map->GetName();
-  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
+  G4String psName = map->GetName();
+  const auto fMapItr = fMap.find(psName);
   *(fMapItr->second) += *map;
 
   if(verboseLevel > 9)
@@ -418,7 +415,7 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4StatDouble>* map)
     G4cout << G4endl;
     G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
     G4cout << "  PS name : " << psName << G4endl;
-    if(fMapItr == fMap.end())
+    if(fMapItr == fMap.cend())
     {
       G4cout << "  " << psName << " was not found." << G4endl;
     }
@@ -477,13 +474,13 @@ void G4VScoringMesh::Merge(const G4VScoringMesh* scMesh)
 {
   const MeshScoreMap scMap = scMesh->GetScoreMap();
 
-  MeshScoreMap::const_iterator fMapItr = fMap.begin();
-  MeshScoreMap::const_iterator mapItr  = scMap.begin();
-  for(; fMapItr != fMap.end(); fMapItr++)
+  auto fMapItr = fMap.cbegin();
+  auto mapItr  = scMap.cbegin();
+  for(; fMapItr != fMap.cend(); ++fMapItr)
   {
     if(verboseLevel > 9)
       G4cout << "G4VScoringMesh::Merge()" << fMapItr->first << G4endl;
     *(fMapItr->second) += *(mapItr->second);
-    mapItr++;
+    ++mapItr;
   }
 }

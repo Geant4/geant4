@@ -108,15 +108,15 @@ void G4KDNode_Base::InactiveNode()
 	fTree->NoticeNodeDeactivation();
 }
 
-int G4KDNode_Base::GetDim() const
+G4int G4KDNode_Base::GetDim() const
 {
 	if(fTree)
-		return fTree->GetDim();
+          return (G4int)fTree->GetDim();
 	else
-		return -1;
+          return -1;
 }
 
-int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
+G4int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
 {
 	G4KDNode_Base* aParent = FindParent(*newNode);
 	// TODO check p == aParent->pos
@@ -178,7 +178,7 @@ void G4KDNode_Base::Print(std::ostream& out, int level) const
 {
 	// Print node level
 	out << G4endl;
-	for (int i=0; i<level; i++)         // Indent to level
+	for (G4int i=0; i<level; ++i)         // Indent to level
 	{
 		out << "  ";
 	}

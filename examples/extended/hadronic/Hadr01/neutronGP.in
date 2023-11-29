@@ -1,0 +1,29 @@
+#================================================
+#     Macro file for Hadr01
+#     27.12.2022 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_PbWO4
+/testhadr/TargetRadius     20 cm
+/testhadr/TargetLength     50 cm
+/testhadr/NumberDivZ       1000
+/testhadr/NumberOfBinsE    1000
+/testhadr/PrintModulo      100
+#/testhadr/DebugEvent       2169
+#
+/run/setCut                2 mm
+#/testhadr/Physics         PHYSLIST
+#
+/testhadr/NeutronGeneralProcess true
+/run/initialize
+/testhadr/HistoName        p_pbwo4_10gev_ngp
+/testhadr/MaxEdep          2 GeV
+#/process/list
+#
+/gun/particle proton
+/gun/energy 10. GeV
+/run/beamOn 10000
+#

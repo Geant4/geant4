@@ -53,9 +53,6 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
   //Use SteppingVerbose with Unit
   G4int precision = 4;
   G4SteppingVerbose::UseBestUnit(precision);

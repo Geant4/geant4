@@ -42,86 +42,84 @@
 
 class G4TwistTubsHypeSide : public G4VTwistSurface
 {
-  public:  // with description
+  public:
                        
-   G4TwistTubsHypeSide(const G4String&         name,
-                       const G4RotationMatrix& rot,  // 0.5*(phi-width segment)
-                       const G4ThreeVector&    tlate,
-                       const G4int     handedness,// R-hand = 1, L-hand = -1
-                       const G4double  kappa,     // tan(TwistAngle/2)/fZHalfLen
-                       const G4double  tanstereo, // tan(stereo angle)
-                       const G4double  r0,        // radius at z = 0
-                       const EAxis     axis0 = kPhi,
-                       const EAxis     axis1 = kZAxis,
-                             G4double  axis0min = -kInfinity,
-                             G4double  axis1min = -kInfinity,
-                             G4double  axis0max = kInfinity,
-                             G4double  axis1max = kInfinity); 
+    G4TwistTubsHypeSide(const G4String&         name,
+                        const G4RotationMatrix& rot,  // 0.5*(phi-width segment)
+                        const G4ThreeVector&    tlate,
+                        const G4int     handedness,// R-hand = 1, L-hand = -1
+                        const G4double  kappa,     // tan(TwistAngle/2)/fZHalfLen
+                        const G4double  tanstereo, // tan(stereo angle)
+                        const G4double  r0,        // radius at z = 0
+                        const EAxis     axis0 = kPhi,
+                        const EAxis     axis1 = kZAxis,
+                              G4double  axis0min = -kInfinity,
+                              G4double  axis1min = -kInfinity,
+                              G4double  axis0max = kInfinity,
+                              G4double  axis1max = kInfinity); 
                              
-  G4TwistTubsHypeSide(const G4String&  name,
-                            G4double   EndInnerRadius[2],
-                            G4double   EndOuterRadius[2],
-                            G4double   DPhi,
-                            G4double   EndPhi[2],
-                            G4double   EndZ[2], 
-                            G4double   InnerRadius,
-                            G4double   OuterRadius,
-                            G4double   Kappa,
-                            G4double   TanInnerStereo,
-                            G4double   TanOuterStereo,
-                            G4int      handedness) ;
+   G4TwistTubsHypeSide(const G4String&  name,
+                             G4double   EndInnerRadius[2],
+                             G4double   EndOuterRadius[2],
+                             G4double   DPhi,
+                             G4double   EndPhi[2],
+                             G4double   EndZ[2], 
+                             G4double   InnerRadius,
+                             G4double   OuterRadius,
+                             G4double   Kappa,
+                             G4double   TanInnerStereo,
+                             G4double   TanOuterStereo,
+                             G4int      handedness) ;
 
-   virtual ~G4TwistTubsHypeSide();
+   ~G4TwistTubsHypeSide() override;
 
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                   const G4ThreeVector& gv,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[],
-                                         G4bool         isvalid[],
-                                   EValidate validate = kValidateWithTol);
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                            const G4ThreeVector& gv,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[],
+                                  G4bool         isvalid[],
+                            EValidate validate = kValidateWithTol) override;
                                                    
-   virtual G4int DistanceToSurface(const G4ThreeVector& gp,
-                                         G4ThreeVector  gxx[],
-                                         G4double       distance[],
-                                         G4int          areacode[]);
+    G4int DistanceToSurface(const G4ThreeVector& gp,
+                                  G4ThreeVector  gxx[],
+                                  G4double       distance[],
+                                  G4int          areacode[]) override;
  
-   virtual G4ThreeVector GetNormal(const G4ThreeVector& xx,
-                                         G4bool isGlobal = false) ;
-   virtual EInside Inside(const G4ThreeVector& gp) ;
+    G4ThreeVector GetNormal(const G4ThreeVector& xx,
+                                  G4bool isGlobal = false) override ;
+    EInside Inside(const G4ThreeVector& gp) ;
    
-   virtual G4double GetRhoAtPZ(const G4ThreeVector& p,
+    inline G4double GetRhoAtPZ(const G4ThreeVector& p,
                                      G4bool isglobal = false) const ;
    
-   virtual G4ThreeVector SurfacePoint(G4double, G4double,
-                                      G4bool isGlobal = false) ;  
-   virtual G4double GetBoundaryMin(G4double phi) ;
-   virtual G4double GetBoundaryMax(G4double phi) ;
-   virtual G4double GetSurfaceArea() ;
-   virtual void GetFacets( G4int m, G4int n, G4double xyz[][3],
-                           G4int faces[][4], G4int iside ) ;
+    inline G4ThreeVector SurfacePoint(G4double, G4double,
+                                      G4bool isGlobal = false) override ;  
+    inline G4double GetBoundaryMin(G4double phi) override ;
+    inline G4double GetBoundaryMax(G4double phi) override ;
+    inline G4double GetSurfaceArea() override ;
+    void GetFacets( G4int m, G4int n, G4double xyz[][3],
+                    G4int faces[][4], G4int iside ) override ;
  
-  public:  // without description
-
-   G4TwistTubsHypeSide(__void__&);
-     // Fake default constructor for usage restricted to direct object
-     // persistency for clients requiring preallocation of memory for
-     // persistifiable objects.
+    G4TwistTubsHypeSide(__void__&);
+      // Fake default constructor for usage restricted to direct object
+      // persistency for clients requiring preallocation of memory for
+      // persistifiable objects.
 
   private:
 
-   virtual G4int GetAreaCode(const G4ThreeVector& xx, 
-                                   G4bool withTol = true);
-   virtual G4int GetAreaCodeInPhi(const G4ThreeVector& xx, 
-                                        G4bool withTol = true);
-   virtual void SetCorners();
+   G4int GetAreaCode(const G4ThreeVector& xx, 
+                           G4bool withTol = true) override;
+   G4int GetAreaCodeInPhi(const G4ThreeVector& xx, 
+                                G4bool withTol = true);
+   void SetCorners() override;
 
-   virtual void SetCorners(G4double EndInnerRadius[2],
-                           G4double EndOuterRadius[2],
-                           G4double DPhi,
-                           G4double EndPhi[2],
-                           G4double EndZ[2]);
-   virtual void SetBoundaries();
+   void SetCorners(G4double EndInnerRadius[2],
+                   G4double EndOuterRadius[2],
+                   G4double DPhi,
+                   G4double EndPhi[2],
+                   G4double EndZ[2]);
+   void SetBoundaries() override;
 
   private:
    

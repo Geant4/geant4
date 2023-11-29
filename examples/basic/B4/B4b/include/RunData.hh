@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunData.hh
+/// \file B4/B4b/include/RunData.hh
 /// \brief Definition of the B4b::RunData class
 
 #ifndef B4bRunData_h
@@ -54,14 +54,14 @@ const G4int kDim = 2;
 /// - fEdep[], fTrackLength[].
 ///
 /// The data are collected step by step in SteppingAction, and
-/// the accumulated values are filled in histograms and entuple
+/// the accumulated values are filled in histograms and a Ntuple
 /// event by event in EventAction.
 
 class RunData : public G4Run
 {
 public:
-  RunData();
-  ~RunData() override;
+  RunData() = default;
+  ~RunData() override = default;
 
   void Add(G4int id, G4double de, G4double dl);
   void FillPerEvent();

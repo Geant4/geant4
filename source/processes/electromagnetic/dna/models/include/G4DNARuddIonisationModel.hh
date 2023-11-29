@@ -70,17 +70,17 @@ public:
 
 protected:
 
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
 
 private:
 
   G4bool statCode;
 
   // Water density table
-  const std::vector<G4double>* fpWaterDensity;
+  const std::vector<G4double>* fpWaterDensity = nullptr;
 
   //deexcitation manager to produce fluo photns and e-
-  G4VAtomDeexcitation*      fAtomDeexcitation;
+  G4VAtomDeexcitation*      fAtomDeexcitation = nullptr;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
@@ -155,6 +155,13 @@ private:
   G4DNARuddIonisationModel & operator=(const  G4DNARuddIonisationModel &right);
   G4DNARuddIonisationModel(const  G4DNARuddIonisationModel&);
 
+  // Reusable particle definitions
+  G4ParticleDefinition* protonDef = nullptr;
+  G4ParticleDefinition* hydrogenDef = nullptr;
+  G4ParticleDefinition* alphaPlusPlusDef = nullptr;
+  G4ParticleDefinition* alphaPlusDef = nullptr;
+  G4ParticleDefinition* heliumDef = nullptr;
+  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

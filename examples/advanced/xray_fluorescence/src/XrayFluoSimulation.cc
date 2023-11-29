@@ -50,20 +50,8 @@
 #include "XrayFluoActionInitializer.hh"
 #include "XrayFluoAnalysisManager.hh"
 
-
-XrayFluoSimulation::XrayFluoSimulation(G4int seed):dir(seed)
-{;}
-
-
-XrayFluoSimulation::~XrayFluoSimulation()
-{;}
-
 void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
-  // choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  G4Random::setTheSeed(dir);
-
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = 4;
   runManager->SetNumberOfThreads(nThreads);

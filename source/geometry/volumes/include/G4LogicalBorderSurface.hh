@@ -56,7 +56,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
                                   G4VPhysicalVolume* vol1, 
                                   G4VPhysicalVolume* vol2,
                                   G4SurfaceProperty* surfaceProperty );
-    ~G4LogicalBorderSurface();
+    ~G4LogicalBorderSurface() override;
       // Constructor and destructor
 
     G4LogicalBorderSurface(const G4LogicalBorderSurface&) = delete;

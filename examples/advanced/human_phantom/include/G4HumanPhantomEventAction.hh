@@ -38,8 +38,8 @@ class G4Event;
 class G4HumanPhantomEventAction : public G4UserEventAction
 {
 public:
-  G4HumanPhantomEventAction();
-  ~G4HumanPhantomEventAction();
+  explicit G4HumanPhantomEventAction();
+  ~G4HumanPhantomEventAction() = default;
 
 public:
   void BeginOfEventAction(const G4Event*);
@@ -49,9 +49,9 @@ private:
   void Fill(G4String bodypartName, G4double energyDeposit);
   void totalEventEnergyDeposit();
  
-  G4int hitCollectionID; 
-  std::map<std::string,G4double> energyTotal;
-  G4String bodypartName;
+  G4int fHitCollectionID; 
+  std::map<std::string,G4double> fEnergyTotal;
+ // G4String fBodypartName;
 };
 #endif
 

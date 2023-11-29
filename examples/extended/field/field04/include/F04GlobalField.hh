@@ -153,30 +153,37 @@ private:
 
 private:
 
+  // A. INVARIANTS: 
+  // --------------
+  // INVARIANT: an integer to indicate the type of RK integration method ('stepper') used
   G4int fStepperType;
 
+  // INVARIANTS: Accuracy parameters of field propagation (and the integration it uses.)
+  // 1. These values are lengths - initialised in src
   G4double fMinStep;
   G4double fDeltaChord;
   G4double fDeltaOneStep;
   G4double fDeltaIntersection;
-  G4double fEpsMin;
-  G4double fEpsMax;
+  // 2. Dimensionless numbers - can initialise here
+  G4double fEpsMin = 2.5e-7; // Relative accuracy of integration (minimum)
+  G4double fEpsMax = 0.001;  // Relative accuracy of integration (maximum)
 
+  // B. STATE: objects which carry out the propagation and are modified during tracking 
+  // --------
 //  G4Mag_EqRhs*            fEquation;
 //  G4Mag_SpinEqRhs*        fEquation;
 
 //  G4EqMagElectricField*   fEquation;
-  G4EqEMFieldWithSpin*    fEquation;
+  G4EqEMFieldWithSpin*     fEquation        = nullptr;
 
-  G4FieldManager*         fFieldManager;
-  G4PropagatorInField*    fFieldPropagator;
-  G4MagIntegratorStepper* fStepper;
-  G4ChordFinder*          fChordFinder;
+  G4FieldManager*          fFieldManager    = nullptr;
+  G4PropagatorInField*     fFieldPropagator = nullptr;
+  G4MagIntegratorStepper*  fStepper         = nullptr;
+  G4ChordFinder*           fChordFinder     = nullptr;
 
-  F04FieldMessenger*         fFieldMessenger;
-
-  F04DetectorConstruction* fDetectorConstruction;
-
+  // INVARIANTS during tracking: Auxiliary class & information - used for setup
+  F04FieldMessenger*       fFieldMessenger;
+  F04DetectorConstruction* fDetectorConstruction= nullptr;
 };
 
 #endif

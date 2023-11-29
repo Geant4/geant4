@@ -53,10 +53,11 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
     if ( ! fFileManager->CreateNtupleFile(ntupleDescription) ) return;
 
     // create ntuple
-    ntupleDescription->fNtuple
-      = new tools::waxml::ntuple(
-              *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
-    fNtupleVector.push_back(ntupleDescription->fNtuple);
+    ntupleDescription->SetNtuple(
+      new tools::waxml::ntuple(
+            *(ntupleDescription->GetFile()), G4cerr,
+            ntupleDescription->GetNtupleBooking()));
+    fNtupleVector.push_back(ntupleDescription->GetNtuple());
 }
 
 //_____________________________________________________________________________
@@ -66,24 +67,32 @@ void G4XmlNtupleManager::FinishTNtuple(
 
 {
   // Do nothing if the base file name was not yet defined
-  if ( ! fFileManager->GetFileName().size() ) return;
+  if (fFileManager->GetFileName().size() == 0u) return;
 
   // Create ntuple from booking
-  if ( ! ntupleDescription->fNtuple ) {
+  if (ntupleDescription->GetNtuple() == nullptr) {
     CreateTNtupleFromBooking(ntupleDescription);
   }
 
   // Return if creating ntuple failed
-  if ( ! ntupleDescription->fNtuple ) {
+  if (ntupleDescription->GetNtuple() == nullptr) {
     Warn("Creating ntuple has failed. ", fkClass, "FinishTNtuple");
     return;
+  }
+
+  // Update ntuple name if cycle >0
+  auto ntupleName = ntupleDescription->GetNtupleBooking().name();
+  // if (ntupleDescription->GetCycle() > 0) {
+  if (GetCycle() > 0) {
+    ntupleName.append("_v");
+    ntupleName.append(std::to_string(GetCycle()));
   }
 
   // Write header
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
-  ntupleDescription->fNtuple
-    ->write_header(path, ntupleDescription->fNtupleBooking.name(),
-                   ntupleDescription->fNtupleBooking.title());
+  ntupleDescription->GetNtuple()
+    ->write_header(path, ntupleName,
+                   ntupleDescription->GetNtupleBooking().title());
   fFileManager->LockDirectoryNames();
 }

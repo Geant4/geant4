@@ -25,55 +25,53 @@
 //
 //
 //
- // Hadronic Process: High Precision low E neutron tracking
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
+// Hadronic Process: High Precision low E neutron tracking
+// original by H.P. Wellisch, TRIUMF, 14-Feb-97
+// Builds and has the Cross-section data for one material.
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
-  
+
 #ifndef G4ParticleHPFission_h
 #define G4ParticleHPFission_h 1
 
 // Class Description
 // Final state production model for a high precision (based on evaluated data
-// libraries) description of neutron induced fission below 20 MeV; 
+// libraries) description of neutron induced fission below 20 MeV;
 // Note that this model (by intent of avoiding the possibility of heating studies) does
 // not provide the nuclear fragments.
 //
 // To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
+// In this case you want to register an object of this class with
 // the corresponding process.
 // Class Description - End
 
-#include "globals.hh"
-#include "G4ParticleHPChannel.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4ParticleHPChannel.hh"
+#include "globals.hh"
 
 class G4ParticleHPFission : public G4HadronicInteraction
 {
-  public: 
-  
-  G4ParticleHPFission();
+  public:
+    G4ParticleHPFission();
 
-  ~G4ParticleHPFission();
-  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+    ~G4ParticleHPFission() override;
 
-  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                   G4Nucleus& aTargetNucleus) override;
 
-   public:
-      G4int GetVerboseLevel() const;
-      void SetVerboseLevel( G4int );
-      void BuildPhysicsTable(const G4ParticleDefinition&);
-      virtual void ModelDescription(std::ostream& outFile) const;
+    const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const override;
+
+  public:
+    G4int GetVerboseLevel() const;
+    void SetVerboseLevel(G4int);
+    void BuildPhysicsTable(const G4ParticleDefinition&) override;
+    void ModelDescription(std::ostream& outFile) const override;
 
   private:
-  
-  //G4ParticleHPChannel * theFission;
-      std::vector<G4ParticleHPChannel*>* theFission;
-  G4String dirName;
-  G4int numEle;
-
+    // G4ParticleHPChannel * theFission;
+    std::vector<G4ParticleHPChannel*>* theFission{nullptr};
+    G4String dirName;
+    G4int numEle{0};
 };
 
 #endif

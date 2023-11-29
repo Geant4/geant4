@@ -40,6 +40,8 @@
 #include <sstream>
 #include <cmath>
 
+#define G4warn G4cout
+
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
   fNumberOfCloudPoints(10000),
@@ -101,7 +103,8 @@ G4ViewParameters::G4ViewParameters ():
   fDisplayLightFrontRed(0.),
   fDisplayLightFrontGreen(1.),
   fDisplayLightFrontBlue(0.),
-  fSpecialMeshRendering(false)
+  fSpecialMeshRendering(false),
+  fSpecialMeshRenderingOption(meshAsDefault)
 {
   // Pick up default no of sides from G4Polyhedron.
   // Note that this parameter is variously called:
@@ -183,7 +186,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
-    G4cerr <<
+    G4warn <<
       "ERROR: G4ViewParameters::AddCutawayPlane:"
       "\n  A maximum of 3 cutaway planes supported." << G4endl;
   }
@@ -192,7 +195,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
 void G4ViewParameters::ChangeCutawayPlane
 (size_t index, const G4Plane3D& cutawayPlane) {
   if (index >= fCutawayPlanes.size()) {
-    G4cerr <<
+    G4warn <<
       "ERROR: G4ViewParameters::ChangeCutawayPlane:"
       "\n  Plane " << index << " does not exist." << G4endl;
   } else {
@@ -203,12 +206,12 @@ void G4ViewParameters::ChangeCutawayPlane
 void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0) {
-    G4cout << "G4ViewParameters::SetVisibleDensity: attempt to set negative "
+    G4warn << "G4ViewParameters::SetVisibleDensity: attempt to set negative "
       "density - ignored." << G4endl;
   }
   else {
     if (visibleDensity > reasonableMaximum) {
-      G4cout << "G4ViewParameters::SetVisibleDensity: density > "
+      G4warn << "G4ViewParameters::SetVisibleDensity: density > "
 	     << G4BestUnit (reasonableMaximum, "Volumic Mass")
 	     << " - did you mean this?"
 	     << G4endl;
@@ -221,7 +224,7 @@ G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
   const G4int nSidesMin = fDefaultVisAttributes.GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
-    G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
+    G4warn << "G4ViewParameters::SetNoOfSides: attempt to set the"
     "\nnumber of sides per circle < " << nSidesMin
     << "; forced to " << nSides << G4endl;
   }
@@ -233,7 +236,7 @@ G4int G4ViewParameters::SetNumberOfCloudPoints(G4int nPoints) {
   const G4int nPointsMin = 100;
   if (nPoints < nPointsMin) {
     nPoints = nPointsMin;
-    G4cout << "G4ViewParameters::SetNumberOfCloudPoints:"
+    G4warn << "G4ViewParameters::SetNumberOfCloudPoints:"
     "\nnumber of points per cloud set to minimum " << nPoints
     << G4endl;
   }
@@ -252,7 +255,7 @@ void G4ViewParameters::SetViewAndLights
     static G4bool firstTime = true;
     if (firstTime) {
       firstTime = false;
-      G4cout <<
+      G4warn <<
       "WARNING: Viewpoint direction is very close to the up vector direction."
       "\n  Change the up vector or \"/vis/viewer/set/rotationStyle freeRotation\"."
       << G4endl;
@@ -458,6 +461,9 @@ G4String G4ViewParameters::DrawingStyleCommands() const
   } else {
     oss << "false";
   }
+
+  oss << "\n/vis/viewer/set/specialMeshRenderingOption "
+  << fSpecialMeshRenderingOption;
 
   oss << "\n/vis/viewer/set/specialMeshVolumes";
   for (const auto& volume : fSpecialMeshVolumes) {
@@ -868,20 +874,34 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
 }
 
 std::ostream& operator <<
-(std::ostream& os, const G4ViewParameters::DrawingStyle& style)
+ (std::ostream& os, G4ViewParameters::DrawingStyle style)
 {
   switch (style) {
-  case G4ViewParameters::wireframe:
-    os << "wireframe"; break;
-  case G4ViewParameters::hlr:
-    os << "hlr - hidden lines removed"; break;
-  case G4ViewParameters::hsr:
-    os << "hsr - hidden surfaces removed"; break;
-  case G4ViewParameters::hlhsr:
-    os << "hlhsr - hidden line, hidden surface removed"; break;
-  case G4ViewParameters::cloud:
-    os << "cloud - draw volume as a cloud of dots"; break;
-  default: os << "unrecognised"; break;
+    case G4ViewParameters::wireframe:
+      os << "wireframe"; break;
+    case G4ViewParameters::hlr:
+      os << "hlr - hidden lines removed"; break;
+    case G4ViewParameters::hsr:
+      os << "hsr - hidden surfaces removed"; break;
+    case G4ViewParameters::hlhsr:
+      os << "hlhsr - hidden line, hidden surface removed"; break;
+    case G4ViewParameters::cloud:
+      os << "cloud - draw volume as a cloud of dots"; break;
+    default: os << "unrecognised"; break;
+  }
+  return os;
+}
+
+std::ostream& operator <<
+(std::ostream& os, G4ViewParameters::SMROption option)
+{
+  switch (option) {
+    case G4ViewParameters::meshAsDefault:
+      os << "default"; break;
+    case G4ViewParameters::meshAsDots:
+      os << "dots"; break;
+    case G4ViewParameters::meshAsSurfaces:
+      os << "surfaces"; break;
   }
   return os;
 }
@@ -1063,19 +1083,19 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;
   }
 
-  os << "\n  Special Mesh Rendering: ";
+  os << "\n  Special Mesh Rendering";
   if (v.fSpecialMeshRendering) {
-    os << "on: ";
+    os << " requested with option \"" << v.fSpecialMeshRenderingOption;
+    os << "\" for ";
     if (v.fSpecialMeshVolumes.empty()) {
-      os << "all meshes";
+      os << "any mesh";
     } else {
       os << "selected meshes";
       for (const auto& vol: v.fSpecialMeshVolumes) {
 	os << "\n    " << vol.GetName() << ':' << vol.GetCopyNo();
       }
     }
-  } else os << "off";
-
+  } else os << ": off";
   return os;
 }
 
@@ -1121,7 +1141,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fBackgroundColour     != v.fBackgroundColour)     ||
       (fPicking              != v.fPicking)              ||
       (fRotationStyle        != v.fRotationStyle)        ||
-      (fSpecialMeshRendering != v.fSpecialMeshRendering)
+      (fSpecialMeshRendering != v.fSpecialMeshRendering) ||
+      (fSpecialMeshRenderingOption != v.fSpecialMeshRenderingOption)
       )
     return true;
 
@@ -1189,29 +1210,36 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   return false;
 }
 
-void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg)
+void G4ViewParameters::SetXGeometryString (const G4String& geomString)
 {
-  G4int x = 0, y = 0;
-  unsigned int w = 0, h = 0;
-  G4String geomString = geomStringArg;
-  // Parse windowSizeHintString for backwards compatibility...
   const G4String delimiters("xX+-");
   G4String::size_type i = geomString.find_first_of(delimiters);
-  if (i == G4String::npos) {  // Does not contain "xX+-".  Assume single number
+  if (i == G4String::npos) {
+    // Does not contain "xX+-".
+    // Is it a single number?
     std::istringstream iss(geomString);
     G4int size;
     iss >> size;
-    if (!iss) {
-      size = 600;
-      G4cout << "Unrecognised windowSizeHint string: \""
-	     << geomString
-	     << "\".  Asuuming " << size << G4endl;
+    if (iss) {
+      // It is a number
+      fWindowSizeHintX = size;
+      fWindowSizeHintY = size;
     }
+    // Accept other or all defaults (in G4ViewParameters constructor)
+    // Reconstruct a geometry string coherent with the above
+    char signX, signY;
+    if (fWindowLocationHintXNegative) signX = '-'; else signX ='+';
+    if (fWindowLocationHintYNegative) signY = '-'; else signY ='+';
     std::ostringstream oss;
-    oss << size << 'x' << size;
-    geomString = oss.str();
+    oss << fWindowSizeHintX << 'x' << fWindowSizeHintY
+    << signX << fWindowLocationHintX << signY << fWindowLocationHintY;
+    fXGeometryString = oss.str();
+    return;
   }
- 
+
+  // Assume it's a parseable X geometry string
+  G4int x = 0, y = 0;
+  unsigned int w = 0, h = 0;
   fGeometryMask = ParseGeometry( geomString, &x, &y, &w, &h );
 
   // Handle special case :
@@ -1235,7 +1263,7 @@ void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg)
     // if there is only Width. Special case to be backward compatible
     // We set Width and Height the same to obtain a square windows.
     
-    G4cout << "Unrecognised geometry string \""
+    G4warn << "Unrecognised geometry string \""
            << geomString
            << "\".  No Height found. Using Width value instead"
            << G4endl;

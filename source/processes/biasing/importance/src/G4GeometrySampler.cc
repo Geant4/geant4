@@ -286,19 +286,17 @@ void G4GeometrySampler::Configure()
 void G4GeometrySampler::AddProcess()
 {
 
-  G4VSamplerConfigurator *preConf = 0;
-  G4int i = 0;
-  for (G4Configurators::iterator it = fConfigurators.begin();
-       it != fConfigurators.end(); it++)
+  G4VSamplerConfigurator *preConf = nullptr;
+  for (auto it = fConfigurators.cbegin();
+       it != fConfigurators.cend(); ++it)
     {
-      i++;
       G4VSamplerConfigurator *currConf =*it;
       currConf->Configure(preConf);
       preConf = *it;
     }
-  if (fWeightCutOffConfigurator)
+  if (fWeightCutOffConfigurator != nullptr)
     {
-      fWeightCutOffConfigurator->Configure(0);
+      fWeightCutOffConfigurator->Configure(nullptr);
     }
 
   return;

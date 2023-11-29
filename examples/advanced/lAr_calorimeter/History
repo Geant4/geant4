@@ -1,12 +1,19 @@
-Hi-------------------------------------------------------------------
--------------------------------------------------------------------
+# Example lAr_calorimeter History
 
-     =========================================================
-                  Geant4 - ATLAS lAr calorimeter
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+## 2022-09-09 Susanna Guatelli (lar_calorimeter-V11-00-01)
+- Ranecu engine removed
+
+## 2021-12-10 Ben Morgan (lar_calorimeter-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 21.10.2021 - S. Guatelli (lar_calorimeter-V10-07-03)
              Migration to G4RunManagerFactory.
              

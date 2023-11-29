@@ -82,7 +82,7 @@ public:
   G4JAEAElasticScatteringModel(const G4JAEAElasticScatteringModel&) = delete;
 
 private:
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(std::size_t Z, const char* path = 0);
 
   static const G4int maxZ = 99;
   static G4PhysicsFreeVector* dataCS[maxZ+1];

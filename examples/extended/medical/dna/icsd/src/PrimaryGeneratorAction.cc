@@ -36,6 +36,8 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+#include "G4LogicalVolumeStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -46,7 +48,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     fpParticleGun  = new G4ParticleGun(n_particle);
 
     // default gun parameters
-    //  fParticleGun->SetParticleEnergy(500.*eV);
+    fpParticleGun->SetParticleEnergy(500.*eV);
     fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
     fpParticleGun->SetParticlePosition(G4ThreeVector(-1.15*nanometer,0.,0));
 }
@@ -61,5 +63,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    G4Tubs* targetSolid = dynamic_cast< G4Tubs*>(
+        G4LogicalVolumeStore::GetInstance()->GetVolume("Target")->GetSolid());
+
+    if(targetSolid != nullptr)
+    {
+        G4double radius = targetSolid->GetOuterRadius();
+        fpParticleGun->SetParticlePosition(G4ThreeVector(-radius,0.,0));
+    }
+    
     fpParticleGun->GeneratePrimaryVertex(anEvent);
 }

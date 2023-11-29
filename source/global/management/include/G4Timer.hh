@@ -72,7 +72,7 @@
 #ifndef G4TIMER_HH
 #define G4TIMER_HH 1
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(__MINGW32__))
 #  include <sys/times.h>
 #  include <unistd.h>
 #else
@@ -107,11 +107,7 @@ extern "C"
 
 class G4Timer
 {
-  using clock_type = std::chrono::high_resolution_clock;
-
  public:
-  G4Timer();
-
   inline void Start();
   inline void Stop();
   inline G4bool IsValid() const;
@@ -121,7 +117,8 @@ class G4Timer
   G4double GetUserElapsed() const;
 
  private:
-  G4bool fValidTimes;
+  G4bool fValidTimes{false};
+  using clock_type = std::chrono::high_resolution_clock;
   std::chrono::time_point<clock_type> fStartRealTime, fEndRealTime;
   tms fStartTimes, fEndTimes;
 };

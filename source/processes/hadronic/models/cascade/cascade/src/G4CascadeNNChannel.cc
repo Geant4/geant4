@@ -1886,7 +1886,10 @@ G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 G4double 
 G4CascadeNNChannel::findCrossSection(G4double ke,
                                      const G4double (&xsec)[30]) const {
-  if (ke < 0.01 && (xsec == nnTotXSec || xsec == nnCrossSections[0])) {
+  if (ke < 0.01 &&
+       (std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(nnTotXSec))
+     || std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(nnCrossSections[0]))))
+  {
     // Stepanov's function for ke < 10 MeV, up to zero-energy value
     const G4double kemin = 4.0/nnTotXSec[0];
     return (ke>0.001 ? (9.0692 - 0.0050574/ke)/ke + 6.9466 :

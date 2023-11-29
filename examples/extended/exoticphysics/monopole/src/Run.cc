@@ -74,7 +74,7 @@ void Run::Merge(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::EndOfRun(double binLength)
+void Run::EndOfRun(G4double binLength)
 {
 
   if ( ! G4Threading::IsMultithreadedApplication() ) {

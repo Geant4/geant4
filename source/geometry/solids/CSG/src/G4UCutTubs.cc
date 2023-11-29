@@ -49,8 +49,8 @@ G4UCutTubs::G4UCutTubs( const G4String& pName,
                               G4double pRMin, G4double pRMax,
                               G4double pDz,
                               G4double pSPhi, G4double pDPhi,
-                              G4ThreeVector pLowNorm,
-                              G4ThreeVector pHighNorm )
+                              const G4ThreeVector& pLowNorm,
+                              const G4ThreeVector& pHighNorm )
   : Base_t(pName, pRMin, pRMax, pDz, pSPhi, pDPhi,
            pLowNorm.x(), pLowNorm.y(), pLowNorm.z(),
            pHighNorm.x(), pHighNorm.y(), pHighNorm.z())
@@ -71,9 +71,7 @@ G4UCutTubs::G4UCutTubs( __void__& a )
 //
 // Destructor
 
-G4UCutTubs::~G4UCutTubs()
-{
-}
+G4UCutTubs::~G4UCutTubs() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -144,12 +142,12 @@ G4double G4UCutTubs::GetCosEndPhi() const
 G4ThreeVector G4UCutTubs::GetLowNorm  () const
 {
   U3Vector lc = BottomNormal();
-  return G4ThreeVector(lc.x(), lc.y(), lc.z());
+  return {lc.x(), lc.y(), lc.z()};
 }
 G4ThreeVector G4UCutTubs::GetHighNorm () const
 {
   U3Vector hc = TopNormal();
-  return G4ThreeVector(hc.x(), hc.y(), hc.z());
+  return {hc.x(), hc.y(), hc.z()};
 } 
 
 void G4UCutTubs::SetInnerRadius(G4double newRMin)
@@ -353,7 +351,7 @@ G4UCutTubs::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Get parameters of the solid
@@ -479,7 +477,7 @@ G4Polyhedron* G4UCutTubs::CreatePolyhedron() const
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
 
-  G4Polyhedron *ph  = new G4Polyhedron;
+  auto ph = new G4Polyhedron;
   G4Polyhedron *ph1 = new G4PolyhedronTubs(GetInnerRadius(),
                                            GetOuterRadius(),
                                            GetZHalfLength(),
@@ -487,8 +485,8 @@ G4Polyhedron* G4UCutTubs::CreatePolyhedron() const
                                            GetDeltaPhiAngle());
   G4int nn=ph1->GetNoVertices();
   G4int nf=ph1->GetNoFacets();
-  G4double3* xyz = new G4double3[nn];  // number of nodes 
-  G4int4*  faces = new G4int4[nf] ;    // number of faces
+  auto xyz = new G4double3[nn];  // number of nodes 
+  auto faces = new G4int4[nf] ;  // number of faces
   G4double fDz = GetZHalfLength();
 
   for(G4int i=0; i<nn; ++i)
@@ -510,7 +508,7 @@ G4Polyhedron* G4UCutTubs::CreatePolyhedron() const
     }
   }
   G4int iNodes[4];
-  G4int *iEdge=0;
+  G4int* iEdge=nullptr;
   G4int n;
   for(G4int i=0; i<nf; ++i)
   {

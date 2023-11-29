@@ -42,15 +42,12 @@
 //-------------------------------------------------------------------
 
 G4ErrorPropagationNavigator::G4ErrorPropagationNavigator()
-  : G4Navigator()
 {
 }
 
 //-------------------------------------------------------------------
 
-G4ErrorPropagationNavigator::~G4ErrorPropagationNavigator()
-{
-}
+G4ErrorPropagationNavigator::~G4ErrorPropagationNavigator() = default;
 
 //-------------------------------------------------------------------
 
@@ -208,9 +205,8 @@ GetGlobalExitNormal( const G4ThreeVector& point, G4bool* valid )
         break;
       case G4ErrorTarget_PlaneSurface:
       case G4ErrorTarget_CylindricalSurface:
-        const G4ErrorSurfaceTarget* surfaceTarget=
-          static_cast<const G4ErrorSurfaceTarget*>(target);
-        normal = surfaceTarget->GetTangentPlane(point).normal().unit();
+        const auto surfTarget= static_cast<const G4ErrorSurfaceTarget*>(target);
+        normal = surfTarget->GetTangentPlane(point).normal().unit();
         *valid = true;
         break;
 

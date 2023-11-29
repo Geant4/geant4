@@ -43,10 +43,10 @@ public:
     //the below code skips correctly the data in the file.
     uint32 startpos = a_buffer.length();
     short v;
-    unsigned int s,c;
-    if(!a_buffer.read_version(v,s,c)) return false;
-    a_buffer.set_offset(startpos+c+sizeof(unsigned int));
-    if(!a_buffer.check_byte_count(s,c,"dummy")) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
+    a_buffer.set_offset(startpos+_c+sizeof(unsigned int));
+    if(!a_buffer.check_byte_count(_s,_c,"dummy")) return false;
     return true;
   }
 public:

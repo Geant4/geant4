@@ -46,23 +46,23 @@ class G4ExcitedLambdaConstructor: public G4ExcitedBaryonConstructor
 
   public:
     G4ExcitedLambdaConstructor();
-    virtual  ~G4ExcitedLambdaConstructor();
+     ~G4ExcitedLambdaConstructor() override = default;
 
   protected:  
-    virtual  G4bool   Exist( G4int ){return true;}
+     G4bool   Exist( G4int ) override{return true;}
 
-    virtual  G4int    GetQuarkContents(G4int, G4int);
-    virtual  G4String GetName(G4int iIso3, G4int iState);
-    virtual  G4String GetMultipletName(G4int iState);
-    virtual  G4double GetMass( G4int state, G4int iso);
-    virtual  G4double GetWidth( G4int state, G4int iso);
-    virtual  G4int    GetiSpin(G4int iState);
-    virtual  G4int    GetiParity(G4int iState);
-    virtual  G4int    GetEncodingOffset(G4int iState);
+     G4int    GetQuarkContents(G4int, G4int) override;
+     G4String GetName(G4int iIso3, G4int iState) override;
+     G4String GetMultipletName(G4int iState) override;
+     G4double GetMass( G4int state, G4int iso) override;
+     G4double GetWidth( G4int state, G4int iso) override;
+     G4int    GetiSpin(G4int iState) override;
+     G4int    GetiParity(G4int iState) override;
+     G4int    GetEncodingOffset(G4int iState) override;
 
-    virtual  G4DecayTable* CreateDecayTable(const G4String& name,
+     G4DecayTable* CreateDecayTable(const G4String& name,
 					    G4int iIso3, G4int iState,
-					    G4bool fAnti = false);
+					    G4bool fAnti = false) override;
   private:
     G4DecayTable* AddNKMode( G4DecayTable* table, const G4String& name,
 				    G4double br, G4int iIso3, G4bool fAnti);

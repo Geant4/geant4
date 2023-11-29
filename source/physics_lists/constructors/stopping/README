@@ -17,3 +17,7 @@
  The same as G4StoppingPhysics, except that for anti-proton and anti-neutron
  annihilation at rest it uses Fritiof coupled with Binary Cascade.
 
+ G4StoppingPhysicsWithINCLXX
+ ---------------------------
+ The same as G4StoppingPhysics, except that for anti-proton annihilation
+ at rest it uses the INCLXX model.

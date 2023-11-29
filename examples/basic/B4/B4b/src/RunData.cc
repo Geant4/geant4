@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunData.cc
+/// \file B4/B4b/src/RunData.cc
 /// \brief Implementation of the B4b::RunData class
 
 #include "RunData.hh"
@@ -38,23 +38,13 @@ namespace B4b
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunData::RunData()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunData::~RunData()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void RunData::FillPerEvent()
 {
   // get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 
   // accumulate statistic
-  // in the order od the histograms, ntuple columns declarations
+  // in the order of the histograms, ntuple columns declarations
   G4int counter = 0;
   for ( auto edep : fEdep ) {
     analysisManager->FillH1(counter, edep);
@@ -64,6 +54,7 @@ void RunData::FillPerEvent()
     analysisManager->FillH1(counter, trackLength);
     analysisManager->FillNtupleDColumn(counter++, trackLength);
   }
+  
   analysisManager->AddNtupleRow();
 }
 

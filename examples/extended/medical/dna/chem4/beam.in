@@ -7,7 +7,38 @@
 #/process/dna/e-SolvationSubType Terrisol1990
 #
 /run/initialize
-#
+
+# species definition
+# username [ molecule | charge | D(m2/s) | Radius(nm) ]
+/chem/species O2 [ O2 | 0 | 2.4e-9 | 0.17 ]
+/chem/species H3Op [ H3O | 1 | 9e-9 | 0.25 ] # H3Op is H3O plus
+/chem/species OH [ OH | 0 | 2.8e-9 | 0.22 ]
+/chem/species e_aq [ e_aq | -1 | 4.9e-9 | 0.5 ]
+/chem/species OHm [ OH | -1 | 5.0e-9 | 0.33 ] # OHm is OH minus
+/chem/species H [ H | 0 | 7e-09 | 0.19 ]
+/chem/species H2 [ H2 | 0 | 5e-09 | 0.14 ]
+
+/chem/PrintSpeciesTable
+
+# reset and activate User interfact
+/chem/reaction/UI
+# totally diffusion-controlled (TDC)
+# | Fix |  reactionRate[dm3/(mol*s)] | TDC (0)
+/chem/reaction/add H + H -> H2                      | Fix |  1.2e10 | 0
+/chem/reaction/add e_aq + H -> H2 + OHm             | Fix |  2.65e10 | 0
+/chem/reaction/add e_aq + e_aq -> H2 + OHm + OHm    | Fix |  0.5e10 | 0
+/chem/reaction/add H3Op + OHm -> H2O                | Fix |  1.43e11 | 0
+
+# partially diffusion-controlled (PDC)
+# | Fix |  reactionRate[dm3/(mol*s)] | PDC (1)
+/chem/reaction/add e_aq + OH -> OHm                 | Fix |  2.95e10 | 0
+/chem/reaction/add OH + OH -> H2O2                  | Fix |  0.44e10 | 0
+/chem/reaction/add e_aq + H2O2 -> OHm + OH          | Fix |  1.41e10 | 0
+/chem/reaction/add e_aq + H3Op -> H + H2O           | Fix |  2.11e10 | 0
+/chem/reaction/add OH + H -> H2O                    | Fix |  1.44e10 | 0
+
+/chem/reaction/print
+
 /primaryKiller/eLossMin 1 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 2 keV # event is aborted if deposited E is greated than this value
 #

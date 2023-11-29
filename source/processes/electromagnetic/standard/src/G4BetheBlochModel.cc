@@ -51,7 +51,6 @@
 // -------------------------------------------------------------------
 //
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,10 +67,9 @@
 #include "G4ICRU90StoppingData.hh"
 #include "G4Log.hh"
 #include "G4DeltaAngle.hh"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
 
 G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition*, 
                                      const G4String& nam)
@@ -88,8 +86,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BetheBlochModel::~G4BetheBlochModel()
-{}
+G4BetheBlochModel::~G4BetheBlochModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,20 +95,15 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p != particle) { SetupParameters(p); }
 
-  //G4cout << "G4BetheBlochModel::Initialise for " << p->GetParticleName()
-  //         << "  isIon= " << isIon 
-  //         << G4endl;
-
   // always false before the run
   SetDeexcitationFlag(false);
 
   // initialisation once
   if(nullptr == fParticleChange) {
     const G4String& pname = particle->GetParticleName();
-    if(IsMaster() && G4EmParameters::Instance()->UseICRU90Data() &&
+    if(G4EmParameters::Instance()->UseICRU90Data() &&
        (pname == "proton" || pname == "GenericIon" || pname == "alpha")) {
       fICRU90 = nist->GetICRU90StoppingData();
-      fICRU90->Initialise();
     }
     if(particle->GetPDGCharge() > CLHEP::eplus ||
        pname == "GenericIon") { isIon = true; } 
@@ -122,17 +114,22 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
       SetAngularDistribution(new G4DeltaAngle());
     }
   }
+  // initialisation for each new run
+  if(IsMaster() && nullptr != fICRU90) {
+    fICRU90->Initialise();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BetheBlochModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                                  const G4Material* mat,
-                                                 G4double kineticEnergy)
+                                                 G4double kinEnergy)
 {
   // this method is called only for ions, so no check if it is an ion
-  return 
-    (!isAlpha) ? corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy) : 1.0;
+  if(isAlpha) { return 1.0; }
+  chargeSquare = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
+  return chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,7 +139,7 @@ G4double G4BetheBlochModel::GetParticleCharge(const G4ParticleDefinition* p,
                                               G4double kineticEnergy)
 {
   // this method is called only for ions, so no check if it is an ion
-  return corr->GetParticleCharge(p,mat,kineticEnergy);
+  return corr->GetParticleCharge(p, mat, kineticEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -153,10 +150,10 @@ void G4BetheBlochModel::SetupParameters(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   G4double q = particle->GetPDGCharge()*inveplus;
-  if(!isIon && q > 1.1) { isIon = true; } 
+  isIon = (!isAlpha && q > 1.1); 
   chargeSquare = q*q;
   ratio = electron_mass_c2/mass;
-  static const G4double aMag = 1./(0.5*eplus*CLHEP::hbar_Planck*CLHEP::c_squared);
+  constexpr G4double aMag = 1./(0.5*eplus*CLHEP::hbar_Planck*CLHEP::c_squared);
   G4double magmom = particle->GetPDGMagneticMoment()*mass*aMag;
   magMoment2 = magmom*magmom - 1.0;
   formfact = 0.0;
@@ -186,12 +183,13 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
 G4double 
 G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
                                                   G4double kineticEnergy,
-                                                  G4double cutEnergy,
+                                                  G4double cut,
                                                   G4double maxKinEnergy)        
 {
   G4double cross = 0.0;
-  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax, maxKinEnergy);
+  const G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  const G4double cutEnergy = std::min(std::min(cut,tmax), tlimit);
+  const G4double maxEnergy = std::min(tmax, maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -340,55 +338,58 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                              const G4DynamicParticle* dp,
-                                             const G4double& length,
+                                             const G4double& /*length*/,
                                              G4double& eloss)
 {
-  // no correction at the last step
-  const G4double preKinEnergy = dp->GetKineticEnergy();
-  if(eloss >= preKinEnergy) { return; }
+  // no correction for alpha
+  if(isAlpha) { return; }
 
+  // no correction at the last step or at small step
+  const G4double preKinEnergy = dp->GetKineticEnergy();
+  if(eloss >= preKinEnergy || eloss < preKinEnergy*0.05) { return; }
+
+  // corrections for all charged particles with Q > 1
   const G4ParticleDefinition* p = dp->GetDefinition();
   if(p != particle) { SetupParameters(p); }
-  if(isIon) {
-    const G4Material* mat = couple->GetMaterial();
-    G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.75);
+  if(!isIon) { return; }
 
-    const G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
-    GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-    const G4double qfactor =
-      q2*corr->EffectiveChargeCorrection(p,mat,e)/chargeSquare;
-    const G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
-    const G4double elossnew = eloss*qfactor + highOrder;
-    /*    
-    G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
-    << " eloss=" << eloss << " elossnew=" << elossnew 
-    << " qfactor= " << qfactor << " highOrder= " << highOrder << " (ratio=" 
-    << highOrder/eloss << ")" 
-    " q2= " << q2 << "  chargeSquare= " << chargeSquare << G4endl;
-    */
-    eloss = elossnew;
-  }
+  // effective energy and charge at a step
+  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
+  const G4Material* mat = couple->GetMaterial();
+  const G4double q20 = corr->EffectiveChargeSquareRatio(p, mat, preKinEnergy);
+  const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
+  const G4double qfactor = q2/q20;
+
+  /*    
+    G4cout << "G4BetheBlochModel::CorrectionsAlongStep: Epre(MeV)="
+    << preKinEnergy << " Eeff(MeV)=" << e
+    << " eloss=" << eloss << " elossnew=" << eloss*qfactor 
+    << " qfactor=" << qfactor << " Qpre=" << q20 
+    << p->GetParticleName() <<G4endl;
+  */
+  eloss *= qfactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
+void G4BetheBlochModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
                                           const G4MaterialCutsCouple* couple,
                                           const G4DynamicParticle* dp,
-                                          G4double minKinEnergy,
+                                          G4double cut,
                                           G4double maxEnergy)
 {
-  G4double kineticEnergy = dp->GetKineticEnergy();
-  const G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
-  const G4double maxKinEnergy = std::min(maxEnergy,tmax);
+  G4double kinEnergy = dp->GetKineticEnergy();
+  const G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(), kinEnergy);
+  const G4double minKinEnergy = std::min(cut, tmax);
+  const G4double maxKinEnergy = std::min(maxEnergy, tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 
   //G4cout << "G4BetheBlochModel::SampleSecondaries Emin= " << minKinEnergy
   //         << " Emax= " << maxKinEnergy << G4endl;
 
-  const G4double totEnergy = kineticEnergy + mass;
-  const G4double etot2     = totEnergy*totEnergy;
-  const G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
+  const G4double totEnergy = kinEnergy + mass;
+  const G4double etot2 = totEnergy*totEnergy;
+  const G4double beta2 = kinEnergy*(kinEnergy + 2.0*mass)/etot2;
 
   G4double deltaKinEnergy, f; 
   G4double f1 = 0.0;
@@ -428,7 +429,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     if(grej > 1.1) {
       G4cout << "### G4BetheBlochModel WARNING: grej= " << grej
              << "  " << dp->GetDefinition()->GetParticleName()
-             << " Ekin(MeV)= " <<  kineticEnergy
+             << " Ekin(MeV)= " <<  kinEnergy
              << " delEkin(MeV)= " << deltaKinEnergy
              << G4endl;
     }
@@ -446,7 +447,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   } else {
  
     G4double deltaMomentum =
-      sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+      std::sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
     G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
       (deltaMomentum * dp->GetTotalMomentum());
     cost = std::min(cost, 1.0);
@@ -459,7 +460,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   /*
     G4cout << "### G4BetheBlochModel " 
            << dp->GetDefinition()->GetParticleName()
-           << " Ekin(MeV)= " <<  kineticEnergy
+           << " Ekin(MeV)= " <<  kinEnergy
            << " delEkin(MeV)= " << deltaKinEnergy
            << " tmin(MeV)= " << minKinEnergy
            << " tmax(MeV)= " << maxKinEnergy
@@ -468,17 +469,16 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
            << G4endl;
   */
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = 
-    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  auto delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   vdp->push_back(delta);
 
   // Change kinematics of primary particle
-  kineticEnergy -= deltaKinEnergy;
+  kinEnergy -= deltaKinEnergy;
   G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
-  finalP               = finalP.unit();
+  finalP = finalP.unit();
   
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+  fParticleChange->SetProposedKineticEnergy(kinEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
 }
 

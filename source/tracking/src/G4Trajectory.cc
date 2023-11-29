@@ -33,28 +33,24 @@
 // --------------------------------------------------------------------
 
 #include "G4Trajectory.hh"
-#include "G4TrajectoryPoint.hh"
-#include "G4ParticleTable.hh"
-#include "G4AttDefStore.hh"
+
 #include "G4AttDef.hh"
+#include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
+#include "G4ParticleTable.hh"
+#include "G4TrajectoryPoint.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 
 // #define G4ATTDEBUG
 #ifdef G4ATTDEBUG
-#include "G4AttCheck.hh"
+#  include "G4AttCheck.hh"
 #endif
 
 G4Allocator<G4Trajectory>*& aTrajectoryAllocator()
 {
   G4ThreadLocalStatic G4Allocator<G4Trajectory>* _instance = nullptr;
   return _instance;
-}
-
-G4Trajectory::G4Trajectory()
-  : initialMomentum( G4ThreeVector() )
-{
 }
 
 G4Trajectory::G4Trajectory(const G4Track* aTrack)
@@ -74,7 +70,6 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
 }
 
 G4Trajectory::G4Trajectory(G4Trajectory& right)
-  : G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;
@@ -85,21 +80,17 @@ G4Trajectory::G4Trajectory(G4Trajectory& right)
   initialMomentum = right.initialMomentum;
   positionRecord = new G4TrajectoryPointContainer();
 
-  for(std::size_t i=0; i<right.positionRecord->size(); ++i)
-  {
-    G4TrajectoryPoint* rightPoint
-      = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
+  for (auto& i : *right.positionRecord) {
+    auto rightPoint = (G4TrajectoryPoint*)i;
     positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
   }
 }
 
 G4Trajectory::~G4Trajectory()
 {
-  if (positionRecord != nullptr)
-  {
-    for(std::size_t i=0; i<positionRecord->size(); ++i)
-    {
-      delete  (*positionRecord)[i];
+  if (positionRecord != nullptr) {
+    for (auto& i : *positionRecord) {
+      delete i;
     }
     positionRecord->clear();
     delete positionRecord;
@@ -122,81 +113,66 @@ void G4Trajectory::DrawTrajectory() const
   // ... or override with your own code here.
 }
 
-const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
+const std::map<G4String, G4AttDef>* G4Trajectory::GetAttDefs() const
 {
   G4bool isNew;
-  std::map<G4String,G4AttDef>* store
-    = G4AttDefStore::GetInstance("G4Trajectory",isNew);
-  if (isNew)
-  {
+  std::map<G4String, G4AttDef>* store = G4AttDefStore::GetInstance("G4Trajectory", isNew);
+  if (isNew) {
     G4String ID("ID");
-    (*store)[ID] = G4AttDef(ID,"Track ID","Physics","","G4int");
+    (*store)[ID] = G4AttDef(ID, "Track ID", "Physics", "", "G4int");
 
     G4String PID("PID");
-    (*store)[PID] = G4AttDef(PID,"Parent ID","Physics","","G4int");
+    (*store)[PID] = G4AttDef(PID, "Parent ID", "Physics", "", "G4int");
 
     G4String PN("PN");
-    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
+    (*store)[PN] = G4AttDef(PN, "Particle Name", "Physics", "", "G4String");
 
     G4String Ch("Ch");
-    (*store)[Ch] = G4AttDef(Ch,"Charge","Physics","e+","G4double");
+    (*store)[Ch] = G4AttDef(Ch, "Charge", "Physics", "e+", "G4double");
 
     G4String PDG("PDG");
-    (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
+    (*store)[PDG] = G4AttDef(PDG, "PDG Encoding", "Physics", "", "G4int");
 
     G4String IKE("IKE");
-    (*store)[IKE] = 
-      G4AttDef(IKE, "Initial kinetic energy",
-	       "Physics","G4BestUnit","G4double");
+    (*store)[IKE] = G4AttDef(IKE, "Initial kinetic energy", "Physics", "G4BestUnit", "G4double");
 
     G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Initial momentum",
-			      "Physics","G4BestUnit","G4ThreeVector");
+    (*store)[IMom] = G4AttDef(IMom, "Initial momentum", "Physics", "G4BestUnit", "G4ThreeVector");
 
     G4String IMag("IMag");
-    (*store)[IMag] = 
-      G4AttDef(IMag, "Initial momentum magnitude",
-	       "Physics","G4BestUnit","G4double");
+    (*store)[IMag] =
+      G4AttDef(IMag, "Initial momentum magnitude", "Physics", "G4BestUnit", "G4double");
 
     G4String NTP("NTP");
-    (*store)[NTP] = G4AttDef(NTP,"No. of points","Physics","","G4int");
-
+    (*store)[NTP] = G4AttDef(NTP, "No. of points", "Physics", "", "G4int");
   }
   return store;
 }
 
 std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto values = new std::vector<G4AttValue>;
 
-  values->push_back
-    (G4AttValue("ID",G4UIcommand::ConvertToString(fTrackID),""));
+  values->push_back(G4AttValue("ID", G4UIcommand::ConvertToString(fTrackID), ""));
 
-  values->push_back
-    (G4AttValue("PID",G4UIcommand::ConvertToString(fParentID),""));
+  values->push_back(G4AttValue("PID", G4UIcommand::ConvertToString(fParentID), ""));
 
-  values->push_back(G4AttValue("PN",ParticleName,""));
+  values->push_back(G4AttValue("PN", ParticleName, ""));
 
-  values->push_back
-    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
+  values->push_back(G4AttValue("Ch", G4UIcommand::ConvertToString(PDGCharge), ""));
 
-  values->push_back
-    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+  values->push_back(G4AttValue("PDG", G4UIcommand::ConvertToString(PDGEncoding), ""));
 
-  values->push_back
-    (G4AttValue("IKE",G4BestUnit(initialKineticEnergy,"Energy"),""));
+  values->push_back(G4AttValue("IKE", G4BestUnit(initialKineticEnergy, "Energy"), ""));
 
-  values->push_back
-    (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));
+  values->push_back(G4AttValue("IMom", G4BestUnit(initialMomentum, "Energy"), ""));
 
-  values->push_back
-    (G4AttValue("IMag",G4BestUnit(initialMomentum.mag(),"Energy"),""));
+  values->push_back(G4AttValue("IMag", G4BestUnit(initialMomentum.mag(), "Energy"), ""));
 
-  values->push_back
-    (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));
+  values->push_back(G4AttValue("NTP", G4UIcommand::ConvertToString(GetPointEntries()), ""));
 
 #ifdef G4ATTDEBUG
-  G4cout << G4AttCheck(values,GetAttDefs());
+  G4cout << G4AttCheck(values, GetAttDefs());
 #endif
 
   return values;
@@ -204,10 +180,9 @@ std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 
 void G4Trajectory::AppendStep(const G4Step* aStep)
 {
-  positionRecord->push_back( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
-                                                   GetPosition()) );
+  positionRecord->push_back(new G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition()));
 }
-  
+
 G4ParticleDefinition* G4Trajectory::GetParticleDefinition()
 {
   return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
@@ -215,11 +190,11 @@ G4ParticleDefinition* G4Trajectory::GetParticleDefinition()
 
 void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
-  if(secondTrajectory == nullptr) return;
+  if (secondTrajectory == nullptr) return;
 
-  G4Trajectory* seco = (G4Trajectory*)secondTrajectory;
+  auto seco = (G4Trajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
-  for(G4int i=1; i<ent; ++i) // initial pt of 2nd trajectory shouldn't be merged
+  for (G4int i = 1; i < ent; ++i)  // initial pt of 2nd trajectory shouldn't be merged
   {
     positionRecord->push_back((*(seco->positionRecord))[i]);
   }

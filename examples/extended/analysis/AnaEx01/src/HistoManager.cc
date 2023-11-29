@@ -38,26 +38,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
- : fFactoryOn(false)
-{}
+{
+  // Create or get analysis manager
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetDefaultFileType("root");
+    // the default file type can be overriden in run macro
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{}
+HistoManager::~HistoManager() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::Book()
 {
   // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   if ( ! fFactoryOn ) {
     //
-    analysisManager->SetDefaultFileType("root");
     analysisManager->SetVerboseLevel(1);
     // Only merge in MT mode to avoid warning when running in Sequential mode
   #ifdef G4MULTITHREADED
@@ -123,7 +123,7 @@ void HistoManager::Book()
 
 void HistoManager::Save()
 {
-  if (! fFactoryOn) return;
+  if (! fFactoryOn) { return; }
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
@@ -146,7 +146,8 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   auto h1 = analysisManager->GetH1(ih);
-  if (h1) h1->scale(fac);
+  if (h1 != nullptr) { h1->scale(fac);
+}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,7 +170,7 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
 
 void HistoManager::PrintStatistic()
 {
-  if (! fFactoryOn) return;
+  if (! fFactoryOn) { return; }
 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
@@ -179,8 +180,8 @@ void HistoManager::PrintStatistic()
     auto h1 = analysisManager->GetH1(i);
 
     G4String unitCategory;
-    if (name[0U] == 'E' ) unitCategory = "Energy";
-    if (name[0U] == 'L' ) unitCategory = "Length";
+    if (name[0U] == 'E' ) { unitCategory = "Energy"; }
+    if (name[0U] == 'L' ) { unitCategory = "Length"; }
          // we use an explicit unsigned int type for operator [] argument
          // to avoid problems with windows compiler
 

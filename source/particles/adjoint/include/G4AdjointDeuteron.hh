@@ -54,7 +54,7 @@ class G4AdjointDeuteron : public G4AdjointIons
  private:
    static G4AdjointDeuteron* theInstance;
    G4AdjointDeuteron(){}
-   ~G4AdjointDeuteron(){}
+   ~G4AdjointDeuteron() override= default;
 
  public:
    static G4AdjointDeuteron* Definition();

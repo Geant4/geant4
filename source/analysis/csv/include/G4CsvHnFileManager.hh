@@ -45,12 +45,12 @@ class G4CsvHnFileManager : public G4VTHnFileManager<HT>
     explicit G4CsvHnFileManager(G4CsvFileManager* fileManger)
       : G4VTHnFileManager<HT>(), fFileManager(fileManger) {}
     G4CsvHnFileManager() = delete;
-    virtual ~G4CsvHnFileManager() = default;
+    ~G4CsvHnFileManager() override = default;
 
     // Methods for writing objects
-    virtual G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
+    G4bool WriteExtra(HT* ht, const G4String& htName, const G4String& fileName) final;
     // Write to the default file  (handled with OpenFile()/CloseFile methods)
-    virtual G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
+    G4bool Write(HT* ht, const G4String& htName, G4String& fileName) final;
 
   private:
     // Methods

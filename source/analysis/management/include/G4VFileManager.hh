@@ -53,7 +53,7 @@ class G4VFileManager : public G4BaseFileManager
   public:
     explicit G4VFileManager(const G4AnalysisManagerState& state);
     G4VFileManager() = delete;
-    virtual ~G4VFileManager() = default;
+    ~G4VFileManager() override = default;
 
     // Method to open default file
     virtual G4bool OpenFile(const G4String& fileName) = 0;
@@ -65,6 +65,7 @@ class G4VFileManager : public G4BaseFileManager
     virtual G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) = 0;
 
     // Methods applied to all registered files
+    virtual G4bool OpenFiles() = 0;
     virtual G4bool WriteFiles() = 0;
     virtual G4bool CloseFiles() = 0;
     virtual G4bool DeleteEmptyFiles() = 0;
@@ -73,7 +74,7 @@ class G4VFileManager : public G4BaseFileManager
     virtual void Clear() = 0;
 
     // Methods for handling files and directories names
-    virtual G4bool SetFileName(const G4String& fileName) final;
+    G4bool SetFileName(const G4String& fileName) final;
     virtual G4bool SetHistoDirectoryName(const G4String& dirName);
     virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
 
@@ -83,6 +84,7 @@ class G4VFileManager : public G4BaseFileManager
     G4bool IsOpenFile() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
+    G4int GetCycle() const;
 
     // Access to helpers
     template <typename HT>
@@ -122,6 +124,9 @@ inline G4String G4VFileManager::GetHistoDirectoryName() const
 
 inline G4String G4VFileManager::GetNtupleDirectoryName() const
 { return fNtupleDirectoryName; }
+
+inline G4int G4VFileManager::GetCycle() const
+{ return fState.GetCycle(); }
 
 template <>
 inline

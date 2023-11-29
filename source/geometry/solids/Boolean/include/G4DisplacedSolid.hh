@@ -44,7 +44,7 @@
 
 class G4DisplacedSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4DisplacedSolid( const G4String& pName,
                             G4VSolid* pSolid ,
@@ -60,52 +60,49 @@ class G4DisplacedSolid : public G4VSolid
                       const G4AffineTransform directTransform );
       // For use in instantiating a transient instance from a persistent one.
 
-    virtual ~G4DisplacedSolid() ;
+    ~G4DisplacedSolid() override ;
 
-  public:  // without description 
+    EInside Inside( const G4ThreeVector& p ) const override ; 
 
-    // It also has all the methods that a solid requires, eg.
-
-    EInside Inside( const G4ThreeVector& p ) const ; 
-
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const ;
+                                 G4double& pMin, G4double& pMax) const override ;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const ;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const override ;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v  ) const ;
+                           const G4ThreeVector& v  ) const override ;
 
-    G4double DistanceToIn( const G4ThreeVector& p) const ;
+    G4double DistanceToIn( const G4ThreeVector& p) const override ;
 
     G4double DistanceToOut( const G4ThreeVector& p,
                             const G4ThreeVector& v,
                             const G4bool calcNorm=false,
-                                  G4bool *validNorm=0,
-                                  G4ThreeVector *n=0      ) const ;
+                                  G4bool *validNorm=nullptr,
+                                  G4ThreeVector *n=nullptr ) const override ;
 
-    G4double DistanceToOut( const G4ThreeVector& p ) const ;
+    G4double DistanceToOut( const G4ThreeVector& p ) const override ;
 
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep ) ;
+                            const G4VPhysicalVolume* pRep ) override ;
 
     void CleanTransformations();
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-  public:  // with description 
+    G4ThreeVector GetPointOnSurface() const override;
 
-    G4GeometryType  GetEntityType() const;
-    G4VSolid* Clone() const;
+    G4GeometryType  GetEntityType() const override;
+    G4VSolid* Clone() const override;
 
-    const G4DisplacedSolid* GetDisplacedSolidPtr() const;
-          G4DisplacedSolid* GetDisplacedSolidPtr();
+    const G4DisplacedSolid* GetDisplacedSolidPtr() const override;
+          G4DisplacedSolid* GetDisplacedSolidPtr() override;
       // If the Solid is a "G4DisplacedSolid",
       // return a self pointer else return 0.
 
@@ -132,9 +129,7 @@ class G4DisplacedSolid : public G4VSolid
     void SetObjectTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the object.
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4DisplacedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -145,9 +140,9 @@ class G4DisplacedSolid : public G4VSolid
     G4DisplacedSolid& operator=(const G4DisplacedSolid& rhs);
       // Copy constructor and assignment operator.
 
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4Polyhedron* CreatePolyhedron () const ;
-    G4Polyhedron* GetPolyhedron () const ;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override ;
+    G4Polyhedron* CreatePolyhedron () const override ;
+    G4Polyhedron* GetPolyhedron () const override ;
       // For creating graphical representations (ie for visualisation).
 
   protected:

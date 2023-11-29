@@ -80,19 +80,24 @@ AtRestGetPhysicalInteractionLength( const G4Track& track,
   // get mean life time
   currentInteractionLength = GetMeanLifeTime(track, condition);
 
+  G4double time = (currentInteractionLength < DBL_MAX) ?
+    theNumberOfInteractionLengthLeft * currentInteractionLength : DBL_MAX;
+ 
 #ifdef G4VERBOSE
   if ((currentInteractionLength <0.0) || (verboseLevel>2))
   {
+    G4double t = (currentInteractionLength < DBL_MAX) ?
+      currentInteractionLength/ns : DBL_MAX; 
     G4cout << "G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength() - ";
     G4cout << "[ " << GetProcessName() << "]" << G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]"
+    G4cout << "MeanLifeTime = " << t << " [ns]"
            << G4endl;
   }
 #endif
 
-  return theNumberOfInteractionLengthLeft * currentInteractionLength;
+  return time;
 }
 
 // --------------------------------------------------------------------

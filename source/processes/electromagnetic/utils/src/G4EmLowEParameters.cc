@@ -68,8 +68,6 @@ G4EmLowEParameters::~G4EmLowEParameters()
 void G4EmLowEParameters::Initialise()
 {
   fluo = false;
-  beardenFluoDir = false;
-  fANSTOFluoDir = false;
   auger = false;
   pixe = false;
   deexIgnoreCut = false;
@@ -79,9 +77,10 @@ void G4EmLowEParameters::Initialise()
   dnaMsc = false;
   dnaElectronSolvation = fMeesungnoen2002eSolvation;
 
+  fFluoDirectory = fluoDefault;
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
-  livDataDir = "livermore";
+  livDataDir = "epics_2017";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -96,24 +95,32 @@ G4bool G4EmLowEParameters::Fluo() const
   return fluo;
 }
 
-void G4EmLowEParameters::SetBeardenFluoDir(G4bool val)
+G4EmFluoDirectory G4EmLowEParameters::FluoDirectory() const
 {
-  beardenFluoDir = val;
+  return fFluoDirectory;
 }
 
-G4bool G4EmLowEParameters::BeardenFluoDir() const
+void G4EmLowEParameters::SetFluoDirectory(G4EmFluoDirectory val)
 {
-  return beardenFluoDir;
+  fFluoDirectory = fluoDefault;
+  if(fluoBearden == val) { fFluoDirectory = fluoBearden; }
+  else if(fluoANSTO == val) { fFluoDirectory = fluoANSTO; }
+  else if(fluoXDB_EADL == val) { fFluoDirectory = fluoXDB_EADL; }
+}
+
+void G4EmLowEParameters::SetBeardenFluoDir(G4bool val)
+{
+  fFluoDirectory = val ? fluoBearden : fluoDefault;
 }
 
 void G4EmLowEParameters::SetANSTOFluoDir(G4bool val)
 {
-  fANSTOFluoDir = val;
+  fFluoDirectory = val ? fluoANSTO : fluoDefault;
 }
 
-G4bool G4EmLowEParameters::ANSTOFluoDir() const
+void G4EmLowEParameters::SetXDB_EADLFluoDir(G4bool val)
 {
-  return fANSTOFluoDir;
+  fFluoDirectory = val ? fluoXDB_EADL : fluoDefault;
 }
 
 void G4EmLowEParameters::SetAuger(G4bool val)
@@ -235,8 +242,8 @@ G4String G4EmLowEParameters::CheckRegion(const G4String& reg) const
 void G4EmLowEParameters::AddMicroElec(const G4String& region)
 {
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesME.size();
-  for(G4int i=0; i<nreg; ++i) {
+  std::size_t nreg =  m_regnamesME.size();
+  for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesME[i]) { return; }
   }
   m_regnamesME.push_back(r);
@@ -250,8 +257,8 @@ const std::vector<G4String>& G4EmLowEParameters::RegionsMicroElec() const
 void G4EmLowEParameters::AddDNA(const G4String& region, const G4String& type)
 {
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesDNA.size();
-  for(G4int i=0; i<nreg; ++i) {
+  std::size_t nreg =  m_regnamesDNA.size();
+  for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesDNA[i]) { return; }
   }
   m_regnamesDNA.push_back(r);
@@ -274,7 +281,7 @@ G4EmLowEParameters::SetDeexActiveRegion(const G4String& region, G4bool fdeex,
 {
   if(fdeex) { fluo = true; }
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesDeex.size();
+  std::size_t nreg =  m_regnamesDeex.size();
   if(0 == nreg && r != "DefaultRegionForTheWorld") {
     m_regnamesDeex.push_back("DefaultRegionForTheWorld");
     m_fluo.push_back(false);
@@ -282,7 +289,7 @@ G4EmLowEParameters::SetDeexActiveRegion(const G4String& region, G4bool fdeex,
     m_pixe.push_back(false);
     nreg = 1;
   }
-  for(G4int i=0; i<nreg; ++i) {
+  for(std::size_t i=0; i<nreg; ++i) {
     if(r == m_regnamesDeex[i]) { 
       m_fluo[i] = fdeex;
       m_auger[i]= fauger;
@@ -298,8 +305,8 @@ G4EmLowEParameters::SetDeexActiveRegion(const G4String& region, G4bool fdeex,
 
 void G4EmLowEParameters::DefineRegParamForDeex(G4VAtomDeexcitation* ptr) const
 {
-  G4int n = m_regnamesDeex.size();
-  for(G4int i=0; i<n; ++i) {
+  std::size_t n = m_regnamesDeex.size();
+  for(std::size_t i=0; i<n; ++i) {
     ptr->SetDeexcitationActiveRegion(m_regnamesDeex[i],
 				     m_fluo[i], m_auger[i], m_pixe[i]);
   }

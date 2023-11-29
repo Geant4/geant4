@@ -31,11 +31,11 @@ public:
 public:
   virtual bool stream(buffer& a_buffer) {
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     if(!parent::stream(a_buffer)) return false;
     if(!a_buffer.read(fClassName)) return false;
-    if(!a_buffer.check_byte_count(s,c,"TBranchObject")) return false;
+    if(!a_buffer.check_byte_count(_s,_c,"TBranchObject")) return false;
     return true;
   }
 public: //branch

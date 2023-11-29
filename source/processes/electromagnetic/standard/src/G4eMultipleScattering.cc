@@ -59,8 +59,7 @@ G4eMultipleScattering::G4eMultipleScattering(const G4String& processName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4eMultipleScattering::~G4eMultipleScattering()
-{}
+G4eMultipleScattering::~G4eMultipleScattering() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

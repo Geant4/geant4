@@ -46,16 +46,16 @@
 // ###                           SigmacZero                            ###
 // ######################################################################
 
-G4SigmacZero* G4SigmacZero::theInstance = 0;
+G4SigmacZero* G4SigmacZero::theInstance = nullptr;
 
 G4SigmacZero* G4SigmacZero::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "sigma_c0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -72,13 +72,13 @@ G4SigmacZero* G4SigmacZero::Definition()
                     1,              +1,             0,
                     2,              -1,             0,
              "baryon",               0,            +1,        4112,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,       "sigma_c");
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
+  auto  mode = new G4VDecayChannel*[1];
   // sigmac0 -> lambda_c+ + pi-
   mode[0] = new G4PhaseSpaceDecayChannel("sigma_c0",1.000,2,"lambda_c+","pi-");
 
@@ -87,7 +87,7 @@ G4SigmacZero* G4SigmacZero::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4SigmacZero*>(anInstance);
+  theInstance = static_cast<G4SigmacZero*>(anInstance);
   return theInstance;
 }
 

@@ -46,16 +46,16 @@
 // ###                      AntiOmegabMinus                           ###
 // ######################################################################
 
-G4AntiOmegabMinus* G4AntiOmegabMinus::theInstance = 0;
+G4AntiOmegabMinus* G4AntiOmegabMinus::theInstance = nullptr;
 
 G4AntiOmegabMinus* G4AntiOmegabMinus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "anti_omega_b-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -72,10 +72,10 @@ G4AntiOmegabMinus* G4AntiOmegabMinus::Definition()
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -5332,
-                false,     1.640e-3*ns,          NULL,
+                false,     1.640e-3*ns,          nullptr,
                 false,       "omega_b");
   }
-  theInstance = reinterpret_cast<G4AntiOmegabMinus*>(anInstance);
+  theInstance = static_cast<G4AntiOmegabMinus*>(anInstance);
   return theInstance;
 }
 

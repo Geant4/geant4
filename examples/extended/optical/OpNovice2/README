@@ -9,7 +9,8 @@
 
     Investigate optical properties and parameters. Details of optical
     photon boundary interactions on a surface are recorded. Details 
-    of optical photon generation and transport are recorded.
+    of optical photon generation and transport are recorded. Group velocity
+    may be examined.
 
 	
  1- GEOMETRY DEFINITION
@@ -75,7 +76,8 @@
 
  6- RESULTS
 
- A table of optical photon events is printed at the end of the run.	
+ A table of optical photon events is printed at the end of the run.
+ Group velocity is printed with /tracking/verbose 1 or higher.
      	
  7- HISTOGRAMS
  
@@ -99,10 +101,15 @@
    17 : X momentum dir of Fresnel-refracted photons
    18 : Y momentum dir of Fresnel-refracted photons
    19 : Z momentum dir of Fresnel-refracted photons
-   20 : fraction of photons transmitted at surface
-   21 : fraction of photons reflected at surface
+   20 : fraction of photons refracted (i.e. Fresnel transmission)
+   21 : fraction of photons Fresnel-reflected
+   22 : fraction of photons total internal reflected (TIR)
+   23 : fraction of photons reflected (Fresnel reflection plus TIR)
+   24 : fraction of photons absorbed at surface
+   25 : fraction of photons "transmitted" (i.e. TRANSMITTANCE material property)
+   26 : fraction of photons spike-reflected
 
- Histograms 11-19 are recorded for photons scattered from the +X
+ Histograms 11-26 are recorded for photons scattered from the +X
  surface of the cube. Only the first interaction is recorded.  
 
  The histograms are managed by G4Analysis classes. 
@@ -123,15 +130,18 @@
  8- MACROS
 
  Several macros are included.
- boundary.mac: Set the surface to the various types and configurations of
+ - boundary.mac: Set the surface to the various types and configurations of
                model, type, etc., shoot optical photons, and record statistics
- electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
- fresnel.mac:  Shoot optical photons of fixed polarization and random direction
+ - coated.mac: To show reflection/refraction from thin film coating
+ - electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
+ - fresnel.mac:  Shoot optical photons of fixed polarization and random direction
                at a surface, and plot reflectance/transmittance vs incident
                angle.
- OpNovice2.mac: Shoot an optical photon inside a box.
- scint_by_particle.mac: Configure scintillation to have particle-specific
+ - complexRindex.mac: Use a dielectric-metal surface with a complex index of
+               refraction.
+ - OpNovice2.mac: Shoot an optical photon inside a box.
+ - scint_by_particle.mac: Configure scintillation to have particle-specific
                yields and yield ratios. Shoot different types of particles.
- vis.mac:      Configure visualization.
- wls.mac:      Configure two wavelength-shifting processes, and shoot optical
+ - vis.mac:    Configure visualization.
+ - wls.mac:    Configure two wavelength-shifting processes, and shoot optical
                photons.

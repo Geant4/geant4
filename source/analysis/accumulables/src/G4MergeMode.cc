@@ -32,18 +32,17 @@ namespace G4Accumulables
 {
 
 //_____________________________________________________________________________
-G4MergeMode GetMergeMode(const G4String& mergeModeName) {
-  if      ( mergeModeName == "+" )     { return G4MergeMode::kAddition; }
-  else if ( mergeModeName == "*" )     { return G4MergeMode::kMultiplication; }
-  else {
-    G4ExceptionDescription description;
-    description
-      << "\"" << mergeModeName << "\" merge mode is not supported." << G4endl
-      << "Addition will be applied.";
-    G4Exception("G4Analysis::GetMergeMode",
-                "Analysis_W001", JustWarning, description);
-    return G4MergeMode::kAddition;
-  }
+G4MergeMode GetMergeMode(const G4String& mergeModeName)
+{
+  if (mergeModeName == "+") return G4MergeMode::kAddition;
+  if (mergeModeName == "*") return G4MergeMode::kMultiplication;
+
+  G4ExceptionDescription description;
+  description << "\"" << mergeModeName << "\" merge mode is not supported." << G4endl
+              << "Addition will be applied.";
+  G4Exception("G4Analysis::GetMergeMode", "Analysis_W001", JustWarning, description);
+  return G4MergeMode::kAddition;
 }
 
 }
+

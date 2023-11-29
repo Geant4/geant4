@@ -102,6 +102,8 @@
 #include "moc_G4OpenInventorQtExaminerViewer.cpp"
 #endif
 
+#define G4warn G4cout
+
 G4OpenInventorQtExaminerViewer* G4OpenInventorQtExaminerViewer::viewer = 0;
 
 #define MIN_SPEED  2.1        // Lower number means faster
@@ -896,8 +898,7 @@ void G4OpenInventorQtExaminerViewer::superimpositionEvent(SoAction * action)
          curInfoFont->name.setValue("defaultFont:Bold");
          char zPos[20];
          // FWJ need a better format here
-         sprintf(zPos, "%-7.2f [m]", refZPositions[refParticleIdx] / 1000);
-         // sprintf(zPos, "%7.2f [m]", refZPositions[refParticleIdx] / 1000);
+         snprintf(zPos, sizeof zPos, "%-7.2f [m]", refZPositions[refParticleIdx] / 1000);
          curInfoText->string.setValue(SbString(zPos));
       }
    }
@@ -922,7 +923,7 @@ bool G4OpenInventorQtExaminerViewer::loadViewPts()
    // Converts data from string type into necessary types
    while (getline(fileIn, token)) {
 
-      int end = token.find_last_not_of(' '); // Remove padded spaces
+      std::size_t end = token.find_last_not_of(' '); // Remove padded spaces
       token = token.substr(0, end + 1);
 
       char *vpName = new char[token.size() + 1];
@@ -1043,7 +1044,7 @@ void G4OpenInventorQtExaminerViewer::moveCamera(float dist, bool lookdown)
       if (refParticleIdx < 0) {
          prevPt = refParticleTrajectory[refParticleIdx + step];
          dist = (prevPt - cam->position.getValue()).length();
-         refParticleIdx = refParticleTrajectory.size() - 2;
+         refParticleIdx = (int) refParticleTrajectory.size() - 2;
       }
 
       // Set start and end points
@@ -1178,9 +1179,9 @@ void G4OpenInventorQtExaminerViewer::pickingCB(void *aThis,
             }
 
             if(coords == NULL) {
-               G4cout << "Could not find the coordinates node"
+               G4warn << "Could not find the coordinates node"
                   " for the picked trajectory." << G4endl;
-               G4cout << " Reference trajectory not set" << G4endl;
+               G4warn << " Reference trajectory not set" << G4endl;
                return;
             }
             // FWJ DEBUG
@@ -1202,7 +1203,7 @@ void G4OpenInventorQtExaminerViewer::pickingCB(void *aThis,
 
                std::string strTrajPoint = "G4TrajectoryPoint:";
                std::ostringstream oss;
-               for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+               for (std::size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
                   G4cout << G4AttCheck(attHolder->GetAttValues()[i],
                                        attHolder->GetAttDefs()[i]);
                   oss << G4AttCheck(attHolder->GetAttValues()[i],
@@ -1223,11 +1224,11 @@ void G4OpenInventorQtExaminerViewer::pickingCB(void *aThis,
             } else {
                G4String name((char*)node->getName().getString());
                G4String cls((char*)node->getTypeId().getName().getString());
-               G4cout << "SoNode : " << node
+               G4warn << "SoNode : " << node
                       << " SoType : " << cls
                       << " name : " << name
                       << G4endl;
-               G4cout << "No attributes attached." << G4endl;
+               G4warn << "No attributes attached." << G4endl;
             }
 
             return;
@@ -1243,18 +1244,18 @@ void G4OpenInventorQtExaminerViewer::pickingCB(void *aThis,
       // Default behavior in G4OpenInventorViewer::SelectionCB
       G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
       if(attHolder && attHolder->GetAttDefs().size()) {
-         for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+         for (std::size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
             G4cout << G4AttCheck(attHolder->GetAttValues()[i],
                                  attHolder->GetAttDefs()[i]);
          }
       } else {
          G4String name((char*)node->getName().getString());
          G4String cls((char*)node->getTypeId().getName().getString());
-         G4cout << "SoNode : " << node
+         G4warn << "SoNode : " << node
                 << " SoType : " << cls
                 << " name : " << name
                 << G4endl;
-         G4cout << "No attributes attached." << G4endl;
+         G4warn << "No attributes attached." << G4endl;
       }
 
       //Suppress other event handlers
@@ -1292,8 +1293,8 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
          SoGetBoundingBoxAction bAction(viewportRegion);
          bAction.apply((SoFullPath*)path);
          SbBox3f bBox = bAction.getBoundingBox();
-         SbVec3f center = bBox.getCenter();
-         center.getValue(x,y,z);
+         SbVec3f centr = bBox.getCenter();
+         centr.getValue(x,y,z);
          ssZPos << "Pos:  " << x << "  " << y << "  " << z;
 
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
@@ -1303,7 +1304,7 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                attHolder->GetAttDefs();
             std::vector<const std::vector<G4AttValue>*> vecVals =
                attHolder->GetAttValues();
-            for (size_t i = 0; i < vecDefs.size(); ++i) {
+            for (std::size_t i = 0; i < vecDefs.size(); ++i) {
                const std::vector<G4AttValue> * vals = vecVals[i];
 
                std::vector<G4AttValue>::const_iterator iValue;
@@ -1337,7 +1338,7 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
             std::string strTrajPoint = "G4TrajectoryPoint:";
             std::ostringstream oss;
             G4String t1, t1Ch, t2, t3, t4;
-            for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
+            for (std::size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
                // G4cout << "Getting index " << i << " from attHolder" << G4endl;
                // No, returns a vector!
                //   G4AttValue* attValue = attHolder->GetAttValues()[i];
@@ -1375,7 +1376,7 @@ void G4OpenInventorQtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                   if (valueName == "IKE") t3 = "KE " + value;
                   if (valueName == "IMom") {
                      // Remove units
-                     unsigned ipos = value.rfind(" ");
+                     std::size_t ipos = value.rfind(" ");
                      G4String value1 = value;
                      value1.erase(ipos);
                      t3 += "    P (" + value1 + ")";
@@ -1476,7 +1477,7 @@ void G4OpenInventorQtExaminerViewer::incSpeed() {
       animateBtwPtsPeriod = 0.0;
 
    if (currentState != PAUSED_ANIMATION) {
-      int lastIdx = refParticleTrajectory.size() - 1;
+      int lastIdx = (int) refParticleTrajectory.size() - 1;
       if (refParticleIdx < lastIdx && !animateSensor->isScheduled())
          animateRefParticle();
    }
@@ -1604,14 +1605,14 @@ void G4OpenInventorQtExaminerViewer::findAndSetRefPath()
          SoFullPath *path = (SoFullPath *)pathList[i];
 
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(path->getTail());
-         for (size_t j = 0; j < attHolder->GetAttDefs().size(); ++j) {
+         for (std::size_t j = 0; j < attHolder->GetAttDefs().size(); ++j) {
             std::ostringstream oss;
             oss << G4AttCheck(attHolder->GetAttValues()[j],
                               attHolder->GetAttDefs()[j]);
 
             std::string findStr = "Type of trajectory (Type): ";
             std::string compareValue = "REFERENCE";
-            size_t idx = oss.str().find(findStr);
+            std::size_t idx = oss.str().find(findStr);
 
             if(idx != std::string::npos) {
                if(oss.str().substr(idx + findStr.size(),
@@ -1847,7 +1848,7 @@ void G4OpenInventorQtExaminerViewer::distanceToTrajectory(const SbVec3f &q,
    //
    //    --PLG
 
-   const size_t count = refParticleTrajectory.size();
+   const std::size_t count = refParticleTrajectory.size();
    assert(count>0);
 
    SbVec3f b = refParticleTrajectory[0];
@@ -1855,7 +1856,7 @@ void G4OpenInventorQtExaminerViewer::distanceToTrajectory(const SbVec3f &q,
    float sqrDist = sqrlen(dbq);
    closestPoint = b;
    index = 0;
-   for (size_t i = 1; i < count; ++i) {
+   for (std::size_t i = 1; i < count; ++i) {
       const SbVec3f a = b;
       const SbVec3f daq = dbq;
       b = refParticleTrajectory[i];
@@ -1894,7 +1895,7 @@ void G4OpenInventorQtExaminerViewer::distanceToTrajectory(const SbVec3f &q,
       if (current_dist < sqrDist) {
          sqrDist = current_dist;
          closestPoint = a + t*(b-a);
-         index = i;
+         index = (int) i;
       }
    }
 
@@ -2030,8 +2031,8 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
 
    elementField = value;
 
-   int idx = elementField.find_last_of("[");
-   if(idx == -1)
+   std::size_t idx = elementField.find_last_of("[");
+   if(idx == std::string::npos)
       idx = elementField.size(); //if "[" not found for whatever reason (list not sorted)
    else
       idx--; // To get rid of the space that is between the name and '['
@@ -2040,7 +2041,8 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
    SoFullPath *path;
    SoSearchAction search;
    SoNode *root = getSceneManager()->getSceneGraph();
-   int counter, idxUnderscore = elementField.find_last_of("_");
+   int counter;
+   std::size_t idxUnderscore = elementField.find_last_of("_");
 
    parseString<int>(counter, 
                           elementField.substr(idxUnderscore + 1, idx), error);
@@ -2085,7 +2087,7 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
          SbVec3f p;
 
          float absLengthNow, absLengthMin;
-         int maxIdx = refParticleTrajectory.size() - 2;
+         int maxIdx = (int) refParticleTrajectory.size() - 2;
          int targetIdx = 0;
          SbVec3f dir;
 
@@ -2255,9 +2257,9 @@ void G4OpenInventorQtExaminerViewer::evenOutRefParticlePts()
    float totalDistBtwPts = 0;
    std::vector<SbVec3f> newRefParticleTrajectory;
    SbVec3f refPoint;
-   int size = refParticleTrajectory.size() - 1;
+   std::size_t size = refParticleTrajectory.size() - 1;
    int numOfPts = 0;
-   for (int i = 0; i < size; i++) {
+   for (std::size_t i = 0; i < size; ++i) {
       p1 = refParticleTrajectory[i];
       p2 = refParticleTrajectory[i + 1];
       if (p1 == p2)
@@ -2273,7 +2275,7 @@ void G4OpenInventorQtExaminerViewer::evenOutRefParticlePts()
    //	float maxDistAllowed = 1.25 * avgDistBtwPts; // Pts tend to be close not far
 
    float x, y, z;
-   int i = 0, j = 0;
+   std::size_t i = 0, j = 0;
    while (i < size) {
       p1 = refParticleTrajectory[i];
       p2 = refParticleTrajectory[i + 1];
@@ -2615,10 +2617,10 @@ void G4OpenInventorQtExaminerViewer::sceneChangeCB(void* userData, SoSensor*)
 
 void G4OpenInventorQtExaminerViewer::addViewPoints()
 {
-   int size = viewPtList.size();
+   std::size_t size = viewPtList.size();
    if (!size) return;
 
-   for (int i = 0; i < size; i++) {
+   for (std::size_t i = 0; i < size; ++i) {
       new QListWidgetItem(viewPtList[i].viewPtName,
                           AuxWindowDialog->listWidget); 
    }
@@ -2752,7 +2754,7 @@ G4OpenInventorQtExaminerViewer::ToolsAnimateRefParticleCB()
    //   G4cout << "Tools: Animate Ref Particle CALLBACK" << G4endl;
    if (!refParticleTrajectory.size()) {
       returnToAnim = true;
-      G4cout << "No Reference Trajectory" << G4endl;
+      G4warn << "No Reference Trajectory" << G4endl;
       return;
    }
 
@@ -3005,7 +3007,7 @@ void G4OpenInventorQtExaminerViewer::setViewPt()
 
    SoCamera * camera = getCamera();
    if (camera == NULL) {
-      G4cout << "setViewPt: Camera is null. Unable to set the viewpoint." <<
+      G4warn << "setViewPt: Camera is null. Unable to set the viewpoint." <<
          G4endl;
       //      String dialogName = (char *) "Missing Camera Node";
       //      std::string msg = "Camera is null. Unable to set the viewpoint.";
@@ -3014,7 +3016,7 @@ void G4OpenInventorQtExaminerViewer::setViewPt()
    }
 
    if (!viewPtList.size()) {
-      G4cout << "setViewPt: There are no viewpoints to load." << G4endl;
+      G4warn << "setViewPt: There are no viewpoints to load." << G4endl;
       //      String dialogName = (char *) "Missing Viewpoints";
       //      std::string msg = "There are no viewpoints to load.";
       //      warningMsgDialog(msg, dialogName, NULL);
@@ -3095,7 +3097,7 @@ void G4OpenInventorQtExaminerViewer::PrevViewPtCB()
 
    if (!viewPtList.size()) return;
    if (viewPtIdx == 0)
-      viewPtIdx = viewPtList.size() - 1;
+      viewPtIdx = (int) viewPtList.size() - 1;
    else
       viewPtIdx--;
 
@@ -3197,7 +3199,7 @@ void G4OpenInventorQtExaminerViewer::DeleteBookmarkCB()
 void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
 {
    std::string line;
-   int end;
+   std::size_t end;
    fileIn.open(fileName.c_str());
    std::ofstream out("temporaryFile.txt");
 
@@ -3226,8 +3228,8 @@ void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
       }
    }
 
-   int idx = 0; // Remove viewpoint from the vector
-   int size = viewPtList.size();
+   std::size_t idx = 0; // Remove viewpoint from the vector
+   std::size_t size = viewPtList.size();
    while (idx < size) {
       if (!strcmp(viewPtList[idx].viewPtName, vpName)) {
          viewPtList.erase(viewPtList.begin() + idx);
@@ -3266,7 +3268,7 @@ void G4OpenInventorQtExaminerViewer::deleteViewPt(char *vpName)
    fileOut.seekp(0, std::ios::end);
 
    if (!viewPtList.size()) { // viewPtList is empty
-      curViewPtName = (char *) "";
+      curViewPtName = (char *) empty.c_str();
       scheduleRedraw();
    } else {
       if (viewPtIdx >= (int) viewPtList.size())
@@ -3308,8 +3310,8 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
    char* newname = new char[nVPName];
    newname = strdup(qPrintable(newnamein));
 
-   int size = viewPtList.size();
-   for (int i = 0; i < size; i++) {
+   std::size_t size = viewPtList.size();
+   for (std::size_t i = 0; i < size; ++i) {
       if (!strcmp(newname, viewPtList[i].viewPtName)) {
          QMessageBox msgbox;
          msgbox.setFont(*font);
@@ -3332,8 +3334,8 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
 
 void G4OpenInventorQtExaminerViewer::renameViewPt(char *vpName)
 {
-   int idx = 0, end, pos;
-   int size = viewPtList.size();
+   std::size_t idx = 0, end, pos;
+   std::size_t size = viewPtList.size();
    std::string line, newName;
    fileIn.open(fileName.c_str());
 
@@ -3416,7 +3418,7 @@ void G4OpenInventorQtExaminerViewer::sortViewPts(std::vector<std::string> sorted
 {
    SbVec3f axis;
    float x, y, z, angle;
-   int sortIdx = 0, unsortIdx = 0;
+   std::size_t sortIdx = 0, unsortIdx = 0;
 
    if (fileOut.is_open())
       fileOut.close();
@@ -3425,7 +3427,7 @@ void G4OpenInventorQtExaminerViewer::sortViewPts(std::vector<std::string> sorted
 
    writeViewPtIdx();
 
-   int size = sortedViewPts.size();
+   std::size_t size = sortedViewPts.size();
    while (sortIdx < size) {
       while (strcmp(sortedViewPts[sortIdx].c_str(),
                     viewPtList[unsortIdx].viewPtName))
@@ -3461,8 +3463,10 @@ void G4OpenInventorQtExaminerViewer::sortViewPts(std::vector<std::string> sorted
    }
 }
 
-
+// Needed to implement mouse wheel zoom direction change.
+// Does not work with MacOS trackpad: use Coin3d default handler.
 // Emulating private method SoGuiFullViewerP::zoom()
+#ifndef __APPLE__
 void
 G4OpenInventorQtExaminerViewer::zoom(const float diffvalue)
 {
@@ -3485,7 +3489,7 @@ G4OpenInventorQtExaminerViewer::zoom(const float diffvalue)
       oc->height = oc->height.getValue() * multiplicator;
    }
 }
-
+#endif
 
 // Handling mouse and keyboard events
 
@@ -3499,6 +3503,9 @@ G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
    SoCamera *cam = getCamera();
    const SoType type(ev->getTypeId());
 
+// Needed to implement mouse wheel zoom direction change.
+// Does not work with MacOS trackpad: use Coin3d default handler.
+#ifndef __APPLE__
    if (type.isDerivedFrom(SoMouseButtonEvent::getClassTypeId())) {
       SoMouseButtonEvent * me = (SoMouseButtonEvent *) ev;
 
@@ -3522,15 +3529,16 @@ G4OpenInventorQtExaminerViewer::processSoEvent(const SoEvent* const ev)
                return TRUE;
             }
             break;
+
          default:
             break;
-         }
+      }
          //      }
       if (currentState == GENERAL) {
 
       }
    }
-
+#endif
 
    if (type.isDerivedFrom(SoKeyboardEvent::getClassTypeId())) {
       SoKeyboardEvent* ke = (SoKeyboardEvent*)ev;

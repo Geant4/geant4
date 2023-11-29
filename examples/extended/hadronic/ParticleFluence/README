@@ -1,0 +1,44 @@
+
+        ParticleFluence set-ups
+        -----------------------
+
+Sphere
+------
+This set-up consists of a full solid target sphere - whose radius and
+material can be set via UI commands.
+The primary particle is shot from the center of the target sphere
+(along the z-axis direction by default).
+As scoring volume, we use a thin spherical shell outside the target sphere.
+The particle fluences are evaluated in the forward and backward hemispheres
+(with respect to the primary particle direction).
+
+ConcentricSpheres
+-----------------
+Similar to the Sphere one, but with two larger solid target spherical shells
+outside the first one, separated by some space filled up by G4_Galactic.
+The dimensions of these three targets - which are meant as a simplified
+proxy for, respectively, a Tracker (inner sphere), EM (electromagnetic)
+calorimeter (middle spherical shell), and HAD (hadronic) calorimeter
+(external spherical shell) - and their materials can be set via UI commands.
+As scoring volumes, we use three thin spherical shells immediately outside
+the inner target sphere and the two target spherical shells.
+The particle fluences are evaluated in the forward and backward hemispheres
+(with respect to the primary particle direction).
+
+Layer
+-----
+This set-up consists of a cylinder, with axis along the z-direction, whose
+radius, length (i.e. thickness) and material can be set via UI commands.
+The primary particle is shot by default along the z-axis, from behind
+the target.
+As scoring volumes, we use three thin cylindrical layers, filled up by
+G4_Galactic, and placed downstream, upstream, and aside of the target
+cylinder.
+
+Calo
+----
+Similar to the Layer one, the target consists of a simplified cylindrical
+hadronic calorimeter, whose properties - size, number of layers, sampling
+fraction, active and absorber materials - can be set via UI commands.
+Similarly to the Layer case, the the particle fluences are evaluated in the
+downstream, upstream and aside positions.

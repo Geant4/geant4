@@ -46,17 +46,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
-G4UImessenger(), fpDetector(Det), 
-fpTestDir(0), fpDetDir(0), fpTrackingCutCmd(0), fpMaxStepSizeCmd(0)
+G4UImessenger(), fpDetector(Det)
 {
-  fpTestDir = new G4UIdirectory("/microyz/");
+  fpTestDir = std::make_unique<G4UIdirectory>("/microyz/");
   fpTestDir->SetGuidance(" detector control.");
   
-  fpDetDir = new G4UIdirectory("/microyz/det/");
+  fpDetDir = std::make_unique<G4UIdirectory>("/microyz/det/");
   fpDetDir->SetGuidance("detector construction commands");
       
-  fpTrackingCutCmd = 
-    new G4UIcmdWithADoubleAndUnit("/microyz/det/setTrackingCut",this);
+  fpTrackingCutCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setTrackingCut",this);
   fpTrackingCutCmd->SetGuidance("Set tracking cut");
   fpTrackingCutCmd->SetParameterName("Cut",false);
   fpTrackingCutCmd->SetRange("Cut>0.");
@@ -64,35 +62,39 @@ fpTestDir(0), fpDetDir(0), fpTrackingCutCmd(0), fpMaxStepSizeCmd(0)
   fpTrackingCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fpTrackingCutCmd->SetToBeBroadcasted(false);
 
-  fpMaxStepSizeCmd = 
-    new G4UIcmdWithADoubleAndUnit("/microyz/det/setMaxStepSize",this);
+  fpMaxStepSizeCmd = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/setMaxStepSize",this);
   fpMaxStepSizeCmd->SetGuidance("Set maximum step size");
   fpMaxStepSizeCmd->SetParameterName("Size",false);
   fpMaxStepSizeCmd->SetRange("Size>0.");
   fpMaxStepSizeCmd->SetUnitCategory("Length");
   fpMaxStepSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fpMaxStepSizeCmd->SetToBeBroadcasted(false);
+
+  fAddRadius = std::make_unique<G4UIcmdWithADoubleAndUnit>("/microyz/det/Radius",this);
+  fpMaxStepSizeCmd->SetGuidance("Set TrackSD radius");
+  fAddRadius->SetToBeBroadcasted(false);
+  fAddRadius->SetParameterName("Radius",false);
+  fAddRadius->SetRange("Radius>0.");
+  fAddRadius->SetUnitCategory("Length");
+  fAddRadius->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
-{
-  delete fpTestDir;
-  delete fpDetDir;
-  delete fpTrackingCutCmd;
-  delete fpMaxStepSizeCmd;
-}
+DetectorMessenger::~DetectorMessenger() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == fpTrackingCutCmd )
+  if( command == fpTrackingCutCmd.get() )
    { fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));}
 
-  if( command == fpMaxStepSizeCmd )
+  if( command == fpMaxStepSizeCmd.get() )
    { fpDetector->SetMaxStepSize(fpMaxStepSizeCmd->GetNewDoubleValue(newValue));}
+
+  if( command == fAddRadius.get() )
+  { fpDetector->SetTrackerSDRadius(fAddRadius->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

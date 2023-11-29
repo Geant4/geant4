@@ -372,7 +372,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 	 ) {
       unphysicalResidual = true;
       //G4cout << "***UNPHYSICAL PROJECTILE RESIDUAL*** Z=" << numberProtonProjectileResidual
-      //       << " ; N=" << numberNeutronProjectileResidual;
+      //       << " ; N=" << numberNeutronProjectileResidual
+      //       << " ; L=" << numberLambdaProjectileResidual;
     }
     if ( unphysicalResidual ) {
       //G4cout << " -> REJECTING COLLISION because of unphysical residual !" << G4endl;

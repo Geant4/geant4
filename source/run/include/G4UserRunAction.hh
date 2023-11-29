@@ -52,19 +52,17 @@ class G4Run;
 class G4UserRunAction
 {
   public:
-
     G4UserRunAction();
-    virtual ~G4UserRunAction();
+    virtual ~G4UserRunAction() = default;
 
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run* aRun);
-    virtual void EndOfRunAction(const G4Run* aRun);
+    virtual G4Run* GenerateRun() { return nullptr; }
+    virtual void BeginOfRunAction(const G4Run* /*aRun*/) {}
+    virtual void EndOfRunAction(const G4Run* /*aRun*/) {}
 
     inline virtual void SetMaster(G4bool val = true) { isMaster = val; }
     inline G4bool IsMaster() const { return isMaster; }
 
   protected:
-
     G4bool isMaster = true;
 };
 

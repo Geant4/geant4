@@ -20,14 +20,14 @@ typedef unsigned char  tools_GLboolean;
 
 #define TOOLS_GL2PS_MAJOR_VERSION 1
 #define TOOLS_GL2PS_MINOR_VERSION 4
-#define TOOLS_GL2PS_PATCH_VERSION 0
+#define TOOLS_GL2PS_PATCH_VERSION 2
 #define TOOLS_GL2PS_EXTRA_VERSION ""
 
 #define TOOLS_GL2PS_VERSION (TOOLS_GL2PS_MAJOR_VERSION + \
                        0.01 * TOOLS_GL2PS_MINOR_VERSION + \
                        0.0001 * TOOLS_GL2PS_PATCH_VERSION)
 
-#define TOOLS_GL2PS_COPYRIGHT "(C) 1999-2017 C. Geuzaine"
+#define TOOLS_GL2PS_COPYRIGHT "(C) 1999-2020 C. Geuzaine"
 
 /* Output file formats (the values and the ordering are important!) */
 
@@ -71,6 +71,8 @@ typedef unsigned char  tools_GLboolean;
 #define TOOLS_GL2PS_NO_BLENDING          (1<<11)
 #define TOOLS_GL2PS_TIGHT_BOUNDING_BOX   (1<<12)
 #define TOOLS_GL2PS_NO_OPENGL_CONTEXT    (1<<13)
+#define TOOLS_GL2PS_NO_TEX_FONTSIZE      (1<<14)
+#define TOOLS_GL2PS_PORTABLE_SORT        (1<<15)
 
 /* Arguments for tools_gl2psEnable/tools_gl2psDisable */
 
@@ -181,17 +183,30 @@ typedef struct {
 /*----------------------------------------------------------*/
 /*----------------------------------------------------------*/
 /*----------------------------------------------------------*/
+typedef struct tools_GL2PScontextRec* tools_GL2PScontextPointer;
+
+typedef tools_GLboolean (*tools_glIsEnabled_func)      (tools_GLenum);
+typedef void            (*tools_glBegin_func)          (tools_GLenum);
+typedef void            (*tools_glEnd_func)            ();
+typedef void            (*tools_glGetFloatv_func)      (tools_GLenum,tools_GLfloat*);
+typedef void            (*tools_glVertex3f_func)       (tools_GLfloat,tools_GLfloat,tools_GLfloat);
+typedef void            (*tools_glGetBooleanv_func)    (tools_GLenum,tools_GLboolean*);
+typedef void            (*tools_glGetIntegerv_func)    (tools_GLenum,tools_GLint*);
+typedef tools_GLint     (*tools_glRenderMode_func)     (tools_GLenum);
+typedef void            (*tools_glFeedbackBuffer_func) (tools_GLsizei,tools_GLenum,tools_GLfloat*);
+typedef void            (*tools_glPassThrough_func)    (tools_GLfloat);
+
 typedef struct {
-  tools_GLboolean (*m_glIsEnabled)      (tools_GLenum);
-  void      (*m_glBegin)          (tools_GLenum);
-  void      (*m_glEnd)            ();
-  void      (*m_glGetFloatv)      (tools_GLenum,tools_GLfloat*);
-  void      (*m_glVertex3f)       (tools_GLfloat,tools_GLfloat,tools_GLfloat);
-  void      (*m_glGetBooleanv)    (tools_GLenum,tools_GLboolean*);
-  void      (*m_glGetIntegerv)    (tools_GLenum,tools_GLint*);
-  tools_GLint     (*m_glRenderMode)     (tools_GLenum);
-  void      (*m_glFeedbackBuffer) (tools_GLsizei,tools_GLenum,tools_GLfloat*);
-  void      (*m_glPassThrough)    (tools_GLfloat);
+  tools_glIsEnabled_func      m_glIsEnabled;
+  tools_glBegin_func          m_glBegin;
+  tools_glEnd_func            m_glEnd;
+  tools_glGetFloatv_func      m_glGetFloatv;
+  tools_glVertex3f_func       m_glVertex3f;
+  tools_glGetBooleanv_func    m_glGetBooleanv;
+  tools_glGetIntegerv_func    m_glGetIntegerv;
+  tools_glRenderMode_func     m_glRenderMode;
+  tools_glFeedbackBuffer_func m_glFeedbackBuffer;
+  tools_glPassThrough_func    m_glPassThrough;
 } tools_gl2ps_gl_funcs_t;
 
 #endif

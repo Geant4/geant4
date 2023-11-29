@@ -75,7 +75,7 @@ G4AdjointCSManager::G4AdjointCSManager()
 ///////////////////////////////////////////////////////
 G4AdjointCSManager::~G4AdjointCSManager()
 {
-  for (auto p : fAdjointCSMatricesForProdToProj) {
+  for (auto& p : fAdjointCSMatricesForProdToProj) {
     for (auto p1 : p) {
       if (p1) {
         delete p1;
@@ -86,7 +86,7 @@ G4AdjointCSManager::~G4AdjointCSManager()
   }
   fAdjointCSMatricesForProdToProj.clear();
 
-  for (auto p : fAdjointCSMatricesForScatProjToProj) {
+  for (auto& p : fAdjointCSMatricesForScatProjToProj) {
     for (auto p1 : p) {
       if (p1) {
         delete p1;
@@ -147,7 +147,7 @@ G4AdjointCSManager::~G4AdjointCSManager()
 }
 
 ///////////////////////////////////////////////////////
-size_t G4AdjointCSManager::RegisterEmAdjointModel(G4VEmAdjointModel* aModel)
+std::size_t G4AdjointCSManager::RegisterEmAdjointModel(G4VEmAdjointModel* aModel)
 {
   fAdjointModels.push_back(aModel);
   fSigmaTableForAdjointModelScatProjToProj.push_back(new G4PhysicsTable);
@@ -165,7 +165,7 @@ void G4AdjointCSManager::RegisterEmProcess(G4VEmProcess* aProcess,
   {
     RegisterAdjointParticle(anAdjPartDef);
 
-    for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
+    for(std::size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
     {
       if(anAdjPartDef->GetParticleName() ==
          fAdjointParticlesInAction[i]->GetParticleName())
@@ -183,7 +183,7 @@ void G4AdjointCSManager::RegisterEnergyLossProcess(
   if(anAdjPartDef && aProcess)
   {
     RegisterAdjointParticle(anAdjPartDef);
-    for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
+    for(std::size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
     {
       if(anAdjPartDef->GetParticleName() ==
          fAdjointParticlesInAction[i]->GetParticleName())
@@ -323,11 +323,11 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
     G4ProductionCutsTable::GetProductionCutsTable();
 
   // Prepare the Sigma table for all AdjointEMModel, will be filled later on
-  for(size_t i = 0; i < fAdjointModels.size(); ++i)
+  for(std::size_t i = 0; i < fAdjointModels.size(); ++i)
   {
     fSigmaTableForAdjointModelScatProjToProj[i]->clearAndDestroy();
     fSigmaTableForAdjointModelProdToProj[i]->clearAndDestroy();
-    for(size_t j = 0; j < theCoupleTable->GetTableSize(); ++j)
+    for(std::size_t j = 0; j < theCoupleTable->GetTableSize(); ++j)
     {
       fSigmaTableForAdjointModelScatProjToProj[i]->push_back(
         new G4PhysicsLogVector(fTmin, fTmax, fNbins));
@@ -336,7 +336,7 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
     }
   }
 
-  for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
+  for(std::size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
   {
     G4ParticleDefinition* thePartDef = fAdjointParticlesInAction[i];
     DefineCurrentParticle(thePartDef);
@@ -347,29 +347,29 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
     fEkinofFwdSigmaMax[i].clear();
     fEkinofAdjSigmaMax[i].clear();
 
-    for(size_t j = 0; j < theCoupleTable->GetTableSize(); ++j)
+    for(std::size_t j = 0; j < theCoupleTable->GetTableSize(); ++j)
     {
       const G4MaterialCutsCouple* couple =
-        theCoupleTable->GetMaterialCutsCouple(j);
+        theCoupleTable->GetMaterialCutsCouple((G4int)j);
 
       // make first the total fwd CS table for FwdProcess
       G4PhysicsVector* aVector = new G4PhysicsLogVector(fTmin, fTmax, fNbins);
       G4bool Emin_found        = false;
       G4double sigma_max       = 0.;
       G4double e_sigma_max     = 0.;
-      for(size_t l = 0; l < fNbins; ++l)
+      for(std::size_t l = 0; l < fNbins; ++l)
       {
         G4double totCS = 0.;
         G4double e     = aVector->Energy(l);
-        for(size_t k = 0; k < fForwardProcesses[i]->size(); ++k)
+        for(std::size_t k = 0; k < fForwardProcesses[i]->size(); ++k)
         {
-          totCS += (*fForwardProcesses[i])[k]->GetLambda(e, couple);
+          totCS += (*fForwardProcesses[i])[k]->GetCrossSection(e, couple);
         }
-        for(size_t k = 0; k < fForwardLossProcesses[i]->size(); ++k)
+        for(std::size_t k = 0; k < fForwardLossProcesses[i]->size(); ++k)
         {
           if(thePartDef == fAdjIon)
           {  // e is considered already as the scaled energy
-            size_t mat_index = couple->GetIndex();
+            std::size_t mat_index = couple->GetIndex();
             G4VEmModel* currentModel =
               (*fForwardLossProcesses[i])[k]->SelectModelForMaterial(e,
                                                                      mat_index);
@@ -405,7 +405,7 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
       sigma_max                 = 0;
       e_sigma_max               = 0.;
       G4PhysicsVector* aVector1 = new G4PhysicsLogVector(fTmin, fTmax, fNbins);
-      for(size_t eindex = 0; eindex < fNbins; ++eindex)
+      for(std::size_t eindex = 0; eindex < fNbins; ++eindex)
       {
         G4double e     = aVector1->Energy(eindex);
         G4double totCS = ComputeTotalAdjointCS(
@@ -457,7 +457,7 @@ G4double G4AdjointCSManager::GetTotalForwardCS(
 
 ///////////////////////////////////////////////////////
 G4double G4AdjointCSManager::GetAdjointSigma(
-  G4double Ekin_nuc, size_t index_model, G4bool is_scat_proj_to_proj,
+  G4double Ekin_nuc, std::size_t index_model, G4bool is_scat_proj_to_proj,
   const G4MaterialCutsCouple* aCouple)
 {
   DefineCurrentMaterial(aCouple);
@@ -618,13 +618,13 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
     need_to_compute = true;
   }
 
-  size_t ind = 0;
+  std::size_t ind = 0;
   if(!need_to_compute)
   {
     need_to_compute = true;
-    for(size_t i = 0; i < fIndexOfAdjointEMModelInAction.size(); ++i)
+    for(std::size_t i = 0; i < fIndexOfAdjointEMModelInAction.size(); ++i)
     {
-      size_t ind1 = fIndexOfAdjointEMModelInAction[i];
+      std::size_t ind1 = fIndexOfAdjointEMModelInAction[i];
       if(aModel == fAdjointModels[ind1] &&
          isScatProjToProj == fIsScatProjToProj[i])
       {
@@ -637,8 +637,8 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
 
   if(need_to_compute)
   {
-    size_t ind_model = 0;
-    for(size_t i = 0; i < fAdjointModels.size(); ++i)
+    std::size_t ind_model = 0;
+    for(std::size_t i = 0; i < fAdjointModels.size(); ++i)
     {
       if(aModel == fAdjointModels[i])
       {
@@ -659,7 +659,7 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
     }
     else if(aModel->GetUseMatrixPerElement())
     {
-      size_t n_el = aMaterial->GetNumberOfElements();
+      std::size_t n_el = aMaterial->GetNumberOfElements();
       if(aModel->GetUseOnlyOneMatrixForAllElements())
       {
         G4AdjointCSMatrix* theCSMatrix;
@@ -673,7 +673,7 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
         if(PrimEnergy > Tlow)
           CS = ComputeAdjointCS(PrimEnergy, theCSMatrix, Tlow);
         G4double factor = 0.;
-        for(size_t i = 0; i < n_el; ++i)
+        for(G4int i = 0; i < (G4int)n_el; ++i)
         {  // this could be computed only once
           factor += aMaterial->GetElement(i)->GetZ() *
                     aMaterial->GetVecNbOfAtomsPerVolume()[i];
@@ -683,9 +683,9 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
       }
       else
       {
-        for(size_t i = 0; i < n_el; ++i)
+        for(G4int i = 0; i < (G4int)n_el; ++i)
         {
-          size_t ind_el = aMaterial->GetElement(i)->GetIndex();
+          std::size_t ind_el = aMaterial->GetElement(i)->GetIndex();
           G4AdjointCSMatrix* theCSMatrix;
           if(isScatProjToProj)
           {
@@ -704,7 +704,7 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
     }
     else
     {
-      size_t ind_mat = aMaterial->GetIndex();
+      std::size_t ind_mat = aMaterial->GetIndex();
       G4AdjointCSMatrix* theCSMatrix;
       if(isScatProjToProj)
       {
@@ -739,8 +739,8 @@ G4Element* G4AdjointCSManager::SampleElementFromCSMatrices(
   G4double CS    = ComputeAdjointCS(aMaterial, aModel, PrimEnergy, Tcut,
                                  isScatProjToProj, CS_Vs_Element);
   G4double SumCS = 0.;
-  size_t ind     = 0;
-  for(size_t i = 0; i < CS_Vs_Element.size(); ++i)
+  std::size_t ind     = 0;
+  for(std::size_t i = 0; i < CS_Vs_Element.size(); ++i)
   {
     SumCS += CS_Vs_Element[i];
     if(G4UniformRand() <= SumCS / CS)
@@ -750,7 +750,7 @@ G4Element* G4AdjointCSManager::SampleElementFromCSMatrices(
     }
   }
 
-  return const_cast<G4Element*>(aMaterial->GetElement(ind));
+  return const_cast<G4Element*>(aMaterial->GetElement((G4int)ind));
 }
 
 ///////////////////////////////////////////////////////
@@ -765,7 +765,7 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(
   std::vector<G4double> CS_Vs_Element;
   G4double CS;
   G4VEmAdjointModel* adjModel = nullptr;
-  for(size_t i = 0; i < fAdjointModels.size(); ++i)
+  for(std::size_t i = 0; i < fAdjointModels.size(); ++i)
   {
     G4double Tlow = 0.;
     adjModel      = fAdjointModels[i];
@@ -775,7 +775,7 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(
     {
       G4ParticleDefinition* theDirSecondPartDef = GetForwardParticleEquivalent(
         adjModel->GetAdjointEquivalentOfDirectSecondaryParticleDefinition());
-      size_t idx = 56;
+      std::size_t idx = 56;
       if(theDirSecondPartDef->GetParticleName() == "gamma")
         idx = 0;
       else if(theDirSecondPartDef->GetParticleName() == "e-")
@@ -861,7 +861,7 @@ G4AdjointCSManager::BuildCrossSectionsModelAndElement(G4VEmAdjointModel* aModel,
       std::vector<double>* log_CSVec   = aMat[1];
       G4double log_adjointCS           = log_CSVec->back();
       // normalise CSVec such that it becomes a probability vector
-      for(size_t j = 0; j < log_CSVec->size(); ++j)
+      for(std::size_t j = 0; j < log_CSVec->size(); ++j)
       {
         if(j == 0)
           (*log_CSVec)[j] = 0.;
@@ -896,7 +896,7 @@ G4AdjointCSManager::BuildCrossSectionsModelAndElement(G4VEmAdjointModel* aModel,
       std::vector<G4double>* log_CSVec   = aMat[1];
       G4double log_adjointCS             = log_CSVec->back();
       // normalise CSVec such that it becomes a probability vector
-      for(size_t j = 0; j < log_CSVec->size(); ++j)
+      for(std::size_t j = 0; j < log_CSVec->size(); ++j)
       {
         if(j == 0)
           (*log_CSVec)[j] = 0.;
@@ -957,7 +957,7 @@ G4AdjointCSManager::BuildCrossSectionsModelAndMaterial(
       G4double log_adjointCS             = log_CSVec->back();
 
       // normalise CSVec such that it becomes a probability vector
-      for(size_t j = 0; j < log_CSVec->size(); ++j)
+      for(std::size_t j = 0; j < log_CSVec->size(); ++j)
       {
         if(j == 0)
           (*log_CSVec)[j] = 0.;
@@ -994,7 +994,7 @@ G4AdjointCSManager::BuildCrossSectionsModelAndMaterial(
       std::vector<G4double>* log_CSVec   = aMat[1];
       G4double log_adjointCS             = log_CSVec->back();
 
-      for(size_t j = 0; j < log_CSVec->size(); ++j)
+      for(std::size_t j = 0; j < log_CSVec->size(); ++j)
       {
         if(j == 0)
           (*log_CSVec)[j] = 0.;
@@ -1075,7 +1075,7 @@ void G4AdjointCSManager::DefineCurrentParticle(
     if(aPartDef == fAdjIon)
       fMassRatio = proton_mass_c2 / aPartDef->GetPDGMass();
     fCurrentParticleIndex = 1000000;
-    for(size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
+    for(std::size_t i = 0; i < fAdjointParticlesInAction.size(); ++i)
     {
       if(aPartDef == fAdjointParticlesInAction[i])
         fCurrentParticleIndex = i;
@@ -1102,7 +1102,7 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
 
   G4AdjointInterpolator* theInterpolator = G4AdjointInterpolator::GetInstance();
 
-  size_t ind =
+  std::size_t ind =
     theInterpolator->FindPositionForLogVector(log_E, *theLogPrimEnergyVector);
   G4double aLogPrimEnergy1, aLogPrimEnergy2;
   G4double aLogCS1, aLogCS2;
@@ -1111,13 +1111,13 @@ G4double G4AdjointCSManager::ComputeAdjointCS(
   std::vector<G4double>* aLogSecondEnergyVector2 = nullptr;
   std::vector<G4double>* aLogProbVector1         = nullptr;
   std::vector<G4double>* aLogProbVector2         = nullptr;
-  std::vector<size_t>* aLogProbVectorIndex1      = nullptr;
-  std::vector<size_t>* aLogProbVectorIndex2      = nullptr;
+  std::vector<std::size_t>* aLogProbVectorIndex1 = nullptr;
+  std::vector<std::size_t>* aLogProbVectorIndex2 = nullptr;
 
-  anAdjointCSMatrix->GetData(ind, aLogPrimEnergy1, aLogCS1, log01,
+  anAdjointCSMatrix->GetData((G4int)ind, aLogPrimEnergy1, aLogCS1, log01,
                              aLogSecondEnergyVector1, aLogProbVector1,
                              aLogProbVectorIndex1);
-  anAdjointCSMatrix->GetData(ind + 1, aLogPrimEnergy2, aLogCS2, log02,
+  anAdjointCSMatrix->GetData(G4int(ind + 1), aLogPrimEnergy2, aLogCS2, log02,
                              aLogSecondEnergyVector2, aLogProbVector2,
                              aLogProbVectorIndex2);
   if (! (aLogProbVector1 && aLogProbVector2 &&

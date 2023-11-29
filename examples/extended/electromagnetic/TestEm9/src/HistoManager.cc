@@ -204,13 +204,18 @@ void HistoManager::EndOfRun(G4int runID)
 
   G4double f = 100.*std::sqrt(fBeamEnergy/GeV);
 
-  G4cout                         << "Number of events             " << fEvt <<G4endl;
-  G4cout << std::setprecision(4) << "Average number of e-         " << xe << G4endl;
-  G4cout << std::setprecision(4) << "Average number of gamma      " << xg << G4endl;
-  G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
+  G4cout                         << "Number of events             "
+                                 << fEvt <<G4endl;
+  G4cout << std::setprecision(4) << "Average number of e-         "
+         << xe << G4endl;
+  G4cout << std::setprecision(4) << "Average number of gamma      "
+         << xg << G4endl;
+  G4cout << std::setprecision(4) << "Average number of e+         "
+         << xp << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps      "
+         << xs << G4endl;
   
-  for(j=0; j<3; j++) {
+  for(j=0; j<3; ++j) {
     G4double ex = fEdeptr[j];
     G4double sx = fErmstr[j];
     G4double xx= G4double(fStat[j]);
@@ -224,7 +229,8 @@ void HistoManager::EndOfRun(G4int runID)
   }
   if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
     G4cout
-      <<"===========  Mean values without trancating ====================="<<G4endl;
+      <<"===========  Mean values without trancating ====================="
+      <<G4endl;
     for(j=0; j<fNmax; j++) {
       G4double ex = fEdep[j];
       G4double sx = fErms[j];
@@ -238,7 +244,7 @@ void HistoManager::EndOfRun(G4int runID)
   }
   G4cout
     <<"===========  Ratios without trancating ==========================="<<G4endl;
-  for(j=3; j<6; j++) {
+  for(j=3; j<6; ++j) {
     G4double e = fEdep[j];
     G4double xx= G4double(fStat[j]);
     if(xx > 0.0) xx = 1.0/xx;
@@ -250,16 +256,19 @@ void HistoManager::EndOfRun(G4int runID)
            << " +- " << r;
     G4cout << G4endl;
   }
-  G4cout << std::setprecision(4) << "Beam Energy                  " << fBeamEnergy/GeV
+  G4cout << std::setprecision(4) << "Beam Energy                  "
+         << fBeamEnergy/GeV
          << " GeV" << G4endl;
-  if(fLowe > 0)          G4cout << "Number of events E/E0<0.8    " << fLowe << G4endl; 
+  if(fLowe > 0)          G4cout << "Number of events E/E0<0.8    "
+                                << fLowe << G4endl; 
   G4cout
-    <<"=================================================================="<<G4endl;
+    <<"=================================================================="
+    <<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms
   if(fHisto->IsActive()) { 
-    for(G4int i=0; i<fNHisto; i++) {
+    for(G4int i=0; i<fNHisto; ++i) {
       fHisto->ScaleH1(i,x);
     }
     fHisto->Save();
@@ -280,7 +289,8 @@ void HistoManager::EndOfRun(G4int runID)
       G4double etrue = fEdeptrue[j];
       G4double rtrue = fRmstrue[j];
       acc.EmAcceptanceGauss("Edep"+nam[j],fEvt,fEdeptr[j],etrue,rtrue,ltrue);
-      acc.EmAcceptanceGauss("Erms"+nam[j],fEvt,fErmstr[j],rtrue,rtrue,2.0*ltrue);
+      acc.EmAcceptanceGauss("Erms"+nam[j],fEvt,fErmstr[j],rtrue,rtrue,
+                            2.0*ltrue);
     }
   }
   if(isStarted) acc.EndOfAcceptance();
@@ -293,7 +303,8 @@ void HistoManager::EndOfRun(G4int runID)
     G4int n3 = G4int(fComp[j]*x);
     G4int n4 = G4int(fConv[j]*x);
     if(n1 + n2 + n3 + n4 > 0) {
-      G4cout << std::setw(4) << j << std::setw(12) << n1 << std::setw(12) << n2
+      G4cout << std::setw(4) << j << std::setw(12) << n1 
+             << std::setw(12) << n2
              << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
     }
   }
@@ -425,37 +436,29 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     const G4VProcess* proc = aTrack->GetCreatorProcess();
     G4int type = proc->GetProcessSubType();
    
-    if(type == fGammaGeneralProcess) {
-      type = static_cast<const G4GammaGeneralProcess*>(proc)->GetSubProcessSubType();
-      proc = static_cast<const G4GammaGeneralProcess*>(proc)->GetSelectedProcess();
-    }
-
     if(type == fBremsstrahlung) {
-      const G4Element* elm = 
+      auto elm = 
         static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
-      if(elm) {
-        G4int Z = G4lrint(elm->GetZ());
+      if(nullptr != elm) {
+        G4int Z = elm->GetZasInt();
         if(Z > 0 && Z < 93) { fBrem[Z] += 1.0; }
       }
     } else if(type == fPhotoElectricEffect) {
-      const G4Element* elm = 
-        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
-      if(elm) {
-        G4int Z = G4lrint(elm->GetZ());
+      auto elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(nullptr != elm) {
+        G4int Z = elm->GetZasInt();
         if(Z > 0 && Z < 93) { fPhot[Z] += 1.0; }
       }
     } else if(type == fGammaConversion) {
-      const G4Element* elm = 
-        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
-      if(elm) {
-        G4int Z = G4lrint(elm->GetZ());
+      auto elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(nullptr != elm) {
+        G4int Z = elm->GetZasInt();
         if(Z > 0 && Z < 93) { fConv[Z] += 1.0; }
       }
     } else if(type == fComptonScattering) {
-      const G4Element* elm = 
-        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
-      if(elm) {
-        G4int Z = G4lrint(elm->GetZ());
+      auto elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(nullptr != elm) {
+        G4int Z = elm->GetZasInt();
         if(Z > 0 && Z < 93) { fComp[Z] += 1.0; }
       }
     }
@@ -527,8 +530,10 @@ void HistoManager::AddEnergy(G4double edep, G4int volIndex, G4int copyNo)
 void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
 {
   G4double e = elec->GetKineticEnergy()/MeV;
-  if(e > 0.0) fElec++;
-  fHisto->Fill(3,e,1.0);
+  if(e > 0.0) {
+    ++fElec;
+    fHisto->Fill(3,e,1.0);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -536,13 +541,15 @@ void HistoManager::AddDeltaElectron(const G4DynamicParticle* elec)
 void HistoManager::AddPhoton(const G4DynamicParticle* ph)
 {
   G4double e = ph->GetKineticEnergy()/MeV;
-  if(e > 0.0) fGam++;
-  fHisto->Fill(4,e,1.0);
+  if(e > 0.0) { 
+    ++fGam;
+    fHisto->Fill(4,e,1.0);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::SetEdepAndRMS(G4int i, G4ThreeVector val)
+void HistoManager::SetEdepAndRMS(G4int i, const G4ThreeVector& val)
 {
   if(i<fNmax && i>=0) {
     if(val[0] > 0.0) fEdeptrue[i] = val[0];
@@ -552,4 +559,3 @@ void HistoManager::SetEdepAndRMS(G4int i, G4ThreeVector val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-

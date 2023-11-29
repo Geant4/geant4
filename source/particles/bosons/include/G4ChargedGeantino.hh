@@ -55,7 +55,7 @@ class G4ChargedGeantino : public G4ParticleDefinition
   G4ChargedGeantino(){}
 
  public:
-   ~G4ChargedGeantino(){}
+   ~G4ChargedGeantino() override= default;
  
    static G4ChargedGeantino* Definition();
    static G4ChargedGeantino* ChargedGeantinoDefinition();

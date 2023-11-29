@@ -42,19 +42,20 @@
 //#define debug_Hbuilder
 //#define debug_heavyHadrons
 
-G4HadronBuilder::G4HadronBuilder(G4double mesonMix, G4double barionMix,
-		                 std::vector<double> scalarMesonMix,
-		                 std::vector<double> vectorMesonMix,
-                                 G4double Eta_cProb, G4double Eta_bProb)
+G4HadronBuilder::G4HadronBuilder(const std::vector<G4double> & mesonMix, const G4double barionMix,
+		                 const std::vector<G4double> & scalarMesonMix,
+		                 const std::vector<G4double> & vectorMesonMix,
+                                 const G4double Eta_cProb, const G4double Eta_bProb)
 {
-	mesonSpinMix       = mesonMix;	     
+	mesonSpinMix       = mesonMix;
 	barionSpinMix      = barionMix;
 	scalarMesonMixings = scalarMesonMix;
 	vectorMesonMixings = vectorMesonMix;
-     
         ProbEta_c          = Eta_cProb;
         ProbEta_b          = Eta_bProb;
 }
+
+//-------------------------------------------------------------------------
 
 G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4ParticleDefinition * white)
 {
@@ -64,7 +65,10 @@ G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4Pa
 	   return Barion(black,white,spin);
 	} else {
            // Meson
-	   Spin spin = (G4UniformRand() < mesonSpinMix) ? SpinZero : SpinOne;
+	   G4int StrangeQ = 0;
+	   if( std::abs(black->GetPDGEncoding()) >= 3 ) StrangeQ++;
+	   if( std::abs(white->GetPDGEncoding()) >= 3 ) StrangeQ++;
+           Spin spin = (G4UniformRand() < mesonSpinMix[StrangeQ]) ? SpinZero : SpinOne;
 	   return Meson(black,white,spin);
 	}
 }
@@ -303,7 +307,6 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	if (MesonDef == 0 ) {
 		G4cerr << " G4HadronBuilder - Warning: No particle for PDGcode= "
 		       << PDGEncoding << G4endl;
-
 	} else if  ( (  black->GetPDGCharge() + white->GetPDGCharge()
 	       		- MesonDef->GetPDGCharge() ) > perCent   ) {
 	      	G4cerr << " G4HadronBuilder - Warning: Incorrect Charge : "
@@ -318,6 +321,7 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	return MesonDef;
 }
 
+//-------------------------------------------------------------------------
 
 G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black, 
 					       G4ParticleDefinition * white,Spin theSpin)
@@ -622,4 +626,3 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 
 	return BarionDef;
 }
-

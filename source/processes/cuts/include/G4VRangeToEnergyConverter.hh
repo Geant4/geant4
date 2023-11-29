@@ -41,7 +41,6 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
-#include "G4Threading.hh"
 
 class G4VRangeToEnergyConverter
 {
@@ -103,19 +102,17 @@ private:
 
 protected:
 
-#ifdef G4MULTITHREADED
-  static G4Mutex theMutex;
-#endif
-
-  static G4double Emin;
-  static G4double Emax; 
-  static std::vector<G4double>* Energy;
-  static G4int NbinPerDecade;
-  static G4int Nbin;
-
   const G4ParticleDefinition* theParticle = nullptr;
-
   G4int fPDG = 0;
+
+private:
+
+  static G4double sEmin;
+  static G4double sEmax; 
+  static std::vector<G4double>* sEnergy;
+  static G4int sNbinPerDecade;
+  static G4int sNbin;
+
   G4int verboseLevel = 1;
   G4bool isFirstInstance = false;
 };

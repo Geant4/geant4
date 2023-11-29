@@ -50,7 +50,7 @@ class G4VTRModel
   explicit G4VTRModel(const G4String& modelName) { fName = modelName; };
 
   // Destructor
-  virtual ~G4VTRModel(){};
+  virtual ~G4VTRModel() = default;
 
   const G4String& GetName() const { return fName; };
 

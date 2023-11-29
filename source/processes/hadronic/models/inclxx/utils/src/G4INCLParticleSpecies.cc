@@ -118,6 +118,11 @@ namespace G4INCL {
       theZ = -1;
       theS = -1;
       theType = G4INCL::SigmaMinus;
+    } else if(pS=="pb" || pS=="antiproton") {
+      theA = -1;
+      theZ = -1;
+      theS = 0;
+      theType = G4INCL::antiProton;
     } else if(pS=="k+" || pS=="kaon+" || pS=="kplus" || pS=="kaonplus") {
       theA = 0;
       theZ = 1;
@@ -282,7 +287,7 @@ namespace G4INCL {
       endFirstSection = firstSeparator;
       beginSecondSection = firstSeparator+1;
     }
-    
+
     std::string firstSection(pS.substr(0,endFirstSection));
     std::string secondSection(pS.substr(beginSecondSection,std::string::npos));
     std::stringstream parsingStream;
@@ -365,74 +370,77 @@ namespace G4INCL {
   G4int ParticleSpecies::getPDGCode() const {
     switch (theType) {
       case Proton:
-          return 2212;
+        return 2212;
         break;
       case Neutron:
-          return 2112;
-        break;
+	return 2112;
+	break;
       case DeltaPlusPlus:
-          return 2224;
-        break;
+	return 2224;
+	break;
       case DeltaPlus:
-          return 2214;
-        break;
+        return 2214;
+	break;
       case DeltaZero:
-          return 2114;
-        break;
+	return 2114;
+	break;
       case DeltaMinus:
-          return 1114;
-        break;
+	return 1114;
+	break;
       case PiPlus:
-          return 211;
-        break;
+	return 211;
+	break;
       case PiZero:
-          return 111;
-        break;
+	return 111;
+	break;
       case PiMinus:
-          return -211;
-        break;
+	return -211;
+	break;
       case Eta:
-          return 221;
-        break;
+	return 221;
+	break;
       case Omega:
-          return 223;
-        break;
+	return 223;
+	break;
       case EtaPrime:
-          return 331;
-        break;
+	return 331;
+	break;
       case Photon:
-          return 22;
-        break;
+	return 22;
+	break;
       case Lambda:
-          return 3122;
-        break;
+	return 3122;
+	break;
       case SigmaPlus:
-          return 3222;
-        break;
+	return 3222;
+	break;
       case SigmaZero:
-          return 3212;
-        break;
+	return 3212;
+	break;
       case SigmaMinus:
-          return 3112;
-        break;
+	return 3112;
+	break;		
+      case antiProton:
+        return -2212;
+        break;	
       case KPlus:
-          return 321;
-        break;
+	return 321;
+	break;
       case KZero:
-          return 311;
-        break;
+	return 311;
+	break;
       case KZeroBar:
-          return -311;
-        break;
+	return -311;
+	break;
       case KShort:
-          return 310;
-        break;
+	return 310;
+	break;
       case KLong:
-          return 130;
-        break;
+	return 130;
+	break;
       case KMinus:
-          return -321;
-        break;
+	return -321;
+	break;		
       case Composite:
         if(theA == 1 && theZ == 1 && theS == 0) return 2212;
         else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
@@ -443,7 +451,7 @@ namespace G4INCL {
         INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
         return 0;
         break;
-    }	
+    }
   }
 }
 

@@ -29,4 +29,4 @@
 #include "G4ParticleHPVector.hh"
 using G4NeutronHPVector = G4ParticleHPVector;
 
-#endif 
+#endif

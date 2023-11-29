@@ -29,79 +29,71 @@
 #ifndef G4ParticleHPSimpleEvapSpectrum_h
 #define G4ParticleHPSimpleEvapSpectrum_h 1
 
-#include <fstream>
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include <fstream>
 
 // we will need a List of these .... one per term.
 
 class G4ParticleHPSimpleEvapSpectrum : public G4VParticleHPEDis
 {
   public:
-  G4ParticleHPSimpleEvapSpectrum()
-  {
-    expm1 = G4Exp(-1.);
-  }
-  ~G4ParticleHPSimpleEvapSpectrum()
-  {
-  }
-  
-  inline void Init(std::istream & aDataFile)
-  {
-    theFractionalProb.Init(aDataFile, CLHEP::eV);
-    theThetaDist.Init(aDataFile, CLHEP::eV);
-  }
-  
-  inline G4double GetFractionalProbability(G4double anEnergy)
-  {
-    return theFractionalProb.GetY(anEnergy);
-  }
-  
-  inline G4double Sample(G4double anEnergy) 
-  {
-    G4double theta = theThetaDist.GetY(anEnergy)*CLHEP::eV;
-    G4double random, cut, max, result=0.;
-    max = 10.*theta;
-    G4int icounter=0;
-    G4int icounter_max=1024;
-    do
+    G4ParticleHPSimpleEvapSpectrum() { expm1 = G4Exp(-1.); }
+    ~G4ParticleHPSimpleEvapSpectrum() override = default;
+
+    inline void Init(std::istream& aDataFile) override
     {
-      icounter++;
-      if ( icounter > icounter_max ) {
-	 G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
-         break;
-      }
-      random = G4UniformRand();
-      result = -theta*G4Log(random); 
-      cut = G4UniformRand();
+      theFractionalProb.Init(aDataFile, CLHEP::eV);
+      theThetaDist.Init(aDataFile, CLHEP::eV);
     }
-    while(cut>result/max); // Loop checking, 11.05.2015, T. Koi
-    return result;
-  }
-  
+
+    inline G4double GetFractionalProbability(G4double anEnergy) override
+    {
+      return theFractionalProb.GetY(anEnergy);
+    }
+
+    inline G4double Sample(G4double anEnergy) override
+    {
+      G4double theta = theThetaDist.GetY(anEnergy) * CLHEP::eV;
+      G4double random, cut, max, result = 0.;
+      max = 10. * theta;
+      G4int icounter = 0;
+      G4int icounter_max = 1024;
+      do {
+        icounter++;
+        if (icounter > icounter_max) {
+          G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of "
+                 << __FILE__ << "." << G4endl;
+          break;
+        }
+        random = G4UniformRand();
+        result = -theta * G4Log(random);
+        cut = G4UniformRand();
+      } while (cut > result / max);  // Loop checking, 11.05.2015, T. Koi
+      return result;
+    }
+
   private:
-  
-  inline G4double Evapo(G4double anEnergy, G4double theta)
-  {
-    G4double result = (anEnergy*CLHEP::eV)*G4Exp(-anEnergy*CLHEP::eV/theta);
-    return result;
-  }
-  
+    inline G4double Evapo(G4double anEnergy, G4double theta)
+    {
+      G4double result = (anEnergy * CLHEP::eV) * G4Exp(-anEnergy * CLHEP::eV / theta);
+      return result;
+    }
+
   private:
-  
-  G4double expm1;
-  
-  G4ParticleHPVector theFractionalProb;
-  
-  G4ParticleHPVector theThetaDist;
-  
+    G4double expm1;
+
+    G4ParticleHPVector theFractionalProb;
+
+    G4ParticleHPVector theThetaDist;
 };
 
 #endif

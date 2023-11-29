@@ -1,0 +1,97 @@
+# Set Number of Threads
+/run/numberOfThreads 1
+
+# Set electron solvation process: "Meesungnoen2002", "Ritchie1994", "Terrisol1990"
+/process/dna/e-SolvationSubType Meesungnoen2002
+
+# Chemistry Scavenger Cocentrations
+# Units are assumed to be mol/dm3 (M)
+/chem/scavenger/DMSO   2.28e-4
+/chem/scavenger/Oxygen 0.27e-3
+
+# Register Physics and Chemistries
+/physics/SetPhysics   G4EmDNAPhysics_option2
+/physics/SetChemistry G4EmDNAChemistryForPlasmids
+
+# Plasmid DNA Settings (Befor Initialize)
+/det/PlasmidFile  pUC19.xyz
+/det/OffSetFile   PlasmidOffsets.txt
+/det/UseDNAVolumes True
+/det/NbOfPlasmids 5
+
+/run/initialize
+
+# World Size Settings
+/det/setSize 1 um
+
+# Spectrum source settings
+/fpGun/SourceFile CobaltSource.src
+
+# Chemistry Scheduler Settings
+/scheduler/endTime 100 microsecond
+/scorer/species/nOfTimeBins 100
+/scorer/species/addTimeToRecord 1 microsecond
+/scorer/species/addTimeToRecord 10 microsecond
+
+# GValues: Output Options
+/scorer/species/OutputFormat ASCII 
+
+# SB: Output Options
+/scorer/StrandBreak/OutputFormat ASCII
+/scorer/StrandBreak/BreakEnergy 17.5 eV
+
+# Verbose Settings
+/tracking/verbose 0
+/scheduler/verbose 0
+
+# Print Chemistry
+/chem/reaction/print
+
+# Console Output Progess
+/run/printProgress 1
+
+# Run
+/fpGun/PrimariesPerEvent 50
+/scorer/species/OutputFile SpeciesInfo_50
+/scorer/StrandBreak/OutputFile StrandBreakInfo_50
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 100
+/scorer/species/OutputFile SpeciesInfo_100
+/scorer/StrandBreak/OutputFile StrandBreakInfo_100
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 200
+/scorer/species/OutputFile SpeciesInfo_200
+/scorer/StrandBreak/OutputFile StrandBreakInfo_200
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 400
+/scorer/species/OutputFile SpeciesInfo_400
+/scorer/StrandBreak/OutputFile StrandBreakInfo_400
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 800
+/scorer/species/OutputFile SpeciesInfo_800
+/scorer/StrandBreak/OutputFile StrandBreakInfo_800
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 1000
+/scorer/species/OutputFile SpeciesInfo_1000
+/scorer/StrandBreak/OutputFile StrandBreakInfo_1000
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 2000
+/scorer/species/OutputFile SpeciesInfo_2000
+/scorer/StrandBreak/OutputFile StrandBreakInfo_2000
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 4000
+/scorer/species/OutputFile SpeciesInfo_4000
+/scorer/StrandBreak/OutputFile StrandBreakInfo_4000
+/run/beamOn 10
+
+/fpGun/PrimariesPerEvent 6000
+/scorer/species/OutputFile SpeciesInfo_6000
+/scorer/StrandBreak/OutputFile StrandBreakInfo_6000
+/run/beamOn 10

@@ -68,7 +68,7 @@ class G4Ions : public G4ParticleDefinition
        G4int               isomer = 0
     );
 
-    virtual ~G4Ions();
+    ~G4Ions() override = default;
 
     inline G4Ions* IonsDefinition();
     inline G4Ions* Ions();
@@ -100,7 +100,7 @@ class G4Ions : public G4ParticleDefinition
 
   protected:
 
-    G4Ions();
+    G4Ions() = default;
 
   private:
 

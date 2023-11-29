@@ -45,39 +45,28 @@
 #include "G4Ellipsoid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDSpleen::G4MIRDSpleen()
-{
-}
-
-G4MIRDSpleen::~G4MIRDSpleen()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDSpleen::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					   const G4String& colourName, G4bool wireFrame, G4bool)
 {
-
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double ax= 3.5 *cm;
   G4double by= 2. *cm;
   G4double cz= 6. * cm; 
 
-  G4Ellipsoid* spleen = new G4Ellipsoid("spleen", ax, by, cz);
+  auto* spleen = new G4Ellipsoid("spleen", ax, by, cz);
 
 
-  G4LogicalVolume* logicSpleen = new G4LogicalVolume(spleen, soft,
+  auto* logicSpleen = new G4LogicalVolume(spleen, soft,
 						     "logical" + volumeName,
-						     0, 0, 0);
+						     nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physSpleen = new G4PVPlacement(0,
+  G4VPhysicalVolume* physSpleen = new G4PVPlacement(nullptr,
 						    G4ThreeVector(11. *cm, 3. *cm, 2.*cm), // ztrans = half trunk lenght - z0
 						    "physicalSpleen",
 						    logicSpleen,
@@ -85,13 +74,11 @@ G4VPhysicalVolume* G4MIRDSpleen::Construct(const G4String& volumeName,G4VPhysica
 						    false,
 						    0, true);
 
-
-
   // Visualization Attributes
   // G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* SpleenVisAtt = new G4VisAttributes(colour);
+  auto* SpleenVisAtt = new G4VisAttributes(colour);
   SpleenVisAtt->SetForceSolid(wireFrame);
   logicSpleen->SetVisAttributes(SpleenVisAtt);
 
@@ -112,8 +99,6 @@ G4VPhysicalVolume* G4MIRDSpleen::Construct(const G4String& volumeName,G4VPhysica
   // Testing Mass
   G4double SpleenMass = (SpleenVol)*SpleenDensity;
   G4cout << "Mass of Spleen = " << SpleenMass/gram << " g" << G4endl;
-
-
-  
+ 
   return physSpleen;
 }

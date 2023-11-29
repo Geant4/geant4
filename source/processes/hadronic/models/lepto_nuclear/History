@@ -1,31 +1,41 @@
--------------------------------------------------------------------
+# Category hadr-lepnuc History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/models/util directory
-            -----------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-10-30 Vladimir Grichine(hadr-lepnuc-V11-00-06)
+- G4(A)NuTauMucleusNc(Cc)Models added for (anti)_nu_tau final state 
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-10-26 Alberto Ribon (hadr-lepnuc-V11-00-05)
+- G4ElectroVDNuclearModel : added protections against null pointers to 
+  gamma cross section and material (causing rare crashes).
 
-20 April 2022 Alberto Ribon (hadr-lepnuc-V10-07-06)
----------------------------------------------------
+## 2022-06-20 Igor Semeniouk (hadr-lepnuc-V11-00-04)
+- G4ANuElNucleusCcModel.cc, G4ANuElNucleusNcModel.cc,
+  G4ANuMuNucleusCcModel.cc, G4ANuMuNucleusNcModel.cc,
+  G4NuElNucleusCcModel.cc, G4NuElNucleusNcModel.cc,
+  G4NuMuNucleusCcModel.cc,G4NuMuNucleusNcModel.cc :
+  use G4FindDataDir("G4PARTICLEXSDATA") on place of getenv.
+
+## 2022-04-20 Alberto Ribon (hadr-lepnuc-V11-00-03)
 - G4MuonVDNuclearModel.cc : fixed compilation warnings for
   'may be used uninitialized' variables.
 
-17 February 2022 Vladimir Ivanchenko
-------------------------------------
+## 2022-02-17 Vladimir Ivanchenko (hadr-lepnuc-V11-00-02)
 - G4NeutrinoNucleusModel - fixed memory leak reported by Coverity
 
-09 February 2022 Gabriele Cosmo
--------------------------------
+## 2022-02-09 Gabriele Cosmo (hadr-lepnuc-V11-00-01)
 - Fixed compilation warning on Intel compilers for unused variables.
+
+## 2021-12-10 Ben Morgan (hadr-lepnuc-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 04 August 2021 A. Ribon (hadr-lepnuc-V10-07-05)
 --------------------------------------------------

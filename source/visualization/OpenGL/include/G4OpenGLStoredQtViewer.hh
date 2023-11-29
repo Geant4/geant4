@@ -34,7 +34,6 @@
 
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLQtViewer.hh"
-#include <qgl.h>  // include qglwidget
 
 class QMouseEvent;
 class QWheelEvent;
@@ -43,7 +42,7 @@ class QContextMenuEvent;
 class G4OpenGLStoredSceneHandler;
 
 class G4OpenGLStoredQtViewer:
-  public G4OpenGLQtViewer, public G4OpenGLStoredViewer, public QGLWidget {
+  public G4OpenGLQtViewer, public G4OpenGLStoredViewer, public G4QGLWidgetType {
   
 public:
   G4OpenGLStoredQtViewer (G4OpenGLStoredSceneHandler& scene,

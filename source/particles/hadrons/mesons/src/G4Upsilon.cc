@@ -41,16 +41,16 @@
 // ###                             Upsilon                            ###
 // ######################################################################
 
-G4Upsilon* G4Upsilon::theInstance = 0;
+G4Upsilon* G4Upsilon::theInstance = nullptr;
 
 G4Upsilon* G4Upsilon::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "Upsilon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -67,10 +67,10 @@ G4Upsilon* G4Upsilon::Definition()
                     2,              -1,            -1,
                     0,               0,            -1,
               "meson",               0,             0,         553,
-                false,          0.0*ns,          NULL,
+                false,          0.0*ns,          nullptr,
                 false,       "Upsilon",           553);
   }
-  theInstance = reinterpret_cast<G4Upsilon*>(anInstance);
+  theInstance = static_cast<G4Upsilon*>(anInstance);
   return theInstance;
 }
 

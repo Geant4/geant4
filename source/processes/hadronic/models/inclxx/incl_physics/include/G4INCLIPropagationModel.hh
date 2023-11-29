@@ -82,6 +82,7 @@ namespace G4INCL {
 
       virtual G4double shoot(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
     protected:
+      virtual G4double shootAtrest(ParticleType const t, const G4double kineticEnergy) = 0; 
       virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
       virtual G4double shootComposite(ParticleSpecies const &s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
 

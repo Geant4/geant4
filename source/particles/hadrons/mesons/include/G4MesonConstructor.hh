@@ -40,10 +40,6 @@ class G4MesonConstructor
   //This class is a utility class for construction 
 
   public:
-    G4MesonConstructor();
-    ~G4MesonConstructor();
-  
-  public:
     static void ConstructParticle();
 
   protected:

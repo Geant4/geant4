@@ -156,7 +156,6 @@ class G4VLongitudinalStringDecay : public G4HadronicInteraction
     void SetDiquarkSuppression(G4double aValue);
     void SetDiquarkBreakProbability(G4double aValue);
 
-    void SetVectorMesonProbability(G4double aValue);
     void SetSpinThreeHalfBarionProbability(G4double aValue);
    
     void SetScalarMesonMixings( std::vector<G4double> aVector);
@@ -193,7 +192,7 @@ class G4VLongitudinalStringDecay : public G4HadronicInteraction
 
     G4HadronBuilder *hadronizer;
 
-    G4double pspin_meson;
+    std::vector<G4double> pspin_meson;
     G4double pspin_barion;
     std::vector<G4double> vectorMesonMix;
     std::vector<G4double> scalarMesonMix;

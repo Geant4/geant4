@@ -11,4 +11,4 @@ geant4_add_module(G4hepgeometry
     G4Vector3D.hh
     geomdefs.hh)
 
-geant4_module_link_libraries(G4hepgeometry PUBLIC G4globman)
+geant4_module_link_libraries(G4hepgeometry INTERFACE G4globman)

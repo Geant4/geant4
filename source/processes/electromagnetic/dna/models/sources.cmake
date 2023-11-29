@@ -23,7 +23,6 @@ geant4_add_module(G4emdna-models
     G4DNAELSEPAElasticModel.hh
     G4DNAIonElasticModel.hh
     G4DNAIRT.hh
-    G4DNAIRT_geometries.hh
     G4DNAIRTMoleculeEncounterStepper.hh
     G4DNAMeltonAttachmentModel.hh
     G4DNAMillerGreenExcitationModel.hh
@@ -59,7 +58,6 @@ geant4_add_module(G4emdna-models
     G4LEPTSExcitationModel.hh
     G4VDNAModel.hh
     G4DNAModelInterface.hh
-    G4DNADummyModel.hh
     G4DNADiracRMatrixExcitationModel.hh
     G4DNAQuinnPlasmonExcitationModel.hh
     G4DNARelativisticIonisationModel.hh
@@ -67,13 +65,14 @@ geant4_add_module(G4emdna-models
     G4DNAIndependentReactionTimeModel.hh
     G4DNAIndependentReactionTimeStepper.hh
     G4DNAMakeReaction.hh
-    G4DNAPartiallyDiffusionControlled.hh
-    G4DNATotallyDiffusionControlled.hh
     G4DNAUpdateSystemModel.hh
     G4DNAGillespieDirectMethod.hh
     G4VUpdateSystemModel.hh
     G4DNAUpdateSystemModel.hh
     G4DNAEventScheduler.hh
+    G4DNARPWBAExcitationModel.hh
+    G4DNARPWBAIonisationModel.hh
+    G4VDNAHitModel.hh
   SOURCES
     G4DNABornAngle.cc
     G4DNABornExcitationModel1.cc
@@ -93,7 +92,6 @@ geant4_add_module(G4emdna-models
     G4DNAEmfietzoglouIonisationModel.cc
     G4DNAIonElasticModel.cc
     G4DNAIRT.cc
-    G4DNAIRT_geometries.cc
     G4DNAIRTMoleculeEncounterStepper.cc
     G4DNAMeltonAttachmentModel.cc
     G4DNAMillerGreenExcitationModel.cc
@@ -128,7 +126,6 @@ geant4_add_module(G4emdna-models
     G4LEPTSDiffXS.cc
     G4VDNAModel.cc
     G4DNAModelInterface.cc
-    G4DNADummyModel.cc
     G4DNADiracRMatrixExcitationModel.cc
     G4DNAQuinnPlasmonExcitationModel.cc
     G4DNARelativisticIonisationModel.cc
@@ -136,12 +133,13 @@ geant4_add_module(G4emdna-models
     G4DNAIndependentReactionTimeModel.cc
     G4DNAIndependentReactionTimeStepper.cc
     G4DNAMakeReaction.cc
-    G4DNAPartiallyDiffusionControlled.cc
-    G4DNATotallyDiffusionControlled.cc
     G4DNAUpdateSystemModel.cc
     G4DNAGillespieDirectMethod.cc
     G4DNAUpdateSystemModel.cc
-    G4DNAEventScheduler.cc)
+    G4DNAEventScheduler.cc
+    G4DNARPWBAExcitationModel.cc
+    G4DNARPWBAIonisationModel.cc
+    G4VDNAHitModel.cc)
 
 geant4_module_link_libraries(G4emdna-models
   PUBLIC
@@ -150,6 +148,7 @@ geant4_module_link_libraries(G4emdna-models
     G4cuts
     G4emdna-man
     G4emdna-molman
+    G4emdna-moltypes
     G4emdna-utils
     G4emlowenergy
     G4emutils
@@ -161,5 +160,5 @@ geant4_module_link_libraries(G4emdna-models
     G4partman
     G4track
   PRIVATE
-    G4emdna-moltypes
-    G4emstandard)
+    G4emstandard
+    G4ions)

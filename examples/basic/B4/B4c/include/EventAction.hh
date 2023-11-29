@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.hh
+/// \file B4/B4c/include/EventAction.hh
 /// \brief Definition of the B4c::EventAction class
 
 #ifndef B4cEventAction_h
@@ -48,8 +48,8 @@ namespace B4c
 class EventAction : public G4UserEventAction
 {
 public:
-  EventAction();
-  ~EventAction() override;
+  EventAction() = default;
+  ~EventAction() override = default;
 
   void  BeginOfEventAction(const G4Event* event) override;
   void    EndOfEventAction(const G4Event* event) override;

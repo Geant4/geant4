@@ -168,7 +168,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ* prevRZ,
 //
 G4PolyconeSide::G4PolyconeSide( __void__& )
   : startPhi(0.), deltaPhi(0.),
-    cone(0), rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
+    rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
     prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.),
     kCarTolerance(0.), instanceID(0)
 {
@@ -189,7 +189,6 @@ G4PolyconeSide::~G4PolyconeSide()
 // Copy constructor
 //
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide& source )
-  : G4VCSGface()
 {
   instanceID = subInstanceManager.CreateSubInstance();
 
@@ -267,7 +266,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector& p,
                                         G4ThreeVector& normal,
                                         G4bool& isAllBehind )
 {
-  G4double s1, s2;
+  G4double s1=0., s2=0.;
   G4double normSign = outgoing ? +1 : -1;
   
   isAllBehind = allBehind;
@@ -463,7 +462,7 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector& p,
   *bestDistance = std::sqrt( dFrom*dFrom + dOut2 );
   
   G4double rds = p.perp();
-  if (rds!=0.) { return G4ThreeVector(rNorm*p.x()/rds,rNorm*p.y()/rds,zNorm); }
+  if (rds!=0.) { return {rNorm*p.x()/rds,rNorm*p.y()/rds,zNorm}; }
   return G4ThreeVector( 0.,0., zNorm ).unit();
 }
 
@@ -1196,5 +1195,5 @@ G4ThreeVector G4PolyconeSide::GetPointOnFace()
     }
   }
 
-  return G4ThreeVector(x,y,zz);
+  return {x,y,zz};
 }

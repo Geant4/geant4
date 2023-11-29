@@ -47,7 +47,7 @@ class G4DoubleHyperH4 : public G4Ions {
   private:
     static G4DoubleHyperH4* theInstance;
     G4DoubleHyperH4()  {}
-    ~G4DoubleHyperH4() {}
+    ~G4DoubleHyperH4() override = default;
 };
 
 #endif

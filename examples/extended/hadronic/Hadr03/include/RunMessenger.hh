@@ -46,15 +46,15 @@ class RunMessenger: public G4UImessenger
 {
 public:
   RunMessenger(RunAction*);
-  virtual ~RunMessenger();
+ ~RunMessenger() override;
     
-  void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
     
 private:
-  RunAction*        fRun;
+  RunAction*        fRun = nullptr;
     
-  G4UIdirectory*    fRunDir;
-  G4UIcmdWithABool* fPrintCmd;
+  G4UIdirectory*    fRunDir = nullptr;
+  G4UIcmdWithABool* fPrintCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

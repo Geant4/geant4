@@ -34,12 +34,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VSolid.hh"
 
-G4VPrimaryGenerator::G4VPrimaryGenerator()
-{;}
-
-G4VPrimaryGenerator::~G4VPrimaryGenerator()
-{;}
-
 G4bool G4VPrimaryGenerator::CheckVertexInsideWorld(const G4ThreeVector& pos)
 {
   G4Navigator* navigator= G4TransportationManager::GetTransportationManager()
@@ -49,5 +43,5 @@ G4bool G4VPrimaryGenerator::CheckVertexInsideWorld(const G4ThreeVector& pos)
   G4VSolid* solid = world-> GetLogicalVolume()-> GetSolid();
   EInside qinside = solid-> Inside(pos);
   
-  return (qinside != kInside) ? false : true;
+  return qinside == kInside;
 }

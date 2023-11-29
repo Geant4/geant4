@@ -37,8 +37,6 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 
-#include "G4PolyhedronArbitrary.hh"
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructors
@@ -51,8 +49,8 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
   unsigned int nVertices = polygon.size();
   unsigned int nSections = zsections.size();
 
-  vecgeom::XtruVertex2* vertices = new vecgeom::XtruVertex2[nVertices];
-  vecgeom::XtruSection* sections = new vecgeom::XtruSection[nSections];
+  auto vertices = new vecgeom::XtruVertex2[nVertices];
+  auto sections = new vecgeom::XtruSection[nSections];
 
   for (unsigned int i = 0; i < nVertices; ++i)
   {
@@ -82,8 +80,8 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
   unsigned int nVertices = polygon.size();
   unsigned int nSections = 2;
 
-  vecgeom::XtruVertex2* vertices = new vecgeom::XtruVertex2[nVertices];
-  vecgeom::XtruSection* sections = new vecgeom::XtruSection[nSections];
+  auto vertices = new vecgeom::XtruVertex2[nVertices];
+  auto sections = new vecgeom::XtruSection[nSections];
 
   for (unsigned int i = 0; i < nVertices; ++i)
   {
@@ -114,9 +112,7 @@ G4UExtrudedSolid::G4UExtrudedSolid(__void__& a)
 //
 // Destructor
 //
-G4UExtrudedSolid::~G4UExtrudedSolid()
-{
-}
+G4UExtrudedSolid::~G4UExtrudedSolid() = default;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -152,12 +148,14 @@ G4int G4UExtrudedSolid::GetNofVertices() const
 {
   return Base_t::GetNVertices();
 }
+
 G4TwoVector G4UExtrudedSolid::GetVertex(G4int i) const
 {
   G4double xx, yy;
   Base_t::GetVertex(i, xx, yy);
-  return G4TwoVector(xx, yy);
+  return { xx, yy };
 }
+
 std::vector<G4TwoVector> G4UExtrudedSolid::GetPolygon() const
 {
   std::vector<G4TwoVector> pol;
@@ -167,26 +165,29 @@ std::vector<G4TwoVector> G4UExtrudedSolid::GetPolygon() const
   }
   return pol;
 }
+
 G4int G4UExtrudedSolid::GetNofZSections() const
 {
   return Base_t::GetNSections();
 }
+
 G4UExtrudedSolid::ZSection G4UExtrudedSolid::GetZSection(G4int i) const
 {
   vecgeom::XtruSection sect = Base_t::GetSection(i);
-  return ZSection(sect.fOrigin[2],
-                  G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
-                  sect.fScale);
+  return { sect.fOrigin[2],
+           G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
+           sect.fScale };
 }
+
 std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
 {
   std::vector<G4UExtrudedSolid::ZSection> sections;
   for (unsigned int i = 0; i < Base_t::GetNSections(); ++i)
   {
     vecgeom::XtruSection sect = Base_t::GetSection(i);
-    sections.push_back(ZSection(sect.fOrigin[2],
-                                G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
-                                sect.fScale));
+    sections.emplace_back(sect.fOrigin[2],
+                          G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
+                          sect.fScale);
   }
   return sections;
 }
@@ -299,7 +300,7 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, the base polygon is subdivided in triangles.
@@ -344,8 +345,8 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
       G4double dy    = zsect.fOffset.y();
       G4double scale = zsect.fScale;
 
-      G4ThreeVectorList* ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
-      G4ThreeVectorList::iterator iter = ptr->begin();
+      auto ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
+      auto iter = ptr->begin();
       G4double x0 = triangles[i3+0].x()*scale+dx;
       G4double y0 = triangles[i3+0].y()*scale+dy;
       iter->set(x0,y0,z);
@@ -368,7 +369,7 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
     if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
   // free memory
-  for (G4int k=0; k<nsect; ++k) { delete polygons[k]; polygons[k]=0;}
+  for (G4int k=0; k<nsect; ++k) { delete polygons[k]; polygons[k]=nullptr;}
   return (pMin < pMax);
 }
 
@@ -382,14 +383,13 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
   unsigned int nFacets = Base_t::GetStruct().fTslHelper.fFacets.size();
   unsigned int nVertices = Base_t::GetStruct().fTslHelper.fVertices.size();
 
-  G4PolyhedronArbitrary* polyhedron =
-    new G4PolyhedronArbitrary (nVertices, nFacets);
+  auto polyhedron = new G4Polyhedron(nVertices, nFacets);
 
   // Copy vertices
   for (unsigned int i = 0; i < nVertices; ++i)
   {
     U3Vector v = Base_t::GetStruct().fTslHelper.fVertices[i];
-    polyhedron->AddVertex(G4ThreeVector(v.x(), v.y(), v.z()));
+    polyhedron->SetVertex(i+1, G4ThreeVector(v.x(), v.y(), v.z()));
   }
 
   // Copy facets
@@ -399,11 +399,11 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
     G4int i1 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[0] + 1;
     G4int i2 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[1] + 1;
     G4int i3 = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[2] + 1;
-    polyhedron->AddFacet(i1, i2, i3);
+    polyhedron->SetFacet(i+1, i1, i2, i3);
   }
   polyhedron->SetReferences();
 
-  return (G4Polyhedron*) polyhedron;
+  return polyhedron;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

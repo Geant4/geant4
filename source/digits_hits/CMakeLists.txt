@@ -1,12 +1,10 @@
 # - G4digits_hits category build
-
-# Add (private) allocation export symbol
 add_definitions(-DG4DIGI_ALLOC_EXPORT)
 
-geant4_global_library_target(NAME G4digits_hits
-  COMPONENTS
-    detector/sources.cmake
-    digits/sources.cmake
-    hits/sources.cmake
-    scorer/sources.cmake
-    utils/sources.cmake)
+include(detector/sources.cmake)
+include(digits/sources.cmake)
+include(hits/sources.cmake)
+include(scorer/sources.cmake)
+include(utils/sources.cmake)
+
+geant4_add_category(G4digits_hits MODULES G4detector G4digits G4hits G4detscorer G4detutils)

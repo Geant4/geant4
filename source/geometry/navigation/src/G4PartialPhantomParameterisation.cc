@@ -42,15 +42,12 @@
 
 //------------------------------------------------------------------
 G4PartialPhantomParameterisation::G4PartialPhantomParameterisation()
-  : G4PhantomParameterisation()
 {
 }
 
 
 //------------------------------------------------------------------
-G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation()
-{
-}
+G4PartialPhantomParameterisation::~G4PartialPhantomParameterisation() = default;
 
 //------------------------------------------------------------------
 void G4PartialPhantomParameterisation::
@@ -69,7 +66,7 @@ GetTranslation(const G4int copyNo ) const
 {
   CheckCopyNo( copyNo );
 
-  size_t nx, ny, nz;
+  std::size_t nx, ny, nz;
   ComputeVoxelIndices( copyNo, nx, ny, nz );
 
   G4ThreeVector trans( (2*nx+1)*fVoxelHalfX - fContainerWallX,
@@ -92,7 +89,7 @@ ComputeMaterial( const G4int copyNo, G4VPhysicalVolume*, const G4VTouchable* )
 
 //------------------------------------------------------------------
 size_t G4PartialPhantomParameterisation::
-GetMaterialIndex( size_t copyNo ) const
+GetMaterialIndex( std::size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
@@ -104,16 +101,16 @@ GetMaterialIndex( size_t copyNo ) const
 
 //------------------------------------------------------------------
 size_t G4PartialPhantomParameterisation::
-GetMaterialIndex( size_t nx, size_t ny, size_t nz ) const
+GetMaterialIndex( std::size_t nx, std::size_t ny, std::size_t nz ) const
 {
-  size_t copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
+  std::size_t copyNo = nx + fNoVoxelsX*ny + fNoVoxelsXY*nz;
   return GetMaterialIndex( copyNo );
 }
 
 
 //------------------------------------------------------------------
 G4Material* G4PartialPhantomParameterisation::
-GetMaterial( size_t nx, size_t ny, size_t nz) const
+GetMaterial( std::size_t nx, std::size_t ny, std::size_t nz) const
 {
   return fMaterials[GetMaterialIndex(nx,ny,nz)];
 }
@@ -121,7 +118,7 @@ GetMaterial( size_t nx, size_t ny, size_t nz) const
 
 //------------------------------------------------------------------
 G4Material* G4PartialPhantomParameterisation::
-GetMaterial( size_t copyNo ) const
+GetMaterial( std::size_t copyNo ) const
 {
   return fMaterials[GetMaterialIndex(copyNo)];
 }
@@ -129,15 +126,15 @@ GetMaterial( size_t copyNo ) const
 
 //------------------------------------------------------------------
 void G4PartialPhantomParameterisation::
-ComputeVoxelIndices(const G4int copyNo, size_t& nx,
-                            size_t& ny, size_t& nz ) const
+ComputeVoxelIndices(const G4int copyNo, std::size_t& nx,
+                          std::size_t& ny, std::size_t& nz ) const
 {
   CheckCopyNo( copyNo );
 
-  auto ite = fFilledIDs.lower_bound(size_t(copyNo));
-  G4int dist = std::distance( fFilledIDs.cbegin(), ite );
-  nz = size_t( dist/fNoVoxelsY );
-  ny = size_t( dist%fNoVoxelsY );
+  auto ite = fFilledIDs.lower_bound(copyNo);
+  G4long dist = std::distance( fFilledIDs.cbegin(), ite );
+  nz = std::size_t( dist/fNoVoxelsY );
+  ny = std::size_t( dist%fNoVoxelsY );
 
   G4int ifmin = (*ite).second;
   G4int nvoxXprev;
@@ -172,13 +169,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // if the direction is negative substract 1
 
   G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
-  G4int nx = G4int(fx);
+  auto  nx = G4int(fx);
 
   G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.);
-  G4int ny = G4int(fy);
+  auto  ny = G4int(fy);
 
   G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
-  G4int nz = G4int(fz);
+  auto  nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
   // negative place it on the previous voxel (if direction is positive it is
@@ -249,7 +246,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( nx >= G4int(fNoVoxelsX) )
   {
-    nx = fNoVoxelsX-1;
+    nx = G4int(fNoVoxelsX)-1;
     isOK = false;
   }
   if( ny < 0 )
@@ -259,7 +256,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( ny >= G4int(fNoVoxelsY) )
   {
-    ny = fNoVoxelsY-1;
+    ny = G4int(fNoVoxelsY)-1;
     isOK = false;
   }
   if( nz < 0 )
@@ -269,7 +266,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
   else if( nz >= G4int(fNoVoxelsZ) )
   {
-    nz = fNoVoxelsZ-1;
+    nz = G4int(fNoVoxelsZ)-1;
     isOK = false;
   }
   if( !isOK )
@@ -289,7 +286,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
                 "GeomNav1002", JustWarning, message);
   }
 
-  G4int nyz = nz*fNoVoxelsY+ny;
+  auto  nyz = G4int(nz*fNoVoxelsY+ny);
   auto ite = fFilledIDs.cbegin();
 /*
   for( ite = fFilledIDs.cbegin(); ite != fFilledIDs.cend(); ++ite )
@@ -316,7 +313,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
 
 
 //------------------------------------------------------------------
-void G4PartialPhantomParameterisation::CheckCopyNo( const G4int copyNo ) const
+void G4PartialPhantomParameterisation::CheckCopyNo( const G4long copyNo ) const
 { 
   if( copyNo < 0 || copyNo >= G4int(fNoVoxels) )
   {

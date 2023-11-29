@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.hh
+/// \file B2/B2b/include/DetectorConstruction.hh
 /// \brief Definition of the B2b::DetectorConstruction class
 
 #ifndef B2bDetectorConstruction_h

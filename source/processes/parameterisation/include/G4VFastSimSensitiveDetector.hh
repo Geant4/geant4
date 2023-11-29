@@ -54,6 +54,7 @@
 class G4VFastSimSensitiveDetector
 {
  public:
+  virtual ~G4VFastSimSensitiveDetector() = default;
   /// Create a hit.
   ///
   /// It checks if G4VSensitiveDetector is also used as a base class,

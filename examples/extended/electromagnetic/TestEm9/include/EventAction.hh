@@ -45,15 +45,17 @@ class EventAction : public G4UserEventAction
 public: 
 
   EventAction();
+  ~EventAction() override = default;
 
-  virtual ~EventAction();
+  void BeginOfEventAction(const G4Event*) override;
+  void EndOfEventAction(const G4Event*) override;
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+  EventAction & operator=(const EventAction &right) = delete;
+  EventAction(const EventAction&) = delete;
 
 private:
 
-  G4int    fVerbose;
+  G4int fVerbose;
 };
 
 #endif

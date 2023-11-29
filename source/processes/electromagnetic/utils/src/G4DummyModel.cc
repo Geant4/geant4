@@ -57,8 +57,7 @@ G4DummyModel::G4DummyModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DummyModel::~G4DummyModel()
-{}
+G4DummyModel::~G4DummyModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

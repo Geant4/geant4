@@ -124,7 +124,7 @@ void G4DNABornIonisationModel1::Initialise(const G4ParticleDefinition* particle,
 
   G4double scaleFactor = (1.e-22 / 3.343) * m*m;
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
 
   // *** ELECTRON
 
@@ -520,8 +520,8 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
     // here we assume that H_{2}O electronic levels are the same as Oxygen.
     // this can be considered true with a rough 10% error in energy on K-shell,
 
-    size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
-    size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
+    std::size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
+    std::size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
 
     G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
 
@@ -540,7 +540,7 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
 
       if(secNumberFinal > secNumberInit) 
       {
-	for (size_t i=secNumberInit; i<secNumberFinal; ++i) 
+	for (std::size_t i=secNumberInit; i<secNumberFinal; ++i) 
         {
           //Check if there is enough residual energy 
           if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
@@ -990,8 +990,8 @@ G4int G4DNABornIonisationModel1::RandomSelect(G4double k,
     if (table != 0)
     {
       G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-      const size_t n(table->NumberOfComponents());
-      size_t i(n);
+      const G4int n = (G4int)table->NumberOfComponents();
+      G4int i(n);
       G4double value = 0.;
 
       while (i > 0)

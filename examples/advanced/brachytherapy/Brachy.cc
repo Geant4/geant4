@@ -84,12 +84,12 @@ int main(int argc ,char ** argv)
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
 
   // Initialize the detector component
-  BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction();
+  auto pDetectorConstruction = new  BrachyDetectorConstruction();
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
   // User action initialization
 
-  BrachyActionInitialization* actions = new BrachyActionInitialization();
+ auto actions = new BrachyActionInitialization();
   pRunManager->SetUserInitialization(actions);
 
   //Initialize G4 kernel
@@ -103,7 +103,7 @@ int main(int argc ,char ** argv)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc == 1)   // Define UI session for interactive mode.
     {
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      auto ui = new G4UIExecutive(argc, argv);
       G4cout << " UI session starts ..." << G4endl;
       UImanager -> ApplyCommand("/control/execute VisualisationMacro.mac");
       ui -> SessionStart();

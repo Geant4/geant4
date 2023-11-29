@@ -83,7 +83,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   // For most applications, this is a safe simplification, giving that the nearly all
   // slowly moving charm and bottom hadrons decay before any hadronic interaction can occur.
   // Note that we prefer not to use G4HadronicParameters::GetMinEnergyTransitionFTF_Cascade()
-  // (typicall ~3 GeV) because FTFP works reasonably well below such a value.
+  // (typically ~3 GeV) because FTFP works reasonably well below such a value.
   const G4double energyThresholdForCharmAndBottomHadrons = 100.0*CLHEP::MeV;
   if ( thePrimary.GetKineticEnergy() < energyThresholdForCharmAndBottomHadrons  &&
        ( thePrimary.GetDefinition()->GetQuarkContent( 4 )     != 0  ||    // Has charm       constituent quark
@@ -95,7 +95,27 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     theParticleChange->SetMomentumChange( thePrimary.Get4Momentum().vect().unit() );
     return theParticleChange;
   }
-      
+
+  // Temporarily dummy treatment of light hypernuclei projectiles at low energies.
+  // Bertini and Binary intra-nuclear cascade models are currently not applicable
+  // for hypernuclei and string models cannot handle them properly at low energies -
+  // let's say safely below ~100 MeV.
+  // In these cases, we return as final state the initial state unchanged.
+  // For most applications, this is a safe simplification, giving that the nearly all
+  // slowly moving hypernuclei decay before any hadronic interaction can occur.
+  // Note that we prefer not to use G4HadronicParameters::GetMinEnergyTransitionFTF_Cascade()
+  // (typically ~3 GeV) because FTFP works reasonably well below such a value.
+  // Note that for anti-hypernuclei, FTF model works fine down to zero kinetic energy,
+  // so there is no need of any extra, dummy treatment.
+  const G4double energyThresholdForHyperNuclei = 100.0*CLHEP::MeV;
+  if ( thePrimary.GetKineticEnergy() < energyThresholdForHyperNuclei  &&
+       thePrimary.GetDefinition()->IsHypernucleus() ) {
+    theParticleChange->SetStatusChange( isAlive );
+    theParticleChange->SetEnergyChange( thePrimary.GetKineticEnergy() );
+    theParticleChange->SetMomentumChange( thePrimary.Get4Momentum().vect().unit() );
+    return theParticleChange;
+  }
+
   // check if models have been registered, and use default, in case this is not true @@
   
   const G4DynamicParticle aPart(thePrimary.GetDefinition(),thePrimary.Get4Momentum().vect());
@@ -182,7 +202,6 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 
   G4ReactionProductVector * theTransportResult = nullptr;
 
-  // Uzhi Nov. 2012 for nucleus-nucleus collision
   G4V3DNucleus* theProjectileNucleus = theHighEnergyGenerator->GetProjectileNucleus(); 
   if(theProjectileNucleus == nullptr)
   {
@@ -194,7 +213,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     }
     if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
     {
-      theTransport->SetPrimaryProjectile(thePrimary);	// For Bertini Cascade
+      theTransport->SetPrimaryProjectile(thePrimary);
       theTransportResult = 
         theTransport->Propagate(theInitialResult, 
                                 theHighEnergyGenerator->GetWoundedNucleus());
@@ -252,6 +271,8 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
     G4double time = std::max(ptr->GetFormationTime(), 0.0);
     aNew.SetTime(timePrimary + time);
     aNew.SetCreatorModelID(ptr->GetCreatorModelID());
+    aNew.SetParentResonanceDef(ptr->GetParentResonanceDef());
+    aNew.SetParentResonanceID(ptr->GetParentResonanceID());    
     theParticleChange->AddSecondary(aNew);
     delete ptr;
   }

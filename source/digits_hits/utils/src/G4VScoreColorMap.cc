@@ -41,20 +41,12 @@
 
 G4VScoreColorMap::G4VScoreColorMap(G4String mName)
   : fName(mName)
-  , ifFloat(true)
-  , fMinVal(0.)
-  , fMaxVal(DBL_MAX)
-  , fVisManager(nullptr)
-{
-  ;
-}
-
-G4VScoreColorMap::~G4VScoreColorMap() { ; }
+{}
 
 void G4VScoreColorMap::DrawColorChart(G4int _nPoint)
 {
   fVisManager = G4VVisManager::GetConcreteInstance();
-  if(!fVisManager)
+  if(fVisManager == nullptr)
   {
     G4cerr << "G4VScoringMesh::DrawColorChart(): no visualization system"
            << G4endl;
@@ -116,13 +108,9 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
     }
 
     // text
-    // char cstring[80];
-    // std::sprintf(cstring, "%8.2e", v);
-    // G4String value(cstring);
     std::ostringstream oss;
     oss << std::setw(8) << std::setprecision(1) << std::scientific << v;
-    std::string str = oss.str();
-    G4String value  = str;  //.c_str());
+    G4String value  = oss.str();
 
     G4Text text(value, G4Point3D(-0.9, -0.9 + 0.05 * n, 0.4));
     G4double size = 12.;
@@ -147,7 +135,6 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
       line.push_back(
         G4Point3D(-0.92 + 0.025 * lpsname, -0.965 + 0.002 * l, 0.));
       G4VisAttributes attblack(black);
-      // G4VisAttributes attblack(G4Colour(.5, .5, 1.));
       line.SetVisAttributes(&attblack);
       fVisManager->Draw2D(line);
     }
@@ -173,7 +160,6 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint)
       line.push_back(G4Point3D(-0.7, -0.9 + 0.002 * l, 0.));
       line.push_back(G4Point3D(-0.7 + 0.025 * len, -0.9 + 0.002 * l, 0.));
       G4VisAttributes attblack(black);
-      // G4VisAttributes attblack(G4Colour(.5, .5, .5));
       line.SetVisAttributes(&attblack);
       fVisManager->Draw2D(line);
     }

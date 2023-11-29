@@ -1,0 +1,69 @@
+#
+# Macro file for the test of field01 example
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/tracking/verbose 1
+/run/verbose 1
+#
+# ******  Start of initialisation of classes for field propagation 
+#
+# /field/setMinStep 0.1 mm  
+#
+# Initialise the field classes - parameters, stepper, ...
+#
+# /field/update
+#
+# ******  Initialisation of classes for field propagation is done
+#
+/run/initialize
+#
+/gun/particle e-
+#
+#  /gun/particle proton
+#  /gun/particle chargedgeantino
+#
+/gun/energy 500.0 MeV
+/run/beamOn 1
+#
+/gun/energy 250.0 MeV
+/run/beamOn 1
+#
+/gun/energy 200.0 MeV
+/run/beamOn 1
+#
+/gun/energy 100.0 MeV
+/run/beamOn 1
+#
+/gun/energy  50.0 MeV
+/run/beamOn 1
+#
+# Change the value of the B-field
+#
+/field/update
+/field/setField 0.1 0 0 tesla
+/run/beamOn 1
+#
+/gun/energy 500.0 MeV
+/tracking/verbose 0
+/run/printProgress 10
+/run/beamOn 100
+#
+# Test commands defined in this example
+/control/verbose 2
+#
+/calor/setAbsMat Xe20CO2      # default Air
+/calor/setWorldMat Kr20CO2    # default Air
+/calor/setAbsThick  0.8 mm    # default 1 mm
+/calor/setAbsRad 1900 mm      # default 20000.*mm
+/calor/setAbsZpos  20990 mm   # default 21990.0*mm
+/calor/setWorldZ  45000 mm    # default 44000.*mm
+/calor/setWorldR  23000 mm    # default 22000.*mm
+/field/setFieldZ 1.0 kG       # default field 3*tesla in X-direction 
+#
+/gun/random   on       # default "off"
+/gun/xvertex  100 mm   # default 0
+/gun/yvertex  100 mm   # default 0
+/gun/zvertex  100 mm   # default 0
+#
+/run/beamOn 1

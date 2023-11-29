@@ -41,9 +41,7 @@ G4Mag_EqRhs::G4Mag_EqRhs( G4MagneticField* magField )
 { 
 }
 
-G4Mag_EqRhs::~G4Mag_EqRhs()
-{
-}
+G4Mag_EqRhs::~G4Mag_EqRhs() = default;
 
 void  
 G4Mag_EqRhs::SetChargeMomentumMass( G4ChargeState particleCharge,

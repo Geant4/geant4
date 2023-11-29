@@ -326,7 +326,6 @@ G4PolyhedraSide::~G4PolyhedraSide()
 // Copy constructor
 //
 G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide& source )
-  : G4VCSGface()
 {
   instanceID = subInstanceManager.CreateSubInstance();
 
@@ -950,7 +949,7 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
   //
   // Divide
   //
-  G4int answer = (G4int)(phi/deltaPhi);
+  auto answer = (G4int)(phi/deltaPhi);
   
   if (answer >= numSide)
   {
@@ -1165,9 +1164,9 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector& p,
 // Calculation of surface area of a triangle. 
 // At the same time a random point in the triangle is given
 //
-G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
-                                           G4ThreeVector p2,
-                                           G4ThreeVector p3,
+G4double G4PolyhedraSide::SurfaceTriangle( const G4ThreeVector& p1,
+                                           const G4ThreeVector& p2,
+                                           const G4ThreeVector& p3,
                                            G4ThreeVector* p4 )
 {
   G4ThreeVector v, w;
@@ -1186,8 +1185,8 @@ G4double G4PolyhedraSide::SurfaceTriangle( G4ThreeVector p1,
 // Auxiliary method for GetPointOnSurface()
 //
 G4ThreeVector
-G4PolyhedraSide::GetPointOnPlane( G4ThreeVector p0, G4ThreeVector p1, 
-                                  G4ThreeVector p2, G4ThreeVector p3,
+G4PolyhedraSide::GetPointOnPlane( const G4ThreeVector& p0, const G4ThreeVector& p1, 
+                                  const G4ThreeVector& p2, const G4ThreeVector& p3,
                                   G4double* Area )
 {
   G4double chose,aOne,aTwo;

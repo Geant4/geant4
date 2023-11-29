@@ -58,6 +58,3 @@ G4Quarks::G4Quarks(
 {
    SetParticleSubType("quark");
 }
-
-G4Quarks::~G4Quarks() {}
-

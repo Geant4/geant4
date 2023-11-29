@@ -46,13 +46,13 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-// Constructor
+
 G4ShellData::G4ShellData(G4int minZ, G4int maxZ, G4bool isOccupancy)
   : zMin(minZ), zMax(maxZ), occupancyData(isOccupancy)
-{  }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-// Destructor
+
 G4ShellData::~G4ShellData()
 {
   for (auto& pos : idMap)
@@ -78,7 +78,7 @@ G4ShellData::~G4ShellData()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4ShellData::NumberOfShells(G4int Z) const
+std::size_t G4ShellData::NumberOfShells(G4int Z) const
 {
   G4int z = Z - 1;
   G4int n = 0;
@@ -125,7 +125,7 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
       if (pos!= idMap.end())
 	{
 	  std::vector<G4double> dataSet = *((*pos).second);
-	  G4int nData = dataSet.size();
+	  G4int nData = (G4int)dataSet.size();
 	  if (shellIndex >= 0 && shellIndex < nData)
 	    {
 	      n = (G4int) dataSet[shellIndex];
@@ -146,7 +146,7 @@ G4double G4ShellData::ShellOccupancyProbability(G4int Z, G4int shellIndex) const
       if (pos!= idMap.end())
 	{
 	  std::vector<G4double> dataSet = *((*pos).second);
-	  G4int nData = dataSet.size();
+	  G4int nData = (G4int)dataSet.size();
 	  if (shellIndex >= 0 && shellIndex < nData)
 	    {
 	      prob = dataSet[shellIndex];
@@ -168,7 +168,7 @@ G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
       if (pos!= bindingMap.end())
 	{
 	  G4DataVector dataSet = *((*pos).second);
-	  G4int nData = dataSet.size();
+	  G4int nData = (G4int)dataSet.size();
 	  if (shellIndex >= 0 && shellIndex < nData)
 	    {
 	      value = dataSet[shellIndex];
@@ -230,10 +230,9 @@ void G4ShellData::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   std::ostringstream ost;
   ost << fileName << ".dat";
-  // G4cout << fileName << G4endl;
   G4String name(ost.str());
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4ShellData::LoadData()");
@@ -273,7 +272,7 @@ void G4ShellData::LoadData(const G4String& fileName)
 	    // End of a shell data set
 	    idMap[Z] = ids;
             bindingMap[Z] = energies;
-            G4int n = ids->size();
+            G4int n = (G4int)ids->size();
 	    nShells.push_back(n);
 	    // Start of new shell data set
 	    
@@ -323,7 +322,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   if (occupancyData)
     {
       // Build cumulative from raw shell occupancy
-      for (G4int ZLocal=zMin; ZLocal <= zMax; ZLocal++)
+      for (G4int ZLocal=zMin; ZLocal <= zMax; ++ZLocal)
 	{
 	  std::vector<G4double> occupancy = ShellIdVector(ZLocal);
 
@@ -331,7 +330,7 @@ void G4ShellData::LoadData(const G4String& fileName)
 	  G4double scale = 1. / G4double(ZLocal);
 
 	  prob->push_back(occupancy[0] * scale);
-	  for (size_t i=1; i<occupancy.size(); i++)
+	  for (std::size_t i=1; i<occupancy.size(); ++i)
 	    {
 	      prob->push_back(occupancy[i]*scale + (*prob)[i-1]);
 	    }
@@ -352,7 +351,7 @@ G4int G4ShellData::SelectRandomShell(G4int Z) const
   G4double random = G4UniformRand();
 
   // Binary search the shell with probability less or equal random
-  G4int nShellsLocal = NumberOfShells(Z);
+  G4int nShellsLocal = (G4int)NumberOfShells(Z);
   G4int upperBound = nShellsLocal;
 
   while (shellIndex <= upperBound) 

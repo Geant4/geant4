@@ -10,6 +10,7 @@ set(XML_CONTEXT_BYTES 1024)
 set(XML_DTD 1)
 set(XML_NS 1)
 
+include(CheckCSourceCompiles)
 include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
@@ -28,10 +29,14 @@ check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
 check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
 check_include_file("unistd.h" HAVE_UNISTD_H)
 
-check_function_exists("getpagesize" HAVE_GETPAGESIZE)
-check_function_exists("bcopy" HAVE_BCOPY)
-check_symbol_exists("memmove" "string.h" HAVE_MEMMOVE)
-check_function_exists("mmap" HAVE_MMAP)
+check_symbol_exists("getpagesize" "unistd.h" HAVE_GETPAGESIZE)
+check_symbol_exists("mmap" "sys/mman.h" HAVE_MMAP)
+check_symbol_exists("getrandom" "sys/random.h" HAVE_GETRANDOM)
+
+check_symbol_exists("arc4random_buf" "${_bsd}stdlib.h" HAVE_ARC4RANDOM_BUF)
+if(NOT HAVE_ARC4RANDOM_BUF)
+    check_symbol_exists("arc4random" "${_bsd}stdlib.h" HAVE_ARC4RANDOM)
+endif()
 
 #/* Define to 1 if you have the ANSI C header files. */
 check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
@@ -52,6 +57,16 @@ else(HAVE_SYS_TYPES_H)
   set(SIZE_T "unsigned")
 endif(HAVE_SYS_TYPES_H)
 
+check_c_source_compiles("
+        #include <stdlib.h>  /* for NULL */
+        #include <unistd.h>  /* for syscall */
+        #include <sys/syscall.h>  /* for SYS_getrandom */
+        int main() {
+            syscall(SYS_getrandom, NULL, 0, 0);
+            return 0;
+        }"
+    HAVE_SYSCALL_GETRANDOM)
+
 configure_file(expat_config.h.cmake expat_config.h)
 add_definitions(-DHAVE_EXPAT_CONFIG_H)
 
@@ -69,33 +84,30 @@ set(G4expat_HEADERS
 
 set(G4expat_SOURCES
   ${CMAKE_CURRENT_BINARY_DIR}/expat_config.h
-  src/amigaconfig.h
   src/ascii.h
   src/asciitab.h
   src/iasciitab.h
   src/internal.h
   src/latin1tab.h
-  src/macconfig.h
   src/nametab.h
+  src/siphash.h
   src/utf8tab.h
   src/winconfig.h
-  src/xmlparse.cc
-  src/xmlrole.cc
+  src/xmlparse.c
+  src/xmlrole.c
   src/xmlrole.h
-  src/xmltok.cc
+  src/xmltok.c
   src/xmltok.h
-  src/xmltok_impl.cc
+  src/xmltok_impl.c
   src/xmltok_impl.h
-  src/xmltok_ns.cc)
-
+  src/xmltok_ns.c)
 
 # - Create target(s) and set usage requirements
-geant4_library_target(NAME G4expat SOURCES ${G4expat_SOURCES} ${G4expat_HEADERS})
+geant4_add_external_library(NAME G4expat SOURCES ${G4expat_SOURCES} ${G4expat_HEADERS})
 foreach(__g4expat_target G4expat G4expat-static)
   if(TARGET ${__g4expat_target})
     target_include_directories(${__g4expat_target}
       PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
       PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -106,11 +118,6 @@ endforeach()
 if(TARGET G4expat-static)
   target_compile_definitions(G4expat-static PUBLIC XML_STATIC)
 endif()
-
-# - Ensure the header directory gets added to the list of ones to export
-set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
 
 # Install headers alongside Geant4
 install(FILES ${G4expat_HEADERS}

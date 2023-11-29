@@ -36,7 +36,7 @@
 // Modified:
 //
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,33 +55,32 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class DetectorMessenger: public G4UImessenger
-{
+class DetectorMessenger : public G4UImessenger {
 public:
+  explicit DetectorMessenger(DetectorConstruction *);
+  ~DetectorMessenger() override;
 
-  DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
+  void SetNewValue(G4UIcommand *, G4String) override;
+
+  DetectorMessenger &operator = (const DetectorMessenger &right) = delete;
+  DetectorMessenger(const DetectorMessenger &) = delete;
+
 private:
+  DetectorConstruction *fDetector;
 
-  DetectorConstruction*      fDetector;
-    
-  G4UIdirectory*             fDetDir;
+  G4UIdirectory *fDetDir;
 
-  G4UIcmdWithAString*        fGasMaterCmd;
-  G4UIcmdWithADoubleAndUnit* fGasThickCmd;
-  G4UIcmdWithADoubleAndUnit* fGasRadCmd;
+  G4UIcmdWithAString *fGasMaterCmd;
+  G4UIcmdWithADoubleAndUnit *fGasThickCmd;
+  G4UIcmdWithADoubleAndUnit *fGasRadCmd;
 
-  G4UIcmdWithADoubleAndUnit* fWinThickCmd;
-  G4UIcmdWithAString*        fWindowMaterCmd;
+  G4UIcmdWithADoubleAndUnit *fWinThickCmd;
+  G4UIcmdWithAString *fWindowMaterCmd;
 
-  G4UIcmdWithAString*        fWorldMaterCmd;
+  G4UIcmdWithAString *fWorldMaterCmd;
 
-  G4UIcmdWithADoubleAndUnit* fIonCmd;
-  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+  G4UIcmdWithADoubleAndUnit *fIonCmd;
+  G4UIcmdWithADoubleAndUnit *fStepMaxCmd;
 };
 
 #endif
-

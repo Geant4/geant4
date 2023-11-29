@@ -45,15 +45,23 @@
 #ifndef G4VUSERCHEMISTRYLIST_HH_
 #define G4VUSERCHEMISTRYLIST_HH_
 
+#include "G4Types.hh"
 class G4Molecule;
 class G4DNAMolecularReactionTable;
 class G4VITStepModel;
 class G4MoleculeDefinition;
 
+enum TimeStepModel
+{
+  fSBS,
+  fIRT,
+  fIRT_syn
+};
+
 class G4VUserChemistryList
 {
 public:
-  G4VUserChemistryList(bool flag = true);
+  G4VUserChemistryList(G4bool flag = true);
   virtual ~G4VUserChemistryList();
 
   // If your user class also inherits from G4VPhysicsConstructor,
@@ -63,7 +71,7 @@ public:
     return fIsPhysicsConstructor;
   }
   
-  void ThisIsAPhysicsConstructor(bool flag = true)
+  void ThisIsAPhysicsConstructor(G4bool flag = true)
   {
     fIsPhysicsConstructor = flag;
   }
@@ -91,13 +99,14 @@ public:
 
   void BuildPhysicsTable();
 
-protected:
-  void RegisterTimeStepModel(G4VITStepModel* timeStepModel,
-                             double startingTime = 0);
+ protected:
   void BuildPhysicsTable(G4MoleculeDefinition*);
 
-  int verboseLevel;
-  bool fIsPhysicsConstructor;
+  void RegisterTimeStepModel(G4VITStepModel* timeStepModel,
+                             G4double startingTime = 0);
+
+  G4int verboseLevel;
+  G4bool fIsPhysicsConstructor;
 };
 
 #endif /* G4VUSERCHEMISTRYLIST_HH_ */

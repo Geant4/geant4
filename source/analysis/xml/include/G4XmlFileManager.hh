@@ -52,16 +52,16 @@ class G4XmlFileManager : public G4VTFileManager<std::ofstream>
   public:
     explicit G4XmlFileManager(const G4AnalysisManagerState& state);
     G4XmlFileManager() = delete;
-    virtual ~G4XmlFileManager() = default;
+    ~G4XmlFileManager() override = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<std::ofstream>::WriteFile;
     using G4VTFileManager<std::ofstream>::CloseFile;
 
     // Methods to manipulate output files
-    virtual G4bool OpenFile(const G4String& fileName) final;
+    G4bool OpenFile(const G4String& fileName) final;
 
-    virtual G4String GetFileType() const final { return "xml"; }
+    G4String GetFileType() const final { return "xml"; }
 
     // Specific methods for files per objects
     G4bool CreateNtupleFile(XmlNtupleDescription* ntupleDescription);
@@ -69,11 +69,11 @@ class G4XmlFileManager : public G4VTFileManager<std::ofstream>
 
   protected:
     // Methods derived from templated base class
-    virtual std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
+    std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
+    G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
+    G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
 
-   private:
+  private:
     // Utility method
     G4String GetNtupleFileName(XmlNtupleDescription* ntupleDescription);
 

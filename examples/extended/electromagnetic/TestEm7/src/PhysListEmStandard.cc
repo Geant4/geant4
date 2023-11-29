@@ -82,9 +82,16 @@ PhysListEmStandard::PhysListEmStandard(const G4String&)
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
-  param->SetMscRangeFactor(0.04);
+  param->SetUseMottCorrection(true);  
+  param->SetStepFunction(0.2, 100*CLHEP::um);
+  param->SetStepFunctionMuHad(0.2, 50*CLHEP::um);
+  param->SetStepFunctionLightIons(0.1, 20*CLHEP::um);
+  param->SetStepFunctionIons(0.1, 1*CLHEP::um);
+  param->SetMscRangeFactor(0.03);
+  param->SetLateralDisplacementAlg96(true);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetMuHadLateralDisplacement(true);
+  param->SetFluctuationType(fUrbanFluctuation);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -122,7 +129,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //            
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
       //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
@@ -132,7 +138,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
       //     
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
       //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
@@ -144,7 +149,6 @@ void PhysListEmStandard::ConstructProcess()
 
       ph->RegisterProcess(new G4MuMultipleScattering(), particle);
       G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.1, 50*um);      
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
       ph->RegisterProcess(new G4MuPairProduction(), particle);
@@ -155,7 +159,6 @@ void PhysListEmStandard::ConstructProcess()
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);      
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.1, 20*um);
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(new G4hBremsstrahlung(), particle);
       ph->RegisterProcess(new G4hPairProduction(), particle);            
@@ -165,7 +168,6 @@ void PhysListEmStandard::ConstructProcess()
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
       ph->RegisterProcess(new G4NuclearStopping(), particle);      
             
@@ -174,7 +176,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hMultipleScattering(), particle);          
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       

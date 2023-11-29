@@ -26,6 +26,12 @@
 
 #include "G4DNAExcitation.hh"
 #include "G4LEPTSExcitationModel.hh"
+#include "G4DNAMillerGreenExcitationModel.hh"
+#include "G4DNABornExcitationModel.hh"
+#include "G4DNAGenericIonsManager.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4Positron.hh"
 #include "G4LowEnergyEmProcessSubType.hh"
@@ -39,12 +45,6 @@ G4DNAExcitation::G4DNAExcitation(const G4String& processName,
     G4VEmProcess(processName, type), isInitialised(false)
 {
   SetProcessSubType(fLowEnergyExcitation);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4DNAExcitation::~G4DNAExcitation()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,6 +67,8 @@ G4bool G4DNAExcitation::IsApplicable(const G4ParticleDefinition& p)
 
 void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 {
+  // default models are defined in the case of unit tests,
+  // when G4EmDNABuilder is not used
   if(!isInitialised)
   {
     isInitialised = true;
@@ -76,39 +78,30 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-
-      // Emfietzoglou model
-      /*
-       if(!EmModel()) SetEmModel(new G4DNAEmfietzoglouExcitationModel);
-       EmModel()->SetLowEnergyLimit(8.23*eV);
-       EmModel()->SetHighEnergyLimit(10*MeV);
-       */
       // Born model
-      if(!EmModel())
+      if(nullptr == EmModel(0))
       {
         G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
         SetEmModel(born);
         born->SetLowEnergyLimit(9 * eV);
         born->SetHighEnergyLimit(1 * MeV);
       }
-      AddEmModel(1, EmModel());
+      AddEmModel(1, EmModel(0));
     }
-
     else if(name == "e+")
     {
-      if(!EmModel())
+      if(nullptr == EmModel(0))
       {
         G4LEPTSExcitationModel* lepts = new G4LEPTSExcitationModel();
         SetEmModel(lepts);
         lepts->SetLowEnergyLimit(1 * eV);
         lepts->SetHighEnergyLimit(1 * MeV);
       }
-      AddEmModel(1, EmModel());
+      AddEmModel(1, EmModel(0));
     }
-
     else if(name == "proton")
     {
-      if(!EmModel(0)) // MK: Is this a correct test ?
+      if(nullptr == EmModel(0))
       {
         G4DNAMillerGreenExcitationModel* miller =
             new G4DNAMillerGreenExcitationModel();
@@ -122,13 +115,12 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
         born->SetHighEnergyLimit(100 * MeV);
       }
 
-      AddEmModel(1, EmModel());
-      if(EmModel(1)) AddEmModel(2, EmModel(1));
+      AddEmModel(1, EmModel(0));
+      if(nullptr != EmModel(1)) AddEmModel(2, EmModel(1));
     }
-
     else if(name == "hydrogen")
     {
-      if(!EmModel())
+      if(nullptr == EmModel(0))
       {
         G4DNAMillerGreenExcitationModel* miller =
             new G4DNAMillerGreenExcitationModel;
@@ -136,12 +128,11 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
         miller->SetLowEnergyLimit(10 * eV);
         miller->SetHighEnergyLimit(500 * keV);
       }
-      AddEmModel(1, EmModel());
+      AddEmModel(1, EmModel(0));
     }
-
     else if(name == "alpha" || name == "alpha+" || name == "helium")
     {
-      if(!EmModel())
+      if(nullptr == EmModel(0))
       {
         G4DNAMillerGreenExcitationModel* miller =
             new G4DNAMillerGreenExcitationModel;
@@ -149,26 +140,17 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
         miller->SetLowEnergyLimit(1 * keV);
         miller->SetHighEnergyLimit(400 * MeV);
       }
-      AddEmModel(1, EmModel());
+      AddEmModel(1, EmModel(0));
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4DNAExcitation::PrintInfo()
+void G4DNAExcitation::ProcessDescription(std::ostream& out) const
 {
-  if(EmModel(2))
-  {
-    G4cout << " Total cross sections computed from " << EmModel(1)->GetName()
-           << " and " << EmModel(2)->GetName() << " models" << G4endl;
-  }
-  else
-  {
-    G4cout << " Total cross sections computed from "
-           << EmModel()->GetName()
-           << G4endl;
-  }
+  out << "  DNA Excitation";
+  G4VEmProcess::ProcessDescription(out);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

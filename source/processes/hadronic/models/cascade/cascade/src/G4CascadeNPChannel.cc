@@ -2079,7 +2079,10 @@ G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 G4double 
 G4CascadeNPChannel::findCrossSection(G4double ke,
                                      const G4double (&xsec)[30]) const {
-  if (ke < 0.01 && (xsec == npTotXSec || xsec == npCrossSections[0])) {
+  if (ke < 0.01 &&
+       (std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(npTotXSec))
+     || std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(npCrossSections[0]))))
+  {
     // Stepanov's function for ke < 10 MeV, up to zero-energy value
     const G4double kemin = 1.92/npTotXSec[0];
     return (ke>0.001 ? (3.0885 - 0.0011748/ke)/ke + 5.3107 :

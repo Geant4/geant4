@@ -52,10 +52,10 @@ class G4HadProcesses
 {
 public: 
 
-  // convert name to pointer
+  // convert particle name to a pointer
   static const G4ParticleDefinition* FindParticle(const G4String&);
 
-  // access to a process
+  // access to a process created before
   static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
   static G4HadronicProcess* FindInelasticProcess(const G4String&);
 
@@ -80,6 +80,12 @@ public:
   static G4bool AddCaptureCrossSection(G4VCrossSectionDataSet*);
 
   static G4bool AddFissionCrossSection(G4VCrossSectionDataSet*);
+
+  // build neutron physics, neutron inelastic and elastic processes
+  // and list of models should be defined before call to this functions
+  static void BuildNeutronInelasticAndCapture(G4HadronicProcess*);
+  static void BuildNeutronElastic(G4HadronicProcess*);
+
 };
 
 #endif

@@ -55,7 +55,7 @@ class G4GenericMuonicAtom : public G4MuonicAtom
  private:
    static G4GenericMuonicAtom* theInstance;
    G4GenericMuonicAtom(){}
-   ~G4GenericMuonicAtom(){}
+   ~G4GenericMuonicAtom() override= default;
 
  public:
    static G4GenericMuonicAtom* Definition();

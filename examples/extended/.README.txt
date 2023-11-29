@@ -20,7 +20,7 @@ Webified README pages are not yet available for all examples. </i>
    - A set of common classes which can be reused in other examples demonstrating just a particular feature
 - \link Examples_electromagnetic electromagnetic \endlink
    - Specific EM physics simulation with histogramming
-- \link Exampleerrorpropagation errorpropagation \endlink
+- \link Examples_errorpropagation errorpropagation \endlink
    - Use of the error propagation utility (Geant4e)
 - \link Examples_eventgenerator eventgenerator \endlink
    - Applications demonstrating various ways of primary event generation:

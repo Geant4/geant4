@@ -46,7 +46,7 @@ G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 // -------------------------------------------------------------------
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient,
-                                           G4ThreeVector pOrigin,
+                                           const G4ThreeVector& pOrigin,
                                            G4RotationMatrix* pMatrix)
 {
    fGradient = pGradient ;
@@ -63,14 +63,12 @@ G4Field* G4QuadrupoleMagField::Clone() const
 
 // -------------------------------------------------------------------
 
-G4QuadrupoleMagField::~G4QuadrupoleMagField()
-{
-}
+G4QuadrupoleMagField::~G4QuadrupoleMagField() = default;
 
 // -------------------------------------------------------------------
 
-void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
-                                                G4double B[3]  ) const
+void G4QuadrupoleMagField::GetFieldValue( const G4double y[],         // [7]
+                                                G4double B[]  ) const // [3]
 {
   //  with displaced origin and rotation
 

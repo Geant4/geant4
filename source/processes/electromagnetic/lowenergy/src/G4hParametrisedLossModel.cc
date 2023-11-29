@@ -217,7 +217,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
 {
   G4double eloss = 0.0;
 
-  const G4int numberOfElements = material->GetNumberOfElements() ;
+  const std::size_t numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
     material->GetAtomicNumDensityVector() ;
 
@@ -232,7 +232,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
         G4int nAtoms = 0;
 
         const G4int* theAtomsVector = material->GetAtomsVector();
-        for (G4int iel=0; iel<numberOfElements; iel++) {
+        for (std::size_t iel=0; iel<numberOfElements; ++iel) {
           nAtoms += theAtomsVector[iel];
         }
         eloss /= nAtoms;
@@ -256,7 +256,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
 
 
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; i++) {
+    for (std::size_t i=0; i<numberOfElements; ++i) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss    +=(eStopingPowerTable->ElectronicStoppingPower(z,kineticEnergy))
@@ -274,7 +274,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
                            material->GetElementVector() ;
 
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; i++)
+    for (std::size_t i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
@@ -308,7 +308,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   const G4State theState = material->GetState() ;
   if( theState == kStateGas && myFormula == chFormula) return false ;
 
-  const size_t numberOfMolecula = 53 ;
+  const std::size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
   static const G4double HeEff = 2.8735 ;
@@ -370,7 +370,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   } ;
 
   // Search for the compaund in the table
-  for (size_t i=0; i<numberOfMolecula; i++)
+  for (std::size_t i=0; i<numberOfMolecula; ++i)
     {
       if(chFormula == name[i]) {
         G4double exp125 = expStopping[i] *

@@ -59,11 +59,9 @@
 #ifndef G4MuBremsstrahlungModel_h
 #define G4MuBremsstrahlungModel_h 1
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
-#include "G4Threading.hh"
+#include "G4Exp.hh"
 
 class G4Element;
 class G4ParticleChangeForLoss;
@@ -126,13 +124,13 @@ protected:
 						   G4double Z,
 						   G4double gammaEnergy);
 
-  inline void SetParticle(const G4ParticleDefinition*);
+  void SetParticle(const G4ParticleDefinition*);
 
 protected:
 
   const G4ParticleDefinition* particle = nullptr;
-  G4ParticleDefinition*       theGamma = nullptr;
-  G4ParticleChangeForLoss*    fParticleChange = nullptr;
+  G4ParticleDefinition* theGamma = nullptr;
+  G4ParticleChangeForLoss* fParticleChange = nullptr;
   G4NistManager* nist = nullptr;
 
   G4double mass = 1.0;
@@ -150,12 +148,7 @@ protected:
 
   static const G4double xgi[6];
   static const G4double wgi[6];
-
   static G4double fDN[93];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex theMuBremMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,20 +156,6 @@ protected:
 inline void G4MuBremsstrahlungModel::SetLowestKineticEnergy(G4double e) 
 {
   lowestKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(nullptr == particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    rmass = mass/CLHEP::electron_mass_c2 ;
-    cc = CLHEP::classic_electr_radius/rmass ;
-    coeff = 16.*CLHEP::fine_structure_const*cc*cc/3. ;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

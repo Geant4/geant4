@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HadCalorimeterSD.hh
+/// \file B5/include/HadCalorimeterSD.hh
 /// \brief Definition of the B5::HadCalorimeterSD class
 
 #ifndef B5HadCalorimeterSD_h
@@ -47,7 +47,7 @@ class HadCalorimeterSD : public G4VSensitiveDetector
 {
   public:
     HadCalorimeterSD(G4String name);
-    ~HadCalorimeterSD() override;
+    ~HadCalorimeterSD() override = default;
 
     void Initialize(G4HCofThisEvent*HCE) override;
     G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) override;

@@ -1,17 +1,44 @@
--------------------------------------------------------------------
+# Category phys-ctor-limiters History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-    Hadronic physics-list/constructors/limiters History
-    ---------------------------------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-24 Gabriele Cosmo (phys-ctor-limiters-V11-00-08)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-09-05 Ben Morgan (phys-ctor-limiters-V11-00-07)
+- Update public/private dependencies for consistency
+
+## 2022-08-31, Gabriele Cosmo (phys-ctor-limiters-V11-00-06)
+- Fixed defects reported by Coverity in G4GenericBiasingPhysics, to use auto&.
+
+## 2022-08-24, Vladimir Ivanchenko (phys-ctor-limiters-V11-00-05)
+- G4NeutronTrackingCut - use enumerator for neutron general process
+    instead of hard-coded number
+
+## 2022-08-22, Gabriele Cosmo (phys-ctor-limiters-V11-00-04)
+- Added missing dependency on G4physlist_util in souces.cmake script.
+
+## 2022-08-18, Vladimir Ivanchenko (phys-ctor-limiters-V11-00-03)
+- G4NeutronTrackingCut - added check if G4NeutronGeneralProcess is
+    defined to avoid double instantiation of the same cut
+
+## 2022-04-25, Vladimir Ivanchenko (phys-ctor-limiters-V11-00-02)
+- G4UserSpecialCuts class is moved from process/transportation 
+
+## 2022-02-21, Ivana Hrivnacova  (phys-ctor-limiters-V11-00-01)
+- G4SpecialCuts: added setting of process type (fGeneral) and sub type (USER_SPECIAL_CUTS)
+  G4MinEkineCuts: removed setting of process type fUserDefined
+
+## 2021-12-10 Ben Morgan (phys-ctor-limiters-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 13-Apr-2021, A. Ribon     (phys-ctor-limiters-V10-07-00)
 -  GNUmakefile, sources.cmake : removed dependency on hadronic/model/util

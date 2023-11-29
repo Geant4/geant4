@@ -322,7 +322,7 @@ G4ThreeVector G4ScaledSolid::GetPointOnSurface() const
 //
 G4GeometryType G4ScaledSolid::GetEntityType() const
 {
-  return G4String("G4ScaledSolid");
+  return {"G4ScaledSolid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -340,9 +340,9 @@ G4VSolid* G4ScaledSolid::Clone() const
 //
 G4Scale3D G4ScaledSolid::GetScaleTransform() const
 {
-  return G4Scale3D(fScale->GetScale().x(),
-                   fScale->GetScale().y(),
-                   fScale->GetScale().z());
+  return { fScale->GetScale().x(),
+           fScale->GetScale().y(),
+           fScale->GetScale().z() };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -351,7 +351,7 @@ G4Scale3D G4ScaledSolid::GetScaleTransform() const
 //
 void G4ScaledSolid::SetScaleTransform(const G4Scale3D& scale)
 {
-  if (fScale != nullptr) { delete fScale; }
+  delete fScale; 
   fScale = new G4ScaleTransform(scale);
   fRebuildPolyhedron = true;
 }

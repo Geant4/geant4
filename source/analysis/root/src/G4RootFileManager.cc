@@ -33,7 +33,7 @@
 
 #include "tools/wroot/file"
 #include "tools/wroot/to"
-#include "tools/zlib"
+#include "toolx/zlib"
 
 using namespace tools;
 using namespace G4Analysis;
@@ -59,7 +59,7 @@ tools::wroot::directory*  G4RootFileManager::CreateDirectory(
   tools::wroot::file* rfile,
   const G4String& directoryName,  [[maybe_unused]] const G4String& objectType) const
 {
-  if ( ! rfile ) return nullptr;
+  if (rfile == nullptr) return nullptr;
 
   if ( directoryName == "" ) {
     // Do not create a new directory if its name is not set
@@ -69,13 +69,11 @@ tools::wroot::directory*  G4RootFileManager::CreateDirectory(
   Message(kVL4, "create", "directory for " + objectType, directoryName);
 
   auto directory = rfile->dir().mkdir(directoryName);
-  if ( ! directory ) {
+  if (directory == nullptr) {
     Warn("Cannot create directory " + directoryName, fkClass, "CreateDirectory");
     return nullptr;
   }
-  else {
-    Message(kVL2, "create", "directory for " + objectType, directoryName);
-  }
+  Message(kVL2, "create", "directory for " + objectType, directoryName);
 
   return directory;
 }
@@ -88,12 +86,13 @@ G4String G4RootFileManager::GetNtupleFileName(
 {
   // get ntuple file name
 
-  auto ntupleFileName = ntupleDescription->fFileName;
-  if ( ntupleFileName.size() ) {
+  auto ntupleFileName = ntupleDescription->GetFileName();
+  if (ntupleFileName.size() != 0u) {
     if ( perThread ) {
       ntupleFileName = GetTnFileName(ntupleFileName, GetFileType());
     }
-  } else {
+  }
+  else {
     // get default file name
     ntupleFileName = GetFullFileName(fFileName, perThread);
   }
@@ -118,7 +117,7 @@ G4RootFileManager::CreateFileImpl(const G4String& fileName)
 {
   // create file
   std::shared_ptr<wroot::file> file = std::make_shared<wroot::file>(G4cout, fileName);
-  file->add_ziper('Z',compress_buffer);
+  file->add_ziper('Z',toolx::compress_buffer);
   file->set_compression(fState.GetCompressionLevel());
 
   if ( ! file->is_open() ) {
@@ -129,7 +128,7 @@ G4RootFileManager::CreateFileImpl(const G4String& fileName)
   // create histo directory
   tools::wroot::directory* hdirectory
     = CreateDirectory(file.get(), fHistoDirectoryName, "histograms");
-  if ( ! hdirectory ) {
+  if (hdirectory == nullptr) {
     // Warning is issued in CreateDirectory
     return std::make_shared<G4RootFile>(nullptr, nullptr, nullptr);
   }
@@ -137,7 +136,7 @@ G4RootFileManager::CreateFileImpl(const G4String& fileName)
   // create ntuple directory
   tools::wroot::directory* ndirectory
     = CreateDirectory(file.get(), fNtupleDirectoryName, "ntuples");
-  if ( ! ndirectory ) {
+  if (ndirectory == nullptr) {
     // Warning is issued in CreateDirectory
     return std::make_shared<G4RootFile>(nullptr, nullptr, nullptr);
   }
@@ -150,10 +149,9 @@ G4bool G4RootFileManager::WriteFileImpl(std::shared_ptr<G4RootFile> file)
 {
 // New prototype: called by G4TFileManager base classe
 
-  if ( ! file ) return false;
+  // nothing to be done, but file should exist
+  return (file == nullptr) ? false : true;
 
-  unsigned int n;
-  return std::get<0>(*file)->write(n);
 }
 
 //_____________________________________________________________________________
@@ -161,7 +159,11 @@ G4bool G4RootFileManager::CloseFileImpl(std::shared_ptr<G4RootFile> file)
 {
 // New prototype: called by G4TFileManager base classe
 
-  if ( ! file ) return false;
+  if (file == nullptr) return false;
+
+  // write file (only once)
+  unsigned int n;
+  std::get<0>(*file)->write(n);
 
   // close file
   std::get<0>(*file)->close();
@@ -215,7 +217,7 @@ std::shared_ptr<G4RootFile> G4RootFileManager::CreateNtupleFile(
   // register file in ntuple description only if it is not main ntuple file
   // (main ntuple files are managed in main ntuple manager)
   if ( mainNumber == -1 ) {
-    ntupleDescription->fFile = file;
+    ntupleDescription->SetFile(file);
   }
 
   return file;
@@ -233,19 +235,16 @@ std::shared_ptr<G4RootFile> G4RootFileManager::GetNtupleFile(
 
 //_____________________________________________________________________________
 G4bool G4RootFileManager::CloseNtupleFile(
-  RootNtupleDescription* ntupleDescription)
+  RootNtupleDescription* ntupleDescription,  G4int mainNumber)
 {
-  auto result = true;
+  // auto result = true;
 
-  if ( ntupleDescription->fFile ) {
-    // Ntuple files are registered in file manager map.
-    // they will be closed with CloseFiles() calls
-    ntupleDescription->fFile.reset();
-    // Notify not empty file
-    auto ntupleFileName = GetNtupleFileName(ntupleDescription);
-    result &= SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
-  }
+  // Notify not empty file
+  auto ntupleFileName = GetNtupleFileName(ntupleDescription, true, mainNumber);
+  auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->GetHasFill());
+
+  // Ntuple files will be closed with CloseFiles() calls
+  ntupleDescription->GetFile().reset();
 
   return result;
 }
-

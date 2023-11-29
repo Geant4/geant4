@@ -1,0 +1,1458 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : 
+      issued by : TETModelImport::TETModelImport
+PHANTOM_PATH environment variable was not set. Using ./ICRP145data.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+================================================================================
+	MRCP_AM was implemented in this CODE!!   
+================================================================================
+  Opening TETGEN node (vertex points: x y z) file 'MRCP_AM.node'
+  Opening TETGEN elements (tetrahedron with node No.) file 'MRCP_AM.ele'
+  Opening material file 'MRCP_AM.material'
+
+ Organ ID   # of Tet  vol [cm3]  d [g/cm3]   mass [g]	organ/tissue
+--------------------------------------------------------------------------------
+      100       2679      8.381      1.036      8.683	Adrenal_left
+      200       2663      8.381      1.036      8.683	Adrenal_right
+      300       4678      0.022      1.031      0.022	ET1(0-8)
+      301       4668      0.087      1.031      0.090	ET1(8-40)
+      302       4672      0.027      1.031      0.028	ET1(40-50)
+      303       5908     10.952      1.031     11.291	ET1(50-Surface)
+      400       8615      0.141      1.000      0.141	ET2(-15-0)
+      401       8613      0.378      1.031      0.390	ET2(0-40)
+      402       8614      0.095      1.031      0.098	ET2(40-50)
+      403       8614      0.048      1.031      0.049	ET2(50-55)
+      404       8613      0.095      1.031      0.098	ET2(55-65)
+      405      11326     27.942      1.031     28.808	ET2(65-Surface)
+      500       6495      0.082      1.050      0.086	Oral_mucosa_tongue
+      501        769      0.022      1.050      0.024	Oral_mucosa_mouth_floor
+      600       5892      0.022      1.050      0.023	Oral_mucosa_lips_and_cheeks
+      700       2836     10.052      1.031     10.364	Trachea
+      800       7422      0.025      1.000      0.025	BB(-11--6)
+      801       7418      0.030      1.031      0.031	BB(-6-0)
+      802       7426      0.050      1.031      0.052	BB(0-10)
+      803       7423      0.126      1.031      0.130	BB(10-35)
+      804       7425      0.025      1.031      0.026	BB(35-40)
+      805       7419      0.051      1.031      0.052	BB(40-50)
+      806       7421      0.051      1.031      0.052	BB(50-60)
+      807       7425      0.051      1.031      0.053	BB(60-70)
+      808       7466      2.693      1.031      2.777	BB(70-surface)
+      900       8205      1.419      1.060      1.504	Blood_in_large_arteries_head
+      910       6686      6.551      1.060      6.944	Blood_in_large_veins_head
+     1000     199191    182.261      1.060    193.197	Blood_in_large_arteries_trunk
+     1010     194214    418.901      1.060    444.035	Blood_in_large_veins_trunk
+     1100      79908     30.626      1.060     32.463	Blood_in_large_arteries_arms
+     1110      64710    157.801      1.060    167.269	Blood_in_large_veins_arms
+     1200     143952    102.671      1.060    108.832	Blood_in_large_arteries_legs
+     1210     130064    367.680      1.060    389.741	Blood_in_large_veins_legs
+     1300       4516     83.612      1.904    159.196	Humeri_upper_cortical
+     1400       1590    118.158      1.233    145.689	Humeri_upper_spogiosa
+     1500       1038     34.907      0.981     34.244	Humeri_upper_medullary_cavity
+     1600       4205     56.050      1.904    106.720	Humeri_lower_cortical
+     1700       1605     45.888      1.109     50.890	Humeri_lower_spongiosa
+     1800        793     38.121      0.981     37.397	Humeri_lower_medullary_cavity
+     1900      13286    143.597      1.904    273.409	Ulnae_and_radii_cotical
+     2000       4191    139.748      1.109    154.981	Ulnae_and_radii_spongiosa
+     2100       3976     23.442      0.981     22.996	Ulnae_and_radii_medullary_cavity
+     2200      55513     95.341      1.904    181.529	Wrists_and_hand_bones_cortical
+     2300      26624    107.238      1.109    118.927	Wrists_and_hand_bones_spongiosa
+     2400       6916     25.342      1.904     48.252	Clavicles_cortical
+     2500       3515     38.943      1.157     45.057	Clavicles_spongiosa
+     2600     182327    298.566      1.904    568.469	Cranium_cortical
+     2700      94860    327.960      1.165    382.073	Cranium_spongiosa
+     2800       9091    133.166      1.904    253.548	Femora_upper_cortical
+     2900       4288    367.318      1.125    413.232	Femora_upper_spongiosa
+     3000       1039     26.550      0.981     26.045	Femora_upper_medullary_cavity
+     3100       7648    161.639      1.904    307.761	Femora_lower_cortical
+     3200       2934    336.927      1.109    373.652	Femora_lower_spongiosa
+     3300       1540     83.771      0.981     82.179	Femora_lower_medullary_cavity
+     3400      24140    281.855      1.904    536.651	Tibiae_fibulae_and_patellae_cortical
+     3500      11021    560.332      1.109    621.408	Tibiae_fibulae_and_patellae_spongiosa
+     3600       1803     81.361      0.981     79.815	Tibiae_fibulae_and_patellae_medullary_cavity
+     3700      34421    123.363      1.904    234.882	Ankles_and_foot_cortical
+     3800      15056    390.095      1.109    432.615	Ankles_and_foot_spongiosa
+     3900      10794     40.377      1.904     76.877	Mandible_cortical
+     4000       4792     44.286      1.271     56.287	Mandible_spongiosa
+     4100      20905    211.447      1.904    402.595	Pelvis_cortical
+     4200      11670    552.785      1.121    619.672	Pelvis_spongiosa
+     4300     163255    193.696      1.904    368.797	Ribs_cortical
+     4400      84986    390.898      1.170    457.351	Ribs_spongiosa
+     4500      43878    117.297      1.904    223.333	Scapulae_cortical
+     4600      29041    130.450      1.201    156.670	Scapulae_spongiosa
+     4700     113618     54.592      1.904    103.943	Cervical_spine_cortical
+     4800      52162     75.229      1.049     78.915	Cervical_spine_spongiosa
+     4900     188758    152.017      1.904    289.440	Thoracic_spine_cortical
+     5000      83312    322.637      1.070    345.222	Thoracic_spine_spongiosa
+     5100      78115     98.764      1.904    188.047	Lumbar_spine_cortical
+     5200      35095    263.163      1.108    291.584	Lumbar_spine_spongiosa
+     5300      52256     57.941      1.904    110.320	Sacrum_cortical
+     5400      24993    186.083      1.033    192.224	Sacrum_spongiosa
+     5500      19002      5.247      1.904      9.991	Sternum_cortical
+     5600       9933     59.001      1.041     61.420	Sternum_spongiosa
+     5700      30694     51.257      1.099     56.331	Cartilage_costal
+     5800      41577     74.671      1.099     82.063	Cartilage_discs
+     6100      16690   1457.627      1.041   1517.390	Brain
+     6200       1176      8.152      0.953      7.769	Breast_left_adipose_tissue
+     6300        767      5.074      1.021      5.180	Breast_left_glandular_tissue
+     6400       1312      8.152      0.953      7.769	Breast_right_adipose_tissue
+     6500        781      5.074      1.021      5.180	Breast_right_glandular_tissue
+     6600       2162      0.037      1.060      0.039	Eye_lens_sensitive_left
+     6601       3213      0.179      1.060      0.189	Eye_lens_insensitive_left
+     6700      24543      1.012      1.100      1.113	Cornea_left
+     6701       3230      0.300      1.025      0.308	Aqueous_left
+     6702       6392      5.938      1.031      6.122	Vitreous_left
+     6800       2161      0.037      1.060      0.039	Eye_lens_sensitive_right
+     6801       3209      0.179      1.060      0.189	Eye_lens_insensitive_right
+     6900      24497      1.012      1.100      1.113	Cornea_right
+     6901       3226      0.300      1.025      0.308	Aqueous_right
+     6902       6400      5.938      1.031      6.122	Vitreous_right
+     7000       3706     10.052      1.031     10.364	Gall_bladder_wall
+     7100       1733     56.311      1.030     58.000	Gall_bladder_contents
+     7200      13462      1.720      1.037      1.784	Stomach_wall(0-60)
+     7201      13462      1.150      1.037      1.193	Stomach_wall(60-100)
+     7202      13442      5.794      1.037      6.008	Stomach_wall(100-300)
+     7203      14008    178.675      1.037    185.286	Stomach_wall(300-surface)
+     7300       6779    240.385      1.040    250.000	Stomach_contents
+     7400     107604     14.028      1.037     14.547	Small_intestine_wall(0-130)
+     7401     108179      2.184      1.037      2.264	Small_intestine_wall(130-150)
+     7402     107946      5.489      1.037      5.692	Small_intestine_wall(150-200)
+     7403     102255    810.122      1.037    840.096	Small_intestine_wall(200-surface)
+     7500     105754     51.286      1.040     53.337	Small_intestine_contents(-500-0)
+     7501      68926    285.253      1.040    296.663	Small_intestine_contents(centre--500)
+     7600       5035      2.962      1.037      3.071	Ascending_colon_wall(0-280)
+     7601       5040      0.215      1.037      0.223	Ascending_colon_wall(280-300)
+     7602       5756    112.473      1.037    116.634	Ascending_colon_wall(300-surface)
+     7700       2558     52.885      1.040     55.000	Ascending_colon_content
+     7800       4207      3.850      1.037      3.993	Transverse_colon_wall_right(0-280)
+     7801       4193      0.278      1.037      0.289	Transverse_colon_wall_right(280-300)
+     7802       5672     72.971      1.037     75.671	Transverse_colon_wall_right(300-surface)
+     7900       2078     91.346      1.040     95.000	Transverse_colon_contents_right
+     8000       3262      2.723      1.037      2.824	Transverse_colon_wall_left(0-280)
+     8001       3236      0.198      1.037      0.205	Transverse_colon_wall_left(280-300)
+     8002       4068     74.179      1.037     76.924	Transverse_colon_wall_left(300-surface)
+     8100       1609     38.462      1.040     40.000	Transverse_colon_content_left
+     8200       5849      2.680      1.037      2.779	Descending_colon_wall(0-280)
+     8201       5889      0.196      1.037      0.203	Descending_colon_wall(280-300)
+     8202       6279    112.774      1.037    116.946	Descending_colon_wall(300-surface)
+     8300       2867     33.654      1.040     35.000	Descending_colon_content
+     8400       6070      4.292      1.037      4.451	Sigmoid_colon_wall(0-280)
+     8401       6074      0.312      1.037      0.324	Sigmoid_colon_wall(280-300)
+     8402       6003     46.793      1.037     48.524	Sigmoid_colon_wall(300-surface)
+     8500       3044     72.115      1.040     75.000	Sigmoid_colon_contents
+     8600        851     38.550      1.037     39.976	Rectum_wall
+     8700      15525    367.116      1.051    385.839	Heart_wall
+     8800       8952    481.132      1.060    510.000	Blood_in_heart_chamber
+     8900       9948    154.168      1.053    162.338	Kidney_left_cortex
+     9000       5835     36.429      1.053     38.359	Kidney_left_medulla
+     9100       1080      7.267      1.053      7.652	Kidney_left_pelvis
+     9200       7385    158.159      1.053    166.542	Kidney_right_cortex
+     9300       3176     37.381      1.053     39.362	Kidney_right_medulla
+     9400        786      7.495      1.053      7.892	Kidney_right_pelvis
+     9500      12572   2226.415      1.060   2360.000	Liver
+     9700       8585   1315.366      0.415    545.877	Lung(AI)_left
+     9900       9942   1573.160      0.415    652.861	Lung(AI)_right
+    10000       6820     15.455      1.032     15.949	Lymphatic_nodes_ET
+    10100       6847     15.455      1.032     15.949	Lymphatic_nodes_thoracic
+    10200       2356      5.339      1.032      5.510	Lymphatic_nodes_head
+    10300      55778    126.166      1.032    130.204	Lymphatic_nodes_trunk
+    10400       4773     10.678      1.032     11.019	Lymphatic_nodes_arms
+    10500       4712     10.678      1.032     11.019	Lymphatic_nodes_legs
+    10600     131456   1143.646      1.050   1200.828	Muscle_head
+    10700     396779  14137.838      1.050  14844.730	Muscle_trunk
+    10800     168215   2708.102      1.050   2843.507	Muscle_arms
+    10900     254592  10369.266      1.050  10887.729	Muscle_legs
+    11000      10089      1.851      1.037      1.919	Oesophagus_wall(0-190)
+    11001      10343      0.099      1.037      0.103	Oesophagus_wall(190-200)
+    11002       8293     48.007      1.037     49.783	Oesophagus_wall(200-surface)
+    11003       5948     21.990      1.040     22.870	Oesophagus_contents
+    11300       3149    166.314      1.044    173.631	Pancreas
+    11400       2834      0.603      1.031      0.622	Pituitary_gland
+    11500       1727     17.088      1.031     17.618	Prostate
+    11600     384599   1039.002      0.939    975.622	RST_head
+    11700    1427980  11902.982      0.939  11176.900	RST_trunk
+    11800     313691   1650.523      0.939   1549.842	RST_arms
+    11900     537482   4803.124      0.939   4510.134	RST_legs
+    12000       5950     42.721      1.031     44.045	Salivary_glands_left
+    12100       6720     42.721      1.031     44.045	Salivary_glandss_right
+    12200      86263    238.044      1.089    259.230	Skin_head_insensitive
+    12201      43173      7.778      1.089      8.470	Skin_head_sensitive(50-100)
+    12300     110950   1167.132      1.089   1271.006	Skin_trunk_insensitive
+    12301      55548     35.278      1.089     38.418	Skin_trunk_sensitive(50-100)
+    12400     149406    528.658      1.089    575.709	Skin_arms_insensitive
+    12401      75152     17.303      1.089     18.843	Skin_arms_sensitive(50-100)
+    12500     209121   1157.008      1.089   1259.982	Skin_legs_insensitive
+    12501     105078     34.701      1.089     37.790	Skin_legs_sensitive(50-100)
+    12600       6128     36.811      1.031     37.952	Spinal_cord
+    12700       2516    215.472      1.060    228.400	Spleen
+    12800       7296     18.872      2.688     50.727	Teeth
+    12801      11929      0.041      1.040      0.043	Teeth_retention_region
+    12900       2595     17.884      1.041     18.617	Testis_left
+    13000       2422     17.884      1.041     18.617	Testis_right
+    13100       5110     25.130      1.031     25.909	Thymus
+    13200       9199     22.217      1.051     23.351	Thyroid
+    13300       1760     19.993      1.050     20.993	Tongue_upper(food)
+    13301       9472     51.954      1.050     54.552	Tongue_lower
+    13400       2132      3.016      1.031      3.109	Tonsils
+    13500       2851      8.544      1.031      8.809	Ureter_left
+    13600       6072      7.539      1.031      7.773	Ureter_right
+    13700       6150     47.866      1.040     49.781	Urinary_bladder_wall_insensitive
+    13701       2968      1.267      1.040      1.318	Urinary_bladder_wall_sensitive(75-118)
+    13800       1437    192.308      1.040    200.000	Urinary_bladder_content
+    14000      20909    140.165      0.001      0.140	Air_inside_body
+<<< Geant4 Physics List simulation engine: QGSP_BIC_HP
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Registered graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
+  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
+  OpenGLImmediateQt (OGLIQt, OGLI)
+  OpenGLStoredQt (OGLSQt, OGL, OGLS)
+  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+  RayTracerX (RayTracerX)
+  Qt3D (Qt3D)
+  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
+  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
+  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
+  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
+  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered models:
+  None
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+Registered filters:
+  None
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+
+   Phantom name               MRCP_AM TET phantom
+   Phantom size               557.708 * 291.260 * 1760.047 mm3
+   Phantom box position (min) -286.958 mm, -136.028 mm, -878.602 mm
+   Phantom box position (max) 270.750 mm, 155.232 mm, 881.445 mm
+   Number of tetrahedrons     8233413
+
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
+Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.80000
+Min kinetic energy for tables                      100.00000 eV 
+Max kinetic energy for tables                      100.00000 TeV
+Number of bins per decade of a table               20
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100.00000 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100.00000 TeV
+Lowest triplet kinetic energy                      1.00000 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           epics_2017
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.20000, 0.01000 mm)
+Step function for muons/hadrons                    (0.10000, 0.05000 mm)
+Step function for light ions                       (0.10000, 0.02000 mm)
+Step function for general ions                     (0.10000, 0.00100 mm)
+Lowest e+e- kinetic energy                         100.00000 eV 
+Lowest muon/hadron kinetic energy                  1.00000 keV
+Use ICRU90 data                                    1
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Urban
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 1
+Max kinetic energy for CSDA tables                 1.00000 GeV
+Max kinetic energy for NIEL computation            1.00000 MeV
+Linear loss limit                                  0.01000
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.08000
+Range factor for msc step limit for muons/hadrons  0.20000
+Geometry factor for msc step limitation of e+-     2.50000
+Safety factor for msc step limit for e+-           0.60000
+Skin parameter for msc step limitation of e+-      3.00000
+Lambda limit for msc step limit for e+-            1.00000 mm
+Use Mott correction for e- scattering              1
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1.00000
+Fixed angular limit between single 
+  and multiple scattering                          3.14159 rad
+Upper energy limit for e+- multiple scattering     100.00000 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1.00000
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Directory in G4LEDATA for fluorescence data files  fluor
+Auger electron cascade enabled                     1
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger flag: 1
+### ===  Ignore cuts flag:   1
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200.000000 keV to 100.000000 TeV in 174 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=0.000000 eV  Emax=100.000000 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100.000000 eV  to 1.000000 MeV, 20 bins/decade, spline: 1
+      LambdaPrime table from 1.000000 MeV to 100.000000 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LowEPComptonModel : Emin=0.000000 eV  Emax=20.000000 MeV Fluo
+        KleinNishina : Emin=20.000000 MeV Emax=100.000000 TeV Fluo
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.021998 MeV to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+      BetheHeitler5D : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100.000000 eV  to 150.000000 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150.000000 keV to 100.000000 TeV in 176 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=0.000000 eV  Emax=100.000000 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=0.000000 eV  Emax=100.000000 MeV Nbins=120 100.000000 eV  - 100.000000 MeV
+          StepLim=SafetyPlus Rfact=0.080000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+        WentzelVIUni : Emin=100.000000 MeV Emax=100.000000 TeV Nbins=120 100.000000 MeV - 100.000000 TeV
+          StepLim=SafetyPlus Rfact=0.080000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+eIoni:  for e-  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.200000, 0.010000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni : Emin=0.000000 eV  Emax=100.000000 keV
+        MollerBhabha : Emin=100.000000 keV Emax=100.000000 TeV  deltaVI
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1.000000 GeV,  VertexHighEnergyTh(GeV)= 100000.000000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=0.000000 eV  Emax=1.000000 GeV  AngularGen2BS
+            eBremLPM : Emin=1.000000 GeV Emax=100.000000 TeV  AngularGen2BS
+
+ePairProd:  for e-  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.100000 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100.000000 MeV to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=100.000000 MeV Emax=100.000000 TeV
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  GoudsmitSaunderson : Emin=0.000000 eV  Emax=100.000000 MeV Nbins=120 100.000000 eV  - 100.000000 MeV
+          StepLim=SafetyPlus Rfact=0.080000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+        WentzelVIUni : Emin=100.000000 MeV Emax=100.000000 TeV Nbins=120 100.000000 MeV - 100.000000 TeV
+          StepLim=SafetyPlus Rfact=0.080000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+eIoni:  for e+  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.200000, 0.010000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni : Emin=0.000000 eV  Emax=100.000000 keV
+        MollerBhabha : Emin=100.000000 keV Emax=100.000000 TeV  deltaVI
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      LPM flag: 1 for E > 1.000000 GeV,  VertexHighEnergyTh(GeV)= 100000.000000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=0.000000 eV  Emax=1.000000 GeV  AngularGen2BS
+            eBremLPM : Emin=1.000000 GeV Emax=100.000000 TeV  AngularGen2BS
+
+ePairProd:  for e+  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 0
+      Sampling table 25x1001 from 0.100000 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=0.000000 eV  Emax=100.000000 TeV
+
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100.000000 MeV to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=100.000000 MeV Emax=100.000000 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for proton  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=0.000000 eV  Emax=2.000000 MeV  deltaVI
+          BetheBloch : Emin=2.000000 MeV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+nuclearStopping:  for proton SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=0.000000 eV  Emax=1.000000 MeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=0.000000 eV  Emax=100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+ionIoni:  for GenericIon  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.001000 mm), integ: 3, fluct: 1, linLossLim= 0.020000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LindhardSorensen : Emin=0.000000 eV  Emax=100.000000 TeV  deltaVI
+
+nuclearStopping:  for GenericIon SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=0.000000 eV  Emax=1.000000 MeV
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                1.00000 ns 
+Max life time (from G4DeexPrecoParameters)        1000.00000 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        31709791983.76459 y  
+======================================================================
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=0.000000 eV  Emax=100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+ionIoni:  for alpha  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.020000 mm), integ: 3, fluct: 1, linLossLim= 0.020000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=0.000000 eV  Emax=7.945199 MeV  deltaVI
+          BetheBloch : Emin=7.945199 MeV Emax=100.000000 TeV  deltaVI
+
+nuclearStopping:  for alpha SubType=8 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping : Emin=0.000000 eV  Emax=1.000000 MeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for anti_proton  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=0.000000 eV  Emax=2.000000 MeV  deltaVI
+          BetheBloch : Emin=2.000000 MeV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.506176 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for kaon+  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=0.000000 eV  Emax=1.052311 MeV  deltaVI
+          BetheBloch : Emin=1.052311 MeV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for kaon-  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=0.000000 eV  Emax=1.052311 MeV  deltaVI
+          BetheBloch : Emin=1.052311 MeV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.949416 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+muIoni:  for mu+  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=0.000000 eV  Emax=200.000000 keV  deltaVI
+        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV  deltaVI
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+muIoni:  for mu-  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=0.000000 eV  Emax=200.000000 keV  deltaVI
+        MuBetheBloch : Emin=200.000000 keV Emax=100.000000 TeV  deltaVI
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.850000 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
+
+=======================================================
+======       ParticleHP Physics Parameters     ========
+=======================================================
+ UseOnlyPhotoEvaporation ? 0
+ SkipMissingIsotopes ?     0
+ NeglectDoppler ?          0
+ DoNotAdjustFinalState ?   0
+ ProduceFissionFragments ? 0
+ UseWendtFissionModel ?    0
+ UseNRESP71Model ?         0
+ UseDBRC ?                 0
+=======================================================
+
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for pi+  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=0.000000 eV  Emax=297.504557 keV  deltaVI
+          BetheBloch : Emin=297.504557 keV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100.000000 TeV, 20 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=0.000000 eV  Emax=100.000000 TeV Nbins=240 100.000000 eV  - 100.000000 TeV
+          StepLim=Minimal Rfact=0.200000 Gfact=2.500000 Sfact=0.600000 DispFlag:1 Skin=3.000000 Llim=1.000000 mm
+
+hIoni:  for pi-  XStype:3  SubType=2
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      StepFunction=(0.100000, 0.050000 mm), integ: 3, fluct: 1, linLossLim= 0.010000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=0.000000 eV  Emax=297.504557 keV  deltaVI
+          BetheBloch : Emin=297.504557 keV Emax=100.000000 TeV  deltaVI
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 100.000000 eV  to 100.000000 TeV in 240 bins
+      Lambda tables from threshold to 100.000000 TeV, 20 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.116561 GeV to 100.000000 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=0.000000 eV  Emax=100.000000 TeV  ModifiedMephi
+
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
+======================================================================
+======          Radioactive Decay Physics Parameters           =======
+======================================================================
+min MeanLife (from G4NuclideTable)                1.00000 ns 
+Max life time (from G4DeexPrecoParameters)        1000.00000 ps 
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enabled atomic relaxation mode                    1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+Use ANSTO fluorescence model                      0
+Threshold for very long decay time at rest        31709791983.76459 y  
+======================================================================
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionElastic
+        Model:          NNDiffuseElastic: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
+        Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: RadioactiveDecay
+
+  Process: RadioactiveDecay
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
+        Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
+        Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
+        Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
+        Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
+        Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: anti_lambdaInelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 0.000000 eV  ---> 25.000000 GeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.100000 MeV
+        Model:              AntiAElastic: 100.000000 MeV ---> 100.000000 TeV
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.100000 MeV
+        Model:              AntiAElastic: 100.000000 MeV ---> 100.000000 TeV
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
+        Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
+        Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
+     Cr_sctns:          ElectroNuclearXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
+     Cr_sctns:          ElectroNuclearXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0.000000 eV  ---> 200.000000 MeV
+        Model:            BertiniCascade: 199.000000 MeV ---> 6.000000 GeV
+        Model:           TheoFSGenerator: 3.000000 GeV ---> 100.000000 TeV
+     Cr_sctns:            GammaNuclearXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: kaon+Inelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: kaon-Inelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: lambdaInelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 19.500000 MeV ---> 100.000000 TeV
+        Model:          NeutronHPElastic: 0.000000 eV  ---> 20.000000 MeV
+     Cr_sctns:        NeutronHPElasticXS: 0.000000 eV  ---> 20.000000 MeV
+
+     Cr_sctns:        G4NeutronElasticXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: neutronInelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            Binary Cascade: 19.900000 MeV ---> 6.000000 GeV
+        Model:        NeutronHPInelastic: 0.000000 eV  ---> 20.000000 MeV
+     Cr_sctns:      NeutronHPInelasticXS: 0.000000 eV  ---> 20.000000 MeV
+
+     Cr_sctns:      G4NeutronInelasticXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: nCapture
+        Model:          NeutronHPCapture: 0.000000 eV  ---> 20.000000 MeV
+        Model:               nRadCapture: 19.900000 MeV ---> 100.000000 TeV
+     Cr_sctns:        NeutronHPCaptureXS: 0.000000 eV  ---> 20.000000 MeV
+
+     Cr_sctns:        G4NeutronCaptureXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: nFission
+        Model:          NeutronHPFission: 0.000000 eV  ---> 20.000000 MeV
+        Model:                G4LFission: 19.900000 MeV ---> 100.000000 TeV
+     Cr_sctns:        NeutronHPFissionXS: 0.000000 eV  ---> 20.000000 MeV
+
+     Cr_sctns:                    ZeroXS: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: pi+Inelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: pi-Inelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: protonInelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            Binary Cascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: sigma-Inelastic
+        Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
+        Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
+        Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
+     Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
+        Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
+
+
+================================================================
+=======================================================================
+======       Geant4 Native Pre-compound Model Parameters       ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy                  100.00000 keV
+Pre-compound excitation high energy                 30.00000 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy                               10.00000 eV 
+Min energy per nucleon for multifragmentation       200.00000 GeV
+Limit excitation energy for Fermi BreakUp           20.00000 MeV
+Level density (1/MeV)                               0.07500
+Use simple level density model                      1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1000.00000 ps 
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   1
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+--> Event 0 starts.
+--> Event 100000 starts.
+--> Event 200000 starts.
+--> Event 300000 starts.
+--> Event 400000 starts.
+--> Event 500000 starts.
+--> Event 600000 starts.
+--> Event 700000 starts.
+--> Event 800000 starts.
+--> Event 900000 starts.
+
+=====================================================================
+ Run #0 / Number of event processed : 1000000
+=====================================================================
+organ ID|      Organ Mass (g)   Dose (Gy/source)     Relative Error
+     100|               8.683          5.087e-17              0.426
+     200|               8.683          3.443e-17              0.445
+     300|               0.022          4.113e-17              0.710
+     301|               0.090          5.589e-17              0.721
+     302|               0.028          6.791e-17              0.711
+     303|              11.291          5.730e-17              0.383
+     400|               0.141          5.214e-17              1.000
+     401|               0.390          4.388e-17              0.985
+     402|               0.098          1.744e-17              1.000
+     403|               0.049          2.332e-17              1.000
+     404|               0.098          1.965e-17              1.000
+     405|              28.808          1.485e-17              0.360
+     500|               0.086          1.503e-17              1.000
+     501|               0.024          0.000e+00              1.000
+     600|               0.023          9.872e-18              1.000
+     700|              10.364          3.217e-17              0.391
+     800|               0.025          0.000e+00              1.000
+     801|               0.031          0.000e+00              1.000
+     802|               0.052          0.000e+00              1.000
+     803|               0.130          8.369e-17              1.000
+     804|               0.026          1.023e-16              1.000
+     805|               0.052          1.694e-17              0.853
+     806|               0.052          6.597e-18              1.000
+     807|               0.053          8.078e-18              1.000
+     808|               2.777          6.374e-18              1.000
+     900|               1.504          1.043e-17              1.000
+     910|               6.944          5.231e-17              0.515
+    1000|             193.197          3.110e-17              0.111
+    1010|             444.035          3.370e-17              0.071
+    1100|              32.463          3.490e-17              0.273
+    1110|             167.269          3.270e-17              0.116
+    1200|             108.832          2.882e-17              0.153
+    1210|             389.741          2.651e-17              0.085
+    1300|             159.196          2.707e-17              0.136
+    1400|             145.689          3.073e-17              0.138
+    1500|              34.244          3.552e-17              0.261
+    1600|             106.720          3.175e-17              0.154
+    1700|              50.890          3.444e-17              0.214
+    1800|              37.397          3.710e-17              0.247
+    1900|             273.409          2.610e-17              0.107
+    2000|             154.981          1.846e-17              0.155
+    2100|              22.996          1.765e-17              0.414
+    2200|             181.529          2.771e-17              0.123
+    2300|             118.927          3.254e-17              0.137
+    2400|              48.252          3.191e-17              0.225
+    2500|              45.057          3.614e-17              0.220
+    2600|             568.469          1.617e-17              0.091
+    2700|             382.073          1.634e-17              0.110
+    2800|             253.548          3.295e-17              0.099
+    2900|             413.232          3.024e-17              0.082
+    3000|              26.045          2.219e-17              0.299
+    3100|             307.761          3.308e-17              0.088
+    3200|             373.652          2.824e-17              0.092
+    3300|              82.179          2.818e-17              0.185
+    3400|             536.651          2.275e-17              0.080
+    3500|             621.408          2.734e-17              0.074
+    3600|              79.815          2.115e-17              0.228
+    3700|             234.882          1.968e-17              0.126
+    3800|             432.615          1.546e-17              0.112
+    3900|              76.877          2.852e-17              0.197
+    4000|              56.287          3.557e-17              0.207
+    4100|             402.595          3.187e-17              0.075
+    4200|             619.672          3.093e-17              0.065
+    4300|             368.797          2.279e-17              0.085
+    4400|             457.351          2.267e-17              0.085
+    4500|             223.333          1.734e-17              0.128
+    4600|             156.670          2.685e-17              0.136
+    4700|             103.943          1.917e-17              0.178
+    4800|              78.915          1.633e-17              0.240
+    4900|             289.440          1.521e-17              0.126
+    5000|             345.222          1.527e-17              0.111
+    5100|             188.047          2.216e-17              0.127
+    5200|             291.584          2.350e-17              0.105
+    5300|             110.320          2.062e-17              0.155
+    5400|             192.224          2.574e-17              0.122
+    5500|               9.991          6.223e-17              0.301
+    5600|              61.420          4.137e-17              0.181
+    5700|              56.331          3.668e-17              0.190
+    5800|              82.063          2.343e-17              0.190
+    6100|            1517.390          1.243e-17              0.071
+    6200|               7.769          5.465e-17              0.436
+    6300|               5.180          5.837e-17              0.578
+    6400|               7.769          1.133e-17              0.542
+    6500|               5.180          4.383e-17              0.625
+    6600|               0.039          0.000e+00              1.000
+    6601|               0.189          0.000e+00              1.000
+    6700|               1.113          2.725e-17              1.000
+    6701|               0.308          0.000e+00              1.000
+    6702|               6.122          1.828e-17              1.000
+    6800|               0.039          0.000e+00              1.000
+    6801|               0.189          0.000e+00              1.000
+    6900|               1.113          0.000e+00              1.000
+    6901|               0.308          0.000e+00              1.000
+    6902|               6.122          6.690e-19              0.806
+    7000|              10.364          5.476e-17              0.296
+    7100|              58.000          4.325e-17              0.194
+    7200|               1.784          6.287e-17              0.440
+    7201|               1.193          3.283e-17              0.464
+    7202|               6.008          4.832e-17              0.289
+    7203|             185.286          3.330e-17              0.114
+    7300|             250.000          3.153e-17              0.103
+    7400|              14.547          3.000e-17              0.197
+    7401|               2.264          4.163e-17              0.228
+    7402|               5.692          2.949e-17              0.224
+    7403|             840.096          4.126e-17              0.049
+    7500|              53.337          3.163e-17              0.152
+    7501|             296.663          3.541e-17              0.084
+    7600|               3.071          1.221e-17              0.643
+    7601|               0.223          1.015e-17              0.596
+    7602|             116.634          4.053e-17              0.137
+    7700|              55.000          3.554e-17              0.201
+    7800|               3.993          2.849e-17              0.546
+    7801|               0.289          4.005e-17              0.746
+    7802|              75.671          3.538e-17              0.174
+    7900|              95.000          3.714e-17              0.151
+    8000|               2.824          4.294e-17              0.415
+    8001|               0.205          1.092e-17              0.582
+    8002|              76.924          3.346e-17              0.158
+    8100|              40.000          5.038e-17              0.215
+    8200|               2.779          5.119e-17              0.500
+    8201|               0.203          3.138e-17              0.585
+    8202|             116.946          3.058e-17              0.142
+    8300|              35.000          3.132e-17              0.276
+    8400|               4.451          1.810e-17              0.474
+    8401|               0.324          2.485e-17              0.726
+    8402|              48.524          3.403e-17              0.226
+    8500|              75.000          4.092e-17              0.162
+    8600|              39.976          2.293e-17              0.286
+    8700|             385.839          3.305e-17              0.081
+    8800|             510.000          2.533e-17              0.082
+    8900|             162.338          2.957e-17              0.128
+    9000|              38.359          1.078e-17              0.381
+    9100|               7.652          5.535e-17              0.422
+    9200|             166.542          2.055e-17              0.143
+    9300|              39.362          1.469e-17              0.324
+    9400|               7.892          5.248e-17              0.452
+    9500|            2360.000          2.901e-17              0.038
+    9700|             545.877          2.244e-17              0.081
+    9900|             652.861          2.819e-17              0.068
+   10000|              15.949          1.779e-17              0.519
+   10100|              15.949          1.619e-17              0.463
+   10200|               5.510          3.959e-18              0.996
+   10300|             130.204          3.739e-17              0.126
+   10400|              11.019          6.558e-19              0.834
+   10500|              11.019          4.223e-17              0.448
+   10600|            1200.828          2.390e-17              0.057
+   10700|           14844.730          2.623e-17              0.016
+   10800|            2843.507          3.164e-17              0.032
+   10900|           10887.729          2.667e-17              0.019
+   11000|               1.919          3.722e-17              0.569
+   11001|               0.103          1.629e-17              0.655
+   11002|              49.783          2.537e-17              0.235
+   11003|              22.870          2.977e-17              0.291
+   11300|             173.631          2.747e-17              0.129
+   11400|               0.622          0.000e+00              1.000
+   11500|              17.618          2.754e-17              0.387
+   11600|             975.622          2.128e-17              0.064
+   11700|           11176.900          2.950e-17              0.016
+   11800|            1549.842          2.850e-17              0.044
+   11900|            4510.134          2.761e-17              0.027
+   12000|              44.045          2.533e-17              0.277
+   12100|              44.045          3.644e-17              0.233
+   12200|             259.230          2.009e-17              0.118
+   12201|               8.470          1.162e-17              0.336
+   12300|            1271.006          2.610e-17              0.046
+   12301|              38.418          1.558e-17              0.154
+   12400|             575.709          2.505e-17              0.069
+   12401|              18.843          1.507e-17              0.176
+   12500|            1259.982          2.308e-17              0.049
+   12501|              37.790          1.127e-17              0.144
+   12600|              37.952          1.367e-17              0.363
+   12700|             228.400          2.113e-17              0.128
+   12800|              50.727          2.511e-17              0.274
+   12801|               0.043          1.726e-17              1.000
+   12900|              18.617          5.549e-17              0.306
+   13000|              18.617          5.407e-17              0.305
+   13100|              25.909          1.894e-17              0.441
+   13200|              23.351          1.933e-17              0.425
+   13300|              20.993          2.558e-17              0.438
+   13301|              54.552          1.337e-17              0.308
+   13400|               3.109          6.587e-17              0.590
+   13500|               8.809          3.261e-17              0.513
+   13600|               7.773          3.282e-17              0.422
+   13700|              49.781          4.563e-17              0.176
+   13701|               1.318          3.889e-17              0.366
+   13800|             200.000          3.992e-17              0.101
+   14000|               0.140          3.014e-17              0.425
+=====================================================================
+
+Graphics systems deleted.
+Visualization Manager deleting...

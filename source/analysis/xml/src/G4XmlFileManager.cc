@@ -56,14 +56,18 @@ G4XmlFileManager::G4XmlFileManager(const G4AnalysisManagerState& state)
 G4String G4XmlFileManager::GetNtupleFileName(XmlNtupleDescription* ntupleDescription)
 {
   // get ntuple file name
-  auto ntupleFileName = ntupleDescription->fFileName;
-  if ( ntupleFileName.size() ) {
+  auto ntupleFileName = ntupleDescription->GetFileName();
+  if (ntupleFileName.size() != 0u) {
     // update filename per object per thread
-    ntupleFileName = GetTnFileName(ntupleFileName, GetFileType());
-  } else {
-    // compose ntuple file name from the default file name
-    ntupleFileName = GetNtupleFileName(ntupleDescription->fNtupleBooking.name());
+    ntupleFileName =
+      GetTnFileName(ntupleFileName, GetFileType()/*, ntupleDescription->GetCycle()*/);
   }
+  else {
+    // compose ntuple file name from the default file name
+    ntupleFileName = GetNtupleFileName(
+      ntupleDescription->GetNtupleBooking().name()/*, ntupleDescription->GetCycle()*/);
+  }
+
   return ntupleFileName;
 }
 
@@ -138,54 +142,31 @@ G4bool G4XmlFileManager::OpenFile(const G4String& fileName)
 G4bool G4XmlFileManager::CreateNtupleFile(
   XmlNtupleDescription* ntupleDescription)
 {
-  // get ntuple file name per object (if defined)
+  // Get ntuple file name per object (if defined)
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-  Message(kVL4, "create", "ntuple file", ntupleFileName);
-
-  // update file name if it is already in use
-  while ( GetTFile(ntupleFileName, false) ) {
-    // the file is already in use
-    auto oldName = ntupleDescription->fFileName;
-    auto newName = GetBaseName(oldName) + "_bis." + GetExtension(oldName);
-    ntupleDescription->fFileName = newName;
-
-    Warn(G4String( "Ntuple filename ") + oldName + " is already in use.\n" +
-         "It will be replaced with : " + newName,
-         fkClass, "CreateNtupleFile");
-
-    ntupleFileName = GetNtupleFileName(ntupleDescription);
+  // Create ntuple file name if it does not yet exist
+  auto ntupleFile = GetTFile(ntupleFileName, false);
+  if ( ntupleFile == nullptr) {
+    ntupleFile = CreateTFile(ntupleFileName);
   }
 
-  ntupleDescription->fFile = CreateTFile(ntupleFileName);
+  ntupleDescription->SetFile(ntupleFile);
 
-  Message(kVL2, "create", "ntuple file", ntupleFileName);
-
-  return (ntupleDescription->fFile != nullptr);
+  return (ntupleDescription->GetFile() != nullptr);
 }
 
 //_____________________________________________________________________________
 G4bool G4XmlFileManager::CloseNtupleFile(
   XmlNtupleDescription* ntupleDescription)
 {
-  // Do nothing if there is no file
-  if ( ! ntupleDescription->fFile ) return true;
-
-  auto result = true;
-
-  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
-
-  Message(kVL4, "close", "ntuple file", ntupleFileName);
-
-  // Close file
-  result &= CloseTFile(ntupleFileName);
   // Notify not empty file
-  result &=SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
+  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
+  auto result = SetIsEmpty(ntupleFileName, ! ntupleDescription->GetHasFill());
 
-  // Reset file info in ntuple description
-  ntupleDescription->fFile.reset();
-
-  Message(kVL2, "close", "ntuple file", ntupleFileName);
+  // Ntuple files are registered in file manager map.
+  // they will be closed with CloseFiles() calls
+  ntupleDescription->GetFile().reset();
 
   return result;
 }

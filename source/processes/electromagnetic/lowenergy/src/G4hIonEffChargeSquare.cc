@@ -191,7 +191,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomicNumDensityVector =
                          material->GetAtomicNumDensityVector() ;
-  const G4int NumberOfElements = material->GetNumberOfElements() ;
+  const G4int NumberOfElements = (G4int)material->GetNumberOfElements() ;
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF

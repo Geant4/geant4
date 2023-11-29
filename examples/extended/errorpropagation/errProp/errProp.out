@@ -1,0 +1,421 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+ creating G4RunManagerKernel 0xf54450
+ G4ChordFinder: stepperDriverId: 2
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 4 *****
+
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.095 m  
+                       Imean:  85.700 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
+   --->  Element: N (N)   Z =  7.0   N =    14   A = 14.007 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
+   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
+
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.894 cm 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Fe    density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.990 cm 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance: 91.754 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:  2.119 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:  0.282 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Cu    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm 
+                       Imean: 322.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =    64   A = 63.546 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance: 69.170 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance: 30.830 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+
+ HalfWorldLength 2250
+World is registered to the default region.
+  G4ErrorRunManagerHelper::InitializePhysics 
+List of instantiated particles ============================================
+e+ e- gamma geantino mu+ mu- pi+ pi- proton 
+Current application state is PreInit
+Warning : Geant4 kernel is not Init state : Assuming Init state.
+physicsList->Construct() start.
+G4Transportation:  Current values for thresholds related to  the killing of looping tracks: 
+    Warning Energy   = 100 MeV   ( below this tracks are killed without warning ) 
+    Important Energy = 250  ( above this tracks are given multiple chances ) 
+    Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
+ G4Transportation constructor> set fShortStepOptimisation to false
+0x1205490G4ErrorPhysicsList:: particle process manager e+ = 0x120a250
+0x1205340G4ErrorPhysicsList:: particle process manager e- = 0x120e700
+0x1204dd0G4ErrorPhysicsList:: particle process manager gamma = 0x120e8b0
+0x1206840G4ErrorPhysicsList:: particle process manager geantino = 0x120eb00
+0x12055e0G4ErrorPhysicsList:: particle process manager mu+ = 0x120ed50
+0x1205990G4ErrorPhysicsList:: particle process manager mu- = 0x120efa0
+0x1205da0G4ErrorPhysicsList:: particle process manager pi+ = 0x120f1f0
+0x12061f0G4ErrorPhysicsList:: particle process manager pi- = 0x120f440
+0x1206610G4ErrorPhysicsList:: particle process manager proton = 0x120f690
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+ G4ChordFinder: stepperDriverId: 2
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                0
+Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           epics_2017
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_Cu G4_Al G4_Fe 
+ Production cuts :   gamma 10000 km      e- 10000 km      e+ 10000 km  proton 10000 km 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10000 km      e- 10000 km      e+ 10000 km  proton 10000 km 
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : G4_Al
+ Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  10000 km     e-  10000 km     e+  10000 km  proton 10000 km 
+ Energy thresholds :  gamma  9.54965 GeV    e-  9.54965 GeV    e+  9.54965 GeV proton 1 PeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   1 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            1k World
+       0.00         0.00         0.00            0k ECAL
+       0.00         0.00         0.00            1k HCAL
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      44.50          0k         3        8         18         0.00    World
+      37.80          0k         1       10         10         0.00    HCAL
+      17.70          0k         1        4          4         0.00    ECAL
+/tracking/verbose 1
+/geant4e/limits/stepLength 100 mm
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0  1.99e+04        0        0         0        BEAM initStep
+### G4EnergyLossForExtrapolator::Initialisation tables= 0
+G4TablesForExtrapolator::ComputeElectronDEDX for e-
+G4TablesForExtrapolator::ComputeElectronDEDX for e+
+G4TablesForExtrapolator::ComputeMuonDEDX for mu+
+G4TablesForExtrapolator::ComputeProtonDEDX for proton
+G4TablesForExtrapolator::ComputeTransportXS for e-
+### G4EnergyLossForExtrapolator::BuildTables for 4 materials Nbins= 80 Emin(MeV)= 1  Emax(MeV)= 1e+08
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0333      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0333      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04   0.0251   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0337   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0487   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0336      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0336      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0336      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
+ $$$ PROPAGATION ENDED 
+ Position: (2210,35.10134103703911,0)
+ Momentum: (22433.70312107119,696.1889753558929,0)
+ Error: 
+  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
+                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
+  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
+  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
+                      0    0.004070098790523185                       0                       0        0.54095727675807 
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0  1.99e+04        0        0         0        BEAM initStep
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0333      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0333      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04   0.0251   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0337   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0487   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0336      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0336      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0336      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
+ $$$ PROPAGATION ENDED 
+ Position: (2210,35.10134103703911,0)
+ Momentum: (22433.70312107119,696.1889753558929,0)
+ Error: 
+  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
+                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
+  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
+  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
+                      0    0.004070098790523185                       0                       0        0.54095727675807 
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0        0  1.99e+04        0        0         0        BEAM initStep
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0333      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0333      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04   0.0251   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0337   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0487   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0336      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0336      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0336      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
+ $$$ PROPAGATION ENDED 
+ Position: (2210,35.10134103703911,0)
+ Momentum: (22433.70312107119,696.1889753558929,0)
+ Error: 
+  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
+                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
+  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
+  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
+                      0    0.004070098790523185                       0                       0        0.54095727675807 
+

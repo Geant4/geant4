@@ -23,32 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-
 
 #ifndef eRositaRunAction_h
 #define eRositaRunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "globals.hh"
 #include "G4Timer.hh"
-
+#include "G4UserRunAction.hh"
 
 class G4Run;
 
-class eRositaRunAction : public G4UserRunAction
-{
+class eRositaRunAction : public G4UserRunAction {
 public:
-  eRositaRunAction();
-  ~eRositaRunAction();
+    explicit eRositaRunAction();
+    
+    ~eRositaRunAction() override;
 
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run* run) override;
+    
+    void EndOfRunAction(const G4Run* run) override;
 
-private: 
-  G4Timer timerRun;
-
+private:
+    G4Timer timerRun;
 };
 #endif

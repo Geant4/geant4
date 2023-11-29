@@ -36,48 +36,40 @@
 #include "ExGflash3DetectorConstruction.hh"
 
 // G4 Classes
-#include "G4NistManager.hh"
-#include "G4Material.hh"
-#include "G4ThreeVector.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Box.hh"
-#include "G4SDManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4Colour.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4AutoDelete.hh"
+#include "G4Box.hh"
+#include "G4Colour.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VisAttributes.hh"
 #include "globals.hh"
 
-//fast simulation
-#include "GFlashHomoShowerParameterisation.hh"
-#include "G4FastSimulationManager.hh"
-#include "GFlashShowerModel.hh"
+// fast simulation
 #include "GFlashHitMaker.hh"
+#include "GFlashHomoShowerParameterisation.hh"
 #include "GFlashParticleBounds.hh"
+#include "GFlashShowerModel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ThreadLocal GFlashShowerModel* ExGflash3DetectorConstruction::fFastShowerModel = 0; 
-G4ThreadLocal 
-GFlashHomoShowerParameterisation* ExGflash3DetectorConstruction::fParameterisation = 0;
-G4ThreadLocal GFlashParticleBounds* ExGflash3DetectorConstruction::fParticleBounds = 0;
-G4ThreadLocal GFlashHitMaker* ExGflash3DetectorConstruction::fHitMaker = 0;
+#include "G4FastSimulationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflash3DetectorConstruction::ExGflash3DetectorConstruction()
-  :G4VUserDetectorConstruction(), fRegion(nullptr)
 {
-  G4cout<<"ExGflash3DetectorConstruction::Detector constructor"<<G4endl;
+  G4cout << "ExGflash3DetectorConstruction::Detector constructor" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflash3DetectorConstruction::~ExGflash3DetectorConstruction()
 {
-  delete fFastShowerModel; 
+  delete fFastShowerModel;
   delete fParameterisation;
   delete fParticleBounds;
   delete fHitMaker;
@@ -92,96 +84,80 @@ G4VPhysicalVolume* ExGflash3DetectorConstruction::Construct()
   // Get nist material manager
   G4NistManager* nistManager = G4NistManager::Instance();
   // Build materials
-  G4Material* air   = nistManager->FindOrBuildMaterial("G4_AIR");
+  G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
   G4Material* pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
-  
+
   /*******************************
    * The Experimental Hall       *
    *******************************/
-  G4double experimentalHall_x=1000.*cm;
-  G4double experimentalHall_y=1000.*cm;
-  G4double experimentalHall_z=1000.*cm;
-  
-  G4VSolid* experimentalHall_box 
-    = new G4Box("expHall_box",             // World Volume
-                experimentalHall_x,        // x size
-                experimentalHall_y,        // y size
-                experimentalHall_z);       // z size
-  
-  G4LogicalVolume* experimentalHallLog 
-    = new G4LogicalVolume(experimentalHall_box,
-                          air,
-                          "expHallLog",
-                          0,               //opt: fieldManager
-                          0,               //opt: SensitiveDetector
-                          0);              //opt: UserLimits
-  G4VPhysicalVolume* experimentalHall_phys 
-    = new G4PVPlacement(0,
-                        G4ThreeVector(),   //at (0,0,0)
-                        "expHall",
-                        experimentalHallLog,
-                        0,
-                        false,
-                        0);
-  
-  
-  //------------------------------ 
+  G4double experimentalHall_x = 1000. * cm;
+  G4double experimentalHall_y = 1000. * cm;
+  G4double experimentalHall_z = 1000. * cm;
+
+  G4VSolid* experimentalHall_box = new G4Box("expHall_box",  // World Volume
+                                             experimentalHall_x,  // x size
+                                             experimentalHall_y,  // y size
+                                             experimentalHall_z);  // z size
+
+  auto experimentalHallLog = new G4LogicalVolume(experimentalHall_box, air, "expHallLog",
+                                                 nullptr,  // opt: fieldManager
+                                                 nullptr,  // opt: SensitiveDetector
+                                                 nullptr);  // opt: UserLimits
+  G4VPhysicalVolume* experimentalHall_phys =
+    new G4PVPlacement(nullptr,
+                      G4ThreeVector(),  // at (0,0,0)
+                      "expHall", experimentalHallLog, nullptr, false, 0);
+
+  //------------------------------
   // Calorimeter segments
   //------------------------------
-  // Simplified `CMS-like` PbWO4 crystal calorimeter  
-  
-  G4int nbOfCrystals = 10;  // this are the crystals PER ROW in this example 
-                       // cube of 10 x 10 crystals 
-                       // don't change it @the moment, since 
-                       // the readout in event action assumes this 
-                       // dimensions and is not automatically adapted
-                       // in this version of the example :-( 
-  // Simplified `CMS-like` PbWO4 crystal calorimeter  
-  G4double calo_xside = 31*cm;
-  G4double calo_yside = 31*cm;
-  G4double calo_zside = 24*cm; 
+  // Simplified `CMS-like` PbWO4 crystal calorimeter
 
-  G4double crystalWidth = 3*cm;
-  G4double crystalLength = 24*cm;
+  G4int nbOfCrystals = 10;  // this are the crystals PER ROW in this example
+                            // cube of 10 x 10 crystals
+                            // don't change it @the moment, since
+                            // the readout in event action assumes this
+                            // dimensions and is not automatically adapted
+                            // in this version of the example :-(
+  // Simplified `CMS-like` PbWO4 crystal calorimeter
+  G4double calo_xside = 31 * cm;
+  G4double calo_yside = 31 * cm;
+  G4double calo_zside = 24 * cm;
 
-  calo_xside = (crystalWidth*nbOfCrystals)+1*cm;
-  calo_yside = (crystalWidth*nbOfCrystals)+1*cm;
+  G4double crystalWidth = 3 * cm;
+  G4double crystalLength = 24 * cm;
+
+  calo_xside = (crystalWidth * nbOfCrystals) + 1 * cm;
+  calo_yside = (crystalWidth * nbOfCrystals) + 1 * cm;
   calo_zside = crystalLength;
-  
-  G4Box* calo_box= new G4Box("CMS calorimeter",  // its name
-                             calo_xside/2.,      // size
-                             calo_yside/2.,
-                             calo_zside/2.);
-  G4LogicalVolume* caloLog 
-    = new G4LogicalVolume(calo_box,      // its solid
-                          pbWO4,           // its material
-                          "calo log",    // its name
-                          0,             // opt: fieldManager
-                          0,             // opt: SensitiveDetector 
-                          0);            // opt: UserLimit
-  
+
+  auto calo_box = new G4Box("CMS calorimeter",  // its name
+                            calo_xside / 2.,  // size
+                            calo_yside / 2., calo_zside / 2.);
+  auto caloLog = new G4LogicalVolume(calo_box,  // its solid
+                                     pbWO4,  // its material
+                                     "calo log",  // its name
+                                     nullptr,  // opt: fieldManager
+                                     nullptr,  // opt: SensitiveDetector
+                                     nullptr);  // opt: UserLimit
+
   G4double xpos = 0.0;
   G4double ypos = 0.0;
-  G4double zpos = 100.0*cm;
-  new G4PVPlacement(0,
-                    G4ThreeVector(xpos, ypos, zpos),
-                    caloLog,
-                    "calorimeter",
-                    experimentalHallLog,
-                    false,
-                    1);
+  G4double zpos = 100.0 * cm;
+  new G4PVPlacement(nullptr, G4ThreeVector(xpos, ypos, zpos), caloLog, "calorimeter",
+                    experimentalHallLog, false, 1);
 
   // Individual crystals are created as part of the readout geometry in the parallel world
-  
+
   experimentalHallLog->SetVisAttributes(G4VisAttributes::GetInvisible());
-  G4VisAttributes* caloVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto caloVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   caloLog->SetVisAttributes(caloVisAtt);
 
   // define the fParameterisation region
   fRegion = new G4Region("crystals");
   caloLog->SetRegion(fRegion);
   fRegion->AddRootLogicalVolume(caloLog);
-  
+
   return experimentalHall_phys;
 }
 
@@ -207,7 +183,7 @@ void ExGflash3DetectorConstruction::ConstructSDandField()
   // Important: use SD defined in different geometry
   fHitMaker->SetNameOfWorldWithSD("parallelWorld");
   fFastShowerModel->SetHitMaker(*fHitMaker);
-  G4cout<<"end shower parameterization."<<G4endl;
+  G4cout << "end shower parameterization." << G4endl;
   // **********************************************
 }
 

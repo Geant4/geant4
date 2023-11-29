@@ -23,70 +23,99 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #ifndef eRositaTrackerHit_h
 #define eRositaTrackerHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
-#include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
-
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-class eRositaTrackerHit : public G4VHit
-{
+#include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4ThreeVector.hh"
+#include "G4VHit.hh"
+
+class eRositaTrackerHit : public G4VHit {
 public:
-  eRositaTrackerHit();
-  
-  ~eRositaTrackerHit();
-  
-  eRositaTrackerHit(const eRositaTrackerHit&);
-  
-  const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
-  
-  G4bool operator==(const eRositaTrackerHit&) const;
+    explicit eRositaTrackerHit();
 
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
+    ~eRositaTrackerHit() override;
 
-  void Draw();
-  void Print();
-  void PrintToFile();
+    explicit eRositaTrackerHit(const eRositaTrackerHit& right);
 
-public:
-  void SetTrackID  (G4int track)      { trackID = track; };
-  void SetChamberNb(G4int chamb)      { chamberNb = chamb; };  
-  void SetEdep     (G4double de)      { edep = de; };
-  void SetPos      (G4ThreeVector xyz){ pos = xyz; };
-      
-  G4int GetTrackID()    { return trackID; };
-  G4int GetChamberNb()  { return chamberNb; };
-  G4double GetEdep()    { return edep; };      
-  G4ThreeVector GetPos(){ return pos; };
-      
+    auto operator=(const eRositaTrackerHit& right) -> const eRositaTrackerHit&;
+
+    auto operator==(const eRositaTrackerHit& right) const -> G4bool;
+
+    inline auto operator new(size_t) -> void*;
+    
+    inline auto operator delete(void* hit) -> void;
+
+    void Draw() override;
+    
+    void Print() override;
+    
+    void PrintToFile() const;
+
+    void SetTrackIdentifier(const G4int &value) {
+        trackIdentifier = value;        
+    };
+    
+    void SetChamberNumber(const G4int &value) {
+        chamberNumber = value;        
+    };
+    
+    void SetDepositedEnergy(const G4double &value) {
+        depositedEnergy = value;        
+    };
+    
+    void SetPosition(const G4ThreeVector &value) {
+        position = value;        
+    };
+
+    [[nodiscard]]
+    auto GetTrackIdentifier() const -> G4int {
+        return trackIdentifier;        
+    };
+
+    [[nodiscard]]
+    auto GetChamberNumber() const -> G4int {
+        return chamberNumber;        
+    };
+    
+    [[nodiscard]]
+    auto GetDepositedEnergy() const -> G4double {
+        return depositedEnergy;        
+    };
+    
+    [[nodiscard]]
+    auto GetPosition() const -> G4ThreeVector {
+        return position;        
+    };
+
 private:
-  G4int         trackID;
-  G4int         chamberNb;
-  G4double      edep;
-  G4ThreeVector pos;
+    G4int trackIdentifier; // track identifier
+
+    G4int chamberNumber; // chamber number
+
+    G4double depositedEnergy; // deposited energy
+
+    G4ThreeVector position; // spatial position
 };
 
-typedef G4THitsCollection<eRositaTrackerHit> eRositaTrackerHitsCollection;
-extern G4ThreadLocal G4Allocator<eRositaTrackerHit>* eRositaTrackerHitAllocator;
+using eRositaTrackerHitsCollection = G4THitsCollection<eRositaTrackerHit>;
+extern G4ThreadLocal G4Allocator<eRositaTrackerHit>* trackerHitAllocator;
 
-inline void* eRositaTrackerHit::operator new(size_t)
+inline auto eRositaTrackerHit::operator new(size_t) -> void*
 {
-  if(!eRositaTrackerHitAllocator) eRositaTrackerHitAllocator = new G4Allocator<eRositaTrackerHit>;
-  
-  return (void*) eRositaTrackerHitAllocator->MallocSingle();
+    if (trackerHitAllocator == nullptr) {
+        trackerHitAllocator = new G4Allocator<eRositaTrackerHit>;
+    }
+    return (void*) trackerHitAllocator->MallocSingle();
 }
 
-inline void eRositaTrackerHit::operator delete(void *aHit)
+inline auto eRositaTrackerHit::operator delete(void* hit) -> void
 {
-   eRositaTrackerHitAllocator->FreeSingle((eRositaTrackerHit*) aHit);
+    trackerHitAllocator->FreeSingle((eRositaTrackerHit*) hit);
 }
 #endif

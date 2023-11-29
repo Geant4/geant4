@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -25,8 +25,10 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -42,7 +44,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -52,8 +54,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -130,6 +133,7 @@ physicsList->setCut() start.
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
         good cross section parametrization from 211.317 MeV to 1e+12 GeV for all Z.
+        cross section factor: 1
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Water> world volume
  This region is in the mass world.
@@ -149,7 +153,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.334 keV    e+  341.625 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -179,7 +183,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.340000s Real=2.367493s Sys=0.000000s
+  User=1.980000s Real=1.989883s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -221,7 +225,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.93516 keV    e-  351.296 keV    e+  341.588 keV proton 100 keV
+ Energy thresholds :  gamma  2.93516 keV    e-  351.334 keV    e+  341.625 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -246,24 +250,24 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.490000s Real=2.534999s Sys=0.000000s
+  User=2.190000s Real=2.200987s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 538236	eBrem = 281299	eIoni = 180465
+ Process calls frequency --->	Transportation = 538247	eBrem = 281308	eIoni = 180445
 
- Nb of incident particles unaltered after 1 cm  of Water : 538236 over 1000000 incident particles.  Ratio = 53.824 %
- ---> CrossSection per volume:	0.61946 cm^-1 	CrossSection per mass: 61.946 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 538247 over 1000000 incident particles.  Ratio = 53.825 %
+ ---> CrossSection per volume:	0.61944 cm^-1 	CrossSection per mass: 61.944 mm2/g 
 
  Verification from G4EmCalculator: 
-	eBrem= 37.79 mm2/g 	eIoni= 24.206 mm2/g 	total= 61.997 mm2/g 
-	Expected ratio of transmitted particles= 53.796 %
+	eBrem= 37.79 mm2/g 	eIoni= 24.204 mm2/g 	total= 61.994 mm2/g 
+	Expected ratio of transmitted particles= 53.798 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1312526117, 166129892
+ Current couple of seeds = 1537749914, 1160203484
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

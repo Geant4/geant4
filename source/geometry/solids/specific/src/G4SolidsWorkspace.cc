@@ -61,9 +61,6 @@ G4SolidsWorkspace::G4SolidsWorkspace(G4bool verbose)
   fPolyhedraSideOffset = fpPolyhedraSideSIM->GetOffset();
 }
 
-G4SolidsWorkspace::~G4SolidsWorkspace()
-{
-}
 
 void
 G4SolidsWorkspace::UseWorkspace()

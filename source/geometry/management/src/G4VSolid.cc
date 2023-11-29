@@ -157,7 +157,7 @@ G4ThreeVector G4VSolid::GetPointOnSurface() const
             << "Returning origin.";
     G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
                 JustWarning, message);
-    return G4ThreeVector(0,0,0);
+    return {0,0,0};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -496,9 +496,9 @@ G4VSolid::CalculateClippedPolygonExtent(G4ThreeVectorList& pPolygon,
   G4double component;
 
   ClipPolygon(pPolygon,pVoxelLimit,pAxis);
-  noLeft = pPolygon.size();
+  noLeft = (G4int)pPolygon.size();
 
-  if ( noLeft )
+  if ( noLeft != 0 )
   {
     for (i=0; i<noLeft; ++i)
     {
@@ -552,13 +552,13 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
 
       pPolygon.clear();
 
-      if ( !outputPolygon.size() )  return;
+      if ( outputPolygon.empty() )  return;
 
       G4VoxelLimits simpleLimit2;
       simpleLimit2.AddLimit(kXAxis,-kInfinity,pVoxelLimit.GetMaxXExtent());
       ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
 
-      if ( !pPolygon.size() )       return;
+      if ( pPolygon.empty() )       return;
       else                          outputPolygon.clear();
     }
     if ( pVoxelLimit.IsYLimited() ) // && pAxis != kYAxis)
@@ -572,13 +572,13 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
 
       pPolygon.clear();
 
-      if ( !outputPolygon.size() )  return;
+      if ( outputPolygon.empty() )  return;
 
       G4VoxelLimits simpleLimit2;
       simpleLimit2.AddLimit(kYAxis,-kInfinity,pVoxelLimit.GetMaxYExtent());
       ClipPolygonToSimpleLimits(outputPolygon,pPolygon,simpleLimit2);
 
-      if ( !pPolygon.size() )       return;
+      if ( pPolygon.empty() )       return;
       else                          outputPolygon.clear();
     }
     if ( pVoxelLimit.IsZLimited() ) // && pAxis != kZAxis)
@@ -592,7 +592,7 @@ void G4VSolid::ClipPolygon(      G4ThreeVectorList& pPolygon,
 
       pPolygon.clear();
 
-      if ( !outputPolygon.size() )  return;
+      if ( outputPolygon.empty() )  return;
 
       G4VoxelLimits simpleLimit2;
       simpleLimit2.AddLimit(kZAxis,-kInfinity,pVoxelLimit.GetMaxZExtent());
@@ -614,7 +614,7 @@ G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
                                const G4VoxelLimits& pVoxelLimit       ) const
 {
   G4int i;
-  G4int noVertices=pPolygon.size();
+  auto  noVertices = (G4int)pPolygon.size();
   G4ThreeVector vEnd,vStart;
 
   for (i = 0 ; i < noVertices ; ++i )

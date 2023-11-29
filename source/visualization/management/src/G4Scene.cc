@@ -38,6 +38,8 @@
 
 #include <set>
 
+#define G4warn G4cout
+
 G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
@@ -131,7 +133,7 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
 	pWorld -> GetLogicalVolume () -> GetVisAttributes ();
       if (!pVisAttribs || pVisAttribs -> IsVisible ()) {
 	if (warn) {
-	  G4cout << 
+	  G4warn <<
 	    "Your \"world\" has no vis attributes or is marked as visible."
 	    "\n  For a better view of the contents, mark the world as"
 	    " invisible, e.g.,"
@@ -144,10 +146,10 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
       // Note: default depth and no modeling parameters.
       if (successful) {
 	if (warn) {
-	  G4cout <<
-    "G4Scene::AddWorldIfEmpty: The scene was empty of run-duration models."
+	  G4warn <<
+    "G4Scene::AddWorldIfEmpty: The scene had no extent."
     "\n  \"world\" has been added.";
-	  G4cout << G4endl;
+	  G4warn << G4endl;
 	}
       }
     }
@@ -165,7 +167,7 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn)
   }
   if (i != fRunDurationModelList.end ()) {
     if (warn) {
-      G4cout << "G4Scene::AddRunDurationModel: model \""
+      G4warn << "G4Scene::AddRunDurationModel: model \""
       << pModel -> GetGlobalDescription ()
       << "\"\n  is already in the run-duration list of scene \""
       << fName
@@ -180,14 +182,14 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn)
 }
 
 G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
-  G4int i, nModels = fEndOfEventModelList.size ();
-  for (i = 0; i < nModels; i++) {
+  std::size_t i, nModels = fEndOfEventModelList.size ();
+  for (i = 0; i < nModels; ++i) {
     if (pModel -> GetGlobalDescription () ==
 	fEndOfEventModelList[i].fpModel -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
     if (warn) {
-      G4cout << "G4Scene::AddEndOfEventModel: a model \""
+      G4warn << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the end-of-event list of scene \""
 	     << fName << "\"."
@@ -196,18 +198,19 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
     return false;
   }
   fEndOfEventModelList.push_back (Model(pModel));
+  CalculateExtent ();
   return true;
 }
 
 G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
-  G4int i, nModels = fEndOfRunModelList.size ();
-  for (i = 0; i < nModels; i++) {
+  std::size_t i, nModels = fEndOfRunModelList.size ();
+  for (i = 0; i < nModels; ++i) {
     if (pModel -> GetGlobalDescription () ==
 	fEndOfRunModelList[i].fpModel -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
     if (warn) {
-      G4cout << "G4Scene::AddEndOfRunModel: a model \""
+      G4warn << "G4Scene::AddEndOfRunModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the end-of-run list of scene \""
 	     << fName << "\"."
@@ -216,6 +219,7 @@ G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
     return false;
   }
   fEndOfRunModelList.push_back (pModel);
+  CalculateExtent ();
   return true;
 }
 

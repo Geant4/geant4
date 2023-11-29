@@ -38,56 +38,47 @@
 // Creation date: 03.09.2018
 //
 // Modifications: 25.09.2018 V.Ivanchenko adopted for material sub-library
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Class Description:
 //
 // Data on electonic stopping powers from ICRU 90 report
-//   
+//
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "globals.hh"
 #include "G4Material.hh"
 #include "G4PhysicsFreeVector.hh"
+#include "globals.hh"
 
-class G4ICRU90StoppingData 
-{ 
-public: 
-
+class G4ICRU90StoppingData
+{
+ public:
   explicit G4ICRU90StoppingData();
 
   ~G4ICRU90StoppingData();
 
+  // hide assignment operator
+  G4ICRU90StoppingData& operator=(const G4ICRU90StoppingData& right) = delete;
+  G4ICRU90StoppingData(const G4ICRU90StoppingData&) = delete;
+
   void Initialise();
 
-  G4double 
-  GetElectronicDEDXforProton(const G4Material*, G4double kinEnergy) const;
+  G4double GetElectronicDEDXforProton(const G4Material*, G4double kinEnergy) const;
 
-  G4double 
-  GetElectronicDEDXforAlpha(const G4Material*, G4double scaledKinEnergy) const;
+  G4double GetElectronicDEDXforAlpha(const G4Material*, G4double scaledKinEnergy) const;
 
   inline G4int GetIndex(const G4Material*) const;
 
   inline G4int GetIndex(const G4String&) const;
 
-  inline G4double 
-  GetElectronicDEDXforProton(G4int idx, G4double kinEnergy) const;
+  inline G4double GetElectronicDEDXforProton(G4int idx, G4double kinEnergy) const;
 
-  inline G4double 
-  GetElectronicDEDXforAlpha(G4int idx, G4double scaledKinEnergy) const;
- 
+  inline G4double GetElectronicDEDXforAlpha(G4int idx, G4double scaledKinEnergy) const;
+
   inline G4bool IsApplicable(const G4Material*) const;
 
-  // hide assignment operator
-  G4ICRU90StoppingData & operator=
-  (const  G4ICRU90StoppingData &right) = delete;
-  G4ICRU90StoppingData(const G4ICRU90StoppingData&) = delete;
-
-private:
-
+ private:
   inline G4double GetDEDX(G4PhysicsFreeVector*, G4double e) const;
 
   void FillData();
@@ -98,7 +89,7 @@ private:
   const G4Material* materials[nvectors];
   G4PhysicsFreeVector* sdata_proton[nvectors];
   G4PhysicsFreeVector* sdata_alpha[nvectors];
-  G4bool isInitialized;
+  G4bool isInitialized{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,12 +99,20 @@ inline G4bool G4ICRU90StoppingData::IsApplicable(const G4Material* mat) const
   return (mat == materials[0] || mat == materials[1] || mat == materials[2]);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4int G4ICRU90StoppingData::GetIndex(const G4Material* mat) const
-{  
+{
   G4int idx = -1;
-  if (mat == materials[0]) { idx = 0; }
-  else if(mat == materials[1]) { idx = 1; }
-  else if(mat == materials[2]) { idx = 2; }
+  if (mat == materials[0]) {
+    idx = 0;
+  }
+  else if (mat == materials[1]) {
+    idx = 1;
+  }
+  else if (mat == materials[2]) {
+    idx = 2;
+  }
   return idx;
 }
 
@@ -122,39 +121,40 @@ inline G4int G4ICRU90StoppingData::GetIndex(const G4Material* mat) const
 inline G4int G4ICRU90StoppingData::GetIndex(const G4String& nam) const
 {
   G4int idx = -1;
-  if (nam == materials[0]->GetName()) { idx = 0; }
-  else if(nam == materials[1]->GetName()) { idx = 1; }
-  else if(nam == materials[2]->GetName()) { idx = 2; }
+  if (nam == materials[0]->GetName()) {
+    idx = 0;
+  }
+  else if (nam == materials[1]->GetName()) {
+    idx = 1;
+  }
+  else if (nam == materials[2]->GetName()) {
+    idx = 2;
+  }
   return idx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double 
-G4ICRU90StoppingData::GetDEDX(G4PhysicsFreeVector* data, G4double e) const
+inline G4double G4ICRU90StoppingData::GetDEDX(G4PhysicsFreeVector* data, G4double e) const
 {
   G4double emin = data->Energy(0);
-  return (e <= emin) ? (*data)[0]*std::sqrt(e/emin) : data->Value(e);
+  return (e <= emin) ? (*data)[0] * std::sqrt(e / emin) : data->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4ICRU90StoppingData::GetElectronicDEDXforProton(
-       G4int idx, G4double kinEnergy) const
+  G4int idx, G4double kinEnergy) const
 {
-  return (idx < 0 || idx >= nvectors) ? 0.0 
-    : GetDEDX(sdata_proton[idx], kinEnergy);
+  return (idx < 0 || idx >= nvectors) ? 0.0 : GetDEDX(sdata_proton[idx], kinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4ICRU90StoppingData::GetElectronicDEDXforAlpha(
-       G4int idx, G4double scaledKinEnergy) const
+  G4int idx, G4double scaledKinEnergy) const
 {
-  return (idx < 0 || idx >= nvectors) ? 0.0 
-    : GetDEDX(sdata_alpha[idx], scaledKinEnergy);
+  return (idx < 0 || idx >= nvectors) ? 0.0 : GetDEDX(sdata_alpha[idx], scaledKinEnergy);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

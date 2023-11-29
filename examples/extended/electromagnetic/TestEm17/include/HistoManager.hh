@@ -42,7 +42,7 @@
 
 class HistoMessenger;
 
-const G4int kMaxHisto = 15;
+const G4int kMaxHisto = 30;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -47,14 +47,14 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
   using Shape_t = vecgeom::UnplacedParaboloid;
   using Base_t  = G4UAdapter<vecgeom::UnplacedParaboloid>;
 
-  public:  // with description
+  public:
 
     G4UParaboloid(const G4String& name, G4double dz,
                                         G4double rlo,
                                         G4double rhi);
-   ~G4UParaboloid();
+   ~G4UParaboloid() override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetZHalfLength() const;
     G4double GetRadiusMinusZ() const;
@@ -64,9 +64,7 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
     void SetRadiusMinusZ(G4double r1);
     void SetRadiusPlusZ(G4double r2);
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UParaboloid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -77,12 +75,12 @@ class G4UParaboloid : public G4UAdapter<vecgeom::UnplacedParaboloid>
     G4UParaboloid& operator=( const G4UParaboloid& source );
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pmin, G4double& pmax) const;
-    G4Polyhedron* CreatePolyhedron() const;
+                           G4double& pmin, G4double& pmax) const override;
+    G4Polyhedron* CreatePolyhedron() const override;
 };
 
 // --------------------------------------------------------------------

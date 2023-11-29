@@ -52,7 +52,7 @@ G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
   {
     for (std::size_t node=0; node<maxNode; ++node)
     {
-      if (GetVolume(node) != v.GetVolume(node))
+      if (GetVolume((G4int)node) != v.GetVolume((G4int)node))
       {
         return false;
       }

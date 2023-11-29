@@ -40,38 +40,38 @@ class G4VPhysicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VEmProcess
-{
+class StepMax : public G4VEmProcess {
 public:
+  explicit StepMax(DetectorConstruction *ptr,
+                   const G4String &processName = "UserMaxStep");
+  ~StepMax() override = default;
 
-  StepMax(DetectorConstruction* ptr, 
-          const G4String& processName = "UserMaxStep");
-  virtual ~StepMax();
+  G4bool IsApplicable(const G4ParticleDefinition &) override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  void PreparePhysicsTable(const G4ParticleDefinition &) override;
 
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition &) override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void InitialiseProcess(const G4ParticleDefinition *) override;
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  G4double
+  PostStepGetPhysicalInteractionLength(const G4Track &track,
+                                       G4double previousStep,
+                                       G4ForceCondition *cond) override;
 
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                                        G4double previousStep,
-                                                        G4ForceCondition* cond);
+  G4VParticleChange *PostStepDoIt(const G4Track &, const G4Step &) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  StepMax &operator = (const StepMax &right) = delete;
+  StepMax(const StepMax &) = delete;
 
 private:
+  G4double fMaxChargedStep = DBL_MAX;
 
-  G4double fMaxChargedStep;
-     
-  DetectorConstruction* fDetector;
-  G4VPhysicalVolume* fWorld;
-  G4bool isInitialised;
+  DetectorConstruction *fDetector;
+  G4VPhysicalVolume *fWorld = nullptr;
+  G4bool fIsInitialised = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

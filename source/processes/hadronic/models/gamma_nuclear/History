@@ -1,18 +1,19 @@
--------------------------------------------------------------------
+# Category hadr-gammanuc History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/models/gamma_nuclear directory
-            -----------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-09-05 Ben Morgan (hadr-gammanuc-V11-00-01)
+- Update dependencies to address warnings from consistency check
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2021-12-10 Ben Morgan (hadr-gammanuc-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 4 August 2021 Alberto Ribon (hadr-gammanuc-V10-07-02)
 -----------------------------------------------------

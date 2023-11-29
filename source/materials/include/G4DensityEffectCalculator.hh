@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+
 /*
  * Interface to calculation of the Fermi density effect as per the method
  * described in:
@@ -52,16 +52,14 @@ class G4Material;
 
 class G4DensityEffectCalculator
 {
-public:
-
+ public:
   G4DensityEffectCalculator(const G4Material*, G4int);
   ~G4DensityEffectCalculator();
 
   // The Sternheimer 'x' defined as log10(p/m) == log10(beta*gamma).
   G4double ComputeDensityCorrection(G4double x);
 
-private:
-
+ private:
   /*
    * Given a material defined in 'par' with a plasma energy, mean excitation
    * energy, and set of atomic energy levels ("oscillator frequencies") with
@@ -86,8 +84,8 @@ private:
   G4double DeltaOnceSolved(G4double);
 
   const G4Material* fMaterial;
-  G4int fVerbose;
-  G4int fWarnings;
+  G4int fVerbose{0};
+  G4int fWarnings{0};
 
   // Number of energy levels.  If a single element, this is the number
   // of subshells.  If several elements, this is the sum of the number
@@ -99,7 +97,7 @@ private:
   const G4int nlev;
 
   G4double fConductivity;
-  
+
   // Current Sternheimer 'x' defined as log10(p/m) == log10(beta*gamma).
   G4double sternx;
 
@@ -117,7 +115,7 @@ private:
   // it is weighted by the number fraction of electrons contributed by
   // each element, e.g. for water, oxygen's electrons are given 8/10 of the
   // weight.
-  G4double * sternf;
+  G4double* sternf;
 
   // Energy levels.  Can be found for free atoms in, e.g., T. A. Carlson.
   // Photoelectron and Auger Spectroscopy. Plenum Press, New York and London,
@@ -126,15 +124,15 @@ private:
   // Sternheimer 1984 implies that the energy level for conduction electrons
   // (the final element of this array) should be set to zero, although the
   // computation could be run with other values.
-  G4double * levE;
+  G4double* levE;
 
   /***** Results of intermediate calculations *****/
 
   // The Sternheimer parameters l_i which appear in Sternheimer 1984 eq(1).
-  G4double * sternl;
+  G4double* sternl;
 
   // The adjusted energy levels, as found using Sternheimer 1984 eq(8).
-  G4double * sternEbar;
+  G4double* sternEbar;
 };
 
 #endif

@@ -43,6 +43,8 @@
 #include "G4Neutron.hh"
 #include "G4NeutronKiller.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4PhysListUtil.hh"
+#include "G4NeutronGeneralProcess.hh"
 
 #include "G4BuilderType.hh"
 #include "G4Threading.hh"
@@ -56,7 +58,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
 G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
   :  G4VPhysicsConstructor("neutronTrackingCut"), verbose(ver)
 {
-  timeLimit          = 10.*microsecond;
+  timeLimit = 10*CLHEP::microsecond;
   kineticEnergyLimit = 0.0;
   SetPhysicsType(bUnknown);
 }
@@ -75,8 +77,11 @@ void G4NeutronTrackingCut::ConstructParticle()
 
 void G4NeutronTrackingCut::ConstructProcess()
 {
+  auto particle = G4Neutron::Neutron();
+  auto proc = dynamic_cast<G4NeutronGeneralProcess*>(G4PhysListUtil::FindProcess(particle, fNeutronGeneral));
+  if(nullptr != proc) { return; }
+
   G4NeutronKiller* pNeutronKiller = new G4NeutronKiller();
-  G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
 
   if(verbose > 0 && G4Threading::IsMasterThread()) {
@@ -87,7 +92,7 @@ void G4NeutronTrackingCut::ConstructProcess()
 	   << "  KinEnergyCut(MeV)= " <<  kineticEnergyLimit/MeV
 	   <<  G4endl;
   }
-  pmanager -> AddDiscreteProcess(pNeutronKiller);
+  pmanager->AddDiscreteProcess(pNeutronKiller);
   pNeutronKiller->SetKinEnergyLimit(kineticEnergyLimit);
   pNeutronKiller->SetTimeLimit(timeLimit);
 

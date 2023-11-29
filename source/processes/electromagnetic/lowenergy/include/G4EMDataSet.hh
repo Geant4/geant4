@@ -87,7 +87,7 @@ public:
 
   virtual void AddComponent(G4VEMDataSet* /* dataSet */) {}
 
-  virtual size_t NumberOfComponents(void) const { return 0; }
+  virtual std::size_t NumberOfComponents(void) const { return 0; }
 
   virtual const G4DataVector& GetEnergies(G4int /* componentId */) const { return *energies; }
   virtual const G4DataVector& GetData(G4int /* componentId */) const { return *data; }
@@ -112,8 +112,8 @@ public:
 
 private:
 
-  size_t FindLowerBound(G4double energy) const;
-  size_t FindLowerBound(G4double x, G4DataVector* values) const;
+  std::size_t FindLowerBound(G4double energy) const;
+  std::size_t FindLowerBound(G4double x, G4DataVector* values) const;
 
   G4double IntegrationFunction(G4double x);
   virtual void BuildPdf();

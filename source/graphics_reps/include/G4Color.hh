@@ -38,6 +38,6 @@
 
 #include "G4Colour.hh"
 
-typedef G4Colour G4Color;
+using G4Color = G4Colour;
 
 #endif

@@ -33,6 +33,7 @@
 
 // User Classes
 #include "ExGflashDetectorConstruction.hh"
+
 #include "ExGflashHomoShowerTuning.hh"
 #include "ExGflashMessenger.hh"
 #include "ExGflashSensitiveDetector.hh"
@@ -54,21 +55,12 @@
 #include "globals.hh"
 
 // fast simulation
-#include "G4FastSimulationManager.hh"
 #include "GFlashHitMaker.hh"
 #include "GFlashHomoShowerParameterisation.hh"
 #include "GFlashParticleBounds.hh"
 #include "GFlashShowerModel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ThreadLocal GFlashShowerModel*
-  ExGflashDetectorConstruction::fFastShowerModel = nullptr;
-G4ThreadLocal GFlashHomoShowerParameterisation*
-  ExGflashDetectorConstruction::fParameterisation = nullptr;
-G4ThreadLocal GFlashParticleBounds*
-  ExGflashDetectorConstruction::fParticleBounds                       = nullptr;
-G4ThreadLocal GFlashHitMaker* ExGflashDetectorConstruction::fHitMaker = nullptr;
+#include "G4FastSimulationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,22 +69,12 @@ const G4int kMaxBin = 500;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExGflashDetectorConstruction::ExGflashDetectorConstruction()
-  : G4VUserDetectorConstruction(),
-    fNbOfCrystals(10),
-    fCrystal_log(nullptr),
-    fDetMat(nullptr),
-    fRegion(nullptr),
-    fVerbose(0),
-    fNLtot(40),
-    fNRtot(50),
-    fDLradl(0.5),
-    fDRradl(0.1)
 {
   G4cout << "ExGflashDetectorConstruction::Detector constructor" << G4endl;
   fGflashMessenger = new ExGflashMessenger(this);
 
   // Crystall
-  fCrystalWidth  = 3 * cm;
+  fCrystalWidth = 3 * cm;
   fCrystalLength = 24 * cm;
 }
 
@@ -116,7 +98,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
   // Get nist material manager
   G4NistManager* nistManager = G4NistManager::Instance();
   // Build materials
-  G4Material* air   = nistManager->FindOrBuildMaterial("G4_AIR");
+  G4Material* air = nistManager->FindOrBuildMaterial("G4_AIR");
   G4Material* pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
 
   fDetMat = pbWO4;
@@ -139,70 +121,66 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
   G4double experimentalHall_z = calo_zside * 4;
 
   G4VSolid* experimentalHall_box = new G4Box("expHall_box",  // World Volume
-    experimentalHall_x,                                      // x size
-    experimentalHall_y,                                      // y size
-    experimentalHall_z);                                     // z size
+                                             experimentalHall_x,  // x size
+                                             experimentalHall_y,  // y size
+                                             experimentalHall_z);  // z size
 
-  auto experimentalHall_log =
-    new G4LogicalVolume(experimentalHall_box, air, "expHall_log",
-      nullptr,   // opt: fieldManager
-      nullptr,   // opt: SensitiveDetector
-      nullptr);  // opt: UserLimits
-  G4VPhysicalVolume* experimentalHall_phys = new G4PVPlacement(nullptr,
-    G4ThreeVector(),  // at (0,0,0)
-    "expHall", experimentalHall_log, nullptr, false, 0);
+  auto experimentalHall_log = new G4LogicalVolume(experimentalHall_box, air, "expHall_log",
+                                                  nullptr,  // opt: fieldManager
+                                                  nullptr,  // opt: SensitiveDetector
+                                                  nullptr);  // opt: UserLimits
+  G4VPhysicalVolume* experimentalHall_phys =
+    new G4PVPlacement(nullptr,
+                      G4ThreeVector(),  // at (0,0,0)
+                      "expHall", experimentalHall_log, nullptr, false, 0);
 
-  G4Box* calo_box = new G4Box("Calorimeter",  // its name
-    calo_xside / 2.,                          // size
-    calo_yside / 2., calo_zside / 2.);
-  auto   calo_log = new G4LogicalVolume(calo_box,  // its solid
-      air,                                         // its material
-      "calo_log",                                  // its name
-      nullptr,                                     // opt: fieldManager
-      nullptr,                                     // opt: SensitiveDetector
-      nullptr);                                    // opt: UserLimit
+  auto calo_box = new G4Box("Calorimeter",  // its name
+                            calo_xside / 2.,  // size
+                            calo_yside / 2., calo_zside / 2.);
+  auto calo_log = new G4LogicalVolume(calo_box,  // its solid
+                                      air,  // its material
+                                      "calo_log",  // its name
+                                      nullptr,  // opt: fieldManager
+                                      nullptr,  // opt: SensitiveDetector
+                                      nullptr);  // opt: UserLimit
 
   G4double xpos = 0.0;
   G4double ypos = 0.0;
   G4double zpos = calo_zside / 2.;  // face @ z= 0.0
 
-  new G4PVPlacement(nullptr, G4ThreeVector(xpos, ypos, zpos), calo_log,
-    "calorimeter", experimentalHall_log, false, 1);
+  new G4PVPlacement(nullptr, G4ThreeVector(xpos, ypos, zpos), calo_log, "calorimeter",
+                    experimentalHall_log, false, 1);
 
   // Crystals
   G4VSolid* crystal_box = new G4Box("Crystal",  // its name
-    fCrystalWidth / 2, fCrystalWidth / 2, fCrystalLength / 2);
+                                    fCrystalWidth / 2, fCrystalWidth / 2, fCrystalLength / 2);
   // size
   fCrystal_log = new G4LogicalVolume(crystal_box,  // its solid
-    fDetMat,                                       // its material
-    "Crystal_log");                                // its name
+                                     fDetMat,  // its material
+                                     "Crystal_log");  // its name
 
-  for ( G4int i = 0; i < fNbOfCrystals; i++ ) {
-    for ( G4int j = 0; j < fNbOfCrystals; j++ ) {
-      G4int         n = i * 10 + j;
-      G4ThreeVector crystalPos(
-        (i * fCrystalWidth) - (calo_xside - fCrystalWidth) / 2.,
-        (j * fCrystalWidth) - (calo_yside - fCrystalWidth) / 2., 0);
+  for (G4int i = 0; i < fNbOfCrystals; i++) {
+    for (G4int j = 0; j < fNbOfCrystals; j++) {
+      G4int n = i * 10 + j;
+      G4ThreeVector crystalPos((i * fCrystalWidth) - (calo_xside - fCrystalWidth) / 2.,
+                               (j * fCrystalWidth) - (calo_yside - fCrystalWidth) / 2., 0);
       new G4PVPlacement(nullptr,  // no rotation
-        crystalPos,               // translation
-        fCrystal_log,
-        "crystal",  // its name
-        calo_log, false, n);
+                        crystalPos,  // translation
+                        fCrystal_log,
+                        "crystal",  // its name
+                        calo_log, false, n);
     }
   }
-  G4cout << "There are " << fNbOfCrystals
-         << " crystals per row in the calorimeter, so in total "
+  G4cout << "There are " << fNbOfCrystals << " crystals per row in the calorimeter, so in total "
          << fNbOfCrystals * fNbOfCrystals << " crystals" << G4endl;
-  G4cout << "Total Calorimeter size" << calo_xside / cm << " cm x "
-         << calo_yside / cm << " cm x " << calo_zside / cm << " cm" << G4endl;
-  G4cout << "They have width of  " << fCrystalWidth / cm
-         << "  cm and a length of  " << fCrystalLength / cm
-         << " cm. The Material is " << fDetMat
-         << " Total: " << fCrystalLength / fDetMat->GetRadlen() << " X0"
-         << G4endl;
+  G4cout << "Total Calorimeter size" << calo_xside / cm << " cm x " << calo_yside / cm << " cm x "
+         << calo_zside / cm << " cm" << G4endl;
+  G4cout << "They have width of  " << fCrystalWidth / cm << "  cm and a length of  "
+         << fCrystalLength / cm << " cm. The Material is " << fDetMat
+         << " Total: " << fCrystalLength / fDetMat->GetRadlen() << " X0" << G4endl;
 
   experimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
-  auto caloVisAtt    = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+  auto caloVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   auto crystalVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
   calo_log->SetVisAttributes(caloVisAtt);
   fCrystal_log->SetVisAttributes(crystalVisAtt);
@@ -227,7 +205,7 @@ void ExGflashDetectorConstruction::ConstructSDandField()
   auto SD = new ExGflashSensitiveDetector("Calorimeter", this);
 
   SDman->AddNewDetector(SD);
-  if ( fCrystal_log != nullptr ) {
+  if (fCrystal_log != nullptr) {
     fCrystal_log->SetSensitiveDetector(SD);
   }
 
@@ -236,9 +214,8 @@ void ExGflashDetectorConstruction::ConstructSDandField()
   // * Initializing shower modell
   // ***********************************************
   G4cout << "\n--> Creating shower parameterization models" << G4endl;
-  fFastShowerModel  = new GFlashShowerModel("fFastShowerModel", fRegion);
-  fParameterisation = new GFlashHomoShowerParameterisation(
-    fDetMat, new ExGflashHomoShowerTuning());
+  fFastShowerModel = new GFlashShowerModel("fFastShowerModel", fRegion);
+  fParameterisation = new GFlashHomoShowerParameterisation(fDetMat, new ExGflashHomoShowerTuning());
   fFastShowerModel->SetParameterisation(*fParameterisation);
   // Energy Cuts to kill particles:
   fParticleBounds = new GFlashParticleBounds();
@@ -257,9 +234,9 @@ void ExGflashDetectorConstruction::ConstructSDandField()
 void ExGflashDetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   fNLtot = (G4int)Value(0);
-  if ( fNLtot > kMaxBin ) {
-    G4cout << "\n ---> warning from SetLBining: " << fNLtot << " truncated to "
-           << kMaxBin << G4endl;
+  if (fNLtot > kMaxBin) {
+    G4cout << "\n ---> warning from SetLBining: " << fNLtot << " truncated to " << kMaxBin
+           << G4endl;
     fNLtot = kMaxBin;
   }
   fDLradl = Value(1);
@@ -270,9 +247,9 @@ void ExGflashDetectorConstruction::SetLBining(G4ThreeVector Value)
 void ExGflashDetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   fNRtot = (G4int)Value(0);
-  if ( fNRtot > kMaxBin ) {
-    G4cout << "\n ---> warning from SetRBining: " << fNRtot << " truncated to "
-           << kMaxBin << G4endl;
+  if (fNRtot > kMaxBin) {
+    G4cout << "\n ---> warning from SetRBining: " << fNRtot << " truncated to " << kMaxBin
+           << G4endl;
     fNRtot = kMaxBin;
   }
   fDRradl = Value(1);
@@ -283,15 +260,14 @@ void ExGflashDetectorConstruction::SetRBining(G4ThreeVector Value)
 void ExGflashDetectorConstruction::SetMaterial(G4String mat)
 {
   // search the material by its name
-  G4Material* pttoMaterial =
-    G4NistManager::Instance()->FindOrBuildMaterial(mat);
+  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(mat);
 
-  if ( pttoMaterial != nullptr && fDetMat != pttoMaterial ) {
+  if (pttoMaterial != nullptr && fDetMat != pttoMaterial) {
     fDetMat = pttoMaterial;
-    if ( fCrystal_log != nullptr ) {
+    if (fCrystal_log != nullptr) {
       fCrystal_log->SetMaterial(fDetMat);
     }
-    if ( fParameterisation != nullptr ) {
+    if (fParameterisation != nullptr) {
       fParameterisation->SetMaterial(fDetMat);
       fParameterisation->PrintMaterial(fDetMat);
       // Get Rad Len and R molere ?

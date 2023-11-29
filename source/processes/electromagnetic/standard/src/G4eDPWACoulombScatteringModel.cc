@@ -90,18 +90,16 @@ void G4eDPWACoulombScatteringModel::Initialise(const G4ParticleDefinition* pdef,
   fIsMixedModel = (fMuMin > 0.0);
   if(IsMaster()) {
     // clean the G4eDPWAElasticDCS object if any
-    if (fTheDCS) {
-      delete fTheDCS;
-    }
+    delete fTheDCS;
     fTheDCS = new G4eDPWAElasticDCS(pdef==G4Electron::Electron(), fIsMixedModel);
     // init only for the elements that are used in the geometry
     G4ProductionCutsTable* theCpTable = G4ProductionCutsTable::GetProductionCutsTable();
-    std::size_t numOfCouples = theCpTable->GetTableSize();
-    for(std::size_t j=0; j<numOfCouples; ++j) {
-      const G4Material*      mat = theCpTable->GetMaterialCutsCouple(j)->GetMaterial();
+    G4int numOfCouples = (G4int)theCpTable->GetTableSize();
+    for(G4int j=0; j<numOfCouples; ++j) {
+      const G4Material* mat = theCpTable->GetMaterialCutsCouple(j)->GetMaterial();
       const G4ElementVector* elV = mat->GetElementVector();
-      std::size_t      numOfElem = mat->GetNumberOfElements();
-      for (size_t ie = 0; ie < numOfElem; ++ie) {
+      std::size_t numOfElem = mat->GetNumberOfElements();
+      for (std::size_t ie = 0; ie < numOfElem; ++ie) {
         fTheDCS->InitialiseForZ((*elV)[ie]->GetZasInt());
       }
     }

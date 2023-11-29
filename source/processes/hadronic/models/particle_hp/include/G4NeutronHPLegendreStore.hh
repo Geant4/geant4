@@ -29,4 +29,4 @@
 #include "G4ParticleHPLegendreStore.hh"
 using G4NeutronHPLegendreStore = G4ParticleHPLegendreStore;
 
-#endif 
+#endif

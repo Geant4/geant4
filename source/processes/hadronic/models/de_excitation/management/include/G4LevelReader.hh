@@ -47,9 +47,9 @@
 #include "globals.hh"
 #include "G4LevelManager.hh"
 #include <iosfwd>
+#include <vector>
 
 class G4NuclearLevelData;
-class G4DeexPrecoParameters;
 
 class G4LevelReader 
 {
@@ -66,6 +66,11 @@ public:
 					 const G4String& filename);
 
   inline void SetVerbose(G4int val);
+
+  G4LevelReader(const G4LevelReader & right) = delete;  
+  const G4LevelReader& operator=(const G4LevelReader &right) = delete;
+  G4bool operator==(const G4LevelReader &right) const = delete;
+  G4bool operator!=(const G4LevelReader &right) const = delete;
   
 private:
 
@@ -81,63 +86,55 @@ private:
   
   const std::vector<G4float>* NormalizedICCProbability(G4int Z);
 
-  const G4LevelManager* LevelManager(G4int Z, G4int A, G4int nlev,
-				     std::ifstream& infile);  
-
-  G4LevelReader(const G4LevelReader & right) = delete;  
-  const G4LevelReader& operator=(const G4LevelReader &right) = delete;
-  G4bool operator==(const G4LevelReader &right) const = delete;
-  G4bool operator!=(const G4LevelReader &right) const = delete;
+  const G4LevelManager* LevelManager(G4int Z, G4int A,
+				     std::ifstream& infile);
 
   G4NuclearLevelData* fData;
-  G4DeexPrecoParameters* fParam;
 
-  G4double fEnergy;
-  G4double fCurrEnergy;
-  G4double fTrEnergy;
-  G4double ener, tener;
-
+  G4double fEnergy = 0.;
+  G4double fTransEnergy = 0.;
+  G4double fTime = 0.;
   G4double fTimeFactor;
-  G4double fTime;
 
-  G4float  fProb;
-  G4float  fSpin;
-  G4float  fAlpha;
-  G4float  fAlphaMax;
-  G4float  fRatio;
-  G4float  fICC[10];
+  G4float fProb = 0.f;
+  G4float fSpin = 0.f;
+  G4float fAlpha = 0.f;
+  G4float fAlphaMax;
+  G4float fRatio = 0.f;
+  G4float fNorm1 = 0.f;
+  G4float fICC[10] = {0.f};
 
-  static const G4int nfloting = 13;
-  static G4String fFloatingLevels[nfloting];
+  G4int nbufmax = 20;
+  G4int nbuf1 = 14;
+  G4int nbuf2 = 8;
 
-  G4String fDirectory;
-  G4String fPol;
+  G4int fVerbose = 1;
+  G4int fLevelMax = 632;
+  G4int fTransMax = 145;
+  G4int ntrans = 0;
+  G4int i1 = 0;
+  G4int i2 = 0;
+  G4int k = 0;
+  G4int kk = 0;
+  G4int tnum = 0;
 
-  static const G4int nbufmax = 20;
-  static const G4int nbuf1   = 14;
-  static const G4int nbuf2   = 8;
-
-  char buffer[nbufmax];
-  char buff1[nbuf1];
-  char buff2[nbuf2];
-  char bufp[3];
-
-  G4int fVerbose;
-  G4int fLevelMax;
-  G4int fTransMax;
-  G4int ntrans, i1, i2, k, kk, tnum;
-
-  G4float fNorm1;
+  char buffer[20] = {' '};
+  char buff1[14] = {' '};
+  char buff2[8] = {' '};
+  char bufp[3] = {' '};
 
   std::vector<G4double> vEnergy;
-  std::vector<G4int>    vSpin;
+  std::vector<G4int> vSpin;
   std::vector<const G4NucLevel*> vLevel;
 
-  std::vector<G4int>    vTrans;
-  std::vector<G4float>  vRatio;
-  std::vector<G4float>  vGammaCumProbability;
-  std::vector<G4float>  vGammaProbability;
+  std::vector<G4int> vTrans;
+  std::vector<G4float> vRatio;
+  std::vector<G4float> vGammaCumProbability;
+  std::vector<G4float> vGammaProbability;
   std::vector<const std::vector<G4float>*> vShellProbability;
+
+  G4String fPol = "  ";
+  G4String fDirectory;
 };
 
 inline void G4LevelReader::SetVerbose(G4int val)

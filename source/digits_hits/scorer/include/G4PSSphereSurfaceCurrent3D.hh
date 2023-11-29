@@ -51,7 +51,7 @@
 
 class G4PSSphereSurfaceCurrent3D : public G4PSSphereSurfaceCurrent
 {
- public:  // with description
+ public: 
   G4PSSphereSurfaceCurrent3D(G4String name, G4int direction, G4int ni = 1,
                              G4int nj = 1, G4int nk = 1, G4int depi = 2,
                              G4int depj = 1, G4int depk = 0);
@@ -59,11 +59,10 @@ class G4PSSphereSurfaceCurrent3D : public G4PSSphereSurfaceCurrent
                              const G4String& unit, G4int ni = 1, G4int nj = 1,
                              G4int nk = 1, G4int depi = 2, G4int depj = 1,
                              G4int depk = 0);
+  ~G4PSSphereSurfaceCurrent3D() override = default;
 
-  virtual ~G4PSSphereSurfaceCurrent3D();
-
- protected:  // with description
-  virtual G4int GetIndex(G4Step*);
+ protected:
+  G4int GetIndex(G4Step*) override;
 
  private:
   G4int fDepthi, fDepthj, fDepthk;

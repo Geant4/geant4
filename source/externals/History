@@ -1,24 +1,41 @@
--------------------------------------------------------------------
+# Category externals History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-12-12 Ben Morgan (externals-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
-11 February 2022 - Ben Morgan (externals-V10-07-08)
+## 2022-10-10 Gabriele Cosmo (externals-V11-00-05)
+- Synchronised with CLHEP-2.4.6.0.
+  o Resolved gcc-12 warnings in Evaluator source (C.Green).
+
+## 2022-10-06 Gabriele Cosmo (externals-V11-00-04)
+- Synchronised with CLHEP-2.4.5.4.
+  o Fix in RandGamma::genGamma() to fix reproducibility in multi-threading
+    environment (J.Junggeburth).
+
+## 2022-05-31 Guilherme Amadio (externals-V11-00-03)
+- Update CMake install directory for PTL to match recent changes
+  in default install directories in Geant4.
+
+## 2022-03-15 Ben Morgan (externals-V11-00-02)
+- Rationalize externals builds to decouple them from the core Geant4 module/category
+  definitions.
+
+## 2022-02-11 Ben Morgan (externals-V11-00-01)
 - Export builtin PTL include directory to build directory include path list
   - Allows use of geant4-config from build directory
+
+## 2021-12-10 Ben Morgan (externals-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 01 September 2021 - G.Cosmo (externals-V10-07-07)
 - Synchronised with CLHEP-2.4.5.1:

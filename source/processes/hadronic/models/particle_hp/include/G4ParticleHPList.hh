@@ -29,55 +29,51 @@
 #ifndef G4ParticleHPList_h
 #define G4ParticleHPList_h 1
 
-#include "globals.hh"
 #include "G4ios.hh"
+#include "globals.hh"
+
 #include <fstream>
 
 class G4ParticleHPList
 {
   public:
-  
-  G4ParticleHPList()
-  {
-    theData = new G4double[2]; 
-    nPoints=2;
-    nEntries=0;
-    theLabel=0.0;
-  }
-  
-  ~G4ParticleHPList()
-  {
-    delete [] theData;
-  }
-  
-  inline void SetValue(G4int i, G4double y) 
-  { 
-    Check(i);
-    theData[i]=y;
-  }
-  G4double GetValue(G4int i);
-  
-  inline G4int GetListLength() {return nEntries;}
+    G4ParticleHPList()
+    {
+      theData = new G4double[2];
+      nPoints = 2;
+      nEntries = 0;
+      theLabel = 0.0;
+    }
 
-  void Dump();
-  
-  void Init(std::istream & aDataFile, G4int nPar, G4double unit=1.);
-  
-  void Init(std::istream & aDataFile, G4double unit=1.);
+    ~G4ParticleHPList() { delete[] theData; }
 
-  inline void SetLabel(G4double aLabel) { theLabel = aLabel; }
-  
-  inline G4double GetLabel() { return theLabel; }
+    inline void SetValue(G4int i, G4double y)
+    {
+      Check(i);
+      theData[i] = y;
+    }
+    G4double GetValue(G4int i);
+
+    inline G4int GetListLength() { return nEntries; }
+
+    void Dump();
+
+    void Init(std::istream& aDataFile, G4int nPar, G4double unit = 1.);
+
+    void Init(std::istream& aDataFile, G4double unit = 1.);
+
+    inline void SetLabel(G4double aLabel) { theLabel = aLabel; }
+
+    inline G4double GetLabel() { return theLabel; }
 
   private:
-  
-  void Check(G4int i);
- 
-  G4double theLabel;
+    void Check(G4int i);
 
-  G4double * theData;
-  G4int nEntries;
-  G4int nPoints;
+    G4double theLabel;
+
+    G4double* theData;
+    G4int nEntries;
+    G4int nPoints;
 };
 
 #endif

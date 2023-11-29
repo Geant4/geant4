@@ -123,7 +123,6 @@ protected:
 public:
   virtual void Initialize(G4HCofThisEvent*);
   virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
   virtual void DrawAll();
   virtual void PrintAll();
   /** Method used in multithreading mode in order to merge 

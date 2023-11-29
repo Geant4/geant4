@@ -93,6 +93,10 @@ int main(int argc,char **argv)
 // Uncomment the following if wish to avoid names stripping
 // parser.SetStripFlag(false);
 
+// Uncomment the following and set a string with proper absolute path and
+// schema filename if wishing to use alternative schema for parsing validation
+// parser.SetImportSchema("");
+
    parser.SetOverlapCheck(true);
    parser.Read(argv[1]);
 

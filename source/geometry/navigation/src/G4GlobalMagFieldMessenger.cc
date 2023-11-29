@@ -43,7 +43,6 @@
 //______________________________________________________________________________
 
 G4GlobalMagFieldMessenger::G4GlobalMagFieldMessenger(const G4ThreeVector& value)
- : G4UImessenger()
 {
   fDirectory = new G4UIdirectory("/globalField/");
   fDirectory->SetGuidance("Global uniform magnetic field UI commands");
@@ -91,8 +90,8 @@ void G4GlobalMagFieldMessenger::SetField(const G4ThreeVector& value,
   // Inactivate field if its value is zero
   if ( value == G4ThreeVector() )
   {
-    fieldManager->SetDetectorField(0);
-    fieldManager->CreateChordFinder(0);
+    fieldManager->SetDetectorField(nullptr);
+    fieldManager->CreateChordFinder(nullptr);
     
     if ( fVerboseLevel > 0 )
     {
@@ -140,7 +139,7 @@ void G4GlobalMagFieldMessenger::SetFieldValue(const G4ThreeVector& value)
 
 G4ThreeVector G4GlobalMagFieldMessenger::GetFieldValue() const
 {
-  if ( fMagField ) return fMagField->GetConstantFieldValue();
+  if ( fMagField != nullptr ) { return fMagField->GetConstantFieldValue(); }
   
-  return G4ThreeVector();
+  return {};
 }  

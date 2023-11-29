@@ -54,15 +54,15 @@ G4HadElementSelector::G4HadElementSelector(G4DynamicParticle* dp,
 					   G4int bins, G4double emin, 
 					   G4double emax, G4bool)
 {
-  G4int n = mat->GetNumberOfElements();
-  nElmMinusOne = n - 1;
+  std::size_t n = mat->GetNumberOfElements();
+  nElmMinusOne = G4int(n - 1);
   theElementVector = mat->GetElementVector();
   if(nElmMinusOne > 0) {
     G4PhysicsVector* first = nullptr;
     xSections.resize(n, first);
     first = new G4PhysicsLogVector(emin,emax,bins,false);
     xSections[0] = first;
-    for(G4int i=1; i<n; ++i) {
+    for(std::size_t i=1; i<n; ++i) {
       xSections[i] = new G4PhysicsVector(*first);
     }
     std::vector<G4double> temp;
@@ -71,12 +71,12 @@ G4HadElementSelector::G4HadElementSelector(G4DynamicParticle* dp,
       G4double cross = 0.0;
       G4double e = first->Energy(j);
       dp->SetKineticEnergy(e);
-      for(G4int i=0; i<n; ++i) {
+      for(std::size_t i=0; i<n; ++i) {
 	cross += xs->GetCrossSection(dp, (*theElementVector)[i], mat);
         temp[i] = cross;
       }
       G4double fact = (cross > 0.0) ? 1.0/cross : 0.0;
-      for(G4int i=0; i<n; ++i) {
+      for(std::size_t i=0; i<n; ++i) {
 	G4double y = (i<n-1) ? temp[i]*fact : 1.0; 
         xSections[i]->PutValue(j, y);
       }
@@ -110,7 +110,7 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
 				     G4int bins, G4double emin, G4double emax, 
 				     G4bool spline)
 {
-  size_t nn = G4Material::GetNumberOfMaterials();
+  std::size_t nn = G4Material::GetNumberOfMaterials();
   if(nn > nMaterials) {
     if(0 == nMaterials) {
       xsData.reserve(nn);
@@ -119,7 +119,7 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
     G4PhysicsLogVector* first = nullptr;
     G4int sbins = std::max(10, bins/5);
     const G4MaterialTable* mtable = G4Material::GetMaterialTable();
-    for(size_t i=nMaterials; i<nn; ++i) {
+    for(std::size_t i=nMaterials; i<nn; ++i) {
       const G4Material* mat = (*mtable)[i];
       G4PhysicsVector* v = nullptr;
       G4HadElementSelector* es = nullptr;
@@ -151,7 +151,7 @@ void G4HadronXSDataTable::Initialise(G4DynamicParticle* dp,
 
 G4HadronXSDataTable::~G4HadronXSDataTable()
 {
-  for(size_t i=0; i<nMaterials; ++i) {
+  for(std::size_t i=0; i<nMaterials; ++i) {
     delete xsData[i];
     delete elmSelectors[i];
   }

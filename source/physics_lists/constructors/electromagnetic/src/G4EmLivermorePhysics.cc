@@ -53,8 +53,6 @@
 
 // e+-
 #include "G4eMultipleScattering.hh"
-#include "G4UniversalFluctuation.hh"
-
 #include "G4eIonisation.hh"
 #include "G4LivermoreIonisationModel.hh"
 
@@ -77,6 +75,7 @@
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
+#include "G4LindhardSorensenIonModel.hh"
 
 // msc models
 #include "G4UrbanMscModel.hh"
@@ -88,6 +87,7 @@
 // interfaces
 #include "G4EmParameters.hh"
 #include "G4EmBuilder.hh"
+#include "G4EmStandUtil.hh"
 
 // particles
 
@@ -129,6 +129,8 @@ G4EmLivermorePhysics::G4EmLivermorePhysics(G4int ver, const G4String& pname)
   param->SetMscRangeFactor(0.08);
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
+  param->SetUseICRU90Data(true);
+  param->SetFluctuationType(fUrbanFluctuation);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   SetPhysicsType(bElectromagnetic);
 }
@@ -219,13 +221,11 @@ void G4EmLivermorePhysics::ConstructProcess()
   particle = G4Electron::Electron();
 
   // multiple and single scattering
-  G4eMultipleScattering* msc = new G4eMultipleScattering;
   G4GoudsmitSaundersonMscModel* msc1 = new G4GoudsmitSaundersonMscModel();
   G4WentzelVIModel* msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
   G4CoulombScattering* ss = new G4CoulombScattering();
@@ -236,9 +236,10 @@ void G4EmLivermorePhysics::ConstructProcess()
       
   // Ionisation - Livermore should be used only for low energies
   G4eIonisation* eioni = new G4eIonisation();
+  eioni->SetFluctModel(G4EmStandUtil::ModelOfFluctuations());
   G4VEmModel* theIoniLiv = new G4LivermoreIonisationModel();
   theIoniLiv->SetHighEnergyLimit(0.1*CLHEP::MeV); 
-  eioni->AddEmModel(0, theIoniLiv, new G4UniversalFluctuation() );
+  eioni->AddEmModel(0, theIoniLiv);
       
   // Bremsstrahlung
   G4eBremsstrahlung* brem = new G4eBremsstrahlung();
@@ -253,7 +254,6 @@ void G4EmLivermorePhysics::ConstructProcess()
   G4ePairProduction* ee = new G4ePairProduction();
      
   // register processes
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -263,13 +263,11 @@ void G4EmLivermorePhysics::ConstructProcess()
   particle = G4Positron::Positron();
 
   // multiple and single scattering
-  msc = new G4eMultipleScattering;
   msc1 = new G4GoudsmitSaundersonMscModel();
   msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   ssm = new G4eCoulombScatteringModel(); 
   ss = new G4CoulombScattering();
@@ -292,7 +290,6 @@ void G4EmLivermorePhysics::ConstructProcess()
   br1->SetHighEnergyLimit(GeV);
 
   // register processes
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -302,7 +299,7 @@ void G4EmLivermorePhysics::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
-  ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
   if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }

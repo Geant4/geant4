@@ -1,0 +1,1530 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "G4VisManager.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolume.hh"
+
+//========== AddPrimitive() functions ==========//
+
+//----- Add polyline
+void G4FRSCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive\n";
+#endif
+  if(fProcessing2D)
+  {
+    static G4bool warned = false;
+    if(!warned)
+    {
+      warned = true;
+      G4Exception("G4FRSCENEHANDLER::AddPrimitive (const G4Polyline&)",
+                  "dawn0001", JustWarning,
+                  "2D polylines not implemented.  Ignored.");
+    }
+    return;
+  }
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- local working variables
+  G4int nPoints = (G4int)polyline.size();
+  G4int i;
+  const G4VisAttributes* pVA =
+    fpViewer->GetApplicableVisAttributes(polyline.GetVisAttributes());
+
+  //----- skip drawing invisible primitive
+  if(pVA)
+  {
+    if(!(pVA->IsVisible()))
+    {
+      return;
+    }
+  }
+
+  //----- Attributes
+  if(!SendVisAttributes(pVA))
+  {
+    SendStr(FR_COLOR_RGB_RED);  // color
+  }
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send beginning of polyline
+  SendStr(FR_POLYLINE);
+
+  //----- vertices on polyline
+  for(i = 0; i < nPoints; i++)
+  {
+    SendStrDouble3(FR_PL_VERTEX, polyline[i].x(), polyline[i].y(),
+                   polyline[i].z());
+  }
+
+  //----- send ending of polyline
+  SendStr(FR_END_POLYLINE);
+
+}  // G4FRSCENEHANDLER::AddPrimitive (polyline)
+
+//----- Add text
+void G4FRSCENEHANDLER::AddPrimitive(const G4Text& text)
+{
+  //-----
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Text )\n";
+#endif
+  //----- Initialize DAWN IF NECESSARY
+  FRBeginModeling();
+
+  //----- send color
+  const G4Color& color = GetTextColor(text);
+  SendStrDouble3(FR_COLOR_RGB, color.GetRed(), color.GetGreen(),
+                 color.GetBlue());
+
+  //----- send body coordinates
+  SendTransformedCoordinates();
+
+  //----- Calc size
+  MarkerSizeType size_type;
+  G4double fontsize = GetMarkerDiameter(text, size_type);
+
+  //----- Calc position
+  const G4Point3D& position = text.GetPosition();
+
+  //----- offset
+  G4double x_offset = text.GetXOffset();
+  G4double y_offset = text.GetYOffset();
+
+  //----- get string to be visualized and Calc its length
+  const char* vis_text = text.GetText();
+  const G4int STR_LENGTH = (G4int)strlen(vis_text);
+
+  //----- create buffer and copy the string there
+  G4int MAX_STR_LENGTH = COMMAND_BUF_SIZE - 100;
+  if(MAX_STR_LENGTH <= 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    {
+      G4cout << "ERROR (FukuiRenderer) : Not enough buffer size for data "
+                "transferring."
+             << G4endl;
+      G4cout << "                        G4Text Visualization is aborted"
+             << G4endl;
+    }
+    return;
+  }
+  char* buf = new char[(MAX_STR_LENGTH + 1)];
+  if(MAX_STR_LENGTH >= STR_LENGTH)
+  {
+    strcpy(buf, vis_text);
+  }
+  else
+  {
+    strncpy(buf, vis_text, MAX_STR_LENGTH);
+  }
+
+  //----- select string command for 3D drawing
+  char text_command[32];
+  switch(size_type)
+  {
+    case world:
+      strcpy(text_command, FR_MARK_TEXT_2D);
+      break;
+    case screen:
+    default:
+      strcpy(text_command, FR_MARK_TEXT_2DS);
+      break;
+  }
+
+  //----- Send string command
+  if(fProcessing2D)
+  {
+    // Map -1<x<1, -1<y<1 to 10<x<200, 53<y<243
+    G4double x_mm = 95. * position.x() + 105.;
+    G4double y_mm = 95. * position.y() + 148.;
+    SendStrDouble3Str(FR_TEXT_2DS, x_mm, y_mm, fontsize, buf);
+  }
+  else
+  {
+    SendStrDouble6Str(text_command, position.x(), position.y(), position.z(),
+                      fontsize, x_offset, y_offset, buf);
+  }
+
+  //----- delete buffer
+  delete[] buf;
+
+}  // G4FRSCENEHANDLER::AddPrimitive ( text )
+
+//----- Add circle
+void G4FRSCENEHANDLER::AddPrimitive(const G4Circle& mark_circle)
+{
+  //-----
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Circle )\n";
+#endif
+  if(fProcessing2D)
+  {
+    static G4bool warned = false;
+    if(!warned)
+    {
+      warned = true;
+      G4Exception("G4FRSCENEHANDLER::AddPrimitive (const G4Circle&)",
+                  "dawn0002", JustWarning,
+                  "2D circles not implemented.  Ignored.");
+    }
+    return;
+  }
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- send color
+  fpVisAttribs         = mark_circle.GetVisAttributes();
+  const G4Color& color = GetColor();
+  SendStrDouble3(FR_COLOR_RGB, color.GetRed(), color.GetGreen(),
+                 color.GetBlue());
+
+  //----- send body coordinates
+  SendTransformedCoordinates();
+
+  //----- Calc position
+  const G4Point3D& position = mark_circle.GetPosition();
+
+  //----- Calc size
+  MarkerSizeType size_type;
+  G4double size = GetMarkerRadius(mark_circle, size_type);
+
+  //----- send mark
+  switch(size_type)
+  {
+    case world:
+      SendStrDouble4(FR_MARK_CIRCLE_2D, position.x(), position.y(),
+                     position.z(), size);
+      break;
+    default:
+    case screen:
+      SendStrDouble4(FR_MARK_CIRCLE_2DS, position.x(), position.y(),
+                     position.z(), size);
+      break;
+  }
+
+}  // G4FRSCENEHANDLER::AddPrimitive ( mark_circle )
+
+//----- Add square
+void G4FRSCENEHANDLER::AddPrimitive(const G4Square& mark_square)
+{
+  //-----
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Square )\n";
+#endif
+  if(fProcessing2D)
+  {
+    static G4bool warned = false;
+    if(!warned)
+    {
+      warned = true;
+      G4Exception("G4FRSCENEHANDLER::AddPrimitive (const G4Square&)",
+                  "dawn0003", JustWarning,
+                  "2D squares not implemented.  Ignored.");
+    }
+    return;
+  }
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- send color
+  fpVisAttribs         = mark_square.GetVisAttributes();
+  const G4Color& color = GetColor();
+  SendStrDouble3(FR_COLOR_RGB, color.GetRed(), color.GetGreen(),
+                 color.GetBlue());
+
+  //----- send body coordinates
+  SendTransformedCoordinates();
+
+  //----- Calc position
+  const G4Point3D& position = mark_square.GetPosition();
+
+  //----- Calc size
+  MarkerSizeType size_type;
+  G4double size = GetMarkerRadius(mark_square, size_type);
+
+  //----- send mark
+  switch(size_type)
+  {
+    case world:
+      SendStrDouble4(FR_MARK_SQUARE_2D, position.x(), position.y(),
+                     position.z(), size);
+      break;
+    default:
+    case screen:
+      SendStrDouble4(FR_MARK_SQUARE_2DS, position.x(), position.y(),
+                     position.z(), size);
+      break;
+  }
+
+}  // G4FRSCENEHANDLER::AddPrimitive ( mark_square )
+
+//----- Add polyhedron
+void G4FRSCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
+{
+  //-----
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddPrimitive( G4Polyhedron )\n";
+#endif
+  if(fProcessing2D)
+  {
+    static G4bool warned = false;
+    if(!warned)
+    {
+      warned = true;
+      G4Exception("G4FRSCENEHANDLER::AddPrimitive (const G4Polyhedron&)",
+                  "dawn0004", JustWarning,
+                  "2D polyhedrons not implemented.  Ignored.");
+    }
+    return;
+  }
+
+  if(polyhedron.GetNoFacets() == 0)
+    return;
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Attributes
+  if(!SendVisAttributes(
+       fpViewer->GetApplicableVisAttributes(polyhedron.GetVisAttributes())))
+  {
+    SendStr(FR_COLOR_RGB_RED);  // color
+  }
+
+  //----- Coordinates
+  SendTransformedCoordinates();
+
+  //----- Brep data
+
+  //---------- (1) Declare beginning of Brep data
+  SendStr(FR_POLYHEDRON);
+
+  //---------- (2) Vertex block
+  for(G4int i = 1, j = polyhedron.GetNoVertices(); j; j--, i++)
+  {
+    G4Point3D point = polyhedron.GetVertex(i);
+    SendStrDouble3(FR_VERTEX, point.x(), point.y(), point.z());
+  }
+
+  //---------- (3) Facet block
+  for(G4int f = polyhedron.GetNoFacets(); f; f--)
+  {
+    G4int notLastEdge;
+    G4int index    = -1;  // initialization
+    G4int edgeFlag = 1;
+    // G4int preedgeFlag = 1;  Not used - comment out to prevent warnings (JA).
+    G4int work[4], i = 0;
+    do
+    {
+      // preedgeFlag = edgeFlag;  Not used - comment out to prevent warnings
+      // (JA).
+      notLastEdge = polyhedron.GetNextVertexIndex(index, edgeFlag);
+      work[i++]   = index;
+    } while(notLastEdge);
+    switch(i)
+    {
+      case 3:
+        SendStrInt3(FR_FACET, work[0], work[1], work[2]);
+        break;
+      case 4:
+        SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3]);
+        break;
+      default:
+        if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+          G4cout << "ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
+        G4PhysicalVolumeModel* pPVModel =
+          dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+        if(pPVModel)
+          if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+          {
+            G4cout << "Volume " << pPVModel->GetCurrentPV()->GetName()
+                   << ", Solid "
+                   << pPVModel->GetCurrentLV()->GetSolid()->GetName() << " ("
+                   << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
+            G4cout << "\nG4Polyhedron facet with " << i << " edges" << G4endl;
+          }
+    }
+  }
+
+  //---------- (4) Declare ending of Brep data
+  SendStr(FR_END_POLYHEDRON);
+
+}  // G4FRSCENEHANDLER::AddPrimitive (polyhedron)
+
+//-----
+void G4FRSCENEHANDLER::SendNdiv(void)
+{
+  //////////////////////////////////////////////////
+  //#if defined DEBUG_FR_SCENE
+  //	G4cout << "***** SendNdiv() (/Ndiv)" << G4endl;
+  //#endif
+  //////////////////////////////////////////////////
+
+  //----- local
+  G4int num_division = FR_DEFALUT_NDIV_VALUE;
+
+  //-----  number used for dividing a curved surface, Ndiv
+  // if ( GetModel() ) {  ?? Why test for model.  Can be zero.  JA ??
+  const G4VisAttributes* pVisAttribs =
+    fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  num_division = GetNoOfSides(pVisAttribs);
+  // } else {
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  {
+    G4cout << "WARNING: GetNoOfSides() failed. ";
+    G4cout << "The default value " << num_division;
+    G4cout << " is assigned." << G4endl;
+  }
+#endif
+  //}
+
+  //---------- Error recovery for too small Ndiv
+  num_division = (num_division < 3 ? 3 : num_division);
+
+  //////////////////////////////////////////////////
+  //#if defined DEBUG_FR_SCENE
+  //	G4cout << "Ndiv = " << num_division << G4endl;
+  //#endif
+  //////////////////////////////////////////////////
+
+  //----- Send resultant Ndiv
+  this->SendStrInt(FR_NDIV, num_division);
+}
+
+//-----
+void G4FRSCENEHANDLER::FREndModeling()
+{
+  //-----
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** FREndModeling (called)" << G4endl;
+#endif
+  if(FRIsInModeling())
+  {
+#if defined DEBUG_FR_SCENE
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    {
+      G4cout << "***** FREndModeling (started) ";
+      G4cout << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
+    }
+#endif
+
+    SendStr("#--------------------");
+
+    //----- !EndModeling
+    SendStr(FR_END_MODELING);
+
+    //----- !DrawAll
+    SendStr(FR_DRAW_ALL);
+
+    //----- !CloseDevice
+    SendStr(FR_CLOSE_DEVICE);
+
+    //----- End saving data to g4.prim
+    EndSavingG4Prim();
+
+    //------ Reset flag
+    FRflag_in_modeling = false;
+  }
+}
+
+//-----
+void G4FRSCENEHANDLER::BeginPrimitives(
+  const G4Transform3D& objectTransformation)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** BeginPrimitives \n";
+#endif
+
+  FRBeginModeling();
+
+  G4VSceneHandler::BeginPrimitives(objectTransformation);
+}
+
+//-----
+void G4FRSCENEHANDLER::EndPrimitives()
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** EndPrimitives \n";
+#endif
+  G4VSceneHandler::EndPrimitives();
+}
+
+//========== AddSolid() functions ==========//
+
+//----- Add box
+void G4FRSCENEHANDLER::AddSolid(const G4Box& box)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( box )\n";
+#endif
+
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  // SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_GREEN);  // color
+  }
+
+  //----- parameters (half lengths of box)
+  G4double dx = box.GetXHalfLength();
+  G4double dy = box.GetYHalfLength();
+  G4double dz = box.GetZHalfLength();
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send box to Fukui Renderer
+  SendStrDouble3(FR_BOX, dx, dy, dz);
+
+}  // void G4FRSCENEHANDLER::AddSolid( const G4Box& box )
+
+//----- Add tubes
+void G4FRSCENEHANDLER::AddSolid(const G4Tubs& tubes)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( tubes )\n";
+#endif
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_BLUE);  // color
+  }
+
+  //----- parameters
+  const G4double R    = tubes.GetOuterRadius();    // outside radius
+  const G4double r    = tubes.GetInnerRadius();    // inside radius
+  const G4double dz   = tubes.GetZHalfLength();    // half length in z
+  const G4double sphi = tubes.GetStartPhiAngle();  // starting angle
+  const G4double dphi = tubes.GetDeltaPhiAngle();  // angle width
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send tubes to Fukui Renderer
+  SendStrDouble5(FR_TUBS, r, R, dz, sphi, dphi);
+
+}  // void G4FRSCENEHANDLER::AddSolid( const G4Tubs& )
+
+//----- Add cons
+void G4FRSCENEHANDLER::AddSolid(const G4Cons& cons)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( cons )\n";
+#endif
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_CYAN);  // color
+  }
+
+  //----- parameters
+  const G4double r1   = cons.GetInnerRadiusMinusZ();  // inside radius  at -dz
+  const G4double R1   = cons.GetOuterRadiusMinusZ();  // outside radius at -dz
+  const G4double r2   = cons.GetInnerRadiusPlusZ();   // inside radius  at +dz
+  const G4double R2   = cons.GetOuterRadiusPlusZ();   // outside radius at +dz
+  const G4double dz   = cons.GetZHalfLength();        // half length in z
+  const G4double sphi = cons.GetStartPhiAngle();      // starting angle
+  const G4double dphi = cons.GetDeltaPhiAngle();      // angle width
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send cons to Fukui Renderer
+  SendStrDouble7(FR_CONS, r1, R1, r2, R2, dz, sphi, dphi);
+
+}  // G4FRSCENEHANDLER::AddSolid( cons )
+
+//----- Add trd
+void G4FRSCENEHANDLER::AddSolid(const G4Trd& trd)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( trd )\n";
+#endif
+
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  // SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_MAGENTA);  // color
+  }
+
+  //----- parameters
+  G4double dx1 = trd.GetXHalfLength1();
+  G4double dx2 = trd.GetXHalfLength2();
+  G4double dy1 = trd.GetYHalfLength1();
+  G4double dy2 = trd.GetYHalfLength2();
+  G4double dz  = trd.GetZHalfLength();
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send trd to Fukui Renderer
+  SendStrDouble5(FR_TRD, dx1, dx2, dy1, dy2, dz);
+
+}  // G4FRSCENEHANDLER::AddSolid ( trd )
+
+//----- Add sphere
+void G4FRSCENEHANDLER::AddSolid(const G4Sphere& sphere)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( sphere )\n";
+#endif
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_YELLOW);  // color
+  }
+
+  //----- parameters
+  //	const G4double  rmin    = sphere.GetInnerRadius();
+  const G4double rmax = sphere.GetOuterRadius();
+  //  	const G4double  sphi    = sphere.GetStartPhiAngle();
+  const G4double dphi = sphere.GetDeltaPhiAngle();
+  //	const G4double  stheta  = sphere.GetStartThetaAngle();
+  const G4double dtheta = sphere.GetDeltaThetaAngle();
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send sphere to Fukui Renderer
+  const G4double PI_minus  = 0.9999 * CLHEP::pi;
+  const G4double PI2_minus = 1.9999 * CLHEP::pi;
+  if(dphi > PI2_minus && dtheta > PI_minus)
+  {
+    //----- full sphere
+    SendStrDouble(FR_SPHERE, rmax);
+  }
+  else
+  {
+    //----- call AddPrimitives( G4Polyhedron )
+    //...... For sphere "segment",
+    //...... G4Polyhedron is used for visualization.
+    //...... Visualization attributes and
+    //...... local coordinates are resent and overwritten.
+    G4VSceneHandler::AddSolid(sphere);
+
+    ////////////////////////////////////////////////////////////////
+    //			//----- sphere segment
+    //		SendStrDouble6( FR_SPHERE_SEG, rmin, rmax, stheta, dtheta, sphi, dphi
+    //);
+    ////////////////////////////////////////////////////////////////
+  }
+
+}  // G4FRSCENEHANDLER::AddSolid ( sphere )
+
+//----- Add para
+void G4FRSCENEHANDLER::AddSolid(const G4Para& para)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( para )\n";
+#endif
+
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  // SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_RED);  // color
+  }
+
+  //----- local
+  const G4double epsilon = 1.0e-5;
+
+  //----- parameters preprocessing
+  G4double cosTheta = para.GetSymAxis().z();
+  if(cosTheta < epsilon)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    {
+      G4cout << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
+      G4cout << "  Invalid parameter for parallelepiped." << G4endl;
+      G4cout << "  Drawing is skipped." << G4endl;
+    }
+    return;
+  }
+  G4double tanTheta_cosPhi_cosTheta = para.GetSymAxis().x();
+  G4double tanTheta_sinPhi_cosTheta = para.GetSymAxis().y();
+
+  //----- parameters
+  G4double dx              = para.GetXHalfLength();
+  G4double dy              = para.GetYHalfLength();
+  G4double dz              = para.GetZHalfLength();
+  G4double tanAlpha        = para.GetTanAlpha();
+  G4double tanTheta_cosPhi = tanTheta_cosPhi_cosTheta / cosTheta;
+  G4double tanTheta_sinPhi = tanTheta_sinPhi_cosTheta / cosTheta;
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send data to Fukui Renderer
+  SendStrDouble6(FR_PARA, dx, dy, dz, tanAlpha, tanTheta_cosPhi,
+                 tanTheta_sinPhi);
+
+}  // G4FRSCENEHANDLER::AddSolid ( para )
+
+//----- Add trap
+void G4FRSCENEHANDLER::AddSolid(const G4Trap& trap)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( trap )\n";
+#endif
+
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  // SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_GREEN);  // color
+  }
+
+  //----- local
+  const G4double epsilon = 1.0e-5;
+
+  //----- parameters preprocessing
+  G4double cosTheta = trap.GetSymAxis().z();
+  if(cosTheta < epsilon)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    {
+      G4cout << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
+      G4cout << "  Invalid parameter for trap, 1" << G4endl;
+      G4cout << "  Drawing is skipped." << G4endl;
+    }
+    return;
+  }
+
+  G4double nx = trap.GetSymAxis().x();
+  G4double ny = trap.GetSymAxis().y();
+
+  //----- parameters (half lengths of box)
+  G4double dz    = trap.GetZHalfLength();
+  G4double theta = std::acos(cosTheta);
+  G4double phi;
+  if(ny == 0. && nx == 0.)
+  {
+    phi = 0.;  // std::atan2(0.,0.) gives undefined value of phi
+  }
+  else
+  {
+    phi = std::atan2(ny, nx);
+    if(phi < 0.)
+    {
+      phi += CLHEP::twopi;
+    }
+    // -PI < std::atan() < PI
+  }
+  /////////////////////////////////////////////////
+  //  	G4double  phi     = std::atan2( ny, nx ) ;
+  //	if( phi < 0.0 ) { phi += CLHEP::twopi ; }
+  //				// -PI < std::atan() < PI
+  /////////////////////////////////////////////////
+
+  G4double h1     = trap.GetYHalfLength1();
+  G4double bl1    = trap.GetXHalfLength1();
+  G4double tl1    = trap.GetXHalfLength2();
+  G4double alpha1 = std::atan(trap.GetTanAlpha1());
+  G4double h2     = trap.GetYHalfLength2();
+  G4double bl2    = trap.GetXHalfLength3();
+  G4double tl2    = trap.GetXHalfLength4();
+  G4double alpha2 = std::atan(trap.GetTanAlpha2());
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- Change sign of alpha for compatibility
+  //      with the DAWN format
+  G4double alpha_sign = -1.0;
+  alpha1 *= alpha_sign;
+  alpha2 *= alpha_sign;
+
+  //----- send box to Fukui Renderer
+  SendStrDouble11(FR_TRAP, dz, theta, phi, h1, bl1, tl1, alpha1, h2, bl2, tl2,
+                  alpha2);
+
+}  // G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
+
+//----- Add torus
+void G4FRSCENEHANDLER::AddSolid(const G4Torus& torus)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** AddSolid ( torus )\n";
+#endif
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  SendNdiv();
+
+  //----- Attributes
+  if(!SendVisAttributes(fpViewer->GetApplicableVisAttributes(fpVisAttribs)))
+  {
+    SendStr(FR_COLOR_RGB_BLUE);  // color
+  }
+
+  //----- parameters
+  const G4double r    = torus.GetRmin();
+  const G4double R    = torus.GetRmax();
+  const G4double t    = torus.GetRtor();
+  const G4double sphi = torus.GetSPhi();
+  const G4double dphi = torus.GetDPhi();
+
+  //----- send coordinates to Fukui Renderer
+  SendTransformedCoordinates();
+
+  //----- send torus to Fukui Renderer
+  SendStrDouble5(FR_TORUS, r, R, t, sphi, dphi);
+
+}  // void G4FRSCENEHANDLER::AddSolid( const G4Torus& )
+
+//----- Add a shape which is not treated above
+void G4FRSCENEHANDLER::AddSolid(const G4VSolid& solid)
+{
+  //----- skip drawing invisible primitive
+  if(!IsVisible())
+  {
+    return;
+  }
+
+  //----- Initialize Fukui Renderer IF NECESSARY
+  FRBeginModeling();
+
+  //----- Send Name
+  SendPhysVolName();
+
+  //----- Send Ndiv
+  // SendNdiv();
+
+  //----- Send a primitive
+  G4VSceneHandler::AddSolid(solid);
+
+}  // G4FRSCENEHANDLER::AddSolid ( const G4VSolid& )
+
+//-----
+G4bool G4FRSCENEHANDLER::SendVisAttributes(const G4VisAttributes* pAV)
+{
+  // Have a look at G4VSceneHandler::GetDrawingStyle (const G4Visible&). (John)
+
+  G4bool status            = true;   // initialization
+  const G4double ALPHA_MIN = 0.001;  // min of alpha factor of color
+
+  if(pAV == NULL)
+  {
+    // No attribute is given.
+    // Do nothing. Status is "fail".
+    status = false;
+  }
+  else
+  {
+    // Send attributes. Status is "success".
+    status               = true;
+    const G4Color& color = pAV->GetColor();
+    SendStrDouble3(FR_COLOR_RGB, color.GetRed(), color.GetGreen(),
+                   color.GetBlue());
+    if(color.GetAlpha() < ALPHA_MIN)
+    {
+      SendStr(FR_FORCE_WIREFRAME_ON);
+    }
+    else if(pAV->IsForceDrawingStyle() &&
+            (pAV->GetForcedDrawingStyle() == G4VisAttributes::wireframe))
+    {
+      SendStr(FR_FORCE_WIREFRAME_ON);
+    }
+    else
+    {
+      SendStr(FR_FORCE_WIREFRAME_OFF);
+    }
+  }
+
+  return status;
+
+}  // G4FRSCENEHANDLER::SendVisAttributes ()
+
+//-----
+G4bool G4FRSCENEHANDLER::IsVisible()
+{
+  //-----
+  G4bool visibility = true;
+
+  //-----
+  const G4VisAttributes* pVisAttribs =
+    fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+
+  //-----
+  if((std::getenv(FR_ENV_CULL_INVISIBLE_OBJECTS) != NULL) &&
+     (strcmp(std::getenv(FR_ENV_CULL_INVISIBLE_OBJECTS), "0")) && (pVisAttribs))
+  {
+    visibility = pVisAttribs->IsVisible();
+  }
+
+  //-----
+  return visibility;
+
+}  // G4FRSCENEHANDLER::IsVisible()
+
+//-----
+void G4FRSCENEHANDLER::SendBoundingBox(void)
+{
+#if defined DEBUG_FR_SCENE
+  if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    G4cout << "***** SendBoundingBox ()  (/BoundingBox)" << G4endl;
+#endif
+
+  //----- (1A) CALC bounding box of the bounding sphere
+  const G4VisExtent& extent = GetScene()->GetExtent();
+  const G4Point3D& center   = extent.GetExtentCenter();
+  const G4double radius     = extent.GetExtentRadius();
+
+  G4double xmin = center.x() - radius;
+  G4double ymin = center.y() - radius;
+  G4double zmin = center.z() - radius;
+
+  G4double xmax = center.x() + radius;
+  G4double ymax = center.y() + radius;
+  G4double zmax = center.z() + radius;
+
+  ////////////////////////////////////////////
+  //	G4double xmin = extent.GetXmin ();
+  //	G4double ymin = extent.GetYmin ();
+  //	G4double zmin = extent.GetZmin ();
+  //	G4double xmax = extent.GetXmax ();
+  //	G4double ymax = extent.GetYmax ();
+  //	G4double zmax = extent.GetZmax ();
+  ////////////////////////////////////////////
+
+  //----- (1B) SEND bounding box
+  SendStrDouble6(FR_BOUNDING_BOX, xmin, ymin, zmin, xmax, ymax, zmax);
+
+}  // G4FRSCENEHANDLER::SendBoundingBox()
+
+//-----
+void G4FRSCENEHANDLER::SendTransformedCoordinates()
+{
+  //----- coord info
+  G4Point3D zero(0.0, 0.0, 0.0);
+  G4Point3D x1(1.0, 0.0, 0.0);
+  G4Point3D y1(0.0, 1.0, 0.0);
+  G4Vector3D x_unit_vec(1.0, 0.0, 0.0);
+  G4Vector3D y_unit_vec(0.0, 1.0, 0.0);
+
+  //----- transformed origin
+  zero.transform(fObjectTransformation);
+
+  //----- transformed base vectors
+  x1.transform(fObjectTransformation);
+  x_unit_vec = x1 - zero;
+  y1.transform(fObjectTransformation);
+  y_unit_vec = y1 - zero;
+
+  //----- send transformed origin
+  SendStrDouble3(FR_ORIGIN, (zero.x()), (zero.y()), (zero.z()));
+
+  //----- send transformed base vectors
+  SendStrDouble6(FR_BASE_VECTOR, (x_unit_vec.x()), (x_unit_vec.y()),
+                 (x_unit_vec.z()), (y_unit_vec.x()), (y_unit_vec.y()),
+                 (y_unit_vec.z()));
+
+}  // G4FRSCENEHANDLER::SendTransformedCoordinates()
+
+//-----
+void G4FRSCENEHANDLER::SendPhysVolName(void)
+{
+  // Local
+  G4int i;
+
+  // Current Model
+  const G4VModel* pv_model = GetModel();
+  if(!pv_model)
+  {
+    return;
+  }
+
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if(!pPVModel)
+  {
+    return;
+  }
+
+  // Current Physical volume name
+  G4String pv_name = pPVModel->GetCurrentTag();
+
+  // Current depth of volume
+  G4int cur_depth = pPVModel->GetCurrentDepth();
+
+  // Make a string to be sent
+  // e.g. experimental_Hall.1, where "1" is the copy number
+  G4String name_comment(FR_PHYSICAL_VOLUME_NAME);
+  name_comment += "     ";
+
+  for(i = 0; i < cur_depth; i++)
+  {
+    // Make tree
+    name_comment += "     ";
+  }
+  name_comment += pv_name;
+
+  // Send physical volume name
+  SendStr("#--------------------");
+  SendStr(name_comment);
+
+}  // G4FRSCENEHANDLER::SendPhysVolName ()
+
+//-----
+void G4FRSCENEHANDLER::SendStr(const char* char_string)
+{
+  fPrimDest.SendLine(char_string);
+}
+
+//-----
+void G4FRSCENEHANDLER::SendStrInt(const char* char_string, G4int ival)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d", char_string, ival);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}  // G4FRSCENEHANDLER::SendStrInt()
+
+//-----
+void G4FRSCENEHANDLER::SendStrInt3(const char* char_string, G4int ival1,
+                                   G4int ival2, G4int ival3)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d  %d  %d",
+                      char_string, ival1, ival2, ival3);
+
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt3(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrInt3()
+
+//-----
+void G4FRSCENEHANDLER::SendStrInt4(const char* char_string, G4int ival1,
+                                   G4int ival2, G4int ival3, G4int ival4)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %d  %d  %d  %d",
+                      char_string, ival1, ival2, ival3, ival4);
+
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt4(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrInt4()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble(const char* char_string, G4double dval)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g",
+                      char_string, fPrec2, fPrec, dval);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble2(const char* char_string, G4double dval1,
+                                      G4double dval2)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble2(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble2()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble3(const char* char_string, G4double dval1,
+                                      G4double dval2, G4double dval3)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2,
+                      fPrec, dval2, fPrec2, fPrec, dval3);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble3(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble3()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble4(const char* char_string, G4double dval1,
+                                      G4double dval2, G4double dval3,
+                                      G4double dval4)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
+                      fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble4(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble4()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble5(const char* char_string, G4double dval1,
+                                      G4double dval2, G4double dval3,
+                                      G4double dval4, G4double dval5)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g", char_string,
+                      fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2,
+                      fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec, dval5);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble5(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble5()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble6(const char* char_string, G4double dval1,
+                                      G4double dval2, G4double dval3,
+                                      G4double dval4, G4double dval5,
+                                      G4double dval6)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g  %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble6()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble7(const char* char_string, G4double dval1,
+                                      G4double dval2, G4double dval3,
+                                      G4double dval4, G4double dval5,
+                                      G4double dval6, G4double dval7)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g",
+                      char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6, fPrec2, fPrec, dval7);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble7(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble7()
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble11(const char* char_string, G4double dval1,
+                                       G4double dval2, G4double dval3,
+                                       G4double dval4, G4double dval5,
+                                       G4double dval6, G4double dval7,
+                                       G4double dval8, G4double dval9,
+                                       G4double dval10, G4double dval11)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+    "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g",
+    char_string, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2, fPrec2, fPrec,
+    dval3, fPrec2, fPrec, dval4, fPrec2, fPrec, dval5, fPrec2, fPrec, dval6,
+    fPrec2, fPrec, dval7, fPrec2, fPrec, dval8, fPrec2, fPrec, dval9, fPrec2,
+    fPrec, dval10, fPrec2, fPrec, dval11);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble11(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+
+}  // G4FRSCENEHANDLER::SendStrDouble11()
+
+//-----
+void G4FRSCENEHANDLER::SendIntDouble3(G4int ival, G4double dval1,
+                                      G4double dval2, G4double dval3)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d  %*.*g  %*.*g  %*.*g",
+                      ival, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendIntDouble3(),1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}
+
+//-----
+void G4FRSCENEHANDLER::SendInt3Str(G4int ival1, G4int ival2, G4int ival3,
+                                   const char* char_string)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d %d %d %s",
+                      ival1, ival2, ival3, char_string);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendInt3Str(),1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}
+
+//-----
+void G4FRSCENEHANDLER::SendInt4Str(G4int ival1, G4int ival2, G4int ival3,
+                                   G4int ival4, const char* char_string)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d %d %d %d %s",
+                      ival1, ival2, ival3, ival4, char_string);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendInt4Str(),1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble3Str(const char* char_string1,
+                                         G4double dval1, G4double dval2,
+                                         G4double dval3,
+                                         const char* char_string2)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%s  %*.*g %*.*g %*.*g %s",
+                      char_string1, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, char_string2);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}
+
+//-----
+void G4FRSCENEHANDLER::SendStrDouble6Str(const char* char_string1,
+                                         G4double dval1, G4double dval2,
+                                         G4double dval3, G4double dval4,
+                                         G4double dval5, G4double dval6,
+                                         const char* char_string2)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE,
+                      "%s  %*.*g %*.*g %*.*g %*.*g %*.*g %*.*g %s",
+                      char_string1, fPrec2, fPrec, dval1, fPrec2, fPrec, dval2,
+                      fPrec2, fPrec, dval3, fPrec2, fPrec, dval4, fPrec2, fPrec,
+                      dval5, fPrec2, fPrec, dval6, char_string2);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}
+
+//-----
+void G4FRSCENEHANDLER::SendInt(G4int val)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%d", val);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}  // G4FRSCENEHANDLER::SendStrInt()
+
+//-----
+void G4FRSCENEHANDLER::SendDouble(G4double val)
+{
+  //----- make command char_string and send
+  G4int num_char;
+  char* command = new char[COMMAND_BUF_SIZE];
+
+  num_char = snprintf(command, COMMAND_BUF_SIZE, "%*.*g", fPrec2, fPrec, val);
+  if(num_char < 0)
+  {
+    if(G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n";
+  }
+  SendStr(command);
+  delete[] command;
+}  // G4FRSCENEHANDLER::SendStrInt()
+
+//-----
+void G4FRSCENEHANDLER::ClearTransientStore()
+{
+  // This is typically called after an update and before drawing hits
+  // of the next event.  To simulate the clearing of "transients"
+  // (hits, etc.) the detector is redrawn...
+  if(fpViewer)
+  {
+    fpViewer->SetView();
+    fpViewer->ClearView();
+    fpViewer->DrawView();
+  }
+}

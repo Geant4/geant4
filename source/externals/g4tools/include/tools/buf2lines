@@ -81,9 +81,9 @@ inline bool strings2buf(size_t a_number,const char** a_strings,size_t& a_size,ch
   char* pos = a_buffer;
   size_t array_size;
   for(size_t index=0;index<a_number;index++) {
-    const char* s = a_strings[index];
-    array_size = ::strlen(s)+1;
-    ::memcpy(pos,s,array_size);
+    const char* _s = a_strings[index];
+    array_size = ::strlen(_s)+1;
+    ::memcpy(pos,_s,array_size);
     pos += array_size;
   }
   *pos = '\0';
@@ -104,9 +104,9 @@ inline bool strings2buf(const std::vector<std::string>& a_strings,size_t& a_size
   char* pos = a_buffer;
   size_t array_size;
   for(size_t index=0;index<number;index++) {
-    const std::string& s = a_strings[index];
-    array_size = s.size()+1;
-    ::memcpy(pos,s.c_str(),array_size);
+    const std::string& _s = a_strings[index];
+    array_size = _s.size()+1;
+    ::memcpy(pos,_s.c_str(),array_size);
     pos += array_size;
   }
   *pos = '\0';
@@ -124,10 +124,10 @@ inline bool buf2strings(size_t a_size,char* a_buffer,std::vector<std::string>& a
   for(size_t index=0;index<number;index++) {
     if((*pos)=='\0') {
       size_t l = pos - begin;
-      std::string s(l,0);
-      char* data = (char*)s.c_str();
+      std::string _s(l,0);
+      char* data = (char*)_s.c_str();
       ::memcpy(data,begin,l);
-      a_strings.push_back(s);
+      a_strings.push_back(_s);
       begin = pos+1;
     }
     pos++;

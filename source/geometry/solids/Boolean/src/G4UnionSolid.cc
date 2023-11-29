@@ -41,11 +41,12 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "G4PolyhedronArbitrary.hh"
 #include "HepPolyhedronProcessor.h"
 
 #include "G4IntersectionSolid.hh"
 
-///////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Transfer all data members to G4BooleanSolid which is responsible
 // for them. pName will be in turn sent to G4VSolid
@@ -58,7 +59,7 @@ G4UnionSolid:: G4UnionSolid( const G4String& pName,
   Init();
 }
 
-/////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Constructor
  
@@ -73,7 +74,7 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
   Init();
 }
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Constructor
  
@@ -86,7 +87,7 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
   Init();
 } 
 
-//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
@@ -96,15 +97,14 @@ G4UnionSolid::G4UnionSolid( __void__& a )
 {
 }
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Destructor
 
 G4UnionSolid::~G4UnionSolid()
-{
-}
+= default;
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
@@ -116,7 +116,7 @@ G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
   halfCarTolerance=0.5*kCarTolerance;
 }
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
 
@@ -137,7 +137,7 @@ G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Initialisation
 
@@ -218,7 +218,7 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
   return out ;  // It exists in this slice if either one does.
 }
  
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Important comment: When solids A and B touch together along flat
 // surface the surface points will be considered as kSurface, while points 
@@ -245,7 +245,7 @@ EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
            fPtrSolidB->SurfaceNormal(p)).mag2() < rtol) ? kInside : kSurface;
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Get surface normal
 
@@ -285,7 +285,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   return fPtrSolidA->SurfaceNormal(p);
 }
 
-/////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // The same algorithm as in DistanceToIn(p)
 
@@ -313,13 +313,13 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
                   fPtrSolidB->DistanceToIn(p,v) ) ;
 }
 
-////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Approximate nearest distance from the point p to the union of
 // two solids
 
 G4double 
-G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const 
+G4UnionSolid::DistanceToIn( const G4ThreeVector& p ) const 
 {
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -341,16 +341,16 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const
   return safety ;
 }
 
-//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // The same algorithm as DistanceToOut(p)
 
 G4double 
 G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
-           const G4ThreeVector& v,
-           const G4bool calcNorm,
-                 G4bool *validNorm,
-                 G4ThreeVector *n      ) const 
+                             const G4ThreeVector& v,
+                             const G4bool calcNorm,
+                                   G4bool* validNorm,
+                                   G4ThreeVector* n  ) const 
 {
   G4double  dist = 0.0, disTmp = 0.0 ;
   G4ThreeVector normTmp;
@@ -428,7 +428,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
   return dist ;
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Inverted algorithm of DistanceToIn(p)
 
@@ -479,13 +479,13 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
   return distout;
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
 
 G4GeometryType G4UnionSolid::GetEntityType() const 
 {
-  return G4String("G4UnionSolid");
+  return {"G4UnionSolid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -497,7 +497,7 @@ G4VSolid* G4UnionSolid::Clone() const
   return new G4UnionSolid(*this);
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // ComputeDimensions
 
@@ -508,7 +508,7 @@ G4UnionSolid::ComputeDimensions(       G4VPVParameterisation*,
 {
 }
 
-/////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // DescribeYourselfTo
 
@@ -518,51 +518,66 @@ G4UnionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
   scene.AddSolid (*this);
 }
 
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron
 
 G4Polyhedron* 
-G4UnionSolid::CreatePolyhedron () const 
+G4UnionSolid::CreatePolyhedron () const
 {
-  HepPolyhedronProcessor processor;
-  // Stack components and components of components recursively
-  // See G4BooleanSolid::StackPolyhedron
-  G4Polyhedron* top = StackPolyhedron(processor, this);
-  G4Polyhedron* result = new G4Polyhedron(*top);
-  if (processor.execute(*result)) { return result; }
-  else { return nullptr; }
+  if (fExternalBoolProcessor == nullptr)
+  {
+    HepPolyhedronProcessor processor;
+    // Stack components and components of components recursively
+    // See G4BooleanSolid::StackPolyhedron
+    G4Polyhedron* top = StackPolyhedron(processor, this);
+    auto result = new G4Polyhedron(*top);
+    if (processor.execute(*result))
+    {
+      return result;
+    }
+    else
+    {
+      return nullptr;
+    }
+  }
+  else
+  {
+    return fExternalBoolProcessor
+           ->Union(GetConstituentSolid(0)->GetPolyhedron(),
+                   GetConstituentSolid(1)->GetPolyhedron());
+  }
 }
 
-
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // GetCubicVolume
 
 G4double G4UnionSolid::GetCubicVolume()
 {
-   if( fCubicVolume != -1.0 ) {
-      return fCubicVolume;
-   }
-   G4double cubVolumeA = fPtrSolidA->GetCubicVolume();
-   G4double cubVolumeB = fPtrSolidB->GetCubicVolume();
+  if( fCubicVolume != -1.0 )
+  {
+    return fCubicVolume;
+  }
+  G4double cubVolumeA = fPtrSolidA->GetCubicVolume();
+  G4double cubVolumeB = fPtrSolidB->GetCubicVolume();
 
-   G4ThreeVector bminA, bmaxA, bminB, bmaxB;
-   fPtrSolidA->BoundingLimits(bminA, bmaxA);
-   fPtrSolidB->BoundingLimits(bminB, bmaxB);
+  G4ThreeVector bminA, bmaxA, bminB, bmaxB;
+  fPtrSolidA->BoundingLimits(bminA, bmaxA);
+  fPtrSolidB->BoundingLimits(bminB, bmaxB);
 
-   G4double intersection = 0.;
-   G4bool   canIntersect = 
-        bminA.x() < bmaxB.x() && bminA.y() < bmaxB.y() && bminA.z() < bmaxB.z() &&
-        bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
-   if ( canIntersect )
-   {
-      G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
-                                        fPtrSolidA, fPtrSolidB );
-      intersection = intersectVol.GetCubicVolume();
-   }
+  G4double intersection = 0.;
+  G4bool   canIntersect = 
+     bminA.x() < bmaxB.x() && bminA.y() < bmaxB.y() && bminA.z() < bmaxB.z() &&
+     bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
+  if ( canIntersect )
+  {
+    G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
+                                      fPtrSolidA, fPtrSolidB );
+    intersection = intersectVol.GetCubicVolume();
+  }
 
-   fCubicVolume = cubVolumeA + cubVolumeB - intersection;
+  fCubicVolume = cubVolumeA + cubVolumeB - intersection;
 
-   return fCubicVolume;
+  return fCubicVolume;
 }

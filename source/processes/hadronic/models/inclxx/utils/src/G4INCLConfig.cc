@@ -116,6 +116,7 @@ namespace G4INCL {
     inverseKinematics = false;
     decayTimeThreshold = 1.e-20;
     bias = 1.;
+    atrestThreshold = 200.;     //D
   }
 
   std::string Config::summary() {

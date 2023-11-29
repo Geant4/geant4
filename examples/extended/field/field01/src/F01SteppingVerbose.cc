@@ -67,10 +67,10 @@ void F01SteppingVerbose::StepInfo()
              << std::setw(10) << "dir y"      << " "
              << std::setw(10) << "dir z"      << " "
              << std::setw( 8) << "KineE"      << " "
-             << std::setw( 6) << "dEStep"     << " "
-             << std::setw(10) << "StepLeng"
-             << std::setw(10) << "TrakLeng"
-             << std::setw(10) << "NextVolu"
+             << std::setw(10) << "dEStep"     << " "
+             << std::setw(10) << "StepLeng"   << " "
+             << std::setw(10) << "TrakLeng"   << " "
+             << std::setw(10) << "NextVolu"   << " "
              << std::setw(10) << "Process"    << " "
              << G4endl;
     }
@@ -82,11 +82,11 @@ void F01SteppingVerbose::StepInfo()
     G4cout << std::setw(10) << fTrack->GetMomentumDirection().x() << " "
            << std::setw(10) << fTrack->GetMomentumDirection().y() << " "
            << std::setw(10) << fTrack->GetMomentumDirection().z() << " ";
-    G4cout << std::setw( 8) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-           << std::setw( 6) << G4BestUnit(
-                                      fStep->GetTotalEnergyDeposit(),"Energy")
-           << std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")
-           << std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length");
+    G4cout << std::setw( 8) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy") << " "
+           << std::setw(10) << G4BestUnit(
+                                      fStep->GetTotalEnergyDeposit(),"Energy") << " "
+           << std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")   << " "
+           << std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
 
     if( fTrack->GetNextVolume() != 0 ) {
       G4cout << std::setw(10) << fTrack->GetVolume()->GetName();

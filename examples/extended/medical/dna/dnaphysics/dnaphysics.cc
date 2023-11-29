@@ -46,52 +46,46 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv)
-{
+int main(int argc, char **argv) {
+
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   // Construct the default run manager
-
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   if(argc==3) runManager->SetNumberOfThreads(atoi(argv[2]));
   else runManager->SetNumberOfThreads(2);
 
   // Set mandatory user initialization classes
-  runManager->SetUserInitialization(new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
+  auto physlist = new PhysicsList();
+  runManager->SetUserInitialization(new DetectorConstruction(physlist));
+  runManager->SetUserInitialization(physlist);
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisExecutive* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  // Process macro or start UI session
-  //
-  if (argc>1) {
+  G4UImanager *UImanager = G4UImanager::GetUIpointer();
+  if (nullptr == ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
-  }
-  else {
-    // interactive mode
+  } else {
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
+    delete visManager;
   }
-
-  delete visManager;
   delete runManager;
-
   return 0;
 }

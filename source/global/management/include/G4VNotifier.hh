@@ -39,8 +39,8 @@
 class G4VNotifier
 {
  public:
-  G4VNotifier();
-  virtual ~G4VNotifier();
+  G4VNotifier() = default;
+  virtual ~G4VNotifier() = default;
   // Constructor and destructor
 
   virtual void NotifyRegistration() = 0;

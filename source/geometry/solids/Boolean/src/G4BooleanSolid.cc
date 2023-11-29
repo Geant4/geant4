@@ -45,6 +45,8 @@ namespace
   G4RecursiveMutex polyhedronMutex = G4MUTEX_INITIALIZER;
 }
 
+G4VBooleanProcessor* G4BooleanSolid::fExternalBoolProcessor = nullptr;
+
 //////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -116,8 +118,7 @@ G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
     fCubicVolume(rhs.fCubicVolume), fStatistics(rhs.fStatistics),
     fCubVolEpsilon(rhs.fCubVolEpsilon), fAreaAccuracy(rhs.fAreaAccuracy), 
-    fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false),
-    fpPolyhedron(nullptr), createdDisplacedSolid(rhs.createdDisplacedSolid)
+    fSurfaceArea(rhs.fSurfaceArea),  createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
   fPrimitives.resize(0); fPrimitivesSurfaceArea = 0.;
 }
@@ -200,7 +201,7 @@ G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
 
 G4GeometryType G4BooleanSolid::GetEntityType() const 
 {
-  return G4String("G4BooleanSolid");
+  return {"G4BooleanSolid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -280,7 +281,7 @@ void G4BooleanSolid::GetListOfPrimitives(
     }
     else
     {
-      primitives.push_back(std::pair<G4VSolid*,G4Transform3D>(solid,transform));
+      primitives.emplace_back(solid,transform);
     }
   }
 }
@@ -292,7 +293,7 @@ void G4BooleanSolid::GetListOfPrimitives(
 
 G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
 {
-  size_t nprims = fPrimitives.size();
+  std::size_t nprims = fPrimitives.size();
   std::pair<G4VSolid *, G4Transform3D> prim;
 
   // Get list of primitives and find the total area of their surfaces
@@ -302,7 +303,7 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
     GetListOfPrimitives(fPrimitives, G4Transform3D());
     nprims = fPrimitives.size();
     fPrimitivesSurfaceArea = 0.;
-    for (size_t i=0; i<nprims; ++i)
+    for (std::size_t i=0; i<nprims; ++i)
     {
       fPrimitivesSurfaceArea += fPrimitives[i].first->GetSurfaceArea();
     }
@@ -312,11 +313,11 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   // check that the point belongs to the surface of the solid
   //
   G4ThreeVector p;
-  for (size_t k=0; k<100000; ++k) // try 100k times
+  for (std::size_t k=0; k<100000; ++k) // try 100k times
   {
      G4double rand = fPrimitivesSurfaceArea * G4QuickRand();
      G4double area = 0.;
-     for (size_t i=0; i<nprims; ++i)
+     for (std::size_t i=0; i<nprims; ++i)
      {
        prim  = fPrimitives[i];
        area += prim.first->GetSurfaceArea();
@@ -422,4 +423,23 @@ G4double G4BooleanSolid::GetCubicVolume()
     fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
   }
   return fCubicVolume;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Set external Boolean processor.
+
+void
+G4BooleanSolid::SetExternalBooleanProcessor(G4VBooleanProcessor* extProcessor)
+{
+  fExternalBoolProcessor = extProcessor;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get external Boolean processor.
+
+G4VBooleanProcessor* G4BooleanSolid::GetExternalBooleanProcessor()
+{
+  return fExternalBoolProcessor;
 }

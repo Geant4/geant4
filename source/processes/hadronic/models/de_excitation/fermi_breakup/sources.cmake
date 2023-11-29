@@ -5,6 +5,7 @@ geant4_add_module(G4hadronic_deex_fermi_breakup
   PUBLIC_HEADERS
     G4FermiBreakUpVI.hh
     G4FermiChannels.hh
+    G4FermiCoulombBarrier.hh
     G4FermiDecayProbability.hh
     G4FermiFragment.hh
     G4FermiFragmentsPoolVI.hh
@@ -13,6 +14,7 @@ geant4_add_module(G4hadronic_deex_fermi_breakup
     G4VFermiBreakUp.hh
   SOURCES
     G4FermiBreakUpVI.cc
+    G4FermiCoulombBarrier.cc
     G4FermiDecayProbability.cc
     G4FermiFragment.cc
     G4FermiFragmentsPoolVI.cc

@@ -39,6 +39,8 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
+#include <memory>
+
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
@@ -50,16 +52,16 @@ class PhysicsListMessenger: public G4UImessenger
   public:
   
     PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+   ~PhysicsListMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+   void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
   
     PhysicsList*               fPhysicsList;
     
-    G4UIdirectory*             fPhysDir;        
-    G4UIcmdWithAString*        fListCmd;
+    std::unique_ptr<G4UIdirectory>             fPhysDir;
+    std::unique_ptr<G4UIcmdWithAString>        fListCmd;
     
 };
 

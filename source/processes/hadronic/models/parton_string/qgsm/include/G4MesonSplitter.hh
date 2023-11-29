@@ -36,9 +36,7 @@
 class G4MesonSplitter
 {
   public:
-    G4bool SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd);
-
-  private:
+    G4bool SplitMeson(G4int PDGcode, G4int & aEnd, G4int & bEnd);
 };
 
 #endif

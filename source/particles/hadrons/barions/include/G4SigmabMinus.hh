@@ -52,7 +52,7 @@ class G4SigmabMinus : public G4ParticleDefinition
  private:
    static G4SigmabMinus* theInstance;
    G4SigmabMinus(){}
-   ~G4SigmabMinus(){}
+   ~G4SigmabMinus() override= default;
 
  public:
    static G4SigmabMinus* Definition();

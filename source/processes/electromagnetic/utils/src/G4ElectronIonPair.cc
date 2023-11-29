@@ -66,8 +66,7 @@ G4ElectronIonPair::G4ElectronIonPair(G4int verb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ElectronIonPair::~G4ElectronIonPair()
-{}
+G4ElectronIonPair::~G4ElectronIonPair() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,7 +105,7 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 std::vector<G4ThreeVector>* 
 G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
 {
-  std::vector<G4ThreeVector>* v = 0;
+  std::vector<G4ThreeVector>* v = nullptr;
 
   G4int nion = SampleNumberOfIonsAlongStep(step);
 
@@ -149,7 +148,7 @@ G4ElectronIonPair::FindG4MeanEnergyPerIonPair(const G4Material* mat) const
   G4double res  = 0.0;
 
   // is this material in the vector?  
-  for(G4int j=0; j<nMaterials; j++) {
+  for(G4int j=0; j<nMaterials; ++j) {
     if(name == g4MatNames[j]) {
       res = g4MatData[j];
       mat->GetIonisation()->SetMeanEnergyPerIonPair(res);
@@ -168,12 +167,12 @@ G4ElectronIonPair::FindG4MeanEnergyPerIonPair(const G4Material* mat) const
 
 void G4ElectronIonPair:: DumpMeanEnergyPerIonPair() const
 {
-  G4int nmat = G4Material::GetNumberOfMaterials();
+  std::size_t nmat = G4Material::GetNumberOfMaterials();
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(nmat > 0) {
     G4cout << "### G4ElectronIonPair: mean energy per ion pair available:" 
 	   << G4endl;
-    for(G4int i=0; i<nmat; ++i) {
+    for(std::size_t i=0; i<nmat; ++i) {
       const G4Material* mat = (*mtable)[i];
       G4double x = mat->GetIonisation()->GetMeanEnergyPerIonPair();
       if(x > 0.0) {
@@ -242,7 +241,7 @@ void G4ElectronIonPair::Initialise()
   g4MatNames.push_back("G4_AIR");
   g4MatData.push_back(35.1*eV);
 
-  nMaterials = g4MatData.size();
+  nMaterials = (G4int)g4MatData.size();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

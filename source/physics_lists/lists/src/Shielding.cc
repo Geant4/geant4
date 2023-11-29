@@ -82,8 +82,12 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   if(verbose > 0) {
     G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
 	   << HadrPhysVariant << G4endl;
-    if ( LEN_model=="LEND" ) 
+    if ( LEN_model=="LEND" ) {
       G4cout << "<<< LEND will be used for low energy neutron and gamma projectiles" << G4endl;
+    } else {
+      G4cout << "<<< (Note that Shielding" << HadrPhysVariant << " and Shielding"
+	     << HadrPhysVariant << "_HP are equivalent!)" << G4endl;
+    }
   }
   defaultCutValue = 0.7*CLHEP::mm;  
   SetCutValue(0, "proton");  

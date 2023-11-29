@@ -1,0 +1,31 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_hdf5_h
+#define toolx_hdf5_h
+
+#include <hdf5.h>
+
+#if (H5_VERS_MAJOR>=1) && (H5_VERS_MINOR<=6)
+#define toolx_H5Dopen           H5Dopen
+#define toolx_H5Dcreate         H5Dcreate
+#define toolx_H5Acreate         H5Acreate
+#define toolx_H5Tarray_create   H5Tarray_create
+#define toolx_H5Tget_array_dims H5Tget_array_dims
+#define toolx_H5Gcreate         H5Gcreate
+#define toolx_H5Gopen           H5Gopen
+#define toolx_H5Aiterate        H5Aiterate
+#define toolx_H5free_memory     free
+#else
+#define toolx_H5Dopen           H5Dopen1
+#define toolx_H5Dcreate         H5Dcreate1
+#define toolx_H5Acreate         H5Acreate1
+#define toolx_H5Tarray_create   H5Tarray_create1
+#define toolx_H5Tget_array_dims H5Tget_array_dims1
+#define toolx_H5Gcreate         H5Gcreate1
+#define toolx_H5Gopen           H5Gopen1
+#define toolx_H5Aiterate        H5Aiterate1
+#define toolx_H5free_memory     H5free_memory
+#endif
+
+#endif

@@ -20,9 +20,9 @@ ifndef G4INSTALL
 endif
 
 ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
+  LOADLIBS += `aida-config --lib`
 endif
 
 CPPFLAGS += -I./physics/include \

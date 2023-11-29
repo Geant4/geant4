@@ -1,28 +1,33 @@
+# Category vistree History
 
--------------------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+--------------------------------------------------------------------
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2023-02-06 Ben Morgan (vistree-V11-01-00)
+- Isolate private headers and update dependencies
 
-     *************************************************************
-     * Note that modeling and test have their own History files. *
-     *************************************************************
+## 2022-11-06 John Allison (vistree-V11-00-02)
+- Eliminate G4cerr and introduce G4warn.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where it is clearly
+    an error report or a warning.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-01-28 Ben Morgan (vistree-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
 
-History file for visualization/Tree sub-category
-------------------------------------------------
+## 2021-12-10 Ben Morgan (vistree-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25 October 2021  Guy Barrand (vistree-V10-07-03)
 - G4VTreeSceneHandler.hh: to quiet g++ about "AddPrimitive(G4Plotter&)", have:

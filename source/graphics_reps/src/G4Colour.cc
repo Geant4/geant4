@@ -94,14 +94,10 @@ std::ostream& operator << (std::ostream& os, const G4Colour& c) {
 }
 
 G4bool G4Colour::operator != (const G4Colour& c) const {
-  if (
-      (red   != c.red)   ||
+  return (red   != c.red)   ||
       (green != c.green) ||
       (blue  != c.blue)  ||
-      (alpha != c.alpha)
-      )
-    return true;
-  return false;
+      (alpha != c.alpha);
 }
 
 std::map<G4String, G4Colour> G4Colour::fColourMap;
@@ -124,10 +120,8 @@ void G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
 
   // Convert to lower case since colour map is case insensitive
   G4String myKey = G4StrUtil::to_lower_copy(key);
-
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
   
-  if (iter == fColourMap.end()) fColourMap[myKey] = colour;
+  if (fColourMap.find(myKey) == fColourMap.end()) fColourMap[myKey] = colour;
   else {
     G4ExceptionDescription ed; 
     ed << "G4Colour with key " << myKey << " already exists." << G4endl;
@@ -164,11 +158,12 @@ G4bool G4Colour::GetColour(const G4String& key, G4Colour& result)
   InitialiseColourMap();  // Initialises if not already initialised
 
   G4String myKey = G4StrUtil::to_lower_copy(key);
- 
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+
+  // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator
+  std::map<G4String, G4Colour>::const_iterator iter = fColourMap.find(myKey); 
 
   // Don't modify "result" if colour was not found in map
-  if (iter == fColourMap.end()) return false;
+  if (iter == fColourMap.cend()) return false;
   
   result = iter->second;
 
@@ -186,12 +181,14 @@ const std::map<G4String, G4Colour>& G4Colour::GetMap()
 G4bool G4Colour::operator< (const G4Colour& rhs) const
 {
   if (red < rhs.red) return true;
-  else if (red == rhs.red) {
+  if (red == rhs.red) {
     if (green < rhs.green) return true;
-    else if (green == rhs.green) {
+    if (green == rhs.green) {
       if (blue < rhs.blue) return true;
-      else if (blue == rhs.blue) {
-	if (alpha < rhs.alpha) return true;
-      }}}
+      if (blue == rhs.blue) {
+	      if (alpha < rhs.alpha) return true;
+      }
+    }
+  }
   return false;
 }

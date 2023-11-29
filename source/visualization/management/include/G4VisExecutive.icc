@@ -31,84 +31,106 @@
 #ifndef G4VISEXECUTIVE_ICC
 #define G4VISEXECUTIVE_ICC
 
-// Supported drivers...
-
-// Not needing external packages or libraries...
-#include "G4ASCIITree.hh"
-#include "G4DAWNFILE.hh"
-#include "G4HepRepFile.hh"
-#include "G4RayTracer.hh"
+// Filter/Model Factories
 #include "G4HitFilterFactories.hh"
 #include "G4DigiFilterFactories.hh"
 #include "G4TrajectoryFilterFactories.hh"
 #include "G4TrajectoryModelFactories.hh"
-#include "G4VRML2File.hh"
-#include "G4GMocrenFile.hh"
+
+// Supported drivers...
+// Not needing external packages or libraries...
+#include "G4ASCIITree.hh"        // no_geant4_module_check
+#include "G4DAWNFILE.hh"         // no_geant4_module_check
+#include "G4HepRepFile.hh"       // no_geant4_module_check
+#include "G4RayTracer.hh"        // no_geant4_module_check
+#include "G4VRML2File.hh"        // no_geant4_module_check
+#include "G4GMocrenFile.hh"      // no_geant4_module_check
+#include "G4ToolsSGOffscreen.hh" // no_geant4_module_check
 
 // Needing external packages or libraries...
 #ifdef G4VIS_USE_OPENGLX
-#include "G4OpenGLImmediateX.hh"
-#include "G4OpenGLStoredX.hh"
+#include "G4OpenGLImmediateX.hh" // no_geant4_module_check
+#include "G4OpenGLStoredX.hh"    // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OPENGLWIN32
-#include "G4OpenGLImmediateWin32.hh"
-#include "G4OpenGLStoredWin32.hh"
+#include "G4OpenGLImmediateWin32.hh" // no_geant4_module_check
+#include "G4OpenGLStoredWin32.hh"    // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OPENGLXM
-#include "G4OpenGLImmediateXm.hh"
-#include "G4OpenGLStoredXm.hh"
+#include "G4OpenGLImmediateXm.hh" // no_geant4_module_check
+#include "G4OpenGLStoredXm.hh"    // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OPENGLQT
-#include "G4OpenGLImmediateQt.hh"
-#include "G4OpenGLStoredQt.hh"
+#include "G4OpenGLImmediateQt.hh" // no_geant4_module_check
+#include "G4OpenGLStoredQt.hh"    // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OIX
-#include "G4OpenInventorX.hh"
-#include "G4OpenInventorXtExtended.hh"
+#include "G4OpenInventorX.hh"          // no_geant4_module_check
+#include "G4OpenInventorXtExtended.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OIQT
-#include "G4OpenInventorQt.hh"
+#include "G4OpenInventorQt.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_OIWIN32
-#include "G4OpenInventorWin32.hh"
+#include "G4OpenInventorWin32.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_RAYTRACERX
-#include "G4RayTracerX.hh"
+#include "G4RayTracerX.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_QT3D
-#include "G4Qt3D.hh"
+#include "G4Qt3D.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
-#include "G4ToolsSGX11GLES.hh"
+#include "G4ToolsSGX11GLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_X11_ZB
+#include "G4ToolsSGX11ZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
-#include "G4ToolsSGWindowsGLES.hh"
+#include "G4ToolsSGWindowsGLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_ZB
+#include "G4ToolsSGWindowsZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_XT_GLES
-#include "G4ToolsSGXtGLES.hh"
+#include "G4ToolsSGXtGLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_XT_ZB
+#include "G4ToolsSGXtZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
-#include "G4ToolsSGQtGLES.hh"
+#include "G4ToolsSGQtGLES.hh" // no_geant4_module_check
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+#include "G4ToolsSGQtZB.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_VTK
-#include "G4Vtk.hh"
+#include "G4Vtk.hh" // no_geant4_module_check
 #endif
 
 #ifdef G4VIS_USE_VTK_QT
-#include "G4VtkQt.hh"
+#include "G4VtkQt.hh" // no_geant4_module_check
+#endif
+
+#if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_TOOLSSG_QT_GLES)
+#include <QtGlobal>
 #endif
 
 // The inline keyword prevents the compiler making an external
@@ -135,12 +157,18 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
+  RegisterGraphicsSystem (new G4ToolsSGOffscreen);
+
+  G4VGraphicsSystem* tsg_offscreen = new G4ToolsSGOffscreen;
+  RegisterGraphicsSystem(tsg_offscreen);
+  tsg_offscreen->AddNickname("TSG_FILE");
 
 // Graphics systems needing external packages or libraries...
 // Register OGL family of drivers with their normal names,
 // super-abbreviated names and fallback names where approproiate.
 
 #ifdef G4VIS_USE_OPENGLQT
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   G4VGraphicsSystem* ogliqt = new G4OpenGLImmediateQt;
   G4VGraphicsSystem* oglsqt = new G4OpenGLStoredQt;
   RegisterGraphicsSystem(ogliqt);
@@ -148,6 +176,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
   ogliqt->AddNickname("OGLI");
   oglsqt->AddNickname("OGL");
   oglsqt->AddNickname("OGLS");
+#endif
 #endif
 
 #ifdef G4VIS_USE_OPENGLXM
@@ -234,6 +263,48 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_TOOLSSG_X11_GLES
   G4VGraphicsSystem* tsg_x11_gles = new G4ToolsSGX11GLES;
   RegisterGraphicsSystem(tsg_x11_gles);
+  tsg_x11_gles->AddNickname("TSGX11");
+#ifdef G4VIS_USE_TOOLSSG_XT_GLES
+  tsg_x11_gles->AddNickname("TSG_XT_GLES_FALLBACK");
+#endif
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+#ifndef G4VIS_USE_TOOLSSG_XT_GLES
+  tsg_x11_gles->AddNickname("TSG_QT_GLES_FALLBACK");
+#endif
+#endif
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_X11_ZB
+  G4VGraphicsSystem* tsg_x11_zb = new G4ToolsSGX11ZB;
+  RegisterGraphicsSystem(tsg_x11_zb);
+  tsg_x11_zb->AddNickname("TSGX11ZB");
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_XT_GLES
+  G4VGraphicsSystem* tsg_xt_gles = new G4ToolsSGXtGLES;
+  RegisterGraphicsSystem(tsg_xt_gles);
+  tsg_xt_gles->AddNickname("TSGXt");
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+  tsg_xt_gles->AddNickname("TSG_QT_GLES_FALLBACK");
+#endif
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_XT_ZB
+  G4VGraphicsSystem* tsg_xt_zb = new G4ToolsSGXtZB;
+  RegisterGraphicsSystem(tsg_xt_zb);
+  tsg_xt_zb->AddNickname("TSGXtZB");
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_GLES
+  G4VGraphicsSystem* tsg_qt_gles = new G4ToolsSGQtGLES;
+  RegisterGraphicsSystem(tsg_qt_gles);
+  tsg_qt_gles->AddNickname("TSGQt");
+#endif
+
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+  G4VGraphicsSystem* tsg_qt_zb = new G4ToolsSGQtZB;
+  RegisterGraphicsSystem(tsg_qt_zb);
+  tsg_qt_zb->AddNickname("TSGQtZB");
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_WINDOWS_GLES
@@ -241,18 +312,17 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem(tsg_windows_gles);
 #endif
 
-#ifdef G4VIS_USE_TOOLSSG_XT_GLES
-  G4VGraphicsSystem* tsg_xt_gles = new G4ToolsSGXtGLES;
-  RegisterGraphicsSystem(tsg_xt_gles);
-#endif
-
-#ifdef G4VIS_USE_TOOLSSG_QT_GLES
-  G4VGraphicsSystem* tsg_qt_gles = new G4ToolsSGQtGLES;
-  RegisterGraphicsSystem(tsg_qt_gles);
+#ifdef G4VIS_USE_TOOLSSG_WINDOWS_ZB
+  G4VGraphicsSystem* tsg_windows_zb = new G4ToolsSGWindowsZB;
+  RegisterGraphicsSystem(tsg_windows_zb);
 #endif
 
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
+#  if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+  G4cout << "  Qt6: Asking ToolsSG to stand in for OpenGL" << G4endl;
+  tsg_qt_gles->AddNickname("OGL");
+#  endif
 #elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
   tsg_xt_gles->AddNickname("TSG");
 #elif defined(G4VIS_USE_TOOLSSG_X11_GLES)
@@ -264,16 +334,15 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VTK
   G4Vtk* vtkN = new G4Vtk();
   RegisterGraphicsSystem(vtkN);
-  vtkN->AddNickname("VTK_NATIVE");
 #  ifdef G4VIS_USE_VTK_QT
-  // Comment out for now until we understand behaviour with a terminal session.
-  // vtkN->AddNickname("VtkQt_FALLBACK");
+  vtkN->AddNickname("VTKQt_FALLBACK");
 #  endif
 #endif
 
 #ifdef G4VIS_USE_VTK_QT
   G4VtkQt* vtkQt = new G4VtkQt();
   RegisterGraphicsSystem(vtkQt);
+  vtkQt->AddNickname("VTKQt");
 #endif
 
 #ifdef G4VIS_USE_VTK_QT

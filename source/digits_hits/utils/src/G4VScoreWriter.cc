@@ -29,25 +29,15 @@
 #include "G4VScoreWriter.hh"
 
 #include "G4MultiFunctionalDetector.hh"
-#include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4VScoringMesh.hh"
 
 #include <map>
 #include <fstream>
 
-G4VScoreWriter::G4VScoreWriter()
-  : fScoringMesh(nullptr)
-  , verboseLevel(0)
-  , fact(1.0)
-{
-  fNMeshSegments[0] = fNMeshSegments[1] = fNMeshSegments[2] = 0;
-}
-
-G4VScoreWriter::~G4VScoreWriter() {}
-
 void G4VScoreWriter::SetScoringMesh(G4VScoringMesh* sm)
 {
+  // Should be checked for nullptr!
   fScoringMesh = sm;
   fScoringMesh->GetNumberOfSegments(fNMeshSegments);
 }
@@ -61,7 +51,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
   // confirm the option
-  if(opt.size() == 0)
+  if(opt.empty())
     opt = "csv";
   if(opt.find("csv") == std::string::npos &&
      opt.find("sequence") == std::string::npos)
@@ -83,6 +73,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
   // retrieve the map
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
 
+  // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator 
   MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
   if(msMapItr == fSMap.end())
   {
@@ -107,7 +98,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
         << ", i" << divisionAxisNames[2];
   // unit of scored value
   ofile << ", total(value) ";
-  if(unit.size() > 0)
+  if(!unit.empty())
     ofile << "[" << unit << "]";
   ofile << ", total(val^2), entry" << G4endl;
 
@@ -132,7 +123,7 @@ void G4VScoreWriter::DumpQuantityToFile(const G4String& psName,
         if(opt.find("csv") != std::string::npos)
           ofile << x << "," << y << "," << z << ",";
 
-        std::map<G4int, G4StatDouble*>::iterator value = score->find(idx);
+        auto value = score->find(idx);
         if(value == score->end())
         {
           ofile << 0. << "," << 0. << "," << 0;
@@ -173,7 +164,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
   std::transform(opt.begin(), opt.end(), opt.begin(), (int (*)(int))(tolower));
 
   // confirm the option
-  if(opt.size() == 0)
+  if(opt.empty())
     opt = "csv";
   if(opt.find("csv") == std::string::npos &&
      opt.find("sequence") == std::string::npos)
@@ -196,8 +187,9 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
   }
 
   // retrieve the map
-  using MeshScoreMap                    = G4VScoringMesh::MeshScoreMap;
-  MeshScoreMap fSMap                    = fScoringMesh->GetScoreMap();
+  using MeshScoreMap = G4VScoringMesh::MeshScoreMap;
+  MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
+  // NOLINTNEXTLINE(modernize-use-auto): Explicitly want a const_iterator 
   MeshScoreMap::const_iterator msMapItr = fSMap.begin();
   std::map<G4int, G4StatDouble*>* score;
   for(; msMapItr != fSMap.end(); msMapItr++)
@@ -216,7 +208,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
           << ", i" << divisionAxisNames[2];
     // unit of scored value
     ofile << ", total(value) ";
-    if(unit.size() > 0)
+    if(!unit.empty())
       ofile << "[" << unit << "]";
     ofile << ", total(val^2), entry" << G4endl;
 
@@ -241,7 +233,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
           if(opt.find("csv") != std::string::npos)
             ofile << x << "," << y << "," << z << ",";
 
-          std::map<G4int, G4StatDouble*>::iterator value = score->find(idx);
+          auto value = score->find(idx);
           if(value == score->end())
           {
             ofile << 0. << "," << 0. << "," << 0;
@@ -278,6 +270,5 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(const G4String& fileName,
 
 G4int G4VScoreWriter::GetIndex(G4int x, G4int y, G4int z) const
 {
-  // return x + y*fNMeshSegments[0] + z*fNMeshSegments[0]*fNMeshSegments[1];
   return x * fNMeshSegments[1] * fNMeshSegments[2] + y * fNMeshSegments[2] + z;
 }

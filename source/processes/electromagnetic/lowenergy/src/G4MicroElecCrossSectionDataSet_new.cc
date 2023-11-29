@@ -174,7 +174,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
     }
   delete stream;
   
-  std::vector<G4DataVector *>::size_type maxI(columns.size());
+  std::size_t maxI(columns.size());
   
   if (maxI<2)
     {
@@ -186,10 +186,10 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
       return false;
     }
   
-  std::vector<G4DataVector*>::size_type i(1);
+  std::size_t i(1);
   while (i<maxI)
     {
-      G4DataVector::size_type maxJ(columns[i]->size());
+      std::size_t maxJ(columns[i]->size());
       
       if (maxJ!=columns[0]->size())
 	{
@@ -201,7 +201,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
 	  return false;
 	}
       
-      G4DataVector::size_type j(0);
+      std::size_t j(0);
       
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
@@ -217,9 +217,9 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadData(const G4String & argFileName
 	  j++;
 	}
       
-      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+      AddComponent(new G4EMDataSet(G4int(i-1), argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
       
-      i++;
+      ++i;
     }
   
   i=maxI;
@@ -333,7 +333,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
  
   delete stream;
  
-  std::vector<G4DataVector *>::size_type maxI(columns.size());
+  std::size_t maxI(columns.size());
  
   if (maxI<2)
     {
@@ -345,10 +345,10 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
       return false;
     }
  
-  std::vector<G4DataVector*>::size_type i(1);
+  std::size_t i(1);
   while (i<maxI)
     {
-      G4DataVector::size_type maxJ(columns[i]->size());
+      std::size_t maxJ(columns[i]->size());
 
 	    
       if (maxJ!=columns[0]->size())
@@ -361,7 +361,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
 	  return false;
 	}
 
-      G4DataVector::size_type j(0);
+      std::size_t j(0);
 
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
@@ -370,18 +370,18 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
 	{
 	  argEnergies->push_back(columns[0]->operator[] (j)*GetUnitEnergies());
 	  argData->push_back(columns[i]->operator[] (j)*GetUnitData());
-	  j++;
+	  ++j;
 	}
 
-      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+      AddComponent(new G4EMDataSet(G4int(i-1), argEnergies, argData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
   
-      i++;
+      ++i;
     }
 
   i=maxI;
   while (i>0)
     {
-      i--;
+      --i;
       delete columns[i];
     }
 
@@ -392,7 +392,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::LoadNonLogData(const G4String & argFi
 
 G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName) const
 {
-  const size_t n(NumberOfComponents());
+  const std::size_t n(NumberOfComponents());
  
   if (n==0)
     {
@@ -419,12 +419,12 @@ G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName
   G4DataVector::const_iterator iEnergiesEnd(GetComponent(0)->GetEnergies(0).end());
   G4DataVector::const_iterator * iData(new G4DataVector::const_iterator[n]);
  
-  size_t k(n);
+  std::size_t k(n);
  
   while (k>0)
     {
-      k--;
-      iData[k]=GetComponent(k)->GetData(0).begin();
+      --k;
+      iData[k]=GetComponent((G4int)k)->GetData(0).begin();
     }
  
   while (iEnergies!=iEnergiesEnd)
@@ -445,12 +445,12 @@ G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName
 	  out << ((*(iData[k]))/GetUnitData());
 
 	  iData[k]++;
-	  k++;
+	  ++k;
 	}
   
       out << std::endl;
   
-      iEnergies++;
+      ++iEnergies;
     }
  
   delete[] iData;
@@ -462,8 +462,7 @@ G4bool G4MicroElecCrossSectionDataSet_new::SaveData(const G4String & argFileName
 
 G4String G4MicroElecCrossSectionDataSet_new::FullFileName(const G4String& argFileName) const
 {
-  
-  char *path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     {
       G4Exception("G4MicroElecCrossSectionDataSet_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
@@ -507,18 +506,18 @@ G4double G4MicroElecCrossSectionDataSet_new::FindShellValue(G4double argEnergy, 
 
 void G4MicroElecCrossSectionDataSet_new::PrintData(void) const
 {
-  const size_t n(NumberOfComponents());
+  const std::size_t n(NumberOfComponents());
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i(0);
+  G4int i(0);
  
-  while (i<n)
+  while (i<(G4int)n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 

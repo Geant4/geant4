@@ -83,7 +83,7 @@ inline bool match(const std::string& a_string,const std::string& a_pattern,bool 
   return true;
 }
 
-//for inlib/app/find.cpp :
+//for tools/app/find.cpp :
 inline bool match2(const std::string& a_string,const std::string& a_pattern){
   return match(a_string,a_pattern,true);
 }

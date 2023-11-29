@@ -48,19 +48,23 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
+#include "G4EmBuilder.hh"
+#include "G4PhysListUtil.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4SpinDecayPhysics);
 
-G4SpinDecayPhysics::G4SpinDecayPhysics(G4int)
-  : G4VPhysicsConstructor("SpinDecay")
+G4SpinDecayPhysics::G4SpinDecayPhysics(G4int verb)
+  : G4SpinDecayPhysics("SpinDecay", verb)
 {
 }
 
 G4SpinDecayPhysics::G4SpinDecayPhysics(const G4String& name, G4int)
   : G4VPhysicsConstructor(name)
 {
+  G4PhysListUtil::InitialiseParameters();
 }
 
 G4SpinDecayPhysics::~G4SpinDecayPhysics()
@@ -69,22 +73,11 @@ G4SpinDecayPhysics::~G4SpinDecayPhysics()
 
 void G4SpinDecayPhysics::ConstructParticle()
 {
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  // minimal set of particles for EM physics
+  G4EmBuilder::ConstructMinimalEmSet();
 
   G4MuonPlus::MuonPlusDefinition();
   G4MuonMinus::MuonMinusDefinition();
-
-  G4PionPlus::PionPlus();
-  G4PionMinus::PionMinus();
-
-  G4GenericIon::GenericIonDefinition();
   
   G4DecayTable* MuonPlusDecayTable = new G4DecayTable();
   MuonPlusDecayTable -> Insert(new

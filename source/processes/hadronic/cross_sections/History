@@ -1,29 +1,116 @@
--------------------------------------------------------------------
+# Category hadr-cross History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-        History file for hadronic/cross_sections directory
-        --------------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-05-24 Vladimir Ivanchenko (hadr-cross-V11-01-05)
+- G4GammaNuclearXS - more accurate usage of cache to fix the nightly problems;
+    simplified GetIsoCrosssection(..) and SelectIsotope(..) methods
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-05-23 Gabriele Cosmo (hadr-cross-V11-01-04)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode>=14.1.
 
-04 February 2022 - Vladimir Ivanchenko (hadr-cross-V10-07-23)
+## 2023-05-08 Vladimir Ivanchenko (hadr-cross-V11-01-03)
+- G4GammaNuclearXS - general clean-up of the class: instantiate data only once
+    for all instances of this x-section class; upload data for all elements
+    before the first run; simplified computation of isotope x-section; added
+    extra public method LowEnergyCrossSection(..)
+
+## 2023-04-25 Vladimir Ivanchenko (hadr-cross-V11-01-02)
+- G4CrossSectionDataStore - removed remaining call to getenv
+
+## 2023-02-17 Vladimir Grichine (hadr-cross-V11-01-01)
+- G4ElNeutrinoNucleusTotXsc - uncommented methods for interface with G4ElNeutrinoNucleusProcess
+
+## 2023-01-14 Vladimir Ivanchenko (hadr-cross-V11-01-00)
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS, G4GammaNuclearXS,
+  G4ParticleInelasticXS - do not call to environment variable G4PARTICLEXSDATA,
+    instead use G4HadrpnicParameters access method. Address issue #139 for
+    hadronic cross sections
+  G4CrossSectionDataStore - reduced number of calls to environment variable,
+    which are done only to print html output for documentation
+
+## 2022-11-26 Gabriele Cosmo (hadr-cross-V11-00-15)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-31 Vladimir Grichine (hadr-cross-V11-00-14)
+- G4TauNeutrinoNucleusTotXsc - added for tau-neutrinos, based on energy scaled nu_mu XS
+
+## 2022-10-25 Alberto Ribon (hadr-cross-V11-00-13)
+- G4ComponentAntiNuclNuclearXS : Vladimir Uzhinsky's bug-fix and extension
+  of the GetTotalElementCrossSection and GetInelasticElementCrossSection
+  methods:
+  *  A bug was causing undefined values for, respectively, the total and
+     inelastic cross-sections of anti-proton interactions with light target
+     nuclei (d, H3, He3 and He4).
+  *  Extension for the simulation of a light anti-hypernucleus projectile
+     scattering on a target nucleus.
+     Note: most of the considered light anti-hypernuclei projectiles have
+           baryon number equal to -4 : it is assumed that their properties
+     are similar to anti-He4, therefore their total and inelastic
+     cross sections are set-up as for anti-He4 nuclear scattering. 
+     These properties can be improved in the future if theoretical estimations
+     will be available.
+
+## 2022-10-27 Vladimir Grichine (hadr-cross-V11-00-12)
+- G4MuNeutrinoNucleusTotXsc - extension to tau-neutrinos, based on energy scaled nu_mu XS
+
+## 2022-10-21 Vladimir Grichine (hadr-cross-V11-00-11)
+- G4ComponentGGNuclNuclXsc - bug fixed pR not tR to be corrected
+
+## 2022-10-12 Vladimir Grichine (hadr-cross-V11-00-10)
+- G4ComponentGGNuclNuclXsc, G4ComponentGGHadronNuclXsc - extension to hyper-nuclei on hydrogen
+
+## 2022-10-10 Vladimir Grichine (hadr-cross-V11-00-09)
+- G4ComponentGGNuclNuclXsc - extension to hyper-nuclei
+
+## 2022-09-29 Vladimir Ivanchenko (hadr-cross-V11-00-08)
+- G4ParticleInelasticXS - fixed computation of isotope x-section #2498
+
+## 2022-08-18 Vladimir Ivanchenko (hadr-cross-V11-00-07)
+- G4CrossSectionDataStore - added extra public method needed 
+    for G4NeutronGeneralProcess
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS -
+    code cleanup, use G4AutoLock
+- G4NeutronInelasticXS - fixed computation of isotope x-section #2498
+
+## 2022-08-13 Vladimir Ivanchenko (hadr-cross-V11-00-06)
+- G4CrossSectionDataStore, G4NeutronElasticXS, G4NeutronInelasticXS -
+    added interfaces needed for G4NeutronGeneralProcess
+
+## 2022-07-23 Vladimir Ivanchenko (hadr-cross-V11-00-05)
+- G4VCrossSectionDataSet - added extra interfaces with G4ParticleDefinition*
+    and kinetic energy
+- G4NeutronCaptureXS - implemented new interfaces
+
+## 2022-07-19 Alberto Ribon (hadr-cross-V11-00-04)
+- G4ComponentAntiNuclNuclearXS.cc : fixed Coverity report (added checks
+  against nullptr pointers).
+
+## 2022-05-08 Vladimir Ivanchenko (hadr-cross-V11-00-03)
+- G4CrossSectionDataStore, G4VCrossSectionDataSet - preparation
+    for integral method, removed unused methods
+
+## 2022-01-03 Vladimir Ivanchenko (hadr-cross-V11-00-02)
 - G4HadronNucleonXsc - fixed compilation warning on unused variable
 
-03 January 2022 - Alberto Ribon (hadr-cross-V10-07-22)
+## 2022-01-03 Alberto Ribon (hadr-cross-V11-00-01)
 - G4ComponentAntiNuclNuclearXS : extension, by Vladimir Uzhinsky, of
   the class to compute the cross sections of light anti-nuclei on
   hydrogen. This relies on the isospin symmetry assumption, according
   to which the properties of the reactions between anti-proton and
   light nuclei are equivalent to those between light anti-nuclei and
   hydrogen.
+
+## 2021-12-10 Ben Morgan (hadr-cross-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 21 October 2021 - Alberto Ribon (hadr-cross-V10-07-21)
 - G4IonsShenCrossSection : reintroduced this (old) ion-ion cross section

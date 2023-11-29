@@ -1,18 +1,23 @@
--------------------------------------------------------------------
+# Example LXe History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    LXe History file
-                    ----------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-09-14 Daren Sawkey (LXe-V11-00-02)
+- change variable name to adhere to naming convention
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-07-07 Vladimir Ivanchenko (LXe-V11-00-01)
+- LXeSteppingAction modified: removed ThreadLocal variable; use
+    pdg code instead on particle name; add more checks on pointers;
+    extend printout before fatal exception
+
+## 2021-12-10 Ben Morgan (LXe-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 06, 2021 I. Hrivnacova (LXe-V10-07-03)
 - Migration to new G4AnalysisManager.hh header;

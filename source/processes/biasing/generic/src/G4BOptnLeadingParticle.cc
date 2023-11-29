@@ -134,7 +134,7 @@ G4VParticleChange* G4BOptnLeadingParticle::ApplyFinalStateBiasing( const G4Biasi
   // ---- randomly select one surviving track per species
   // ---- for this surviving track, further apply a Russian roulette
   G4int nSecondaries = 0; // -- the number of secondaries to be returned
-  for ( auto typeAndTrack : typesAndTracks )
+  for ( auto& typeAndTrack : typesAndTracks )
     {
       size_t nTracks = (typeAndTrack.second).size();
       G4Track* keptTrack;

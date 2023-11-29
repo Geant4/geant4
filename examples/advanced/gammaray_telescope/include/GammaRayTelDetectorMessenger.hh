@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -34,14 +33,14 @@
 //           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
 //
 // ************************************************************
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef GammaRayTelDetectorMessenger_h
 #define GammaRayTelDetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
+
+#include <memory>
 
 class GammaRayTelDetectorConstruction;
 class G4UIdirectory;
@@ -50,63 +49,50 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelDetectorMessenger: public G4UImessenger
-{
+class GammaRayTelDetectorMessenger: public G4UImessenger {
 public:
-  GammaRayTelDetectorMessenger(GammaRayTelDetectorConstruction* );
-  ~GammaRayTelDetectorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
+	explicit GammaRayTelDetectorMessenger(GammaRayTelDetectorConstruction*);
+
+	~GammaRayTelDetectorMessenger() override;
+
+	void SetNewValue(G4UIcommand *command, G4String newValue) override;
+
 private:
-  GammaRayTelDetectorConstruction* GammaRayTelDetector;
-  
-  G4UIdirectory*             GammaRayTeldetDir;
-  
-  // Converter
-  
-  G4UIcmdWithAString*        ConverterMaterCmd;
-  G4UIcmdWithADoubleAndUnit* ConverterThickCmd;
-  
-  // Silicon Tile
-  
-  G4UIcmdWithADoubleAndUnit* SiliconThickCmd;
-  G4UIcmdWithADoubleAndUnit* SiliconTileXYCmd;
-  G4UIcmdWithAnInteger*      NbSiTilesCmd;    
-  G4UIcmdWithADoubleAndUnit* SiliconPitchCmd;
+	GammaRayTelDetectorConstruction *detector;
 
-  // Tracker
-  
-  G4UIcmdWithAnInteger*      NbTKRLayersCmd;    
-  G4UIcmdWithADoubleAndUnit* LayerDistanceCmd;
-  G4UIcmdWithADoubleAndUnit* ViewsDistanceCmd;
-  
-  // Calorimeter 
-  
-  G4UIcmdWithADoubleAndUnit* CALThickCmd;
-  G4UIcmdWithAnInteger*      NbCALBarsCmd;
-  G4UIcmdWithAnInteger*      NbCALLayersCmd;    
+	G4UIdirectory *directory;
 
-  // Anticoincidence
+	// Converter
 
-  G4UIcmdWithADoubleAndUnit* ACDThickCmd;
+	G4UIcmdWithAString *converterMaterialCmd;
+	G4UIcmdWithADoubleAndUnit *converterThicknessCmd;
 
-  // Total
+	// Silicon Tile
 
-  G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+	G4UIcmdWithADoubleAndUnit *siliconThicknessCmd;
+	G4UIcmdWithADoubleAndUnit *siliconTileXYCmd;
+	G4UIcmdWithAnInteger *numberOfSiTilesCmd;
+	G4UIcmdWithADoubleAndUnit *siliconPitchCmd;
+
+	// Tracker (TKR)
+
+	G4UIcmdWithAnInteger *numberOfTKRLayersCmd;
+	G4UIcmdWithADoubleAndUnit *layerDistanceCmd;
+	G4UIcmdWithADoubleAndUnit *viewsDistanceCmd;
+
+	// Calorimeter (CAL)
+
+	G4UIcmdWithADoubleAndUnit *calThicknessCmd;
+	G4UIcmdWithAnInteger *numberOfCALBarsCmd;
+	G4UIcmdWithAnInteger *numberOfCALLayersCmd;
+
+	// Anticoincidence (ACD)
+
+	G4UIcmdWithADoubleAndUnit *acdThicknessCmd;
+
+	// Total
+
+	G4UIcmdWithADoubleAndUnit *magneticFieldCmd;
+	G4UIcmdWithoutParameter *updateCmd;
 };
-
 #endif
-
-
-
-
-
-
-
-
-
-

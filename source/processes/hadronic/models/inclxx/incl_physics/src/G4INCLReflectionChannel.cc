@@ -56,8 +56,11 @@ namespace G4INCL {
   }
 
   void ReflectionChannel::fillFinalState(FinalState *fs) {
+    if(theParticle->getPotentialEnergy() != 0.){
+      theNucleus->updatePotentialEnergy(theParticle); //D
+    }
     fs->setTotalEnergyBeforeInteraction(theParticle->getEnergy() - theParticle->getPotentialEnergy());
-
+    
     const ThreeVector &oldMomentum = theParticle->getMomentum();
     const ThreeVector thePosition = theParticle->getPosition();
     G4double pspr = thePosition.dot(oldMomentum);
@@ -76,7 +79,9 @@ namespace G4INCL {
             << thePosition.getY() << ", "
             << thePosition.getZ() << ")" << '\n');
       }
-      theNucleus->updatePotentialEnergy(theParticle);
+      if(theParticle->getPotentialEnergy() != 0.){
+        theNucleus->updatePotentialEnergy(theParticle);
+      }
     } else { // The particle momentum is already directed towards the inside of the nucleus; do nothing
       // ...but make sure this only happened because of the frozen propagation
 // assert(theParticle->getPosition().dot(theParticle->getPropagationVelocity())>0.);

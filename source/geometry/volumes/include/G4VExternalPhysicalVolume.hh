@@ -56,11 +56,11 @@ class G4VExternalPhysicalVolume : public G4VPhysicalVolume
     G4VExternalPhysicalVolume& operator=(const G4VExternalPhysicalVolume&) = delete;
       // Forbidden copy constructor and assignment operator.
 
-    virtual ~G4VExternalPhysicalVolume();
+    ~G4VExternalPhysicalVolume() override;
       // Default destructor.
 
-    virtual G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
-                                 G4bool verbose=true, G4int maxErr=1) = 0;
+    G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
+                         G4bool verbose=true, G4int maxErr=1) override = 0;
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.

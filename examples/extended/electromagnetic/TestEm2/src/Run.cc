@@ -32,7 +32,6 @@
 
 #include "Run.hh"
 
-#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "EmAcceptance.hh"
 
@@ -44,8 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* kin)
- :G4Run(),fDet(det),fKin(kin),
-  f_nLbin(kMaxBin),f_nRbin(kMaxBin)
+ :fDet(det),fKin(kin)
 {
   Reset();
 }
@@ -85,11 +83,6 @@ void Run::Reset()
   fSumChargTrLength=fSum2ChargTrLength=fSumNeutrTrLength=fSum2NeutrTrLength=0.;
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

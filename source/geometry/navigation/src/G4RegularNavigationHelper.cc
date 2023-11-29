@@ -38,15 +38,11 @@ G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
 
 // --------------------------------------------------------------------
 //
-G4RegularNavigationHelper::G4RegularNavigationHelper()
-{
-}
+G4RegularNavigationHelper::G4RegularNavigationHelper() = default;
 
 // --------------------------------------------------------------------
 //
-G4RegularNavigationHelper::~G4RegularNavigationHelper()
-{
-}
+G4RegularNavigationHelper::~G4RegularNavigationHelper() = default;
 
 // --------------------------------------------------------------------
 //

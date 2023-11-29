@@ -42,7 +42,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VisManager.hh"
-#include "G4Point3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
 #include "G4Scene.hh"

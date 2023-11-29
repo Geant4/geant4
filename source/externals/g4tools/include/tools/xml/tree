@@ -414,9 +414,9 @@ public:
   tree* find_item_with_tag(const std::string& a_tag,
                            const std::string& a_name) const {
     if(a_tag==tag_name()) {
-      std::string s;
-      attribute_value("name",s);
-      if(a_name==s) return const_cast<tree*>(this);
+      std::string _s;
+      attribute_value("name",_s);
+      if(a_name==_s) return const_cast<tree*>(this);
     }
 
     // Look children :
@@ -568,9 +568,9 @@ public:
   tree* find_by_attribute(const std::string& a_atb,const std::string& a_value,
                         bool a_up_down = true,bool a_left_right = true) const {
     if(a_up_down) {
-      std::string s;
-      attribute_value(a_atb,s);
-      if(s==a_value) return const_cast<tree*>(this);
+      std::string _s;
+      attribute_value(a_atb,_s);
+      if(_s==a_value) return const_cast<tree*>(this);
 
       if(a_left_right) {
         tools_lforcit(ielem*,m_childs,it) {
@@ -607,9 +607,9 @@ public:
         }}
       }
 
-      std::string s;
-      attribute_value(a_atb,s);
-      if(s==a_value) return const_cast<tree*>(this);
+      std::string _s;
+      attribute_value(a_atb,_s);
+      if(_s==a_value) return const_cast<tree*>(this);
 
     }
     return 0;
@@ -784,8 +784,8 @@ public:
     // Look children :
     tools_lforcit(ielem*,m_childs,it) {
     if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
-      std::string s;
-      if(_tree->element_value(a_name,s) && (a_value==s)) return _tree;
+      std::string _s;
+      if(_tree->element_value(a_name,_s) && (a_value==_s)) return _tree;
     }}
     return 0;
   }

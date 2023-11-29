@@ -71,6 +71,7 @@ public:
   inline G4VFermiBreakUp* GetFermiBreakUp() const;
   inline G4VEvaporationChannel* GetPhotonEvaporation();
   inline G4VEvaporationChannel* GetFissionChannel();
+  inline G4VEvaporationChannel* GetChannel(size_t idx);
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt); 
@@ -78,6 +79,11 @@ public:
   inline void UseSICB(G4bool use);
 
   inline size_t GetNumberOfChannels() const;
+
+  G4VEvaporation(const G4VEvaporation &right) = delete;
+  const G4VEvaporation & operator=(const G4VEvaporation &right) = delete;
+  G4bool operator==(const G4VEvaporation &right) const = delete;
+  G4bool operator!=(const G4VEvaporation &right) const = delete;
 
 protected:
 
@@ -91,13 +97,6 @@ protected:
 
   std::vector<G4VEvaporationChannel*> * theChannels;
   G4VEvaporationFactory * theChannelFactory;
-
-private:  
-  G4VEvaporation(const G4VEvaporation &right) = delete;
-  const G4VEvaporation & operator=(const G4VEvaporation &right) = delete;
-  G4bool operator==(const G4VEvaporation &right) const = delete;
-  G4bool operator!=(const G4VEvaporation &right) const = delete;
-
 };
 
 inline void G4VEvaporation::SetFermiBreakUp(G4VFermiBreakUp* ptr)
@@ -117,7 +116,14 @@ inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 
 inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
 {
-  return (theChannels && theChannels->size() > 1) ? (*theChannels)[1] : nullptr;
+  return (nullptr != theChannels && theChannels->size() > 1) ? 
+    (*theChannels)[1] : nullptr;
+}
+
+inline G4VEvaporationChannel* G4VEvaporation::GetChannel(size_t idx)
+{
+  return (nullptr != theChannels && theChannels->size() > idx) ? 
+    (*theChannels)[idx] : nullptr;
 }
 
 inline void G4VEvaporation::SetOPTxs(G4int opt) 

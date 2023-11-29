@@ -56,7 +56,7 @@
 
  <solids>
  
-  <eltube aunit="cm" lunit="cm" name="DescendingColonLowerLargeIntestine" dx="1.62" dy="2.09" dz="6.885" />
+  <eltube lunit="cm" name="DescendingColonLowerLargeIntestine" dx="1.62" dy="2.09" dz="6.885" />
 
   <torus aunit="radian" lunit="cm" name="SigmoidColonUpLowerLargeIntestine" rmin="0.0" rmax="1.62" rtor="5.16" startphi="0" deltaphi="HALFPI" />
 

@@ -64,7 +64,7 @@ G4UGenericPolycone::G4UGenericPolycone(const G4String& name,
   rzcorners.resize(0);
   for (G4int i=0; i<numRZ; ++i)
   {
-    rzcorners.push_back(G4TwoVector(r[i],z[i]));
+    rzcorners.emplace_back(r[i],z[i]);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -86,9 +86,7 @@ G4UGenericPolycone::G4UGenericPolycone(__void__& a)
 //
 // Destructor
 //
-G4UGenericPolycone::~G4UGenericPolycone()
-{
-}
+G4UGenericPolycone::~G4UGenericPolycone() = default;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -251,7 +249,7 @@ G4UGenericPolycone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -267,7 +265,7 @@ G4UGenericPolycone::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyconeSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4double area = G4GeomTools::PolygonArea(contourRZ);
   if (area < 0.) std::reverse(contourRZ.begin(),contourRZ.end());

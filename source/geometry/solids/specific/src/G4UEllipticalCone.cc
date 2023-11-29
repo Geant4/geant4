@@ -65,7 +65,7 @@ G4UEllipticalCone::G4UEllipticalCone( __void__& a )
 //
 // Destructor
 
-G4UEllipticalCone::~G4UEllipticalCone() { }
+G4UEllipticalCone::~G4UEllipticalCone() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -200,7 +200,7 @@ G4UEllipticalCone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

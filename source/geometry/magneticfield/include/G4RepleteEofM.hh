@@ -43,18 +43,18 @@ class G4Field;
 
 class G4RepleteEofM : public G4EquationOfMotion
 {
-  public:  // with description
+  public:
 
     G4RepleteEofM(G4Field*, G4int nvar = 8);
-    ~G4RepleteEofM();
+   ~G4RepleteEofM() override;
 
     void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                G4double MomentumXc,
-                               G4double mass);
+                               G4double mass) override;
 
     void EvaluateRhsGivenB(const G4double y[],
                            const G4double Field[],
-                                 G4double dydx[] ) const;
+                                 G4double dydx[] ) const override;
       // Given the value of the field, this function 
       // calculates the value of the derivative dydx.
 

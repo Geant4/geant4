@@ -22,20 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 // File:        G4MaterialPropertiesIndex.hh
 // Description: Indices and Names for G4MaterialProperties
 // Created:     29-06-2017
 // Author:      Soon Yung Jun
-////////////////////////////////////////////////////////////////////////
 
 #ifndef G4MaterialPropertiesIndex_h
 #define G4MaterialPropertiesIndex_h 1
 
-#include <vector>
 #include "G4String.hh"
 
+#include <vector>
+
+// clang-format off
 enum G4MaterialPropertyIndex   {
   kNullPropertyIndex = -1,     // the number of G4MaterialPropertyIndex
   kRINDEX,                     // index of refraction                  
@@ -64,11 +64,12 @@ enum G4MaterialPropertyIndex   {
   kSCINTILLATIONCOMPONENT1,    // scintillation light yield vectors for 
   kSCINTILLATIONCOMPONENT2,    //   3 channels
   kSCINTILLATIONCOMPONENT3,    // "
+  kCOATEDRINDEX,               // real part of the refractive index of the thin layer in case of coated surface
   kNumberOfPropertyIndex       // the number of G4MaterialPropertyIndex
 } ;
 
-enum G4MaterialConstPropertyIndex 
-{ 
+enum G4MaterialConstPropertyIndex
+{
   kNullConstPropertyIndex = -1, // the number of G4MaterialPropertyIndex
   kSURFACEROUGHNESS,            // surface microroughness      
   kISOTHERMAL_COMPRESSIBILITY,  // isothermal compressibility
@@ -127,7 +128,12 @@ enum G4MaterialConstPropertyIndex
   kELECTRONSCINTILLATIONYIELD1, // scintillation light yield by electrons
   kELECTRONSCINTILLATIONYIELD2, //   for 3 channels
   kELECTRONSCINTILLATIONYIELD3, // "
+  kCOATEDTHICKNESS,             // thickness of the thin layer in case of coated
+  kCOATEDFRUSTRATEDTRANSMISSION,// for incident angle superior to limit angle, use frustrated transmission (if true)
+                                // or total reflection (if false)
+
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
 };
+// clang-format on
 
 #endif /* G4MaterialPropertiesIndex_h */

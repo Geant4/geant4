@@ -192,7 +192,7 @@ public:
   static double getTolerance();
   static double setTolerance( double tol );
 
-  enum { ToleranceTicks = 100 };
+  static const int ToleranceTicks = 100;
 
 protected:
 

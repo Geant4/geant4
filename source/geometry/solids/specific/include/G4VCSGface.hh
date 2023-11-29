@@ -263,35 +263,35 @@ class G4SolidExtentList;
 
 class G4VCSGface
 {
-  public:  // with description
+  public:
 
-  G4VCSGface() {}
-  virtual ~G4VCSGface() {}
+    G4VCSGface() = default;
+    virtual ~G4VCSGface() = default;
   
-  virtual G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
-                            G4bool outgoing, G4double surfTolerance,
-                            G4double& distance, G4double& distFromSurface,
-                            G4ThreeVector& normal, G4bool& allBehind ) = 0;
+    virtual G4bool Intersect( const G4ThreeVector& p, const G4ThreeVector& v,  
+                              G4bool outgoing, G4double surfTolerance,
+                              G4double& distance, G4double& distFromSurface,
+                              G4ThreeVector& normal, G4bool& allBehind ) = 0;
 
-  virtual G4double Distance( const G4ThreeVector& p, G4bool outgoing ) = 0;
+    virtual G4double Distance( const G4ThreeVector& p, G4bool outgoing ) = 0;
   
-  virtual EInside Inside( const G4ThreeVector& p, G4double tolerance, 
-                          G4double* bestDistance ) = 0;
+    virtual EInside Inside( const G4ThreeVector& p, G4double tolerance, 
+                            G4double* bestDistance ) = 0;
     
-  virtual G4ThreeVector Normal( const G4ThreeVector& p,
-                                G4double* bestDistance ) = 0;
+    virtual G4ThreeVector Normal( const G4ThreeVector& p,
+                                  G4double* bestDistance ) = 0;
 
-  virtual G4double Extent( const G4ThreeVector axis ) = 0;
+    virtual G4double Extent( const G4ThreeVector axis ) = 0;
   
-  virtual void CalculateExtent( const EAxis axis, 
-                                const G4VoxelLimits& voxelLimit,
-                                const G4AffineTransform& tranform,
-                                G4SolidExtentList& extentList       ) = 0;
+    virtual void CalculateExtent( const EAxis axis, 
+                                  const G4VoxelLimits& voxelLimit,
+                                  const G4AffineTransform& tranform,
+                                  G4SolidExtentList& extentList       ) = 0;
 
-  virtual G4VCSGface* Clone() = 0;
+    virtual G4VCSGface* Clone() = 0;
 
-  virtual G4double SurfaceArea() = 0;
-  virtual G4ThreeVector GetPointOnFace() = 0;
+    virtual G4double SurfaceArea() = 0;
+    virtual G4ThreeVector GetPointOnFace() = 0;
 };
 
 #endif

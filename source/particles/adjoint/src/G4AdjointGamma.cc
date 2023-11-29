@@ -40,18 +40,18 @@
 // ######################################################################
 // ###                            GAMMA                               ###
 // ######################################################################
-G4AdjointGamma* G4AdjointGamma::theInstance = 0;
+G4AdjointGamma* G4AdjointGamma::theInstance = nullptr;
 
 
 G4AdjointGamma*  G4AdjointGamma::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "adj_gamma";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -67,11 +67,11 @@ G4AdjointGamma*  G4AdjointGamma::Definition()
 		    2,              -1,            -1,          
 		    0,               0,             0,             
 	    "adjoint",               0,             0,    10000022,
-	         true,             0.0,          NULL,
+	         true,             0.0,          nullptr,
                 false,     "adj_gamma",      10000022
 	      );
   }
-  theInstance = reinterpret_cast<G4AdjointGamma*>(anInstance);
+  theInstance = static_cast<G4AdjointGamma*>(anInstance);
   return theInstance;
 }
 

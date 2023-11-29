@@ -35,6 +35,8 @@
 
 #include "globals.hh"
 
+#include <array>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TFile;
@@ -50,28 +52,28 @@ class HistoManager
   public:
     HistoManager();
    ~HistoManager();
-   
+
     void Book();
     void Save();
 
     void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+    void Normalize(G4int id, G4double fac);
 
     void FillNtuple(G4double energyAbs, G4double energyGap,
                     G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-    TFile*   fRootFile;
-    TH1D*    fHisto[kMaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
 
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
+    void PrintStatistic();
+
+  private:
+    TFile* fRootFile = nullptr;
+    std::array<TH1D*, kMaxHisto> fHisto = {nullptr, nullptr, nullptr, nullptr};
+    TTree* fNtuple1 = nullptr;
+    TTree* fNtuple2 = nullptr;
+
+    G4double fEabs = 0.;
+    G4double fEgap = 0.;
+    G4double fLabs = 0.;
+    G4double fLgap = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

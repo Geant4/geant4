@@ -27,10 +27,8 @@
 // Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
 // Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 // 
-//
-//
-#include "G4MIRDRightTeste.hh"
 
+#include "G4MIRDRightTeste.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
@@ -47,40 +45,28 @@
 #include "G4UnionSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDRightTeste::G4MIRDRightTeste()
-{
-}
-
-G4MIRDRightTeste::~G4MIRDRightTeste()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDRightTeste::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 					       const G4String& colourName, G4bool wireFrame,G4bool)
 { 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
-
- 
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
  
   G4double ax= 1.3*cm;
   G4double by= 1.5*cm;
   G4double cz= 2.3*cm;
 
-  G4Ellipsoid* OneTeste = new G4Ellipsoid("OneTeste",
-					  ax, by, cz);
+  auto* OneTeste = new G4Ellipsoid("OneTeste",
+				     ax, by, cz);
 
-  G4LogicalVolume* logicRightTeste = new G4LogicalVolume(OneTeste,
-							 soft,
-							 "logical" + volumeName,
-							 0, 0, 0);
+  auto* logicRightTeste = new G4LogicalVolume(OneTeste,
+						soft,
+						"logical" + volumeName,
+						 nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physRightTeste = new G4PVPlacement(0,
+  G4VPhysicalVolume* physRightTeste = new G4PVPlacement(nullptr,
 							G4ThreeVector(-1.4*cm,3*cm, 0*cm),
 							"physicalRightTeste",
 							logicRightTeste,
@@ -91,9 +77,9 @@ G4VPhysicalVolume* G4MIRDRightTeste::Construct(const G4String& volumeName, G4VPh
 
   // Visualization Attributes
   // G4VisAttributes* RightTesteVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* RightTesteVisAtt = new G4VisAttributes(colour);
+  auto* RightTesteVisAtt = new G4VisAttributes(colour);
   RightTesteVisAtt->SetForceSolid(wireFrame);
   logicRightTeste->SetVisAttributes(RightTesteVisAtt);
 

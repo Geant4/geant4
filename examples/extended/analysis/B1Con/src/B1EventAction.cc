@@ -39,7 +39,7 @@ B1EventAction::B1EventAction()
 : G4UserEventAction(),
   fPrintModulo(100),
   fEdep(0.)
-{} 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,21 +49,21 @@ B1EventAction::~B1EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1EventAction::BeginOfEventAction(const G4Event* event)
-{  
+{
   G4int eventNb = event->GetEventID();
-  if (eventNb%fPrintModulo == 0) { 
+  if (eventNb%fPrintModulo == 0) {
     G4cout << "\n---> Begin of event: " << eventNb << G4endl;
   }
-  
+
   fEdep = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1EventAction::EndOfEventAction(const G4Event*)
-{   
+{
   // accumulate statistics in B1Run
-  B1Run* run 
+  B1Run* run
     = static_cast<B1Run*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddEdep(fEdep);

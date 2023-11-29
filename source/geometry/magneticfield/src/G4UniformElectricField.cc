@@ -60,9 +60,7 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
 
-G4UniformElectricField::~G4UniformElectricField()
-{
-}
+G4UniformElectricField::~G4UniformElectricField() = default;
 
 G4UniformElectricField::
 G4UniformElectricField (const G4UniformElectricField& p)
@@ -77,7 +75,7 @@ G4UniformElectricField (const G4UniformElectricField& p)
 G4UniformElectricField&
 G4UniformElectricField::operator = (const G4UniformElectricField& p)
 {
-  if (&p == this) return *this; 
+  if (&p == this) { return *this; }
   G4ElectricField::operator=(p); 
   for (auto i=0; i<6; ++i)
   {

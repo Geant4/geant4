@@ -51,6 +51,8 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 
+namespace {
+
 const G4String namesICRU73[31] = {
 "G4_A-150_TISSUE"
 "G4_ADIPOSE_TISSUE_ICRP"
@@ -83,7 +85,13 @@ const G4String namesICRU73[31] = {
 "G4_TISSUE-PROPANE"
 "G4_WATER"
 "G4_WATER_VAPOR"};
-const G4String namesICRU90[3] = {"G4_AIR","G4_GRAPHITE","G4_WATER"};
+  const G4String namesICRU90[3] = {"G4_AIR","G4_GRAPHITE","G4_WATER"};
+  const G4double densityCoef[3] = {0.996, 1.025, 0.998};
+  const G4int NZ = 27;
+  const G4int zdat[NZ] = { 5,   6,  7,  8, 13, 14, 15, 16, 22, 26,
+                          28, 29, 30, 31, 32, 33, 34, 40, 47, 48,
+                          49, 51, 52, 72, 73, 74, 79 }; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -91,9 +99,9 @@ G4IonICRU73Data::G4IonICRU73Data()
 {
   fEmin = 0.025*CLHEP::MeV;
   fEmax = 2.5*CLHEP::MeV;
-  fNbins = fNbinsPerDecade*G4lrint(std::log10(fEmax/fEmin) + 0.000001);
+  fNbins = fNbinsPerDecade*G4lrint(std::log10(fEmax/fEmin));
   fVector = new G4PhysicsFreeVector(fSpline);
-  for(G4int i=0; i<81; ++i) {
+  for(G4int i=3; i<=ZPROJMAX; ++i) {
     fMatData[i] = new std::vector<G4PhysicsLogVector*>;
   }
 }
@@ -103,34 +111,39 @@ G4IonICRU73Data::G4IonICRU73Data()
 G4IonICRU73Data::~G4IonICRU73Data()
 {
   delete fVector;
-  for(G4int i=0; i<81; ++i) {
+  for(G4int i=3; i<=ZPROJMAX; ++i) {
     auto v = fMatData[i];
-    for(G4int j=0; j<fNmat; ++j) {
-      delete (*v)[j];
+    if(nullptr != v) {
+      for(auto & dat : *v) {
+	delete dat;
+      }
+      delete v;
     }
-    delete v;
-    for(G4int j=0; j<81; ++j) { delete fElmData[i][j]; }
+    for(G4int j=1; j<=ZTARGMAX; ++j) {
+      delete fElmData[i][j]; 
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4IonICRU73Data::GetDEDX(const G4Material* mat, const G4int Z,
-				  const G4double e, const G4double loge) const
+                                  const G4double e, const G4double loge) const
 {
   G4PhysicsLogVector* v = nullptr;
+  G4int Z2 = std::min(Z, ZPROJMAX);
   if(1 == mat->GetNumberOfElements()) {
-    G4int Z1 = (*(mat->GetElementVector()))[0]->GetZasInt();
-    if(Z <= 80 && Z1 <= 80) {
-      v = fElmData[Z][Z1];
-    }
+    G4int Z1 = std::min((*(mat->GetElementVector()))[0]->GetZasInt(), ZTARGMAX);
+    v = fElmData[Z2][Z1];
   } else {
     G4int idx = fMatIndex[mat->GetIndex()];
-    if(idx < fNmat && Z <= 80) {
-      v = (*(fMatData[Z]))[idx];
+    if(idx < fNmat) {
+      v = (*(fMatData[Z2]))[idx];
     }
   }
-  G4double res = (nullptr != v) ? v->LogVectorValue(e, loge) : 0.0;
+  if(nullptr == v) { return 0.0; }
+  G4double res = (e > fEmin) ? v->LogVectorValue(e, loge) 
+    : (*v)[0]*std::sqrt(e/fEmin);
   return res;
 }
 
@@ -140,81 +153,138 @@ void G4IonICRU73Data::Initialise()
 {
   // fill directory path
   if(fDataDirectory.empty()) {
-    char* path = std::getenv("G4LEDATA");
-    if (nullptr != path) {
-      std::ostringstream ost;
-      ost << path << "/ion_stopping_data/";
-      fDataDirectory = ost.str();
-    } else {
-      G4Exception("G4IonICRU73Data::Initialise(..)","em013",
-                  FatalException,
-                  "Environment variable G4LEDATA is not defined");
-    }
+    std::ostringstream ost;
+    ost << G4EmParameters::Instance()->GetDirLEDATA() << "/ion_stopping_data/";
+    fDataDirectory = ost.str();
   }
 
-  G4bool useICRU90 = G4EmParameters::Instance()->UseICRU90Data();
-  size_t nmat = G4Material::GetNumberOfMaterials();
+  std::size_t nmat = G4Material::GetNumberOfMaterials();
+  if(nmat == fMatIndex.size()) { return; }
+ 
+  if(1 < fVerbose) {
+    G4cout << "### G4IonICRU73Data::Initialise() for " << nmat
+           << " materials" << G4endl;
+  } 
   fMatIndex.resize(nmat, -1);
+  for(G4int j=3; j<=ZPROJMAX; ++j) {
+    fMatData[j]->resize(nmat, nullptr);
+  }
+  G4bool useICRU90 = G4EmParameters::Instance()->UseICRU90Data();
+  auto mtable = G4Material::GetMaterialTable();
 
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
-
-  for(size_t i=0; i<numOfCouples; ++i) {
-    const G4MaterialCutsCouple* couple = 
-      theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* mat = couple->GetMaterial();
-    G4int idx = mat->GetIndex();
+  for(G4int i=0; i<(G4int)nmat; ++i) {
+    fNmat = i;
+    const G4Material* mat = (*mtable)[i];
+    G4int idx = (G4int)mat->GetIndex();
+    if(1 < fVerbose) {
+      G4cout << i << ".  material:" << mat->GetName() 
+             << "  idx=" << idx << "  matIdx=" << fMatIndex[idx] 
+	     << "  fNmat=" << fNmat << G4endl;
+    }
     if(fMatIndex[idx] == -1) {
+      fMatIndex[idx] = i;
       G4String matname = mat->GetName();
       G4bool isOK = false; 
       if(1 == mat->GetNumberOfElements()) {
-	ReadElementData(mat, useICRU90);
+        ReadElementData(mat, useICRU90);
         isOK = true;
+        if(1 < fVerbose) {
+          G4cout << "Material from single element fNmat=" << fNmat << G4endl;
+        }
       }
       if(!isOK && useICRU90) {
-	for(G4int j=0; j<3; ++j) {
-	  if(matname == namesICRU90[j]) {
-	    ReadMaterialData(matname, true);
+        for(G4int j=0; j<3; ++j) {
+          if(matname == namesICRU90[j]) {
+            ReadMaterialData(mat, densityCoef[j], true);
             isOK = true;
-	    fMatIndex[idx] = fNmat; 
-	    ++fNmat;
-	    break;
-	  }
-	}
+            if(1 < fVerbose) {
+              G4cout << "ICRU90 material" << G4endl;
+            }
+            break;
+          }
+        }
       }
       if(!isOK) {
-	for(G4int j=0; j<31; ++j) {
-	  if(matname == namesICRU73[j]) {
-	    ReadMaterialData(matname, false);
+        for(G4int j=0; j<31; ++j) {
+          if(matname == namesICRU73[j]) {
+            ReadMaterialData(mat, 1.0, false);
             isOK = true;
-	    fMatIndex[idx] = fNmat; 
-	    ++fNmat;
-	    break;
-	  }
-	}
+            if(1 < fVerbose) {
+              G4cout << "ICRU73 material" << G4endl;
+            }
+            break;
+          }
+        }
       }
       if(!isOK) {
-	ReadElementData(mat, useICRU90);
-	fMatIndex[idx] = fNmat; 
-	++fNmat;
+        ReadElementData(mat, useICRU90);
+        if(1 < fVerbose) {
+          G4cout << "Read element data" << G4endl;
+        }
       }
+    }
+    if(1 < fVerbose) {
+      G4cout << "     matData: " << fMatData[i] << G4endl;
     }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void G4IonICRU73Data::ReadMaterialData(const G4String& name, G4bool isICRU90)
+void G4IonICRU73Data::ReadMaterialData(const G4Material* mat, 
+                                       const G4double coeff, 
+                                       const G4bool useICRU90)
 {
-  for(G4int Z=3; Z<81; ++Z) {
+  G4String name = mat->GetName();
+  for(G4int Z=3; Z<=ZPROJMAX; ++Z) {
     std::ostringstream ost;
     ost << fDataDirectory << "icru";
-    if(isICRU90 && Z <= 18) { ost << "90"; }
-    else { ost << "73"; }
-    ost << "/z" << Z << "_" << name << ".dat"; 
-    G4PhysicsLogVector* v = RetrieveVector(ost, false);
-    (fMatData[Z])->push_back(v);
+    G4int Z1 = Z;
+    G4double scale = 1.0;
+    if(useICRU90 && Z <= 18) {
+      ost << "90";
+    } else {
+      ost << "73";
+      for(G4int i=0; i<NZ; ++i) {
+	if(Z == zdat[i]) {
+	  break;
+	} else if(i == NZ-1) {
+	  Z1 = zdat[NZ - 1];
+	  scale = (G4double)(Z*Z)/(G4double)(Z1*Z1);
+	} else if(Z > zdat[i] && Z < zdat[i+1]) {
+	  if(Z - zdat[i] <= zdat[i + 1] - Z) {
+	    Z1 = zdat[i];
+	  } else {
+	    Z1 = zdat[i+1];
+	  }
+	  scale = (G4double)(Z*Z)/(G4double)(Z1*Z1);
+	  break;
+	}
+      }
+    }
+    if(nullptr == (*(fMatData[Z1]))[fNmat]) {
+      ost << "/z" << Z1 << "_" << name << ".dat"; 
+      G4PhysicsLogVector* v = RetrieveVector(ost, false);
+      if(nullptr != v) {
+	const G4double fact = coeff *
+	  mat->GetDensity() * CLHEP::MeV * 1000 * CLHEP::cm2 / CLHEP::g; 
+	v->ScaleVector(CLHEP::MeV, fact);
+	if(2 < fVerbose) {
+	  G4cout << "### Data for " << name 
+		 << " and projectile Z=" << Z1 << G4endl;
+	  G4cout << *v << G4endl;
+	}
+	(*(fMatData[Z1]))[fNmat] = v;
+      }
+    }
+    if(Z != Z1) {
+      auto v2 = (*(fMatData[Z1]))[fNmat];
+      if(nullptr != v2) {
+	auto v1 = new G4PhysicsLogVector(*v2);
+	(*(fMatData[Z]))[fNmat] = v1;
+	v1->ScaleVector(1.0, scale);
+      }
+    }
   }
 }
 
@@ -224,34 +294,35 @@ void G4IonICRU73Data::ReadElementData(const G4Material* mat, G4bool useICRU90)
 {
   const G4ElementVector* elmv = mat->GetElementVector();
   const G4double* dens = mat->GetFractionVector();
-  const G4int nelm = mat->GetNumberOfElements();
-  for(G4int Z=3; Z<81; ++Z) {
+  const G4int nelm = (G4int)mat->GetNumberOfElements();
+  for(G4int Z=3; Z<ZPROJMAX; ++Z) {
+    G4PhysicsLogVector* v = nullptr; 
     if(1 == nelm) {
-      FindOrBuildElementData(Z, (*elmv)[0]->GetZasInt(), useICRU90);
+      v = FindOrBuildElementData(Z, (*elmv)[0]->GetZasInt(), useICRU90);
     } else {
-      G4PhysicsLogVector* v2 = nullptr; 
-      for(G4int j=0; j<nelm; ++j) {
-	v2 = FindOrBuildElementData(Z, (*elmv)[j]->GetZasInt(), useICRU90);
-        if(nullptr == v2) { break; }
-      }
-      // for one or more elements there is no data
-      if(nullptr == v2) {
-	fMatData[Z]->push_back(v2);
-        continue;
-      }
-      G4PhysicsLogVector* v =
-	new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
+      v = new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
       for(G4int i=0; i<=fNbins; ++i) {
-	G4double dedx = 0;
+        G4double dedx = 0.0;
         for(G4int j=0; j<nelm; ++j) {
-	  G4PhysicsLogVector* v1 = 
-	    FindOrBuildElementData(Z, (*elmv)[j]->GetZasInt(), useICRU90);
+          G4PhysicsLogVector* v1 = 
+            FindOrBuildElementData(Z, (*elmv)[j]->GetZasInt(), useICRU90);
           dedx += (*v1)[i]*dens[j];
-	}
+        }
         v->PutValue(i, dedx);
       }
       if(fSpline) { v->FillSecondDerivatives(); }
-      fMatData[Z]->push_back(v);
+      (*(fMatData[Z]))[fNmat] = v;
+    }
+    // scale data for correct units
+    if(nullptr != v) {
+      const G4double fact =
+        mat->GetDensity() * CLHEP::MeV * 1000 * CLHEP::cm2 / CLHEP::g; 
+      v->ScaleVector(CLHEP::MeV, fact);
+      if(2 < fVerbose) {
+        G4cout << "### Data for "<< mat->GetName() 
+               << " for projectile Z=" << Z << G4endl;
+        G4cout << *v << G4endl;
+      }
     }
   }
 }
@@ -263,18 +334,44 @@ G4IonICRU73Data::FindOrBuildElementData(const G4int Z, const G4int Z1,
                                         G4bool useICRU90)
 {
   G4PhysicsLogVector* v = nullptr;
-  if(Z <= 80 && Z1 <= 80) {
+  if(Z <= ZPROJMAX && Z1 <= ZTARGMAX) {
     v = fElmData[Z][Z1];
     if(nullptr == v) {
+      G4int Z2 = Z1;
       G4bool isICRU90 = (useICRU90 && Z <= 18 && 
-			 (Z1 == 1 || Z1 == 6 || Z1 == 7 || Z1 == 8)); 
+                         (Z1 == 1 || Z1 == 6 || Z1 == 7 || Z1 == 8));
+
+      G4double scale = 1.0;      
+      if(!isICRU90) {
+        for(G4int i=0; i<NZ; ++i) {
+          if(Z1 == zdat[i]) {
+	    break;
+	  } else if(i == NZ-1) {
+	    Z2 = zdat[NZ - 1];
+            scale = (G4double)Z1/(G4double)Z2;
+	  } else if(Z1 > zdat[i] && Z1 < zdat[i+1]) {
+            if(Z1 - zdat[i] <= zdat[i + 1] - Z1) {
+	      Z2 = zdat[i];
+	    } else {
+	      Z2 = zdat[i+1];
+	    }
+            scale = (G4double)Z1/(G4double)Z2;
+	    break;
+	  }
+	}
+      }
+
       std::ostringstream ost;
       ost << fDataDirectory << "icru";
       if(isICRU90) { ost << "90"; }
       else { ost << "73"; }
-      ost << "/z" << Z << "_" << Z1 << ".dat"; 
+      ost << "/z" << Z << "_" << Z2 << ".dat"; 
       v = RetrieveVector(ost, false);
-      fElmData[Z][Z1] = v;
+      fElmData[Z][Z2] = v;
+      if(Z1 != Z2 && nullptr != v) {
+	fElmData[Z][Z1] = new G4PhysicsLogVector(*v);
+	fElmData[Z][Z1]->ScaleVector(1.0, scale);
+      }
     }
   }
   return v;
@@ -300,6 +397,7 @@ G4IonICRU73Data::RetrieveVector(std::ostringstream& ost, G4bool warn)
       G4cout << "File " << ost.str() 
              << " is opened by G4IonICRU73Data" << G4endl;
     }
+
     // retrieve data from DB
     if(!fVector->Retrieve(filein, true)) {
       G4ExceptionDescription ed;
@@ -311,14 +409,12 @@ G4IonICRU73Data::RetrieveVector(std::ostringstream& ost, G4bool warn)
       if(fSpline) { fVector->FillSecondDerivatives(); }
       v = new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
       for(G4int i=0; i<=fNbins; ++i) {
-	G4double e = v->Energy(i);
-	G4double dedx = fVector->Value(e);
-	v->PutValue(i, dedx);
+        G4double e = v->Energy(i);
+        G4double dedx = fVector->Value(e);
+        v->PutValue(i, dedx);
       }
-      const G4double fact = CLHEP::MeV * CLHEP::cm2 /( 0.001 * CLHEP::g); 
-      v->ScaleVector(CLHEP::MeV, fact);
       if(fSpline) { v->FillSecondDerivatives(); }
-      if(fVerbose > 1) { G4cout << *v << G4endl; }
+      if(fVerbose > 2) { G4cout << *v << G4endl; }
     }
   }
   return v;

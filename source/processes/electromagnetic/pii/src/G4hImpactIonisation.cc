@@ -247,12 +247,12 @@ void G4hImpactIonisation::BuildPhysicsTable(const G4ParticleDefinition& particle
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   cutForDelta.clear();
   cutForGamma.clear();
 
-  for (size_t j=0; j<numOfCouples; j++) {
+  for (G4int j=0; j<numOfCouples; ++j) {
 
     // get material parameters needed for the energy loss calculation
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
@@ -368,7 +368,7 @@ void G4hImpactIonisation::BuildLossTable(const G4ParticleDefinition& particleDef
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   if ( theLossTable) 
     {
@@ -379,7 +379,7 @@ void G4hImpactIonisation::BuildLossTable(const G4ParticleDefinition& particleDef
   theLossTable = new G4PhysicsTable(numOfCouples);
 
   //  loop for materials
-  for (size_t j=0; j<numOfCouples; j++) {
+  for (G4int j=0; j<numOfCouples; ++j) {
 
     // create physics vector and fill it
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
@@ -461,7 +461,7 @@ void G4hImpactIonisation::BuildLambdaTable(const G4ParticleDefinition& particleD
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
 
   if (theMeanFreePathTable) {
@@ -473,7 +473,7 @@ void G4hImpactIonisation::BuildLambdaTable(const G4ParticleDefinition& particleD
 
   // loop for materials
 
-  for (size_t j=0 ; j < numOfCouples; j++) {
+  for (G4int j=0 ; j < numOfCouples; ++j) {
 
     //create physics vector then fill it ....
     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
@@ -486,7 +486,7 @@ void G4hImpactIonisation::BuildLambdaTable(const G4ParticleDefinition& particleD
 
     const G4ElementVector* theElementVector =  material->GetElementVector() ;
     const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
-    const G4int numberOfElements = material->GetNumberOfElements() ;
+    const G4int numberOfElements = (G4int)material->GetNumberOfElements() ;
 
     // get the electron kinetic energy cut for the actual material,
     //  it will be used in ComputeMicroscopicCrossSection
@@ -1040,13 +1040,13 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 
   // fill aParticleChange
   G4double finalKineticEnergy = kineticEnergy - deltaKineticEnergy;
-  size_t totalNumber = 1;
+  std::size_t totalNumber = 1;
 
   // Atomic relaxation
 
   // ---- MGP ---- Temporary limitation: currently PIXE only for incident protons
 
-  size_t nSecondaries = 0;
+  std::size_t nSecondaries = 0;
   std::vector<G4DynamicParticle*>* secondaryVector = 0;
 
   if (definition == G4Proton::ProtonDefinition())
@@ -1127,7 +1127,7 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 	  if (secondaryVector != 0) 
 	    {
 	      nSecondaries = secondaryVector->size();
-	      for (size_t i = 0; i<nSecondaries; i++) 
+	      for (std::size_t i = 0; i<nSecondaries; i++) 
 		{
 		  G4DynamicParticle* aSecondary = (*secondaryVector)[i];
 		  if (aSecondary) 
@@ -1218,7 +1218,7 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 
   aParticleChange.ProposeEnergy(finalKineticEnergy);
   aParticleChange.ProposeLocalEnergyDeposit (eDeposit);
-  aParticleChange.SetNumberOfSecondaries(totalNumber);
+  aParticleChange.SetNumberOfSecondaries((G4int)totalNumber);
   aParticleChange.AddSecondary(deltaRay);
 
   // ---- Debug ----
@@ -1235,7 +1235,7 @@ G4VParticleChange* G4hImpactIonisation::PostStepDoIt(const G4Track& track,
 
   if (secondaryVector != 0) 
     { 
-      for (size_t l = 0; l < nSecondaries; l++) 
+      for (std::size_t l = 0; l < nSecondaries; l++) 
 	{ 
 	  G4DynamicParticle* secondary = (*secondaryVector)[l];
 	  if (secondary) aParticleChange.AddSecondary(secondary);
@@ -1371,7 +1371,7 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
   //G4double AMaterial = 0.0;
   G4double ZMaterial = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int numberOfElements = material->GetNumberOfElements();
+  G4int numberOfElements = (G4int)material->GetNumberOfElements();
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
@@ -1571,7 +1571,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 	      p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else
-	    p3 = G4Poisson(a3);
+	    p3 = (G4int)G4Poisson(a3);
 
 	  loss = p3*e0 ;
 
@@ -1590,7 +1590,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 	      p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else
-	    p3 = G4Poisson(a3);
+	    p3 = (G4int)G4Poisson(a3);
 
 	  if(p3 > 0)
 	    {
@@ -1599,7 +1599,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 		{
 		  dp3 = G4float(p3) ;
 		  corrfac = dp3/G4float(nmaxCont2) ;
-		  p3 = nmaxCont2 ;
+		  p3 = G4int(nmaxCont2) ;
 		}
 	      else
 		corrfac = 1. ;
@@ -1619,7 +1619,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 	  p1 = std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
 	}
       else
-	p1 = G4Poisson(a1);
+	p1 = (G4int)G4Poisson(a1);
 
       // excitation type 2
       if(a2>alim)
@@ -1628,7 +1628,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 	  p2 = std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
 	}
       else
-        p2 = G4Poisson(a2);
+        p2 = (G4int)G4Poisson(a2);
 
       loss = p1*e1Fluct+p2*e2Fluct;
 
@@ -1647,7 +1647,7 @@ G4double G4hImpactIonisation::ElectronicLossFluctuation(
 	      p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
 	    }
 	  else
-	    p3 = G4Poisson(a3);
+	    p3 = (G4int)G4Poisson(a3);
 
 	  lossc = 0.;
 	  if(p3 > 0)
@@ -1741,11 +1741,11 @@ void G4hImpactIonisation::PrintInfoDefinition() const
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   // loop for materials
 
-  for (size_t j=0 ; j < numOfCouples; j++) {
+  for (G4int j=0 ; j < numOfCouples; ++j) {
 
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
     const G4Material* material= couple->GetMaterial();

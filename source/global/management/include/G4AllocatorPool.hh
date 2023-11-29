@@ -49,7 +49,7 @@ class G4AllocatorPool
   ~G4AllocatorPool();
   // Destructor. Return storage to the free store
 
-  G4AllocatorPool(const G4AllocatorPool& right);
+  G4AllocatorPool(const G4AllocatorPool& right) = default;
   // Copy constructor
   G4AllocatorPool& operator=(const G4AllocatorPool& right);
   // Equality operator
@@ -82,7 +82,7 @@ class G4AllocatorPool
     explicit G4PoolChunk(unsigned int sz)
       : size(sz)
       , mem(new char[size])
-      , next(0)
+      , next(nullptr)
     {
       ;
     }
@@ -113,7 +113,7 @@ class G4AllocatorPool
 //
 inline void* G4AllocatorPool::Alloc()
 {
-  if(head == 0)
+  if(head == nullptr)
   {
     Grow();
   }
@@ -128,7 +128,7 @@ inline void* G4AllocatorPool::Alloc()
 //
 inline void G4AllocatorPool::Free(void* b)
 {
-  G4PoolLink* p = static_cast<G4PoolLink*>(b);
+  auto* p = static_cast<G4PoolLink*>(b);
   p->next       = head;  // put b back as first element
   head          = p;
 }
@@ -157,7 +157,7 @@ inline unsigned int G4AllocatorPool::GetPageSize() const { return csize; }
 //
 inline void G4AllocatorPool::GrowPageSize(unsigned int sz)
 {
-  csize = (sz) ? sz * csize : csize;
+  csize = (sz) != 0u ? sz * csize : csize;
 }
 
 #endif

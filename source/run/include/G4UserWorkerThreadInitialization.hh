@@ -50,37 +50,36 @@ class G4WorkerRunManager;
 class G4UserWorkerThreadInitialization
 {
   public:
+    G4UserWorkerThreadInitialization() = default;
+    virtual ~G4UserWorkerThreadInitialization() = default;
 
-    G4UserWorkerThreadInitialization();
-    virtual ~G4UserWorkerThreadInitialization();
-
+    // Called by the kernel to create a new thread/worker and start work.
+    // User should not re-implement this function (in derived class), except
+    // only if he/she wants to rewrite the default threading model (see
+    // StartThread() function).
     virtual G4Thread* CreateAndStartWorker(G4WorkerThread* workerThreadContext);
-      // Called by the kernel to create a new thread/worker and start work.
-      // User should not re-implement this function (in derived class), except
-      // only if he/she wants to rewrite the default threading model (see
-      // StartThread() function).
 
+    // Called by worker threads to set the Random Number Generator Engine.
+    // The default implementation "clones" the engine from the master thread
+    // User needs to re-implement this method if using a non-standard
+    // RNG Engine (i.e. a different one w.r.t. the one provided in the CLHEP
+    // version supported by Geant4).
+    // Important: this method is called by all threads at the same time;
+    // it is user responsibilitiy to make it thread-safe.
     virtual void SetupRNGEngine(const CLHEP::HepRandomEngine* aRNGEngine) const;
-      // Called by worker threads to set the Random Number Generator Engine.
-      // The default implementation "clones" the engine from the master thread
-      // User needs to re-implement this method if using a non-standard
-      // RNG Engine (i.e. a different one w.r.t. the one provided in the CLHEP
-      // version supported by Geant4).
-      // Important: this method is called by all threads at the same time;
-      // it is user responsibilitiy to make it thread-safe.
 
+    // Called by the kernel when threads need to be terminated. Implements
+    // logic of joining the "aThread". Calling thread will wait for "aThread"
+    // to end. Users should not re-implement this function (in derived class),
+    // except only if he/she wants to rewrite the default threading model (see
+    // StartThread() function).
     virtual void JoinWorker(G4Thread* aThread);
-      // Called by the kernel when threads need to be terminated. Implements
-      // logic of joining the "aThread". Calling thread will wait for "aThread"
-      // to end. Users should not re-implement this function (in derived class),
-      // except only if he/she wants to rewrite the default threading model (see
-      // StartThread() function).
 
+    // Called by StartThread() function to create a run-manager implementing
+    // worker behvior. User should re-implement this function in a derived
+    // class to instantiate his/her user-defined WorkerRunManager.
+    // By default this method instantiates a G4WorkerRunManager object.
     virtual G4WorkerRunManager* CreateWorkerRunManager() const;
-      // Called by StartThread() function to create a run-manager implementing
-      // worker behvior. User should re-implement this function in a derived
-      // class to instantiate his/her user-defined WorkerRunManager.
-      // By default this method instantiates a G4WorkerRunManager object.
 };
 
 #endif

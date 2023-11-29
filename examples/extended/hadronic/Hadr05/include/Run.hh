@@ -54,8 +54,8 @@ class Run : public G4Run
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void CountProcesses(const G4VProcess* process);      
-    void FillPerEvent(G4int,G4double,G4double);    
-    void AddEnergyLeak (G4double eleak, G4int index);       
+    void SumEdepPerAbsorber(G4int,G4double,G4double);    
+    void SumEnergies (G4double edeptot, G4double eleak0, G4double eleak1);       
     void SumEnergyFlow (G4int plane, G4double Eflow);
                 
     void Merge(const G4Run*) override;
@@ -69,7 +69,12 @@ class Run : public G4Run
     G4double fSumEAbs [kMaxAbsor], fSum2EAbs [kMaxAbsor]; 
     G4double fSumLAbs [kMaxAbsor], fSum2LAbs [kMaxAbsor];
     
+    G4double fEdepTot, fEdepTot2;
+    
     G4double fEnergyLeak[2];
+    G4double fEleakTot, fEleakTot2;
+    
+    G4double fEtotal, fEtotal2;
     
     std::map<G4String,G4int> fProcCounter;            
     std::vector<G4double>    fEnergyFlow;

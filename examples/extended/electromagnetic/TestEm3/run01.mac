@@ -4,26 +4,30 @@
 #
 # Lead-liquidArgon 50 layers; electron 1 GeV
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 #
 /testem/phys/addPhysics  local
+###/testem/phys/addPhysics  emstandard_opt0
 #
-/run/setCut 100 um
+###/run/setCut 100 um
 #
+/process/em/verbose 0
 /run/initialize
 #
 /gun/particle e-
 /gun/energy 1 GeV
 #
 /analysis/setFileName run01
-/analysis/h1/set 1 100 700. 1000. MeV
-/analysis/h1/set 2 100   0.  300. MeV
+/analysis/h1/set 1 100 700. 1000. MeV   #edep in absor1
+/analysis/h1/set 2 100   0.  300. MeV   #edep in absor2
+/analysis/h1/set 10 110 900. 1010. MeV	#total edep
 /analysis/h1/set 11 52   0.   52.  none	#long. profile in absor1
 /analysis/h1/set 12 52   0.   52.  none	#long. profile in absor2
 /analysis/h1/set 21 102  0.   102. none	#energy flow
 /analysis/h1/set 22 102  0.   102. none	#lateral energy leakage
+/analysis/h1/set 23 100 0.     50. MeV	#eleak
+/analysis/h1/set 24 110 900. 1010. MeV	#total energy: edep + eleak
 #
-/run/printProgress 100
-#
-/run/beamOn 1000
+/run/printProgress 200
+/run/beamOn 2000

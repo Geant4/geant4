@@ -35,7 +35,7 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 #include <memory>
 #include <string_view>
@@ -51,7 +51,7 @@ class G4XmlAnalysisReader : public G4ToolsAnalysisReader
   friend class G4ThreadLocalSingleton<G4XmlAnalysisReader>;
 
   public:
-    virtual ~G4XmlAnalysisReader();
+    ~G4XmlAnalysisReader() override;
 
     // Static methods
     static G4XmlAnalysisReader* Instance();
@@ -65,7 +65,7 @@ class G4XmlAnalysisReader : public G4ToolsAnalysisReader
     G4XmlAnalysisReader();
 
     // Virtual methods from base class
-    virtual G4bool CloseFilesImpl(G4bool reset) final;
+    G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
     // Static data members

@@ -1,0 +1,14 @@
+/control/verbose 1
+/process/had/verbose 0
+/process/em/verbose 0
+
+/allXS/outputFileName all_XS
+/allXS/particleName neutron
+/allXS/elementName Pb
+#/allXS/nonElementaryMaterialName WATER
+/allXS/numBins 1000
+/allXS/minKineticEnergy 1. keV
+/allXS/maxKineticEnergy 10. TeV
+
+/run/initialize
+/run/beamOn 0

@@ -365,7 +365,6 @@ bool CML2Acc2::vacuumWindow()
 bool CML2Acc2::flatteningFilter()
 {
 	G4String iName;
-	char a[10];
 	bool bCreated = false;
 	switch (idEnergy)
 	{
@@ -403,8 +402,7 @@ bool CML2Acc2::flatteningFilter()
 
 		for (i = 0 ; i < 19; i++)
 		{
-			sprintf(a,"%d", i);
-			iName = (G4String)a;
+      iName = std::to_string(i);
 			halfHeigth = (yHeight[i]-yHeight[i+1])/2. ;
 			if (i == 18)
 			{
@@ -438,8 +436,7 @@ bool CML2Acc2::flatteningFilter()
 		rMinInf = 0.;
 		rMinSup = 0.;
 		centre.set(0.,0., distanceLast+halfHeigth);
-		sprintf(a,"%d", i);
-		iName = (G4String)a;
+		iName = std::to_string(i);
 		name = "ffConeG"+iName;
 		cone = new G4Cons(name, rMinInf, rMaxInf, rMinSup, rMaxSup, halfHeigth, angleStart, angleStop);
 		name = "ffConeLV"+iName;
@@ -461,8 +458,7 @@ bool CML2Acc2::flatteningFilter()
 		rMinInf = xRadius[20];
 		rMinSup = xRadius[19];
 		centre.set(0.,0., distanceLast-halfHeigth);
-		sprintf(a,"%d", ++i);
-		iName = (G4String)a;
+		iName = std::to_string(++i);
 		name = "ffConeG"+iName;
 		cone = new G4Cons(name, rMinInf, rMaxInf, rMinSup, rMaxSup, halfHeigth, angleStart, angleStop);
 		name = "ffConeLV"+iName;
@@ -521,8 +517,7 @@ bool CML2Acc2::flatteningFilter()
 
 			for (i=0;i<18;i++)
 			{
-				sprintf(a,"%d", i);
-				iName = (G4String)a;
+				iName = std::to_string(i);
 				halfHeigth = (yHeight[i]-yHeight[i+1])/2. ;
 				if (i == 17)
 				{
@@ -555,8 +550,7 @@ bool CML2Acc2::flatteningFilter()
 			rMinInf = 0.;
 			rMinSup = 0.;
 			centre.set(0.,0., distanceLast+halfHeigth);
-			sprintf(a,"%d", i);
-			iName = (G4String)a;
+			iName = std::to_string(i);
 			name = "ffConeG"+iName;
 			cone = new G4Cons(name, rMinInf, rMaxInf, rMinSup, rMaxSup, halfHeigth, angleStart, angleStop);
 			name = "ffConeLV"+iName;
@@ -578,8 +572,7 @@ bool CML2Acc2::flatteningFilter()
 			rMinInf = xRadius[19];
 			rMinSup = xRadius[18];
 			centre.set(0.,0., distanceLast-halfHeigth);
-			sprintf(a,"%d", ++i);
-			iName = (G4String)a;
+			iName = std::to_string(++i);
 			name = "ffConeG"+iName;
 			cone = new G4Cons(name, rMinInf, rMaxInf, rMinSup, rMaxSup, halfHeigth, angleStart, angleStop);
 			name = "ffConeLV"+iName;
@@ -854,7 +847,6 @@ bool CML2Acc2::Jaw2Y()
 bool CML2Acc2::MLC()
 {
 	G4String iName;
-	char a[12]; 
 	bool bCreated = false;
 	//    material
 	G4Material *W = G4NistManager::Instance()->FindOrBuildMaterial("G4_W");
@@ -919,33 +911,27 @@ bool CML2Acc2::MLC()
 	G4String PVname;
 //	G4VPhysicalVolume *leafPhys;
 	int i;
-	int j = 0;
 
 	G4ThreeVector centre;
 	centre= centreStart + G4ThreeVector(-38.*halfSize.getX(), 0.,0.);
 
 	for (i = 1; i < (int)vec_leavesA.size(); i++)
 	{
-		sprintf(a,"%d", i);
-		iName = (G4String)a;
+		iName = std::to_string(i);
 		PVname = "leafA"+iName;
 		centre.setX(centre.getX()+halfSize.getX()*2.);
 		centre.setY(-halfSize.getY()-vec_leavesA[i]);
 		new G4PVPlacement(0, centre, PVname, leafLVA, PVWorld, false, i);
-		j++;
 	}
 	centre=centreStart+G4ThreeVector(-38.*halfSize.getX(), 0.,0.);
 	for (i = 1; i < (int)vec_leavesB.size(); i++)
 	{
-		sprintf(a,"%d", i);
-		iName = (G4String)a;
+		iName = std::to_string(i);
 		PVname = "leafB"+iName;
 		centre.setX(centre.getX()+halfSize.getX()*2.);
 		centre.setY(+halfSize.getY()+vec_leavesB[i]);
 		new G4PVPlacement(0, centre, PVname, leafLVB, PVWorld, false, i);
-		j++;
 	}
 	bCreated = true;
 	return bCreated;
 }
-

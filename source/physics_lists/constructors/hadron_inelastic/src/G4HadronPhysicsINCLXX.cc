@@ -31,6 +31,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 11.11.2022 A.Ribon: Extended to light hypernuclei and anti-hypernuclei projectiles
 // 07.05.2020 A.Ribon: Use eventually QGSP for hyperons (and anti-hyperons)
 //                     at high energies
 // 05.05.2020 A.Ribon: Use eventually QGSP for antibaryons at high energies
@@ -285,6 +286,17 @@ void G4HadronPhysicsINCLXX::Others()
     // anti light ions
     G4HadronicBuilder::BuildAntiLightIonsFTFP();
 
+    if ( param->EnableHyperNuclei() ) {
+      // INCLXX is currently capable of handling light hypernuclei projectiles,
+      // but not light anti-hypernuclei projectiles, therefore FTFP must be used
+      // for the latter.
+      // Note that the QGSP string model cannot currently handle nuclear projectiles
+      // of any kind, so only the FTFP string model can be used together with INCLXX
+      // for the simulation of nuclear interactions light hypernuclei.
+      G4HadronicBuilder::BuildHyperAntiNucleiFTFP_BERT();
+      G4HadronicBuilder::BuildHyperNucleiFTFP_INCLXX();
+    }
+
     if(withFTFP) {
       // hyperons
       G4HadronicBuilder::BuildHyperonsFTFP_BERT();
@@ -300,7 +312,7 @@ void G4HadronPhysicsINCLXX::Others()
       // b-, c- baryons and mesons
       if( param->EnableBCParticles() ) {
 	G4HadronicBuilder::BuildBCHadronsQGSP_FTFP_BERT(true);
-      }    
+      }
     }
   }
 }

@@ -75,112 +75,104 @@
 
 G4MIRDBodyFactory::G4MIRDBodyFactory()
 {
-  // Map with name of the organ and pointer to the MIRDOrgan class
-  //  organ["ParameterisedRightBreast"] = new G4ParameterisedRightBreast();
-  //organ["ParameterisedLeftBreast"] = new G4ParameterisedLeftBreast();
-  organ["Head"] = new G4MIRDHead();
-  organ["Trunk"] = new G4MIRDTrunk(); 
-  organ["LeftLeg"] = new G4MIRDLeftLeg();
-  organ["RightLeg"] = new G4MIRDRightLeg();
-
-  organ["Skull"] = new G4MIRDSkull();
-  organ["LeftArmBone"] = new G4MIRDLeftArmBone();
-  organ["RightArmBone"] = new G4MIRDRightArmBone();
-  organ["UpperSpine"] = new G4MIRDUpperSpine();
-  organ["MiddleLowerSpine"] = new G4MIRDMiddleLowerSpine();
-  organ["Pelvis"]= new G4MIRDPelvis();
-  organ["RibCage"] = new G4MIRDRibCage(); 
-  organ["LeftClavicle"]= new G4MIRDLeftClavicle();
-  organ["RightClavicle"] = new G4MIRDRightClavicle();
-  organ["LeftLegBone"] = new G4MIRDLeftLegBone();
-  organ["RightLegBone"] = new G4MIRDRightLegBone();
-  organ["LeftScapula"]= new G4MIRDLeftScapula(); 
-  organ["RightScapula"]= new G4MIRDRightScapula(); 
-
-  organ["Heart"] = new G4MIRDHeart();
-  organ["Thyroid"] = new G4MIRDThyroid(); 
-  organ["Thymus"] = new G4MIRDThymus(); 
-  organ["MaleGenitalia"] = new G4MIRDMaleGenitalia(); 
-  organ["Brain"] = new G4MIRDBrain(); 
-  organ["Stomach"] = new G4MIRDStomach();
-  organ["UpperLargeIntestine"] = new G4MIRDUpperLargeIntestine();
-  organ["LowerLargeIntestine"] = new G4MIRDLowerLargeIntestine();
-  organ["SmallIntestine"] = new G4MIRDSmallIntestine();
-  organ["Spleen"] = new G4MIRDSpleen(); 
-  organ["Pancreas"] = new G4MIRDPancreas();
-  organ["LeftKidney"] = new G4MIRDLeftKidney();
-  organ["RightKidney"] = new G4MIRDRightKidney();
-  organ["UrinaryBladder"] = new G4MIRDUrinaryBladder();
-  organ["Uterus"] = new G4MIRDUterus(); 
-  organ["Liver"] = new G4MIRDLiver(); 
-  organ["LeftLung"]= new G4MIRDLeftLung();
-  organ["RightLung"] = new G4MIRDRightLung();
-  organ["LeftOvary"] = new G4MIRDLeftOvary();
-  organ["RightOvary"] = new G4MIRDRightOvary();
-  organ["LeftTeste"] = new G4MIRDLeftTeste();
-  organ["RightTeste"] = new G4MIRDRightTeste();
-  organ["RightBreast"] = new G4MIRDRightBreast();
-  organ["LeftBreast"] = new G4MIRDLeftBreast();
-  organ["LeftAdrenal"]= new G4MIRDLeftAdrenal();  
-  organ["RightAdrenal"]= new G4MIRDRightAdrenal(); 
+  // Map with name of the fOrgan and pointer to the MIRDOrgan class
+  fOrgan["Head"] = new G4MIRDHead();
+  fOrgan["Trunk"] = new G4MIRDTrunk(); 
+  fOrgan["LeftLeg"] = new G4MIRDLeftLeg();
+  fOrgan["RightLeg"] = new G4MIRDRightLeg();
+  fOrgan["Skull"] = new G4MIRDSkull();
+  fOrgan["LeftArmBone"] = new G4MIRDLeftArmBone();
+  fOrgan["RightArmBone"] = new G4MIRDRightArmBone();
+  fOrgan["UpperSpine"] = new G4MIRDUpperSpine();
+  fOrgan["MiddleLowerSpine"] = new G4MIRDMiddleLowerSpine();
+  fOrgan["Pelvis"]= new G4MIRDPelvis();
+  fOrgan["RibCage"] = new G4MIRDRibCage(); 
+  fOrgan["LeftClavicle"]= new G4MIRDLeftClavicle();
+  fOrgan["RightClavicle"] = new G4MIRDRightClavicle();
+  fOrgan["LeftLegBone"] = new G4MIRDLeftLegBone();
+  fOrgan["RightLegBone"] = new G4MIRDRightLegBone();
+  fOrgan["LeftScapula"]= new G4MIRDLeftScapula(); 
+  fOrgan["RightScapula"]= new G4MIRDRightScapula(); 
+  fOrgan["Heart"] = new G4MIRDHeart();
+  fOrgan["Thyroid"] = new G4MIRDThyroid(); 
+  fOrgan["Thymus"] = new G4MIRDThymus(); 
+  fOrgan["MaleGenitalia"] = new G4MIRDMaleGenitalia(); 
+  fOrgan["Brain"] = new G4MIRDBrain(); 
+  fOrgan["Stomach"] = new G4MIRDStomach();
+  fOrgan["UpperLargeIntestine"] = new G4MIRDUpperLargeIntestine();
+  fOrgan["LowerLargeIntestine"] = new G4MIRDLowerLargeIntestine();
+  fOrgan["SmallIntestine"] = new G4MIRDSmallIntestine();
+  fOrgan["Spleen"] = new G4MIRDSpleen(); 
+  fOrgan["Pancreas"] = new G4MIRDPancreas();
+  fOrgan["LeftKidney"] = new G4MIRDLeftKidney();
+  fOrgan["RightKidney"] = new G4MIRDRightKidney();
+  fOrgan["UrinaryBladder"] = new G4MIRDUrinaryBladder();
+  fOrgan["Uterus"] = new G4MIRDUterus(); 
+  fOrgan["Liver"] = new G4MIRDLiver(); 
+  fOrgan["LeftLung"]= new G4MIRDLeftLung();
+  fOrgan["RightLung"] = new G4MIRDRightLung();
+  fOrgan["LeftOvary"] = new G4MIRDLeftOvary();
+  fOrgan["RightOvary"] = new G4MIRDRightOvary();
+  fOrgan["LeftTeste"] = new G4MIRDLeftTeste();
+  fOrgan["RightTeste"] = new G4MIRDRightTeste();
+  fOrgan["RightBreast"] = new G4MIRDRightBreast();
+  fOrgan["LeftBreast"] = new G4MIRDLeftBreast();
+  fOrgan["LeftAdrenal"]= new G4MIRDLeftAdrenal();  
+  fOrgan["RightAdrenal"]= new G4MIRDRightAdrenal(); 
 }
 
 G4MIRDBodyFactory::~G4MIRDBodyFactory()
 {
-  delete organ["Head"]; organ["Head"]=0;
-  delete organ["RightLeg"]; organ["RightLeg"]=0;
-  delete organ["LeftLeg"]; organ["LeftLeg"]=0;
-  delete organ["Trunk"]; organ["Trunk"]=0;
-
-  delete organ["RightScapula"];organ["RightScapula"] =0;
-  delete organ["LeftScapula"];organ["LeftScapula"] =0;
-  delete organ["RightLegBone"]; organ["RightLegBone"]=0;
-  delete organ["LeftLegBone"]; organ["LeftLegBone"]=0;
-  delete organ["RibCage"]; organ["RibCage"] =0;  
-  delete organ["MiddleLowerSpine"]; organ["MidlleLowerSpine"]=0;
-  delete organ["UpperSpine"]; organ["UpperSpine"]=0;
-  delete organ["Skull"]; organ["Skull"] =0;
-  delete organ["RightArmBone"]; organ["RightArmBone"] =0;
-  delete organ["LeftArmBone"]; organ["LeftArmBone"] =0;
-  delete organ["RightClavicle"]; organ["RightClavicle"]=0;
-  delete organ["LeftClavicle"]; organ["LeftClavicle"]=0;
-  delete organ["Pelvis"]; organ["Pelvis"] =0;  
-
-  delete organ["RightAdrenal"]; organ["RightAdrenal"]=0;
-  delete organ["LeftAdrenal"]; organ["LeftAdrenal"]=0;
-  delete organ["LeftBreast"]; organ["LeftBreast"]=0;
-  delete organ["RightBreast"]; organ["RightBreast"]=0;
-  delete organ["RightOvary"]; organ["RightOvary"]=0;
-  delete organ["LeftOvary"]; organ["LeftOvary"]=0;
-  delete organ["RightTeste"]; organ["RightTeste"]=0;
-  delete organ["LeftTeste"]; organ["LeftTeste"]=0;
-  delete organ["RightLung"]; organ["RightLung"] =0;
-  delete organ["LeftLung"]; organ["LeftLung"]=0;
-  delete organ["Uterus"]; organ["Uterus"]=0;
-  delete organ["UrinaryBladder"]; organ["UrinaryBladder"]=0;
-  delete organ["RightKidney"]; organ["RightKidney"] =0;  
-  delete organ["LeftKidney"]; organ["LeftKidney"] =0; 
-  delete organ["Pancreas"]; organ["Pancreas"] =0;  
-  delete organ["Spleen"]; organ["Spleen"] =0; 
-  delete organ["LowerLargeIntestine"]; organ["LowerLargeIntestine"] =0; 
-  delete organ["SmallIntestine"]; organ["SmallIntestine"] =0; 
-  delete organ["UpperLargeIntestine"]; organ["UpperLargeIntestine"] =0; 
-  delete organ["Stomach"]; organ["Stomach"] =0;  
-  delete organ["Brain"]; organ["Brain"]=0;
-  delete organ["Heart"]; organ["Heart"]=0;
-  delete organ["Thymus"]; organ["Thymus"]=0;
-  delete organ["MaleGenitalia"]; organ["MaleGenitalia"]=0;
-  delete organ["Thyroid"]; organ["Thyroid"]=0;
-  delete organ["Liver"]; organ["Liver"]=0;
+  delete fOrgan["Head"]; fOrgan["Head"]=nullptr;
+  delete fOrgan["RightLeg"]; fOrgan["RightLeg"]=nullptr;
+  delete fOrgan["LeftLeg"]; fOrgan["LeftLeg"]=nullptr;
+  delete fOrgan["Trunk"]; fOrgan["Trunk"]=nullptr;
+  delete fOrgan["RightScapula"];fOrgan["RightScapula"]=nullptr;
+  delete fOrgan["LeftScapula"];fOrgan["LeftScapula"]=nullptr;
+  delete fOrgan["RightLegBone"]; fOrgan["RightLegBone"]=nullptr;
+  delete fOrgan["LeftLegBone"]; fOrgan["LeftLegBone"]=nullptr;
+  delete fOrgan["RibCage"]; fOrgan["RibCage"] =nullptr;  
+  delete fOrgan["MiddleLowerSpine"]; fOrgan["MidlleLowerSpine"]=nullptr;
+  delete fOrgan["UpperSpine"]; fOrgan["UpperSpine"]=nullptr;
+  delete fOrgan["Skull"]; fOrgan["Skull"]=nullptr;
+  delete fOrgan["RightArmBone"]; fOrgan["RightArmBone"]=nullptr;
+  delete fOrgan["LeftArmBone"]; fOrgan["LeftArmBone"]=nullptr;
+  delete fOrgan["RightClavicle"]; fOrgan["RightClavicle"]=nullptr;
+  delete fOrgan["LeftClavicle"]; fOrgan["LeftClavicle"]=nullptr;
+  delete fOrgan["Pelvis"]; fOrgan["Pelvis"]=nullptr;  
+  delete fOrgan["RightAdrenal"]; fOrgan["RightAdrenal"]=nullptr;
+  delete fOrgan["LeftAdrenal"]; fOrgan["LeftAdrenal"]=nullptr;
+  delete fOrgan["LeftBreast"]; fOrgan["LeftBreast"]=nullptr;
+  delete fOrgan["RightBreast"]; fOrgan["RightBreast"]=nullptr;
+  delete fOrgan["RightOvary"]; fOrgan["RightOvary"]=nullptr;
+  delete fOrgan["LeftOvary"]; fOrgan["LeftOvary"]=nullptr;
+  delete fOrgan["RightTeste"]; fOrgan["RightTeste"]=nullptr;
+  delete fOrgan["LeftTeste"]; fOrgan["LeftTeste"]=nullptr;
+  delete fOrgan["RightLung"]; fOrgan["RightLung"] =nullptr;
+  delete fOrgan["LeftLung"]; fOrgan["LeftLung"]=nullptr;
+  delete fOrgan["Uterus"]; fOrgan["Uterus"]=nullptr;
+  delete fOrgan["UrinaryBladder"]; fOrgan["UrinaryBladder"]=nullptr;
+  delete fOrgan["RightKidney"]; fOrgan["RightKidney"]=nullptr;  
+  delete fOrgan["LeftKidney"]; fOrgan["LeftKidney"]=nullptr; 
+  delete fOrgan["Pancreas"]; fOrgan["Pancreas"]=nullptr;  
+  delete fOrgan["Spleen"]; fOrgan["Spleen"]=nullptr; 
+  delete fOrgan["LowerLargeIntestine"]; fOrgan["LowerLargeIntestine"]=nullptr; 
+  delete fOrgan["SmallIntestine"]; fOrgan["SmallIntestine"]=nullptr; 
+  delete fOrgan["UpperLargeIntestine"]; fOrgan["UpperLargeIntestine"]=nullptr; 
+  delete fOrgan["Stomach"]; fOrgan["Stomach"]=nullptr;  
+  delete fOrgan["Brain"]; fOrgan["Brain"]=nullptr;
+  delete fOrgan["Heart"]; fOrgan["Heart"]=nullptr;
+  delete fOrgan["Thymus"]; fOrgan["Thymus"]=nullptr;
+  delete fOrgan["MaleGenitalia"]; fOrgan["MaleGenitalia"]=nullptr;
+  delete fOrgan["Thyroid"]; fOrgan["Thyroid"]=nullptr;
+  delete fOrgan["Liver"]; fOrgan["Liver"]=nullptr;
 }
-
-
 
 G4VPhysicalVolume* G4MIRDBodyFactory::CreateOrgan(const G4String& organ_name,G4VPhysicalVolume* motherVolume,
 						  const G4String& colourName, G4bool visAttribute,
 						  G4bool sensitivity)
 {
-  return organ[organ_name]->Construct(organ_name,motherVolume,colourName, visAttribute, sensitivity);
+  return fOrgan[organ_name]->Construct(organ_name,motherVolume,colourName, visAttribute, sensitivity);
 }
 
 

@@ -118,13 +118,14 @@ void checkVol(G4LogicalVolume* _lvol, G4int level)
 {
   G4LogicalVolume* _ldvol;
   G4VPhysicalVolume* _pdvol;
-  level++;
+  ++level;
   
-  G4int ndau = _lvol -> GetNoDaughters();
+  std::size_t ndau = _lvol -> GetNoDaughters();
   
   G4cout << "G44LogicalVolume " << _lvol->GetName() << " at level " << level
 	 << " contains " << ndau << " daughters." << G4endl;
-  for (G4int idau=0; idau<ndau; idau++){
+  for (std::size_t idau=0; idau<ndau; ++idau)
+  {
     _pdvol = _lvol-> GetDaughter(idau);
     _ldvol = _pdvol -> GetLogicalVolume();
     G4cout << "G4VPhysical volume " << std::setw(5) << _pdvol -> GetName() 

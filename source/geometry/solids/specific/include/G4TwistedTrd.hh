@@ -27,9 +27,9 @@
 //
 // Class description:
 //
-//  A G4TwistedTrd is a twisted trapezoid with the x and y dimensions 
-//  varying along z 
-// 
+//  A G4TwistedTrd is a twisted trapezoid with the x and y dimensions
+//  varying along z
+//
 //
 //   Member Data:
 //
@@ -49,17 +49,17 @@
 
 class G4TwistedTrd : public G4VTwistedFaceted
 {
-  public:  // with description
+  public:
 
     G4TwistedTrd( const G4String& pName,
                         G4double  pDx1,
                         G4double  pDx2,
-                        G4double  pDy1, 
+                        G4double  pDy1,
                         G4double  pDy2,
                         G4double  pDz,
                         G4double  pPhiTwist );
 
-    virtual ~G4TwistedTrd();
+    ~G4TwistedTrd() override;
 
     // accessors
 
@@ -70,13 +70,14 @@ class G4TwistedTrd : public G4VTwistedFaceted
     inline G4double GetZHalfLength()  const { return GetDz()  ; }
     inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-    std::ostream&  StreamInfo(std::ostream& os) const;
+    G4VSolid* Clone() const override;
 
-  public:  // without description
+    std::ostream&  StreamInfo(std::ostream& os) const override;
 
     G4TwistedTrd(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -84,7 +85,7 @@ class G4TwistedTrd : public G4VTwistedFaceted
       // persistifiable objects.
 
     G4TwistedTrd(const G4TwistedTrd& rhs);
-    G4TwistedTrd& operator=(const G4TwistedTrd& rhs); 
+    G4TwistedTrd& operator=(const G4TwistedTrd& rhs);
       // Copy constructor and assignment operator.
 
 } ;

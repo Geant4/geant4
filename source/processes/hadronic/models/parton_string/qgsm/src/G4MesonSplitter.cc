@@ -26,17 +26,16 @@
 #include "G4MesonSplitter.hh"
 #include "Randomize.hh"
 
-G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
+G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int& aEnd, G4int& bEnd)
 {
-  G4bool result = true;
   G4int absPDGcode = std::abs(PDGcode);
   if (absPDGcode >= 1000) return false;
-  if(absPDGcode == 22)                   // For gamma -> 4 (u ubar) + 1 (d dbar)
+  if (absPDGcode == 22)  // For gamma -> 4 (u ubar) + 1 (d dbar)
   {
     G4int it=1;
     if(G4UniformRand()<0.8) it++;
-    *aEnd = it;
-    *bEnd = -it;
+    aEnd = it;
+    bEnd = -it;
   }
   else
   {
@@ -47,8 +46,8 @@ G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
     heavy *=  anti;
     light *= -anti;
     if ( anti < 0) G4SwapObj(&heavy, &light);
-    *aEnd = heavy;
-    *bEnd = light;
+    aEnd = heavy;
+    bEnd = light;
   }
-  return result;
+  return true;
 }

@@ -41,6 +41,7 @@
 enum G4HadronicProcessType
 {
   fHadronElastic =    111,
+  fNeutronGeneral =   116,
   fHadronInelastic =  121,
   fCapture =          131,
   fMuAtomicCapture =  132,

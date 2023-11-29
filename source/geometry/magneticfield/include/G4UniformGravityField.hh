@@ -43,7 +43,7 @@
 
 class G4UniformGravityField : public G4Field
 {
-  public:  // with description
+  public:
 
     G4UniformGravityField(const G4ThreeVector& FieldVector );
       // A field with value equal to FieldVector.
@@ -51,18 +51,18 @@ class G4UniformGravityField : public G4Field
     G4UniformGravityField(const G4double gy = -9.81*CLHEP::m/CLHEP::s/CLHEP::s);
       // Standard Gravitational field on earth's surface
 
-    virtual ~G4UniformGravityField();
+   ~G4UniformGravityField() override;
 
     G4UniformGravityField(const G4UniformGravityField& p);
     G4UniformGravityField& operator=(const G4UniformGravityField& p);
       // Copy constructor and assignment operator
 
-    inline G4bool DoesFieldChangeEnergy() const { return true; }
+    inline G4bool DoesFieldChangeEnergy() const override { return true; }
       // Since a gravitational field can change track energy
 
-    virtual void GetFieldValue(const G4double Point[4], G4double* field) const;
+    void GetFieldValue(const G4double Point[4], G4double* field) const override;
     
-    virtual G4Field* Clone() const;
+    G4Field* Clone() const override;
 
   private:
 

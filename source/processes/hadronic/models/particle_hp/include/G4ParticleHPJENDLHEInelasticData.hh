@@ -39,8 +39,8 @@
 
 class G4ParticleHPJENDLHEInelasticData : public G4ParticleHPJENDLHEData
 {
-   public:
-      G4ParticleHPJENDLHEInelasticData();
+  public:
+    G4ParticleHPJENDLHEInelasticData();
 };
 
 #endif

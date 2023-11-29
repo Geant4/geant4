@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file Run.cc
+/// \file B3/B3b/src/Run.cc
 /// \brief Implementation of the B3b::Run class
 
 #include "Run.hh"
@@ -39,16 +39,6 @@
 
 namespace B3b
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::Run()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,8 +72,7 @@ void Run::RecordEvent(const G4Event* event)
   const G4double eThreshold = 500*keV;
   G4int nbOfFired = 0;
 
-  G4THitsMap<G4double>* evtMap =
-    static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_cryst));
+  auto evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_cryst));
 
   std::map<G4int,G4double*>::iterator itr;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {

@@ -49,7 +49,7 @@ G4GammaXTRadiator::G4GammaXTRadiator(G4LogicalVolume* anEnvelope,
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4GammaXTRadiator::~G4GammaXTRadiator() {}
+G4GammaXTRadiator::~G4GammaXTRadiator() = default;
 
 void G4GammaXTRadiator::ProcessDescription(std::ostream& out) const
 {

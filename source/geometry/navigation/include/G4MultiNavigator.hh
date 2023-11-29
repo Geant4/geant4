@@ -60,13 +60,13 @@ class G4MultiNavigator : public G4Navigator
   G4MultiNavigator();
     // Constructor - initialisers and setup.
 
-  ~G4MultiNavigator();
+  ~G4MultiNavigator() override;
     // Destructor. No actions.
 
   G4double ComputeStep( const G4ThreeVector& pGlobalPoint,
                         const G4ThreeVector& pDirection,
                         const G4double       pCurrentProposedStepLength,
-                              G4double&      pNewSafety );
+                              G4double&      pNewSafety ) override;
     // Return the distance to the next boundary of any geometry
 
   G4double ObtainFinalStep( G4int        navigatorId, 
@@ -77,13 +77,13 @@ class G4MultiNavigator : public G4Navigator
 
   void PrepareNavigators(); 
     // Find which geometries are registered for this particles, and keep info
-  void PrepareNewTrack( const G4ThreeVector position, 
+  void PrepareNewTrack( const G4ThreeVector& position, 
                         const G4ThreeVector direction ); 
     // Prepare Navigators and locate 
 
   G4VPhysicalVolume* ResetHierarchyAndLocate( const G4ThreeVector& point,
-                                              const G4ThreeVector& direction,
-                                              const G4TouchableHistory& h );
+                                   const G4ThreeVector& direction,
+                                   const G4TouchableHistory& h ) override;
     // Reset the geometrical hierarchy for all geometries.
     // Use the touchable history for the first (mass) geometry.
     // Return the volume in the first (mass) geometry.
@@ -91,35 +91,35 @@ class G4MultiNavigator : public G4Navigator
     // Important Note: In order to call this the geometries MUST be closed.
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup( const G4ThreeVector& point,
-                                     const G4ThreeVector* direction = nullptr,
-                                     const G4bool pRelativeSearch = true,
-                                     const G4bool ignoreDirection = true);
+                                   const G4ThreeVector* direction = nullptr,
+                                   const G4bool pRelativeSearch = true,
+                                   const G4bool ignoreDirection = true) override;
     // Locate in all geometries.
     // Return the volume in the first (mass) geometry
     //  Maintain vector of other volumes,  to be returned separately
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume( const G4ThreeVector& position ); 
+  void LocateGlobalPointWithinVolume( const G4ThreeVector& position ) override; 
     // Relocate in all geometries for point that has not changed volume
     // (ie is within safety  in all geometries or is distance less that 
     // along the direction of a computed step.
 
   G4double ComputeSafety( const G4ThreeVector& globalpoint,
                           const G4double pProposedMaxLength = DBL_MAX,
-                          const G4bool keepState = false );
+                          const G4bool keepState = false ) override;
     // Calculate the isotropic distance to the nearest boundary 
     // in any geometry from the specified point in the global coordinate
     // system. The geometry must be closed.
 
-  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
+  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const override;
     // Returns a reference counted handle to a touchable history.
 
-  virtual G4ThreeVector GetLocalExitNormal( G4bool* obtained ); // const
-  virtual G4ThreeVector GetLocalExitNormalAndCheck( const G4ThreeVector &E_Pt,
-                                                    G4bool* obtained ); // const
-  virtual G4ThreeVector GetGlobalExitNormal( const G4ThreeVector &E_Pt,
-                                                   G4bool* obtained ); // const
+  G4ThreeVector GetLocalExitNormal( G4bool* obtained ) override; // const
+  G4ThreeVector GetLocalExitNormalAndCheck( const G4ThreeVector &E_Pt,
+                                            G4bool* obtained ) override; // const
+  G4ThreeVector GetGlobalExitNormal( const G4ThreeVector &E_Pt,
+                                           G4bool* obtained ) override; // const
     // Return Exit Surface Normal and validity too.
     // Can only be called if the Navigator's last Step either
     //  - has just crossed a volume geometrical boundary and relocated, or
@@ -141,10 +141,10 @@ class G4MultiNavigator : public G4Navigator
 
  protected:  // with description
 
-  void ResetState();
+  void ResetState() override;
     // Utility method to reset the navigator state machine.
 
-  void SetupHierarchy();
+  void SetupHierarchy() override;
     // Renavigate & reset hierarchy described by current history
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised

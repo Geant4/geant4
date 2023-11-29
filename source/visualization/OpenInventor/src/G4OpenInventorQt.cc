@@ -37,6 +37,8 @@
 #include "moc_G4OpenInventorQt.cpp"
 #endif
 
+#define G4warn G4cout
+
 G4OpenInventorQt::G4OpenInventorQt()
   : G4OpenInventor("OpenInventorQt", "OIQt", G4VGraphicsSystem::threeD),
     fInited(false)
@@ -78,7 +80,7 @@ G4VViewer* G4OpenInventorQt::CreateViewer(G4VSceneHandler& scene,
 
   if (pView) {
     if (pView->GetViewId() < 0) {
-      G4cerr <<
+      G4warn <<
       "G4OpenInventorQt::CreateViewer: ERROR flagged by negative"
       " view id in G4OpenInventorQtViewer creation."
       "\n Destroying view and returning null pointer."
@@ -88,7 +90,7 @@ G4VViewer* G4OpenInventorQt::CreateViewer(G4VSceneHandler& scene,
     }
   }
   if (!pView) {
-    G4cerr <<
+    G4warn <<
     "G4OpenInventorQt::CreateViewer: ERROR: null pointer on new G4OpenInventorQtViewer."
     << G4endl;
   }

@@ -71,19 +71,11 @@
    #if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
    #else
     #ifdef __MACH__
-//#  define G4OPENGL_VERSION_2 1
       #include <OpenGL/gl.h>
     #else
       #include <GL/gl.h>
     #endif
-    #include <qgl.h>
   #endif
-#endif
-
-#ifdef G4OPENGL_VERSION_2
-#  undef G4VIS_BUILD_OPENGL_GL2PS
-// include all redefinitions of openGl functions for Vertex Buffer Objects
-#  include "G4OpenGLVboDrawer.hh"
 #endif
 
 #define G4OPENGL_FLT_BIG 1.e20

@@ -60,7 +60,7 @@ G4UTet::G4UTet(const G4String& pName,
 {
   // Check for degeneracy
   G4bool degenerate = CheckDegeneracy(anchor, p1, p2, p3);
-  if(degeneracyFlag) *degeneracyFlag = degenerate;
+  if(degeneracyFlag != nullptr) *degeneracyFlag = degenerate;
   else if (degenerate)
   {
     G4Exception("G4UTet::G4UTet()", "GeomSolids0002", FatalException,
@@ -89,9 +89,7 @@ G4UTet::G4UTet( __void__& a )
 //
 // Destructor
 //
-G4UTet::~G4UTet()
-{
-}
+G4UTet::~G4UTet() = default;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -187,7 +185,7 @@ void G4UTet::SetVertices(const G4ThreeVector& anchor,
 {
   // Check for degeneracy
   G4bool degenerate = CheckDegeneracy(anchor, p1, p2, p3);
-  if(degeneracyFlag) *degeneracyFlag = degenerate;
+  if(degeneracyFlag != nullptr) *degeneracyFlag = degenerate;
   else if (degenerate)
   {
     G4Exception("G4UTet::SetVertices()", "GeomSolids0002", FatalException,
@@ -241,12 +239,12 @@ void G4UTet::SetBoundingLimits(const G4ThreeVector& pMin,
   G4int iout[4] = { 0, 0, 0, 0 };
   for (G4int i = 0; i < 4; ++i)
   {
-    iout[i] = (fVertex[i].x() < pMin.x() ||
-               fVertex[i].y() < pMin.y() ||
-               fVertex[i].z() < pMin.z() ||
-               fVertex[i].x() > pMax.x() ||
-               fVertex[i].y() > pMax.y() ||
-               fVertex[i].z() > pMax.z());
+    iout[i] = (G4int)(fVertex[i].x() < pMin.x() ||
+                      fVertex[i].y() < pMin.y() ||
+                      fVertex[i].z() < pMin.z() ||
+                      fVertex[i].x() > pMax.x() ||
+                      fVertex[i].y() > pMax.y() ||
+                      fVertex[i].z() > pMax.z());
   }
   if (iout[0] + iout[1] + iout[2] + iout[3] != 0)
   {
@@ -257,10 +255,10 @@ void G4UTet::SetBoundingLimits(const G4ThreeVector& pMin,
             << "    pmin: " << pMin << "\n"
             << "    pmax: " << pMax << "\n"
             << "  Tetrahedron vertices:\n"
-            << "    anchor " << fVertex[0] << ((iout[0]) ? " is outside\n" : "\n")
-            << "    p1 "     << fVertex[1] << ((iout[1]) ? " is outside\n" : "\n")
-            << "    p2 "     << fVertex[2] << ((iout[2]) ? " is outside\n" : "\n")
-            << "    p3 "     << fVertex[3] << ((iout[3]) ? " is outside"   : "");
+            << "    anchor " << fVertex[0] << ((iout[0]) != 0 ? " is outside\n" : "\n")
+            << "    p1 "     << fVertex[1] << ((iout[1]) != 0 ? " is outside\n" : "\n")
+            << "    p2 "     << fVertex[2] << ((iout[2]) != 0 ? " is outside\n" : "\n")
+            << "    p3 "     << fVertex[3] << ((iout[3]) != 0 ? " is outside"   : "");
     G4Exception("G4UTet::SetBoundingLimits()", "GeomSolids0002",
                 FatalException, message);
   }
@@ -347,7 +345,7 @@ G4Polyhedron* G4UTet::CreatePolyhedron() const
     xyz[i][2] = vec[i].z();
   }
 
-  G4Polyhedron* ph = new G4Polyhedron;
+  auto ph = new G4Polyhedron;
   ph->createPolyhedron(4,4,xyz,faces);
   return ph;
 }

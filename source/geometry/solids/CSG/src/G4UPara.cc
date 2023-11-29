@@ -106,7 +106,7 @@ G4UPara::G4UPara( const G4String& pName,
     if (discrepancy > 0.1*kCarTolerance)
     {
       std::ostringstream message;
-      G4int oldprc = message.precision(16);
+      G4long oldprc = message.precision(16);
       message << "Invalid vertice coordinates for Solid: " << GetName()
               << "\nVertix #" << i << ", discrepancy = " << discrepancy
               << "\n  original   : " << pt[i]
@@ -135,9 +135,7 @@ G4UPara::G4UPara( __void__& a )
 //
 // Destructor
 
-G4UPara::~G4UPara()
-{
-}
+G4UPara::~G4UPara() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -423,7 +421,7 @@ G4bool G4UPara::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Set bounding envelope (benv) and calculate extent

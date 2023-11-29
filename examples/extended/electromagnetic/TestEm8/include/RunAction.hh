@@ -51,31 +51,29 @@ class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
-{
-public: 
-
+class RunAction : public G4UserRunAction {
+public:
   RunAction();
-  virtual ~RunAction();
+  ~RunAction() override = default;
 
-  virtual G4Run* GenerateRun(); 
+  G4Run *GenerateRun() override;
 
-  virtual void BeginOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run *) override;
   // In this method histogramms are booked
 
-  virtual void EndOfRunAction(const G4Run*);
+  void EndOfRunAction(const G4Run *) override;
   // In this method bookHisto method is called in which histogramms are filled
 
-private:
+  RunAction &operator = (const RunAction &right) = delete;
+  RunAction(const RunAction &) = delete;
 
-  // Book predefined histogramms  
+private:
+  // Book predefined histogramms
   void Book();
 
 private:
-
-  G4AnalysisManager* fAnalysisManager;
-  Run*  fRun;
+  G4AnalysisManager *fAnalysisManager;
+  Run *fRun = nullptr;
 };
 
 #endif
-

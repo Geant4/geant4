@@ -1,18 +1,25 @@
--------------------------------------------------------------------
+# Example hadronic History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Hadronic Examples History file
-                    ------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-05-09 G. Hugo (exHadronic-V11-01-00)
+- Add a G4-FLUKA interface and two G4 hadronic examples, 
+providing access to FLUKA hadron-nucleus inelastic physics.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-10-25 I. Hrivnacova (exHadronic-V11-00-02)
+- Fixed link to new ParticleFluence example in Doxygen documentation
+
+## 2022-06-10 Alberto Ribon (exHadronic-V11-00-01)
+- Created new test: ParticleFluence.
+
+## 2021-12-10 Ben Morgan (exHadronic-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
      
 29-11-21 I. Hrivnacova (exHadronic-V10-07-04)
 - Removed obsolete references to AIDA analysis tools

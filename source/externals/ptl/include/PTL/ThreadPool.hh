@@ -31,8 +31,12 @@
 #pragma once
 
 #include "PTL/AutoLock.hh"
+#ifndef G4GMAKE
+#include "PTL/Config.hh"
+#endif
 #include "PTL/ThreadData.hh"
 #include "PTL/Threading.hh"
+#include "PTL/Types.hh"
 #include "PTL/VTask.hh"
 #include "PTL/VUserTaskQueue.hh"
 
@@ -44,27 +48,42 @@
 #        define TBB_PREVIEW_GLOBAL_CONTROL 1
 #    endif
 #    include <tbb/global_control.h>
-#    include <tbb/tbb.h>
+#    include <tbb/task_arena.h>
+#    include <tbb/task_group.h>
 #endif
 
-// C
+#include <algorithm>
+#include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
-#include <cstring>
-// C++
-#include <atomic>
 #include <deque>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
-#include <queue>
+#include <mutex>  // IWYU pragma: keep
 #include <set>
-#include <stack>
+#include <thread>
+#include <type_traits>  // IWYU pragma: keep
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace PTL
 {
+namespace thread_pool
+{
+namespace state
+{
+static const short STARTED = 0;
+static const short PARTIAL = 1;
+static const short STOPPED = 2;
+static const short NONINIT = 3;
+
+}  // namespace state
+}  // namespace thread_pool
+
 class ThreadPool
 {
 public:
@@ -84,27 +103,70 @@ public:
     using task_pointer = std::shared_ptr<task_type>;
     using task_queue_t = VUserTaskQueue;
     // containers
-    typedef std::deque<ThreadId>          thread_list_t;
-    typedef std::vector<bool>             bool_list_t;
-    typedef std::map<ThreadId, uintmax_t> thread_id_map_t;
-    typedef std::map<uintmax_t, ThreadId> thread_index_map_t;
-    using thread_vec_t  = std::vector<Thread>;
-    using thread_data_t = std::vector<std::shared_ptr<ThreadData>>;
+    using thread_list_t      = std::deque<ThreadId>;
+    using bool_list_t        = std::vector<bool>;
+    using thread_id_map_t    = std::map<ThreadId, uintmax_t>;
+    using thread_index_map_t = std::map<uintmax_t, ThreadId>;
+    using thread_vec_t       = std::vector<Thread>;
+    using thread_data_t      = std::vector<std::shared_ptr<ThreadData>>;
     // functions
-    typedef std::function<void()>             initialize_func_t;
-    typedef std::function<intmax_t(intmax_t)> affinity_func_t;
+    using initialize_func_t = std::function<void()>;
+    using finalize_func_t   = std::function<void()>;
+    using affinity_func_t   = std::function<intmax_t(intmax_t)>;
+
+    static affinity_func_t& affinity_functor()
+    {
+        static affinity_func_t _v = [](intmax_t) {
+            static std::atomic<intmax_t> assigned;
+            intmax_t                     _assign = assigned++;
+            return _assign % Thread::hardware_concurrency();
+        };
+        return _v;
+    }
+
+    static initialize_func_t& initialization_functor()
+    {
+        static initialize_func_t _v = []() {};
+        return _v;
+    }
+
+    static finalize_func_t& finalization_functor()
+    {
+        static finalize_func_t _v = []() {};
+        return _v;
+    }
+
+    struct Config
+    {
+        PTL_DEFAULT_OBJECT(Config)
+
+        Config(bool, bool, bool, int, int, size_type, VUserTaskQueue*, affinity_func_t,
+               initialize_func_t, finalize_func_t);
+
+        bool              init         = true;
+        bool              use_tbb      = f_use_tbb();
+        bool              use_affinity = f_use_cpu_affinity();
+        int               verbose      = f_verbose();
+        int               priority     = f_thread_priority();
+        size_type         pool_size    = f_default_pool_size();
+        VUserTaskQueue*   task_queue   = nullptr;
+        affinity_func_t   set_affinity = affinity_functor();
+        initialize_func_t initializer  = initialization_functor();
+        finalize_func_t   finalizer    = finalization_functor();
+    };
 
 public:
     // Constructor and Destructors
+    explicit ThreadPool(const Config&);
     ThreadPool(const size_type& pool_size, VUserTaskQueue* task_queue = nullptr,
-               bool _use_affinity = GetEnv<bool>("PTL_CPU_AFFINITY", false),
-               affinity_func_t    = [](intmax_t) {
-                   static std::atomic<intmax_t> assigned;
-                   intmax_t                     _assign = assigned++;
-                   return _assign % Thread::hardware_concurrency();
-               });
-    // Virtual destructors are required by abstract classes
-    // so add it by default, just in case
+               bool _use_affinity = f_use_cpu_affinity(),
+               affinity_func_t    = affinity_functor(),
+               initialize_func_t  = initialization_functor(),
+               finalize_func_t    = finalization_functor());
+    ThreadPool(const size_type& pool_size, initialize_func_t, finalize_func_t,
+               bool             _use_affinity = f_use_cpu_affinity(),
+               affinity_func_t                = affinity_functor(),
+               VUserTaskQueue* task_queue     = nullptr);
     virtual ~ThreadPool();
     ThreadPool(const ThreadPool&) = delete;
     ThreadPool(ThreadPool&&)      = default;
@@ -132,8 +194,30 @@ public:
 public:
     // Public functions related to TBB
     static bool using_tbb();
-    // enable using TBB if available
-    static void set_use_tbb(bool val);
+    // enable using TBB if available - semi-deprecated
+    static void set_use_tbb(bool _v);
+
+    /// set the default use of tbb
+    static void set_default_use_tbb(bool _v) { set_use_tbb(_v); }
+    /// set the default use of cpu affinity
+    static void set_default_use_cpu_affinity(bool _v);
+    /// set the default scheduling priority of threads in thread-pool
+    static void set_default_scheduling_priority(int _v) { f_thread_priority() = _v; }
+    /// set the default verbosity
+    static void set_default_verbose(int _v) { f_verbose() = _v; }
+    /// set the default pool size
+    static void set_default_size(size_type _v) { f_default_pool_size() = _v; }
+
+    /// get the default use of tbb
+    static bool get_default_use_tbb() { return f_use_tbb(); }
+    /// get the default use of cpu affinity
+    static bool get_default_use_cpu_affinity() { return f_use_cpu_affinity(); }
+    /// get the default scheduling priority of threads in thread-pool
+    static int get_default_scheduling_priority() { return f_thread_priority(); }
+    /// get the default verbosity
+    static int get_default_verbose() { return f_verbose(); }
+    /// get the default pool size
+    static size_type get_default_size() { return f_default_pool_size(); }
 
 public:
     // add tasks for threads to process
@@ -149,11 +233,16 @@ public:
     // only relevant when compiled with PTL_USE_TBB
     static tbb_global_control_t*& tbb_global_control();
 
-    void set_initialization(initialize_func_t f) { m_init_func = f; }
+    void set_initialization(initialize_func_t f) { m_init_func = std::move(f); }
+    void set_finalization(finalize_func_t f) { m_fini_func = std::move(f); }
+
     void reset_initialization()
     {
-        auto f      = []() {};
-        m_init_func = f;
+        m_init_func = []() {};
+    }
+    void reset_finalization()
+    {
+        m_fini_func = []() {};
     }
 
 public:
@@ -170,13 +259,11 @@ public:
     void notify_all();
     void notify(size_type);
     bool is_initialized() const;
-    int  get_active_threads_count() const
-    {
-        return (m_thread_awake) ? m_thread_awake->load() : 0;
-    }
+    int  get_active_threads_count() const { return (int)m_thread_awake->load(); }
 
-    void set_affinity(affinity_func_t f) { m_affinity_func = f; }
-    void set_affinity(intmax_t i, Thread&);
+    void set_affinity(affinity_func_t f) { m_affinity_func = std::move(f); }
+    void set_affinity(intmax_t i, Thread&) const;
+    void set_priority(int _prio, Thread&) const;
 
     void set_verbose(int n) { m_verbose = n; }
     int  get_verbose() const { return m_verbose; }
@@ -187,21 +274,9 @@ public:
 public:
     // read FORCE_NUM_THREADS environment variable
     static const thread_id_map_t& get_thread_ids();
+    static uintmax_t              get_thread_id(ThreadId);
     static uintmax_t              get_this_thread_id();
-    static uintmax_t              add_thread_id()
-    {
-        AutoLock lock(TypeMutex<ThreadPool>(), std::defer_lock);
-        if(!lock.owns_lock())
-            lock.lock();
-        auto _tid = ThisThread::get_id();
-        if(f_thread_ids.find(_tid) == f_thread_ids.end())
-        {
-            auto _idx          = f_thread_ids.size();
-            f_thread_ids[_tid] = _idx;
-            Threading::SetThreadId(_idx);
-        }
-        return f_thread_ids.at(_tid);
-    }
+    static uintmax_t              add_thread_id(ThreadId = ThisThread::get_id());
 
 protected:
     void execute_thread(VUserTaskQueue*);  // function thread sits in
@@ -212,17 +287,8 @@ protected:
     // called in THREAD INIT
     static void start_thread(ThreadPool*, thread_data_t*, intmax_t = -1);
 
-    void record_entry()
-    {
-        if(m_thread_active)
-            ++(*m_thread_active);
-    }
-
-    void record_exit()
-    {
-        if(m_thread_active)
-            --(*m_thread_active);
-    }
+    void record_entry();
+    void record_exit();
 
 private:
     // Private variables
@@ -230,13 +296,14 @@ private:
     bool             m_use_affinity      = false;
     bool             m_tbb_tp            = false;
     bool             m_delete_task_queue = false;
-    int              m_verbose           = GetEnv<int>("PTL_VERBOSE", 0);
+    int              m_verbose           = f_verbose();
+    int              m_priority          = f_thread_priority();
     size_type        m_pool_size         = 0;
     ThreadId         m_main_tid          = ThisThread::get_id();
     atomic_bool_type m_alive_flag        = std::make_shared<std::atomic_bool>(false);
     pool_state_type  m_pool_state        = std::make_shared<std::atomic_short>(0);
-    atomic_int_type  m_thread_awake      = std::make_shared<std::atomic_uintmax_t>();
-    atomic_int_type  m_thread_active     = std::make_shared<std::atomic_uintmax_t>();
+    atomic_int_type  m_thread_awake      = std::make_shared<std::atomic_uintmax_t>(0);
+    atomic_int_type  m_thread_active     = std::make_shared<std::atomic_uintmax_t>(0);
 
     // locks
     lock_t m_task_lock = std::make_shared<Mutex>();
@@ -244,12 +311,12 @@ private:
     condition_t m_task_cond = std::make_shared<Condition>();
 
     // containers
-    bool_list_t   m_is_joined{};     // join list
-    bool_list_t   m_is_stopped{};    // lets thread know to stop
-    thread_list_t m_main_threads{};  // storage for active threads
-    thread_list_t m_stop_threads{};  // storage for stopped threads
-    thread_vec_t  m_threads{};
-    thread_data_t m_thread_data{};
+    bool_list_t   m_is_joined    = {};  // join list
+    bool_list_t   m_is_stopped   = {};  // lets thread know to stop
+    thread_list_t m_main_threads = {};  // storage for active threads
+    thread_list_t m_stop_threads = {};  // storage for stopped threads
+    thread_vec_t  m_threads      = {};
+    thread_data_t m_thread_data  = {};
 
     // task queue
     task_queue_t*     m_task_queue     = nullptr;
@@ -257,13 +324,17 @@ private:
     tbb_task_group_t* m_tbb_task_group = nullptr;
 
     // functions
-    initialize_func_t m_init_func = []() {};
-    affinity_func_t   m_affinity_func;
+    initialize_func_t m_init_func     = initialization_functor();
+    finalize_func_t   m_fini_func     = finalization_functor();
+    affinity_func_t   m_affinity_func = affinity_functor();
 
 private:
-    // Private static variables
-    PTL_DLL static thread_id_map_t f_thread_ids;
-    PTL_DLL static bool            f_use_tbb;
+    static bool&            f_use_tbb();
+    static bool&            f_use_cpu_affinity();
+    static int&             f_thread_priority();
+    static int&             f_verbose();
+    static size_type&       f_default_pool_size();
+    static thread_id_map_t& f_thread_ids();
 };
 
 //--------------------------------------------------------------------------------------//
@@ -271,7 +342,7 @@ inline void
 ThreadPool::notify()
 {
     // wake up one thread that is waiting for a task to be available
-    if(m_thread_awake && m_thread_awake->load() < m_pool_size)
+    if(m_thread_awake->load() < m_pool_size)
     {
         AutoLock l(*m_task_lock);
         m_task_cond->notify_one();
@@ -293,7 +364,7 @@ ThreadPool::notify(size_type ntasks)
         return;
 
     // wake up as many threads that tasks just added
-    if(m_thread_awake && m_thread_awake->load() < m_pool_size)
+    if(m_thread_awake->load() < m_pool_size)
     {
         AutoLock l(*m_task_lock);
         if(ntasks < this->size())
@@ -341,10 +412,9 @@ ThreadPool::get_task_arena()
 inline void
 ThreadPool::resize(size_type _n)
 {
-    if(_n == m_pool_size)
-        return;
     initialize_threadpool(_n);
-    m_task_queue->resize(static_cast<intmax_t>(_n));
+    if(m_task_queue)
+        m_task_queue->resize(static_cast<intmax_t>(_n));
 }
 //--------------------------------------------------------------------------------------//
 inline int
@@ -354,7 +424,7 @@ ThreadPool::run_on_this(task_pointer&& _task)
 
     if(m_tbb_tp && m_tbb_task_group)
     {
-        auto _arena = get_task_arena();
+        auto* _arena = get_task_arena();
         _arena->execute([this, _func]() { this->m_tbb_task_group->run(_func); });
     }
     else
@@ -373,7 +443,7 @@ ThreadPool::insert(task_pointer&& task, int bin)
     // pass the task to the queue
     auto ibin = get_valid_queue(m_task_queue)->InsertTask(std::move(task), _data, bin);
     notify();
-    return ibin;
+    return (int)ibin;
 }
 //--------------------------------------------------------------------------------------//
 inline ThreadPool::size_type
@@ -457,13 +527,13 @@ ThreadPool::execute_on_all_threads(FuncT&& _func)
         size_t _maxp = tbb_global_control()->active_value(
             tbb::global_control::max_allowed_parallelism);
         // create a task arean
-        auto _arena = get_task_arena();
+        auto* _arena = get_task_arena();
         // size of the thread-pool
         size_t _sz = size();
         // number of cores
         size_t _ncore = Threading::GetNumberOfCores();
         // maximum depth for recursion
-        size_t _dmax = std::max<size_t>(_ncore, 4);
+        size_t _dmax = std::max<size_t>(_ncore, 8);
         // how many threads we need to initialize
         size_t _num = std::min(_maxp, std::min(_sz, _ncore));
         // this is the task passed to the task-group
@@ -498,7 +568,7 @@ ThreadPool::execute_on_all_threads(FuncT&& _func)
         size_t nitr        = 0;
         auto   _fname      = __FUNCTION__;
         auto   _write_info = [&]() {
-            std::cout << "[" << _fname << "]> Total initalized: " << _total_init
+            std::cout << "[" << _fname << "]> Total initialized: " << _total_init
                       << ", expected: " << _num << ", max-parallel: " << _maxp
                       << ", size: " << _sz << ", ncore: " << _ncore << std::endl;
         };
@@ -575,11 +645,11 @@ ThreadPool::execute_on_specific_threads(const std::set<std::thread::id>& _tids,
         // number of cores
         size_t _ncore = Threading::GetNumberOfCores();
         // maximum depth for recursion
-        size_t _dmax = std::max<size_t>(_ncore, 4);
+        size_t _dmax = std::max<size_t>(_ncore, 8);
         // how many threads we need to initialize
         size_t _num = _tids.size();
         // create a task arena
-        auto _arena = get_task_arena();
+        auto* _arena = get_task_arena();
         // this is the task passed to the task-group
         std::function<void()> _exec_task;
         _exec_task = [&]() {

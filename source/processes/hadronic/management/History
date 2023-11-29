@@ -1,18 +1,74 @@
--------------------------------------------------------------------
+# Category hadr-man History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/management directory
-            ----------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-03-29 Vladimir Ivanchenko (hadr-man-V11-01-03)
+- G4HadronicProcess - added extra G4Exception for the case if worker cannot 
+  share initialisation with master thread (problem #2528), diagnostic is
+  improved
+- G4HadronicProcessStore - avoid checks of environment variables, instead call 
+  to G4HadronicParameters
+
+## 2023-01-21 Vladimir Ivanchenko (hadr-man-V11-01-02)
+- G4HadronicProcess - removed usage of DebugFlag and RandomFile
+
+## 2023-01-17 Vladimir Ivanchenko (hadr-man-V11-01-01)
+- G4HadronicProcess - moved several class members to be protected, which 
+    is needed for hadron elastic process (and may be other processes)
+
+## 2023-01-09 Vladimir Ivanchenko (hadr-man-V11-01-00)
+- G4HadronicProcess - substitute access to environment variables by call to
+  G4HadronicParameters
+
+## 2022-11-26 Gabriele Cosmo (hadr-man-V11-00-08)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (hadr-man-V11-00-07)
+- G4HadronicProcessStore: extended the Dump method for hypertriton and 
+  anti_hypertriton.
+
+## 2022-08-24 Vladimir Ivanchenko (hadr-man-V11-00-06)
+- G4HadronicProcessType - added fNeutronGeneral
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-man-V11-00-05)
+- G4HadronicProcess - make access to target nucleus public needed for 
+    neutron general process
+
+## 2022-07-01 Alberto Ribon (hadr-man-V11-00-04)
+- G4HadronicProcess: removed the temporary check and protection introduced
+  in the previous tag (see below). This is not needed any longer after 
+  replacing the threshold used for checking the absolute energy 
+  non-conservation from DLB_MAX (implying no checking at all) to 350 GeV
+  (this value allows for cases where the residual nucleus is not produced,
+   even when super-heavy nuclides are involved).
+
+## 2022-06-16 Alberto Ribon (hadr-man-V11-00-03)
+- G4HadronicProcess: temporary check and protection against the crashes
+  that have been seen recently with neutronHP; when a secondary particle
+  has a huge kinetic energy (i.e. higher than the max energy allowed in
+  Geant4 hadronic physics - by default 100 TeV), a JustWarning is thrown
+  and the particle is neglected (i.e. a corresponding G4Track object is
+  not created).
+
+## 2022-05-25 Alberto Ribon (hadr-man-V11-00-02)
+- G4HadronicProcess: propagate the information on parent resonance
+  (in the FillResults method, from G4HadSecondary to G4Track)
+
+## 2022-05-14 Vladimir Ivanchenko (hadr-man-V11-00-01)
+- G4HadronicProcess - implemented integral method
+- G4HadXSTypes, G4HadXSHelper - new helper objects 
+
+## 2021-12-10 Ben Morgan (hadr-man-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 16 November 2021 V. Ivanchenko (hadr-man-V10-07-10)
 ---------------------------------------------------

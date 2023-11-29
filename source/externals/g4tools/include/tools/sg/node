@@ -203,7 +203,7 @@ protected:
           return false;
         }
       } /*else {
-        a_action.out() << "debug : inlib::node::read_fields :"
+        a_action.out() << "debug : tools::node::read_fields :"
                        << " for node class " << s_cls()
                        << " : field desc class " << fdesc.cls()
                        << " : field desc offset " << fdesc.offset()

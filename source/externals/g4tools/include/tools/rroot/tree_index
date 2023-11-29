@@ -36,9 +36,9 @@ public:
   virtual bool stream(buffer& a_buffer) {
     uint32 startpos = a_buffer.length();
 
-    unsigned int s,c;
+    unsigned int _s,_c;
     short v;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     //::printf("debug : tree_index::stream : version %d count %d\n",v,c);
 
     if(!virtual_index_stream(a_buffer)) return false;
@@ -58,9 +58,9 @@ public:
 
     //FIXME : still problem with this streamer.
 
-    a_buffer.set_offset(startpos+c+sizeof(unsigned int));
+    a_buffer.set_offset(startpos+_c+sizeof(unsigned int));
 
-    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    if(!a_buffer.check_byte_count(_s,_c,s_store_class())) return false;
 
     //::printf("debug : tree_index::stream : ok\n");
     return true;
@@ -88,12 +88,12 @@ protected:
   }
   bool virtual_index_stream(buffer& a_buffer){
     short v;
-    unsigned int s, c;
-    if(!a_buffer.read_version(v,s,c)) return false;
+    unsigned int _s,_c;
+    if(!a_buffer.read_version(v,_s,_c)) return false;
     //::printf("debug : virtual_index::stream : version %d count %d\n",v,c);
     std::string ds;
     if(!Named_stream(a_buffer,ds,ds)) return false;
-    if(!a_buffer.check_byte_count(s,c,virtual_index_s_store_class()))
+    if(!a_buffer.check_byte_count(_s,_c,virtual_index_s_store_class()))
       return false;
     return true;
   }

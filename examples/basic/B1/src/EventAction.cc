@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B1/src/EventAction.cc
 /// \brief Implementation of the B1::EventAction class
 
 #include "EventAction.hh"
@@ -40,11 +40,6 @@ namespace B1
 
 EventAction::EventAction(RunAction* runAction)
 : fRunAction(runAction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

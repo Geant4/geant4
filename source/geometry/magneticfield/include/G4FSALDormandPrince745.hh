@@ -44,7 +44,7 @@ class G4FSALDormandPrince745 : public G4VFSALIntegrationStepper
     G4FSALDormandPrince745(G4EquationOfMotion* EqRhs,
                            G4int numberOfVariables = 6,
                            G4bool primary = true);
-   ~G4FSALDormandPrince745();
+   ~G4FSALDormandPrince745() override;
 
     G4FSALDormandPrince745(const G4FSALDormandPrince745&) = delete;
     G4FSALDormandPrince745& operator=(const G4FSALDormandPrince745&) = delete;
@@ -54,7 +54,7 @@ class G4FSALDormandPrince745 : public G4VFSALIntegrationStepper
                         G4double h,
                         G4double yout[],
                         G4double yerr[],
-                        G4double nextDydx[]) ;
+                        G4double nextDydx[]) override ;
     void interpolate( const G4double yInput[],
                       const G4double dydx[],
                             G4double yOut[],
@@ -74,8 +74,8 @@ class G4FSALDormandPrince745 : public G4VFSALIntegrationStepper
       // For calculating the output at the tau fraction of Step
     
 
-    G4double  DistChord()   const;
-    inline G4int IntegratorOrder() const {return 4; }
+    G4double  DistChord()   const override;
+    inline G4int IntegratorOrder() const override { return 4; }
     inline G4bool isFSAL() const { return true; }
     
   private:

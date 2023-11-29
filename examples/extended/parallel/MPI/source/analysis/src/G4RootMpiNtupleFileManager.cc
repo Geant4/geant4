@@ -184,8 +184,6 @@ std::shared_ptr<G4VNtupleManager> G4RootMpiNtupleFileManager::CreateNtupleManage
 //_____________________________________________________________________________
 G4bool G4RootMpiNtupleFileManager::ActionAtOpenFile(const G4String& fileName)
 {
-  auto finalResult = true;
-
   // No MPI merging, call base class
   if ( fNtupleMergeMode == G4NtupleMergeMode::kNone )  {
     return G4RootNtupleFileManager::ActionAtOpenFile(fileName);
@@ -218,7 +216,7 @@ G4bool G4RootMpiNtupleFileManager::ActionAtOpenFile(const G4String& fileName)
     fNtupleBooked = true;
   }
 
-  return finalResult;
+  return true;
 }  
 
 //_____________________________________________________________________________
@@ -229,7 +227,7 @@ G4bool G4RootMpiNtupleFileManager::ActionAtWrite()
     return G4RootNtupleFileManager::ActionAtWrite();
   }
   
-  auto finalResult = true;
+  auto result = true;
 
   G4String ntupleType;
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain ) ntupleType = "main ntuples";
@@ -238,50 +236,32 @@ G4bool G4RootMpiNtupleFileManager::ActionAtWrite()
   Message(kVL4, "merge", ntupleType);
 
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
-    auto result = fNtupleManager->Merge();
-    finalResult = result && finalResult;
+    result &= fNtupleManager->Merge();
   }  
   
   if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave ) {
-    auto result = fMpiSlaveNtupleManager->Merge();
-    finalResult = result && finalResult;
+    result &= fMpiSlaveNtupleManager->Merge();
   }
 
-  Message(kVL1, "merge", ntupleType, "", finalResult);
+  Message(kVL1, "merge", ntupleType, "", result);
 
-  return finalResult;
+  return result;
 }
 
 //_____________________________________________________________________________
-G4bool G4RootMpiNtupleFileManager::ActionAtCloseFile(G4bool reset)
-{
+G4bool G4RootMpiNtupleFileManager::ActionAtCloseFile()
+{ 
   // No MPI merging, call base class
   if ( fNtupleMergeMode == G4NtupleMergeMode::kNone )  {
-    return G4RootNtupleFileManager::ActionAtCloseFile(reset);
+    return G4RootNtupleFileManager::ActionAtCloseFile();
   }
 
-  auto finalResult = true;
-
-  // reset data
-  if ( reset ) {
-    auto result = Reset();
-    if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "Resetting data failed";
-        G4Exception("G4RootNtupleFileManager::Write()",
-                  "Analysis_W021", JustWarning, description);
-    } 
-    finalResult = finalResult && result;
+  if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave)  {
+    fMpiSlaveNtupleManager->SetNewCycle(false);
+    return true;
   }
 
-  // close files
-  if ( fNtupleMergeMode != G4NtupleMergeMode::kSlave )  {
-    auto result = CloseNtupleFiles();
-    finalResult = finalResult && result;
-  }
-
-  // MT not yet supported - no files clean-up
-  return finalResult;
+  return CloseNtupleFiles();
 }
 
 //_____________________________________________________________________________
@@ -294,17 +274,15 @@ G4bool G4RootMpiNtupleFileManager::Reset()
     return G4RootNtupleFileManager::Reset();
   }
   
-  auto finalResult = true;
+  auto result = true;
   
   if ( fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
-    auto result = fNtupleManager->Reset();
-    finalResult = result && finalResult;
+    result &= fNtupleManager->Reset();
   }  
 
   if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave )  {
-    auto result = fMpiSlaveNtupleManager->Reset(false);
-    finalResult = result && finalResult;
+    result &= fMpiSlaveNtupleManager->Reset(false);
   }  
 
-  return finalResult;
+  return result;
 }

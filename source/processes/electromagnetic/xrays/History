@@ -1,28 +1,40 @@
--------------------------------------------------------------------
+# Category xrays History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-23 Gabriele Cosmo (xrays-V11-00-07)
+- Fixed more compilation warnings for implicit type conversions.
 
-21 Jan 22: D. Sawkey (xrays-V10-07-10)
+## 2022-11-18 Gabriele Cosmo (xrays-V11-00-06)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-011 Vladimir Grichine (xrays-V11-00-05)
+- G4VXTRenergyLoss.cc bug fixed in the angle range for fMaxThetaTR
+
+## 2022-04-27 Daren Sawkey (xrays-V11-00-04)
+- many files: apply clang-tidy recommendations. Default ctors, use of auto keywork,
+  use nullptr
+
+## 2022-01-21 Daren Sawkey (xrays-V11-00-03)
 - G4Scintillation - remove unused YieldFactor declarations
-  Addresses bug 2470.
 
-18 Jan 22: D. Sawkey (xrays-V10-07-09)
+## 2021-12-17 Ivana Hrivnacova (xrays-V11-00-02)
 - Fix MaxBetaChange value in Cerenkov process.
-  Addressing problem report 2456.
+  Addressing problem report [#2456](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2456).
+
+## 2021-12-15 Ben Morgan (xrays-V11-00-01)
+- Minor code formatting 
+
+## 2021-12-10 Ben Morgan (xrays-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 19 Oct 21: D. Sawkey (xrays-V10-07-08)
 - G4Cerenkov, G4Scintillation - update G4OpticalParameters when process

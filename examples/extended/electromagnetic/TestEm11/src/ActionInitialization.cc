@@ -38,15 +38,8 @@
 
 ActionInitialization::ActionInitialization(DetectorConstruction* detector, 
                                            PhysicsList* physics)
- : G4VUserActionInitialization(),
-   fDetector(detector),
-   fPhysics(physics)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
+ : fDetector(detector), fPhysics(physics)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,7 +61,7 @@ void ActionInitialization::Build() const
   EventAction* eventAction = new EventAction(fDetector);
   SetUserAction(eventAction);
   
-  SetUserAction(new TrackingAction(fDetector));
+  SetUserAction(new TrackingAction(fDetector, eventAction));
   
   SetUserAction(new SteppingAction(fDetector, eventAction));
 }  

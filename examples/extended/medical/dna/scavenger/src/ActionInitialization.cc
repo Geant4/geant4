@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file ActionInitialization.cc
-/// \brief Implementation of the ActionInitialization class
+/// \file scavenger/src/ActionInitialization.cc
+/// \brief Implementation of the scavenger::ActionInitialization class
 
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -55,7 +55,7 @@ void ActionInitialization::BuildForMaster() const {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ActionInitialization::Build() const {
-  G4MoleculeCounter::Use();
+  G4MoleculeCounter::Instance()->Use();
   G4MoleculeCounter::Instance()->SetVerbose(0);
   G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());
   // sequential mode

@@ -66,7 +66,7 @@ class G4ErrorTarget
 
   protected:
 
-    G4ErrorTargetType theType;
+    G4ErrorTargetType theType{G4ErrorTarget_GeomVolume};
 };
 
 // Inline methods

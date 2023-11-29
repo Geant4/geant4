@@ -92,7 +92,7 @@ void G4MCCIndexConversionTable::SetNewIndex(std::size_t index,
 {
   // set the index in the current production cut table
   // for the indicated MCC in the file
-  if (index < vecNewIndex.size()) vecNewIndex[index] = new_value;  
+  if (index < vecNewIndex.size()) vecNewIndex[index] = (G4int)new_value;  
 }  
 
 inline

@@ -35,6 +35,7 @@
 
 #include "G4Run.hh"
 #include "G4AnalysisManager.hh"
+#include "DetectorConstruction.hh"
 
 #include <vector>
 typedef std::vector<G4double> MyVector;
@@ -51,9 +52,9 @@ class Run : public G4Run
 public:
 
   Run(DetectorConstruction*, PrimaryGeneratorAction*);
-  virtual ~Run();
+ ~Run() override = default;
 
-  virtual void Merge(const G4Run*);
+  void Merge(const G4Run*) override;
 
   void InitializePerEvent();
   void FillPerEvent();
@@ -70,35 +71,35 @@ public:
 private:
   void Reset();
 
-  DetectorConstruction*   fDet;
-  PrimaryGeneratorAction* fKin;
+  DetectorConstruction*   fDet = nullptr;
+  PrimaryGeneratorAction* fKin = nullptr;
     
-  G4int f_nLbin;
+  G4int f_nLbin = kMaxBin;
   MyVector f_dEdL;
   MyVector fSumELongit;
   MyVector fSumE2Longit;
   MyVector fSumELongitCumul;
   MyVector fSumE2LongitCumul;
 
-  G4int f_nRbin;
+  G4int f_nRbin = kMaxBin;
   MyVector f_dEdR;
   MyVector fSumERadial;
   MyVector fSumE2Radial;
   MyVector fSumERadialCumul;
   MyVector fSumE2RadialCumul;
 
-  G4double fChargTrLength;
-  G4double fSumChargTrLength;
-  G4double fSum2ChargTrLength;
+  G4double fChargTrLength = 0.;
+  G4double fSumChargTrLength = 0.;
+  G4double fSum2ChargTrLength = 0.;
 
-  G4double fNeutrTrLength;
-  G4double fSumNeutrTrLength;
-  G4double fSum2NeutrTrLength;
+  G4double fNeutrTrLength = 0.;
+  G4double fSumNeutrTrLength = 0.;
+  G4double fSum2NeutrTrLength = 0.;
 
-  G4double fChargedStep;
-  G4double fNeutralStep;    
+  G4double fChargedStep = 0.;
+  G4double fNeutralStep = 0.;
 
-  G4int    fVerbose;
+  G4int    fVerbose = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

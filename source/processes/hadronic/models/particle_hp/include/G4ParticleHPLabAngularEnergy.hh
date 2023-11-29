@@ -29,71 +29,64 @@
 #ifndef G4ParticleHPLabAngularEnergy_h
 #define G4ParticleHPLabAngularEnergy_h 1
 
-#include "G4ios.hh"
-#include <fstream>
-#include "globals.hh"
+#include "G4InterpolationManager.hh"
 #include "G4Neutron.hh"
 #include "G4ParticleHPInterpolator.hh"
 #include "G4ParticleHPVector.hh"
-#include "G4VParticleHPEnergyAngular.hh"
 #include "G4ReactionProduct.hh"
-#include "G4InterpolationManager.hh"
+#include "G4VParticleHPEnergyAngular.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <fstream>
 
 class G4ParticleHPLabAngularEnergy : public G4VParticleHPEnergyAngular
 {
   public:
-  
-  G4ParticleHPLabAngularEnergy()
-  {
-    theEnergies = 0;
-    theData = 0;
-    nCosTh = 0;
-    theSecondManager = 0;
-    nEnergies = -1;
-    currentMeanEnergy = -1.0;
-  }
-  ~G4ParticleHPLabAngularEnergy()
-  {
-    if(theEnergies != 0) delete [] theEnergies;
-    if(nCosTh != 0) delete [] nCosTh;
-    if(theData != 0) 
+    G4ParticleHPLabAngularEnergy()
     {
-      for(G4int i=0; i<nEnergies; i++)
-        delete [] theData[i];
-      delete [] theData;
+      theEnergies = nullptr;
+      theData = nullptr;
+      nCosTh = nullptr;
+      theSecondManager = nullptr;
+      nEnergies = -1;
+      currentMeanEnergy = -1.0;
     }
-    if(theSecondManager != 0) delete [] theSecondManager;
-  }
-  
-  public:
-  
-  void Init(std::istream & aDataFile);
-     G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
-  G4double MeanEnergyOfThisInteraction()
-  {
-    return currentMeanEnergy;
-  }
-  
-  
-  private:
-  
-  // number of incoming neutron energies
-  G4int nEnergies;
-  // Interpol between neutron energies
-  G4InterpolationManager theManager; 
-  // Incoming neutron energies
-  G4double * theEnergies; 
-  // number of directioncosines; parallel to theEnergies
-  G4int * nCosTh; 
-  // knows the interpolation between these stores
-  G4InterpolationManager * theSecondManager; 
-  // vectors of secondary energy, haufigkeit; parallel to theEnergies
-  G4ParticleHPVector ** theData; 
+    ~G4ParticleHPLabAngularEnergy() override
+    {
+      delete[] theEnergies;
+      delete[] nCosTh;
+      if (theData != nullptr) {
+        for (G4int i = 0; i < nEnergies; i++)
+          delete[] theData[i];
+        delete[] theData;
+      }
+      delete[] theSecondManager;
+    }
 
-  // utility interpolator
-  G4ParticleHPInterpolator theInt;
-  
-  // cashed value of mean secondary energy in this event.
-  G4double currentMeanEnergy;
+  public:
+    void Init(std::istream& aDataFile) override;
+    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+    G4double MeanEnergyOfThisInteraction() override { return currentMeanEnergy; }
+
+  private:
+    // number of incoming neutron energies
+    G4int nEnergies;
+    // Interpol between neutron energies
+    G4InterpolationManager theManager;
+    // Incoming neutron energies
+    G4double* theEnergies;
+    // number of directioncosines; parallel to theEnergies
+    G4int* nCosTh;
+    // knows the interpolation between these stores
+    G4InterpolationManager* theSecondManager;
+    // vectors of secondary energy, haufigkeit; parallel to theEnergies
+    G4ParticleHPVector** theData;
+
+    // utility interpolator
+    G4ParticleHPInterpolator theInt;
+
+    // cashed value of mean secondary energy in this event.
+    G4double currentMeanEnergy;
 };
 #endif

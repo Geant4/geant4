@@ -42,14 +42,12 @@ G4HelixExplicitEuler::G4HelixExplicitEuler(G4Mag_EqRhs* EqRhs)
 {
 }
  
-G4HelixExplicitEuler::~G4HelixExplicitEuler()
-{
-}
+G4HelixExplicitEuler::~G4HelixExplicitEuler() = default;
 
-void G4HelixExplicitEuler::Stepper( const G4double  yInput[7],
+void G4HelixExplicitEuler::Stepper( const G4double  yInput[],  // [7]
                                     const G4double*,
                                           G4double Step,
-                                          G4double yOut[7],
+                                          G4double yOut[],     // [7]
                                           G4double yErr[] )
 {
   // Estimation of the Stepping Angle

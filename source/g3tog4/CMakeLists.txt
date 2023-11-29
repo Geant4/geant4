@@ -1,6 +1,6 @@
 # - G3toG4 category build
-
-geant4_global_library_target(COMPONENTS sources.cmake)
+include(sources.cmake)
+geant4_add_category(G3toG4 MODULES G3toG4)
 
 # OBSOLETE: build the rztog4 application
 # It's not a Mac Bundle or WIN32 app (i.e. no GUI!!)

@@ -1,9 +1,30 @@
-     =========================================================
- 		      Geant4 - dnaphysics example
-     =========================================================
+# Example dnaphysics History
 
-                       Package History file
-                       --------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-11-07 Hoang Tran (dnaphysics-V11-00-03)
+- update README file for radioactive decay
+
+## 2022-11-04 Vladimir Ivanchenko (dnaphysics-V11-00-02)
+- dnaphysics.cc, DetectorConstruction, DetectorMessenger - added
+    UI command to add different standard EM, DNA physics, and 
+    radioactive decay
+- PhysicsList - added possibility to change DNA physics via UI 
+    commands
+
+## 2022-02-28 Vladimir Ivanchenko (dnaphysics-V11-00-01)
+- dnaphysics.cc - enable visualisation only in interactive mode,
+    use G4RunManagerFactory
+- PhysicsList - added RadioactiveDecayPhysics
+
+## 2021-12-10 Ben Morgan (dnaphysics-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06 Oct 21 I. Hrivnacova - tag dnaphysics-V10-07-01
 - Migration to new G4AnalysisManager.hh header;

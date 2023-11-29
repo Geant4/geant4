@@ -18,7 +18,7 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #include <io.h>
 #include <sys/stat.h>
 #else
@@ -60,7 +60,7 @@ public: //ifile
 
 #if defined(__linux__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 2)
     if (::lseek64(m_file, a_offset, whence) < 0) {
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) || defined(__MINGW32__)
     if (::_lseeki64(m_file, a_offset, whence) < 0) {
 #else
     if (::lseek(m_file, a_offset, whence) < 0) {
@@ -137,7 +137,7 @@ public:
 #endif
 
     m_file = _open(a_path.c_str(),
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
                                O_RDONLY | O_BINARY,S_IREAD | S_IWRITE
 #else
                                O_RDONLY,0644

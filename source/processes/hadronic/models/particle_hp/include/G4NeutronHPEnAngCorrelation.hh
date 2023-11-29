@@ -29,4 +29,4 @@
 #include "G4ParticleHPEnAngCorrelation.hh"
 using G4NeutronHPEnAngCorrelation = G4ParticleHPEnAngCorrelation;
 
-#endif 
+#endif

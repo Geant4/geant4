@@ -293,7 +293,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(
 {
   if(!fIsDirectModelInitialised)
   {
-    fEmModelManagerForFwdModels->Initialise(fElectron, fGamma, 1., 0);
+    fEmModelManagerForFwdModels->Initialise(fElectron, fGamma, 0);
     fIsDirectModelInitialised = true;
   }
   return G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(
@@ -309,7 +309,7 @@ G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(
   // 2.78.. == std::exp(1.)
   if(!fIsDirectModelInitialised)
   {
-    fEmModelManagerForFwdModels->Initialise(fElectron, fGamma, 1., 0);
+    fEmModelManagerForFwdModels->Initialise(fElectron, fGamma, 0);
     fIsDirectModelInitialised = true;
   }
   if(fUseMatrix)

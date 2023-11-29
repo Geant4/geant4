@@ -51,27 +51,26 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4BuilderType.hh"
+#include "G4PhysListUtil.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4DecayPhysics);
 
-G4DecayPhysics::G4DecayPhysics(G4int ver)
-  :  G4VPhysicsConstructor("Decay"), verbose(ver)
-{
-  SetPhysicsType(bDecay);
-}
-
 G4DecayPhysics::G4DecayPhysics(const G4String& name, G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver)
 {
   SetPhysicsType(bDecay);
+  G4PhysListUtil::InitialiseParameters();
 }
 
+G4DecayPhysics::G4DecayPhysics(G4int ver)
+  :  G4DecayPhysics("Decay", ver)
+{}
+
 G4DecayPhysics::~G4DecayPhysics()
-{
-}
+{}
 
 void G4DecayPhysics::ConstructParticle()
 {

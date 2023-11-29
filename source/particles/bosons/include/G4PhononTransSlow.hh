@@ -41,7 +41,7 @@ private:
   G4PhononTransSlow() {;}
 
 public:
-  virtual ~G4PhononTransSlow () {;}
+  ~G4PhononTransSlow () override {;}
   
   static G4PhononTransSlow* Definition();
   static G4PhononTransSlow* PhononDefinition();

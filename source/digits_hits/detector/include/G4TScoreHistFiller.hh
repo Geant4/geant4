@@ -45,19 +45,17 @@ template <typename T>
 class G4TScoreHistFiller : public G4VScoreHistFiller
 {
  public:
-  G4TScoreHistFiller();
-  virtual ~G4TScoreHistFiller();
+  G4TScoreHistFiller() = default;
+  virtual ~G4TScoreHistFiller() = default;
 
   // methods
   virtual void FillH1(G4int id, G4double value, G4double weight = 1.0);
-  virtual void FillH2(G4int id, G4double xvalue, G4double yvalue,
-                      G4double weight = 1.0);
-  virtual void FillH3(G4int id, G4double xvalue, G4double yvalue,
-                      G4double zvalue, G4double weight = 1.0);
-  virtual void FillP1(G4int id, G4double xvalue, G4double yvalue,
-                      G4double weight = 1.0);
-  virtual void FillP2(G4int id, G4double xvalue, G4double yvalue,
-                      G4double zvalue, G4double weight = 1.0);
+  virtual void FillH2(G4int id, G4double xvalue, G4double yvalue, G4double weight = 1.0);
+  virtual void FillH3(
+    G4int id, G4double xvalue, G4double yvalue, G4double zvalue, G4double weight = 1.0);
+  virtual void FillP1(G4int id, G4double xvalue, G4double yvalue, G4double weight = 1.0);
+  virtual void FillP2(
+    G4int id, G4double xvalue, G4double yvalue, G4double zvalue, G4double weight = 1.0);
 
   virtual G4bool CheckH1(G4int id);
   virtual G4bool CheckH2(G4int id);
@@ -77,9 +75,9 @@ class G4TScoreHistFiller : public G4VScoreHistFiller
   void CreateAnalysisManager();
 
   // data members
-  T* fAnalysisManager        = nullptr;
-  G4int fVerboseLevel        = 0;
-  G4bool fIsInitialized      = false;
+  T* fAnalysisManager = nullptr;
+  G4int fVerboseLevel = 0;
+  G4bool fIsInitialized = false;
 };
 
 #include "G4TScoreHistFiller.icc"

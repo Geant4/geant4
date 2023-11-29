@@ -82,7 +82,7 @@ G4int G4TouchableHistory::GetHistoryDepth()  const
 inline
 G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 { 
-  G4int maxLevelsMove = G4int(fhistory.GetDepth());
+  auto  maxLevelsMove = G4int(fhistory.GetDepth());
   G4int minLevelsMove = 0;              // Cannot redescend today!
                                         // Soon it will be possible
                                         // by adding a data member here

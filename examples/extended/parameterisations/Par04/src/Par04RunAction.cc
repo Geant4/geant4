@@ -59,14 +59,16 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   // Create directories
-  analysisManager->SetNtupleMerging(false);
+  analysisManager->SetNtupleMerging(true);
   analysisManager->SetVerboseLevel(0);
 
   // Get detector dimensions
   G4int cellNumZ       = fDetector->GetMeshNbOfCells().z();
   G4int cellNumRho     = fDetector->GetMeshNbOfCells().x();
+  G4int cellNumPhi     = fDetector->GetMeshNbOfCells().y();
   G4double cellSizeZ   = fDetector->GetMeshSizeOfCells().z();
   G4double cellSizeRho = fDetector->GetMeshSizeOfCells().x();
+  G4double cellSizePhi = fDetector->GetMeshSizeOfCells().y();
   // Default max value of energy stored in histogram (in GeV)
   G4double maxEnergy = 1000;
 
@@ -101,6 +103,10 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
     "transSecondMoment", "Second moment of transverse distribution;#LTr^{2}#GT (mm^{2});Entries",
     1024, 0, std::pow(cellNumRho * cellSizeRho, 2) / 5);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1("hitType", "hit type;type (0=full, 1= fast);Entries", 2, -0.5, 1.5);
+  analysisManager->CreateH1("phiProfile", "Azimuthal angle profile, centred at mean;phi;#LTE#GT (MeV)", cellNumPhi,
+                            - (cellNumPhi - 0.5) * cellSizePhi, (cellNumPhi - 0.5) * cellSizePhi);
+  analysisManager->CreateH1("numHits", "Number of hits above 0.5 keV", 4048, 0, 40500);
+  analysisManager->CreateH1("cellEnergy", "Cell energy distribution;log10(E/MeV);Entries", 1024, -4, 2);
 
   // Creating ntuple
   analysisManager->CreateNtuple("events", "per event data");

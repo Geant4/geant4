@@ -44,58 +44,61 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackerSD::TrackerSD(const G4String& name,
-                     const G4String& hitsCollectionName) 
+                     const G4String& hitsCollectionName)
 :G4VSensitiveDetector(name),
-fHitsCollection(NULL)
+fHitsCollection(nullptr)
 {
   collectionName.insert(hitsCollectionName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackerSD::~TrackerSD() 
-{}
+TrackerSD::~TrackerSD() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackerSD::Initialize(G4HCofThisEvent* hce)
 {
   // Create hits collection
-  fHitsCollection 
-    = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]); 
+  fHitsCollection
+    = new TrackerHitsCollection(SensitiveDetectorName, collectionName[0]);
 
   // Add this collection in hce
 
-  G4int hcID 
+  G4int hcID
     = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-  
-  hce->AddHitsCollection( hcID, fHitsCollection ); 
+
+  hce->AddHitsCollection( hcID, fHitsCollection );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool TrackerSD::ProcessHits(G4Step* aStep, 
+G4bool TrackerSD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
-{  
+{
   // energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   if (edep==0.) return false;
 
-  TrackerHit* newHit = new TrackerHit();
+  auto newHit = new TrackerHit();
 
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
   newHit->SetEdep(edep);
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
 
-  if (aStep->GetTrack()->GetTrackID()==1&&aStep->GetTrack()->GetParentID()==0)
+  if (aStep->GetTrack()->GetTrackID()==1&&aStep->GetTrack()->GetParentID()==0){
     newHit->SetIncidentEnergy(aStep->GetTrack()->GetVertexKineticEnergy());
-
+  }
   fHitsCollection->insert( newHit );
-
   //newHit->Print();
 
   return true;
+}
+
+void TrackerSD::SetRadius(const G4double& value)
+{
+  fRadius = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,58 +108,58 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   G4int nofHits = fHitsCollection->entries();
 
   G4double Einc=0;
-  
+
   /*
   G4cout << G4endl
-  << "-------->Hits Collection: in this event they are " 
-  << nofHits 
+  << "-------->Hits Collection: in this event they are "
+  << nofHits
   << " hits in the target volume " << G4endl;
   */
-  
+
   // PROCESSING OF MICRODOSIMETRY Y & Z SPECTRA
-  
+
   // *************************************
   // Please select herebelow :
   // the radius of the target sphere:
   // variable name = radius
   // it is set to 5 nm by default)
   //
-  
-  G4double radius = 5*nm;
+
+  G4double radius = fRadius;
 
   //
- 
+
   //***************
   // y and z
   //***************
-  
+
   // select random hit
   G4int randHit=0; // Runs from 0 to number of hits - 1
   randHit = static_cast<G4int>( G4UniformRand()*nofHits );
-  
+
   /*
-  G4cout 
-  << "======> random selection of hit number randHit =" 
+  G4cout
+  << "======> random selection of hit number randHit ="
   << randHit << G4endl;
   */
-  
+
   // get selected random hit position
   G4ThreeVector hitPos =  (*fHitsCollection)[randHit]->GetPos();
 //G4cout << "======> random hit position x/nm =" << hitPos.x()/nm << G4endl; 
 //G4cout << "======> random hit position y/nm =" << hitPos.y()/nm << G4endl; 
 //G4cout << "======> random hit position z/nm =" << hitPos.z()/nm << G4endl; 
-  
+
   // set random position of center of sphere within radius
   G4double chord = 4.*radius/3;
   G4double density = 1 * g/cm3;
   G4double mass = (4./3)*CLHEP::pi*radius*radius*radius*density;
-  
+
   // random placement of sphere: method 1
-  /*  
+  /*
   G4ThreeVector randDir = G4RandomDirection();
   G4double randRadius = G4UniformRand()*radius;
   G4ThreeVector randCenterPos = randRadius*randDir + hitPos;
-  */  
+  */
 
   // random placement of sphere: method 2
 
@@ -173,51 +176,51 @@ void TrackerSD::EndOfEvent(G4HCofThisEvent*)
   }
   while (randRad>radius);
 
-  G4ThreeVector 
+  G4ThreeVector
     randCenterPos(xRand+hitPos.x(),yRand+hitPos.y(),zRand+hitPos.z());
 
-  // search for neighbouring hits in the sphere and cumulate deposited energy 
+  // search for neighbouring hits in the sphere and cumulate deposited energy
   //  in epsilon
   G4double epsilon = 0;
   G4int nbEdep = 0;
-  
-  for ( G4int i=0; i<nofHits; i++ ) 
-  { 
+
+  for ( G4int i=0; i<nofHits; i++ )
+  {
 
     if ((*fHitsCollection)[i]->GetIncidentEnergy()>0)
       Einc = (*fHitsCollection)[i]->GetIncidentEnergy();
-    
+
     G4ThreeVector localPos = (*fHitsCollection)[i]->GetPos();
-    
+
     // G4cout << i << " " << (*fHitsCollection)[i] << G4endl;
     // G4cout << i << " " << (*fHitsCollection)[i]->GetEdep()/eV << G4endl;
-    
-    if ( 
+
+    if (
         (localPos.x()-randCenterPos.x()) * (localPos.x()-randCenterPos.x()) +
         (localPos.y()-randCenterPos.y()) * (localPos.y()-randCenterPos.y()) +
-        (localPos.z()-randCenterPos.z()) * (localPos.z()-randCenterPos.z()) 
+        (localPos.z()-randCenterPos.z()) * (localPos.z()-randCenterPos.z())
          <= radius*radius
-       ) 
-       
-    { 
+       )
+
+    {
       epsilon = epsilon + (*fHitsCollection)[i]->GetEdep() ;
       nbEdep = nbEdep+1;
     }
-       
+
   }
 
   // for testing only
   /*
   G4cout << "======> for hit number #" << randHit <<
-  ", we collect " 
-  << nbEdep << " energy depositions in a sphere of radius " 
-  << radius/nm << " nm and mass " 
-  << mass/kg << " kg for a total of " 
-  << epsilon/eV << " eV or " 
+  ", we collect "
+  << nbEdep << " energy depositions in a sphere of radius "
+  << radius/nm << " nm and mass "
+  << mass/kg << " kg for a total of "
+  << epsilon/eV << " eV or "
   << (epsilon/joule)/(mass/kg) << " Gy" << G4endl;
   G4cout << "-" << G4endl;
   */
-  
+
   /*
   FILE* myFile;
   myFile=fopen("yz.txt","a");

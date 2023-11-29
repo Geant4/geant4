@@ -112,7 +112,7 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition*,
       new G4eeToPGammaModel(cross,"eta",maxKineticEnergy,delta);
     AddEEModel(mpg2,cuts);
 
-    nModels = models.size();
+    nModels = (G4int)models.size();
 
     fParticleChange = GetParticleChangeForGamma();
   }

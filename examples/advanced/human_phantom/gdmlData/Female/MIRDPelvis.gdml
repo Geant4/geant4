@@ -56,9 +56,9 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="PelvisOut" dx="10.35" dy="11.76" dz="9.915" />
-  <eltube aunit="cm" lunit="cm" name="PelvisIn" dx="9.75" dy="11.07" dz="10.0" />
-  <box aunit="cm" lunit="cm" name="SubtrPelvis" x="20.71" y="23.52" z="19.84" /> 
+  <eltube lunit="cm" name="PelvisOut" dx="10.35" dy="11.76" dz="9.915" />
+  <eltube lunit="cm" name="PelvisIn" dx="9.75" dy="11.07" dz="10.0" />
+  <box lunit="cm" name="SubtrPelvis" x="20.71" y="23.52" z="19.84" /> 
 
   <subtraction name="FirstPelvis">
    <first ref="PelvisOut" />

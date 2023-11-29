@@ -292,7 +292,7 @@ public:
   double howOrthogonal (const Hep3Vector & v) const;
   // | v1.dot(v2) / v1.cross(v2) |, to a maximum of 1.
 
-  enum { ToleranceTicks = 100 };
+  static const int ToleranceTicks = 100;
 
 // 4 - Intrinsic properties 
 

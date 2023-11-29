@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.hh
+/// \file B3/B3b/include/DetectorConstruction.hh
 /// \brief Definition of the B3::DetectorConstruction class
 
 #ifndef B3DetectorConstruction_h
@@ -48,7 +48,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     DetectorConstruction();
-    ~DetectorConstruction() override;
+    ~DetectorConstruction() override = default;
 
   public:
     G4VPhysicalVolume* Construct() override;

@@ -4,60 +4,68 @@
 
 /*! \page ExampleTestEm15 Example TestEm15
 
-  How to compute and plot the final state of Multiple Scattering 
-  considered as an isolated process.
-  The method is exposed below : see \ref TestEm15_s4. 
-  
+How to compute and plot the final state of:
+ - Multiple Scattering
+ - Gamma Conversion
+considered as an isolated processes, see \link TestEm15_s4 PHYSICS \endlink .
+
+For Multiple Scattering, the method is exposed below.
+
+For Gamma Conversion, when G4BetheHeitler5DModel Model is used,
+see \link ExampleTestEm15_GC README.gamma \endlink for Histograms and UI commands description.
+
 \section TestEm15_s1 GEOMETRY DEFINITION
- 
+
   It is a single box representing a 'semi infinite' homogeneous medium.
-  Two parameters define the geometry :
+  Two parameters define the geometry:
   - the material of the box,
   - the (full) size of the box.
-   
-  The default geometry (100 m of water) is constructed in 
-  DetectorConstruction, but the above parameters can be changed 
+
+  The default geometry (100 m of water) is constructed in
+  DetectorConstruction, but the above parameters can be changed
   interactively via the commands defined in DetectorMessenger.
-   
+
 \section TestEm15_s2 PHYSICS LIST
- 
+
   The physics list contains the standard electromagnetic processes.
-  In order not to introduce 'articicial' constraints on the step size, 
-  there is no limitation from the maximum energy lost per step.  
-    
-\section TestEm15_s3 AN EVENT : THE PRIMARY GENERATOR
- 
+  In order not to introduce 'articicial' constraints on the step size,
+  there is no limitation from the maximum energy lost per step.
+
+\section TestEm15_s3 AN EVENT: THE PRIMARY GENERATOR
+
   The primary kinematic consists of a single particle starting at the edge
-  of the box. The type of the particle and its energy are set in 
-  PrimaryGeneratorAction (1 MeV electron), and can be changed via the G4 
-  build-in commands of G4ParticleGun class (see the macros provided with 
+  of the box. The type of the particle and its energy are set in
+  PrimaryGeneratorAction (1 MeV electron), and can be changed via the G4
+  build-in commands of G4ParticleGun class (see the macros provided with
   this example).
-   
+
 \section TestEm15_s4 PHYSICS
- 
-  All discrete processes are inactivated (see provided macros),
-  so that Multiple Scattering is 'forced' to determine the first step of 
-  the primary particle. The step size and the final state are computed 
-  and plotted. Then the event is immediately killed.
-  
-  The result is compared with the 'input' data, i.e. with the cross
-  sections stored in the PhysicsTables and used by Geant4.
-  
+
+   All discrete processes are inactivated (see provided macros),
+   so that Multiple Scattering or Gamma Conversion is 'forced' to
+   determine the first step of the primary particle.
+   The step size and the final state are computed  and plotted.
+   Then the event is immediately killed.
+
+ __Multiple Scattering:__
+
+  The result is compared with the 'input' data, i.e. with the cross sections stored in the PhysicsTables and used by Geant4.
+
   The stepMax command provides an additionnal control of the step size of
   the multiple scattering.
-   
+
 
 \section TestEm15_s5 HISTOGRAMS
-         
-  The test contains 9 built-in 1D histograms, which are managed by the
-  HistoManager class and its Messenger. The histos can be individually 
+
+  The test contains 16 built-in 1D histograms, which are managed by the
+  HistoManager class and its Messenger. The histos can be individually
   activated with the command :
-\verbatim  
-/analysis/h1/set id nbBins  valMin valMax unit 
-\endverbatim  
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit
+\endverbatim
   where unit is the desired unit for the histo (MeV or keV, etc..)
   (see the macros xxxx.mac).
-     
+
    - 1 :  Multiple Scattering. True step length
    - 2 :  Multiple Scattering. Geom step length
    - 3 :  Multiple Scattering. Ratio geomSl/trueSl
@@ -67,50 +75,59 @@
    - 7 :  Multiple Scattering. Phi-position angle
    - 8 :  Multiple Scattering. Phi-direction angle
    - 9 :  Multiple Scattering. Correlation: cos(phiPos-phiDir)
-      
-   The histograms are managed by the HistoManager class and its Messenger. 
+
+   - 10 : Gamma Conversion. Open Angle * Egamma
+   - 11 : Gamma Conversion. Log10(P recoil)
+   - 12 : Gamma Conversion. Phi P recoil angle
+   - 13 : Gamma Conversion. Phi P plus angle
+   - 14 : Gamma Conversion. 2 * cos(phiplus + phiminus) Asymmetry
+   - 15 : Gamma Conversion. E plus / E gamma
+   - 16 : Gamma Conversion. Phi of Gamma Polarization
+
+
+   The histograms are managed by the HistoManager class and its Messenger.
    The histos can be individually activated with the command :
 \verbatim
-/analysis/h1/set id nbBins  valMin valMax unit 
+/analysis/h1/set id nbBins  valMin valMax unit
 \endverbatim
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
-   
+
    One can control the name of the histograms file with the command:
 \verbatim
 /analysis/setFileName  name  (default testem15)
 \endverbatim
-   
+
    It is possible to choose the format of the histogram file : root (default),
-   hbook, xml, csv, by using namespace in HistoManager.hh   
-  
+   hbook, xml, csv, by using namespace in HistoManager.hh
+
    It is also possible to print selected histograms on an ascii file:
 \verbatim
 /analysis/h1/setAscii id
 \endverbatim
    All selected histos will be written on a file name.ascii (default testem15)
-            
+
 \section TestEm15_s6 VISUALIZATION
- 
+
    The Visualization Manager is set in the main () (see TestEm15.cc).
    The initialisation of the drawing is done via the commands
    /vis/... in the macro vis.mac. To get visualisation:
 \verbatim
 > /control/execute vis.mac
 \endverbatim
-   
-   The detector has a default view which is a longitudinal view of the 
+
+   The detector has a default view which is a longitudinal view of the
    box.
-   
+
    The tracks are drawn at the end of event, and erased at the end of run.
-  
+
 \section TestEm15_s7- HOW TO START ?
- 
-  - Execute TestEm15 in 'batch' mode from macro files :
+
+  - Execute TestEm15 in 'batch' mode from macro files:
 \verbatim
 % TestEm15   compt.mac
 \endverbatim
-     
-  - Execute TestEm15 in 'interactive mode' with visualization :
+
+  - Execute TestEm15 in 'interactive mode' with visualization:
 \verbatim
 % TestEm15
 Idle> control/execute vis.mac
@@ -119,6 +136,121 @@ Idle> type your commands
 ....
 Idle> exit
 \endverbatim
-  
+
+\section TestEm15_s8 - MACROS
+
+ The examples of macros for Multiple Scattering:
+  - electron.mac
+  - muon.mac
+  - proton.mac
+
+ The example of Gamma Conversion macro:
+  - gamma.mac - gamma to e+ e-
+  - gamma2mumu.mac gamma to mu+ mu-
+
+\subpage ExampleTestEm15_GC
+
+\page ExampleTestEm15_GC Example TestEm15 - Gamma Conversion
+
+\section  TestEm15_gc_s0 Gamma Conversion macros:
+  - gamma.mac - tests of the 5D gamma -> e+ e- conversion model G4BetheHeitler5DModel
+  - gamma2mumu.mac - tests of the 5D gamma -> mu+ mu- conversion model G4BetheHeitler5DModel
+
+All discrete processes are inactivated (see macro),
+so Gamma Conversion is 'forced'.
+
+\section TestEm15_gc_s1 HISTOGRAMS
+
+  - 10 : Open Angle (rad)* E gamma (MeV).
+
+The most probable value of the e+ e- pair opening angle multiplied by the
+photon energy is 1.6 rad*MeV and 338 rad*MeV in case mu+ mu- pair.
+See: Olsen, Phys. Rev. 131 (1963) 406.
+See also: Fig. 7 of arXiv:1802.08253 and Fig. 6 arXiv:1910.12501.
+
+  - 11 :  Log10 ( recoil momentum).
+
+The distribution of the  recoil momentum is described by
+Jost, Phys. Rev. 80 (1950) 189 (no form factor).
+See also Fig. 2 of Astroparticle Physics 88 (2017) 60.
+
+  - 12 :  Phi recoil.
+
+  - 13 :  Phi positron.
+
+  For linearly polarized incident photons, the distributions should show
+  a sinusoidal shape with period 180°, for non polarized incident photons,
+  the distribution of azimuthal angles should be flat.
+
+  - 14 : Asymmetry 2 * cos(phi_+ + phi_-).
+
+For a photon propagating along x, polarized along y,
+the average value of ( 2.0 * cos(phi_+ + phi_-) ),
+provides a measurement of the polarization asymmetry, A.
+Eq. (12) of Nucl. Instrum. Meth. A 729 (2013) 765
+The azimuthal angle of the event defined as the bisector angle
+of the azimuthal angles of the positron and of the electron,
+(phi_+ + phi_-)/2,
+provides the optimal measurement of the asymmetry
+Astroparticle Physics 88 (2017) 30.
+
+For high-energy photons (E >> 20 MeV), the asymptotic expression for A
+can be used for comparison.
+Boldyshev, Yad. Fiz. 14 (1971) 1027, Sov.J.Nucl.Phys. 14 (1972) 576.
+See also eq. (13) of arXiv:1802.08253
+Example : A ~ 0.17 at 100 GeV.
+
+  - 15 : E plus / E gamma.
+
+x_+ = E plus / E gamma has a more-or-less flat spectrum that extends
+almost from 0. to 1.
+See Fig. 16 page 261 of "The Quantum Theory of Radiation", W. Heitler,
+3rd edition, 1954.
+
+  - 16 : Phi of Gamma Polarization.
+
+The phi of polarization vector after transformation into reference system
+ defined by gamma direction (z) , gamma polarization (x).
+
+\section TestEm15_gc_s2 UI COMMANDS
+
+There are two commands to control G4BetheHeitler5DModel:
+
+\verbatim
+/process/gconv/conversionType itype
+/process/gconv/onIsolated bool
+\endverbatim
+
+The command:
+\verbatim
+/process/gconv/conversionType
+\endverbatim
+
+Allow to force conversion on nuclear or electron
+The parameter values:
+ - 0 - (default) both triplet and nuclear conversion in proportion triplet/nuclear 1/Z
+ - 1 - force nuclear conversion
+ - 2 - force triplet
+
+The command:
+\verbatim
+/process/gconv/onIsolated
+\endverbatim
+
+Allow simulate conversion on isolated particles without screening
+The perimeter values:
+ - false - (default) atomic electron screening
+ - true - conversion on isolated particles
+
+\subsection TestEm15_gc_s3 One more command for G4GammaConversionToMuons
+
+To enable gamma to mu+ mu- conversion use command:
+
+\verbatim
+/process/em/max5DMuPairEnergy emax5D units
+\endverbatim
+The conversion disabled by default, emax5D set to 0.0
+
+__The model tested for the energies about the threshold up to PeV range__.
+
 */
- 

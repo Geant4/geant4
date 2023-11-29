@@ -56,33 +56,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
-  : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , EvtMap(0)
-  , weighted(true)
-{
-  DefineUnitAndCategory();
-  SetUnit("percm2");
-  // verboseLevel = 10;
-}
+  : G4PSCellFlux(name, "percm2", depth)
+{}
 
 G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
   : G4VPrimitivePlotter(name, depth)
   , HCID(-1)
-  , EvtMap(0)
+  , EvtMap(nullptr)
   , weighted(true)
 {
   DefineUnitAndCategory();
   SetUnit(unit);
 }
 
-G4PSCellFlux::~G4PSCellFlux() { ; }
-
 G4bool G4PSCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double stepLength = aStep->GetStepLength();
   if(stepLength == 0.)
-    return FALSE;
+    return false;
 
   G4int idx = ((G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable()))
                 ->GetReplicaNumber(indexDepth);
@@ -94,10 +85,10 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int index = GetIndex(aStep);
   EvtMap->add(index, CellFlux);
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.end())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSCellFlux::ProcessHits", "SCORER0123", JustWarning,
@@ -110,7 +101,7 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 void G4PSCellFlux::Initialize(G4HCofThisEvent* HCE)
@@ -121,22 +112,17 @@ void G4PSCellFlux::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSCellFlux::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSCellFlux::clear() { EvtMap->clear(); }
-
-void G4PSCellFlux::DrawAll() { ; }
 
 void G4PSCellFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, flux]: *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  cell flux : " << *(itr->second) / GetUnitValue() << " ["
+    G4cout << "  copy no.: " << copy
+           << "  cell flux : " << *(flux) / GetUnitValue() << " ["
            << GetUnit() << "]" << G4endl;
   }
 }

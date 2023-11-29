@@ -36,36 +36,37 @@
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 //
 #include "globals.hh"
+
 #include <map>
 
-class G4ParticleHPReactionWhiteBoard 
+class G4ParticleHPReactionWhiteBoard
 {
-   public:
-      G4ParticleHPReactionWhiteBoard();
-      ~G4ParticleHPReactionWhiteBoard();
+  public:
+    G4ParticleHPReactionWhiteBoard();
+    ~G4ParticleHPReactionWhiteBoard();
 
-   public:
-      void Dump();
+  public:
+    void Dump();
 
-      void SetTargZ( G4int Z ){ targZ=Z; };
-      void SetTargA( G4int A ){ targA=A; };
-      void SetTargM( G4int M ){ targM=M; };
-      G4int GetTargZ(){ return targZ; };
-      G4int GetTargA(){ return targA; };
-      G4int GetTargM(){ return targM; };
-       
-      bool AddRecord( std::pair<G4String,G4String> );
-      G4String GetValue( G4String );
-      // "0" or "0.0" will retrun for invalid key by following two methods
-      G4int GetValueInInt( G4String );
-      G4double GetValueInDouble( G4String );
+    void SetTargZ(G4int Z) { targZ = Z; };
+    void SetTargA(G4int A) { targA = A; };
+    void SetTargM(G4int M) { targM = M; };
+    G4int GetTargZ() { return targZ; };
+    G4int GetTargA() { return targA; };
+    G4int GetTargM() { return targM; };
 
-   private:
-      G4int targZ;
-      G4int targA;
-      G4int targM;
-      std::map< G4String,G4String > mapStringPair;
-      //,,,
+    bool AddRecord(std::pair<G4String, G4String>);
+    G4String GetValue(G4String);
+    // "0" or "0.0" will retrun for invalid key by following two methods
+    G4int GetValueInInt(G4String);
+    G4double GetValueInDouble(G4String);
+
+  private:
+    G4int targZ{0};
+    G4int targA{0};
+    G4int targM{0};
+    std::map<G4String, G4String> mapStringPair;
+    //,,,
 };
 
 #endif

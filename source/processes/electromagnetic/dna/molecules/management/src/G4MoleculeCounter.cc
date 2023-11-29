@@ -376,7 +376,7 @@ G4MoleculeCounter::RecordedMolecules G4MoleculeCounter::GetRecordedMolecules()
 
     RecordedMolecules output(new ReactantList());
 
-    for (auto it : fCounterMap)
+    for (const auto & it : fCounterMap)
     {
         output->push_back(it.first);
     }
@@ -429,13 +429,13 @@ RecordedTimes G4MoleculeCounter::GetRecordedTimes()
 
 void G4MoleculeCounter::Dump()
 {
-    for (auto it : fCounterMap)
+    for (const auto& it : fCounterMap)
     {
         auto pReactant = it.first;
 
         G4cout << " --- > For " << pReactant->GetName() << G4endl;
 
-        for (auto it2 : it.second)
+        for (const auto& it2 : it.second)
         {
             G4cout << " " << G4BestUnit(it2.first, "Time")
                    << "    " << it2.second << G4endl;

@@ -1,38 +1,38 @@
 #
 # Macro file for "TestEm1.cc"
 # 
-# compute the csda range of primary particle
+# compute csda range of primary particle
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 #
 /testem/det/setMat Water
 #
 /testem/phys/addPhysics  local
-###/testem/phys/addPhysics  empenelope
-###/testem/phys/addPhysics  emlivermore
+###/testem/phys/addPhysics  emstandard_opt4
 #
+/process/em/verbose 0
 /run/initialize
 #
-# csda condition
+# prevent any secondary production
 /run/setCut 1 km
 #
-# no step limitation from eLoss
-/process/eLoss/StepFunction 1 100 um
+# (no) step limitation from eLoss
+# to test StepFunction, play with this command
+###/process/eLoss/StepFunction 1 1 mm
 #
 # eliminate straggling
 /process/eLoss/fluct false
 /process/inactivate msc
 #
+/process/em/printParameters
+#
 /testem/gun/setDefault
 /gun/particle e-
-/gun/energy 100 keV
+/gun/energy 1 MeV
 #
-/tracking/verbose 1
-/run/beamOn 5
+/tracking/verbose 2
+/run/beamOn 2
+/tracking/verbose 0
 #
-###/analysis/setFileName std.1km
-###/analysis/h1/set 1 200 0 2000 um		# csda range
-###/analysis/h1/set 1 250 0 5000 um
-#
-###/run/beamOn 20000
+/run/beamOn 10000

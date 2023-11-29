@@ -63,7 +63,7 @@ public:
 
   explicit G4NIELCalculator(G4VEmModel*, G4int verb);
 
-  ~G4NIELCalculator();
+  ~G4NIELCalculator() = default;
 
   // initialisation before start of run
   void Initialise();

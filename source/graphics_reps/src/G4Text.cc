@@ -50,7 +50,7 @@ fLayout   (left)  ,
 fXOffset(0.) , fYOffset(0.)
 {}
 
-G4Text::~G4Text () {}
+G4Text::~G4Text () = default;
 
 std::ostream& operator<< (std::ostream& os, const G4Text& text)
 {

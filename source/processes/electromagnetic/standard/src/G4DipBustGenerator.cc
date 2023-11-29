@@ -65,8 +65,7 @@ G4DipBustGenerator::G4DipBustGenerator(const G4String&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DipBustGenerator::~G4DipBustGenerator()
-{}
+G4DipBustGenerator::~G4DipBustGenerator() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

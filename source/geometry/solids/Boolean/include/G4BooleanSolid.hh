@@ -41,11 +41,14 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
+#include "G4VBooleanProcessor.hh"
+
 class HepPolyhedronProcessor;
+
 
 class G4BooleanSolid : public G4VSolid
 {
-  public:  // with description
+  public:
  
     G4BooleanSolid( const G4String& pName,
                           G4VSolid* pSolidA ,
@@ -62,21 +65,21 @@ class G4BooleanSolid : public G4VSolid
                           G4VSolid* pSolidB , 
                     const G4Transform3D& transform   );
 
-    virtual ~G4BooleanSolid();
+    ~G4BooleanSolid() override;
 
-    virtual const G4VSolid* GetConstituentSolid(G4int no) const;
-    virtual       G4VSolid* GetConstituentSolid(G4int no);
+    const G4VSolid* GetConstituentSolid(G4int no) const override;
+          G4VSolid* GetConstituentSolid(G4int no) override;
       // If Solid is made up from a Boolean operation of two solids,
       // return the corresponding solid (for no=0 and 1).
       // If the solid is not a "Boolean", return 0.
 
-    virtual G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    inline G4double GetSurfaceArea() override;
 
-    virtual G4GeometryType  GetEntityType() const;
-    virtual G4Polyhedron* GetPolyhedron () const;
+    G4GeometryType  GetEntityType() const override;
+    G4Polyhedron* GetPolyhedron () const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     inline G4int GetCubVolStatistics() const;
     inline G4double GetCubVolEpsilon() const;
@@ -88,9 +91,7 @@ class G4BooleanSolid : public G4VSolid
     inline void SetAreaStatistics(G4int st);
     inline void SetAreaAccuracy(G4double ep);
    
-    G4ThreeVector GetPointOnSurface() const;
-
-  public:  // without description
+    G4ThreeVector GetPointOnSurface() const override;
 
     G4BooleanSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -100,6 +101,11 @@ class G4BooleanSolid : public G4VSolid
     G4BooleanSolid(const G4BooleanSolid& rhs);
     G4BooleanSolid& operator=(const G4BooleanSolid& rhs);
       // Copy constructor and assignment operator.
+
+    static void SetExternalBooleanProcessor(G4VBooleanProcessor* extProcessor);
+      // Set Boolean processor to replace default processor.
+    static G4VBooleanProcessor* GetExternalBooleanProcessor();
+      // Get Boolean processor needed for G4MultiUnion.
 
   protected:
   
@@ -119,6 +125,9 @@ class G4BooleanSolid : public G4VSolid
     G4double fCubicVolume = -1.0;
       // Stored value of fCubicVolume 
 
+    static G4VBooleanProcessor* fExternalBoolProcessor;
+      // External Boolean processor
+
   private:
 
     G4int    fStatistics = 1000000;
@@ -134,7 +143,7 @@ class G4BooleanSolid : public G4VSolid
 
     G4bool  createdDisplacedSolid = false;
       // If & only if this object created it, it must delete it
-} ;
+};
 
 #include "G4BooleanSolid.icc"
 

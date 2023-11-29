@@ -47,16 +47,16 @@
 // ###                           SigmaPlus                            ###
 // ######################################################################
 
-G4SigmaPlus* G4SigmaPlus::theInstance = 0;
+G4SigmaPlus* G4SigmaPlus::theInstance = nullptr;
 
 G4SigmaPlus* G4SigmaPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "sigma+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4SigmaPlus* G4SigmaPlus::Definition()
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        3222,
-                false,      0.08018*ns,          NULL,
+                false,      0.08018*ns,          nullptr,
                 false,       "sigma");
  
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4SigmaPlus* G4SigmaPlus::Definition()
     anInstance->SetPDGMagneticMoment( 2.458 * mN);
 
     //create Decay Table
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels
-    G4VDecayChannel** mode = new G4VDecayChannel*[2];
+    auto  mode = new G4VDecayChannel*[2];
     // sigma+ -> proton + pi0
     mode[0] = new G4PhaseSpaceDecayChannel("sigma+",0.516,2,"proton","pi0");
     // sigma+ -> neutron + pi+
@@ -95,7 +95,7 @@ G4SigmaPlus* G4SigmaPlus::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4SigmaPlus*>(anInstance);
+  theInstance = static_cast<G4SigmaPlus*>(anInstance);
   return theInstance;
 }
 

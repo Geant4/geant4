@@ -1,0 +1,20 @@
+#
+# Macro file for "TestEm0.cc"
+#
+/control/verbose 0
+/run/verbose 1
+#
+/testem/phys/addPhysics local
+###/testem/phys/addPhysics emstandard_opt4
+#
+/process/em/verbose 0
+#
+/run/setCut 1 mm
+/run/initialize
+#
+/testem/det/setMat G4_lH2
+/gun/particle ion
+/gun/ion 3 7
+/gun/energy 20 MeV
+/run/beamOn 
+#

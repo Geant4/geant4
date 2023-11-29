@@ -29,4 +29,4 @@
 #include "G4ParticleHPNDInelasticFS.hh"
 using G4NeutronHPNDInelasticFS = G4ParticleHPNDInelasticFS;
 
-#endif 
+#endif

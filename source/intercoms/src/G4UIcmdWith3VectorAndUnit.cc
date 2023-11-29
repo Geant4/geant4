@@ -29,23 +29,25 @@
 // --------------------------------------------------------------------
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
+
 #include "G4Tokenizer.hh"
-#include "G4UnitsTable.hh"
 #include "G4UIcommandStatus.hh"
+#include "G4UnitsTable.hh"
+
 #include <sstream>
 
 // --------------------------------------------------------------------
-G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit(
-  const char* theCommandPath, G4UImessenger* theMessenger)
+G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit(const char* theCommandPath,
+                                                     G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* dblParamX = new G4UIparameter('d');
+  auto* dblParamX = new G4UIparameter('d');
   SetParameter(dblParamX);
-  G4UIparameter* dblParamY = new G4UIparameter('d');
+  auto* dblParamY = new G4UIparameter('d');
   SetParameter(dblParamY);
-  G4UIparameter* dblParamZ = new G4UIparameter('d');
+  auto* dblParamZ = new G4UIparameter('d');
   SetParameter(dblParamZ);
-  G4UIparameter* untParam = new G4UIparameter('s');
+  auto* untParam = new G4UIparameter('s');
   untParam->SetParameterName("Unit");
   SetParameter(untParam);
   SetCommandType(With3VectorAndUnitCmd);
@@ -57,21 +59,18 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
   std::vector<G4String> token_vector;
   G4Tokenizer tkn(parameterList);
   G4String str;
-  while((str = tkn()) != "")
-  {
+  while (!(str = tkn()).empty()) {
     token_vector.push_back(str);
   }
 
   // convert a value in default unit
   G4String converted_parameter;
   G4String default_unit = GetParameter(3)->GetDefaultValue();
-  if(default_unit != "" && token_vector.size() >= 4)
-  {
-    if(CategoryOf(token_vector[3]) != CategoryOf(default_unit))
-    {
+  if (!default_unit.empty() && token_vector.size() >= 4) {
+    if (CategoryOf(token_vector[3]) != CategoryOf(default_unit)) {
       return fParameterOutOfCandidates + 3;
     }
-    G4double value_given   = ValueOf(token_vector[3]);
+    G4double value_given = ValueOf(token_vector[3]);
     G4double value_default = ValueOf(default_unit);
     G4double x = ConvertToDouble(token_vector[0]) * value_given / value_default;
     G4double y = ConvertToDouble(token_vector[1]) * value_given / value_default;
@@ -85,14 +84,12 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
     converted_parameter += ConvertToString(z);
     converted_parameter += " ";
     converted_parameter += default_unit;
-    for(std::size_t i = 4; i < token_vector.size(); ++i)
-    {
+    for (std::size_t i = 4; i < token_vector.size(); ++i) {
       converted_parameter += " ";
       converted_parameter += token_vector[i];
     }
   }
-  else
-  {
+  else {
     converted_parameter = parameterList;
   }
 
@@ -100,15 +97,13 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
 }
 
 // --------------------------------------------------------------------
-G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(
-  const char* paramString)
+G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(const char* paramString)
 {
   return ConvertToDimensioned3Vector(paramString);
 }
 
 // --------------------------------------------------------------------
-G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(
-  const char* paramString)
+G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(const char* paramString)
 {
   G4double vx;
   G4double vy;
@@ -133,11 +128,10 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
 }
 
 // --------------------------------------------------------------------
-G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(
-  G4ThreeVector vec)
+G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(const G4ThreeVector& vec)
 {
   G4UIparameter* unitParam = GetParameter(3);
-  G4String canList         = unitParam->GetParameterCandidates();
+  G4String canList = unitParam->GetParameterCandidates();
   G4Tokenizer candidateTokenizer(canList);
   G4String aToken = candidateTokenizer();
 
@@ -149,27 +143,22 @@ G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithBestUnit(
 }
 
 // --------------------------------------------------------------------
-G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithDefaultUnit(
-  G4ThreeVector vec)
+G4String G4UIcmdWith3VectorAndUnit::ConvertToStringWithDefaultUnit(const G4ThreeVector& vec)
 {
   G4UIparameter* unitParam = GetParameter(3);
   G4String st;
-  if(unitParam->IsOmittable())
-  {
+  if (unitParam->IsOmittable()) {
     st = ConvertToString(vec, unitParam->GetDefaultValue());
   }
-  else
-  {
+  else {
     st = ConvertToStringWithBestUnit(vec);
   }
   return st;
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWith3VectorAndUnit::SetParameterName(const char* theNameX,
-                                                 const char* theNameY,
-                                                 const char* theNameZ,
-                                                 G4bool omittable,
+void G4UIcmdWith3VectorAndUnit::SetParameterName(const char* theNameX, const char* theNameY,
+                                                 const char* theNameZ, G4bool omittable,
                                                  G4bool currentAsDefault)
 {
   G4UIparameter* theParamX = GetParameter(0);
@@ -187,7 +176,7 @@ void G4UIcmdWith3VectorAndUnit::SetParameterName(const char* theNameX,
 }
 
 // --------------------------------------------------------------------
-void G4UIcmdWith3VectorAndUnit::SetDefaultValue(G4ThreeVector vec)
+void G4UIcmdWith3VectorAndUnit::SetDefaultValue(const G4ThreeVector& vec)
 {
   G4UIparameter* theParamX = GetParameter(0);
   theParamX->SetDefaultValue(vec.x());
@@ -207,7 +196,7 @@ void G4UIcmdWith3VectorAndUnit::SetUnitCategory(const char* unitCategory)
 void G4UIcmdWith3VectorAndUnit::SetUnitCandidates(const char* candidateList)
 {
   G4UIparameter* untParam = GetParameter(3);
-  G4String canList        = candidateList;
+  G4String canList = candidateList;
   untParam->SetParameterCandidates(canList);
 }
 

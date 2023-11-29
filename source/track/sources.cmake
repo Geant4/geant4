@@ -12,7 +12,6 @@ geant4_add_module(G4track
     G4ParticleChangeForGamma.hh
     G4ParticleChangeForLoss.hh
     G4ParticleChangeForMSC.hh
-    G4ParticleChangeForMSC.icc
     G4ParticleChangeForRadDecay.hh
     G4ParticleChangeForTransport.hh
     G4ParticleChangeForTransport.icc
@@ -48,6 +47,8 @@ geant4_add_module(G4track
     G4VelocityTable.cc
     G4VAuxiliaryTrackInformation.cc
     G4VUserTrackInformation.cc)
+
+geant4_module_compile_definitions(G4track PRIVATE G4TRACK_ALLOC_EXPORT)
 
 geant4_module_link_libraries(G4track
   PUBLIC

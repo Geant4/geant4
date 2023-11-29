@@ -65,33 +65,26 @@ class TrackerHit : public G4VHit
     virtual void Print();
 
     // Set methods
-    void SetTrackID  (G4int track)      { fTrackID = track; };
-    void SetEdep     (G4double de)      { fEdep = de; };
-    void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
-//NEW
-    void SetIncidentEnergy (G4double e)      { fIncidentEnergy = e; };
-//
+    inline void SetTrackID  (const G4int& track)      { fTrackID = track; };
+    inline void SetEdep     (const G4double& de)      { fEdep = de; };
+    inline void SetPos      (const G4ThreeVector& xyz){ fPos = xyz; };
+    inline void SetIncidentEnergy (const G4double& e)      { fIncidentEnergy = e; };
     // Get methods
-    G4int GetTrackID() const     { return fTrackID; };
-    G4double GetEdep() const     { return fEdep; };
-    G4ThreeVector GetPos() const { return fPos; };
-//NEW
-    G4double GetIncidentEnergy() const { return fIncidentEnergy; };
-//
-
+    inline G4int GetTrackID() const     { return fTrackID; };
+    inline G4double GetEdep() const     { return fEdep; };
+    inline G4ThreeVector GetPos() const { return fPos; };
+    inline G4double GetIncidentEnergy() const { return fIncidentEnergy; };
   private:
-
-    G4int         fTrackID;
-    G4double      fEdep;
-    G4ThreeVector fPos;
-//NEW
-    G4double      fIncidentEnergy;
+    G4int         fTrackID = -1;
+    G4double      fEdep = 0;
+    G4ThreeVector fPos = G4ThreeVector();
+    G4double      fIncidentEnergy = 0.;
 //
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<TrackerHit> TrackerHitsCollection;
+using TrackerHitsCollection = G4THitsCollection<TrackerHit> ;
 
 extern G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator;
 
@@ -99,8 +92,9 @@ extern G4ThreadLocal G4Allocator<TrackerHit>* TrackerHitAllocator;
 
 inline void* TrackerHit::operator new(size_t)
 {
-  if(!TrackerHitAllocator)
-      TrackerHitAllocator = new G4Allocator<TrackerHit>;
+  if(!TrackerHitAllocator){
+    TrackerHitAllocator = new G4Allocator<TrackerHit>;
+  }
   return (void *) TrackerHitAllocator->MallocSingle();
 }
 

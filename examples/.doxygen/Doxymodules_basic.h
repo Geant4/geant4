@@ -101,9 +101,9 @@
   class B3::PrimaryGeneratorAction{};
   class B3::StackingAction{};
   class B3b::ActionInitialization{};
+  class B3b::DetectorConstruction{};
   class B3b::Run{};
   class B3b::RunAction{};
-  class B3D::etectorConstruction{};
 
 /** @} */
 

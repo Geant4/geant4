@@ -335,7 +335,7 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
   G4double tol2 = kCarTolerance*kCarTolerance;
   G4double tolh = 0.5*kCarTolerance;
 
-  if(r2 && p.z() > - tolh + dz) 
+  if((r2 != 0.0) && p.z() > - tolh + dz) 
   {
     // If the points is above check for intersection with upper edge.
 
@@ -356,7 +356,7 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
       return kInfinity;
     }
   }
-  else if(r1 && p.z() < tolh - dz)
+  else if((r1 != 0.0) && p.z() < tolh - dz)
   {
     // If the points is belove check for intersection with lower edge.
 
@@ -819,7 +819,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
      G4cout << G4endl ;
      DumpInfo();
      std::ostringstream message;
-     G4int oldprc = message.precision(16);
+     G4long oldprc = message.precision(16);
      message << "Point p is outside !?" << G4endl
              << "Position:" << G4endl
              << "   p.x() = "   << p.x()/mm << " mm" << G4endl
@@ -851,7 +851,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p) const
 //
 G4GeometryType G4Paraboloid::GetEntityType() const
 {
-  return G4String("G4Paraboloid");
+  return {"G4Paraboloid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -869,7 +869,7 @@ G4VSolid* G4Paraboloid::Clone() const
 //
 std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -899,19 +899,19 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
     if(pi * sqr(r1) / A > z)
     {
       rho = r1 * std::sqrt(G4RandFlat::shoot(0., 1.));
-      return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), -dz);
+      return { rho * std::cos(phi), rho * std::sin(phi), -dz };
     }
     else
     {
       rho = r2 * std::sqrt(G4RandFlat::shoot(0., 1));
-      return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), dz);
+      return { rho * std::cos(phi), rho * std::sin(phi), dz };
     }
   }
   else
   {
     z = G4RandFlat::shoot(0., 1.)*2*dz - dz;
-    return G4ThreeVector(std::sqrt(z*k1 + k2)*std::cos(phi),
-                         std::sqrt(z*k1 + k2)*std::sin(phi), z);
+    return { std::sqrt(z*k1 + k2)*std::cos(phi),
+             std::sqrt(z*k1 + k2)*std::sin(phi), z};
   }
 }
 

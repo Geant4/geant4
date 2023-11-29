@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HadCalorimeterSD.cc
+/// \file B5/src/HadCalorimeterSD.cc
 /// \brief Implementation of the B5::HadCalorimeterSD class
 
 #include "HadCalorimeterSD.hh"
@@ -48,11 +48,6 @@ HadCalorimeterSD::HadCalorimeterSD(G4String name)
 {
   collectionName.insert("HadCalorimeterColl");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HadCalorimeterSD::~HadCalorimeterSD()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

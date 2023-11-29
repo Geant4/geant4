@@ -37,12 +37,6 @@
 
 class G4LeptonConstructor
 {
-  //This class is a utility class for constructLepton 
-
-  public:
-    G4LeptonConstructor();
-    ~G4LeptonConstructor();
-  
   public:
     static void ConstructParticle();
 

@@ -51,7 +51,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 SteppingAction::SteppingAction()
   : G4UserSteppingAction()
-  , fVerbose(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,8 +135,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     // optical process has endpt on bdry,
     if(endPoint->GetStepStatus() == fGeomBoundary)
     {
-      G4ThreeVector m0 = startPoint->GetMomentumDirection();
-      G4ThreeVector m1 = endPoint->GetMomentumDirection();
+      G4ThreeVector p0 = startPoint->GetMomentumDirection();
+      G4ThreeVector p1 = endPoint->GetMomentumDirection();
 
       G4OpBoundaryProcessStatus theStatus = Undefined;
 
@@ -148,21 +147,24 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
       if(trackInfo->GetIsFirstTankX())
       {
-        G4ThreeVector momdir = endPoint->GetMomentumDirection();
-        G4double px1         = momdir.x();
-        G4double py1         = momdir.y();
-        G4double pz1         = momdir.z();
-        if(px1 < 0.)
+        G4double px1         = p1.x();
+        G4double py1         = p1.y();
+        G4double pz1         = p1.z();
+        // do not count Absorbed or Detected photons here
+        if(track->GetTrackStatus() != fStopAndKill)
         {
-          analysisMan->FillH1(11, px1);
-          analysisMan->FillH1(12, py1);
-          analysisMan->FillH1(13, pz1);
-        }
-        else
-        {
-          analysisMan->FillH1(14, px1);
-          analysisMan->FillH1(15, py1);
-          analysisMan->FillH1(16, pz1);
+          if(px1 < 0.)
+          {
+            analysisMan->FillH1(11, px1);
+            analysisMan->FillH1(12, py1);
+            analysisMan->FillH1(13, pz1);
+          }
+          else
+          {
+            analysisMan->FillH1(14, px1);
+            analysisMan->FillH1(15, py1);
+            analysisMan->FillH1(16, pz1);
+          }
         }
 
         trackInfo->SetIsFirstTankX(false);
@@ -176,30 +178,31 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
             dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
           if(opProc)
           {
-            G4double angle = std::acos(startPoint->GetMomentumDirection().x());
+            G4double angle = std::acos(p0.x());
             theStatus      = opProc->GetStatus();
             analysisMan->FillH1(10, theStatus);
             switch(theStatus)
             {
               case Transmission:
                 run->AddTransmission();
+                analysisMan->FillH1(25, angle / deg);
                 break;
               case FresnelRefraction:
                 run->AddFresnelRefraction();
                 analysisMan->FillH1(17, px1);
                 analysisMan->FillH1(18, py1);
                 analysisMan->FillH1(19, pz1);
-
-                // transmission
                 analysisMan->FillH1(20, angle / deg);
                 break;
               case FresnelReflection:
                 run->AddFresnelReflection();
                 analysisMan->FillH1(21, angle / deg);
+                analysisMan->FillH1(23, angle / deg);
                 break;
               case TotalInternalReflection:
                 run->AddTotalInternalReflection();
-                analysisMan->FillH1(21, angle / deg);
+                analysisMan->FillH1(22, angle / deg);
+                analysisMan->FillH1(23, angle / deg);
                 break;
               case LambertianReflection:
                 run->AddLambertianReflection();
@@ -209,11 +212,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                 break;
               case SpikeReflection:
                 run->AddSpikeReflection();
+                analysisMan->FillH1(26, angle / deg);
                 break;
               case BackScattering:
                 run->AddBackScattering();
                 break;
               case Absorption:
+                analysisMan->FillH1(24, angle / deg);
                 run->AddAbsorption();
                 break;
               case Detection:
@@ -306,6 +311,15 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
               case Dichroic:
                 run->AddDichroic();
                 break;
+              case CoatedDielectricReflection:
+                run->AddCoatedDielectricReflection();
+                break;
+              case CoatedDielectricRefraction:
+                run->AddCoatedDielectricRefraction();
+                break;
+              case CoatedDielectricFrustratedTransmission:
+                run->AddCoatedDielectricFrustratedTransmission();
+                break;
               default:
                 G4cout << "theStatus: " << theStatus
                        << " was none of the above." << G4endl;
@@ -315,6 +329,35 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         }
       }
     }
+    // This block serves to test that G4OpBoundaryProcess sets the group
+    // velocity correctly. It is not necessary to include in user code.
+    // Only steps where pre- and post- are the same material, to avoid
+    // incorrect checks (so, in practice, set e.g. OpRayleigh low enough
+    // for particles to step in the interior of each volume.
+    if (endPoint->GetMaterial() == startPoint->GetMaterial())
+    {
+      G4double trackVelocity = track->GetVelocity();
+      G4double materialVelocity = CLHEP::c_light;
+      G4MaterialPropertyVector* velVector = endPoint->GetMaterial()
+        ->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
+      if(velVector)
+      {
+        materialVelocity =
+          velVector->Value(theParticle->GetTotalMomentum(), fIdxVelocity);
+      }
+
+      if (std::abs(trackVelocity - materialVelocity) > 1e-9 * CLHEP::c_light)
+      {
+        G4ExceptionDescription ed;
+        ed << "Optical photon group velocity: " << trackVelocity/(cm/ns)
+           << " cm/ns is not what is expected from " << G4endl
+           << "the material properties, "
+           << materialVelocity/(cm/ns) << " cm/ns";
+        G4Exception("OpNovice2 SteppingAction", "OpNovice2_1",
+                    FatalException, ed);
+      }
+    }
+    // end of group velocity test
   }
 
   else

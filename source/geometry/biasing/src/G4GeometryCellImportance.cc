@@ -34,10 +34,10 @@
 std::ostream& operator<<(std::ostream& out,
                          const G4GeometryCellImportance& gCelli)
 {
-  for (auto it = gCelli.cbegin(); it != gCelli.cend(); ++it)
+  for (const auto & it : gCelli)
   {
-    out << (*it).first << ", importance = ";
-    out << (*it).second << "\n";
+    out << it.first << ", importance = ";
+    out << it.second << "\n";
   }
   return out;
 }

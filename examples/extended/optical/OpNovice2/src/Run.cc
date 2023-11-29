@@ -70,12 +70,7 @@ Run::Run()
 
   fTotalSurface = 0;
 
-  fBoundaryProcs.clear();
-  fBoundaryProcs.resize(40);
-  for(G4int i = 0; i < 40; ++i)
-  {
-    fBoundaryProcs[i] = 0;
-  }
+  fBoundaryProcs.assign(43, 0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -214,11 +209,31 @@ void Run::EndOfRun()
   analysisMan->SetH1XAxisTitle(id, "Direction cosine");
   analysisMan->SetH1YAxisTitle(id, "Number of photons");
 
+  id = analysisMan->GetH1Id("Fresnel reflection");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  id = analysisMan->GetH1Id("Fresnel refraction");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  id = analysisMan->GetH1Id("Total internal reflection");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  id = analysisMan->GetH1Id("Fresnel reflection plus TIR");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
+  id = analysisMan->GetH1Id("Absorption");
+  analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
+  analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
+
   id = analysisMan->GetH1Id("Transmitted");
   analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
   analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
 
-  id = analysisMan->GetH1Id("Reflected");
+  id = analysisMan->GetH1Id("Spike reflection");
   analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
   analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
 
@@ -510,6 +525,21 @@ void Run::EndOfRun()
     G4cout << "  Ground VM2000 Glue reflection: " << std::setw(8)
            << fBoundaryProcs[GroundVM2000GlueReflection] << G4endl;
   }
+  if(fBoundaryProcs[CoatedDielectricRefraction] > 0)
+  {
+    G4cout << "  CoatedDielectricRefraction: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricRefraction] << G4endl;
+  }
+  if(fBoundaryProcs[CoatedDielectricReflection] > 0)
+  {
+    G4cout << "  CoatedDielectricReflection: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricReflection] << G4endl;
+  }
+  if(fBoundaryProcs[CoatedDielectricFrustratedTransmission] > 0)
+  {
+    G4cout << "  CoatedDielectricFrustratedTransmission: " << std::setw(8)
+           << fBoundaryProcs[CoatedDielectricFrustratedTransmission] << G4endl;
+  }
 
   G4int sum = std::accumulate(fBoundaryProcs.begin(), fBoundaryProcs.end(), 0);
   G4cout << " Sum:                        " << std::setw(8) << sum << G4endl;
@@ -520,101 +550,152 @@ void Run::EndOfRun()
   G4cout.setf(mode, std::ios::floatfield);
   G4cout.precision(prec);
 
-  G4int histo_id_trans = analysisMan->GetH1Id("Transmitted");
-  G4int histo_id_refl  = analysisMan->GetH1Id("Reflected");
-  if(analysisMan->GetH1Activation(histo_id_trans))
+  G4int histo_id_refract = analysisMan->GetH1Id("Fresnel refraction");
+  G4int histo_id_reflect = analysisMan->GetH1Id("Fresnel reflection plus TIR");
+  G4int histo_id_spike   = analysisMan->GetH1Id("Spike reflection");
+  G4int histo_id_absorption = analysisMan->GetH1Id("Absorption");
+
+  if(analysisMan->GetH1Activation(histo_id_refract) &&
+     analysisMan->GetH1Activation(histo_id_reflect))
   {
+    G4double rindex1 = det->GetTankMaterial()
+                         ->GetMaterialPropertiesTable()
+                         ->GetProperty(kRINDEX)
+                         ->Value(fEkin);
+    G4double rindex2 = det->GetWorldMaterial()
+                         ->GetMaterialPropertiesTable()
+                         ->GetProperty(kRINDEX)
+                         ->Value(fEkin);
+
+    auto histo_refract = analysisMan->GetH1(histo_id_refract);
+    auto histo_reflect = analysisMan->GetH1(histo_id_reflect);
+    // std::vector<G4double> refract;
+    std::vector<G4double> reflect;
+    // std::vector<G4double> tir;
+    std::vector<G4double> tot;
+    for(size_t i = 0; i < histo_refract->axis().bins(); ++i)
+    {
+      // refract.push_back(histo_refract->bin_height(i));
+      reflect.push_back(histo_reflect->bin_height(i));
+      // tir.push_back(histo_TIR->bin_height(i));
+      tot.push_back(histo_refract->bin_height(i) +
+                    histo_reflect->bin_height(i));
+    }
+
+    // find Brewster angle: Rp = 0
+    //  need enough statistics for this method to work
+    G4double min_angle = -1.;
+    G4double min_val   = DBL_MAX;
+    G4double bin_width = 0.;
+    for(size_t i = 0; i < reflect.size(); ++i)
+    {
+      if(reflect[i] < min_val)
+      {
+        min_val   = reflect[i];
+        min_angle = histo_reflect->axis().bin_lower_edge(i);
+        bin_width = histo_reflect->axis().bin_upper_edge(i) -
+                    histo_reflect->axis().bin_lower_edge(i);
+        min_angle += bin_width / 2.;
+      }
+    }
+    G4cout << "Polarization of primary optical photons: "
+           << fPolarization / deg << " deg." << G4endl;
+    if(fPolarized && fPolarization == 0.0)
+    {
+      G4cout << "Reflectance shows a minimum at: " << min_angle << " +/- "
+             << bin_width / 2;
+      G4cout << " deg. Expected Brewster angle: "
+             << (360. / CLHEP::twopi) * std::atan(rindex2 / rindex1)
+             << " deg. " << G4endl;
+    }
+
+    // find angle of total internal reflection:  T -> 0
+    //   last bin for T > 0
+    min_angle = -1.;
+    min_val   = DBL_MAX;
+    for(size_t i = 0; i < histo_refract->axis().bins() - 1; ++i)
+    {
+      if(histo_refract->bin_height(i) > 0. &&
+         histo_refract->bin_height(i + 1) == 0.)
+      {
+        min_angle = histo_refract->axis().bin_lower_edge(i);
+        bin_width = histo_reflect->axis().bin_upper_edge(i) -
+                    histo_reflect->axis().bin_lower_edge(i);
+        min_angle += bin_width / 2.;
+        break;
+      }
+    }
     if(fPolarized)
     {
-      G4double rindex1 = det->GetTankMaterial()
-                           ->GetMaterialPropertiesTable()
-                           ->GetProperty(kRINDEX)
-                           ->Value(fEkin);
-      G4double rindex2 = det->GetWorldMaterial()
-                           ->GetMaterialPropertiesTable()
-                           ->GetProperty(kRINDEX)
-                           ->Value(fEkin);
-
-      auto histo_trans = analysisMan->GetH1(histo_id_trans);
-      auto histo_refl  = analysisMan->GetH1(histo_id_refl);
-      std::vector<G4double> trans;
-      std::vector<G4double> refl;
-      std::vector<G4double> tot;
-      for(size_t i = 0; i < histo_trans->axis().bins(); ++i)
-      {
-        trans.push_back(histo_trans->bin_height(i));
-        refl.push_back(histo_refl->bin_height(i));
-        tot.push_back(histo_trans->bin_height(i) + histo_refl->bin_height(i));
-      }
-
-      // find Brewster angle: Rp = 0
-      //  need enough statistics for this method to work
-      G4double min_angle = -1.;
-      G4double min_val   = DBL_MAX;
-      G4double bin_width = 0.;
-      for(size_t i = 0; i < refl.size(); ++i)
-      {
-        if(refl[i] < min_val)
-        {
-          min_val   = refl[i];
-          min_angle = histo_refl->axis().bin_lower_edge(i);
-          bin_width = histo_refl->axis().bin_upper_edge(i) -
-                      histo_refl->axis().bin_lower_edge(i);
-          min_angle += bin_width / 2.;
-        }
-      }
-      G4cout << "Polarization of primary optical photons: "
-             << fPolarization / deg << " deg." << G4endl;
-      if(fPolarization == 0.0)
-      {
-        G4cout << "Reflectance shows a minimum at: " << min_angle << " +/- "
-               << bin_width / 2;
-        G4cout << " deg. Expected Brewster angle: "
-               << (360. / CLHEP::twopi) * std::atan(rindex2 / rindex1)
-               << " deg. " << G4endl;
-      }
-
-      // find angle of total internal reflection:  T -> 0
-      //   last bin for T > 0
-      min_angle = -1.;
-      min_val   = DBL_MAX;
-      for(size_t i = 0; i < histo_trans->axis().bins() - 1; ++i)
-      {
-        if(histo_trans->bin_height(i) > 0. &&
-           histo_trans->bin_height(i + 1) == 0.)
-        {
-          min_angle = histo_trans->axis().bin_lower_edge(i);
-          bin_width = histo_refl->axis().bin_upper_edge(i) -
-                      histo_refl->axis().bin_lower_edge(i);
-          min_angle += bin_width / 2.;
-          break;
-        }
-      }
-      G4cout << "Transmission goes to 0 at: " << min_angle << " +/- "
+      G4cout << "Fresnel transmission goes to 0 at: " << min_angle << " +/- "
              << bin_width / 2. << " deg."
              << " Expected: "
-             << (360. / CLHEP::twopi) * std::asin(rindex2 / rindex1) << " deg."
-             << G4endl;
+             << (360. / CLHEP::twopi) * std::asin(rindex2 / rindex1)
+             << " deg." << G4endl;
+    }
 
-      // Normalize the transmission/reflection histos so that max is 1.
-      // Only if x values are the same
-      if((analysisMan->GetH1Nbins(histo_id_trans) ==
-          analysisMan->GetH1Nbins(histo_id_refl)) &&
-         (analysisMan->GetH1Xmin(histo_id_trans) ==
-          analysisMan->GetH1Xmin(histo_id_refl)) &&
-         (analysisMan->GetH1Xmax(histo_id_trans) ==
-          analysisMan->GetH1Xmax(histo_id_refl)))
+    // Normalize the transmission/reflection histos so that max is 1.
+    // Only if x values are the same
+    if((analysisMan->GetH1Nbins(histo_id_refract) ==
+        analysisMan->GetH1Nbins(histo_id_reflect)) &&
+       (analysisMan->GetH1Xmin(histo_id_refract) ==
+        analysisMan->GetH1Xmin(histo_id_reflect)) &&
+       (analysisMan->GetH1Xmax(histo_id_refract) ==
+        analysisMan->GetH1Xmax(histo_id_reflect)))
+    {
+      unsigned int ent;
+      G4double sw;
+      G4double sw2;
+      G4double sx2;
+      G4double sx2w;
+      for(size_t bin = 0; bin < histo_refract->axis().bins(); ++bin)
       {
-        unsigned int ent;
-        G4double sw;
-        G4double sw2;
-        G4double sx2;
-        G4double sx2w;
-        for(size_t bin = 0; bin < histo_trans->axis().bins(); ++bin)
+        // "bin+1" below because bin 0 is underflow bin
+        // NB. We are ignoring underflow/overflow bins
+        histo_refract->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        if(tot[bin] > 0)
         {
-          // "bin+1" below because bin 0 is underflow bin
-          // NB. We are ignoring underflow/overflow bins
-          histo_trans->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+          sw /= tot[bin];
+          // bin error is sqrt(sw2)
+          sw2 /= (tot[bin] * tot[bin]);
+          sx2 /= (tot[bin] * tot[bin]);
+          sx2w /= (tot[bin] * tot[bin]);
+          histo_refract->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        }
+
+        histo_reflect->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        if(tot[bin] > 0)
+        {
+          sw /= tot[bin];
+          // bin error is sqrt(sw2)
+          sw2 /= (tot[bin] * tot[bin]);
+          sx2 /= (tot[bin] * tot[bin]);
+          sx2w /= (tot[bin] * tot[bin]);
+          histo_reflect->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        }
+
+        G4int histo_id_fresnelrefl =
+          analysisMan->GetH1Id("Fresnel reflection");
+        auto histo_fresnelreflect = analysisMan->GetH1(histo_id_fresnelrefl);
+        histo_fresnelreflect->get_bin_content(bin + 1, ent, sw, sw2, sx2,
+                                              sx2w);
+        if(tot[bin] > 0)
+        {
+          sw /= tot[bin];
+          // bin error is sqrt(sw2)
+          sw2 /= (tot[bin] * tot[bin]);
+          sx2 /= (tot[bin] * tot[bin]);
+          sx2w /= (tot[bin] * tot[bin]);
+          histo_fresnelreflect->set_bin_content(bin + 1, ent, sw, sw2, sx2,
+                                                sx2w);
+        }
+
+        G4int histo_id_TIR =
+          analysisMan->GetH1Id("Total internal reflection");
+        auto histo_TIR = analysisMan->GetH1(histo_id_TIR);
+        if(analysisMan->GetH1Activation(histo_id_TIR))
+        {
+          histo_TIR->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
           if(tot[bin] > 0)
           {
             sw /= tot[bin];
@@ -622,28 +703,76 @@ void Run::EndOfRun()
             sw2 /= (tot[bin] * tot[bin]);
             sx2 /= (tot[bin] * tot[bin]);
             sx2w /= (tot[bin] * tot[bin]);
-            histo_trans->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
-          }
-        }
-        for(size_t bin = 0; bin < histo_refl->axis().bins(); ++bin)
-        {
-          histo_refl->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
-          if(tot[bin] > 0)
-          {
-            sw /= tot[bin];
-            // bin error is sqrt(sw2)
-            sw2 /= (tot[bin] * tot[bin]);
-            sx2 /= (tot[bin] * tot[bin]);
-            sx2w /= (tot[bin] * tot[bin]);
-            histo_refl->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+            histo_TIR->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
           }
         }
       }
-      else
+    }
+    else
+    {
+      G4cout << "Not going to normalize refraction and reflection "
+             << "histograms because bins are not the same." << G4endl;
+    }
+  }
+
+  // complex index of refraction; have spike reflection and absorption
+  // Only works for polished surfaces. Ground surfaces neglected.
+  else if(analysisMan->GetH1Activation(histo_id_absorption) &&
+          analysisMan->GetH1Activation(histo_id_spike))
+  {
+    auto histo_spike      = analysisMan->GetH1(histo_id_spike);
+    auto histo_absorption = analysisMan->GetH1(histo_id_absorption);
+
+    std::vector<G4double> tot;
+    for(size_t i = 0; i < histo_absorption->axis().bins(); ++i)
+    {
+      tot.push_back(histo_absorption->bin_height(i) +
+                    histo_spike->bin_height(i));
+    }
+
+    if((analysisMan->GetH1Nbins(histo_id_absorption) ==
+        analysisMan->GetH1Nbins(histo_id_spike)) &&
+       (analysisMan->GetH1Xmin(histo_id_absorption) ==
+        analysisMan->GetH1Xmin(histo_id_spike)) &&
+       (analysisMan->GetH1Xmax(histo_id_absorption) ==
+        analysisMan->GetH1Xmax(histo_id_spike)))
+    {
+      unsigned int ent;
+      G4double sw;
+      G4double sw2;
+      G4double sx2;
+      G4double sx2w;
+      for(size_t bin = 0; bin < histo_absorption->axis().bins(); ++bin)
       {
-        G4cout << "Not going to normalize transmission and reflection "
-               << "histograms because bins are not the same." << G4endl;
+        // "bin+1" below because bin 0 is underflow bin
+        // NB. We are ignoring underflow/overflow bins
+        histo_absorption->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        if(tot[bin] > 0)
+        {
+          sw /= tot[bin];
+          // bin error is sqrt(sw2)
+          sw2 /= (tot[bin] * tot[bin]);
+          sx2 /= (tot[bin] * tot[bin]);
+          sx2w /= (tot[bin] * tot[bin]);
+          histo_absorption->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        }
+
+        histo_spike->get_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        if(tot[bin] > 0)
+        {
+          sw /= tot[bin];
+          // bin error is sqrt(sw2)
+          sw2 /= (tot[bin] * tot[bin]);
+          sx2 /= (tot[bin] * tot[bin]);
+          sx2w /= (tot[bin] * tot[bin]);
+          histo_spike->set_bin_content(bin + 1, ent, sw, sw2, sx2, sx2w);
+        }
       }
+    }
+    else
+    {
+      G4cout << "Not going to normalize spike reflection and absorption "
+             << "histograms because bins are not the same." << G4endl;
     }
   }
 }

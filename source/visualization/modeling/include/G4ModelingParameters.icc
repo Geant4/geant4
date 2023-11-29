@@ -94,6 +94,9 @@ inline G4int G4ModelingParameters::GetNoOfSides () const {
 inline G4DisplacedSolid* G4ModelingParameters::GetSectionSolid () const
 {return fpSectionSolid;}
 
+inline G4ModelingParameters::CutawayMode G4ModelingParameters::GetCutawayMode () const
+{ return fCutawayMode;}
+
 inline G4DisplacedSolid* G4ModelingParameters::GetCutawaySolid () const
 {return fpCutawaySolid;}
 
@@ -162,6 +165,11 @@ inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {
 inline void G4ModelingParameters::SetExplodeCentre
 (const G4Point3D& explodeCentre) {
   fExplodeCentre = explodeCentre;
+}
+
+inline void G4ModelingParameters::SetCutawayMode
+(G4ModelingParameters::CutawayMode cutawayMode) {
+  fCutawayMode = cutawayMode;
 }
 
 inline void G4ModelingParameters::SetEvent(const G4Event* pEvent) {

@@ -281,7 +281,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(G4double U,
   ThermalWaveLenght3 = ThermalWaveLenght3*ThermalWaveLenght3*ThermalWaveLenght3;
   
   // Translational Entropy
-  G4double kappa = 1. + elm_coupling*(g4calc->Z13(_thePartition.size())-1.0)
+  G4double kappa = 1. + elm_coupling*(g4calc->Z13((G4int)_thePartition.size())-1.0)
                     /(G4StatMFParameters::Getr0()*g4calc->Z13(theA));
   kappa = kappa*kappa*kappa;
   kappa -= 1.;

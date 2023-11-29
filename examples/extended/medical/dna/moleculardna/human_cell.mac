@@ -1,0 +1,60 @@
+/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+/run/verbose 1
+/control/verbose 1
+
+/world/worldSize 50 um
+/cell/radiusSize 14 2.5 14 um
+/scheduler/endTime 5.0 ns
+/scheduler/maxNullTimeSteps 10000000
+/dnageom/radicalKillDistance 9 nm
+/dnageom/interactionDirectRange 3.5 angstrom
+
+/dnageom/placementSize 75 75 75 nm
+/dnageom/fractalScaling 75 75 75 nm
+/dnageom/definitionFile geometries/cube-centred-X-8.txt
+/dnageom/placementVolume turn geometries/turned_solenoid_750_withHistone.txt
+/dnageom/placementVolume turntwist geometries/turned_twisted_solenoid_750_withHistone.txt true
+/dnageom/placementVolume straight geometries/straight_solenoid_750_withHistone.txt
+
+/dnadamage/directDamageLower 5 eV
+/dnadamage/directDamageUpper 37.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.405
+/dnadamage/inductionOHChance 0.00
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.0
+/dnadamage/inductionHChance 0.00
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.0
+/dnadamage/inductionEaqChance 0.00
+
+
+/chromosome/add cell ellipse 7100 2500 7100 0 0 0 nm 0 0 0
+#/chromosome/add cell sphere 3000 0 0 0 nm
+
+/run/initialize
+/run/printProgress 10
+
+# Source Geometry
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 3000 0 nm
+/gps/pos/rot1 0 0 1 
+/gps/pos/rot2 1 0 0 
+/gps/pos/radius 7100 nm
+/gps/direction 0 -1 0
+
+# Source Energy
+/gps/particle  e-
+
+#/analysisDNA/fileName 50MeV
+/gps/energy 0.662 MeV
+/run/beamOn 2
+
+

@@ -45,15 +45,15 @@ class G4VIsotopeTable
 {
   public:
 
-    G4VIsotopeTable();
+    G4VIsotopeTable() = default;
     explicit G4VIsotopeTable(const G4String&);
       // Constructors
 
-    G4VIsotopeTable(const G4VIsotopeTable&);
+    G4VIsotopeTable(const G4VIsotopeTable&) = default;
     G4VIsotopeTable& operator=(const G4VIsotopeTable&);
       // Copy contructor and assignment operator
 
-    virtual ~G4VIsotopeTable();
+    virtual ~G4VIsotopeTable() = default;
       // Destructor
 
     virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,

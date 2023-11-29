@@ -101,18 +101,18 @@ G4double G4CompositeEMDataSet::FindValue(G4double argEnergy, G4int argComponentI
 
 void G4CompositeEMDataSet::PrintData(void) const
 {
-  const size_t n(NumberOfComponents());
+  const G4int n = (G4int)NumberOfComponents();
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i(0);
+  G4int i(0);
  
   while (i<n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 
@@ -164,7 +164,7 @@ G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
 {
   CleanUpComponents(); 
 
-  for (G4int z(minZ); z<maxZ; z++)
+  for (G4int z(minZ); z<maxZ; ++z)
     {
       G4VEMDataSet* component = new G4EMDataSet(z, algorithm->Clone(), unitEnergies, unitData);
       if (!component->LoadData(argFileName))
@@ -183,7 +183,7 @@ G4bool G4CompositeEMDataSet::LoadNonLogData(const G4String& argFileName)
 {
   CleanUpComponents(); 
 
-  for (G4int z(minZ); z<maxZ; z++)
+  for (G4int z(minZ); z<maxZ; ++z)
     {
       G4VEMDataSet* component = new G4EMDataSet(z, algorithm->Clone(), unitEnergies, unitData);
       if (!component->LoadNonLogData(argFileName))
@@ -200,7 +200,7 @@ G4bool G4CompositeEMDataSet::LoadNonLogData(const G4String& argFileName)
 
 G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const
 {
-  for (G4int z=minZ; z<maxZ; z++)
+  for (G4int z=minZ; z<maxZ; ++z)
     {
       const G4VEMDataSet* component(GetComponent(z-minZ));
   

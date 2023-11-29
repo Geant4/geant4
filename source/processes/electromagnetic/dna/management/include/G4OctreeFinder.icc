@@ -27,7 +27,6 @@
 // Author: HoangTRAN 16/7/2019
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#include "G4Molecule.hh"
 
 template<class T,typename CONTAINER>
 G4ThreadLocal G4OctreeFinder<T,CONTAINER> * G4OctreeFinder<T,CONTAINER>::fInstance = nullptr;
@@ -160,14 +159,16 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4Track& track,
 
         G4int nBin = 10;
 
-        G4double value(G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns));
+        //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
+        //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
+        G4double value(6.4606e-06);
 
-        G4double binOfR(std::pow(G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) / value,
+        G4double binOfR(std::pow(0.00050251 / value,
         1. / static_cast<G4double>(nBin - 1)));
 
-        if( R <= G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) )
+        if( R <= 0.00050251 )
         {
-            if(tempResult.size() < 10 && R < G4IRTUtils::GetRCutOff(1000 * CLHEP::ns))
+            if(tempResult.size() < 10 && R < 0.00050251)
             {
                 R *= binOfR;
 #ifdef DEBUG
@@ -245,14 +246,15 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4ThreeVector& positi
         position, R, tempResult);
 
         G4int nBin = 10;
-
-        G4double value(G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns));
-        G4double binOfR(std::pow(G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) / value,
+        //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
+        //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
+        G4double value(6.4606e-06);
+        G4double binOfR(std::pow(0.00050251 / value,
         1. / static_cast<G4double>(nBin - 1)));
 
-        if( R <= G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) )
+        if( R <= 0.00050251 )
         {
-            if(tempResult.size() < 10 && R < G4IRTUtils::GetRCutOff(1000 * CLHEP::ns))
+            if(tempResult.size() < 10 && R < 0.00050251)
             {
                 R *= binOfR;
 #ifdef DEBUG

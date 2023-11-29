@@ -78,14 +78,14 @@
 
 class G4GenericTrap : public G4VSolid
 {
-  public:  // with description
+  public:
 
-     G4GenericTrap( const G4String& name, G4double halfZ,
-                    const std::vector<G4TwoVector>& vertices );
-       // Constructor
+    G4GenericTrap( const G4String& name, G4double halfZ,
+                   const std::vector<G4TwoVector>& vertices );
+      // Constructor
 
-     ~G4GenericTrap();
-       // Destructor
+    ~G4GenericTrap() override;
+      // Destructor
 
     // Accessors
 
@@ -100,42 +100,40 @@ class G4GenericTrap : public G4VSolid
 
     // Solid methods
 
-    EInside Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
+    EInside Inside(const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
     G4double DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    G4ThreeVector GetPointOnSurface() const ;
+    G4ThreeVector GetPointOnSurface() const override ;
 
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
     // Visualisation functions
 
-    G4Polyhedron* GetPolyhedron () const;
-    void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4VisExtent   GetExtent() const;
-    G4Polyhedron* CreatePolyhedron() const;
-
-  public:  // without description
+    G4Polyhedron* GetPolyhedron () const override;
+    void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
+    G4VisExtent   GetExtent() const override;
+    G4Polyhedron* CreatePolyhedron() const override;
 
     G4GenericTrap(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -181,18 +179,8 @@ class G4GenericTrap : public G4VSolid
     G4ThreeVector NormalToPlane(const G4ThreeVector& p,
                                 const G4int ipl) const;
     G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;
-    G4double GetFaceSurfaceArea(const G4ThreeVector& p0,
-                                const G4ThreeVector& p1,
-                                const G4ThreeVector& p2,
-                                const G4ThreeVector& p3) const;
-    G4double GetTwistedFaceSurfaceArea(const G4ThreeVector& p0,
-                                       const G4ThreeVector& p1,
-                                       const G4ThreeVector& p2,
-                                       const G4ThreeVector& p3) const;
-    G4double GetFaceCubicVolume(const G4ThreeVector& p0,
-                                const G4ThreeVector& p1,
-                                const G4ThreeVector& p2,
-                                const G4ThreeVector& p3) const;
+    G4double GetLateralFaceArea(G4int iface) const;
+
   protected:
 
      mutable G4bool fRebuildPolyhedron = false;

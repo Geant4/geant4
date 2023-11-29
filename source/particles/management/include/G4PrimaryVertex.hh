@@ -50,7 +50,7 @@ class G4PrimaryVertex
 {
   public:
 
-    G4PrimaryVertex();
+    G4PrimaryVertex() = default;
     G4PrimaryVertex(G4double x0,G4double y0,G4double z0,G4double t0);
     G4PrimaryVertex(G4ThreeVector xyz0, G4double t0);
       // Constructors

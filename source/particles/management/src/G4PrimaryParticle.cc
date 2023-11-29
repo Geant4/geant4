@@ -145,7 +145,7 @@ G4PrimaryParticle::operator=(const G4PrimaryParticle& right)
     G4code    = right.G4code;
     direction = right.direction;
     kinE      = right.kinE;
-    if (nextParticle != nullptr) delete nextParticle;
+    delete nextParticle;
     if ( right.nextParticle == nullptr )
     {
       nextParticle = nullptr;
@@ -154,7 +154,7 @@ G4PrimaryParticle::operator=(const G4PrimaryParticle& right)
     {
       nextParticle = new G4PrimaryParticle(*right.nextParticle);
     }
-    if (daughterParticle != nullptr) delete daughterParticle;
+    delete daughterParticle;
     if ( right.daughterParticle == nullptr )
     {
       daughterParticle = nullptr;
@@ -207,7 +207,7 @@ G4PrimaryParticle::~G4PrimaryParticle()
 // --------------------------------------------------------------------
 void G4PrimaryParticle::SetMomentum(G4double px, G4double py, G4double pz)
 { 
-  if ((mass<0.)&&(G4code!=0))
+  if ((mass<0.)&&(G4code!=nullptr))
   { 
     mass =  G4code->GetPDGMass(); 
   }
@@ -310,7 +310,7 @@ void G4PrimaryParticle::Print() const
     G4cout << "     PreAssigned proper decay time : "
            << properTime/ns << " [ns] " << G4endl; 
   }
-  if(userInfo != 0) { userInfo->Print(); }
+  if(userInfo != nullptr) { userInfo->Print(); }
   if(daughterParticle != nullptr)
   {
     G4cout << ">>>> Daughters" << G4endl;

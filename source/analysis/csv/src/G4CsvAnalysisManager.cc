@@ -55,112 +55,19 @@ G4bool G4CsvAnalysisManager::IsInstance()
 G4CsvAnalysisManager::G4CsvAnalysisManager()
  : G4ToolsAnalysisManager("Csv")
 {
-  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
-
   // File Manager
-  fFileManager = std::make_shared<G4CsvFileManager>(fState);
-  SetFileManager(fFileManager);
+  auto fileManager = std::make_shared<G4CsvFileManager>(fState);
+  SetFileManager(fileManager);
 
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4CsvNtupleFileManager>(fState);
-  fNtupleFileManager->SetFileManager(fFileManager);
+  SetNtupleFileManager(fNtupleFileManager);
+  fNtupleFileManager->SetFileManager(fileManager);
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 
 //_____________________________________________________________________________
 G4CsvAnalysisManager::~G4CsvAnalysisManager()
 {
-  if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
   fgIsInstance = false;
-}
-
-//
-// protected methods
-//
-
-//_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::OpenFileImpl(const G4String& fileName)
-{
-  // Create ntuple manager(s)
-  // and set it to base class which takes then their ownership
-  SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
-
-  auto result = true;
-
-  // Save file name in file manager
-  result &= fFileManager->OpenFile(fileName);
-
-  // Open ntuple files and create ntuples from bookings
-  result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::WriteImpl()
-{
-  // nothing to be done for Csv file
-  auto result = true;
-
-  Message(kVL4, "write", "files");
-
-  if ( G4Threading::IsWorkerThread() )  {
-    result &= G4ToolsAnalysisManager::Merge();
-  }
-  else {
-    // Write all histograms/profile on master
-    result &= G4ToolsAnalysisManager::WriteImpl();
-  }
-
-  // Ntuples
-  // Nothing to be done
-
-  // Write ASCII if activated
-  // Not available
-  //if ( IsAscii() ) {
-  //  result &= WriteAscii();
-  //}
-
-  Message(kVL3, "write", "files", "", result);
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::CloseFileImpl(G4bool reset)
-{
-  auto result = true;
-
-  // close open files
-  result &= fFileManager->CloseFiles();
-
-  // Histogram and profile files are created/closed indivudually for each
-  // object in WriteT function
-
-  result &= fNtupleFileManager->ActionAtCloseFile(reset);
-
-  // Reset data
-  if ( reset ) {
-    result = Reset();
-    if ( ! result ) {
-      Warn("Resetting data failed", fkClass, "CloseFileImpl");
-    }
-  }
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::ResetImpl()
-{
-// Reset histograms and ntuple
-
-  auto result = true;
-
-  result &= G4ToolsAnalysisManager::ResetImpl();
-  if ( fNtupleFileManager != nullptr ) {
-    result &= fNtupleFileManager->Reset();
-  }
-
-  return result;
 }

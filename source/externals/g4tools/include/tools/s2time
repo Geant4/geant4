@@ -11,13 +11,13 @@
 namespace tools {
 
 inline bool s2time(const std::string& a_string,time_t& a_time) {
-  int yy, mm, dd, hh, mi, ss;
+  int yy, _mm, dd, hh, mi, ss;
   if(::sscanf(a_string.c_str(),
               "%d-%d-%d %d:%d:%d",
-              &yy,&mm,&dd,&hh,&mi,&ss)!=6) {a_time = 0;return false;}
+              &yy,&_mm,&dd,&hh,&mi,&ss)!=6) {a_time = 0;return false;}
   struct tm tp;
   tp.tm_year  = yy-1900;
-  tp.tm_mon   = mm-1;
+  tp.tm_mon   = _mm-1;
   tp.tm_mday  = dd;
   tp.tm_hour  = hh;
   tp.tm_min   = mi;

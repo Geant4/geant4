@@ -49,7 +49,7 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     explicit G4VNtupleManager(const G4AnalysisManagerState& state)
       : G4BaseAnalysisManager(state) {}
     G4VNtupleManager() = delete;
-    virtual ~G4VNtupleManager() = default;
+    ~G4VNtupleManager() override = default;
 
     // deleted copy constructor & assignment operator
     G4VNtupleManager(const G4VNtupleManager& rhs) = delete;
@@ -80,6 +80,10 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual void  SetActivation(G4int id, G4bool activation) = 0;
     virtual G4bool  GetActivation(G4int id) const = 0;
 
+    // New cycle option
+    virtual void SetNewCycle(G4bool value) = 0;
+    virtual G4bool GetNewCycle() const = 0;
+
     // Access methods
     virtual G4int GetNofNtuples() const = 0;
     // virtual G4int GetNofNtupleBookings() const = 0;
@@ -89,7 +93,9 @@ class G4VNtupleManager : public G4BaseAnalysisManager
 
     // Clear all date
     virtual void Clear() = 0;
+
+    // List ntuples
+    virtual G4bool List(std::ostream& output, G4bool onlyIfActive = true) = 0;
 };
 
 #endif
-

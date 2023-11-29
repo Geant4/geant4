@@ -32,124 +32,48 @@
 #include <vector>
 #include <array>
 #include <cmath>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <sstream>
 #include "G4MolecularConfiguration.hh"
-#include "G4Track.hh"
+#include "G4VDNAMesh.hh"
 
-class G4Voxel
+class G4DNAMesh : public G4VDNAMesh
 {
  public:
-  struct Index
-  {
-    Index()
-      : x(0)
-      , y(0)
-      , z(0)
-    {}
-    Index(int x0, int y0, int z0)
-      : x(x0)
-      , y(y0)
-      , z(z0)
-    {}
-
-    friend std::ostream& operator<<(std::ostream& stream, const Index& rhs)
-    {
-      stream << "(" << rhs.x << ", " << rhs.y << ", " << rhs.z << ")";
-      return stream;
-    }
-    G4bool operator==(const Index& rhs) const
-    {
-      return x == rhs.x && y == rhs.y && z == rhs.z;
-    }
-    G4bool operator!=(const Index& rhs) const
-    {
-      return x != rhs.x || y != rhs.y || z != rhs.z;
-    }
-    Index operator+(const Index& rhs) const
-    {
-      return { x + rhs.x, y + rhs.y, z + rhs.z };
-    }
-    int x, y, z;
-  };
-  using MolType = const G4MolecularConfiguration*;
-  using MapList = std::map<MolType, size_t>;
-
-  G4Voxel(MapList&& list, Index& index, G4DNABoundingBox&& box)
-    : fMapList(std::move(list))
-    , fIndex(index)
-    , fBox(std::move(box))
-  {}
-
-  ~G4Voxel() = default;
-
-  const Index& GetIndex() const { return fIndex; }
-
-  MapList& GetMapList() { return fMapList; }
-
-  void SetMapList(MapList&& mapList) { fMapList = std::move(mapList); }
-
-  G4double GetVolume() const
-  {
-    auto xlo = fBox.Getxlo();
-    auto ylo = fBox.Getylo();
-    auto zlo = fBox.Getzlo();
-
-    auto xhi = fBox.Getxhi();
-    auto yhi = fBox.Getyhi();
-    auto zhi = fBox.Getzhi();
-
-    return (xhi - xlo) * (yhi - ylo) * (zhi - zlo);
-  }
-
- private:
-  MapList fMapList;
-  Index fIndex;
-  G4DNABoundingBox fBox;
-};
-
-class G4DNAMesh
-{
- public:
-  using Index    = G4Voxel::Index;
-  using Key      = unsigned int;
-  using VoxelMap = std::map<Key, G4Voxel*>;
+  using Box         = G4DNABoundingBox;
+  using MolType     = const G4MolecularConfiguration*;
+  using Data        = std::map<MolType, size_t>;
+  using Voxel       = std::tuple<Index, Box, Data>;
+  using IndexMap    = std::unordered_map<Index, G4int, G4VDNAMesh::hashFunc>;
+  using VoxelVector = std::vector<Voxel>;
   G4DNAMesh(const G4DNABoundingBox&, G4int);
-  ~G4DNAMesh();
-
-  Key GetKey(const G4ThreeVector& pos) const;
-  Index GetIndex(Key key) const;
+  ~G4DNAMesh() override;
   Index GetIndex(const G4ThreeVector& position) const;
-
-  G4Voxel* GetVoxel(Key key);
-  [[maybe_unused]] G4Voxel* GetVoxel(const Index& index);
-  size_t size() { return fMesh.size(); }
-  Index GetIndex(const Index& index, int) const;
-  std::vector<Index> FindVoxelNeighbors(const Index& index) const;
+  Voxel& GetVoxel(const Index& index);  // GetorCreateVoxel
+  size_t size() { return fVoxelVector.size(); };
+  Index ConvertIndex(const Index& index, const G4int&) const;
   std::vector<Index> FindNeighboringVoxels(const Index& index) const;
   void Reset();
-
-  G4Voxel::MapList& GetVoxelMapList(Key key);
-  G4Voxel::MapList& GetVoxelMapList(const Index& index);
-
-  Key GetKey(const Index& index) const;
-  VoxelMap::iterator end() { return fMesh.end(); }
-  VoxelMap::iterator begin() { return fMesh.begin(); }
-  VoxelMap::const_iterator end() const { return fMesh.end(); }
-  VoxelMap::const_iterator begin() const { return fMesh.begin(); }
-
+  Data& GetVoxelMapList(const Index& index);
+  auto end() { return fVoxelVector.end(); }
+  auto begin() { return fVoxelVector.begin(); }
+  VoxelVector::const_iterator const_end() const { return fVoxelVector.end(); }
+  VoxelVector::const_iterator const_begin() const
+  {
+    return fVoxelVector.begin();
+  }
   void PrintMesh();
   void PrintVoxel(const Index& index);
   const G4DNABoundingBox& GetBoundingBox() const;
   G4DNABoundingBox GetBoundingBox(const Index& index);
-  G4int GetNumberOfType(G4Voxel::MolType type) const;
-  void SetVoxelMapList(const Key& key, G4Voxel::MapList&& mapList);
-
+  G4int GetNumberOfType(MolType type) const;
+  void InitializeVoxel(const Index& key, Data&& mapList);
   G4double GetResolution() const;
 
  private:
-  VoxelMap fMesh;
+  IndexMap fIndexMap;
+  VoxelVector fVoxelVector;
   const G4DNABoundingBox* fpBoundingMesh;
   G4double fResolution;
 };

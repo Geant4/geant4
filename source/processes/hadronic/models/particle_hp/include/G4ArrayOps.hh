@@ -34,11 +34,11 @@
 // [] (bracket) operator for element-wise access
 
 #ifndef G4ARRAYOPS_HH
-#define	G4ARRAYOPS_HH
-
-#include <vector>
+#define G4ARRAYOPS_HH
 
 #include "globals.hh"
+
+#include <vector>
 
 /** G4ArrayOps is a namespace that provides template functions for
  *  performing basic arithmatic operations on any data type that
@@ -46,183 +46,140 @@
  */
 namespace G4ArrayOps
 {
-    /** Set's all the values in an array to a constant */
-    template< class T >
-    void Set( G4int Elements,
-               T* To,
-               T Value )
-    {
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = Value;
-        }
-    }
-
-    /** Copy values from one array to another */
-    template< class T >
-    void Copy( G4int Elements,
-               T* To,
-               T* From )
-    {
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = From[position];
-        }
-    }
-
-    /** Add two arrays together. If the second array is NULL then the
-     *  'To' array is used as if the function were the += operator.
-     */
-    template< class T >
-    void Add( G4int Elements,
-              T* To,
-              T* A1,
-              T* A2 = NULL )
-    {
-        if(A2 == NULL)
-        {
-            A2 = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = A2[position] + A1[position];
-        }
-    }
-
-    /** Add a constant to an array. If the second array is NULL then the
-     *  'To' array is used as if the function were the += operator.
-     */
-    template< class T >
-    void Add( G4int Elements,
-              T* To,
-              T A1,
-              T* A2 = NULL )
-    {
-        if(A2 == NULL)
-        {
-            A2 = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = A1 + A2[position];
-        }
-    }
-
-    /** Subtract an array from another. If the second array is NULL then the
-     *  'To' array is used as if the function were the -= operator.
-     */
-    template< class T >
-    void Subtract( G4int Elements,
-                   T* To,
-                   T* Minuend,
-                   T* Subtrahend = NULL )
-    {
-        if(Subtrahend == NULL)
-        {
-            Subtrahend = Minuend;
-            Minuend = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = Minuend[position] - Subtrahend[position];
-        }
-    }
-
-    /** Multiply two arrays together. If the second array is NULL then the
-     *  'To' array is used as if the function were the *= operator.
-     */
-    template< class T >
-    void Multiply( G4int Elements,
-                   T* To,
-                   T* M1,
-                   T* M2 = NULL )
-    {
-        if(M2 == NULL)
-        {
-            M2 = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = M2[position] * M1[position];
-        }
-    }
-
-    /** Multiply an array by a constant. If the second array is NULL then the
-     *  'To' array is used as if the function were the *= operator.
-     */
-    template< class T >
-    void Multiply( G4int Elements,
-                   T* To,
-                   T M1,
-                   T* M2 = NULL )
-    {
-        if(M2 == NULL)
-        {
-            M2 = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = M2[position] * M1;
-        }
-    }
-
-    /** Divide an array by another. If the second array is NULL then the
-     *  'To' array is used as if the function were the /= operator.
-     */
-    template< class T >
-    void Divide( G4int Elements,
-                 T* To,
-                 T* Numerator,
-                 T* Denominator = NULL )
-    {
-        if(Denominator == NULL)
-        {
-            Denominator = Numerator;
-            Numerator = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = Numerator[position] / Denominator[position];
-        }
-    }
-
-    /** Divide a constant by an array. If the second array is NULL then the
-     *  'To' array is used as if the function were the /= operator.
-     */
-    template< class T >
-    void Divide( G4int Elements,
-                 T* To,
-                 T Numerator,
-                 T* Denominator = NULL )
-    {
-        if(Denominator == NULL)
-        {
-            Denominator = To;
-        }
-
-        for(G4int position = 0; position < Elements; position++)
-        {
-            To[position] = Numerator / Denominator[position];
-        }
-    }
-
-    template< class T >
-    void DeleteVectorOfPointers( std::vector< T >& Vector )
-    {
-    	for(unsigned int i = 0; i < Vector.size(); i++)
-    	{
-			delete Vector[i];
-		}
-
-    	delete &Vector;
-    }
+/** Set's all the values in an array to a constant */
+template<class T>
+void Set(G4int Elements, T* To, T Value)
+{
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = Value;
+  }
 }
 
-#endif  /** G4ARRAYOPS_HH */
+/** Copy values from one array to another */
+template<class T>
+void Copy(G4int Elements, T* To, T* From)
+{
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = From[position];
+  }
+}
 
+/** Add two arrays together. If the second array is NULL then the
+ *  'To' array is used as if the function were the += operator.
+ */
+template<class T>
+void Add(G4int Elements, T* To, T* A1, T* A2 = nullptr)
+{
+  if (A2 == nullptr) {
+    A2 = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = A2[position] + A1[position];
+  }
+}
+
+/** Add a constant to an array. If the second array is NULL then the
+ *  'To' array is used as if the function were the += operator.
+ */
+template<class T>
+void Add(G4int Elements, T* To, T A1, T* A2 = NULL)
+{
+  if (A2 == NULL) {
+    A2 = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = A1 + A2[position];
+  }
+}
+
+/** Subtract an array from another. If the second array is NULL then the
+ *  'To' array is used as if the function were the -= operator.
+ */
+template<class T>
+void Subtract(G4int Elements, T* To, T* Minuend, T* Subtrahend = NULL)
+{
+  if (Subtrahend == NULL) {
+    Subtrahend = Minuend;
+    Minuend = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = Minuend[position] - Subtrahend[position];
+  }
+}
+
+/** Multiply two arrays together. If the second array is NULL then the
+ *  'To' array is used as if the function were the *= operator.
+ */
+template<class T>
+void Multiply(G4int Elements, T* To, T* M1, T* M2 = nullptr)
+{
+  if (M2 == nullptr) {
+    M2 = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = M2[position] * M1[position];
+  }
+}
+
+/** Multiply an array by a constant. If the second array is NULL then the
+ *  'To' array is used as if the function were the *= operator.
+ */
+template<class T>
+void Multiply(G4int Elements, T* To, T M1, T* M2 = NULL)
+{
+  if (M2 == NULL) {
+    M2 = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = M2[position] * M1;
+  }
+}
+
+/** Divide an array by another. If the second array is NULL then the
+ *  'To' array is used as if the function were the /= operator.
+ */
+template<class T>
+void Divide(G4int Elements, T* To, T* Numerator, T* Denominator = NULL)
+{
+  if (Denominator == NULL) {
+    Denominator = Numerator;
+    Numerator = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = Numerator[position] / Denominator[position];
+  }
+}
+
+/** Divide a constant by an array. If the second array is NULL then the
+ *  'To' array is used as if the function were the /= operator.
+ */
+template<class T>
+void Divide(G4int Elements, T* To, T Numerator, T* Denominator = NULL)
+{
+  if (Denominator == nullptr) {
+    Denominator = To;
+  }
+
+  for (G4int position = 0; position < Elements; position++) {
+    To[position] = Numerator / Denominator[position];
+  }
+}
+
+template<class T>
+void DeleteVectorOfPointers(std::vector<T>& Vector)
+{
+  for (unsigned int i = 0; i < Vector.size(); i++) {
+    delete Vector[i];
+  }
+
+  delete &Vector;
+}
+}  // namespace G4ArrayOps
+
+#endif /** G4ARRAYOPS_HH */

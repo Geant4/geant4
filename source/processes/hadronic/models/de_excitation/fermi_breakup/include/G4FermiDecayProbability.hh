@@ -40,19 +40,15 @@ class G4FermiDecayProbability
 public:
 
   explicit G4FermiDecayProbability();
-  ~G4FermiDecayProbability();
+  ~G4FermiDecayProbability() = default;
 
   G4double ComputeProbability(G4int Z, G4int A, G4int spin, G4double TotalE, 
 			      const G4FermiFragment* f1, 
 			      const G4FermiFragment* f2) const;
-  
-private:
 
   G4FermiDecayProbability(const G4FermiDecayProbability &right) = delete;  
   const G4FermiDecayProbability & operator = 
   (const G4FermiDecayProbability &right) = delete;
-  G4bool operator==(const G4FermiDecayProbability &right) const = delete;
-  G4bool operator!=(const G4FermiDecayProbability &right) const = delete;
  
 };
 

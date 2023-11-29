@@ -67,8 +67,7 @@ G4eplusTo3GammaOKVIModel::G4eplusTo3GammaOKVIModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eplusTo3GammaOKVIModel::~G4eplusTo3GammaOKVIModel()
-{}
+G4eplusTo3GammaOKVIModel::~G4eplusTo3GammaOKVIModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

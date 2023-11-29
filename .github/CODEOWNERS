@@ -4,15 +4,15 @@
 # Software Management
 /CMakeLists.txt @drbenmorgan
 /cmake/         @drbenmorgan @gunterfolger
-/config/        @gcosmo
+/config/        @gcosmo @drbenmorgan
 /ReleaseNotes/  @gcosmo
 /source/global/ @gcosmo @drbenmorgan @gunterfolger
 
 # Run, Event, and Detector Response
-/source/run/              @makotoasai @jrmadsen
-/source/event/            @makotoasai @jrmadsen
-/source/digits_hits/      @makotoasai @jrmadsen
-/source/processes/scoring @makotoasai @jrmadsen
+/source/run/              @makotoasai @drbenmorgan
+/source/event/            @makotoasai @drbenmorgan
+/source/digits_hits/      @makotoasai @drbenmorgan
+/source/processes/scoring @makotoasai @drbenmorgan
 
 # Tracking
 /source/tracking/ @ts-kek @shogo0416 @makotoasai
@@ -29,10 +29,13 @@
 # Generic Processes and Materials
 /source/materials/                  @marcverderi @civanch
 /source/parameterisations/          @marcverderi
+/source/parameterisations/channeling/ @pandola
+/source/parameterisations/gflash/   @marcverderi
 /source/processes/biasing/          @marcverderi @civanch
 /source/processes/parameterisation/ @marcverderi @civanch
 
 # Electromagnetic Standard Physics
+/source/processes/electromagnetic/              @civanch @dsawkey
 /source/processes/electromagnetic/highenergy/   @civanch @dsawkey
 /source/processes/electromagnetic/muons/        @civanch @dsawkey
 /source/processes/electromagnetic/polarisation/ @civanch @dsawkey
@@ -54,10 +57,9 @@
 /source/analysis/    @ihrivnac
 
 # User and Category Interfaces
-# TBA: Hajime Yoshida
 /source/intercoms/  @koichi-murakami @makotoasai
 /source/interfaces/ @koichi-murakami @laurent-garnier
-/environments/      @koichi-murakami
+/environments/      @drbenmorgan @koichi-murakami
 
 # Visualization
 /source/graphics_reps/ @laurent-garnier @jiperl @johna1941
@@ -77,3 +79,6 @@
 # Testing
 /tests/ @gunterfolger @whokion
 
+# Other
+/source/error_propagation/     @arceciemat
+/source/externals/             @gcosmo @drbenmorgan @gunterfolger

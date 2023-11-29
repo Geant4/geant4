@@ -1,3 +1,6 @@
+/run/verbose 1
+/run/numberOfThreads 4
+/run/initialize
 /gun/particle pi+
 /gun/energy 5.0 GeV
 /run/beamOn 100

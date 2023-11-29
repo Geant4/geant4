@@ -38,9 +38,7 @@ G4MonopoleEq::G4MonopoleEq(G4ElectroMagneticField* emField )
 {
 }
 
-G4MonopoleEq::~G4MonopoleEq()
-{
-} 
+G4MonopoleEq::~G4MonopoleEq() = default; 
 
 void  
 G4MonopoleEq::SetChargeMomentumMass(G4ChargeState particleCharge, // e+ units

@@ -1,9 +1,21 @@
-     =========================================================
- 		      Geant4 - microyz example
-     =========================================================
+# Example microyz History
 
-                       Package History file
-                       --------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-06-10 Sergio Losilla (microyz-V11-00-02)
+- Added missing headers.
+
+## 2022-05-28 Hoang Tran (microyz-V11-00-01)
+- addition of UI to microyz for TrackerSD radius selection
+
+## 2021-12-10 Ben Morgan (microyz-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06/10/2021 - tag microyz-V10-07-02 - I. Hrivnacova
 - Migration to new G4AnalysisManager.hh header;

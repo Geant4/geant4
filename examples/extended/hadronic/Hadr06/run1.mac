@@ -11,19 +11,23 @@
 #
 ###/testhadr/phys/thermalScattering true
 #
+/process/em/verbose 0
+/process/had/verbose 0
+#
 /run/initialize
 #
 /gun/particle neutron
 /gun/energy 14.1 MeV
 #
 /analysis/setFileName run1
-/analysis/h1/set  1 100  0. 15. MeV	#Edep
+/analysis/h1/set  1 100  0. 20. MeV	#Edep
 /analysis/h1/set  2 100  0. 30. cm	#Edep profile
-/analysis/h1/set  3 100  0. 15. MeV	#Eflow
-/analysis/h1/set 14 100  0. 15. MeV	#emerging gamma
+/analysis/h1/set  3 100  0. 20. MeV	#Eflow
+/analysis/h1/set 14 100  0. 20. MeV	#emerging gamma
 /analysis/h1/set 16 200  0.001 20. MeV log10   #emerging neutrons
-/analysis/h1/set 19 100  0. 15. MeV	#emerging alphas
-/analysis/h1/set 20 100  0. 15. MeV	#emerging generic ions
+/analysis/h1/set 19 100  0. 20. MeV	#emerging alphas
+/analysis/h1/set 20 100  0. 20. MeV	#emerging generic ions
+/analysis/h1/set 24 100  0. 20. MeV	#Etot
 #
 /run/printProgress 10000
 /run/beamOn 100000

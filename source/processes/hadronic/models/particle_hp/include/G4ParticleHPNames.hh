@@ -30,44 +30,48 @@
 #define G4ParticleHPNames_h 1
 
 #include "G4ios.hh"
+
 #include <fstream>
 // #include <strstream>
-#include <stdlib.h>
-#include "globals.hh"
 #include "G4ParticleHPDataUsed.hh"
+#include "globals.hh"
+
+#include <stdlib.h>
 
 class G4ParticleHPNames
 {
   public:
-  
-  G4ParticleHPNames(){theMaxOffSet = 5;}
-  G4ParticleHPNames(G4int maxOffSet){theMaxOffSet = maxOffSet;}
-  ~G4ParticleHPNames(){}
-  
-  //G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active);
-  G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & active) { G4int M = 0; return GetName( A, Z, M, base, rest, active); };
-  G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & active);
-  G4String GetName(G4int i);
-  void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
-  
-  public:
-  
-  static const G4String theString[100];
-  G4int theMaxOffSet;
-  G4String itoa(int current)
-  {
-    const char theDigits[11] = "0123456789";
-    G4String result;
-    int digit;
-    do
+    G4ParticleHPNames() { theMaxOffSet = 5; }
+    G4ParticleHPNames(G4int maxOffSet) { theMaxOffSet = maxOffSet; }
+    ~G4ParticleHPNames() = default;
+
+    // G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool &
+    // active);
+    G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool& active)
     {
-      digit = current-10*(current/10);
-      result=theDigits[digit]+result;
-      current/=10;
+      G4int M = 0;
+      return GetName(A, Z, M, base, rest, active);
+    };
+    G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest,
+                                 G4bool& active);
+    G4String GetName(G4int i);
+    void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
+
+  public:
+    static const G4String theString[100];
+    G4int theMaxOffSet;
+    G4String itoa(int current)
+    {
+      const char theDigits[11] = "0123456789";
+      G4String result;
+      int digit;
+      do {
+        digit = current - 10 * (current / 10);
+        result = theDigits[digit] + result;
+        current /= 10;
+      } while (current != 0);  // Loop checking, 11.05.2015, T. Koi
+      return result;
     }
-    while(current!=0); // Loop checking, 11.05.2015, T. Koi
-    return result;
-  }
 };
 
 #endif

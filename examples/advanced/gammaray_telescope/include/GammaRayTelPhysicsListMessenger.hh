@@ -32,39 +32,39 @@
 #ifndef GammaRayTelPhysicsListMessenger_h
 #define GammaRayTelPhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
+
+#include <memory>
 
 class GammaRayTelPhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class GammaRayTelPhysicsListMessenger: public G4UImessenger {
+public:
+    explicit GammaRayTelPhysicsListMessenger(GammaRayTelPhysicsList*);
 
-class GammaRayTelPhysicsListMessenger: public G4UImessenger
-{
-  public:
-  
-    GammaRayTelPhysicsListMessenger(GammaRayTelPhysicsList* );
-   ~GammaRayTelPhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-  GammaRayTelPhysicsList* pPhysicsList;
-    
-  G4UIdirectory*             physDir;        
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithAString* packageListCmd;    
+    ~GammaRayTelPhysicsListMessenger() override;
+
+    void SetNewValue(G4UIcommand *command, G4String newValue) override;
+
+private:
+    GammaRayTelPhysicsList *pPhysicsList;
+
+    G4UIdirectory *physDir;
+
+    G4UIcmdWithADoubleAndUnit *gammaCutCmd;
+
+    G4UIcmdWithADoubleAndUnit *electronCutCmd;
+
+    G4UIcmdWithADoubleAndUnit *protonCutCmd;
+
+    G4UIcmdWithADoubleAndUnit *allCutCmd;
+
+    G4UIcmdWithAString *pListCmd;
+
+    G4UIcmdWithAString *packageListCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

@@ -31,7 +31,7 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
-#include "tools/raxml"
+#include "toolx/raxml"
 
 using namespace G4Analysis;
 using namespace tools;
@@ -74,12 +74,12 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
   G4bool verbose = false;
 
   // create factory (if it does not yet exist)
-  if ( ! fReadFactory ) {
+  if (fReadFactory == nullptr) {
     fReadFactory = new tools::xml::default_factory();
   }
 
   // create new file
-  auto newFile = new tools::raxml(*fReadFactory, G4cout, verbose);
+  auto newFile = new toolx::raxml(*fReadFactory, G4cout, verbose);
 
   // clear objects
   // (this should not be needed when starting a new raxml)
@@ -109,16 +109,15 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
 }
 
 //_____________________________________________________________________________
-tools::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
+toolx::raxml* G4XmlRFileManager::GetRFile(const G4String& fileName) const
 {
   // Get full file name (add only extension)
   G4bool isPerThread = false;
   G4String name = GetFullFileName(fileName, isPerThread);
 
   auto it = fRFiles.find(name);
-  if  ( it != fRFiles.end() )
+  if (it != fRFiles.end()) {
     return it->second;
-  else {
-    return nullptr;
   }
+  return nullptr;
 }

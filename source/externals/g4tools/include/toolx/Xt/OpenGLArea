@@ -1,0 +1,489 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Xt_OpenGLArea
+#define toolx_Xt_OpenGLArea
+
+#include <X11/IntrinsicP.h>
+#include <X11/CoreP.h>
+#include <X11/CompositeP.h>
+#include <X11/StringDefs.h>
+
+#include <GL/glx.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+namespace toolx {
+namespace Xt {
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+typedef struct _OpenGLAreaClassRec* OpenGLAreaWidgetClass;
+typedef struct _OpenGLAreaRec* OpenGLAreaWidget;
+
+typedef struct {
+ int reason;
+ XEvent* event;
+} XoAnyCallbackStruct;
+
+#define XoCR_PAINT 1
+#define XoCR_EVENT 2
+
+#define XoNdoubleBufferOn toolx::Xt::OpenGLArea::XoN_doubleBufferOn()
+#define XoNpaintCallback  toolx::Xt::OpenGLArea::XoN_paintCallback()
+#define XoNeventCallback  toolx::Xt::OpenGLArea::XoN_eventCallback()
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+typedef struct {
+  void* extension;
+} OpenGLAreaClassPart;
+
+typedef struct _OpenGLAreaClassRec {
+  CoreClassPart core_class;
+  CompositeClassPart composite_class;
+  OpenGLAreaClassPart openGLArea_class;
+} OpenGLAreaClassRec;
+
+typedef struct {
+  Boolean doubleBufferOn;
+  XtCallbackList paintCallback;
+  XtCallbackList eventCallback;
+  Visual* visual;
+  Boolean installColormap;
+  GLXContext glContext;
+} OpenGLAreaPart;
+
+typedef struct _OpenGLAreaRec {
+  CorePart core;
+  CompositePart composite;
+  OpenGLAreaPart openGLArea;
+} OpenGLAreaRec;
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+class OpenGLArea {
+protected:
+  static const char* class_name()         {static const char* s_s = "OpenGLArea";return s_s;}
+  static const char* XoC_DoubleBufferOn() {static const char* s_s = "DoubleBufferOn";return s_s;}
+public:
+  static const char* XoN_doubleBufferOn() {static const char* s_s = "doubleBufferOn";return s_s;}
+  static const char* XoN_paintCallback()  {static const char* s_s = "paintCallback";return s_s;}
+  static const char* XoN_eventCallback()  {static const char* s_s = "eventCallback";return s_s;}
+public:
+  static void paint(Widget a_this) {
+    if(!XtIsRealized(a_this)) return;
+    if(make_current(a_this)==1) {
+      XoAnyCallbackStruct value;
+      value.reason = XoCR_PAINT;
+      value.event = 0;
+      ::XtCallCallbacks(a_this,XoNpaintCallback,(XtPointer)&value);
+      ::glXSwapBuffers(XtDisplay(a_this),XtWindow(a_this));
+      ::glXMakeCurrent(XtDisplay(a_this),None,NULL);
+    }
+  }
+protected:
+  static void initialize_class(void) {}
+
+  static void initialize_widget(Widget a_request,Widget a_this,ArgList,Cardinal*) {
+    if(a_request->core.width<=0)  a_this->core.width  = 100;
+    if(a_request->core.height<=0) a_this->core.height = 100;
+
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    ::printf ("debug : OpenGLArea : InitializeWidget : %s\n",::XtName(a_this));
+#endif
+
+    OpenGLAreaPart& athis = _athis(a_this);
+    athis.visual          = CopyFromParent;
+    athis.installColormap = False;
+    athis.glContext       = NULL;
+
+    Display* display;
+    Screen* screen;
+    int iscreen;
+    XVisualInfo* vinfo;
+    display = XtDisplay(a_this);
+    screen = XtScreen(a_this);
+    iscreen = XScreenNumberOfScreen(screen);
+  
+   {int error,event;
+    if(::glXQueryExtension(display,&error,&event)==0) {
+      CWarn ("X server does not have OpenGL extensions.\n");
+    }}
+  
+    if(athis.doubleBufferOn==True) {
+      int atbs_1[] = {
+        GLX_RGBA,
+        GLX_RED_SIZE,   1,
+        GLX_GREEN_SIZE, 1,
+        GLX_BLUE_SIZE,  1,
+        GLX_ALPHA_SIZE, 1,
+        GLX_DEPTH_SIZE, 1,
+        GLX_DOUBLEBUFFER,
+        None
+      };
+      vinfo = ::glXChooseVisual  (display,iscreen,atbs_1);
+      if(vinfo==NULL) { //GLX_ALPHA_SIZE : problem with Xming. Try without it.
+        int atbs_2[] = {
+          GLX_RGBA,
+          GLX_RED_SIZE,   1,
+          GLX_GREEN_SIZE, 1,
+          GLX_BLUE_SIZE,  1,
+          GLX_DEPTH_SIZE, 1,
+          GLX_DOUBLEBUFFER,
+          None
+        };
+        vinfo = ::glXChooseVisual  (display,iscreen,atbs_2);
+      }
+    } else {
+      int atbs_1[] = {
+        GLX_RGBA,
+        GLX_RED_SIZE,   1,
+        GLX_GREEN_SIZE, 1,
+        GLX_BLUE_SIZE,  1,
+        GLX_ALPHA_SIZE, 1,
+        GLX_DEPTH_SIZE, 1,
+        None
+      };
+      vinfo = ::glXChooseVisual  (display,iscreen,atbs_1);
+      if(vinfo==NULL) { //GLX_ALPHA_SIZE : problem with Xming. Try without it.
+        int atbs_2[] = {
+          GLX_RGBA,
+          GLX_RED_SIZE,   1,
+          GLX_GREEN_SIZE, 1,
+          GLX_BLUE_SIZE,  1,
+          GLX_DEPTH_SIZE, 1,
+          None
+        };
+        vinfo = ::glXChooseVisual  (display,iscreen,atbs_2);
+      }
+    }
+  
+    if(vinfo==NULL) {
+      CWarn ("Can't choose a visual.\n");
+    } else {
+      a_this->core.depth = vinfo->depth;
+      athis.visual = vinfo->visual;
+      if( (vinfo->depth ==DefaultDepth (display,iscreen))  &&
+          (vinfo->visual==DefaultVisual(display,iscreen)) ) {
+        a_this->core.colormap = XDefaultColormap (display,iscreen);
+        athis.installColormap = False;
+      } else {
+        a_this->core.colormap =
+  	XCreateColormap (display,XRootWindow(display,iscreen),vinfo->visual, AllocNone);
+        athis.installColormap = True;
+      }  
+      if(a_this->core.colormap==0L) {
+        CWarn ("Can't get/create a X colormap.\n");
+      }  
+      athis.glContext = ::glXCreateContext (display,vinfo,NULL,GL_TRUE);
+      if(athis.glContext==NULL) {
+        athis.glContext = ::glXCreateContext (display,vinfo,NULL,GL_FALSE);
+        if(athis.glContext==NULL) {
+          CWarn ("Can't create a GLX context.\n");
+        }
+      }
+      ::XFree(vinfo);
+    }
+
+    ::XtAddEventHandler
+       (a_this,ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|KeyPressMask|KeyReleaseMask,0,event_handler,NULL);
+
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : InitializeWidget : end\n");
+#endif
+  }
+
+  static void realize_widget(Widget a_this,XtValueMask* a_mask,XSetWindowAttributes* a_watbs) {
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : realize_widget : %s\n",XtName(a_this));
+#endif
+
+    // Have to create window ourselves due to OpenGL that compells it's visual.
+    // In principle colormap is correctly set in a_watbsy.
+  
+    OpenGLAreaPart& athis = _athis(a_this);
+    
+    ::XtCreateWindow(a_this,(unsigned int)InputOutput,athis.visual,*a_mask,a_watbs);
+  
+    // Call the Realize procedure (XtInheritRealize) :
+    if(widget_class()->core_class.superclass->core_class.realize!=NULL)
+      (widget_class()->core_class.superclass->core_class.realize)(a_this, a_mask, a_watbs);
+  
+    // If window is delete, all seems ok :
+    if(athis.installColormap==True) install_colormap(a_this);
+  
+    //make_current(a_this);
+  
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : realize_widget : end\n");
+#endif
+  }
+
+  static void destroy_widget(Widget a_this) {
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : destroy_widget : begin\n");
+#endif
+    OpenGLAreaPart& athis = _athis(a_this);
+    if(athis.installColormap==True) {
+      uninstall_colormap (a_this);
+      athis.installColormap    = False;
+      ::XFreeColormap(XtDisplay(a_this),a_this->core.colormap);
+    }
+    if(athis.glContext!=NULL) {
+      ::glXMakeCurrent(XtDisplay(a_this),None,NULL);
+      ::glXDestroyContext(XtDisplay(a_this),athis.glContext);
+      athis.glContext = NULL;
+    }
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : destroy_widget : end\n");
+#endif
+  }
+
+  static Boolean set_values(Widget a_current,Widget,Widget a_this,ArgList,Cardinal*) {
+    OpenGLAreaPart& athis = _athis(a_this);
+    if(athis.doubleBufferOn != ((OpenGLAreaWidget)a_current)->openGLArea.doubleBufferOn) {
+      // Can't change buffering here if X window is created.
+      // With OpenGL, buffering fix parameter of the X window.
+      // Buffering must be choosen before the execution of the
+      // Realize method that create the window.
+      if(XtIsRealized(a_this) && (athis.installColormap==True)) {
+        CWarn("Can't change buffering after \"realization\" of the widget.\n");
+        athis.doubleBufferOn = ((OpenGLAreaWidget)a_current)->openGLArea.doubleBufferOn;
+      }
+    }
+    return False;
+  }
+  
+  static void change_widget_size(Widget a_this) {
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : change_widget_size : %s\n",XtName(a_this));
+#endif
+
+    // Call the Resize procedure (XtInheritResize) :
+    if(widget_class()->core_class.superclass->core_class.resize!=NULL)
+      (widget_class()->core_class.superclass->core_class.resize)(a_this);
+  
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : change_widget_size : end\n");
+#endif
+}
+
+  static void draw_widget(Widget  a_this,XEvent* a_event,Region a_region) {
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+    printf("debug : OpenGLArea : draw_widget : %s\n",XtName(a_this));
+#endif
+
+    if(widget_class()->core_class.superclass->core_class.expose!=NULL)
+      (widget_class()->core_class.superclass->core_class.expose)(a_this,a_event,a_region);
+
+    if(make_current(a_this)==1) {
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+      printf("debug : OpenGLArea : draw_widget : %s : make_current ok : call paintCallback...\n",XtName(a_this));
+#endif
+      XoAnyCallbackStruct value;
+      value.reason = XoCR_PAINT;
+      value.event = a_event;
+      ::XtCallCallbacks(a_this,XoNpaintCallback,(XtPointer)&value);
+      ::glXSwapBuffers(XtDisplay(a_this),XtWindow(a_this));
+      ::glXMakeCurrent(XtDisplay(a_this),None,NULL);
+    }
+  
+#ifdef TOOLX_XT_OPENGLAREA_DEBUG
+  printf("debug : OpenGLArea : draw_widget : end\n");
+#endif
+  }
+
+protected:
+  static OpenGLAreaPart& _athis(Widget a_this) {return *(&(((OpenGLAreaWidget)a_this)->openGLArea));}
+  static void CWarn(const char* a_msg) {
+    ::printf("%s",a_msg);
+  }
+  static void CWarnF(const char* a_format,...) {
+    va_list args;
+    va_start(args,a_format);
+    ::vprintf(a_format,args);
+    va_end(args);
+  }
+  static int make_current(Widget a_this) {
+    if(!XtIsRealized(a_this)) return 0;
+    OpenGLAreaPart& athis = _athis(a_this);
+    if(athis.glContext==NULL) return 0;
+    return (int)::glXMakeCurrent(XtDisplay(a_this),XtWindow(a_this),athis.glContext);
+  }
+
+  static void event_handler(Widget a_this,XtPointer,XEvent* a_event ,Boolean*) {
+    XoAnyCallbackStruct value;
+    value.reason = XoCR_EVENT;
+    value.event = a_event;
+    ::XtCallCallbacks(a_this,XoNeventCallback,(XtPointer)&value);
+  }
+
+  static void install_colormap(Widget a_this) {
+    // From Mesa/widgets/GLwDrawingArea.c/post_colormap routine.
+    // Could use also XtSetWMColormapWindows.
+    if( !XtIsWidget(a_this) || !XtIsRealized(a_this) ) return;
+    Widget shell = get_shell(a_this);
+    if(shell==NULL) return;
+    Display* display = XtDisplay (a_this);
+    Window wthis   = XtWindow  (a_this);
+    Window wshell  = XtWindow  (shell);
+    Window*           ws = NULL;
+    int               wn = 0;
+    ::XGetWMColormapWindows (display,wshell, &ws, &wn);
+    // Check if colormap of this is a colormap of a Window in list :
+    XWindowAttributes watbs;
+    XGetWindowAttributes  (display,wthis,&watbs);
+    Colormap cmapthis = watbs.colormap;
+    int found                 = -1;
+    for(int count=0;count<wn;count++) {
+      Colormap             cmap;
+      XGetWindowAttributes (display,ws[count],&watbs);
+      cmap                 = watbs.colormap;
+      if(cmap==cmapthis) {
+        ::XFree (ws);
+        return;
+      }
+      if(ws[count]==wshell) {
+        found = count;
+      }
+    }
+    // Have to add window of this in list :
+    if(wn==0) {
+      if(ws!=NULL) ::XFree(ws);
+      ws = (Window*)::malloc( 2 * sizeof(Window));
+    } else {
+      ws = (Window*)::realloc(ws,(wn + 2) * sizeof(Window));
+    }
+    if(ws==NULL) return;
+    if(found==-1) {
+      // Window of shell not in list :
+      ws[wn] = wthis; wn++;
+      ws[wn] = wshell;wn++;
+    } else {
+      ws[found] = wthis;
+      ws[wn]    = wshell; wn++;  // Shell must be last.
+    }
+    if (::XSetWMColormapWindows(display,wshell, ws, wn)==0) {
+      CWarnF ("install_colormap: can't install colormap of %s in %s.\n",XtName(a_this),XtName(shell));
+    }
+    ::free(ws);
+  }
+
+  static void uninstall_colormap(Widget a_this) {
+    if( !XtIsWidget(a_this) || !XtIsRealized(a_this) ) return;
+    Widget shell = get_shell (a_this);
+    if(shell==NULL) return;
+    Display* display = XtDisplay (a_this);
+    Window wthis     = XtWindow  (a_this);
+    Window wshell    = XtWindow  (shell);
+    Window*           ws  = NULL;
+    int               wn  = 0;
+    ::XGetWMColormapWindows (display,wshell, &ws, &wn);
+    if( (wn==0) || (ws==NULL) ) return;
+    Window* nws = (Window*)::malloc( wn  * sizeof(Window));
+    if(nws==NULL) {
+      ::XFree (ws);
+      return;
+    }
+    int nwn = 0;
+    for(int count=0;count<wn;count++) {
+      if(ws[count]!=wthis) {
+        nws[nwn] = ws[count];
+        nwn++;
+      }
+    }
+    if(wn!=nwn) {
+      if (::XSetWMColormapWindows(display,wshell, nws, nwn)==0) {
+        CWarnF("uninstall_colormap: can't install colormap of %s in %s.\n",XtName(a_this),XtName(shell));
+      }
+    }
+    ::XFree (ws);
+    ::free (nws);
+  }
+  
+  static Widget get_shell(Widget a_this) {
+    Widget widget = a_this;
+    while(1) {
+      if(widget==NULL) return NULL;
+      if(XtIsShell(widget)) return widget;
+      widget = XtParent(widget);
+    }
+  }
+
+public:
+  static WidgetClass widget_class() {
+    static XtResource s_resources[] = {
+      {(String)XoN_doubleBufferOn(),(String)XoC_DoubleBufferOn(),XtRBoolean,sizeof(Boolean),
+       XtOffset(OpenGLAreaWidget,openGLArea.doubleBufferOn),XtRImmediate,(XtPointer)True},
+      {(String)XoN_paintCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
+       XtOffset(OpenGLAreaWidget,openGLArea.paintCallback),XtRImmediate,(XtPointer)NULL},
+      {(String)XoN_eventCallback(),XtCCallback,XtRCallback,sizeof(XtCallbackList),
+       XtOffset(OpenGLAreaWidget,openGLArea.eventCallback),XtRImmediate,(XtPointer)NULL}
+    };
+
+    static OpenGLAreaClassRec s_openGLAreaClassRec = {
+      // Core Class Part :
+      {
+        (WidgetClass) &compositeClassRec, // pointer to superclass ClassRec   
+        (String)class_name(),             // widget resource class name
+        sizeof(OpenGLAreaRec),           // size in bytes of widget record   
+        initialize_class,                // class_initialize                 
+        NULL,                            // dynamic initialization           
+        FALSE,                           // has class been initialized?      
+        initialize_widget,               // initialize                       
+        NULL,                            // notify that initialize called    
+        realize_widget,                  // XCreateWindow for widget         
+        NULL,                            // widget semantics name to proc mapWidget
+        0,                               // number of entries in actions     
+        s_resources,                     // resources for subclass fields    
+        XtNumber(s_resources),           // number of entries in resources   
+        NULLQUARK,                       // resource class quarkified        
+        TRUE,                            // compress MotionNotify for widget 
+        TRUE,                            // compress Expose events for widget
+        TRUE,                            // compress enter and leave events  
+        TRUE,                            // select for VisibilityNotify      
+        destroy_widget,                  // free data for subclass pointers  
+        change_widget_size,              // geom manager changed widget size 
+        draw_widget,                     // rediplay window                  
+        set_values,                      // set subclass resource values     
+        NULL,                            // notify that SetValues called    
+        XtInheritSetValuesAlmost,        // SetValues got "Almost" geo reply
+        NULL,                            // notify that get_values called    
+        XtInheritAcceptFocus,            // assign input focus to widget     
+        XtVersion,                       // version of intrinsics used       
+        NULL,                            // list of callback offsets         
+        XtInheritTranslations,           // translations                     
+        XtInheritQueryGeometry,          // return preferred geometry        
+        XtInheritDisplayAccelerator,     // display your accelerator         
+        NULL                             // pointer to extension record      
+      },
+      // Composite Class Part :
+      {
+        XtInheritGeometryManager,   // geometry manager for children   
+        XtInheritChangeManaged,     // change managed state of child   
+        XtInheritInsertChild,       // physically add child to parent  
+        XtInheritDeleteChild,       // physically remove child             
+        NULL                        // pointer to extension record     
+      },
+      // OpenGLArea :
+      {
+        NULL
+      }
+    };
+    return (WidgetClass)&s_openGLAreaClassRec;
+  }
+};
+
+}}
+
+
+#endif

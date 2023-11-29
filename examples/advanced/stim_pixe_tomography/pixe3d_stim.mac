@@ -1,0 +1,852 @@
+#
+# macro file pixe3d.mac
+#
+/control/verbose 1
+/run/verbose 1
+#/tracking/verbose 2
+#
+#/tomography/det/setPhantomType 1
+#
+# material and size of simple cube object
+# comment out if the object is not a cubic shape
+#/tomography/det/setAbsMat Gold
+#/tomography/det/setAbsMat G4_P
+#/tomography/det/setAbsThick 50 um
+#/tomography/det/setAbsYZ    50 um
+#/tomography/det/setAbsThick 5 um
+#/tomography/det/setAbsYZ    5 um
+#
+#Physics lists
+#/tomography/phys/addPhysics local
+/tomography/phys/addPhysics  elastic
+/tomography/phys/addPhysics  binary
+/tomography/phys/addPhysics  binary_ion
+#
+#Production cuts
+#/run/setCut 0.01 mm
+#/run/setCutForAGivenParticle gamma 0.5 um
+/run/setCut 1 nm
+/cuts/setLowEdge 900 eV
+#
+#/process/em/deexcitationIgnoreCut true
+#/process/em/deexcitation world true false true
+/process/em/applyCuts true
+/process/em/fluo true
+/process/em/fluoBearden true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#
+/tomography/run/scanParameters 10 1 20
+#
+/run/initialize
+#
+/run/printProgress 500000
+#
+# Source definition : energy, type
+#
+/gps/energy 1.50 MeV
+/gps/particle proton
+#
+# SOURCE POSITION AND DIRECTION
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -34.200000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -30.600000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -27.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -23.400000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -19.800000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -16.200000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -12.600000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -9.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -5.400000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 -1.800000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 1.800000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 5.400000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 9.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 12.600000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 16.200000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 19.800000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 23.400000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 27.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 30.600000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 1.000000 0.000000 0.000000
+/gps/pos/centre -36.000000 34.200000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -23.669653 -43.650745 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -24.782115 -40.226941 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -25.894576 -36.803138 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -27.007037 -33.379334 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -28.119498 -29.955531 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -29.231959 -26.531727 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -30.344420 -23.107924 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -31.456882 -19.684120 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -32.569343 -16.260317 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -33.681804 -12.836514 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -34.794265 -9.412710 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -35.906726 -5.988907 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -37.019188 -2.565103 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -38.131649 0.858700 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -39.244110 4.282504 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -40.356571 7.706307 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -41.469032 11.130111 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -42.581493 14.553914 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -43.693955 17.977718 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.951057 0.309017 0.000000
+/gps/pos/centre -44.806416 21.401521 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -9.022356 -48.828650 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -11.138383 -45.916189 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -13.254410 -43.003728 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -15.370437 -40.091267 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -17.486464 -37.178806 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -19.602491 -34.266344 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -21.718518 -31.353883 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -23.834545 -28.441422 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -25.950571 -25.528961 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -28.066598 -22.616500 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -30.182625 -19.704038 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -32.298652 -16.791577 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -34.414679 -13.879116 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -36.530706 -10.966655 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -38.646733 -8.054194 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -40.762760 -5.141733 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -42.878787 -2.229271 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -44.994814 0.683190 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -47.110841 3.595651 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.809017 0.587785 0.000000
+/gps/pos/centre -49.226867 6.508112 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre 6.508112 -49.226867 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre 3.595651 -47.110841 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre 0.683190 -44.994814 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -2.229271 -42.878787 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -5.141733 -40.762760 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -8.054194 -38.646733 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -10.966655 -36.530706 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -13.879116 -34.414679 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -16.791577 -32.298652 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -19.704038 -30.182625 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -22.616500 -28.066598 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -25.528961 -25.950571 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -28.441422 -23.834545 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -31.353883 -21.718518 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -34.266344 -19.602491 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -37.178806 -17.486464 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -40.091267 -15.370437 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -43.003728 -13.254410 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -45.916189 -11.138383 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.587785 0.809017 0.000000
+/gps/pos/centre -48.828650 -9.022356 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 21.401521 -44.806416 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 17.977718 -43.693955 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 14.553914 -42.581493 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 11.130111 -41.469032 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 7.706307 -40.356571 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 4.282504 -39.244110 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre 0.858700 -38.131649 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -2.565103 -37.019188 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -5.988907 -35.906726 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -9.412710 -34.794265 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -12.836514 -33.681804 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -16.260317 -32.569343 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -19.684120 -31.456882 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -23.107924 -30.344420 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -26.531727 -29.231959 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -29.955531 -28.119498 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -33.379334 -27.007037 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -36.803138 -25.894576 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -40.226941 -24.782115 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.309017 0.951057 0.000000
+/gps/pos/centre -43.650745 -23.669653 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 34.200000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 30.600000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 27.000000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 23.400000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 19.800000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 16.200000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 12.600000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 9.000000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 5.400000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre 1.800000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -1.800000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -5.400000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -9.000000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -12.600000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -16.200000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -19.800000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -23.400000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -27.000000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -30.600000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction 0.000000 1.000000 0.000000
+/gps/pos/centre -34.200000 -36.000000 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 43.650745 -23.669653 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 40.226941 -24.782115 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 36.803138 -25.894576 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 33.379334 -27.007037 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 29.955531 -28.119498 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 26.531727 -29.231959 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 23.107924 -30.344420 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 19.684120 -31.456882 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 16.260317 -32.569343 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 12.836514 -33.681804 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 9.412710 -34.794265 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 5.988907 -35.906726 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre 2.565103 -37.019188 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -0.858700 -38.131649 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -4.282504 -39.244110 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -7.706307 -40.356571 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -11.130111 -41.469032 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -14.553914 -42.581493 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -17.977718 -43.693955 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.309017 0.951057 0.000000
+/gps/pos/centre -21.401521 -44.806416 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 48.828650 -9.022356 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 45.916189 -11.138383 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 43.003728 -13.254410 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 40.091267 -15.370437 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 37.178806 -17.486464 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 34.266344 -19.602491 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 31.353883 -21.718518 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 28.441422 -23.834545 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 25.528961 -25.950571 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 22.616500 -28.066598 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 19.704038 -30.182625 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 16.791577 -32.298652 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 13.879116 -34.414679 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 10.966655 -36.530706 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 8.054194 -38.646733 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 5.141733 -40.762760 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre 2.229271 -42.878787 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre -0.683190 -44.994814 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre -3.595651 -47.110841 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.587785 0.809017 0.000000
+/gps/pos/centre -6.508112 -49.226867 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 49.226867 6.508112 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 47.110841 3.595651 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 44.994814 0.683190 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 42.878787 -2.229271 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 40.762760 -5.141733 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 38.646733 -8.054194 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 36.530706 -10.966655 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 34.414679 -13.879116 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 32.298652 -16.791577 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 30.182625 -19.704038 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 28.066598 -22.616500 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 25.950571 -25.528961 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 23.834545 -28.441422 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 21.718518 -31.353883 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 19.602491 -34.266344 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 17.486464 -37.178806 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 15.370437 -40.091267 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 13.254410 -43.003728 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 11.138383 -45.916189 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.809017 0.587785 0.000000
+/gps/pos/centre 9.022356 -48.828650 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 44.806416 21.401521 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 43.693955 17.977718 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 42.581493 14.553914 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 41.469032 11.130111 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 40.356571 7.706307 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 39.244110 4.282504 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 38.131649 0.858700 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 37.019188 -2.565103 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 35.906726 -5.988907 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 34.794265 -9.412710 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 33.681804 -12.836514 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 32.569343 -16.260317 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 31.456882 -19.684120 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 30.344420 -23.107924 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 29.231959 -26.531727 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 28.119498 -29.955531 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 27.007037 -33.379334 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 25.894576 -36.803138 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 24.782115 -40.226941 0.000000 um
+/run/beamOn 100
+#
+/gps/direction -0.951057 0.309017 0.000000
+/gps/pos/centre 23.669653 -43.650745 0.000000 um
+/run/beamOn 100
+#

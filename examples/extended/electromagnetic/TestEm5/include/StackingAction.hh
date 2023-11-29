@@ -45,7 +45,7 @@ class StackingAction : public G4UserStackingAction
 {
   public:
     StackingAction(EventAction*);
-   ~StackingAction();
+   ~StackingAction() override;
    
     void SetKillStatus(G4int value) { fKillSecondary = value;};
      
@@ -54,8 +54,8 @@ class StackingAction : public G4UserStackingAction
   private:
     EventAction*        fEventAction;    
     
-    G4bool              fKillSecondary = 0;
-    StackingMessenger*  fStackMessenger;
+    G4bool              fKillSecondary  = false;
+    StackingMessenger*  fStackMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

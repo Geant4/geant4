@@ -32,8 +32,14 @@
 #define G4ToolsAnalysisManager_h 1
 
 #include "G4VAnalysisManager.hh"
-#include "G4ToolsAnalysisMessenger.hh"
+#include "G4TH1ToolsManager.hh"
+#include "G4TH2ToolsManager.hh"
+#include "G4TH3ToolsManager.hh"
+#include "G4TP1ToolsManager.hh"
+#include "G4TP2ToolsManager.hh"
 #include "globals.hh"
+
+#include "G4THnToolsManager.hh"  // make forward declaration if possible
 
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
@@ -43,11 +49,7 @@
 
 #include <string_view>
 
-class G4H1ToolsManager;
-class G4H2ToolsManager;
-class G4H3ToolsManager;
-class G4P1ToolsManager;
-class G4P2ToolsManager;
+class G4PlotManager;
 
 namespace tools {
 namespace histo {
@@ -60,9 +62,9 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
   friend class G4ToolsAnalysisMessenger;
 
   public:
-    virtual ~G4ToolsAnalysisManager();
+    ~G4ToolsAnalysisManager() override;
 
-        // Static methods
+    // Static methods
     static G4ToolsAnalysisManager* Instance();
     static G4bool IsInstance();
 
@@ -108,14 +110,16 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
     explicit G4ToolsAnalysisManager(const G4String& type);
 
     // Virtual methods from base class
-    virtual G4bool PlotImpl() final;
-    virtual G4bool MergeImpl(tools::histo::hmpi* hmpi) final;
-    virtual G4bool WriteImpl() override;
-    virtual G4bool ResetImpl() override;
-    virtual void   ClearImpl() override;
+    G4bool OpenFileImpl(const G4String& fileName) override;
+    G4bool WriteImpl() override;
+    G4bool CloseFileImpl(G4bool reset) override;
+    G4bool ResetImpl() override;
+    void ClearImpl() override;
+    G4bool PlotImpl() final;
+    G4bool MergeImpl(tools::histo::hmpi* hmpi) final;
+    G4bool IsOpenFileImpl() const final;
 
     // Methods
-    G4bool Merge();
     G4bool IsEmpty();
 
      // Static data members
@@ -124,22 +128,25 @@ class G4ToolsAnalysisManager : public  G4VAnalysisManager
     static constexpr std::string_view fkClass { "G4ToolsAnalysisManager" };
 
     // Data members
-    G4H1ToolsManager*  fH1Manager { nullptr };
-    G4H2ToolsManager*  fH2Manager { nullptr };
-    G4H3ToolsManager*  fH3Manager { nullptr };
-    G4P1ToolsManager*  fP1Manager { nullptr };
-    G4P2ToolsManager*  fP2Manager { nullptr };
+    G4THnToolsManager<kDim1, tools::histo::h1d>* fH1Manager { nullptr };
+    G4THnToolsManager<kDim2, tools::histo::h2d>* fH2Manager { nullptr };
+    G4THnToolsManager<kDim3, tools::histo::h3d>* fH3Manager { nullptr };
+    G4THnToolsManager<kDim2, tools::histo::p1d>* fP1Manager { nullptr };
+    G4THnToolsManager<kDim3, tools::histo::p2d>* fP2Manager { nullptr };
 
   private:
     //  // Static data members
     // Static G4ThreadLocal G4ToolsAnalysisManager* fgToolsInstance;
     // Methods
     template <typename HT>
-    G4bool WriteT(const std::vector<HT*>& htVector,
-                  const std::vector<G4HnInformation*>& hnVector);
+    G4bool WriteT(const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector);
+
+    G4bool WriteHns();
+    G4bool ResetHns();
+    G4bool MergeHns();
 
     // Data members
-    std::unique_ptr<G4ToolsAnalysisMessenger> fMessenger;
+    std::shared_ptr<G4PlotManager>   fPlotManager { nullptr };
  };
 
 #include "G4ToolsAnalysisManager.icc"

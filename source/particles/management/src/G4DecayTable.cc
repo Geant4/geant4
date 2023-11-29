@@ -40,9 +40,9 @@ G4DecayTable::G4DecayTable()
 G4DecayTable::~G4DecayTable()
 {
   // remove and delete all contents  
-  for (auto iCh = channels->cbegin(); iCh!= channels->cend(); ++iCh)
+  for (const auto channel : *channels)
   {
-    delete (*iCh);
+    delete channel;
   }
   channels->clear();
   delete  channels;
@@ -82,15 +82,15 @@ void G4DecayTable::Insert(G4VDecayChannel* aChannel)
 G4VDecayChannel* G4DecayTable::SelectADecayChannel(G4double parentMass)
 {
   // check if contents exist
-  if (channels->size()<1) return nullptr;
+  if (channels->empty()) return nullptr;
 
   if(parentMass < 0.) parentMass=parent->GetPDGMass(); 
 
   G4double sumBR = 0.;
-  for (auto iCh = channels->cbegin(); iCh!= channels->cend(); ++iCh)
+  for (const auto channel : *channels)
   {
-    if ( !((*iCh)->IsOKWithParentMass(parentMass)) ) continue;
-    sumBR += (*iCh)->GetBR();
+    if ( !(channel->IsOKWithParentMass(parentMass)) ) continue;
+    sumBR += channel->GetBR();
   }
   if (sumBR <= 0.0)
   {
@@ -107,11 +107,11 @@ G4VDecayChannel* G4DecayTable::SelectADecayChannel(G4double parentMass)
     G4double sum = 0.0;
     G4double br= sumBR*G4UniformRand();
     // select decay channel
-    for (auto iCh = channels->cbegin(); iCh!= channels->cend(); ++iCh)
+    for (const auto channel : *channels)
     {
-      sum += (*iCh)->GetBR();
-      if ( !((*iCh)->IsOKWithParentMass(parentMass)) ) continue;
-      if (br < sum) return (*iCh);
+      sum += channel->GetBR();
+      if ( !(channel->IsOKWithParentMass(parentMass)) ) continue;
+      if (br < sum) return channel;
     }
   }
   return nullptr;
@@ -121,10 +121,10 @@ void G4DecayTable::DumpInfo() const
 {
   G4cout << "G4DecayTable:  " << parent->GetParticleName() << G4endl;
   G4int index =0;
-  for (auto iCh = channels->cbegin(); iCh!= channels->cend(); ++iCh)
+  for (const auto channel : *channels)
   {
     G4cout << index << ": ";
-    (*iCh)->DumpInfo();
+    channel->DumpInfo();
     index += 1;
   }
   G4cout << G4endl;

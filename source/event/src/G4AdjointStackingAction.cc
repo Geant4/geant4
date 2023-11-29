@@ -45,11 +45,6 @@ G4AdjointStackingAction(G4AdjointTrackingAction* anAction)
 
 // --------------------------------------------------------------------
 //
-G4AdjointStackingAction::~G4AdjointStackingAction()
-{;}
-
-// --------------------------------------------------------------------
-//
 G4ClassificationOfNewTrack
 G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
@@ -66,7 +61,7 @@ G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
     {
       if (theAdjointTrackingAction->GetNbOfAdointTracksReachingTheExternalSurface()>0)
       {
-        if (theFwdStackingAction)
+        if (theFwdStackingAction != nullptr)
         {
           classification =  theFwdStackingAction->ClassifyNewTrack(aTrack);
         }
@@ -77,7 +72,7 @@ G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
       }
     }
   }
-  else if (theUserAdjointStackingAction)
+  else if (theUserAdjointStackingAction != nullptr)
   {
     classification = theUserAdjointStackingAction->ClassifyNewTrack(aTrack);
   }
@@ -91,13 +86,13 @@ void G4AdjointStackingAction::NewStage()
   reclassification_stage = true;
   if (first_reclassification_stage)
   {
-    if (theUserAdjointStackingAction)
+    if (theUserAdjointStackingAction != nullptr)
     {
       theUserAdjointStackingAction->NewStage();
     }
     stackManager->ReClassify();
   }
-  else if (theFwdStackingAction) theFwdStackingAction->NewStage();
+  else if (theFwdStackingAction != nullptr) theFwdStackingAction->NewStage();
   {
     first_reclassification_stage = false;
   }
@@ -109,7 +104,7 @@ void G4AdjointStackingAction::PrepareNewEvent()
 {
   reclassification_stage = false;
   first_reclassification_stage = true;
-  if (theUserAdjointStackingAction)
+  if (theUserAdjointStackingAction != nullptr)
   {
     theUserAdjointStackingAction->PrepareNewEvent();
   }

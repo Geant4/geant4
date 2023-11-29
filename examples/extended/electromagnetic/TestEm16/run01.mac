@@ -3,6 +3,7 @@
 # (can be run in batch, without graphic)
 #
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #

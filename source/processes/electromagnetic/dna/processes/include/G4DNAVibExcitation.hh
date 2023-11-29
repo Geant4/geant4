@@ -33,9 +33,6 @@
 
 #include "G4VEmProcess.hh"
 
-// Available models
-#include "G4DNASancheExcitationModel.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4DNAVibExcitation : public G4VEmProcess
@@ -45,24 +42,19 @@ public:
   G4DNAVibExcitation(const G4String& processName ="DNAVibrationalExcitation",
 		     G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4DNAVibExcitation();
+  ~G4DNAVibExcitation() override = default;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
   
-  virtual void PrintInfo();
-
-  static int ProcessSubType()
-  {
-    return 54;
-  }
+  void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
-  G4bool       isInitialised;
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -55,7 +55,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WentzelVIModel.hh"
-#include "G4Threading.hh"
 #include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,10 +92,6 @@ private:
 
   static std::vector<G4double> effMass;
   G4NistManager* fNistManager;
-
-#ifdef G4MULTITHREADED
-  static G4Mutex WentzelVIRelModelMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

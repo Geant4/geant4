@@ -1,0 +1,122 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_X11_colors
+#define toolx_X11_colors
+
+#include <X11/Xlib.h>
+#include <vector>
+#include <map>
+
+namespace toolx {
+namespace X11 {
+
+typedef unsigned long Pixel;
+typedef std::vector<Pixel> pixels_t;
+
+typedef unsigned int rgb_t;
+typedef std::map<rgb_t,Pixel> colors_t;
+
+inline bool rgb2pixel(Display* a_display,unsigned int a_monitor,
+                      unsigned char a_r,unsigned char a_g,unsigned char a_b,
+                      Pixel& a_pixel,bool& a_allocated) {
+  // read_write visual class: PseudoColor, GrayScale, DirectColor.
+  // read_only  visual class: TrueColor, StaticColor, StaticGray.
+  // Could allocate a read_only cell in a read_write, read_only visual class.
+  // Could allocate a read_write cell only in read_write visual class.
+  // StaticGray + (depth=1) is monochrome.
+
+  Screen* screen = ::XScreenOfDisplay(a_display,a_monitor);
+  int vclass = ::XDefaultVisualOfScreen(screen)->c_class;
+  Colormap cmap = ::XDefaultColormapOfScreen(screen);
+
+  bool is_grey  = ((vclass==GrayScale) || (vclass==StaticGray) ) ? true : false;
+
+  float r = float(a_r)/255.0f;
+  float g = float(a_g)/255.0f;
+  float b = float(a_b)/255.0f;
+  
+  XColor xcolor;
+  xcolor.pixel  = 0L;
+  if(is_grey) {
+    float grey = 0.30f * r + 0.59f * g + 0.11f * b;
+    xcolor.red    = (unsigned short) (grey * 0xffff);
+    xcolor.green  = (unsigned short) (grey * 0xffff);
+    xcolor.blue   = (unsigned short) (grey * 0xffff);
+  } else {
+    xcolor.red    = (unsigned short) (r  * 0xffff);
+    xcolor.green  = (unsigned short) (g  * 0xffff);
+    xcolor.blue   = (unsigned short) (b  * 0xffff);
+  }
+
+  // Could be done on read_only/read_write visual class.
+  // Cell is taken from a common pool. It is read only.
+  if(::XAllocColor(a_display,cmap,&xcolor)==0) {
+    // Color not found. Try to allocate a private color cell :
+    if((vclass==TrueColor)||(vclass==StaticColor)||(vclass==StaticGray)) { //Viusal class is read_only.
+      a_pixel = 0;
+      a_allocated = false;
+      return false;
+    }
+    if(::XAllocColorCells(a_display,cmap,False,NULL,0,&(xcolor.pixel),1)==0) { //read/write cell.
+      a_pixel = 0;
+      a_allocated = false;
+      return false;
+    }
+    xcolor.flags = DoRed|DoGreen|DoBlue;
+    ::XStoreColor(a_display,cmap,&xcolor);
+    a_pixel = xcolor.pixel;
+    a_allocated = true;
+  } else {
+    a_pixel = xcolor.pixel;
+    a_allocated = false;
+  }
+
+  return true;
+}
+
+inline bool get_pixel(Display* a_display,unsigned int a_monitor,
+                      pixels_t& a_pixels,colors_t& a_colors,
+                      unsigned int a_rgba,
+                      Pixel& a_pixel) {
+  colors_t::const_iterator it = a_colors.find(a_rgba);
+  if(it!=a_colors.end()) {a_pixel = (*it).second;return true;}
+  unsigned char* pos = (unsigned char*)&a_rgba;
+  bool allocated;
+  if(!rgb2pixel(a_display,a_monitor,*(pos+0),*(pos+1),*(pos+2),a_pixel,allocated)) {
+    Screen* screen = ::XScreenOfDisplay(a_display,a_monitor);
+    a_pixel = XWhitePixelOfScreen(screen);
+    return false;
+  }
+  if(allocated) a_pixels.push_back(a_pixel);
+  a_colors[a_rgba] = a_pixel;
+  return true;
+}
+
+inline void set_rgb_t(unsigned char a_r,unsigned char a_g,unsigned char a_b,rgb_t& a_rgb) {
+  unsigned char* pos = (unsigned char*)&a_rgb;
+  *pos = a_r;pos++;
+  *pos = a_g;pos++;
+  *pos = a_b;pos++;
+  *pos = 0;pos++;
+}
+
+inline bool set_foreground(Display* a_display,unsigned int a_monitor,GC a_gc,pixels_t& a_pixels,colors_t& a_colors,unsigned char a_r,unsigned char a_g,unsigned char a_b) {
+  Pixel pixel;
+  rgb_t rgb;
+  set_rgb_t(a_r,a_g,a_b,rgb);
+  if(!get_pixel(a_display,a_monitor,a_pixels,a_colors,rgb,pixel)) return false;
+  XGCValues gcv;
+  gcv.foreground = pixel;
+  if(::XChangeGC(a_display,a_gc,GCForeground,&gcv)==0) return false;
+  return true;
+}
+
+inline bool set_foregroundf(Display* a_display,unsigned int a_monitor,GC a_gc,pixels_t& a_pixels,colors_t& a_colors,float a_r,float a_g,float a_b) {
+  return set_foreground(a_display,a_monitor,a_gc,a_pixels,a_colors,a_r*255.0f,a_g*255.0f,a_b*255.0f);
+}
+
+}}
+
+
+#endif

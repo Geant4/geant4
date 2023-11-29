@@ -74,6 +74,6 @@ G4HO2* G4HO2::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0); // Set 2 electrons on 1 single occupancy
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
   }
-  theInstance = reinterpret_cast<G4HO2*>(anInstance);
+  theInstance = static_cast<G4HO2*>(anInstance);
   return theInstance;
 }

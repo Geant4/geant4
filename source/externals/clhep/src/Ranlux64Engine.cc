@@ -707,9 +707,9 @@ bool Ranlux64Engine::getState (const std::vector<unsigned long> & v) {
   }
   t[0] = v[25]; t[1] = v[26];
   carry    = DoubConv::longs2double(t);
-  index    = v[27];
-  luxury   = v[28];
-  pDiscard = v[29]; 
+  index    = (int)v[27];
+  luxury   = (int)v[28];
+  pDiscard = (int)v[29]; 
   return true;
 }
 

@@ -1,18 +1,27 @@
--------------------------------------------------------------------
+# Category physics-lists History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                  Hadronic physics-list History
-                  -----------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-12-12 Ben Morgan (physics-lists-V11-01-00)
+- Remove obsolete GNUmakefile scripts
+
+## 2022-11-24 Gabriele Cosmo (physics-lists-V11-00-02)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-01-28 Ben Morgan (physics-lists-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+  
+## 2021-12-10 Ben Morgan (physics-lists-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 25-08-2021 Dennis Wright (physics-lists-V10-07-02)
 - completed name migration by replacing G4RadioactiveDecayBase with

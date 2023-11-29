@@ -46,7 +46,7 @@ class G4ExcitedBaryonConstructor
 
   public:
     G4ExcitedBaryonConstructor(G4int nStates = 0, G4int isoSpin=0);
-    virtual  ~G4ExcitedBaryonConstructor();
+    virtual  ~G4ExcitedBaryonConstructor() = default;
   
   public:
     virtual  void Construct(G4int indexOfState = -1);
@@ -64,10 +64,10 @@ class G4ExcitedBaryonConstructor
     G4int iIsoSpin;
 
     const G4String type;
-    const G4int    iConjugation;
-    const G4int    iGParity;
-    const G4int    leptonNumber;
-    const G4int    baryonNumber;
+    const G4int    iConjugation{0};
+    const G4int    iGParity{0};
+    const G4int    leptonNumber{0};
+    const G4int    baryonNumber{1};
 
     // following methods are pure virtual
     // thes methods should be implemented in derived classes

@@ -60,13 +60,13 @@ class G4ParticlePropertyMessenger : public G4UImessenger
   public:
 
     G4ParticlePropertyMessenger(G4ParticleTable* pTable = nullptr);
-    virtual ~G4ParticlePropertyMessenger();
+    ~G4ParticlePropertyMessenger() override;
 
     G4ParticlePropertyMessenger(const G4ParticlePropertyMessenger&) = delete;
     G4ParticlePropertyMessenger& operator=(const G4ParticlePropertyMessenger&) = delete;
 
-    virtual void SetNewValue(G4UIcommand* command, G4String newValues);
-    virtual G4String GetCurrentValue(G4UIcommand* command);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
 

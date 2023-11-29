@@ -24,9 +24,11 @@
 // ********************************************************************
 //
 
+#include <utility>
+
 //_____________________________________________________________________________
-inline G4VAccumulable::G4VAccumulable(const G4String& name)
-  : fName(name)
+inline G4VAccumulable::G4VAccumulable(G4String name)
+  : fName(std::move(name))
 {}
 
 //_____________________________________________________________________________

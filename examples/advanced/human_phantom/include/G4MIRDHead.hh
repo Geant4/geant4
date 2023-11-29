@@ -41,9 +41,9 @@ class G4MIRDHead: public G4VOrgan
 {
 public:
 
-  G4MIRDHead();
-  ~G4MIRDHead();
+  G4MIRDHead() = default;
+  ~G4MIRDHead() override = default;
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*, const G4String&, 
-				    G4bool, G4bool); 
+				    G4bool, G4bool) override; 
 };
 #endif

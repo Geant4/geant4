@@ -51,7 +51,7 @@ class G4TauMinus : public G4ParticleDefinition
  private:
    static G4TauMinus* theInstance;
    G4TauMinus(){}
-   ~G4TauMinus(){}
+   ~G4TauMinus() override= default;
 
  public:
    static G4TauMinus* Definition();

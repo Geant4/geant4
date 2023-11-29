@@ -45,12 +45,10 @@ void BrachyActionInitialization::BuildForMaster() const
 
 void BrachyActionInitialization::Build() const
 {   
-BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
-SetUserAction(primary); 
+SetUserAction(new BrachyPrimaryGeneratorAction()); 
 
 SetUserAction(new BrachyRunAction());
 
-BrachySteppingAction* stepping = new BrachySteppingAction();
-SetUserAction(stepping);	
+SetUserAction(new BrachySteppingAction());	
 }  
 

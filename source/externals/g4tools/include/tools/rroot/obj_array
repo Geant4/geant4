@@ -77,7 +77,7 @@ public:
         T* obj = safe_cast<iro,T>(*_obj);
         if(!obj) {
           m_fac.out() << "tools::rroot::obj_array::obj_array :"
-                      << " inlib::cast failed."
+                      << " tools::cast failed."
                       << std::endl;
           delete _obj;
           parent::push_back(0);
@@ -104,7 +104,7 @@ public:
         T* obj = safe_cast<iro,T>(*_obj);
         if(!obj) {
           m_fac.out() << "tools::rroot::obj_array::operator= :"
-                      << " inlib::cast failed."
+                      << " tools::cast failed."
                       << std::endl;
           delete _obj;
           parent::push_back(0);
@@ -160,7 +160,7 @@ public:
         T* to = safe_cast<iro,T>(*obj);
         if(!to) {
           a_buffer.out() << "tools::rroot::obj_array::stream :"
-                         << " inlib::cast failed."
+                         << " tools::cast failed."
                          << " " << obj->s_cls() << " is not a " << T::s_class() << "."
                          << std::endl;
           if(created) {

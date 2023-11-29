@@ -63,10 +63,12 @@
 #include "G4ExcitationHandler.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4Ions.hh"
 #include "G4Electron.hh"
+#include "G4Lambda.hh"
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
@@ -89,7 +91,8 @@ G4ExcitationHandler::G4ExcitationHandler()
     minExcitation(1.*CLHEP::eV),maxExcitation(100.*CLHEP::MeV),
     isInitialised(false),isEvapLocal(true),isActive(true)
 {                                                                          
-  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
+  thePartTable = G4ParticleTable::GetParticleTable();
+  theTableOfIons = thePartTable->GetIonTable();
   nist = G4NistManager::Instance();
   
   theMultiFragmentation = nullptr;
@@ -107,7 +110,10 @@ G4ExcitationHandler::G4ExcitationHandler()
   theDeuteron = G4Deuteron::DeuteronDefinition();
   theTriton = G4Triton::TritonDefinition();
   theHe3 = G4He3::He3Definition();
-  theAlpha = G4Alpha::AlphaDefinition();;
+  theAlpha = G4Alpha::AlphaDefinition();
+  theLambda = G4Lambda::Lambda();
+
+  fLambdaMass = theLambda->GetPDGMass();
 
   if(fVerbose > 1) { G4cout << "### New handler " << this << G4endl; }
 }
@@ -296,6 +302,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   G4double exEnergy = theInitialState.GetExcitationEnergy();
   G4int A = theInitialState.GetA_asInt();
   G4int Z = theInitialState.GetZ_asInt();
+  G4int nL = theInitialState.GetNumberOfLambdas();
 
   // too much excitation
   if(exEnergy > A*maxExcitation && A > 0) {
@@ -307,18 +314,82 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       G4Exception("G4ExcitationHandler::BreakItUp()","had0034",JustWarning,ed,"");
     }
   }
-  
+
+  // for hyper-nuclei subtract lambdas from the projectile fragment
+  G4double lambdaF = 0.0;
+  G4LorentzVector lambdaLV = theInitialStatePtr->GetMomentum();
+  if(0 < nL) {
+
+    // is it a stable hyper-nuclei?
+    if(A >= 3 && A <= 5 && nL <= 2) {
+      G4int pdg = 0;
+      if(3 == A && 1 == nL) {
+        pdg = 1010010030;
+      } else if(5 == A && 2 == Z && 1 == nL) {
+        pdg = 1010020050;
+      } else if(4 == A) {
+	if(1 == Z && 1 == nL) {
+	  pdg = 1010010040;
+	} else if(2 == Z && 1 == nL) {
+	  pdg = 1010020040;
+	} else if(0 == Z && 2 == nL) {
+	  pdg = 1020000040;
+	} else if(1 == Z && 2 == nL) {
+	  pdg = 1020010040;
+	}
+      }
+      // initial state is one of hyper-nuclei
+      if(0 < pdg) {
+	const G4ParticleDefinition* part = thePartTable->FindParticle(pdg);
+        if(nullptr != part) {
+	  G4ReactionProduct* theNew = new G4ReactionProduct(part);
+	  G4ThreeVector dir = G4ThreeVector( 0.0, 0.0, 0.0 );
+          if ( lambdaLV.vect().mag() > CLHEP::eV ) {
+	    dir = lambdaLV.vect().unit();
+          }
+	  G4double mass = part->GetPDGMass(); 
+	  G4double etot = std::max(lambdaLV.e(), mass);
+          dir *= std::sqrt((etot - mass)*(etot + mass));
+	  theNew->SetMomentum(dir);
+	  theNew->SetTotalEnergy(etot);
+	  theNew->SetFormationTime(theInitialState.GetCreationTime());
+	  theNew->SetCreatorModelID(theInitialState.GetCreatorModelID());
+	  G4ReactionProductVector* v = new G4ReactionProductVector();
+          v->push_back(theNew);
+	  return v;
+	}
+      }
+    }
+    G4double mass = theInitialStatePtr->GetGroundStateMass();
+    lambdaF = nL*(fLambdaMass - CLHEP::neutron_mass_c2)/mass;
+
+    // de-excitation with neutrons instead of lambda inside the fragment
+    theInitialStatePtr->SetZAandMomentum(lambdaLV*(1. - lambdaF), Z, A, 0);
+
+    // 4-momentum not used in de-excitation 
+    lambdaLV *= lambdaF;
+  } else if(0 > nL) {
+    ++fWarnings;
+    if(fWarnings < 0) {
+      G4ExceptionDescription ed;
+      ed << "Fragment with negative L: Z=" << Z << " A=" << A << " L=" << nL
+	 << " Eex/A(MeV)= " << exEnergy/A;
+      G4Exception("G4ExcitationHandler::BreakItUp()","had0034",JustWarning,ed,"");
+    }
+  }
+
   // In case A <= 1 the fragment will not perform any nucleon emission
   if (A <= 1 || !isActive) {
     theResults.push_back( theInitialStatePtr );
 
     // check if a fragment is stable
-  } else if(exEnergy < minExcitation && nist->GetIsotopeAbundance(Z, A) > 0.0) {
+  } else if(exEnergy < minExcitation && 
+	    nist->GetIsotopeAbundance(Z, A) > 0.0) {
     theResults.push_back( theInitialStatePtr );
 
     // JMQ 150909: first step in de-excitation is treated separately 
     // Fragments after the first step are stored in theEvapList 
-  } else {      
+  } else {
     if((A<maxAForFermiBreakUp && Z<maxZForFermiBreakUp) 
        || exEnergy <= minEForMultiFrag*A) { 
       theEvapList.push_back(theInitialStatePtr); 
@@ -435,14 +506,17 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     G4cout << "### ExcitationHandler provides " << theResults.size() 
 	   << " evaporated products:" << G4endl;
   }
+  G4LorentzVector partOfLambdaLV;
+  if ( nL > 0 ) partOfLambdaLV = lambdaLV/(G4double)nL;
   for (auto & frag : theResults) {
+    G4LorentzVector lv0 = frag->GetMomentum();
+    G4double etot = lv0.e();
 
     // in the case of dummy de-excitation, excitation energy is transfered 
     // into kinetic energy of output ion
     if(!isActive) {
       G4double mass = frag->GetGroundStateMass();
-      G4double ptot = (frag->GetMomentum()).vect().mag();
-      G4double etot = (frag->GetMomentum()).e();
+      G4double ptot = lv0.vect().mag();
       G4double fac  = (etot <= mass || 0.0 == ptot) ? 0.0 
 	: std::sqrt((etot - mass)*(etot + mass))/ptot; 
       G4LorentzVector lv((frag->GetMomentum()).px()*fac, 
@@ -460,9 +534,9 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 
     G4int fragmentA = frag->GetA_asInt();
     G4int fragmentZ = frag->GetZ_asInt();
-    G4double etot= frag->GetMomentum().e();
     G4double eexc = 0.0;
     const G4ParticleDefinition* theKindOfFragment = nullptr;
+    G4bool isHyperN = false;
     if (fragmentA == 0) {       // photon or e-
       theKindOfFragment = frag->GetParticleDefinition();   
     } else if (fragmentA == 1 && fragmentZ == 0) { // neutron
@@ -473,21 +547,37 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       theKindOfFragment = theDeuteron;
     } else if (fragmentA == 3 && fragmentZ == 1) { // triton
       theKindOfFragment = theTriton;
+      if(0 < nL) {
+        const G4ParticleDefinition* p = thePartTable->FindParticle(1010010030);
+        if(nullptr != p) {
+	  theKindOfFragment = p;
+	  isHyperN = true;
+	  --nL;
+	}
+      }
     } else if (fragmentA == 3 && fragmentZ == 2) { // helium3
       theKindOfFragment = theHe3;
     } else if (fragmentA == 4 && fragmentZ == 2) { // alpha
       theKindOfFragment = theAlpha;
+      if(0 < nL) {
+        const G4ParticleDefinition* p = thePartTable->FindParticle(1010020040);
+        if(nullptr != p) {
+	  theKindOfFragment = p;
+	  isHyperN = true;
+	  --nL;
+	}
+      }
     } else {
 
       // fragment
       eexc = frag->GetExcitationEnergy();
       G4int idxf = frag->GetFloatingLevelNumber();
-      if(eexc < minExcitation) { 
+      if(eexc < minExcitation) {
 	eexc = 0.0; 
         idxf = 0;
       }
 
-      theKindOfFragment = theTableOfIons->GetIon(fragmentZ,fragmentA,eexc,
+      theKindOfFragment = theTableOfIons->GetIon(fragmentZ, fragmentA, eexc,
                                                  G4Ions::FloatLevelBase(idxf));
       if(fVerbose > 3) {
 	G4cout << "### EXCH: Find ion Z= " << fragmentZ 
@@ -497,9 +587,21 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       }
     }
     // fragment identified
-    if(theKindOfFragment) {
+    if(nullptr != theKindOfFragment) {
       G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
-      theNew->SetMomentum(frag->GetMomentum().vect());
+      if(isHyperN) {
+        G4LorentzVector lv = lv0 + partOfLambdaLV;
+	G4ThreeVector dir = lv.vect().unit();
+        G4double mass = theKindOfFragment->GetPDGMass();
+        etot = std::max(lv.e(), mass);
+        G4double ptot = std::sqrt((etot - mass)*(etot + mass));
+        dir *= ptot;
+	theNew->SetMomentum(dir);
+	// remaining not compensated 4-momentum
+        lambdaLV += (lv0 - G4LorentzVector(dir, etot));
+      } else {
+	theNew->SetMomentum(lv0.vect());
+      }
       theNew->SetTotalEnergy(etot);
       theNew->SetFormationTime(frag->GetCreationTime());
       if(theKindOfFragment == theElectron) {
@@ -536,7 +638,25 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     }
     delete frag;
   }
-  if(fVerbose > 3) { 	
+  // remaining lambdas are free; conserve quantum numbers but
+  // not 4-momentum
+  if(0 < nL) {
+    G4ThreeVector dir = G4ThreeVector( 0.0, 0.0, 0.0 );
+    if ( lambdaLV.vect().mag() > CLHEP::eV ) {
+      dir = lambdaLV.vect().unit();
+    }
+    G4double etot = std::max(lambdaLV.e()/(G4double)nL, fLambdaMass);
+    dir *= std::sqrt((etot - fLambdaMass)*(etot + fLambdaMass));
+    for(G4int i=0; i<nL; ++i) {
+      G4ReactionProduct* theNew = new G4ReactionProduct(theLambda);
+      theNew->SetMomentum(dir);
+      theNew->SetTotalEnergy(etot);
+      theNew->SetFormationTime(theInitialState.GetCreationTime());
+      theNew->SetCreatorModelID(theInitialState.GetCreatorModelID());
+      theReactionProductVector->push_back(theNew);
+    }
+  }
+  if(fVerbose > 3) {
     G4cout << "@@@@@@@@@@ End G4Excitation Handler "<< G4endl;
   }
   return theReactionProductVector;

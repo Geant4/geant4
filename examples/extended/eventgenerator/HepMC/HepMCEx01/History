@@ -1,22 +1,20 @@
--------------------------------------------------------------------
+# Example HepMCEx01 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example HepMCEx01 History file
-                    ------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-
-May 24th 2022 I. Hrivnacova (HepMCEx01-V10-07-00)
-- Fix failing compilation due to G4String changes in Geant4 11
+## 2022-05-24 I. Hrivnacova (HepMCEx01-V11-00-01)
+- Fix failing comilation due to G4String changes in Geant4 11
   (Makes part of the GitHub PR #45)
+
+## 2021-12-10 Ben Morgan (HepMCEx01-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 Novemebr 13th 2020 Ben Morgan (HepMCEx01-V10-06-01)
 - Enforce use of Serial RunManager.

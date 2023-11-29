@@ -29,4 +29,4 @@
 #include "G4ParticleHPIsotropic.hh"
 using G4NeutronHPIsotropic = G4ParticleHPIsotropic;
 
-#endif 
+#endif

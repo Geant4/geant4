@@ -75,22 +75,20 @@ G4Hdf5AnalysisManager::G4Hdf5AnalysisManager()
 #endif
 #endif
 
-  if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
-
   // File manager
-  fFileManager = std::make_shared<G4Hdf5FileManager>(fState);
-  SetFileManager(fFileManager);
+  auto fileManager = std::make_shared<G4Hdf5FileManager>(fState);
+  SetFileManager(fileManager);
 
   // Ntuple file manager
   fNtupleFileManager = std::make_shared<G4Hdf5NtupleFileManager>(fState);
-  fNtupleFileManager->SetFileManager(fFileManager);
+  SetNtupleFileManager(fNtupleFileManager);
+  fNtupleFileManager->SetFileManager(fileManager);
   fNtupleFileManager->SetBookingManager(fNtupleBookingManager);
 }
 
 //_____________________________________________________________________________
 G4Hdf5AnalysisManager::~G4Hdf5AnalysisManager()
 {
-  if ( fState.GetIsMaster() ) fgMasterInstance = nullptr;
   fgIsInstance = false;
 }
 
@@ -101,44 +99,9 @@ G4Hdf5AnalysisManager::~G4Hdf5AnalysisManager()
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-  // Create ntuple manager(s)
-  // and set it to base class which takes then their ownership
-  SetNtupleManager(fNtupleFileManager->CreateNtupleManager());
-
-  auto result = true;
-
   G4AutoLock lock(&openFileMutex);
-  result &= fFileManager->OpenFile(fileName);
-  result &= fNtupleFileManager->ActionAtOpenFile(fFileManager->GetFullFileName());
+  auto result = G4ToolsAnalysisManager::OpenFileImpl(fileName);
   lock.unlock();
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::WriteImpl()
-{
-  auto result = true;
-
-  Message(kVL4, "write", "files");
-
-  if ( G4Threading::IsWorkerThread() )  {
-    result &= G4ToolsAnalysisManager::Merge();
-  }
-  else {
-    // Open all files registered with objects
-    fFileManager->OpenFiles();
-
-    // Write all histograms/profile on master
-    result &= G4ToolsAnalysisManager::WriteImpl();
-  }
-
-  // Write ASCII if activated
-  if ( IsAscii() ) {
-    result &= WriteAscii(fFileManager->GetFileName());
-  }
-
-  Message(kVL3, "write", "files", "", result);
 
   return result;
 }
@@ -146,34 +109,9 @@ G4bool G4Hdf5AnalysisManager::WriteImpl()
 //_____________________________________________________________________________
 G4bool G4Hdf5AnalysisManager::CloseFileImpl(G4bool reset)
 {
-  auto result = true;
-
   G4AutoLock lock(&closeFileMutex);
-  result &= fFileManager->CloseFiles();
-
-  if ( reset ) {
-    // reset data
-    result = ResetImpl();
-    if ( ! result ) {
-      Warn("Resetting data failed", fkClass, "OpenDirectory");
-    }
-  }
-  result &= fNtupleFileManager->ActionAtCloseFile(reset);
-
+  auto result = G4ToolsAnalysisManager::CloseFileImpl(reset);
   lock.unlock();
-
-  return result;
-}
-
-//_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::ResetImpl()
-{
-  auto result = true;
-
-  result &= G4ToolsAnalysisManager::ResetImpl();
-  if ( fNtupleFileManager != nullptr ) {
-    result &= fNtupleFileManager->Reset();
-  }
 
   return result;
 }

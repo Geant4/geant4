@@ -35,8 +35,9 @@
 #define G4PairingCorrection_h 1
 
 #include "globals.hh"
-#include "G4CookPairingCorrections.hh"
 #include "G4CameronGilbertPairingCorrections.hh"
+#include "G4CameronGilbertShellCorrections.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
 
 class G4PairingCorrection
 {
@@ -44,16 +45,21 @@ public:
 	
   explicit G4PairingCorrection();
   
-  ~G4PairingCorrection();
+  ~G4PairingCorrection() = default;
 
   G4double GetPairingCorrection(G4int A, G4int Z) const;
 
   G4double GetFissionPairingCorrection(G4int A, G4int Z) const;
 
+  G4PairingCorrection(const G4PairingCorrection & right) = delete;
+  const G4PairingCorrection & operator=
+  (const G4PairingCorrection & right) = delete;
+
 private:
 
-  G4CookPairingCorrections theCookPairingCorrections;
   G4CameronGilbertPairingCorrections theCameronGilbertPairingCorrections;
+  G4CameronGilbertShellCorrections theCameronGilbertShellCorrections;
+  G4CameronShellPlusPairingCorrections theCorr;
 
 };
 #endif

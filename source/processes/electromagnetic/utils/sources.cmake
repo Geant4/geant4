@@ -17,6 +17,7 @@ geant4_add_module(G4emutils
     G4EmElementSelector.hh
     G4EmExtraParameters.hh
     G4EmExtraParametersMessenger.hh
+    G4EmFluoDirectory.hh
     G4EmLowEParameters.hh
     G4EmLowEParametersMessenger.hh
     G4EmModelManager.hh
@@ -27,6 +28,8 @@ geant4_add_module(G4emutils
     G4EmSaturation.hh
     G4EmSecondaryParticleType.hh
     G4EmTableType.hh
+    G4EmTableUtil.hh
+    G4EmUtility.hh
     G4EnergyLossTables.hh
     G4LossTableBuilder.hh
     G4LossTableManager.hh
@@ -36,6 +39,7 @@ geant4_add_module(G4emutils
     G4NuclearFormfactorType.hh
     G4OpticalParameters.hh
     G4OpticalParametersMessenger.hh
+    G4TransportationWithMsc.hh
     G4VAtomDeexcitation.hh
     G4VEmAngularDistribution.hh
     G4VEmFluctuationModel.hh
@@ -65,12 +69,15 @@ geant4_add_module(G4emutils
     G4EmParameters.cc
     G4EmParametersMessenger.cc
     G4EmSaturation.cc
+    G4EmTableUtil.cc
+    G4EmUtility.cc
     G4EnergyLossTables.cc
     G4LossTableBuilder.cc
     G4LossTableManager.cc
     G4NIELCalculator.cc
     G4OpticalParameters.cc
     G4OpticalParametersMessenger.cc
+    G4TransportationWithMsc.cc
     G4VAtomDeexcitation.cc
     G4VEmAngularDistribution.cc
     G4VEmFluctuationModel.cc
@@ -93,6 +100,7 @@ geant4_module_link_libraries(G4emutils
     G4partman
     G4procman
     G4track
+    G4transportation
   PRIVATE
     G4baryons
     G4bosons

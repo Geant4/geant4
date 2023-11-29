@@ -34,35 +34,20 @@
 
 #include "globals.hh"
 #include "G4VCoulombBarrier.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
-
-class G4Pow;
 
 class G4CoulombBarrier : public G4VCoulombBarrier
 {
-
 public:
 
   explicit G4CoulombBarrier(G4int anA, G4int aZ);
-  virtual ~G4CoulombBarrier();
+  ~G4CoulombBarrier() override = default;
 
-  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
+  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const override;
 
-  virtual G4double BarrierPenetrationFactor(G4int Eexc) const;
+  G4double BarrierPenetrationFactor(G4int aZ) const override;
 
-private:
-
-  G4CoulombBarrier(const G4CoulombBarrier & right);
-  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right);
-  G4bool operator==(const G4CoulombBarrier & right) const;
-  G4bool operator!=(const G4CoulombBarrier & right) const;
-  
-protected:
-
-  G4Pow* g4calc;
-
-private:
-
-  G4double factor; 
+  G4CoulombBarrier(const G4CoulombBarrier & right) = delete;
+  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right) = delete;
 };
+
 #endif

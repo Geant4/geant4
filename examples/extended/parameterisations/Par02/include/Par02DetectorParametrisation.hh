@@ -25,7 +25,7 @@
 //
 //
 /// \file Par02DetectorParametrisation.hh
-/// \brief Definition of the Par02DetectorParameterisation class
+/// \brief Definition of the Par02DetectorParametrisation class
 
 #ifndef PAR02_DETECTOR_PARAMETRSIATION_H
 #define PAR02_DETECTOR_PARAMETRSIATION_H

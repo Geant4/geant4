@@ -90,7 +90,7 @@ G4PhotoElectricAngularGeneratorPolarized::G4PhotoElectricAngularGeneratorPolariz
     if(level == 0) filename = nameChar0;
     if(level == 1) filename = nameChar1;
 
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
     if (!path)
       {
         G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
@@ -270,6 +270,7 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(
         G4double beta, G4double theta, G4double phi) const
 {
   //Double differential L1 shell cross-section (Gavrila 1961)
+  // 26Oct2022: included factor (1/8) in dsigma from eqn 20 of paper
   G4double beta2 = beta*beta;
   G4double oneBeta2 = 1-beta2;
   G4double sqrtOneBeta2 = std::sqrt(oneBeta2);
@@ -294,7 +295,7 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaL1shellGavrila(
                + (1-sqrtOneBeta2)/(4*beta2*oneBetaCosTheta*oneBetaCosTheta) * (beta/oneBeta2 - 2/oneBeta2 * cosTheta * cosPhi2 +
                (1-sqrtOneBeta2)/oneBeta2_to_3_2*cosTheta - beta*(1-sqrtOneBeta2)/oneBeta2_to_3_2);
 
-  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) )*std::sin(theta);
+  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) )*std::sin(theta) / 8.;
 
   return dsigma;
 }

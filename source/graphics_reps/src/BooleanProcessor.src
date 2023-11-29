@@ -16,9 +16,9 @@
 #include "G4Plane3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
-typedef G4Plane3D HVPlane3D;
-typedef G4Point3D HVPoint3D;
-typedef G4Normal3D HVNormal3D;
+using HVPlane3D = G4Plane3D;
+using HVPoint3D = G4Point3D;
+using HVNormal3D = G4Normal3D;
 
 #else //BP_HEPVIS
 
@@ -115,9 +115,9 @@ class ExtNode {
  public: 
   ExtNode(HVPoint3D vertex=HVPoint3D(), int status=0)
     : v(vertex), s(status) {}
-  ~ExtNode() {}
+  ~ExtNode() = default;
 
-  ExtNode(const ExtNode & node) : v(node.v), s(node.s) {}
+  ExtNode(const ExtNode & node)  = default;
 
   ExtNode & operator=(const ExtNode & node) {
     if (&node == this) return *this;
@@ -134,17 +134,15 @@ class ExtEdge {
   int       iface1;           // native face
   int       iface2;           // neighbouring face
   int       ivis;             // visibility: +1 (visible), -1 (invisible)
-  int       inext;            // index of next edge 
+  int       inext{0};            // index of next edge 
 
  public:
   ExtEdge(int k1=0, int k2=0, int kface1=0, int kface2=0, int kvis=0) :
-    i1(k1), i2(k2), iface1(kface1), iface2(kface2), ivis(kvis), inext(0) {}
+    i1(k1), i2(k2), iface1(kface1), iface2(kface2), ivis(kvis) {}
 
-  ~ExtEdge() {};
+  ~ExtEdge() = default;
 
-  ExtEdge(const ExtEdge & edge) :
-    i1(edge.i1), i2(edge.i2), iface1(edge.iface1), iface2(edge.iface2),
-    ivis(edge.ivis), inext(edge.inext) {}
+  ExtEdge(const ExtEdge & edge)  = default;
 
   ExtEdge & operator=(const ExtEdge & edge) {
     if (&edge == this) return *this;
@@ -172,19 +170,19 @@ class ExtFace {
   HVPlane3D plane;            // face plane
   double     rmin[3], rmax[3]; // bounding box
   int        iold;             // head of the list of the original edges
-  int        inew;             // head of the list of the new edges
-  int        iprev;            // index of previous face 
-  int        inext;            // index of next face 
+  int        inew{0};             // head of the list of the new edges
+  int        iprev{0};            // index of previous face 
+  int        inext{0};            // index of next face 
 
  public:
   //G.Barrand : ExtFace(int iedge=0) : iold(iedge), inew(0), iprev(iprev), inext(0) {}
   ExtFace(std::vector<ExtEdge>& a_edges,int iedge)
-  : edges(a_edges), iold(iedge), inew(0), iprev(0), inext(0) {
+  : edges(a_edges), iold(iedge)  {
     //G.Barrand : initialize arrays to quiet valgrind.
-   {for (int i=0; i<4; i++) { iedges[i] = 0; }}
+   {for (int & ie : iedges) { ie = 0; }}
    {for (int i=0; i<3; i++) { rmin[i] = 0; rmax[i] = 0; }}
   }
-  ~ExtFace() {}
+  ~ExtFace() = default;
 
   ExtFace(const ExtFace & face) :
     edges(face.edges), //G.Barrand
@@ -226,13 +224,13 @@ class FaceList {
  private:
   std::vector<ExtFace>& faces; //G.Barrad : end
  private:
-  int ihead;
-  int ilast;
+  int ihead{0};
+  int ilast{0};
 
  public:
   //G.Barrand : FaceList() : ihead(0), ilast(0) {}
-  FaceList(std::vector<ExtFace>& a_faces) : faces(a_faces),ihead(0),ilast(0) {}
-  ~FaceList() {}
+  FaceList(std::vector<ExtFace>& a_faces) : faces(a_faces) {}
+  ~FaceList() = default;
 
   void clean() { ihead = 0; ilast = 0; }  
   int front()  { return ihead; }
@@ -279,13 +277,13 @@ class BooleanProcessor {
   std::vector<ExtEdge> edges;        // vector of edges //G.Barrand
   std::vector<ExtFace> faces;        // vector of faces //G.Barrand
  private:
-  int             processor_error;   // is set in case of error
-  int             operation;  // 0 (union), 1 (intersection), 2 (subtraction)
-  int             ifaces1, ifaces2;  // lists of faces
-  int             iout1,   iout2;    // lists of faces with status "out"
-  int             iunk1,   iunk2;    // lists of faces with status "unknown"
+  int             processor_error{0};   // is set in case of error
+  int             operation{0};  // 0 (union), 1 (intersection), 2 (subtraction)
+  int             ifaces1{0}, ifaces2{0};  // lists of faces
+  int             iout1{0},   iout2{0};    // lists of faces with status "out"
+  int             iunk1{0},   iunk2{0};    // lists of faces with status "unknown"
   double          rmin[3], rmax[3];  // intersection of bounding boxes
-  double          del;               // precision (tolerance)   
+  double          del{0.};               // precision (tolerance)   
 
   FaceList        result_faces;      // list of accepted faces
   FaceList        suitable_faces;    // list of suitable faces
@@ -329,16 +327,7 @@ class BooleanProcessor {
  public:
   //G.Barrand : BooleanProcessor() {}
   BooleanProcessor() //G.Barrand
-  :processor_error(0)  // The next few fields are work space, initialised
-  ,operation(0)        // here to prevent Coverity warnings.
-  ,ifaces1(0)          // "
-  ,ifaces2(0)          // "
-  ,iout1(0)            // "
-  ,iout2(0)            // "
-  ,iunk1(0)            // "
-  ,iunk2(0)            // "
-  ,del(0.)             // "
-  ,result_faces(faces)
+  : result_faces(faces)
   ,suitable_faces(faces)
   ,unsuitable_faces(faces)
   ,unknown_faces(faces)
@@ -349,7 +338,7 @@ class BooleanProcessor {
     }
   }
 
-  ~BooleanProcessor() {}
+  ~BooleanProcessor() = default;
 
   HepPolyhedron execute(int op,
                         const HepPolyhedron &a,
@@ -424,8 +413,8 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
 {
   int i = 0, k = 0, nnode = 0, iNodes[5] = {0,0,0,0,0}, iVis[4] = {0,0,0,0},
   iFaces[4] = {0,0,0,0};
-  int dnode = nodes.size() - 1;
-  int dface = faces.size() - 1;
+  int dnode = (int)nodes.size() - 1;
+  int dface = (int)faces.size() - 1;
 
   //   S E T   N O D E S
 
@@ -444,13 +433,13 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
     ppp = p.GetVertexFast(i);
     ppp += HVPoint3D(dx,dy,dz);
 #endif
-    nodes.push_back(ExtNode(ppp));
+    nodes.emplace_back(ppp);
   }
 
   //   S E T   F A C E S
 
   for (int iface=1; iface <= p.GetNoFacets(); iface++) {
-    faces.push_back(ExtFace(edges,edges.size()));
+    faces.emplace_back(edges,static_cast<int>(edges.size()));
 
     //   S E T   F A C E   N O D E S
 
@@ -484,10 +473,10 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
     iNodes[nnode] = iNodes[0];
     faces.back().iedges[3] = 0;
     for (i=0; i<nnode; i++) {
-      faces.back().iedges[i] = edges.size();
-      edges.push_back(ExtEdge(iNodes[i], iNodes[i+1],
-                              iface+dface, iFaces[i], iVis[i]));
-      edges.back().inext     = edges.size();
+      faces.back().iedges[i] = (int)edges.size();
+      edges.emplace_back(iNodes[i], iNodes[i+1],
+                              iface+dface, iFaces[i], iVis[i]);
+      edges.back().inext     = (int)edges.size();
     }
     edges.back().inext = 0;
 
@@ -521,7 +510,7 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
 
     //   S E T   R E F E R E N C E   T O   T H E   N E X T   F A C E
 
-    faces.back().inext = faces.size(); 
+    faces.back().inext = (int)faces.size(); 
   }
   faces.back().inext = 0; 
 }
@@ -729,9 +718,9 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
         d1 = plane.distance(nodes[i1].v);
         d2 = plane.distance(nodes[i2].v);
         if (d1 > del) {
-          if (d2 < -del) { ii[i] = nodes.size(); break; } // +-
+          if (d2 < -del) { ii[i] = (int)nodes.size(); break; } // +-
         }else if (d1 < -del) {
-          if (d2 >  del) { ii[i] = nodes.size(); break; } // -+
+          if (d2 >  del) { ii[i] = (int)nodes.size(); break; } // -+
         }else{ 
           ii[i] = i1; break;                              // 0+ or 0-
         }
@@ -739,7 +728,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
       }
       if (ii[i] == (int)nodes.size()) {
         d3 = d2-d1; d1 = d1/d3; d2 = d2/d3;
-        nodes.push_back(ExtNode(d2*nodes[i1].v-d1*nodes[i2].v, iedge));
+        nodes.emplace_back(d2*nodes[i1].v-d1*nodes[i2].v, iedge);
       }  
     }
     edge.inext = 0;
@@ -751,18 +740,19 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
       edge.i2 = ii[1];
     }
     return INTERSECTION;
-  }else{
-    if (npos == nneg)                   return NON_PLANAR_FACE;
-    edge.inext = (s1 == ZERO_ZERO) ? ie1+1 : ie2+1;
-    if (s1 == ZERO_PLUS || s2 == ZERO_MINUS) {
-      edge.i1 = edges[faces[iface].iedges[ie2]].i1;
-      edge.i2 = edges[faces[iface].iedges[ie1]].i1;
-    }else{
-      edge.i1 = edges[faces[iface].iedges[ie1]].i1;
-      edge.i2 = edges[faces[iface].iedges[ie2]].i1;
-    }
-    return EDGE;
   }
+  
+  if (npos == nneg) return NON_PLANAR_FACE;
+
+  edge.inext = (s1 == ZERO_ZERO) ? ie1+1 : ie2+1;
+  if (s1 == ZERO_PLUS || s2 == ZERO_MINUS) {
+    edge.i1 = edges[faces[iface].iedges[ie2]].i1;
+    edge.i2 = edges[faces[iface].iedges[ie1]].i1;
+  }else{
+    edge.i1 = edges[faces[iface].iedges[ie1]].i1;
+    edge.i2 = edges[faces[iface].iedges[ie2]].i1;
+  }
+  return EDGE;
 }
 
 void BooleanProcessor::renumberNodes(int & i1, int & i2, int & i3, int & i4)
@@ -782,7 +772,7 @@ void BooleanProcessor::renumberNodes(int & i1, int & i2, int & i3, int & i4)
   if (i1 == i2) return;
   if (nodes[i1].s == 0 || nodes.back().s == 0) { i1 = i2; return; }
 
-  int ilast = nodes.size()-1;
+  int ilast = (int)nodes.size()-1;
   if (i1 == ilast) { i1 = i2; nodes.pop_back(); return; }
   if (i2 == ilast) { i2 = i1; }
   if (i3 == ilast) { i3 = i1; }
@@ -851,11 +841,11 @@ void BooleanProcessor::divideEdge(int & i1, int & i2)
 
   int ie1, ie2, inode = i1;
   nodes[inode].s = 0;
-  for (int i=0; i<2; i++) {
+  for (int iedge : iedges) {
 
     //   F I N D   C O R R E S P O N D I N G   E D G E
 
-    if ((ie1 = iedges[i]) == 0) continue;
+    if ((ie1 = iedge) == 0) continue;
     ie2 = faces[edges[ie1].iface2].iedges[0];
     while (ie2 > 0) {
       if (edges[ie2].i1 == edges[ie1].i2 &&
@@ -866,12 +856,12 @@ void BooleanProcessor::divideEdge(int & i1, int & i2)
     //   D I V I D E   E D G E S
     
     edges.push_back(edges[ie1]);
-    edges[ie1].inext = edges.size() - 1;
+    edges[ie1].inext = (int)edges.size() - 1;
     edges[ie1].i2    = inode;
     edges.back().i1  = inode;
     
     edges.push_back(edges[ie2]);
-    edges[ie2].inext = edges.size() - 1;
+    edges[ie2].inext = (int)edges.size() - 1;
     edges[ie2].i2    = inode;
     edges.back().i1  = inode;
   } 
@@ -890,7 +880,7 @@ void BooleanProcessor::insertEdge(const ExtEdge & edge)
   int iface = edge.iface1;
   edges.push_back(edge);
   edges.back().inext = faces[iface].inew;
-  faces[iface].inew  = edges.size() - 1;
+  faces[iface].inew  = (int)edges.size() - 1;
 }
 
 void BooleanProcessor::caseII(ExtEdge & edge1, ExtEdge & edge2)
@@ -1099,18 +1089,19 @@ void BooleanProcessor::assembleFace(int what, int iface)
         icur = *i;
         *i = edges[icur].inext;
         INSERT_EDGE_TO_THE_LIST(icur);
-        if (edges[icur].i2 == ifirst) { break; } else { continue; }
-      }else{
-        processor_error = 1;
-#ifdef BP_DEBUG
-        G4cerr
-          << "BooleanProcessor::assembleFace(" << iface << ") : "
-          << "could not find next edge of the contour"
-          << G4endl;
-#endif
-        face.inew = DEFECTIVE_FACE;
-        return;
+        if (edges[icur].i2 == ifirst) { break; } 
+        continue;
       }
+      
+      processor_error = 1;
+#ifdef BP_DEBUG
+      G4cerr
+        << "BooleanProcessor::assembleFace(" << iface << ") : "
+        << "could not find next edge of the contour"
+        << G4endl;
+#endif
+      face.inew = DEFECTIVE_FACE;
+      return;
     }
   }
 
@@ -1130,9 +1121,8 @@ void BooleanProcessor::assembleFace(int what, int iface)
         if (edges[iedge].i2 == edges[face.iold].i1) {
           edges[iedge].inext = ihead;   // set new face
           return;
-        }else{
-          break;
-        }
+        }          break;
+       
       }
     }
   }
@@ -1546,17 +1536,16 @@ void BooleanProcessor::mergeContours(int ix, int iy, int kext, int kint)
               edges[i].inext = internal_contours[kint];
               internal_contours[kint] = 0;
               break;
-            }else{
-              i = edges[i].inext;
             }
+            i = edges[i].inext;
           }
           i = edges[i1int].iface1;
-          edges.push_back(ExtEdge(k[1], k[4], i, -(int(edges.size())+1), -1));
+          edges.emplace_back(k[1], k[4], i, -(int(edges.size())+1), -1);
           edges.back().inext = i2int;
-          edges.push_back(ExtEdge(k[4], k[1], i, -(int(edges.size())-1), -1));
+          edges.emplace_back(k[4], k[1], i, -(int(edges.size())-1), -1);
           edges.back().inext = edges[i1ext].inext;
-          edges[i1ext].inext = edges.size()-2;
-          edges[i1int].inext = edges.size()-1;
+          edges[i1ext].inext = (int)edges.size()-2;
+          edges[i1int].inext = (int)edges.size()-1;
           return;
         }
       }
@@ -1667,11 +1656,11 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
       istart = iedge1;
       if (nnode <= 3) {
         iedge3 = edges[iedge2].inext;
-        edges[iedge1].iface1 = faces.size();
-        edges[iedge2].iface1 = faces.size();
-        edges[iedge3].iface1 = faces.size();
+        edges[iedge1].iface1 = (int)faces.size();
+        edges[iedge2].iface1 = (int)faces.size();
+        edges[iedge3].iface1 = (int)faces.size();
         edges[iedge3].inext = 0;
-        faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
+        faces.emplace_back(edges,0); //G.Barrand : ok ?
         faces.back().iold = iedge1;
         faces.back().inew = ORIGINAL_FACE;
 
@@ -1702,17 +1691,17 @@ void BooleanProcessor::triangulateContour(int ix, int iy, int ihead)
     int i1 = edges[iedge1].i1;
     int i3 = edges[iedge2].i2;
     int iface1 = edges[iedge1].iface1;
-    int iface2 = faces.size();
+    int iface2 = (int)faces.size();
 
-    edges[ipnext].inext = edges.size();
-    edges.push_back(ExtEdge(i1, i3, iface1, -(int(edges.size())+1), -1));
+    edges[ipnext].inext = (int)edges.size();
+    edges.emplace_back(i1, i3, iface1, -(int(edges.size())+1), -1);
     edges.back().inext = edges[iedge2].inext;
 
     //   A D D   N E W   T R I A N G L E   T O   T H E   L I S T
 
-    edges[iedge2].inext = edges.size();
-    edges.push_back(ExtEdge(i3, i1, iface2, -(int(edges.size())-1), -1));
-    faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
+    edges[iedge2].inext = (int)edges.size();
+    edges.emplace_back(i3, i1, iface2, -(int(edges.size())-1), -1);
+    faces.emplace_back(edges,0); //G.Barrand : ok ?
     faces.back().iold   = iedge1;
     faces.back().inew   = ORIGINAL_FACE;
     edges[iedge1].iface1 = iface2;
@@ -1803,33 +1792,31 @@ void BooleanProcessor::triangulateFace(int iface)
         if (ifirst != i2) {
           iedge = edges[iedge].inext;
           continue;
-        }else{
-          if (z > del*del) {
-            external_contours.push_back(icontour);
-          }else if (z < -del*del) {
-            internal_contours.push_back(icontour);
-          }else{  
-            processor_error = 1;
-#ifdef BP_DEBUG
-            G4cerr
-              << "BooleanProcessor::triangulateFace : too small contour"
-              << G4endl;
-#endif
-          }
-          icontour = edges[iedge].inext;
-          edges[iedge].inext = 0;
-          break;
         }
-      }else{
-        processor_error = 1;
+        if (z > del*del) {
+          external_contours.push_back(icontour);
+        }else if (z < -del*del) {
+          internal_contours.push_back(icontour);
+        }else{  
+          processor_error = 1;
 #ifdef BP_DEBUG
-        G4cerr
-          << "BooleanProcessor::triangulateFace : broken contour"
-          << G4endl;
+          G4cerr
+            << "BooleanProcessor::triangulateFace : too small contour"
+            << G4endl;
 #endif
-        icontour = 0;
+        }
+        icontour = edges[iedge].inext;
+        edges[iedge].inext = 0;
         break;
       }
+      processor_error = 1;
+#ifdef BP_DEBUG
+      G4cerr
+        << "BooleanProcessor::triangulateFace : broken contour"
+        << G4endl;
+#endif
+      icontour = 0;
+      break;
     }
   }
 
@@ -1854,7 +1841,7 @@ void BooleanProcessor::triangulateFace(int iface)
 
   //   T R I A N G U L A T E   C O N T O U R S
 
-  int nface = faces.size();
+  int nface = (int)faces.size();
   for (kext=0; kext < (int)external_contours.size(); kext++) {
     triangulateContour(ix, iy, external_contours[kext]);
 #ifdef BP_DEBUG
@@ -2013,16 +2000,16 @@ HepPolyhedron BooleanProcessor::execute(int op,
 
   processor_error = 0;
   operation = op;
-  nodes.clear(); nodes.push_back(CRAZY_POINT);
-  edges.clear(); edges.push_back(ExtEdge());
-  faces.clear(); faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
+  nodes.clear(); nodes.emplace_back(CRAZY_POINT);
+  edges.clear(); edges.emplace_back();
+  faces.clear(); faces.emplace_back(edges,0); //G.Barrand : ok ?
 
   //   T A K E   P O L Y H E D R A
 
-  ifaces1 = faces.size(); takePolyhedron(a,0,0,0);
-  ifaces2 = faces.size(); takePolyhedron(b,0,0,0);
+  ifaces1 = (int)faces.size(); takePolyhedron(a,0,0,0);
+  ifaces2 = (int)faces.size(); takePolyhedron(b,0,0,0);
 
-  if (processor_error) {             // corrupted polyhedron
+  if (processor_error != 0) {             // corrupted polyhedron
     G4cerr
       << "BooleanProcessor: corrupted input polyhedron"
       << G4endl;
@@ -2085,14 +2072,14 @@ HepPolyhedron BooleanProcessor::execute(int op,
 
   processor_error = 0; //G.Barrand
   operation = op;
-  nodes.clear(); nodes.push_back(CRAZY_POINT);
-  edges.clear(); edges.push_back(ExtEdge());
-  faces.clear(); faces.push_back(ExtFace(edges,0)); //G.Barrand : ok ?
+  nodes.clear(); nodes.emplace_back(CRAZY_POINT);
+  edges.clear(); edges.emplace_back();
+  faces.clear(); faces.emplace_back(edges,0); //G.Barrand : ok ?
 
-  ifaces1 = faces.size(); takePolyhedron(a,0,0,0);
-  ifaces2 = faces.size(); takePolyhedron(b,ddxx,ddyy,ddzz);
+  ifaces1 = (int)faces.size(); takePolyhedron(a,0,0,0);
+  ifaces2 = (int)faces.size(); takePolyhedron(b,ddxx,ddyy,ddzz);
 
-  if (processor_error) { PROCESSOR_ERROR(1) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(1) } //G.Barrand
 
   del = findMinMax();
 
@@ -2102,7 +2089,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
   selectOutsideFaces(ifaces1, iout1);
   selectOutsideFaces(ifaces2, iout2);
 
-  if (processor_error) { PROCESSOR_ERROR(2) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(2) } //G.Barrand
 
   //   P R E S E L E C T   N O   I N T E R S E C T I O N   F A C E S
 
@@ -2119,7 +2106,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
     }
   }
 
-  if (processor_error) { PROCESSOR_ERROR(3) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(3) } //G.Barrand
 
   //   F I N D   N E W   E D G E S
 
@@ -2134,14 +2121,14 @@ HepPolyhedron BooleanProcessor::execute(int op,
       ifa1 = faces[ifa1].inext;
     }
   }
-  if (processor_error) { PROCESSOR_ERROR(4) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(4) } //G.Barrand
 
   //   C O N S T R U C T   N E W   F A C E S
 
   assembleNewFaces((operation == OP_INTERSECTION) ? 1 : 0, ifaces1);
-  if (processor_error) { PROCESSOR_ERROR(5) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(5) } //G.Barrand
   assembleNewFaces((operation == OP_UNION) ? 0 : 1, ifaces2);
-  if (processor_error) { PROCESSOR_ERROR(6) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(6) } //G.Barrand
 
   //   A S S E M B L E   S U I T A B L E   F A C E S
 
@@ -2155,7 +2142,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
       << G4endl;
 #endif
   }
-  if (processor_error) { PROCESSOR_ERROR(7) } //G.Barrand
+  if (processor_error != 0) { PROCESSOR_ERROR(7) } //G.Barrand
 
   //   T R I A N G U L A T E   A C C E P T E D   F A C E S 
 
@@ -2164,13 +2151,13 @@ HepPolyhedron BooleanProcessor::execute(int op,
     ifa2 = ifa1;
     ifa1 = faces[ifa2].inext;
     if (faces[ifa2].inew == NEW_FACE) triangulateFace(ifa2);
-    if (processor_error) { 
+    if (processor_error != 0) { 
       PROCESSOR_ERROR(8) //G.Barrand
       break; //G.Barrand
     }
   }
 
-  if(!processor_error) {   
+  if(processor_error == 0) {   
 #ifdef BP_DEBUG
     if(try_count!=1) {
       G4cerr
@@ -2318,7 +2305,8 @@ HepPolyhedron BooleanProcessor::execute(int op,
 /*
 //--------------------------------------------------------------------
 void
-BooleanProcessor::draw_edge(int icol, int iedge) {
+BooleanProcessor::draw_edge(int icol, int iedge)
+{
   int   i1, i2;
   float p1[3], p2[3];
 
@@ -2337,7 +2325,8 @@ BooleanProcessor::draw_edge(int icol, int iedge) {
 
 //--------------------------------------------------------------------
 void
-BooleanProcessor::draw_contour(int i1col, int i2col, int ihead) {
+BooleanProcessor::draw_contour(int i1col, int i2col, int ihead)
+{
   int iedge, icol;
   iedge = ihead;
   while (iedge > 0) {
@@ -2355,7 +2344,8 @@ BooleanProcessor::draw_contour(int i1col, int i2col, int ihead) {
 
 //--------------------------------------------------------------------
 void
-BooleanProcessor::print_face(int iface) {
+BooleanProcessor::print_face(int iface)
+{
   G4cout.precision(3);
   G4cout << "\n====== Face N " << iface << G4endl;
   G4cout << "iedges[4] = "
@@ -2408,7 +2398,8 @@ BooleanProcessor::print_face(int iface) {
 
 //--------------------------------------------------------------------
 void
-BooleanProcessor::print_edge(int iedge) {
+BooleanProcessor::print_edge(int iedge)
+{
   G4cout << "==== Edge N " << iedge << G4endl;
   int i = std::abs(iedge);
   int i1 = edges[i].i1;
@@ -2431,10 +2422,11 @@ BooleanProcessor::print_edge(int iedge) {
 }
 */
 
-void BooleanProcessor::dump() {//G.Barrand
-  unsigned int number = nodes.size();
+void BooleanProcessor::dump()
+{
+  std::size_t number = nodes.size();
   G4cout << "nodes : " << number << G4endl;
-  for(unsigned int index=0;index<number;index++) { 
+  for(std::size_t index=0; index<number; ++index) { 
     const ExtNode& node = nodes[index];
     G4cout << " " << index
            << " x = " << node.v[0]

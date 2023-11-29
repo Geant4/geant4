@@ -25,16 +25,19 @@
 //
 #ifdef USE_INFERENCE
 #include "Par04MLFastSimModel.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Gamma.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4UnitsTable.hh"
-#include "G4FastHit.hh"
-#include "G4FastSimHitMaker.hh"
-#include "Randomize.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
-#include <numeric>
+#include <stddef.h>                      // for size_t
+#include <G4FastStep.hh>                 // for G4FastStep
+#include <G4FastTrack.hh>                // for G4FastTrack
+#include <G4Track.hh>                    // for G4Track
+#include <G4VFastSimulationModel.hh>     // for G4VFastSimulationModel
+#include "G4Electron.hh"                 // for G4Electron
+#include "G4FastHit.hh"                  // for G4FastHit
+#include "G4FastSimHitMaker.hh"          // for G4FastSimHitMaker
+#include "G4Gamma.hh"                    // for G4Gamma
+#include "G4Positron.hh"                 // for G4Positron
+#include "Par04InferenceSetup.hh"        // for Par04InferenceSetup
+class G4ParticleDefinition;
+class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -9,6 +9,7 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4BetaDecayType.hh
     G4BetaMinusDecay.hh
     G4BetaPlusDecay.hh
+    G4BetaSpectrumSampler.hh
     G4ECDecay.hh
     G4ITDecay.hh
     G4SFDecay.hh
@@ -34,6 +35,7 @@ geant4_add_module(G4hadronic_radioactivedecay
     G4BetaDecayType.cc
     G4BetaMinusDecay.cc
     G4BetaPlusDecay.cc
+    G4BetaSpectrumSampler.cc
     G4ECDecay.cc
     G4ITDecay.cc
     G4SFDecay.cc
@@ -55,7 +57,6 @@ geant4_add_module(G4hadronic_radioactivedecay
 geant4_module_link_libraries(G4hadronic_radioactivedecay
   PUBLIC
     G4globman
-    G4hadronic_util
     G4heprandom
     G4intercoms
     G4partman

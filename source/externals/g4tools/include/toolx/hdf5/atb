@@ -1,0 +1,72 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_hdf5_atb
+#define toolx_hdf5_atb
+
+// The below is internal methods in the HDF5 lib.
+
+#include "hdf5_h"
+
+#include <cstring>
+
+namespace toolx {
+namespace hdf5 {
+
+inline herr_t H5LT_get_attribute_mem(hid_t obj_id,const char *attr_name,hid_t mem_type_id,void *data ) {
+  hid_t attr_id;
+  if ( ( attr_id = ::H5Aopen_name( obj_id, attr_name ) ) < 0 )  return -1;
+  if ( ::H5Aread( attr_id, mem_type_id, data ) < 0 ) {
+    ::H5Aclose( attr_id );
+    return -1;
+  }
+  if ( ::H5Aclose( attr_id ) < 0 )  return -1;
+  return 0;
+}
+
+inline herr_t find_attr( hid_t loc_id, const char *name, void *op_data) {
+  int ret = 0;
+  char *attr_name = (char*)op_data;
+  if( ::strcmp( name, attr_name ) == 0 ) ret = 1;
+  (void)loc_id;
+  return ret;
+}
+
+inline herr_t H5LT_find_attribute( hid_t loc_id, const char* attr_name ) {
+  unsigned int attr_num;
+  attr_num = 0;
+  return toolx_H5Aiterate( loc_id, &attr_num, find_attr, (void *)attr_name );
+}
+
+inline herr_t H5LT_get_attribute_disk( hid_t loc_id,const char *attr_name,void *attr_out ) {
+  hid_t      attr_id;
+  if ( ( attr_id = ::H5Aopen_name( loc_id, attr_name ) ) < 0 )  return -1;
+
+  hid_t      attr_type;
+  if ( (attr_type = ::H5Aget_type( attr_id )) < 0 ) {
+    ::H5Tclose( attr_type );
+    ::H5Aclose( attr_id );
+    return -1;
+  }
+
+  if ( ::H5Aread( attr_id, attr_type, attr_out ) < 0 ) {
+    ::H5Tclose( attr_type );
+    ::H5Aclose( attr_id );
+    return -1;
+  }
+
+  if ( ::H5Tclose( attr_type )  < 0 ) {
+    ::H5Tclose( attr_type );
+    ::H5Aclose( attr_id );
+    return -1;
+  }
+
+  if ( ::H5Aclose( attr_id ) < 0 )  return -1;
+
+  return 0;
+
+}
+
+}}
+
+#endif

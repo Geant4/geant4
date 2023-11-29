@@ -1,0 +1,82 @@
+#/process/dna/e-SolvationSubType Meesungnoen2002
+#/process/dna/e-SolvationSubType Ritchie1994
+#/process/dna/e-SolvationSubType Terrisol1990
+
+/run/verbose 2
+/control/verbose 1
+/dnageom/verbose 1
+
+/chem/activate true
+/scheduler/verbose 0
+/material/verbose 2
+
+/world/worldSize 10200 nm
+/cell/radiusSize 3 3 3 um
+
+/dnageom/setSmartVoxels 1
+/dnageom/checkOverlaps false
+/scheduler/endTime 1 us
+
+/dnageom/radicalKillDistance 9 nm
+/dnageom/interactionDirectRange 7 angstrom
+
+/dnageom/placementSize 30 30 100 nm
+/dnageom/fractalScaling 1 1 1 nm
+/dnageom/definitionFile geometries/prisms200k_r3000.txt
+/dnageom/placementVolume prism geometries/straight-216-0.txt
+
+
+/dnageom/setVoxelPlacementAnglesAsMultiplesOfPi false
+/dnageom/useCustomMoleculeSizes false
+
+# used default moleculeSize
+#/dnageom/moleculeSize
+
+/dnageom/drawCellVolumes false
+/dnageom/activateHistoneScavenging true
+
+
+/chromosome/add cylinder sphere 3000 0 0 0 nm
+
+# Damage Model
+/dnadamage/directDamageLower 17.5 eV
+/dnadamage/directDamageUpper 17.5 eV
+
+/dnadamage/indirectOHBaseChance 1.0
+/dnadamage/indirectOHStrandChance 0.65
+/dnadamage/inductionOHChance 0.0
+
+/dnadamage/indirectHBaseChance 1.0
+/dnadamage/indirectHStrandChance 0.65
+/dnadamage/inductionHChance 0.00
+
+/dnadamage/indirectEaqBaseChance 1.0
+/dnadamage/indirectEaqStrandChance 0.65
+/dnadamage/inductionEaqChance 0.00
+
+/analysisDNA/saveStrands false
+/analysisDNA/fragmentGap 0  # do not join
+#/analysisDNA/diagnosticChain
+
+/run/initialize
+
+# Uncomment the next line to visualize cylinder DNA geometry
+#/control/execute vis.mac
+
+# unit tests
+#/dnatests/uniqueid
+#/dnatests/basepairs
+#/dnatests/chromosome
+#/analysisDNA/testClassifier
+# end unit tests
+
+/run/printProgress 100
+
+/gps/particle e-
+/gps/ang/type iso
+/gps/energy 4.5 keV
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/radius 500 nm
+/gps/pos/centre 0 0 0 nm
+/run/beamOn 2

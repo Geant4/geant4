@@ -50,7 +50,7 @@ class BrachyDetectorConstructionI
 {
 public:
   explicit BrachyDetectorConstructionI();
-  ~BrachyDetectorConstructionI();
+  ~BrachyDetectorConstructionI() = default;
   void  ConstructIodine(G4VPhysicalVolume*);// Construct iodine source
   void  CleanIodine(); // Clean iodine source
 private:

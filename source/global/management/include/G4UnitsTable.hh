@@ -56,7 +56,7 @@ class G4UnitsTable : public std::vector<G4UnitsCategory*>
 {
  public:
   using std::vector<G4UnitsCategory*>::vector;
-  G4UnitsTable();
+  G4UnitsTable() = default;
   ~G4UnitsTable();
 
  public:
@@ -77,7 +77,7 @@ class G4UnitDefinition
   G4UnitDefinition(const G4String& name, const G4String& symbol,
                    const G4String& category, G4double value);
 
-  ~G4UnitDefinition();
+  ~G4UnitDefinition() = default;
   G4bool operator==(const G4UnitDefinition&) const;
   G4bool operator!=(const G4UnitDefinition&) const;
 
@@ -164,14 +164,14 @@ class G4BestUnit
   // into the most appropriate unit of the same category.
   // In practice it builds an object VU = (newValue, newUnit)
 
-  ~G4BestUnit();
+  ~G4BestUnit() = default;
 
   inline G4double* GetValue();
   inline const G4String& GetCategory() const;
   inline std::size_t GetIndexOfCategory() const;
   operator G4String() const;  // Conversion to best string.
 
-  friend std::ostream& operator<<(std::ostream&, G4BestUnit VU);
+  friend std::ostream& operator<<(std::ostream&, const G4BestUnit& VU);
   // Default format to print the objet VU above.
 
  private:

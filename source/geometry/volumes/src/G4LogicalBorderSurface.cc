@@ -38,7 +38,7 @@ G4LogicalBorderSurfaceTable*
 G4LogicalBorderSurface::theBorderSurfaceTable = nullptr;
 
 //
-// Constructor & destructor
+// Constructor
 //
 
 G4LogicalBorderSurface::
@@ -60,9 +60,11 @@ G4LogicalBorderSurface(const G4String& name,
   theBorderSurfaceTable->insert(std::make_pair(std::make_pair(vol1,vol2),this));
 }
 
-G4LogicalBorderSurface::~G4LogicalBorderSurface()
-{
-}
+//
+// Default destructor
+//
+
+G4LogicalBorderSurface::~G4LogicalBorderSurface() = default;
 
 //
 // Operators
@@ -123,10 +125,9 @@ void G4LogicalBorderSurface::DumpInfo()
 
   if (theBorderSurfaceTable != nullptr)
   {
-    for(auto pos = theBorderSurfaceTable->cbegin();
-        pos != theBorderSurfaceTable->cend(); ++pos)
+    for(const auto & pos : *theBorderSurfaceTable)
     {
-      G4LogicalBorderSurface* pSurf = pos->second;
+      G4LogicalBorderSurface* pSurf = pos.second;
       G4cout << pSurf->GetName() << " : " << G4endl
              << " Border of volumes "
              << pSurf->GetVolume1()->GetName() << " and " 
@@ -140,10 +141,9 @@ void G4LogicalBorderSurface::CleanSurfaceTable()
 {
   if (theBorderSurfaceTable != nullptr)
   {
-    for(auto pos = theBorderSurfaceTable->cbegin();
-        pos != theBorderSurfaceTable->cend(); ++pos)
+    for(const auto & pos : *theBorderSurfaceTable)
     {
-      if (pos->second)  { delete pos->second; }
+      delete pos.second; 
     }
     theBorderSurfaceTable->clear();
   }

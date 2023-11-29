@@ -40,15 +40,6 @@
 #include "G4Gamma.hh"
 #include "G4OpticalPhoton.hh"
 
-G4BosonConstructor::G4BosonConstructor()
-{
-}
-
-G4BosonConstructor::~G4BosonConstructor()
-{
-}
-
-
 void G4BosonConstructor::ConstructParticle()
 {
   // pseudo-particles

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -131,7 +131,6 @@ THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhys
 #    Phantoms
 # fullWater // water box
 # boxInBox  // box in a box with a layer of PMMA at the exposed surface
-Using seed 1
 I'm building acc1 accelerator
 /control/execute acc1.mac
 /accelerator/isoCentre 1000 mm
@@ -248,8 +247,10 @@ Checking overlaps for volume fullWaterPhantomPV:0 (G4Box) ... OK!
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -265,7 +266,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -275,8 +276,9 @@ Step function for light ions                       (0.1, 0.02 mm)
 Step function for general ions                     (0.1, 0.001 mm)
 Lowest e+e- kinetic energy                         100 eV 
 Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    1
 Fluctuations of dE/dx are enabled                  1
-Use ICRU90 data                                    0
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -312,8 +314,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -355,8 +356,8 @@ conv:  for gamma SubType=14 BuildTable=1
 Livermore5DConversion : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
 
 Rayl:  for gamma SubType=11 BuildTable=1
-      Lambda table from 100 eV  to 100 keV, 20 bins/decade, spline: 0
-      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
+      Lambda table from 100 eV  to 150 keV, 20 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 176 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
@@ -367,10 +368,10 @@ msc:  for e-  SubType= 10
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-eIoni:  for e-  XStype:1  SubType=2
+eIoni:  for e-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.01 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni : Emin=    0 eV  Emax=  100 keV  deltaVI
         MollerBhabha : Emin=  100 keV Emax=  100 TeV  deltaVI
@@ -392,7 +393,7 @@ ePairProd:  for e-  XStype:1  SubType=4
 
 CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -403,10 +404,10 @@ msc:  for e+  SubType= 10
         WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=120 100 MeV - 100 TeV
           StepLim=SafetyPlus Rfact=0.08 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-eIoni:  for e+  XStype:1  SubType=2
+eIoni:  for e+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.2, 0.01 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.01 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
@@ -431,7 +432,7 @@ annihil:  for e+ XStype:2 SubType=5 BuildTable=0
 
 CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
       Lambda table from 100 MeV to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
 
@@ -440,30 +441,30 @@ msc:  for proton  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for proton  XStype:1  SubType=2
+hIoni:  for proton  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -476,12 +477,12 @@ msc:  for GenericIon  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-ionIoni:  for GenericIon  XStype:1  SubType=2
+ionIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.001 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 : Emin=    0 eV  Emax=  100 TeV  deltaVI
+    LindhardSorensen : Emin=    0 eV  Emax=  100 TeV  deltaVI
 
 nuclearStopping:  for GenericIon SubType=8 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -492,10 +493,10 @@ msc:  for alpha  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-ionIoni:  for alpha  XStype:1  SubType=2
+ionIoni:  for alpha  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.02 mm), integ: 1, fluct: 1, linLossLim= 0.02
+      StepFunction=(0.1, 0.02 mm), integ: 3, fluct: 1, linLossLim= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon : Emin=    0 eV  Emax=7.9452 MeV  deltaVI
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV  deltaVI
@@ -509,30 +510,30 @@ msc:  for anti_proton  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for anti_proton  XStype:1  SubType=2
+hIoni:  for anti_proton  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV  deltaVI
           BetheBloch : Emin=    2 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for anti_proton  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for anti_proton  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -541,30 +542,30 @@ msc:  for kaon+  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for kaon+  XStype:1  SubType=2
+hIoni:  for kaon+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for kaon+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -573,30 +574,30 @@ msc:  for kaon-  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for kaon-  XStype:1  SubType=2
+hIoni:  for kaon-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV  deltaVI
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV  deltaVI
 
 hBrems:  for kaon-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for kaon-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of kaon+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -605,31 +606,30 @@ msc:  for mu+  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-muIoni:  for mu+  XStype:1  SubType=2
+muIoni:  for mu+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV  deltaVI
-          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
-        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -638,31 +638,30 @@ msc:  for mu-  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-muIoni:  for mu-  XStype:1  SubType=2
+muIoni:  for mu-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV  deltaVI
-          BetheBloch : Emin=  200 keV Emax=    1 GeV  deltaVI
-        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV  deltaVI
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of mu+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -671,30 +670,30 @@ msc:  for pi+  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for pi+  XStype:1  SubType=2
+hIoni:  for pi+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
 
 hBrems:  for pi+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
       Lambda table from threshold  to 100 TeV, 20 bins/decade, spline: 0
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -703,30 +702,30 @@ msc:  for pi-  SubType= 10
         WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=3 Llim=1 mm
 
-hIoni:  for pi-  XStype:1  SubType=2
+hIoni:  for pi-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
-      StepFunction=(0.1, 0.05 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.1, 0.05 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  100 TeV  deltaVI
 
 hBrems:  for pi-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 hPairProd:  for pi-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
-      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 20 bins/decade, spline: 1
       Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       Used Lambda table of pi+
-      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
 
@@ -832,105 +831,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -974,10 +973,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.120000s Real=17.344744s Sys=0.010000s
+  User=14.340000s Real=14.424118s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 189
-loop elapsed time [s] : 17.16
+ Number of entries 144
+loop elapsed time [s] : 14.39
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1082,105 +1081,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1201,10 +1200,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.840000s Real=17.022293s Sys=0.000000s
+  User=14.440000s Real=14.522564s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 167
-loop elapsed time [s] : 16.87
+ Number of entries 181
+loop elapsed time [s] : 14.48
 
 ################ END NEW GEOMETRY ########################
 /run/geometryModified
@@ -1356,105 +1355,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1498,10 +1497,10 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.760000s Real=16.956064s Sys=0.010000s
+  User=14.330000s Real=14.403898s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 112
-loop elapsed time [s] : 16.79
+ Number of entries 166
+loop elapsed time [s] : 14.37
 
 
 Region <DefaultRegionForTheWorld> --  -- appears in <worldPV> world volume
@@ -1606,105 +1605,105 @@ Region <fullWaterPhantomR> --  -- appears in <worldPV> world volume
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 2     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  24.8201 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
+ Energy thresholds :  gamma  24.8228 keV    e-  1.40308 MeV    e+  1.3229 MeV proton 100 keV
  Region(s) which use this couple : 
     targetR
 
 Index : 3     used in the geometry : Yes
  Material : G4_Be
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.0129 keV    e-  468.81 keV    e+  454.405 keV proton 100 keV
+ Energy thresholds :  gamma  2.01246 keV    e-  468.814 keV    e+  454.419 keV proton 100 keV
  Region(s) which use this couple : 
     BeWindow
 
 Index : 4     used in the geometry : Yes
  Material : G4_KAPTON
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  2.97277 keV    e-  419.485 keV    e+  406.695 keV proton 100 keV
+ Energy thresholds :  gamma  2.97329 keV    e-  419.475 keV    e+  406.697 keV proton 100 keV
  Region(s) which use this couple : 
     ionizationChamber
 
 Index : 5     used in the geometry : Yes
  Material : G4_Cu
  Range cuts        :  gamma  5 mm     e-  5 mm     e+  5 mm  proton 5 mm 
- Energy thresholds :  gamma  55.127 keV    e-  6.82825 MeV    e+  6.35094 MeV proton 500 keV
+ Energy thresholds :  gamma  55.118 keV    e-  6.8282 MeV    e+  6.351 MeV proton 500 keV
  Region(s) which use this couple : 
     flatfilterR
 
 Index : 6     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  3.01263 keV    e-  420.623 keV    e+  407.829 keV proton 100 keV
+ Energy thresholds :  gamma  3.01225 keV    e-  420.616 keV    e+  407.833 keV proton 100 keV
  Region(s) which use this couple : 
     Mirror
 
 Index : 7     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  1 keV    e+  1 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 8     used in the geometry : Yes
  Material : G4_W
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  106.434 keV    e-  2.31002 MeV    e+  2.14588 MeV proton 100 keV
+ Energy thresholds :  gamma  106.43 keV    e-  2.31004 MeV    e+  2.14587 MeV proton 100 keV
  Region(s) which use this couple : 
     PrymCollR
 
 Index : 9     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 cm 
- Energy thresholds :  gamma  60.6475 keV    e-  13.0434 MeV    e+  12.1452 MeV proton 1 MeV
+ Energy thresholds :  gamma  60.6431 keV    e-  13.0433 MeV    e+  12.1452 MeV proton 1 MeV
  Region(s) which use this couple : 
     MLCR
 
 Index : 10     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1XR
 
 Index : 11     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2XR
 
 Index : 12     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws1YR
 
 Index : 13     used in the geometry : Yes
  Material : steel1
  Range cuts        :  gamma  2 cm     e-  2 cm     e+  2 cm  proton 2 cm 
- Energy thresholds :  gamma  81.2182 keV    e-  28.1438 MeV    e+  26.2789 MeV proton 2 MeV
+ Energy thresholds :  gamma  81.2176 keV    e-  28.1438 MeV    e+  26.2791 MeV proton 2 MeV
  Region(s) which use this couple : 
     Jaws2YR
 
 Index : 14     used in the geometry : Yes
  Material : G4_WATER
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11083 keV    e-  85.0421 keV    e+  83.9054 keV proton 10 keV
+ Energy thresholds :  gamma  1.11075 keV    e-  85.0445 keV    e+  83.9021 keV proton 10 keV
  Region(s) which use this couple : 
     fullWaterPhantomR
 
@@ -1725,13 +1724,13 @@ Launched 50000 random primary particles
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.950000s Real=17.204220s Sys=0.010000s
+  User=14.370000s Real=14.445436s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,TotalDose
- Number of entries 72
-loop elapsed time [s] : 17
+ Number of entries 154
+loop elapsed time [s] : 14.41
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 71.11
+loop elapsed time [s] : 60.76
 
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1746,27 +1745,26 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 20
+Total navigation history collections cleaned: 24
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0288 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0346 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00577 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.00288 MB
-Pool ID '16G4HitsCollection', size : 0 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00385 MB
-Pool ID '7G4Track', size : 0.00673 MB
+Pool ID '7G4Track', size : 0.00769 MB
 Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '12G4Trajectory', size : 0.00288 MB
-Pool ID '17G4TrajectoryPoint', size : 0.0385 MB
+Pool ID '12G4Trajectory', size : 0.00385 MB
+Pool ID '17G4TrajectoryPoint', size : 0.0442 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Number of memory pools allocated: 16 of which, static: 0
-Dynamic pools deleted: 16 / Total memory freed: 0.099 MB
+Number of memory pools allocated: 15 of which, static: 0
+Dynamic pools deleted: 15 / Total memory freed: 0.11 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

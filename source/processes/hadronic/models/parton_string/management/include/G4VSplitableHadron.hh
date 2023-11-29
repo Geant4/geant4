@@ -89,14 +89,12 @@ class G4VSplitableHadron
 
     G4int GetSoftCollisionCount();
 
-  protected:
     void Splitting() {isSplit = true;}
-      
+
   private:
     G4VSplitableHadron(const G4VSplitableHadron &right);
     const G4VSplitableHadron & operator=(const G4VSplitableHadron &right);
 
-  private:
     const G4ParticleDefinition *theDefinition;
 
     G4LorentzVector the4Momentum;

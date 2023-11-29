@@ -1,0 +1,25 @@
+# Macro file for the visualization for the Xray_SiliconPoreOptics
+#
+# Create an OpenGL view:
+/vis/open OGL 600x600-0+0
+#
+# Draw geometry
+/vis/drawVolume
+#
+# Specify style
+/vis/viewer/set/style wireframe
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/lineSegmentsPerCircle 100
+#
+# Draw all trajectories for a given run
+/vis/scene/add/trajectories smooth
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/scene/endOfEventAction accumulate
+#
+# Set analysis file name
+/analysis/setFileName output.root
+#
+# Make the "World" box invisible
+/vis/geometry/set/visibility World 0 false

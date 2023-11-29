@@ -1,19 +1,25 @@
--------------------------------------------------------------------
+# Example TestEm17 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    TestEm17 History file
-                    ---------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
-     
+## 2022-10-24 I. Hrivnacova (testem17-V11-00-02)
+- Coding guidelines: start data members with 'f' (MuCrossSections);
+  use G4int, G4double
+
+## 2022-07-20 Vladimir Ivanchenko (testem17-V11-00-01)
+- Added new process of muon pair production by muons; 
+  analysis extended and new histograms are added by Siddharth Yajaman
+
+## 2021-12-10 Ben Morgan (testem17-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 07-11-21 I. Hrivnacova (testem17-V10-07-03)
 - Added analysis manager Clear() call instead of
   deleting in the end of run (removed on July 19)

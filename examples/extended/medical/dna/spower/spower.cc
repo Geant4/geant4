@@ -27,14 +27,9 @@
 /// \brief Main program of the medical/dna/spower example
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "G4UImanager.hh"
-#include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -54,50 +49,49 @@ int main(int argc,char** argv) {
 
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
   //construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+
+  if (argc==3) { 
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+  }
 
   //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction;
+  auto det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
 
-  PhysicsList* phys = new PhysicsList;
+  auto phys = new PhysicsList();
   runManager->SetUserInitialization(phys);
 
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize visualization
   //
-  G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
+  G4VisManager* visManager = nullptr;
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //
-  if ( ! ui ) {
+  if (nullptr == ui) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
-  }
-  else {
+  } else {
     // interactive mode
+    visManager = new G4VisExecutive();
+    visManager->Initialize();
     ui->SessionStart();
     delete ui;
+    delete visManager;
   }
 
   //job termination

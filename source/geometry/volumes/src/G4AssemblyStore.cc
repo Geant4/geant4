@@ -51,7 +51,6 @@ G4ThreadLocal G4bool G4AssemblyStore::locked = false;
 // ***************************************************************************
 //
 G4AssemblyStore::G4AssemblyStore()
-  : std::vector<G4AssemblyVolume*>()
 {
   reserve(20);
 }
@@ -85,26 +84,13 @@ void G4AssemblyStore::Clean()
   //
   locked = true;  
 
-  size_t i=0;
   G4AssemblyStore* store = GetInstance();
 
-#ifdef G4DEBUG_NAVIGATION
-  G4cout << "Deleting Assemblies ... ";
-#endif
-
-  for(auto pos=store->cbegin(); pos!=store->cend(); ++pos)
+  for(const auto & pos : *store)
   {
     if (fgNotifier != nullptr) { fgNotifier->NotifyDeRegistration(); }
-    if (*pos) { delete *pos; }
-    ++i;
+    if (pos != nullptr) { delete pos; }
   }
-
-#ifdef G4DEBUG_NAVIGATION
-  if (store->size() < i-1)
-    { G4cout << "No assembly deleted. Already deleted by user ?" << G4endl; }
-  else
-    { G4cout << i-1 << " assemblies deleted !" << G4endl; }
-#endif
 
   locked = false;
   store->clear();
@@ -171,9 +157,9 @@ G4AssemblyStore* G4AssemblyStore::GetInstance()
 G4AssemblyVolume*
 G4AssemblyStore::GetAssembly(unsigned int id, G4bool verbose) const
 {
-  for (auto i=GetInstance()->cbegin(); i!=GetInstance()->cend(); ++i)
+  for (const auto & i : *GetInstance())
   {
-    if ((*i)->GetAssemblyID() == id) { return *i; }
+    if (i->GetAssemblyID() == id) { return i; }
   }
   if (verbose)
   {
@@ -184,5 +170,5 @@ G4AssemblyStore::GetAssembly(unsigned int id, G4bool verbose) const
     G4Exception("G4AssemblyStore::GetAssembly()",
                 "GeomVol1001", JustWarning, message);
   }
-  return 0;
+  return nullptr;
 }

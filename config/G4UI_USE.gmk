@@ -24,11 +24,11 @@ endif
 # there is no need to use it.
 
 ifneq ($(G4INCLUDE_EXEC),1)
-  CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
-  CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+  CPPFLAGS += -I$(G4BASE)/interfaces/core/include
+  CPPFLAGS += -I$(G4BASE)/interfaces/implementation/include
 endif
-UILIBS   += -lG4UIbasic
-UILIBS   += -lG4UIcommon
+UILIBS   += -lG4UIcore
+UILIBS   += -lG4UIimplementation
 
 ifdef G4UI_USE_TERMINAL
   G4UI_USE  = 1

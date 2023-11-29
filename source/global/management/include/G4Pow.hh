@@ -49,7 +49,7 @@ class G4Pow
 {
  public:
   static G4Pow* GetInstance();
-  ~G4Pow();
+  ~G4Pow() = default;
 
   // Fast computation of Z^1/3
   //

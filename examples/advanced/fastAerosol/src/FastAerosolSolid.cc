@@ -49,7 +49,7 @@
 
 namespace
 {
-	G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+ G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
 }
 
 
@@ -57,11 +57,9 @@ namespace
 //
 // Constructor
 //
-FastAerosolSolid::FastAerosolSolid(const G4String& pName,
-										 FastAerosol* pCloud,
-										 G4VSolid* pDroplet,
+FastAerosolSolid::FastAerosolSolid(const G4String& pName,								 FastAerosol* pCloud,										 G4VSolid* pDroplet,
 										 std::function<G4RotationMatrix (G4ThreeVector)> pRotation)
-	: G4VSolid(pName), fCloud(pCloud), fDroplet(pDroplet), fRotation(pRotation), fRebuildPolyhedron(false), fpPolyhedron(0)
+	: G4VSolid(pName), fCloud(pCloud), fDroplet(pDroplet), fRotation(pRotation), fRebuildPolyhedron(false), fpPolyhedron(nullptr)
 {
 	// Get cloud size from fCloud
 	G4ThreeVector cloudPMin, cloudPMax;
@@ -105,15 +103,8 @@ FastAerosolSolid::FastAerosolSolid( __void__& a )
 	fCubicVolume(0.), fSurfaceArea(0.),
 	farFromCloudDist(0.),
 	fRotation([](G4ThreeVector) {return G4RotationMatrix();}),
-	fRebuildPolyhedron(false), fpPolyhedron(0)
+	fRebuildPolyhedron(false), fpPolyhedron(nullptr)
 {
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-FastAerosolSolid::~FastAerosolSolid() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////

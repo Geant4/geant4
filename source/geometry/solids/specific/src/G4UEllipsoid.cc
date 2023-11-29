@@ -66,7 +66,7 @@ G4UEllipsoid::G4UEllipsoid( __void__& a )
 //
 // Destructor
 
-G4UEllipsoid::~G4UEllipsoid() { }
+G4UEllipsoid::~G4UEllipsoid() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //

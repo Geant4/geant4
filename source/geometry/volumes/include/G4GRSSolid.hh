@@ -53,15 +53,15 @@ class G4GRSSolid : public G4VTouchable
     G4GRSSolid(G4VSolid *pSolid,
          const G4RotationMatrix &rot,
          const G4ThreeVector &tlate);
-    ~G4GRSSolid();
+    ~G4GRSSolid() override;
 
     G4GRSSolid(const G4GRSSolid&) = delete;
     G4GRSSolid& operator=(const G4GRSSolid&) = delete;
       // Copy constructor and assignment operator not allowed
 
-    inline G4VSolid* GetSolid(G4int depth=0) const;
-    inline const G4ThreeVector& GetTranslation(G4int depth=0) const;
-    inline const G4RotationMatrix*  GetRotation(G4int depth=0) const;
+    inline G4VSolid* GetSolid(G4int depth=0) const override;
+    inline const G4ThreeVector& GetTranslation(G4int depth=0) const override;
+    inline const G4RotationMatrix*  GetRotation(G4int depth=0) const override;
 
   private:
   

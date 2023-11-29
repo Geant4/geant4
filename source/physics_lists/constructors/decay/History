@@ -1,17 +1,38 @@
--------------------------------------------------------------------
+# Category phys-ctor-decay History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-    Hadronic physics-list/constructors/decay History
-    -----------------------------------------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
+## 2023-01-11 Alberto Ribon (phys-ctor-decay-V11-01-00)
+- G4RadioactiveDecayPhysics : assigned the RadioactiveDecay process
+  to G4Triton (which is the only light ion that decays).
+  Note: before, triton did not have beta decay, i.e. it was wrongly
+  treated as stable even when radioactive decay physics was enabled;
+  anti_triton did not, and still does not, have beta decay
+  (because RadioactiveDecay, in its current implementation, does
+  not handle any kind of anti-ions): in practice, this is an acceptable
+  approximation because of its relatively long lifetime and the fact
+  that annihilation and nuclear capture are more likely to happen
+  before decay.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-16 Vladimir Ivanchenko (phys-ctor-decay-V11-00-03)
+- added calls to G4EmBuilder and G4PhysListUtil in order to 
+  prevent from warnings on hyper-nuclei decays in the case of 
+  simplified custom Physics List
+
+## 2022-08-16 Alberto Ribon (phys-ctor-decay-V11-00-02)
+- sources.cmake : added missed dependency on G4physlist_util
+
+## 2022-08-09 Vladimir Ivanchenko (phys-ctor-decay-V11-00-01)
+- G4DecayPhysics - added instantiation of singletones for physics
+
+## 2021-12-10 Ben Morgan (phys-ctor-decay-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 06-October-2020 Vladimir Ivanchenko  (phys-ctor-decay-V10-07-03)
 - G4RadioactiveDecayPhysics - Use SetAuger(..) method instead of 

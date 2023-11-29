@@ -17,75 +17,75 @@
 namespace tools {
 
 inline std::string tos(unsigned char a_value){
-  std::string s;
+  std::string _s;
   if(is_printable(a_value))
-    sprintf(s,32,"%c",a_value);
+    sprintf(_s,32,"%c",a_value);
   else
-    sprintf(s,32,"%d",a_value);
-  return s;
+    sprintf(_s,32,"%d",a_value);
+  return _s;
 }
 
 inline std::string tos(char a_value){
-  std::string s;
+  std::string _s;
   if(is_printable(a_value))
-    sprintf(s,32,"%c",a_value);
+    sprintf(_s,32,"%c",a_value);
   else
-    sprintf(s,32,"%d",a_value);
-  return s;
+    sprintf(_s,32,"%d",a_value);
+  return _s;
 }
 
 inline std::string tos(unsigned short a_value) {
-  std::string s;
-  sprintf(s,32,"%d",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%d",a_value);
+  return _s;
 }
 
 inline std::string tos(short a_value){
-  std::string s;
-  sprintf(s,32,"%d",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%d",a_value);
+  return _s;
 }
 
 inline std::string tos(unsigned int a_value) {
-  std::string s;
-  sprintf(s,32,"%u",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%u",a_value);
+  return _s;
 }
 
 inline std::string tosx(unsigned int a_value) {
-  std::string s;
-  sprintf(s,32,"%x",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%x",a_value);
+  return _s;
 }
 
 inline std::string tos(int a_value){
-  std::string s;
-  sprintf(s,32,"%d",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%d",a_value);
+  return _s;
 }
 
 inline std::string tos(uint64 a_value) {
-  std::string s;
-  sprintf(s,32,uint64_format(),a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,uint64_format(),a_value);
+  return _s;
 }
 
 inline std::string tos(int64 a_value){
-  std::string s;
-  sprintf(s,32,int64_format(),a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,int64_format(),a_value);
+  return _s;
 }
 
 inline std::string tos(float a_value){
-  std::string s;
-  sprintf(s,32,"%g",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%g",a_value);
+  return _s;
 }
 
 inline std::string tos(double a_value){
-  std::string s;
-  sprintf(s,32,"%g",a_value);
-  return s;
+  std::string _s;
+  sprintf(_s,32,"%g",a_value);
+  return _s;
 }
 
 inline std::string tos(bool a_value){
@@ -112,12 +112,12 @@ inline std::string tos(const std::vector<T>& a_vals,
 }
 
 inline std::string tos(unsigned int a_linen,const char* a_lines[]) {
-  std::string s;
+  std::string _s;
   for(unsigned int index=0;index<a_linen;index++) {
-    s += std::string(a_lines[index]);
-    s += "\n";
+    _s += std::string(a_lines[index]);
+    _s += "\n";
   }
-  return s;
+  return _s;
 }
 
 }

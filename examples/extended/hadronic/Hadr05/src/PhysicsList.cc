@@ -33,6 +33,8 @@
 
 #include "G4SystemOfUnits.hh"
 
+#include "G4NuclideTable.hh"
+
 #include "G4HadronElasticPhysicsXS.hh"
 #include "HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
@@ -63,7 +65,12 @@ PhysicsList::PhysicsList()
 {
   G4int verb = 1;
   SetVerboseLevel(verb);
-   
+  
+  // mandatory for G4NuclideTable
+  //
+  const G4double meanLife = 1*nanosecond, halfLife = meanLife*std::log(2);
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(halfLife);
+     
   // Hadron Elastic scattering
   RegisterPhysics( new G4HadronElasticPhysicsXS(verb) );  
   ///RegisterPhysics( new HadronElasticPhysicsHP(verb) );

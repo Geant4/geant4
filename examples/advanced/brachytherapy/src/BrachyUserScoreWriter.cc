@@ -86,8 +86,8 @@ if(!ofile)
 
 // retrieve the map
 MeshScoreMap fSMap = fScoringMesh -> GetScoreMap();
-  
-MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
+ 
+auto msMapItr = fSMap.find(psName);
   
 if(msMapItr == fSMap.end()) 
   {
@@ -96,7 +96,7 @@ if(msMapItr == fSMap.end())
    return;
   }
 
-std::map<G4int, G4StatDouble*> * score = msMapItr -> second-> GetMap();
+auto score = msMapItr-> second-> GetMap(); 
   
 ofile << "# primitive scorer name: " << msMapItr -> first << G4endl;
 //
@@ -139,7 +139,7 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
         G4double zz = ( - numberOfVoxel_z + 1+ 2*z )* voxelWidth/2;
         G4int idx = GetIndex(x, y, z);
         std::map<G4int, G4StatDouble*>::iterator value = score -> find(idx);
-
+        
        if (value != score -> end()) 
         {
          // Print in the ASCII output file the information

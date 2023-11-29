@@ -45,36 +45,25 @@
 
 class G4PSNofStep : public G4VPrimitivePlotter
 {
- public:  // with description
+ public:
   G4PSNofStep(G4String name, G4int depth = 0);
+  ~G4PSNofStep() override = default;
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
- public:
-  virtual ~G4PSNofStep();
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
-
- public:
   void SetBoundaryFlag(G4bool flg = true) { boundaryFlag = flg; }
 
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+
  private:
-  G4int HCID;
-  G4THitsMap<G4double>* EvtMap;
+  G4int HCID{-1};
+  G4THitsMap<G4double>* EvtMap{nullptr};
 
-  G4bool boundaryFlag;
-
- public:
+  G4bool boundaryFlag{false};
 };
 
 #endif

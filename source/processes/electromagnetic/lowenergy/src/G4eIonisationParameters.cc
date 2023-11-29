@@ -97,7 +97,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
   auto pos = param.find(id);
   if (pos!= param.end()) {
     G4VEMDataSet* dataSet = (*pos).second;
-    G4int nShells = dataSet->NumberOfComponents();
+    G4int nShells = (G4int)dataSet->NumberOfComponents();
 
     if(shellIndex < nShells) { 
       const G4VEMDataSet* component = dataSet->GetComponent(shellIndex);
@@ -155,15 +155,15 @@ void G4eIonisationParameters::LoadData()
      G4Exception("G4eIonisationParameters::LoadData",
 		    "em1001",FatalException,"Unable to find MaterialTable");
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t nMaterials = G4Material::GetNumberOfMaterials();
   
-  for (G4int mLocal=0; mLocal<nMaterials; mLocal++) {
+  for (std::size_t mLocal=0; mLocal<nMaterials; ++mLocal) {
 
     const G4Material* material= (*materialTable)[mLocal];        
     const G4ElementVector* elementVector = material->GetElementVector();
-    const size_t nElements = material->GetNumberOfElements();
+    const std::size_t nElements = material->GetNumberOfElements();
       
-    for (size_t iEl=0; iEl<nElements; iEl++) {
+    for (std::size_t iEl=0; iEl<nElements; ++iEl) {
       G4double Z = (*elementVector)[iEl]->GetZ();
       if (!(activeZ.contains(Z))) {
 	activeZ.push_back(Z);
@@ -171,7 +171,7 @@ void G4eIonisationParameters::LoadData()
     }
   }
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4Exception("G4BremsstrahlungParameters::LoadData",
@@ -185,9 +185,9 @@ void G4eIonisationParameters::LoadData()
   
   G4double energy, sum;
   
-  size_t nZ = activeZ.size();
+  std::size_t nZ = activeZ.size();
   
-  for (size_t i=0; i<nZ; i++) {
+  for (std::size_t i=0; i<nZ; ++i) {
     
     G4int Z = (G4int)activeZ[i];
     std::ostringstream ost;
@@ -216,7 +216,7 @@ void G4eIonisationParameters::LoadData()
     // The file terminates with the pattern: -2   -2
 
     std::vector<G4VEMDataSet*> p;
-    for (size_t k=0; k<length; k++) 
+    for (std::size_t k=0; k<length; ++k) 
       {
 	G4VDataSetAlgorithm* inter = new G4LinLogLogInterpolation();
 	G4VEMDataSet* composite = new G4CompositeEMDataSet(inter,1.,1.);
@@ -246,13 +246,13 @@ void G4eIonisationParameters::LoadData()
 	if(!isReady) {
 	  isReady = true;
 	  e.clear();
-	  for (size_t j=0; j<length; ++j) { 
+	  for (std::size_t j=0; j<length; ++j) { 
 	    a[j] = new G4DataVector(); 
 	  }  
 	}
         e.push_back(energy);
         a[0]->push_back(sum);
-        for (size_t j=1; j<length; ++j) {
+        for (std::size_t j=1; j<length; ++j) {
 	  G4double qRead;
 	  file >> qRead;
 	  a[j]->push_back(qRead);
@@ -261,15 +261,15 @@ void G4eIonisationParameters::LoadData()
       } else {
 
         // End of set for a shell, fill the map
-	for (size_t k=0; k<length; k++) {
+	for (std::size_t k=0; k<length; ++k) {
 
           G4VDataSetAlgorithm* interp;
           if(0 == k) { interp  = new G4LinLogLogInterpolation(); }
           else       { interp  = new G4LogLogInterpolation(); }
 
 	  G4DataVector* eVector = new G4DataVector;
-	  size_t eSize = e.size();
-	  for (size_t sLocal=0; sLocal<eSize; sLocal++) {
+	  std::size_t eSize = e.size();
+	  for (std::size_t sLocal=0; sLocal<eSize; ++sLocal) {
 	    eVector->push_back(e[sLocal]);
 	  }
 	  G4VEMDataSet* set = new G4EMDataSet(shell,eVector,a[k],interp,1.,1.);
@@ -285,10 +285,10 @@ void G4eIonisationParameters::LoadData()
     
     file.close();
 
-    for (size_t kk=0; kk<length; kk++) 
+    for (G4int kk=0; kk<(G4int)length; ++kk) 
       {
-	G4int id = Z*100 + kk;
-	param[id] = p[kk];
+        G4int id = Z*100 + kk;
+        param[id] = p[kk];
       }
   }
 
@@ -355,8 +355,8 @@ void G4eIonisationParameters::LoadData()
 	G4VDataSetAlgorithm* inter  = new G4LinInterpolation();
 	G4DataVector* eVector = new G4DataVector;
 	G4DataVector* dVector = new G4DataVector;
-	size_t eSize = e.size();
-	for (size_t sLocal2=0; sLocal2<eSize; sLocal2++) {
+	std::size_t eSize = e.size();
+	for (std::size_t sLocal2=0; sLocal2<eSize; ++sLocal2) {
            eVector->push_back(e[sLocal2]);
            dVector->push_back(d[sLocal2]);
 	}
@@ -385,22 +385,22 @@ void G4eIonisationParameters::PrintData() const
   G4cout << "===== G4eIonisationParameters =====" << G4endl;
   G4cout << G4endl;
 
-  size_t nZ = activeZ.size();
+  std::size_t nZ = activeZ.size();
   std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
-  for (size_t i=0; i<nZ; i++) {
+  for (std::size_t i=0; i<nZ; i++) {
     G4int Z = (G4int)activeZ[i];      
 
-    for (size_t j=0; j<length; j++) {
+    for (G4int j=0; j<(G4int)length; ++j) {
     
       G4int index = Z*100 + j;
 
       pos = param.find(index);
-      if (pos!= param.end()) {
+      if (pos!= param.cend()) {
         G4VEMDataSet* dataSet = (*pos).second;
-        size_t nShells = dataSet->NumberOfComponents();
+        std::size_t nShells = dataSet->NumberOfComponents();
 
-        for (size_t k=0; k<nShells; k++) {
+        for (G4int k=0; k<(G4int)nShells; ++k) {
 
           G4cout << "===== Z= " << Z << " shell= " << k 
                  << " parameter[" << j << "]  =====" 

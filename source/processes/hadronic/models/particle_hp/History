@@ -1,27 +1,156 @@
--------------------------------------------------------------------
+# Category hadr-hpp History
 
-          ==================================================
-          Geant4 - an Object-Oriented Toolkit for Simulation
-          ==================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for High Precision Neutron model
-            ---------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-06-17 Vladimir Ivanchenko (hadr-hpp-V11-01-09)
+- G4ParticleHPEnergyDistribution, G4ParticleHPContAngularPar,
+  G4ParticleHPEnAngCorrelation - fixed old Coverity reports
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-06-16 Vladimir Ivanchenko (hadr-hpp-V11-01-08)
+- G4ParticleHPInelasticBaseFS - real fix of memory leak reported by Coverity
 
-11 May 2022 Dennis Wright (hadr-hpp-V10-07-12)
-----------------------------------------------
+## 2023-06-07 Vladimir Ivanchenko (hadr-hpp-V11-01-07)
+- G4ParticleHPInelasticBaseFS - fix potential memory leak reported by Coverity
+
+## 2023-05-04 Ben Morgan (hadr-hpp-V11-01-06)
+- Apply clang-tidy fixes
+
+## 2023-05-02 Ben Morgan (hadr-hpp-V11-01-05)
+- Apply clang-format to headers/sources
+  - FastLegendre source files are marked to be ignored due to complexity/size
+
+## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-01-04)
+- G4ParticleHPGamma, G4ParticleHPLevel : are removed
+- G4ParticleHPNucLevel : added new data structure for nuclear levels
+- G4ParticleHPDeExGammas : rewitten in order to avoid usage of C-arrays,
+    which provokes a problem for CMS static build; code now fully based on
+    std::vector of G4ParticleHPNucLevel; public interfaces are not changed;
+    if in DB probability of decay for a give level is zero; it is substituted 
+    to 1.e-6
+- G4ParticleHPInelasticBaseFS, G4ParticleHPInelasticCompFS - gamma cascade
+    sampling is checked and simplified (removed unnecessary computations)
+
+## 2023-03-27 Alberto Ribon (hadr-hpp-V11-01-03)
+- G4ParticleHPManager : removed the neutron kinetic energy threshold for applying
+  the SVT (Sampling of the Velocity of the Target) algorithm, because this 
+  parameter is in G4HadronicParameters.
+- G4ParticleHPMessenger : when changing the neutron kinetic energy threshold
+  for applying the SVT algorithm - as part of the setting of the DBRC 
+  (Double Broadening Rejection Correction) algorithm - update the corresponding
+  value in G4HadronicParameters.
+- G4ParticleHPElasticFS : get the neutron kinetic energy threshold for applying
+  the SVT algorithm from G4HadronicParameters; 
+  in the method GetBiasedThermalNucleus, corrected mistake in the interval 
+  where the max neutron cross section is considered for rejection.
+
+## 2023-03-13 Vladimir Ivanchenko (hadr-hpp-V11-01-02)
+- G4ParticleHPGamma, G4ParticleHPLevel, G4ParticleHPDeExGammas - attempt to 
+    fix compilation warning in CMSSW, reported in Geant4 issue #158;
+    removed internal counter; delete only objects, which are created
+
+## 2023-03-04 Alberto Ribon (hadr-hpp-V11-01-01)
+Accurate modelling of elastic resonant scattering in heavy nuclei by
+Marek Zmeskal and Loic Thulliez by the use of DBRC (Doppler Broadening
+Rejection Correction) algorithm:
+- G4ParticleHPManager : added new member variables, and corresponding
+  Get and Set methods, related to the DBRC algorithm.
+- G4ParticleHPMessenger : added new UI commands to enable DBRC (which is off
+  by default) and to specify its parameters.
+- G4ParticleHPVector : added new method GetMaxY to provide the maximum
+  cross section in the interval between two kinetic energy values.
+- G4ParticleHPChannel : modified method ApplyYourself, with an extra argument,
+  for a special treatment of the elastic channel.
+- G4ParticleHPElastic : modified call to G4ParticleHPChannel::ApplyYourself,
+  with an extra parameter.
+- G4ParticleHPElasticFS : implemented the DBRC algorithm in the new method
+  GetBiasedThermalNucleus (in the case that DBRC algorithm should not be
+  applied, then this method calls G4Nucleus::GetBiasedThermalNucleus);
+  modified the method ApplyYourself to call the new method
+  GetBiasedThermalNucleus;
+  introduced two more new methods, InitializeScatterKernelParameters and
+  RegisterCrossSection, and corresponding new member variables.
+
+## 2023-02-06 Gabriele Cosmo (hadr-hpp-V11-01-00)
+- Minor cleanup in G4ParticleHPDeExGammas header for data initialisation.
+
+## 2022-11-26 Gabriele Cosmo (hadr-hpp-V11-00-19)
+- Fixed more compilation warnings for implicit type conversions.
+- Some code cleanup.
+
+## 2022-11-18 Gabriele Cosmo (hadr-hpp-V11-00-18)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-07 Gabriele Cosmo (hadr-hpp-V11-00-17)
+- Fixed compilation warnings on Intel/icx compiler for variable set
+  but not used in G4ParticleHPInelasticCompFS and G4ParticleHPFFFissionFS.
+- Use auto for iterators in G4ParticleHPFFFissionFS::GetAFissionFragment().
+
+## 2022-10-05 Alberto Ribon (hadr-hpp-V11-00-16)
+- G4ParticleHPContAngularPar.cc : added protection against zero probability
+  for both discrete and continuous emission.
+
+## 2022-10-01 Dennis Wright (hadr-hpp-V11-00-15)
+- Remove environment variables G4PHPTEST, G4PHPTEST2 and NeutronHPCapture,
+  associated getenv() calls and associated debug code. They are no longer
+  used and found to slow down the code significantly.
+  This is a fix of bug report #2501.
+
+  Files modified: G4ParticleHPContAngularPar (removed G4PHPTEST, G4PHPTEST2)
+                  G4ParticleHPCapture.cc (removed NeutronHPCapture)
+                  G4ParticleHPEnAngCorrelation.cc (removed G4PHPTEST)
+                  G4ParticleHPContEnergyAngular.cc (  "        " )
+                  G4ParticleHPInelastic.cc         (  "        " )
+                  G4ParticleHPInelasticBaseFS.cc   (  "        " )                   
+                  G4ParticleHPProduct              (  "        " )
+                  G4ParticleHPDeExGammas.hh        (  "        " )
+
+## 2022-07-19 Alberto Ribon (hadr-hpp-V11-00-14)
+- G4ParticleHPThermalScattering.hh : fixed Coverity report (uninitialized
+  variable).
+
+## 2022-07-23 Ben Morgan (hadr-hpp-V11-00-13)
+- Remove unneeded include of `G4FastVector.hh`
+
+## 2022-07-01 Alberto Ribon (hadr-hpp-V11-00-12)
+- G4ParticleHPInelastic.cc, G4ParticleHPCapture.cc, G4ParticleHPFission.cc,
+  G4ParticleHPElastic.cc, G4ParticleHPThermalScattering.cc : replaced
+  the threshold used for checking the absolute energy non-conservation
+  from DLB_MAX (implying no checking at all) to 350 GeV (this value allows
+  for cases where the residual nucleus is not produced, even when super-heavy
+  nuclides are involved).
+- G4ParticleHPContAngularPar.cc : removed unneeded check, reported by Coverity.
+
+## 2022-06-23 Alberto Ribon (hadr-hpp-V11-00-11)
+- G4ParticleHPContAngularPar.cc : added protections against evaluations of
+  arrays at negative index (-1), fixing rare reproducibility problems.
+
+## 2022-06-22 Guilherme Amadio (hadr-hpp-V11-00-10)
+- Replace std::getenv with G4FindDataDir
+
+## 2022-06-20 Igor Semeniouk (hadr-hpp-V11-00-09)
+- G4ParticleHPIsoData.cc, G4ParticleHPInelasticData.cc,
+G4ParticleHPJENDLHEData.cc, G4ParticleHPThermalScatteringData.cc,
+G4ParticleHPThermalScattering.cc :
+quick fix, use G4FindDataDir for G4NEUTRONHPDATA and other dataDirVariable environment variables.
+
+## 2022-06-14 Igor Semeniouk (hadr-hpp-V11-00-08)
+- G4ParticleHPInelastic.cc : quick fix, use G4FindDataDir for G4NEUTRONHPDATA
+and other dataDirVariable environment variables.
+
+## 2022-06-10 Alberto Ribon (hadr-hpp-V11-00-07)
+- G4ParticleHPContEnergyAngular.hh : fixed Coverity report.
+  (Correction suggested by Dennis Wright; expected no effect).
+
+## 2022-05-11 Dennis Wright (hadr-hpp-V11-00-06)
 - code cleanup of G4ParticleHPContEnergyAngular.cc and 
   G4ParticleHPContAngularPar.cc : remove debug code, remove commented out code,
   fix indentation of loops and if branches   
 
-27 April 2022 Dennis Wright
----------------------------
+## 2022-04-27 Dennis Wright (hadr-hpp-V11-00-05)
 - fix of bug #2468: many or most photons generated from G4NDL/Capture/FSMF6 data
   are too high in energy.  Bug reported and fixed by Sven Menke.
 - G4ParticleHPContEnergyAngular
@@ -37,14 +166,16 @@ code and to keep track of all tags.
                            assignment of elements
                          : disable and replace code with incorrect assignment of
                            continuous energies
+   
+G4ParticleHPContEnergyAngular: 
+## 2022-04-27 Gunter Folger  (hadr-hpp-V11-00-04)
+-  G4ParticleHPThermalScatteringNames.cc updated to use new ThermalScattering        data. File provided by Loic Thulliez.
 
-26 April 2022 Alberto Ribon
----------------------------
+## 2022-04-26 Alberto Ribon (hadr-hpp-V11-00-03)
 -  G4ParticleHPVector : fixed compilation warning for 'may be used uninitialized'
    variable.
 
-20 April 2022 Alberto Ribon
----------------------------
+## 2022-04-20 Alberto Ribon (hadr-hpp-V11-00-02)
 -  G4ParticleHPFissionSpectrum.hh, G4ParticleHPSimpleEvapSpectrum.hh,
    G4FPYNormalFragmentDist.cc, G4FissionProductYieldDist.cc, 
    G4ParticleHPInelasticCompFS.cc, G4ParticleHPKallbachMannSyst.cc,
@@ -52,10 +183,16 @@ code and to keep track of all tags.
    G4ParticleHPVector.cc, G4ParticleHPWattSpectrum.cc : fixed compilation
    warnings for 'may be used uninitialized' variables.
 
-09 February 2022 Gabriele Cosmo
--------------------------------
+## 2022-02-09 Gabriele Cosmo (hadr-hpp-V11-00-01)
 - Fixed compilation warnings on Intel compilers for deprecated use of
   operator=() in G4ParticleHPDataPoint.
+
+## 2021-12-10 Ben Morgan (hadr-hpp-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 05 November 2021 Alberto Ribon (hadr-hpp-V10-07-11)
 --------------------------------------------------

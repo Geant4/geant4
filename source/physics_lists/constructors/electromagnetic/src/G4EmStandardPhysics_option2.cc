@@ -59,7 +59,6 @@
 #include "G4KleinNishinaModel.hh"
 #include "G4RayleighScattering.hh"
 
-#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
@@ -166,13 +165,11 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
   G4eIonisation* eioni = new G4eIonisation();
 
-  G4eMultipleScattering* msc = new G4eMultipleScattering;
   G4UrbanMscModel* msc1 = new G4UrbanMscModel();
   G4WentzelVIModel* msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel();
   G4CoulombScattering* ss = new G4CoulombScattering();
@@ -181,7 +178,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
   ph->RegisterProcess(ss, particle);
@@ -190,13 +186,11 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   particle = G4Positron::Positron();
   eioni = new G4eIonisation();
 
-  msc = new G4eMultipleScattering;
   msc1 = new G4UrbanMscModel();
   msc2 = new G4WentzelVIModel();
   msc1->SetHighEnergyLimit(highEnergyLimit);
   msc2->SetLowEnergyLimit(highEnergyLimit);
-  msc->SetEmModel(msc1);
-  msc->SetEmModel(msc2);
+  G4EmBuilder::ConstructElectronMscProcess(msc1, msc2, particle);
 
   ssm = new G4eCoulombScatteringModel();
   ss = new G4CoulombScattering();
@@ -205,7 +199,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   ssm->SetLowEnergyLimit(highEnergyLimit);
   ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eioni, particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
   ph->RegisterProcess(new G4eplusAnnihilation(), particle);

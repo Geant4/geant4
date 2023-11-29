@@ -56,7 +56,13 @@ class G4CoulombScattering : public G4VEmProcess
 
 public:
 
-  explicit G4CoulombScattering(const G4String& name = "CoulombScat");
+  explicit G4CoulombScattering(const G4String& name, G4bool combined);
+
+  // for pure single scattering use combined=false
+  G4CoulombScattering(G4bool combined = true);
+
+  // for pure single scattering use SetIsCombined(false) method 
+  G4CoulombScattering(const G4String& name);
 
   ~G4CoulombScattering() override;
 
@@ -64,6 +70,8 @@ public:
 
   // print documentation in html format
   void ProcessDescription(std::ostream&) const override;
+
+  inline void SetIsCombined(G4bool val) { isCombined = val; }
 
   G4CoulombScattering & operator=(const G4CoulombScattering &right) = delete;
   G4CoulombScattering(const G4CoulombScattering&) = delete;
@@ -81,7 +89,8 @@ protected:
 private:
   
   G4double q2Max;
-  G4bool isInitialised;
+  G4bool isInitialised = false;
+  G4bool isCombined;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -43,25 +43,15 @@
 #include "G4PVPlacement.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDTrunk::G4MIRDTrunk()
-{
-}
-
-G4MIRDTrunk::~G4MIRDTrunk()
-{
-
-}
-
 
 G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
 					  const G4String& colourName, G4bool wireFrame,G4bool )
 {
-
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
    
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* soft = material -> GetMaterial("soft_tissue");
  
   delete material;
 
@@ -71,13 +61,13 @@ G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysica
   G4double dy = 10. * cm;
   G4double dz = 35. * cm;
 
-  G4EllipticalTube* trunk = new G4EllipticalTube("Trunk",dx, dy, dz);
+  auto* trunk = new G4EllipticalTube("Trunk",dx, dy, dz);
 
-  G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, soft, 
+  auto* logicTrunk = new G4LogicalVolume(trunk, soft, 
 	 					    "logical" + volumeName,
-						    0, 0, 0);
+						    nullptr, nullptr, nullptr);
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree); 
   rm->rotateY(180.*degree); 
   G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,
@@ -88,13 +78,10 @@ G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysica
 						   mother,
 						   false,
 						   0, true);
-
-
-
   // Visualization Attributes
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(colour);
+  auto* TrunkVisAtt = new G4VisAttributes(colour);
   TrunkVisAtt->SetForceSolid(wireFrame);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
@@ -115,7 +102,6 @@ G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysica
   // Testing Mass
   G4double TrunkMass = (TrunkVol)*TrunkDensity;
   G4cout << "Mass of Trunk = " << TrunkMass/gram << " g" << G4endl;
-
   
   return physTrunk;
 }

@@ -60,7 +60,7 @@ public:
 
   explicit G4VSubCutProducer(const G4String& name) : fName(name) {};
 
-  virtual ~G4VSubCutProducer() {};
+  virtual ~G4VSubCutProducer() = default;
 
   // Sample direction in global coordinate system,
   // this means for zero scattering angle this direction is the same

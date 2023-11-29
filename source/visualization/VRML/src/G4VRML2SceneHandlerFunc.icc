@@ -175,7 +175,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
   fDest << "\t\t\t"
         << "point ["
         << "\n";
-  G4int e, i;
+  std::size_t e, i;
   for(i = 0, e = polyline.size(); e; i++, e--)
   {
     G4Point3D point = polyline[i];

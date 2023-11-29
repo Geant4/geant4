@@ -46,16 +46,16 @@
 // ###                          PIONPLUS                              ###
 // ######################################################################
 
-G4PionPlus* G4PionPlus::theInstance = 0;
+G4PionPlus* G4PionPlus::theInstance = nullptr;
 
 G4PionPlus* G4PionPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "pi+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -72,11 +72,11 @@ G4PionPlus* G4PionPlus::Definition()
                     0,              -1,             0,
                     2,              +2,            -1,
               "meson",               0,             0,         211,
-                false,       26.033*ns,          NULL,
+                false,       26.033*ns,          nullptr,
                 false,       "pi");
 
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
   // create a decay channel
   // pi+ -> mu+ + nu_mu
@@ -85,7 +85,7 @@ G4PionPlus* G4PionPlus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4PionPlus*>(anInstance);
+  theInstance = static_cast<G4PionPlus*>(anInstance);
   return theInstance;
 }
 

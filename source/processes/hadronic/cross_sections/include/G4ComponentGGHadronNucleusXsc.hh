@@ -88,7 +88,7 @@ public:
 
   // Glauber-Gribov cross section
   void ComputeCrossSections(const G4ParticleDefinition* aParticle,
-			    G4double kinEnergy, G4int Z, G4int A);
+			    G4double kinEnergy, G4int Z, G4int A, G4int nL = 0);
 
   // additional public methods
   G4double GetProductionElementCrossSection(const G4ParticleDefinition* aParticle,
@@ -164,12 +164,13 @@ private:
   const G4ParticleDefinition* theKMinus;
   const G4ParticleDefinition* theK0S;
   const G4ParticleDefinition* theK0L;
+  const G4ParticleDefinition* theLambda;
 
   G4HadronNucleonXsc* hnXsc;
 
   // Cache
   const G4ParticleDefinition* fParticle;
-  G4int fZ, fA;
+  G4int fZ, fA, fL;
 
 };
 

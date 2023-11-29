@@ -53,9 +53,7 @@ G4ParticlesWorkspace::G4ParticlesWorkspace(G4bool verbose)
   fpPDefOffset = fpPDefSIM->GetOffset();   
 }
 
-G4ParticlesWorkspace::~G4ParticlesWorkspace()
-{
-}
+
 
 void G4ParticlesWorkspace::UseWorkspace()
 {
@@ -71,7 +69,7 @@ void G4ParticlesWorkspace::UseWorkspace()
 
 void G4ParticlesWorkspace::ReleaseWorkspace()
 {
-  fpPDefSIM->UseWorkArea(0);
+  fpPDefSIM->UseWorkArea(nullptr);
 }
 
 void G4ParticlesWorkspace::InitialiseParticles()

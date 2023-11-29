@@ -135,7 +135,7 @@ G4UniversalFluctuation::AddExcitation(CLHEP::HepRandomEngine* rndm,
     eav  += ax*ex;
     esig2 += ax*ex*ex;
   } else {
-    const G4int p = G4Poisson(ax);
+    const G4int p = (G4int)G4Poisson(ax);
     if(p > 0) { eloss += ((p + 1) - 2.*rndm->flat())*ex; }
   }
 }

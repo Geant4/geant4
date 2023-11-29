@@ -152,6 +152,12 @@ const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType )
 }
 
 // --------------------------------------------------------------------
+const G4VProcess* G4VProcess::GetCreatorProcess() const
+{
+  return this;
+}
+
+// --------------------------------------------------------------------
 G4bool G4VProcess::operator==(const G4VProcess& right) const
 {
   return (this == &right);

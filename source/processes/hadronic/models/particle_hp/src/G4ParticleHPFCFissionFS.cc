@@ -31,16 +31,17 @@
 //
 #include "G4ParticleHPFCFissionFS.hh"
 
-  void G4ParticleHPFCFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String &, G4ParticleDefinition* projectile)
-  {
-    G4String aString = "/FC/";
-    G4ParticleHPFissionBaseFS::Init(A, Z, M, dirName, aString, projectile );
-  }
-  
-  G4DynamicParticleVector * G4ParticleHPFCFissionFS::ApplyYourself(G4int nNeutrons)
-  {  
-    G4DynamicParticleVector * aResult;
-//    G4cout <<"G4ParticleHPFCFissionFS::ApplyYourself +"<<G4endl;
-    aResult = G4ParticleHPFissionBaseFS::ApplyYourself(nNeutrons);    
-    return aResult;
-  }
+void G4ParticleHPFCFissionFS::Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String&,
+                                   G4ParticleDefinition* projectile)
+{
+  G4String aString = "/FC/";
+  G4ParticleHPFissionBaseFS::Init(A, Z, M, dirName, aString, projectile);
+}
+
+G4DynamicParticleVector* G4ParticleHPFCFissionFS::ApplyYourself(G4int nNeutrons)
+{
+  G4DynamicParticleVector* aResult;
+  //    G4cout <<"G4ParticleHPFCFissionFS::ApplyYourself +"<<G4endl;
+  aResult = G4ParticleHPFissionBaseFS::ApplyYourself(nNeutrons);
+  return aResult;
+}

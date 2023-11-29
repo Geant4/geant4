@@ -25,29 +25,19 @@
 //
 // Class Description
 // Manager of NetronHP
-// 
+//
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 
 #include "G4ParticleHPThreadLocalManager.hh"
-#include "G4ParticleHPReactionWhiteBoard.hh"
+
 #include "G4HadronicException.hh"
+#include "G4ParticleHPReactionWhiteBoard.hh"
 
-G4ParticleHPThreadLocalManager::G4ParticleHPThreadLocalManager()
-:RWB(0)
-{
-;
-}
+G4ParticleHPThreadLocalManager::G4ParticleHPThreadLocalManager() = default;
 
-G4ParticleHPThreadLocalManager::~G4ParticleHPThreadLocalManager()
-{
-;
-}
-
-G4ParticleHPThreadLocalManager::
-G4ParticleHPThreadLocalManager( const G4ParticleHPThreadLocalManager& )
-{
-;
-}
+G4ParticleHPThreadLocalManager::G4ParticleHPThreadLocalManager(
+  const G4ParticleHPThreadLocalManager&)
+{}
 
 G4ParticleHPThreadLocalManager* G4ParticleHPThreadLocalManager::GetInstance()
 {
@@ -57,28 +47,25 @@ G4ParticleHPThreadLocalManager* G4ParticleHPThreadLocalManager::GetInstance()
 
 void G4ParticleHPThreadLocalManager::OpenReactionWhiteBoard()
 {
-   if ( RWB )
-   {
-      G4cout << "Warning: G4ParticleHPReactionWhiteBoard is tried doubly opening" << G4endl;
-      return;
-   }
-   
-   RWB = new G4ParticleHPReactionWhiteBoard();
+  if (RWB != nullptr) {
+    G4cout << "Warning: G4ParticleHPReactionWhiteBoard is tried doubly opening" << G4endl;
+    return;
+  }
+
+  RWB = new G4ParticleHPReactionWhiteBoard();
 }
 
-G4ParticleHPReactionWhiteBoard*
-G4ParticleHPThreadLocalManager::GetReactionWhiteBoard()
+G4ParticleHPReactionWhiteBoard* G4ParticleHPThreadLocalManager::GetReactionWhiteBoard()
 {
-   if ( !RWB )
-   {
-      G4cout << "Warning: try to access G4ParticleHPReactionWhiteBoard before opening" << G4endl;
-      RWB = new G4ParticleHPReactionWhiteBoard();
-   }
-   return RWB; 
+  if (RWB == nullptr) {
+    G4cout << "Warning: try to access G4ParticleHPReactionWhiteBoard before opening" << G4endl;
+    RWB = new G4ParticleHPReactionWhiteBoard();
+  }
+  return RWB;
 }
 
 void G4ParticleHPThreadLocalManager::CloseReactionWhiteBoard()
-{  
-   delete RWB; 
-   RWB=0;
+{
+  delete RWB;
+  RWB = nullptr;
 }

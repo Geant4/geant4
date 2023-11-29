@@ -132,7 +132,6 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
   for (i = 0; i < 49; i++) {ecalE[i]=0.;}
 
   G4float* edep = new G4float[numberOfSD];
-  G4int nhit=0;
   for (i = 0; i < numberOfSD; ++i){
 
     //
@@ -182,7 +181,6 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
 #endif
             fullE   += En/GeV;
             edep[i] += En/GeV;
-            nhit++;
           }
 #ifdef ddebug
           G4cout << " ===> Total Energy Deposit in this Calorimeter = " 

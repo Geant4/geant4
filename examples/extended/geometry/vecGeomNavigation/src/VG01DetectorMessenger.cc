@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+/// \file VG01DetectorMessenger.cc
+/// \brief Implementation of the VG01DetectorMessenger class
+
 //  Authors: J. Apostolakis & S. Wenzel (CERN)  2018-2021
 //
 //  Started from FullCMS code by Mihaly Novak (CERN) 2017  

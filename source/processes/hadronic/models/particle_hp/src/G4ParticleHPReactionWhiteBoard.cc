@@ -30,72 +30,65 @@
 //
 #include "G4ParticleHPReactionWhiteBoard.hh"
 
-G4ParticleHPReactionWhiteBoard::G4ParticleHPReactionWhiteBoard()
-:targZ(0)
-,targA(0)
-,targM(0)
-{
-;
-}
+G4ParticleHPReactionWhiteBoard::G4ParticleHPReactionWhiteBoard() = default;
+
 G4ParticleHPReactionWhiteBoard::~G4ParticleHPReactionWhiteBoard()
 {
-   mapStringPair.clear();
+  mapStringPair.clear();
 }
 
 void G4ParticleHPReactionWhiteBoard::Dump()
 {
-   G4cout << "G4ParticleHPReactionWhiteBoard::Dump" << G4endl;
-   G4cout << "Target Z = " << targZ << G4endl;
-   G4cout << "Target A = " << targA << G4endl;
-   G4cout << "Target M = " << targM << G4endl;
+  G4cout << "G4ParticleHPReactionWhiteBoard::Dump" << G4endl;
+  G4cout << "Target Z = " << targZ << G4endl;
+  G4cout << "Target A = " << targA << G4endl;
+  G4cout << "Target M = " << targM << G4endl;
 
-   for ( std::map< G4String,G4String >::iterator 
-         it = mapStringPair.begin(); it != mapStringPair.end(); it++ )
-   {
-      G4cout << it->first << " " << it->second << G4endl; 
-   }
-   //,,,
-   G4cout << G4endl;
+  for (const auto& it : mapStringPair) {
+    G4cout << it.first << " " << it.second << G4endl;
+  }
+  //,,,
+  G4cout << G4endl;
 }
 
-bool G4ParticleHPReactionWhiteBoard::AddRecord( std::pair<G4String,G4String> new_record )
+bool G4ParticleHPReactionWhiteBoard::AddRecord(std::pair<G4String, G4String> new_record)
 {
-   if ( mapStringPair.find( new_record.first ) !=  mapStringPair.end() ) {
-      G4cout << "This key is already used in the current reaction white board!" << G4endl;
-      return false;
-   }
-   mapStringPair.insert ( new_record );
-   return true;
+  if (mapStringPair.find(new_record.first) != mapStringPair.end()) {
+    G4cout << "This key is already used in the current reaction white board!" << G4endl;
+    return false;
+  }
+  mapStringPair.insert(new_record);
+  return true;
 }
 
-G4String G4ParticleHPReactionWhiteBoard::GetValue( G4String key )
+G4String G4ParticleHPReactionWhiteBoard::GetValue(G4String key)
 {
-   std::map< G4String,G4String >::iterator it = mapStringPair.find( key );
-   if ( it == mapStringPair.end() ) {
-      G4cout << "No entry for this key " << key << " in the current reaction white board!" << G4endl;
-      return "NONE";
-   }
-   return it->second;
+  auto it = mapStringPair.find(key);
+  if (it == mapStringPair.end()) {
+    G4cout << "No entry for this key " << key << " in the current reaction white board!" << G4endl;
+    return "NONE";
+  }
+  return it->second;
 }
 
-G4int G4ParticleHPReactionWhiteBoard::GetValueInInt( G4String key )
+G4int G4ParticleHPReactionWhiteBoard::GetValueInInt(G4String key)
 {
-   G4String result = GetValue( key );  
-   if ( result == "NONE" ) return 0;
-   std::stringstream ss;
-   ss << key;
-   G4int i;
-   ss >> i;
-   return i;
+  G4String result = GetValue(key);
+  if (result == "NONE") return 0;
+  std::stringstream ss;
+  ss << key;
+  G4int i;
+  ss >> i;
+  return i;
 }
 
-G4double G4ParticleHPReactionWhiteBoard::GetValueInDouble( G4String key )
+G4double G4ParticleHPReactionWhiteBoard::GetValueInDouble(G4String key)
 {
-   G4String result = GetValue( key );  
-   if ( result == "NONE" ) return 0.0;
-   std::stringstream ss;
-   ss << key;
-   G4double x;
-   ss >> x;
-   return x;
+  G4String result = GetValue(key);
+  if (result == "NONE") return 0.0;
+  std::stringstream ss;
+  ss << key;
+  G4double x;
+  ss >> x;
+  return x;
 }

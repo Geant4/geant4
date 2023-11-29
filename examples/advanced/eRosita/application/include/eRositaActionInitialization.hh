@@ -23,23 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
 #ifndef eRositaActionInitialization_h
 #define eRositaActionInitialization_h 1
 
 #include "globals.hh"
-
-#include "G4VUserActionInitialization.hh"
 #include "G4VSteppingVerbose.hh"
+#include "G4VUserActionInitialization.hh"
 
-class eRositaActionInitialization : public G4VUserActionInitialization
-{
+class eRositaActionInitialization : public G4VUserActionInitialization {
 public:
-    eRositaActionInitialization();
+    explicit eRositaActionInitialization();
 
-    virtual ~eRositaActionInitialization();
+    ~eRositaActionInitialization() override;
 
-    virtual void BuildForMaster() const;
+    void Build() const override;
 
-    virtual void Build() const;
+    void BuildForMaster() const override;
 };
 #endif

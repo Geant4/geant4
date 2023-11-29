@@ -40,7 +40,7 @@
 
 class G4UniformElectricField : public G4ElectricField
 {
-  public:  // with description
+  public:
 
     G4UniformElectricField(const G4ThreeVector& FieldVector);
       // A field with value equal to FieldVector.
@@ -48,16 +48,16 @@ class G4UniformElectricField : public G4ElectricField
     G4UniformElectricField(G4double vField,
                            G4double vTheta,
                            G4double vPhi);
-       
-    virtual ~G4UniformElectricField();
+
+   ~G4UniformElectricField() override;
 
     G4UniformElectricField(const G4UniformElectricField &p);
     G4UniformElectricField& operator = (const G4UniformElectricField &p);
       // Copy constructor and assignment operator
 
-    virtual void GetFieldValue(const G4double pos[4], G4double* field) const;
+    void GetFieldValue(const G4double pos[4], G4double* field) const override;
 
-    virtual G4Field* Clone() const;
+    G4Field* Clone() const override;
 
   private:
   

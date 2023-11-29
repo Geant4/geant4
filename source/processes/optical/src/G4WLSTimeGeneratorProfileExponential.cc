@@ -56,7 +56,8 @@ G4WLSTimeGeneratorProfileExponential::G4WLSTimeGeneratorProfileExponential(
 
 //
 
-G4WLSTimeGeneratorProfileExponential::~G4WLSTimeGeneratorProfileExponential() {}
+G4WLSTimeGeneratorProfileExponential::~G4WLSTimeGeneratorProfileExponential() =
+  default;
 
 //
 

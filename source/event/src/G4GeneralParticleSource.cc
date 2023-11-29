@@ -202,7 +202,7 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
         GPSData->Unlock();
       }
       G4double rndm = G4UniformRand();
-      std::size_t i = 0 ;
+      G4int i = 0 ;
       if (! GPSData->GetFlatSampling() )
       {
         while ( rndm > GPSData->GetSourceProbability(i) ) ++i;
@@ -210,7 +210,7 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
       }
       else
       {
-        i = std::size_t (GPSData->GetIntensityVectorSize()*rndm);
+        i = G4int (GPSData->GetIntensityVectorSize()*rndm);
         currentSource = GPSData->GetCurrentSource(i);
       }
     }

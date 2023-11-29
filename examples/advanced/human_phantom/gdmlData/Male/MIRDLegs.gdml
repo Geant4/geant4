@@ -108,7 +108,7 @@
 
  <solids>
   <cone aunit="radian" lunit="cm" name="Leg1" z="78.0" rmax1="4.0" rmax2="17.25" startphi="0." deltaphi="TWOPI"/>
-  <eltube aunit="cm" lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="78."/>
+  <eltube lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="78."/>
   <intersection name="Legs">
    <first ref="Leg1"/> 
    <second ref="Trunk"/>

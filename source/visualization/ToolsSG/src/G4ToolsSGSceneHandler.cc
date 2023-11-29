@@ -36,6 +36,7 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4Text.hh"
+#include "G4Mesh.hh"
 #include "G4PlotterManager.hh"
 
 #include <tools/sg/separator>
@@ -45,11 +46,11 @@
 #include <tools/sg/atb_vertices>
 #include <tools/sg/markers>
 #ifdef TOOLS_USE_FREETYPE
-#include <tools/sg/text_freetype>
+#include <toolx/sg/text_freetype>
 #include <tools/sg/strings>
 #include <tools/font/lato_regular_ttf>
 #include <tools/font/roboto_bold_ttf>
-#include <tools/sg/text_freetype_marker>
+#include <toolx/sg/text_freetype_marker>
 #else
 #include <tools/sg/dummy_freetype>
 #include <tools/sg/text_hershey_marker>
@@ -80,7 +81,7 @@ G4ToolsSGSceneHandler::G4ToolsSGSceneHandler
   //::printf("debug : G4ToolsSGSceneHandler : %lu, %s\n",this,name.c_str());
   EstablishBaseNodes();
 #if defined(TOOLS_USE_FREETYPE)
-  fFreetypeNode = new tools::sg::text_freetype();
+  fFreetypeNode = new toolx::sg::text_freetype();
   fFreetypeNode->add_embedded_font(tools::sg::font_lato_regular_ttf(),tools::font::lato_regular_ttf);
   fFreetypeNode->add_embedded_font(tools::sg::font_roboto_bold_ttf(),tools::font::roboto_bold_ttf);
 #else  
@@ -173,7 +174,7 @@ tools::sg::separator* G4ToolsSGSceneHandler::GetOrCreateNode()
   size_t iDepth = 1;
   while (iDepth < depth) {
     const auto& children = node->children();
-    const G4int nChildren = children.size();
+    const G4int nChildren = (G4int)children.size();
     G4int iChild = 0;
     G4ToolsSGNode* child = nullptr;
     for (; iChild < nChildren; ++iChild) {
@@ -286,15 +287,17 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
                   float(colour.GetAlpha()));
   currentNode->add(mat);}
 
+  MarkerSizeType markerSizeType;
+  G4double markerSize = GetMarkerSize(a_polymarker, markerSizeType);
+
   switch (a_polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:{
       //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : dots\n");
       tools::sg::draw_style* ds = new tools::sg::draw_style;
       ds->style = tools::sg::draw_points;
-      ds->point_size = 10;
+      ds->point_size = 1;
       currentNode->add(ds);
-
       tools::sg::vertices* vtxs = new tools::sg::vertices;
       vtxs->mode = tools::gl::points();
      {for (size_t i = 0; i < a_polymarker.size(); ++i) {
@@ -305,7 +308,12 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
     case G4Polymarker::circles:{
       //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : circles\n");
      {tools::sg::markers* markers = new tools::sg::markers;
-      markers->size = 10;
+      G4double diameter = markerSize;  // OK for "screen-size" (the usual case)
+      if (markerSizeType == G4VSceneHandler::world ) {
+        const G4double scale = 200.;  // Roughly pixels per scene
+        diameter *= fpScene->GetExtent().GetExtentRadius()/scale;
+      }
+      markers->size = diameter;
       markers->style = tools::sg::marker_circle_line;
       for (size_t i = 0; i < a_polymarker.size(); ++i) {
         markers->add(float(a_polymarker[i].x()),float(a_polymarker[i].y()),float(a_polymarker[i].z()));
@@ -315,7 +323,12 @@ void G4ToolsSGSceneHandler::AddPrimitive (const G4Polymarker& a_polymarker)
   case G4Polymarker::squares:{
     //::printf("debug : GB : Add Markers : +++++++++++++++++++++++++++++++++++++++++++ : square\n");
      {tools::sg::markers* markers = new tools::sg::markers;
-      markers->size = 10;
+      G4double side = markerSize;  // OK for "screen-size" (the usual case)
+      if (markerSizeType == G4VSceneHandler::world ) {
+        const G4double scale = 200.;  // Roughly pixels per scene
+        side *= fpScene->GetExtent().GetExtentRadius()/scale;
+      }
+      markers->size = side;
       markers->style = tools::sg::marker_square_line;
       for (size_t i = 0; i < a_polymarker.size(); ++i) {
         markers->add(float(a_polymarker[i].x()),float(a_polymarker[i].y()),float(a_polymarker[i].z()));
@@ -371,7 +384,7 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Text& a_text)
   parentNode->add(mat);}
  
 #ifdef TOOLS_USE_FREETYPE
-  tools::sg::text_freetype_marker* text = new tools::sg::text_freetype_marker;
+  toolx::sg::text_freetype_marker* text = new toolx::sg::text_freetype_marker;
   text->add_embedded_font(tools::sg::font_lato_regular_ttf(),tools::font::lato_regular_ttf);
   text->font = tools::sg::font_lato_regular_ttf();
   text->front_face = tools::sg::winding_cw;
@@ -440,11 +453,11 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& a_polyhedron)
   typedef std::pair<G4Point3D,G4Point3D> Line;
   std::vector<Line> lines;
   auto insertIfNew = [&lines](const Line& newLine) {
-    for (const auto& line: lines) {
-      if ((newLine.first==line.first && newLine.second==line.second) ||
-          (newLine.first==line.second && newLine.second==line.first))
-      return;
-    }
+//    for (const auto& line: lines) {
+//      if ((newLine.first==line.first && newLine.second==line.second) ||
+//          (newLine.first==line.second && newLine.second==line.first))
+//      return;
+//    }
     lines.push_back(newLine);
   };
 
@@ -568,6 +581,11 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& a_polyhedron)
     }
   
   }
+}
+
+void G4ToolsSGSceneHandler::AddCompound(const G4Mesh& mesh)
+{
+  StandardSpecialMeshRendering(mesh);
 }
 
 //plotting:
@@ -699,7 +717,10 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
       os << hid;
       std::string cmd("/analysis/h1/get ");
       cmd += std::string(os.str());
+      auto keepControlVerbose = UI->GetVerboseLevel();
+      UI->SetVerboseLevel(0);
       G4int status = UI->ApplyCommand(cmd.c_str());
+      UI->SetVerboseLevel(keepControlVerbose);
       if(status==G4UIcommandStatus::fCommandSucceeded) {
         G4String hexString = UI->GetCurrentValues("/analysis/h1/get");
         if(hexString.size()) {
@@ -710,6 +731,11 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
           tools::sg::plottable* p = new tools::sg::h1d2plot_cp(*_h);
           _plotter->add_plottable(p); //give ownership of p to sg::plotter.
         }
+      } else {
+        G4cerr <<
+        "G4ToolsSGSceneHandler::SetPlotterHistograms: cannot get histogram - maybe doesn't exist?"
+        "\n  Maybe this app does not do analysis at all?"
+        << G4endl;
       }
     }
   }}
@@ -721,7 +747,10 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
       os << hid;
       std::string cmd("/analysis/h2/get ");
       cmd += std::string(os.str());
+      auto keepControlVerbose = UI->GetVerboseLevel();
+      UI->SetVerboseLevel(0);
       G4int status = UI->ApplyCommand(cmd.c_str());
+      UI->SetVerboseLevel(keepControlVerbose);
       if(status==G4UIcommandStatus::fCommandSucceeded) {
         G4String hexString = UI->GetCurrentValues("/analysis/h2/get");
         if(hexString.size()) {
@@ -732,6 +761,11 @@ void G4ToolsSGSceneHandler::SetPlotterHistograms(tools::sg::plots& a_plots) {
           tools::sg::plottable* p = new tools::sg::h2d2plot_cp(*_h);
           _plotter->add_plottable(p); //give ownership of p to sg::plotter.
         }
+      } else {
+        G4cerr <<
+        "G4ToolsSGSceneHandler::SetPlotterHistograms: cannot get histogram - maybe doesn't exist?"
+        "\n  Maybe this app does not do analysis at all?"
+        << G4endl;
       }
     }
   }}
@@ -813,7 +847,7 @@ void G4ToolsSGSceneHandler::AddPrimitive(const G4Plotter& a_plotter)
 }
 
 void G4ToolsSGSceneHandler::Messenger::SetNewValue(G4UIcommand* a_cmd,G4String) {
-  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  G4VSceneHandler* pSceneHandler = GetVisManager()->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     G4cout << "G4ToolsSGSceneHandler::Messenger::SetNewValue: no current sceneHandler.  Please create one." << G4endl;
     return;

@@ -68,30 +68,42 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   theTotalResult->ProposeWeight(weight);
 
   // For elastic scattering, _any_ result is considered an interaction
-  ClearNumberOfInteractionLengthLeft();
+  theNumberOfInteractionLengthLeft = -1.0;
+  //  ClearNumberOfInteractionLengthLeft();
 
-  G4double kineticEnergy = track.GetKineticEnergy();
+  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  G4double kineticEnergy = dynParticle->GetKineticEnergy();
   G4TrackStatus status = track.GetTrackStatus();
   if(kineticEnergy == 0.0 || track.GetTrackStatus() != fAlive) {
     return theTotalResult;
   }
 
-  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
-  const G4ParticleDefinition* part = dynParticle->GetDefinition();
   const G4Material* material = track.GetMaterial();
+
+  // check only for charged particles
+  if(fXSType != fHadNoIntegral) {
+    mfpKinEnergy = DBL_MAX;
+    G4double xs = aScaleFactor*
+      theCrossSectionDataStore->ComputeCrossSection(dynParticle, material);
+    if(xs < theLastCrossSection*G4UniformRand()) {
+      // No interaction
+      return theTotalResult;
+    }    
+  }
+
+  const G4ParticleDefinition* part = dynParticle->GetDefinition();
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
   const G4Element* elm = 
-    GetCrossSectionDataStore()->SampleZandA(dynParticle, material, *targNucleus);
+    theCrossSectionDataStore->SampleZandA(dynParticle, material, *targNucleus);
 
   // Initialize the hadronic projectile from the track
   G4HadProjectile theProj(track);
   G4HadronicInteraction* hadi = nullptr;
   G4HadFinalState* result = nullptr;
 
-  if(fDiffraction) 
-  {
+  if(nullptr != fDiffraction) {
     G4double ratio = 
       fDiffractionRatio->ComputeRatio(part, kineticEnergy,
 				      targNucleus->GetZ_asInt(),
@@ -108,7 +120,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	  G4ExceptionDescription ed;
 	  aR.Report(ed);
 	  ed << "Call for " << fDiffraction->GetModelName() << G4endl;
-	  ed << "Target element "<< elm->GetName()<<"  Z= " 
+	  ed << part->GetParticleName() 
+	     << " off target element " << elm->GetName() << "  Z= " 
 	     << targNucleus->GetZ_asInt() 
 	     << "  A= " << targNucleus->GetA_asInt() << G4endl;
 	  DumpState(track,"ApplyYourself",ed);
@@ -118,9 +131,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	}
       // Check the result for catastrophic energy non-conservation
       result = CheckResult(theProj, *targNucleus, result);
-
       result->SetTrafoToLab(theProj.GetTrafoToLab());
-      ClearNumberOfInteractionLengthLeft();
 
       // The following method of the base class takes care also of setting
       // the creator model ID for the secondaries that are created
@@ -134,28 +145,25 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   }      
 
   // ordinary elastic scattering
-  try
-    {
-      hadi = ChooseHadronicInteraction( theProj, *targNucleus, material, elm );
-    }
-  catch(G4HadronicException & aE)
-    {
-      G4ExceptionDescription ed;
-      aE.Report(ed);
-      ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targNucleus->GetZ_asInt() << "  A= " 
-	 << targNucleus->GetA_asInt() << G4endl;
-      DumpState(track,"ChooseHadronicInteraction",ed);
-      ed << " No HadronicInteraction found out" << G4endl;
-      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had005", 
-		  FatalException, ed);
-    }
+  hadi = ChooseHadronicInteraction( theProj, *targNucleus, material, elm );
+  if(nullptr == hadi) {
+    G4ExceptionDescription ed;
+    ed << part->GetParticleName() 
+       << " off target element " << elm->GetName() << "  Z= " 
+       << targNucleus->GetZ_asInt() << "  A= " 
+       << targNucleus->GetA_asInt() << G4endl;
+    DumpState(track,"ChooseHadronicInteraction",ed);
+    ed << " No HadronicInteraction found out" << G4endl;
+    G4Exception("G4HadronElasticProcess::PostStepDoIt", "had005", 
+		FatalException, ed);
+    return theTotalResult;
+  }
 
   size_t idx = track.GetMaterialCutsCouple()->GetIndex();
   G4double tcut = (*(G4ProductionCutsTable::GetProductionCutsTable()
 		     ->GetEnergyCutsVector(3)))[idx];
   hadi->SetRecoilEnergyThreshold(tcut);
-
+  /*
   if(verboseLevel>1) {
     G4cout << "G4HadronElasticProcess::PostStepDoIt for " 
 	   << part->GetParticleName()
@@ -164,24 +172,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	   << " A= " << targNucleus->GetA_asInt() 
 	   << " Tcut(MeV)= " << tcut << G4endl; 
   }
-
-  try
-    {
-      result = hadi->ApplyYourself( theProj, *targNucleus);
-    }
-  catch(G4HadronicException & aR)
-    {
-      G4ExceptionDescription ed;
-      aR.Report(ed);
-      ed << "Call for " << hadi->GetModelName() << G4endl;
-      ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targNucleus->GetZ_asInt() 
-	 << "  A= " << targNucleus->GetA_asInt() << G4endl;
-      DumpState(track,"ApplyYourself",ed);
-      ed << " ApplyYourself failed" << G4endl;
-      G4Exception("G4HadronElasticProcess::PostStepDoIt", "had006", 
-		  FatalException, ed);
-    }
+  */
+  result = hadi->ApplyYourself( theProj, *targNucleus);
 
   // Check the result for catastrophic energy non-conservation
   // cannot be applied because is not guranteed that recoil 
@@ -191,7 +183,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   // directions
   G4ThreeVector indir = track.GetMomentumDirection();
   G4ThreeVector outdir = result->GetMomentumChange();
-
+  /*
   if(verboseLevel>1) {
     G4cout << "Efin= " << result->GetEnergyChange()
 	   << " de= " << result->GetLocalEnergyDeposit()
@@ -199,7 +191,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	   << " dir= " << outdir
 	   << G4endl;
   }
-
+  */
   // energies  
   G4double edep = std::max(result->GetLocalEnergyDeposit(), 0.0);
   G4double efinal = std::max(result->GetEnergyChange(), 0.0);
@@ -216,8 +208,10 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     else { status = fStopAndKill; }
     theTotalResult->ProposeTrackStatus(status);
   }
-
-  //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
+  /*
+  G4cout << "Efinal= " << efinal << "  TrackStatus= " << status 
+	 << " time(ns)=" << track.GetGlobalTime()/ns << G4endl;
+  */
   theTotalResult->SetNumberOfSecondaries(0);
 
   // recoil

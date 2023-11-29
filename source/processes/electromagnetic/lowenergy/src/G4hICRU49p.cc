@@ -85,7 +85,7 @@ G4bool G4hICRU49p::HasMaterial(const G4Material* material)
   }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 11 ;    
+  const G4int numberOfMolecula = 11 ;    
   static const G4String name[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",            "CH_4",  
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",  
@@ -101,7 +101,7 @@ G4bool G4hICRU49p::HasMaterial(const G4Material* material)
   }
   
   // Search for the material in the table
-  for (size_t i=0; i<numberOfMolecula; i++) {
+  for (G4int i=0; i<numberOfMolecula; ++i) {
       if (chFormula == name[i]) {
         SetMoleculaNumber(i) ;    
 	return true ;

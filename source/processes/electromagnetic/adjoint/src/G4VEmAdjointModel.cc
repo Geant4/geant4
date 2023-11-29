@@ -411,7 +411,7 @@ G4VEmAdjointModel::ComputeAdjointCrossSectionVectorPerVolumeForScatProj(
 
 //////////////////////////////////////////////////////////////////////////////
 G4double G4VEmAdjointModel::SampleAdjSecEnergyFromCSMatrix(
-  size_t MatrixIndex, G4double aPrimEnergy, G4bool isScatProjToProj)
+  std::size_t MatrixIndex, G4double aPrimEnergy, G4bool isScatProjToProj)
 {
   G4AdjointCSMatrix* theMatrix = (*fCSMatrixProdToProjBackScat)[MatrixIndex];
   if(isScatProjToProj)
@@ -428,18 +428,18 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromCSMatrix(
 
   G4AdjointInterpolator* theInterpolator = G4AdjointInterpolator::GetInstance();
   G4double aLogPrimEnergy                = std::log(aPrimEnergy);
-  size_t ind = theInterpolator->FindPositionForLogVector(
+  G4int ind = (G4int)theInterpolator->FindPositionForLogVector(
     aLogPrimEnergy, *theLogPrimEnergyVector);
 
   G4double aLogPrimEnergy1, aLogPrimEnergy2;
   G4double aLogCS1, aLogCS2;
   G4double log01, log02;
-  std::vector<double>* aLogSecondEnergyVector1 = nullptr;
-  std::vector<double>* aLogSecondEnergyVector2 = nullptr;
-  std::vector<double>* aLogProbVector1         = nullptr;
-  std::vector<double>* aLogProbVector2         = nullptr;
-  std::vector<size_t>* aLogProbVectorIndex1    = nullptr;
-  std::vector<size_t>* aLogProbVectorIndex2    = nullptr;
+  std::vector<G4double>* aLogSecondEnergyVector1 = nullptr;
+  std::vector<G4double>* aLogSecondEnergyVector2 = nullptr;
+  std::vector<G4double>* aLogProbVector1         = nullptr;
+  std::vector<G4double>* aLogProbVector2         = nullptr;
+  std::vector<std::size_t>* aLogProbVectorIndex1    = nullptr;
+  std::vector<std::size_t>* aLogProbVectorIndex2    = nullptr;
 
   theMatrix->GetData(ind, aLogPrimEnergy1, aLogCS1, log01,
                      aLogSecondEnergyVector1, aLogProbVector1,
@@ -539,8 +539,8 @@ void G4VEmAdjointModel::SelectCSMatrix(G4bool isScatProjToProj)
       fLastCS       = fLastAdjointCSForProdToProj;
     }
     G4double SumCS = 0.;
-    size_t ind     = 0;
-    for(size_t i = 0; i < CS_Vs_Element->size(); ++i)
+    std::size_t ind = 0;
+    for(std::size_t i = 0; i < CS_Vs_Element->size(); ++i)
     {
       SumCS += (*CS_Vs_Element)[i];
       if(G4UniformRand() <= SumCS / fLastCS)
@@ -549,7 +549,7 @@ void G4VEmAdjointModel::SelectCSMatrix(G4bool isScatProjToProj)
         break;
       }
     }
-    fCSMatrixUsed = fCurrentMaterial->GetElement(ind)->GetIndex();
+    fCSMatrixUsed = fCurrentMaterial->GetElement((G4int)ind)->GetIndex();
   }
 }
 
@@ -688,7 +688,7 @@ void G4VEmAdjointModel::DefineCurrentMaterial(
   {
     fCurrentCouple   = const_cast<G4MaterialCutsCouple*>(couple);
     fCurrentMaterial = const_cast<G4Material*>(couple->GetMaterial());
-    size_t idx       = 56;
+    std::size_t idx       = 56;
     fTcutSecond      = 1.e-11;
     if(fAdjEquivDirectSecondPart)
     {

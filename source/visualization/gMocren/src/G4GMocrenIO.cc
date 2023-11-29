@@ -894,7 +894,7 @@ bool G4GMocrenIO::storeData4() {
   // number of track 
   if(kPointerToTrackData > 0) {
 
-    int ntrk = kTracks.size();
+    int ntrk = (int)kTracks.size();
     if(kLittleEndianOutput) {
       ofile.write((char *)&ntrk, sizeof(int));
     } else {
@@ -946,7 +946,7 @@ bool G4GMocrenIO::storeData4() {
   //----- detector information -----//
   // number of detectors
   if(kPointerToDetectorData > 0) {
-    int ndet = kDetectors.size();
+    int ndet = (int)kDetectors.size();
     if(kLittleEndianOutput) {
       ofile.write((char *)&ndet, sizeof(int));
     } else {
@@ -1287,7 +1287,7 @@ bool G4GMocrenIO::storeData3() {
 
   //----- track information -----//
   // number of track 
-  int ntrk = kSteps.size();
+  int ntrk = (int)kSteps.size();
   ofile.write((char *)&ntrk, sizeof(int));
   if(DEBUG || kVerbose > 0) {
     G4cout << "# of tracks : "
@@ -1566,7 +1566,7 @@ bool G4GMocrenIO::storeData2() {
 
   //----- track information -----//
   // track
-  int ntrk = kSteps.size();
+  int ntrk = (int)kSteps.size();
   ofile.write((char *)&ntrk, sizeof(int));
   if(DEBUG || kVerbose > 0) {
     G4cout << "# of tracks : "
@@ -2088,7 +2088,7 @@ bool G4GMocrenIO::retrieveData4() {
 	if(i < 5) {
 	  G4cout << i << ": " ;
 	  for(int j = 0; j < 3; j++) G4cout << steps[0][j] << " ";
-	  int nstp = steps.size();
+	  int nstp = (int)steps.size();
 	  G4cout << "<-> ";
 	  for(int j = 3; j < 6; j++) G4cout << steps[nstp-1][j] << " ";
 	  G4cout << "    rgb( ";
@@ -3223,7 +3223,7 @@ void G4GMocrenIO::calcPointers4() {
   }
 
   // pointer to track data
-  int ntrk = kTracks.size();
+  int ntrk = (int)kTracks.size();
   if(ntrk != 0) {
     setPointerToTrackData(pointer);
 
@@ -3240,7 +3240,7 @@ void G4GMocrenIO::calcPointers4() {
 			     << kPointerToTrackData << G4endl;
 
   // pointer to detector data
-  int ndet = kDetectors.size();
+  int ndet = (int)kDetectors.size();
   if(ndet != 0) {
     kPointerToDetectorData = pointer;
   } else {
@@ -3689,7 +3689,7 @@ bool G4GMocrenIO::mergeDoseDist(std::vector<class GMocrenDataPrimitive<double> >
     return false;
   }
 
-  int num = kDose.size();
+  int num = (int)kDose.size();
   std::vector<class GMocrenDataPrimitive<double> >::iterator itr1 = kDose.begin();
   std::vector<class GMocrenDataPrimitive<double> >::iterator itr2 = _dose.begin();
   for(int i = 0; i < num; i++, itr1++, itr2++) {

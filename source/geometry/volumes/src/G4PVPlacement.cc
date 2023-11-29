@@ -47,7 +47,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix* pRot,
   : G4VPhysicalVolume(pRot, tlate, pName, pLogical, pMother),
     fmany(pMany), fcopyNo(pCopyNo)
 {
-  if (pMother)
+  if (pMother != nullptr)
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
@@ -75,8 +75,8 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D& Transform3D,
                       Transform3D.getTranslation(), pName, pLogical, pMother),
     fmany(pMany), fcopyNo(pCopyNo)
 {
-  fallocatedRotM = (GetRotation() != 0);
-  if (pMother)
+  fallocatedRotM = (GetRotation() != nullptr);
+  if (pMother != nullptr)
   {
     G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
     if (pLogical == motherLogical)
@@ -110,8 +110,8 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix* pRot,
                 FatalException, "Cannot place a volume inside itself!");
   }
   SetMotherLogical(pMotherLogical);
-  if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
-  if ((pSurfChk) && (pMotherLogical)) { CheckOverlaps(); }
+  if (pMotherLogical != nullptr) { pMotherLogical->AddDaughter(this); }
+  if ((pSurfChk) && ((pMotherLogical) != nullptr)) { CheckOverlaps(); }
 }
 
 
@@ -137,8 +137,8 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D& Transform3D,
   SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
   fallocatedRotM = (GetRotation() != nullptr);
   SetMotherLogical(pMotherLogical);
-  if (pMotherLogical) { pMotherLogical->AddDaughter(this); }
-  if ((pSurfChk) && (pMotherLogical)) { CheckOverlaps(); }
+  if (pMotherLogical != nullptr) { pMotherLogical->AddDaughter(this); }
+  if ((pSurfChk) && ((pMotherLogical) != nullptr)) { CheckOverlaps(); }
 }
 
 // ----------------------------------------------------------------------
@@ -348,9 +348,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
   G4VSolid* previous = nullptr;
   G4ThreeVector pmin_local(0.,0.,0.), pmax_local(0.,0.,0.);
 
-  for (size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
+  for (std::size_t k = 0; k < motherLog->GetNoDaughters(); ++k)
   {
-    G4VPhysicalVolume* daughter = motherLog->GetDaughter(k);
+    G4VPhysicalVolume* daughter = motherLog->GetDaughter((G4int)k);
     if (daughter == this) continue;
     G4bool check_encapsulation = true;
 
@@ -420,9 +420,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
       };
       G4double dxmin =  kInfinity, dymin =  kInfinity, dzmin =  kInfinity;
       G4double dxmax = -kInfinity, dymax = -kInfinity, dzmax = -kInfinity;
-      for (G4int i = 0; i < 8; ++i)
+      for (const auto & i : pbox)
       {
-        G4ThreeVector p = Td.TransformPoint(pbox[i]);
+        G4ThreeVector p = Td.TransformPoint(i);
         dxmin = std::min(dxmin, p.x());
         dymin = std::min(dymin, p.y());
         dzmin = std::min(dzmin, p.z());

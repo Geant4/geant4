@@ -41,7 +41,7 @@ public:
 
   G4int Entries();
   void AddCollision(G4double time, G4KineticTrack * proj,
-		    G4KineticTrack * target = NULL);
+		    G4KineticTrack * target = nullptr);
   void AddCollision(G4CollisionInitialState * collision)
   {
     theCollisionList->push_back(collision);
@@ -60,26 +60,10 @@ private:
   G4ListOfCollisions * theCollisionList;   //was sorted (by time) vector...
 };
 
-
-
 inline G4int G4CollisionManager::Entries()
 {
-  return theCollisionList->size();
+  return (G4int)theCollisionList->size();
 }
 
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

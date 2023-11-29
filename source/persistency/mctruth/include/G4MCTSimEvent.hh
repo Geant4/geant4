@@ -104,12 +104,12 @@ inline G4MCTSimEvent& G4MCTSimEvent::operator=(const G4MCTSimEvent& right)
 
 inline G4int G4MCTSimEvent::GetNofParticles() const
 {
-  return particleMap.size();
+  return (G4int)particleMap.size();
 }
 
 inline G4int G4MCTSimEvent::GetNofVertices() const
 {
-  return vertexVec.size();
+  return (G4int)vertexVec.size();
 }
 
 // iterators

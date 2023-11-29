@@ -43,23 +43,12 @@
 #include "G4EllipticalTube.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDHead::G4MIRDHead()
-{
-
-}
-
-G4MIRDHead::~G4MIRDHead()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					 const G4String& colourName, G4bool wireFrame, G4bool)
 {
   G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial * material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
   
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
@@ -71,23 +60,23 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
   G4double zcut1 = 0.0 * cm;
   G4double zcut2 = 8.5 * cm;
 
-  G4Ellipsoid* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
+  auto* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
 
   G4double dx = 7.0 * cm;
   G4double dy = 10.0 * cm;
   G4double dz = 7.75 * cm;
  
 
-  G4EllipticalTube* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
+  auto* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
 
-  G4UnionSolid* head = new G4UnionSolid("Head",head2,head1,
-					0, // Rotation 
+  auto* head = new G4UnionSolid("Head",head2,head1,
+					nullptr, // Rotation 
 					G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
-  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"logical" + volumeName,
-						   0, 0,0);
+  auto* logicHead = new G4LogicalVolume(head, soft,"logical" + volumeName,
+				          nullptr, nullptr, nullptr);
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(180.*degree); 
   rm->rotateY(180.*degree); 
   
@@ -103,9 +92,9 @@ G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalV
  
   // Visualization Attributes
 
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
+  auto* HeadVisAtt = new G4VisAttributes(colour);
 
   HeadVisAtt->SetForceSolid(wireFrame);
   // HeadVisAtt->SetLineWidth(0.7* mm);

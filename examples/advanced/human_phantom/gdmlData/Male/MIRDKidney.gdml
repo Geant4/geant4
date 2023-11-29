@@ -112,8 +112,8 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="OneKidney" ax="4.05" by="1.53" cz="4.96" zcut1="-4.96" zcut2="4.96" />
-  <box aunit="cm" lunit="cm" name="SubtrKidney" x="4.96" y="20.00" z="20.00" />
+  <ellipsoid lunit="cm" name="OneKidney" ax="4.05" by="1.53" cz="4.96" zcut1="-4.96" zcut2="4.96" />
+  <box lunit="cm" name="SubtrKidney" x="4.96" y="20.00" z="20.00" />
 
   <union name="UnionKidney">
    <first ref="OneKidney" />

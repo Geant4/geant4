@@ -22,10 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-//
+
 //---------------------------------------------------------------
 //
 // G4LatticeSystems
@@ -33,21 +30,20 @@
 // Class Description:
 //
 
-
 #ifndef G4LatticeSystems_H
 #define G4LatticeSystems_H 1
 
 // Lattice Systems
-enum theLatticeSystemType {
-    Amorphous = -1,
-    Triclinic = 1,
-    Monoclinic = 2,
-    Orthorhombic = 3,
-    Tetragonal = 4,
-    Rhombohedral = 5,
-    Hexagonal = 6,
-    Cubic = 7,
+enum theLatticeSystemType
+{
+  Amorphous = -1,
+  Triclinic = 1,
+  Monoclinic = 2,
+  Orthorhombic = 3,
+  Tetragonal = 4,
+  Rhombohedral = 5,
+  Hexagonal = 6,
+  Cubic = 7,
 };
 
 #endif
-

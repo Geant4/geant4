@@ -48,12 +48,12 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
   using Shape_t = vecgeom::UnplacedGenTrap;
   using Base_t  = G4UAdapter<vecgeom::UnplacedGenTrap>;
 
-  public:  // with description
+  public:
 
     G4UGenericTrap(const G4String& name, G4double halfZ,
                    const std::vector<G4TwoVector>& vertices);
 
-   ~G4UGenericTrap();
+   ~G4UGenericTrap() override;
 
     G4double    GetZHalfLength() const;
     G4int       GetNofVertices() const;
@@ -66,9 +66,7 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
     void        SetZHalfLength(G4double);
     void Initialise(const std::vector<G4TwoVector>& v);
 
-    inline G4GeometryType GetEntityType() const;
-
-  public:  // without description
+    inline G4GeometryType GetEntityType() const override;
 
     G4UGenericTrap(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -79,14 +77,14 @@ class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap>
     G4UGenericTrap& operator=(const G4UGenericTrap& source);
       // Copy constructor and assignment operator.
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   private:
 

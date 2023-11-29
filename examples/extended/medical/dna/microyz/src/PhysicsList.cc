@@ -33,9 +33,10 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
+#include <memory>
+
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
-
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option1.hh"
 #include "G4EmDNAPhysics_option2.hh"
@@ -45,20 +46,14 @@
 #include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
 #include "G4EmDNAPhysics_option8.hh"
-
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-
 #include "G4UserSpecialCuts.hh"
 #include "G4StepLimiter.hh"
-
-// particles
-
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
@@ -66,25 +61,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  fMessenger = new PhysicsListMessenger(this);
-
+  fMessenger = std::make_unique<PhysicsListMessenger>(this);
   SetVerboseLevel(1);
-
-  // EM physics
-  fEmPhysicsList = new G4EmDNAPhysics_option2();
+  fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option2>();
   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
-{
-  delete fMessenger;
-  delete fEmPhysicsList;
-}
+PhysicsList::~PhysicsList()= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -150,63 +137,51 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == "dna") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics>();
          
   } else if (name == "dna_opt1") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option1();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option1>();
          
   } else if (name == "dna_opt2") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option2();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option2>();
          
   } else if (name == "dna_opt3") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option3();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option3>();
          
   } else if (name == "dna_opt4") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option4();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option4>();
          
   } else if (name == "dna_opt5") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option5();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option5>();
          
   } else if (name == "dna_opt6") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option6();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option6>();
          
   } else if (name == "dna_opt7") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option7();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option7>();
          
   } else if (name == "dna_opt8") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmDNAPhysics_option8();
+    fEmPhysicsList = std::make_unique<G4EmDNAPhysics_option8>();
          
   } else if (name == "liv") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmLivermorePhysics();
+    fEmPhysicsList = std::make_unique<G4EmLivermorePhysics>();
          
   } else if (name == "pene") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmPenelopePhysics();
+    fEmPhysicsList = std::make_unique<G4EmPenelopePhysics>();
          
   } else if (name == "emstandard_opt4") {
     fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    fEmPhysicsList = std::make_unique<G4EmStandardPhysics_option4>();
          
   } else {
 

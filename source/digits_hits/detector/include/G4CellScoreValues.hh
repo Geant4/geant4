@@ -44,35 +44,19 @@
 class G4CellScoreValues
 {
  public:
-  G4CellScoreValues()
-    : fSumSL(0)
-    , fSumSLW(0)
-    , fSumSLW_v(0)
-    , fSumSLWE(0)
-    , fSumSLWE_v(0)
-    , fSumTracksEntering(0)
-    , fSumPopulation(0)
-    , fSumCollisions(0)
-    , fSumCollisionsWeight(0)
-    , fNumberWeightedEnergy(0)
-    , fFluxWeightedEnergy(0)
-    , fAverageTrackWeight(0)
-    , fImportance(0)
-  {}
-
-  G4double fSumSL;
-  G4double fSumSLW;
-  G4double fSumSLW_v;
-  G4double fSumSLWE;
-  G4double fSumSLWE_v;
-  G4int fSumTracksEntering;
-  G4int fSumPopulation;
-  G4int fSumCollisions;
-  G4double fSumCollisionsWeight;
-  G4double fNumberWeightedEnergy;
-  G4double fFluxWeightedEnergy;
-  G4double fAverageTrackWeight;
-  G4double fImportance;
+  G4double fSumSL = 0;
+  G4double fSumSLW = 0;
+  G4double fSumSLW_v = 0;
+  G4double fSumSLWE = 0;
+  G4double fSumSLWE_v = 0;
+  G4int fSumTracksEntering = 0;
+  G4int fSumPopulation = 0;
+  G4int fSumCollisions = 0;
+  G4double fSumCollisionsWeight = 0;
+  G4double fNumberWeightedEnergy = 0;
+  G4double fFluxWeightedEnergy = 0;
+  G4double fAverageTrackWeight = 0;
+  G4double fImportance = 0;
 };
 
 #endif

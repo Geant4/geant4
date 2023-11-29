@@ -37,6 +37,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
+#define G4warn G4cout
+
 G4int G4VTreeSceneHandler::fSceneIdCount = 0;
 // Counter for Tree scene handlers.
 
@@ -100,7 +102,7 @@ void G4VTreeSceneHandler::PreAddSolid
       // G4PhysicalVolumeModel sends volumes as it encounters them,
       // i.e., mothers before daughters, in its descent of the
       // geometry tree.  Error!
-      G4cerr << "ERROR: G4VTreeSceneHandler::PreAddSolid: Mother "
+      G4warn << "ERROR: G4VTreeSceneHandler::PreAddSolid: Mother "
 	     << ri->GetPhysicalVolume()->GetName()
 	     << ':' << ri->GetCopyNo()
 	     << " not previously encountered."

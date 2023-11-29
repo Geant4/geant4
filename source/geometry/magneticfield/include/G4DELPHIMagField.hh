@@ -43,14 +43,14 @@
 
 class G4DELPHIMagField : public G4MagneticField
 {
-  public:  // with description
+  public:
                        
     G4DELPHIMagField();
-   ~G4DELPHIMagField();
+   ~G4DELPHIMagField() override;
 
     void GetFieldValue(const G4double yTrack[],
-                             G4double B[]     ) const;
-    G4Field* Clone() const;
+                             G4double B[]     ) const override;
+    G4Field* Clone() const override;
 };
 
 #endif

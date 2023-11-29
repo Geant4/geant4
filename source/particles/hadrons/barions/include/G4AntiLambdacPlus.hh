@@ -51,7 +51,7 @@ class G4AntiLambdacPlus : public G4ParticleDefinition
  private:
    static G4AntiLambdacPlus* theInstance;
    G4AntiLambdacPlus(){}
-   ~G4AntiLambdacPlus(){}
+   ~G4AntiLambdacPlus() override= default;
 
  public:
    static G4AntiLambdacPlus* Definition();

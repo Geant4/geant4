@@ -51,8 +51,6 @@
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 
 G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
-G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 1e7;
 
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
@@ -150,6 +148,7 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
+fDoNotUseDisplayList(false),
 fTopPODL (0)
 {}
 
@@ -230,7 +229,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
 
   if (fThreePassCapable) {
     
-    // Ensure transparent objects are drawn opaque ones and before
+    // Ensure transparent objects are drawn *after* opaque ones and before
     // non-hidden markers.  The problem of blending/transparency/alpha
     // is quite a tricky one - see History of opengl-V07-01-01/2/3.
     if (!(fSecondPassForTransparency || fThirdPassForNonHiddenMarkers)) {
@@ -271,97 +270,40 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
     LoadAtts(visible, holder);
     fPickMap[fPickName] = holder;
   }
-  
-  const G4VSolid* pSolid = 0;
-
-  // Can we re-use a display list?
-  if (isMarker)
-    // It is a marker, which may have its own position relative to fObjectTransformation
-    goto end_of_display_list_reuse_test;
-  if (fpViewer->GetViewParameters().GetVisAttributesModifiers().size())
-    // Touchables have been modified - don't risk re-using display list.
-    goto end_of_display_list_reuse_test;
-  {  // It is a viable candidate for display list re-use
-    G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-    if (pPVModel) {
-      // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
-      // G4PhysicalVolumeModel).
-      G4LogicalVolumeModel* pLVModel =
-      dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
-      if (pLVModel)
-        // Logical volume model - don't re-use.
-        goto end_of_display_list_reuse_test;
-      // If part of the geometry hierarchy, i.e., from a
-      // G4PhysicalVolumeModel, check if a display list already exists for
-      // this solid, re-use it if possible.  We could be smarter, and
-      // recognise repeated branches of the geometry hierarchy, for
-      // example.  But this algorithm should be secure, I think...
-      G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
-      if (!pPV)
-        // It's probably a dummy model, e.g., for a user-drawn hit?
-        goto end_of_display_list_reuse_test;
-      G4LogicalVolume* pLV = pPV->GetLogicalVolume();
-      if (!pLV)
-        // Dummy model again?
-        goto end_of_display_list_reuse_test;
-      pSolid = pLV->GetSolid();
-      EAxis axis = kRho;
-      G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-      if (pCurrentPV -> IsReplicated ()) {
-        G4int nReplicas;
-        G4double width;
-        G4double offset;
-        G4bool consuming;
-        pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-      }
-      // Provided it is not parametrised (because if so, the
-      // solid's parameters might have been changed)...
-      if (!(pCurrentPV -> IsParameterised ()) &&
-          // Provided it is not replicated radially (because if so, the
-          // solid's parameters will have been changed)...
-          !(pCurrentPV -> IsReplicated () && axis == kRho) &&
-          // ...and if the solid has already been rendered...
-          (fSolidMap.find (pSolid) != fSolidMap.end ())) {
-        fDisplayListId = fSolidMap [pSolid];
-        PO po(fDisplayListId,fObjectTransformation);
-        if (isPicking) po.fPickName = fPickName;
-        po.fColour = c;
-        po.fMarkerOrPolyline = isMarkerOrPolyline;
-        fPOList.push_back(po);
-        // No need to test if gl commands are used (result of
-        // ExtraPOProcessing) because we have already decided they will
-        // not, at least not here.  Also, pass a dummy G4Visible since
-        // not relevant for G4PhysicalVolumeModel.
-        (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
-        return false;  // No further processing.
-      }
-    }
-  }
-end_of_display_list_reuse_test:
 
   // Because of our need to control colour of transients (display by
   // time fading), display lists may only cover a single primitive.
   // So display list setup is here.
-  
-  if (fMemoryForDisplayLists) {
-    fDisplayListId = glGenLists (1);
-    if (glGetError() == GL_OUT_OF_MEMORY ||
-	fDisplayListId > fDisplayListLimit) {
-      G4cout <<
-      "********************* WARNING! ********************"
-      "\n*  Display list limit reached in OpenGL."
-      "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
-      "\n*  Current limit: " << fDisplayListLimit << " primitives"
-      ".  Change with \"/vis/ogl/set/displayListLimit\"."
-      "\n***************************************************"
-      << G4endl;
-      fMemoryForDisplayLists = false;
-    }
-  }
-  
-  if (pSolid) fSolidMap [pSolid] = fDisplayListId;
 
-  if (fMemoryForDisplayLists) {
+  if (fDoNotUseDisplayList) {
+
+    glPushMatrix();
+    G4OpenGLTransform3D oglt (fObjectTransformation);
+    glMultMatrixd (oglt.GetGLMatrix ());
+    if (transparency_enabled) {
+      glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+    } else {
+      glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    }
+
+  } else {
+
+    fDisplayListId = glGenLists (1);
+    if (glGetError() == GL_OUT_OF_MEMORY) {
+      static G4int errorCount = 0;
+      if (errorCount < 5) {
+        errorCount++;
+        G4ExceptionDescription ed;
+        ed <<
+        "Error attempting to create an OpenGL display list."
+        "\nCurrent display list id: " << fDisplayListId <<
+        "\nMaybe out of memory?";
+        G4Exception
+        ("G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal","opengl1001",
+         JustWarning,ed);
+      }
+      return false;
+    }
     if (fReadyForTransients) {
       TO to(fDisplayListId, fObjectTransformation);
       if (isPicking) to.fPickName = fPickName;
@@ -417,15 +359,6 @@ end_of_display_list_reuse_test:
       if (!usesGLCommands) return false;
       glNewList (fDisplayListId, GL_COMPILE);
     }
-  } else {  // Out of memory (or being used when display lists not required).
-    glPushMatrix();
-    G4OpenGLTransform3D oglt (fObjectTransformation);
-    glMultMatrixd (oglt.GetGLMatrix ());
-    if (transparency_enabled) {
-      glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
-    } else {
-      glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
-    }
   }
 
   if (fProcessing2D) {
@@ -471,7 +404,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
       "  to allocate display List for fTopPODL - try OpenGL Immediated mode."
            << G4endl;
   }
-  if (fMemoryForDisplayLists) {
+  if (!fDoNotUseDisplayList) {
     glEndList();
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cerr <<
@@ -480,7 +413,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
              << G4endl;
     }
   }
-  if (fReadyForTransients || !fMemoryForDisplayLists) {
+  if (fReadyForTransients || fDoNotUseDisplayList) {
     glPopMatrix();
   }
 }
@@ -608,8 +541,6 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
-
-  fMemoryForDisplayLists = true;
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore ()
@@ -620,8 +551,6 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
-
-  fMemoryForDisplayLists = true;
 
   // Redraw the scene ready for the next event.
   if (fpViewer) {

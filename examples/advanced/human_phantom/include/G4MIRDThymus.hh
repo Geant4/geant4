@@ -41,11 +41,10 @@ class G4MIRDThymus: public G4VOrgan
 {
 public:
 
-  G4MIRDThymus();
-  ~G4MIRDThymus();
+  G4MIRDThymus() = default;
+  ~G4MIRDThymus() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
-				    const G4String&,G4bool, G4bool);
+				    const G4String&,G4bool, G4bool) override;
 
-private:
 };
 #endif

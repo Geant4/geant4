@@ -113,17 +113,25 @@ add_custom_target(validate_sources
   )
 
 #.rst:
-# A custom ``validate_no_module_cycles`` is declared if Python3.9 is available.
-# This runs the geant4_check_module_cycles Python script to check that the
-# source module dependency graph has no cycles. It will fail if any cycles
-# are found, listing the first found to stderr.
+# Custom ``validate_no_module_cycles`` and ``validate_module_consistency`` targets
+# are declared if Python3.9 is available.
+# These runs the geant4_module_check.py Python script to check for cycles or
+# inconsistencies in the module dependency graph and declarations.
 find_package(Python3 3.9 QUIET COMPONENTS Interpreter)
 if(Python3_FOUND)
+  set(G4MODULE_VALIDATION_CMD Python3::Interpreter
+    ${PROJECT_SOURCE_DIR}/cmake/Modules/geant4_module_check.py 
+    -db ${PROJECT_BINARY_DIR}/G4ModuleInterfaceMap.csv)
+
   add_custom_target(validate_no_module_cycles
-    COMMAND Python3::Interpreter
-            ${PROJECT_SOURCE_DIR}/cmake/Modules/geant4_check_module_cycles.py
-            -f ${PROJECT_BINARY_DIR}/G4ModuleAdjacencyList.txt
+    COMMAND ${G4MODULE_VALIDATION_CMD} --find-cycles
     COMMENT "Checking for cycles in declared source module dependencies"
+    )
+  
+  add_custom_target(validate_module_consistency
+    COMMAND ${G4MODULE_VALIDATION_CMD} --find-inconsistencies
+    COMMENT "Checking for inconsistencies in declared source module dependencies"
+    USES_TERMINAL
     )
 endif()
 
@@ -138,8 +146,8 @@ set(CMAKE_INSTALL_DATAROOTDIR "share" CACHE PATH
   "Read-only architecture-independent data root (share)")
 
 set(CMAKE_INSTALL_DATADIR
-  "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}" CACHE PATH
-  "Read-only architecture-independent data (DATAROOTDIR/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION})")
+  "${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}" CACHE PATH
+  "Read-only architecture-independent data (DATAROOTDIR/${PROJECT_NAME})")
 
 #
 # CMake's builtin `GNUInstallDirs` module is used to set and provide variables

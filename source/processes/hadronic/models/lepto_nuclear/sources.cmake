@@ -7,6 +7,8 @@ geant4_add_module(G4had_lept_nuclear
     G4ANuElNucleusNcModel.hh
     G4ANuMuNucleusCcModel.hh
     G4ANuMuNucleusNcModel.hh
+    G4ANuTauNucleusCcModel.hh
+    G4ANuTauNucleusNcModel.hh
     G4ElectroVDNuclearModel.hh
     G4MuonVDNuclearModel.hh
     G4NeutrinoElectronCcModel.hh
@@ -15,11 +17,15 @@ geant4_add_module(G4had_lept_nuclear
     G4NuElNucleusNcModel.hh
     G4NuMuNucleusCcModel.hh
     G4NuMuNucleusNcModel.hh
+    G4NuTauNucleusCcModel.hh
+    G4NuTauNucleusNcModel.hh
   SOURCES
     G4ANuElNucleusCcModel.cc
     G4ANuElNucleusNcModel.cc
     G4ANuMuNucleusCcModel.cc
     G4ANuMuNucleusNcModel.cc
+    G4ANuTauNucleusCcModel.cc
+    G4ANuTauNucleusNcModel.cc
     G4ElectroVDNuclearModel.cc
     G4MuonVDNuclearModel.cc
     G4NeutrinoElectronCcModel.cc
@@ -27,7 +33,9 @@ geant4_add_module(G4had_lept_nuclear
     G4NuElNucleusCcModel.cc
     G4NuElNucleusNcModel.cc
     G4NuMuNucleusCcModel.cc
-    G4NuMuNucleusNcModel.cc)
+    G4NuMuNucleusNcModel.cc
+    G4NuTauNucleusCcModel.cc
+    G4NuTauNucleusNcModel.cc)
 
 geant4_module_link_libraries(G4had_lept_nuclear
   PUBLIC

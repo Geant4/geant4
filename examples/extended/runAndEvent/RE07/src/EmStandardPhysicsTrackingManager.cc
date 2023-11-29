@@ -29,9 +29,21 @@
 // Original author: Jonas Hahnfeld, 2021
 
 #include "EmStandardPhysicsTrackingManager.hh"
-#include "TrackingManagerHelper.hh"
 
+#include "G4ComptonScattering.hh"
 #include "G4CoulombScattering.hh"
+#include "G4Electron.hh"
+#include "G4EmParameters.hh"
+#include "G4Gamma.hh"
+#include "G4GammaConversion.hh"
+#include "G4KleinNishinaModel.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4Positron.hh"
+#include "G4RayleighScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UrbanMscModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4eBremsstrahlung.hh"
@@ -40,46 +52,32 @@
 #include "G4eMultipleScattering.hh"
 #include "G4eplusAnnihilation.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4KleinNishinaModel.hh"
-#include "G4LivermorePhotoElectricModel.hh"
-#include "G4LivermorePolarizedRayleighModel.hh"
-#include "G4PhotoElectricAngularGeneratorPolarized.hh"
-#include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
+#include "TrackingManagerHelper.hh"
 
-#include "G4EmParameters.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "G4Electron.hh"
-#include "G4Gamma.hh"
-#include "G4Positron.hh"
-
-EmStandardPhysicsTrackingManager*
-  EmStandardPhysicsTrackingManager::masterTrackingManager = nullptr;
+EmStandardPhysicsTrackingManager* EmStandardPhysicsTrackingManager::fMasterTrackingManager =
+  nullptr;
 
 EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
 {
-  G4EmParameters* param    = G4EmParameters::Instance();
+  G4EmParameters* param = G4EmParameters::Instance();
   G4double highEnergyLimit = param->MscEnergyLimit();
-  G4bool polar             = param->EnablePolarisation();
+  G4bool polar = param->EnablePolarisation();
 
   // e-
   {
     G4eMultipleScattering* msc = new G4eMultipleScattering;
-    G4UrbanMscModel* msc1      = new G4UrbanMscModel;
-    G4WentzelVIModel* msc2     = new G4WentzelVIModel;
+    G4UrbanMscModel* msc1 = new G4UrbanMscModel;
+    G4WentzelVIModel* msc2 = new G4WentzelVIModel;
     msc1->SetHighEnergyLimit(highEnergyLimit);
     msc2->SetLowEnergyLimit(highEnergyLimit);
     msc->SetEmModel(msc1);
     msc->SetEmModel(msc2);
     fElectronProcs.msc = msc;
 
-    fElectronProcs.ioni  = new G4eIonisation;
+    fElectronProcs.ioni = new G4eIonisation;
     fElectronProcs.brems = new G4eBremsstrahlung;
 
-    G4CoulombScattering* ss        = new G4CoulombScattering;
+    G4CoulombScattering* ss = new G4CoulombScattering;
     G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel;
     ssm->SetLowEnergyLimit(highEnergyLimit);
     ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -91,19 +89,19 @@ EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
   // e+
   {
     G4eMultipleScattering* msc = new G4eMultipleScattering;
-    G4UrbanMscModel* msc1      = new G4UrbanMscModel;
-    G4WentzelVIModel* msc2     = new G4WentzelVIModel;
+    G4UrbanMscModel* msc1 = new G4UrbanMscModel;
+    G4WentzelVIModel* msc2 = new G4WentzelVIModel;
     msc1->SetHighEnergyLimit(highEnergyLimit);
     msc2->SetLowEnergyLimit(highEnergyLimit);
     msc->SetEmModel(msc1);
     msc->SetEmModel(msc2);
     fPositronProcs.msc = msc;
 
-    fPositronProcs.ioni         = new G4eIonisation;
-    fPositronProcs.brems        = new G4eBremsstrahlung;
+    fPositronProcs.ioni = new G4eIonisation;
+    fPositronProcs.brems = new G4eBremsstrahlung;
     fPositronProcs.annihilation = new G4eplusAnnihilation;
 
-    G4CoulombScattering* ss        = new G4CoulombScattering;
+    G4CoulombScattering* ss = new G4CoulombScattering;
     G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel;
     ssm->SetLowEnergyLimit(highEnergyLimit);
     ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -114,18 +112,15 @@ EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
 
   {
     G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-    G4VEmModel* peModel       = new G4LivermorePhotoElectricModel;
-    if(polar)
-    {
-      peModel->SetAngularDistribution(
-        new G4PhotoElectricAngularGeneratorPolarized);
+    G4VEmModel* peModel = new G4LivermorePhotoElectricModel;
+    if (polar) {
+      peModel->SetAngularDistribution(new G4PhotoElectricAngularGeneratorPolarized);
     }
     pe->SetEmModel(peModel);
     fGammaProcs.pe = pe;
 
     G4ComptonScattering* cs = new G4ComptonScattering;
-    if(polar)
-    {
+    if (polar) {
       cs->SetEmModel(new G4KleinNishinaModel);
     }
     fGammaProcs.compton = cs;
@@ -133,77 +128,58 @@ EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
     fGammaProcs.conversion = new G4GammaConversion;
 
     G4RayleighScattering* rl = new G4RayleighScattering;
-    if(polar)
-    {
+    if (polar) {
       rl->SetEmModel(new G4LivermorePolarizedRayleighModel);
     }
     fGammaProcs.rayleigh = rl;
   }
 
-  if(masterTrackingManager == nullptr)
-  {
-    masterTrackingManager = this;
+  if (fMasterTrackingManager == nullptr) {
+    fMasterTrackingManager = this;
   }
-  else
-  {
-    fElectronProcs.msc->SetMasterProcess(
-      masterTrackingManager->fElectronProcs.msc);
-    fElectronProcs.ss->SetMasterProcess(
-      masterTrackingManager->fElectronProcs.ss);
-    fElectronProcs.ioni->SetMasterProcess(
-      masterTrackingManager->fElectronProcs.ioni);
-    fElectronProcs.brems->SetMasterProcess(
-      masterTrackingManager->fElectronProcs.brems);
+  else {
+    fElectronProcs.msc->SetMasterProcess(fMasterTrackingManager->fElectronProcs.msc);
+    fElectronProcs.ss->SetMasterProcess(fMasterTrackingManager->fElectronProcs.ss);
+    fElectronProcs.ioni->SetMasterProcess(fMasterTrackingManager->fElectronProcs.ioni);
+    fElectronProcs.brems->SetMasterProcess(fMasterTrackingManager->fElectronProcs.brems);
 
-    fPositronProcs.msc->SetMasterProcess(
-      masterTrackingManager->fPositronProcs.msc);
-    fPositronProcs.ss->SetMasterProcess(
-      masterTrackingManager->fPositronProcs.ss);
-    fPositronProcs.ioni->SetMasterProcess(
-      masterTrackingManager->fPositronProcs.ioni);
-    fPositronProcs.brems->SetMasterProcess(
-      masterTrackingManager->fPositronProcs.brems);
+    fPositronProcs.msc->SetMasterProcess(fMasterTrackingManager->fPositronProcs.msc);
+    fPositronProcs.ss->SetMasterProcess(fMasterTrackingManager->fPositronProcs.ss);
+    fPositronProcs.ioni->SetMasterProcess(fMasterTrackingManager->fPositronProcs.ioni);
+    fPositronProcs.brems->SetMasterProcess(fMasterTrackingManager->fPositronProcs.brems);
     fPositronProcs.annihilation->SetMasterProcess(
-      masterTrackingManager->fPositronProcs.annihilation);
+      fMasterTrackingManager->fPositronProcs.annihilation);
 
-    fGammaProcs.pe->SetMasterProcess(masterTrackingManager->fGammaProcs.pe);
-    fGammaProcs.compton->SetMasterProcess(
-      masterTrackingManager->fGammaProcs.compton);
-    fGammaProcs.conversion->SetMasterProcess(
-      masterTrackingManager->fGammaProcs.conversion);
-    fGammaProcs.rayleigh->SetMasterProcess(
-      masterTrackingManager->fGammaProcs.rayleigh);
+    fGammaProcs.pe->SetMasterProcess(fMasterTrackingManager->fGammaProcs.pe);
+    fGammaProcs.compton->SetMasterProcess(fMasterTrackingManager->fGammaProcs.compton);
+    fGammaProcs.conversion->SetMasterProcess(fMasterTrackingManager->fGammaProcs.conversion);
+    fGammaProcs.rayleigh->SetMasterProcess(fMasterTrackingManager->fGammaProcs.rayleigh);
   }
 }
 
 EmStandardPhysicsTrackingManager::~EmStandardPhysicsTrackingManager()
 {
-  if(masterTrackingManager == this)
-  {
-    masterTrackingManager = nullptr;
+  if (fMasterTrackingManager == this) {
+    fMasterTrackingManager = nullptr;
   }
 }
 
-void EmStandardPhysicsTrackingManager::BuildPhysicsTable(
-  const G4ParticleDefinition& part)
+void EmStandardPhysicsTrackingManager::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  if(&part == G4Electron::Definition())
-  {
+  if (&part == G4Electron::Definition()) {
     fElectronProcs.msc->BuildPhysicsTable(part);
     fElectronProcs.ioni->BuildPhysicsTable(part);
     fElectronProcs.brems->BuildPhysicsTable(part);
     fElectronProcs.ss->BuildPhysicsTable(part);
   }
-  else if(&part == G4Positron::Definition())
-  {
+  else if (&part == G4Positron::Definition()) {
     fPositronProcs.msc->BuildPhysicsTable(part);
     fPositronProcs.ioni->BuildPhysicsTable(part);
     fPositronProcs.brems->BuildPhysicsTable(part);
     fPositronProcs.annihilation->BuildPhysicsTable(part);
     fPositronProcs.ss->BuildPhysicsTable(part);
   }
-  else if(&part == G4Gamma::Definition())
-  {
+  else if (&part == G4Gamma::Definition()) {
     fGammaProcs.pe->BuildPhysicsTable(part);
     fGammaProcs.compton->BuildPhysicsTable(part);
     fGammaProcs.conversion->BuildPhysicsTable(part);
@@ -211,26 +187,22 @@ void EmStandardPhysicsTrackingManager::BuildPhysicsTable(
   }
 }
 
-void EmStandardPhysicsTrackingManager::PreparePhysicsTable(
-  const G4ParticleDefinition& part)
+void EmStandardPhysicsTrackingManager::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(&part == G4Electron::Definition())
-  {
+  if (&part == G4Electron::Definition()) {
     fElectronProcs.msc->PreparePhysicsTable(part);
     fElectronProcs.ioni->PreparePhysicsTable(part);
     fElectronProcs.brems->PreparePhysicsTable(part);
     fElectronProcs.ss->PreparePhysicsTable(part);
   }
-  else if(&part == G4Positron::Definition())
-  {
+  else if (&part == G4Positron::Definition()) {
     fPositronProcs.msc->PreparePhysicsTable(part);
     fPositronProcs.ioni->PreparePhysicsTable(part);
     fPositronProcs.brems->PreparePhysicsTable(part);
     fPositronProcs.annihilation->PreparePhysicsTable(part);
     fPositronProcs.ss->PreparePhysicsTable(part);
   }
-  else if(&part == G4Gamma::Definition())
-  {
+  else if (&part == G4Gamma::Definition()) {
     fGammaProcs.pe->PreparePhysicsTable(part);
     fGammaProcs.compton->PreparePhysicsTable(part);
     fGammaProcs.conversion->PreparePhysicsTable(part);
@@ -243,9 +215,7 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
   class ElectronPhysics final : public TrackingManagerHelper::Physics
   {
    public:
-    ElectronPhysics(EmStandardPhysicsTrackingManager& mgr)
-      : fMgr(mgr)
-    {}
+    ElectronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
     void StartTracking(G4Track* aTrack) override
     {
@@ -276,49 +246,40 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
       G4GPILSelection selection;
 
       fProposedStep = DBL_MAX;
-      fSelected     = -1;
+      fSelected = -1;
 
-      physIntLength =
-        electronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = electronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 0;
+        fSelected = 0;
       }
 
-      physIntLength = electronProcs.brems->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = electronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 1;
+        fSelected = 1;
       }
 
-      physIntLength = electronProcs.ioni->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = electronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 2;
+        fSelected = 2;
       }
 
       physIntLength = electronProcs.ioni->AlongStepGPIL(
         track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if(physIntLength < fProposedStep)
-      {
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = -1;
+        fSelected = -1;
       }
 
       physIntLength = electronProcs.msc->AlongStepGPIL(
         track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if(physIntLength < fProposedStep)
-      {
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
         // Check if MSC actually wants to win, in most cases it only limits the
         // step size.
-        if(selection == CandidateForSelection)
-        {
+        if (selection == CandidateForSelection) {
           fSelected = -1;
         }
       }
@@ -328,12 +289,10 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
 
     void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
     {
-      if(step.GetStepLength() == fProposedStep)
-      {
+      if (step.GetStepLength() == fProposedStep) {
         step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
       }
-      else
-      {
+      else {
         // Remember that the step was limited by geometry.
         fSelected = -1;
       }
@@ -353,31 +312,28 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
       fPreviousStepLength = step.GetStepLength();
     }
 
-    void PostStepDoIt(G4Track& track, G4Step& step,
-                      G4TrackVector& secondaries) override
+    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
     {
-      if(fSelected < 0)
-      {
+      if (fSelected < 0) {
         return;
       }
       step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
 
-      auto& electronProcs               = fMgr.fElectronProcs;
-      G4VProcess* process               = nullptr;
+      auto& electronProcs = fMgr.fElectronProcs;
+      G4VProcess* process = nullptr;
       G4VParticleChange* particleChange = nullptr;
 
-      switch(fSelected)
-      {
+      switch (fSelected) {
         case 0:
-          process        = electronProcs.ss;
+          process = electronProcs.ss;
           particleChange = electronProcs.ss->PostStepDoIt(track, step);
           break;
         case 1:
-          process        = electronProcs.brems;
+          process = electronProcs.brems;
           particleChange = electronProcs.brems->PostStepDoIt(track, step);
           break;
         case 2:
-          process        = electronProcs.ioni;
+          process = electronProcs.ioni;
           particleChange = electronProcs.ioni->PostStepDoIt(track, step);
           break;
       }
@@ -386,8 +342,7 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
       step.UpdateTrack();
 
       int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for(int i = 0; i < numSecondaries; i++)
-      {
+      for (int i = 0; i < numSecondaries; i++) {
         G4Track* secondary = particleChange->GetSecondary(i);
         secondary->SetParentID(track.GetTrackID());
         secondary->SetCreatorProcess(process);
@@ -414,9 +369,7 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
   class PositronPhysics final : public TrackingManagerHelper::Physics
   {
    public:
-    PositronPhysics(EmStandardPhysicsTrackingManager& mgr)
-      : fMgr(mgr)
-    {}
+    PositronPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
     void StartTracking(G4Track* aTrack) override
     {
@@ -449,57 +402,47 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
       G4GPILSelection selection;
 
       fProposedStep = DBL_MAX;
-      fSelected     = -1;
+      fSelected = -1;
+
+      physIntLength = positronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
+        fProposedStep = physIntLength;
+        fSelected = 0;
+      }
 
       physIntLength =
-        positronProcs.ss->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+        positronProcs.annihilation->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 0;
+        fSelected = 1;
       }
 
-      physIntLength = positronProcs.annihilation->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = positronProcs.brems->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 1;
+        fSelected = 2;
       }
 
-      physIntLength = positronProcs.brems->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = positronProcs.ioni->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 2;
-      }
-
-      physIntLength = positronProcs.ioni->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
-        fProposedStep = physIntLength;
-        fSelected     = 3;
+        fSelected = 3;
       }
 
       physIntLength = positronProcs.ioni->AlongStepGPIL(
         track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if(physIntLength < fProposedStep)
-      {
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = -1;
+        fSelected = -1;
       }
 
       physIntLength = positronProcs.msc->AlongStepGPIL(
         track, fPreviousStepLength, fProposedStep, proposedSafety, &selection);
-      if(physIntLength < fProposedStep)
-      {
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
         // Check if MSC actually wants to win, in most cases it only limits the
         // step size.
-        if(selection == CandidateForSelection)
-        {
+        if (selection == CandidateForSelection) {
           fSelected = -1;
         }
       }
@@ -509,12 +452,10 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
 
     void AlongStepDoIt(G4Track& track, G4Step& step, G4TrackVector&) override
     {
-      if(step.GetStepLength() == fProposedStep)
-      {
+      if (step.GetStepLength() == fProposedStep) {
         step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
       }
-      else
-      {
+      else {
         // Remember that the step was limited by geometry.
         fSelected = -1;
       }
@@ -534,11 +475,9 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
       fPreviousStepLength = step.GetStepLength();
     }
 
-    void PostStepDoIt(G4Track& track, G4Step& step,
-                      G4TrackVector& secondaries) override
+    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
     {
-      if(fSelected < 0)
-      {
+      if (fSelected < 0) {
         return;
       }
       step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
@@ -547,23 +486,21 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
       G4VProcess* process;
       G4VParticleChange* particleChange = nullptr;
 
-      switch(fSelected)
-      {
+      switch (fSelected) {
         case 0:
-          process        = positronProcs.ss;
+          process = positronProcs.ss;
           particleChange = positronProcs.ss->PostStepDoIt(track, step);
           break;
         case 1:
           process = positronProcs.annihilation;
-          particleChange =
-            positronProcs.annihilation->PostStepDoIt(track, step);
+          particleChange = positronProcs.annihilation->PostStepDoIt(track, step);
           break;
         case 2:
-          process        = positronProcs.brems;
+          process = positronProcs.brems;
           particleChange = positronProcs.brems->PostStepDoIt(track, step);
           break;
         case 3:
-          process        = positronProcs.ioni;
+          process = positronProcs.ioni;
           particleChange = positronProcs.ioni->PostStepDoIt(track, step);
           break;
       }
@@ -572,8 +509,7 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
       step.UpdateTrack();
 
       int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for(int i = 0; i < numSecondaries; i++)
-      {
+      for (int i = 0; i < numSecondaries; i++) {
         G4Track* secondary = particleChange->GetSecondary(i);
         secondary->SetParentID(track.GetTrackID());
         secondary->SetCreatorProcess(process);
@@ -586,19 +522,16 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
 
     G4bool HasAtRestProcesses() override { return true; }
 
-    void AtRestDoIt(G4Track& track, G4Step& step,
-                    G4TrackVector& secondaries) override
+    void AtRestDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
     {
       auto& positronProcs = fMgr.fPositronProcs;
       // Annihilate the positron at rest.
-      G4VParticleChange* particleChange =
-        positronProcs.annihilation->AtRestDoIt(track, step);
+      G4VParticleChange* particleChange = positronProcs.annihilation->AtRestDoIt(track, step);
       particleChange->UpdateStepForAtRest(&step);
       step.UpdateTrack();
 
       int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for(int i = 0; i < numSecondaries; i++)
-      {
+      for (int i = 0; i < numSecondaries; i++) {
         G4Track* secondary = particleChange->GetSecondary(i);
         secondary->SetParentID(track.GetTrackID());
         secondary->SetCreatorProcess(positronProcs.annihilation);
@@ -625,9 +558,7 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
   class GammaPhysics final : public TrackingManagerHelper::Physics
   {
    public:
-    GammaPhysics(EmStandardPhysicsTrackingManager& mgr)
-      : fMgr(mgr)
-    {}
+    GammaPhysics(EmStandardPhysicsTrackingManager& mgr) : fMgr(mgr) {}
 
     void StartTracking(G4Track* aTrack) override
     {
@@ -657,38 +588,30 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
       G4ForceCondition condition;
 
       fProposedStep = DBL_MAX;
-      fSelected     = -1;
+      fSelected = -1;
 
-      physIntLength = gammaProcs.rayleigh->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = gammaProcs.rayleigh->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 0;
+        fSelected = 0;
       }
 
-      physIntLength = gammaProcs.conversion->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = gammaProcs.conversion->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 1;
+        fSelected = 1;
       }
 
-      physIntLength = gammaProcs.compton->PostStepGPIL(
-        track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = gammaProcs.compton->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 2;
+        fSelected = 2;
       }
 
-      physIntLength =
-        gammaProcs.pe->PostStepGPIL(track, fPreviousStepLength, &condition);
-      if(physIntLength < fProposedStep)
-      {
+      physIntLength = gammaProcs.pe->PostStepGPIL(track, fPreviousStepLength, &condition);
+      if (physIntLength < fProposedStep) {
         fProposedStep = physIntLength;
-        fSelected     = 3;
+        fSelected = 3;
       }
 
       return fProposedStep;
@@ -696,47 +619,42 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
 
     void AlongStepDoIt(G4Track&, G4Step& step, G4TrackVector&) override
     {
-      if(step.GetStepLength() == fProposedStep)
-      {
+      if (step.GetStepLength() == fProposedStep) {
         step.GetPostStepPoint()->SetStepStatus(fAlongStepDoItProc);
       }
-      else
-      {
+      else {
         // Remember that the step was limited by geometry.
         fSelected = -1;
       }
       fPreviousStepLength = step.GetStepLength();
     }
 
-    void PostStepDoIt(G4Track& track, G4Step& step,
-                      G4TrackVector& secondaries) override
+    void PostStepDoIt(G4Track& track, G4Step& step, G4TrackVector& secondaries) override
     {
-      if(fSelected < 0)
-      {
+      if (fSelected < 0) {
         return;
       }
       step.GetPostStepPoint()->SetStepStatus(fPostStepDoItProc);
 
-      auto& gammaProcs                  = fMgr.fGammaProcs;
-      G4VProcess* process               = nullptr;
+      auto& gammaProcs = fMgr.fGammaProcs;
+      G4VProcess* process = nullptr;
       G4VParticleChange* particleChange = nullptr;
 
-      switch(fSelected)
-      {
+      switch (fSelected) {
         case 0:
-          process        = gammaProcs.rayleigh;
+          process = gammaProcs.rayleigh;
           particleChange = gammaProcs.rayleigh->PostStepDoIt(track, step);
           break;
         case 1:
-          process        = gammaProcs.conversion;
+          process = gammaProcs.conversion;
           particleChange = gammaProcs.conversion->PostStepDoIt(track, step);
           break;
         case 2:
-          process        = gammaProcs.compton;
+          process = gammaProcs.compton;
           particleChange = gammaProcs.compton->PostStepDoIt(track, step);
           break;
         case 3:
-          process        = gammaProcs.pe;
+          process = gammaProcs.pe;
           particleChange = gammaProcs.pe->PostStepDoIt(track, step);
           break;
       }
@@ -745,8 +663,7 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
       step.UpdateTrack();
 
       int numSecondaries = particleChange->GetNumberOfSecondaries();
-      for(int i = 0; i < numSecondaries; i++)
-      {
+      for (int i = 0; i < numSecondaries; i++) {
         G4Track* secondary = particleChange->GetSecondary(i);
         secondary->SetParentID(track.GetTrackID());
         secondary->SetCreatorProcess(process);
@@ -772,16 +689,13 @@ void EmStandardPhysicsTrackingManager::HandOverOneTrack(G4Track* aTrack)
 {
   const G4ParticleDefinition* part = aTrack->GetParticleDefinition();
 
-  if(part == G4Electron::Definition())
-  {
+  if (part == G4Electron::Definition()) {
     TrackElectron(aTrack);
   }
-  else if(part == G4Positron::Definition())
-  {
+  else if (part == G4Positron::Definition()) {
     TrackPositron(aTrack);
   }
-  else if(part == G4Gamma::Definition())
-  {
+  else if (part == G4Gamma::Definition()) {
     TrackGamma(aTrack);
   }
 

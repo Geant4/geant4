@@ -276,6 +276,41 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|.*Clang")
     geant4_add_feature(GEANT4_BUILD_SANITIZER "Compiling/linking with sanitizer '${GEANT4_BUILD_SANITIZER}'")
   endif()
 endif()
+
+#.rst:
+# - ``GEANT4_BUILD_ENABLE_ASSERTIONS``
+#   - Build libraries with assertions enabled even in release build types (Release, RelWithDebInfo, MinSizeRel)
+#
+option(GEANT4_BUILD_ENABLE_ASSERTIONS "Enable assertions regardless of build mode" OFF)
+geant4_add_feature(GEANT4_BUILD_ENABLE_ASSERTIONS "Compiling Geant4 with assertions enabled in all build types")
+mark_as_advanced(GEANT4_BUILD_ENABLE_ASSERTIONS)
+
+# "Dumb" strip of NDEBUG definition from build type flags
+if(GEANT4_BUILD_ENABLE_ASSERTIONS)
+  foreach(__build_type Release MinSizeRel RelWithDebInfo)
+    string(TOUPPER ${__build_type} __build_type_uc)
+    foreach(__lang C CXX)
+      set(FLAGSET_TO_MODIFY "CMAKE_${__lang}_FLAGS_${__build_type_uc}")
+      string(REGEX REPLACE "(^| )[/-]D *NDEBUG($| )" " " new_flags "${${FLAGSET_TO_MODIFY}}")
+      set(${FLAGSET_TO_MODIFY} "${new_flags}")
+    endforeach()
+  endforeach()
+endif()
+
+# Copy .clang-tidy file to build dir
+# - clang-tidy/run-clang-tidy state that by default:
+#
+#   "clang-tidy will attempt to find a file named .clang-tidy for each source file in its parent directories."
+#
+#   Whilst this does appear to be the case, `run-clang-tidy` will report enabled checks
+#   as the default set, or that of any .clang-tidy found in parent directories of the build dir
+#   To avoid confusion, copy .clang-tidy into build directory so that run-clang-tidy
+#   should report correctly
+#
+if(EXISTS "${PROJECT_SOURCE_DIR}/.clang-tidy")
+  configure_file("${PROJECT_SOURCE_DIR}/.clang-tidy" "${PROJECT_BINARY_DIR}/.clang-tidy" COPYONLY)
+endif()
+
 #-----------------------------------------------------------------------
 # Multithreading
 #-----------------------------------------------------------------------
@@ -380,7 +415,7 @@ mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
 if(UNIX)
   option(GEANT4_BUILD_BUILTIN_BACKTRACE
     "Enable automatic G4Backtrace signal handling in G4RunManager. Switch off for applications implementing their own signal handling"
-    ON)
+    OFF)
   mark_as_advanced(GEANT4_BUILD_BUILTIN_BACKTRACE)
 endif()
 

@@ -40,24 +40,6 @@ G4CsvNtupleFileManager::G4CsvNtupleFileManager(const G4AnalysisManagerState& sta
 {}
 
 //
-// private methods
-//
-
-//_____________________________________________________________________________
-G4bool G4CsvNtupleFileManager::CloseNtupleFiles()
-{
-  // Close ntuple files
-
-  auto result = true;
-  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
-  for ( auto ntupleDescription : ntupleVector) {
-    result &= fFileManager->CloseNtupleFile(ntupleDescription);
-  }
-
-  return result;
-}
-
-//
 // public methods
 //
 
@@ -88,23 +70,29 @@ G4bool G4CsvNtupleFileManager::ActionAtOpenFile(const G4String& /*fileName*/)
 //_____________________________________________________________________________
 G4bool G4CsvNtupleFileManager::ActionAtWrite()
 {
-  return true;
+  auto result = true;
+
+  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
+
+  for ( auto ntupleDescription : ntupleVector ) {
+    if (ntupleDescription->GetNtuple() != nullptr) {
+      // Notify not empty file
+      result &= fFileManager->NotifyNtupleFile(ntupleDescription);
+    }
+  }
+
+  return result;
 }
 
 //_____________________________________________________________________________
-G4bool G4CsvNtupleFileManager::ActionAtCloseFile(G4bool reset)
+G4bool G4CsvNtupleFileManager::ActionAtCloseFile()
 {
   auto result = true;
 
-  // close ntuple files
-  result &= CloseNtupleFiles();
-
-  if ( ! reset ) {
-    // The ntuples must be always reset when closing file)
-    result = Reset();
-    if ( ! result ) {
-      Warn("Resetting data failed", fkClass, "ActionAtCloseFile");
-    }
+  // Close ntuple files
+  auto ntupleVector = fNtupleManager->GetNtupleDescriptionVector();
+  for ( auto ntupleDescription : ntupleVector) {
+    result &= fFileManager->CloseNtupleFile(ntupleDescription);
   }
 
   return result;

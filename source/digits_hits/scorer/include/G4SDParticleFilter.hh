@@ -51,7 +51,7 @@ class G4ParticleDefinition;
 
 class G4SDParticleFilter : public G4VSDFilter
 {
- public:  // with description
+ public:
   G4SDParticleFilter(G4String name);
   G4SDParticleFilter(G4String name, const G4String& particleName);
   G4SDParticleFilter(G4String name, const std::vector<G4String>& particleNames);
@@ -60,10 +60,9 @@ class G4SDParticleFilter : public G4VSDFilter
   // Constructors. Filter name and particle's name.
   //
 
-  virtual ~G4SDParticleFilter();
+  ~G4SDParticleFilter() override = default;
 
- public:  // with description
-  virtual G4bool Accept(const G4Step*) const;
+  G4bool Accept(const G4Step*) const override;
 
   void add(const G4String& particleName);
   // set method for acceptable particle name.

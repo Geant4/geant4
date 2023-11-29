@@ -1,20 +1,168 @@
--------------------------------------------------------------------
+# Category opengl History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-           Category History file for visualization/OpenGL
-           ----------------------------------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+# 2023-05-31 Ben Morgan (opengl-V11-01-09)
+- Remove support for Qt < 5.9
+  - Clarify remaining version checks using QT_VERSION_CHECK instead of raw hex
+- Add inclusion of qdesktopwidget header required by Qt < 5.10
+
+## 2023-05-16 John Allison (opengl-V11-01-08)
+- G4OpenGLQtViewer: Disable the "old" scene tree.
+  - Comment out just two lines:
+    - Prevent G4OpenGLQtViewer overwriting the "new" scene tree.
+    - Prevent G4OpenGLQtViewer registering the "old" widget.
+  - The problem is G4OpenGLQtViewer removes the "new" scene tree and
+    registers the "old" one, not just for the OGLSQt viewer,
+    but for *all* subsequent viewers, so using OGLSQt completely prevents
+    use of the "new" scene tree. Geant4 examples execute
+    "/vis/open OGL" in the "vis.mac" macro, so the "new" scene tree is
+    never seen nor used. 
+  - This is a "stop-gap" solution - we need to decide how to proceed.
+    - We could keep the "old" scene tree as an option.
+      - In favour of this: the "old" tree is more highly featured.
+    - We could remove the "old" scene tree completely.
+      - We should then transfer nice features of the "old" scene tree
+        to the "new" one.
+      - In any case, new features will be progressively added to the
+        "new" scene tree in future developments.
+
+## 2023-04-27 Ben Morgan (opengl-V11-01-07)
+- Minimum build and code changes required to compile/link against both Qt5 and Qt6
+
+## 2023-04-14 John Allison (opengl-V11-01-06)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  openinventor-V11-01-04, vis_toolssg-V11-01-05.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (opengl-V11-01-05)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+- Remove inclusion of qprinter.h.
+
+## 2023-03-28 John Allison (opengl-V11-01-04)
+- G4OpenGLQtViewer:
+  - Move G4UIQt* fUiQt from private to protected.
+  - Implement UpdateGUISceneTree.
+    - fUiQt->UpdateSceneTree(fSceneTree).
+- G4OpenGLImmediateQtViewer.cc:
+  - Use UpdateGUISceneTree in DrawView.
+- G4OpenGLStoredQtViewer.cc:
+  - Use UpdateGUISceneTree if (kernelVisitWasNeeded).
+
+## 2023-03-22 Ben Morgan (opengl-V11-01-03)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-03-03 Ben Morgan (opengl-V11-01-02)
+- Remove obsolete G4OPENGL_VERSION_2 symbol and G4OpenGLVboDrawer class.
+
+## 2023-01-30 Ben Morgan (opengl-V11-01-01)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2023-01-28 Ben Morgan (opengl-V11-01-00)
+- Make G4modeling a private dependency, unless Qt is active, when it must be public.
+
+## 2022-11-25 Gabriele Cosmo (opengl-V11-00-21)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-21 Ben Morgan (opengl-V11-00-20)
+- Revert link support for Qt6 until code is ready.
+
+## 2022-10-28 John Allison (opengl-V11-00-19)
+- Update a comment about requesting a kernel visit when cutaway mode
+  changes - noted but not relevant because OGL does its own cutaways:
+  - G4OpenGLStoredQtViewer.cc
+  - G4OpenGLStoredViewer.cc
+- Minor tidy - speed cutaway check:
+  - G4OpenGLViewer::SetView
+
+## 2022-10-17 Gabriele Cosmo (opengl-V11-00-18)
+- Replaced use of sprintf() with snprintf(), to fix deprecation compilation
+  warnings on macOS-13 SDK.
+
+## 2022-10-11 Ben Morgan (opengl-V11-00-17)
+- Link to Qt OpenGLWidgets target for Qt6 only.
+
+## 2022-10-07 Gabriele Cosmo (opengl-V11-00-16)
+- Fixed compilation warnings on Intel/icc compiler for deprecated conversion
+  of string literal to char* in G4OpenGLXmConvenienceRoutines and
+  G4OpenGLXmViewer.
+
+## 2022-09-14 John Allison (opengl-V11-00-15)
+- G4OpenGLStoredViewer.cc, G4OpenGLStoredQtViewer.cc:
+  - Add check on special mesh rendering option in CompareForKernelVisit.
+
+## 2022-09-06 Ben Morgan (opengl-V11-00-14)
+- Address dependency inconsistencies reported by geant4_module_check
+
+## 2022-07-13 Ben Morgan (opengl-V11-00-13)
+- Fix compiler warnings in the use of G4OpenGLQtViewer::toggleProjection.
+
+## 2022-05-03 Ben Morgan (opengl-V11-00-12)
+- Preliminary build support for Qt5 and Qt6
+
+## 2022-05-03 Gabriele Cosmo (opengl-V11-00-11)
+- Fixed GNUmakefile for missing compilation of `G4gl2ps`.
+
+## 2022-04-27 John Allison (opengl-V11-00-10)
+- Co-works with `visman-V11-00-15`.
+- Move `G4gl2ps` from `management` to `OpenGL`.
+
+## 2022-04-07 Guy Barrand (opengl-V11-00-09)
+- Added missing dependency to G4tools in GNUmakefile...
+
+## 2022-04-07 Guy Barrand (opengl-V11-00-08)
+- Have G4OpenGLViewer use the thread safe tools/gl2ps.
+
+## 2022-04-06 John Allison (opengl-V11-00-07)
+- Use `StandardSpecialMeshRendering(mesh)`.
+
+## 2022-03-24 John Allison (opengl-V11-00-06)
+- Retire display list re-use and display list limit.
+
+## 2022-03-22 Ben Morgan (opengl-V11-00-05)
+- Use geant4_module_sources to add optional sources
+
+## 2022-03-05 John Allison (opengl-V11-00-04)
+- G4OpenGLSceneHandler::AddCompound(const G4Mesh& mesh):
+  - For parameterised tetrahedron mesh, call default
+    G4VSceneHandler::DrawTetMeshAsDots(mesh).
+  - Tested on "ICRP145", a Geant4 application that we hope can become
+    a Geant4 advanced example, downloaded from the supplementary material
+    of Kim et al, ICRP, 2020. Adult mesh-type reference computational phantoms,
+    ICRP Publication 145, Ann. ICRP 49(3).
+
+## 2022-01-28 Ben Morgan (opengl-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2021-12-16 John Allison (opengl-V11-00-02)
+- G4OpenGLSceneHandler.cc:
+  - AddCompound(const G4Mesh& mesh):
+    - Use base class utility G4VSceneHandler::Draw3DRectMeshAsDots(mesh);
+
+## 2021-12-11 John Allison (opengl-V11-00-01)
+- G4OpenGLSceneHandler:
+  - void AddCompound(const G4Mesh& mesh):
+    - Add missing return statement for unimplemented cases.
+    - Tidy.
+
+## 2021-12-10 Ben Morgan (opengl-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 12 November 2021 - Ben Morgan (opengl-V10-07-25)
 - Retire G4VIS_... preprocessor symbols in toolkit build, only required

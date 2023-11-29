@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.cc
+/// \file B5/src/DetectorConstruction.cc
 /// \brief Implementation of the B5::DetectorConstruction class
 
 #include "DetectorConstruction.hh"
@@ -70,8 +70,8 @@ namespace B5
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal MagneticField* DetectorConstruction::fMagneticField = 0;
-G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
+G4ThreadLocal MagneticField* DetectorConstruction::fMagneticField = nullptr;
+G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,9 +119,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4Box("worldBox",10.*m,3.*m,10.*m);
   auto worldLogical
     = new G4LogicalVolume(worldSolid,air,"worldLogical");
-  auto worldPhysical
-    = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,
-                        false,0,checkOverlaps);
+  auto worldPhysical = new G4PVPlacement(
+    nullptr, G4ThreeVector(), worldLogical, "worldPhysical", nullptr, false, 0, checkOverlaps);
 
   // Tube with Local Magnetic field
 
@@ -133,14 +132,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // placement of Tube
 
-  G4RotationMatrix* fieldRot = new G4RotationMatrix();
+  auto fieldRot = new G4RotationMatrix();
   fieldRot->rotateX(90.*deg);
   new G4PVPlacement(fieldRot,G4ThreeVector(),fMagneticLogical,
                     "magneticPhysical",worldLogical,
                     false,0,checkOverlaps);
 
   // set step limit in tube with magnetic field
-  G4UserLimits* userLimits = new G4UserLimits(1*m);
+  auto userLimits = new G4UserLimits(1 * m);
   fMagneticLogical->SetUserLimits(userLimits);
 
   // first arm
@@ -148,9 +147,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4Box("firstArmBox",1.5*m,1.*m,3.*m);
   auto firstArmLogical
     = new G4LogicalVolume(firstArmSolid,air,"firstArmLogical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,-5.*m),firstArmLogical,
-                    "firstArmPhysical",worldLogical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., -5. * m), firstArmLogical, "firstArmPhysical",
+    worldLogical, false, 0, checkOverlaps);
 
   // second arm
   auto secondArmSolid
@@ -172,9 +170,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for (auto i=0;i<kNofHodoscopes1;i++) {
       G4double x1 = (i-kNofHodoscopes1/2)*10.*cm;
-      new G4PVPlacement(0,G4ThreeVector(x1,0.,-1.5*m),fHodoscope1Logical,
-                        "hodoscope1Physical",firstArmLogical,
-                        false,i,checkOverlaps);
+      new G4PVPlacement(nullptr, G4ThreeVector(x1, 0., -1.5 * m), fHodoscope1Logical,
+        "hodoscope1Physical", firstArmLogical, false, i, checkOverlaps);
   }
 
   // drift chambers in first arm
@@ -185,9 +182,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for (auto i=0;i<kNofChambers;i++) {
     G4double z1 = (i-kNofChambers/2)*0.5*m;
-    new G4PVPlacement(0,G4ThreeVector(0.,0.,z1),chamber1Logical,
-                      "chamber1Physical",firstArmLogical,
-                      false,i,checkOverlaps);
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., z1), chamber1Logical, "chamber1Physical",
+      firstArmLogical, false, i, checkOverlaps);
   }
 
   // "virtual" wire plane
@@ -195,9 +191,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4Box("wirePlane1Box",1.*m,30.*cm,0.1*mm);
   fWirePlane1Logical
     = new G4LogicalVolume(wirePlane1Solid,argonGas,"wirePlane1Logical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),fWirePlane1Logical,
-                    "wirePlane1Physical",chamber1Logical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fWirePlane1Logical, "wirePlane1Physical",
+    chamber1Logical, false, 0, checkOverlaps);
 
   // hodoscopes in second arm
   auto hodoscope2Solid
@@ -207,9 +202,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for (auto i=0;i<kNofHodoscopes2;i++) {
       G4double x2 = (i-kNofHodoscopes2/2)*10.*cm;
-      new G4PVPlacement(0,G4ThreeVector(x2,0.,0.),fHodoscope2Logical,
-                        "hodoscope2Physical",secondArmLogical,
-                        false,i,checkOverlaps);
+      new G4PVPlacement(nullptr, G4ThreeVector(x2, 0., 0.), fHodoscope2Logical,
+        "hodoscope2Physical", secondArmLogical, false, i, checkOverlaps);
   }
 
   // drift chambers in second arm
@@ -220,9 +214,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for (auto i=0;i<kNofChambers;i++) {
     G4double z2 = (i-kNofChambers/2)*0.5*m - 1.5*m;
-    new G4PVPlacement(0,G4ThreeVector(0.,0.,z2),chamber2Logical,
-                      "chamber2Physical",secondArmLogical,
-                      false,i,checkOverlaps);
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., z2), chamber2Logical, "chamber2Physical",
+      secondArmLogical, false, i, checkOverlaps);
   }
 
   // "virtual" wire plane
@@ -230,18 +223,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4Box("wirePlane2Box",1.5*m,30.*cm,0.1*mm);
   fWirePlane2Logical
     = new G4LogicalVolume(wirePlane2Solid,argonGas,"wirePlane2Logical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),fWirePlane2Logical,
-                    "wirePlane2Physical",chamber2Logical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fWirePlane2Logical, "wirePlane2Physical",
+    chamber2Logical, false, 0, checkOverlaps);
 
   // CsI calorimeter
   auto emCalorimeterSolid
     = new G4Box("EMcalorimeterBox",1.5*m,30.*cm,15.*cm);
   auto emCalorimeterLogical
     = new G4LogicalVolume(emCalorimeterSolid,csI,"EMcalorimeterLogical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*m),emCalorimeterLogical,
-                    "EMcalorimeterPhysical",secondArmLogical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 2. * m), emCalorimeterLogical,
+    "EMcalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
 
   // EMcalorimeter cells
   auto cellSolid
@@ -257,9 +248,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4Box("HadCalorimeterBox",1.5*m,30.*cm,50.*cm);
   auto hadCalorimeterLogical
     = new G4LogicalVolume(hadCalorimeterSolid,lead,"HadCalorimeterLogical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,3.*m),hadCalorimeterLogical,
-                    "HadCalorimeterPhysical",secondArmLogical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 3. * m), hadCalorimeterLogical,
+    "HadCalorimeterPhysical", secondArmLogical, false, 0, checkOverlaps);
 
   // hadron calorimeter column
   auto HadCalColumnSolid
@@ -291,9 +281,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fHadCalScintiLogical
     = new G4LogicalVolume(HadCalScintiSolid,scintillator,
                           "HadCalScintiLogical");
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*cm),fHadCalScintiLogical,
-                    "HadCalScintiPhysical",HadCalLayerLogical,
-                    false,0,checkOverlaps);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 2. * cm), fHadCalScintiLogical,
+    "HadCalScintiPhysical", HadCalLayerLogical, false, 0, checkOverlaps);
 
   // visualization attributes ------------------------------------------------
 

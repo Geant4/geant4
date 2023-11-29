@@ -29,20 +29,24 @@
 
 #include "G4VCoulombBarrier.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Pow.hh"
 
 G4VCoulombBarrier::G4VCoulombBarrier(G4int anA, G4int aZ)
+  : g4calc(G4Pow::GetInstance())
 {
   theA = anA;
   theZ = aZ;
-  theRho = 0.0; 
   theR0 = 1.5*CLHEP::fermi;
 }
-
-G4VCoulombBarrier::~G4VCoulombBarrier()
-{}
 
 void G4VCoulombBarrier::SetParameters(G4double rho, G4double r0)
 {
   theRho = rho;
   theR0 = r0;
 }
+
+G4double G4VCoulombBarrier::BarrierPenetrationFactor(G4int) const
+{
+  return 1.0;
+}
+

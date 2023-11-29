@@ -128,10 +128,9 @@ void G4ConvergenceTester::calStat()
   vov             = 0.0;
 
   G4double xi;
-  for(auto it = nonzero_histories.cbegin(); it != nonzero_histories.cend();
-      ++it)
+  for(const auto& nonzero_historie : nonzero_histories)
   {
-    xi = it->second;
+    xi = nonzero_historie.second;
     sum_x2 += xi * xi;
     var += (xi - mean) * (xi - mean);
     shift += (xi - mean) * (xi - mean) * (xi - mean);
@@ -165,14 +164,14 @@ void G4ConvergenceTester::calStat()
   largest                        = 0.0;
   largest_score_happened         = 0;
   G4double spend_time_of_largest = 0.0;
-  for(auto it = nonzero_histories.cbegin(); it != nonzero_histories.cend();
-      ++it)
+  for(const auto& nonzero_historie : nonzero_histories)
   {
-    if(std::abs(it->second) > largest)
+    if(std::abs(nonzero_historie.second) > largest)
     {
-      largest                = it->second;
-      largest_score_happened = it->first;
-      spend_time_of_largest  = cpu_time[it->first + 1] - cpu_time[it->first];
+      largest                = nonzero_historie.second;
+      largest_score_happened = nonzero_historie.first;
+      spend_time_of_largest =
+        cpu_time[nonzero_historie.first + 1] - cpu_time[nonzero_historie.first];
     }
   }
 
@@ -186,10 +185,9 @@ void G4ConvergenceTester::calStat()
 
   mean_1 = (sum + largest) / (n + 1);
 
-  for(auto it = nonzero_histories.cbegin(); it != nonzero_histories.cend();
-      ++it)
+  for(const auto& nonzero_historie : nonzero_histories)
   {
-    xi = it->second;
+    xi = nonzero_historie.second;
     var_1 += (xi - mean_1) * (xi - mean_1);
     shift_1 += (xi - mean_1) * (xi - mean_1) * (xi - mean_1);
     vov_1 += (xi - mean_1) * (xi - mean_1) * (xi - mean_1) * (xi - mean_1);
@@ -284,7 +282,9 @@ void G4ConvergenceTester::calc_stat_history()
     }
 
     if(nonzero_till_ith == 0)
+    {
       continue;
+    }
 
     mean_till_ith   = mean_till_ith / (ith + 1);
     mean_history[i] = mean_till_ith;
@@ -314,11 +314,17 @@ void G4ConvergenceTester::calc_stat_history()
     G4double sum_till_ith = mean_till_ith * (ith + 1);
 
     if(!(std::fabs(var_till_ith) > 0.0))
+    {
       continue;
+    }
     if(!(std::fabs(mean_till_ith) > 0.0))
+    {
       continue;
+    }
     if(!(std::fabs(sum_till_ith) > 0.0))
+    {
       continue;
+    }
 
     vov_till_ith = vov_till_ith / std::pow(var_till_ith, 2.0) - 1.0 / (ith + 1);
     vov_history[i] = vov_till_ith;
@@ -501,8 +507,8 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
   std::vector<G4double> second_ally;
 
   // use 2nd half of hisories
-  G4int N = mean_history.size() / 2;
-  G4int i;
+  std::size_t N = mean_history.size() / 2;
+  std::size_t i;
 
   G4double pearson_r;
   G4double t;
@@ -527,7 +533,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = mean_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r((G4int)N, first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t < 0.429318)  // Student t of (Degree of freedom = N-2 )
@@ -548,7 +554,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = r_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t > 1.090546)
@@ -561,7 +567,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     out << "r does not follow 1/std::sqrt(N)" << G4endl;
   }
 
-  if(is_monotonically_decrease(second_ally) == true)
+  if(is_monotonically_decrease(second_ally))
   {
     out << "r is monotonically decrease " << G4endl;
   }
@@ -587,7 +593,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = vov_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t > 1.090546)
@@ -600,7 +606,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     out << "VOV does not follow 1/std::sqrt(N)" << G4endl;
   }
 
-  if(is_monotonically_decrease(second_ally) == true)
+  if(is_monotonically_decrease(second_ally))
   {
     out << "VOV is monotonically decrease " << G4endl;
   }
@@ -617,7 +623,7 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
     second_ally[i] = fom_history[N + i];
   }
 
-  pearson_r = calc_Pearson_r(N, first_ally, second_ally);
+  pearson_r = calc_Pearson_r(G4int(N), first_ally, second_ally);
   t         = pearson_r * std::sqrt((N - 2) / (1 - pearson_r * pearson_r));
 
   if(t < 0.429318)
@@ -667,19 +673,21 @@ G4double G4ConvergenceTester::calc_Pearson_r(G4int N,
 }
 
 G4bool G4ConvergenceTester::is_monotonically_decrease(
-  std::vector<G4double> ally)
+  const std::vector<G4double>& ally)
 {
   for(auto it = ally.cbegin(); it != ally.cend() - 1; ++it)
   {
     if(*it < *(it + 1))
+    {
       return FALSE;
+    }
   }
 
   ++noPass;
   return TRUE;
 }
 
-void G4ConvergenceTester::calc_slope_fit(std::vector<G4double>)
+void G4ConvergenceTester::calc_slope_fit(const std::vector<G4double>&)
 {
   // create PDF bins
   G4double max = largest_scores.front();

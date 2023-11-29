@@ -30,17 +30,16 @@
 
 #pragma once
 
-#include "Globals.hh"
-#include "VTask.hh"
+#include "PTL/Globals.hh"
+#include "PTL/VTask.hh"
 
 #include <cstdint>
-#include <functional>
-#include <stdexcept>
+#include <future>
+#include <tuple>
+#include <utility>
 
 namespace PTL
 {
-class ThreadPool;
-
 //======================================================================================//
 
 /// \brief The task class is supplied to thread_pool.
@@ -48,9 +47,9 @@ template <typename RetT>
 class TaskFuture : public VTask
 {
 public:
-    typedef std::promise<RetT> promise_type;
-    typedef std::future<RetT>  future_type;
-    typedef RetT               result_type;
+    using promise_type = std::promise<RetT>;
+    using future_type  = std::future<RetT>;
+    using result_type  = RetT;
 
 public:
     // pass a free function pointer
@@ -59,13 +58,13 @@ public:
     : VTask{ std::forward<Args>(args)... }
     {}
 
-    virtual ~TaskFuture() = default;
+    ~TaskFuture() override = default;
 
     TaskFuture(const TaskFuture&) = delete;
     TaskFuture& operator=(const TaskFuture&) = delete;
 
-    TaskFuture(TaskFuture&&) = default;
-    TaskFuture& operator=(TaskFuture&&) = default;
+    TaskFuture(TaskFuture&&) noexcept = default;
+    TaskFuture& operator=(TaskFuture&&) noexcept = default;
 
 public:
     // execution operator
@@ -81,12 +80,12 @@ template <typename RetT, typename... Args>
 class PackagedTask : public TaskFuture<RetT>
 {
 public:
-    typedef PackagedTask<RetT, Args...>       this_type;
-    typedef std::promise<RetT>                promise_type;
-    typedef std::future<RetT>                 future_type;
-    typedef std::packaged_task<RetT(Args...)> packaged_task_type;
-    typedef RetT                              result_type;
-    typedef std::tuple<Args...>               tuple_type;
+    using this_type          = PackagedTask<RetT, Args...>;
+    using promise_type       = std::promise<RetT>;
+    using future_type        = std::future<RetT>;
+    using packaged_task_type = std::packaged_task<RetT(Args...)>;
+    using result_type        = RetT;
+    using tuple_type         = std::tuple<Args...>;
 
 public:
     // pass a free function pointer
@@ -104,20 +103,20 @@ public:
     , m_args{ args... }
     {}
 
-    virtual ~PackagedTask() = default;
+    ~PackagedTask() override = default;
 
     PackagedTask(const PackagedTask&) = delete;
     PackagedTask& operator=(const PackagedTask&) = delete;
 
-    PackagedTask(PackagedTask&&) = default;
-    PackagedTask& operator=(PackagedTask&&) = default;
+    PackagedTask(PackagedTask&&) noexcept = default;
+    PackagedTask& operator=(PackagedTask&&) noexcept = default;
 
 public:
     // execution operator
-    virtual void operator()() final { mpl::apply(std::move(m_ptask), std::move(m_args)); }
-    virtual future_type get_future() final { return m_ptask.get_future(); }
-    virtual void        wait() final { return m_ptask.get_future().wait(); }
-    virtual RetT        get() final { return m_ptask.get_future().get(); }
+    void        operator()() final { mpl::apply(std::move(m_ptask), std::move(m_args)); }
+    future_type get_future() final { return m_ptask.get_future(); }
+    void        wait() final { return m_ptask.get_future().wait(); }
+    RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
     packaged_task_type m_ptask;
@@ -131,12 +130,12 @@ template <typename RetT, typename... Args>
 class Task : public TaskFuture<RetT>
 {
 public:
-    typedef Task<RetT, Args...>               this_type;
-    typedef std::promise<RetT>                promise_type;
-    typedef std::future<RetT>                 future_type;
-    typedef std::packaged_task<RetT(Args...)> packaged_task_type;
-    typedef RetT                              result_type;
-    typedef std::tuple<Args...>               tuple_type;
+    using this_type          = Task<RetT, Args...>;
+    using promise_type       = std::promise<RetT>;
+    using future_type        = std::future<RetT>;
+    using packaged_task_type = std::packaged_task<RetT(Args...)>;
+    using result_type        = RetT;
+    using tuple_type         = std::tuple<Args...>;
 
 public:
     template <typename FuncT>
@@ -153,24 +152,24 @@ public:
     , m_args{ args... }
     {}
 
-    virtual ~Task() = default;
+    ~Task() override = default;
 
     Task(const Task&) = delete;
     Task& operator=(const Task&) = delete;
 
-    Task(Task&&)  = default;
-    Task& operator=(Task&&) = default;
+    Task(Task&&) noexcept = default;
+    Task& operator=(Task&&) noexcept = default;
 
 public:
     // execution operator
-    virtual void operator()() final
+    void operator()() final
     {
         if(m_ptask.valid())
             mpl::apply(std::move(m_ptask), std::move(m_args));
     }
-    virtual future_type get_future() final { return m_ptask.get_future(); }
-    virtual void        wait() final { return m_ptask.get_future().wait(); }
-    virtual RetT        get() final { return m_ptask.get_future().get(); }
+    future_type get_future() final { return m_ptask.get_future(); }
+    void        wait() final { return m_ptask.get_future().wait(); }
+    RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
     packaged_task_type m_ptask{};
@@ -184,11 +183,11 @@ template <typename RetT>
 class Task<RetT, void> : public TaskFuture<RetT>
 {
 public:
-    typedef Task<RetT>                 this_type;
-    typedef std::promise<RetT>         promise_type;
-    typedef std::future<RetT>          future_type;
-    typedef std::packaged_task<RetT()> packaged_task_type;
-    typedef RetT                       result_type;
+    using this_type          = Task<RetT>;
+    using promise_type       = std::promise<RetT>;
+    using future_type        = std::future<RetT>;
+    using packaged_task_type = std::packaged_task<RetT()>;
+    using result_type        = RetT;
 
 public:
     template <typename FuncT>
@@ -208,8 +207,8 @@ public:
     Task(const Task&) = delete;
     Task& operator=(const Task&) = delete;
 
-    Task(Task&&)  = default;
-    Task& operator=(Task&&) = default;
+    Task(Task&&) noexcept = default;
+    Task& operator=(Task&&) noexcept = default;
 
 public:
     // execution operator
@@ -229,12 +228,12 @@ template <>
 class Task<void, void> : public TaskFuture<void>
 {
 public:
-    typedef void                       RetT;
-    typedef Task<void, void>           this_type;
-    typedef std::promise<RetT>         promise_type;
-    typedef std::future<RetT>          future_type;
-    typedef std::packaged_task<RetT()> packaged_task_type;
-    typedef RetT                       result_type;
+    using RetT               = void;
+    using this_type          = Task<void, void>;
+    using promise_type       = std::promise<RetT>;
+    using future_type        = std::future<RetT>;
+    using packaged_task_type = std::packaged_task<RetT()>;
+    using result_type        = RetT;
 
 public:
     template <typename FuncT>
@@ -249,7 +248,7 @@ public:
     , m_ptask{ std::move(func) }
     {}
 
-    virtual ~Task() = default;
+    ~Task() override = default;
 
     Task(const Task&) = delete;
     Task& operator=(const Task&) = delete;
@@ -259,10 +258,10 @@ public:
 
 public:
     // execution operator
-    virtual void        operator()() final { m_ptask(); }
-    virtual future_type get_future() final { return m_ptask.get_future(); }
-    virtual void        wait() final { return m_ptask.get_future().wait(); }
-    virtual RetT        get() final { return m_ptask.get_future().get(); }
+    void        operator()() final { m_ptask(); }
+    future_type get_future() final { return m_ptask.get_future(); }
+    void        wait() final { return m_ptask.get_future().wait(); }
+    RetT        get() final { return m_ptask.get_future().get(); }
 
 private:
     packaged_task_type m_ptask{};

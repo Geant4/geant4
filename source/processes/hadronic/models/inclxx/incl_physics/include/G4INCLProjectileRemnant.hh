@@ -182,7 +182,7 @@ namespace G4INCL {
 
     /// \brief Get the number of the stored components
     G4int getNumberStoredComponents() const {
-      return storedComponents.size();
+      return (G4int)storedComponents.size();
     }
 
     /// \brief Store the energy levels

@@ -43,16 +43,8 @@ class G4HumanPhantomMaterial. The materials of the ORNL model are defined in
 the GDML files.
 If using ORNL phantom model with no GDML set-up a segmentation
 fault will be otained when running the simulation.
-
-*** Parameterized breast ***
-MIRD Female model: a breast is analytical and derives from the MIRD 
-anthropomorphic phantom; the other breast derives from the model [3] and 
-it is voxelised.
-
-[3] D.R. Dance and R. A. Hunt, "Voxel breast phantom to represent breasts 
-of different sizes and glandularities for use with a Monte Carlo simulation 
-program", Report RMTPC 02/1005.
-
+The gdml files describing the MIRD phantoms are not used in the example
+but are there as reference for users.
 
 -----> Physics
 
@@ -79,9 +71,7 @@ the energy deposit is not calculated in the specific organ.
 The energy deposit is calculated in each voxel of the parameterised breast.
 
 -----> Analysis
-To activate the analysis, the application must be built with the option
-WITH_ANALYSIS_USE=ON :
-make -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_ANALYSIS_USE=ON /path/to/human_phantom/
+The analysis is activated by default.
 
 **** SEQUENTIAL MODE *************
 output file: g4humanphantom.root containing
@@ -112,14 +102,12 @@ adultMIRDMale.mac: example to define a MIRD male human phantom
 adultHead.mac: example how to define one piece of the anatomy
 adultORNLFemale.mac: example to define a ORNL female human phantom - THIS NEEDS GDML INSTALLED
 adultORNLMale.mac: example to define a ORNL male human phantom - THIS NEEDS GDML INSTALLED
-adultMIXFemale.mac : example of MIRD human female phantom with 
-	             parameterised breast
 
 -----> How to build the example 
 
 If the user wants to run the example importing geometries via GDML, 
 he/she needs to have built the persistency/gdml module by having
-set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
+set the -DWITH_GDML_USE=ON flag during the CMAKE configuration step, 
 as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
 the path where the XercesC XML parser package is installed in your system.
 

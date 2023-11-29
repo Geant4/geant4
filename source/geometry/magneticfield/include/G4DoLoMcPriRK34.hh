@@ -47,7 +47,7 @@ class G4DoLoMcPriRK34 : public G4MagIntegratorStepper
                      G4bool primary = true );
       // Constructor using Equation
 
-    ~G4DoLoMcPriRK34();
+    ~G4DoLoMcPriRK34() override;
 
     G4DoLoMcPriRK34(const G4DoLoMcPriRK34&) = delete;
     G4DoLoMcPriRK34& operator=(const G4DoLoMcPriRK34&) = delete; 
@@ -57,12 +57,12 @@ class G4DoLoMcPriRK34 : public G4MagIntegratorStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) ;
+                        G4double yerr[] ) override ;
     
     void SetupInterpolation();
     void SetupInterpolate( const G4double yInput[],
-                              const G4double dydx[],
-                              const G4double Step );
+                           const G4double dydx[],
+                           const G4double Step );
       // For Preparing the interpolation and calculating the extra stages
     
     void Interpolate( const G4double yInput[],
@@ -81,8 +81,8 @@ class G4DoLoMcPriRK34 : public G4MagIntegratorStepper
                            G4double Step,
                            G4double tau ) ;
 
-    G4double DistChord() const;
-    G4int IntegratorOrder() const { return 3; }
+    G4double DistChord() const override;
+    G4int IntegratorOrder() const override { return 3; }
     
   private :
     

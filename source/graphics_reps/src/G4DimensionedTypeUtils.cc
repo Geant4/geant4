@@ -49,10 +49,10 @@ namespace G4DimensionedTypeUtils
   {
     // Get units table
     G4UnitsTable& unitTable = G4UnitDefinition::GetUnitsTable();
-    if (unitTable.size() == 0) G4UnitDefinition::BuildUnitsTable();
+    if (unitTable.empty()) G4UnitDefinition::BuildUnitsTable();
     
     // Iterate over unit lists, searching for unit match
-    G4UnitsTable::const_iterator iterTable = unitTable.begin();
+    auto iterTable = unitTable.begin();
     
     HasName myUnit(unit);
     G4bool gotUnit(false);
@@ -60,7 +60,7 @@ namespace G4DimensionedTypeUtils
     while (!gotUnit && (iterTable != unitTable.end())) {
       G4UnitsContainer unitContainer = (*iterTable)->GetUnitsList();
       
-      G4UnitsContainer::const_iterator iterUnits =
+      auto iterUnits =
       std::find_if(unitContainer.begin(), unitContainer.end(), myUnit);
       
       if (iterUnits != unitContainer.end()) {

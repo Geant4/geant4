@@ -54,7 +54,7 @@ class G4ParticlesWorkspace
     using pool_type = G4TWorkspacePool<G4ParticlesWorkspace>;
 
     G4ParticlesWorkspace(G4bool verbose=false);
-    ~G4ParticlesWorkspace();
+    ~G4ParticlesWorkspace() = default;
 
     void UseWorkspace();     // Take ownership
     void ReleaseWorkspace(); // Release ownership

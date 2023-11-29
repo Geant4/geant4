@@ -101,7 +101,7 @@ namespace field_utils
                 TargetArray& trg, TargetArrays&... trgs);
 
   void copy(G4double dst[], const G4double src[],
-            size_t size = G4FieldTrack::ncompSVEC);
+            std::size_t size = G4FieldTrack::ncompSVEC);
 
   G4double inverseCurvatureRadius(G4double particleCharge,
                                   G4double momentum, G4double BField);

@@ -25,7 +25,7 @@
 //
 //
 // 
-/// \file testCommon.cc
+/// \file common/testCommon.cc
 /// \brief Test program for the common classes
 
 #include "DetectorConstruction.hh"
@@ -36,6 +36,8 @@
 
 #include "G4RunManager.hh"
 #include "FTFP_BERT.hh"
+
+using namespace Common;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

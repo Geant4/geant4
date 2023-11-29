@@ -44,21 +44,13 @@ G4ScintillationTrackInformation::G4ScintillationTrackInformation(
   , scintillationType(aType)
 {}
 
-G4ScintillationTrackInformation::~G4ScintillationTrackInformation() {}
+G4ScintillationTrackInformation::~G4ScintillationTrackInformation() = default;
 
 G4ScintillationTrackInformation::G4ScintillationTrackInformation(
-  const G4ScintillationTrackInformation& right)
-  : G4VUserTrackInformation(right)
-  , scintillationType(right.scintillationType)
-{}
+  const G4ScintillationTrackInformation& right) = default;
 
 G4ScintillationTrackInformation& G4ScintillationTrackInformation::operator=(
-  const G4ScintillationTrackInformation& right)
-{
-  G4VUserTrackInformation::operator=(right);
-  this->scintillationType          = right.scintillationType;
-  return *this;
-}
+  const G4ScintillationTrackInformation& right) = default;
 
 void G4ScintillationTrackInformation::Print() const
 {
@@ -79,7 +71,7 @@ G4ScintillationTrackInformation* G4ScintillationTrackInformation::Cast(
   if(IsScintillationTrackInformation(aTI))
   {
     // No change will be done to the pointer and to the pointed data
-    G4VUserTrackInformation* temp = const_cast<G4VUserTrackInformation*>(aTI);
+    auto temp = const_cast<G4VUserTrackInformation*>(aTI);
     STI = dynamic_cast<G4ScintillationTrackInformation*>(temp);
   }
   return STI;

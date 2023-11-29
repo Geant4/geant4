@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 070625 add natural abundance (nat) flag by T. Koi 
+// 070625 add natural abundance (nat) flag by T. Koi
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
@@ -35,38 +35,37 @@
 class G4ParticleHPDataUsed
 {
   public:
-  
-  G4ParticleHPDataUsed()
-  {
-    theName = "";
-    theA = 0;
-    theZ = 0;
-    theM = 0;
-     nat = false;
-  }
-  
-  void SetA(G4double anA){theA = anA;}
-  void SetZ(G4int aZ){theZ = aZ;}
-  void SetM(G4int aM){theM = aM;}
-  void SetName(G4String aName){theName = aName;}
+    G4ParticleHPDataUsed()
+    {
+      theName = "";
+      theA = 0;
+      theZ = 0;
+      theM = 0;
+      nat = false;
+    }
 
-  G4int GetZ() {return theZ;}
-  G4double GetA() {return theA;}
-  G4int GetM() {return theM;}
-  G4String GetName() {return theName;}
-  
+    void SetA(G4double anA) { theA = anA; }
+    void SetZ(G4int aZ) { theZ = aZ; }
+    void SetM(G4int aM) { theM = aM; }
+    void SetName(G4String aName) { theName = aName; }
+
+    G4int GetZ() { return theZ; }
+    G4double GetA() { return theA; }
+    G4int GetM() { return theM; }
+    G4String GetName() { return theName; }
+
   private:
-  
-  G4String theName;
-  G4double theA;
-  G4int theZ;
-  G4int theM;
-   public:
-      G4bool IsThisNaturalAbundance() { return nat; };
-      void SetNaturalAbundanceFlag() { nat = TRUE; };
+    G4String theName;
+    G4double theA;
+    G4int theZ;
+    G4int theM;
 
-   private:
-      G4bool nat;
+  public:
+    G4bool IsThisNaturalAbundance() { return nat; };
+    void SetNaturalAbundanceFlag() { nat = TRUE; };
+
+  private:
+    G4bool nat;
 };
 
 #endif

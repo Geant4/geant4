@@ -173,7 +173,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   tlimit                 = 1.e+10*mm;
   presafety              = 0.*mm;
   //
-  particle               = 0;
+  particle               = nullptr;
   theManager             = G4LossTableManager::Instance();
   firstStep              = true;
   currentKinEnergy       = 0.0;
@@ -324,7 +324,7 @@ G4double G4GoudsmitSaundersonMscModel::CrossSectionPerVolume(const G4Material* m
   // beta square
   G4double beta2   = pt2/(pt2+electron_mass_c2*electron_mass_c2);
   // current material index
-  G4int    matindx = mat->GetIndex();
+  G4int    matindx = (G4int)mat->GetIndex();
   // Moliere's b_c
   G4double bc      = fGSTable->GetMoliereBc(matindx);
   // get the Mott-correcton factors if Mott-correcton was requested by the user
@@ -381,7 +381,7 @@ G4GoudsmitSaundersonMscModel::GetTransportMeanFreePath(const G4ParticleDefinitio
   // beta square
   G4double beta2   = pt2/(pt2+electron_mass_c2*electron_mass_c2);
   // current material index
-  G4int    matindx = mat->GetIndex();
+  G4int    matindx = (G4int)mat->GetIndex();
   // Moliere's b_c
   G4double bc      = fGSTable->GetMoliereBc(matindx);
   // get the Mott-correcton factors if Mott-correcton was requested by the user
@@ -434,7 +434,7 @@ G4GoudsmitSaundersonMscModel::GetTransportMeanFreePathOnly(const G4ParticleDefin
   // total mometum square in Geant4 internal energy2 units which is MeV2
   G4double pt2     = efEnergy*(efEnergy+2.0*electron_mass_c2);
   G4double beta2   = pt2/(pt2+electron_mass_c2*electron_mass_c2);
-  G4int    matindx = mat->GetIndex();
+  G4int    matindx = (G4int)mat->GetIndex();
   G4double bc      = fGSTable->GetMoliereBc(matindx);
   // get the Mott-correcton factors if Mott-correcton was requested by the user
   G4double mctoScrA    = 1.0;
@@ -475,7 +475,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track&
   G4StepStatus stepStatus     = sp->GetStepStatus();
   currentCouple               = track.GetMaterialCutsCouple();
   SetCurrentCouple(currentCouple);
-  currentMaterialIndex        = currentCouple->GetMaterial()->GetIndex();
+  currentMaterialIndex        = (G4int)currentCouple->GetMaterial()->GetIndex();
   currentKinEnergy            = dp->GetKineticEnergy();
   currentRange                = GetRange(particle,currentKinEnergy,currentCouple,
                                          dp->GetLogKineticEnergy());

@@ -28,6 +28,7 @@
 #define G4MULTISENSITIVEDETECTOR_H
 
 #include "G4VSensitiveDetector.hh"
+
 #include <vector>
 
 // class description:
@@ -40,51 +41,47 @@
 class G4MultiSensitiveDetector : public G4VSensitiveDetector
 {
  public:
-  G4MultiSensitiveDetector(G4String name);
-  // Second optional parameter allows to append to the SDname a random string
-  G4MultiSensitiveDetector(const G4MultiSensitiveDetector& rhs);
-  // Cosntructors. The name of the instance must be unique
-  virtual ~G4MultiSensitiveDetector();
+  using sds_t = std::vector<G4VSensitiveDetector*>;
+  using sdsConstIter = sds_t::const_iterator;
 
-  G4MultiSensitiveDetector& operator=(const G4MultiSensitiveDetector& rhs);
+ public:
+  using G4VSensitiveDetector::G4VSensitiveDetector;
+  ~G4MultiSensitiveDetector() override = default;
+
+  G4MultiSensitiveDetector(const G4MultiSensitiveDetector& rhs) = default;
+  G4MultiSensitiveDetector& operator=(const G4MultiSensitiveDetector& rhs) = default;
 
  public:
   // interface from G4VSensitiveDetector starts here.
   // See G4VSensitiveDetector for documentation.
   // All these methods forward the call to each of the SD
   // attached to this proxy.
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void EndOfEvent(G4HCofThisEvent*) override;
+  void clear() override;
+  void DrawAll() override;
+  void PrintAll() override;
 
- protected:
-  // The return value is an AND of the called SDs return values.
-  // This method will call the "Hit(G4Step*)" method of all
-  // added SDs. Note that the ROhist of this method is not used
-  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-  // The following method does not have a meaning for this concrete class
-  virtual G4int GetCollectionID(G4int i) final;
+  // Return clone of this detector
+  // Requires all held SDs to be cloneable
+  G4VSensitiveDetector* Clone() const override;
 
- public:
-  // Note, that cloning works only if all the contained SDs are also
-  // clonable.
-  virtual G4VSensitiveDetector* Clone() const;
+  G4VSensitiveDetector* GetSD(const int i) const { return fSensitiveDetectors[i]; }
 
- public:
-  //===== Main interface of this special SD
-  using sds_t        = std::vector<G4VSensitiveDetector*>;
-  using sdsConstIter = sds_t::const_iterator;
-  G4VSensitiveDetector* GetSD(const int i) const
-  {
-    return fSensitiveDetectors[i];
-  }
   sds_t::size_type GetSize() const { return fSensitiveDetectors.size(); }
   sdsConstIter GetBegin() const { return fSensitiveDetectors.begin(); }
   sdsConstIter GetEnd() const { return fSensitiveDetectors.end(); }
   void ClearSDs() { fSensitiveDetectors.clear(); }
   void AddSD(G4VSensitiveDetector* sd) { fSensitiveDetectors.push_back(sd); }
+
+ protected:
+  // The return value is an AND of the called SDs return values.
+  // This method will call the "Hit(G4Step*)" method of all
+  // added SDs. Note that the ROhist of this method is not used
+  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist) override;
+
+  // The following method does not have a meaning for this concrete class
+  G4int GetCollectionID(G4int i) final;
 
  private:
   sds_t fSensitiveDetectors;

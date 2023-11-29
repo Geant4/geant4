@@ -31,22 +31,17 @@
 // --------------------------------------------------------------------
 
 #include "G4AdjointSteppingAction.hh"
-#include "G4Track.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4AffineTransform.hh"
+
 #include "G4AdjointCrossSurfChecker.hh"
+#include "G4AffineTransform.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4Track.hh"
 
 //////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointSteppingAction::G4AdjointSteppingAction()
-{ 
-  theG4AdjointCrossSurfChecker = G4AdjointCrossSurfChecker::GetInstance();
-}
-
-//////////////////////////////////////////////////////////////////////////////
-//
-G4AdjointSteppingAction::~G4AdjointSteppingAction()
 {
+  theG4AdjointCrossSurfChecker = G4AdjointCrossSurfChecker::GetInstance();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -54,15 +49,13 @@ G4AdjointSteppingAction::~G4AdjointSteppingAction()
 void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4Track* aTrack = aStep->GetTrack();
-  if(!is_adjoint_tracking_mode) // forward tracking mode
+  if (! is_adjoint_tracking_mode)  // forward tracking mode
   {
-    if (!did_one_adj_part_reach_ext_source_during_event)
-    {
+    if (! did_one_adj_part_reach_ext_source_during_event) {
       aTrack->SetTrackStatus(fStopAndKill);
       return;
     }
-    if(theUserFwdSteppingAction)
-    {
+    if (theUserFwdSteppingAction != nullptr) {
       theUserFwdSteppingAction->UserSteppingAction(aStep);
     }
     return;
@@ -72,29 +65,26 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   // --------------------------------------------
 
   did_adj_part_reach_ext_source = false;
-  if (theUserAdjointSteppingAction)
-  {
+  if (theUserAdjointSteppingAction != nullptr) {
     theUserAdjointSteppingAction->UserSteppingAction(aStep);
   }
 
   G4double nb_nuc = 1.;
   G4ParticleDefinition* thePartDef = aTrack->GetDefinition();
- 
-  if (thePartDef->GetParticleType() == "adjoint_nucleus")
-  {
+
+  if (thePartDef->GetParticleType() == "adjoint_nucleus") {
     nb_nuc = G4double(thePartDef->GetBaryonNumber());
   }
 
   // Kill conditions for adjoint particles reaching the maximum energy
   // -----------------------------------------------------------------
 
-  if(aTrack->GetKineticEnergy() >= ext_sourceEMax*nb_nuc)
-  {
+  if (aTrack->GetKineticEnergy() >= ext_sourceEMax * nb_nuc) {
     aTrack->SetTrackStatus(fStopAndKill);
     did_adj_part_reach_ext_source = false;
     return;
   }
-  
+
   // Kill conditions for surface crossing
   // --------------------------------------
 
@@ -102,12 +92,10 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double cos_to_surface;
   G4bool GoingIn;
   G4ThreeVector crossing_pos;
-  if (theG4AdjointCrossSurfChecker
-    ->CrossingOneOfTheRegisteredSurface(aStep, surface_name,
-                                        crossing_pos, cos_to_surface, GoingIn))
+  if (theG4AdjointCrossSurfChecker->CrossingOneOfTheRegisteredSurface(
+        aStep, surface_name, crossing_pos, cos_to_surface, GoingIn))
   {
-    if (surface_name == "ExternalSource")
-    {
+    if (surface_name == "ExternalSource") {
       // Registering still needed
       did_adj_part_reach_ext_source = true;
       did_one_adj_part_reach_ext_source_during_event = true;
@@ -121,22 +109,20 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
       last_pos = crossing_pos;
       return;
     }
-    else if (surface_name == "AdjointSource" && GoingIn)
-    {
+    if (surface_name == "AdjointSource" && GoingIn) {
       did_adj_part_reach_ext_source = false;
       aTrack->SetTrackStatus(fStopAndKill);
       return;
-    }  
+    }
   }
 
   // Check for reaching out of world
   //
-  if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary)
-  {
+  if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
     did_adj_part_reach_ext_source = true;
     did_one_adj_part_reach_ext_source_during_event = true;
-    last_momentum =aTrack->GetMomentum();
-    last_ekin=aTrack->GetKineticEnergy();
+    last_momentum = aTrack->GetMomentum();
+    last_ekin = aTrack->GetKineticEnergy();
     last_weight = aTrack->GetWeight();
     last_part_def = aTrack->GetDefinition();
     last_pos = crossing_pos;

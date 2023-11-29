@@ -34,13 +34,13 @@
 
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
+
 #include "PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-  : G4UImessenger()
-  , fPhysicsList(pPhys)
+  : G4UImessenger(), fPhysicsList(pPhys)
 {
   fModeCmd.reset(new G4UIcmdWithAString("/setMode", this));
   fModeCmd->SetGuidance("Add physics mode.");
@@ -57,8 +57,7 @@ PhysicsListMessenger::~PhysicsListMessenger() = default;
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if(command == fModeCmd.get())
-  {
+  if (command == fModeCmd.get()) {
     fPhysicsList->SetMode(newValue);
   }
 }

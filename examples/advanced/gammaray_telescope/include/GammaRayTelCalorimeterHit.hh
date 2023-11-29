@@ -38,85 +38,99 @@
 #ifndef GammaRayTelCalorimeterHit_h
 #define GammaRayTelCalorimeterHit_h 1
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
+#include "G4VHit.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelCalorimeterHit : public G4VHit
-{
+class GammaRayTelCalorimeterHit: public G4VHit {
 public:
-  
-  GammaRayTelCalorimeterHit();
-  ~GammaRayTelCalorimeterHit();
-  GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit&);
-  const GammaRayTelCalorimeterHit& operator=(const
-						GammaRayTelCalorimeterHit&);
-  G4bool operator==(const GammaRayTelCalorimeterHit&) const;
-  
-  inline void* operator new(size_t);
-  inline void  operator delete(void*);
-  
-  void Draw();
-  void Print();
+	GammaRayTelCalorimeterHit();
+
+	~GammaRayTelCalorimeterHit() override;
+
+	GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit &right);
+
+	auto operator=(const GammaRayTelCalorimeterHit &right) -> const GammaRayTelCalorimeterHit&;
+
+	auto operator==(const GammaRayTelCalorimeterHit &right) const -> G4bool;
+
+	inline auto operator new(size_t) -> void*;
+
+	inline auto operator delete(void* hit) -> void;
+
+	void Draw() override;
+
+	void Print() override;
+
+	inline void AddEnergy(G4double value) {
+		calDepositedEnergy += value;
+	}
+
+	inline void SetCALBarNumber(const G4int &value) {
+		calBarNumber = value;
+	}
+
+	inline void SetCALPlaneNumber(const G4int &value) {
+		calPlaneNumber = value;
+	}
+
+	inline void SetCALType(const G4int &value) {
+		isCALPlane = value;
+	}
+
+	inline void SetPosition(const G4ThreeVector &vector) {
+		position = vector;
+	}
+
+	[[nodiscard]]
+	inline auto GetCALDepositedEnergy() const -> G4double {
+		return calDepositedEnergy;
+	}
+
+	[[nodiscard]]
+	inline auto GetCALBarNumber() const -> G4int {
+		return calBarNumber;
+	}
+
+	[[nodiscard]]
+	inline auto GetCALPlaneNumber() const -> G4int {
+		return calPlaneNumber;
+	}
+
+	[[nodiscard]]
+	inline auto GetCALType() const -> G4int {
+		return isCALPlane;
+	}
+
+	[[nodiscard]]
+	inline auto GetPosition() const -> G4ThreeVector {
+		return position;
+	}
 
 private:
-  
-  G4double EdepCAL;  // Energy deposited on the ACD tile
-  G4ThreeVector pos; // Position of the hit
-  G4int CALBarNumber; // Number of the CAL tile
-  G4int CALPlaneNumber;    // Number of the CAL plane
-  G4int IsCALPlane;    // Type of the plane (0 X, 1 Y)
+    G4int calBarNumber{0}; // Number of the calorimeter (CAL) tile
 
-public:
-  
-  inline void AddEnergy(G4double de) {EdepCAL += de;};
-  inline void SetCALBarNumber(G4int i) {CALBarNumber = i;};
-  inline void SetCALPlaneNumber(G4int i) {CALPlaneNumber = i;};
-  inline void SetCALType(G4int i) {IsCALPlane = i;};
-  inline void SetPos(G4ThreeVector xyz){ pos = xyz; }
-  
-  inline G4double GetEdepCAL()     { return EdepCAL; };
-  inline G4int    GetCALBarNumber()   { return CALBarNumber; };
-  inline G4int    GetCALPlaneNumber()   { return CALPlaneNumber; };
-  inline G4int    GetCALType()   {return IsCALPlane;};      
-  inline G4ThreeVector GetPos() { return pos; };
-  
+    G4int calPlaneNumber{0}; // Number of the calorimeter (CAL) plane
+
+    G4int isCALPlane{0}; // Type of the plane (0: X plane, 1: Y plane)
+
+    G4double calDepositedEnergy{0.}; // Energy deposited on the calorimeter (CAL) tile
+
+    G4ThreeVector position{G4ThreeVector(0., 0., 0.)}; // Position of the hit
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+using GammaRayTelCalorimeterHitsCollection = G4THitsCollection<GammaRayTelCalorimeterHit>;
+extern G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *calorimeterHitAllocator;
 
-typedef G4THitsCollection<GammaRayTelCalorimeterHit> GammaRayTelCalorimeterHitsCollection;
-
-extern G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *GammaRayTelCalorimeterHitAllocator;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void* GammaRayTelCalorimeterHit::operator new(size_t)
-{
-  if (!GammaRayTelCalorimeterHitAllocator)
-    GammaRayTelCalorimeterHitAllocator = new G4Allocator<GammaRayTelCalorimeterHit>;
-  return (void*) GammaRayTelCalorimeterHitAllocator->MallocSingle();
+inline auto GammaRayTelCalorimeterHit::operator new(size_t) -> void* {
+	if (calorimeterHitAllocator == nullptr) {
+	    calorimeterHitAllocator = new G4Allocator<GammaRayTelCalorimeterHit>;
+	}
+	return (void*) calorimeterHitAllocator->MallocSingle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void GammaRayTelCalorimeterHit::operator delete(void* aHit)
-{
-  GammaRayTelCalorimeterHitAllocator->FreeSingle((GammaRayTelCalorimeterHit*) aHit);
+inline auto GammaRayTelCalorimeterHit::operator delete(void* hit) -> void {
+    calorimeterHitAllocator->FreeSingle((GammaRayTelCalorimeterHit*) hit);
 }
-
 #endif
-
-
-
-
-
-
-
-
-
-

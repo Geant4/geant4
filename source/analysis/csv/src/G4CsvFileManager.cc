@@ -55,13 +55,15 @@ G4CsvFileManager::G4CsvFileManager(const G4AnalysisManagerState& state)
 G4String G4CsvFileManager::GetNtupleFileName(CsvNtupleDescription* ntupleDescription)
 {
   // get ntuple file name
-  auto ntupleFileName = ntupleDescription->fFileName;
-  if ( ntupleFileName.size() ) {
+  auto ntupleFileName = ntupleDescription->GetFileName();
+  auto cycle = GetCycle();
+  if (ntupleFileName.size() != 0u) {
     // update filename per object per thread
-    ntupleFileName = GetTnFileName(ntupleFileName, GetFileType());
-  } else {
+    ntupleFileName = GetTnFileName(ntupleFileName, GetFileType(), cycle);
+  }
+  else {
     // compose ntuple file name from the default file name
-    ntupleFileName = GetNtupleFileName(ntupleDescription->fNtupleBooking.name());
+    ntupleFileName = GetNtupleFileName(ntupleDescription->GetNtupleBooking().name(), cycle);
   }
 
   if ( IsNtupleDirectory() ) {
@@ -151,20 +153,27 @@ G4bool G4CsvFileManager::SetNtupleDirectoryName(const G4String& dirName)
 }
 
 //_____________________________________________________________________________
+G4bool G4CsvFileManager::NotifyNtupleFile(CsvNtupleDescription* ntupleDescription)
+{
+  // Notify not empty file
+  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
+
+  return SetIsEmpty(ntupleFileName, ! ntupleDescription->GetHasFill());
+}
+
+//_____________________________________________________________________________
 G4bool G4CsvFileManager::CreateNtupleFile(
   CsvNtupleDescription* ntupleDescription)
 {
-  // get ntuple file name per object (if defined)
+  // Get ntuple file name per object (if defined)
   auto ntupleFileName = GetNtupleFileName(ntupleDescription);
 
-  Message(kVL4, "create", "ntuple file", ntupleFileName);
-
-  // update file name if it is already in use
-  while ( GetTFile(ntupleFileName, false) ) {
+  // Update file name if it is already in use
+  while ( GetTFile(ntupleFileName, false) != nullptr ) {
     // the file is already in use
-    auto oldName = ntupleDescription->fFileName;
+    auto oldName = ntupleFileName;
     auto newName = GetBaseName(oldName) + "_bis." + GetExtension(oldName);
-    ntupleDescription->fFileName = newName;
+    ntupleDescription->SetFileName(newName);
 
     Warn("Ntuple filename " + oldName + " is already in use.\n" +
          "It will be replaced with : " + newName,
@@ -173,35 +182,24 @@ G4bool G4CsvFileManager::CreateNtupleFile(
     ntupleFileName = GetNtupleFileName(ntupleDescription);
   }
 
-  ntupleDescription->fFile = CreateTFile(ntupleFileName);
+  // Create new ntuple file
+  ntupleDescription->SetFile(CreateTFile(ntupleFileName));
 
-  Message(kVL2, "create", "ntuple file", ntupleFileName);
-
-  return (ntupleDescription->fFile != nullptr);
+  return (ntupleDescription->GetFile() != nullptr);
 }
 
 //_____________________________________________________________________________
 G4bool G4CsvFileManager::CloseNtupleFile(
   CsvNtupleDescription* ntupleDescription)
 {
-  // Do nothing if there is no file
-  if ( ! ntupleDescription->fFile ) return true;
+  // Notifying not empty file is done in G4CsvNtupleFileManager::ActionAtWrite,
+  // as here we increment the cycle number and GetNtupleFileName returns a file name
+  // for the next cycle version.
 
-  auto result = true;
+  // Ntuple files are registered in file manager map.
+  // they will be closed with CloseFiles() calls
 
-  auto ntupleFileName = GetNtupleFileName(ntupleDescription);
+  ntupleDescription->GetFile().reset();
 
-  Message(kVL4, "close", "ntuple file", ntupleFileName);
-
-  // close file
-  result &= CloseTFile(ntupleFileName);
-  // Notify not empty file
-  result &= SetIsEmpty(ntupleFileName, ! ntupleDescription->fHasFill);
-
-  // Reset file info in ntuple description
-  ntupleDescription->fFile.reset();
-
-  Message(kVL2, "close", "ntuple file", ntupleFileName);
-
-  return result;
+  return true;
 }

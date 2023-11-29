@@ -54,16 +54,16 @@ class G4GRSVolume : public G4VTouchable
     G4GRSVolume(G4VPhysicalVolume* pVol,
           const G4RotationMatrix& rot,
           const G4ThreeVector& tlate);
-    ~G4GRSVolume();
+    ~G4GRSVolume() override;
 
     G4GRSVolume(const G4GRSVolume&) = delete;
     G4GRSVolume& operator=(const G4GRSVolume&) = delete;
       // Copy constructor and assignment operator not allowed
 
-    inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;
-    inline G4VSolid* GetSolid(G4int depth=0) const;
-    inline const G4ThreeVector& GetTranslation(G4int depth=0) const;
-    inline const G4RotationMatrix* GetRotation(G4int depth=0) const;
+    inline G4VPhysicalVolume* GetVolume(G4int depth=0) const override;
+    inline G4VSolid* GetSolid(G4int depth=0) const override;
+    inline const G4ThreeVector& GetTranslation(G4int depth=0) const override;
+    inline const G4RotationMatrix* GetRotation(G4int depth=0) const override;
 
   private:
   

@@ -189,6 +189,18 @@ class Run : public G4Run
   }
 
   void AddDichroic(void) { fBoundaryProcs[Dichroic] += 1; }
+  void AddCoatedDielectricRefraction(void)
+  {
+    fBoundaryProcs[CoatedDielectricRefraction] += 1;
+  }
+  void AddCoatedDielectricReflection(void)
+  {
+    fBoundaryProcs[CoatedDielectricReflection] += 1;
+  }
+  void AddCoatedDielectricFrustratedTransmission(void)
+  {
+    fBoundaryProcs[CoatedDielectricFrustratedTransmission] += 1;
+  }
 
   virtual void Merge(const G4Run*);
 

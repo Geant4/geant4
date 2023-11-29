@@ -151,10 +151,9 @@ G4bool G4ChipsPionPlusElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4ChipsPionPlusElasticXS::GetIsoCrossSection(const G4DynamicParticle* Pt, G4int tgZ, G4int A,  
-							const G4Isotope*,
-							const G4Element*,
-							const G4Material*)
-
+                                                      const G4Isotope*,
+                                                      const G4Element*,
+                                                      const G4Material*)
 {
   G4double pMom=Pt->GetTotalMomentum();
   G4int tgN = A - tgZ;
@@ -172,8 +171,8 @@ G4double G4ChipsPionPlusElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ
   lastP   = 0.;                      // New momentum history (nothing to compare with)
   lastN   = tgN;                     // The last N of the calculated nucleus
   lastZ   = tgZ;                     // The last Z of the calculated nucleus
-  lastI   = colN.size();             // Size of the Associative Memory DB in the heap
-  if(lastI) for(G4int i=0; i<lastI; i++) // Loop over proj/tgZ/tgN lines of DB
+  lastI   = (G4int)colN.size();      // Size of the Associative Memory DB in the heap
+  if(lastI) for(G4int i=0; i<lastI; ++i) // Loop over proj/tgZ/tgN lines of DB
   {                                  // The nucleus with projPDG is found in AMDB
     if(colN[i]==tgN && colZ[i]==tgZ) // Isotope is foind in AMDB
     {

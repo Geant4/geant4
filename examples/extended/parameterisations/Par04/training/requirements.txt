@@ -1,0 +1,12 @@
+tensorflow==2.9.1
+numpy==1.23.1
+h5py==3.7.0
+matplotlib==3.5.2
+optuna==2.10.1
+mysqlclient==2.1.1
+pymysql==1.0.2
+scikit-learn==1.1.1
+scipy==1.8.1
+wandb==0.13.1
+tf2onnx==1.12.0
+onnxruntime==1.12.1

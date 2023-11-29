@@ -1,0 +1,39 @@
+/control/verbose 2
+/tracking/verbose 0
+/run/verbose 0
+/process/optical/verbose 1
+/control/cout/ignoreThreadsExcept 0
+
+/opnovice2/worldMaterial G4_Al
+/opnovice2/worldProperty RINDEX    0.000002 1.38        0.000004 0.28        0.000006 0.13        0.000008 0.077
+/opnovice2/worldProperty ABSLENGTH 0.000002 6.75e-9     0.000004 6.65e-9     0.000006 6.96e-9     0.000008 7.45e-9
+
+/opnovice2/boxMaterial G4_AIR
+/opnovice2/boxProperty RINDEX    0.000002 1.01    0.000008 1.01
+/opnovice2/boxProperty ABSLENGTH 0.000002 1000000 0.000005 2000000 0.000008 3000000
+
+/opnovice2/surfaceModel unified
+/opnovice2/surfaceType dielectric_metal
+/opnovice2/surfaceFinish polished
+
+/opnovice2/surfaceProperty REALRINDEX           0.000002 1.38     0.000004 0.28     0.000006 0.13     0.000008 0.077
+/opnovice2/surfaceProperty IMAGINARYRINDEX      0.000002 7.31     0.000004 3.71     0.000006 2.40     0.000008 1.71
+
+/run/initialize
+
+/gun/particle opticalphoton
+/gun/energy 4 eV
+/gun/position 90 0 0 cm
+/gun/direction 1 0 0
+/opnovice2/gun/optPhotonPolar 0. deg
+/opnovice2/gun/randomDirection true
+
+/analysis/setFileName complexRindex_0
+/analysis/h1/set 24 90 0 90  # deg
+/analysis/h1/set 26 90 0 90  # deg
+/run/printProgress 100000
+/run/beamOn 500000
+
+/analysis/setFileName complexRindex_90
+/opnovice2/gun/optPhotonPolar 90. deg
+/run/beamOn 500000

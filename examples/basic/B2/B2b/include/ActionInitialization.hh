@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ActionInitialization.hh
+/// \file B2/B2b/include/ActionInitialization.hh
 /// \brief Definition of the B2::ActionInitialization class
 
 #ifndef B2ActionInitialization_h
@@ -40,8 +40,8 @@ namespace B2
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization();
-    ~ActionInitialization() override;
+    ActionInitialization() = default;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;

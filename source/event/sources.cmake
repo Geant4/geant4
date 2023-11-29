@@ -69,6 +69,8 @@ geant4_add_module(G4event
     G4UserStackingAction.cc
     G4VPrimaryGenerator.cc)
 
+geant4_module_compile_definitions(G4event PRIVATE G4EVENT_ALLOC_EXPORT)
+
 # Enable smart stack
 if(GEANT4_USE_SMARTSTACK)
   geant4_module_compile_definitions(G4event PUBLIC G4_USESMARTSTACK)
@@ -93,4 +95,5 @@ geant4_module_link_libraries(G4event
     G4detector
     G4graphics_reps
     G4materials
-    G4heprandom)
+    G4heprandom
+    G4parameterisation)

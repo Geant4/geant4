@@ -86,7 +86,7 @@
 
 class G4EllipticalCone : public G4VSolid
 {
-  public:  // with description
+  public:
    
     G4EllipticalCone(const G4String& pName,
                            G4double  pxSemiAxis,
@@ -94,7 +94,7 @@ class G4EllipticalCone : public G4VSolid
                            G4double  zMax,
                            G4double  pzTopCut);
 
-    virtual ~G4EllipticalCone();
+    ~G4EllipticalCone() override;
 
     // Access functions
     //
@@ -107,52 +107,50 @@ class G4EllipticalCone : public G4VSolid
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCut (G4double newzTopCut);
 
-    G4double GetCubicVolume(); 
-    G4double GetSurfaceArea();
+    G4double GetCubicVolume() override; 
+    G4double GetSurfaceArea() override;
 
     // Solid standard methods
     //
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    EInside Inside(const G4ThreeVector& p) const;
+    EInside Inside(const G4ThreeVector& p) const override;
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
 
     G4double DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const;
+                          const G4ThreeVector& v) const override;
 
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
 
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
+                                 G4ThreeVector* n = nullptr) const override;
 
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
   
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     // Visualisation functions
     //
-    G4Polyhedron* GetPolyhedron () const;
-    void DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4VisExtent   GetExtent() const;
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* GetPolyhedron () const override;
+    void DescribeYourselfTo(G4VGraphicsScene& scene) const override;
+    G4VisExtent   GetExtent() const override;
+    G4Polyhedron* CreatePolyhedron() const override;
        
-  public:  // without description
-
     G4EllipticalCone(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -162,7 +160,7 @@ class G4EllipticalCone : public G4VSolid
     G4EllipticalCone& operator=(const G4EllipticalCone& rhs); 
       // Copy constructor and assignment operator.
 
-  protected:  // without description
+  protected:
  
     mutable G4bool fRebuildPolyhedron = false;
     mutable G4Polyhedron* fpPolyhedron = nullptr;

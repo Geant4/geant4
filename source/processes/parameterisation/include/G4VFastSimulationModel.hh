@@ -130,6 +130,10 @@ public: // With description
   // described has "requests" the tracking will apply after your 
   // parameterisation has been invoked.
   
+
+  virtual
+  void Flush(){}
+  
 public: // Without description
 
   // Useful public methods :

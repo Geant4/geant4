@@ -27,7 +27,6 @@
 /// \brief Implementation of the GammaNuclearPhysics class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "GammaNuclearPhysics.hh"
@@ -49,11 +48,6 @@
 
 GammaNuclearPhysics::GammaNuclearPhysics(const G4String& name)
 :  G4VPhysicsConstructor(name)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-GammaNuclearPhysics::~GammaNuclearPhysics()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

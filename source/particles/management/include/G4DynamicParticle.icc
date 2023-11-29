@@ -37,7 +37,9 @@ extern G4PART_DLL G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator();
 inline void * G4DynamicParticle::operator new(size_t)
 {
   if (pDynamicParticleAllocator() == nullptr)
+  {
     pDynamicParticleAllocator() = new G4Allocator<G4DynamicParticle>;
+  }
   return pDynamicParticleAllocator()->MallocSingle();
 }
 
@@ -59,12 +61,12 @@ G4DynamicParticle::GetElectronOccupancy() const
 
 inline G4int G4DynamicParticle::GetTotalOccupancy() const
 {
-  return (theElectronOccupancy) ? theElectronOccupancy->GetTotalOccupancy() : 0;
+  return (theElectronOccupancy) != nullptr ? theElectronOccupancy->GetTotalOccupancy() : 0;
 }
 
 inline G4int G4DynamicParticle::GetOccupancy(G4int orbit) const
 {
-  return (theElectronOccupancy) ? theElectronOccupancy->GetOccupancy(orbit) : 0;
+  return (theElectronOccupancy) != nullptr ? theElectronOccupancy->GetOccupancy(orbit) : 0;
 }
 
 inline void  G4DynamicParticle::AddElectron(G4int orbit, G4int number)

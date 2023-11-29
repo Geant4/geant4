@@ -44,41 +44,20 @@ class GFlashParticleBounds;
 
 class ExGflash3DetectorConstruction : public G4VUserDetectorConstruction
 {
-public:
-  ExGflash3DetectorConstruction();
-  ~ExGflash3DetectorConstruction();
-  
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-  
-private:
-  G4Region*           fRegion;
+  public:
+    ExGflash3DetectorConstruction();
+    ~ExGflash3DetectorConstruction() override;
 
-  static G4ThreadLocal GFlashShowerModel* fFastShowerModel; 
-  static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation;
-  static G4ThreadLocal GFlashParticleBounds* fParticleBounds;
-  static G4ThreadLocal GFlashHitMaker* fHitMaker;
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
+
+  private:
+    G4Region* fRegion{nullptr};
+
+    inline static G4ThreadLocal GFlashShowerModel* fFastShowerModel = nullptr;
+    inline static G4ThreadLocal GFlashHomoShowerParameterisation* fParameterisation = nullptr;
+    inline static G4ThreadLocal GFlashParticleBounds* fParticleBounds = nullptr;
+    inline static G4ThreadLocal GFlashHitMaker* fHitMaker = nullptr;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

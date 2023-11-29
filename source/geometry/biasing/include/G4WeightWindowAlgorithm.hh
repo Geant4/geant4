@@ -58,10 +58,10 @@ class G4WeightWindowAlgorithm : public G4VWeightWindowAlgorithm
                             G4double survivalFactor = 3,
                             G4int maxNumberOfSplits = 5);
   
-    virtual ~G4WeightWindowAlgorithm();
+    ~G4WeightWindowAlgorithm() override;
 
-    virtual G4Nsplit_Weight Calculate(G4double init_w,
-                                      G4double lowerWeightBound) const;
+    G4Nsplit_Weight Calculate(G4double init_w,
+                                      G4double lowerWeightBound) const override;
       // calculate number of tracks and their weight according
       // to the initial track weight and the lower energy bound
 

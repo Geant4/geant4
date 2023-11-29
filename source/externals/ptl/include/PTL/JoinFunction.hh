@@ -32,12 +32,8 @@
 
 #include "PTL/Types.hh"
 
-#include <cstdint>
-#include <deque>
 #include <functional>
-#include <future>
-#include <list>
-#include <vector>
+#include <utility>
 
 namespace PTL
 {

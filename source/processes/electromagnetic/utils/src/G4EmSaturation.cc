@@ -53,7 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4EmSaturation::nMaterials = 0;
+std::size_t G4EmSaturation::nMaterials = 0;
 std::vector<G4double> G4EmSaturation::massFactors;
 std::vector<G4double> G4EmSaturation::effCharges;
 std::vector<G4double> G4EmSaturation::g4MatData;
@@ -72,8 +72,7 @@ G4EmSaturation::G4EmSaturation(G4int verb)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmSaturation::~G4EmSaturation()
-{}
+G4EmSaturation::~G4EmSaturation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -120,7 +119,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       }
       // non-ionizing energy loss
       if(nloss > 0.0) {
-        G4int idx = couple->GetMaterial()->GetIndex();
+        std::size_t idx = couple->GetMaterial()->GetIndex();
         G4double escaled = nloss*massFactors[idx];
 	/*        
         G4cout << "%% p edep= " << nloss/keV << " keV  Escaled= " 
@@ -150,7 +149,7 @@ void G4EmSaturation::InitialiseG4Saturation()
 
   if(0 == nG4Birks) {  InitialiseG4materials(); }
 
-  for(size_t i=0; i<nMaterials; ++i) {
+  for(std::size_t i=0; i<nMaterials; ++i) {
     InitialiseBirksCoefficient((*G4Material::GetMaterialTable())[i]);
   }
   if(verbose > 0) { DumpBirksCoefficients(); }
@@ -215,8 +214,8 @@ void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
   G4double norm = 0.0;
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
-  size_t nelm = mat->GetNumberOfElements();
-  for (size_t i=0; i<nelm; ++i) {
+  std::size_t nelm = mat->GetNumberOfElements();
+  for (std::size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     G4double Z = elm->GetZ();
     G4double w = Z*Z*theAtomNumDensityVector[i];
@@ -228,7 +227,7 @@ void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
   curChargeSq /= norm;
 
   // store results
-  G4int idx = mat->GetIndex();
+  std::size_t idx = mat->GetIndex();
   massFactors[idx] = curRatio;
   effCharges[idx] = curChargeSq;
 }
@@ -239,7 +238,7 @@ void G4EmSaturation::DumpBirksCoefficients()
 {
   G4cout << "### Birks coefficients used in run time" << G4endl;
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
-  for(size_t i=0; i<nMaterials; ++i) {
+  for(std::size_t i=0; i<nMaterials; ++i) {
     const G4Material* mat = (*mtable)[i];
     G4double br = mat->GetIonisation()->GetBirksConstant();
     if(br > 0.0) {

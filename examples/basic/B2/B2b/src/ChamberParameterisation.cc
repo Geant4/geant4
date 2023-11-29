@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ChamberParameterisation.cc
+/// \file B2/B2b/src/ChamberParameterisation.cc
 /// \brief Implementation of the B2b::ChamberParameterisation class
 
 #include "ChamberParameterisation.hh"
@@ -61,11 +61,6 @@ ChamberParameterisation::ChamberParameterisation(
       }
    }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ChamberParameterisation::~ChamberParameterisation()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

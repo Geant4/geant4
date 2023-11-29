@@ -47,16 +47,16 @@
 // ###                           Lambda                               ###
 // ######################################################################
 
-G4Lambda* G4Lambda::theInstance = 0;
+G4Lambda* G4Lambda::theInstance = nullptr;
 
 G4Lambda* G4Lambda::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "lambda";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -73,7 +73,7 @@ G4Lambda* G4Lambda::Definition()
                     1,              +1,             0,
                     0,               0,             0,             
              "baryon",               0,            +1,        3122,
-                false,       0.2631*ns,          NULL,
+                false,       0.2631*ns,          nullptr,
                 false,       "lambda");
  
     // Magnetic Moment
@@ -81,10 +81,10 @@ G4Lambda* G4Lambda::Definition()
     anInstance->SetPDGMagneticMoment( -0.613 * mN);
     
     //create Decay Table 
-    G4DecayTable* table = new G4DecayTable();
+    auto  table = new G4DecayTable();
     
     // create decay channels 
-    G4VDecayChannel** mode = new G4VDecayChannel*[2];
+    auto  mode = new G4VDecayChannel*[2];
     // lambda -> proton + pi-
     mode[0] = new G4PhaseSpaceDecayChannel("lambda",0.639,2,"proton","pi-");
     // lambda -> neutron + pi0
@@ -95,7 +95,7 @@ G4Lambda* G4Lambda::Definition()
     
     anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4Lambda*>(anInstance);
+  theInstance = static_cast<G4Lambda*>(anInstance);
   return theInstance;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PrimaryGeneratorAction.cc
+/// \file B5/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the B5::PrimaryGeneratorAction class
 
 #include "PrimaryGeneratorAction.hh"
@@ -84,7 +84,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
   G4ParticleDefinition* particle;
   if (fRandomizePrimary) {
-    G4int i = (int)(5.*G4UniformRand());
+    auto i = (int)(5. * G4UniformRand());
     switch(i) {
       case 0:
           particle = fPositron;

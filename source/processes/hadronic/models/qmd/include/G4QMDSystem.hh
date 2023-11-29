@@ -45,24 +45,55 @@
 class G4QMDSystem 
 {
    public:
+
       G4QMDSystem();
       virtual ~G4QMDSystem();
 
-      void SetParticipant( G4QMDParticipant* particle ) { participants.push_back ( particle ); };
+      void SetParticipant( G4QMDParticipant* particle )
+      {
+        participants.push_back ( particle );
+      }
+
       void SetSystem ( G4QMDSystem* , G4ThreeVector , G4ThreeVector );
 
       void SubtractSystem ( G4QMDSystem* );
 
-      G4QMDParticipant* EraseParticipant( G4int i ) { G4QMDParticipant* particle =  participants[ i ]; participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ) ; return particle; };
-      void DeleteParticipant( G4int i ) { delete participants[ i ] ; participants.erase( std::find ( participants.begin() , participants.end() , participants[ i ] ) ); };
+      G4QMDParticipant* EraseParticipant( G4int i )
+      {
+        G4QMDParticipant* particle =  participants[ i ];
+        participants.erase(std::find( participants.cbegin(),
+                                      participants.cend(), participants[ i ]));
+        return particle;
+      }
+
+      void DeleteParticipant( G4int i )
+      {
+        delete participants[ i ];
+        participants.erase(std::find ( participants.cbegin(),
+                                       participants.cend(), participants[ i ]));
+      }
+
       void InsertParticipant( G4QMDParticipant* particle , G4int j );
 
-      G4int GetTotalNumberOfParticipant() { return participants.size(); };
+      G4int GetTotalNumberOfParticipant()
+      {
+        return (G4int)participants.size();
+      }
 
-      G4QMDParticipant* GetParticipant( G4int i ) { return participants[i]; };
+      G4QMDParticipant* GetParticipant( G4int i )
+      {
+        return participants[i];
+      }
 
-      void IncrementCollisionCounter() { numberOfCollision++; };
-      G4int GetNOCollision() { return numberOfCollision; };
+      void IncrementCollisionCounter()
+      {
+        ++numberOfCollision;
+      }
+
+      G4int GetNOCollision()
+      {
+        return numberOfCollision;
+      }
 
       void ShowParticipants();
 

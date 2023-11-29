@@ -292,7 +292,6 @@ G4PolyPhiFace::~G4PolyPhiFace()
 // Copy constructor
 //
 G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace& source )
-  : G4VCSGface()
 {
   CopyStuff( source );
 }
@@ -445,7 +444,7 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector& p, G4bool outgoing )
   //
   G4double distRZ2;
   
-  if (InsideEdges( r, p.z(), &distRZ2, 0 ))
+  if (InsideEdges( r, p.z(), &distRZ2, nullptr ))
   {
     //
     // Yup, answer is just distPhi
@@ -554,7 +553,7 @@ G4ThreeVector G4PolyPhiFace::Normal( const G4ThreeVector& p,
   //
   G4double distRZ2;
   
-  if (InsideEdges( r, p.z(), &distRZ2, 0 ))
+  if (InsideEdges( r, p.z(), &distRZ2, nullptr ))
   {
     //
     // Yup, answer is just distPhi
@@ -788,7 +787,7 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z )
   //
   G4double notUsed;
   
-  return InsideEdges( r, z, &notUsed, 0 );
+  return InsideEdges( r, z, &notUsed, nullptr );
 }
 
 // InsideEdges (care about distance)
@@ -873,9 +872,9 @@ G4bool G4PolyPhiFace::InsideEdges( G4double r, G4double z,
 // Calculation of Surface Area of a Triangle 
 // In the same time Random Point in Triangle is given
 //
-G4double G4PolyPhiFace::SurfaceTriangle( G4ThreeVector p1,
-                                         G4ThreeVector p2,
-                                         G4ThreeVector p3,
+G4double G4PolyPhiFace::SurfaceTriangle( const G4ThreeVector& p1,
+                                         const G4ThreeVector& p2,
+                                         const G4ThreeVector& p3,
                                          G4ThreeVector* p4 )
 {
   G4ThreeVector v, w;
@@ -911,9 +910,9 @@ G4ThreeVector G4PolyPhiFace::GetPointOnFace()
 
 // Calculation of 2*Area of Triangle with Sign
 //
-G4double G4PolyPhiFace::Area2( G4TwoVector a,
-                               G4TwoVector b,
-                               G4TwoVector c )
+G4double G4PolyPhiFace::Area2( const G4TwoVector& a,
+                               const G4TwoVector& b,
+                               const G4TwoVector& c )
 {
   return ((b.x()-a.x())*(c.y()-a.y())-
           (c.x()-a.x())*(b.y()-a.y()));
@@ -921,27 +920,27 @@ G4double G4PolyPhiFace::Area2( G4TwoVector a,
 
 // Boolean function for sign of Surface
 //
-G4bool G4PolyPhiFace::Left( G4TwoVector a,
-                            G4TwoVector b,
-                            G4TwoVector c )
+G4bool G4PolyPhiFace::Left( const G4TwoVector& a,
+                            const G4TwoVector& b,
+                            const G4TwoVector& c )
 {
   return Area2(a,b,c)>0;
 }
 
 // Boolean function for sign of Surface
 //
-G4bool G4PolyPhiFace::LeftOn( G4TwoVector a,
-                              G4TwoVector b,
-                              G4TwoVector c )
+G4bool G4PolyPhiFace::LeftOn( const G4TwoVector& a,
+                              const G4TwoVector& b,
+                              const G4TwoVector& c )
 {
   return Area2(a,b,c)>=0;
 }
 
 // Boolean function for sign of Surface
 //
-G4bool G4PolyPhiFace::Collinear( G4TwoVector a,
-                                 G4TwoVector b,
-                                 G4TwoVector c )
+G4bool G4PolyPhiFace::Collinear( const G4TwoVector& a,
+                                 const G4TwoVector& b,
+                                 const G4TwoVector& c )
 {
   return Area2(a,b,c)==0;
 }
@@ -949,22 +948,22 @@ G4bool G4PolyPhiFace::Collinear( G4TwoVector a,
 // Boolean function for finding "Proper" Intersection
 // That means Intersection of two lines segments (a,b) and (c,d)
 // 
-G4bool G4PolyPhiFace::IntersectProp( G4TwoVector a,
-                                     G4TwoVector b,
-                                     G4TwoVector c, G4TwoVector d )
+G4bool G4PolyPhiFace::IntersectProp( const G4TwoVector& a,
+                                     const G4TwoVector& b,
+                                     const G4TwoVector& c, const G4TwoVector& d )
 {
   if( Collinear(a,b,c) || Collinear(a,b,d)||
       Collinear(c,d,a) || Collinear(c,d,b) )  { return false; }
 
   G4bool Positive;
   Positive = !(Left(a,b,c))^!(Left(a,b,d));
-  return Positive && (!Left(c,d,a)^!Left(c,d,b));
+  return Positive && ((!Left(c,d,a)^!Left(c,d,b)) != 0);
 }
 
 // Boolean function for determining if Point c is between a and b
 // For the tree points(a,b,c) on the same line
 //
-G4bool G4PolyPhiFace::Between( G4TwoVector a, G4TwoVector b, G4TwoVector c )
+G4bool G4PolyPhiFace::Between( const G4TwoVector& a, const G4TwoVector& b, const G4TwoVector& c )
 {
   if( !Collinear(a,b,c) ) { return false; }
 
@@ -983,9 +982,9 @@ G4bool G4PolyPhiFace::Between( G4TwoVector a, G4TwoVector b, G4TwoVector c )
 // Boolean function for finding Intersection "Proper" or not
 // Between two line segments (a,b) and (c,d)
 //
-G4bool G4PolyPhiFace::Intersect( G4TwoVector a,
-                                 G4TwoVector b,
-                                 G4TwoVector c, G4TwoVector d )
+G4bool G4PolyPhiFace::Intersect( const G4TwoVector& a,
+                                 const G4TwoVector& b,
+                                 const G4TwoVector& c, const G4TwoVector& d )
 {
  if( IntersectProp(a,b,c,d) )
    { return true; }
@@ -1096,7 +1095,7 @@ void G4PolyPhiFace::Triangulate()
   // The copy of Polycone is made and this copy is reordered in order to 
   // have a list of triangles. This list is used for GetPointOnFace().
 
-  G4PolyPhiFaceVertex* tri_help = new G4PolyPhiFaceVertex[numEdges];
+  auto tri_help = new G4PolyPhiFaceVertex[numEdges];
   triangles = tri_help;
   G4PolyPhiFaceVertex* triang = triangles;
 
@@ -1197,7 +1196,7 @@ void G4PolyPhiFace::Triangulate()
     }
   }   // end outer while loop
 
-  if(v2->next)
+  if(v2->next != nullptr)
   {
      // add last triangle
      //

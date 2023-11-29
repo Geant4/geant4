@@ -47,19 +47,24 @@ class G4EmDNAChemistry_option3 : public G4VUserChemistryList,
 public:
 
   G4EmDNAChemistry_option3();
-  virtual ~G4EmDNAChemistry_option3();
+  ~G4EmDNAChemistry_option3() override = default;
 
-  virtual void ConstructParticle()
+  void ConstructParticle() override
   {
     ConstructMolecule();
   }
-  virtual void ConstructMolecule();
-  virtual void ConstructProcess();
+  void ConstructMolecule() override;
+  void ConstructProcess() override;
 
-  virtual void ConstructDissociationChannels();
-  virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable);
-  virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable);
-
+  void ConstructDissociationChannels() override;
+  void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) override;
+  void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) override;
+  inline void SetTimeStepModel(const TimeStepModel& model)
+  {
+    fTimeStepModel = model;
+  }
+ private:
+  TimeStepModel fTimeStepModel = fIRT;
 };
 
 #endif

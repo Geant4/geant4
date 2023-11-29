@@ -235,7 +235,7 @@ public:
   void clear() {safe_reverse_clear<node>(m_children);}
 
   void raw_clear() { //used for sg coming from exlib/rroot/vis_volume.
-    tools::raw_clear<node>(m_children); //inlib:: is needed.
+    tools::raw_clear<node>(m_children); //tools:: is needed.
   }
 
 //void children_clear() {m_children.clear();} //warning : nodes are not deleted. Used in [hep_]cone_anim.

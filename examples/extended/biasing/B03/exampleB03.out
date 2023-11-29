@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -98,8 +98,10 @@ B03PhysicsList::SetCuts:CutLength : 1 (mm)
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      100 eV 
@@ -115,7 +117,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -125,8 +127,9 @@ Step function for light ions                       (0.2, 0.1 mm)
 Step function for general ions                     (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Universal
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           0
 Use cut as a final range enabled                   0
@@ -181,10 +184,10 @@ msc:  for e-  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e-  XStype:1  SubType=2
+eIoni:  for e-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
@@ -201,10 +204,10 @@ msc:  for e+  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
-eIoni:  for e+  XStype:1  SubType=2
+eIoni:  for e+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
@@ -225,10 +228,10 @@ msc:  for proton  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for proton  XStype:1  SubType=2
+hIoni:  for proton  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -238,10 +241,10 @@ msc:  for GenericIon  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for GenericIon  XStype:1  SubType=2
+hIoni:  for GenericIon  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -251,10 +254,10 @@ msc:  for alpha  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for alpha  XStype:1  SubType=2
+hIoni:  for alpha  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=7.9452 MeV
           BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
@@ -264,10 +267,10 @@ msc:  for anti_proton  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for anti_proton  XStype:1  SubType=2
+hIoni:  for anti_proton  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=    2 MeV
           BetheBloch : Emin=    2 MeV Emax=  100 TeV
@@ -277,10 +280,10 @@ msc:  for kaon+  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for kaon+  XStype:1  SubType=2
+hIoni:  for kaon+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=1.05231 MeV
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
@@ -290,10 +293,10 @@ msc:  for kaon-  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for kaon-  XStype:1  SubType=2
+hIoni:  for kaon-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV
           BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
@@ -303,25 +306,24 @@ msc:  for mu+  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-muIoni:  for mu+  XStype:1  SubType=2
+muIoni:  for mu+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
 
 muBrems:  for mu+  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu+  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -330,25 +332,24 @@ msc:  for mu-  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-muIoni:  for mu-  XStype:1  SubType=2
+muIoni:  for mu-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=  200 keV
-          BetheBloch : Emin=  200 keV Emax=    1 GeV
-        MuBetheBloch : Emin=    1 GeV Emax=  100 TeV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
 
 muBrems:  for mu-  XStype:1  SubType=3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
 muPairProd:  for mu-  XStype:1  SubType=4
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 0
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
 
@@ -357,10 +358,10 @@ msc:  for pi+  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for pi+  XStype:1  SubType=2
+hIoni:  for pi+  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg : Emin=    0 eV  Emax=297.505 keV
           BetheBloch : Emin=297.505 keV Emax=  100 TeV
@@ -370,10 +371,10 @@ msc:  for pi-  SubType= 10
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
           StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
 
-hIoni:  for pi-  XStype:1  SubType=2
+hIoni:  for pi-  XStype:3  SubType=2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
-      StepFunction=(0.2, 0.1 mm), integ: 1, fluct: 1, linLossLim= 0.01
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV
           BetheBloch : Emin=297.505 keV Emax=  100 TeV
@@ -386,215 +387,231 @@ hIoni:  for pi-  XStype:1  SubType=2
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 110 MeV/n
         Model:                  QMDModel: 100 MeV/n ---> 10 GeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_lambda
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:                 ANTI-FTFP: 0 eV  ---> 20 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:                 ANTI-FTFP: 0 eV  ---> 20 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for anti_proton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:                 ANTI-FTFP: 0 eV  ---> 20 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for deuteron
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 110 MeV/n
         Model:                  QMDModel: 100 MeV/n ---> 10 GeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for kaon+
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for kaon-
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for lambda
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for neutron
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
 
+
   Process: nFission
         Model:                G4LFission: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:                    ZeroXS: 0 eV  ---> 100 TeV
 
+
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for proton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
 
 ---------------------------------------------------
                            Hadronic Processes for sigma-
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 22 MeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
 
+
 ---------------------------------------------------
                            Hadronic Processes for triton
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 25.6 PeV
+
 
   Process: inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 110 MeV/n
         Model:                  QMDModel: 100 MeV/n ---> 10 GeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
 
+
 ================================================================
 =======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
+======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
 Type of pre-compound inverse x-section              3
 Pre-compound model active                           1
-Pre-compound excitation low energy (MeV)            0.1
-Pre-compound excitation high energy (MeV)           30
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
 Type of de-excitation inverse x-section             3
 Type of de-excitation factory                       Evaporation+GEM
 Number of de-excitation channels                    68
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 2e+05
-Limit excitation energy for Fermi BreakUp (MeV)     20
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
 Level density (1/MeV)                               0.075
 Use simple level density model                      1
-Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1
-Isomer production flag                              1
-Internal e- conversion flag                         1
-Store e- internal conversion data                   0
-Correlated gamma emission flag                      0
-Max 2J for sampling of angular correlations         10
-=======================================================================
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Pre-compound model active                           1
-Pre-compound excitation low energy (MeV)            0.1
-Pre-compound excitation high energy (MeV)           30
-Type of de-excitation inverse x-section             3
-Type of de-excitation factory                       Evaporation+GEM
-Number of de-excitation channels                    68
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 2e+05
-Limit excitation energy for Fermi BreakUp (MeV)     20
-Level density (1/MeV)                               0.075
-Use simple level density model                      1
-Use discrete excitation energy of the residual      0
-Time limit for long lived isomeres (ns)             1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
 Isomer production flag                              1
 Internal e- conversion flag                         1
 Store e- internal conversion data                   0
@@ -616,7 +633,7 @@ Max 2J for sampling of angular correlations         10
 *** G4Exception : GeomBias1001
       issued by : G4ImportanceAlgorithm::Warning()
 Calculate() - ipre_over_ipost ! in [0.25, 4].
-ipre_over_ipost = 4096.
+ipre_over_ipost = 64.
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
@@ -636,24 +653,24 @@ ipre_over_ipost = 4096.
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            42 |           137 |             0 |             0 |    0.00187798 |       2.58678 |             1 |       7435.72 |       7435.72 |        381201 |       19234.6 |       715.888 |
-       cell_01 |           143 |           169 |           326 |           326 |    0.00186836 |       4.71158 |             1 |       22601.2 |       22601.2 |   1.53793e+06 |        106487 |       2873.41 |
-       cell_02 |           180 |           299 |           884 |           442 |   0.000662167 |       3.01184 |           0.5 |         51114 |         25557 |   3.52414e+06 |       76973.5 |       2333.57 |
-       cell_03 |           300 |           452 |          1512 |           378 |    0.00122066 |       2.32281 |          0.25 |       83802.9 |       20950.7 |   1.27676e+06 |       48664.6 |       1558.49 |
-       cell_04 |           450 |           662 |          2359 |       294.875 |   0.000633263 |       1.75479 |         0.125 |        126114 |       15764.2 |   1.48076e+06 |       27662.9 |       937.708 |
-       cell_05 |           689 |           951 |          3835 |       239.688 |   0.000340383 |       1.31797 |        0.0625 |        192676 |       12042.3 |   1.71179e+06 |       15871.4 |       582.663 |
-       cell_06 |           985 |          1313 |          5763 |       180.094 |   0.000212153 |      0.971561 |       0.03125 |        276370 |       8636.57 |   1.57994e+06 |       8390.95 |        335.19 |
-       cell_07 |          1311 |          1750 |          7696 |        120.25 |   0.000159737 |      0.835298 |      0.015625 |        360035 |       5625.55 |   1.22257e+06 |       4699.01 |        195.29 |
-       cell_08 |          1569 |          2119 |          9819 |       76.7109 |   0.000144459 |       0.71372 |     0.0078125 |        457691 |       3575.71 |        770507 |       2552.06 |       111.307 |
-       cell_09 |          1913 |          2562 |         11987 |       46.8242 |   0.000109508 |      0.629828 |    0.00390625 |        536383 |       2095.25 |        533853 |       1319.65 |       58.4611 |
-       cell_10 |          2184 |          3018 |         14272 |        27.875 |   0.000104244 |      0.606641 |    0.00195312 |        632911 |       1236.15 |        322686 |       749.902 |       33.6382 |
-       cell_11 |          2477 |          3344 |         15561 |       15.1963 |   8.59806e-05 |      0.537942 |   0.000976562 |        683344 |       667.328 |        191946 |       358.984 |       16.5037 |
-       cell_12 |          2758 |          3757 |         18079 |       8.82764 |   7.70425e-05 |      0.461918 |   0.000488281 |        792784 |       387.102 |        112547 |       178.809 |       8.67088 |
-       cell_13 |          2937 |          4002 |         18859 |       4.60425 |   6.62855e-05 |      0.419788 |   0.000244141 |        824639 |       201.328 |       63615.7 |       84.5151 |        4.2168 |
-       cell_14 |          3097 |          4332 |         20204 |       2.46631 |   6.40584e-05 |      0.421251 |    0.00012207 |        870071 |        106.21 |       34811.1 |        44.741 |       2.22994 |
-       cell_15 |          3259 |          4573 |         21270 |       1.29822 |   6.33226e-05 |      0.416255 |   6.10352e-05 |        918808 |       56.0796 |       18431.5 |       23.3434 |       1.16713 |
-       cell_16 |          3403 |          4776 |         22598 |      0.689636 |   6.27419e-05 |      0.386088 |   3.05176e-05 |        964268 |       29.4271 |       9348.31 |       11.3615 |      0.586531 |
-       cell_17 |          3329 |          4835 |         21968 |      0.335205 |   5.95469e-05 |      0.361499 |   1.52588e-05 |        944928 |       14.4184 |       4563.87 |       5.21226 |      0.271764 |
-       cell_18 |          2349 |          4334 |         18483 |      0.141014 |   6.39378e-05 |      0.399177 |   7.62939e-06 |        804435 |       6.13735 |       1966.82 |       2.44989 |      0.125754 |
-       cell_19 |          1971 |          1971 |             0 |             0 |   9.72052e-05 |       0.58562 |   7.62939e-06 |        311518 |       2.37669 |       679.726 |       1.39184 |     0.0660729 |
+       cell_00 |            48 |           144 |             0 |             0 |    0.00400059 |       1.95992 |             1 |       9423.67 |       9423.67 |        170955 |       18469.6 |       683.921 |
+       cell_01 |           146 |           187 |           389 |           389 |    0.00459231 |       4.15214 |             1 |       24206.9 |       24206.9 |        608498 |        100510 |       2794.41 |
+       cell_02 |           183 |           273 |           923 |         461.5 |   0.000686926 |       2.51431 |           0.5 |       51219.7 |       25609.9 |   2.89504e+06 |         64391 |       1988.68 |
+       cell_03 |           324 |           439 |          1539 |        384.75 |   0.000407614 |       2.04634 |          0.25 |       84172.4 |       21043.1 |   3.45545e+06 |       43061.4 |       1408.49 |
+       cell_04 |           506 |           701 |          2852 |         356.5 |   0.000298237 |       1.54609 |         0.125 |        142527 |       17815.9 |   3.22255e+06 |         27545 |       961.084 |
+       cell_05 |           727 |           992 |          4181 |       261.312 |    0.00022306 |       1.26762 |        0.0625 |        206706 |       12919.2 |   2.70982e+06 |       16376.5 |       604.452 |
+       cell_06 |           915 |          1275 |          5541 |       173.156 |    0.00020849 |       1.08966 |       0.03125 |        264235 |       8257.35 |   1.68094e+06 |       8997.71 |        350.46 |
+       cell_07 |          1174 |          1619 |          7221 |       112.828 |   0.000181412 |      0.843659 |      0.015625 |        341632 |          5338 |   1.04824e+06 |       4503.46 |       190.164 |
+       cell_08 |          1412 |          1948 |          9025 |       70.5078 |   0.000140726 |      0.698734 |     0.0078125 |        417823 |       3264.24 |        720644 |       2280.84 |       101.413 |
+       cell_09 |          1772 |          2438 |         11054 |       43.1797 |   0.000109624 |      0.610036 |    0.00390625 |        497278 |       1942.49 |        492102 |       1184.99 |       53.9461 |
+       cell_10 |          2150 |          2922 |         13650 |       26.6602 |   9.69769e-05 |      0.568169 |    0.00195312 |        608403 |       1188.29 |        319562 |       675.149 |       30.9901 |
+       cell_11 |          2487 |          3407 |         15614 |        15.248 |   8.11331e-05 |      0.514019 |   0.000976562 |        699856 |       683.453 |        206013 |       351.308 |       16.7144 |
+       cell_12 |          2832 |          3904 |         18463 |       9.01514 |   7.63921e-05 |      0.476324 |   0.000488281 |        809387 |       395.209 |        120334 |       188.247 |       9.19259 |
+       cell_13 |          3142 |          4371 |         20302 |       4.95654 |   7.57635e-05 |       0.43614 |   0.000244141 |        888356 |       216.884 |       63024.4 |       94.5916 |       4.77495 |
+       cell_14 |          3562 |          4806 |         22349 |       2.72815 |    7.0335e-05 |      0.422465 |    0.00012207 |        971171 |       118.551 |       36370.1 |       50.0837 |       2.55809 |
+       cell_15 |          3918 |          5315 |         24861 |        1.5174 |   6.58693e-05 |      0.400322 |   6.10352e-05 |   1.09189e+06 |       66.6437 |       20938.1 |        26.679 |       1.37918 |
+       cell_16 |          4099 |          5651 |         26912 |      0.821289 |   6.80894e-05 |      0.394316 |   3.05176e-05 |   1.17377e+06 |       35.8206 |       10983.1 |       14.1246 |      0.747833 |
+       cell_17 |          4100 |          5912 |         27045 |      0.412674 |   6.72991e-05 |      0.408536 |   1.52588e-05 |   1.16919e+06 |       17.8404 |       5540.04 |       7.28847 |       0.37284 |
+       cell_18 |          3000 |          5563 |         23233 |      0.177254 |   7.71321e-05 |      0.446845 |   7.62939e-06 |   1.03117e+06 |       7.86724 |       2341.58 |       3.51543 |      0.180611 |
+       cell_19 |          2573 |          2573 |             0 |             0 |    0.00010536 |      0.576978 |   7.62939e-06 |        406542 |       3.10167 |       829.823 |        1.7896 |     0.0874299 |
 =============================================

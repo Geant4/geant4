@@ -1886,7 +1886,10 @@ G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 G4double 
 G4CascadePPChannel::findCrossSection(G4double ke,
                                      const G4double (&xsec)[30]) const {
-  if (ke < 0.01 && (xsec == ppTotXSec || xsec == ppCrossSections[0])) {
+  if (ke < 0.01 &&
+       (std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(ppTotXSec))
+     || std::equal(std::cbegin(xsec), std::cend(xsec), std::cbegin(ppCrossSections[0]))))
+  {
     // Stepanov's function for ke < 10 MeV, up to zero-energy value
     const G4double kemin = 4.0/ppTotXSec[0];
     return (ke>0.001 ? (9.0692 - 0.0050574/ke)/ke + 6.9466 :

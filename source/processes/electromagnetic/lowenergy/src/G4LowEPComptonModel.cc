@@ -132,7 +132,7 @@ G4LowEPComptonModel::~G4LowEPComptonModel()
 //****************************************************************************
 
 void G4LowEPComptonModel::Initialise(const G4ParticleDefinition* particle,
-                                         const G4DataVector& cuts)
+                                     const G4DataVector& cuts)
 {
   if (verboseLevel > 1) {
     G4cout << "Calling G4LowEPComptonModel::Initialise()" << G4endl;
@@ -142,19 +142,19 @@ void G4LowEPComptonModel::Initialise(const G4ParticleDefinition* particle,
   if(IsMaster()) {
 
     // Access to elements
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
     for(G4int i=0; i<numOfCouples; ++i) {
       const G4Material* material =
         theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
-      G4int nelm = material->GetNumberOfElements();
+      std::size_t nelm = material->GetNumberOfElements();
 
-      for (G4int j=0; j<nelm; ++j) {
+      for (std::size_t j=0; j<nelm; ++j) {
         G4int Z = G4lrint((*theElementVector)[j]->GetZ());
         if(Z < 1)        { Z = 1; }
         else if(Z > maxZ){ Z = maxZ; }
@@ -204,7 +204,7 @@ void G4LowEPComptonModel::InitialiseLocal(const G4ParticleDefinition*,
 
 //****************************************************************************
 
-void G4LowEPComptonModel::ReadData(size_t Z, const char* path)
+void G4LowEPComptonModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1)
   {
@@ -215,7 +215,7 @@ void G4LowEPComptonModel::ReadData(size_t Z, const char* path)
   const char* datadir = path;
   if(!datadir)
   {
-    datadir = std::getenv("G4LEDATA");
+    datadir = G4FindDataDir("G4LEDATA");
     if(!datadir)
     {
       G4Exception("G4LowEPComptonModel::ReadData()",
@@ -282,7 +282,7 @@ G4LowEPComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
       if(!pv) { return cs; }
     }
 
-  G4int n = pv->GetVectorLength() - 1;
+  G4int n = G4int(pv->GetVectorLength() - 1);
   G4double e1 = pv->Energy(0);
   G4double e2 = pv->Energy(n);
 
@@ -609,13 +609,13 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   if(fAtomDeexcitation && iteration < maxDopplerIterations) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      size_t nbefore = fvect->size();
+      std::size_t nbefore = fvect->size();
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIdx);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
-      size_t nafter = fvect->size();
+      std::size_t nafter = fvect->size();
       if(nafter > nbefore) {
-        for (size_t i=nbefore; i<nafter; ++i) {
+        for (std::size_t i=nbefore; i<nafter; ++i) {
           //Check if there is enough residual energy 
           if (bindingE >= ((*fvect)[i])->GetKineticEnergy())
            {

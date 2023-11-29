@@ -57,10 +57,10 @@ class RunAction : public G4UserRunAction
     void EndOfRunAction(const G4Run*) override;
                              
   private:
-    const DetectorConstruction*   fDetector;
-    PrimaryGeneratorAction* fPrimary;
-    Run*                    fRun;        
-    HistoManager*           fHistoManager;
+    const DetectorConstruction* fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary      = nullptr;
+    Run* fRun                             = nullptr;
+    HistoManager* fHistoManager           = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

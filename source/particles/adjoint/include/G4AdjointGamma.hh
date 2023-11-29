@@ -60,7 +60,7 @@ class G4AdjointGamma : public G4ParticleDefinition
    G4AdjointGamma(){}
 
  public:
-   ~G4AdjointGamma(){}
+   ~G4AdjointGamma() override= default;
 
    static G4AdjointGamma* Definition();
    static G4AdjointGamma* AdjointGammaDefinition();

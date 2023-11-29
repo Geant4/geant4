@@ -45,27 +45,25 @@ public:
   explicit G4EvaporationProbability(G4int anA, G4int aZ, 
                                     G4double aGamma); 
 
-  ~G4EvaporationProbability() override;
+  ~G4EvaporationProbability() override = default;
 
   // general method used for evaporation
   virtual G4double TotalProbability(const G4Fragment& fragment,
                                     G4double minKinEnergy,
 			            G4double maxKinEnergy,
 			            G4double CB, G4double exEnergy);
-  /*
-  virtual G4double TotalProbability(const G4Fragment& fragment,
-			            G4double minKinEnergy,
-			            G4double maxKinEnergy,
-			            G4double CB);
-  */
+
   // main method to compute full probability for OPTx > 2
   G4double ComputeProbability(G4double K, G4double CB) override;
 
-  // Samples fragment kinetic energy and excitation energy 
-  // of the residual nucleaus
-  G4double SampleKineticEnergy(G4double minKinEnergy,
-			       G4double maxKinEnergy,
-			       G4double CB);
+  G4double CrossSection(G4double K, G4double CB);  
+
+  // Copy constructor
+  G4EvaporationProbability(const G4EvaporationProbability &right) = delete;
+  const G4EvaporationProbability & operator=
+  (const G4EvaporationProbability &right) = delete;
+  G4bool operator==(const G4EvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4EvaporationProbability &right) const = delete;
 
 protected:
 
@@ -75,20 +73,8 @@ protected:
 
 private:
 
-  G4double CrossSection(G4double K, G4double CB);  
-
-  // Copy constructor
-  G4EvaporationProbability(const G4EvaporationProbability &right);
-  const G4EvaporationProbability & operator=
-  (const G4EvaporationProbability &right);
-  G4bool operator==(const G4EvaporationProbability &right) const;
-  G4bool operator!=(const G4EvaporationProbability &right) const;
-
-  //G4int fragA;
-  //G4int fragZ;
-  G4int index;
-
   G4double resA13;
+  G4double lastA;
   G4double muu;
   G4double freeU;
   G4double a0;
@@ -98,6 +84,8 @@ private:
   // number and S_f is fragment spin
   G4double fGamma;
   G4double pcoeff;
+
+  G4int index;
 };
 
 #endif

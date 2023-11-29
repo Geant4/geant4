@@ -1,31 +1,11 @@
 #/bin/csh
+#================================================
+#     Macro file for Hadr01
+#     29.12.2022 V.Ivanchneko
+#================================================
 
-setenv HISTODIR 20140131
-mkdir -p $HISTODIR
-
-setenv PHYSLIST QGSP_BERT_EMV
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP_BERT_EMX
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP_BERT
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP_BIC
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QBBC
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QBBC_EMZ
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST FTFP_BERT
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP_FTFP_BERT
-$G4MY/Hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-echo "Done!"
+#$G4BWORK/Hadr01 neutronGP.in QBBC >& p_pbwo4_10gev_ngp.out
+#$G4BWORK/Hadr01 tq.in QBBC >& p_pbwo4_10gev.out
+$G4BWORK/Hadr01 tq1.in QBBC >& p_w_10gev_ngp_1.out
+$G4BWORK/Hadr01 tq2.in QBBC >& p_w_10gev_1.out
 #

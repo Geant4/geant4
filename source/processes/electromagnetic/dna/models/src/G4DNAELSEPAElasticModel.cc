@@ -53,14 +53,14 @@ G4VEmModel(nam), isInitialised(false)
 
   G4ProductionCutsTable* theCoupleTable =
   G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   for(G4int i=0; i<numOfCouples; ++i)
   {
     const G4MaterialCutsCouple* couple =
          theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
-    G4int nelm = material->GetNumberOfElements();
+    G4int nelm = (G4int)material->GetNumberOfElements();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
     if(nelm==1)
@@ -163,7 +163,7 @@ const G4DataVector& )
  
   G4ProductionCutsTable* theCoupleTable =
   G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
   // UNIT OF TCS
   G4double scaleFactor = 1.*cm*cm;
@@ -182,7 +182,7 @@ const G4DataVector& )
     const G4Material* material = couple->GetMaterial();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
-    G4int nelm = material->GetNumberOfElements();
+    G4int nelm = (G4int)material->GetNumberOfElements();
     if (nelm==1){// Protection: only for single element
       G4int Z =  G4lrint((*theElementVector)[0]->GetZ());
       if (Z!=79)// Protection: only for GOLD
@@ -212,7 +212,7 @@ const G4DataVector& )
         fpData_Au->LoadData(fileZElectron);
       
         std::ostringstream eFullFileNameZ;
-        char *path = getenv("G4LEDATA");
+	const char *path = G4FindDataDir("G4LEDATA");
         if (!path)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0002",
@@ -306,7 +306,7 @@ const G4DataVector& )
 
         std::ostringstream eFullFileNameZ;
 
-        char *path = getenv("G4LEDATA");
+	const char *path = G4FindDataDir("G4LEDATA");
         if (!path)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0004",
@@ -404,10 +404,11 @@ G4double G4DNAELSEPAElasticModel::CrossSectionPerVolume
   G4double sigma=0;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
-  if (nelm==1) {// Protection: only for single element
+  std::size_t nelm = material->GetNumberOfElements();
+  if (nelm==1)  // Protection: only for single element
+  {
     // Protection: only for GOLD
-    if (material->GetZ()!=79) return 0;
+    if (material->GetZ()!=79) return 0.0;
 
     G4int Z = G4lrint((*theElementVector)[0]->GetZ());
 
@@ -458,46 +459,48 @@ G4double G4DNAELSEPAElasticModel::CrossSectionPerVolume
              << sigma*atomicNDensity/(1./cm) << G4endl;
       G4cout << "=== G4DNAELSEPAElasticModel - XS INFO END" << G4endl;
     }
-  }else{
-     fpMolDensity =
-     G4DNAMolecularMaterial::Instance()->
-     GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
-     atomicNDensity = (*fpMolDensity)[material->GetIndex()];
-     if(atomicNDensity!= 0.0)
-     {
-       if (ekin < HighEnergyLimit() && ekin >= LowEnergyLimit())
-       {
-         //std::map< G4int,G4DNACrossSectionDataSet*,
-         //std::less<G4String> >::iterator pos;
-         ////pos = tableZData_H2O.find(0); // the data is stored as Z=0
-         //pos = tableZData.find(0); // the data is stored as Z=0
-         ////SI : XS must not be zero 
-         ////     otherwise sampling of secondaries method ignored
-         ////if (pos != tableZData_H2O.end())
-         //if (pos != tableZData.end())
-         //{
-         //  G4DNACrossSectionDataSet* table = pos->second;
-         //  if (table != 0)
-         //  {
-         //    sigma = table->FindValue(ekin);
-         //  }
-         //}
+  }
+  else
+  {
+    fpMolDensity =
+    G4DNAMolecularMaterial::Instance()->
+    GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+    atomicNDensity = (*fpMolDensity)[material->GetIndex()];
+    if(atomicNDensity!= 0.0)
+    {
+      if (ekin < HighEnergyLimit() && ekin >= LowEnergyLimit())
+      {
+        //std::map< G4int,G4DNACrossSectionDataSet*,
+        //std::less<G4String> >::iterator pos;
+        ////pos = tableZData_H2O.find(0); // the data is stored as Z=0
+        //pos = tableZData.find(0); // the data is stored as Z=0
+        ////SI : XS must not be zero 
+        ////     otherwise sampling of secondaries method ignored
+        ////if (pos != tableZData_H2O.end())
+        //if (pos != tableZData.end())
+        //{
+        //  G4DNACrossSectionDataSet* table = pos->second;
+        //  if (table != 0)
+        //  {
+        //    sigma = table->FindValue(ekin);
+        //  }
+        //}
 
-         sigma = fpData_H2O->FindValue(ekin);
-       }
-     }
-     if (verboseLevel > 2)
-     {
-       G4cout << "__________________________________" << G4endl;
-       G4cout << "=== G4DNAELSEPAElasticModel - XS INFO START" << G4endl;
-       G4cout << "=== Kinetic energy(eV)=" << ekin/eV 
-              << " particle : " << particle->GetParticleName() << G4endl;
-       G4cout << "=== Cross section per water molecule (cm^2)=" 
-              << sigma/cm/cm << G4endl;
-       G4cout << "=== Cross section per water molecule (cm^-1)=" 
-              << sigma*atomicNDensity/(1./cm) << G4endl;
-       G4cout << "=== G4DNAELSEPAElasticModel - XS INFO END" << G4endl;
-     }
+        sigma = fpData_H2O->FindValue(ekin);
+      }
+    }
+    if (verboseLevel > 2)
+    {
+      G4cout << "__________________________________" << G4endl;
+      G4cout << "=== G4DNAELSEPAElasticModel - XS INFO START" << G4endl;
+      G4cout << "=== Kinetic energy(eV)=" << ekin/eV 
+             << " particle : " << particle->GetParticleName() << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^2)=" 
+             << sigma/cm/cm << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^-1)=" 
+             << sigma*atomicNDensity/(1./cm) << G4endl;
+      G4cout << "=== G4DNAELSEPAElasticModel - XS INFO END" << G4endl;
+    }
   }
 
   return sigma*atomicNDensity;
@@ -523,8 +526,9 @@ void G4DNAELSEPAElasticModel::SampleSecondaries(
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
-  if (nelm==1){// Protection: only for single element
+  std::size_t nelm = material->GetNumberOfElements();
+  if (nelm==1) // Protection: only for single element
+  {
     G4int Z =  G4lrint((*theElementVector)[0]->GetZ());
     if (Z!=79) return;
     if (electronEnergy0 < fkillBelowEnergy_Au)
@@ -539,9 +543,12 @@ void G4DNAELSEPAElasticModel::SampleSecondaries(
     if(electronEnergy0>= fkillBelowEnergy_Au && electronEnergy0 < fhighEnergyLimit)
     {
       G4double cosTheta = 0;
-      if (electronEnergy0>=10*eV){
-         cosTheta = RandomizeCosTheta(Z,electronEnergy0);
-      }else { 
+      if (electronEnergy0>=10*eV)
+      {
+        cosTheta = RandomizeCosTheta(Z,electronEnergy0);
+      }
+      else
+      { 
         cosTheta = RandomizeCosTheta(Z,10*eV);
       }
 
@@ -561,8 +568,11 @@ void G4DNAELSEPAElasticModel::SampleSecondaries(
       fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
       
     }
-  }else{
-    if(material->GetName()=="G4_WATER"){
+  }
+  else
+  {
+    if(material->GetName()=="G4_WATER")
+    {
       //The data for water is stored as Z=0
       G4double cosTheta = RandomizeCosTheta(0,electronEnergy0);
 

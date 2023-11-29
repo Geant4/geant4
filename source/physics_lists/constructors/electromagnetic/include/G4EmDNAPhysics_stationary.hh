@@ -37,10 +37,7 @@ public:
 
   G4EmDNAPhysics_stationary(G4int ver=1, const G4String& nam="G4EmDNAPhysics_stationary");
 
-  virtual ~G4EmDNAPhysics_stationary();
-
-  void ConstructProcess() override;
-
+  ~G4EmDNAPhysics_stationary() override;
 };
 
 #endif

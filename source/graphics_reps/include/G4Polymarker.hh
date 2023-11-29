@@ -47,7 +47,7 @@ public: // With description
   enum MarkerType {dots, circles, squares};
   G4Polymarker ();
   G4Polymarker (const G4VMarker&);
-  virtual ~G4Polymarker ();
+  ~G4Polymarker () override;
   MarkerType GetMarkerType () const;
   void SetMarkerType (MarkerType);
 private:

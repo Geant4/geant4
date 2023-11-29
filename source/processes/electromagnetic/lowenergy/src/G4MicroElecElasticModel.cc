@@ -83,7 +83,7 @@ G4MicroElecElasticModel::G4MicroElecElasticModel(const G4ParticleDefinition*,
 G4MicroElecElasticModel::~G4MicroElecElasticModel()
 {
   // For total cross section
-  for (auto pos : tableData)
+  for (auto & pos : tableData)
     {
       G4MicroElecCrossSectionDataSet* table = pos.second;
       delete table;
@@ -132,8 +132,8 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
   tableE->LoadData(fileElectron);
   tableData[electron] = tableE;
 
-  // For final state  
-  char *path = std::getenv("G4LEDATA");
+  // For final state
+  const char* path = G4FindDataDir("G4LEDATA");
 
   if (!path)
     {

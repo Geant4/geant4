@@ -7,16 +7,16 @@ PairProdCharged	2	4	-1	-1	4	0
 Annih		2	5	 5	-1	5	0
 AnnihToMuMu	2	6	-1	-1	6	0
 AnnihToHad	2	7	-1	-1	7	0
-NuclearStopp	2	8	-1	 8	-1	0
-ElectronSuper	2	9	-1	 1	1	0
+NuclearStopping	2	8	-1	 8	-1	0
+ElectronGeneral	2	9	-1	 1	1	0
 Msc		2	10	-1	 1	-1	0
 Rayleigh	2	11	-1	-1	1000	0	
 PhotoElectric	2	12	-1	-1	1000	0	
 Compton		2	13	-1	-1	1000	0
 Conv		2	14	-1	-1	1000	0	
 ConvToMuMu	2	15	-1	-1	1000	0
-GammaSuper	2	16	-1	-1	1000	0
-PositronSuper	2	17	 1	 1	1	0
+GammaGeneral	2	16	-1	-1	1000	0
+PositronGeneral	2	17	 1	 1	1	0
 Cerenkov	2	21	-1	-1	1000	0
 Scintillation	2	22	9999	-1	9999	0
 SynchRad	2	23	-1	-1	1000	0
@@ -28,6 +28,7 @@ OpRayleigh	3	33	-1	-1	1000	0
 OpWLS		3	34	-1	-1	1000	0
 OpMieHG		3	35	-1	-1	1000	0		
 OpWLS2		3	36	-1	-1	1000	0
+MuPairByMuon	2	49	-1	-1	10	0
 DNAElastic 	2	51	-1	-1	1000	0	
 DNAExcit 	2	52	-1	-1	1000	0
 DNAIonisation 	2	53	-1	-1	1000	0
@@ -43,6 +44,7 @@ DNADoubleIoni 	2	62	-1	-1	1000	0
 DNADoubleCap 	2	63	-1	-1	1000	0
 DNAIoniTransfer 2	64	-1	-1	1000	0
 HadElastic	4	111	-1	-1	1000	0
+NeutronGeneral	4	116	-1	-1	1000	0
 HadInelastic	4	121	-1	-1	1000	0
 HadCapture	4	131	-1	-1	1000	0
 MuAtomCapture	4	132	-1	-1	1000	0
@@ -60,5 +62,4 @@ StepLimiter	7	401	-1	-1	1000	0
 UsrSpecCuts	7	402	-1	-1	1000	0
 NeutronKiller	7	403	-1	-1	1000	0
 ParallelWorld	10	491	9900	 1	9900	1
-
 

@@ -43,6 +43,7 @@
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
 #include "G4THitsMap.hh"
+#include "G4PseudoScene.hh"
 
 class G4Scene;
 class G4VGraphicsSystem;
@@ -338,6 +339,94 @@ protected:
   // publicly inherits G4AttHolder - see, e.g., SoG4Polyhedron in the
   // Open Inventor driver.  G4AttHolder deletes G4AttValues in its
   // destructor to ensure proper clean-up of G4AttValues.
+
+  //////////////////////////////////////////////////////////////
+  // Special mesh rendering utilities...
+
+  struct NameAndVisAtts {
+    NameAndVisAtts(const G4String& name = "",const G4VisAttributes& visAtts = G4VisAttributes())
+    : fName(name),fVisAtts(visAtts) {}
+    G4String fName;
+    G4VisAttributes fVisAtts;
+  };
+
+  class PseudoSceneFor3DRectMeshPositions: public G4PseudoScene {
+  public:
+    PseudoSceneFor3DRectMeshPositions
+    (G4PhysicalVolumeModel* pvModel  // input
+     , const G4Mesh* pMesh  // input...the following are outputs by reference
+     , std::multimap<const G4Material*,const G4ThreeVector>& positionByMaterial
+     , std::map<const G4Material*,NameAndVisAtts>& nameAndVisAttsByMaterial)
+    : fpPVModel(pvModel)
+    , fpMesh(pMesh)
+    , fPositionByMaterial(positionByMaterial)
+    , fNameAndVisAttsByMaterial(nameAndVisAttsByMaterial)
+    {}
+  private:
+    using G4PseudoScene::AddSolid;  // except for...
+    void AddSolid(const G4Box&) override;
+    void ProcessVolume(const G4VSolid&) override {
+      // Do nothing if uninteresting solids found, e.g., the container if not marked invisible.
+    }
+    G4PhysicalVolumeModel* fpPVModel;
+    const G4Mesh* fpMesh;
+    std::multimap<const G4Material*,const G4ThreeVector>& fPositionByMaterial;
+    std::map<const G4Material*,NameAndVisAtts>& fNameAndVisAttsByMaterial;
+  };
+
+  class PseudoSceneForTetVertices: public G4PseudoScene {
+  public:
+    PseudoSceneForTetVertices
+    (G4PhysicalVolumeModel* pvModel  // input
+     , const G4Mesh* pMesh  // input...the following are outputs by reference
+     , std::multimap<const G4Material*,std::vector<G4ThreeVector>>& verticesByMaterial
+     , std::map<const G4Material*,NameAndVisAtts>& nameAndVisAttsByMaterial)
+    : fpPVModel(pvModel)
+    , fpMesh(pMesh)
+    , fVerticesByMaterial(verticesByMaterial)
+    , fNameAndVisAttsByMaterial(nameAndVisAttsByMaterial)
+    {}
+  private:
+    using G4PseudoScene::AddSolid;  // except for...
+    void AddSolid(const G4VSolid& solid) override;
+    void ProcessVolume(const G4VSolid&) override {
+      // Do nothing if uninteresting solids found, e.g., the container if not marked invisible.
+    }
+    G4PhysicalVolumeModel* fpPVModel;
+    const G4Mesh* fpMesh;
+    std::multimap<const G4Material*,std::vector<G4ThreeVector>>& fVerticesByMaterial;
+    std::map<const G4Material*,NameAndVisAtts>& fNameAndVisAttsByMaterial;
+  };
+
+  void StandardSpecialMeshRendering(const G4Mesh&);
+  // Standard way of special mesh rendering.
+  // MySceneHandler::AddCompound(const G4Mesh& mesh) may use this if
+  // appropriate or implement its own special mesh rendereing.
+
+  void Draw3DRectMeshAsDots(const G4Mesh&);
+  // For a rectangular 3-D mesh, draw as coloured dots by colour and material,
+  // one dot randomly placed in each visible mesh cell.
+
+  void Draw3DRectMeshAsSurfaces(const G4Mesh&);
+  // For a rectangular 3-D mesh, draw as surfaces by colour and material
+  // with inner shared faces removed.
+
+  void DrawTetMeshAsDots(const G4Mesh&);
+  // For a tetrahedron mesh, draw as coloured dots by colour and material,
+  // one dot randomly placed in each visible mesh cell.
+
+  void DrawTetMeshAsSurfaces(const G4Mesh&);
+  // For a tetrahedron mesh, draw as surfaces by colour and material
+  // with inner shared faces removed.
+
+  G4ThreeVector GetPointInBox(const G4ThreeVector& pos,
+                              G4double halfX,
+                              G4double halfY,
+                              G4double halfZ) const;
+  // Sample a random point inside the box
+
+  G4ThreeVector GetPointInTet(const std::vector<G4ThreeVector>& vertices) const;
+  // Sample a random point inside the tetrahedron
 
   //////////////////////////////////////////////////////////////
   // Data members

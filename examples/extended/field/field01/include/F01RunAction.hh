@@ -48,26 +48,26 @@ public:
   void ChangeLooperParameters(const G4ParticleDefinition* particleDef );
 
   // Helper method to find the Transportation process for a particle type
-  std::pair<G4Transportation*, G4CoupledTransportation*>
-     findTransportation( const G4ParticleDefinition * particleDef,
+  G4Transportation*
+     FindTransportation( const G4ParticleDefinition * particleDef,
                          bool reportError= true );
 
 public:
-  void     SetNumberOfTrials( G4int val )   { theNumberOfTrials  =  val; }
-  void     SetWarningEnergy( double val )   { theWarningEnergy = val; }
-  void     SetImportantEnergy( double val ) { theImportantEnergy = val; }   
-  G4int    GetNumberOfTrials() { return theNumberOfTrials; }
-  G4double GetWarningEnergy()  { return theWarningEnergy; }
-  G4double GetImportantEnergy() { return theImportantEnergy; }   
+  void     SetNumberOfTrials( G4int val )   { fNumberOfTrials  =  val; }
+  void     SetWarningEnergy( G4double val )   { fWarningEnergy = val; }
+  void     SetImportantEnergy( G4double val ) { fImportantEnergy = val; }
+  G4int    GetNumberOfTrials() { return fNumberOfTrials; }
+  G4double GetWarningEnergy()  { return fWarningEnergy; }
+  G4double GetImportantEnergy() { return fImportantEnergy; }
    
 private:
 
   // Values for initialising 'loopers' parameters of Transport process
-  G4int    theNumberOfTrials  =  0;    // Default will not overwrite
-  G4double theWarningEnergy   = -1.0;  // Default values - non operational 
-  G4double theImportantEnergy = -1.0;  // Default - will not overwrite
+  G4int    fNumberOfTrials  =  0;    // Default will not overwrite
+  G4double fWarningEnergy   = -1.0;  // Default values - non operational
+  G4double fImportantEnergy = -1.0;  // Default - will not overwrite
 
-  int    theVerboseLevel = 0;
+  G4int    fVerboseLevel = 0;
 };
 
 #endif

@@ -159,8 +159,8 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
   if (IsMaster() && particle == fParticle)
     {
       //Set the number of bins for the tables. 20 points per decade
-      fNBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
-      fNBins = std::max(fNBins,(size_t)100);
+      fNBins = (std::size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
+      fNBins = std::max(fNBins,(std::size_t)100);
       
       //Clear and re-build the tables
       if (fCrossSectionHandler)
@@ -174,7 +174,7 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
       //Build tables for all materials
       G4ProductionCutsTable* theCoupleTable = 
 	G4ProductionCutsTable::GetProductionCutsTable();      
-      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+      for (G4int i=0;i<(G4int)theCoupleTable->GetTableSize();++i)
 	{
 	  const G4Material* theMat = 
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
@@ -605,13 +605,13 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
       G4int index = couple->GetIndex();
       if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
 	{
-	  size_t nBefore = fvect->size();
+	  std::size_t nBefore = fvect->size();
 	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
-	  size_t nAfter = fvect->size(); 
+	  std::size_t nAfter = fvect->size(); 
       
 	  if (nAfter>nBefore) //actual production of fluorescence
 	    {
-	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
+	      for (std::size_t j=nBefore;j<nAfter;++j) //loop on products
 		{
 		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
                   if (itsEnergy < localEnergyDeposit) // valid secondary, generate it
@@ -707,7 +707,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
   //
 
   G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableIonisation(mat);
-  size_t numberOfOscillators = theTable->size();
+  std::size_t numberOfOscillators = theTable->size();
   const G4PenelopeCrossSection* theXS = 
     fCrossSectionHandler->GetCrossSectionTableForCouple(G4Electron::Electron(),mat,
 							  cutEnergy);
@@ -715,10 +715,10 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
  
   // Selection of the active oscillator
   G4double TST = G4UniformRand();
-  fTargetOscillator = numberOfOscillators-1; //initialization, last oscillator
+  fTargetOscillator = G4int(numberOfOscillators-1); //initialization, last oscillator
   G4double XSsum = 0.;
 
-  for (size_t i=0;i<numberOfOscillators-1;i++)
+  for (std::size_t i=0;i<numberOfOscillators-1;++i)
     {     
       XSsum += theXS->GetNormalizedShellCrossSection(i,kineticEnergy); 
      	
@@ -820,7 +820,7 @@ void G4PenelopeIonisationModel::SampleFinalStateElectron(const G4Material* mat,
       fCosThetaPrimary=1.0;
       fEnergySecondary=0.0;
       fCosThetaSecondary=1.0;
-      fTargetOscillator = numberOfOscillators-1;
+      fTargetOscillator = G4int(numberOfOscillators-1);
       return;
     }
   
@@ -914,7 +914,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
   // 
  
   G4PenelopeOscillatorTable* theTable = fOscManager->GetOscillatorTableIonisation(mat);
-  size_t numberOfOscillators = theTable->size();
+  std::size_t numberOfOscillators = theTable->size();
   const G4PenelopeCrossSection* theXS = 
     fCrossSectionHandler->GetCrossSectionTableForCouple(G4Positron::Positron(),mat,
 							cutEnergy);
@@ -922,9 +922,9 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
 
   // Selection of the active oscillator
   G4double TST = G4UniformRand();
-  fTargetOscillator = numberOfOscillators-1; //initialization, last oscillator
+  fTargetOscillator = G4int(numberOfOscillators-1); //initialization, last oscillator
   G4double XSsum = 0.;
-  for (size_t i=0;i<numberOfOscillators-1;i++)
+  for (std::size_t i=0;i<numberOfOscillators-1;++i)
     {
       XSsum += theXS->GetNormalizedShellCrossSection(i,kineticEnergy);   	
       if (XSsum > TST)
@@ -1031,7 +1031,7 @@ void G4PenelopeIonisationModel::SampleFinalStatePositron(const G4Material* mat,
       fCosThetaPrimary=1.0;
       fEnergySecondary=0.0;
       fCosThetaSecondary=1.0;
-      fTargetOscillator = numberOfOscillators-1;
+      fTargetOscillator = G4int(numberOfOscillators-1);
       return;
     }
 

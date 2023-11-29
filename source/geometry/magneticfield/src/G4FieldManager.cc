@@ -37,6 +37,14 @@
 
 G4double G4FieldManager::fDefault_Delta_One_Step_Value= 0.01 *    millimeter;
 G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.001 * millimeter;
+G4bool   G4FieldManager::fVerboseConstruction= false;
+
+G4double G4FieldManager::fMaxAcceptedEpsilon= 0.01; //  Legacy value.  Future value = 0.001
+//   Requesting a large epsilon (max) value provides poor accuracy for
+//   every integration segment.
+//   Problems occur because some methods (including DormandPrince(7)45 the estimation of local
+//   error appears to be a substantial underestimate at large epsilon values ( > 0.001 ).
+//   So the value for fMaxAcceptedEpsilon is recommended to be 0.001 or below.
 
 G4FieldManager::G4FieldManager(G4Field* detectorField, 
                                G4ChordFinder* pChordFinder, 
@@ -57,6 +65,11 @@ G4FieldManager::G4FieldManager(G4Field* detectorField,
      fFieldChangesEnergy = fieldChangesEnergy;
    }
 
+   if( fVerboseConstruction)
+   {
+     G4cout << "G4FieldManager/ctor#1 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   }
+
    // Add to store
    //
    G4FieldManagerStore::Register(this);
@@ -71,6 +84,10 @@ G4FieldManager::G4FieldManager(G4MagneticField* detectorField)
 {
    fChordFinder = new G4ChordFinder( detectorField );
 
+   if( fVerboseConstruction )
+   {
+     G4cout << "G4FieldManager/ctor#2 fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
+   }
    // Add to store
    //
    G4FieldManagerStore::Register(this);
@@ -128,6 +145,8 @@ G4FieldManager* G4FieldManager::Clone() const
         delete aCF;
         throw;
     }
+
+    G4cout << "G4FieldManager/clone fEpsilon Min/Max:  eps_min = " << fEpsilonMin << " eps_max=" << fEpsilonMax << G4endl;
     return aFM;
 }
 
@@ -233,4 +252,209 @@ G4bool G4FieldManager::SetDetectorField(G4Field* pDetectorField,
                  severity, msg);
    }
    return ableToSet;
+}
+
+G4bool G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
+{
+  G4bool succeeded= false;
+  if(    (newEpsMax > 0.0) && ( newEpsMax <= fMaxAcceptedEpsilon)
+     &&  (fMinAcceptedEpsilon <= newEpsMax ) ) // (std::fabs(1.0+newEpsMax)>1.0) )
+  {
+    if(newEpsMax >= fEpsilonMin)
+    {
+      fEpsilonMax = newEpsMax;
+      succeeded = true;
+      if (fVerboseConstruction)
+      {
+        G4cout << "G4FieldManager/SetEpsMax :  eps_max = " << std::setw(10) << fEpsilonMax
+               << " ( Note: unchanged eps_min=" << std::setw(10) << fEpsilonMin << " )" << G4endl;
+      }
+    }
+    else
+    {
+      G4ExceptionDescription erm;
+      erm << " Call to set eps_max = " << newEpsMax << " . The problem is that"
+          << " its value must be at larger or equal to eps_min= " << fEpsilonMin << G4endl;
+      erm << " Modifying both to the same value " << newEpsMax << " to ensure consistency."
+          << G4endl
+          << " To avoid this warning, please set eps_min first, and ensure that "
+          << " 0 < eps_min <= eps_max <= " << fMaxAcceptedEpsilon << G4endl;
+      
+      fEpsilonMax = newEpsMax;
+      fEpsilonMin = newEpsMax;
+      G4String methodName = G4String("G4FieldManager::")+ G4String(__func__);
+      G4Exception(methodName.c_str(), "Geometry003", JustWarning, erm);
+    }
+  }
+  else
+  {
+    G4ExceptionDescription erm;
+    G4String paramName("eps_max");
+    ReportBadEpsilonValue(erm, newEpsMax, paramName );
+    G4String methodName = G4String("G4FieldManager::")+ G4String(__func__);
+    G4Exception(methodName.c_str(), "Geometry001", FatalException, erm);
+  }
+  return succeeded;
+}
+
+// -----------------------------------------------------------------------------
+
+G4bool G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
+{
+  G4bool succeeded= false;
+
+  if( fMinAcceptedEpsilon <= newEpsMin  &&  newEpsMin <= fMaxAcceptedEpsilon )
+  {
+    fEpsilonMin = newEpsMin;
+    //*********
+    succeeded= true;
+
+    if (fVerboseConstruction)
+    {
+      G4cout << "G4FieldManager/SetEpsMin :  eps_min = "
+             << std::setw(10) << fEpsilonMin << G4endl;
+    }
+    if( fEpsilonMax < fEpsilonMin )
+    {
+      // Ensure consistency
+      G4ExceptionDescription erm;
+      erm << "Setting eps_min = " << newEpsMin
+          << " For consistency set eps_max= " << fEpsilonMin
+          << " ( Old value = " << fEpsilonMax << " )" << G4endl;
+      fEpsilonMax = fEpsilonMin;
+      G4String methodName = G4String("G4FieldManager::")+ G4String(__func__);
+      G4Exception(methodName.c_str(), "Geometry003", JustWarning, erm);
+    }
+  }
+  else
+  {
+    G4ExceptionDescription erm;
+    G4String paramName("eps_min");
+    ReportBadEpsilonValue(erm, newEpsMin, paramName );
+    G4String methodName = G4String("G4FieldManager::")+ G4String(__func__);
+    G4Exception(methodName.c_str(), "Geometry001", FatalException, erm);
+  }
+  return succeeded;
+}
+
+// -----------------------------------------------------------------------------
+
+G4double G4FieldManager::GetMaxAcceptedEpsilon()
+{
+   return fMaxAcceptedEpsilon;
+}
+
+// -----------------------------------------------------------------------------
+
+G4bool   G4FieldManager::SetMaxAcceptedEpsilon(G4double maxAcceptValue, G4bool softFailure)
+// Set value -- within limits
+{
+  G4bool success= false;
+  // Limit for warning and absolute limit chosen from experience in and 
+  // investigation of integration with G4DormandPrince745 in HEP-type setups.
+  if( maxAcceptValue <= fMaxWarningEpsilon )
+  {
+    fMaxAcceptedEpsilon= maxAcceptValue;
+    success= true;
+  }
+  else
+  {
+    G4ExceptionDescription erm;
+    G4ExceptionSeverity  severity;
+
+    G4cout << "G4FieldManager::" << __func__ 
+           << " Parameters:   fMaxAcceptedEpsilon = " << fMaxAcceptedEpsilon
+           << " fMaxFinalEpsilon = " << fMaxFinalEpsilon << G4endl;
+    
+    if( maxAcceptValue <= fMaxFinalEpsilon )
+    {
+      success= true;
+      fMaxAcceptedEpsilon = maxAcceptValue;
+      // Integration is poor, and robustness will likely suffer
+      erm << "Proposed value for maximum-accepted-epsilon = " << maxAcceptValue
+          << " is larger than the recommended = " << fMaxWarningEpsilon
+          << G4endl
+          << "This may impact the robustness of integration of tracks in field."
+          << G4endl
+          << "The request was accepted and the value = "  << fMaxAcceptedEpsilon
+          << " , but future releases are expected " << G4endl
+          << " to tighten the limit of acceptable values to " 
+          << fMaxWarningEpsilon << G4endl << G4endl          
+          << "Suggestion: If you need better performance investigate using "
+          << "alternative, low-order RK integration methods or " << G4endl
+          << " helix-based methods (for pure B-fields) for low(er) energy tracks, "
+          << " especially electrons if you need better performance." << G4endl;
+      severity= JustWarning;
+    }
+    else
+    {
+      fMaxAcceptedEpsilon= fMaxFinalEpsilon;
+      erm << " Proposed value for maximum accepted epsilon " << maxAcceptValue
+          << " is larger than the top of the range = " << fMaxFinalEpsilon
+          << G4endl;
+      if( softFailure )
+      {
+        erm << " Using the latter value instead." << G4endl;
+      }
+      erm << G4endl;
+      erm << " Please adjust to request maxAccepted <= " << fMaxFinalEpsilon
+          << G4endl << G4endl;
+      if( !softFailure )
+      {
+        erm << " NOTE: you can accept the ceiling value and turn this into a " 
+            << " warning by using a 2nd argument  " << G4endl
+            << " in your call to SetMaxAcceptedEpsilon:  softFailure = true ";
+      }
+      severity = softFailure ? JustWarning : FatalException; 
+      // if( softFailure ) severity= JustWarning;
+      // else severity= FatalException;
+      success = false;
+    }
+    G4String methodName = G4String("G4FieldManager::")+ G4String(__func__);
+    G4Exception(methodName.c_str(), "Geometry003", severity, erm);    
+  }
+  return success;
+}
+
+// -----------------------------------------------------------------------------
+
+void G4FieldManager::
+ReportBadEpsilonValue(G4ExceptionDescription& erm, G4double value, G4String& name) const
+{
+  erm << "Incorrect proposed value of " << name << " = " << value << G4endl
+      << " Its value is outside the permitted range from "
+      << fMinAcceptedEpsilon << "  to " <<  fMaxAcceptedEpsilon << G4endl
+      << " Clarification: " << G4endl;
+  G4long oldPrec = erm.precision();
+  if(value < fMinAcceptedEpsilon )
+  {
+    erm << "  a) The value must be positive and enough larger than the accuracy limit"
+        << " of the (G4)double type - ("
+        <<  (value < fMinAcceptedEpsilon ? "FAILED" : "OK" ) << ")" << G4endl
+        << "     i.e. std::numeric_limits<G4double>::epsilon()= "
+        <<  std::numeric_limits<G4double>::epsilon()
+        << " to ensure that integration " << G4endl
+        << "     could potentially achieve this acccuracy." << G4endl
+        << "     Minimum accepted eps_min/max value = " << fMinAcceptedEpsilon << G4endl;
+  }
+  else if( value > fMaxAcceptedEpsilon)
+  {
+    erm << "  b) It must be smaller than (or equal) " << std::setw(8)
+        << std::setprecision(4) << fMaxAcceptedEpsilon
+        << " to ensure robustness of integration - ("
+        << (( value < fMaxAcceptedEpsilon) ? "OK" : "FAILED" ) << ")" << G4endl;
+  }
+  else
+  {
+    G4bool badRoundoff = (std::fabs(1.0+value) == 1.0);
+    erm << "  Unknown ERROR case -- extra check: " << G4endl;
+    erm << "  c) as a floating point number (of type G4double) the sum (1+" << name
+        << " ) must be > 1 , ("
+        <<  (badRoundoff ? "FAILED" : "OK" ) << ")" << G4endl
+        << "     Now    1+eps_min          = " << std::setw(20)
+        << std::setprecision(17) << (1+value) << G4endl
+        << "     and   (1.0+" << name << ") - 1.0 = " << std::setw(20)
+        << std::setprecision(9) << (1.0+value)-1.0;
+  }
+  erm.precision(oldPrec);
 }

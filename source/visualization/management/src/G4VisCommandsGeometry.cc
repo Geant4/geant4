@@ -34,6 +34,8 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4UImanager.hh"
 
+#define G4warn G4cout
+
 std::map<G4LogicalVolume*, const G4VisAttributes*>
 G4VVisCommandGeometry::fVisAttsMap;
 
@@ -86,7 +88,7 @@ void G4VisCommandGeometryList::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (fpVisManager->GetVerbosity() >= G4VisManager::errors) {
-      G4cerr << "ERROR: Logical volume \"" << newValue
+      G4warn << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;
@@ -143,7 +145,7 @@ void G4VisCommandGeometryRestore::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Logical volume \"" << newValue
+      G4warn << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;

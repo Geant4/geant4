@@ -45,7 +45,6 @@
 #include "G4FemaleBuilder.hh"
 #include "G4MaleBuilder.hh"
 #include "G4PhantomHeadBuilder.hh"
-#include "G4CustomFemaleBuilder.hh"
 #include "G4RunManager.hh"
 #include "G4HumanPhantomMaterial.hh"
 #include "G4Box.hh"
@@ -57,50 +56,41 @@
 
 G4HumanPhantomConstruction::G4HumanPhantomConstruction()
 {
-  messenger = new G4HumanPhantomMessenger(this);
-  material = new G4HumanPhantomMaterial();
+  fMessenger = new G4HumanPhantomMessenger(this);
+  fMaterial = new G4HumanPhantomMaterial();
 }
 
 G4HumanPhantomConstruction::~G4HumanPhantomConstruction()
 {
-  delete material;
-  delete messenger;
+  delete fMaterial;
+  delete fMessenger;
 }
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
 {
-  material -> DefineMaterials();
+  fMaterial -> DefineMaterials();
   
-  
+  G4BasePhantomBuilder*  builder = nullptr;
 
-  G4BasePhantomBuilder*  builder = 0;
-
-  if (model == "MIRDHead" || model == "ORNLHead")
+  if (fModel == "MIRDHead" || fModel == "ORNLHead")
     { 
       G4cout << "HeadBuilder instantiated" << G4endl;
       builder = new G4PhantomHeadBuilder;
-      if (model ==  "MIRDHead") builder->SetModel("MIRD");
-      else if (model ==  "ORNLHead") builder->SetModel("ORNLMale");
+      if (fModel ==  "MIRDHead") builder->SetModel("MIRD");
+      else if (fModel ==  "ORNLHead") builder->SetModel("ORNLMale");
     }
   else
     {  
-      if (sex =="Female") 
+      if (fSex =="Female") 
 	{ 
-	  if (model == "MIX") builder = new G4CustomFemaleBuilder;
-	  else {builder = new G4FemaleBuilder;}
-	  builder->SetModel(model);
-	  G4cout <<model << " "<< sex << G4endl;
+	  builder = new G4FemaleBuilder;
+	  builder->SetModel(fModel);
+	  G4cout << fModel << " "<< fSex << G4endl;
 	}
-      else if (sex == "Male") 
+      else if (fSex == "Male") 
 	{
 	  builder = new G4MaleBuilder;
-	  builder->SetModel(model);
-          if (model == "MIX") 
-	    { 
-	      G4cout<< "Custom Male is not available!!! MIRD model is selected !" 
-		    << G4endl;
-	      model = "MIRD";  
-	      builder->SetModel(model);}
+	  builder->SetModel(fModel);
 	}
     }
   
@@ -108,84 +98,78 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::Construct()
   
   // the argument indicates the sensitivity of the volume
   
-  builder->BuildHead("black", false, sensitivities["Head"]);
-  builder->BuildSkull("orange", false,sensitivities["Skull"]); 
-  builder->BuildBrain("yellow", true,sensitivities["Brain"]); 
+  builder->BuildHead("black", false, fSensitivities["Head"]);
+  builder->BuildSkull("orange", false, fSensitivities["Skull"]); 
+  builder->BuildBrain("yellow", true, fSensitivities["Brain"]); 
 
-  if (model != "MIRDHead" && model != "ORNLHead")
+  if (fModel != "MIRDHead" && fModel != "ORNLHead")
     { 
       //  builder->SetModel(model);
-      builder->BuildTrunk("yellow", false, sensitivities["Trunk"]);
+      builder->BuildTrunk("yellow", false, fSensitivities["Trunk"]);
       
-      builder->BuildLeftLeg("yellow", false,sensitivities["LeftLeg"]);
-      builder->BuildRightLeg("yellow", false,sensitivities["RightLeg"]);
+      builder->BuildLeftLeg("yellow", false, fSensitivities["LeftLeg"]);
+      builder->BuildRightLeg("yellow", false, fSensitivities["RightLeg"]);
       
-      builder->BuildLeftArmBone("grey", true,sensitivities["LeftArmBone"]);
-      builder->BuildRightArmBone("grey", true, sensitivities["RightArmBone"]);  
+      builder->BuildLeftArmBone("grey", true, fSensitivities["LeftArmBone"]);
+      builder->BuildRightArmBone("grey", true, fSensitivities["RightArmBone"]);  
     
-      builder->BuildLeftLegBone("grey", true,sensitivities["LeftLegBone"]);
-      builder ->BuildRightLegBone("grey", true,sensitivities["RightLegBone"]);
+      builder->BuildLeftLegBone("grey", true, fSensitivities["LeftLegBone"]);
+      builder ->BuildRightLegBone("grey", true, fSensitivities["RightLegBone"]);
  
-      builder->BuildUpperSpine("yellow", true,sensitivities["UpperSpine"]); 
+      builder->BuildUpperSpine("yellow", true, fSensitivities["UpperSpine"]); 
       
-      if (model == "MIRD" || model == "MIX") 
+      if (fModel == "MIRD") 
 	{
-	  builder->BuildLeftScapula("grey", true, sensitivities["LeftScapula"]); 
-	  builder->BuildRightScapula("grey", true, sensitivities["RightScapula"]);
-	  builder->BuildLeftAdrenal("yellow", true, sensitivities["LeftAdrenal"]);
-	  builder->BuildRightAdrenal("yellow", true, sensitivities["RightAdrenal"]);
-	  builder->BuildThymus("orange", true,sensitivities["Thymus"]); 
-	  builder->BuildLeftClavicle("grey", true,sensitivities["LeftClavicle"]);
-	  builder->BuildRightClavicle("grey", true,sensitivities["RightClavicle"]);
-	  builder->BuildSmallIntestine("orange", true,sensitivities["SmallIntestine"]);
-	  builder->BuildRibCage("grey", true,sensitivities["RibCage"]); 
+	  builder->BuildLeftScapula("grey", true, fSensitivities["LeftScapula"]); 
+	  builder->BuildRightScapula("grey", true, fSensitivities["RightScapula"]);
+	  builder->BuildLeftAdrenal("yellow", true, fSensitivities["LeftAdrenal"]);
+	  builder->BuildRightAdrenal("yellow", true, fSensitivities["RightAdrenal"]);
+	  builder->BuildThymus("orange", true, fSensitivities["Thymus"]); 
+	  builder->BuildLeftClavicle("grey", true, fSensitivities["LeftClavicle"]);
+	  builder->BuildRightClavicle("grey", true, fSensitivities["RightClavicle"]);
+	  builder->BuildSmallIntestine("orange", true, fSensitivities["SmallIntestine"]);
+	  builder->BuildRibCage("grey", true, fSensitivities["RibCage"]); 
 	}
   
-      builder->BuildMiddleLowerSpine("yellow", true,sensitivities["MiddleLowerSpine"]);
+      builder->BuildMiddleLowerSpine("yellow", true, fSensitivities["MiddleLowerSpine"]);
   
-      builder->BuildPelvis("grey", true,sensitivities["Pelvis"]); 
+      builder->BuildPelvis("grey", true, fSensitivities["Pelvis"]); 
   
-      builder->BuildStomach("orange", true,sensitivities["Stomach"]); 
-      builder->BuildUpperLargeIntestine("lightBlue", true,sensitivities["UpperLargeIntestine"]);
-      builder->BuildLowerLargeIntestine("lightBlue", true,sensitivities["LowerLargeIntestine"]);
-         
-      builder->BuildSpleen("green", true,sensitivities["Spleen"]);
-      builder->BuildPancreas("purple", true,sensitivities["Pancreas"]); 
+      builder->BuildStomach("orange", true, fSensitivities["Stomach"]); 
+      builder->BuildUpperLargeIntestine("lightBlue", true, fSensitivities["UpperLargeIntestine"]);
+      builder->BuildLowerLargeIntestine("lightBlue", true, fSensitivities["LowerLargeIntestine"]);
+      builder->BuildSpleen("green", true, fSensitivities["Spleen"]);
+      builder->BuildPancreas("purple", true, fSensitivities["Pancreas"]); 
       //builder->BuildLiver("orange", true,sensitivities["Liver"]); 
 
-      builder->BuildLeftKidney("green", true,sensitivities["LeftKidney"]);
-      builder->BuildRightKidney("green", true,sensitivities["RightKidney"]);
-      builder->BuildUrinaryBladder("green", true,sensitivities["UrinaryBladder"]);
+      builder->BuildLeftKidney("green", true, fSensitivities["LeftKidney"]);
+      builder->BuildRightKidney("green", true, fSensitivities["RightKidney"]);
+      builder->BuildUrinaryBladder("green", true, fSensitivities["UrinaryBladder"]);
  
-      //builder->BuildHeart("red", true,sensitivities["Hearth"]);// to do MIRD
-     // builder->BuildLeftLung("blue", true,sensitivities["LeftLung"]);
-      //builder->BuildRightLung("blue", true,sensitivities["RightLung"]);
-     // builder->BuildThyroid("orange", true,sensitivities["Thyroid"]); 
+      //builder->BuildHeart("red", true,fSensitivities["Hearth"]);// to do MIRD
+     // builder->BuildLeftLung("blue", true, fSensitivities["LeftLung"]);
+      //builder->BuildRightLung("blue", true, fSensitivities["RightLung"]);
+     // builder->BuildThyroid("orange", true, fSensitivities["Thyroid"]); 
 
-      if(sex=="Female"){
+      if(fSex=="Female"){
 
-	builder->BuildLeftOvary("purple", true,sensitivities["LeftOvary"]);
-	builder->BuildRightOvary("purple", true,sensitivities["RightOvary"]);
-	builder->BuildUterus("purple", true,sensitivities["Uterus"]);
+	builder->BuildLeftOvary("purple", true, fSensitivities["LeftOvary"]);
+	builder->BuildRightOvary("purple", true, fSensitivities["RightOvary"]);
+	builder->BuildUterus("purple", true, fSensitivities["Uterus"]);
 
-	if (model == "ORNLFemale" || model == "MIRD")
+	if (fModel == "ORNLFemale" || fModel == "MIRD")
 	  {
-	    builder->BuildLeftBreast("purple", true,sensitivities["LeftBreast"]); 
-	    builder->BuildRightBreast("purple", true,sensitivities["RightBreast"]);
+	    builder->BuildLeftBreast("purple", true,fSensitivities["LeftBreast"]); 
+	    builder->BuildRightBreast("purple", true,fSensitivities["RightBreast"]);
 	  }
-	else if (model == "MIX")
-	  {
-	    builder->BuildVoxelLeftBreast("purple",false, sensitivities["LeftBreast"]); 
-	    builder->BuildVoxelRightBreast("purple", false, sensitivities["RightBreast"]);  
-	  } 
       }
       
-      if(sex=="Male"){
+      if(fSex=="Male"){
 	
-	if (model == "MIRD"){ 
-	  builder -> BuildMaleGenitalia("yellow",false,sensitivities["MaleGenitalia"]);
-	  builder -> BuildLeftTeste("purple",true,sensitivities["LeftTeste"]);
-	  builder -> BuildRightTeste("purple",true,sensitivities["RightTeste"]);
+	if (fModel == "MIRD"){ 
+	  builder -> BuildMaleGenitalia("yellow",false, fSensitivities["MaleGenitalia"]);
+	  builder -> BuildLeftTeste("purple",true, fSensitivities["LeftTeste"]);
+	  builder -> BuildRightTeste("purple",true, fSensitivities["RightTeste"]);
 	}
 	else G4cout <<  "ORNL does not have model for male genitalia and testes yet" << G4endl;
       }
@@ -203,26 +187,26 @@ void  G4HumanPhantomConstruction::SetBodyPartSensitivity(G4String, G4bool)
 
 G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
 {
-  G4Material* air = material -> GetMaterial("Air");
+  G4Material* air = fMaterial -> GetMaterial("Air");
 
   // World Volume
   // G4double worldSize = 1.*m ;
   G4double worldSize = 1.5 *m ;
   G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(world, 
-						    air, 
-						    "logicalWorld", 0, 0,0);
+  auto* logicWorld = new G4LogicalVolume(world, 
+				          air, 
+				          "logicalWorld", nullptr, nullptr, nullptr);
 
-  G4VPhysicalVolume* motherVolume = new G4PVPlacement(0,G4ThreeVector(),
+  G4VPhysicalVolume* motherVolume = new G4PVPlacement(nullptr,G4ThreeVector(),
 						      "physicalWorld",
 						      logicWorld,
-						      0,
+						      nullptr,
 						      false,
 						      0);
 
   // Visualization Attributes
-  G4VisAttributes* WorldVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
+  auto* WorldVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
     
   WorldVisAtt->SetForceSolid(false);
   logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
@@ -232,63 +216,60 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
 
 void G4HumanPhantomConstruction::SetPhantomSex(G4String newSex)
 {
-  sex=newSex;
+  fSex=newSex;
 
-  if (sex == "Male")
+  if (fSex == "Male")
     {
       G4cout << ">> Male Phantom will be built." << G4endl;
     }
-  if (sex == "Female")
+  if (fSex == "Female")
     {
       G4cout << ">> Female Phantom will be built." << G4endl;
     }
-  if ((sex != "Female") && (sex != "Male"))
-    G4cout << sex << " can not be defined!" << G4endl;
+  if ((fSex != "Female") && (fSex != "Male"))
+    G4cout << fSex << " can not be defined!" << G4endl;
 }
 
 void G4HumanPhantomConstruction::SetPhantomModel(G4String newModel)
 {
-  model = newModel;
+  fModel = newModel;
 
-  if (model == "MIRD")
+  if (fModel == "MIRD")
     {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
+      G4cout<<" >> Phantom " << fModel << " will be built."<<G4endl;
     }
-  if (model == "ORNLFemale")
+  if (fModel == "ORNLFemale")
     {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
-    }
-
-  if (model == "ORNLMale")
-    {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
+      G4cout<<" >> Phantom " << fModel << " will be built."<<G4endl;
     }
 
-  if (model == "MIX")
+  if (fModel == "ORNLMale")
     {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
-    }
-  if (model == "MIRDHead")
-    {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
+      G4cout<<" >> Phantom " << fModel << " will be built."<<G4endl;
     }
 
-  if (model == "ORNLHead")
+  if (fModel == "MIRDHead")
     {
-      G4cout<<" >> Phantom " << model << " will be built."<<G4endl;
+      G4cout<<" >> Phantom " << fModel << " will be built."<<G4endl;
+    }
+
+  if (fModel == "ORNLHead")
+    {
+      G4cout<<" >> Phantom " << fModel << " will be built."<<G4endl;
     }
 }
 
 void G4HumanPhantomConstruction::ConstructSDandField()
 {
-   G4HumanPhantomSD* SD = new G4HumanPhantomSD("SD", "HumanPhantomCollection");
+   auto* SD = new G4HumanPhantomSD("SD", "HumanPhantomCollection");
    G4SDManager::GetSDMpointer()->AddNewDetector(SD);
-if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")  
+
+if (fModel != "ORNLMale" && fModel != "ORNLFemale" && fModel!= "ORNLHead")  
 {
   SetSensitiveDetector("logicalHead",SD);
   SetSensitiveDetector("logicalSkull",SD);
   SetSensitiveDetector("logicalBrain",SD);
-  if (model != "MIRDHead")
+  if (fModel != "MIRDHead")
     { 
       SetSensitiveDetector("logicalTrunk",SD);
       SetSensitiveDetector("logicalLeftLeg",SD); 
@@ -301,10 +282,13 @@ if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")
       SetSensitiveDetector("logicalLeftScapula",SD);
       SetSensitiveDetector("logicalRightScapula",SD);
       SetSensitiveDetector("logicalLeftAdrenal",SD);
-      SetSensitiveDetector("logicalRightAdrenal",SD);      SetSensitiveDetector("logicalThymus",SD);      SetSensitiveDetector("logicalLeftClavicle",SD);
+      SetSensitiveDetector("logicalRightAdrenal",SD);      
+      SetSensitiveDetector("logicalThymus",SD);      
+      SetSensitiveDetector("logicalLeftClavicle",SD);
       SetSensitiveDetector("logicalRightClavicle",SD);
       SetSensitiveDetector("logicalSmallIntestine",SD); 
-      SetSensitiveDetector("logicalRibCage",SD);       SetSensitiveDetector("logicalMiddleLowerSpine",SD); 
+      SetSensitiveDetector("logicalRibCage",SD);       
+      SetSensitiveDetector("logicalMiddleLowerSpine",SD); 
       SetSensitiveDetector("logicalStomach",SD); 
       SetSensitiveDetector("logicalUpperLargeIntestine",SD);
       SetSensitiveDetector("logicalLowerLargeIntestine",SD);
@@ -314,32 +298,24 @@ if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")
       SetSensitiveDetector("logicalRightKidney",SD);       
       SetSensitiveDetector("logicalUrinaryBladder",SD);
 
-      if(sex=="Female"){
-
+      if(fSex=="Female"){
 	SetSensitiveDetector("logicalLeftOvary",SD);
         SetSensitiveDetector("logicalRightOvary",SD); 
         SetSensitiveDetector("logicalUterus",SD);
         SetSensitiveDetector("logicalLeftBreast",SD);
         SetSensitiveDetector("logicalRightBreast",SD); 
 	}
-
-      if(sex=="Male"){
-	
-	
+      else if(fSex=="Male"){
 	  SetSensitiveDetector("logicalMaleGenitalia",SD);
           SetSensitiveDetector("logicalLeftTeste",SD);
 	  SetSensitiveDetector("logicalRightTeste",SD);
 	}
-	
       }
   }else 
  { 
   SetSensitiveDetector("HeadVolume",SD);
   SetSensitiveDetector("SkullVolume",SD);
   SetSensitiveDetector("BrainVolume",SD);
-  G4cout << "Work in progress!!!! " << G4endl;
   G4cout <<"ORNL model!!!! Head is sensitive only!!!" << G4endl;
-} 
-
-   
+}   
 }

@@ -100,9 +100,9 @@ struct ProcessGeneralInfo
   //       and SelectedPostStepDoItVector.
   //
   // * Max number of processes
-  size_t MAXofAtRestLoops;
-  size_t MAXofAlongStepLoops;
-  size_t MAXofPostStepLoops;
+  std::size_t MAXofAtRestLoops;
+  std::size_t MAXofAlongStepLoops;
+  std::size_t MAXofPostStepLoops;
   // Maximum number of processes for each type of process
   // These depend on the G4ParticleDefinition, so on the track
 
@@ -217,7 +217,7 @@ public:
   inline const G4Track* GetTrack() const;
   inline void CleanProcessor();
 
-  size_t GetAtRestDoItProcTriggered() const
+  std::size_t GetAtRestDoItProcTriggered() const
   {
     return fAtRestDoItProcTriggered;
   }
@@ -252,12 +252,12 @@ public:
     return fPhysIntLength;
   }
 
-  size_t GetPostStepAtTimeDoItProcTriggered() const
+  std::size_t GetPostStepAtTimeDoItProcTriggered() const
   {
     return fPostStepAtTimeDoItProcTriggered;
   }
 
-  size_t GetPostStepDoItProcTriggered() const
+  std::size_t GetPostStepDoItProcTriggered() const
   {
     return fPostStepDoItProcTriggered;
   }
@@ -319,7 +319,7 @@ protected:
   void InvokeAtRestDoItProcs();
   void InvokeAlongStepDoItProcs();
   void InvokePostStepDoItProcs();
-  void InvokePSDIP(size_t); //
+  void InvokePSDIP(std::size_t); //
   void InvokeTransportationProc();
   void SetNavigator(G4ITNavigator *value);
   G4double CalculateSafety();
@@ -374,9 +374,9 @@ private:
   // just executed.
 
   // * Process selection
-  size_t fAtRestDoItProcTriggered;
-  size_t fPostStepDoItProcTriggered;
-  size_t fPostStepAtTimeDoItProcTriggered;
+  std::size_t fAtRestDoItProcTriggered;
+  std::size_t fPostStepDoItProcTriggered;
+  std::size_t fPostStepAtTimeDoItProcTriggered;
   // Record the selected process
 
   G4ForceCondition fCondition;

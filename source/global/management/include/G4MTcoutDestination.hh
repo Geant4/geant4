@@ -46,7 +46,7 @@ class G4MTcoutDestination : public G4MulticoutDestination
 {
  public:
   explicit G4MTcoutDestination(const G4int& threadId);
-  virtual ~G4MTcoutDestination();
+  ~G4MTcoutDestination() override;
 
   virtual void Reset();
 
@@ -79,9 +79,9 @@ class G4MTcoutDestination : public G4MulticoutDestination
 
  protected:
   void AddMasterOutput(G4bool formatAlsoMaster);
-  void HandleFileCout(G4String fileN, G4bool appendFlag,
+  void HandleFileCout(const G4String& fileN, G4bool appendFlag,
                       G4bool suppressDefault);
-  void HandleFileCerr(G4String fileN, G4bool appendFlag,
+  void HandleFileCerr(const G4String& fileN, G4bool appendFlag,
                       G4bool suppressDefault);
 
  private:

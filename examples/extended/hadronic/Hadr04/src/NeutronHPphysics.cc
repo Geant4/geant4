@@ -27,7 +27,6 @@
 /// \brief Implementation of the NeutronHPphysics class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "NeutronHPphysics.hh"
@@ -63,7 +62,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NeutronHPphysics::NeutronHPphysics(const G4String& name)
-:  G4VPhysicsConstructor(name), fThermal(true), fMessenger(nullptr)
+: G4VPhysicsConstructor(name)
 {
   // define commands for this class
   DefineCommands();  

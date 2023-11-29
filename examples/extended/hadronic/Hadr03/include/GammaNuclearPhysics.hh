@@ -27,7 +27,6 @@
 /// \brief Definition of the GammaNuclearPhysics class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef GammaNuclearPhysics_h
@@ -42,7 +41,7 @@ class GammaNuclearPhysics : public G4VPhysicsConstructor
 {
   public:
     GammaNuclearPhysics(const G4String& name="gamma");
-   ~GammaNuclearPhysics() override;
+   ~GammaNuclearPhysics() override = default;
 
   public:
     void ConstructParticle() override { };

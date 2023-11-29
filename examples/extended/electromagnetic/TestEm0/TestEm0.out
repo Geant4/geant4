@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -38,8 +38,10 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
 LPM effect enabled                                 1
 Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
 Use general process                                0
 Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
 Enable sampling of quantum entanglement            0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
@@ -55,7 +57,7 @@ Lowest triplet kinetic energy                      1 MeV
 Enable sampling of gamma linear polarisation       0
 5D gamma conversion model type                     0
 5D gamma conversion model on isolated ion          0
-Livermore data directory                           livermore
+Livermore data directory                           epics_2017
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
@@ -65,8 +67,9 @@ Step function for light ions                       (0.1, 0.02 mm)
 Step function for general ions                     (0.1, 0.001 mm)
 Lowest e+e- kinetic energy                         100 eV 
 Lowest muon/hadron kinetic energy                  1 keV
-Fluctuations of dE/dx are enabled                  1
 Use ICRU90 data                                    1
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Urban
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   0
@@ -102,8 +105,7 @@ Screening factor                                   1
 ======                 Atomic Deexcitation Parameters          ========
 =======================================================================
 Fluorescence enabled                               1
-Fluorescence Bearden data files enabled            0
-Fluorescence ANSTO data files enabled              0
+Directory in G4LEDATA for fluorescence data files  fluor
 Auger electron cascade enabled                     0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
@@ -128,7 +130,7 @@ Type of PIXE cross section for e+-                 Livermore
 Index : 0     used in the geometry : Yes
  Material : Germanium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  20.7286 keV    e-  870.352 keV    e+  826.678 keV proton 100 keV
+ Energy thresholds :  gamma  20.7286 keV    e-  870.39 keV    e+  826.714 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -140,22 +142,21 @@ Index : 0     used in the geometry : Yes
 
   processes :                	          phot		         compt		          conv		          Rayl		         total
  
-  cross section per atom   : 	  1.72573 barn  	  11.0976 barn  	        0 pbarn 	  767.816 mbarn 	  13.5911 barn  
+  cross section per atom   : 	  1.72494 barn  	  11.0976 barn  	        0 pbarn 	  774.227 mbarn 	  13.5968 barn  
 
+  compCrossSectionPerVolume: 	0.0761496 cm^-1		 0.489918 cm^-1		        0 cm^-1		0.0341792 cm^-1		 0.600247 cm^-1	
+  cross section per volume : 	 0.076168 cm^-1		 0.489918 cm^-1		        0 cm^-1		0.0341792 cm^-1		 0.600265 cm^-1	
+  cross section per mass   : 	  1.43092 mm2/g 	  9.20379 mm2/g 	        0 um2/mg	  642.104 um2/mg	  11.2768 mm2/g 
  
-  compCrossSectionPerVolume: 	0.0761844 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0338962 cm^-1	 0.599999 cm^-1
-  cross section per volume : 	0.0761844 cm^-1	 0.489918 cm^-1	        0 cm^-1	0.0338962 cm^-1	 0.599999 cm^-1
-  cross section per mass   : 	  1.43123 mm2/g 	   9.2038 mm2/g 	        0 um2/mg	  636.788 um2/mg	  11.2718 mm2/g 
- 
-  mean free path           : 	   13.126 cm 	  2.04116 cm 	5.82593e+288 pc 	  29.5018 cm 	  1.66667 cm 
-        (g/cm2)            : 	  69.8699 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  157.038 g/cm2 	  8.87169 g/cm2 
+  mean free path           : 	  13.1289 cm    	  2.04116 cm    	5.82593e+288 pc    	  29.2575 cm    	  1.66593 cm    
+        (g/cm2)            : 	   69.885 g/cm2 	  10.8651 g/cm2 	2.88022e+285 kg/cm2	  155.738 g/cm2 	  8.86775 g/cm2 
 
 -----------------------------------------------------------
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000523s Sys=0.000000s
+  User=0.000000s Real=0.000393s Sys=0.000000s
 
   Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -177,12 +178,12 @@ Run Summary
 Index : 0     used in the geometry : No 
  Material : Germanium
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  5.96323 keV    e-  174.298 keV    e+  169.99 keV proton 10 keV
+ Energy thresholds :  gamma  5.96323 keV    e-  174.355 keV    e+  170.047 keV proton 10 keV
 
 Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  1.11071 keV    e-  85.0292 keV    e+  83.8928 keV proton 10 keV
+ Energy thresholds :  gamma  1.11071 keV    e-  85.1086 keV    e+  83.971 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -193,27 +194,26 @@ Index : 1     used in the geometry : Yes
  e- (10 MeV) in Water (density: 1 g/cm3    radiation length: 36.0924 cm )
 
   Range cuts: 	 gamma          100 um 	 e-          100 um 
- Energy cuts: 	 gamma      1.11071 keV	 e-      85.0292 keV
+ Energy cuts: 	 gamma      1.11071 keV	 e-      85.1086 keV
 
   Max_energy _transferable  : 5 MeV (2.53529 cm )
 
   processes :                	         eIoni		         eBrem		     ePairProd		         total
+  compCrossSectionPerVolume: 	 0.994823 cm^-1		 0.325194 cm^-1		        0 cm^-1		  1.32002 cm^-1	
+  cross section per volume : 	 0.994823 cm^-1		 0.325183 cm^-1		        0 cm^-1		  1.32001 cm^-1	
+  cross section per mass   : 	  99.4823 mm2/g 	  32.5183 mm2/g 	        0 um2/mg	  1.32001 cm2/g 
  
-  compCrossSectionPerVolume: 	 0.995759 cm^-1	 0.325194 cm^-1	        0 cm^-1	  1.32095 cm^-1
-  cross section per volume : 	 0.995759 cm^-1	 0.325183 cm^-1	        0 cm^-1	  1.32094 cm^-1
-  cross section per mass   : 	  99.5759 mm2/g 	  32.5183 mm2/g 	        0 um2/mg	  1.32094 cm2/g 
- 
-  mean free path           : 	  1.00426 cm 	  3.07519 cm 	5.82593e+288 pc 	  7.57036 mm 
-        (g/cm2)            : 	  1.00426 g/cm2 	  3.07519 g/cm2 	2.88022e+285 kg/cm2	  757.036 mg/cm2
+  mean free path           : 	   1.0052 cm    	  3.07519 cm    	5.82593e+288 pc    	  7.57573 mm    
+        (g/cm2)            : 	   1.0052 g/cm2 	  3.07519 g/cm2 	2.88022e+285 kg/cm2	  757.573 mg/cm2
 
  
-  restricted dE/dx         : 	       1.61319 MeV/cm	       25.5407 eV/cm 	             0 eV/cm 	       1.61322 MeV/cm
-      (MeV/g/cm2)          : 	       1.61319 MeV*cm2/g	       25.5407  eV*cm2/g	             0  eV*cm2/g	       1.61322 MeV*cm2/g
+  restricted dE/dx         : 	  1.61327 MeV/cm	  25.5407 eV/cm 	        0 eV/cm 	   1.6133 MeV/cm
+      (MeV/g/cm2)          : 	  1.61327 MeV*cm2/g	  25.5407  eV*cm2/g	        0  eV*cm2/g	   1.6133 MeV*cm2/g
  
-  unrestricted dE/dx       : 	       1.99147 MeV/cm	       181.698 keV/cm	             0 eV/cm 	       2.17317 MeV/cm
-      (MeV/g/cm2)          : 	       1.99147 MeV*cm2/g	       181.698 keV*cm2/g	             0  eV*cm2/g	       2.17317 MeV*cm2/g
+  unrestricted dE/dx       : 	  1.99147 MeV/cm	  181.698 keV/cm	        0 eV/cm 	  2.17317 MeV/cm
+      (MeV/g/cm2)          : 	  1.99147 MeV*cm2/g	  181.698 keV*cm2/g	        0  eV*cm2/g	  2.17317 MeV*cm2/g
  
-  range from restrict dE/dx: 	   6.0725 cm  (   6.0725 g/cm2 )
+  range from restrict dE/dx: 	   6.0722 cm  (   6.0722 g/cm2 )
   range from full dE/dx    : 	  4.93182 cm  (  4.93182 g/cm2 )
  
   transport mean free path : 	  28.1601 cm  (  28.1601 g/cm2 )
@@ -225,10 +225,8 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000179s Sys=0.000000s
-G4 kernel has come to Quit state.
+  User=0.000000s Real=0.000161s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.012 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

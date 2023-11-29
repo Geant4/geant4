@@ -76,14 +76,20 @@
 #include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ICRU90StoppingData* G4BraggModel::fICRU90 = nullptr;
 G4PSTARStopping* G4BraggModel::fPSTAR = nullptr;
 
+namespace
+{
+  G4Mutex ionMutex = G4MUTEX_INITIALIZER;
+}
+
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
-  : G4VEmModel(nam),
-    protonMassAMU(1.007276)
+  : G4VEmModel(nam)
 {
   SetHighEnergyLimit(2.0*CLHEP::MeV);
 
@@ -94,14 +100,14 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
 
   corr = G4LossTableManager::Instance()->EmCorrections();
   if(nullptr != p) { SetParticle(p); }
-  else  { SetParticle(theElectron); }
+  else { SetParticle(theElectron); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BraggModel::~G4BraggModel()
 {
-  if(IsMaster()) { 
+  if(isFirst) { 
     delete fPSTAR; 
     fPSTAR = nullptr;
   }
@@ -117,14 +123,21 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   // always false before the run
   SetDeexcitationFlag(false);
 
-  if(IsMaster()) {
-    if(nullptr == fPSTAR)  { fPSTAR = new G4PSTARStopping(); }
-    if(particle->GetPDGMass() < CLHEP::GeV) { fPSTAR->Initialise(); }
-    if(G4EmParameters::Instance()->UseICRU90Data()) {
-      if(!fICRU90) { 
+  // initialise data only once
+  if(nullptr == fPSTAR) { 
+    G4AutoLock l(&ionMutex);
+    if(nullptr == fPSTAR) { 
+      isFirst = true;
+      fPSTAR = new G4PSTARStopping();
+      if(G4EmParameters::Instance()->UseICRU90Data()) { 
 	fICRU90 = G4NistManager::Instance()->GetICRU90StoppingData(); 
-      } else if(particle->GetPDGMass() < CLHEP::GeV) { fICRU90->Initialise(); }
-    }
+      }
+    } 
+    l.unlock();
+  }
+  if(isFirst) {
+    if(nullptr != fICRU90) { fICRU90->Initialise(); }
+    fPSTAR->Initialise();
   }
 
   if(nullptr == fParticleChange) {
@@ -144,14 +157,26 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
+{
+  particle = p;
+  mass = particle->GetPDGMass();
+  spin = particle->GetPDGSpin();
+  G4double q = particle->GetPDGCharge()/CLHEP::eplus;
+  chargeSquare = q*q;
+  massRate = mass/CLHEP::proton_mass_c2;
+  ratio = CLHEP::electron_mass_c2/mass;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4BraggModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                             const G4Material* mat,
-                                            G4double kineticEnergy)
+                                            G4double kinEnergy)
 {
   // this method is called only for ions
-  G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  return q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy);
+  chargeSquare = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
+  return chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -230,22 +255,22 @@ G4double G4BraggModel::CrossSectionPerVolume(const G4Material* material,
 
 G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
                                             const G4ParticleDefinition* p,
-                                            G4double kineticEnergy,
+                                            G4double kinEnergy,
                                             G4double cut)
 {
-  const G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
-  const G4double tkin  = kineticEnergy/massRate;
-  const G4double cutEnergy = std::max(cut, lowestKinEnergy*massRate);
+  const G4double tmax = MaxSecondaryEnergy(p, kinEnergy);
+  const G4double tlim = lowestKinEnergy*massRate;
+  const G4double tmin = std::max(std::min(cut, tmax), tlim);
   G4double dedx  = 0.0;
 
-  if(tkin < lowestKinEnergy) {
-    dedx = DEDX(material, lowestKinEnergy)*std::sqrt(tkin/lowestKinEnergy);
+  if(kinEnergy < tlim) {
+    dedx = DEDX(material, lowestKinEnergy)*std::sqrt(kinEnergy/tlim);
   } else {
-    dedx = DEDX(material, tkin); 
+    dedx = DEDX(material, kinEnergy);
 
-    if (cutEnergy < tmax) {
-      const G4double tau = kineticEnergy/mass;
-      const G4double x   = cutEnergy/tmax;
+    if (tmin < tmax) {
+      const G4double tau = kinEnergy/mass;
+      const G4double x   = tmin/tmax;
 
       dedx += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) * 
 	CLHEP::twopi_mc2_rcl2 * material->GetElectronDensity();
@@ -268,7 +293,7 @@ void G4BraggModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 {
   const G4double tmax = MaxSecondaryKinEnergy(dp);
   const G4double xmax = std::min(tmax, maxEnergy);
-  const G4double xmin  = std::max(lowestKinEnergy*massRate, minEnergy);
+  const G4double xmin = std::max(lowestKinEnergy*massRate, std::min(minEnergy, xmax));
   if(xmin >= xmax) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -323,13 +348,12 @@ void G4BraggModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   }  
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = 
-    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  auto delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   // Change kinematics of primary particle
   kineticEnergy -= deltaKinEnergy;
   G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
-  finalP               = finalP.unit();
+  finalP = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
@@ -357,7 +381,7 @@ void G4BraggModel::HasMaterial(const G4Material* mat)
   if(chFormula.empty()) { return; }
 
   // ICRU Report N49, 1993. Power's model for H
-  static const size_t numberOfMolecula = 11;
+  static const G4int numberOfMolecula = 11;
   static const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
@@ -365,7 +389,7 @@ void G4BraggModel::HasMaterial(const G4Material* mat)
     "H_2O-Gas",                "Graphite" } ;
 
   // Search for the material in the table
-  for (size_t i=0; i<numberOfMolecula; ++i) {
+  for (G4int i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
       iMolecula = i;  
       return;
@@ -626,7 +650,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
       *material->GetDensity();
 
   } 
-  const G4int numberOfElements = material->GetNumberOfElements();
+  const std::size_t numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
   
@@ -652,7 +676,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector();
   
     //  Loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; ++i) {
+    for (std::size_t i=0; i<numberOfElements; ++i) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss    += ElectronicStoppingPower(z,kineticEnergy)
@@ -670,7 +694,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector() ;
   
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; ++i)
+    for (std::size_t i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss   += ElectronicStoppingPower(element->GetZ(), kineticEnergy)
@@ -706,7 +730,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   // The coffecient from Table.4 of Ziegler & Manoyan
   static const G4float HeEff = 2.8735f;
   
-  static const size_t numberOfMolecula = 53;
+  static const std::size_t numberOfMolecula = 53;
   static const G4String nameOfMol[numberOfMolecula] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
@@ -735,7 +759,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     306.8f,  324.4f, 420.0f
   } ;
 
-  static const G4float expCharge[53] = {
+  static const G4float expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,  1.0f, HeEff,
     HeEff, HeEff, HeEff,  1.0f,  1.0f,
      1.0f, HeEff, HeEff, HeEff, HeEff,
@@ -749,7 +773,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     HeEff, HeEff, HeEff
   } ;
 
-  static const G4int numberOfAtomsPerMolecula[53] = {
+  static const G4int numberOfAtomsPerMolecula[numberOfMolecula] = {
     3,  7, 10,  4,  6,
     9, 12,  7,  4, 24,
     12,14, 10, 13,  5,
@@ -763,7 +787,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     10, 9,  15};
 
   // Search for the compaund in the table
-  for (size_t i=0; i<numberOfMolecula; ++i) {
+  for (std::size_t i=0; i<numberOfMolecula; ++i) {
     if(chFormula == nameOfMol[i]) {
       expStopPower125 = ((G4double)expStopping[i])
         * (material->GetTotNbOfAtomsPerVolume()) /

@@ -1,44 +1,40 @@
 # Macro file for example B4
-# 
+#
 # Can be run in batch, without graphic
 # or interactively: Idle> /control/execute run1.mac
-#
-# Change the default number of workers (in multi-threading mode) 
+# 
+# change the default number of workers (in multi-threading mode)
 #/run/numberOfThreads 4
+#
+# Kind of tutorial:
+# interactively with visualization, issue the commands one by one:
+# Idle> gun/particle mu+
+# Idle> ...etc... 
 #
 # Initialize kernel
 /run/initialize
 #
-# Default kinematics: 
-# electron 50 MeV in direction (0.,0.,1.)
-# 1 event with tracking/verbose
+# muon 300 MeV in direction (0.,0.,1.)
+/gun/particle mu+
+/gun/energy 300 MeV
 #
-/tracking/verbose 1
 /run/beamOn 1
 #
-#
-# muon 300 MeV in direction (0.,0.,1.)
-# 3 events
-#
-/gun/particle mu+
-/gun/energy 3 MeV
-/run/beamOn 3
-#
-# 20 events
-#
-/tracking/verbose 0
 /run/printProgress 5
-/run/beamOn 20
+/run/beamOn 10
 #
-# Magnetic field
-# 
-/globalField/setValue 0.2 0 0 tesla
-/run/beamOn 3
+# inactivate multiple scattering process
+/process/inactivate msc
+/run/beamOn 10
 #
-# Activate/inactivate physics processes
+# set a magnetic field 
+/globalField/setValue 2 0 0 tesla
+/run/beamOn 10
 #
-/process/list
-/process/inactivate eBrem
+# re-activate multiple scattering
+/process/activate msc
+/run/beamOn 10
 #
-/run/beamOn 20
-#
+# verbosity
+/tracking/verbose 2
+/run/beamOn 1

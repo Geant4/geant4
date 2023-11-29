@@ -41,26 +41,24 @@
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4HadronicParametersMessenger.hh"
-
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4HadronicParameters* G4HadronicParameters::sInstance = nullptr;
 
-#ifdef G4MULTITHREADED
-G4Mutex G4HadronicParameters::paramMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex paramMutex = G4MUTEX_INITIALIZER;
+}
 
 G4HadronicParameters* G4HadronicParameters::Instance() {
   if ( sInstance == nullptr ) {
-    #ifdef G4MULTITHREADED
-    G4MUTEXLOCK( &paramMutex );
+    G4AutoLock l(&paramMutex);
     if ( sInstance == nullptr ) {
-    #endif
       static G4HadronicParameters theHadronicParametersObject;
       sInstance = &theHadronicParametersObject;
-    #ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&paramMutex);
-    #endif
+    l.unlock();
   }
   return sInstance;
 }
@@ -79,6 +77,31 @@ G4HadronicParameters::G4HadronicParameters() {
   fMaxEnergyTransitionQGS_FTF = 25.0*CLHEP::GeV;
   fEnergyThresholdForHeavyHadrons = 1.1*CLHEP::GeV;
   fMessenger = new G4HadronicParametersMessenger( this );
+
+  // read environment variables
+  fReportLevel = G4GetEnv<G4int>("G4Hadronic_epReportLevel", 0);
+  const char* ep1 = std::getenv("G4Hadronic_epCheckRelativeLevel");
+  if(nullptr != ep1) { fRelativeDiff = std::strtod(ep1, 0); }
+  const char* ep2 = std::getenv("G4Hadronic_epCheckAbsoluteLevel");
+  if(nullptr != ep2) { fAbsoluteDiff = std::strtod(ep2, 0); }
+  const char* v = G4FindDataDir("G4PARTICLEXSDATA");
+  if(nullptr != v) {
+    fDirPARTICLEXS = G4String(v);
+  } else {
+    if(1 < fVerboseLevel) {
+      G4ExceptionDescription ed;
+      ed << "Environment variable G4PARTICLEXSDATA is not defined or " 
+         << " it is pointing out to not existing directory";
+      G4Exception("G4LevelReader::LevelManager(..)","had014",
+		  JustWarning, ed, "Check file path");
+    }
+  }
+  const char* x = std::getenv("G4PhysListDocDir");
+  if(nullptr != x) { fPhysListDocDir = G4String(x); }
+  const char* y = std::getenv("G4PhysListName");
+  if(nullptr != y) { fPhysListName = G4String(y); }
+  const char* z = std::getenv("BINARY_CASCADE_DEBUG");
+  if(nullptr != z) { fBinaryDebug = true; }
 }
 
 
@@ -192,6 +215,15 @@ void G4HadronicParameters::SetXSFactorEM( G4double val ) {
 }
 
 
+void G4HadronicParameters::SetNeutronKineticEnergyThresholdForSVT( const G4double val ) {
+  // This setting works only after initialization (i.e. for G4State_Idle, 
+  // whereas it does not work for G4State_PreInit).
+  if ( G4Threading::IsMasterThread()  &&  val > 0.0 ) { 
+    fNeutronEkinThresholdForSVT = val;
+  }
+}
+
+
 void G4HadronicParameters::SetApplyFactorXS( G4bool val ) {
   if ( ! IsLocked() ) fApplyFactorXS = val; 
 }
@@ -199,4 +231,29 @@ void G4HadronicParameters::SetApplyFactorXS( G4bool val ) {
 
 void G4HadronicParameters::SetEnableCRCoalescence( G4bool val ) {
   if ( ! IsLocked() ) fEnableCRCoalescence = val;
+}
+
+
+void G4HadronicParameters::SetEnableIntegralInelasticXS( G4bool val ) {
+  if ( ! IsLocked() ) fEnableIntegralInelasticXS = val;
+}
+
+
+void G4HadronicParameters::SetEnableIntegralElasticXS( G4bool val ) {
+  if ( ! IsLocked() ) fEnableIntegralElasticXS = val;
+}
+
+
+void G4HadronicParameters::SetEnableDiffDissociationForBGreater10( G4bool val ) {
+  if ( ! IsLocked() ) fEnableDiffDissociationForBGreater10 = val;
+}
+
+
+void G4HadronicParameters::SetEnableNeutronGeneralProcess( G4bool val ) {
+  if ( ! IsLocked() ) fNeutronGeneral = val;
+} 
+
+
+void G4HadronicParameters::SetEnableCoherentChargeExchange( G4bool val ) {
+  if ( ! IsLocked() )  fChargeExchange = val;
 }

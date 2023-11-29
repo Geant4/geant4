@@ -1,0 +1,1521 @@
+# Category analysis History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+## 2022-07-27 I. Hrivnacova (analysis-V11-00-07)
+- Fix Coverity: use auto& to avoid copying of shared_ptr and pair objects
+
+## 2022-07-13 I. Hrivnacova (analysis-V11-00-06)
+- Added G4RootRFile type = a tuple for the Root read file including its directories,
+  analogic to G4RootRFile for Root output, used now in the G4RootRfileManager::fRFiles
+  map instead of tools::rroot::file.
+  This allows deleting file directories in the class dtor, and should fix
+  the Coverity defect (deleting local variable 'newDir' in G4RootRNtupleManager)
+
+## 2022-05-18 Guy Barrand (analysis-V11-00-05)
+- have "toolx" namespace for g4tools classes related to "externals", then:
+  - tools::[hdf5,zlib,xml::xml_style,raxml,sg::text_freetype] become toolx::[hdf5,zlib,xml::xml_style,raxml,sg::text_freetype].
+  - corresponding includes #include <tools/...> become #include <toolx/...>
+
+## 2022-03-24 Ben Morgan (analysis-V11-00-04)
+- Use geant4_category_modules to optionaly add G4hdf5 module to category
+
+## 2022-03-02 I. Hrivnacova (analysis-V11-00-03)
+- Fix notifying about closing file in G4GenericAnalysisManager;
+  this fixes savinng scorers in analysis file in B3 example
+  for the second and further runs.
+
+## 2022-02-23 I. Hrivnacova (analysis-V11-00-02)
+- Added "getVector" commands (for visualization): 
+    /analysis/hn|pn/getVector
+
+## 2022-01-28 Ben Morgan (analysis-V11-00-01)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2021-12-10 Ben Morgan (analysis-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
+November 15, 2021 I. Hrivnacova (analysis-V10-07-30)
+- Fixed remaining Coverity issues
+
+November 15, 2021 I. Hrivnacova (analysis-V10-07-29)
+- Fixed Coverity issues
+
+November 09, 2021 I. Hrivnacova (analysis-V10-07-28)
+- Fix in G4MPIToolsManager: do not call Receive() twice
+
+November 05, 2021 I. Hrivnacova (analysis-V10-07-27)
+- Added new public function G4VAnalysisManager::Clear()
+  that deletes all allocated analysis objects and clears
+  their collections.
+  This function should be used as a replacement for deleting
+  the analysis manager in the applications that allocate the
+  analysis data in begin of run and deleted the analysis
+  manager in end of run.
+- Minor code clean-up
+
+November 04, 2021 I. Hrivnacova (analysis-V10-07-26)
+- Renamed G4VAnalysisReader::ReadNtuple(const G4String&)
+  back in GetNtuple.  Cannot reproduce the ambiguity error
+  with GetNtuple(G4int).
+
+October 28, 2021 I. Hrivnacova (analysis-V10-07-25)
+- Moved data members initialization in header files;
+  added deleted default constructor where appropriate,
+  added explicit keyword to one argument construtors where
+  missing
+- Use brace data members initialization everywhere
+- Implemented missing WriteOnAscii() - for h2,h3,p1,p2
+- Use fonts from tools in G4PlotManager.cc
+- Removed CMake -DTOOLS_USE_EXPAT definition (not needed)
+- Added G4ToolsAnalysisMessenger that implements "get" commands
+    /analysis/hn|pn/get id
+
+October 27, 2021 B.Morgan (analysis-V10-07-24)
+- Use G4StrUtil functions replacing deprecated G4String member functions
+
+October 26, 2021 I. Hrivnacova (analysis-V10-07-23)
+- Fixed G4*RFileManager destructors;
+  thanks to B. Morgan for spotting this bug
+
+October 25, 2021 I. Hrivnacova (analysis-V10-07-22)
+- Added public function G4VAnalysisManager::Reset()
+  - Needed when calling files are closed without reset
+    by calling analysisManager->CloseFile(false)
+    (see B5 example with interactive plotting)
+- Minor fixes:
+  - Do not issue same log messages from generic analysis manager
+    and generic file manager
+  - Do not call SetIsEmpty() twice in Hdf5
+
+October 22, 2021 I. Hrivnacova (analysis-V10-07-21)
+- Support for ntuple columns of string vector type
+  for Xml, Hdf5 output type:
+  - added helper code for Xml reader, no update needed for Hdf5
+
+October 19, 2021 I. Hrivnacova (analysis-V10-07-20)
+- Implemented support for file system directories with Csv output
+  as proposed in [GitHub PR #32](https://github.com/Geant4/geant4/pull/32)
+- Fixed reading objects from files with directories (Root, Hdf5)
+- Implemented handling directories in Generic analysis manager
+- Clean-up in G4ToolsAnalysisManager
+- Reimplemented utility functions GetBaseName(), GetExtension() using
+  <filesystem> library
+
+October 6, 2021 I. Hrivnacova (analysis-V10-07-19)
+- Added new G4AnalysisManager.hh header defining
+  using G4AnalysisManager = G4GenericAnalysisManager
+- Removed g4csv.hh, g4hdf5.hh, g4root.hh, g4xml.hh
+- Reduced output specific type definitions in
+  g4xyz_defs.hh to ntuple end rntuple types
+- Removed g4analysis.hh with the
+  G4Analysis::MasterInstance() factory method
+- Removed the default value ("root") for the default file type
+  in G4GenericAnalysisManager - the default must be set by
+  user if using fileNames without extensions
+- Updated exception codes and messages in accummulables
+
+September 20, 2021 I. Hrivnacova (analysis-V10-07-18)
+- clang-tidy performance fixes:
+  - use const auto&, std::move where appropriate
+  - revisited passing by std::shared_ptr
+- clang-tidy modernize fixes:
+  - use make_unique, nullptr, auto, emplace_back, using
+  - use default for disabled constructors and destructors,
+    delete for private member functions not implemented
+- Removed explicit for constructors with more than 1 parameters
+
+September 17, 2021 I. Hrivnacova (analysis-V10-07-17)
+- Fixed evaluation of result of deleting empty file
+  in G4RootAnalysisManager causing wrong warnings
+
+September 3, 2021 I. Hrivnacova (analysis-V10-07-16)
+- Added support for ntuple columns of string vectors via
+  new public functions in G4VAnalysisManager and G4VAnalysisReader:
+  G4bool SetNtupleSColumn(const G4String& columnName,
+                          std::vector<std::string>& vector) final;
+  G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName,
+                          std::vector<std::string>& vector) = 0;
+
+August 31, 2021 I. Hrivnacova (analysis-V10-07-15)
+- Code clean-up:
+  - Review of static data members:
+    - changed static const to static constexpr where possible
+      or inline static const otherwise (for G4String)
+    - declares static data members inline and moved their initialization
+      in header file
+  - Be consistent:
+    - "" for includes from g4tools
+    - "fk" prefix for class constexpr data names
+    - Template argument names:
+    HT, NT, FT for histogram/profile, ntuple, file types
+  - Removed redundant includes of "G4Threading.hh", <iostream>
+
+August 26, 2021 B. Morgan (analysis-V10-07-14)
+- Remove default: in switch for GetMergeFunction
+  - Prevents accidental fall through of Windows
+
+August 25, 2021 I. Hrivnacova (analysis-V10-07-13)
+- Separated Hn/Pn object file handling from output specific analysis readers
+  in Hn file manager classes for reading (G4XHnRFileManager)
+- Replaced the explicit Read[Hn|Pn] functions in the analysis readers
+  by a common implementation in G4ToolsAnalysisReader
+  using the newly introduced Hn file manager classes for reading
+- Separated ReadNtuple functions from the analysis readers in
+  the RNtuple manager classes
+- Renamed G4VAnalysisReader::GetNtuple(const G4String&) in ReadNtuple
+  to avoid ambiguity with GetNtuple(G4int).
+  Note that this change brings backward incompatibility.
+- Using more shared pointers
+
+August 18, 2021 I. Hrivnacova (analysis-V10-07-12)
+- Simplified verbosity messages
+- Plus more simplifications in Warn calls
+- Separated inline functions from G4MPIToolsManager.hh
+  to new .icc
+
+August 16, 2021 I. Hrivnacova (analysis-V10-07-11)
+- Simplified calls to G4Exceptions:
+  - Added G4Analysis::Warn() and changed the calls to G4Exception in
+    all analysis classes (except accummulables)
+  - Reduced exception classification to
+    Analysis_F001: Fatal exceptions - all fatal exception
+    Analysis_W001: Warnings - all warnings
+- Replaced some constants with constexpr
+
+August 12, 2021 I. Hrivnacova (analysis-V10-07-10)
+- Replaced the explicit Write[Hn|Pn] functions in the analysis managers
+  by a common implementation in G4ToolsAnalysisManager::WriteImpl() and Merge()
+  using the new Hn file manager classes introduced for the generic file manager
+  last year.
+  The same code is now used for writing histograms/profiles by specific analysis managers and the generic analysis manager.
+- Added new G4ToolsAnalysisManager::IsEmpty() function
+- Removed trailing whitespaces
+
+August 6, 2021 I. Hrivnacova (analysis-V10-07-09)
+- Added new G4VAnalysisReader public function
+    G4bool CloseFiles(G4bool reset = true);
+  to be called by user before the end of program
+  and its implementation for all readers.
+  This prevents from errors in the Hdf5 read test
+  after migration of the readers to G4ThreadLocalSingleton.
+
+July 19, 2021 I. Hrivnacova (analysis-V10-07-08)
+- Migration to G4ThreadLocalSingleton:
+  in all specific analysis manager and reader classes.
+  After this migration the singleton instances are deletes
+  by the Geant4 kernel, that's why their deleting has to be
+  removed from the client code.
+- Removed isMaster argument from managers/reders constructors,
+  and retrieve this info from G4Threading where needed.
+
+July 15, 2021 I. Hrivnacova (analysis-V10-07-07)
+- Replaced G4Analysis::make_unique with std::make_unique
+- Using [[maybe_unused]] where appropriate
+
+June 29, 2021 G. Cosmo (analysis-V10-07-06)
+- Fixed compilation errors in G4CsvAnalysisReader and G4XmlAnalysisReader
+  occurring with c++20 enabled.
+
+May 25, 2021 B. Morgan (analysis-V10-07-05)
+- Move fonts/ directory and install logic to g4tools external, as prime interface
+  to Freetype.
+
+March 30, 2021 B. Morgan (analysis-V10-07-04)
+- Migrate build to modular CMake API
+
+February 26, 2021 I. Hrivnacova (analysis-V10-07-03)
+- Fixed ntuple indexing when FinishNtuple is called in different order
+  than CreateNtuple.
+  Addressing the problem report #2335.
+
+February 18, 2021 B. Morgan (analysis-V10-07-02)
+- Move g4tools to externals category
+
+February 2, 2021 I. Hrivnacova (analysis-V10-07-01)
+- Fixed the problem with merging ntuples with columns of vector type
+  reported by Riccardo Pilato in G4 Forum.
+
+January 5, 2021 I. Hrivnacova (analysis-V10-07-00)
+- Updated to g4tools 5.2.3 (Guy Barrand):
+  Bug fix in tools/histo/h2,h3 : get_bin_content(): have '&' in "get" arguments.
+  Addressing the problem report #2306.
+  See History_tools for the complete list of modifications.
+
+November 16, 2020 G. Cosmo (analysis-V10-06-11)
+- Fixed typos in printed-out text. Addressing problem report #2285.
+
+November 12, 2020 B. Morgan (analysis-V10-06-10)
+- Apply typo fixes from Gurkan Myczko (https://github.com/Geant4/geant4/pull/15)
+
+November 10, 2020  I. Hrivnacova (analysis-V10-06-09)
+- Fixed the memory leak reported by valgrind in deleting files
+
+November 06, 2020  I. Hrivnacova (analysis-V10-06-08)
+- Make GenericAnalysisManager working with file names without extension
+  (needed for backward compatibility):
+  - Added fDefaultType data member and its setter, getter (with "root" default)
+- Fixed deleting empty files
+- Fixed minor memory leaks
+
+November 04, 2020  I. Hrivnacova (analysis-V10-06-07)
+- Changes to allow overriding Root classes in g4mpi/analysis
+- Removed redundant variable in G4RootNtupleFileManager::Reset()
+
+October 30, 2020  I. Hrivnacova (analysis-V10-06-06)
+- Implemented writing ntuples in multiple files of the same output type:
+  - New G4VAnalysisManager function:
+      void SetNtupleFileName(G4int objectId, const G4String& name);
+    and UI commands:
+      /analysis/ntuple/setFileName id fileName
+      /analysis/ntuple/setFileNameToAll fileName
+- Finalizes implementation of extra write of histograms
+  - Polished G4GenericAnalysisManager::WriteH1 and added
+    functions for other Hn types
+- This also fixes issues in the ntuple output introduced with previous tag
+  (observed in B4, TestEm1, microbeam)
+
+October 21, 2020  I. Hrivnacova (analysis-V10-06-05)
+- Major upgrade including the support for multiple files
+  and multiple output types:
+  - New G4GenericAnalysisManager,G4GenericFileManager classes
+    if factory category
+  - New G4VAnalysisManager functions:
+     void SetH1FileName(G4int objectId, const G4String& name);
+        ... etc. for H2, H3, P1, P2
+    and corresponding UI commands:
+     /analysis/h1/setFileName id name
+     /analysis/h1/setFileName id name
+        ... etc. for h2, h3, p1, p2
+  - Redesign of management classes to separate object file handling
+    from output specifuc analysis managers
+  - The multiple file output is tested in new test32
+
+October 14, 2020  I. Hrivnacova (analysis-V10-06-04)
+- Updated G4PlotManager.cc - using new wrap_viewplot_fonts_google_style
+  header
+- Updated to g4tools 5.2.1 (Guy Barrand):
+  - Change the usage of arialbd.ttf, helvetica.ttf with roboto_bold.ttf
+    and lato_regular.ttf (google fonts).
+  - Modifications in tools/hdf5 to use H5free_memory() instead free() at
+    some places (needed for HDF5/1.12.0).
+  - Modifations in graphics to be be in sync with the code in inlib/exlib
+    around Apple/Metal, but they should not have an impact on offscreen plotting.
+  See History_tools for the complete list of modifications.
+
+June 10, 2020  J. Madsen (analysis-V10-06-03)
+- (bug-fix) Added a null-pointer check to ntupleDescription->fNtuple in
+  G4RootPNtupleManager::Merge. This happened during testing of new
+  G4TaskRunManager in basic/B5, which defaults to a higher
+  number of threads than G4MTRunManager.
+
+May 22, 2020   I. Hrivnacova (analysis-V10-06-02)
+- Updated to g4tools 5.1.0 (Guy Barrand):
+  Corrections to handle automatic min/max axes values in case of log scale.
+  See History_tools for the complete list of modifications.
+
+April 29, 2020   G. Folger (analysis-V10-06-01)
+- (trivial) fix for clang10, affects header g4tools/include/tools/gl2ps
+
+December 9, 2019 B. Morgan (analysis-V10-06-00)
+- Cleanup CMake build, removing obsolete granular library options and
+  explicit include_directories.
+- Update granular dependencies in preparation for modularization
+- Remove uneeded links to externals in factory
+
+December 3, 2019 I. Hrivnacova (analysis-V10-05-13)
+- Use consistently the same default value of rowMode
+  in G4RootAnalysisManager::SetNtupleRowWise() as defined in the
+  G4VAnalysisManager base class.
+
+November 19, 2019 G. Cosmo (analysis-V10-05-12)
+- Fixed more cases of implicit type conversions.
+
+November 17, 2019 I. Hrivnacova (analysis-V10-05-11)
+- Updated to g4tools 5.0.5 (Guy Barrand):
+  Fixed compilation warning from gl2ps showing up on gcc-9.2.
+  See History_tools for the complete list of modifications.
+
+November 15, 2019 G. Cosmo (analysis-V10-05-10)
+- Fixed cases of implicit type conversions from size_t to G4int.
+
+November 11, 2019 B. Morgan (analysis-V10-05-09)
+- Link directly to FreeType and HDF5 impormted targets
+
+November 8, 2019 I. Hrivnacova (analysis-V10-05-08)
+- In G4PlotManager: Disabled PAW encoding
+  (this fixes a problem with unwanted axis labels in Greek)
+- Updated to g4tools 5.0.4 (Guy Barrand):
+  - sg/plotter: added function set_encoding(), set_encoding_none() which allow
+    to disable (unwanted) paw specific encoding
+  - Fixed Coverity warnings
+
+October 21, 2019 I. Hrivnacova (analysis-V10-05-07)
+- Added fRowWise data member in G4RootNtupleManager to make the parameter
+  available in MPI
+
+October 17, 2019 I. Hrivnacova (analysis-V10-05-06)
+- Updated to g4tools 5.0.2 (Guy Barrand):
+  Handle axis label of format "10^%d?" in case of freetype font.
+
+October 14, 2019 I. Hrivnacova (analysis-V10-05-05)
+- Enhanced the G4VAnalysisManager interface:
+  - Added new option for ntuple merging and updated/added functions for merging:
+    - SetNtupleMerging(): removed rowWise and basketSize optional paremeters
+    - SetNtupleRowWise(): added parameter 'rowMode' with a default value
+    - SetBasketSize(), SetBasketEntries(): new methods
+  - Added functions and UI commands for setting axis log scale for plotting:
+    - Set[H,P][1,2,3][X,Y.Z]AxisIsLog()
+      and analoguos getters
+    - New UI commands
+      /analysis/[h,p][1,2,3]/set[X,Y,Z]axisLog true|false
+- Fix in g4tools for axis labels with log scale
+
+October 9, 2019 I. Hrivnacova (analysis-V10-05-04)
+- Updated to g4tools 5.0.1 (Guy Barrand):
+  - ROOT format : restore a "per event/row view" for the ntuple column-wise in MT and MPI.
+  - batch plotting : fixes to avoid labels overlap when having a grid of plotters.
+  - MPI : fix a memory leak.
+  - scene graph : have material for interactive plotting.
+  - include modifications coming from other usage of inlib/exlib, for example, in rroot, to be able to read TClonesArray.
+  See History_tools for the complete list of modifications.
+
+September 24, 2019 I. Hrivnacova (analysis-V10-05-03)
+- Fix in g4tools:
+  - mpi_create_basket: fixed memory leak (Guy Barrand)
+
+September 10, 2019 I. Hrivnacova (analysis-V10-05-02)
+- Added new factory function G4Analysis::ManagerInstance():
+  which allows to create the analysis manager of the type selected via a string argument; example of the user code:
+  #include "g4analysis.hh"
+  G4AnalysisManager* analysisManager = G4Analysis::ManagerInstance("root");
+
+  Note that G4AnalysisManager is in this case G4ToolsAnalysisManager, and not
+  the output type specific manager (eg. G4RootAnalysisManager), as it is
+  in case of using a type specific include, eg. "g4root.hh"
+
+  Details:
+  - Added new analysis sub-category "factory"
+  - Clean-up analysis type definitions:
+    G4Hn*, G4Pn* types moved out of type specific namespace
+  - Added methods for setting ntuple merge mode in G4VAnalysisManager
+    with a default implementatation (issuing a warning if merging is not available)
+
+June 12, 2019 I. Hrivnacova (analysis-V10-05-01)
+- Fixed CSV, XML ntuple file names
+
+March 11, 2019 G. Cosmo (analysis-V10-05-00)
+- Fixed typos in printouts in G4P1Messenger, G4PlotMessenger, G4PlotParameters.
+
+November 28, 2018 I. Hrivnacova (analysis-V10-04-10)
+- Use the same mutex in Root pntuple add_row and end_fill.
+  This should fix occassional failures of tests in MT mode.
+
+November 21, 2018 I. Hrivnacova (analysis-V10-04-09)
+- Added G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise):
+  this allows to choose rowWise/columnWise mode also in sequential mode
+- Added "boolean reset" argument in G4AnalysisManager::CloseFile() function:
+  this allows to close a file without resetting data
+  (used in MPI example)
+- Allow overriding selected functions in G4RootAnalysisManager, G4RootNtupleManager
+  and G4TNtupleManager: needed for an external implementation of MPI ntuple merging
+  in MPI examples
+
+November 9, 2018 G. Cosmo (analysis-V10-04-08)
+- tools/hatcher.icc: fixed printout typos.
+
+November 7, 2018 I. Hrivnacova (analysis-V10-04-07)
+- Fixed creating ntuples after OpenFile for other then Root formats
+
+October 11, 2018 I. Hrivnacova (analysis-V10-04-06)
+- Switched the default Root ntuple merge mode to rowWise
+- Added friend class declarations to allow an implementation
+  of MPI ntuple merging in the MPI example
+
+October 11, 2018 I. Hrivnacova (analysis-V10-04-05)
+- Modified management of plotting:
+  G4PlotManager is now instantiated with G4AnalysisManager what makes
+  possible to remove static G4PlotParameters.
+  (This fixes the problem report ##2083.)
+
+September 12, 2018 I. Hrivnacova (analysis-V10-04-04)
+- Fixed the default value of rowWise argument (false)
+  in G4RootAnalysisManager::SetNtupleMerging().
+- Updated G4TNtupleManager::FinishTNtuple to support creating ntuples
+  both before and after OpenFile.
+
+May 25, 2018 I. Hrivnacova (analysis-V10-04-03)
+- Updated to g4tools 4.2.3 (Guy Barrand):
+  Fixed remaining gcc-8.1.0 warnings.
+  See History_tools for the complete list of modifications.
+
+May 23, 2018 I. Hrivnacova (analysis-V10-04-02)
+- Updated to g4tools 4.2.2 (Guy Barrand):
+  Fixed gcc-8.1.0 warnings.
+  See History_tools for the complete list of modifications.
+
+February 15, 2018 J. Madsen (analysis-V10-04-01)
+- Fixed a deadlock issue with G4RootPNtupleManager where the mutex
+  was locked before being passed to ROOT
+
+December 21, 2017 G. Cosmo (analysis-V10-04-00)
+- Fixed self-consistency in headers (missing #include) in G4BaseAnalysisManager,
+  and G4PlotManager.
+
+November 16, 2017 I. Hrivnacova (analysis-V10-03-17)
+- Updated to g4tools 4.2.1 (Guy Barrand):
+  Coverity fixes.
+  See History_tools for the complete list of modifications.
+
+November 2, 2017 I. Hrivnacova (analysis-V10-03-16)
+- Fixed compilation warning
+
+October 25, 2017 I. Hrivnacova (analysis-V10-03-15)
+- Updated to g4tools 4.2.0 (Guy Barrand):
+  Changes in wroot, rroot in order to handle row wise ntuple in case of MT or MPI.
+  See History_tools for the complete list of modifications.
+- Added rowWise option to G4RootAnalysisManager::SetNtupleMerging()
+
+October 19, 2017 I. Hrivnacova (analysis-V10-03-14)
+- Fixed compiler warning in G4Hdf5FileManager.cc
+
+September 26, 2017 I. Hrivnacova (analysis-V10-03-13)
+- Updated to g4tools 3.7.0 (Guy Barrand):
+  - Update in colorf, colors to make possible to use the tools/colors color
+    table in G4Colour class.
+  - Coverity fixes graphics/plotting code.
+  See History_tools for the complete list of modifications.
+
+September 11, 2017 I. Hrivnacova (analysis-V10-03-12)
+- Fixed generating file name on workers (adding _tN extension).
+  (The problem was reported in analysis category in hypernews as item #537.)
+
+August 3, 2017 I. Hrivnacova (analysis-V10-03-11)
+- Updated to g4tools 3.6.0 (Guy Barrand):
+  Fixing problems introduced in previous version.
+  See History_tools for the complete list of modifications.
+
+August 1, 2017 I. Hrivnacova (analysis-V10-03-09, 10)
+- Several fixes in hdf5
+- Updated to g4tools 3.5.0 (Guy Barrand):
+  Coverity fixes and test/cpp/hdf5_threads.cpp program.
+  See History_tools for the complete list of modifications.
+
+July 27, 2017 I. Hrivnacova (analysis-V10-03-08)
+- Adding support for Hdf5
+- Updated to g4tools 3.4.0 (Guy Barrand):
+  See History_tools for the complete list of modifications.
+
+July 21, 2017 I. Hrivnacova (analysis-V10-03-07)
+- Updated to g4tools 3.3.0 (Guy Barrand):
+  Adding support for HDF5, improved tests.
+  See History_tools for the complete list of modifications.
+
+July 21, 2017 I. Hrivnacova (analysis-V10-03-06)
+- Fixing remaining compilation warnings (gcc)
+
+July 21, 2017 I. Hrivnacova (analysis-V10-03-05)
+- Fixing compilation warnings (gcc53)
+
+July 20, 2017 I. Hrivnacova (analysis-V10-03-04)
+- Code improvements:
+  - Moved common implementation from G4V[R]NtupleManager in
+    new G4Base[R]NtupleManager classes
+  - Introduced G4TRNtupleDescription, G4TRNtupleManager template classes
+  - Always create an ntuple from ntuple booking (removed usage of
+    ntupel::create_column)
+  - Added an optional directoryName argument in Read[Hn][Pn][Ntuple]
+    functions in G4VAnalysisReader (needed for HDF5)
+
+April 12, 2017 I. Hrivnacova (analysis-V10-03-03)
+- Corrected handling of open file failure
+  (This fixes problem report #1957.)
+
+March 14, 2017 I. Hrivnacova (analysis-V10-03-02)
+- Added GetP[1,2]Id(const G4String&) functions to
+  the G4AnaysisManager public interface.
+  (This fixes problem report #1949.)
+
+March 03, 2017 I. Hrivnacova (analysis-V10-03-01)
+- Fixed problem of removing non-empty ntuple files
+  in user application where ntuples are created after
+  open file.
+  (This mode is used in dna examples, eg. dnaphysics.)
+
+February 24, 2017 I. Hrivnacova (analysis-V10-03-00)
+- Restored clean-up of Root empty files in MT mode
+  (which was lost with previous updates)
+
+November 17, 2016 I. Hrivnacova (analysis-V10-02-25)
+- Fixed compiler warning issued when G4VERBOSE is not set.
+- Updated to g4tools 2.3.0 (Guy Barrand):
+  Adding methods to tools/impi for passing ntuple data.
+  See History_tools for the complete list of modifications.
+
+November 03, 2016 I. Hrivnacova (analysis-V10-02-24)
+- Updated to g4tools 2.2.0 (Guy Barrand):
+  Coverity fixes,
+  See History_tools for the complete list of modifications.
+- Added prefix, postfix increment operators to G4Accumulable
+
+October 30, 2016 I. Hrivnacova (analysis-V10-02-23)
+- Simplified G4RootAnalysisManager::GetNtupleFileNumber() to avoid using
+  G4Threading::GetNumberOfRunningWorkerThreads() which seems to be failing
+  on gcc and icc plaftorms
+- Added temporary debug printing from this method
+
+October 28, 2016 I. Hrivnacova (analysis-V10-02-22)
+- Merging ntuples in a selected number of output files
+
+October 24, 2016 I. Hrivnacova (analysis-V10-02-21)
+- Set back not merging ntuples by default.
+- Fixed resetting ntuples (which was failing in case when
+  a new file is written per event and ntuples are created
+  after file is open (examples/advanced/gammaray_telescope
+  use case).
+
+October 14, 2016 I. Hrivnacova (analysis-V10-02-20)
+- Merging ntuples improvements:
+  - now working also when ntuples are booked after OpenFile (use case in AnaEx01)
+  - use directory if directory name is set
+  - added basketSize parameter in the SetNtupleMerging() public function
+
+October 10, 2016 I. Hrivnacova (analysis-V10-02-19)
+- Do not merge ntuples by default.
+  Merging ntuples requires the application to call CreateNtuple both on master
+  and workers, what is not done in all examples.
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-18)
+- Disabled code using the number of threads in G4RootAnalysisManager
+  untill this function is available in G4Threading;
+  user setting of numbert of reduced ntuple files is ignored.
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-17)
+- Fixed case in included file name
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-16)
+- Implemented merging of ntuples in MT mode:
+  - Added G4RootAnalysisManager::SetMerging(G4bool mergeNtuples, G4int nofReducedNtupleFile)
+  - Added G4RootPNtupleManager, G4RootMainNtupleManager classes
+- Updated to g4tools 2.1.0 (Guy Barrand)
+  For parallel ntuple : handle properly the user std::vector for column of vector.
+  See History_tools for the complete list of modifications.
+
+October 3, 2016 I. Hrivnacova (analysis-V10-02-15)
+- Removing dependencies of accumulables on other analysis categories
+
+October 3, 2016 G. Cosmo (analysis-V10-02-14)
+- Fixed again GNUmakefile in "accumulables" module...
+
+September 30, 2016 I. Hrivnacova (analysis-V10-02-13)
+- Updated to g4tools 2.0.0 (Guy Barrand)
+  Added parallel ntuple : on a same booked nutple, pass baskets from threads
+  or mpi ranks to a "main ntuple" tied to a file.
+  See History_tools for the complete list of modifications.
+
+September 27, 2016 G. Cosmo (analysis-V10-02-12)
+- Fixed GNUmakefile in new "accumulables" module.
+
+September 26, 2016 I. Hrivnacova (analysis-V10-02-11)
+- Renamed G4Parameter in G4Accumulable (as suggested in CM in Ferrara)
+  including all related classes and the subdirectory parameters
+  in accumulables
+
+September 8, 2016 I. Hrivnacova (analysis-V10-02-10)
+- Enable creating/configurion profiles without cut values (vmin, vmax).
+  This feature was disabled by a check for the values in G4VAnalysisManager;
+  these values are now treated in a special way.
+- Fixed duplicating Csv ntuple header
+
+September 6, 2016 I. Hrivnacova (analysis-V10-02-09)
+- Fixed writing CSV profiles
+  (to be propagated in the patch to 10.2)
+
+July 4, 2016 I. Hrivnacova (analysis-V10-02-08)
+- Adding missing inline keyword to functions defined in
+  G4ParameterManager.icc
+
+June 24, 2016 I. Hrivnacova (analysis-V10-02-07)
+- Fixing compilation with gcc: added missing include <functional>
+
+June 23, 2016 I. Hrivnacova (analysis-V10-02-06)
+- Extended and improved current implementation of parameters:
+  - The parameters names are optional
+  - Extended merge mode with kMaximum, kMinimum
+    and removed kUser (not needed anymore)
+  - Added access to paremeters via iterators and ids
+    (defined by the order of registering)
+  - Introduced G4MergeFunction<T> type and apply merging via a function
+    defined accorting to the merge mode
+    (thanks to Jonathan Madsen for providing an example of the code)
+- Return 0. instead of 0 when the return type is double
+- Return nullptr instead of 0
+
+June 7, 2016 I. Hrivnacova (analysis-V10-02-05)
+- Updated to g4tools 1.27.4 (Guy Barrand):
+  Fixed remaining Windows-64 compiler warnings.
+  See History_tools for the complete list of modifications.
+
+June 3, 2016 I. Hrivnacova (analysis-V10-02-04)
+- Updated to g4tools 1.27.3 (Guy Barrand):
+  Fixed Windows-64 compiler warnings.
+  See History_tools for the complete list of modifications.
+
+May 25, 2016 I. Hrivnacova (analysis-V10-02-03)
+- Updated to g4tools 1.27.2 (Guy Barrand):
+  Fixed Mac OSX compiler warnings.
+
+May 4, 2016 I. Hrivnacova (analysis-V10-02-02)
+- Updated to g4tools 1.27.1 (Guy Barrand):
+  Fixed gcc 6.1 compiler warnings.
+
+April 18, 2016 I. Hrivnacova (analysis-V10-02-01)
+- Updated to g4tools 1.27.0 (Guy Barrand):
+  Fixed incompatibility with ROOT 5.x and 6.x formats reported in ROOT forum:
+  https://root.cern.ch/phpBB3/viewtopic.php?t=21315
+
+December 8, 2015 I. Hrivnacova (analysis-V10-02-00)
+- Fixed definition of /analysis/ntuple command directory
+  which was created implicitly with the commands and so
+  defined without a guideline and not deleted
+
+November 25, 2015 I. Hrivnacova (analysis-V10-01-47)
+- Adding GNUmakefile in parameters sub-category
+
+November 25, 2015 I. Hrivnacova (analysis-V10-01-46)
+- Updated GNUmakefile for added parameters sub-category
+
+November 20, 2015 I. Hrivnacova (analysis-V10-01-45)
+- Fix compiler warning about unused parameter 'size' observed on MacOS/clang
+  (Guy Barrand)
+
+November 6, 2015 I. Hrivnacova (analysis-V10-01-44)
+- Fixed default viewer settings and finalized supported plotting
+  configurations:
+  - Updated to  g4tools 1.26.2 (G. Barrand):
+    - See History_tools for the complete list of modifications.
+  - Extended viewplot.cpp with a test which mimics usage in analysis category
+  - Set limits for layout parameters which can be changed via UI commands
+
+November 3, 2015 I. Hrivnacova (analysis-V10-00-46)
+- Fixed handling ntuples created in MT mode on master thread
+  This fixes the problem reported in hypernews (#495) and the problem
+  of deleting non-empty Root file containing only ntuples.
+
+November 2, 2015 I. Hrivnacova (analysis-V10-01-43)
+- Fixed G4Parameter constructor
+
+Oct 30, 2015 I. Hrivnacova (analysis-V10-01-42)
+- Fixed handling ntuples created in MT mode on master thread
+  This fixes the problem reported in hypernews (#495) and the problem
+  of deleting non-empty Root file containing only ntuples.
+
+Oct 22, 2015 I. Hrivnacova (analysis-V10-01-41)
+- Updated to g4tools 1.26.0 (Guy Barrand):
+  with added support for using freetype rendering in plotting
+  See History_tools for the complete list of modifications.
+- Implemented support for freetype in G4PlotManager
+- Added G4PlotParameters and G4PlotMessenger classes which
+  define the plot configuration parameters that can be set via UI
+  commands
+- Removed unused include of G4PlotManager in hntools/src/G4ToolsAnalysisReader.cc
+
+Sep 23, 2015 I. Hrivnacova (analysis-V10-01-40)
+- Fixed compiler warning
+
+Sep 23, 2015 I. Hrivnacova (analysis-V10-01-39)
+- Added  G4AnalysisOutput type (as class enum) and
+  G4AnalysisManager functions needed to connect analysis to Geant4 scorers:
+    static G4bool IsInstance();
+    G4bool IsOpenFile() const;
+- Two more minor fixes
+
+Sep 21, 2015 I. Hrivnacova (analysis-V10-01-38)
+- Implemented setPlotting commands and added G4HnManager::SetPlotting() function
+  to set plotting to all objects
+- Fixed false warning issued from G4TNtupleManager
+- Fixed plotting in more pages
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-37)
+- Fixed return value also in FillNtupleTColumn() in G4TNtupleManager.icc
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-36)
+- Fixed return value in FillNtupleTColumn() in G4RootNtupleManager.hh
+
+Sep 18, 2015 I. Hrivnacova (analysis-V10-01-35)
+- Updated to g4tools 1.24.2 (Guy Barrand):
+  - tools/wcsv_ntuple, tools/wroot/ntuple : have class icol public.
+  - tools/mpi/wrmpi : fixed use of TOOLS_USE_MPI_PACK_NOT_CONST
+  - See History_tools for the complete list of modifications.
+- Use tools ntuple column base type (icol, iobj), which access is now enabled in tools,
+  to avoid casting to/from void* and type check in FillNtupleXColumn (where both column type and
+  column Id must be consistent with ntuple definition)
+- Simplified definitions of G4TNtupleManager pure virtual functions
+
+Sep 16, 2015 I. Hrivnacova (analysis-V10-01-34)
+- In G4TNtupleManager::FillNtupleTColumn:
+  changed Tvalue in const T& value to match exactlly with fill()
+  functions in tools
+
+Sep 15, 2015 I. Hrivnacova (analysis-V10-01-33)
+- Do not delete ntuple with Root output type
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-32)
+- One more fix in G4RootNtupleManager - exact match of arguments in
+  template specialization
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-31)
+- Added declaration for template specializations in G4RootNtupleManager.hh;
+  Trying to fix vc12 compiler error:
+  'none of the 5 overloads could convert all the argument types'
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-30)
+- Added scope G4Analysis:: to all calls to make_unique
+  (to avoid ambiguity error on vc12 with std::make_unique )
+
+Sep 14, 2015 I. Hrivnacova (analysis-V10-01-29)
+- Replaced constexpr (not supported on vc12) with const definitions
+
+Sep 12, 2015 I. Hrivnacova (analysis-V10-01-28)
+- Removed G4CsvNtupleManager.icc file, not used
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-27)
+- Fixed compilation warnings about unused variables
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-26)
+- Fixed compilation with gcc 5.1:
+  Added #include <memory> where missing
+
+Sep 11, 2015 I. Hrivnacova (analysis-V10-01-25)
+Merged developments from analysis_c++11 branch:
+- Introduced C++11 features
+- Added classes for common handling of tools objects
+  to avoid code duplication:
+  - G4ToolsAnalysisManager, ToolsAnalysisReader; G4THnAnalysisManager (templated)
+  - Improved G4XNtupleManager classes:
+    - Introduced template functions to avoid code duplication and added
+      G4TNtupleManager class template with a common implementation
+      for all output types
+- G4BaseToolsManager class replaced with G4Analysis namespace utility functions,
+  defined in G4BaseHistoUtilies
+- Added new sub-category parameters
+  with first implementation of G4ParameterManager (still to be finalized)
+
+Sep 03, 2015 I. Hrivnacova (analysis-V10-01-24)
+- Updated to g4tools 1.24.1 (Guy Barrand):
+  Added ability to handle old MPI_[Pack,UnPack] signature;
+  make whbook.cpp test compiling with tools in Geant4;
+  Coverity fixes.
+  See History_tools for the complete list of modifications.
+
+Aug 27, 2015 I. Hrivnacova (analysis-V10-01-23)
+- Removed profile directory; the profiles are put in the histograms directory,
+  if its name is set by the user.
+
+Aug 17, 2015 I. Hrivnacova (analysis-V10-01-22)
+- Updated exception_classification:
+  Added Analysis_W041: Requested feature is not available with selected output.
+
+Aug 12, 2015 I. Hrivnacova (analysis-V10-01-21)
+- Fixed parameter range in setAscii command
+  (thanks to Mihaly Novak for reporting this problem)
+
+Jul 01, 2015 I. Hrivnacova (analysis-V10-01-20)
+- Updated to g4tools 1.23.1 (Guy Barrand):
+  Finalize interfaces to MPI;
+  prepare the ground for plot style files.
+  See History_tools for the complete list of modifications.
+- Added G4VAnalysisManager::Merge(tools::histo::hmpi*)
+  and G4MMPIToolsManager class which implements histogram & profiles
+  MPI merging using tools/histo/hmpi interface
+
+Jun 23, 2015 I. Hrivnacova (analysis-V10-00-45)
+- Fixed G4Analysis::Tokenize() which was failing when processsing a string
+  containing opening double quota without a closing one.
+
+Jun 23, 2015 I. Hrivnacova (analysis-V10-01-19)
+- Revised while loops and fixed G4Analysis::Tokenize()
+
+Jun 10, 2015 I. Hrivnacova (analysis-V10-01-18)
+- Make new functions SetNtupleSColumn() in G4VRNtupleManager
+  pure virtual.
+
+Jun 03, 2015 I. Hrivnacova (analysis-V10-01-17)
+- Updated to g4tools 1.22.1 (Guy Barrand):
+     Revisit structure for plotting related code.
+     Added methods for writing multiple pages in a file.
+- Integrated changes in g4tools:
+  generating a single plot file with multiple pages.
+
+Jun 03, 2015 I. Hrivnacova (analysis-V10-01-16)
+- Added functions for batch plotting:
+  o to activate batch plotting of a selected hitsogram/profile:
+    analysisManger->SetH1Plotting(id, true);
+  o the output .ps file is then create on Write() call
+    in addition to standard output files
+  o Plotting available for  1D, 2D histograms
+- Updated to g4tools 1.21.0 (Guy Barrand):
+     Revisit #include paths to avoid too much -I when compiling.
+
+May 19, 2015 I. Hrivnacova (analysis-V10-01-15)
+ - Updated to g4tools 1.20.0 (Guy Barrand):
+   Added "batch plotting" facility.
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-14)
+ - Fixed command directory names and code clean-up.
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-13)
+ - Attempt to fix a compilation error on Windows:
+   replaced use of string operator [] with substr()
+
+May 6, 2015 I. Hrivnacova (analysis-V10-01-12)
+ - Attempt to fix a compilation error on Windows.
+
+May 5, 2015 I. Hrivnacova (analysis-V10-01-11)
+ - Implemented activation of ntuples
+ - Implemented setX,Y,Z commands for setting histograms/profiles
+   parameters per dimensiion. They can be used as an alternative to the
+   complex set commands.
+   Note: The parameters per dimensions have to be set sucessively; eg.
+   /analysis/h2/setX ...
+   /analysis/h2/setY ...
+   Incomplete or ordre-reverted setting will result in issuing a warning
+   and will be ignored.
+ - Restructured messenger classes to avoid code duplications.
+
+May 3, 2015 I. Hrivnacova (analysis-V10-01-10)
+ - Implemented support for ntuple vector columns with Csv output
+ - Added Set/GetCompressionLevel() functions to G4AnalysisManager
+   (used only with Root output) and changed its default value to 1 (was 9))
+
+April 14, 2015 I. Hrivnacova (analysis-V10-01-09)
+ - Updated to g4tools 1.19.2 (Guy Barrand):
+   Fixed compilation on Mac, clang 3.4.
+   See History_tools for the complete list of modifications.
+
+April 13, 2015 I. Hrivnacova (analysis-V10-01-08)
+ - Updated to g4tools 1.19.1 (Guy Barrand):
+   csv: handle vector column if using the ntuple_booking way
+   See History_tools for the complete list of modifications.
+
+April 9, 2015 I. Hrivnacova (analysis-V10-00-44)
+  tag to be included in the patch release:
+- Updated to g4tools 1.17.2 (Guy Barrand):
+  Changes for Windows (MinGW) - fixing problem #1721 (mainly to change
+  #ifdef WIN32 to #ifdef _MSC_VER, which more clean)
+
+April 02, 2015 I. Hrivnacova (analysis-V10-01-07)
+ - Updated to g4tools 1.19.0 (Guy Barrand):
+   - Csv handles vector columns
+   - Changes for Windows (MinGW) - fixing problem #1721 (mainly to change
+     #ifdef WIN32 to #ifdef _MSC_VER, which more clean)
+   - Various optimisations to be faster in converting numbers to strings
+     (huge improvements with that around csv and xml tuples)
+   - See History_tools for the complete list of modifications.
+
+March 18, 2015 I. Hrivnacova (analysis-V10-00-43)
+  tag to be included in the patch release:
+- Fixed reading XML ntuples with a column of a vector type
+  tools do not support direct use of ntuple_bindings with a vector,
+  use of a temorary sub-ntuple is needed
+
+March 17, 2015 I. Hrivnacova (analysis-V10-01-06)
+- Fixed reading XML ntuples with a column of a vector type
+  tools do not support direct use of ntuple_bindings with a vector,
+  use of a temorary sub-ntuple is needed
+
+March 13, 2015 I. Hrivnacova (analysis-V10-01-05)
+- Fixed false warnings about unknown column type when an ntuple contains
+  a column of a vector type and is created via ntuple booking
+
+March 13, 2015 I. Hrivnacova (analysis-V10-01-04)
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
+  managers
+
+March 13, 2015 I. Hrivnacova (analysis-V10-00-42)
+  tag to be included in the patch release:
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
+  managers
+
+February 20, 2015 I. Hrivnacova (analysis-V10-01-03)
+- Updated to g4tools 1.18.2 (Guy Barrand):
+  Added code to send/recv histos through MPI;
+  see History_tools for the complete list of modifications.
+
+February 04, 2015 I. Hrivnacova (analysis-V10-01-02)
+- Updated to g4tools 1.17.1 (Guy Barrand):
+  Fixed resetting histograms;
+  see History_tools for the complete list of modifications.
+
+January 21, 2015 I. Hrivnacova (analysis-V10-01-01)
+- Updated to g4tools 1.17.0 (Guy Barrand):
+  Fixes in the Root files output to be compatible with ROOT 6.02/x;
+  see History_tools for the complete list of modifications.
+
+December 5, 2014 G. Cosmo (analysis-V10-01-00)
+- Corrected csv/sources.cmake to include missing file:
+    G4CsvAnalysisReader.icc
+
+November 24, 2014 I. Hrivnacova (analysis-V10-00-41)
+- Fixed update to g4tools 1.16.3:
+  the update of g4tools/src/csz_inflate.cc with Coverity fix
+  was missing
+
+November 07, 2014 I. Hrivnacova (analysis-V09-06-33)
+- Fixed createH2/setH2 commands implementation
+  (was missing in the previous tag V09-06-32)
+
+November 06, 2014 I. Hrivnacova (analysis-V10-00-40)
+- Fixed Coverity defect also in Csv, Root ntuple and Xml rntuple managers
+
+November 05, 2014 I. Hrivnacova (analysis-V10-00-39)
+- Fixed Coverity defect in G4XmlNtupleManager
+
+October 27, 2014 I. Hrivnacova (analysis-V10-00-38)
+- Revised (and simplified) numbering of warnings in exception messages
+
+October 25, 2014 I. Hrivnacova (analysis-V10-00-37)
+- Updated to g4tools 1.16.3 (by G. Barrand):
+  Fixed problem with csv reading on windows;
+  see History_tools for complete list of modifications.
+
+October 22, 2014 I. Hrivnacova (analysis-V10-00-36)
+- Updated to g4tools 1.16.2 (by G. Barrand):
+  modifs for example code to read csv ntuple by using ntuple_binding
+  see History_tools for complete list of modifications.
+- Added writing commented header (default) for csv ntuple
+- Implemented reading csv ntuples
+- Removed H1, H2, P1 dummy manager classes and H3, P3 moved in
+  hbook implementation in examples
+- Use kInvalidId instead of -1
+- Added checks for ntupleId in RNtupleManager classes
+
+October 22, 2014 I. Hrivnacova (analysis-V10-00-35)
+- Fixed compiler warning in tools/wroot/leaf:
+  base class tools::wroot::ibo should be explicitly initialized in the copy constructor
+
+October 21, 2014 I. Hrivnacova (analysis-V10-00-34)
+- Updated to g4tools 1.16.1 (by G. Barrand):
+  Fixed reading root ntuple with column of std::string type
+  by using ntuple_binding.
+  see History_tools for complete list of modifications.
+
+October 20, 2014 I. Hrivnacova (analysis-V10-00-33)
+- Updated to g4tools 1.16.0 (by G. Barrand)
+  Write/read ntuple with std::string columns,
+  see History_tools for complete list of modifications.
+- Implemented reading H3 for Root (now supported in tools)
+- Added functions for handling ntuple columns of std::string type
+- Added an option to write the Hippo header in csv ntuple output
+  (default true)
+
+October 13, 2014 I. Hrivnacova (analysis-V10-00-32)
+- Fixed variable initialization in G4CsvAnalysisReader
+
+October 13, 2014 I. Hrivnacova (analysis-V10-00-31)
+- Do not include G4CsvRNtupleManager, which is not yet commited.
+
+October 07, 2014 I. Hrivnacova (analysis-V10-00-30)
+- Implemented G4CsvAnalysisReader: reading all histograms and profiles;
+  ntuples noy yet done
+- Updated to g4tools 1.15.2 (by G. Barrand)
+  Fixed reading csv histograms and profiles (rcsv_histo)
+
+September 30, 2014 I. Hrivnacova (analysis-V10-00-29)
+- Updated to g4tools 1.15.1 (by G. Barrand)
+  Fixed reading histograms with titles of more words;
+  see History_tools for complete list of modifications.
+
+September 30, 2014 I. Hrivnacova (analysis-V10-00-28)
+- Updated to g4tools 1.15.0 (by G. Barrand)
+  See History_tools for complete list of modifications.
+
+September 18, 2014 I. Hrivnacova (analysis-V10-00-27)
+- Fixed units in /analysis/[h|p]n/create and /analysis/[h|p]n/set
+  commands
+
+September 12, 2014 G. Cosmo (analysis-V10-00-26)
+- Fixed xml/GNUmakefile to add missing dependency on expat, to
+  cover cases when internal expat is used or for WIN32 builds.
+
+September 12, 2014 I. Hrivnacova (analysis-V10-00-25)
+- Fixes in XML reader:
+  - Added expat includes and libraries in xml sources.cmake
+  - Removed unused function from G4XmlAnalysisReader
+
+September 11, 2014 I. Hrivnacova (analysis-V10-00-24)
+- Adding histograms and profiles support in Csv
+- Finalized G4VAnalysisReader interface:
+  - Added reading P1, P2, H3
+  - Modifications to fit to all outputs
+  - Support for both user defined file names and "generic" file names
+    (generated automatically by G4AnalysisManager from the base name)
+- Introduced G4BaseFileManager and separated implementation for
+  output/input file managers
+- Implemented reading P1, P2 in G4RootAnalysisReader;
+  prepared code for H3 which reading is not yet available in tools
+- Implemented G4XmlAnalysisReader (complete)
+- Fixed writing ntuples when more than one ntuple is defined (Xml)
+- Do not overwrite user defined file extension
+
+September 08, 2014 I. Hrivnacova (analysis-V10-00-23)
+- Updated to g4tools 1.14.0 (by G. Barrand):
+  Fixed compiler warning (converting to unsigned int from double)
+
+September 04, 2014 I. Hrivnacova (analysis-V10-00-22)
+- Updated to g4tools 1.14.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
+September 02, 2014 I. Hrivnacova (analysis-V10-00-21)
+- Fixed Coverity defects:
+  - Initialization of data members in G4VAnalysisManager
+  - Provided assignment operator for G4HnDimensionInformation
+- Removed unused data member in G4HnDimensionInformation
+
+July 28, 2014 I. Hrivnacova (analysis-V10-00-20)
+- Removed unsused data member in G4P1DummyManager
+
+July 24, 2014 I. Hrivnacova (analysis-V10-00-19)
+- Added H3, P1 and P2
+- Added G4BaseToolsManager - common implementation for
+  setters/getters related to axes annotations
+- Fixed applying unit to min, max values in H1, H2 managers
+- Issue the warning about not supported histograms/profiles only once per run
+
+July 23, 2014 I. Hrivnacova (analysis-V10-00-18)
+- Updated to g4tools 1.11.1 (by G. Barrand):
+  Fixed problem on Windows with including windows.h.
+
+July 23, 2014 I. Hrivnacova (analysis-V09-06-32)
+- Fixed applying unit to min, max values in H1, H2 managers
+- Fixed createH2/setH2 commands implementation
+
+July 18, 2014 I. Hrivnacova (analysis-V10-00-17)
+- Updated to g4tools 1.11.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
+July 02, 2014 I. Hrivnacova (analysis-V10-00-16)
+- Replaced use of std::cout with G4cout in Root managers
+  (to fix data race reported by A. Dotti)
+
+June 27, 2014 G. Cosmo (analysis-V10-00-15)
+- Get rid of obsolete 'register' keyword in csz_inflate.cc..
+
+June 12, 2014 I. Hrivnacova (analysis-V10-00-14)
+- Added typedefs and functions for accessing iterators
+  over H1, H2, Ntuples;
+  Usage:
+   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+   for (G4H1Iterator it = analysisManager->BeginH1();
+                     it != analysisManager->EndH1(); it++ ) {
+      G4H1* h1 = *it;
+      // call any h1 function define in tools
+    }
+- Added G4AnalysisManager functions to access FirstIds
+  G4int GetFirst[H1|H2|Ntuple|NtupleColumn]Id() const;
+
+June 11, 2014 I. Hrivnacova (analysis-V10-00-13)
+- Restored hbook files lost with moving to g4tools 1.9.4
+
+June 04, 2014 I. Hrivnacova (analysis-V10-00-12)
+- Udated History with the descriptions of the tags analysis-V09-06-*
+  applied from the analysis_10-00-patches branch.
+
+June 03, 2014 I. Hrivnacova (analysis-V09-06-31)
+- Do not remove Root base file if ntuples are in use
+  (this addresses problem report #1633)
+
+May 16, 2014 I. Hrivnacova (analysis-V10-00-11)
+- Fixed Coverity defects.
+- Updated to g4tools 1.10.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
+April 25, 2014 I. Hrivnacova (analysis-V10-00-10)
+April 25, 2014 I. Hrivnacova (analysis-V09-06-30)
+- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
+  using new G4AnalysisUtilities::Tokenize() function.
+  This allows to pass multi-word strings within "" and fixes problem report
+  #1616.
+- Fixed G4H2ToolsManager::SetH2YAxisTitle: set title to y-axis and not x-axis.
+  This addresses problem report #1620.
+
+April 16, 2014 I. Hrivnacova (analysis-V09-06-29)
+- Do not allow creating objects with empty names
+  (this addresses problem report #1579)
+
+April 14, 2014 I. Hrivnacova (analysis-V10-00-09)
+- Use G4Threading::IsMultithreadedApplication() instead of
+  G4AnalysisManagerState::IsMT() (now removed);
+  this function fixes files clean-up at the end of sequential
+  application built against multi-threaded Geant4 libraries.
+
+April 14, 2014 I. Hrivnacova (analysis-V10-00-08)
+- Do not allow creating objects with empty names
+  (this addresses problem report #1579)
+- Introduced independent numbering of warnings from reader
+- Renamed g4tools/src/inflate.cc in csz_inflate.cc to avoid confusion with
+  zlib inflate.cc
+
+April 10, 2014 G. Cosmo (analysis-V10-00-07)
+- Corrected organisation of source files in g4tools sub-module to
+  allow for building with GNUmake system:
+  o Moved g4tools/src/csz/inflate.c to g4tools/src and renamed to inflate.cc.
+  o Corrected main GNUmakefile for build order.
+
+April 10, 2014 I. Hrivnacova (analysis-V10-00-06)
+- Fixed GNUmakefile (Gabriele)
+
+April 10, 2014 I. Hrivnacova (analysis-V10-00-05)
+- Updated to g4tools 1.9.4 (by G. Barrand):
+  See History_tools for complete list of modifications.
+- Added interface classes for reading:
+    G4VAnalysisReader, G4VRNtupleManager
+  and their implementation for Root:
+    G4RootAnalysisReader, G4RootRNtupleManager
+
+March 12, 2014 I. Hrivnacova (analysis-V09-06-28)
+March 11, 2014 I. Hrivnacova (analysis-V10-00-04)
+- Fixed H1, H2 functions to access xmin, xmax and width
+  (do not apply function and unit to return values)
+
+March 10, 2014 I. Hrivnacova (analysis-V09-06-27)
+- Fixed bug in /analysis/h1/setAscii command
+  (introduced with refactoring messenger classes in analysis-V09-06-19)
+
+March 05, 2014 I. Hrivnacova (analysis-V10-00-03)
+- Fixed bug in /analysis/h1/setAscii command
+  (introduced with refactoring messenger classes in analysis-V09-06-19)
+
+February 05, 2014 I. Hrivnacova (analysis-V10-00-02)
+- Updated tools ntuple_booking and ntuple classes from
+  g4tools 1.9.0 (by G. Barrand) what should hopefully fix warnings issued
+  on x86_64-slc5-gcc41.
+
+February 04, 2014 I. Hrivnacova (analysis-V10-00-01)
+- Adding new functions for ntuple columns of vectors
+  in G4AnalysisManer:
+    // Create columns of vector in the last created ntuple
+    G4int CreateNtupleTColumn(
+                const G4String& name, std::vector<int>& vector);
+    G4int CreateNtupleTColumn(G4int ntupleId,
+                const G4String& name, std::vector<int>& vector);
+          where T can be I, F, T
+- Updated to g4tools 1.8.0 (by G. Barrand)
+  See History_tools for complete list of modifications.
+
+January 21, 2014 I. Hrivnacova (analysis-V10-00-00)
+January 21, 2014 I. Hrivnacova (analysis-V09-06-26)
+- Updated to g4tools 1.7.1 (by G. Barrand):
+  Fixed performance issue observed for an ntuple with large numbers of columns
+  reported in item #455 in Geant4 hypernews, Analysis category.
+  See History_tools for complete list of modifications.
+
+October 02, 2013 I. Hrivnacova (analysis-V09-06-25)
+- Do not call WriteH1[2]() when no histograms are defined.
+  This allows to run application which uses only ntuples without
+  a master instance of analysis manager.
+
+September 30, 2013 I. Hrivnacova (analysis-V09-06-24)
+- Removed static G4AnalysisManager::Create(G4bool isMaster) function
+  (the master/worker is now identified automatically)
+- Removed instances counter and its mutex
+- Reimplemented  G4AnalysisManagerState::IsMT() with use of
+  G4Threading functions
+- Removed virtual declaration for GetH1, GetH2, GetNtuple functions
+  in manager classes (to follow NVI pattern)
+- Fixed installing of g4analysis_defs.hh  header
+- Fixed g4csv.hh (it was overwritten by mistake with g4csv_defs.hh)
+- Fixed g4csv_defs.hh (G4Ntuple is the ntuple type, and not a pointer)
+
+September 17, 2013 I. Hrivnacova (analysis-V09-06-23)
+- Use thread Id (now available) in generating file names instead
+  of thread Pid.
+
+September 02, 2013 I. Hrivnacova (analysis-V09-06-22)
+- Updated to g4tools 1.7.0 (by G. Barrand):
+  Fixed problem report #1523 (incorrect setting the list of free blocks
+  in the ROOT file).
+  See History_tools for complete list of modifications.
+
+September 02, 2013 I. Hrivnacova (analysis-V09-06-21)
+- Fixed saving binScheme in H2 information
+
+August 26, 2013 I. Hrivnacova (analysis-V09-06-20)
+- Fixed Coverity defects
+  (missing copy constructor and assignment operator in G4VH1Manager
+   and G4VH2Manager)
+
+August 26, 2013 A.Dotti (analysis-V09-06-19)
+- New interface for functions in G4Threading.hh,
+  now in G4Threading namespace
+  And also (I. Hrivnacova):
+- Added a possibility to define logarithmic binning for H1 and H2
+- Reorganized messenger classes per objects: they are now associated
+  with the public interface (G4VAnalysisManager)
+- Fixed path to g4tools in test/build
+
+August 1, 2013 I.Hrivnacova (analysis-V09-06-18)
+- Fixed CMake build (added missing *.icc files in HEADERS);
+  thanks to Mike Kelsey for pointing at this.
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-17)
+- Added set_property(...GEANT4_BUILDTREE_INCLUDE_DIRS) in
+  g4tools/CMakeLists.txt
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-16)
+- Added GLOBAL_DEPENDENCIES lists in sources.cmake files
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-15)
+- Fixed dependencies on zlib
+  (previous tag failed on linking error on Mac)
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-14)
+- Introduced subdirectories:
+  csv, g4tools, hntools, management, root, xml
+  and updated CMake & GNUmake files accordingly
+
+July 12, 2013 I.Hrivnacova (analysis-V09-06-13)
+- Fixed warnings on clang:
+  Use struct keyword instead of class for forward declaration of structs.
+
+July 11, 2013 I.Hrivnacova (analysis-V09-06-12)
+- Refactoring manager classes:
+  - Introduced managers per object types (H1, H2, Ntuple, File)
+    and re-implemented G4VAnalysisManager as a composite of the objects
+    managers
+  - Removed enum G4VAnalysisManager::ObjectType and replaced related methods
+    with methods per object type; eg.
+      void  SetActivation(ObjectType type,  G4int id, G4bool activation);
+    with
+      void  SetH1Activation(G4int id, G4bool activation);
+      void  SetH2Activation(G4int id, G4bool activation);
+
+June 20, 2013 I.Hrivnacova (analysis-V09-06-11)
+- Fixed the problem in Root files clean-up (manifested in
+  examples/advanced/microbeam):
+  non-empty Root file was deleted when only ntuples and no histograms
+  were booked and the application was built against MT Geant4 but run
+  in sequential mode.
+
+June 11, 2013 I.Hrivnacova (analysis-V09-06-10)
+- Fixed deleting fNtuple in G4RootNtupleDescription
+  (the ntuple is deleted with root file)
+
+June 03, 2013 I.Hrivnacova (analysis-V09-06-09)
+- Improved handling files: empty files are now removed in CloseFile()
+- Moved generation of file name in G4VAnalysisManager
+- Forced setting fIsMaster=true in sequential mode
+
+May 31, 2013 I.Hrivnacova (analysis-V09-06-08)
+- Fix in G4RootAnalysisManager::WriteOnAscii() - bug report #1473
+
+April 18, 2013 I.Hrivnacova (analysis-V09-06-07)
+- Manager classes updated for MT:
+  Added fgMasterInstance, fIsMaster data members and functions for
+  mergings histograms (Root, Xml) from worker tom master:
+    void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
+    void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
+  These functions are automatically called on Worker::Write().
+  Added ThreadId to ntuple file names when processing on workers.
+
+April 10, 2013 I.Hrivnacova (analysis-V09-06-06)
+- Updated to g4tools 1.6.0 (by G. Barrand) - see History_tools
+
+March 29, 2013 I.Hrivnacova (analysis-V09-06-05)
+- Extended analysis managers for handling more than one ntuple
+
+March 26, 2013 B.Morgan (analysis-V09-06-04)
+- source.cmake : Corrected zlib setup for transparent use of
+  internal or external variants.
+
+March 22, 2013 G.Cosmo (analysis-V09-06-03)
+- Corrected GNUmakefile and CMakeLists.txt for zlib dependency.
+
+March 21, 2013 I.Hrivnacova (analysis-V09-06-02)
+- Updated CMakeList.txt for zlib dependencies
+
+March 21, 2013 I.Hrivnacova (analysis-V09-06-01)
+- Updated to g4tools 1.5.0 (by G. Barrand) - see History_tools
+- Adding file compression in Root manager (now available)
+- Adding use of zlib in GNUmakefile (needed for compression)
+
+December 17, 2012 I.Hrivnacova (analysis-V09-06-00)
+- Added 'svn:keywords' property to all files (except for tools)
+
+October 26, 2012 I.Hrivnacova (analysis-V09-05-15)
+- Updated to g4tools 1.4.3 (by G. Barrand) - see History_tools;
+  includes bug correction for histo/h3::fill
+
+October 14, 2012 I.Hrivnacova (analysis-V09-05-14)
+- Adding function  G4VAnalysisManager::SetActivation(..)
+  for setting activation to all histograms of one type
+- Adding commands to activate/inactivate 1D, 2D histograms
+- Fixed GetH1[2]Width: return the correct value also when histogram is
+  inactive.
+
+October 10, 2012 I.Hrivnacova (analysis-V09-05-13)
+- Adding commands for handling h2d histograms.
+- Adding functions for accessing h1d, h2d by name
+- Splitting verbose level 1 in 2 levels and shifting the upper levels
+
+September 28, 2012 I.Hrivnacova (analysis-V09-05-12)
+- Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii;
+  (causing compilation warning for shadowing)
+
+September 4, 2012 I.Hrivnacova (analysis-V09-05-11)
+- Adding missing header file in CMakeLists.txt
+
+August 28, 2012 I.Hrivnacova (analysis-V09-05-10)
+- Adding SetH2Title() in all managers
+- Minor fixes
+
+August 22, 2012 I.Hrivnacova (analysis-V09-05-09)
+- Updated to g4tools 1.4.1 (by G. Barrand) - see History_tools
+- Adding setters/getters for histogram axis titles
+  and commands for setting histogram title and axis titles
+
+August 20, 2012 I.Hrivnacova (analysis-V09-05-08)
+- Updated to g4tools 1.3.2 (by G. Barrand) - see History_tools
+- Adding a possibility to fill h1, h2 with values with automatically
+  applied function (eg. log10, exp)
+- Pass units via a name instead of value
+- Adding getters for many h1, h2 attributes
+- Adding ScaleH1(), ScaleH2()
+- Fixed warning in G4RootAnalysisManager when trying to fill inactivated
+  histogram
+- Adding W013, W014 in exception classification
+
+July 27, 2012 I.Hrivnacova (analysis-V09-05-07)
+- Updated to g4tools 1.3.1 (by G. Barrand) - see History_tools
+- Messages from Fill functions only in verbose level 3
+- Fixes in memory management:
+  delete file before opening a new one (all);
+  delete ntuple before closing a file (csv, xml)
+
+July 25, 2012 I.Hrivnacova (analysis-V09-05-06)
+- Fix returned values in newly added functions for accessing additional
+ information. (This fixes compiler warnings.)
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-05)
+- Fix CMake build once more - adding new source files in
+  and dependence on G4intercoms library
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-04)
+- Fix CMake build - adding intercoms to include path
+  (now needed for the messenger class)
+
+July 24, 2012 I.Hrivnacova (analysis-V09-05-03)
+- Updated to g4tools-1.3.0 (G. Barrand) - see History_tools
+- Adding an additional information to the analysis objects
+  (defined in G4HnInformation.hh):
+  units, activation, ascii output
+- Implemented a possibility to book histograms/ntuples
+  before opening a file
+- Adding a messenger class allowing to configure file and directories
+  names, verbosity level and histogram parameters interactively.
+
+June 5, 2012 I.Hrivnacova (analysis-V09-05-02)
+- Updated to g4tools-1.2.0 (G. Barrand) - see History_tools
+
+February 23, 2012 I.Hrivnacova (analysis-V09-05-01)
+- Adding locks for functions which define directory names,
+  setting Ids etc. so that these parameters cannot be changed once
+  they were used
+- Changed return type for the functions with locks to G4bool
+- Renamed FirstNtupleId data member and its setter to FirstNtupleColumnId
+  to better reflect its meaning
+- Adding W009-W012 warning in exception_classification.txt
+
+February 14, 2012 I.Hrivnacova (analysis-V09-05-00)
+- Updated to g4tools-1.1.0 (G. Barrand) - see History_tools
+- Adding defs include files per manager type
+- Adding GetNtuple() function to specific managers
+- Adding GetType() function  to G4VAnalysisManager
+- Increased granularity of verbose levels (now 3 levels are available)
+- Adding test for result of openning file in Root manager
+  (which was not provided in previous versions of g4tools)
+- Making creating directories optional
+
+November 30th 2011 B.Morgan (analysis-V09-04-15)
+- CMakeLists.txt : Updated to build G4analysis in granular as well as global
+  mode.
+
+November 24 2001 I.Hrivnacova (analysis-V09-04-14)
+- Updated to g4tools-1.0.5 (G. Barrand):
+  - wroot : streamers, buffer, wbuf, named :
+            arrange to avoid the usage of the std::vector<>::data() method
+            which is quite not portable for the moment.
+ - remove the no more needed (and problematic) tools/vdata file.
+
+November 24 2001 I.Hrivnacova (analysis-V09-04-13)
+- tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__
+  which got lost with update to  g4tools-1.0.4
+
+November 24 2001 I.Hrivnacova (analysis-V09-04-12)
+- Updated to g4tools-1.0.4 (G. Barrand):
+  - Fix in tools/vdata:
+    Adding a protection against an empty vector
+
+November 19 2001 I.Hrivnacova (analysis-V09-04-11)
+- Updated to g4tools-1.0.3 (G. Barrand):
+  - Removed warning in CHBOOK/CHPWDF
+  - Remove #ifdef WIN32 in wroot/date.
+
+November 8 2011 G.Cosmo (analysis-V09-04-10)
+- tools/vdata: restored protection __GXX_EXPERIMENTAL_CXX0X__ to use of
+  std::vector<>::data() feature, to allow compilation on Leopard systems.
+
+October 27 2011 G.Cosmo (analysis-V09-04-09)
+- Added workaround to use 'this' pointer for internal calls in histo/b1,
+  to allow for compilation on Xcode on MacOX Lion.
+
+October 18 2011 I.Hrivnacova (analysis-V09-04-08)
+- Fix in CMakeLists.txt - adding new G4AnalysisVerbose.* files
+
+October 17 2011 I.Hrivnacova (analysis-V09-04-07)
+- Added support for H2 histograms
+- Added verbose printing (for levels: 0,1,2)
+- Updated to g4tools-1.0.2 (G. Barrand):
+  - Removed "inline" keyword for the methods having code implementation
+    within classes. Dixit C++ docs, this kind of method is treated defacto
+    as "inline". The keyword "inline" remains or for functions or for the
+    few methods having their implementation outside the class.
+  - Fixed some warnings (coming from Coverity or some specific version of g++)
+    about the lacking of calling the copy constructor of an inherited interface
+    in some copy constructors.
+  - wroot/tree : have the streaming of the list of leaves. This permits to have
+    the ROOT/TTree::Scan() method working when looking for a ntuple
+    stored in a .root file as a TTree.
+
+September 15 2011 I.Hrivnacova (analysis-V09-04-06)
+- Added static access to specific manager classes.
+- Migration to G4Exception for all warning/error messages.
+
+August 4 2011 G.Cosmo (analysis-V09-04-05)
+- Extended fix in tools/vdata for compilation error on olders GCC compiler
+  versions (MacOSX 10.5, SLC4, ...). Addressing problem report #1238.
+
+July 29 2011 G.Cosmo (analysis-V09-04-04)
+- Fix in tools/vdata for compilation error in Intel ICC compiler.
+
+July 28 2011 B.Morgan (analysis-V09-04-02)
+- Creating new tag because previous ones were not documented here!!
+
+July 28 2011 B.Morgan (analysis-V09-04-01.5)
+- CMakeLists.txt : Added to provide CMake build for G4Analysis. Implemented
+  without using a sources.cmake because we only have one library, and tools
+  headers need a specialized install to retain their nested structure.
+
+July 28 2011 G. Cosmo
+- Fix in tools/wroot/file to avoid gcc dependency error on WIN32 with CygWin.
+
+
+July 28, 2011 B.Morgan
+- Created History file for analysis module.

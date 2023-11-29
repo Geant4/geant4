@@ -1,10 +1,32 @@
--------------------------------------------------------------------
+# Example DICOM History
 
-     =========================================================
- 		      Geant4 - DICOM example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
+-------------------------------------------------------------------------------
+
+## 2022-10-04 John Allison (DICOM-V11-00-04)
+- Introduce special mesh rendering of DICOM image.
+
+## 2022-10-24 I. Hrivnacova  (DICOM-V11-00-03)
+- Coding guidelines: start data member with 'f'; use G4int, G4double
+  (skipped dicomReader classes)
+
+## 2022-10-04 Ben Morgan (DICOM-V11-00-02)
+- Replace sprintf with direct G4String use to remove deprecation warnings on macOS 13 
+
+## 2022-10-04 Gabriele Cosmo (DICOM-V11-00-01)
+- Fixed compilation warning on Intel-icx compiler for set but unused variable
+  in DicomHandler::ReadData().
+
+## 2021-12-10 Ben Morgan (DICOM-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 27.09.2021  Pedro Arce (DICOM-V10-07-01)
 - Use updated interface from geomnav to use G4PhantomParameterisation::GetNoVoxels instead of GetNoVoxel
 

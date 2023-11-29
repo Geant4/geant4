@@ -40,8 +40,6 @@
 #include "G4AffineTransform.hh"
 #include "G4BoundingEnvelope.hh"
 
-#include "G4PolyhedronArbitrary.hh"
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructors
@@ -72,8 +70,8 @@ G4UTessellatedSolid::G4UTessellatedSolid(__void__& a)
 //
 G4UTessellatedSolid::~G4UTessellatedSolid()
 {
-  G4int size = fFacets.size();
-  for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
+  std::size_t size = fFacets.size();
+  for (std::size_t i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
 }
 
@@ -123,7 +121,7 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   }
   if (aFacet->GetNumberOfVertices() == 3)
   {
-    G4TriangularFacet* a3Facet = dynamic_cast<G4TriangularFacet*>(aFacet);
+    auto a3Facet = dynamic_cast<G4TriangularFacet*>(aFacet);
     return Base_t::AddTriangularFacet(U3Vector(a3Facet->GetVertex(0).x(),
                                                a3Facet->GetVertex(0).y(),
                                                a3Facet->GetVertex(0).z()),
@@ -137,7 +135,7 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   }
   else if (aFacet->GetNumberOfVertices() == 4)
   {
-    G4QuadrangularFacet* a4Facet = dynamic_cast<G4QuadrangularFacet*>(aFacet);
+    auto a4Facet = dynamic_cast<G4QuadrangularFacet*>(aFacet);
     return Base_t::AddQuadrilateralFacet(U3Vector(a4Facet->GetVertex(0).x(),
                                                   a4Facet->GetVertex(0).y(),
                                                   a4Facet->GetVertex(0).z()),
@@ -176,22 +174,22 @@ void G4UTessellatedSolid::SetSolidClosed(const G4bool t)
   if (t && !Base_t::IsClosed())
   {
     Base_t::Close();
-    G4int nVertices = fTessellated.fVertices.size();
-    G4int nFacets   = fTessellated.fFacets.size();
-    for (G4int j = 0; j < nVertices; ++j)
+    std::size_t nVertices = fTessellated.fVertices.size();
+    std::size_t nFacets   = fTessellated.fFacets.size();
+    for (std::size_t j = 0; j < nVertices; ++j)
     {
       U3Vector vt = fTessellated.fVertices[j];
-      fVertexList.push_back(G4ThreeVector(vt.x(), vt.y(), vt.z()));
+      fVertexList.emplace_back(vt.x(), vt.y(), vt.z());
     }
-    for (G4int i = 0; i < nFacets; ++i)
+    for (std::size_t i = 0; i < nFacets; ++i)
     {
       vecgeom::TriangleFacet<G4double>* afacet = Base_t::GetFacet(i);
       std::vector<G4ThreeVector> v;
-      for (G4int k=0; k<3; ++k)
+      for (const auto & vertex : afacet->fVertices)
       {
-        v.push_back(G4ThreeVector(afacet->fVertices[k].x(),
-                                  afacet->fVertices[k].y(),
-                                  afacet->fVertices[k].z()));
+        v.emplace_back(vertex.x(),
+                                  vertex.y(),
+                                  vertex.z());
       }
       G4VFacet* facet = new G4TriangularFacet(v[0], v[1], v[2],
                                               G4FacetVertexType::ABSOLUTE);
@@ -257,8 +255,8 @@ G4int G4UTessellatedSolid::AllocatedMemoryWithoutVoxels()
   G4int base = sizeof(*this);
   base += fVertexList.capacity() * sizeof(G4ThreeVector);
 
-  G4int limit = fFacets.size();
-  for (G4int i = 0; i < limit; ++i)
+  std::size_t limit = fFacets.size();
+  for (std::size_t i = 0; i < limit; ++i)
   {
     G4VFacet &facet = *fFacets[i];
     base += facet.AllocatedMemory();
@@ -381,28 +379,27 @@ G4UTessellatedSolid::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UTessellatedSolid::CreatePolyhedron () const
 {
-  G4int nVertices = fVertexList.size();
-  G4int nFacets   = fFacets.size();
-  G4PolyhedronArbitrary *polyhedron = new G4PolyhedronArbitrary (nVertices,
-                                                                 nFacets);
-  for (G4int j = 0; j < nVertices; ++j)
+  auto nVertices = (G4int)fVertexList.size();
+  auto nFacets = (G4int)fFacets.size();
+  auto polyhedron = new G4Polyhedron(nVertices, nFacets);
+  for (auto i = 0; i < nVertices; ++i)
   {
-    polyhedron->AddVertex(fVertexList[j]);
+    polyhedron->SetVertex(i+1, fVertexList[i]);
   }
 
-  for (G4int i = 0; i < nFacets; ++i)
+  for (auto i = 0; i < nFacets; ++i)
   {
     G4int v[3];  // Only facets with 3 vertices are defined in VecGeom
     G4VFacet* facet = GetFacet(i);
-    for (G4int j=0; j<3; ++j)  // Retrieve indexing directly from VecGeom
+    for (auto j = 0; j < 3; ++j) // Retrieve indexing directly from VecGeom
     {
       v[j] = facet->GetVertexIndex(j) + 1;
     }
-    polyhedron->AddFacet(v[0],v[1],v[2]);
+    polyhedron->SetFacet(i+1, v[0], v[1], v[2]);
   }
   polyhedron->SetReferences();  
 
-  return (G4Polyhedron*) polyhedron;
+  return polyhedron;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

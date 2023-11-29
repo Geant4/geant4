@@ -30,20 +30,44 @@
 
 #include "globals.hh"
 #include "G4VScoringMesh.hh"
+
+#include <vector>
+
 class G4VPhysicalVolume;
 class G4Material;
-#include <vector>
 
 class G4ScoringProbe : public G4VScoringMesh
 {
  public:
   G4ScoringProbe(G4String lvName, G4double half_size,
                  G4bool checkOverlap = false);
-  ~G4ScoringProbe();
+  ~G4ScoringProbe() override = default;
+
+ public:
+  void LocateProbe(G4ThreeVector pos)
+  {
+    posVec.push_back(pos);
+    G4int nbin[] = { static_cast<G4int>(posVec.size()), 1, 1 };
+    SetNumberOfSegments(nbin);
+  }
+  G4int GetNumberOfProbes() const { return (G4int)posVec.size(); }
+  void SetProbeSize(G4double val) { probeSize = val; }
+  G4double GetProbeSize() const { return probeSize; }
+  G4bool SetMaterial(G4String val);
+
+  void List() const override;
+
+  //++++++++++ visualization method not yet implemented
+  void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
+                    G4int /*axflg=111*/) override
+  {}
+  void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
+                          G4int /*idxProj*/, G4int /*idxColumn*/) override
+  {}
 
  protected:
   // construct scoring volume
-  virtual void SetupGeometry(G4VPhysicalVolume*);
+  void SetupGeometry(G4VPhysicalVolume*) override;
 
  protected:
   G4String logVolName;
@@ -53,34 +77,6 @@ class G4ScoringProbe : public G4VScoringMesh
   G4String layeredMaterialName;
   G4Material* layeredMaterial;
   G4String regName;
-
- public:
-  void LocateProbe(G4ThreeVector pos)
-  {
-    posVec.push_back(pos);
-    G4int nbin[] = { static_cast<G4int>(posVec.size()), 1, 1 };
-    SetNumberOfSegments(nbin);
-  }
-  G4int GetNumberOfProbes() const { return posVec.size(); }
-  void SetProbeSize(G4double val) { probeSize = val; }
-  G4double GetProbeSize() const { return probeSize; }
-  G4bool SetMaterial(G4String val);
-
- public:
-  virtual void List() const;
-
- public:
-  //++++++++++ visualization method not yet implemented
-  virtual void Draw(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                    G4int /*axflg=111*/)
-  {
-    ;
-  }
-  virtual void DrawColumn(RunScore* /*map*/, G4VScoreColorMap* /*colorMap*/,
-                          G4int /*idxProj*/, G4int /*idxColumn*/)
-  {
-    ;
-  }
 };
 
 #endif

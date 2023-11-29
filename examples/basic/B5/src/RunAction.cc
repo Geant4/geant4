@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.cc
+/// \file B5/src/RunAction.cc
 /// \brief Implementation of the B5::RunAction class
 
 #include "RunAction.hh"
@@ -89,12 +89,6 @@ RunAction::RunAction(EventAction* eventAction)
 
   // Set ntuple output file
   analysisManager->SetNtupleFileName(0, "B5ntuple");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

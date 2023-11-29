@@ -13,7 +13,7 @@ include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 
-CPPFLAGS +=  -I$(G4BASE)/global/management/include \
+CPPFLAGS += -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
               -I$(G4BASE)/global/HEPNumerics/include \
@@ -64,11 +64,10 @@ CPPFLAGS +=  -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include \
 
-
 ifdef G4ANALYSIS_USE
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
+  LOADLIBS += `aida-config --lib`
 endif
 
 include $(G4INSTALL)/config/common.gmk

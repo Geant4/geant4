@@ -102,11 +102,6 @@ PhysListEmLivermore::PhysListEmLivermore(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmLivermore::~PhysListEmLivermore()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysListEmLivermore::ConstructProcess()
 {
   G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();

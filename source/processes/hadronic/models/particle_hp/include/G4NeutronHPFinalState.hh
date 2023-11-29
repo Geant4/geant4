@@ -29,4 +29,4 @@
 #include "G4ParticleHPFinalState.hh"
 using G4NeutronHPFinalState = G4ParticleHPFinalState;
 
-#endif 
+#endif

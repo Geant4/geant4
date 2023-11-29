@@ -22,18 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//      ----------------  G4ElementTable  ----------------
-// History:
-// First implementation: Torre Wenaus, November 1995
-// ------------------------------------------------------------
- 
+
 #ifndef G4ELEMENTTABLE_HH
 #define G4ELEMENTTABLE_HH
 
@@ -41,6 +30,6 @@
 
 class G4Element;
 
-typedef std::vector<G4Element*> G4ElementTable;
+using G4ElementTable = std::vector<G4Element*>;
 
 #endif

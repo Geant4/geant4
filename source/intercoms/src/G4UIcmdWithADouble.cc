@@ -31,11 +31,10 @@
 #include "G4UIcmdWithADouble.hh"
 
 // --------------------------------------------------------------------
-G4UIcmdWithADouble::G4UIcmdWithADouble(const char* theCommandPath,
-                                       G4UImessenger* theMessenger)
+G4UIcmdWithADouble::G4UIcmdWithADouble(const char* theCommandPath, G4UImessenger* theMessenger)
   : G4UIcommand(theCommandPath, theMessenger)
 {
-  G4UIparameter* dblParam = new G4UIparameter('d');
+  auto* dblParam = new G4UIparameter('d');
   SetParameter(dblParam);
   SetCommandType(WithADoubleCmd);
 }

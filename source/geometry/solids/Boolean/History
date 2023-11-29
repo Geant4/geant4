@@ -1,38 +1,55 @@
+# Category geom-bool History
 
--------------------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+------------------------------------------------------------------------------
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2023-05-10 Gabriele Cosmo (geom-bool-V11-01-03)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
 
-   Please keep a summary of these message in geometry/History!
+## 2023-03-22 Gabriele Cosmo (geom-bool-V11-01-02)
+- Minor code formatting. No functional changes.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-03-21 Stewart Boogert (geom-bool-V11-01-01)
+- Added external boolean processor interface.
 
-May 4, 2022, G.Cosmo (geom-bool-V10-07-05)
-- Minor cleanup in G4UnionSolid constructors.
+## 2022-12-20 Ivana Hrivnacova (geom-bool-V11-01-00)
+- Fixed hang-out in G4MultiUnion, caused by oveflow of 'size-1' when 'size' value is zero
+  after changing G4int type to size_t.
 
-April 29, 2022, G.Cosmo
+## 2022-11-10 Gabriele Cosmo (geom-bool-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-27 Evgueni Tcherniaev (geom-bool-V11-00-06)
+- G4SubtractionSolid::GetCubicVolume(): Fix problem of non-zero volume for
+  null resulting objects. 
+
+## 2022-05-04 Gabriele Cosmo (geom-bool-V11-00-05)
+- Minor cleanup in headers and G4UnionSolid constructors.
+
+## 2022-04-29 Gabriele Cosmo (geom-bool-V11-00-04)
 - G4UnionSolid: added missing data initialisation in copy-ctr and operator=().
 
-April 5, 2022, G.Cosmo
+## 2022-04-05 Gabriele Cosmo (geom-bool-V11-00-03)
 - G4UnionSolid: add surface tolerance in Inside(p) for check on Z.
   Minor optimisation in caching half-tolerance.
 
-January 10, 2022, G.Cosmo geom-bool-V10-07-04
+## 2022-01-19 Evgueni Tcherniaev (geom-bool-V11-00-02)
+- G4DisplacedSolid: added GetCubicVolume(), GetSurfaceArea()
+
+## 2022-01-10 Gabriele Cosmo (geom-bool-V11-00-01)
 - Added alternative signature for AddNode() taking a pointer to solid.
   Added 'const' qualification to transformation passed as argument.
   Addressing problem report #2457.
+
+## 2021-12-10 Ben Morgan (geom-bool-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 12, 2021 G.Cosmo geom-bool-V10-07-03
 - In G4BooleanSolid, use G4RecursiveMutex in place of G4Mutex in GetPolyhedron()

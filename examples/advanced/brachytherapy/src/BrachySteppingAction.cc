@@ -39,11 +39,6 @@
 #include "G4Gamma.hh"
 #include "G4SystemOfUnits.hh"
 
-BrachySteppingAction::BrachySteppingAction()
-{}
-
-BrachySteppingAction::~BrachySteppingAction()
-{}
 
 void BrachySteppingAction::UserSteppingAction(const G4Step* aStep)
 {

@@ -32,14 +32,14 @@
 #ifndef G4ParticleHPContEnergyAngular_h
 #define G4ParticleHPContEnergyAngular_h 1
 
-#include <fstream>
-
+#include "G4Cache.hh"
+#include "G4InterpolationManager.hh"
+#include "G4ParticleHPContAngularPar.hh"
+#include "G4VParticleHPEnergyAngular.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VParticleHPEnergyAngular.hh"
-#include "G4ParticleHPContAngularPar.hh"
-#include "G4InterpolationManager.hh"
-#include "G4Cache.hh"
+
+#include <fstream>
 
 class G4ParticleDefinition;
 
@@ -47,62 +47,54 @@ class G4ParticleDefinition;
 
 class G4ParticleHPContEnergyAngular : public G4VParticleHPEnergyAngular
 {
-public:
-  
-  G4ParticleHPContEnergyAngular(G4ParticleDefinition* proj)
-    : theProjectile(proj)
-  {
-    theAngular = 0;
-    currentMeanEnergy.Put( -2 );
-    theTargetCode = -1.0;
-    theAngularRep = -1;
-    nEnergy = -1;
-    theInterpolation = -1;
-    fCacheAngular.Put(0); //fix
-  }
-  
-  ~G4ParticleHPContEnergyAngular()
-  {
-    if(theAngular!=0) delete [] theAngular;
-    if (fCacheAngular.Get() != 0) delete fCacheAngular.Get(); //fix
-  }
-  
-  void Init(std::istream & aDataFile)
-  {
-    aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
-    theAngular = new G4ParticleHPContAngularPar[nEnergy];
-    theManager.Init(aDataFile);
-    for(G4int i=0; i<nEnergy; i++)
+  public:
+    G4ParticleHPContEnergyAngular(G4ParticleDefinition* proj) : theProjectile(proj)
     {
-      theAngular[i].Init(aDataFile, theProjectile);
-      theAngular[i].SetInterpolation(theInterpolation);
-#ifndef PHP_AS_HP
-      if( i != 0 ) {
-	theAngular[i].PrepareTableInterpolation();
-      } else {
-	theAngular[i].PrepareTableInterpolation();
-      }
-#endif
+      theAngular = nullptr;
+      currentMeanEnergy.Put(-2);
+      theTargetCode = -1.0;
+      theAngularRep = -1;
+      nEnergy = -1;
+      theInterpolation = -1;
+      fCacheAngular.Put(nullptr);  // fix
     }
-  }
 
-  G4double MeanEnergyOfThisInteraction();
-  G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass);
-  void ClearHistories(); 
-  
-private:
-  
-  G4double theTargetCode;
-  G4int theAngularRep;
-  G4int nEnergy;
-  
-  G4int theInterpolation;
+    ~G4ParticleHPContEnergyAngular() override
+    {
+      delete[] theAngular;
+      if (fCacheAngular.Get() != nullptr) delete fCacheAngular.Get();  // fix
+    }
 
-  G4InterpolationManager theManager; // knows the interpolation between stores
-  G4ParticleHPContAngularPar * theAngular;
-  
-  G4Cache<G4double> currentMeanEnergy;
-  G4Cache<G4ParticleHPContAngularPar*> fCacheAngular; //fix
-  G4ParticleDefinition* theProjectile;
+    void Init(std::istream& aDataFile) override
+    {
+      aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
+      theAngular = new G4ParticleHPContAngularPar[nEnergy];
+      theManager.Init(aDataFile);
+      for (G4int i = 0; i < nEnergy; i++) {
+        theAngular[i].Init(aDataFile, theProjectile);
+        theAngular[i].SetInterpolation(theInterpolation);
+#ifndef PHP_AS_HP
+        theAngular[i].PrepareTableInterpolation();
+#endif
+      }
+    }
+
+    G4double MeanEnergyOfThisInteraction() override;
+    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+    void ClearHistories() override;
+
+  private:
+    G4double theTargetCode;
+    G4int theAngularRep;
+    G4int nEnergy;
+
+    G4int theInterpolation;
+
+    G4InterpolationManager theManager;  // knows the interpolation between stores
+    G4ParticleHPContAngularPar* theAngular;
+
+    G4Cache<G4double> currentMeanEnergy;
+    G4Cache<G4ParticleHPContAngularPar*> fCacheAngular;  // fix
+    G4ParticleDefinition* theProjectile;
 };
 #endif

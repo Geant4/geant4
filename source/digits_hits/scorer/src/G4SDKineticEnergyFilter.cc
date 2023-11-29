@@ -45,20 +45,16 @@ G4SDKineticEnergyFilter::G4SDKineticEnergyFilter(G4String name, G4double elow,
   : G4VSDFilter(name)
   , fLowEnergy(elow)
   , fHighEnergy(ehigh)
-{
-  ;
-}
-
-G4SDKineticEnergyFilter::~G4SDKineticEnergyFilter() { ; }
+{}
 
 G4bool G4SDKineticEnergyFilter::Accept(const G4Step* aStep) const
 {
   G4double kinetic = aStep->GetPreStepPoint()->GetKineticEnergy();
   if(kinetic < fLowEnergy)
-    return FALSE;
+    return false;
   if(kinetic >= fHighEnergy)
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 void G4SDKineticEnergyFilter::SetKineticEnergy(G4double elow, G4double ehigh)

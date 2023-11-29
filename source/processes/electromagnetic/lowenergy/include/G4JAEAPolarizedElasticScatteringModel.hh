@@ -79,7 +79,7 @@ public:
   G4JAEAPolarizedElasticScatteringModel(const G4JAEAPolarizedElasticScatteringModel&) = delete;
 
 private:
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(std::size_t Z, const char* path = 0);
   G4double GeneratePolarizedPhi(G4double Sigma_para,G4double Sigma_perp, G4double initial_Pol_Plane);
 
   static const G4int maxZ = 99;

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -72,14 +72,14 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Energy thresholds :  gamma  6.91691 keV    e-  597.603 keV    e+  574.29 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : H2Liq
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  108.778 keV    e+  107.414 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  108.788 keV    e+  107.418 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -98,14 +98,14 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0    -2.4 cm       0 fm       0 fm       1 eV           0 eV       0 fm       0 fm      World   initStep
-    1      -1 cm       0 fm       0 fm       1 eV           0 eV     1.4 cm     1.4 cm      World   Transportation
-    2       2 cm       0 fm       0 fm       1 eV           0 eV       3 cm     4.4 cm   Absorber   Transportation
-    3     2.4 cm       0 fm       0 fm       1 eV           0 eV       4 mm     4.8 cm      World   OutOfWorld
+    0      -2 cm       0 fm       0 fm       1 eV           0 eV       0 fm       0 fm      World   initStep
+    1      -1 cm       0 fm       0 fm       1 eV           0 eV       1 cm       1 cm      World   Transportation
+    2       2 cm       0 fm       0 fm       1 eV           0 eV       3 cm       4 cm   Absorber   Transportation
+    3     2.4 cm       0 fm       0 fm       1 eV           0 eV       4 mm     4.4 cm      World   OutOfWorld
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000697s Sys=0.000000s
+  User=0.000000s Real=0.000366s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -141,6 +141,12 @@ Run Summary
   computed theta0 (Highland formula)          = 0 mrad
   central part defined as +- 0 mrad   Tail ratio = 0 %
 
+ Gamma process counts:
+   Photoeffect 0
+   Compton     0
+   Conversion  0
+   Rayleigh    0
+
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
@@ -156,14 +162,14 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
 Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.91818 keV    e-  597.592 keV    e+  574.294 keV proton 100 keV
+ Energy thresholds :  gamma  6.91691 keV    e-  597.603 keV    e+  574.29 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : H2Liq
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1 keV    e-  108.778 keV    e+  107.414 keV proton 100 keV
+ Energy thresholds :  gamma  990 eV     e-  108.788 keV    e+  107.418 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -179,7 +185,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 6
-  User=0.000000s Real=0.000079s Sys=0.000000s
+  User=0.000000s Real=0.000093s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -215,14 +221,18 @@ Run Summary
   computed theta0 (Highland formula)          = 0 mrad
   central part defined as +- 0 mrad   Tail ratio = 0 %
 
+ Gamma process counts:
+   Photoeffect 0
+   Compton     0
+   Conversion  0
+   Rayleigh    0
+
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
 N=17 V[N]={1977567618660788324, 300890354879745607, 1424437069285335120, 2296497209797367902, 1143472681269825295, 260370018537989708, 668395878522115384, 1090766064544254753, 1931418983504702790, 828618339300030337, 2137373994898626588, 1263575693625627220, 316400124824195510, 274418011581707120, 1512294095604459534, 166310252540771229, 2260588327282429663} counter= 13sumtot= 1406650644950420476
 ---------------------------------------
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.017 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

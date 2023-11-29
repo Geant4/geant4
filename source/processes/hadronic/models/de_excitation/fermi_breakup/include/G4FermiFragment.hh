@@ -33,7 +33,7 @@
 
 #include "globals.hh"
 #include "G4FragmentVector.hh"
-#include "G4CoulombBarrier.hh"
+#include "G4VCoulombBarrier.hh"
 
 class G4FermiFragment 
 {
@@ -43,32 +43,17 @@ public:
 
   ~G4FermiFragment();
 
-  inline G4int GetA(void) const 
-  {
-    return A;
-  }
+  inline G4int GetA() const { return A; }
   
-  inline G4int GetZ(void) const 
-  {
-    return Z;
-  }
+  inline G4int GetZ() const { return Z; }
   
-  inline G4int GetSpin(void) const 
-  {
-    return spin;
-  }
+  inline G4int GetSpin() const { return spin; }
 
-  inline G4double GetExcitationEnergy(void) const 
-  {
-    return excitEnergy;
-  }
+  inline G4double GetExcitationEnergy() const { return excitEnergy; }
 
-  inline G4double GetFragmentMass(void) const
-  {
-    return fragmentMass;
-  }
+  inline G4double GetFragmentMass() const { return fragmentMass; }
 
-  inline G4double GetTotalEnergy(void) const
+  inline G4double GetTotalEnergy(void) const 
   {
     return (fragmentMass + excitEnergy);
   }
@@ -83,21 +68,20 @@ public:
     return (A == right.A && Z == right.Z &&
 	    std::abs(excitEnergy - right.excitEnergy) < 0.0001);
   }
+  
+  G4FermiFragment(const G4FermiFragment &right) = delete;
+  const G4FermiFragment & operator=(const G4FermiFragment &right) = delete;
 
 private:
 
   G4double excitEnergy;
   G4double fragmentMass;
 
-  G4CoulombBarrier* cBarrier;
+  G4VCoulombBarrier* cBarrier;
 
   G4int A;
   G4int Z;
   G4int spin;
-
-  G4FermiFragment(const G4FermiFragment &right);  
-  const G4FermiFragment & operator=(const G4FermiFragment &right);
-  G4bool operator!=(const G4FermiFragment &right) const;
 };
 
 

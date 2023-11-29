@@ -80,7 +80,7 @@ void G4GDMLEvaluator::DefineVariable(const G4String& name, G4double value)
 void G4GDMLEvaluator::DefineMatrix(const G4String& name, G4int coldim,
                                    std::vector<G4double> valueList)
 {
-  const G4int size = valueList.size();
+  const G4int size = (G4int)valueList.size();
 
   if(size == 0)
   {

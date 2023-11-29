@@ -29,4 +29,4 @@
 #include "G4ParticleHPWattSpectrum.hh"
 using G4NeutronHPWattSpectrum = G4ParticleHPWattSpectrum;
 
-#endif 
+#endif

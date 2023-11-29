@@ -48,7 +48,7 @@ class G4HumanPhantomAnalysisManager
 
 public:
   G4HumanPhantomAnalysisManager();
-  ~G4HumanPhantomAnalysisManager();
+  ~G4HumanPhantomAnalysisManager() = default;
   
 
   void book();
@@ -64,7 +64,7 @@ public:
  // results in the ROOT file
 
 private:
-    G4bool factoryOn; 
+    G4bool fFactoryOn; 
     G4int         fNtColId[MaxNtCol];
 };
 #endif

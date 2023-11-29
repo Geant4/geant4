@@ -1,0 +1,27 @@
+#
+# Macro file for "TestEm1.cc"
+#
+# interactively: visualize eta decay
+#
+/control/verbose 1
+/run/verbose 1
+/process/em/verbose 0
+#
+/testem/det/setMat Galactic
+/testem/det/setSize 100 nm
+#
+/testem/phys/addPhysics  local
+#
+## interactive or batch
+/control/execute vis.mac
+/run/initialize
+#
+## kinematic
+/gun/particle eta
+/gun/energy 1 eV
+/gun/position 0 0 0 mm
+#
+## run
+/tracking/verbose 2
+/run/beamOn 1
+

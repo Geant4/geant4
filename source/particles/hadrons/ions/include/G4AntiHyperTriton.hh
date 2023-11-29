@@ -47,7 +47,7 @@ class G4AntiHyperTriton : public G4Ions {
   private:
     static G4AntiHyperTriton* theInstance;
     G4AntiHyperTriton()  {}
-    ~G4AntiHyperTriton() {}
+    ~G4AntiHyperTriton() override = default;
 };
 
 #endif

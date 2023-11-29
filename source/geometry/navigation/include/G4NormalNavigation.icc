@@ -88,10 +88,7 @@ G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
           found = true;
           break;
         }
-        else
-        {
-          history.BackLevel();
-        }
+        history.BackLevel();
       }
     }
   }

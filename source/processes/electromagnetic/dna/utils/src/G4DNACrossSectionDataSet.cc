@@ -187,7 +187,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
  
   delete stream;
  
-  std::vector<G4DataVector *>::size_type maxI(columns.size());
+  std::size_t maxI(columns.size());
  
   if (maxI<2)
     {
@@ -199,10 +199,10 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
       return false;
     }
  
-  std::vector<G4DataVector*>::size_type i(1);
+  std::size_t i(1);
   while (i<maxI)
     {
-      G4DataVector::size_type maxJ(columns[i]->size());
+      std::size_t maxJ(columns[i]->size());
 
       if (maxJ!=columns[0]->size())
 	{
@@ -214,7 +214,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 	  return false;
 	}
 
-      G4DataVector::size_type j(0);
+      std::size_t j(0);
 
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
@@ -230,7 +230,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 	  j++;
 	}
 
-      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+      AddComponent(new G4EMDataSet(G4int(i-1), argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
   
       i++;
     }
@@ -337,7 +337,7 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
  
   delete stream;
  
-  std::vector<G4DataVector *>::size_type maxI(columns.size());
+  std::size_t maxI(columns.size());
  
   if (maxI<2)
     {
@@ -349,10 +349,10 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
       return false;
     }
  
-  std::vector<G4DataVector*>::size_type i(1);
+  std::size_t i(1);
   while (i<maxI)
     {
-      G4DataVector::size_type maxJ(columns[i]->size());
+      std::size_t maxJ(columns[i]->size());
 
       if (maxJ!=columns[0]->size())
 	{
@@ -364,7 +364,7 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 	  return false;
 	}
 
-      G4DataVector::size_type j(0);
+      std::size_t j(0);
 
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
@@ -376,7 +376,7 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 	  j++;
 	}
 
-      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+      AddComponent(new G4EMDataSet(G4int(i-1), argEnergies, argData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
   
       i++;
     }
@@ -394,7 +394,7 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 
 G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
 {
-  const size_t n(NumberOfComponents());
+  const std::size_t n(NumberOfComponents());
  
   if (n==0)
     {
@@ -421,12 +421,12 @@ G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
   G4DataVector::const_iterator iEnergiesEnd(GetComponent(0)->GetEnergies(0).end());
   G4DataVector::const_iterator * iData(new G4DataVector::const_iterator[n]);
  
-  size_t k(n);
+  std::size_t k(n);
  
   while (k>0)
     {
       k--;
-      iData[k]=GetComponent(k)->GetData(0).begin();
+      iData[k]=GetComponent((G4int)k)->GetData(0).cbegin();
     }
  
   while (iEnergies!=iEnergiesEnd)
@@ -463,7 +463,7 @@ G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
 
 G4String G4DNACrossSectionDataSet::FullFileName(const G4String& argFileName) const
 {
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
   {
       G4Exception("G4DNACrossSectionDataSet::FullFileName","em0006",
@@ -500,18 +500,18 @@ G4double G4DNACrossSectionDataSet::FindValue(G4double argEnergy, G4int /* argCom
 
 void G4DNACrossSectionDataSet::PrintData(void) const
 {
-  const size_t n(NumberOfComponents());
+  const G4int n = (G4int)NumberOfComponents();
 
   G4cout << "The data set has " << n << " components" << G4endl;
   G4cout << G4endl;
  
-  size_t i(0);
+  G4int i(0);
  
   while (i<n)
     {
       G4cout << "--- Component " << i << " ---" << G4endl;
       GetComponent(i)->PrintData();
-      i++;
+      ++i;
     }
 }
 

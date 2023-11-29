@@ -28,7 +28,6 @@
 
 #include "G4NtupleBookingManager.hh"
 #include "G4RootPNtupleManager.hh"
-#include "G4RootMainNtupleManager.hh"
 #include "G4AnalysisUtilities.hh"
 
 #include "tools/wroot/file"
@@ -42,6 +41,8 @@ namespace {
 
 //Mutex to lock master manager when adding ntuple row and ending fill
 G4Mutex pntupleMutex = G4MUTEX_INITIALIZER;
+//Mutex to lock master manager when createing main ntuples at new cycle
+G4Mutex createMainMutex = G4MUTEX_INITIALIZER;
 
 //_____________________________________________________________________________
 void NotExistWarning(const G4String& what, G4int id,
@@ -101,15 +102,15 @@ tools::wroot::base_pntuple*
   G4int id, std::string_view functionName, G4bool warn) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(id, functionName);
-  if ( ! ntupleDescription ) return nullptr;
+  if (ntupleDescription == nullptr) return nullptr;
 
-  if ( ! ntupleDescription->fBasePNtuple ) {
+  if (ntupleDescription->GetBasePNtuple() == nullptr) {
     if ( warn ) {
       NotExistWarning("ntuple", id, fkClass, functionName);
     }
     return nullptr;
   }
-  return ntupleDescription->fBasePNtuple;
+  return ntupleDescription->GetBasePNtuple();
 }
 
 //_____________________________________________________________________________
@@ -141,17 +142,17 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
 {
   Message(kVL4, "create from main", "pntuple", mainNtuple->name());
 
-  auto file = fMainNtupleManager->GetNtupleFile(&ntupleDescription->fDescription);
+  auto file = fMainNtupleManager->GetNtupleFile(&ntupleDescription->GetDescription());
   if ( ! file ) {
     Warn("Cannot create pntuple. Main ntuple file does not exist.",
       fkClass, "CreateNtupleFromMain");
     return;
   }
 
-  ntupleDescription->fDescription.fFile = file;
+  ntupleDescription->GetDescription().SetFile(file);
 
   // Get parameters from ntupleDescription
-  mainNtuple->get_branches(ntupleDescription->fMainBranches);
+  mainNtuple->get_branches(ntupleDescription->GetMainBranches());
 
   auto rfile = std::get<0>(*file);
   G4bool verbose = true;
@@ -162,16 +163,16 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
               G4cout, rfile->byte_swap(), rfile->compression(),
               mainNtuple->dir().seek_directory(),
               *mainBranch, mainBranch->basket_size(),
-              ntupleDescription->fDescription.fNtupleBooking, verbose);
+              ntupleDescription->GetDescription().GetNtupleBooking(), verbose);
 
-    ntupleDescription->fNtuple
-      = static_cast<tools::wroot::imt_ntuple*>(mtNtuple);
-    ntupleDescription->fBasePNtuple
-      = static_cast<tools::wroot::base_pntuple*>(mtNtuple);
+    ntupleDescription->SetNtuple(
+      static_cast<tools::wroot::imt_ntuple*>(mtNtuple));
+    ntupleDescription->SetBasePNtuple(
+      static_cast<tools::wroot::base_pntuple*>(mtNtuple));
   }
   else {
     std::vector<tools::uint32> basketSizes;
-    tools_vforcit(tools::wroot::branch*, ntupleDescription->fMainBranches, it) {
+    tools_vforcit(tools::wroot::branch*, ntupleDescription->GetMainBranches(), it) {
       basketSizes.push_back((*it)->basket_size());
     }
     auto basketEntries = fMainNtupleManager->GetBasketEntries();
@@ -180,36 +181,44 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
       new tools::wroot::mt_ntuple_column_wise(
             G4cout, rfile->byte_swap(), rfile->compression(),
             mainNtuple->dir().seek_directory(),
-            ntupleDescription->fMainBranches, basketSizes,
-            ntupleDescription->fDescription.fNtupleBooking,
+            ntupleDescription->GetMainBranches(), basketSizes,
+            ntupleDescription->GetDescription().GetNtupleBooking(),
             fRowMode, basketEntries, verbose);
 
-    ntupleDescription->fNtuple
-      = static_cast<tools::wroot::imt_ntuple*>(mtNtuple);
-    ntupleDescription->fBasePNtuple
-      = static_cast<tools::wroot::base_pntuple*>(mtNtuple);
+    ntupleDescription->SetNtuple(
+      static_cast<tools::wroot::imt_ntuple*>(mtNtuple));
+    ntupleDescription->SetBasePNtuple(
+      static_cast<tools::wroot::base_pntuple*>(mtNtuple));
   }
 
-  ntupleDescription->fDescription.fIsNtupleOwner = true;
+  ntupleDescription->GetDescription().SetIsNtupleOwner(true);
   //        // pntuple object is not deleted automatically
-  fNtupleVector.push_back(ntupleDescription->fNtuple);
+  fNtupleVector.push_back(ntupleDescription->GetNtuple());
 
   Message(kVL3, "create from main", "pntuple", mainNtuple->name());
 }
 
 //_____________________________________________________________________________
-void G4RootPNtupleManager::CreateNtuplesFromMain()
+void G4RootPNtupleManager::CreateNtupleDescriptionsFromBooking()
 {
-// Create ntuple from booking (if not yet done) and main ntuple
+// Create ntuple descriptions from booking.
 // This function is called from the first Fill call.
 
   // Create pntuple descriptions from ntuple booking.
   auto g4NtupleBookings = fBookingManager->GetNtupleBookingVector();
+
   for ( auto g4NtupleBooking : g4NtupleBookings ) {
     auto ntupleDescription = new G4RootPNtupleDescription(g4NtupleBooking);
     // Save g4booking, activation in pntuple booking
     fNtupleDescriptionVector.push_back(ntupleDescription);
   }
+}
+
+//_____________________________________________________________________________
+void G4RootPNtupleManager::CreateNtuplesFromMain()
+{
+// Create slave ntuples from  main ntuple.
+// This function is called from the first Fill call.
 
   auto& mainNtupleVector = fMainNtupleManager->GetNtupleVector();
 
@@ -218,8 +227,52 @@ void G4RootPNtupleManager::CreateNtuplesFromMain()
     auto& ntupleDescription = fNtupleDescriptionVector[lcounter++];
     CreateNtupleFromMain(ntupleDescription, mainNtuple);
   }
+}
 
-  fCreateNtuples = false;
+//_____________________________________________________________________________
+void G4RootPNtupleManager::CreateNtuplesIfNeeded()
+{
+// The ntuples on workers are created at first FillColumn or AddRow
+// (if only columns of vector type) call.
+// When writing multiple times in teh same file, the main ntuples have
+// to be recreated as well.
+
+  // G4cout << "G4RootPNtupleManager::CreateNtuplesIfNeeded: "
+  //   << " fCreateNtuple: " << fCreateNtuples << " "
+  //   << " fNewCycle: " << fNewCycle
+  //   << " fMainNtupleManager->GetNewCycle(): " << fMainNtupleManager->GetNewCycle()
+  //   << " fNtupleDescriptionVector.size(): " << fNtupleDescriptionVector.size()
+  //   << " fNtupleVector.size(): " << fNtupleVector.size()
+  //   << G4endl;
+
+  if (fCreateNtuples) {
+    // create ntuple descriptions
+    CreateNtupleDescriptionsFromBooking();
+
+    // create main ntuples if needed
+    G4AutoLock lock(&createMainMutex);
+    if (fMainNtupleManager->GetNewCycle()) {
+      fMainNtupleManager->CreateNtuplesFromBooking();
+    }
+    lock.unlock();
+
+    // create slave ntuples
+    CreateNtuplesFromMain();
+    fCreateNtuples = false;
+  }
+
+  if (fNewCycle) {
+    // create main ntuples if needed
+    G4AutoLock lock(&createMainMutex);
+    if (fMainNtupleManager->GetNewCycle()) {
+      fMainNtupleManager->CreateNtuplesFromBooking();
+    }
+    lock.unlock();
+
+    // create slave ntuples
+    CreateNtuplesFromMain();
+    fNewCycle = false;
+  }
 }
 
 //_____________________________________________________________________________
@@ -262,10 +315,6 @@ G4bool G4RootPNtupleManager::FillNtupleSColumn(
 //_____________________________________________________________________________
 G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
 {
-  if (fCreateNtuples) {
-    CreateNtuplesFromMain();
-  }
-
   if ( fState.GetIsActivation() && ( ! GetActivation(ntupleId) ) ) {
     //G4cout << "Skipping AddNtupleRow for " << ntupleId << G4endl;
     return false;
@@ -275,23 +324,27 @@ G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
     Message(kVL4, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
   }
 
-  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
-  if ( ! ntupleDescription ) return false;
+  // Creating ntuples on workers is triggered with the first FillColumn
+  // or AddRow (in only columns of vector type call)
+  CreateNtuplesIfNeeded();
 
-  auto rfile = std::get<0>(*ntupleDescription->fDescription.fFile);
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
+  if (ntupleDescription == nullptr) return false;
+
+  auto rfile = std::get<0>(*ntupleDescription->GetDescription().GetFile());
 
   G4AutoLock lock(&pntupleMutex);
   lock.unlock();
   mutex toolsLock(lock);
   auto result
-    = ntupleDescription->fNtuple->add_row(toolsLock, *rfile);
+    = ntupleDescription->GetNtuple()->add_row(toolsLock, *rfile);
 
   if ( ! result ) {
     Warn("NtupleId " + to_string(ntupleId) + "adding row failed.",
       fkClass, "AddNtupleRow");
   }
 
-  ntupleDescription->fDescription.fHasFill = true;
+  ntupleDescription->GetDescription().SetHasFill(true);
 
   if ( IsVerbose(kVL3) ) {
     Message(kVL3, "add", "pntuple row", " ntupleId " + to_string(ntupleId));
@@ -307,45 +360,64 @@ G4bool G4RootPNtupleManager::Merge()
   for ( auto ntupleDescription : fNtupleDescriptionVector) {
 
     // skip inactivated ntuples
-    if(!ntupleDescription->fDescription.fActivation || !ntupleDescription->fNtuple) {
+    if (! ntupleDescription->GetDescription().GetActivation() ||
+        (ntupleDescription->GetNtuple() == nullptr)) {
       // G4cout << "skipping inactive ntuple " << G4endl;
       continue;
     }
 
     if ( IsVerbose(kVL4) ) {
-      Message(kVL4, "merge", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
+      Message(kVL4, "merge", "pntuple",
+        ntupleDescription->GetDescription().GetNtupleBooking().name());
     }
 
-    auto rfile = std::get<0>(*ntupleDescription->fDescription.fFile);
+    auto rfile = std::get<0>(*ntupleDescription->GetDescription().GetFile());
 
     G4AutoLock lock(&pntupleMutex);
     lock.unlock();
     mutex toolsLock(lock);
     auto result
-      = ntupleDescription->fNtuple->end_fill(toolsLock, *rfile);
+      = ntupleDescription->GetNtuple()->end_fill(toolsLock, *rfile);
 
     if ( ! result ) {
-      Warn("Ntuple " + ntupleDescription->fDescription.fNtupleBooking.name() +
+      Warn("Ntuple " + ntupleDescription->GetDescription().GetNtupleBooking().name() +
            "end fill has failed.", fkClass, "Merge");
     }
 
-    delete ntupleDescription->fNtuple;
-    ntupleDescription->fNtuple = nullptr;
-
     if ( IsVerbose(kVL3) ) {
-      Message(kVL3, "merge", "pntuple", ntupleDescription->fDescription.fNtupleBooking.name());
+      Message(kVL3, "merge", "pntuple",
+        ntupleDescription->GetDescription().GetNtupleBooking().name());
     }
 
   }
-  return true;
 
+  // Set new cycle
+  fNewCycle = true;
+
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootPNtupleManager::Reset()
+{
+  // Reset ntuple description, this will delete ntuple if present and
+  // we have its ownership.
+  // The ntuples will be recreated with new cycle or new open file.
+
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    ntupleDescription->Reset();
+  }
+
+  fNtupleVector.clear();
+
+  return true;
 }
 
 //_____________________________________________________________________________
 void G4RootPNtupleManager::Clear()
 {
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
-    delete ntupleDescription->fNtuple;
+    delete ntupleDescription->GetNtuple();
   }
 
   fNtupleDescriptionVector.clear();
@@ -360,7 +432,7 @@ void  G4RootPNtupleManager::SetActivation(
   G4bool activation)
 {
   for ( auto ntupleDescription : fNtupleDescriptionVector ) {
-    ntupleDescription->fDescription.fActivation = activation;
+    ntupleDescription->GetDescription().SetActivation(activation);
   }
 }
 
@@ -370,9 +442,9 @@ void  G4RootPNtupleManager::SetActivation(
   G4int ntupleId, G4bool activation)
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetActivation");
-  if ( ! ntupleDescription ) return;
+  if (ntupleDescription == nullptr) return;
 
-  ntupleDescription->fDescription.fActivation = activation;
+  ntupleDescription->GetDescription().SetActivation(activation);
 }
 
 //_____________________________________________________________________________
@@ -380,15 +452,27 @@ G4bool  G4RootPNtupleManager::GetActivation(
   G4int ntupleId) const
 {
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetActivation");
-  if ( ! ntupleDescription ) return false;
+  if (ntupleDescription == nullptr) return false;
 
-  return ntupleDescription->fDescription.fActivation;
+  return ntupleDescription->GetDescription().GetActivation();
+}
+
+//_____________________________________________________________________________
+void G4RootPNtupleManager::SetNewCycle(G4bool value)
+{
+  fNewCycle = value;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootPNtupleManager::GetNewCycle() const
+{
+  return fNewCycle;
 }
 
 //_____________________________________________________________________________
 G4int G4RootPNtupleManager::GetNofNtuples() const
 {
-  return fNtupleVector.size();
+  return (G4int)fNtupleVector.size();
 }
 
 //_____________________________________________________________________________
@@ -396,4 +480,11 @@ void G4RootPNtupleManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
 {
   fRowWise = rowWise;
   fRowMode = rowMode;
+}
+
+//_____________________________________________________________________________
+G4bool G4RootPNtupleManager::List(std::ostream& /*output*/, G4bool /*onlyIfActive*/)
+{
+  Warn("Not implemented.", fkClass, "List");
+  return false;
 }

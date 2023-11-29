@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B4/B4d/src/EventAction.cc
 /// \brief Implementation of the B4d::EventAction class
 
 #include "EventAction.hh"
@@ -41,16 +41,6 @@
 
 namespace B4d
 {
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::EventAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -159,8 +149,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;
     PrintEventStatistics(absoEdep, absoTrackLength, gapEdep, gapTrackLength);
+    G4cout << "--> End of event: " << eventID << "\n" << G4endl;  
   }
 }
 

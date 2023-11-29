@@ -109,7 +109,7 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="OneOvary" ax="1.17" by="0.58" cz="1.80" zcut1="-1.80" zcut2="1.80" />
+  <ellipsoid lunit="cm" name="OneOvary" ax="1.17" by="0.58" cz="1.80" zcut1="-1.80" zcut2="1.80" />
 
   <union name="Ovary">
    <first ref="OneOvary" />

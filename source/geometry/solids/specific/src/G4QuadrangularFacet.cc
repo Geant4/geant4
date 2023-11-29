@@ -53,7 +53,6 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
                                           const G4ThreeVector& vt2,
                                           const G4ThreeVector& vt3,
                                                 G4FacetVertexType vertexType)
-  : G4VFacet()
 {
   G4double delta   =  1.0 * kCarTolerance; // dimension tolerance
   G4double epsilon = 0.01 * kCarTolerance; // planarity tolerance
@@ -131,10 +130,11 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
             << "P1 = " << GetVertex(1) << G4endl
             << "P2 = " << GetVertex(2) << G4endl
             << "P3 = " << GetVertex(3) << G4endl
-            << "Height in P0-P1-P2 = " << h1 << G4endl
-            << "Height in P1-P2-P3 = " << h2 << G4endl
-            << "Height in P2-P3-P4 = " << h3 << G4endl
-            << "Height in P4-P0-P1 = " << h4;
+            << "Smallest heights:" << G4endl
+            << "  in triangle P0-P1-P2 = " << h1 << G4endl
+            << "  in triangle P1-P2-P3 = " << h2 << G4endl
+            << "  in triangle P2-P3-P0 = " << h3 << G4endl
+            << "  in triangle P3-P0-P1 = " << h4;
     G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
 	        "GeomSolids1001", JustWarning, message);
     return;
@@ -206,9 +206,7 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector& vt0,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4QuadrangularFacet::~G4QuadrangularFacet ()
-{
-}
+G4QuadrangularFacet::~G4QuadrangularFacet () = default;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -238,9 +236,8 @@ G4QuadrangularFacet::operator=(const G4QuadrangularFacet& rhs)
 //
 G4VFacet* G4QuadrangularFacet::GetClone ()
 {
-  G4QuadrangularFacet *c = new G4QuadrangularFacet (GetVertex(0), GetVertex(1),
-                                                    GetVertex(2), GetVertex(3),
-                                                    ABSOLUTE);
+  auto c = new G4QuadrangularFacet (GetVertex(0), GetVertex(1),
+                                    GetVertex(2), GetVertex(3), ABSOLUTE);
   return c;
 }
 

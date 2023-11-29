@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file ChamberParameterisation.hh
+/// \file B2/B2b/include/ChamberParameterisation.hh
 /// \brief Definition of the B2b::ChamberParameterisation class
 
 #ifndef B2bChamberParameterisation_h
@@ -69,7 +69,7 @@ class ChamberParameterisation : public G4VPVParameterisation
                               G4double lengthInitial,
                               G4double lengthFinal );
 
-    ~ChamberParameterisation() override;
+    ~ChamberParameterisation() override = default;
 
     void ComputeTransformation (const G4int copyNo,
                                 G4VPhysicalVolume* physVol) const override;

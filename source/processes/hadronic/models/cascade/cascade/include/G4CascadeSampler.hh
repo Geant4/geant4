@@ -39,7 +39,7 @@
 #include <iosfwd>
 #include <vector>
 
-template <int NBINS, int NMULT>
+template <G4int NBINS, G4int NMULT>
 class G4CascadeSampler {
 public:
   enum { energyBins=NBINS, multBins=NMULT };	// For use in function arguments
@@ -50,7 +50,7 @@ public:
   virtual ~G4CascadeSampler() {}
 
   virtual G4double 
-  findCrossSection(double ke, const G4double (&xsec)[energyBins]) const;
+  findCrossSection(G4double ke, const G4double (&xsec)[energyBins]) const;
 
   virtual G4int 
   findMultiplicity(G4double ke, const G4double xmult[][energyBins]) const;

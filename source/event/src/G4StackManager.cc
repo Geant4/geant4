@@ -58,7 +58,7 @@ G4StackManager::G4StackManager()
 
 G4StackManager::~G4StackManager()
 {
-  if(userStackingAction) { delete userStackingAction; }
+  delete userStackingAction; 
 
 #ifdef G4VERBOSE
   if(verboseLevel>0)
@@ -98,7 +98,7 @@ PushOneTrack(G4Track* newTrack, G4VTrajectory* newTrajectory)
     else
     { 
       const G4VProcess* vp = newTrack->GetCreatorProcess();
-      if(vp)
+      if(vp != nullptr)
       {
         ED << "created by " << vp->GetProcessName() << ".";
       }
@@ -212,7 +212,7 @@ G4Track* G4StackManager::PopNextTrack(G4VTrajectory** newTrajectory)
              << " waiting tracks." << G4endl;
 #endif
     if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) )
-      return 0;
+      return nullptr;
   }
 
   G4StackedTrack selectedStackedTrack = urgentStack->PopFromStack();
@@ -282,7 +282,7 @@ void G4StackManager::ReClassify()
 
 G4int G4StackManager::PrepareNewEvent()
 {
-  if(userStackingAction)
+  if(userStackingAction != nullptr)
   {
     userStackingAction->PrepareNewEvent();
   }
@@ -315,7 +315,7 @@ G4int G4StackManager::PrepareNewEvent()
       G4Track* aTrack = aStackedTrack.GetTrack();
       aTrack->SetParentID(-1);
       G4ClassificationOfNewTrack classification;
-      if(userStackingAction)
+      if(userStackingAction != nullptr)
       {
         classification = userStackingAction->ClassifyNewTrack( aTrack );
       }
@@ -370,7 +370,7 @@ void G4StackManager::SetNumberOfAdditionalWaitingStacks(G4int iAdd)
   {
     for(G4int i=numberOfAdditionalWaitingStacks; i<iAdd; ++i)
     {
-      G4TrackStack* newStack = new G4TrackStack;
+      auto* newStack = new G4TrackStack;
       additionalWaitingStacks.push_back(newStack);
     }
     numberOfAdditionalWaitingStacks = iAdd;
@@ -493,13 +493,13 @@ TransferOneStackedTrack(G4ClassificationOfNewTrack origin,
   G4StackedTrack aStackedTrack;
   if(destination==fKill)
   {
-    if( originStack != nullptr && originStack->GetNTrack() )
+    if( originStack != nullptr && (originStack->GetNTrack() != 0u) )
     {
       aStackedTrack = originStack->PopFromStack();
       delete aStackedTrack.GetTrack();
       delete aStackedTrack.GetTrajectory();
     }
-    else if (urgentStack->GetNTrack() )
+    else if (urgentStack->GetNTrack() != 0u )
     {
       aStackedTrack = urgentStack->PopFromStack();
       delete aStackedTrack.GetTrack();
@@ -528,16 +528,16 @@ TransferOneStackedTrack(G4ClassificationOfNewTrack origin,
         }
         break;
     }
-    if(originStack && originStack->GetNTrack())
+    if((originStack != nullptr) && (originStack->GetNTrack() != 0u))
     {
       aStackedTrack = originStack->PopFromStack();
-      if(targetStack) { targetStack->PushToStack(aStackedTrack); }
+      if(targetStack != nullptr) { targetStack->PushToStack(aStackedTrack); }
       else            { urgentStack->PushToStack(aStackedTrack); }
     }
-    else if(urgentStack->GetNTrack())
+    else if(urgentStack->GetNTrack() != 0u)
     {
       aStackedTrack = urgentStack->PopFromStack();
-      if(targetStack) { targetStack->PushToStack(aStackedTrack); }
+      if(targetStack != nullptr) { targetStack->PushToStack(aStackedTrack); }
       else            { urgentStack->PushToStack(aStackedTrack); }
     }
   }
@@ -581,40 +581,39 @@ void G4StackManager::ClearPostponeStack()
 
 G4int G4StackManager::GetNTotalTrack() const
 {
-  G4int n = urgentStack->GetNTrack()
-          + waitingStack->GetNTrack()
-          + postponeStack->GetNTrack();
+  std::size_t n = urgentStack->GetNTrack()
+                + waitingStack->GetNTrack()
+                + postponeStack->GetNTrack();
   for(G4int i=1; i<=numberOfAdditionalWaitingStacks; ++i)
   {
     n += additionalWaitingStacks[i-1]->GetNTrack();
   }
-  return n;
+  return G4int(n);
 }
 
 G4int G4StackManager::GetNUrgentTrack() const
 {
-  return urgentStack->GetNTrack();
+  return (G4int)urgentStack->GetNTrack();
 }
 
 G4int G4StackManager::GetNWaitingTrack(int i) const
 {
   if(i==0)
   {
-    return waitingStack->GetNTrack();
+    return (G4int)waitingStack->GetNTrack();
   }
-  else
+  
+  if(i<=numberOfAdditionalWaitingStacks)
   {
-    if(i<=numberOfAdditionalWaitingStacks)
-    {
-      return additionalWaitingStacks[i-1]->GetNTrack();
-    }
+    return (G4int)additionalWaitingStacks[i-1]->GetNTrack();
   }
+ 
   return 0;
 }
 
 G4int G4StackManager::GetNPostponedTrack() const
 {
-  return postponeStack->GetNTrack();
+  return (G4int)postponeStack->GetNTrack();
 }
 
 void G4StackManager::SetVerboseLevel( G4int const value )
@@ -625,7 +624,7 @@ void G4StackManager::SetVerboseLevel( G4int const value )
 void G4StackManager::SetUserStackingAction(G4UserStackingAction* value)
 {
   userStackingAction = value;
-  if(userStackingAction)
+  if(userStackingAction != nullptr)
   {
     userStackingAction->SetStackManager(this);
   }

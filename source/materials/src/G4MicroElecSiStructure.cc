@@ -22,8 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
+
 // G4MicroElecSiStructure.cc, 2011/08/29 A.Valentin, M. Raine
 //
 // Based on the following publications
@@ -38,33 +37,30 @@
 //	    very low energy electromagnetic models for protons and
 //	    heavy ions in Si, NIM B, vol. 287, pp. 124 - 129, 2012.
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4MicroElecSiStructure.hh"
+
 #include "G4SystemOfUnits.hh"
 
-G4MicroElecSiStructure::G4MicroElecSiStructure(): nLevels(6)
+G4MicroElecSiStructure::G4MicroElecSiStructure()
 {
-  energyConstant.push_back(16.65*eV);
-  energyConstant.push_back(6.52*eV); 
-  energyConstant.push_back(13.63*eV);
-  energyConstant.push_back(107.98*eV); 
-  energyConstant.push_back(151.55*eV); 
-  energyConstant.push_back(1828.5*eV);
+  energyConstant.push_back(16.65 * eV);
+  energyConstant.push_back(6.52 * eV);
+  energyConstant.push_back(13.63 * eV);
+  energyConstant.push_back(107.98 * eV);
+  energyConstant.push_back(151.55 * eV);
+  energyConstant.push_back(1828.5 * eV);
 
-  nLevels = energyConstant.size();
+  nLevels = (G4int)energyConstant.size();
 }
-
-
-G4MicroElecSiStructure::~G4MicroElecSiStructure()
-{ }
- 
 
 G4double G4MicroElecSiStructure::Energy(G4int level)
 {
   G4double energ = 0.;
 
-  if (level >=0 && level < nLevels) energ = energyConstant[level];
+  if (level >= 0 && level < nLevels) {
+    energ = energyConstant[level];
+  }
 
   return energ;
 }

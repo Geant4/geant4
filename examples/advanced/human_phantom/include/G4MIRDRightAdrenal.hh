@@ -40,10 +40,9 @@ class G4MIRDRightAdrenal: public G4VOrgan
 {
 public:
 
-  G4MIRDRightAdrenal();
-  ~G4MIRDRightAdrenal();
+  G4MIRDRightAdrenal() = default;
+  ~G4MIRDRightAdrenal() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
-				    const G4String&,G4bool, G4bool);
-private:
+				    const G4String&,G4bool, G4bool) override;
 };
 #endif

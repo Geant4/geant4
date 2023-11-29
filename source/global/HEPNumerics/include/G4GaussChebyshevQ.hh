@@ -47,7 +47,7 @@ class G4GaussChebyshevQ : public G4VGaussianQuadrature
   G4GaussChebyshevQ(function pFunction, G4int nChebyshev);
   // Constructor for Gauss-Chebyshev quadrature method
 
-  ~G4GaussChebyshevQ();
+  ~G4GaussChebyshevQ() override = default;
 
   G4GaussChebyshevQ(const G4GaussChebyshevQ&) = delete;
   G4GaussChebyshevQ& operator=(const G4GaussChebyshevQ&) = delete;

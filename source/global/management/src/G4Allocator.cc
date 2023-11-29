@@ -36,6 +36,3 @@ G4AllocatorBase::G4AllocatorBase()
 {
   G4AllocatorList::GetAllocatorList()->Register(this);
 }
-
-// --------------------------------------------------------------------
-G4AllocatorBase::~G4AllocatorBase() {}

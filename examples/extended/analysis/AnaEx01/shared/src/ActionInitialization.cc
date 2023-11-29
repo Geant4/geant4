@@ -37,22 +37,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* detector)
- : G4VUserActionInitialization(),
-   fDetector(detector)
+ : fDetector(detector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::~ActionInitialization()
-{}
+ActionInitialization::~ActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
   // Histo manager
-  HistoManager*  histo = new HistoManager();
-  
+  auto   histo = new HistoManager();
+
   // Actions
   SetUserAction(new RunAction(histo));
 }
@@ -62,20 +60,20 @@ void ActionInitialization::BuildForMaster() const
 void ActionInitialization::Build() const
 {
   // Histo manager
-  HistoManager*  histo = new HistoManager();
-  
+  auto   histo = new HistoManager();
+
   // Actions
   //
   SetUserAction(new PrimaryGeneratorAction(fDetector));
-  
-  RunAction* runAction = new RunAction(histo);  
+
+  auto  runAction = new RunAction(histo);
   SetUserAction(runAction);
-  
-  EventAction* eventAction = new EventAction(runAction, histo);
+
+  auto  eventAction = new EventAction(runAction, histo);
   SetUserAction(eventAction);
 
-  SteppingAction* steppingAction = new SteppingAction(fDetector, eventAction);
+  auto  steppingAction = new SteppingAction(fDetector, eventAction);
   SetUserAction(steppingAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

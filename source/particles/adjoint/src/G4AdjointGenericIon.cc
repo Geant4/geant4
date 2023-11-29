@@ -31,16 +31,16 @@
 // ######################################################################
 // ###                           ADJOINT GenericIon                   ###
 // ######################################################################
-G4AdjointGenericIon* G4AdjointGenericIon::theInstance = 0;
+G4AdjointGenericIon* G4AdjointGenericIon::theInstance = nullptr;
 
 G4AdjointGenericIon* G4AdjointGenericIon::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance = reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance = static_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -61,13 +61,13 @@ G4AdjointGenericIon* G4AdjointGenericIon::Definition()
                     1,              +1,             0,          
                     1,              +1,             0,             
 	    "adjoint_nucleus",               0,            +1,           0,
-		 true,            -1.0,          NULL,
+		 true,            -1.0,          nullptr,
 		 false,      "adjoint_generic",             0,
 		 0.0 
               );
   }
 
-  theInstance = reinterpret_cast<G4AdjointGenericIon*>(anInstance);
+  theInstance = static_cast<G4AdjointGenericIon*>(anInstance);
   return theInstance;
 }
 

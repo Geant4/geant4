@@ -74,6 +74,6 @@ G4O2* G4O2::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0); // not implemented
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
   }
-  theInstance = reinterpret_cast<G4O2*>(anInstance);
+  theInstance = static_cast<G4O2*>(anInstance);
   return theInstance;
 }

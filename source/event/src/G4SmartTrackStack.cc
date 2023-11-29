@@ -44,8 +44,7 @@ void G4SmartTrackStack::dumpStatistics()
   G4cerr << G4endl;
 }
 
-G4SmartTrackStack::G4SmartTrackStack()
-  : fTurn(0), nTurn(5), maxNTracks(0), nTracks(0)
+G4SmartTrackStack::G4SmartTrackStack() 
 {
   for(G4int i=0; i<nTurn; ++i)
   {
@@ -56,17 +55,17 @@ G4SmartTrackStack::G4SmartTrackStack()
 
 G4SmartTrackStack::~G4SmartTrackStack()
 {
-  for (G4int i=0; i<nTurn; ++i)
+  for (auto* sp : stacks)
   {
-    delete stacks[i];
+    delete sp;
   }
 }
 
 void G4SmartTrackStack::TransferTo(G4TrackStack* aStack)
 {
-  for (G4int i=0; i<nTurn; ++i)
+  for (auto* sp : stacks)
   {
-    stacks[i]->TransferTo(aStack);
+    sp->TransferTo(aStack);
   }
   nTracks = 0;
 }
@@ -75,21 +74,19 @@ G4StackedTrack G4SmartTrackStack::PopFromStack()
 {
   G4StackedTrack aStackedTrack;
 
-  if (nTracks)
+  if (nTracks != 0)
   {
     while (true)
     {
-      if (stacks[fTurn]->GetNTrack())
+      if (stacks[fTurn]->GetNTrack() != 0u)
       {
         aStackedTrack = stacks[fTurn]->PopFromStack();
         energies[fTurn] -= aStackedTrack.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
         --nTracks;
         break;
       }
-      else
-      {
-        fTurn = (fTurn+1) % nTurn;
-      }
+      
+      fTurn = (fTurn+1) % nTurn;
     }
   }
 
@@ -105,7 +102,7 @@ void G4SmartTrackStack::PushToStack( const G4StackedTrack& aStackedTrack )
 {
 
   G4int iDest = 0;
-  if (aStackedTrack.GetTrack()->GetParentID())
+  if (aStackedTrack.GetTrack()->GetParentID() != 0)
   {
     G4int code = aStackedTrack.GetTrack()->GetDynamicParticle()->GetPDGcode();
     if (code == electronCode)
@@ -126,8 +123,8 @@ void G4SmartTrackStack::PushToStack( const G4StackedTrack& aStackedTrack )
   energies[iDest] += aStackedTrack.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
   ++nTracks;
   
-  G4int dy1 = stacks[iDest]->GetNTrack() - stacks[iDest]->GetSafetyValue1();
-  G4int dy2 = stacks[fTurn]->GetNTrack() - stacks[fTurn]->GetSafetyValue2();
+  G4long dy1 = stacks[iDest]->GetNTrack() - stacks[iDest]->GetSafetyValue1();
+  G4long dy2 = stacks[fTurn]->GetNTrack() - stacks[fTurn]->GetSafetyValue2();
   
   if (dy1 > 0 || dy1 > dy2 ||
       (iDest == 2 &&

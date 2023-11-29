@@ -54,40 +54,39 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
                          T*       stepper,
                          G4int    numberOfComponents = 6,
                          G4int    statisticsVerbosity = 0 );
-
-    virtual ~G4IntegrationDriver() override;
+   ~G4IntegrationDriver() override;
 
     G4IntegrationDriver(const G4IntegrationDriver &) = delete;
     const G4IntegrationDriver& operator =(const G4IntegrationDriver &) = delete;
 
-    virtual G4double AdvanceChordLimited(G4FieldTrack& track, 
+    G4double AdvanceChordLimited(G4FieldTrack& track, 
                                          G4double stepMax, 
                                          G4double epsStep,
                                          G4double chordDistance) override;
 
-    virtual void OnStartTracking() override;
-    virtual void OnComputeStep() override {}
-    virtual G4bool DoesReIntegrate() const override { return true; }
+    void OnStartTracking() override;
+    void OnComputeStep(const G4FieldTrack* /*track*/ = nullptr) override {}
+    G4bool DoesReIntegrate() const override { return true; }
 
-    virtual G4bool AccurateAdvance(G4FieldTrack& track,
-                                   G4double hstep,
-                                   G4double eps, // Requested y_err/hstep
-                                   G4double hinitial = 0 ) override;
+    G4bool AccurateAdvance(G4FieldTrack& track,
+                           G4double hstep,
+                           G4double eps, // Requested y_err/hstep
+                           G4double hinitial = 0 ) override;
       // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
       // On output track is replaced by value at end of interval.
       // The concept is similar to the odeint routine from NRC p.721-722.
 
-    virtual G4bool QuickAdvance(      G4FieldTrack& fieldTrack,
-                                const G4double dydx[],
-                                      G4double hstep,
-                                      G4double& dchord_step,
-                                      G4double& dyerr) override;
+    G4bool QuickAdvance(      G4FieldTrack& fieldTrack,
+                        const G4double dydx[],
+                              G4double hstep,
+                              G4double& dchord_step,
+                              G4double& dyerr) override;
       // QuickAdvance just tries one Step - it does not ensure accuracy.
 
-    virtual void SetVerboseLevel(G4int newLevel) override;
-    virtual G4int GetVerboseLevel() const override;
+    void SetVerboseLevel(G4int newLevel) override;
+    G4int GetVerboseLevel() const override;
 
-    virtual void  StreamInfo( std::ostream& os ) const override;
+    void  StreamInfo( std::ostream& os ) const override;
      // Write out the parameters / state of the driver
    
     // Accessors
@@ -106,8 +105,8 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
       // as possible while satisfying the accuracy criterion of:
       //     yerr < eps * |y_end-y_start|
 
-     G4double GetSmallestFraction() const;
-     void SetSmallestFraction(G4double val);
+    G4double GetSmallestFraction() const;
+    void SetSmallestFraction(G4double val);
 
   protected:
 
@@ -122,7 +121,7 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
     G4double fMinimumStep;
       // Minimum Step allowed in a Step (in absolute units)
 
-    G4double fSmallestFraction;
+    G4double fSmallestFraction{1e-12};
       // Smallest fraction of (existing) curve length - in relative units
       // below this fraction the current step will be the last
       // Expected range: smaller than 0.1 * epsilon and bigger than 5e-13
@@ -132,10 +131,10 @@ class G4IntegrationDriver : public G4RKIntegrationDriver<T>,
       // Verbosity level for printing (debug, ..)
       // Could be varied during tracking - to help identify issues
 
-    G4int fNoQuickAvanceCalls;
-    G4int fNoAccurateAdvanceCalls;
-    G4int fNoAccurateAdvanceBadSteps;
-    G4int fNoAccurateAdvanceGoodSteps;
+    G4int fNoQuickAvanceCalls{0};
+    G4int fNoAccurateAdvanceCalls{0};
+    G4int fNoAccurateAdvanceBadSteps{0};
+    G4int fNoAccurateAdvanceGoodSteps{0};
 
     using Base = G4RKIntegrationDriver<T>;
     using ChordFinderDelegate = G4ChordFinderDelegate<G4IntegrationDriver<T>>;

@@ -116,7 +116,6 @@ private:
         void* fpValue;
         G4DNABoundingBox fBigVolume;
         NodeTypes fNodeType;
-        G4bool fIsActivated;
 
         void init_max_depth_leaf(const NodeVector& input_values);
         void init_leaf(const NodeVector& input_values);

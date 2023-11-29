@@ -253,18 +253,18 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
 
   if(stype == "BOX")
   {
-    CheckNoSolidParams(stype, 3, solParam.size());
+    CheckNoSolidParams(stype, 3, (G4int)solParam.size());
     solid = new G4Box(sname, solParam[0], solParam[1], solParam[2]);
   }
   else if(stype == "TUBE")
   {
-    CheckNoSolidParams(stype, 3, solParam.size());
+    CheckNoSolidParams(stype, 3, (G4int)solParam.size());
     solid = new G4Tubs(sname, solParam[0], solParam[1], solParam[2], 0. * deg,
                        360. * deg);
   }
   else if(stype == "TUBS")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     G4double phiDelta = solParam[4];
     if(std::fabs(phiDelta - twopi) < angularTolerance)
     {
@@ -300,25 +300,25 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "TRD")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     solid = new G4Trd(sname, solParam[0], solParam[1], solParam[2], solParam[3],
                       solParam[4]);
   }
   else if(stype == "PARA")
   {
-    CheckNoSolidParams(stype, 6, solParam.size());
+    CheckNoSolidParams(stype, 6, (G4int)solParam.size());
     solid = new G4Para(sname, solParam[0], solParam[1], solParam[2],
                        solParam[3], solParam[4], solParam[5]);
   }
   else if(stype == "CONE")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     solid = new G4Cons(sname, solParam[0], solParam[1], solParam[2],
                        solParam[3], solParam[4], 0., 360. * deg);
   }
   else if(stype == "CONS")
   {
-    CheckNoSolidParams(stype, 7, solParam.size());
+    CheckNoSolidParams(stype, 7, (G4int)solParam.size());
     G4double phiDelta = solParam[6];
     if(std::fabs(phiDelta - twopi) < angularTolerance)
     {
@@ -329,7 +329,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "SPHERE")
   {
-    CheckNoSolidParams(stype, 6, solParam.size());
+    CheckNoSolidParams(stype, 6, (G4int)solParam.size());
     G4double phiDelta = solParam[3];
     if(std::fabs(phiDelta - twopi) < angularTolerance)
     {
@@ -345,12 +345,12 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "ORB")
   {
-    CheckNoSolidParams(stype, 1, solParam.size());
+    CheckNoSolidParams(stype, 1, (G4int)solParam.size());
     solid = new G4Orb(sname, solParam[0]);
   }
   else if(stype == "TORUS")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     G4double phiDelta = solParam[4];
     if(std::fabs(phiDelta - twopi) < angularTolerance)
     {
@@ -405,7 +405,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
         phiTotal = twopi;
       }
       solid = new G4Polycone(sname, solParam[0], phiTotal,  // start,delta-phi
-                             nplanes,                       // sections
+                             (G4int)nplanes,                // sections
                              &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
     }
     else
@@ -424,7 +424,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
       }
       solid =
         new G4GenericPolycone(sname, solParam[0], phiTotal,  // start,delta-phi
-                              nplanes,                       // sections
+                              (G4int)nplanes,                // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
     }
   }
@@ -473,7 +473,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
         phiTotal = twopi;
       }
       solid = new G4Polyhedra(sname, solParam[0], phiTotal, G4int(solParam[2]),
-                              nplanes, &((*z_p)[0]), &((*rmin_p)[0]),
+                              (G4int)nplanes, &((*z_p)[0]), &((*rmin_p)[0]),
                               &((*rmax_p)[0]));
     }
     else
@@ -491,35 +491,35 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
         phiTotal = twopi;
       }
       solid = new G4Polyhedra(sname, solParam[0], phiTotal, G4int(solParam[2]),
-                              nplanes, &((*R_c)[0]), &((*Z_c)[0]));
+                              (G4int)nplanes, &((*R_c)[0]), &((*Z_c)[0]));
     }
   }
   else if(stype == "ELLIPTICALTUBE")
   {
-    CheckNoSolidParams(stype, 3, solParam.size());
+    CheckNoSolidParams(stype, 3, (G4int)solParam.size());
     solid = new G4EllipticalTube(sname, solParam[0], solParam[1], solParam[2]);
   }
   else if(stype == "ELLIPSOID")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     solid = new G4Ellipsoid(sname, solParam[0], solParam[1], solParam[2],
                             solParam[3], solParam[4]);
   }
   else if(stype == "ELLIPTICALCONE")
   {
-    CheckNoSolidParams(stype, 4, solParam.size());
+    CheckNoSolidParams(stype, 4, (G4int)solParam.size());
     solid = new G4EllipticalCone(sname, solParam[0], solParam[1], solParam[2],
                                  solParam[3]);
   }
   else if(stype == "HYPE")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     solid = new G4Hype(sname, solParam[0], solParam[1], solParam[2],
                        solParam[3], solParam[4]);
   }
   else if(stype == "TET")
   {
-    CheckNoSolidParams(stype, 12, solParam.size());
+    CheckNoSolidParams(stype, 12, (G4int)solParam.size());
     G4ThreeVector anchor(solParam[0], solParam[1], solParam[2]);
     G4ThreeVector p2(solParam[3], solParam[4], solParam[5]);
     G4ThreeVector p3(solParam[6], solParam[7], solParam[8]);
@@ -528,13 +528,13 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "TWISTEDBOX")
   {
-    CheckNoSolidParams(stype, 4, solParam.size());
+    CheckNoSolidParams(stype, 4, (G4int)solParam.size());
     solid = new G4TwistedBox(sname, solParam[0], solParam[1], solParam[2],
                              solParam[3]);
   }
   else if(stype == "TWISTEDTRAP")
   {
-    CheckNoSolidParams(stype, 11, solParam.size());
+    CheckNoSolidParams(stype, 11, (G4int)solParam.size());
     solid =
       new G4TwistedTrap(sname, solParam[0], solParam[1], solParam[2],
                         solParam[3], solParam[4], solParam[5], solParam[6],
@@ -542,7 +542,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "TWISTEDTRD")
   {
-    CheckNoSolidParams(stype, 6, solParam.size());
+    CheckNoSolidParams(stype, 6, (G4int)solParam.size());
     solid = new G4TwistedTrd(sname, solParam[0], solParam[1], solParam[2],
                              solParam[3], solParam[4], solParam[5]);
   }
@@ -561,7 +561,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid(const G4tgrSolid* sol)
   }
   else if(stype == "TWISTEDTUBS")
   {
-    CheckNoSolidParams(stype, 5, solParam.size());
+    CheckNoSolidParams(stype, 5, (G4int)solParam.size());
     G4double phiTotal = solParam[4];
     if(std::fabs(phiTotal - twopi) < angularTolerance)
     {

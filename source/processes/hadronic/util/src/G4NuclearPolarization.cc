@@ -49,6 +49,7 @@ G4NuclearPolarization::G4NuclearPolarization(G4int Z, G4int A, G4double exc)
 G4NuclearPolarization::~G4NuclearPolarization()
 {
   //G4cout << "NP: delete " << this << G4endl;
+  Clean();
 }
 
 void G4NuclearPolarization::Clean()

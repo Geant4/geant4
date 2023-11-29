@@ -41,11 +41,9 @@ class G4MIRDSpleen: public G4VOrgan
 {
 public:
 
-  G4MIRDSpleen();
-  ~G4MIRDSpleen();
+  G4MIRDSpleen()= default;
+  ~G4MIRDSpleen() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
-				    const G4String&, G4bool, G4bool);
- 
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

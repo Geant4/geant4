@@ -102,7 +102,7 @@ G4MicroElecInelasticModel::G4MicroElecInelasticModel(const G4ParticleDefinition*
 G4MicroElecInelasticModel::~G4MicroElecInelasticModel()
 {
   // Cross section
-  for (auto pos : tableData)
+  for (auto & pos : tableData)
   {
     G4MicroElecCrossSectionDataSet* table = pos.second;
     delete table;
@@ -134,9 +134,9 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
   G4String proton = protonDef->GetParticleName();;
   
   G4double scaleFactor = 1e-18 * cm *cm;
-  
-  char *path = std::getenv("G4LEDATA");
-  
+
+  const char* path = G4FindDataDir("G4LEDATA");
+
   // *** ELECTRON
   tableFile[electron] = fileElectron;  
   lowEnergyLimit[electron] = 16.7 * eV;
@@ -464,8 +464,8 @@ void G4MicroElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
     }
     
     // sample deexcitation
-    G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries
-    G4int secNumberFinal = 0; // So I'll make the difference and then sum the energies
+    std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
+    std::size_t secNumberFinal = 0; // So I'll make the difference and then sum the energies
     
     //SI: additional protection if tcs interpolation method is modified
     if (k<bindingEnergy) return;
@@ -535,7 +535,7 @@ void G4MicroElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
     
     // note that secondaryKinetic is the energy of the delta ray, not of all secondaries.
     G4double deexSecEnergy = 0;
-    for (G4int j=secNumberInit; j < secNumberFinal; ++j) {
+    for (std::size_t j=secNumberInit; j < secNumberFinal; ++j) {
       deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();}
     
     fParticleChangeForGamma->SetProposedKineticEnergy(ekin-bindingEnergy-secondaryKinetic);
@@ -804,20 +804,20 @@ G4int G4MicroElecInelasticModel::RandomSelect(G4double k, const G4String& partic
   G4int level = 0;
  
   auto pos = tableData.find(particle); 
-  if (pos != tableData.end())
+  if (pos != tableData.cend())
   {
     G4MicroElecCrossSectionDataSet* table = pos->second;
     
     if (table != nullptr)
     {
       G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-      const size_t n(table->NumberOfComponents());
-      size_t i(n);
+      const G4int n = (G4int)table->NumberOfComponents();
+      G4int i(n);
       G4double value = 0.;
       
       while (i>0)
       {
-        i--;
+        --i;
         valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
         value += valuesBuffer[i];
       }
@@ -828,7 +828,7 @@ G4int G4MicroElecInelasticModel::RandomSelect(G4double k, const G4String& partic
       
       while (i > 0)
       {
-        i--;
+        --i;
         
         if (valuesBuffer[i] > value)
         {

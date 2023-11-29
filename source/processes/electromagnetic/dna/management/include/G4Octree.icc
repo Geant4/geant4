@@ -207,7 +207,7 @@ void OCTREE::Node::init_internal(
 {
     std::array<NodeVector, 8> childVectors;
     std::array<G4DNABoundingBox, 8> boxes = fBigVolume.partition();
-    std::array<Node*, 8> children;
+    std::array<Node*, 8> children{};
     for (size_t child = 0; child < 8; ++child)
     {
         NodeVector& childVector = childVectors[child];
@@ -277,7 +277,7 @@ G4bool OCTREE::Node::radiusNeighbors(const Point& query,
     else if (fNodeType == NodeTypes::MAX_DEPTH_LEAF)
     {
         NodeVector& children = *static_cast<NodeVector*>(fpValue);
-        for (auto child : children)
+        for (auto & child : children)
         {
             const Point& point = std::get<1>(child);
             //if (this->fBigVolume.contains(query, point, radius))

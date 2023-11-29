@@ -45,24 +45,25 @@ class G4VTFileManager : public G4VFileManager,
   public:
     explicit G4VTFileManager(const G4AnalysisManagerState& state)
       : G4VFileManager(state), G4TFileManager<FT>(state) {}
-    virtual ~G4VTFileManager() = default;
+    ~G4VTFileManager() override = default;
 
     using G4VFileManager::WriteFile;
     using G4VFileManager::CloseFile;
 
     // Methods applied to file per name
-    virtual G4bool CreateFile(const G4String& fileName) final;
-    virtual G4bool WriteFile(const G4String& fileName) final;
-    virtual G4bool CloseFile(const G4String& fileName) final;
-    virtual G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) final;
+    G4bool CreateFile(const G4String& fileName) final;
+    G4bool WriteFile(const G4String& fileName) final;
+    G4bool CloseFile(const G4String& fileName) final;
+    G4bool SetIsEmpty(const G4String& fileName, G4bool isEmpty) final;
 
     // Methods applied to all registered files
-    virtual G4bool WriteFiles() final;
-    virtual G4bool CloseFiles() final;
-    virtual G4bool DeleteEmptyFiles() final;
+    G4bool OpenFiles() final;
+    G4bool WriteFiles() final;
+    G4bool CloseFiles() final;
+    G4bool DeleteEmptyFiles() final;
 
     // Clear all data
-    virtual void Clear() final;
+    void Clear() final;
 
     // Get method
     std::shared_ptr<FT> GetFile() const;
@@ -103,6 +104,14 @@ inline
 G4bool G4VTFileManager<FT>::SetIsEmpty(const G4String& fileName, G4bool isEmpty)
 {
   return G4TFileManager<FT>::SetIsEmpty(fileName, isEmpty);
+}
+
+//_____________________________________________________________________________
+template <typename FT>
+inline
+G4bool G4VTFileManager<FT>::OpenFiles()
+{
+  return G4TFileManager<FT>::OpenFiles();
 }
 
 //_____________________________________________________________________________

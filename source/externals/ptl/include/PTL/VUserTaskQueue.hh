@@ -29,14 +29,12 @@
 
 #include "PTL/Globals.hh"
 #include "PTL/Threading.hh"
-#include "PTL/Types.hh"
 
-#include <cstddef>
+#include <atomic>
+#include <cstdint>
+#include <functional>
 #include <memory>
 #include <set>
-#include <tuple>
-#include <type_traits>
-#include <utility>
 
 namespace PTL
 {
@@ -47,11 +45,11 @@ class ThreadData;
 class VUserTaskQueue
 {
 public:
-    typedef std::shared_ptr<VTask> task_pointer;
-    typedef std::atomic<intmax_t>  AtomicInt;
-    typedef uintmax_t              size_type;
-    typedef std::function<void()>  function_type;
-    typedef std::set<ThreadId>     ThreadIdSet;
+    using task_pointer  = std::shared_ptr<VTask>;
+    using AtomicInt     = std::atomic<intmax_t>;
+    using size_type     = uintmax_t;
+    using function_type = std::function<void()>;
+    using ThreadIdSet   = std::set<ThreadId>;
 
 public:
     // Constructor - accepting the number of workers

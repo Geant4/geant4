@@ -23,27 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef eRositaSteppingAction_h
 #define eRositaSteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class eRositaSteppingAction : public G4UserSteppingAction
-{
-  public:
-    eRositaSteppingAction();
-   ~eRositaSteppingAction(){};
-
-    //void UserSteppingAction(const G4Step*);
+class eRositaSteppingAction : public G4UserSteppingAction {
+public:
+    explicit eRositaSteppingAction();
+    
+    ~eRositaSteppingAction() override;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

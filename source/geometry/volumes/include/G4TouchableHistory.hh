@@ -58,26 +58,26 @@ class G4TouchableHistory : public G4VTouchable
   G4TouchableHistory( const G4NavigationHistory& history );
     // Copy constructor
 
-  ~G4TouchableHistory();
+  ~G4TouchableHistory() override;
     // Destructor
 
-  inline G4VPhysicalVolume* GetVolume( G4int depth = 0 ) const;
-  inline G4VSolid* GetSolid( G4int depth = 0 ) const;
-  const G4ThreeVector& GetTranslation( G4int depth = 0 ) const;
-  const G4RotationMatrix* GetRotation( G4int depth = 0 ) const;
+  inline G4VPhysicalVolume* GetVolume( G4int depth = 0 ) const override;
+  inline G4VSolid* GetSolid( G4int depth = 0 ) const override;
+  const G4ThreeVector& GetTranslation( G4int depth = 0 ) const override;
+  const G4RotationMatrix* GetRotation( G4int depth = 0 ) const override;
 
-  inline G4int GetReplicaNumber( G4int depth = 0 ) const;
-  inline G4int GetHistoryDepth()  const;
-  G4int MoveUpHistory( G4int num_levels = 1 );
+  inline G4int GetReplicaNumber( G4int depth = 0 ) const override;
+  inline G4int GetHistoryDepth()  const override;
+  G4int MoveUpHistory( G4int num_levels = 1 ) override;
     // Access methods for touchables with history
 
   void  UpdateYourself( G4VPhysicalVolume*   pPhysVol,
-                        const G4NavigationHistory* history = nullptr ); 
+                        const G4NavigationHistory* history = nullptr ) override; 
     // Update methods for touchables with history
 
  public:  // without description
 
-  inline const G4NavigationHistory* GetHistory() const;
+  inline const G4NavigationHistory* GetHistory() const override;
     // Should this method be "deprecated" ?
     // it is used now in G4Navigator::LocateGlobalPointAndSetup
 

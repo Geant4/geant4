@@ -44,15 +44,11 @@ G4UnitsTable* G4UnitDefinition::pUnitsTableShadow = nullptr;
 
 // --------------------------------------------------------------------
 
-G4UnitsTable::G4UnitsTable() {}
-
-// --------------------------------------------------------------------
-
 G4UnitsTable::~G4UnitsTable()
 {
-  for(auto itr = cbegin(); itr != cend(); ++itr)
+  for(const auto itr : *this)
   {
-    delete *itr;
+    delete itr;
   }
   clear();
 }
@@ -109,10 +105,6 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name, const G4String& symbol,
 
 // --------------------------------------------------------------------
 
-G4UnitDefinition::~G4UnitDefinition() {}
-
-// --------------------------------------------------------------------
-
 G4UnitDefinition::G4UnitDefinition(const G4UnitDefinition& right)
 {
   *this = right;
@@ -154,7 +146,7 @@ G4UnitsTable& G4UnitDefinition::GetUnitsTable()
   {
     pUnitsTable = new G4UnitsTable;
   }
-  if(pUnitsTable->size() == 0)
+  if(pUnitsTable->empty())
   {
     BuildUnitsTable();
   }
@@ -175,10 +167,10 @@ G4bool G4UnitDefinition::IsUnitDefined(const G4String& str)
   for(std::size_t i = 0; i < (GetUnitsTable()).size(); ++i)
   {
     G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
-    for(std::size_t j = 0; j < units.size(); ++j)
+    for(auto& unit : units)
     {
-      name   = units[j]->GetName();
-      symbol = units[j]->GetSymbol();
+      name   = unit->GetName();
+      symbol = unit->GetSymbol();
       if(str == name || str == symbol)
       {
         return true;
@@ -196,13 +188,13 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
   for(std::size_t i = 0; i < (GetUnitsTable()).size(); ++i)
   {
     G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
-    for(std::size_t j = 0; j < units.size(); ++j)
+    for(auto& unit : units)
     {
-      name   = units[j]->GetName();
-      symbol = units[j]->GetSymbol();
+      name   = unit->GetName();
+      symbol = unit->GetSymbol();
       if(str == name || str == symbol)
       {
-        return units[j]->GetValue();
+        return unit->GetValue();
       }
     }
   }
@@ -221,10 +213,10 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
   for(std::size_t i = 0; i < (GetUnitsTable()).size(); ++i)
   {
     G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
-    for(std::size_t j = 0; j < units.size(); ++j)
+    for(auto& unit : units)
     {
-      name   = units[j]->GetName();
-      symbol = units[j]->GetSymbol();
+      name   = unit->GetName();
+      symbol = unit->GetSymbol();
       if(str == name || str == symbol)
       {
         return (*pUnitsTable)[i]->GetName();
@@ -467,16 +459,15 @@ void G4UnitDefinition::ClearUnitsTable()
 
 G4UnitsCategory::G4UnitsCategory(const G4String& name)
   : Name(name)
-  , UnitsList()
 {}
 
 // --------------------------------------------------------------------
 
 G4UnitsCategory::~G4UnitsCategory()
 {
-  for(std::size_t i = 0; i < UnitsList.size(); ++i)
+  for(auto& i : UnitsList)
   {
-    delete UnitsList[i];
+    delete i;
   }
   UnitsList.clear();
 }
@@ -521,9 +512,9 @@ G4bool G4UnitsCategory::operator!=(const G4UnitsCategory& right) const
 void G4UnitsCategory::PrintCategory()
 {
   G4cout << "\n  category: " << Name << G4endl;
-  for(std::size_t i = 0; i < UnitsList.size(); ++i)
+  for(auto& i : UnitsList)
   {
-    UnitsList[i]->PrintDefinition();
+    i->PrintDefinition();
   }
 }
 
@@ -585,10 +576,6 @@ G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
 
 // --------------------------------------------------------------------
 
-G4BestUnit::~G4BestUnit() {}
-
-// --------------------------------------------------------------------
-
 G4BestUnit::operator G4String() const
 {
   std::ostringstream oss;
@@ -598,13 +585,13 @@ G4BestUnit::operator G4String() const
 
 // --------------------------------------------------------------------
 
-std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
+std::ostream& operator<<(std::ostream& flux, const G4BestUnit& a)
 {
   G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
   G4UnitsContainer& List = theUnitsTable[a.IndexOfCategory]->GetUnitsList();
   G4int len              = theUnitsTable[a.IndexOfCategory]->GetSymbMxLen();
 
-  G4int ksup(-1), kinf(-1);
+  G4long ksup(-1), kinf(-1);
   G4double umax(0.), umin(DBL_MAX);
   G4double rsup(DBL_MAX), rinf(0.);
 
@@ -661,7 +648,7 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
     }
   }
 
-  G4int index = ksup;
+  G4long index = ksup;
   if(index == -1)
   {
     index = kinf;
@@ -693,16 +680,16 @@ void G4UnitsTable::Synchronize()
 {
   G4UnitsTable* orig = &(G4UnitDefinition::GetUnitsTableShadow());
   if(this == orig)
-    return;
-
-  for(auto utItr = orig->cbegin(); utItr != orig->cend(); ++utItr)
   {
-    G4UnitsCategory* category = *utItr;
+    return;
+  }
+
+  for(const auto category : *orig)
+  {
     G4String catName          = category->GetName();
     G4UnitsContainer* units   = &(category->GetUnitsList());
-    for(auto ucItr = units->cbegin(); ucItr != units->cend(); ++ucItr)
+    for(const auto unit : *units)
     {
-      G4UnitDefinition* unit = *ucItr;
       if(!Contains(unit, catName))
       {
         new G4UnitDefinition(unit->GetName(), unit->GetSymbol(), catName,
@@ -717,17 +704,18 @@ void G4UnitsTable::Synchronize()
 G4bool G4UnitsTable::Contains(const G4UnitDefinition* unit,
                               const G4String& categoryName)
 {
-  for(auto utItr = cbegin(); utItr != cend(); ++utItr)
+  for(const auto category : *this)
   {
-    G4UnitsCategory* category = *utItr;
-    G4String catName          = category->GetName();
+    G4String catName = category->GetName();
     if(catName != categoryName)
-      continue;
-    G4UnitsContainer* units = &(category->GetUnitsList());
-    for(auto ucItr = units->cbegin(); ucItr != units->cend(); ++ucItr)
     {
-      if((*ucItr)->GetName() == unit->GetName() &&
-         (*ucItr)->GetSymbol() == unit->GetSymbol())
+      continue;
+    }
+    G4UnitsContainer* units = &(category->GetUnitsList());
+    for(const auto ucItr : *units)
+    {
+      if(ucItr->GetName() == unit->GetName() &&
+         ucItr->GetSymbol() == unit->GetSymbol())
       {
         return true;
       }

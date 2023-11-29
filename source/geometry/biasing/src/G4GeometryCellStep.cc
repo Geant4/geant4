@@ -37,5 +37,4 @@ G4GeometryCellStep::G4GeometryCellStep(const G4GeometryCell& preCell,
 }
 
 G4GeometryCellStep::~G4GeometryCellStep()
-{
-}
+= default;

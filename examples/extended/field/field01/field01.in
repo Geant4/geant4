@@ -40,9 +40,38 @@
 #
 #
 # Control the mininum step size for integration in field
+#     with a value of 10 um ==> accept any amount of integration error in smaller steps!
 #
-/field/setMinStep 0.1 mm  
+/field/setMinStep 0.01 mm  
 #
+# Control the (relative) accuracy of the integration.
+# ---------------------------------------------------
+# 1. DeltaOneStep: 
+## Errors of this size in an integration sub-step are acceptable except when 
+#   it is limited by the relative integration error limits (epsilon_min/max)
+#
+/field/setDeltaOneStep  2.0e-05 mm
+#
+#    DeltaOneStep is used to obtain a relative accuracy for the step:
+#       relative_eps = DeltaOneStep / step-length
+#  To ensure robustness the value of this is kept within the following limits: 
+# 2. Epsilon Min:  the minimum value of the relative integration error (EpsilonMin) -
+#
+/field/setEpsilonMin    5.0e-06
+# 
+#  This Limit to ensure that large steps do NOT result in a very low value of relative_eps 
+#   (ie very high accuracy) that would result in integration requiring many steps and CPU cycles.
+#  Note: it is a dimensionless number
+#
+# 3. Epsilon Max:
+#
+/field/setEpsilonMax    5.0e-04
+# 
+# A minimum value of the relative integration error (EpsilonMax). Also a dimensionless number");
+#  This Limit serves to ensure that a very small step does NOT result in a large relative error 
+#  (ie low accuracy) and unreliable results."); 
+#
+
 # Initialise the field classes - parameters, stepper, ...
 #
 /field/update

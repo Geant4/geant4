@@ -47,7 +47,7 @@ class StepMax : public G4VDiscreteProcess
   public:
 
    StepMax(const G4String& processName = "UserMaxStep");
-   ~StepMax();
+  ~StepMax();
 
    G4bool IsApplicable(const G4ParticleDefinition&) override;
 
@@ -65,9 +65,9 @@ class StepMax : public G4VDiscreteProcess
 
   private:
 
-   G4double fMaxChargedStep;
+   G4double fMaxChargedStep = DBL_MAX;
      
-   StepMaxMessenger* fMess;
+   StepMaxMessenger* fMess = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

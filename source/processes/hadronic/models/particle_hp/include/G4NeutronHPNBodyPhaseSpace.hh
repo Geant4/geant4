@@ -29,4 +29,4 @@
 #include "G4ParticleHPNBodyPhaseSpace.hh"
 using G4NeutronHPNBodyPhaseSpace = G4ParticleHPNBodyPhaseSpace;
 
-#endif 
+#endif

@@ -55,21 +55,21 @@ class G4NystromRK4 : public G4MagIntegratorStepper
     G4NystromRK4(G4Mag_EqRhs* EquationMotion, 
                  G4double distanceConstField = 0.0); 
       // Can be used only for Magnetic Fields - and for 6 variables (x,p)
-    ~G4NystromRK4() {}
+   ~G4NystromRK4() override = default;
    
-    virtual void Stepper(const G4double y[],
-                         const G4double dydx[],
-                         G4double hstep,
-                         G4double yOut[],
-                         G4double yError[]) override;
+    void Stepper(const G4double y[],
+                 const G4double dydx[],
+                       G4double hstep,
+                       G4double yOut[],
+                       G4double yError[]) override;
       // Single call for integration result and error
       // Provides error via analytical method
 
     void SetDistanceForConstantField(G4double length); 
     G4double GetDistanceForConstantField() const; 
    
-    virtual G4int IntegratorOrder() const override { return 4; }
-    virtual G4double DistChord() const override; 
+    G4int IntegratorOrder() const override { return 4; }
+    G4double DistChord() const override; 
   
   private:
 

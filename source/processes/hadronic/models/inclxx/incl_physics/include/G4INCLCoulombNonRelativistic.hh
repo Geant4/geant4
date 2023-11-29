@@ -100,8 +100,9 @@ namespace G4INCL {
         const G4double nucleusMass = n->getTableMass();
         const G4double reducedMass = particleMass*nucleusMass/(particleMass+nucleusMass);
         const G4double kineticEnergyInCM = kineticEnergy * reducedMass / particleMass;
-        const G4double theMinimumDistance = PhysicalConstants::eSquared * p.theZ * n->getZ() * particleMass
-          / (kineticEnergyInCM * reducedMass);
+        const G4double theMinimumDistance = ( kineticEnergyInCM <= 0.0 ? 0.0 :    
+					      PhysicalConstants::eSquared * p.theZ * n->getZ() * particleMass
+					      / (kineticEnergyInCM * reducedMass) );
         INCL_DEBUG("Minimum distance of approach due to Coulomb = " << theMinimumDistance << '\n');
         return theMinimumDistance;
       }

@@ -69,17 +69,17 @@ G4NeutrinoElectronProcess::G4NeutrinoElectronProcess( G4String anEnvelopeName, c
   lowestEnergy = 1.*keV;
   fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;
-  fTotXsc = nullptr; // new G4NeutrinoElectronTotXsc();
-  fNuEleCcBias=1.;
-  fNuEleNcBias=1.;
-  fNuEleTotXscBias=1.;
+  fTotXsc = new G4NeutrinoElectronTotXsc();
+  fNuEleCcBias     = 1.;
+  fNuEleNcBias     = 1.;
+  fNuEleTotXscBias = 1.;
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
 }
 
 G4NeutrinoElectronProcess::~G4NeutrinoElectronProcess()
 {
-  // if( fTotXsc ) delete fTotXsc;
+  if( fTotXsc ) delete fTotXsc;
 }
 
 ///////////////////////////////////////////////////////
@@ -87,20 +87,25 @@ G4NeutrinoElectronProcess::~G4NeutrinoElectronProcess()
 void G4NeutrinoElectronProcess::SetBiasingFactor(G4double bf)
 {
   fNuEleTotXscBias = bf;
-
-  fTotXsc = new G4NeutrinoElectronTotXsc();
-  // fTotXsc->SetBiasingFactor(bf);
 }
 
 ///////////////////////////////////////////////////////
 
 void G4NeutrinoElectronProcess::SetBiasingFactors(G4double bfCc, G4double bfNc)
 {
-  fNuEleCcBias=bfCc;
-  fNuEleNcBias=bfNc;
+  fNuEleCcBias = bfCc;
+  fNuEleNcBias = bfNc;
+  fNuEleTotXscBias = std::max( fNuEleCcBias, fNuEleNcBias );
+}
 
-  fTotXsc = new G4NeutrinoElectronTotXsc();
-  fTotXsc->SetBiasingFactors(bfCc, bfNc);
+///////////////////////////////////////////////
+
+G4double G4NeutrinoElectronProcess::PostStepGetPhysicalInteractionLength( const G4Track& track,
+                                      G4double previousStepSize,
+                                      G4ForceCondition* condition )
+{
+  return G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(  track,
+                                       previousStepSize,  condition );
 }
 
 //////////////////////////////////////////////////

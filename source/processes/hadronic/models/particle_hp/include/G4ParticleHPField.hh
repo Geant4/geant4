@@ -35,54 +35,52 @@
 class G4ParticleHPField
 {
   public:
-  
-  G4ParticleHPField();
-  
-  ~G4ParticleHPField();
-  
-  inline void InitY(G4int i, G4int n)
-  {
-    Check(i);
-    theData[i].InitY(n);
-  }
-  inline void SetData(G4int i, G4double x, G4int j, G4double y) 
-  { 
-    Check(i);
-    theData[i].SetData(x, j, y);
-  }
-  inline void SetEnergy(G4int i, G4double e)
-  {
-    Check(i);
-    theData[i].SetX(e);
-  }
-  inline void SetX(G4int i, G4double e)
-  {
-    Check(i);
-    theData[i].SetX(e);
-  }
-  inline void SetY(G4int i, G4int j, G4double x)
-  {
-    Check(i);
-    theData[i].SetY(j, x);
-  }
-  inline G4double GetEnergy(G4int i) { return theData[i].GetX(); }
-  inline G4double GetX(G4int i) { return theData[i].GetX(); }
-  inline G4double GetY(G4int i, G4int j) { return theData[i].GetY(j); }
-  inline G4ParticleHPFieldPoint & GetPoint(G4int i) { return theData[i]; }
-  
-  G4double GetY(G4double e, G4int j);
+    G4ParticleHPField();
 
-  inline G4int GetFieldLength() {return nEntries;}
+    ~G4ParticleHPField();
 
-  void Dump();
+    inline void InitY(G4int i, G4int n)
+    {
+      Check(i);
+      theData[i].InitY(n);
+    }
+    inline void SetData(G4int i, G4double x, G4int j, G4double y)
+    {
+      Check(i);
+      theData[i].SetData(x, j, y);
+    }
+    inline void SetEnergy(G4int i, G4double e)
+    {
+      Check(i);
+      theData[i].SetX(e);
+    }
+    inline void SetX(G4int i, G4double e)
+    {
+      Check(i);
+      theData[i].SetX(e);
+    }
+    inline void SetY(G4int i, G4int j, G4double x)
+    {
+      Check(i);
+      theData[i].SetY(j, x);
+    }
+    inline G4double GetEnergy(G4int i) { return theData[i].GetX(); }
+    inline G4double GetX(G4int i) { return theData[i].GetX(); }
+    inline G4double GetY(G4int i, G4int j) { return theData[i].GetY(j); }
+    inline G4ParticleHPFieldPoint& GetPoint(G4int i) { return theData[i]; }
+
+    G4double GetY(G4double e, G4int j);
+
+    inline G4int GetFieldLength() { return nEntries; }
+
+    void Dump();
 
   private:
-  
-  void Check(G4int i);
-  
-  G4ParticleHPFieldPoint * theData;
-  G4int nEntries;
-  G4int nPoints;
+    void Check(G4int i);
+
+    G4ParticleHPFieldPoint* theData;
+    G4int nEntries;
+    G4int nPoints;
 };
 
 #endif

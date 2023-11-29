@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4Accumulable.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,21 +49,25 @@ class RunAction : public G4UserRunAction
 {
 public:
   RunAction(HistoManager*);
-  virtual ~RunAction();
+  ~RunAction() override;
 
-  virtual void BeginOfRunAction(const G4Run*);
-  virtual void   EndOfRunAction(const G4Run*);
-    
-  void FillPerEvent(G4double, G4double, G4double, G4double); 
+  void BeginOfRunAction(const G4Run*) override;
+  void   EndOfRunAction(const G4Run*) override;
+
+  void FillPerEvent(G4double, G4double, G4double, G4double);
 
 private:
-  HistoManager* fHistoManager;
+  HistoManager* fHistoManager = nullptr;
 
-  G4double fSumEAbs, fSum2EAbs;
-  G4double fSumEGap, fSum2EGap;
-    
-  G4double fSumLAbs, fSum2LAbs;
-  G4double fSumLGap, fSum2LGap;    
+  G4Accumulable<G4double> fSumEAbs = 0.;
+  G4Accumulable<G4double> fSum2EAbs = 0.;
+  G4Accumulable<G4double> fSumEGap = 0.;
+  G4Accumulable<G4double> fSum2EGap = 0.;
+
+  G4Accumulable<G4double> fSumLAbs = 0.;
+  G4Accumulable<G4double> fSum2LAbs = 0.;
+  G4Accumulable<G4double> fSumLGap = 0.;
+  G4Accumulable<G4double> fSum2LGap = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

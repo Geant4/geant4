@@ -57,8 +57,9 @@
                const G4String& showLabel): 
       m_name(name),m_value(value),
       m_showLabel(showLabel){};
-    G4AttValue(){};
-    
+    G4AttValue()= default;
+    ~G4AttValue()= default;
+
     const G4String& GetName()const{return m_name;};
     const G4String& GetValue()const{return m_value;};
     const G4String& GetShowLabel()const{return m_showLabel;};

@@ -1,25 +1,85 @@
--------------------------------------------------------------------
+# Category transport History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
+## 2023-01-26 John Apostolakis (transport-V11-01-02)
+- Added a method to set both warning & important energies in G4TransporationParameters
+  Added method to report lock errors.
+  Improve reporting of inconsistent changes of 'warning' & 'important' energies
+    (not only enforce warning_E < important_E but also warn about violations.)
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-01-25 John Apostolakis (transport-V11-01-01)
+- Fix unwanted change of default looper parameters.
+  ( Reversed inadvertent creation of G4TransportationParameters in
+    calls to G4Transportation constructor.)
 
-May 5th 2022, Gabriele Cosmo transport-V10-07-04
-----------------------------
-- G4Transportation, G4CoupledTransportation: fixed misuse of bitwise '|'
+## 2023-01-09 Jonas Hahnfeld (transport-V11-01-00)
+- Fix compilation warning about unused variable without `G4VERBOSE`.
+
+## 2022-11-25 Gabriele Cosmo (transport-V11-00-10)
+- Removed debug printouts in G4Transportation.
+
+## 2022-11-23 Gabriele Cosmo (transport-V11-00-09)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-10 John Apostolakis (transport-V11-00-08)
+- New class G4TransporationParameters to hold looper parameters & others.
+  This is a class to be created in master and hold the values of all looper 
+  parameters for G4Transportation and derived classes.
+  * G4Transporation's  constructor checks for the existence of a default 
+    instance. If found, its values will be assigned to the corresponding
+    data members of G4Transporation.
+    This behaviour is inherited by subclasses (using this constructor).
+  * The (default) 'instance' of G4TransportationParameters should be
+    shared by all threads, and used for all particle types.
+    These values could be subsequently changed - e.g. in User Actions.
+  * The G4TransporationParameters object (instance) is current unique.
+    ( Future extensions are envisioned that allow an object of this  
+      to be associated with a separate instance of G4Transportation assigned 
+      to one or more particle types, e.g. electrons, or muons and positrons. )
+
+## 2022-10-05 Gabriele Cosmo (transport-V11-00-07)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used.
+
+## 2022-05-18 Gabriele Cosmo (transport-V11-00-06)
+- `G4Transportation`, `G4CoupledTransportation`: fixed misuse of bitwise '|'
   operator instead of logical.
+
+## 2022-05-11 Jonas Hahnfeld (transport-V11-00-05)
+- `G4Transportation`: Remove non-working check for any field
+- Remove `PUBLIC` dependency on `G4magneticfield`, `G4navigation`
+
+## 2022-04-24 Vladimir Ivanchenko (transport-V11-00-04)
+- moved G4UserSpecialCuts to physics_lists/constructors/limiters
+- GNUmakefile, source.cmake - removed dependence on electromagnetic/utils 
+
+## 2022-04-20 Jonas Hahnfeld (transport-V11-00-03)
+- `G4CoupledTransportation`: Set flags from `G4Transportation`
+  * Replace `fFirstStepInAnyVolume` with `fFirstStepInVolume`
+  * Replace `fAnyGeometryLimitedStep` with `fGeometryLimitedStep`
+  * Remove wrong check in case of zero steps
+- `G4Transportation`:
+  * Remove wrong check in case of zero steps
+  * Set step status on volume boundary
+
+## 2022-01-17 Jonas Hahnfeld (transport-V11-00-02)
+- Remove useless `const_cast` of `G4VSensitiveDetector`
+
+## 2022-01-05 Jonas Hahnfeld (transport-V11-00-01)
+- `G4CoupledTransportation`:
+  * Use new constant `G4TransportationManager::kMassNavigatorId`
+  * Inherit from `G4Transportation`, remove duplicated variables and methods
+
+## 2021-12-10 Ben Morgan (transport-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 Sep 23rd 2021, Alberto Ribon transport-V10-07-03
 ----------------------------

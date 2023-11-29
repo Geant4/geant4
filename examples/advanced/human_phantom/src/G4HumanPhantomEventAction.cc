@@ -37,64 +37,60 @@
 #include "G4RunManager.hh"
 
 G4HumanPhantomEventAction::G4HumanPhantomEventAction():
-hitCollectionID(-1)
+fHitCollectionID(-1)
 { 
  
-}
- 
-G4HumanPhantomEventAction::~G4HumanPhantomEventAction()
-{
 }
 
 void G4HumanPhantomEventAction::BeginOfEventAction(const G4Event*)
 {
- energyTotal["logicalHead"]=0.;
- energyTotal["logicalTrunk"]=0.;
- energyTotal["logicalLeftLeg"]=0.;
- energyTotal["logicalRightLeg"]=0.;
- energyTotal["logicalSkull"]=0.;
- energyTotal["logicalLeftArmBone"]=0.;
- energyTotal["logicalRightArmBone"]=0.;
- energyTotal["logicalUpperSpine"]=0.;
- energyTotal["logicalMiddleLowerSpine"]=0.;
- energyTotal["logicalPelvis"]=0.;
- energyTotal["logicalRibCage"]=0.;
- energyTotal["logicalLeftClavicle"]=0.;
- energyTotal["logicalRightClavicle"]=0.;
- energyTotal["logicalLeftLegBone"]=0.;
- energyTotal["logicalRightLegBone"]=0.;
- energyTotal["logicalLeftScapula"]=0.; 
- energyTotal["logicalRightScapula"]=0.;
- energyTotal["logicalHeart"]=0.;
- energyTotal["logicalThyroid"]=0.;
- energyTotal["logicalThymus"]=0.;
- energyTotal["logicalMaleGenitalia"]=0.;
- energyTotal["logicalBrain"]=0.;
- energyTotal["logicalStomach"]=0.;
- energyTotal["logicalUpperLargeIntestine"]=0.;
- energyTotal["logicalLowerLargeIntestine"]=0.;
- energyTotal["logicalSmallIntestine"]=0;
- energyTotal["logicalSpleen"]=0.;
- energyTotal["logicalPancreas"]=0.;
- energyTotal["logicalLeftKidney"]=0.;
- energyTotal["logicalRightKidney"]=0.;
- energyTotal["logicalUrinaryBladder"]=0.;
- energyTotal["logicalUterus"]=0.;
- energyTotal["logicalLeftLung"]=0.;
- energyTotal["logicalRightLung"]=0.;
- energyTotal["logicalLeftOvary"]=0.;
- energyTotal["logicalRightOvary"]=0.;
- energyTotal["logicalLeftTeste"]=0;
- energyTotal["logicalRightTeste"]=0;
- energyTotal["logicalLeftBreast"]=0.;
- energyTotal["logicalRightBreast"]=0.; 
- energyTotal["logicalLeftAdrenal"]=0.; 
- energyTotal["logicalRightAdrenal"]=0.;
+ fEnergyTotal["logicalHead"]=0.;
+ fEnergyTotal["logicalTrunk"]=0.;
+ fEnergyTotal["logicalLeftLeg"]=0.;
+ fEnergyTotal["logicalRightLeg"]=0.;
+ fEnergyTotal["logicalSkull"]=0.;
+ fEnergyTotal["logicalLeftArmBone"]=0.;
+ fEnergyTotal["logicalRightArmBone"]=0.;
+ fEnergyTotal["logicalUpperSpine"]=0.;
+ fEnergyTotal["logicalMiddleLowerSpine"]=0.;
+ fEnergyTotal["logicalPelvis"]=0.;
+ fEnergyTotal["logicalRibCage"]=0.;
+ fEnergyTotal["logicalLeftClavicle"]=0.;
+ fEnergyTotal["logicalRightClavicle"]=0.;
+ fEnergyTotal["logicalLeftLegBone"]=0.;
+ fEnergyTotal["logicalRightLegBone"]=0.;
+ fEnergyTotal["logicalLeftScapula"]=0.; 
+ fEnergyTotal["logicalRightScapula"]=0.;
+ fEnergyTotal["logicalHeart"]=0.;
+ fEnergyTotal["logicalThyroid"]=0.;
+ fEnergyTotal["logicalThymus"]=0.;
+ fEnergyTotal["logicalMaleGenitalia"]=0.;
+ fEnergyTotal["logicalBrain"]=0.;
+ fEnergyTotal["logicalStomach"]=0.;
+ fEnergyTotal["logicalUpperLargeIntestine"]=0.;
+ fEnergyTotal["logicalLowerLargeIntestine"]=0.;
+ fEnergyTotal["logicalSmallIntestine"]=0;
+ fEnergyTotal["logicalSpleen"]=0.;
+ fEnergyTotal["logicalPancreas"]=0.;
+ fEnergyTotal["logicalLeftKidney"]=0.;
+ fEnergyTotal["logicalRightKidney"]=0.;
+ fEnergyTotal["logicalUrinaryBladder"]=0.;
+ fEnergyTotal["logicalUterus"]=0.;
+ fEnergyTotal["logicalLeftLung"]=0.;
+ fEnergyTotal["logicalRightLung"]=0.;
+ fEnergyTotal["logicalLeftOvary"]=0.;
+ fEnergyTotal["logicalRightOvary"]=0.;
+ fEnergyTotal["logicalLeftTeste"]=0;
+ fEnergyTotal["logicalRightTeste"]=0;
+ fEnergyTotal["logicalLeftBreast"]=0.;
+ fEnergyTotal["logicalRightBreast"]=0.; 
+ fEnergyTotal["logicalLeftAdrenal"]=0.; 
+ fEnergyTotal["logicalRightAdrenal"]=0.;
 
  G4SDManager * SDman = G4SDManager::GetSDMpointer();  
 
-  if (hitCollectionID==-1) {
-    hitCollectionID = SDman->GetCollectionID("HumanPhantomCollection");
+  if (fHitCollectionID==-1) {
+    fHitCollectionID = SDman->GetCollectionID("HumanPhantomCollection");
   }
 }
  
@@ -103,10 +99,10 @@ void G4HumanPhantomEventAction::EndOfEventAction(const G4Event* evt)
 
  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
  
- G4HumanPhantomHitsCollection* HC = 0;
+ G4HumanPhantomHitsCollection* HC = nullptr;
 
  if (HCE)
-     HC = (G4HumanPhantomHitsCollection*)(HCE->GetHC(hitCollectionID));
+     HC = (G4HumanPhantomHitsCollection*)(HCE->GetHC(fHitCollectionID));
 
  if (HC)
 	{
@@ -129,17 +125,17 @@ void G4HumanPhantomEventAction:: Fill(G4String bName,
 				      G4double energyDeposit)
 
 {
- energyTotal[bName] += energyDeposit;
+ fEnergyTotal[bName] += energyDeposit;
 }
 
 void G4HumanPhantomEventAction::totalEventEnergyDeposit() 
 {
 
  G4RunManager* runManager = G4RunManager::GetRunManager();
- G4HumanPhantomRunAction* pointerRun = (G4HumanPhantomRunAction*)(runManager->GetUserRunAction());
+ auto* pointerRun = (G4HumanPhantomRunAction*)(runManager->GetUserRunAction());
 
- std::map<std::string,G4double>::iterator i = energyTotal.begin();
-  std::map<std::string,G4double>::iterator end = energyTotal.end();
+ std::map<std::string,G4double>::iterator i = fEnergyTotal.begin();
+  std::map<std::string,G4double>::iterator end = fEnergyTotal.end();
 
   while(i!=end)
     {

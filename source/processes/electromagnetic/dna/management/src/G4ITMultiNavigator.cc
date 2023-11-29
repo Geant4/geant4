@@ -265,7 +265,7 @@ void G4ITMultiNavigator::PrepareNavigators()
   // Message the transportation-manager to find active navigators
 
   std::vector<G4ITNavigator*>::iterator pNavigatorIter;
-  fNoActiveNavigators=  pTransportManager-> GetNoActiveNavigators();
+  fNoActiveNavigators = (G4int)pTransportManager-> GetNoActiveNavigators();
 
   if( fNoActiveNavigators > fMaxNav )
   {
@@ -573,7 +573,7 @@ G4ITMultiNavigator::PrintLimited()
     { 
       stepLen = fTrueMinStep;     // did not limit (went as far as asked)
     }
-    G4int oldPrec= G4cout.precision(9); 
+    G4long oldPrec= G4cout.precision(9); 
 
     G4cout << std::setw(5) << num  << " "
            << std::setw(12) << stepLen << " "

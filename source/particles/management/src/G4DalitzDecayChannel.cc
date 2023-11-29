@@ -39,11 +39,6 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
-G4DalitzDecayChannel::G4DalitzDecayChannel()
-  : G4VDecayChannel()
-{
-}
-
 G4DalitzDecayChannel::
 G4DalitzDecayChannel(const G4String& theParentName,
                            G4double        theBR,
@@ -59,15 +54,6 @@ G4DalitzDecayChannel(const G4String& theParentName,
   SetDaughter(idGamma, gammaName);
   SetDaughter(idLepton, theLeptonName);
   SetDaughter(idAntiLepton, theAntiLeptonName);
-}
-
-G4DalitzDecayChannel::~G4DalitzDecayChannel()
-{
-}
-
-G4DalitzDecayChannel::G4DalitzDecayChannel(const G4DalitzDecayChannel& right)
-  : G4VDecayChannel(right)
-{
 }
 
 G4DalitzDecayChannel&
@@ -114,7 +100,7 @@ G4DecayProducts* G4DalitzDecayChannel::DecayIt(G4double)
  
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
  
   //daughters' mass
@@ -157,7 +143,7 @@ G4DecayProducts* G4DalitzDecayChannel::DecayIt(G4double)
                            costheta);
 
   // create G4DynamicParticle for gamma 
-  G4DynamicParticle* gammaparticle
+  auto  gammaparticle
     = new G4DynamicParticle(G4MT_daughters[idGamma] , gdirection, Pgamma);
 
   // calculate beta of (l+ l-)system
@@ -174,10 +160,10 @@ G4DecayProducts* G4DalitzDecayChannel::DecayIt(G4double)
                            sintheta*std::sin(phi),
                            costheta);
   // create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
-  G4DynamicParticle* leptonparticle 
+  auto  leptonparticle 
     = new G4DynamicParticle(G4MT_daughters[idLepton] , 
                             ldirection, Elepton-leptonmass );
-  G4DynamicParticle* antileptonparticle 
+  auto  antileptonparticle 
     = new G4DynamicParticle(G4MT_daughters[idAntiLepton] , 
                             -1.0*ldirection, Elepton-leptonmass );
   //boost leptons in the rest frame of the parent 
@@ -193,7 +179,7 @@ G4DecayProducts* G4DalitzDecayChannel::DecayIt(G4double)
   antileptonparticle->Set4Momentum(p4);
 
   //create G4Decayproducts
-  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
+  auto  products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
   products->PushProducts(gammaparticle);
   products->PushProducts(leptonparticle);

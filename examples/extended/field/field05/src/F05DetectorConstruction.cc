@@ -166,6 +166,7 @@ void F05DetectorConstruction::ConstructSDandField()
      G4double deltaChord        = 3.0*mm;
      chordFinder->SetDeltaChord( deltaChord );
 
+     // Maximum allowed integration error in one integration sub-step
      G4double deltaOneStep      = 0.01*mm;
      fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
 
@@ -178,8 +179,9 @@ void F05DetectorConstruction::ConstructSDandField()
      G4PropagatorInField* fieldPropagator =
                                       transportManager->GetPropagatorInField();
 
-     G4double epsMin            = 2.5e-7*mm;
-     G4double epsMax            = 0.05*mm;
+     // Limits for relative accuracy of integration
+     G4double epsMin            = 2.5e-7;
+     G4double epsMax            = 0.001;
 
      fieldPropagator->SetMinimumEpsilonStep(epsMin);
      fieldPropagator->SetMaximumEpsilonStep(epsMax);

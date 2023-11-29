@@ -1,21 +1,73 @@
--------------------------------------------------------------------
+# Category track History
 
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+-------------------------------------------------------------------------------
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2022-12-12 Ben Morgan (track-V11-01-00)
+- Remove obsolete GNUmakefile scripts
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-16 Gabriele Cosmo (track-V11-00-11)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-31 Vladimir Ivanchenko (track-V11-00-10)
+- G4ParticleChangeForMSC - fixed crash in "/tracking/verbose 6"
+
+## 2022-09-13 Vladimir Ivanchenko (track-V11-00-09)
+- 2nd round of particle change classes cleanup: improved diagnostic for 
+    problems with primary track parameters or with secondary tracks; ensure
+    kinetic energy to be positive after a step; improved comments
+
+## 2022-09-08 Makoto Asai (track-V11-00-08)
+- G4Step.hh, G4Step.icc - Adding ResetPre/PostStepPoint methods to replace
+  StepPoint object without deleting the previous object.
+
+## 2022-09-02 Vladimir Ivanchenko (track-V11-00-07)
+- G4ParticleChangeForMSC - substitute virtual initialisation by inline
+    method
+
+## 2022-08-24 Vladimir Ivanchenko (track-V11-00-06)
+- General clean-up of all ParticleChange classes:
+   1) delete copy constructors and operators
+   2) removed unused methods
+   3) removed tracking cut 1 eV implemented inside G4ParticleChangeForLoss
+   4) make more effective handling of secondary tracks
+   5) substitute G4ParticleChangeForRadDecay by G4ParticleChangeForDecay
+   6) make all derived classes/methods final
+   7) removed commented code and useless or incorrect comments, added
+      improved comments
+   8) removed duplicated code
+
+## 2022-06-24 Ben Morgan (track-V11-00-05)
+- Initial `clang-tidy` fixes and minor simplifications
+
+## 2022-05-25 Alberto Ribon (track-V11-00-04)
+- `G4Track`: add methods to get/set information on (short-lived) parent resonance
+
+## 2022-04-19 Jonas Hahnfeld (track-V11-00-03)
+- `G4ParticleChangeForTransport`:
+  * Apply proposed step length
+  * Further simplify `UpdateStepForAlongStep` method, assuming that
+    transportation is always the first process
+
+## 2022-01-28 Ben Morgan (track-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+- Make DLL export symbol a CMake module-level compile definition to aid
+  future modularization
+
+## 2021-12-13 Jonas Hahnfeld (track-V11-00-01)
+- Simplify `G4ParticleChangeForTransport::UpdateStepForAlongStep`, assuming
+  that transportation is always the first process
+
+## 2021-12-10 Ben Morgan (track-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 - September 28, 2021 J. Hahnfeld (track-V10-07-06)
 - G4ParticleChangeForMSC, G4ParticleChangeForTransport: Disable debugFlag

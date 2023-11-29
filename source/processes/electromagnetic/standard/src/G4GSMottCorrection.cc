@@ -53,6 +53,7 @@
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "G4Element.hh"
+#include "G4EmParameters.hh"
 
 #include <iostream>
 #include <fstream>
@@ -204,17 +205,17 @@ void G4GSMottCorrection::InitMCDataPerElement() {
   // loop over all materials, for those that are used check the list of elements and load data from file if the
   // corresponding data has not been loaded yet
   G4ProductionCutsTable *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numMatCuts = thePCTable->GetTableSize();
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
-    const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
+  G4int numMatCuts = (G4int)thePCTable->GetTableSize();
+  for (G4int imc=0; imc<numMatCuts; ++imc) {
+    const G4MaterialCutsCouple *matCut = thePCTable->GetMaterialCutsCouple(imc);
     if (!matCut->IsUsed()) {
       continue;
     }
     const G4Material      *mat      = matCut->GetMaterial();
     const G4ElementVector *elemVect = mat->GetElementVector();
     //
-    size_t numElems = elemVect->size();
-    for (size_t ielem=0; ielem<numElems; ++ielem) {
+    std::size_t numElems = elemVect->size();
+    for (std::size_t ielem=0; ielem<numElems; ++ielem) {
       const G4Element *elem = (*elemVect)[ielem];
       G4int izet = G4lrint(elem->GetZ());
       if (izet>gMaxZet) {
@@ -230,15 +231,15 @@ void G4GSMottCorrection::InitMCDataPerElement() {
 
 void G4GSMottCorrection::InitMCDataPerMaterials() {
   // prepare size of the container
-  size_t numMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t numMaterials = G4Material::GetNumberOfMaterials();
   if (fMCDataPerMaterial.size()!=numMaterials) {
     fMCDataPerMaterial.resize(numMaterials);
   }
   // init. Mott-correction data for the Materials that are used in the geometry
   G4ProductionCutsTable *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numMatCuts = thePCTable->GetTableSize();
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
-    const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
+  G4int numMatCuts = (G4int)thePCTable->GetTableSize();
+  for (G4int imc=0; imc<numMatCuts; ++imc) {
+    const G4MaterialCutsCouple *matCut = thePCTable->GetMaterialCutsCouple(imc);
     if (!matCut->IsUsed()) {
       continue;
     }
@@ -257,19 +258,12 @@ void G4GSMottCorrection::LoadMCDataElement(const G4Element *elem) {
   if (izet>gMaxZet) {
     izet = gMaxZet;
   }
-  DataPerMaterial *perElem = new DataPerMaterial();
+  auto perElem = new DataPerMaterial();
   AllocateDataPerMaterial(perElem);
   fMCDataPerElement[izet]  = perElem;
   //
   // load data from file
-  char* tmppath = std::getenv("G4LEDATA");
-  if (!tmppath) {
-    G4Exception("G4GSMottCorrection::LoadMCDataElement()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  std::string path(tmppath);
+  std::string path = G4EmParameters::Instance()->GetDirLEDATA();
   if (fIsElectron) {
     path += "/msc_GS/MottCor/el/";
   } else {
@@ -309,7 +303,7 @@ void G4GSMottCorrection::ReadCompressedFile(std::string fname, std::istringstrea
   std::ifstream in(compfilename, std::ios::binary | std::ios::ate);
   if (in.good()) {
      // get current position in the stream (was set to the end)
-     int fileSize = in.tellg();
+     std::streamoff fileSize = in.tellg();
      // set current position being the beginning of the stream
      in.seekg(0,std::ios::beg);
      // create (zlib) byte buffer for the data
@@ -354,12 +348,12 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
   G4double constFactor        = CLHEP::electron_mass_c2*CLHEP::fine_structure_const/0.88534;
   constFactor                *= constFactor;  // (mc^2)^2\alpha^2/( C_{TF}^2)
   // allocate memory
-  DataPerMaterial *perMat     = new DataPerMaterial();
+  auto perMat = new DataPerMaterial();
   AllocateDataPerMaterial(perMat);
   fMCDataPerMaterial[mat->GetIndex()] = perMat;
   //
   const G4ElementVector* elemVect           = mat->GetElementVector();
-  const G4int            numElems           = mat->GetNumberOfElements();
+  const G4int            numElems           = (G4int)mat->GetNumberOfElements();
   const G4double*        nbAtomsPerVolVect  = mat->GetVecNbOfAtomsPerVolume();
   G4double               totNbAtomsPerVol   = mat->GetTotNbOfAtomsPerVolume();
   //
@@ -506,10 +500,10 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
 void G4GSMottCorrection::AllocateDataPerMaterial(DataPerMaterial *data) {
   data->fDataPerEkin = new DataPerEkin*[gNumEkin]();
   for (G4int iek=0; iek<gNumEkin; ++iek) {
-    DataPerEkin *perEkin   = new DataPerEkin();
+    auto perEkin = new DataPerEkin();
     perEkin->fDataPerDelta = new DataPerDelta*[gNumDelta]();
     for (G4int idel=0; idel<gNumDelta; ++idel) {
-      DataPerDelta *perDelta       = new DataPerDelta();
+      auto perDelta                = new DataPerDelta();
       perDelta->fRejFuntion        = new double[gNumAngle]();
       perEkin->fDataPerDelta[idel] = perDelta;
     }
@@ -533,7 +527,7 @@ void G4GSMottCorrection::DeAllocateDataPerMaterial(DataPerMaterial *data) {
 
 
 void G4GSMottCorrection::ClearMCDataPerElement() {
-  for (size_t i=0; i<fMCDataPerElement.size(); ++i) {
+  for (std::size_t i=0; i<fMCDataPerElement.size(); ++i) {
     if (fMCDataPerElement[i]) {
       DeAllocateDataPerMaterial(fMCDataPerElement[i]);
       delete fMCDataPerElement[i];
@@ -543,7 +537,7 @@ void G4GSMottCorrection::ClearMCDataPerElement() {
 }
 
 void G4GSMottCorrection::ClearMCDataPerMaterial() {
-  for (size_t i=0; i<fMCDataPerMaterial.size(); ++i) {
+  for (std::size_t i=0; i<fMCDataPerMaterial.size(); ++i) {
     if (fMCDataPerMaterial[i]) {
       DeAllocateDataPerMaterial(fMCDataPerMaterial[i]);
       delete fMCDataPerMaterial[i];

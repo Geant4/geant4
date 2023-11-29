@@ -32,6 +32,7 @@
 #define G4AnalysisManagerState_h 1
 
 #include "G4AnalysisVerbose.hh"
+#include "G4Threading.hh"
 #include "globals.hh"
 
 #include <string_view>
@@ -44,7 +45,7 @@ class G4AnalysisManagerState
   friend class G4ParameterManager;
 
   public:
-    G4AnalysisManagerState(const G4String& type, G4bool isMaster);
+    G4AnalysisManagerState(G4String type, G4bool isMaster);
     // disabled constructors, operators
     G4AnalysisManagerState() = delete;
     G4AnalysisManagerState(const G4AnalysisManagerState&) = delete;
@@ -56,14 +57,18 @@ class G4AnalysisManagerState
                  [[maybe_unused]] const G4String& objectType,
                  [[maybe_unused]] const G4String& objectName = "",
                  [[maybe_unused]] G4bool success = true) const;
+    void IncrementCycle();
+    void ResetCycle();
 
     // get methods
     G4String GetType() const;
     G4bool   GetIsMaster() const;
+    G4int    GetThreadId() const;
     G4bool   GetIsActivation() const;
     G4int    GetVerboseLevel() const;
     G4bool   IsVerbose(G4int verboseLevel) const;
     G4int    GetCompressionLevel() const;
+    G4int    GetCycle() const;
 
   private:
     // set methods
@@ -78,9 +83,11 @@ class G4AnalysisManagerState
     // Data members
     G4String fType;
     G4bool   fIsMaster;
+    G4int    fThreadId { G4Threading::SEQUENTIAL_ID };
     G4bool   fIsActivation { false };
     G4int    fVerboseLevel { 0 };
     G4int    fCompressionLevel { 1 };
+    G4int    fCycle { 0 };
     G4AnalysisVerbose fVerbose;
 };
 
@@ -92,11 +99,20 @@ inline void G4AnalysisManagerState::SetIsActivation(G4bool isActivation)
 inline void G4AnalysisManagerState::SetCompressionLevel(G4int level)
 { fCompressionLevel = level; }
 
+inline void G4AnalysisManagerState::IncrementCycle()
+{ ++fCycle; }
+
+inline void G4AnalysisManagerState::ResetCycle()
+{ fCycle = 0; }
+
 inline G4String G4AnalysisManagerState::GetType() const
 { return fType; }
 
 inline G4bool  G4AnalysisManagerState::GetIsMaster() const
 { return fIsMaster; }
+
+inline G4int  G4AnalysisManagerState::GetThreadId() const
+{ return fThreadId; }
 
 inline G4bool  G4AnalysisManagerState::GetIsActivation() const
 { return fIsActivation; }
@@ -109,5 +125,8 @@ inline G4bool  G4AnalysisManagerState::IsVerbose(G4int verboseLevel) const
 
 inline G4int  G4AnalysisManagerState::GetCompressionLevel() const
 { return fCompressionLevel; }
+
+inline G4int G4AnalysisManagerState::GetCycle() const
+{ return fCycle; }
 
 #endif

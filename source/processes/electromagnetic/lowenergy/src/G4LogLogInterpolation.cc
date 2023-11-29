@@ -60,7 +60,7 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
 					  const G4DataVector& points, 
 					  const G4DataVector& data) const
 {
-  G4int nBins = data.size() - 1;
+  G4int nBins = G4int(data.size() - 1);
   G4double value = 0.;
   if (x < points[0])
     {
@@ -98,7 +98,7 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
                                           const G4DataVector& log_points, 
 					  const G4DataVector& log_data) const
 { 
-  G4int nBins = data.size() - 1;
+  G4int nBins = G4int(data.size() - 1);
   G4double value = 0.;
   G4double log_x = std::log10(x);
   if (x < points[0])

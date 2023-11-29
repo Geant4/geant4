@@ -30,9 +30,7 @@
 
 #include "G4PolyconeHistorical.hh"
 
-G4PolyconeHistorical::G4PolyconeHistorical()
-{
-}
+G4PolyconeHistorical::G4PolyconeHistorical() = default;
 
 G4PolyconeHistorical::
 G4PolyconeHistorical( G4int z_planes )

@@ -51,7 +51,7 @@ class G4XiZero : public G4ParticleDefinition
  private:
    static G4XiZero* theInstance;
    G4XiZero(){}
-   ~G4XiZero(){}
+   ~G4XiZero() override= default;
 
  public:
    static G4XiZero* Definition();

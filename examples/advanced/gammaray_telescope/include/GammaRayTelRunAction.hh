@@ -34,8 +34,6 @@
 // 18.11.2001 G.Santin - Modified the analysis management according to the new design
 //
 // ************************************************************
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef GammaRayTelRunAction_h
 #define GammaRayTelRunAction_h 1
@@ -43,32 +41,27 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class G4Run;
 
-class GammaRayTelRunAction : public G4UserRunAction
-{
+class GammaRayTelRunAction: public G4UserRunAction {
 public:
-  GammaRayTelRunAction();
-  ~GammaRayTelRunAction();
-  
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
-  std::ofstream* GetOutputFile();
-  
+	explicit GammaRayTelRunAction();
+
+	~GammaRayTelRunAction() override;
+
+	void BeginOfRunAction(const G4Run *run) override;
+
+	void EndOfRunAction(const G4Run *run) override;
+
+	auto GetOutputFile() -> std::ofstream*;
 
 private:
-  std::ofstream* outFile;
-  G4String fileName;
+	std::ofstream *outFile{nullptr};
 
-  void OpenFile();
-  G4int fRunID;
+	G4String fileName{"NULL"};
 
+	G4int fRunID{-1};
+
+	void OpenFile();
 };
-
 #endif
-
-
-

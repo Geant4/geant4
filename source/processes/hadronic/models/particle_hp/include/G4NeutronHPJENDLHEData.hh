@@ -29,4 +29,4 @@
 #include "G4ParticleHPJENDLHEData.hh"
 using G4NeutronHPJENDLHEData = G4ParticleHPJENDLHEData;
 
-#endif 
+#endif

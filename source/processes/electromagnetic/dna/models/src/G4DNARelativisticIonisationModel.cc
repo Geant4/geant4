@@ -116,7 +116,7 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
 
     std::ostringstream eFullFileNameZ;
 
-    char *path = getenv("G4LEDATA");
+    const char *path = G4FindDataDir("G4LEDATA");
     if (!path)
     {
       G4Exception("G4DNARelativisticIonisationModel::Initialise","em0006",
@@ -127,8 +127,8 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
 
     G4ProductionCutsTable *coupletable 
                   = G4ProductionCutsTable::GetProductionCutsTable();
-    G4int Ncouple = coupletable ->GetTableSize();
-    for(G4int i=0;i<Ncouple;i++)
+    G4int Ncouple = (G4int)coupletable ->GetTableSize();
+    for(G4int i=0; i<Ncouple; ++i)
     {
       const G4MaterialCutsCouple* couple   
                            = coupletable->GetMaterialCutsCouple(i);
@@ -316,9 +316,9 @@ void G4DNARelativisticIonisationModel::SampleSecondaries(
     if(fAtomDeexcitation){
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(level);
       const G4AtomicShell *shell = fAtomDeexcitation->GetAtomicShell(z,as);
-      NumSecParticlesInit  = fvect->size();
+      NumSecParticlesInit  = (G4int)fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect,shell,z,0,0);
-      NumSecParticlesFinal = fvect->size();
+      NumSecParticlesFinal = (G4int)fvect->size();
     }
 
     ejectedE                
@@ -404,7 +404,7 @@ void G4DNARelativisticIonisationModel::LoadAtomicStates(
   const char *datadir =  path;
   if(!datadir)
   {
-     datadir = getenv("G4LEDATA");
+     datadir = G4FindDataDir("G4LEDATA");
      if(!datadir)
      {
        G4Exception("G4DNARelativisticIonisationModel::LoadAtomicStates()",
@@ -469,8 +469,8 @@ G4double G4DNARelativisticIonisationModel::GetTotalCrossSection(
   G4int  z = material->GetZ();
   if(z!=79){ return 0.;}
   else {
-    size_t N=iState[z].size();
-    for(G4int i=0;i<(G4int)N;i++){
+    std::size_t N=iState[z].size();
+    for(G4int i=0; i<(G4int)N; ++i){
       value = value+GetPartialCrossSection(material,i,particle,kineticEnergy);
     }
     return value;
@@ -571,9 +571,10 @@ G4int G4DNARelativisticIonisationModel::RandomSelect(
 {
   G4double value = 0.;
   G4int z = material->GetZ();
-  G4double* valuesBuffer = new G4double[iShell[z].size()];
-  const size_t n(iShell[z].size());
-  size_t i(n);
+  std::size_t numberOfShell = iShell[z].size();
+  auto valuesBuffer = new G4double[numberOfShell];
+  const G4int n = (G4int)iShell[z].size();
+  G4int i(n);
 
   while (i > 0)
   {

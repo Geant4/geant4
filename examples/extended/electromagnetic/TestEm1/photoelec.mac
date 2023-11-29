@@ -1,28 +1,32 @@
 #
 # Macro file for "TestEm1.cc"
 #
-#  Photon 100 keV; photoelectric effect
+# check energy conservation in photoelectric process
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 #
 /testem/det/setMat G4_Gd
-/testem/det/setSize 100 m
+/testem/det/setSize 10 m
 #
 /testem/phys/addPhysics local
+###/testem/phys/addPhysics emstandard_opt4
 #
 /run/initialize
 #
-# no Compton nor conversion
+/process/em/verbose 0
+#
+# photoelectric alone : no Compton nor conversion
 /process/inactivate compt
 /process/inactivate conv
 #
-/process/em/deexcitation world true true true
-/process/em/fluo true
+# atomic deexcitation
+/process/em/fluo  true
 /process/em/auger true
+/process/em/deexcitationIgnoreCut true
 #
-# prevent ionisation and bremsstrahlung production
-/run/setCut 1 um
+# no delta rays or bremsstrahlung production
+/run/setCut 1 mm
 #
 # no multiple scattering
 /process/inactivate msc
@@ -32,9 +36,11 @@
 /gun/energy 80 keV
 /gun/position 0 0 0 mm
 #
-/analysis/setFileName photoelec
-/analysis/h1/set 4 100 0 100 keV	#total edep
-#
+/tracking/verbose 2
+/run/beamOn 1
 /tracking/verbose 0
+#
+/analysis/setFileName photoelec
+/analysis/h1/set 4 100 0 100 keV   #total edep
 #
 /run/beamOn 10000

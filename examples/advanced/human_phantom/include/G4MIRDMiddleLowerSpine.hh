@@ -41,10 +41,9 @@ class G4MIRDMiddleLowerSpine: public G4VOrgan
 {
 public:
 
-  G4MIRDMiddleLowerSpine();
-  ~G4MIRDMiddleLowerSpine();
+  G4MIRDMiddleLowerSpine() = default;
+  ~G4MIRDMiddleLowerSpine() override = default;
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
-				    const G4String&, G4bool, G4bool);
-private:
+				    const G4String&, G4bool, G4bool) override;
 };
 #endif

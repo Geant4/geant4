@@ -4,7 +4,7 @@
 #ifndef tools_sg_f2plot
 #define tools_sg_f2plot
 
-// Connexion inlib/func to sg/plotter.
+// Connexion tools/func to sg/plotter.
 
 #include "plottables"
 

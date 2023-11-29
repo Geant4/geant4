@@ -105,8 +105,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
 #include "G4IonTable.hh"
 #include "G4NucleiProperties.hh"
 
@@ -132,7 +130,7 @@ G4BetheHeitler5DModel::G4BetheHeitler5DModel(const G4ParticleDefinition* pd,
                                              const G4String& nam)
   : G4PairProductionRelModel(pd, nam),
     fLepton1(G4Electron::Definition()),fLepton2(G4Positron::Definition()),
-    fTheMuPlus(G4MuonPlus::Definition()),fTheMuMinus(G4MuonMinus::Definition()),
+    fTheMuPlus(nullptr),fTheMuMinus(nullptr),
     fVerbose(1),
     fConversionType(0),
     fConvMode(kEPair),
@@ -145,8 +143,7 @@ G4BetheHeitler5DModel::G4BetheHeitler5DModel(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BetheHeitler5DModel::~G4BetheHeitler5DModel()
-{}
+G4BetheHeitler5DModel::~G4BetheHeitler5DModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -175,18 +172,6 @@ void G4BetheHeitler5DModel::Initialise(const G4ParticleDefinition* part,
   //Q: Do we need this on Model
   // The Leptons defined via SetLeptonPair(..) method
   SetLowEnergyLimit(2*CLHEP::electron_mass_c2);
-
-  if (fConvMode == kEPair) {
-    assert(fLepton1->GetPDGEncoding() == fTheElectron->GetPDGEncoding()) ;
-    if (fVerbose > 3)
-      G4cout << "BH5DModel::Initialise conversion to e+ e-" << G4endl;
-  }
-
-  if (fConvMode == kMuPair) {
-    assert(fLepton1->GetPDGEncoding() == fTheMuMinus->GetPDGEncoding()) ;
-    if (fVerbose > 3)
-      G4cout << "BH5DModel::Initialise conversion to mu+ mu-" << G4endl;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -194,66 +179,43 @@ void G4BetheHeitler5DModel::Initialise(const G4ParticleDefinition* part,
 void G4BetheHeitler5DModel::SetLeptonPair(const G4ParticleDefinition* p1,
 		     const G4ParticleDefinition* p2)
 {
-  // Lepton1 - nagative charged particle
-  if ( p1->GetPDGEncoding() < 0 ){
-    if ( p1->GetPDGEncoding() ==
-	 G4Positron::Definition()->GetPDGEncoding() ) {
-      SetConversionMode(kEPair);
-      fLepton1 = p2;
-      fLepton2 = p1;
-      // if (fVerbose)
-	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to e+ e-"
-	       << G4endl;
-    } else   if ( p1->GetPDGEncoding() ==
-		  G4MuonPlus::Definition()->GetPDGEncoding() ) {
-      SetConversionMode(kMuPair);
-      fLepton1 = p2;
-      fLepton2 = p1;
-      // if (fVerbose)
-	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to mu+ mu-"
-	       << G4endl;
-    } else {
-      // Exception
-      G4ExceptionDescription ed;
-      ed << "Model not applicable to particle(s) "
-	 << p1->GetParticleName() << ", "
-	 << p2->GetParticleName();
-      G4Exception("G4BetheHeitler5DModel::SetLeptonPair","em0002",
-		  FatalException, ed);
-    }
-  } else {
-    if ( p1->GetPDGEncoding() ==
-	 G4Electron::Definition()->GetPDGEncoding() ) {
-      SetConversionMode(kEPair);
-      fLepton1 = p1;
-      fLepton2 = p2;
-      // if (fVerbose)
-	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to e+ e-"
-	       << G4endl;
-    } else   if ( p1->GetPDGEncoding() ==
-		  G4MuonMinus::Definition()->GetPDGEncoding() ) {
-      SetConversionMode(kMuPair);
-      fLepton1 = p1;
-      fLepton2 = p2;
-      // if (fVerbose)
-	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to mu+ mu-"
-	       << G4endl;
-    } else {
-      // Exception
-      G4ExceptionDescription ed;
-      ed << "Model not applicable to particle(s) "
-	 << p1->GetParticleName() << ", "
-	 << p2->GetParticleName();
-      G4Exception("G4BetheHeitler5DModel::SetLeptonPair","em0002",
-		  FatalException, ed);
-    }
-  }
-  if ( fLepton1->GetPDGEncoding() != fLepton2->GetAntiPDGEncoding() ) {
+  G4int pdg1 = p1->GetPDGEncoding();
+  G4int pdg2 = p2->GetPDGEncoding();
+  G4int pdg = std::abs(pdg1);
+  if ( pdg1 != -pdg2 || (pdg != 11 && pdg != 13) ) {
+    G4ExceptionDescription ed;
+    ed << " Wrong pair of leptons: " << p1->GetParticleName()
+       << " and " << p1->GetParticleName();
     G4Exception("G4BetheHeitler5DModel::SetLeptonPair","em0007",
-		FatalErrorInArgument, "pair must be particle, antiparticle ");
-      G4cerr << "BH5DModel::SetLeptonPair BAD paricle/anti particle pair"
-	     << fLepton1->GetParticleName() << ", "
-	     << fLepton2->GetParticleName() << G4endl;
+		FatalErrorInArgument, ed, "");
+  } else {
+    if ( pdg == 11 ) {
+      SetConversionMode(kEPair);
+      if( pdg1 == 11 ) {
+	fLepton1 = p1;
+	fLepton2 = p2;
+      } else {
+	fLepton1 = p2;
+	fLepton2 = p1;
+      }
+      if (fVerbose > 0)
+	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to e+ e-"
+	       << G4endl;
+    } else {
+      SetConversionMode(kMuPair);
+      if( pdg1 == 13 ) {
+	fLepton1 = p1;
+	fLepton2 = p2;
+      } else {
+	fLepton1 = p2;
+	fLepton2 = p1;
+      }
+      fTheMuPlus = fLepton2;
+      fTheMuMinus= fLepton1;
+      if (fVerbose > 0)
+	G4cout << "G4BetheHeitler5DModel::SetLeptonPair conversion to mu+ mu-"
+	       << G4endl;
+    }
   }
 }
 
@@ -666,8 +628,8 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   }
 
   // Create secondaries
-  G4DynamicParticle* aParticle1 = new G4DynamicParticle(fLepton1,LeptonMinus);
-  G4DynamicParticle* aParticle2 = new G4DynamicParticle(fLepton2,LeptonPlus);
+  auto aParticle1 = new G4DynamicParticle(fLepton1,LeptonMinus);
+  auto aParticle2 = new G4DynamicParticle(fLepton2,LeptonPlus);
 
   // create G4DynamicParticle object for the particle3 ( recoil )
   G4ParticleDefinition* RecoilPart;
@@ -677,7 +639,7 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   } else{
     RecoilPart = theIonTable->GetIon(Z, A, 0);
   }
-  G4DynamicParticle* aParticle3 = new G4DynamicParticle(RecoilPart,Recoil);
+  auto aParticle3 = new G4DynamicParticle(RecoilPart,Recoil);
 
   // Fill output vector
   fvect->push_back(aParticle1);

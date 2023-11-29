@@ -31,6 +31,6 @@
 #include "globals.hh"
 #include <CLHEP/Geometry/Normal3D.h>
 
-typedef HepGeom::Normal3D<G4double> G4Normal3D;
+using G4Normal3D = HepGeom::Normal3D<G4double>;
 
 #endif /* G4NORMAL3D_HH */

@@ -24,26 +24,34 @@
 // ********************************************************************
 //
 //
-//
-// 
 
 // Class Description:
 //
-// G4VUserVisAction is added to the scene by the command
-// /vis/scene/add/userAction, which instantiates a G4CallbackModel to
-// add to the RunDurationModels.  Thus the pure virtual Draw() method
+// G4VUserVisAction is brought into effect by the command
+// /vis/scene/add/userAction. The vis manager instantiates a
+// G4CallbackModel when the vis action is registered, and adds
+// it to the scene. The pure virtual Draw() method
 // is invoked whenever the viewer needs to "visit the kernel", e.g.,
 // to remake its graphical database, if any, or simply to refresh the
-// screen.  operator() is defined to satisfy the template
+// screen. It is not intended to be called directly. It is called
+// via the operator() which is defined to satisfy the template
 // G4CallbackModel<G4VUserVisAction>.
 //
-// See the User Guide for Application Developers, Section 8.8.7 and 8.8.8.
-
+// A concrete Draw() method would normally make use of the Draw() methods
+// of the vis manager, e.g:
+//   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
+//   if (pVisManager) {
+//     pVisManager->Draw(G4Box("box",2*cm,2*cm,2*cm),
+//                       G4VisAttributes(G4Colour(1,1,0)));
+//   ...
+// but it can also use pointers fpSceneHandler and pMP that give it
+// direct access to the current scene handler and modeling parameters
+// for more advanced use.
+//
+// See the User Guide for Application Developers.
 
 #ifndef G4VUSERVISACTION_HH
 #define G4VUSERVISACTION_HH
-
-#include "G4Transform3D.hh"
 
 class G4VGraphicsScene;
 class G4ModelingParameters;
@@ -51,18 +59,15 @@ class G4ModelingParameters;
 class G4VUserVisAction
 {
 public: // With description
-  G4VUserVisAction()
-  : fpSceneHandler(nullptr)
-  , fpMP(nullptr)
-  {}
+  G4VUserVisAction(): fpSceneHandler(nullptr), fpMP(nullptr) {}
   virtual ~G4VUserVisAction() {}
-  virtual void Draw() = 0;
   void operator()(G4VGraphicsScene& scene, const G4ModelingParameters* pMP) {
     fpSceneHandler = &scene;
     fpMP           = pMP;
     Draw();
   }
 protected:
+  virtual void Draw() = 0;
   G4VGraphicsScene* fpSceneHandler;
   const G4ModelingParameters* fpMP;
 };

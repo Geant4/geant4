@@ -37,18 +37,19 @@
 #include "G4HnInformation.hh"
 #include "globals.hh"
 
-#include <vector>
 #include <string_view>
+#include <utility>
+#include <vector>
 
 class G4VFileManager;
+class G4HnMessenger;
 
 class G4HnManager : public G4BaseAnalysisManager
 {
   public:
-    G4HnManager(const G4String& hnType,
-                const G4AnalysisManagerState& state);
+    G4HnManager(G4String hnType, const G4AnalysisManagerState& state);
     G4HnManager() = delete;
-    virtual ~G4HnManager();
+    ~G4HnManager() override;
 
     // Methods to manipulate additional information
 
@@ -68,6 +69,7 @@ class G4HnManager : public G4BaseAnalysisManager
 
     const std::vector<G4HnInformation*>& GetHnVector() const;
     G4int GetNofHns() const;
+    G4int GetNofActiveHns() const;
     G4String GetHnType() const;
 
     // Activation option
@@ -100,19 +102,13 @@ class G4HnManager : public G4BaseAnalysisManager
     void  SetPlotting(G4bool plotting);
     void  SetFileName(G4int id, const G4String& fileName);
     void  SetFileName(const G4String& fileName);
-    G4bool  SetXAxisIsLog(G4int id, G4bool isLogAxis);
-    G4bool  SetYAxisIsLog(G4int id, G4bool isLogAxis);
-    G4bool  SetZAxisIsLog(G4int id, G4bool isLogAxis);
+    G4bool  SetAxisIsLog(unsigned int idim, G4int id, G4bool isLogAxis);
 
 
     // Access to Hn additional information
     G4String GetName(G4int id) const;
-    G4double GetXUnit(G4int id) const;
-    G4double GetYUnit(G4int id) const;
-    G4double GetZUnit(G4int id) const;
-    G4bool   GetXAxisIsLog(G4int id) const;
-    G4bool   GetYAxisIsLog(G4int id) const;
-    G4bool   GetZAxisIsLog(G4int id) const;
+    G4double GetUnit(unsigned int idim, G4int id) const;
+    G4bool   GetAxisIsLog(unsigned int idim, G4int id) const;
     G4bool   GetActivation(G4int id) const;
     G4bool   GetAscii(G4int id) const;
     G4bool   GetPlotting(G4int id) const;
@@ -139,10 +135,16 @@ class G4HnManager : public G4BaseAnalysisManager
     // Additional histograms/ntuple properties not included in tools
     std::vector<G4HnInformation*> fHnVector;
     std::shared_ptr<G4VFileManager> fFileManager { nullptr };
+
+    // Messenger
+    std::unique_ptr<G4HnMessenger> fMessenger;
 };
 
 inline G4int G4HnManager::GetNofHns() const
 { return G4int(fHnVector.size()); }
+
+inline G4int G4HnManager::GetNofActiveHns() const
+{ return fNofActiveObjects; }
 
 inline G4String G4HnManager::GetHnType() const
 { return fHnType; }
@@ -151,7 +153,9 @@ inline const std::vector<G4HnInformation*>& G4HnManager::GetHnVector() const
 { return fHnVector; }
 
 inline void G4HnManager::SetFileManager(std::shared_ptr<G4VFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 #endif
 

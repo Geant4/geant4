@@ -39,7 +39,6 @@
 #define G4ITDecay_h 1
 
 #include "G4NuclearDecay.hh"
-#include "G4Fragment.hh"
 
 class G4PhotonEvaporation;
 

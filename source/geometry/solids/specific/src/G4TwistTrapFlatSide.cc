@@ -93,8 +93,7 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( const G4String& name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistTrapFlatSide::G4TwistTrapFlatSide( __void__& a )
-  : G4VTwistSurface(a), fDx1(0.), fDx2(0.), fDy(0.), fDz(0.), fPhiTwist(0.), 
-    fAlpha(0.), fTAlph(0.), fPhi(0.), fTheta(0.), fdeltaX(0.), fdeltaY(0.)
+  : G4VTwistSurface(a)
 {
 }
 
@@ -102,9 +101,7 @@ G4TwistTrapFlatSide::G4TwistTrapFlatSide( __void__& a )
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistTrapFlatSide::~G4TwistTrapFlatSide()
-{
-}
+G4TwistTrapFlatSide::~G4TwistTrapFlatSide() = default;
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
@@ -347,7 +344,7 @@ G4int G4TwistTrapFlatSide::GetAreaCode(const G4ThreeVector& xx,
       {
         areacode |= (sAxis1 & (sAxisY | sAxisMin)); 
         
-        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+        if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
         else                        areacode |= sBoundary;
         if (xx.y() <= fAxisMin[yaxis] - ctol) isoutside = true;
         
@@ -356,7 +353,7 @@ G4int G4TwistTrapFlatSide::GetAreaCode(const G4ThreeVector& xx,
       {
         areacode |= (sAxis1 & (sAxisY | sAxisMax));
         
-        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+        if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
         else                        areacode |= sBoundary; 
         if (xx.y() >= fAxisMax[yaxis] + ctol) isoutside = true;
       }
@@ -392,14 +389,14 @@ G4int G4TwistTrapFlatSide::GetAreaCode(const G4ThreeVector& xx,
       if (xx.y() < fAxisMin[yaxis])
       {
         areacode |= (sAxis1 & (sAxisY | sAxisMin));
-        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+        if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
         else                        areacode |= sBoundary; 
         
       }
       else if (xx.y() > fAxisMax[yaxis])
       {
         areacode |= (sAxis1 & (sAxisY | sAxisMax)) ;
-        if   (areacode & sBoundary) areacode |= sCorner;  // xx is on corner.
+        if   ((areacode & sBoundary) != 0) areacode |= sCorner;  // xx is on corner.
         else                        areacode |= sBoundary; 
       }
       

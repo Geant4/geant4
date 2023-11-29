@@ -143,7 +143,7 @@ G4bool PrimaryKiller::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
 void PrimaryKiller::Initialize(G4HCofThisEvent* /*HCE*/)
 {
-  clear();
+  Clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,7 +154,7 @@ void PrimaryKiller::EndOfEvent(G4HCofThisEvent*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryKiller::clear()
+void PrimaryKiller::Clear()
 {
   fELoss = 0.;
 }

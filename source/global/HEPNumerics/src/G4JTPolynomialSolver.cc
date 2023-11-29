@@ -41,10 +41,6 @@ const G4double G4JTPolynomialSolver::are    = DBL_EPSILON;
 const G4double G4JTPolynomialSolver::mre    = DBL_EPSILON;
 const G4double G4JTPolynomialSolver::lo     = DBL_MIN / DBL_EPSILON;
 
-G4JTPolynomialSolver::G4JTPolynomialSolver() {}
-
-G4JTPolynomialSolver::~G4JTPolynomialSolver() {}
-
 G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
                                       G4double* zeroi)
 {
@@ -186,7 +182,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
 
     // Chop the interval (0,x) until ff <= 0
     //
-    while(1)
+    while(true)
     {
       xm = x * 0.1;
       ff = pt[0];
@@ -230,11 +226,11 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
     k[0]  = p[0];
     aa    = p[n];
     bb    = p[n - 1];
-    zerok = (k[n - 1] == 0);
+    zerok = static_cast<G4int>(k[n - 1] == 0);
     for(jj = 0; jj < 5; ++jj)
     {
       cc = k[n - 1];
-      if(!zerok)  // Use a scaled form of recurrence if k at 0 is nonzero.
+      if(zerok == 0)  // Use a scaled form of recurrence if k at 0 is nonzero.
       {
         // Use a scaled form of recurrence if value of k at 0 is nonzero.
         //
@@ -245,7 +241,8 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
           k[j] = t * k[j - 1] + p[j];
         }
         k[0]  = p[0];
-        zerok = (std::fabs(k[n - 1]) <= std::fabs(bb) * eta * 10.0);
+        zerok =
+          static_cast<G4int>(std::fabs(k[n - 1]) <= std::fabs(bb) * eta * 10.0);
       }
       else  // Use unscaled form of recurrence.
       {
@@ -255,7 +252,7 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
           k[j] = k[j - 1];
         }
         k[0]  = 0.0;
-        zerok = (!(k[n - 1] != 0.0));
+        zerok = static_cast<G4int>(!(k[n - 1] != 0.0));
       }
     }
 
@@ -305,16 +302,15 @@ G4int G4JTPolynomialSolver::FindRoots(G4double* op, G4int degr, G4double* zeror,
         }
         break;
       }
-      else
+      
+      // If the iteration is unsuccessful another quadratic
+      // is chosen after restoring k.
+      //
+      for(i = 0; i < n; ++i)
       {
-        // If the iteration is unsuccessful another quadratic
-        // is chosen after restoring k.
-        //
-        for(i = 0; i < n; ++i)
-        {
-          k[i] = temp[i];
-        }
+        k[i] = temp[i];
       }
+     
     }
   } while(nz != 0);  // End of initial DO loop
 
@@ -394,9 +390,9 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int* nz)
     }
 
     // Compare with convergence criteria.
-    vpass = (tvv < betav);
-    spass = (tss < betas);
-    if(!(spass || vpass))
+    vpass = static_cast<G4int>(tvv < betav);
+    spass = static_cast<G4int>(tss < betas);
+    if(!((spass != 0) || (vpass != 0)))
     {
       ovv = vv;
       oss = ss;
@@ -420,7 +416,7 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int* nz)
     //
     vtry = 0;
     stry = 0;
-    if((spass && (!vpass)) || (tss < tvv))
+    if(((spass != 0) && (vpass == 0)) || (tss < tvv))
     {
       RealPolynomialIteration(&xs, nz, &iflag);
       if(*nz > 0)
@@ -464,7 +460,7 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int* nz)
       // Try linear iteration if it has not been tried and
       // the S sequence is converging.
       //
-      if(stry || !spass)
+      if((stry != 0) || (spass == 0))
       {
         break;
       }
@@ -509,7 +505,7 @@ void G4JTPolynomialSolver::ComputeFixedShiftPolynomial(G4int l2, G4int* nz)
     // Try quadratic iteration if it has not been tried
     // and the V sequence is converging.
     //
-    if(vpass && !vtry)
+    if((vpass != 0) && (vtry == 0))
     {
       goto _quadratic_iteration;
     }
@@ -549,7 +545,7 @@ void G4JTPolynomialSolver::QuadraticPolynomialIteration(G4double* uu,
 
   // Main loop.
 
-  while(1)
+  while(true)
   {
     Quadratic(1.0, u, v, &szr, &szi, &lzr, &lzi);
 
@@ -599,7 +595,7 @@ void G4JTPolynomialSolver::QuadraticPolynomialIteration(G4double* uu,
     }
     if(j >= 2)
     {
-      if(!(relstp > 0.01 || mp < omp || tried))
+      if(!(relstp > 0.01 || mp < omp || (tried != 0)))
       {
         // A cluster appears to be stalling the convergence.
         // Five fixed shift steps are taken with a u,v close to the cluster.
@@ -661,7 +657,7 @@ void G4JTPolynomialSolver::RealPolynomialIteration(G4double* sss, G4int* nz,
 
   // Main loop
   //
-  while(1)
+  while(true)
   {
     pv = p[0];
 

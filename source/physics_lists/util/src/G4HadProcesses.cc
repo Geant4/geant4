@@ -44,6 +44,13 @@
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
+#include "G4HadronicParameters.hh"
+#include "G4PhysicsListHelper.hh"
+#include "G4NeutronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronElasticXS.hh"
+#include "G4NeutronCaptureXS.hh"
 
 const G4ParticleDefinition* G4HadProcesses::FindParticle(const G4String& pname)
 {
@@ -169,4 +176,47 @@ G4bool G4HadProcesses::AddFissionCrossSection(G4VCrossSectionDataSet* xs)
     had->AddDataSet( xs );
   }
   return isOK;
+}
+
+void G4HadProcesses::BuildNeutronInelasticAndCapture(G4HadronicProcess* nInel)
+{
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useNeutronGeneral = param->EnableNeutronGeneralProcess();
+
+  G4HadronicProcess* nCap = new G4NeutronCaptureProcess("nCapture");
+  nCap->RegisterMe(new G4NeutronRadCapture());
+
+  if(useNeutronGeneral) {
+    auto nGen = G4PhysListUtil::FindNeutronGeneralProcess();
+    nGen->SetInelasticProcess(nInel);
+    nGen->SetCaptureProcess(nCap);
+  } else {
+    auto neutron = G4Neutron::Neutron();
+    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    nInel->AddDataSet(new G4NeutronInelasticXS());
+    ph->RegisterProcess(nInel, neutron);
+    ph->RegisterProcess(nCap, neutron);
+    if( param->ApplyFactorXS() ) {
+      nInel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
+    }
+  }
+}
+
+void G4HadProcesses::BuildNeutronElastic(G4HadronicProcess* nEl)
+{
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4bool useNeutronGeneral = param->EnableNeutronGeneralProcess();
+
+  if(useNeutronGeneral) {
+    auto nGen = G4PhysListUtil::FindNeutronGeneralProcess();
+    nGen->SetElasticProcess(nEl);
+  } else {
+    auto neutron = G4Neutron::Neutron();
+    nEl->AddDataSet(new G4NeutronElasticXS());
+    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    ph->RegisterProcess(nEl, neutron);
+    if( param->ApplyFactorXS() ) {
+      nEl->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
+    }
+  }
 }

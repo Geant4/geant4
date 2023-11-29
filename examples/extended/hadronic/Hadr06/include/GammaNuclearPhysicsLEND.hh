@@ -27,7 +27,6 @@
 /// \brief Definition of the GammaNuclearPhysics class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef GammaNuclearPhysicsLEND_h
@@ -42,11 +41,11 @@ class GammaNuclearPhysicsLEND : public G4VPhysicsConstructor
 {
   public:
     GammaNuclearPhysicsLEND(const G4String& name="gamma");
-   ~GammaNuclearPhysicsLEND() override;
+   ~GammaNuclearPhysicsLEND() override = default;
 
   public:
     void ConstructParticle() override { };
-    void ConstructProcess() override;
+    void ConstructProcess()  override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

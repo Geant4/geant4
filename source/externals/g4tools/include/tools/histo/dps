@@ -209,10 +209,10 @@ public:
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {
-        measurement& m = (*it).coordinate(coord);
-        m.set_value(m.value() * a_scale);
-        m.set_error_plus(m.error_plus() * a_scale);
-        m.set_error_minus(m.error_minus() * a_scale);
+        measurement& _m = (*it).coordinate(coord);
+        _m.set_value(_m.value() * a_scale);
+        _m.set_error_plus(_m.error_plus() * a_scale);
+        _m.set_error_minus(_m.error_minus() * a_scale);
       }
     }
   }
@@ -221,8 +221,8 @@ public:
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {
-        measurement& m = (*it).coordinate(coord);
-        m.set_value(m.value() * a_scale);
+        measurement& _m = (*it).coordinate(coord);
+        _m.set_value(_m.value() * a_scale);
       }
     }
   }
@@ -231,9 +231,9 @@ public:
     std::vector<data_point>::iterator it;
     for(it=m_points.begin();it!=m_points.end();++it) {
       for(unsigned int coord=0;coord<m_dim;coord++) {
-        measurement& m = (*it).coordinate(coord);
-        m.set_error_plus(m.error_plus() * a_scale);
-        m.set_error_minus(m.error_minus() * a_scale);
+        measurement& _m = (*it).coordinate(coord);
+        _m.set_error_plus(_m.error_plus() * a_scale);
+        _m.set_error_minus(_m.error_minus() * a_scale);
       }
     }
   }

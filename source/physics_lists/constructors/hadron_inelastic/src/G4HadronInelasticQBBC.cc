@@ -39,6 +39,7 @@
 
 #include "G4SystemOfUnits.hh"
 
+#include "G4HadronicProcess.hh"
 #include "G4HadronInelasticProcess.hh"
 #include "G4NeutronCaptureProcess.hh"
 #include "G4HadronicInteraction.hh"
@@ -56,6 +57,7 @@
 #include "G4ParticleInelasticXS.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
+#include "G4NeutronGeneralProcess.hh"
 
 #include "G4CrossSectionInelastic.hh"
 
@@ -81,15 +83,14 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver)
   : G4VHadronPhysics("hInelasticQBBC")
 {
   SetPhysicsType(bHadronInelastic);
-  G4HadronicParameters::Instance()->SetEnableBCParticles(true);
-  G4HadronicParameters::Instance()->SetVerboseLevel(ver);
+  auto param = G4HadronicParameters::Instance();
+  param->SetEnableBCParticles(true);
+  param->SetEnableNeutronGeneralProcess(true);
+  param->SetVerboseLevel(ver);
 }
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver, 
     G4bool, G4bool,G4bool, G4bool, G4bool) : G4HadronInelasticQBBC(ver)
-{}
-
-G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {}
 
 void G4HadronInelasticQBBC::ConstructProcess()
@@ -158,17 +159,12 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
   // n
   particle = G4Neutron::Neutron();
-  hp = new G4HadronInelasticProcess( particle->GetParticleName()+"Inelastic", particle );
-  hp->AddDataSet(new G4NeutronInelasticXS());
-  hp->RegisterMe(theFTFP);
-  hp->RegisterMe(theBERT);
-  hp->RegisterMe(theBIC);
-  ph->RegisterProcess(hp, particle);
-  if( useFactorXS ) hp->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
-       
-  hp = new G4NeutronCaptureProcess("nCapture");
-  hp->RegisterMe(new G4NeutronRadCapture());
-  ph->RegisterProcess(hp, particle);
+  G4HadronicProcess* ni = 
+    new G4HadronInelasticProcess( "neutronInelastic", particle );
+  ni->RegisterMe(theFTFP);
+  ni->RegisterMe(theBERT);
+  ni->RegisterMe(theBIC);
+  G4HadProcesses::BuildNeutronInelasticAndCapture(ni);
 
   // pi+
   particle = G4PionPlus::PionPlus();

@@ -58,6 +58,7 @@ class G4VMultiFragmentation;
 class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
+class G4ParticleTable;
 
 class G4ExcitationHandler 
 {
@@ -97,27 +98,28 @@ public:
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt);
-  // for superimposed Coulomb Barrir for inverse cross sections
+  // for superimposed Coulomb Barrier for inverse cross sections
   inline void UseSICB();
 
   //==============================================
+
+  G4ExcitationHandler(const G4ExcitationHandler &right) = delete;
+  const G4ExcitationHandler & operator
+  =(const G4ExcitationHandler &right) = delete;
+  G4bool operator==(const G4ExcitationHandler &right) const = delete;
+  G4bool operator!=(const G4ExcitationHandler &right) const = delete;
 
 private:
 
   void SetParameters();
 
   inline void SortSecondaryFragment(G4Fragment*);
-
-  G4ExcitationHandler(const G4ExcitationHandler &right);
-  const G4ExcitationHandler & operator
-  =(const G4ExcitationHandler &right);
-  G4bool operator==(const G4ExcitationHandler &right) const;
-  G4bool operator!=(const G4ExcitationHandler &right) const;
   
   G4VEvaporation* theEvaporation;  
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
+  G4ParticleTable* thePartTable;
   G4IonTable* theTableOfIons;
   G4NistManager* nist;
 
@@ -128,6 +130,7 @@ private:
   const G4ParticleDefinition* theTriton;
   const G4ParticleDefinition* theHe3;
   const G4ParticleDefinition* theAlpha;
+  const G4ParticleDefinition* theLambda;
 
   G4int icID;
 
@@ -140,6 +143,7 @@ private:
   G4double minEForMultiFrag;
   G4double minExcitation;
   G4double maxExcitation;
+  G4double fLambdaMass;
 
   G4bool isInitialised;
   G4bool isEvapLocal;
@@ -176,18 +180,12 @@ inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
   minEForMultiFrag = anE;
 }
 
-inline void G4ExcitationHandler::SetOPTxs(G4int) 
-{}
-
-inline void G4ExcitationHandler::UseSICB()
-{}
-
 inline void G4ExcitationHandler::SortSecondaryFragment(G4Fragment* frag)
 { 
   G4int A = frag->GetA_asInt();  
 
   // gamma, e-, p, n
-  if(A <= 1) { 
+  if(A <= 1 || frag->IsLongLived()) { 
     theResults.push_back(frag); 
   } else if(frag->GetExcitationEnergy() < minExcitation) {
     // cold fragments

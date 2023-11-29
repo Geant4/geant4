@@ -284,5 +284,5 @@ G4double G4LFission::Atomas(const G4double A, const G4double Z)
 const std::pair<G4double, G4double> G4LFission::GetFatalEnergyCheckLevels() const
 {
   // max energy non-conservation is mass of heavy nucleus
-  return std::pair<G4double, G4double>(5*perCent,250*GeV);
+  return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }

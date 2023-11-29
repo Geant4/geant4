@@ -82,6 +82,8 @@
 
 #include <sstream>
 
+#define G4warn G4cout
+
 ////////////// /vis/scene/add/arrow ///////////////////////////////////////
 
 G4VisCommandSceneAddArrow::G4VisCommandSceneAddArrow () {
@@ -122,7 +124,7 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -192,7 +194,7 @@ void G4VisCommandSceneAddArrow2D::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -311,13 +313,13 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   } else {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr
+        G4warn
   << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
@@ -348,9 +350,9 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Consult scene for arrow width...
   G4double arrowWidth =
-    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
-  // ...but limit it to length/50.
-  if (arrowWidth > length/50.) arrowWidth = length/50.;
+    0.05 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+  // ...but limit it to length/30.
+  if (arrowWidth > length/30.) arrowWidth = length/30.;
 
   G4VModel* model = new G4AxesModel
     (x0, y0, z0, length, arrowWidth, colourString, newValue,
@@ -417,7 +419,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -506,7 +508,7 @@ void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -580,7 +582,7 @@ void G4VisCommandSceneAddElectricField::SetNewValue
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<  "ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<  "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -664,7 +666,7 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -818,7 +820,7 @@ void G4VisCommandSceneAddExtent::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -897,7 +899,7 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -985,7 +987,7 @@ void G4VisCommandSceneAddGPS::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
+      G4warn << "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1040,7 +1042,7 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1100,7 +1102,7 @@ void G4VisCommandSceneAddLine::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1189,7 +1191,7 @@ void G4VisCommandSceneAddLine2D::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1274,7 +1276,7 @@ void G4VisCommandSceneAddLocalAxes::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1353,11 +1355,11 @@ void G4VisCommandSceneAddLocalAxes::SetNewValue (G4UIcommand*,
 
   if (findingsVector.empty()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Volume \"" << name << "\"";
+      G4warn << "ERROR: Volume \"" << name << "\"";
       if (copyNo >= 0) {
-	G4cerr << ", copy no. " << copyNo << ",";
+	G4warn << ", copy no. " << copyNo << ",";
       }
-      G4cerr << " not found." << G4endl;
+      G4warn << " not found." << G4endl;
     }
     G4VisCommandsSceneAddUnsuccessful(verbosity);
     return;
@@ -1421,7 +1423,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -1453,7 +1455,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   }
   if (i != rdModelList.end()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "There is already a volume, \""
+      G4warn << "There is already a volume, \""
              << i->fpModel->GetGlobalDescription()
              << "\",\n in the run-duration model list of scene \""
              << pScene -> GetName()
@@ -1493,7 +1495,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 //    if (verbosity >= G4VisManager::warnings) {
 //      const std::map<G4String,G4AttDef>* attDefs = model->GetAttDefs();
 //      std::vector<G4AttValue>* attValues = model->CreateCurrentAttValues();
-//      G4cout << G4AttCheck(attValues, attDefs);
+//      G4warn << G4AttCheck(attValues, attDefs);
 //      delete attValues;
 //    }
 
@@ -1600,13 +1602,13 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   } else {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr
+        G4warn
   << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
@@ -1617,7 +1619,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
   if (!pViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandSceneAddLogo::SetNewValue: no viewer."
 	"\n  Auto direction needs a viewer."
 	     << G4endl;
@@ -1665,7 +1667,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     else if (direction[1] == 'z') logoDirection = minusZ;
   } else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: Unrecogniseed direction: \""
+      G4warn <<	"ERROR: Unrecogniseed direction: \""
 	     << direction << "\"." << G4endl;
       return;
     }
@@ -1687,7 +1689,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   if (sceneExtent.GetExtentRadius() == 0) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: Existing scene does not yet have any extent."
 	"\n  Maybe you have not yet added any geometrical object."
 	     << G4endl;
@@ -1718,14 +1720,14 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   if (!room) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: Not enough room in existing scene.  Maybe logo is too large."
 	     << G4endl;
     }
   }
   if (worried) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: The logo you have asked for is bigger than the existing"
 	"\n  scene.  Maybe you have added it too soon.  It is recommended that"
 	"\n  you add the logo last so that it can be correctly auto-positioned"
@@ -1964,7 +1966,7 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2043,7 +2045,7 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<  "ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<  "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2117,7 +2119,7 @@ void G4VisCommandSceneAddPSHits::SetNewValue
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2226,13 +2228,13 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   } else {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
-        G4cerr
+        G4warn
   << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
@@ -2271,7 +2273,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
   if (!pViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandSceneAddScale::SetNewValue: no viewer."
 	"\n  Auto direction needs a viewer."
 	     << G4endl;
@@ -2322,7 +2324,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   if (sceneExtent.GetExtentRadius() == 0) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: Existing scene does not yet have any extent."
 	"\n  Maybe you have not yet added any geometrical object."
 	     << G4endl;
@@ -2345,14 +2347,14 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   if (!room) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: Not enough room in existing scene.  Maybe scale is too long."
 	     << G4endl;
     }
   }
   if (worried) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: The scale you have asked for is bigger than the existing"
 	"\n  scene.  Maybe you have added it too soon.  It is recommended that"
 	"\n  you add the scale last so that it can be correctly auto-positioned"
@@ -2610,7 +2612,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2701,7 +2703,7 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2802,7 +2804,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2814,7 +2816,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   if (newValue.find("rich") != std::string::npos) rich = true;
   if (newValue.size() && !(rich || smooth)) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Unrecognised parameter \"" << newValue << "\""
+      G4warn << "ERROR: Unrecognised parameter \"" << newValue << "\""
       "\n  No action taken."
       << G4endl;
     }
@@ -2822,9 +2824,6 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  G4int keepVerbose = UImanager->GetVerboseLevel();
-  G4int newVerbose = 2;
-  UImanager->SetVerboseLevel(newVerbose);
   G4String defaultTrajectoryType;
   if (smooth && rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 4");
@@ -2839,23 +2838,22 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     UImanager->ApplyCommand("/tracking/storeTrajectory 1");
     defaultTrajectoryType = "G4Trajectory";
   }
-  UImanager->SetVerboseLevel(keepVerbose);
 
   if (verbosity >= G4VisManager::errors) {
-    G4cout <<
+    G4warn <<
       "Attributes available for modeling and filtering with"
       "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
       "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands:"
 	   << G4endl;
-    G4cout << *G4TrajectoriesModel().GetAttDefs();
+    G4warn << *G4TrajectoriesModel().GetAttDefs();
     if (rich) {
-      G4cout << *G4RichTrajectory().GetAttDefs()
+      G4warn << *G4RichTrajectory().GetAttDefs()
 	     << *G4RichTrajectoryPoint().GetAttDefs();
     } else if (smooth) {
-      G4cout << *G4SmoothTrajectory().GetAttDefs()
+      G4warn << *G4SmoothTrajectory().GetAttDefs()
 	     << *G4SmoothTrajectoryPoint().GetAttDefs();
     } else {
-      G4cout << *G4Trajectory().GetAttDefs()
+      G4warn << *G4Trajectory().GetAttDefs()
 	     << *G4TrajectoryPoint().GetAttDefs();
     }
   }
@@ -2882,7 +2880,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   }
 
   if (verbosity >= G4VisManager::warnings) {
-    G4cout <<
+    G4warn <<
       "WARNING: Trajectory storing has been requested.  This action may be"
       "\n  reversed with \"/tracking/storeTrajectory 0\"."
 	   << G4endl;
@@ -2924,7 +2922,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -2966,7 +2964,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue
 
   if (!any) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<	"WARNING: No User Vis Action registered." << G4endl;
+      G4warn <<	"WARNING: No User Vis Action registered." << G4endl;
     }
     return;
   }
@@ -2991,7 +2989,7 @@ void G4VisCommandSceneAddUserAction::AddVisAction
   if (i != visExtentMap.end()) extent = i->second;
   if (warn) {
     if (extent.GetExtentRadius() <= 0.) {
-      G4cout
+      G4warn
       << "WARNING: User Vis Action \"" << name << "\" extent is null."
       << G4endl;
     }
@@ -3077,7 +3075,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter = new G4UIparameter ("depth-of-descent", 'i', omitable = true);
   parameter -> SetGuidance
     ("Depth of descent of geometry hierarchy. Default = unlimited depth.");
-  parameter -> SetDefaultValue (G4Scene::UNLIMITED);
+  parameter -> SetDefaultValue (G4PhysicalVolumeModel::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
   parameter -> SetParameterCandidates("none box -box *box");
@@ -3124,7 +3122,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -3170,7 +3168,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     if (verbosity >= G4VisManager::warnings) {
       static G4bool warned = false;
       if (!warned && name != "worlds") {
-	G4cout <<
+	G4warn <<
 	  "WARNING: Parallel worlds in operation.  To visualise, specify"
 	  "\n  \"worlds\" or the parallel world volume or sub-volume name"
 	  "\n   and control visibility with /vis/geometry."
@@ -3178,7 +3176,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 	std::vector<G4VPhysicalVolume*>::iterator iterWorld =
 	  transportationManager->GetWorldsIterator();
 	for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-	  G4cout << "  World " << i << ": " << (*iterWorld)->GetName()
+	  G4warn << "  World " << i << ": " << (*iterWorld)->GetName()
 		 << G4endl;
 	  warned = true;
 	}
@@ -3191,7 +3189,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   if (!world) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: G4VisCommandSceneAddVolume::SetNewValue:"
 	"\n  No world.  Maybe the geometry has not yet been defined."
 	"\n  Try \"/run/initialize\""
@@ -3229,7 +3227,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
     if (nWorlds <= 1) {
       if (verbosity >= G4VisManager::warnings) {
-	G4cout <<
+	G4warn <<
 	  "WARNING: G4VisCommandSceneAddVolume::SetNewValue:"
 	  "\n  Parallel worlds requested but none exist."
 	  "\n  Just adding material world."
@@ -3259,12 +3257,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
       G4ModelingParameters mp;  // Default - no culling.
       G4PhysicalVolumeModel searchModel
       (*iterWorld,
-       G4PhysicalVolumeModel::UNLIMITED,
+       requestedDepthOfDescent,
        G4Transform3D(),
        &mp,
        useFullExtent);
-      G4PhysicalVolumesSearchScene searchScene
-      (&searchModel, name, copyNo, requestedDepthOfDescent);
+      G4PhysicalVolumesSearchScene searchScene(&searchModel, name, copyNo);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
       for (const auto& findings: searchScene.GetFindings()) {
         findingsVector.push_back(findings);
@@ -3314,11 +3311,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   if (findingsVector.empty()) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr << "ERROR: Volume \"" << name << "\"";
+      G4warn << "ERROR: Volume \"" << name << "\"";
       if (copyNo >= 0) {
-        G4cerr << ", copy no. " << copyNo << ",";
+        G4warn << ", copy no. " << copyNo << ",";
       }
-      G4cerr << " not found." << G4endl;
+      G4warn << " not found." << G4endl;
     }
     G4VisCommandsSceneAddUnsuccessful(verbosity);
     return;
@@ -3351,20 +3348,22 @@ void G4VisCommandSceneAddPlotter::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
 
   G4Plotter& _plotter = G4PlotterManager::GetInstance().GetPlotter(newValue);
-  
-  G4VModel* model = new G4PlotterModel(_plotter);
+  G4VModel* model = new G4PlotterModel(_plotter,newValue);
 
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  G4bool successful = pScene -> AddEndOfRunModel(model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Arrow has been added to scene \"" << currentSceneName << "\"." << G4endl;
+      G4cout
+      << "Plotter \"" << model->GetCurrentDescription()
+      << "\" has been added to scene \"" << currentSceneName << "\"."
+      << G4endl;
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);

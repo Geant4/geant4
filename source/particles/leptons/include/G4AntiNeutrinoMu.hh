@@ -51,7 +51,7 @@ class G4AntiNeutrinoMu : public G4ParticleDefinition
  private:
    static G4AntiNeutrinoMu* theInstance;
    G4AntiNeutrinoMu(){}
-   ~G4AntiNeutrinoMu(){}
+   ~G4AntiNeutrinoMu() override= default;
 
  public:
    static G4AntiNeutrinoMu* Definition();

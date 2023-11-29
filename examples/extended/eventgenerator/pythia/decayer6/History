@@ -1,17 +1,26 @@
-----------------------------------------------------------------------------
+# Example decayer6 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      examples History file
-                      ---------------------
-This file should be used by the test developer to briefly summarize all major
-modifications introduced in the code and keep track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-07 I. Hrivnacova (p6decayer-V11-00-02)
+- Updated common directory (excommon-V11-00-01)
+- Fixed P6DExtDecayerPhysics compilation
+
+## 2022-10-26 I. Hrivnacova (p6decayer-V11-00-01)
+- P6DExtDecayerPhysics.cc:
+  Make sure that the ext decayer is set to G4Decay process only once
+  to avoid potential misleading.
+  (Inspired by M. Asai update in p8decayer-V11-00-01.)
+
+## 2021-12-10 Ben Morgan (p6decayer-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 13/11/20 B.Morgan (p6decayer-V10-06-01)
 - Enforce use of Serial RunManager.

@@ -39,7 +39,7 @@ const G4ThreeVector G4ClippablePolygon::GetNormal() const
 }
 
 inline
-G4int G4ClippablePolygon::GetNumVertices() const
+std::size_t G4ClippablePolygon::GetNumVertices() const
 {
    return vertices.size();
 }
@@ -47,5 +47,5 @@ G4int G4ClippablePolygon::GetNumVertices() const
 inline
 G4bool G4ClippablePolygon::Empty() const
 {
-   return vertices.size()==0;
+   return vertices.empty();
 }

@@ -38,7 +38,7 @@
 G4HitsModel::~G4HitsModel () {}
 
 G4HitsModel::G4HitsModel ():
-  fpCurrentHit(0)
+  fpCurrentHit(nullptr)
 {
   fType = "G4HitsModel";
   fGlobalTag = "G4HitsModel for all hits.";
@@ -49,17 +49,17 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
   const G4Event* event = fpMP->GetEvent();
   if (event) {
-    G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
+    G4HCofThisEvent* HCE = event->GetHCofThisEvent();
     if (HCE) {
-      G4int nHC = HCE -> GetCapacity ();
-      for (int iHC = 0; iHC < nHC; iHC++) {
-	G4VHitsCollection* HC = HCE -> GetHC (iHC);
-	if (HC) {
-	  for(size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
-	    fpCurrentHit = HC -> GetHit (iHit);
-	    if (fpCurrentHit) sceneHandler.AddCompound (*fpCurrentHit);
-	  }
-	}
+      G4int nHC = (G4int)HCE->GetCapacity();
+      for (G4int iHC = 0; iHC < nHC; ++iHC) {
+        G4VHitsCollection* HC = HCE -> GetHC (iHC);
+        if (HC) {
+          for(std::size_t iHit = 0; iHit < HC->GetSize(); ++iHit) {
+            fpCurrentHit = HC->GetHit(iHit);
+            if (fpCurrentHit) sceneHandler.AddCompound(*fpCurrentHit);
+          }
+        }
       }
     }
   }

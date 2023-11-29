@@ -68,7 +68,7 @@ struct G4ExitNormal
 
  public:
 
-   G4ExitNormal(G4ThreeVector norm = G4ThreeVector(0.,0.,0.),
+   G4ExitNormal(const G4ThreeVector& norm = G4ThreeVector(0.,0.,0.),
                 G4bool        calc = false,
                 G4bool        valid= false,
                 ESide         side = kNull )
@@ -162,7 +162,7 @@ class G4ReplicaNavigation
                                const G4int replicaNo,
                                      G4ExitNormal& foundNormal ) const;
     inline void SetPhiTransformation( const G4double ang,
-                                            G4VPhysicalVolume* pVol=0 ) const;
+                                            G4VPhysicalVolume* pVol=nullptr ) const;
   private:
 
     // Invariants - unaltered during navigation

@@ -65,6 +65,7 @@ class RunAction : public G4UserRunAction
   private:    
     G4double ComputeTheory (const G4String&, G4int); 
     G4double GetEnergyCut  (const G4Material*, G4int);
+    void FillCrossSectionHisto (const G4String&, G4int);
                         
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fPrimary;

@@ -30,21 +30,36 @@
 #ifndef G4VERSION_HH
 #define G4VERSION_HH 1
 
-// Numbering rule for "G4VERSION_NUMBER":
-// - The number is consecutive (i.e. 711) as an integer.
-// - The meaning of each digit is as follows;
+/// @def G4VERSION_NUMBER
+/// @brief Integral value representing the current Geant4 version
+///
+/// Numbering rule for "G4VERSION_NUMBER":
+/// - The number is consecutive (i.e. 711) as an integer.
+/// - The meaning of each digit is as follows;
 //
-//   711
-//   |--> major version number
-//    |--> minor version number
-//     |--> patch number
-
+///   711
+///   |--> major version number (up to two digits)
+///    |--> minor version number (single digit)
+///     |--> patch number (single digit)
+///
 #ifndef G4VERSION_NUMBER
-  #define G4VERSION_NUMBER 1102
+  #define G4VERSION_NUMBER 1120
+#endif
+
+/// @def G4VERSION_REFERENCE_TAG
+/// @brief Number indicating current development cycle
+/// 
+/// Can take values between -1 and 11. A value of -1 indicates a release, whose version 
+/// can be read from @ref `G4VERSION_NUMBER`. Values 0-11 indicate an in development version,
+/// the value being incremented on each reference tag and thus corresponding to the month number 
+/// (taking December as 0, the start of new development of the next major/minor release).
+///
+#ifndef G4VERSION_REFERENCE_TAG
+  #define G4VERSION_REFERENCE_TAG -1
 #endif
 
 #ifndef G4VERSION_TAG
-  #define G4VERSION_TAG "$Name: geant4-11-00-patch-02 $"
+  #define G4VERSION_TAG "$Name: geant4-11-02-beta-01 $"
 #endif
 
 // as variables
@@ -53,10 +68,10 @@
 #include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-11-00-patch-02 [MT]$";
+static const G4String G4Version = "$Name: geant4-11-02-beta-01 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-11-00-patch-02 $";
+static const G4String G4Version = "$Name: geant4-11-02-beta-01 $";
 #endif
-static const G4String G4Date = "(25-May-2022)";
+static const G4String G4Date = "(30-June-2023)";
 
 #endif

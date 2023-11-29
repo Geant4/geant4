@@ -26,70 +26,65 @@
 #pragma once
 
 #include "PTL/Globals.hh"
+#include "PTL/TaskSubQueue.hh"
 #include "PTL/Threading.hh"
-#include "PTL/Types.hh"
+#include "PTL/VTask.hh"
 #include "PTL/VUserTaskQueue.hh"
 
 #include <atomic>
-#include <deque>
-#include <list>
+#include <cstdint>
 #include <memory>
-#include <queue>
 #include <random>
-#include <set>
-#include <stack>
+#include <vector>
 
 namespace PTL
 {
-class VTask;
-class TaskSubQueue;  // definition in UserTaskQueue.icc
-
 class UserTaskQueue : public VUserTaskQueue
 {
 public:
-    typedef std::shared_ptr<VTask>             task_pointer;
-    typedef std::vector<TaskSubQueue*>         TaskSubQueueContainer;
-    typedef std::default_random_engine         random_engine_t;
-    typedef std::uniform_int_distribution<int> int_dist_t;
+    using task_pointer          = std::shared_ptr<VTask>;
+    using TaskSubQueueContainer = std::vector<TaskSubQueue*>;
+    using random_engine_t       = std::default_random_engine;
+    using int_dist_t            = std::uniform_int_distribution<int>;
 
 public:
     // Constructor and Destructors
     UserTaskQueue(intmax_t nworkers = -1, UserTaskQueue* = nullptr);
     // Virtual destructors are required by abstract classes
     // so add it by default, just in case
-    virtual ~UserTaskQueue() override;
+    ~UserTaskQueue() override;
 
 public:
     // Virtual  function for getting a task from the queue
-    virtual task_pointer GetTask(intmax_t subq = -1, intmax_t nitr = -1) override;
+    task_pointer GetTask(intmax_t subq = -1, intmax_t nitr = -1) override;
     // Virtual function for inserting a task into the queue
-    virtual intmax_t InsertTask(task_pointer&&, ThreadData* = nullptr,
-                                intmax_t subq = -1) override PTL_NO_SANITIZE_THREAD;
+    intmax_t InsertTask(task_pointer&&, ThreadData* = nullptr,
+                        intmax_t subq = -1) override PTL_NO_SANITIZE_THREAD;
 
     // if executing only tasks in threads bin
     task_pointer GetThreadBinTask();
 
     // Overload this function to hold threads
-    virtual void Wait() override {}
-    virtual void resize(intmax_t) override;
+    void Wait() override {}
+    void resize(intmax_t) override;
 
-    virtual bool      empty() const override;
-    virtual size_type size() const override;
+    bool      empty() const override;
+    size_type size() const override;
 
-    virtual size_type bin_size(size_type bin) const override;
-    virtual bool      bin_empty(size_type bin) const override;
+    size_type bin_size(size_type bin) const override;
+    bool      bin_empty(size_type bin) const override;
 
-    inline bool      true_empty() const override;
-    inline size_type true_size() const override;
+    bool      true_empty() const override;
+    size_type true_size() const override;
 
-    virtual void ExecuteOnAllThreads(ThreadPool* tp, function_type f) override;
+    void ExecuteOnAllThreads(ThreadPool* tp, function_type f) override;
 
-    virtual void ExecuteOnSpecificThreads(ThreadIdSet tid_set, ThreadPool* tp,
-                                          function_type f) override;
+    void ExecuteOnSpecificThreads(ThreadIdSet tid_set, ThreadPool* tp,
+                                  function_type f) override;
 
-    virtual VUserTaskQueue* clone() override;
+    VUserTaskQueue* clone() override;
 
-    virtual intmax_t GetThreadBin() const override;
+    intmax_t GetThreadBin() const override;
 
 protected:
     intmax_t GetInsertBin() const;
@@ -102,40 +97,34 @@ private:
     bool                       m_is_clone;
     intmax_t                   m_thread_bin;
     mutable intmax_t           m_insert_bin;
-    std::atomic_bool*          m_hold;
-    std::atomic_uintmax_t*     m_ntasks;
-    Mutex*                     m_mutex;
-    TaskSubQueueContainer*     m_subqueues;
-    std::vector<int>           m_rand_list;
-    std::vector<int>::iterator m_rand_itr;
+    std::atomic_bool*          m_hold      = nullptr;
+    std::atomic_uintmax_t*     m_ntasks    = nullptr;
+    Mutex*                     m_mutex     = nullptr;
+    TaskSubQueueContainer*     m_subqueues = nullptr;
+    std::vector<int>           m_rand_list = {};
+    std::vector<int>::iterator m_rand_itr  = {};
 };
-
-}  // namespace PTL
-
-//======================================================================================//
-
-#include "PTL/UserTaskQueue.icc"
 
 //======================================================================================//
 
 inline bool
-PTL::UserTaskQueue::empty() const
+UserTaskQueue::empty() const
 {
     return (m_ntasks->load(std::memory_order_relaxed) == 0);
 }
 
 //======================================================================================//
 
-inline PTL::UserTaskQueue::size_type
-PTL::UserTaskQueue::size() const
+inline UserTaskQueue::size_type
+UserTaskQueue::size() const
 {
     return m_ntasks->load(std::memory_order_relaxed);
 }
 
 //======================================================================================//
 
-inline PTL::UserTaskQueue::size_type
-PTL::UserTaskQueue::bin_size(size_type bin) const
+inline UserTaskQueue::size_type
+UserTaskQueue::bin_size(size_type bin) const
 {
     return (*m_subqueues)[bin]->size();
 }
@@ -143,7 +132,7 @@ PTL::UserTaskQueue::bin_size(size_type bin) const
 //======================================================================================//
 
 inline bool
-PTL::UserTaskQueue::bin_empty(size_type bin) const
+UserTaskQueue::bin_empty(size_type bin) const
 {
     return (*m_subqueues)[bin]->empty();
 }
@@ -151,7 +140,7 @@ PTL::UserTaskQueue::bin_empty(size_type bin) const
 //======================================================================================//
 
 inline bool
-PTL::UserTaskQueue::true_empty() const
+UserTaskQueue::true_empty() const
 {
     for(const auto& itr : *m_subqueues)
         if(!itr->empty())
@@ -161,8 +150,8 @@ PTL::UserTaskQueue::true_empty() const
 
 //======================================================================================//
 
-inline PTL::UserTaskQueue::size_type
-PTL::UserTaskQueue::true_size() const
+inline UserTaskQueue::size_type
+UserTaskQueue::true_size() const
 {
     size_type _n = 0;
     for(const auto& itr : *m_subqueues)
@@ -171,3 +160,4 @@ PTL::UserTaskQueue::true_size() const
 }
 
 //======================================================================================//
+}  // namespace PTL

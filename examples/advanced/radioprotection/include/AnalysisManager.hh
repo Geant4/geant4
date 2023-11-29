@@ -34,24 +34,32 @@
 #include "globals.hh"
 #include "G4AnalysisManager.hh"
 
+#include "AnalysisMessenger.hh"
+
+class AnalysisMessenger;
+
 // Define the total number of columns in the ntuple
-const G4int MaxNtCol = 5;
+const G4int MaxNtCol = 9;
 
 class AnalysisManager
 { 
 
 public:
-   AnalysisManager();
+   AnalysisManager(AnalysisMessenger* messenger);
   ~AnalysisManager();
   
-  void book(); // booking the ROOT file
+  void book(G4bool addExtraNt); // booking the ROOT file
 
   void SetPrimaryEnergy(G4double energy); // Store the energy of the primary particles
-
-  void StoreEnergyDeposition(G4double edep);// Fill the ntuple with energy deposition per event
+  
+  void StoreEnergyDeposition(G4double edep, G4double path, G4int eid);
+  // Fill the ntuple with energy deposition and path length per event
   
   void FillSecondaries(G4int AA, G4double charge, G4double energy); 
   // Information about secondary particles
+  
+  void StoreSecondStageEnergyDeposition(G4double edep, G4int eid);
+  // Fill the ntuple with energy and event ID of the second stage (telescope detector only)
 
   void finish();
   // Close the ROOT file with all the results stored in nutples 
@@ -59,6 +67,10 @@ public:
 private:
   G4bool factoryOn; 
   G4int         fNtColId[MaxNtCol];
+  
+  AnalysisMessenger* messenger;
+  G4bool usingRoot;
+  G4bool extraNt;
 
 };
 

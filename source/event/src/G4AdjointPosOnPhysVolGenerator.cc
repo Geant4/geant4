@@ -55,20 +55,6 @@ G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::GetInstance()
 
 // --------------------------------------------------------------------
 //
-G4AdjointPosOnPhysVolGenerator::~G4AdjointPosOnPhysVolGenerator()
-{ 
-}
-
-////////////////////////////////////////////////////
-//
-G4AdjointPosOnPhysVolGenerator::G4AdjointPosOnPhysVolGenerator()
-   : UseSphere(true), ModelOfSurfaceSource("OnSolid"),
-     AreaOfExtSurfaceOfThePhysicalVolume(0.), CosThDirComparedToNormal(0.)
-{ 
-}
-
-// --------------------------------------------------------------------
-//
 G4VPhysicalVolume*
 G4AdjointPosOnPhysVolGenerator::DefinePhysicalVolume(const G4String& aName)
 {
@@ -78,7 +64,7 @@ G4AdjointPosOnPhysVolGenerator::DefinePhysicalVolume(const G4String& aName)
   for ( unsigned int i=0; i< thePhysVolStore->size(); ++i )
   {
     G4String vol_name =(*thePhysVolStore)[i]->GetName();
-    if (vol_name == "")
+    if (vol_name.empty())
     {
       vol_name = (*thePhysVolStore)[i]->GetLogicalVolume()->GetName();
     }
@@ -152,20 +138,17 @@ G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,
     {
       return ComputeAreaOfExtSurfaceStartingFromSphere(aSolid,NStats);        
     }
-    else
-    {
-      return ComputeAreaOfExtSurfaceStartingFromBox(aSolid,NStats);
-    }
+    
+    return ComputeAreaOfExtSurfaceStartingFromBox(aSolid,NStats);
   }
-  else
+  
+  G4ThreeVector p, dir;
+  if (ModelOfSurfaceSource == "ExternalSphere")
   {
-    G4ThreeVector p, dir;
-    if (ModelOfSurfaceSource == "ExternalSphere")
-    {
-      return GenerateAPositionOnASphereBoundary(aSolid, p,dir);
-    }
-    return GenerateAPositionOnABoxBoundary(aSolid, p,dir);
+    return GenerateAPositionOnASphereBoundary(aSolid, p,dir);
   }
+  
+  return GenerateAPositionOnABoxBoundary(aSolid, p,dir);
 }
 
 // --------------------------------------------------------------------

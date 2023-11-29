@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.hh
+/// \file B1/include/RunAction.hh
 /// \brief Definition of the B1::RunAction class
 
 #ifndef B1RunAction_h
@@ -49,7 +49,7 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-    ~RunAction() override;
+    ~RunAction() override = default;
 
     void BeginOfRunAction(const G4Run*) override;
     void   EndOfRunAction(const G4Run*) override;

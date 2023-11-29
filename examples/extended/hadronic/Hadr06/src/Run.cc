@@ -41,16 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), fParticle(0), fEkin(0.)
-{
-  fEnergyDeposit = fEnergyDeposit2 = 0.;
-  fEnergyFlow    = fEnergyFlow2    = 0.;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
+: fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,19 +90,18 @@ void Run::ParticleCount(G4String name, G4double Ekin, G4double meanLife)
                  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEdep(G4double edep)
+void Run::SumEnergies(G4double edep, G4double eflow, G4double etot)
 { 
   fEnergyDeposit += edep;
   fEnergyDeposit2 += edep*edep;
-}
-                 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEflow(G4double eflow)
-{ 
   fEnergyFlow += eflow;
   fEnergyFlow2 += eflow*eflow;
-}                  
+  
+  fEnergyTotal += etot;
+  fEnergyTotal2 += etot*etot;  
+}
+                  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::ParticleFlux(G4String name, G4double Ekin)
@@ -150,7 +140,9 @@ void Run::Merge(const G4Run* run)
   fEnergyDeposit2  += localRun->fEnergyDeposit2;
   fEnergyFlow      += localRun->fEnergyFlow;
   fEnergyFlow2     += localRun->fEnergyFlow2;
-      
+  fEnergyTotal     += localRun->fEnergyTotal;
+  fEnergyTotal2    += localRun->fEnergyTotal2;
+        
   //map: processes count
   std::map<G4String,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
@@ -285,14 +277,20 @@ void Run::EndOfRun()
 	 
   //energy balance
   //	 
-  G4double Etot = fEnergyDeposit + fEnergyFlow;
-  G4cout << "\n total energy: Edep + Eleak = " << G4BestUnit(Etot, "Energy")
-         << G4endl;	 
-	   
+  fEnergyTotal /= TotNbofEvents; fEnergyTotal2 /= TotNbofEvents;
+  G4double rmsEtotal = fEnergyTotal2 - fEnergyTotal*fEnergyTotal;
+  if (rmsEtotal>0.) rmsEtotal = std::sqrt(rmsEtotal);
+  else              rmsEflow = 0.;
+  
+  G4cout << "\n Mean energy total   per event = "
+         << G4BestUnit(fEnergyTotal,"Energy") << ";  rms = "
+         << G4BestUnit(rmsEtotal,   "Energy") 
+         << G4endl;
+	 	   
   //particles at creation
   //
  if (fParticleDataMap1.size() > 0) {       
-  G4cout << "\n List of particles at creation (with meanLife != 0):"
+  G4cout << "\n List of particles at creation :"
          << G4endl;
   std::map<G4String,ParticleData>::iterator itc;               
   for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 

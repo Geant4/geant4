@@ -59,14 +59,13 @@
 #ifndef G4BraggModel_h
 #define G4BraggModel_h 1
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
 #include "G4VEmModel.hh"
 #include "G4PSTARStopping.hh"
 
 class G4ParticleChangeForLoss;
 class G4EmCorrections;
 class G4ICRU90StoppingData;
+class G4PSTARStopping;
 
 class G4BraggModel : public G4VEmModel
 {
@@ -128,16 +127,14 @@ public:
 
 protected:
 
+  void SetParticle(const G4ParticleDefinition* p);
+
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			      G4double kinEnergy) final;
-
-  inline G4double GetChargeSquareRatio() const;
 
   inline void SetChargeSquareRatio(G4double val);
 
 private:
-
-  inline void SetParticle(const G4ParticleDefinition* p);
 
   void HasMaterial(const G4Material* material);
 
@@ -153,50 +150,39 @@ private:
 
   G4double ChemicalFactor(G4double kineticEnergy, G4double eloss125) const;
 
-  G4EmCorrections*             corr = nullptr;
-  const G4ParticleDefinition*  particle = nullptr;
-  G4ParticleDefinition*        theElectron = nullptr;
-  G4ParticleChangeForLoss*     fParticleChange = nullptr;
-  G4ICRU90StoppingData*        fICRU90 = nullptr;
+protected:
 
-  const G4Material*            currentMaterial = nullptr;
-  const G4Material*            baseMaterial = nullptr;
+  const G4ParticleDefinition* particle = nullptr;
+  G4ParticleDefinition* theElectron = nullptr;
+  G4ParticleChangeForLoss* fParticleChange = nullptr;
 
-  static G4PSTARStopping*      fPSTAR;
+  const G4Material* currentMaterial = nullptr;
+  const G4Material* baseMaterial = nullptr;
 
-  G4double mass;
-  G4double spin;
-  G4double chargeSquare;
-  G4double massRate;
-  G4double ratio;
+  G4EmCorrections* corr = nullptr;
+
+  static G4ICRU90StoppingData* fICRU90;
+  static G4PSTARStopping* fPSTAR;
+
+  G4double mass = 0.0;
+  G4double spin = 0.0;
+  G4double chargeSquare = 1.0;
+  G4double massRate = 1.0;
+  G4double ratio = 1.0;
+  G4double protonMassAMU = 1.007276;
   G4double lowestKinEnergy;
-  G4double protonMassAMU;
   G4double theZieglerFactor;
   G4double expStopPower125;  // Experimental Stopping power at 125keV
 
-  G4int    iMolecula = -1;   // index in the molecula's table
-  G4int    iPSTAR = -1;      // index in PSTAR
-  G4int    iICRU90 = -1;
-  G4bool   isIon = false;
+  G4int iMolecula = -1;   // index in the molecula's table
+  G4int iPSTAR = -1;      // index in NIST PSTAR
+  G4int iICRU90 = -1;
+
+private:
+
+  G4bool isIon = false;
+  G4bool isFirst = false;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/CLHEP::eplus;
-  chargeSquare = q*q;
-  massRate     = mass/CLHEP::proton_mass_c2;
-  ratio = CLHEP::electron_mass_c2/mass;
-}
-
-inline G4double G4BraggModel::GetChargeSquareRatio() const
-{
-  return chargeSquare;
-}
 
 inline void G4BraggModel::SetChargeSquareRatio(G4double val)
 {

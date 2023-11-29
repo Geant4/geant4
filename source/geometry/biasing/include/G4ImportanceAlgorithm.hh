@@ -45,12 +45,12 @@ class G4ImportanceAlgorithm : public G4VImportanceAlgorithm
     G4ImportanceAlgorithm();
       // simple construction
 
-    virtual ~G4ImportanceAlgorithm();
+    ~G4ImportanceAlgorithm() override;
       // repeate warning if triggered
 
-    virtual G4Nsplit_Weight Calculate(G4double ipre, 
+    G4Nsplit_Weight Calculate(G4double ipre, 
                                       G4double ipost, 
-                                      G4double init_w) const;
+                                      G4double init_w) const override;
       // calculate the number of tracks and their weight according to the
       // pre and post importance value and the weight of the mother track
 
@@ -62,11 +62,6 @@ class G4ImportanceAlgorithm : public G4VImportanceAlgorithm
   private:
 
     mutable G4bool fWarned = false;
-
-#ifdef G4MULTITHREADED
-    static G4Mutex ImportanceMutex;
-#endif
-
 };
 
 #endif

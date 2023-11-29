@@ -57,11 +57,9 @@
 #ifndef G4VParticleChange_hh
 #define G4VParticleChange_hh 1
 
+#include <vector>
 #include "globals.hh"
 #include "G4ios.hh"
-#include <cmath>
-
-#include "G4TrackFastVector.hh"
 #include "G4TrackStatus.hh"
 #include "G4SteppingControl.hh"
 #include "G4Step.hh"
@@ -72,14 +70,11 @@ class G4VParticleChange
   public:
 
     G4VParticleChange();
-      // Default constructor
 
-    virtual ~G4VParticleChange();
-      // Destructor
+    virtual ~G4VParticleChange() = default;
 
-    G4bool operator==(const G4VParticleChange& right) const;
-    G4bool operator!=(const G4VParticleChange& right) const;
-      // Equality operators; pointer comparison
+    G4VParticleChange(const G4VParticleChange& right) = delete;
+    G4VParticleChange& operator=(const G4VParticleChange& right) = delete;
 
   // --- the following methods are for updating G4Step ---
 
@@ -96,80 +91,83 @@ class G4VParticleChange
 
   // --- the following methods are for TruePathLength ---
 
-    G4double GetTrueStepLength() const;
-    void ProposeTrueStepLength(G4double truePathLength);
+    inline G4double GetTrueStepLength() const;
+    inline void ProposeTrueStepLength(G4double truePathLength);
       // Get/Propose theTrueStepLength
 
   // --- the following methods are for LocalEnergyDeposit ---
 
-    G4double GetLocalEnergyDeposit() const;
-    void ProposeLocalEnergyDeposit(G4double anEnergyPart);
+    inline G4double GetLocalEnergyDeposit() const;
+    inline void ProposeLocalEnergyDeposit(G4double anEnergyPart);
       // Get/Propose the locally deposited energy
 
   // --- the following methods are for nonIonizingEnergyDeposit  ---
 
-    G4double GetNonIonizingEnergyDeposit() const;
-    void ProposeNonIonizingEnergyDeposit(G4double anEnergyPart);
+    inline G4double GetNonIonizingEnergyDeposit() const;
+    inline void ProposeNonIonizingEnergyDeposit(G4double anEnergyPart);
       // Get/Propose the non-ionizing deposited energy
 
   // --- the following methods are for TrackStatus ---
 
-    G4TrackStatus GetTrackStatus() const;
-    void ProposeTrackStatus(G4TrackStatus status);
+    inline G4TrackStatus GetTrackStatus() const;
+    inline void ProposeTrackStatus(G4TrackStatus status);
       // Get/Propose the final TrackStatus of the current particle
+
+    inline const G4Track* GetCurrentTrack() const;
+      // Get primary track pointer
 
   // --- the following methods are for management of SteppingControl ---
 
-    G4SteppingControl GetSteppingControl() const;
-    void ProposeSteppingControl(G4SteppingControl StepControlFlag);
+    inline G4SteppingControl GetSteppingControl() const;
+    inline void ProposeSteppingControl(G4SteppingControl StepControlFlag);
       // Set/Propose a flag to control stepping manager behaviour
 
   // --- the following methods are for management of initial/last step
 
-    G4bool GetFirstStepInVolume() const;
-    G4bool GetLastStepInVolume() const;
-    void ProposeFirstStepInVolume(G4bool flag);
-    void ProposeLastStepInVolume(G4bool flag);
+    inline G4bool GetFirstStepInVolume() const;
+    inline G4bool GetLastStepInVolume() const;
+    inline void ProposeFirstStepInVolume(G4bool flag);
+    inline void ProposeLastStepInVolume(G4bool flag);
 
   // --- the following methods are for management of secondaries ---
 
-    void Clear();
+    inline void Clear();
       // Clear the contents of this objects
       // This method should be called after the Tracking(Stepping)
       // manager removes all secondaries in theListOfSecondaries
 
-    void SetNumberOfSecondaries(G4int totSecondaries);
+    inline void SetNumberOfSecondaries(G4int totSecondaries);
       // SetNumberOfSecondaries must be called just before AddSecondary()
       // in order to secure memory space for theListOfSecondaries
       // This method resets theNumberOfSecondaries to zero
       // (that will be incremented at every AddSecondary() call)
 
-    G4int GetNumberOfSecondaries() const;
+    inline G4int GetNumberOfSecondaries() const;
       // Returns the number of secondaries current stored in G4TrackFastVector
 
-    G4Track* GetSecondary(G4int anIndex) const;
-      // Returns the pointer to the generated secondary particle
-      // which is specified by an Index
+    inline G4Track* GetSecondary(G4int anIndex) const;
+      // Returns the pointer to the generated secondary particle,
+      // which is specified by an Index, no check on boundary is performed
 
     void AddSecondary(G4Track* aSecondary);
       // Adds a secondary particle to theListOfSecondaries
 
   // --- the following methods are for management of weights ---
 
-    G4double GetWeight() const;
-    G4double GetParentWeight() const;
+    inline G4double GetWeight() const;
+    inline G4double GetParentWeight() const;
       // Get weight of the parent (i.e. current) track
 
-    void ProposeWeight(G4double finalWeight);
-    void ProposeParentWeight(G4double finalWeight);
+    inline void ProposeWeight(G4double finalWeight);
+    inline void ProposeParentWeight(G4double finalWeight);
       // Propose new weight of the parent (i.e. current) track
       // As for AlongStepDoIt, the parent weight will be set
       // in accumulated manner, i.e. - If two processes propose
       // weight of W1 and W2 respectively for the track with initial
       // weight of W0 the final weight is set to: (W1/W0) * (W2/W0) * W0
 
-    void SetSecondaryWeightByProcess(G4bool);
-    G4bool IsSecondaryWeightSetByProcess() const;
+    inline void SetSecondaryWeightByProcess(G4bool);
+    inline G4bool IsSecondaryWeightSetByProcess() const;
       // In default (fSecondaryWeightByProcess flag is false),
       // the weight of secondary tracks will be set to the parent weight
       // If fSecondaryWeightByProcess flag is true, the weight of secondary
@@ -190,39 +188,36 @@ class G4VParticleChange
     virtual void DumpInfo() const;
       // Print out information
 
-    void SetVerboseLevel(G4int vLevel);
-    G4int GetVerboseLevel() const;
+    inline void SetVerboseLevel(G4int vLevel);
+    inline G4int GetVerboseLevel() const;
 
     virtual G4bool CheckIt(const G4Track&);
-      // CheckIt method is provided for debug
+      // CheckIt method for general control in debug regime
 
-    void ClearDebugFlag();
-    void SetDebugFlag();
-    G4bool GetDebugFlag() const;
+    inline void ClearDebugFlag();
+    inline void SetDebugFlag();
+    inline G4bool GetDebugFlag() const;
       // CheckIt method is activated if debug flag is set
       // and 'G4VERBOSE' is defined
 
   protected:
 
-    G4VParticleChange(const G4VParticleChange& right);
-    G4VParticleChange& operator=(const G4VParticleChange& right);
-      // Hidden copy constructor and assignment operator
-
     G4Step* UpdateStepInfo(G4Step* Step);
       // Update the G4Step specific attributes
       // (i.e. SteppingControl, LocalEnergyDeposit, and TrueStepLength)
 
-    void InitializeTrueStepLength(const G4Track&);
-    void InitializeLocalEnergyDeposit(const G4Track&);
-    void InitializeSteppingControl(const G4Track&);
-    void InitializeParentWeight(const G4Track&);
-    void InitializeParentGlobalTime(const G4Track&);
-    void InitializeStatusChange(const G4Track&);
-    void InitializeSecondaries(const G4Track&);
-    void InitializeStepInVolumeFlags(const G4Track&);
+    inline void InitializeLocalEnergyDeposit();
+    inline void InitializeSteppingControl();
+    inline void InitializeParentWeight(const G4Track&);
+    inline void InitializeStatusChange(const G4Track&);
+    inline void InitializeSecondaries();
+    inline void InitializeFromStep(const G4Step*);
+
+    inline G4double ComputeBeta(G4double kinEnergy); 
 
     G4bool CheckSecondary(G4Track&);
-      // CheckSecondary method is provided for debug
+      // CheckSecondary method is provided to control secondary track 
+      // in debug regime
 
     G4double GetAccuracyForWarning() const;
     G4double GetAccuracyForException() const;
@@ -231,9 +226,12 @@ class G4VParticleChange
 
     static const G4double accuracyForWarning;
     static const G4double accuracyForException;
+    static const G4int maxError;
       // accuracy levels
 
-    G4TrackFastVector* theListOfSecondaries = nullptr;
+    const G4Track* theCurrentTrack = nullptr;
+
+    std::vector<G4Track*> theListOfSecondaries;
       // The vector of secondaries
 
     G4TrackStatus theStatusChange = fAlive;
@@ -273,6 +271,8 @@ class G4VParticleChange
 
     G4int verboseLevel = 1;
       // The Verbose level
+
+    G4int nError = 0;
 
     G4bool theFirstStepInVolume = false;
     G4bool theLastStepInVolume = false;

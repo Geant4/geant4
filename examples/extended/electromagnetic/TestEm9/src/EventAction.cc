@@ -34,7 +34,6 @@
 #include "HistoManager.hh"
 
 #include "G4UImanager.hh"
-#include "G4Gamma.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,11 +41,6 @@
 EventAction::EventAction():
   G4UserEventAction(),
   fVerbose(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

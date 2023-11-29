@@ -44,11 +44,11 @@ class G4CsvHnRFileManager : public G4VTHnRFileManager<HT>
     explicit G4CsvHnRFileManager(G4CsvRFileManager* rfileManger)
       : G4VTHnRFileManager<HT>(), fRFileManager(rfileManger) {}
     G4CsvHnRFileManager() = delete;
-    virtual ~G4CsvHnRFileManager() = default;
+    ~G4CsvHnRFileManager() override = default;
 
     // Methods for writing objects
-    virtual HT* Read(const G4String& htName, const G4String& fileName,
-                     const G4String& dirName,  G4bool isUserFileName) final;
+    HT* Read(const G4String& htName, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
 
   private:
     // Methods

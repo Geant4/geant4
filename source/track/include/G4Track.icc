@@ -418,6 +418,42 @@ inline const G4String G4Track::GetCreatorModelName() const
   return G4PhysicsModelCatalog::GetModelNameFromID(fCreatorModelID);
 }
 
+inline const G4ParticleDefinition* G4Track::GetParentResonanceDef() const
+{
+  return fParentResonanceDef;
+}
+
+inline void G4Track::SetParentResonanceDef(const G4ParticleDefinition* parentDef)
+{
+  fParentResonanceDef = parentDef;
+}
+
+inline G4int G4Track::GetParentResonanceID() const
+{
+  return fParentResonanceID;
+}
+
+inline void G4Track::SetParentResonanceID(const G4int parentID)
+{
+  fParentResonanceID = parentID;
+}
+
+inline G4bool G4Track::HasParentResonance() const {
+  return ( fParentResonanceDef != nullptr );
+}
+
+inline G4int G4Track::GetParentResonancePDGEncoding() const {
+  return ( fParentResonanceDef == nullptr ? 0 : fParentResonanceDef->GetPDGEncoding() );
+}
+
+inline G4String G4Track::GetParentResonanceName() const {
+  return ( fParentResonanceDef == nullptr ? G4String() : fParentResonanceDef->GetParticleName() );
+}
+
+inline G4double G4Track::GetParentResonanceMass() const {
+  return fParentResonanceID * CLHEP::keV;  // the ID is the mass of the resonance in eV
+}
+
 // flag for "Below Threshold"
 inline G4bool G4Track::IsBelowThreshold() const
 {

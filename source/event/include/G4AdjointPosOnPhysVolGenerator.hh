@@ -93,9 +93,8 @@ class G4AdjointPosOnPhysVolGenerator
 //---------   
   private:   // private methods
 //---------  
-
-    G4AdjointPosOnPhysVolGenerator();
-   ~G4AdjointPosOnPhysVolGenerator();
+    G4AdjointPosOnPhysVolGenerator() = default;
+   ~G4AdjointPosOnPhysVolGenerator() = default;
     G4double ComputeAreaOfExtSurfaceStartingFromSphere(G4VSolid* aSolid,
                                                        G4int NStat);
     G4double ComputeAreaOfExtSurfaceStartingFromBox(G4VSolid* aSolid,
@@ -119,11 +118,11 @@ class G4AdjointPosOnPhysVolGenerator
    G4VSolid* theSolid = nullptr;
    G4VPhysicalVolume* thePhysicalVolume = nullptr;
 
-   G4bool UseSphere;
-   G4String ModelOfSurfaceSource;
+   G4bool UseSphere{true};
+   G4String ModelOfSurfaceSource{"OnSolid"};
    G4AffineTransform theTransformationFromPhysVolToWorld;
-   G4double AreaOfExtSurfaceOfThePhysicalVolume;
-   G4double CosThDirComparedToNormal;
+   G4double AreaOfExtSurfaceOfThePhysicalVolume{0.};
+   G4double CosThDirComparedToNormal{0.};
 };
 
 #endif

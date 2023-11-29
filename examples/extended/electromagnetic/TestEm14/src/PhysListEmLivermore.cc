@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,11 +95,6 @@ PhysListEmLivermore::PhysListEmLivermore(const G4String& name)
     param->SetVerbose(0);
     param->Dump();
  }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysListEmLivermore::~PhysListEmLivermore()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

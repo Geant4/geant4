@@ -40,7 +40,7 @@
 
 #include "G4Types.hh"
 
-typedef G4double (*function)(G4double);
+using function = G4double (*)(G4double);
 
 class G4SimpleIntegration
 {
@@ -49,7 +49,7 @@ class G4SimpleIntegration
 
   G4SimpleIntegration(function pFunction, G4double pTolerance);
 
-  ~G4SimpleIntegration();
+  ~G4SimpleIntegration() = default;
 
   G4SimpleIntegration(const G4SimpleIntegration&) = delete;
   G4SimpleIntegration& operator=(const G4SimpleIntegration&) = delete;

@@ -43,16 +43,16 @@
 // ###                          DMesonPLUS                            ###
 // ######################################################################
 
-G4DMesonPlus* G4DMesonPlus::theInstance = 0;
+G4DMesonPlus* G4DMesonPlus::theInstance = nullptr;
 
 G4DMesonPlus* G4DMesonPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "D+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -69,10 +69,10 @@ G4DMesonPlus* G4DMesonPlus::Definition()
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         411,
-                false,     1.040e-3*ns,          NULL,
+                false,     1.040e-3*ns,          nullptr,
                 false,       "D");
   }
-  theInstance = reinterpret_cast<G4DMesonPlus*>(anInstance);
+  theInstance = static_cast<G4DMesonPlus*>(anInstance);
   return theInstance;
 }
 

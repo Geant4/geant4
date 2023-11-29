@@ -46,7 +46,7 @@ class Run : public G4Run
 {
   public:
     Run(const DetectorConstruction*);
-    ~Run() override;
+   ~Run() override = default;
 
     void SetPrimary(const G4ParticleDefinition* particle, G4double energy);
       
@@ -66,16 +66,17 @@ class Run : public G4Run
     void EndOfRun();
      
   private:
-    const DetectorConstruction*  fDetector;
-    const G4ParticleDefinition*  fParticle;
-    G4double  fEkin;
+    const DetectorConstruction*  fDetector = nullptr;
+    const G4ParticleDefinition*  fParticle = nullptr;
+    G4double  fEkin = 0.;
                            
-    G4int           fNbOfTraks0, fNbOfTraks1;
-    G4int           fNbOfSteps0, fNbOfSteps1;
-    G4double        fEdep, fNIEL;
-    G4double        fTrueRange, fTrueRange2;             
-    G4double        fProjRange, fProjRange2;
-    G4double        fTransvDev, fTransvDev2;
+    G4int           fNbOfTraks0 = 0, fNbOfTraks1 = 0;
+    G4int           fNbOfSteps0 = 0, fNbOfSteps1 = 0;
+    G4double        fEdep = 0.     , fNIEL = 0.;
+    G4double        fTrueRange = 0., fTrueRange2 = 0.;
+    G4double        fProjRange = 0., fProjRange2 = 0.;
+    G4double        fTransvDev = 0., fTransvDev2 = 0.;
+
     std::map<G4String,G4int>    fProcCounter;
 };
 

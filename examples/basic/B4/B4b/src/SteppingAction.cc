@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-/// \file SteppingAction.cc
-/// \brief Implementation of the SteppingAction class
+/// \file B4/B4b/src/SteppingAction.cc
+/// \brief Implementation of the B4b::SteppingAction class
 
 #include "SteppingAction.hh"
 #include "RunData.hh"
@@ -43,12 +43,6 @@ namespace B4b
 
 SteppingAction::SteppingAction(const DetectorConstruction* detConstruction)
   : fDetConstruction(detConstruction)
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
 {
 }
 

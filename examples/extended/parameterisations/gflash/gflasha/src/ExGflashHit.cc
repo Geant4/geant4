@@ -42,7 +42,7 @@ G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExGflashHit::ExGflashHit() : G4VHit() {}
+ExGflashHit::ExGflashHit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,7 +54,7 @@ ExGflashHit::ExGflashHit(const ExGflashHit& right) : G4VHit(right)
 //@@@ ExGflashHit:Is it right with the init?
 {
   fEdep = right.fEdep;
-  fPos  = right.fPos;
+  fPos = right.fPos;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,11 +79,11 @@ G4bool ExGflashHit::operator==(const ExGflashHit& right) const
 void ExGflashHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if ( pVVisManager != nullptr ) {
+  if (pVVisManager != nullptr) {
     G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour        colour(1., 0., 0.);
+    G4Colour colour(1., 0., 0.);
     G4VisAttributes attribs(colour);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);

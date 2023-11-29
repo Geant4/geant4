@@ -32,17 +32,17 @@
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 
-G4PhononTransFast* G4PhononTransFast::theInstance = 0;
+G4PhononTransFast* G4PhononTransFast::theInstance = nullptr;
 
 G4PhononTransFast*  G4PhononTransFast::Definition() 
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
 
   const G4String name = "phononTF";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //      
@@ -58,11 +58,11 @@ G4PhononTransFast*  G4PhononTransFast::Definition()
                     0,               0,             0,
                     0,               0,             0,
              "phonon",               0,             0,         0,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
                 false,        "phononTF",       0
              );
   }
-  theInstance = reinterpret_cast<G4PhononTransFast*>(anInstance);
+  theInstance = static_cast<G4PhononTransFast*>(anInstance);
   return theInstance;
 }
 

@@ -44,10 +44,10 @@ class G4HEPEvtParticle
 {
   public:
 
-    G4HEPEvtParticle();
+    G4HEPEvtParticle() = default;
     G4HEPEvtParticle(G4PrimaryParticle* pp,
                      G4int isthep, G4int jdahep1, G4int jdahep2);
-   ~G4HEPEvtParticle();
+   ~G4HEPEvtParticle() = default;
 
     G4HEPEvtParticle & operator=(const G4HEPEvtParticle& right);
     G4bool operator==(const G4HEPEvtParticle &right) const;
@@ -64,7 +64,7 @@ class G4HEPEvtParticle
 
   private:
 
-    G4PrimaryParticle* theParticle = nullptr;
+    G4PrimaryParticle* theParticle = nullptr; // not owned
     G4int ISTHEP = 1; // Status code of the entry
                       // Set to be 0 after generating links of
                       // G4PrimaryParticle object
@@ -76,8 +76,10 @@ extern G4EVENT_DLL G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator();
 
 inline void * G4HEPEvtParticle::operator new(std::size_t)
 {
-  if (!aHEPEvtParticleAllocator())
+  if (aHEPEvtParticleAllocator() == nullptr)
+  {
     aHEPEvtParticleAllocator() = new G4Allocator<G4HEPEvtParticle>;
+  }
   return (void *) aHEPEvtParticleAllocator()->MallocSingle();
 }
 

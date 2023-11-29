@@ -46,7 +46,7 @@ class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
 
-typedef std::vector<G4String> G4TokenVec;
+using G4TokenVec = std::vector<G4String>;
 
 // class description:
 //
@@ -59,11 +59,11 @@ class G4ScoreQuantityMessenger : public G4UImessenger
  public:
   G4ScoreQuantityMessenger(G4ScoringManager* SManager);
 
-  ~G4ScoreQuantityMessenger();
+  ~G4ScoreQuantityMessenger() override;
 
-  void SetNewValue(G4UIcommand* command, G4String newValues);
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
-  G4String GetCurrentValue(G4UIcommand*);
+  G4String GetCurrentValue(G4UIcommand*) override;
 
  protected:
   void FillTokenVec(G4String newValues, G4TokenVec& token);
@@ -101,16 +101,11 @@ class G4ScoreQuantityMessenger : public G4UImessenger
   G4UIcommand* qFlatSurfCurrCmd;
   G4UIcommand* qFlatSurfFluxCmd;
   G4UIcommand* qVolFluxCmd;
-  //    G4UIcommand*          qSphereSurfCurrCmd;
-  //    G4UIcommand*          qSphereSurfFluxCmd;
-  //    G4UIcommand*          qCylSurfCurrCmd;
-  //    G4UIcommand*          qCylSurfFluxCmd;
   G4UIcommand* qNofCollisionCmd;
   G4UIcommand* qPopulationCmd;
   G4UIcommand* qTrackCountCmd;
   G4UIcommand* qTerminationCmd;
   G4UIcommand* qMinKinEAtGeneCmd;
-  //
   G4UIcommand* qStepCheckerCmd;
 
   //

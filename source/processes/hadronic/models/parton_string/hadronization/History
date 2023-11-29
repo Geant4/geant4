@@ -1,18 +1,65 @@
--------------------------------------------------------------------
+# Category had-hadronization History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-      History file for hadronic/models/parton_string/hadronization directory
-      -------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-10-19 Alberto Ribon (had-hadronization-V11-00-03)
+   Change suggested by Vladimir Uzhinsky:
+-  G4HadronBuilder, G4VLongitudinalStringDecay, G4LundStringFragmentation,
+   G4QGSMFragmentation, G4ExcitedStringDecay : in order to describe the
+   NA61/SHINE data on K*0 and phi mesons production in proton-proton
+   interactions, different probabilities were introduced for the ratios
+   between pseudo-scalar and vector meson production. These ratios are
+   the following: for ordinary mesons from u- and d- quarks, the ratio is
+   0.5/0.5; for strange mesons the ratio is 0.4/0.6; for mesons with
+   hidden strangeness (as for phi), the ratio is 0.3/0.7.
+   This approach is similar to the one adopted in Pythia8.
+   It is also assumed that the probabilities for hidden strangeness (0.3/0.7)
+   apply for mesons with hidden charm and beauty.
+-  G4LundStringFragmentation : few changes were introduced for a special
+   treatment of last string decay to improve the yield of anti-Xi hyperons
+   in proton-proton interactions, according to the NA61/SHINE data.
+   Moreover, some parameters have been tuned to better describe the
+   NA61/SHINE data on various particles produced in proton-proton
+   interactions.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-07-04 Alberto Ribon (had-hadronization-V11-00-02)
+   Change suggested by Vladimir Uzhinsky:
+-  G4VLongitudinalStringDecay.cc : brought back the value (0.5) of the
+   mixing between (rho0 and omega) vector mesons as it was originally
+   until G4 10.0.
+   This should describe better NA61/SHINE experimental data.
+   The change might affect hadronic showers, giving that the various
+   vector mesons have different decay rates into neutral pions.
+
+## 2022-06-07 Alberto Ribon (had-hadronization-V11-00-01)
+   Changes made by Vladimir Uzhinsky:
+-  G4HadronBuilder : a new argument is added in the constructor, and 
+   a new data member is added to the class.
+   This is needed to set a special mixing of pseudo-scalar and vector mesons
+   for s-sbar mesons. This is introduced to describe phi-meson production
+   in proton-proton interactions measured by NA61/SHINE.
+-  G4VLongitudinalStringDecay : the probability of pseudo-scalar meson
+   production has been tuned to describe K*0 meson production in
+   proton-proton interactions according to NA61/SHINE data. 
+   Moreover, a new parameter (probability of pseudo-scalar meson production
+   in s-sbar mesons) is introduced to increase the phi-meson
+   yield in proton-proton interactions.
+   Fixed also a bug in mixing eta_prime and phi mesons in the quark systems
+   d-dbar, u-ubar and s-sbar.
+-  G4LundStringFragmentation : few changes were introduced for a special
+   treatment of the last string decay in the case of ss-q or ss-qq, 
+   ss-sbar sbar last string decay. This improves the yield of anti-Xi
+   hyperons in proton-proton interactions according to the NA61/SHINE data.
+
+## 2021-12-10 Ben Morgan (had-hadronization-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 16-Apr-2021 B. Morgan        (had-hadronization-V10-07-01)
 - Migrate build to modular CMake API

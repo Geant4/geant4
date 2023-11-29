@@ -34,58 +34,36 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#include "GammaRayTelDigitizer.hh"
 #include "GammaRayTelDigitizerMessenger.hh"
 
-#include "GammaRayTelDigitizer.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDigitizerMessenger::GammaRayTelDigitizerMessenger
-(GammaRayTelDigitizer* GammaRayTelDigit)
-  :GammaRayTelAction(GammaRayTelDigit)
-{ 
-  ThresholdCmd = new G4UIcmdWithADoubleAndUnit("/digitizer/Threshold",this);
-  ThresholdCmd->SetGuidance("Energy deposition threshold for TKR digi generation");
-  ThresholdCmd->SetParameterName("choice",true);
-  ThresholdCmd->SetDefaultValue((G4double)20.*keV);
-  ThresholdCmd->SetRange("Threshold >=0.");
-  ThresholdCmd->SetUnitCategory("Energy");  
-  ThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+GammaRayTelDigitizerMessenger::GammaRayTelDigitizerMessenger(GammaRayTelDigitizer *GammaRayTelDigit) : GammaRayTelAction(GammaRayTelDigit) {
+    constexpr auto ENERGY_DEPOSITION_THRESHOLD_DEFAULT_VALUE{(G4double) 20. * keV};
+
+    thresholdCmd = new G4UIcmdWithADoubleAndUnit("/digitizer/Threshold", this);
+    thresholdCmd->SetGuidance("Energy deposition threshold for tracker (TKR) digi generation");
+    thresholdCmd->SetParameterName("choice", true);
+    thresholdCmd->SetDefaultValue(ENERGY_DEPOSITION_THRESHOLD_DEFAULT_VALUE);
+    thresholdCmd->SetRange("Threshold >=0.");
+    thresholdCmd->SetUnitCategory("Energy");
+    thresholdCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelDigitizerMessenger::~GammaRayTelDigitizerMessenger()
-{
-  delete ThresholdCmd;
+GammaRayTelDigitizerMessenger::~GammaRayTelDigitizerMessenger() {
+    delete thresholdCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelDigitizerMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if( command == ThresholdCmd )
-    { 
-      GammaRayTelAction->SetThreshold
-	(ThresholdCmd->GetNewDoubleValue(newValue));
+void GammaRayTelDigitizerMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+    if (command == thresholdCmd) {
+        GammaRayTelAction->SetThreshold(thresholdCmd->GetNewDoubleValue(newValue));
     }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-

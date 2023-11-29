@@ -100,7 +100,7 @@ class G4Nucleus
     { return theA; }   
     
     inline G4int GetN_asInt() const
-    { return theA-theZ; }   
+    { return theA-theZ-theL; }   
     
     inline G4int GetZ_asInt() const
     { return theZ; }   
@@ -134,6 +134,9 @@ class G4Nucleus
     
     G4ReactionProduct GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp=-1) const;
 
+    void DoKinematicsOfThermalNucleus(const G4double mu, const G4double vT_norm, const G4ThreeVector& aVelocity,
+                                      G4ReactionProduct& result) const;
+  
     G4double Cinema( G4double kineticEnergy );
     
     G4double EvaporationEffects( G4double kineticEnergy );

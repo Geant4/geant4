@@ -24,23 +24,23 @@
 // ********************************************************************
 //
 //
-/// \file GeantinoPhysicsList.cc
-/// \brief Implementation of the GeantinoPhysicsList class
+/// \file common/src/GeantinoPhysicsList.cc
+/// \brief Implementation of the Common::GeantinoPhysicsList class
 
 #include "GeantinoPhysicsList.hh"
 #include "G4Geantino.hh"
 #include "G4ChargedGeantino.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-GeantinoPhysicsList::GeantinoPhysicsList()
-  : G4VUserPhysicsList()
-{}
+namespace Common
+{
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GeantinoPhysicsList::~GeantinoPhysicsList()
-{}
+GeantinoPhysicsList::GeantinoPhysicsList() = default;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+GeantinoPhysicsList::~GeantinoPhysicsList() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +49,7 @@ void GeantinoPhysicsList::ConstructParticle()
   // In this method, static member functions should be called
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
-  // created in the program. 
+  // created in the program.
 
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
@@ -65,3 +65,5 @@ void GeantinoPhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+}

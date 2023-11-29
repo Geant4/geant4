@@ -165,10 +165,10 @@ void G4LogicalVolumeModel::DescribeYourselfTo
       G4VReadOutGeometry* roGeom = sd->GetROgeometry();
       if (roGeom) {
 	G4VPhysicalVolume* roWorld = roGeom->GetROWorld();
-	G4cout << "Readout geometry \"" << roGeom->GetName()
-	       << "\" with top physical volume \""
-	       << roWorld->GetName()
-	       << "\"" << G4endl;
+//	G4cout << "Readout geometry \"" << roGeom->GetName()
+//	       << "\" with top physical volume \""
+//	       << roWorld->GetName()
+//	       << "\"" << G4endl;
 	G4PhysicalVolumeModel pvModel(roWorld);
 	pvModel.SetModelingParameters(fpMP);
 	pvModel.DescribeYourselfTo(sceneHandler);
@@ -179,7 +179,7 @@ void G4LogicalVolumeModel::DescribeYourselfTo
   if (fCheckOverlaps) {
     G4LogicalVolume* motherLog = fpTopPV->GetLogicalVolume();
     G4VSolid* motherSolid = motherLog->GetSolid();
-    G4int nDaughters = motherLog->GetNoDaughters();
+    G4int nDaughters = (G4int)motherLog->GetNoDaughters();
 
     // Models are called repeatedly by the scene handler so be careful...
     // Print overlaps - but only the first time for a given instantiation of G4LogicalVolume

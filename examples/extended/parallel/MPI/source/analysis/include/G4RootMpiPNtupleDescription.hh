@@ -41,12 +41,12 @@
 #include "tools/ntuple_booking"
 #include "tools/impi"
 #include "tools/wroot/impi_ntuple"
+#include "tools/wroot/ntuple"
 
 namespace tools {
 namespace wroot {
 class branch;
 class base_pntuple;
-class ntuple;
 }
 }
 
@@ -64,7 +64,7 @@ struct G4RootMpiPNtupleDescription
 
   ~G4RootMpiPNtupleDescription()
       {
-         if ( fDescription.fIsNtupleOwner ) delete fNtuple;
+         if ( fDescription.GetIsNtupleOwner() ) delete fNtuple;
       }    
 
   RootNtupleDescription fDescription;

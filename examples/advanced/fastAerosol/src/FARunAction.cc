@@ -61,18 +61,14 @@ RunAction::RunAction()
   accumulableManager->RegisterAccumulable(fEdep2); 
 }
 
-RunAction::~RunAction()
-{}
-
 void RunAction::BeginOfRunAction(const G4Run*)
 { 
-  // inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+ // inform the runManager to save random number seed
+ G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
-  // reset accumulables to their initial values
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->Reset();
-
+ // reset accumulables to their initial values
+ G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+ accumulableManager->Reset();
 }
 
 void RunAction::EndOfRunAction(const G4Run* run)
@@ -92,7 +88,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
   G4double rms = edep2 - edep*edep/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;  
 
-  const DetectorConstruction* detectorConstruction
+  const auto* detectorConstruction
    = static_cast<const DetectorConstruction*>
      (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
@@ -102,7 +98,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // Run conditions
   //  note: There is no primary generator action object for "master"
   //        run manager for multi-threaded mode.
-  const PrimaryGeneratorAction* generatorAction
+  const auto* generatorAction
    = static_cast<const PrimaryGeneratorAction*>
      (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4String runCondition;

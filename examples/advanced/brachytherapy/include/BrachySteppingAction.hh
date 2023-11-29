@@ -35,8 +35,8 @@ class BrachySteppingAction: public G4UserSteppingAction
 {
 public:
 
-  explicit BrachySteppingAction();
-  ~BrachySteppingAction();
+  explicit BrachySteppingAction()=default;
+  ~BrachySteppingAction()override=default; 
   
   void UserSteppingAction(const G4Step*) override;
 };

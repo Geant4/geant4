@@ -34,61 +34,8 @@
 #ifndef G4ParticleChangeForRadDecay_hh
 #define G4ParticleChangeForRadDecay_hh 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleChangeForDecay.hh"
 
-class G4VTouchable;
-
-class G4ParticleChangeForRadDecay : public G4ParticleChangeForDecay
-{
-  public:
-
-    G4ParticleChangeForRadDecay() {}
-      // Default constructor
-
-    virtual ~G4ParticleChangeForRadDecay() {}
-      // Destructor
-
-    inline void AddSecondary(G4Track* aSecondary);
-      // Add a secondary particle to theListOfSecondaries
-
-  protected:
-
-    inline G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay&);
-    inline G4ParticleChangeForRadDecay& operator=(const G4ParticleChangeForRadDecay&);
-      // Hidden copy constructor and assignment operator
-};
-
-// ----------------------
-// Inline methods
-// ----------------------
-
-inline G4ParticleChangeForRadDecay::
-G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay&)
-  : G4ParticleChangeForDecay() {}
-
-inline
-G4ParticleChangeForRadDecay&
-G4ParticleChangeForRadDecay::operator=(const G4ParticleChangeForRadDecay&)
-{
-  return *this;
-}
-
-inline
-void G4ParticleChangeForRadDecay::AddSecondary(G4Track* aTrack)
-{
-  // add a secondary after size check
-  if(theSizeOftheListOfSecondaries > theNumberOfSecondaries)
-  {
-    theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
-    ++theNumberOfSecondaries;
-  }
-  else
-  {
-    G4Exception("G4ParticleChangeForRadDecay::AddSecondary()", "TRACK101",
-                JustWarning, "Secondaries buffer is full. Track is deleted!");
-  }
-}
+using G4ParticleChangeForRadDecay = G4ParticleChangeForDecay;
 
 #endif

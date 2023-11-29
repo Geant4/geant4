@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B5/src/EventAction.cc
 /// \brief Implementation of the B5::EventAction class
 
 #include "EventAction.hh"
@@ -79,24 +79,10 @@ namespace B5
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-// : G4UserEventAction(),
-//   fHodHCID  {{ -1, -1 }},
-//   fDriftHCID{{ -1, -1 }},
-//   fCalHCID  {{ -1, -1 }},
-//   fDriftHistoID{{ {{ -1, -1 }}, {{ -1, -1 }} }},
-//   fCalEdep{{ vector<G4double>(kNofEmCells, 0.), vector<G4double>(kNofHadCells, 0.) }}
-//       // std::array<T, N> is an aggregate that contains a C array.
-//       // To initialize it, we need outer braces for the class itself
-//       // and inner braces for the C array
 {
   // set printing per each event
   G4RunManager::GetRunManager()->SetPrintProgress(1);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

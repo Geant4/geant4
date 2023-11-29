@@ -48,7 +48,7 @@ class G4AllocatorBase
 {
  public:
   G4AllocatorBase();
-  virtual ~G4AllocatorBase();
+  virtual ~G4AllocatorBase() = default;
   virtual void ResetStorage()                    = 0;
   virtual std::size_t GetAllocatedSize() const   = 0;
   virtual int GetNoPages() const                 = 0;
@@ -62,7 +62,7 @@ class G4Allocator : public G4AllocatorBase
 {
  public:
   G4Allocator() throw();
-  ~G4Allocator() throw();
+  ~G4Allocator() throw() override;
   // Constructor & destructor
 
   inline Type* MallocSingle();
@@ -70,20 +70,20 @@ class G4Allocator : public G4AllocatorBase
   // Malloc and Free methods to be used when overloading
   // new and delete operators in the client <Type> object
 
-  inline void ResetStorage();
+  inline void ResetStorage() override;
   // Returns allocated storage to the free store, resets allocator.
   // Note: contents in memory are lost using this call !
 
-  inline std::size_t GetAllocatedSize() const;
+  inline std::size_t GetAllocatedSize() const override;
   // Returns the size of the total memory allocated
-  inline int GetNoPages() const;
+  inline int GetNoPages() const override;
   // Returns the total number of allocated pages
-  inline std::size_t GetPageSize() const;
+  inline std::size_t GetPageSize() const override;
   // Returns the current size of a page
-  inline void IncreasePageSize(unsigned int sz);
+  inline void IncreasePageSize(unsigned int sz) override;
   // Resets allocator and increases default page size of a given factor
 
-  inline const char* GetPoolType() const;
+  inline const char* GetPoolType() const override;
   // Returns the type_info Id of the allocated type in the pool
 
   // This public section includes standard methods and types
@@ -112,7 +112,7 @@ class G4Allocator : public G4AllocatorBase
   const_pointer address(const_reference r) const { return &r; }
   // Returns the address of values
 
-  pointer allocate(size_type n, void* = 0)
+  pointer allocate(size_type n, void* = nullptr)
   {
     // Allocates space for n elements of type Type, but does not initialise
     //
@@ -149,7 +149,7 @@ class G4Allocator : public G4AllocatorBase
   template <class U>
   struct rebind
   {
-    typedef G4Allocator<U> other;
+    using other = G4Allocator<U>;
   };
   // Rebind allocator to type U
 
@@ -185,8 +185,7 @@ G4Allocator<Type>::G4Allocator() throw()
 // ************************************************************
 //
 template <class Type>
-G4Allocator<Type>::~G4Allocator() throw()
-{}
+G4Allocator<Type>::~G4Allocator() throw() = default;
 
 // ************************************************************
 // MallocSingle

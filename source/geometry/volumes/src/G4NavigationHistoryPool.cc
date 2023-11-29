@@ -65,9 +65,9 @@ G4NavigationHistoryPool::~G4NavigationHistoryPool()
 //
 void G4NavigationHistoryPool::Clean()
 {
-  for(size_t i=0; i<fPool.size(); ++i)
+  for(auto & i : fPool)
   {
-    delete fPool[i];
+    delete i;
   }
   fPool.clear();
   fFree.clear();
@@ -91,13 +91,13 @@ void G4NavigationHistoryPool::Print() const
 //
 void G4NavigationHistoryPool::Reset()
 {
-  for(size_t i=0; i<fPool.size(); ++i)
+  for(auto & i : fPool)
   {
-    fPool[i] = 0;
+    i = nullptr;
   }
-  for(size_t j=0; j<fFree.size(); ++j)
+  for(auto & j : fFree)
   {
-    fFree[j] = 0;
+    j = nullptr;
   }
 }
 

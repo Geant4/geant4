@@ -3,10 +3,8 @@
 /control/verbose 2
 /run/numberOfThreads 2
 #
-# use /run/initialize before calling /dna/det/setMat
-# in this example, this is done in dnaphysics.cc
-#/dna/det/setMat G4_WATER_MODIFIED
-/dna/det/setMat G4_WATER
+#/dna/test/setMat G4_WATER_MODIFIED
+/dna/test/setMat G4_WATER
 #
 /process/em/fluo true
 /process/em/auger true
@@ -14,6 +12,7 @@
 /process/em/deexcitationIgnoreCut true 
 #
 /process/em/AddDNARegion World DNA_Opt0
+/dna/test/addPhysics raddecay
 #
 /run/initialize 
 #

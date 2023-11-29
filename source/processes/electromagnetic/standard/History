@@ -1,43 +1,220 @@
--------------------------------------------------------------------
+# Category emstand History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-13 V.Ivanchenko (emstand-V11-01-16)
+- G4LindHardSorensenIonModel - do not try to use ICRU73 data for projectile Z>80
 
-04 March 2022: V.Ivanchenko (emstand-V10-07-29)
+## 2023-06-05 V.Ivanchenko (emstand-V11-01-15)
+- G4eBremsstrahlung, G4SeltzerBergerModel - do not change LPM flag at
+    initialisation, do not repeat base class initialisation,
+    improve code comments
+- G4eBremsstrahlungRelModel - improved comments to the code
+
+## 2023-06-04 V.Ivanchenko (emstand-V11-01-14)
+- G4eBremsstrahlungRelModel - use LPM flag from G4EmParameters
+
+## 2023-06-03 V.Ivanchenko (emstand-V11-01-13)
+- G4BetheHeitlerModel, G4PairProductionRelModel, G4eBremsstrahlungRelModel,
+  G4SeltzerBergerModel - reorganized initialisation to address bug report #2543.
+    Initialisation of static element data is performamed only once for the first
+    object independently on how many objects of this kind is created in a thread.
+    Results of simulation are identical, only data race is excluded.
+
+## 2023-05-09 V.Ivanchenko (emstand-V11-01-12)
+- updated hadron/ion ionisation models; initialise stopping power data
+  once: PSTAR and ICRU90 in G4BraggModel, ASTAR - in G4BraggIonModel, 
+  ICRU73 and ICRU90 ion (Z>2) data in G4LindHardSorensenIonModel;
+  G4BraggIonModel inherit from G4Bragg model; fixed stopping power
+  of heavy ions at moderate energies
+
+## 2023-05-03 V.Ivanchenko (emstand-V11-01-11)
+- G4LindhardSorensenIonModel - use G4BraggModel for preliminary computation
+    of DEDX at initialisation for G4GenericIon instead of G4BraggIonModel,
+    which fix problem of low-energy ion tracking in 11.1ref04
+
+## 2023-04-20 V.Ivanchenko (emstand-V11-01-10)
+- G4BetheBlochModel, G4BraggIonModel, G4BraggModel,
+  G4LindhardSorensenIonModel - updated effective charge of an ion at each
+    step of simulation or at each call to G4EmCalculator
+  G4WaterStopping, G4hIonisation - clean-up the code
+  G4ionIonisation - do not use G4WaterStopping, code clean-up
+
+## 2023-04-17 V.Ivanchenko (emstand-V11-01-09)
+- G4BraggModel, G4BraggIonModel - use proton stopping data for for all ions
+    except alpha, make datasets ponters static, address problem #2532
+- G4LinhardSorensenModel - added extra protection and improved debug printout
+
+## 2023-03-11 V.Ivanchenko (emstand-V11-01-08)
+- G4UrbanMscModel - optimisation of the code without any change of the 
+    results (L. Urban)
+
+## 2023-03-05 V.Ivanchenko (emstand-V11-01-07)
+- G4CoulombScattering - fixed typo
+- G4PAIModel, G4PAIPhotModel, G4PAIModelData, G4PAIPhotData, G4PAIxSection,
+  G4PAIySection - fixed problem in tests and code clean-up 
+
+## 2023-03-04 V.Ivanchenko (emstand-V11-01-06)
+- G4CoulombScattering - added extra constructor to address all existing 
+    cases, for pure single scattering integral method type is changed 
+    from fOnePeak to fEmDecreasing and spline interpolation is used. 
+    This is needed for the fix of #2530.
+
+## 2023-02-24 V.Ivanchenko (emstand-V11-01-05)
+- G4WentzelOKandVIxSection - fix numeric instability for the extreme case of 
+    very small kinetic energy (< 1 eV)
+
+## 2023-02-21 V.Ivanchenko (emstand-V11-01-04)
+- G4WentzelOKandVIxSection - fix #2530, improved comments
+- G4CoulombScattering - added constructor with changed signature, which
+    used flag "isCombined" instead of process name, improved initialisation
+    and comments to the code
+- G4eCoulombScatterinModel - improve initialisation and code comments
+
+## 2023-02-14 V.Ivanchenko (emstand-V11-01-03)
+- Preparation for the fix of the problem #2530 - fix apply single 
+    scattering per region
+- G4UrbanMscModel - check IsLocked() method before definition of 
+    lateral displacement algorithm and positron correction;
+    improve formatting
+- G4CoulombScattering - added SetCombined(G4bool) method allowing
+    user to configuer the process; improve formatting and initialisation
+- G4eCoulombScatterinModel - improve formatting
+
+## 2023-01-13 V.Ivanchenko (emstand-V11-01-02)
+- G4ESTARStopping, G4GoudsmitSaundersonTable, G4GSPWACorrections, 
+  G4GSMottCorrection, G4SeltzerBergerModel, G4SBBremTable, G4IonICRU73Data, 
+  G4eDPWAElasticDCS - do not call std::getenv from model classes, instead
+    use G4EmParameters, do not check if G4LEDATA environment variable
+    defined correctly - this is responsibility of the global utility
+
+## 2022-12-21 V.Ivanchenko (emstand-V11-01-01)
+- G4GoudsmithSoundersonMscModel - fixed warning when build CMSSW
+
+## 2022-12-11 V.Ivanchenko (emstand-V11-01-00)
+- G4UrbanMscModel - added flag MscPositronCorrection
+
+## 2022-11-23 Gabriele Cosmo (emstand-V11-00-21)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (emstand-V11-00-20)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-10 V.Ivanchenko (emstand-V11-00-19)
+  Fixed stopping power problem identified by T. Toshita
+- G4IonICRU73Data - fixed stopping power parameterisation below lowest
+    energy point; apply unit factor to material vector and not to
+    data inside each element vector; include debug printouts protected
+    by verbosity; implement data tables for materials and not 
+    material-cut-couples; provide non-zero dEdx for ions with Z > 80
+- G4LindhardSorensenIonModel - fixed CorrectionAlongStep() computations
+    at low energy
+
+## 2022-10-18 V.Ivanchenko (emstand-V11-00-18)
+- G4UrbanMscModel - L.Urban remove computation and use of rangecut for
+    step limitation; this affect only EM option3 physics making 
+    results more close to option4 and there is some CPU advantage
+
+## 2022-10-18 V.Ivanchenko (emstand-V11-00-17)
+- G4PEEffectFluoModel - implement usage PhotoeffectBelowKShell flag, allowing
+    enable/disable photo-electron production below K-shell of an atom;
+    by default this is enabled, so effect on results; if it will be disabled
+    some CPU improvement may be expected
+- G4BetheBlochModel, G4BraggIonModel, G4LindhardSorensenIonModel -
+    use the same computation of effective charge and energy at a step
+    inside CorrectionAlongStep(..) method; improved range of ions in the default
+    EM physics configuration
+
+## 2022-10-12 V.Ivanchenko (emstand-V11-00-16)
+- G4hIonisation, G4ionIonisation - updated initialisation to be coherent with
+    possible creation of combined DNA/standard Physics List: do not modify
+    low energy limit for a model; define high energy limit considering
+    high energy limit set in the Physics List and the mass of the particle
+
+## 2022-10-07 V.Ivanchenko (emstand-V11-00-15)
+- G4AtimaEnergyLossModel, G4BetheBlochModel, G4BraggIonModel,
+  G4LindhardSorensenIonModel - do not set effective charge to the model
+    of energy loss fluctuation inside CorrectionAlongStep(...) method,
+    it is done by G4VEnergyLossProcess, this addresses problem #2495
+
+## 2022-08-16 V.Ivanchenko (emstand-V11-00-14)
+- G4UrbanMscModel - L.Urban optimized the code keeping algorithms unchaged
+
+## 2022-05-24 V.Ivanchenko (emstand-V11-00-13)
+- G4EmStandUtil - new utility class
+- G4eIonisation, G4hIonisation, G4ionIonisation - added selection of the model
+    of energy loss fluctuations using G4EmStandUtil
+
+## 2022-05-24 V.Ivanchenko (emstand-V11-00-12)
+- G4UrbanMscModel - L. Urban extended cache data with 5 variables for positrons,
+    removed used headers, minor saving of instructions, results should be unchanged
+- G4eBremsstrahlungRelModel, G4eBremParametrizedModel - cosmetic changes
+
+## 2022-04-29 Daren Sawkey (emstand-V11-00-11)
+- many files: run clang-tidy. Use keywords nullptr, default, auto; removed unneeded
+  nullptr checks when delete-ing
+
+## 2022-04-25 Ben Morgan (emstand-V11-00-10)
+- Add missing dependencies
+
+## 2022-04-14 V.Ivanchenko (emstand-V11-00-09)
+- G4UrbanMscModel - L.Urban move safety computation before
+    step limitation algorithms in order to save few instructions,
+    which should not affect results; comments to the code are improved
+- G4eBremsstrahlungRelModel, G4PairProductionRelModel - added headers 
+    of G4Exp, G4Pow to source
+- G4WentzelVIRelModel, G4WentzelOKandVIxSection, G4LindhardSorensenIonModel,
+  G4ICRU49NuclearStoppingModel - use G4AutoLock
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added G4Log, 
+    G4Exp headers
+- G4BetheHeitler5DModel - do not instantiate G4MuonPlus, G4MuonMinus
+    inside the model to allow usage of this class in physics lists 
+    without muons
+
+## 2022-04-07 V.Ivanchenko (emstand-V11-00-08)
+- G4hIonisation - improved initialisation
+
+## 2022-03-24 V.Ivanchenko (emstand-V11-00-07)
+- G4eBremsstrahlung - improved initialisation
+
+## 2022-03-07 V.Ivanchenko (emstand-V11-00-06)
+- G4UrbanMscModel - L.Urban added two extra class members
+
+## 2022-03-04 V.Ivanchenko (emstand-V11-00-05)
 - G4UniversalFluctuation - removed unnecessary "if"
 
-18 February 2022: V.Ivanchenko
+## 2022-02-18 V.Ivanchenko (emstand-V11-00-04)
 - G4UniversalFluctuation, G4UrbanFluctuation - L.Urban use the same fw=4 and a0=42
     parameters of the model providing similar results for small steps or thin 
     layers to Geant4 10.7 version of fluctuations (fixed #2466) 
 
-14 February 2022: V.Ivanchenko
+## 2022-02-14 V.Ivanchenko (emstand-V11-00-03)
 - G4UrbanMscModel - minor optimisation of arithmetic
 - G4UniversalFluctuation - introduced a new protected method SampleGlandz(..),
     which provides sampling of non-Gauss fluctuations; improved arithmetic;
-    results are identical to the version of the release 
+    results are identical to the version of the release 11.0 
 - G4UrbanFluctuation - reorganized version of fluctuation model from
     Geant4 10.7 in SampleGlandz(...) method
 - G4LossFluctuationDummy - new class with zero fluctuations
 
-24 January 22: V.Ivanchenko
+## 2022-01-24 V.Ivanchenko (emstand-V11-00-02)
 - G4UrbanMscModel - removed multiple initialisation of the cache data structure and
     possible data race
 
-08 January 22: V.Ivanchenko
+## 2022-01-08 V.Ivanchenko (emstand-V11-00-01)
 - G4CoulombScattering - for single scattering used in restriced interval of large
     angles use fEmIncreasing type of cross section shape
+
+## 2021-12-10 Ben Morgan (emstand-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 26 November 21: V.Ivanchenko  (emstand-V10-07-28)
 - G4PairProductionRelModel - reduce upper limit of parameterisation x-section 

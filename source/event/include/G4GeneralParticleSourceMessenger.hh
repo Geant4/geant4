@@ -78,13 +78,13 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
     void SetParticleGun(G4SingleParticleSource *fpg) { fParticleGun = fpg; } ;
       // Select the particle gun to be defined/modified
    
-    void SetNewValue(G4UIcommand* command, G4String newValues);
+    void SetNewValue(G4UIcommand* command, G4String newValues) override;
       // Identifies the command which has been invoked by the user, extracts the
       // parameters associated with that command (held in newValues), and uses
       // these values with the appropriate member function of
       // G4GeneralParticleSource
 
-    G4String GetCurrentValue(G4UIcommand* command);
+    G4String GetCurrentValue(G4UIcommand* command) override;
       // Allows the user to retrieve the current values of parameters.
       // NOT yet implemented!
 
@@ -93,9 +93,9 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
 
  private:
 
-    G4GeneralParticleSourceMessenger(G4GeneralParticleSource*);
+    explicit G4GeneralParticleSourceMessenger(G4GeneralParticleSource*);
       // Constructor: sets up commands
-    ~G4GeneralParticleSourceMessenger();
+    ~G4GeneralParticleSourceMessenger() override;
       // Destructor: deletes commands
 
     void IonCommand(G4String newValues);

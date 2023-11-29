@@ -62,14 +62,14 @@ inline CONTAINER* container_container(const path_t& a_path) {
 
 inline void dump(std::ostream& a_out,const path_t& a_path) {
   a_out << "tools::sg::dump : path size " << a_path.size() << std::endl;
-  std::string s;
+  std::string _s;
   path_t::const_iterator it;
   for(it=a_path.begin();it!=a_path.end();++it){
-    if(!p2s(*it,s)) {}
-    a_out << " " << s << " " << (*it)->s_cls();
+    if(!p2s(*it,_s)) {}
+    a_out << " " << _s << " " << (*it)->s_cls();
     if(noderef* _ref = safe_cast<node,noderef>(*(*it))) {
-      if(!p2s(&(_ref->node()),s)) {}
-      a_out << ", " << s << " " << _ref->node().s_cls();
+      if(!p2s(&(_ref->node()),_s)) {}
+      a_out << ", " << _s << " " << _ref->node().s_cls();
     }
     a_out << std::endl;
   }

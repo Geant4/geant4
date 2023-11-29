@@ -51,10 +51,10 @@ class PhysicsList: public G4VModularPhysicsList
 {
   public:
     PhysicsList(DetectorConstruction*);
-   ~PhysicsList();
+   ~PhysicsList() override;
 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
     void AddPhysicsList(const G4String& name);
     
     void AddDecay();
@@ -65,11 +65,10 @@ class PhysicsList: public G4VModularPhysicsList
     G4VProcess*  GetProcess(const G4String&) const;
 
   private:    
-    G4VPhysicsConstructor* fEmPhysicsList;
-    G4String               fEmName;
-    
-    DetectorConstruction* fDet;
-    PhysicsListMessenger* fMessenger;         
+    G4VPhysicsConstructor* fEmPhysicsList = nullptr;
+    G4String               fEmName = " ";
+    DetectorConstruction*  fDet = nullptr;
+    PhysicsListMessenger*  fMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

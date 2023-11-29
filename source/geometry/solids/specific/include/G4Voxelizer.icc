@@ -31,7 +31,7 @@
 template <typename T> inline
 G4int G4Voxelizer::BinarySearch(const std::vector<T>& vec, T value)
 {
-  typename std::vector<T>::const_iterator begin=vec.cbegin(), end=vec.cend();
+  auto begin=vec.cbegin(), end=vec.cend();
   return G4int(std::upper_bound(begin, end, value) - begin - 1);
 }
 
@@ -91,7 +91,8 @@ G4bool G4Voxelizer::GetPointVoxel(const G4ThreeVector& p,
 {
   for (auto i = 0; i <= 2; ++i)
   {
-    if (p[i] < *fBoundaries[i].begin() || p[i] > *fBoundaries[i].end())
+    auto begin = fBoundaries[i].cbegin(), end = fBoundaries[i].cend();
+    if (p[i] < *begin || p[i] > *end)
     {
       return false;
     }

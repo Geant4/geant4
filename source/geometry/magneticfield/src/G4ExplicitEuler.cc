@@ -51,9 +51,7 @@ G4ExplicitEuler::G4ExplicitEuler(G4EquationOfMotion* EqRhs,
 //
 // Destructor
 //
-G4ExplicitEuler::~G4ExplicitEuler()
-{
-}
+G4ExplicitEuler::~G4ExplicitEuler() = default;
 
 
 ///////////////////////////////////////////////////////////////////////

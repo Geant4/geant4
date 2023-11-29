@@ -75,7 +75,7 @@ public:
   explicit G4MuPairProductionModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam = "muPairProd");
 
-  virtual ~G4MuPairProductionModel() override;
+  ~G4MuPairProductionModel() = default;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
@@ -103,6 +103,10 @@ public:
                             const G4ParticleDefinition*,
                             G4double) override;
 
+  virtual G4double 
+  ComputeDMicroscopicCrossSection(G4double tkin, G4double Z,
+				  G4double pairEnergy);
+
   inline void SetLowestKineticEnergy(G4double e);
 
   inline void SetParticle(const G4ParticleDefinition*);
@@ -121,14 +125,11 @@ protected:
                                           G4double Z,
                                           G4double cut);
 
-  virtual G4double 
-  ComputeDMicroscopicCrossSection(G4double tkin, G4double Z,
-				  G4double pairEnergy);
+  G4double FindScaledEnergy(G4int Z, G4double rand, G4double logTkin,
+			    G4double yymin, G4double yymax); 
 
   inline G4double MaxSecondaryEnergyForElement(G4double kineticEnergy,
 					       G4double Z);
-
-private:
 
   void MakeSamplingTables();
 
@@ -136,19 +137,11 @@ private:
 
   G4bool RetrieveTables();
 
-  void DataCorrupted(G4int Z, G4double logTkin) const;
+  virtual void DataCorrupted(G4int Z, G4double logTkin) const;
 
-  inline G4double FindScaledEnergy(G4int Z, G4double rand, G4double logTkin,
-				   G4double yymin, G4double yymax); 
-
-protected:
-
-  G4ParticleDefinition*       theElectron = nullptr;
-  G4ParticleDefinition*       thePositron = nullptr;
-  G4ParticleChangeForLoss*    fParticleChange = nullptr;
-
+  G4ParticleChangeForLoss* fParticleChange = nullptr;
   const G4ParticleDefinition* particle = nullptr;
-  G4NistManager*              nist = nullptr;
+  G4NistManager* nist = nullptr;
 
   G4double factorForCross;
   G4double sqrte;
@@ -171,6 +164,11 @@ protected:
   size_t   nbine = 0;
 
   G4bool fTableToFile = false;
+
+private:
+
+  G4ParticleDefinition* theElectron;
+  G4ParticleDefinition* thePositron;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,27 +203,6 @@ G4MuPairProductionModel::MaxSecondaryEnergyForElement(G4double kineticEnergy,
     lnZ = nist->GetLOGZ(Z);
   }
   return kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
-					  G4double logTkin,
-					  G4double yymin, G4double yymax)
-{
-  G4double res = yymin;
-  G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
-  if(nullptr == pv) { 
-    DataCorrupted(Z, logTkin); 
-  } else {
-    G4double pmin = pv->Value(yymin, logTkin);
-    G4double pmax = pv->Value(yymax, logTkin);
-    G4double p0   = pv->Value(0.0, logTkin);
-    if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
-    else { res = pv->FindLinearX((pmin + rand*(pmax - pmin))/p0, logTkin); }
-  }
-  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -182,7 +182,7 @@ G4ITNavigator1::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
   {
-    G4int oldcoutPrec = G4cout.precision(8);
+    G4long oldcoutPrec = G4cout.precision(8);
     G4cout << "*** G4ITNavigator1::LocateGlobalPointAndSetup: ***" << G4endl;
     G4cout << "    Called with arguments: " << G4endl
            << "    Globalpoint = " << globalPoint << G4endl
@@ -564,7 +564,7 @@ G4ITNavigator1::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose >= 4 )
   {
-    G4int oldcoutPrec = G4cout.precision(8);
+    G4long oldcoutPrec = G4cout.precision(8);
     G4String curPhysVol_Name("None");
     if (targetPhysical)  { curPhysVol_Name = targetPhysical->GetName(); }
     G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
@@ -1189,7 +1189,7 @@ G4double G4ITNavigator1::ComputeStep( const G4ThreeVector &pGlobalpoint,
     //
     if( fValidExitNormal || fCalculatedExitNormal )
     {
-      G4int depth= fHistory.GetDepth();
+      G4int depth = (G4int)fHistory.GetDepth();
       if( depth > 0 )
       {
         G4AffineTransform GrandMotherToGlobalTransf =
@@ -1316,7 +1316,7 @@ void G4ITNavigator1::ResetState()
 void G4ITNavigator1::SetupHierarchy()
 {
   G4int i;
-  const G4int cdepth = fHistory.GetDepth();
+  const G4int cdepth = (G4int)fHistory.GetDepth();
   G4VPhysicalVolume *current;
   G4VSolid *pSolid;
   G4VPVParameterisation *pParam;
@@ -1725,7 +1725,7 @@ G4double G4ITNavigator1::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   G4double newSafety = 0.0;
 
 #ifdef G4DEBUG_NAVIGATION
-  G4int oldcoutPrec = G4cout.precision(8);
+  G4long oldcoutPrec = G4cout.precision(8);
   if( fVerbose > 0 )
   {
     G4cout << "*** G4ITNavigator1::ComputeSafety: ***" << G4endl
@@ -1874,7 +1874,7 @@ G4TouchableHistoryHandle G4ITNavigator1::CreateTouchableHistoryHandle() const
 //
 void  G4ITNavigator1::PrintState() const
 {
-  G4int oldcoutPrec = G4cout.precision(4);
+  G4long oldcoutPrec = G4cout.precision(4);
   if( fVerbose == 4 )
   {
     G4cout << "The current state of G4ITNavigator1 is: " << G4endl;
@@ -1962,8 +1962,8 @@ void G4ITNavigator1::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
 
     if( diffShiftSaf > fAccuracyForWarning )
     {
-      G4int oldcoutPrec= G4cout.precision(8);
-      G4int oldcerrPrec= G4cerr.precision(10);
+      G4long oldcoutPrec= G4cout.precision(8);
+      G4long oldcerrPrec= G4cerr.precision(10);
       std::ostringstream message, suggestion;
       message << "Accuracy error or slightly inaccurate position shift."
               << G4endl
@@ -2046,7 +2046,7 @@ std::ostream& operator << (std::ostream &os,const G4ITNavigator1 &n)
   
   // Adapted from G4ITNavigator1::PrintState() const
 
-  G4int oldcoutPrec = os.precision(4);
+  G4long oldcoutPrec = os.precision(4);
   if( n.fVerbose >= 4 )
   {
     os << "The current state of G4ITNavigator1 is: " << G4endl;

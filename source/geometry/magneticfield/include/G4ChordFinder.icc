@@ -79,7 +79,7 @@ G4double G4ChordFinder::InvParabolic ( const G4double xa, const G4double ya,
                  S = yb/ya,
                  T = ya/yc;
   const G4double Q = (T-1)*(R-1)*(S-1);
-  if (std::fabs(Q) <DBL_MIN ) return  DBL_MAX;
+  if (std::fabs(Q) <DBL_MIN ) { return  DBL_MAX; }
         
   const G4double P = S*(T*(R-T)*(xc-xb) - (1-R)*(xb-xa));
   return xb + P/Q;
@@ -97,7 +97,7 @@ G4ChordFinder::AdvanceChordLimited(G4FieldTrack& yCurrent,
 }
 
 inline
-void G4ChordFinder::OnComputeStep() 
+void G4ChordFinder::OnComputeStep(const G4FieldTrack* track)
 { 
-  fIntgrDriver->OnComputeStep(); 
+  fIntgrDriver->OnComputeStep(track);
 }

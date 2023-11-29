@@ -49,11 +49,6 @@ G4GaussChebyshevQ::G4GaussChebyshevQ(function pFunction, G4int nChebyshev)
   }
 }
 
-// ----------------------------------------------------------------------
-//
-
-G4GaussChebyshevQ::~G4GaussChebyshevQ() {}
-
 // -------------------------------------------------------------------------------
 //
 // Integrates function pointed by fFunction from a to b by Gauss-Chebyshev

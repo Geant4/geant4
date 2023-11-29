@@ -203,7 +203,7 @@ protected:
   static int TMath_FloorNint(double x) { return TMath_Nint(::floor(x)); }
 
   size_t find_x(double x) const {
-    int klow=0, khig=fNp-1;
+    int klow=0, khig=int(fNp-1);
     //
     // If out of boundaries, extrapolate
     // It may be badly wrong
@@ -277,7 +277,7 @@ protected:
     //  f  at tau(i), i=1,...,n, is generated and then solved by gauss elim-
     //  ination, with s(i) ending up in c(2,i), all i.
     //     c(3,.) and c(4,.) are used initially for temporary storage.
-    l = fNp-1;
+    l = int(fNp-1);
     // compute first differences of x sequence and store in C also,
     // compute first divided difference of data and store in D.
    {for (size_t m=1; m<fNp ; ++m) {
@@ -450,12 +450,12 @@ protected:
     // If out of boundaries, extrapolate
     // It may be badly wrong
     if(x<=fXmin) klow=0;
-    else if(x>=fXmax) klow=fNp-1;
+    else if(x>=fXmax) klow=int(fNp-1);
     else {
       if(fKstep) { // Equidistant knots, use histogramming :
-        klow = mn<int>(int((x-fXmin)/fDelta),fNp-1);
+        klow = mn<int>(int((x-fXmin)/fDelta),int(fNp-1));
       } else {
-        int khig=fNp-1;
+        int khig=int(fNp-1);
         int khalf;
         // Non equidistant knots, binary search
         while((khig-klow)>1) {
@@ -543,15 +543,15 @@ protected:
     ///       e(j) = s""(x(j)-0)/24    e(j+1) = 0  e(j+2) = s""(x(j)+0)/24
     ///       f(j) = s""'(x(j)-0)/120  f(j+1) = 0  f(j+2) = s""'(x(j)+0)/120
 
-    size_t i, m;
-    double pqqr, p, q, r, s, t, u, v,
+    size_t i, _m;
+    double pqqr, p, q, r, _s, t, u, v,
        b1, p2, p3, q2, q3, r2, pq, pr, qr;
 
     if (fNp <= 2) return;
 
     //     coefficients of a positive definite, pentadiagonal matrix,
     //     stored in D, E, F from 1 to n-3.
-    m = fNp-2;
+    _m = fNp-2;
     q = fPoly[1].X()-fPoly[0].X();
     r = fPoly[2].X()-fPoly[1].X();
     q2 = q*q;
@@ -561,8 +561,8 @@ protected:
     if (q) fPoly[1].D() = q*6.*q2/(qr*qr);
     else fPoly[1].D() = 0;
 
-    if (m > 1) {
-       for (i = 1; i < m; ++i) {
+    if (_m > 1) {
+       for (i = 1; i < _m; ++i) {
           p = q;
           q = r;
           r = fPoly[i+2].X()-fPoly[i+1].X();
@@ -587,7 +587,7 @@ protected:
              fPoly[i+1].D() = fPoly[i].E() = fPoly[i-1].F() = 0;
        }
     }
-    if (r) fPoly[m-1].D() += r*6.*r2/(qr*qr);
+    if (r) fPoly[_m-1].D() += r*6.*r2/(qr*qr);
 
     //     First and second order divided differences of the given function
     //     values, stored in b from 2 to n and in c from 3 to n
@@ -612,14 +612,14 @@ protected:
     }
 
     //     Solve the linear system with c(i+2) - c(i+1) as right-hand side.
-    if (m > 1) {
-       p=fPoly[0].C()=fPoly[m-1].E()=fPoly[0].F()
-          =fPoly[m-2].F()=fPoly[m-1].F()=0;
+    if (_m > 1) {
+       p=fPoly[0].C()=fPoly[_m-1].E()=fPoly[0].F()
+          =fPoly[_m-2].F()=fPoly[_m-1].F()=0;
        fPoly[1].C() = fPoly[3].C()-fPoly[2].C();
        fPoly[1].D() = 1./fPoly[1].D();
 
-       if (m > 2) {
-          for (i = 2; i < m; ++i) {
+       if (_m > 2) {
+          for (i = 2; i < _m; ++i) {
              q = fPoly[i-1].D()*fPoly[i-1].E();
              fPoly[i].D() = 1./(fPoly[i].D()-p*fPoly[i-2].F()-q*fPoly[i-1].E());
              fPoly[i].E() -= q*fPoly[i-1].F();
@@ -637,7 +637,7 @@ protected:
                          -fPoly[i].F()*fPoly[i+2].C())*fPoly[i].D();
 
     //     Integrate the third derivative of s(x)
-    m = fNp-1;
+    _m = fNp-1;
     q = fPoly[1].X()-fPoly[0].X();
     r = fPoly[2].X()-fPoly[1].X();
     b1 = fPoly[1].B();
@@ -650,25 +650,25 @@ protected:
        v = t = 0;
     if (q) fPoly[0].F() = v/q;
     else fPoly[0].F() = 0;
-    for (i = 1; i < m; ++i) {
+    for (i = 1; i < _m; ++i) {
        p = q;
        q = r;
-       if (i != m-1) r = fPoly[i+2].X()-fPoly[i+1].X();
+       if (i != _m-1) r = fPoly[i+2].X()-fPoly[i+1].X();
        else r = 0;
        p3 = q3;
        q3 = q*q*q;
        pq = qr;
        qr = q+r;
-       s = t;
+       _s = t;
        if (qr) t = (fPoly[i+1].C()-fPoly[i].C())/qr;
        else t = 0;
        u = v;
-       v = t-s;
+       v = t-_s;
        if (pq) {
           fPoly[i].F() = fPoly[i-1].F();
           if (q) fPoly[i].F() = v/q;
-          fPoly[i].E() = s*5.;
-          fPoly[i].D() = (fPoly[i].C()-q*s)*10;
+          fPoly[i].E() = _s*5.;
+          fPoly[i].D() = (fPoly[i].C()-q*_s)*10;
           fPoly[i].C() =
           fPoly[i].D()*(p-q)+(fPoly[i+1].B()-fPoly[i].B()+(u-fPoly[i].E())*
                              p3-(v+fPoly[i].E())*q3)/pq;
@@ -682,10 +682,10 @@ protected:
 
     //     End points x(1) and x(n)
     p = fPoly[1].X()-fPoly[0].X();
-    s = fPoly[0].F()*p*p*p;
+    _s = fPoly[0].F()*p*p*p;
     fPoly[0].E() = fPoly[0].D() = 0;
-    fPoly[0].C() = fPoly[1].C()-s*10;
-    fPoly[0].B() = b1-(fPoly[0].C()+s)*p;
+    fPoly[0].C() = fPoly[1].C()-_s*10;
+    fPoly[0].B() = b1-(fPoly[0].C()+_s)*p;
 
     q = fPoly[fNp-1].X()-fPoly[fNp-2].X();
     t = fPoly[fNp-2].F()*q*q*q;

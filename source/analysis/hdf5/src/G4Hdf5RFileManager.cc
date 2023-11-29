@@ -31,9 +31,9 @@
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
 
-#include "tools/hdf5/h2file"
-#include "tools/hdf5/group_exists"
-#include "tools/zlib"
+#include "toolx/hdf5/h2file"
+#include "toolx/hdf5/group_exists"
+#include "toolx/zlib"
 
 using namespace G4Analysis;
 using namespace tools;
@@ -70,7 +70,7 @@ hid_t G4Hdf5RFileManager::OpenRFile(const G4String& fileName,
     return kInvalidId;
   }
 
-  // newFile->add_unziper('Z',tools::decompress_buffer);
+  // newFile->add_unziper('Z',toolx::decompress_buffer);
 
   // add file in a map
   fRFiles[name] = G4Hdf5File(newFile, kInvalidId, kInvalidId);
@@ -85,15 +85,13 @@ hid_t G4Hdf5RFileManager::OpenDirectory(hid_t file, const G4String& directoryNam
 {
   Message(kVL4, "open", "read directory", directoryName);
 
-  auto directory = tools_H5Gopen(file, directoryName);
+  auto directory = toolx_H5Gopen(file, directoryName);
   if ( directory < 0 ) {
     Warn("Cannot open directory " + directoryName, fkClass, "OpenDirectory");
     return kInvalidId;
   }
-  else {
-    Message(kVL2, "open", "read directory", directoryName);
-    return directory;
-  }
+  Message(kVL2, "open", "read directory", directoryName);
+  return directory;
 }
 
 //_____________________________________________________________________________
@@ -104,7 +102,7 @@ hid_t  G4Hdf5RFileManager::GetRDirectory(const G4String& directoryType,
 {
   // Get or open a file
   auto rfile = GetRFile(fileName, isPerThread);
-  if ( ! rfile ) {
+  if (rfile == nullptr) {
     // Try to open it if not found in the map
     if ( OpenRFile(fileName, isPerThread) < 0 ) return kInvalidId;
     rfile = GetRFile(fileName, isPerThread);
@@ -158,11 +156,10 @@ G4Hdf5File* G4Hdf5RFileManager::GetRFile(const G4String& fileName,
   G4String name = GetFullFileName(fileName, isPerThread);
 
   auto it = fRFiles.find(name);
-  if  ( it != fRFiles.end() )
+  if (it != fRFiles.end()) {
     return &(it->second);
-  else {
-    return nullptr;
   }
+  return nullptr;
 }
 
 //_____________________________________________________________________________

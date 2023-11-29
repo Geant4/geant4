@@ -101,6 +101,10 @@ namespace G4INCL {
       uncorrelatedMomentum(rhs.uncorrelatedMomentum),
       theParticleBias(rhs.theParticleBias),
       theNKaon(rhs.theNKaon),
+#ifdef INCLXX_IN_GEANT4_MODE
+      theParentResonancePDGCode(rhs.theParentResonancePDGCode),
+      theParentResonanceID(rhs.theParentResonanceID),
+#endif
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -145,6 +149,11 @@ namespace G4INCL {
       std::swap(nDecays, rhs.nDecays);
       std::swap(thePotentialEnergy, rhs.thePotentialEnergy);
       // ID intentionally not swapped
+
+#ifdef INCLXX_IN_GEANT4_MODE
+      std::swap(theParentResonancePDGCode, rhs.theParentResonancePDGCode);
+      std::swap(theParentResonanceID, rhs.theParentResonanceID);
+#endif
 
       std::swap(theHelicity, rhs.theHelicity);
       std::swap(emissionTime, rhs.emissionTime);
@@ -249,6 +258,11 @@ namespace G4INCL {
           theZ = -1;
           theS = -1;
           break;
+        case antiProton:
+          theA = -1;
+          theZ = -1;
+          theS = 0;
+          break;          
         case KPlus:
           theA = 0;
           theZ = 1;
@@ -386,8 +400,11 @@ namespace G4INCL {
     /** \brief Is this a Baryon? */
     G4bool isBaryon() const { return (isNucleon() || isResonance() || isHyperon()); }
     
-    /** \brief Is this an Strange? */
+    /** \brief Is this a Strange? */
     G4bool isStrange() const { return (isKaon() || isAntiKaon() || isHyperon()); }
+        
+    /** \brief Is this an antinucleon? */
+    G4bool isAntiNucleon() const { return (theType == G4INCL::antiProton ); } //|| theType == G4INCL::antiNeutron
 
     /** \brief Returns the baryon number. */
     G4int getA() const { return theA; }
@@ -462,6 +479,7 @@ namespace G4INCL {
         case SigmaPlus:
         case SigmaZero:
         case SigmaMinus:
+        case antiProton:
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -505,6 +523,7 @@ namespace G4INCL {
         case SigmaPlus:
         case SigmaZero:
         case SigmaMinus:
+        case antiProton:
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -548,6 +567,7 @@ namespace G4INCL {
         case SigmaPlus:
         case SigmaZero:
         case SigmaMinus:
+        case antiProton:
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -623,6 +643,36 @@ namespace G4INCL {
       // The rhs corresponds to the INCL Q-value
       return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
     }
+
+//D
+    G4double getEmissionPbarQvalueCorrection(const G4int AParent, const G4int ZParent, const G4bool Victim) const {
+      G4int SParent = 0;
+      G4int SDaughter = 0;
+      G4int ADaughter = AParent - 1;
+      G4int ZDaughter; 
+      G4bool isProton = Victim;
+      if(isProton){     //proton is annihilated
+        ZDaughter = ZParent - 1;
+      }
+      else {       //neutron is annihilated
+        ZDaughter = ZParent;
+      }
+      
+
+      G4double theQValue; //same procedure as for normal case
+      
+      const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
+      const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
+      const G4double massTableParticle = getTableMass();
+      theQValue = massTableParent - massTableDaughter - massTableParticle;
+      
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
+      const G4double massINCLParticle = getINCLMass();
+
+      return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
+    }
+//D
 
     /**\brief Computes correction on the transfer Q-value
      *
@@ -1052,6 +1102,13 @@ namespace G4INCL {
      
     G4int getNumberOfKaon() const { return theNKaon; };
     void setNumberOfKaon(const G4int NK) { theNKaon = NK; }
+
+#ifdef INCLXX_IN_GEANT4_MODE
+    G4int getParentResonancePDGCode() const { return theParentResonancePDGCode; };
+    void setParentResonancePDGCode(const G4int parentPDGCode) { theParentResonancePDGCode = parentPDGCode; };    
+    G4int getParentResonanceID() const { return theParentResonanceID; };
+    void setParentResonanceID(const G4int parentID) { theParentResonanceID = parentID; };
+#endif
   
   public:
     /** \brief Time ordered vector of all bias applied
@@ -1098,6 +1155,11 @@ namespace G4INCL {
     G4double theParticleBias;
     /// \brief The number of Kaons inside the nucleus (update during the cascade)
     G4int theNKaon;
+
+#ifdef INCLXX_IN_GEANT4_MODE
+    G4int theParentResonancePDGCode;
+    G4int theParentResonanceID;
+#endif
 
   private:
     G4double theHelicity;

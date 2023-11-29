@@ -188,15 +188,15 @@
 
 \section ThreadsafeScorers_s8 TIMEMORY USAGE
 
-    This example demonstrates profiling analysis with timemory
-    (https://github.com/NERSC/timemory).
+   This example demonstrates profiling analysis with timemory
+   (https://github.com/NERSC/timemory).
 
-    - Compile Geant4 with timemory (-DGEANT4_USE_TIMEMORY=ON)
-    - timemory provide timing within the Geant4 source code
-      and within the example (TSRun::RecordEvent)
-    - Analysis is echoed to stdout and generates several output
-      files in a folder based on the name of the executable. In
-      general that folder will be "timemory-{name of executable}-output"
+   - Compile Geant4 with timemory (-DGEANT4_USE_TIMEMORY=ON)
+   - timemory provide timing within the Geant4 source code
+     and within the example (TSRun::RecordEvent)
+   - Analysis is echoed to stdout and generates several output
+     files in a folder based on the name of the executable. In
+     general that folder will be "timemory-{name of executable}-output"
 
 */
 

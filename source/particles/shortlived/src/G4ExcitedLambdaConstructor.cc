@@ -49,10 +49,6 @@ G4ExcitedLambdaConstructor::G4ExcitedLambdaConstructor():
 
 }
 
-G4ExcitedLambdaConstructor::~G4ExcitedLambdaConstructor()
-{
-}
-
 G4DecayTable* G4ExcitedLambdaConstructor::CreateDecayTable(
 						 const G4String&  parentName,  
 						 G4int iIso3, 
@@ -60,7 +56,7 @@ G4DecayTable* G4ExcitedLambdaConstructor::CreateDecayTable(
 						 G4bool fAnti)
 {
   // create decay table
-  G4DecayTable* decayTable =  new G4DecayTable();
+  auto  decayTable =  new G4DecayTable();
 
   G4double br;
   if ( (br=bRatio[iState][NK]) >0.0) {

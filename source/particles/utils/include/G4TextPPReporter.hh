@@ -43,14 +43,7 @@
 class G4TextPPReporter: public G4VParticlePropertyReporter
 {
  public:
-  //constructors
-  G4TextPPReporter();
-  
-  //destructor
-  virtual ~G4TextPPReporter();
-  
- public:
-  virtual void Print(const G4String& option="");
+  void Print(const G4String& option="") override;
 
  protected:
   void SparseOption(const G4String& option);

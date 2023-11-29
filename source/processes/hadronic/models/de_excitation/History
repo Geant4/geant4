@@ -1,18 +1,143 @@
--------------------------------------------------------------------
+# Category hadr-deex History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-          History file for hadronic/models/de_excitation
-          ----------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-04-21 Vladimir Ivanchenko (hadr-deex-V11-01-03)
+- G4LevelManager - added extra public access method allowing users to check 
+    level energies and other parameters
+- G4DeexPrecoParameters - moved part of initialisation to header; do not use
+    autolock, instead use internal flag allowing only one dump of paramenters;
+    print all pre-compound parameters, separate pre-compound and de-excitation
+    printouts
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-03-29 Vladimir Ivanchenko (hadr-deex-V11-01-02)
+- G4NuclearLevelData - fixed uploading of data before the run
+
+## 2023-03-27 Vladimir Ivanchenko (hadr-deex-V11-01-01)
+- class clean-up in management and handler sub-directories: improved debug
+  and exceptions printouts, improve comments; removed unused methods 
+  and class members
+
+## 2023-03-25 Vladimir Ivanchenko (hadr-deex-V11-01-00)
+- G4LevelReader - allow to add more levels of a given isotope than hardcoded
+    limit=635 (max number of levels in G4LEVELGAMMADATA) - fix problem #2534
+
+## 2022-11-26 Gabriele Cosmo (hadr-deex-V11-00-21)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-24 Alberto Ribon (hadr-deex-V11-00-20)
+- G4ExcitationHandler : added protections that prevents crashes and
+  large energy non-conservations in the case of hypernuclei and, even more,
+  for anti-hypernuclei projectiles. 
+  Note: there are still cases of off-shell masses and few GeV energy
+        non-conservations that need further investigations.
+
+## 2022-11-21 Vladimir Ivanchenko (hadr-deex-V11-00-19)
+- G4ExcitationHandler - added extra sanity check for negative value
+    of lambda inside a fragment
+
+## 2022-11-11 Vladimir Ivanchenko (hadr-deex-V11-00-18)
+- G4FermiCoulombBarrier - added Coulomb barrier accourdint to
+    prescription
+- G4FermiDecayProbability, G4FermiFragment - use this new class
+- G4VCoulombBarrier, G4CoulombBarrier, G4GEMCoulombBarrier - cleanup
+
+## 2022-11-07 Vladimir Ivanchenko (hadr-deex-V11-00-17)
+- G4ExcitationHandler - introduced de-excitation of fragments with 
+    lambda inside
+
+## 2022-11-03 Vladimir Ivanchenko (hadr-deex-V11-00-16)
+- G4AtomicTransition - extended upper limit of atomic de-excitation 
+  from Z=100 to Z=104 by R. Chakma
+
+## 2022-09-05 Ben Morgan (hadr-deex-V11-00-15)
+- Update dependencies to address warnings from consistency check
+
+## 2022-07-24 Vladimir Ivanchenko (hadr-deex-V11-00-14)
+- G4PhotonEvaporation - improved use of mutex
+- G4StatMFChannel - implement fixes reported by Roman Nepeyvoda
+- G4StatMF - clean-up
+
+## 2022-06-16 Vladimir Ivanchenko (hadr-deex-V11-00-13)
+- G4PhotonEvaporation - fixed Coverity warning
+
+## 2022-06-16 Vladimir Ivanchenko (hadr-deex-V11-00-12)
+- G4PhotonEvaporation - simplified handling of floating levels
+- G4EvaporationProbability - reduce usage of cache
+
+## 2022-05-31 Vladimir Ivanchenko (hadr-deex-V11-00-11)
+- G4PhotonEvaporation - fix Coverity warning
+
+## 2022-04-29 Vladimir Ivanchenko (hadr-deex-V11-00-10)
+- G4VEvaporationChannel, G4EvaporationChannel, 
+  G4VEmissionProbability, G4EvaporationProbability - improved
+    inverse cross section parameterisation at threshold; code
+    cleanup;
+
+## 2022-04-27 Vladimir Ivanchenko (hadr-deex-V11-00-09)
+- G4VEvaporationChannel, G4EvaporationChannel, G4VEvaporation,
+  G4EvaporationProbability, G4PhotonEvaporation - added extra 
+    public interfaces to be used in unit tests
+- G4NuclearLevelData - use G4AutoLock
+
+## 2022-04-25 Michel Maire (hadr-deex-V11-00-08)
+- G4DeexPrecoParameters::StreamInfo() : use G4BestUnit
+
+## 2022-04-18 Vladimir Ivanchenko (hadr-deex-V11-00-07)
+- G4EvaporationChannel, G4Evaporation - added limitation
+    (A < 30) on decay of unphysical fragment, which allows
+    removal light unphysical states and provides improved
+    isotope production for the spalation fragments
+- G4CoulombBarrier, G4PairingCorrection, G4ShellCorrection,
+  G4CameronShellPlusPairingCorrection,
+  G4CameronGilbertShellCorrections - code clean-up
+
+## 2022-04-04 Vladimir Ivanchenko (hadr-deex-V11-00-06)
+- G4EvaporationChannel, G4EvaporationProbability,
+  G4VEmissionProbability, G4VCoulombBarrier, G4CoulombBarrier
+    code/headers clean-up; use new method from G4Fragment 
+
+## 2022-03-27 Vladimir Ivanchenko (hadr-deex-V11-00-05)
+- G4VEmissionProbability - more strong limit on accuracy of integrated
+    probability, improved debug printout
+
+## 2022-03-21 Vladimir Ivanchenko (hadr-deex-V11-00-04)
+- G4PhotonEvaporation - for floating levels check if levels with the same
+    energy can be used for sampling transitions, code clean-up
+- G4LevelManger, G4NuclLevel - removed verbose printouts, code clean-up
+- G4VEmissionProbability - fixed sampling of tail of distribution, added 
+    numerical protections
+- G4CoulombBarrier - tune parameters
+
+## 2022-02-24 Vladimir Ivanchenko (hadr-deex-V11-00-03)
+- G4LevelManager - use correct type
+- G4VEmissionProbability - updated sampling of the emitted fragment energy
+    needed due to analysis of Alexsandr Svetlichny and colleagues (#2443)
+
+## 2022-02-15 Vladimir Ivanchenko (hadr-deex-V11-00-02)
+- G4PhotonEvaporation - fixed situation when excited fragments is created with 
+    excitation energy does not corresponding to level energies from Geant4
+    G4LEVELGAMMADATA, which fixes #2434, it is also fix non-reproducibility for
+    the case, when radioactive decay is enabled on top of any physics list. 
+
+## 2021-12-13 Vladimir Ivanchenko (hadr-deex-V11-00-01)
+- G4Evaporation, G4UnstableFragmentBreakUp complete fix of production 
+    of unphysical fragments (bug #2355); improved debug printout
+- G4ExcitationHandler - use IsLongLived() flag from G4Fragment to decide
+    if de-excitation of the fragment should be stopped
+- G4VEmissionProbability - limit number of bins for numerical 
+    integration to 50
+
+## 2021-12-10 Ben Morgan (hadr-deex-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 02 November 2021 Vladimir Ivanchenko  (hadr-deex-V10-07-08)
 - G4PhotonEvaporation - changed logic de-excitation from levels, which

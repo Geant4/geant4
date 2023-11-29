@@ -1,24 +1,153 @@
--------------------------------------------------------------------
+# Category vis_toolssg History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-04 John Allison (vis_toolssg-V11-01-08)
+- IsUISessionCompatible: Remove the function where not necessary and tidy.
 
-History file for visualization ToolsSG category - a vis driver based on
-g4tools scene graph logic. See geant4/source/analysis/g4tools/tools.license
-------------------------------------------------
+## 2023-05-29 Guy Barrand (vis_toolssg-V11-01-07)
+- sources.cmake: declare the G4*ZB.hh, G4*ZB.cc files.
+- new ToolsSG Qt ZB sub-driver: new files: G4ToolsSGQtZB.hh, G4ToolsSGQtZB.cc, G4ToolsSGQtZBViewer.hh, G4ToolsSGQtZBViewer.cc.
+- new ToolsSG X11 sub-driver. New files: G4ToolsSGX11ZB.hh, G4ToolsSGX11ZB.cc.
+- new ToolsSG Xt sub-driver. New files: G4ToolsSGXtZB.hh, G4ToolsSGXtZB.cc.
+- new ToolsSG Windows sub-driver. New files: G4ToolsSGWindowsZB.hh, G4ToolsSGWindowsZB.cc.
+- sources.cmake: in if(GEANT4_USE_TOOLSSG_XT_GLES), PUBLIC G4VIS_USE_TOOLSSG_X11_GLES should be PUBLIC G4VIS_USE_TOOLSSG_XT_GLES.
+- src/G4ToolsSGQtGLES.cc, G4ToolsSGXtGLES.cc: avoid the "tools::argcv" logic by using the "get argcv" from G4Qt, G4Xt. This should fix a Coverity issue.
+
+## 2023-04-27 Ben Morgan (vis_toolssg-V11-01-06)
+- Link to Qt6OpenGLWidgets library when using Qt6 to access QOpenGLWidget.
+
+## 2023-04-14 John Allison (vis_toolssg-V11-01-05)
+- Co-working: visman-V11-01-04, greps-V11-01-03, interfaces-V11-01-11,
+  opengl-V11-01-06, openinventor-V11-01-04.
+- New Scene Tree Phase 2 - first implementation of a no-frills GUI-side
+  - See visualization/management/History for full description.
+- Revert earlier changes for the new scene tree.
+  - After the introduction of virtual G4VInteractiveSession::UpdateSceneTree
+    they are no loner necessary.
+
+## 2023-04-02 Ben Morgan (vis_toolssg-V11-01-04)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-03-28 John Allison (vis_toolssg-V11-01-03)
+- G4ToolsSGViewer.hh:
+  -  Call UpdateGUISceneTree() if (kernelVisitWasNeeded).
+- G4ToolsSGQtViewer.hh:
+  - uiQt becomes fUIQt, i.e., a data member.
+  - Implement virtual void UpdateGUISceneTree() {
+    - if (fUIQt) fUIQt->UpdateSceneTree(fSceneTree);
+
+## 2023-03-22 Ben Morgan (vis_toolssg-V11-01-02)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-02-06 Ben Morgan (vis_toolssg-V11-01-01)
+- Isolate private headers and update dependencies
+
+## 2023-01-30 Ben Morgan (vis_toolssg-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2022-11-25 Gabriele Cosmo (vis_toolssg-V11-00-15)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-28 John Allison (vis_toolssg-V11-00-14)
+- Request kernel visit when cutaway mode changes:
+  - G4ToolsSGViewer.hh
+
+## 2022-10-13 Guy Barrand (vis_toolssg-V11-00-13)
+- new offscreen sub-driver.
+- new files: include/G4ToolsSGOffscreen.hh, include/G4ToolsSGOffscreenViewer.hh and src/G4ToolsSGOffscreen.cc.
+- sources.cmake, GNUmakefile: G4ToolsSGOffscreen .hh and .cc files.
+- G4ToolsSGViewer.hh: handle ambient lightening.
+- G4ToolsSGViewer.hh: for "write paper", handle zb_png, zb_jpeg formats.
+- G4ToolsSGViewer.hh: correct fSGViewer->set_clear_color(). The passed "green" was... blue.
+
+## 2022-09-06 Ben Morgan (vis_toolssg-V11-00-12)
+- Address dependency inconsistencies reported by geant4_module_check
+
+## 2022-05-18 Guy Barrand (vis_toolssg-V11-00-11)
+- have "toolx" namespace for g4tools code related to "externals", then:
+  - tools::[Qt,Windows,X11,Xt,sg::text_freetype] become toolx::[Qt,Windows,X11,Xt,sg::text_freetype].
+  - and corresponding includes #include <tools/...> become #include <toolx/...>
+
+## 2022-05-03 Ben Morgan (vis_toolssg-V11-00-10)
+- Preliminary build support for Qt5 and Qt6
+
+## 2022-04-13 Ben Morgan (vis_toolssg-V11-00-09)
+- Add needed dependencies
+
+## 2022-04-06 John Allison (vis_toolssg-V11-00-08)
+- `G4ToolsSGSceneHandler.cc`:
+  - void G4ToolsSGSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron):
+    - Comment out common line elimination - too expensive for a large
+      polyhedron.
+    - Maybe eliminate altogether in future?
+    - Allow the graphics-reps utilities to optimise things like this.
+  - Use StandardSpecialMeshRendering(mesh).
+    - Of course, only if special mesh rendering is requested.
+
+## 2022-03-22 Ben Morgan (vis_toolssg-V11-00-07)
+- Use geant4_module_sources to add optional sources
+
+## 2022-03-07 John Allison (vis_toolssg-V11-00-06)
+- `G4ToolsSGSceneHandler`:
+  - `AddPrimitive (const G4Polymarker& a_polymarker)`:
+    - Define dots as a single pixel.
+    - Use `GetMarkerSize(...)` for circles and squares.
+  - `AddCompound(const G4Mesh& mesh)`:
+    - For parameterised tetrahedron mesh, call default
+      G4VSceneHandler::DrawTetMeshAsDots(mesh).
+    - Tested on "ICRP145", a Geant4 application that we hope can become
+      a Geant4 advanced example, downloaded from the supplementary material
+      of Kim et al, ICRP, 2020. Adult mesh-type reference computational
+      phantoms, ICRP Publication 145, Ann. ICRP 49(3).
+
+## 2022-03-05 John Allison (vis_toolssg-V11-00-05)
+- `G4ToolsSGSceneHandler::SetPlotterHistograms`:
+  - Suppress /control/verbose messages for /analysis/*/get* commands.
+
+## 2022-02-08 Ben Morgan (vis_toolssg-V11-00-04)
+- Access G4VVisCommand::G4VisManager pointer through static function GetVisManager
+  to prevent DLL issues on Windows.
+
+## 2022-01-30 John Allison (vis_toolssg-V11-00-03)
+- Co-works with visman-V11-00-05.
+- G4ToolsSGViewer.hh:
+  - G4ToolsSGViewer::SwitchToMasterThread:
+    - At the moment, the ToolsSG viewer cannot draw trajectories *during* a run
+      so in multithreading mode, so in this function we draw any events that
+      have been kept by the vis manager. But we only need to do it if there are
+      end-of-event models in the scene - this tag fixes that.
+    - It fixes an issue where plots were being drawn twice.
+- G4ToolsSGSceneHandler.cc:
+  - G4ToolsSGSceneHandler::SetPlotterHistograms:
+    - Add warning message if plot cannot be found:
+```
+G4ToolsSGSceneHandler::SetPlotterHistograms: cannot get histogram - maybe doesn't exist?
+  Maybe this app does not do analysis at all?
+```
+
+## 2022-01-28 Ben Morgan (vis_toolssg-V11-00-02)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-16 John Allison (vis_toolssg-V11-00-01)
+- G4ToolsSGViewer::wheel_rotate:
+  - Re-program wheel_rotate for perspective projection:
+    - Takes into account the extent of the scene.
+- Reactivate G4ToolsSGQtGLES::IsUISessionCompatible
+  - Paves way for permitted instantiation of multiple TSG drivers.
+
+## 2021-12-10 Ben Morgan (vis_toolssg-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 13 November 2021 - John Allison (vis_toolssg-V10-07-16)
 - G4ToolsSGSceneHandler.cc: Bug fix:

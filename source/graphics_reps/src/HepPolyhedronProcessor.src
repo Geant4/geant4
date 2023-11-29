@@ -31,20 +31,27 @@
 
 #include "globals.hh"
 
-HepPolyhedronProcessor::HepPolyhedronProcessor(){}
-HepPolyhedronProcessor::~HepPolyhedronProcessor(){}
+#include <list>
+
+HepPolyhedronProcessor::HepPolyhedronProcessor()= default;
+HepPolyhedronProcessor::~HepPolyhedronProcessor()= default;
 //private for the moment.
 HepPolyhedronProcessor::HepPolyhedronProcessor(const HepPolyhedronProcessor&){}
 HepPolyhedronProcessor& HepPolyhedronProcessor::operator=(const HepPolyhedronProcessor&){return *this;}
 
 //public
 void HepPolyhedronProcessor::push_back(Operation a_op,const HepPolyhedron& a_polyhedron) {
-  m_ops.push_back(op_t(a_op,a_polyhedron));
+  m_ops.emplace_back(a_op,a_polyhedron);
 }
-void HepPolyhedronProcessor::clear() { m_ops.clear();}
 
-bool HepPolyhedronProcessor::is_same_op() const {
-  if(!m_ops.size()) return true;
+void HepPolyhedronProcessor::clear()
+{
+  m_ops.clear();
+}
+
+bool HepPolyhedronProcessor::is_same_op() const
+{
+  if(m_ops.empty()) return true;
   Operation op = m_ops[0].first;
   std::vector<op_t>::const_iterator it;
   for(it=m_ops.begin();it!=m_ops.end();++it) {
@@ -53,97 +60,115 @@ bool HepPolyhedronProcessor::is_same_op() const {
   return true;
 }
 
-#include <list>
-
 static bool is_in(unsigned int a_index,
-                  const std::list<unsigned int>& a_is) {
-  std::list<unsigned int>::const_iterator it;
-  for(it=a_is.begin();it!=a_is.end();++it) {
+                  const std::list<unsigned int>& a_is)
+{
+  for(auto it=a_is.cbegin(); it!=a_is.cend(); ++it) {
     if(*it==a_index) return true;
   }
   return false;
 }
-static void dump(const std::vector<unsigned int>& a_is) {
-  unsigned int number = a_is.size();
-  for(unsigned int index=0;index<number;index++) {
+
+static void dump(const std::vector<unsigned int>& a_is)
+{
+  std::size_t number = a_is.size();
+  for(std::size_t index=0; index<number; ++index) {
     G4cout << ' ' << a_is[index];
   }
   G4cout << G4endl;
 }
 
-namespace HEPVis {
-class bijection_visitor {
-public:
-  typedef std::vector<unsigned int> is_t;
-  virtual bool visit(const is_t&) = 0;
-public:
-  bijection_visitor(unsigned int a_number):m_number(a_number){}
-  bool visitx() {
-    m_is.resize(m_number,0);
-    std::list<unsigned int> is;
-    return visit(0,is);
-  }
-private:
-  bool visit(unsigned int a_level,std::list<unsigned int>& a_is) {
-    for(unsigned int index=0;index<m_number;index++) {
-      if(is_in(index,a_is)) {
-      } else {
-        a_is.push_back(index);
-        m_is[a_level] = index; 
-        if(a_level==m_number-1) {
-          if(!visit(m_is)) return false;
-        } else {
-          if(!visit(a_level+1,a_is)) return false;
-        }
-        a_is.pop_back();
-      }
-    }
-    return true;
-  }
-private:
-  unsigned int m_number;
-  is_t m_is;
-};
+namespace HEPVis
+{
+  class bijection_visitor
+  {
+    public:
 
-class bijection_dump : public HEPVis::bijection_visitor {
-public:
-  bijection_dump(unsigned int a_number)
-  : HEPVis::bijection_visitor(a_number)
-  {}
-  virtual bool visit(const is_t& a_is) {
-    dump(a_is);
-    return true;//continue
-  }
-};
+      using is_t = std::vector<unsigned int>;
+      virtual bool visit(const is_t&) = 0;
+
+      bijection_visitor(unsigned int a_number):m_number(a_number){}
+      bool visitx()
+      {
+        m_is.resize(m_number,0);
+        std::list<unsigned int> is;
+        return visit(0,is);
+      }
+
+    private:
+
+      bool visit(unsigned int a_level,std::list<unsigned int>& a_is)
+      {
+        for(unsigned int index=0; index<m_number; ++index) {
+          if(is_in(index,a_is)) {
+          }
+          else {
+            a_is.push_back(index);
+            m_is[a_level] = index; 
+            if(a_level==m_number-1) {
+              if(!visit(m_is)) return false;
+            } else {
+              if(!visit(a_level+1,a_is)) return false;
+            }
+            a_is.pop_back();
+          }
+        }
+        return true;
+      }
+
+    private:
+
+      unsigned int m_number;
+      is_t m_is;
+  };
+
+  class bijection_dump : public HEPVis::bijection_visitor
+  {
+    public:
+
+      bijection_dump(unsigned int a_number)
+        : HEPVis::bijection_visitor(a_number)
+      {}
+
+      bool visit(const is_t& a_is) override
+      {
+        dump(a_is);
+        return true; //continue
+      }
+  };
 
 } //namespace HEPVis
 
-class HepPolyhedron_exec : public HEPVis::bijection_visitor {
-public:
-  HepPolyhedron_exec(unsigned int a_number,
-       HepPolyhedronProcessor& a_proc,
-       HepPolyhedron& a_poly)
-  : HEPVis::bijection_visitor(a_number)
-  ,m_proc(a_proc)
-  ,m_poly(a_poly)
-  {}
-  virtual bool visit(const is_t& a_is) {
-    if(m_proc.execute1(m_poly,a_is)==true) return false; //stop
-    return true;//continue
-  }
-private:
-  HepPolyhedronProcessor& m_proc;
-  HepPolyhedron& m_poly;
+class HepPolyhedron_exec : public HEPVis::bijection_visitor
+{
+  public:
+    HepPolyhedron_exec(unsigned int a_number,
+         HepPolyhedronProcessor& a_proc,
+         HepPolyhedron& a_poly)
+      : HEPVis::bijection_visitor(a_number) ,m_proc(a_proc) ,m_poly(a_poly)
+    {}
+
+    bool visit(const is_t& a_is) override
+    {
+      if(m_proc.execute1(m_poly,a_is)) return false; //stop
+      return true;//continue
+    }
+
+  private:
+
+    HepPolyhedronProcessor& m_proc;
+    HepPolyhedron& m_poly;
 };
 
-bool HepPolyhedronProcessor::execute(HepPolyhedron& a_poly) {
-  //{for(unsigned int index=0;index<5;index++) {
+bool HepPolyhedronProcessor::execute(HepPolyhedron& a_poly)
+{
+  //{for(unsigned int index=0; index<5; ++index) {
   //  printf("debug : bijection : %d\n",index);  
   //  HEPVis::bijection_dump bd(index);
   //  bd.visitx();
   //}}
 
-  HepPolyhedron_exec e(m_ops.size(),*this,a_poly);
+  HepPolyhedron_exec e((unsigned int)m_ops.size(),*this,a_poly);
   if(!e.visitx()) return true;
   //std::cerr << "HepPolyhedronProcessor::execute :"
   //          << " all shifts and combinatory tried."
@@ -152,24 +177,22 @@ bool HepPolyhedronProcessor::execute(HepPolyhedron& a_poly) {
   return false;
 }
 
-bool HepPolyhedronProcessor::execute1(
- HepPolyhedron& a_poly
-,const std::vector<unsigned int>& a_is
-) {
+bool HepPolyhedronProcessor::execute1(HepPolyhedron& a_poly,
+                                      const std::vector<unsigned int>& a_is)
+{
   HepPolyhedron result(a_poly);
-  unsigned int number = m_ops.size();
+  std::size_t number = m_ops.size();
   int num_shift = BooleanProcessor::get_num_shift();
-  for(int ishift=0;ishift<num_shift;ishift++) {
+  for(int ishift=0; ishift<num_shift; ++ishift) {
     BooleanProcessor::set_shift(ishift);
-
     result = a_poly;
     bool done = true;
-    for(unsigned int index=0;index<number;index++) {
+    for(std::size_t index=0; index<number; ++index) {
       BooleanProcessor processor; //take a fresh one.
       const op_t& elem = m_ops[a_is[index]];
       int err;
       result = processor.execute(elem.first,result,elem.second,err);
-      if(err) {
+      if(err != 0) {
         done = false;
         break;
       }

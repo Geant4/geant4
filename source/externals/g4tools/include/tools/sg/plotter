@@ -1866,7 +1866,7 @@ public: //public
     float XMGR = right_margin;
     float wData = XSIZ-XMGL-XMGR;
     if(XSIZ==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","XSIZ is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::data_frame_2_vp","XSIZ is 0");
       return false;
     }
     a_vp[0] = (wData*a_pos[0] + XMGL)/XSIZ;}
@@ -1876,7 +1876,7 @@ public: //public
     float YMGU = top_margin;
     float hData = YSIZ-YMGL-YMGU;
     if(YSIZ==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","YSIZ is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::data_frame_2_vp","YSIZ is 0");
       return false;
     }
     a_vp[1] = (hData*a_pos[1] + YMGL)/YSIZ;}
@@ -1886,7 +1886,7 @@ public: //public
     float ZMGU = up_margin;
     float dData = ZSIZ-ZMGD-ZMGU;
     if(ZSIZ==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","ZSIZ is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::data_frame_2_vp","ZSIZ is 0");
       return false;
     }
     a_vp[2] = (dData*a_pos[2] + ZMGD)/ZSIZ;}
@@ -1903,7 +1903,7 @@ public: //public
     float XMGR = right_margin;
     float wData = XSIZ-XMGL-XMGR;
     if(wData==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","wData is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::vp_2_data_frame","wData is 0");
       return false;
     }
     a_pos[0] = (a_vp[0]*XSIZ - XMGL)/wData;}
@@ -1913,7 +1913,7 @@ public: //public
     float YMGU = top_margin;
     float hData = YSIZ-YMGL-YMGU;
     if(hData==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","hData is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::vp_2_data_frame","hData is 0");
       return false;
     }
     a_pos[1] = (a_vp[1]*YSIZ - YMGL)/hData;}
@@ -1923,7 +1923,7 @@ public: //public
     float ZMGU = up_margin;
     float dData = ZSIZ-ZMGD-ZMGU;
     if(dData==0.0F) {
-      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","dData is 0");
+      //SoDebugError::postInfo("tools::sg;:plotter::vp_2_data_frame","dData is 0");
       return false;
     }
     a_pos[2] = (a_vp[2]*ZSIZ - ZMGD)/dData;}
@@ -1977,19 +1977,19 @@ public: //public
     float mx = m_x_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("inlib::sg;:plotter::axis_2_data_frame","x : mn (%g) == mx (%g)",mn,mx);
+      //  ("tools::sg;:plotter::axis_2_data_frame","x : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_x_axis.is_log;
     if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","x log but mn (%g) <=0",mn);
+        //  ("tools::sg;:plotter::axis_2_data_frame","x log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","x log but mx (%g) <=0",mx);
+        //  ("tools::sg;:plotter::axis_2_data_frame","x log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -2001,19 +2001,19 @@ public: //public
     float mx = m_y_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("inlib::sg;:plotter::axis_2_data_frame","y : mn (%g) == mx (%g)",mn,mx);
+      //  ("tools::sg;:plotter::axis_2_data_frame","y : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_y_axis.is_log;
     if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","y log but mn (%g) <=0",mn);
+        //  ("tools::sg;:plotter::axis_2_data_frame","y log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","y log but mx (%g) <=0",mx);
+        //  ("tools::sg;:plotter::axis_2_data_frame","y log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -2025,19 +2025,19 @@ public: //public
     float mx = m_z_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("inlib::sg;:plotter::axis_2_data_frame","z : mn (%g) == mx (%g)",mn,mx);
+      //  ("tools::sg;:plotter::axis_2_data_frame","z : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_z_axis.is_log;
     if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","z log but mn (%g) <=0",mn);
+        //  ("tools::sg;:plotter::axis_2_data_frame","z log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("inlib::sg;:plotter::axis_2_data_frame","z log but mx (%g) <=0",mx);
+        //  ("tools::sg;:plotter::axis_2_data_frame","z log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -2277,8 +2277,8 @@ protected:
       rotf r3(vec3f(1,0,0),tau * fdeg2rad());
 
       rotf r = r1*r2*r3;
-      mat4f m;
-      r.value(m);
+      mat4f _m;
+      r.value(_m);
 
       float xmn = -0.5F*wData;
       float ymn = -0.5F*hData;
@@ -2291,30 +2291,30 @@ protected:
       float x,y,z;
       // zmn face :
      {x = xmn;y = ymn;z = zmn;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmx;y = ymn;z = zmn;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmx;y = ymx;z = zmn;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmn;y = ymx;z = zmn;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
 
       // zmx face :
      {x = xmn;y = ymn;z = zmx;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmx;y = ymn;z = zmx;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmx;y = ymx;z = zmx;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
      {x = xmn;y = ymx;z = zmx;
-      m.mul_3f(x,y,z);
+      _m.mul_3f(x,y,z);
       _box.extend_by(x,y,z);}
 
       float xfac = _box.mx()[0]-_box.mn()[0];
@@ -2574,7 +2574,7 @@ public:
       ////////////////////////////////////
 
       //if(verbose) {
-      //  SoDebugError::postInfo("inlib::sg;:plotter::updateChildren",
+      //  SoDebugError::postInfo("tools::sg;:plotter::updateChildren",
       //  "%lu : XY : update bins",(unsigned long)this);
       //}
 
@@ -6814,7 +6814,6 @@ protected: //rep
         vtxs->mode = gl::points();
         separator->add(vtxs);
 
-        int ipt = 0;
         float xdbin = xe - xx;
         float ydbin = ye - yy;
         for(int count=0;count<npt;count++) {
@@ -6826,7 +6825,6 @@ protected: //rep
              (yyy>=0)&&(yyy<=1)  ) {
             vtxs->add(xxx,yyy,a_zz);
             empty = false;
-            ipt++;
           }
         }
       }
@@ -6894,7 +6892,7 @@ protected: //rep
       if(ye>1) ye = 1;
 
       char sval[32];
-      ::sprintf (sval,"%d",ival);
+      //::sprintf (sval,"%d",ival);
       SbString sbval(sval);
       int charn = sbval.getLength();
       if(charn<=0) continue;
@@ -6903,7 +6901,7 @@ protected: //rep
       separator->addChild(sep);
 
      {char s[128];
-      ::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
+      //::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
       sep->setInfos(s);}
      {std::string sp;
       if(!p2sx(sep->getInfos(),sp)){}
@@ -7439,7 +7437,7 @@ protected: //rep
                       const std::vector<rep_bin1D>& a_bins,
 		      const rep_box& a_box_x,const rep_box& a_box_y,float a_zz,
 		      bool a_bar_chart){
-    //printf("debug : inlib::sg;:plotter::repHatch1D_xy : zz %g barchart %d sw %g\n",a_zz,aBarChart,a_style.stripWidth.getValue());
+    //printf("debug : tools::sg;:plotter::repHatch1D_xy : zz %g barchart %d sw %g\n",a_zz,aBarChart,a_style.stripWidth.getValue());
 
     separator* _sep = new separator;
 

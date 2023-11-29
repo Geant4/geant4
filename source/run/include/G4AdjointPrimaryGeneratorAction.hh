@@ -61,13 +61,13 @@
 #ifndef G4AdjointPrimaryGeneratorAction_hh
 #define G4AdjointPrimaryGeneratorAction_hh 1
 
+#include "G4ThreeVector.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
+
 #include <iterator>
 #include <map>
 #include <vector>
-
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4AdjointPosOnPhysVolGenerator;
 class G4ParticleGun;
@@ -80,50 +80,32 @@ class G4ParticleDefinition;
 class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-
     G4AdjointPrimaryGeneratorAction();
-   ~G4AdjointPrimaryGeneratorAction();
+    ~G4AdjointPrimaryGeneratorAction() override;
 
-    G4AdjointPrimaryGeneratorAction(
-      const G4AdjointPrimaryGeneratorAction&) = delete;
-    G4AdjointPrimaryGeneratorAction& operator=(
-      const G4AdjointPrimaryGeneratorAction&) = delete;
+    G4AdjointPrimaryGeneratorAction(const G4AdjointPrimaryGeneratorAction&) = delete;
+    G4AdjointPrimaryGeneratorAction& operator=(const G4AdjointPrimaryGeneratorAction&) = delete;
 
-    void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
     void SetEmin(G4double val);
     void SetEmax(G4double val);
     void SetEminIon(G4double val);
     void SetEmaxIon(G4double val);
-    void SetSphericalAdjointPrimarySource(G4double radius,
-                                          G4ThreeVector pos);
-    void SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(
-                                   const G4String& volume_name);
+    void SetSphericalAdjointPrimarySource(G4double radius, G4ThreeVector pos);
+    void SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(const G4String& volume_name);
     void ConsiderParticleAsPrimary(const G4String& particle_name);
     void NeglectParticleAsPrimary(const G4String& particle_name);
-    void SetPrimaryIon(G4ParticleDefinition* adjointIon,
-                       G4ParticleDefinition* fwdIon);
+    void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
     void UpdateListOfPrimaryParticles();
 
-    inline void SetRndmFlag(const G4String& val)
-    {
-      rndmFlag = val;
-    }
-    inline size_t GetNbOfAdjointPrimaryTypes()
-    {
-      return ListOfPrimaryAdjParticles.size();
-    }
+    inline void SetRndmFlag(const G4String& val) { rndmFlag = val; }
+    inline size_t GetNbOfAdjointPrimaryTypes() { return ListOfPrimaryAdjParticles.size(); }
     inline std::vector<G4ParticleDefinition*>* GetListOfPrimaryFwdParticles()
     {
       return &ListOfPrimaryFwdParticles;
     }
-    inline const G4String& GetPrimaryIonName()
-    {
-      return ion_name;
-    }
-    inline void SetNbPrimaryFwdGammasPerEvent(G4int nb)
-    {
-      nb_fwd_gammas_per_event = nb;
-    }
+    inline const G4String& GetPrimaryIonName() { return ion_name; }
+    inline void SetNbPrimaryFwdGammasPerEvent(G4int nb) { nb_fwd_gammas_per_event = nb; }
     inline void SetNbAdjointPrimaryGammasPerEvent(G4int nb)
     {
       nb_adj_primary_gammas_per_event = nb;
@@ -137,12 +119,10 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       return ListOfPrimaryFwdParticles[index_particle];
     }
 
-  private: // methods
-
+  private:  // methods
     G4double ComputeEnergyDistWeight(G4double energy, G4double E1, G4double E2);
 
-  private: // attributes
-
+  private:  // attributes
     G4String rndmFlag;  // flag for a rndm impact point
 
     // The generator of primary vertex except for weight
@@ -161,7 +141,7 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     std::vector<G4ParticleDefinition*> ListOfPrimaryFwdParticles;
     std::vector<G4ParticleDefinition*> ListOfPrimaryAdjParticles;
     std::map<G4String, G4bool> PrimariesConsideredInAdjointSim;
-      // if true considered if false not considered
+    // if true considered if false not considered
 
     std::size_t index_particle = 100000;
 

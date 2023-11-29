@@ -50,8 +50,8 @@
 #ifndef G4RunManagerKernel_hh
 #define G4RunManagerKernel_hh 1
 
-#include "globals.hh"
 #include "G4EventManager.hh"
+#include "globals.hh"
 
 class G4VUserPhysicsList;
 class G4VPhysicalVolume;
@@ -64,74 +64,68 @@ class G4PrimaryTransformer;
 class G4RunManagerKernel
 {
   public:
-
+    // Static method returning the singleton pointer of
+    // G4RunManagerKernel or its derived class.
     static G4RunManagerKernel* GetRunManagerKernel();
-      // Static method returning the singleton pointer of
-      // G4RunManagerKernel or its derived class.
 
+    // The constructor and the destructor. The user must construct this class
+    // object at the beginning of his/her main() and must delete it at the
+    // bottom of the main(), unless he/she used G4RunManager.
     G4RunManagerKernel();
     virtual ~G4RunManagerKernel();
-      // The constructor and the destructor. The user must construct this class
-      // object at the beginning of his/her main() and must delete it at the
-      // bottom of the main(), unless he/she used G4RunManager.
 
-    void DefineWorldVolume(G4VPhysicalVolume* worldVol,
-                           G4bool topologyIsChanged = true);
+    void DefineWorldVolume(G4VPhysicalVolume* worldVol, G4bool topologyIsChanged = true);
 
-    void WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
-                                 G4bool topologyIsChanged = true);
-      // This method must be invoked if the geometry setup has been changed
-      // between runs. The flag "topologyIsChanged" will specify if the
-      // geometry topology is different from the original one used in the
-      // previous run; if not, it must be set to false, so that the original
-      // optimisation and navigation history is preserved. This method is
-      // invoked also at initialisation.
+    // This method must be invoked if the geometry setup has been changed
+    // between runs. The flag "topologyIsChanged" will specify if the
+    // geometry topology is different from the original one used in the
+    // previous run; if not, it must be set to false, so that the original
+    // optimisation and navigation history is preserved. This method is
+    // invoked also at initialisation.
+    void WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol, G4bool topologyIsChanged = true);
 
+    // This method must be invoked at least once with a valid concrete
+    // implementation of user physics list.
     void SetPhysics(G4VUserPhysicsList* uPhys);
-      // This method must be invoked at least once with a valid concrete
-      // implementation of user physics list.
 
+    // This method must be invoked at least once to build physics processes.
     void InitializePhysics();
-      // This method must be invoked at least once to build physics processes.
 
+    // Trigger geometry closing and physics table constructions.
+    // It returns TRUE if all procedures went well.
     G4bool RunInitialization(G4bool fakeRun = false);
-      // Trigger geometry closing and physics table constructions.
-      // It returns TRUE if all procedures went well.
 
+    // Set the application state to 'Idle' so that the user can modify
+    // physics/geometry.
     void RunTermination();
-      // Set the application state to 'Idle' so that the user can modify
-      // physics/geometry.
 
+    // Update region list. This method is mandatory before invoking the
+    // following two dump methods.
+    // At RunInitialization(), this method is automatically invoked.
     void UpdateRegion();
-      // Update region list. This method is mandatory before invoking the
-      // following two dump methods.
-      // At RunInitialization(), this method is automatically invoked.
 
+    // Dump information of a region.
     void DumpRegion(const G4String& rname) const;
-      // Dump information of a region.
 
+    // Dump information of a region.
+    // If the pointer is NULL, all regions are shown.
     void DumpRegion(G4Region* region = nullptr) const;
-      // Dump information of a region.
-      // If the pointer is NULL, all regions are shown.
 
     void WorkerUpdateWorldVolume();
 
+    // This method must be invoked (or equivalent UI commands can be used)
+    // in case the user changes his/her detector geometry.
+    // This method is automatically invoked from DefineWorldVolume().
     inline void GeometryHasBeenModified() { geometryNeedsToBeClosed = true; }
-      // This method must be invoked (or equivalent UI commands can be used)
-      // in case the user changes his/her detector geometry.
-      // This method is automatically invoked from DefineWorldVolume().
 
+    // This method must be invoked in case the user changes his/her physics
+    // process(es), e.g. (in)activate some processes. Once this method is
+    // invoked, regardless of cuts changed or not, BuildPhysicsTable() of
+    // a PhysicsList is invoked for refreshing all physics tables.
     inline void PhysicsHasBeenModified() { physicsNeedsToBeReBuilt = true; }
-      // This method must be invoked in case the user changes his/her physics
-      // process(es), e.g. (in)activate some processes. Once this method is
-      // invoked, regardless of cuts changed or not, BuildPhysicsTable() of
-      // a PhysicsList is invoked for refreshing all physics tables.
 
     inline G4EventManager* GetEventManager() const { return eventManager; }
-    inline G4StackManager* GetStackManager() const
-    {
-      return eventManager->GetStackManager();
-    }
+    inline G4StackManager* GetStackManager() const { return eventManager->GetStackManager(); }
     inline G4TrackingManager* GetTrackingManager() const
     {
       return eventManager->GetTrackingManager();
@@ -151,27 +145,20 @@ class G4RunManagerKernel
 
     inline void SetGeometryToBeOptimized(G4bool vl)
     {
-      if(geometryToBeOptimized != vl)
-      {
-        geometryToBeOptimized   = vl;
+      if (geometryToBeOptimized != vl) {
+        geometryToBeOptimized = vl;
         geometryNeedsToBeClosed = true;
       }
     }
 
-    inline G4int GetNumberOfParallelWorld() const
-    {
-      return numberOfParallelWorld;
-    }
+    inline G4int GetNumberOfParallelWorld() const { return numberOfParallelWorld; }
     inline void SetNumberOfParallelWorld(G4int i) { numberOfParallelWorld = i; }
 
     inline G4VUserPhysicsList* GetPhysicsList() const { return physicsList; }
 
     inline G4VPhysicalVolume* GetCurrentWorld() const { return currentWorld; }
 
-    inline G4int GetNumberOfStaticAllocators() const
-    {
-      return numberOfStaticAllocators;
-    }
+    inline G4int GetNumberOfStaticAllocators() const { return numberOfStaticAllocators; }
 
     enum RMKType
     {
@@ -181,39 +168,35 @@ class G4RunManagerKernel
     };
 
   protected:
-
+    // Constructor to be used by derived classes.
     G4RunManagerKernel(RMKType rmkType);
-      // Constructor to be used by derived classes.
 
+    // Called by DefineWorldVolume().
     void SetupDefaultRegion();
-      // Called by DefineWorldVolume().
     void SetupPhysics();
     void ResetNavigator();
     void BuildPhysicsTables(G4bool fakeRun);
     void CheckRegions();
 
+    // This method will setup the G4VProcesses instances to have a reference
+    // to the process instance created by the master thread.
+    // See G4VProcess::GetMasterProcess().
     virtual void SetupShadowProcess() const;
-      // This method will setup the G4VProcesses instances to have a reference
-      // to the process instance created by the master thread.
-      // See G4VProcess::GetMasterProcess().
 
     void PropagateGenericIonID();
 
   private:
-
     void CheckRegularGeometry();
     G4bool ConfirmCoupledTransportation();
     void SetScoreSplitter();
 
   protected:
-
     RMKType runManagerKernelType;
     G4Region* defaultRegion = nullptr;
     G4Region* defaultRegionForParallelWorld = nullptr;
     G4bool geometryNeedsToBeClosed = true;
 
   private:
-
     G4VUserPhysicsList* physicsList = nullptr;
     G4VPhysicalVolume* currentWorld = nullptr;
     G4bool geometryInitialized = false;

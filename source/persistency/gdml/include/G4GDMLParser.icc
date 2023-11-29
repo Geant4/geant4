@@ -249,6 +249,11 @@ inline void G4GDMLParser::Clear()
   reader->Clear();
 }
 
+inline void G4GDMLParser::SetImportSchema(const G4String& path_and_filename)
+{
+  reader->SetSchemaFile(path_and_filename);
+}
+
 // --------------------------------------------------------------------
 // Methods for Writer
 // --------------------------------------------------------------------

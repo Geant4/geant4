@@ -78,7 +78,7 @@ void ActionInitialization::BuildForMaster() const
 void ActionInitialization::Build() const
 {
 
-  G4MoleculeCounter::Use();
+  G4MoleculeCounter::Instance()->Use();
 //  G4MoleculeCounter::Instance()->SetVerbose(2);
 
   G4MoleculeCounter::Instance()->DontRegister(G4H2O::Definition());

@@ -65,7 +65,7 @@ G4double G4LENDCombinedCrossSection::GetIsoCrossSection( const G4DynamicParticle
 G4int G4LENDCombinedCrossSection::SelectChannel( const G4DynamicParticle* dp , G4int iZ , G4int iA ,
                              const G4Isotope* isotope , const G4Element* /*elment*/ , const G4Material* material )
 {
-   G4int ichannel=-1;
+   G4int ichannel = 3;
    G4double XSs[4];
    XSs[0] = elasticXS->GetIsoCrossSection( dp, iZ, iA, isotope, NULL , material );
    XSs[1] = XSs[0] + inelasticXS->GetIsoCrossSection( dp, iZ, iA, isotope, NULL , material );
@@ -75,11 +75,11 @@ G4int G4LENDCombinedCrossSection::SelectChannel( const G4DynamicParticle* dp , G
    G4double total = XSs[3];
 
    G4double random = G4UniformRand();
-   for ( G4int i = 0 ; i != 4 ; i++ ) {
-      if ( random*total <= XSs[i] ) { 
-         ichannel = i;
-         break; 
-      }
+   for (G4int i = 0 ; i < 4 ; i++) {
+     if (random*total < XSs[i]) { 
+       ichannel = i;
+       break; 
+     }
    }
    
    return ichannel;

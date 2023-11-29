@@ -32,6 +32,7 @@
 //
 // Modified:
 //
+// 2023.04.12 A.Ribon added _HPT variants (i.e. HP + thermal scattering)
 // 2014.08.05 K.L.Genser used provision for Hadronic Physics Variant M in 
 //            Shielding for ShieldingM
 //
@@ -53,6 +54,7 @@
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_HP.hh"
+#include "QGSP_BIC_HPT.hh"
 #include "QGSP_BIC_AllHP.hh"
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
@@ -61,6 +63,7 @@
 #include "Shielding.hh"
 #include "ShieldingLEND.hh"
 #include "NuBeam.hh"
+#include "G4ThermalNeutrons.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -79,13 +82,16 @@
 G4PhysListFactory::G4PhysListFactory(G4int ver) 
   : defName("FTFP_BERT"),verbose(ver),theMessenger(nullptr)
 {
-  nlists_hadr = 23;
-  G4String ss[23] = {
+  nlists_hadr = 33;
+  G4String ss[33] = {
     "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_ATL","FTFP_BERT_HP","FTFQGSP_BERT",
     "FTFP_INCLXX","FTFP_INCLXX_HP","FTF_BIC", "LBE","QBBC",
     "QGSP_BERT","QGSP_BERT_HP","QGSP_BIC","QGSP_BIC_HP","QGSP_BIC_AllHP",
     "QGSP_FTFP_BERT","QGSP_INCLXX","QGSP_INCLXX_HP","QGS_BIC",
-    "Shielding","ShieldingLEND","ShieldingM","NuBeam"};
+    "Shielding","ShieldingLEND","ShieldingM","NuBeam",
+    "Shielding_HP","ShieldingM_HP",
+    "FTFP_BERT_HPT", "FTFP_INCLXX_HPT", "QGSP_BERT_HPT", "QGSP_BIC_HPT",
+    "QGSP_BIC_AllHPT", "QGSP_INCLXX_HPT", "Shielding_HPT", "ShieldingM_HPT" };
   for(size_t i=0; i<nlists_hadr; ++i) {
     listnames_hadr.push_back(ss[i]);
   }
@@ -177,6 +183,23 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "ShieldingLEND")  {p = new ShieldingLEND(verbose);}
   else if(had_name == "ShieldingM")     {p = new Shielding(verbose,"HP","M");}
   else if(had_name == "NuBeam")         {p = new NuBeam(verbose);}
+  else if(had_name == "Shielding_HP")   {p = new Shielding(verbose);}
+  else if(had_name == "ShieldingM_HP")  {p = new Shielding(verbose,"HP","M");}
+  else if(had_name == "FTFP_BERT_HPT")  {p = new FTFP_BERT_HP(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "FTFP_INCLXX_HPT"){p = new FTFP_INCLXX_HP(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_BERT_HPT")  {p = new QGSP_BERT_HP(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_BIC_HPT")   {p = new QGSP_BIC_HPT(verbose);}
+  else if(had_name == "QGSP_BIC_AllHPT"){p = new QGSP_BIC_AllHP(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_INCLXX_HPT"){p = new QGSP_INCLXX_HP(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "Shielding_HPT")  {p = new Shielding(verbose);
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "ShieldingM_HPT") {p = new Shielding(verbose,"HP","M");
+                                         p->RegisterPhysics(new G4ThermalNeutrons);}
   else {
     p = new FTFP_BERT(verbose);
     G4ExceptionDescription ed;

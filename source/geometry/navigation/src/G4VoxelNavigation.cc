@@ -41,8 +41,7 @@
 // ********************************************************************
 //
 G4VoxelNavigation::G4VoxelNavigation()
-  : fBList(),
-    fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
+  : fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax,0),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
@@ -107,7 +106,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
 
   G4bool initialNode, noStep;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   motherPhysical = history.GetTopVolume();
@@ -164,7 +163,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
   }
 #endif
 
-  localNoDaughters = motherLogical->GetNoDaughters();
+  localNoDaughters = (G4int)motherLogical->GetNoDaughters();
 
   fBList.Enlarge(localNoDaughters);
   fBList.Reset();
@@ -178,7 +177,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
     curNoVolumes = curVoxelNode->GetNoContained();
     for (contentNo=curNoVolumes-1; contentNo>=0; contentNo--)
     {
-      sampleNo = curVoxelNode->GetVolume(contentNo);
+      sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
       if ( !fBList.IsBlocked(sampleNo) )
       {
         fBList.BlockVolume(sampleNo);
@@ -340,15 +339,17 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             if ( validExitNormal )
             {
               const G4RotationMatrix *rot = motherPhysical->GetRotation();
-              if (rot)
+              if (rot != nullptr)
               {
                 exitNormal *= rot->inverse();
 #ifdef G4VERBOSE
                 if( fCheck )
-                   fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
-                                                    motherExitNormal,  // original 
-                                                    *rot,
-                                                    "From RotationMatrix" );
+                {
+                  fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
+                                                   motherExitNormal,  // original 
+                                                   *rot,
+                                                   "From RotationMatrix" );
+                }
 #endif
               }
             }
@@ -588,8 +589,8 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
       voxelPoint = localPoint+localDirection*newDistance;
       fVoxelNodeNoStack[newDepth] = newNodeNo;
       fVoxelDepth = newDepth;
-      newVoxelNode = 0;
-      while ( !newVoxelNode )
+      newVoxelNode = nullptr;
+      while ( newVoxelNode == nullptr )
       {
         newProxy = newHeader->GetSlice(newNodeNo);
         if (newProxy->IsNode())
@@ -601,7 +602,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
           ++fVoxelDepth;
           newHeader = newProxy->GetHeader();
           newHeaderAxis = newHeader->GetAxis();
-          newHeaderNoSlices = newHeader->GetNoSlices();
+          newHeaderNoSlices = (G4int)newHeader->GetNoSlices();
           newHeaderMin = newHeader->GetMinExtent();
           newHeaderNodeWidth = (newHeader->GetMaxExtent()-newHeaderMin)
                              / newHeaderNoSlices;
@@ -651,7 +652,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   G4double motherSafety, ourSafety;
   G4int sampleNo;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes, contentNo;
+  G4long curNoVolumes, contentNo;
   G4double voxelSafety;
 
   motherPhysical = history.GetTopVolume();
@@ -718,7 +719,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
   if( fCheck )
   {
-    fLogger->ComputeSafetyLog (motherSolid,localPoint,motherSafety,true,true);
+    fLogger->ComputeSafetyLog (motherSolid,localPoint,motherSafety,true,1);
   }
 #endif
   //
@@ -731,7 +732,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
   {
-    sampleNo = curVoxelNode->GetVolume(contentNo);
+    sampleNo = curVoxelNode->GetVolume((G4int)contentNo);
     samplePhysical = motherLogical->GetDaughter(sampleNo);
 
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),
@@ -748,7 +749,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     if( fCheck )
     {
       fLogger->ComputeSafetyLog(sampleSolid, samplePoint,
-                                sampleSafety, false, false);
+                                sampleSafety, false, 0);
     }
 #endif
   }
@@ -766,6 +767,6 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 //
 void  G4VoxelNavigation::SetVerboseLevel(G4int level)
 {
-  if( fLogger )      fLogger->SetVerboseLevel(level);
-  if( fpVoxelSafety) fpVoxelSafety->SetVerboseLevel(level); 
+  if( fLogger != nullptr ) { fLogger->SetVerboseLevel(level); }
+  if( fpVoxelSafety != nullptr) { fpVoxelSafety->SetVerboseLevel(level); }
 }

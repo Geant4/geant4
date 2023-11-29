@@ -178,7 +178,7 @@ void G4MicroElecElasticModel_new::Initialise(const G4ParticleDefinition* /*parti
     
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
     
     for (G4int i = 0; i < numOfCouples; ++i) {
       const G4Material* material =
@@ -215,7 +215,7 @@ void G4MicroElecElasticModel_new::Initialise(const G4ParticleDefinition* /*parti
       tableTCS[matName] = tableData; //Storage of TCS
       
       // For final state
-      char *path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
 	{
 	  G4Exception("G4MicroElecElasticModel_new::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");

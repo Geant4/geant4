@@ -66,17 +66,17 @@ G4FissLib::G4FissLib()
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(20.*MeV);
-  if(!std::getenv("G4NEUTRONHPDATA")) {
+  if(!G4FindDataDir("G4NEUTRONHPDATA")) {
      G4cout << "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files." << G4endl;
      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
   }
-  dirName = std::getenv("G4NEUTRONHPDATA");
+  dirName = G4FindDataDir("G4NEUTRONHPDATA");
   G4String tString = "/Fission/";
   dirName = dirName + tString;
-  numEle = G4Element::GetNumberOfElements();
+  numEle = (G4int)G4Element::GetNumberOfElements();
   theFission = new G4ParticleHPChannel[numEle];
 
-  for (G4int i=0; i<numEle; i++)
+  for (G4int i=0; i<numEle; ++i)
   { 
 //    G4cout << "G4FissLib::G4FissLib(): element "<< i << " : " << (*(G4Element::GetElementTable()))[i]->GetZ()<< G4endl;
     if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
@@ -98,18 +98,18 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
   G4ParticleHPManager::GetInstance()->OpenReactionWhiteBoard();
 
   const G4Material* theMaterial = aTrack.GetMaterial();
-  G4int n = theMaterial->GetNumberOfElements();
-  G4int index = theMaterial->GetElement(0)->GetIndex();
+  std::size_t n = theMaterial->GetNumberOfElements();
+  std::size_t index = theMaterial->GetElement(0)->GetIndex();
 
   if (n != 1) {
     xSec = new G4double[n];
     G4double sum = 0;
     G4int i;
-    G4int imat;
+    std::size_t imat;
     const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
     G4double rWeight;    
     G4ParticleHPThermalBoost aThermalE;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < (G4int)n; ++i) {
       imat = theMaterial->GetElement(i)->GetIndex();
       rWeight = NumAtomsPerVolume[i];
       xSec[i] = theFission[imat].GetXsec(aThermalE.GetThermalEnergy(aTrack,
@@ -121,7 +121,7 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
 
     G4double random = G4UniformRand();
     G4double running = 0;
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < (G4int)n; ++i) {
       running += xSec[i];
       index = theMaterial->GetElement(i)->GetIndex();
       if(random<=running/sum) break;
@@ -135,8 +135,8 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
    aNucleus.SetParameters(G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
    const G4Element* target_element = (*G4Element::GetElementTable())[index];
    const G4Isotope* target_isotope=NULL;
-   G4int iele = target_element->GetNumberOfIsotopes();
-   for ( G4int j = 0 ; j != iele ; j++ ) {
+   G4int iele = (G4int)target_element->GetNumberOfIsotopes();
+   for ( G4int j = 0 ; j != iele ; ++j ) {
       target_isotope=target_element->GetIsotope( j );
       if ( target_isotope->GetN() == G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break;
    }
@@ -147,6 +147,6 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus)
 
 const std::pair<G4double, G4double> G4FissLib::GetFatalEnergyCheckLevels() const
 {
-  // max energy non-conservation is mass of heavy nucleus (taken from G4LFission)
-  return std::pair<G4double, G4double>(5*perCent,250*GeV);
+  // max energy non-conservation is mass of heavy nucleus
+  return std::pair<G4double, G4double>(10.0*perCent, 350.0*CLHEP::GeV);
 }

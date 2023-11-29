@@ -33,9 +33,6 @@
 #include "G4Scheduler.hh"
 G4DNAUpdateSystemModel::G4DNAUpdateSystemModel()
   : G4VUpdateSystemModel()
-  , fpMesh(nullptr)
-  , fVerbose(0)
-  , fGlobalTime(DBL_MAX)
 {}
 
 void G4DNAUpdateSystemModel::SetMesh(G4DNAMesh* pMesh) { fpMesh = pMesh; }
@@ -48,10 +45,13 @@ void G4DNAUpdateSystemModel::KillMolecule(const Index& index, MolType type)
   {
     if(iter->second <= 0)
     {
-      G4cout << "G4DNAUpdateSystemModel::KillMolecule::molecule : "
-             << type->GetName() << " index : " << index
-             << " number : " << iter->second << G4endl;
-      assert(false);
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription
+        << "G4DNAUpdateSystemModel::KillMolecule::molecule : "
+        << type->GetName() << " index : " << index
+        << " number : " << iter->second << G4endl;
+      G4Exception("G4DNAEventScheduler::Stepping", "G4DNAEventScheduler002",
+                  FatalErrorInArgument, exceptionDescription);
     }
     iter->second--;
     if(G4VMoleculeCounter::Instance()->InUse())
@@ -70,10 +70,13 @@ void G4DNAUpdateSystemModel::KillMolecule(const Index& index, MolType type)
     }
     else
     {
-      G4cout << "index : " << index << " " << type->GetName() << G4endl;
-      G4cout << "This molecule is not belong scavengers or particle-base"
-             << G4endl;
-      assert(false);
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription
+        << "index : " << index << " " << type->GetName()
+        << "  This molecule is not belong scavengers or particle-base"
+        << G4endl;
+      G4Exception("G4DNAEventScheduler::Stepping", "G4DNAEventScheduler002",
+                  FatalErrorInArgument, exceptionDescription);
     }
   }
 }
@@ -81,24 +84,28 @@ void G4DNAUpdateSystemModel::KillMolecule(const Index& index, MolType type)
 void G4DNAUpdateSystemModel::JumpTo(const Index& index, MolType type)
 {
   auto& node = fpMesh->GetVoxelMapList(index);
-
-  auto iter = node.find(type);
+  auto iter  = node.find(type);
   if(iter != node.end())
   {
     if(iter->second <= 0)
     {
-      G4cout << "G4DNAUpdateSystemModel::KillMolecule::molecule : "
-             << type->GetName() << " index : " << index
-             << " number : " << iter->second << G4endl;
-      assert(false);
+      G4ExceptionDescription exceptionDescription;
+      exceptionDescription << "G4DNAUpdateSystemModel::JumpTo::molecule : "
+                           << type->GetName() << " index : " << index
+                           << " number : " << iter->second;
+      G4Exception("G4DNAUpdateSystemModel::JumpTo", "G4DNAUpdateSystemModel001",
+                  FatalErrorInArgument, exceptionDescription);
     }
     iter->second--;
   }
   else
   {
-    G4cout << "index : " << index << " " << type->GetName() << G4endl;
-    G4cout << "This molecule is not belong  particle-base" << G4endl;
-    assert(false);
+    fpMesh->PrintVoxel(index);
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "index : " << index << " " << type->GetName()
+                         << " There is no this type";
+    G4Exception("G4DNAUpdateSystemModel::JumpTo", "G4DNAUpdateSystemModel002",
+                FatalErrorInArgument, exceptionDescription);
   }
 }
 
@@ -162,7 +169,7 @@ void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,
   const G4int nbProducts = data.GetNbProducts();
   if(nbProducts != 0)
   {
-    for(size_t j = 0; j < (size_t) nbProducts; ++j)
+    for(G4int j = 0; j < nbProducts; ++j)
     {
 #ifdef G4VERBOSE
       if((fVerbose != 0) && j != 0)
@@ -172,34 +179,9 @@ void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,
       if(fVerbose != 0)
       {
         G4cout << data.GetProduct(j)->GetName();
-        // for test
-        // G4cout<<"  fGlobalTime : "<<fGlobalTime;
-        // end fortest
       }
 #endif
       CreateMolecule(index, data.GetProduct(j));
-      //#define DEBUG 1
-
-#ifdef DEBUG
-      if(G4MoleculeCounter::Instance()->InUse())
-        if(fpMesh->GetNumberOfType(data.GetProduct(j)) !=
-           G4MoleculeCounter::Instance()->GetCurrentNumberOf(
-             data.GetProduct(j)))
-        {
-          G4cout << "*********G4DNAUpdateSystemModel::DEBUG::GetNumberOfType("
-                 << data.GetProduct(j)->GetName()
-                 << ") : " << fpMesh->GetNumberOfType(data.GetProduct(j))
-                 << G4endl;
-          G4cout << "G4MoleculeCounter::GetCurrentNumberOf ("
-                 << data.GetProduct(j)->GetName() << ") : "
-                 << G4MoleculeCounter::Instance()->GetCurrentNumberOf(
-                      data.GetProduct(j))
-                 << G4endl;
-          G4MoleculeCounter::Instance()->Dump();
-          throw;
-        }
-
-#endif
     }
   }
   else
@@ -208,9 +190,6 @@ void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,
     if(fVerbose != 0)
     {
       G4cout << "No product";
-      // for test
-      // G4cout<<"  fGlobalTime : "<<fGlobalTime;
-      // end fortest
     }
 #endif
   }
@@ -221,40 +200,7 @@ void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,
   }
 #endif
   KillMolecule(index, reactant1);
-#ifdef DEBUG
-  if(G4MoleculeCounter::Instance()->InUse())
-    if(fpMesh->GetNumberOfType(reactant1) !=
-       G4MoleculeCounter::Instance()->GetCurrentNumberOf(reactant1))
-    {
-      G4cout << "*********G4DNAUpdateSystemModel::DEBUG::GetNumberOfType("
-             << reactant1->GetName()
-             << ") : " << fpMesh->GetNumberOfType(reactant1) << G4endl;
-      G4cout << "G4MoleculeCounter::GetCurrentNumberOf ("
-             << reactant1->GetName() << ") : "
-             << G4MoleculeCounter::Instance()->GetCurrentNumberOf(reactant1)
-             << G4endl;
-      G4MoleculeCounter::Instance()->Dump();
-      throw;
-    }
-#endif
   KillMolecule(index, reactant2);
-#ifdef DEBUG
-
-  if(G4MoleculeCounter::Instance()->InUse())
-    if(fpMesh->GetNumberOfType(reactant2) !=
-       G4MoleculeCounter::Instance()->GetCurrentNumberOf(reactant2))
-    {
-      G4cout << "*********G4DNAUpdateSystemModel::DEBUG::GetNumberOfType("
-             << reactant2->GetName()
-             << ") : " << fpMesh->GetNumberOfType(reactant2) << G4endl;
-      G4cout << "G4MoleculeCounter::GetCurrentNumberOf ("
-             << reactant2->GetName() << ") : "
-             << G4MoleculeCounter::Instance()->GetCurrentNumberOf(reactant2)
-             << G4endl;
-      G4MoleculeCounter::Instance()->Dump();
-      throw;
-    }
-#endif
 }
 
 void G4DNAUpdateSystemModel::UpdateSystem(const Index& index,

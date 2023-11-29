@@ -65,7 +65,7 @@ G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4OpAbsorption::~G4OpAbsorption() {}
+G4OpAbsorption::~G4OpAbsorption() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4OpAbsorption::PreparePhysicsTable(const G4ParticleDefinition&)

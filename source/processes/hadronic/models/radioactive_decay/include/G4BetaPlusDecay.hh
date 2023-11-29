@@ -38,7 +38,7 @@
 
 #include "G4NuclearDecay.hh"
 #include "G4BetaDecayType.hh"
-#include "Randomize.hh"
+#include "G4BetaSpectrumSampler.hh"
 
 
 class G4BetaPlusDecay : public G4NuclearDecay
@@ -60,7 +60,7 @@ class G4BetaPlusDecay : public G4NuclearDecay
                                   const G4BetaDecayType& type);
 
     const G4double endpointEnergy;
-    G4RandGeneral* spectrumSampler;
+    G4BetaSpectrumSampler* betaSampler;
 };
 #endif
 

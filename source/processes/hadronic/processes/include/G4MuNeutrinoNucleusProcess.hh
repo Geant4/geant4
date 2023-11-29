@@ -56,7 +56,13 @@ public:
   G4MuNeutrinoNucleusProcess(G4String anEnvelopeName , const G4String& procName = "mu-neutrino-nucleus");
 
   virtual ~G4MuNeutrinoNucleusProcess();
- 
+  
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double previousStepSize,
+                             G4ForceCondition* condition
+                            ) override;
+  
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 					  const G4Step& aStep) override;
 
@@ -84,6 +90,7 @@ private:
   G4String fEnvelopeName;
   G4MuNeutrinoNucleusTotXsc* fTotXsc;
   G4double fNuNuclCcBias, fNuNuclNcBias, fNuNuclTotXscBias;
+  G4double fXsc;
   G4SafetyHelper* safetyHelper;
 };
 

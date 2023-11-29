@@ -18,6 +18,7 @@ geant4_add_module(G4emstandard
     G4DeltaAngleFreeScat.hh
     G4DipBustGenerator.hh
     G4ESTARStopping.hh
+    G4EmStandUtil.hh
     G4GSMottCorrection.hh
     G4GSPWACorrections.hh
     G4GammaConversion.hh
@@ -100,6 +101,7 @@ geant4_add_module(G4emstandard
     G4DeltaAngleFreeScat.cc
     G4DipBustGenerator.cc
     G4ESTARStopping.cc
+    G4EmStandUtil.cc
     G4GoudsmitSaundersonMscModel.cc
     G4GoudsmitSaundersonTable.cc
     G4ICRU49NuclearStoppingModel.cc
@@ -175,4 +177,6 @@ geant4_module_link_libraries(G4emstandard
     G4geometrymng
     G4hepnumerics
     G4ions
-    G4mesons)
+    G4mesons
+    G4procman
+    ${ZLIB_LIBRARIES})

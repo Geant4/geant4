@@ -54,26 +54,22 @@ class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:
-
   PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  ~PrimaryGeneratorAction() override;
 
-  virtual void GeneratePrimaries(G4Event*);
+  void GeneratePrimaries(G4Event *) override;
+
+  PrimaryGeneratorAction &operator=
+  (const PrimaryGeneratorAction &right) = delete;
+  PrimaryGeneratorAction(const PrimaryGeneratorAction &) = delete;
 
 private:
-
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
-
-  G4ParticleGun*    fParticleGun;
-  TestParameters*   fParam;
+  G4ParticleGun *fParticleGun;
+  TestParameters *fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

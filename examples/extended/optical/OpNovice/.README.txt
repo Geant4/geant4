@@ -90,7 +90,7 @@ defined in OpNoviceDetectorConstruction.
    $ OpNovice -m OpNovice.in
 \endverbatim
 
-- execute OpNovice in 'batch' mode from macro files using a gdml file
+ - execute OpNovice in 'batch' mode from macro files using a gdml file
    to define the geometry
  	$ OpNovice -g NoviceExample.gdml -m OpNovice.in
 
@@ -109,12 +109,10 @@ Macros
 
  The following macros are provided:
 
- optPhoton.mac: Shoot optical photons with energy 3 eV
- OpNovice.in: Shoot positrons with energy 500 keV.
- gui.mac: Configure the graphical user interface.
- vis.mac: Configure visualization.
-
-
+ - optPhoton.mac: Shoot optical photons with energy 3 eV
+ - OpNovice.in: Shoot positrons with energy 500 keV.
+ - gui.mac: Configure the graphical user interface.
+ - vis.mac: Configure visualization.
 
 gdml files
 ----------

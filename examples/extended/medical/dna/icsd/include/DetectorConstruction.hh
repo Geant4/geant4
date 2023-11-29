@@ -51,6 +51,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "DetectorMessenger.hh"
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -59,19 +60,23 @@ public:
   ~DetectorConstruction();
 
   virtual G4VPhysicalVolume* Construct();
+  void SetGeometry(const G4String&);
 
 private:  
-  G4double           fWorldSizeX;
-  G4double           fWorldSizeY;
-  G4double           fWorldSizeZ;
-  G4VPhysicalVolume* fpPhysiWorld;
-  G4LogicalVolume*   fpLogicWorld;
-  G4Box*             fpSolidWorld;
-  G4Tubs*            fpSolidTarget;
-  G4Material*        fpWaterMaterial;
-  G4Material*        fpTHFMaterial;
+  G4double           fWorldSize = 0;
+  G4VPhysicalVolume* fpPhysiWorld = nullptr;
+  G4LogicalVolume*   fpLogicWorld = nullptr;
+  G4Box*             fpSolidWorld = nullptr;
+  G4Material*        fpWaterMaterial = nullptr;
+  G4Material*        fpTHFMaterial = nullptr;
+  G4Material*        fpN2Material = nullptr;
+
+  G4String fGeomType = "dna";
 
   void DefineMaterials();
-  G4VPhysicalVolume* ConstructDetector();     
+  G4VPhysicalVolume* ConstructDetector();  
+
+  DetectorMessenger* fDetectorMessenger;    
+   
 };
 #endif

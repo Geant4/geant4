@@ -82,6 +82,7 @@
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4PreCompoundDeexcitation.hh"
+#include "G4AblaDeexcitation.hh"
 
 
 G4InuclCollider::G4InuclCollider()
@@ -121,6 +122,12 @@ void G4InuclCollider::useCascadeDeexcitation() {
 void G4InuclCollider::usePreCompoundDeexcitation() {
   delete theDeexcitation;
   theDeexcitation = new G4PreCompoundDeexcitation;
+  theDeexcitation->setVerboseLevel(verboseLevel);
+}
+
+void G4InuclCollider::useAblaDeexcitation() {
+  delete theDeexcitation;
+  theDeexcitation = new G4AblaDeexcitation;
   theDeexcitation->setVerboseLevel(verboseLevel);
 }
 

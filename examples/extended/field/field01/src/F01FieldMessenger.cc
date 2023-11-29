@@ -36,9 +36,12 @@
 
 #include "F01FieldSetup.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+
+#include "G4FieldManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +69,7 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
- 
+
   fMagFieldZCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
   fMagFieldZCmd->SetGuidance("Define magnetic field.");
   fMagFieldZCmd->SetGuidance("Magnetic field will be in Z direction.");
@@ -83,9 +86,38 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMinStepCmd->SetParameterName("min step",false,false);
+  fMinStepCmd->SetParameterName("minStep",false,false);
   fMinStepCmd->SetDefaultUnit("mm");
   fMinStepCmd->AvailableForStates(G4State_Idle);
+
+  // Commands for integration accuracy 
+  //  1. Delta One Step =  length of potential error in each integration substep
+  //         Recall that there can be up to 300 substeps in a physics step !!
+  fDeltaOneStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setDeltaOneStep",this);
+  fDeltaOneStepCmd->SetGuidance("Define minimal step");
+  fDeltaOneStepCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fDeltaOneStepCmd->SetParameterName("minStep",false,false);
+  fDeltaOneStepCmd->SetDefaultUnit("mm");
+  fDeltaOneStepCmd->AvailableForStates(G4State_Idle);
+
+  // A choice:  Allow the user to reset the Eps Min/Max values to our default
+  G4bool omitable= true,   currentAsDefault= false;
+  fEpsMinCmd = new G4UIcmdWithADouble("/field/setEpsilonMin",this);
+  fEpsMinCmd->SetGuidance("Define minimum value of the relative integration error (EpsilonMin) - a dimensionless number");
+  fEpsMinCmd->SetGuidance("Limit to ensure that large steps do NOT result in a very low value (ie high accuracy) that integration needs many steps and CPU cycles.");
+  fEpsMinCmd->SetParameterName("minEpsilon",omitable,currentAsDefault);
+  fEpsMinCmd->SetDefaultValue(1.0e-4); // A default eps_min
+  fEpsMinCmd->AvailableForStates(G4State_Idle);
+
+  fEpsMaxCmd = new G4UIcmdWithADouble("/field/setEpsilonMax",this);
+  fEpsMaxCmd->SetGuidance("Define minimum value of the relative integration error (EpsilonMax) - a dimensionless number");
+  fEpsMaxCmd->SetGuidance("Limit to ensure a very small step does NOT result in a large relative error (ie low accuracy) with unreliable results.");
+  fEpsMaxCmd->SetParameterName("maxEpsilon",omitable,currentAsDefault);
+  fEpsMinCmd->SetDefaultValue(1.0e-5); // A default eps_max
+  fEpsMaxCmd->AvailableForStates(G4State_Idle);
+
+  // HOW to Ensure that its value is  val < G4FieldManager::GetMaxAcceptedEpsilon() ??
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,6 +128,9 @@ F01FieldMessenger::~F01FieldMessenger()
   delete fMagFieldZCmd;
   delete fMagFieldCmd;
   delete fMinStepCmd;
+  delete fDeltaOneStepCmd;  
+  delete fEpsMinCmd;
+  delete fEpsMaxCmd;
   delete fFieldDir;
   delete fUpdateCmd;
 }
@@ -114,6 +149,12 @@ void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
     fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNew3VectorValue(newValue));
   if( command == fMinStepCmd )
     fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
+  if( command == fDeltaOneStepCmd )
+    fEMfieldSetup->SetDeltaOneStep(fDeltaOneStepCmd->GetNewDoubleValue(newValue));  
+  if( command == fEpsMinCmd )
+    fEMfieldSetup->SetEpsilonMin(fEpsMinCmd->GetNewDoubleValue(newValue));
+  if( command == fEpsMaxCmd )
+    fEMfieldSetup->SetEpsilonMax(fEpsMaxCmd->GetNewDoubleValue(newValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

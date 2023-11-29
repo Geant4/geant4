@@ -55,7 +55,7 @@ G4DamagedDeoxyribose* G4DamagedDeoxyribose::Definition()
                                                ); 
     }
     
-    fgInstance = reinterpret_cast<G4DamagedDeoxyribose*>(pInstance);
+    fgInstance = static_cast<G4DamagedDeoxyribose*>(pInstance);
     return fgInstance;
 }
 
@@ -81,7 +81,7 @@ G4DamagedAdenine* G4DamagedAdenine::Definition()
                                                2 // number of atoms
                                                );
     }
-    fgInstance = reinterpret_cast<G4DamagedAdenine*>(pInstance);
+    fgInstance = static_cast<G4DamagedAdenine*>(pInstance);
     return fgInstance;
 }
 
@@ -108,7 +108,7 @@ G4DamagedGuanine* G4DamagedGuanine::Definition()
                                                2 // number of atoms
                                                );
     }
-    fgInstance = reinterpret_cast<G4DamagedGuanine*>(pInstance);
+    fgInstance = static_cast<G4DamagedGuanine*>(pInstance);
     return fgInstance;
 }
 
@@ -135,7 +135,7 @@ G4DamagedThymine* G4DamagedThymine::Definition()
                                                );
     }
 
-    fgInstance = reinterpret_cast<G4DamagedThymine*>(pInstance);
+    fgInstance = static_cast<G4DamagedThymine*>(pInstance);
     return fgInstance;
 }
 
@@ -161,7 +161,7 @@ G4DamagedCytosine* G4DamagedCytosine::Definition()
                                               2 // number of atoms
                                               );
      }
-     fgInstance = reinterpret_cast<G4DamagedCytosine*>(pInstance);
+     fgInstance = static_cast<G4DamagedCytosine*>(pInstance);
      return fgInstance;
 }
 
@@ -188,7 +188,7 @@ G4Deoxyribose* G4Deoxyribose::Definition()
 	                                           2 // number of atoms
                                                );
     }
-    fgInstance = reinterpret_cast<G4Deoxyribose*>(pInstance);
+    fgInstance = static_cast<G4Deoxyribose*>(pInstance);
     return fgInstance;
 }
 
@@ -214,7 +214,7 @@ G4Phosphate* G4Phosphate::Definition()
                                              2 // number of atoms
                                              );
     }
-    fgInstance = reinterpret_cast<G4Phosphate*>(pInstance);
+    fgInstance = static_cast<G4Phosphate*>(pInstance);
     return fgInstance;
 }
 
@@ -240,7 +240,7 @@ G4Adenine* G4Adenine::Definition()
                                              1 // number of atoms
                                              );
     }
-    fgInstance = reinterpret_cast<G4Adenine*>(pInstance);
+    fgInstance = static_cast<G4Adenine*>(pInstance);
     return fgInstance;
 }
 
@@ -268,7 +268,7 @@ G4Guanine* G4Guanine::Definition()
 
     }
 
-    fgInstance = reinterpret_cast<G4Guanine*>(pInstance);
+    fgInstance = static_cast<G4Guanine*>(pInstance);
     return fgInstance;
 }
 
@@ -294,7 +294,7 @@ G4Thymine* G4Thymine::Definition()
                                          1 // number of atoms
                                          );
     }
-    fgInstance = reinterpret_cast<G4Thymine*>(pInstance);
+    fgInstance = static_cast<G4Thymine*>(pInstance);
     return fgInstance;
 }
 
@@ -320,7 +320,7 @@ G4Cytosine* G4Cytosine::Definition()
                                              1 // number of atoms
                                              );
     }
-    fgInstance = reinterpret_cast<G4Cytosine*>(pInstance);
+    fgInstance = static_cast<G4Cytosine*>(pInstance);
     return fgInstance;
 }
 
@@ -346,7 +346,7 @@ G4ModifiedHistone* G4ModifiedHistone::Definition()
                                              1 // number of atoms
                                              );
     }
-    fgInstance = reinterpret_cast<G4ModifiedHistone*>(pInstance);
+    fgInstance = static_cast<G4ModifiedHistone*>(pInstance);
     return fgInstance;
 }
 
@@ -373,6 +373,6 @@ G4Histone* G4Histone::Definition()
                                              1 // number of atoms
                                              );
     }
-    fgInstance = reinterpret_cast<G4Histone*>(pInstance);
+    fgInstance = static_cast<G4Histone*>(pInstance);
     return fgInstance;
 }

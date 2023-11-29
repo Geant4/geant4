@@ -30,7 +30,7 @@
 
 inline G4Track* G4VParticleChange::GetSecondary(G4int anIndex) const
 {
-  return (*theListOfSecondaries)[anIndex];
+  return theListOfSecondaries[anIndex];
 }
 
 inline G4int G4VParticleChange::GetNumberOfSecondaries() const
@@ -41,6 +41,11 @@ inline G4int G4VParticleChange::GetNumberOfSecondaries() const
 inline void G4VParticleChange::ProposeTrackStatus(G4TrackStatus aStatus)
 {
   theStatusChange = aStatus;
+}
+
+inline const G4Track* G4VParticleChange::GetCurrentTrack() const
+{
+  return theCurrentTrack;
 }
 
 inline G4TrackStatus G4VParticleChange::GetTrackStatus() const
@@ -133,14 +138,14 @@ inline G4double G4VParticleChange::GetWeight() const
 // ----------------------------------------------------------------
 // inline functions for Initialization
 //
-inline void G4VParticleChange::InitializeLocalEnergyDeposit(const G4Track&)
+inline void G4VParticleChange::InitializeLocalEnergyDeposit()
 {
   // clear theLocalEnergyDeposited
   theLocalEnergyDeposit       = 0.0;
   theNonIonizingEnergyDeposit = 0.0;
 }
 
-inline void G4VParticleChange::InitializeSteppingControl(const G4Track&)
+inline void G4VParticleChange::InitializeSteppingControl()
 {
   // SteppingControlFlag
   theSteppingControlFlag = NormalCondition;
@@ -157,6 +162,7 @@ inline void G4VParticleChange::InitializeStatusChange(const G4Track& track)
 {
   // set TrackStatus equal to the parent track's one
   theStatusChange = track.GetTrackStatus();
+  theCurrentTrack = &track;
 }
 
 inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
@@ -166,92 +172,45 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
   isParentWeightProposed = false;
 }
 
-inline void G4VParticleChange::InitializeParentGlobalTime(const G4Track& track)
+inline void G4VParticleChange::InitializeFromStep(const G4Step* step)
 {
   // set the parent track's global time at the pre-step point
-  theParentGlobalTime = track.GetStep()->GetPreStepPoint()->GetGlobalTime();
-}
+  theParentGlobalTime = step->GetPreStepPoint()->GetGlobalTime();
 
-inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
-{
-  // Reset theTrueStepLength
-  // !! Caution  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  theTrueStepLength = track.GetStep()->GetStepLength();
-  // !!  TrueStepLength should be copied from G4Step not G4Track
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-}
-
-inline void G4VParticleChange::InitializeStepInVolumeFlags(const G4Track& track)
-{
-  const G4Step* aStep  = track.GetStep();
-  theFirstStepInVolume = aStep->IsFirstStepInVolume();
-  theLastStepInVolume  = aStep->IsLastStepInVolume();
-}
-
-inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
-{
-  // clear secondaries
-  if(theNumberOfSecondaries > 0)
-  {
-#ifdef G4VERBOSE
-    if(verboseLevel > 0)
-    {
-      G4cerr << "G4VParticleChange::Initialize() Warning  ";
-      G4cerr << "theListOfSecondaries is not empty " << G4endl;
-      G4cerr << "All objects in theListOfSecondaries are destroyed!" << G4endl;
-    }
-#endif
-    for(G4int index = 0; index < theNumberOfSecondaries; index++)
-    {
-      if((*theListOfSecondaries)[index])
-      {
-        delete(*theListOfSecondaries)[index];
-      }
-    }
-  }
-  theNumberOfSecondaries = 0;
+  theTrueStepLength = step->GetStepLength();
+  theFirstStepInVolume = step->IsFirstStepInVolume();
+  theLastStepInVolume = step->IsLastStepInVolume();
 }
 
 // ----------------------------------------------------------------
 // methods for handling secondaries
 //
-inline void G4VParticleChange::SetNumberOfSecondaries(G4int totSecondaries)
+inline void G4VParticleChange::InitializeSecondaries()
 {
-  // check if tracks still exist in theListOfSecondaries
-  if(theNumberOfSecondaries > 0)
-  {
-#ifdef G4VERBOSE
-    if(verboseLevel > 0)
-    {
-      G4cerr << "G4VParticleChange::SetNumberOfSecondaries() Warning  ";
-      G4cerr << "theListOfSecondaries is not empty ";
-    }
-#endif
-    for(G4int index = 0; index < theNumberOfSecondaries; index++)
-    {
-      if((*theListOfSecondaries)[index])
-      {
-        delete(*theListOfSecondaries)[index];
-      }
-    }
-  }
-  theNumberOfSecondaries        = 0;
-  theSizeOftheListOfSecondaries = totSecondaries;
-
-  // Initialize ListOfSecondaries
-  theListOfSecondaries->Initialize(totSecondaries);
+  theNumberOfSecondaries = 0;
 }
 
+inline void G4VParticleChange::SetNumberOfSecondaries(G4int totSecondaries)
+{
+  if(totSecondaries > theSizeOftheListOfSecondaries)
+  {
+    theListOfSecondaries.resize(totSecondaries, nullptr);
+    theSizeOftheListOfSecondaries = totSecondaries;
+  }
+  theNumberOfSecondaries = 0;
+}
+
+// ----------------------------------------------------------------
+// total 
+//
 inline void G4VParticleChange::Initialize(const G4Track& track)
 {
   InitializeStatusChange(track);
-  InitializeLocalEnergyDeposit(track);
-  InitializeSteppingControl(track);
-  InitializeTrueStepLength(track);
-  InitializeSecondaries(track);
+  InitializeLocalEnergyDeposit();
+  InitializeSteppingControl();
+  InitializeSecondaries();
   InitializeParentWeight(track);
-  InitializeParentGlobalTime(track);
-  InitializeStepInVolumeFlags(track);
+  InitializeFromStep(track.GetStep());
 }
 
 inline void G4VParticleChange::ClearDebugFlag()
@@ -289,3 +248,9 @@ inline void G4VParticleChange::ProposeParentWeight(G4double w)
 {
   ProposeWeight(w);
 }
+
+inline G4double G4VParticleChange::ComputeBeta(G4double ekin)
+{
+  G4double mass = theCurrentTrack->GetDefinition()->GetPDGMass();
+  return std::sqrt(ekin*(ekin + 2*mass))/(ekin + mass);
+} 

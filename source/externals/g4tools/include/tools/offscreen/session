@@ -1,0 +1,60 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_offscreen_session
+#define tools_offscreen_session
+
+namespace tools {
+namespace offscreen {
+
+class viewer {
+public:
+  virtual ~viewer() {}
+public:
+  virtual void render() = 0;
+};
+
+}}
+
+#include "../forit"
+#include "../vmanip"
+
+#include <ostream>
+
+namespace tools {
+namespace offscreen {
+
+class session {
+public:
+  session(std::ostream& a_out):m_out(a_out) {}
+  virtual ~session() {}
+protected:
+  session(const session& a_from):m_out(a_from.m_out) {}
+  session& operator=(const session& a_from) {if(&a_from==this) return *this;return *this;}
+public:
+  std::ostream& out() const {return m_out;}
+  bool is_valid() const {return true;}
+  bool steer() {
+    tools_vforcit(viewer*,m_to_render,it) {(*it)->render();}
+    m_to_render.clear();
+    return true;
+  }
+  bool sync() {
+    tools_vforcit(viewer*,m_to_render,it) {(*it)->render();}
+    m_to_render.clear();
+    return true;
+  }
+public:
+  void to_render(viewer* a_viewer) {
+    if(is_inp(m_to_render,a_viewer)) return;
+    m_to_render.push_back(a_viewer);
+  }
+protected:
+  std::ostream& m_out;
+  std::vector<viewer*> m_to_render;  
+};
+
+}}
+
+#endif
+

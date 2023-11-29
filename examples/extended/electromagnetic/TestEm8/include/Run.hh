@@ -46,14 +46,12 @@ class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Run : public G4Run
-{
+class Run : public G4Run {
 public:
-
   Run();
-  virtual ~Run();
+  ~Run() override = default;
 
-  virtual void Merge(const G4Run*);
+  void Merge(const G4Run *) override;
 
   void BeginOfRun();
   void EndOfRun();
@@ -61,7 +59,10 @@ public:
   void BeginOfEvent();
   void EndOfEvent();
 
-  void AddEnergy(G4double edep, const G4Step*);
+  void AddEnergy(G4double edep, const G4Step *);
+
+  Run &operator = (const Run &right) = delete;
+  Run(const Run &) = delete;
 
   inline void SetVerbose(G4int value);
 
@@ -73,63 +74,42 @@ public:
 
   inline G4double GetMeanCluster() const;
 
-  inline const G4StatDouble* GetStat() const;
+  inline const G4StatDouble *GetStat() const;
 
 private:
-
-  G4int fVerbose;
-  G4int fNbins;
-  G4double fStepGas;
-  G4double fMaxEnergy;
-  G4double fCluster;
-  G4double fTotStepGas;
-  G4double fTotCluster;
-  G4double fMeanCluster;
+  G4int fVerbose = 1;
+  G4int fNbins = 0;
+  G4double fStepGas = 0.0;
+  G4double fMaxEnergy = 0.0;
+  G4double fCluster = 0.0;
+  G4double fTotStepGas = 0.0;
+  G4double fTotCluster = 0.0;
+  G4double fMeanCluster = 0.0;
   G4double fFactorALICE;
   G4double fWidthALICE;
-  G4double fEvt;
+  G4double fEvt = 0.0;
+  G4double fTotEdep = 0.0;
+  G4double fOverflow = 0.0;
 
-  G4double fTotEdep;
-  G4StatDouble fEdep;
-  G4double fOverflow;
+  G4StatDouble fEdep = 325;
   G4DataVector fEgas;
 
-  G4ElectronIonPair* fElIonPair;
-  TestParameters* fParam;
+  G4ElectronIonPair *fElIonPair;
+  TestParameters *fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void Run::SetVerbose(G4int value)
-{
-  fVerbose = value;
-}
+inline void Run::SetVerbose(G4int value) { fVerbose = value; }
 
-inline G4int Run::GetVerbose() const
-{
-  return fVerbose;
-}
+inline G4int Run::GetVerbose() const { return fVerbose; }
 
-inline G4double Run::GetTotStepGas() const
-{
-  return fTotStepGas;
-}
+inline G4double Run::GetTotStepGas() const { return fTotStepGas; }
 
-inline G4double Run::GetTotCluster() const
-{
-  return fTotCluster;
-} 
+inline G4double Run::GetTotCluster() const { return fTotCluster; }
 
-inline G4double Run::GetMeanCluster() const
-{
-  return fMeanCluster;
-}
+inline G4double Run::GetMeanCluster() const { return fMeanCluster; }
 
-inline const G4StatDouble* Run::GetStat() const
-{
-  return &fEdep;
-}
+inline const G4StatDouble *Run::GetStat() const { return &fEdep; }
 
 #endif
-
-

@@ -103,7 +103,7 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack& StartFT,
   const G4ThreeVector CurrentUnitVelocity = CurrentFT.GetMomentumDir();
 
   G4double step_len = CurrentFT.GetCurveLength() - StartFT.GetCurveLength();
-  G4int oldprc;  // cout/cerr precision settings
+  G4long oldprc;  // cout/cerr precision settings
 
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
@@ -403,7 +403,7 @@ GetLocalSurfaceNormal(const G4ThreeVector& CurrentE_Point, G4bool& validNormal)
   //        which side you are located onto (can return vector with wrong sign.)
   // TO-DO: use direction (of chord) to identify volume we will be "entering"
 
-  if( located != 0)
+  if( located != nullptr)
   { 
     G4LogicalVolume* pLogical= located->GetLogicalVolume(); 
     G4VSolid*        pSolid; 
@@ -789,7 +789,7 @@ ReportReversedPoints( std::ostringstream& msg,
        << "      Point B' (end)   is " << B_PtVel << G4endl;
    msg << "      fEpsStep= " << epsStep << G4endl << G4endl;
 
-   G4int oldprc = msg.precision(20);
+   G4long oldprc = msg.precision(20);
    msg << " In full precision, the position, momentum, E_kin, length, rest mass "
        << " ... are: " << G4endl;
    msg << " Point A[0] (Curve   start) is " << StartPointVel << G4endl
@@ -821,7 +821,7 @@ void G4VIntersectionLocator::ReportProgress( std::ostream& oss,
 
 {
   oss << "ReportProgress: Current status of intersection search: " << G4endl;
-  if( depth > 0 ) oss << " Depth= " << depth;
+  if( depth > 0 ) { oss << " Depth= " << depth; }
   oss << " Substep no = " << substep_no << G4endl;
   G4int  verboseLevel = 5; 
   G4double safetyPrev = -1.0;  // Add as argument ?

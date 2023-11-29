@@ -37,6 +37,8 @@
 #include "G4Types.hh"
 #include "geomdefs.hh"
 
+#include <vector>
+#include <map>
 #include "G4GDMLReadParamvol.hh"
 
 class G4AssemblyVolume;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-  const G4int kMaxHisto = 2*kMaxAbsor + 3;
+  const G4int kMaxHisto = 2*kMaxAbsor + 5;
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,11 +44,11 @@ class HistoManager
 {
   public:
     HistoManager();
-   ~HistoManager();
+   ~HistoManager() = default;
 
   private:
     void Book();
-    G4String fFileName;
+    G4String fFileName = "testem3";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

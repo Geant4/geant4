@@ -83,8 +83,7 @@ G4IonFluctuations::G4IonFluctuations(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonFluctuations::~G4IonFluctuations()
-{}
+G4IonFluctuations::~G4IonFluctuations() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -43,24 +43,25 @@
 
 class G4CashKarpRKF45 : public G4MagIntegratorStepper
 {
-
-  public:  // with description
+  public:
 
     G4CashKarpRKF45( G4EquationOfMotion* EqRhs,
                      G4int numberOfVariables = 6,
                      G4bool primary = true ) ;
-   ~G4CashKarpRKF45() ;
+   ~G4CashKarpRKF45() override ;
+
+    G4CashKarpRKF45(const G4CashKarpRKF45&) = delete;
+    G4CashKarpRKF45& operator=(const G4CashKarpRKF45&) = delete;
+      // Deleted copy constructor and assignment operator.
 
     void Stepper( const G4double y[],
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] ) ;
+                        G4double yerr[] ) override ;
 
-  public:  // without description
-
-    G4double  DistChord()   const; 
-    G4int IntegratorOrder() const { return 4; }
+    G4double  DistChord()   const override; 
+    G4int IntegratorOrder() const override { return 4; }
 
   private:
 
@@ -74,10 +75,6 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
                             G4double B2[]    );  
       // No longer used. Obsolete.
 
-    G4CashKarpRKF45(const G4CashKarpRKF45&);
-    G4CashKarpRKF45& operator=(const G4CashKarpRKF45&);
-      // Private copy constructor and assignment operator.
-
   private:
 
    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn; // *ak7
@@ -88,8 +85,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
              *fLastDyDx, *fMidVector, *fMidError;
       // for DistChord calculations
 
-    G4CashKarpRKF45* fAuxStepper = nullptr; 
-
+    G4CashKarpRKF45* fAuxStepper = nullptr;
 };
 
 #endif

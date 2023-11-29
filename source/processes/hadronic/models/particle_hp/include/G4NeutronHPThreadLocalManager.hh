@@ -29,4 +29,4 @@
 #include "G4ParticleHPThreadLocalManager.hh"
 using G4NeutronHPThreadLocalManager = G4ParticleHPThreadLocalManager;
 
-#endif 
+#endif

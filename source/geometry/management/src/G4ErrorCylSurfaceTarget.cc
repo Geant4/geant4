@@ -36,6 +36,7 @@
 #endif
 
 #include "geomdefs.hh"
+#include "G4Normal3D.hh"
 #include "G4Plane3D.hh"
 
 //---------------------------------------------------------------------

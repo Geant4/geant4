@@ -45,10 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-:G4VUserPrimaryGeneratorAction(),                                               
- fParticleGun(0),
- fRndmBeam(0),
- fGunMessenger(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
@@ -57,8 +53,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fParticleGun->SetParticleEnergy(4*MeV);  
   fParticleGun->SetParticlePosition(G4ThreeVector());
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1,0,0));
-          
-  fRndmBeam   = true;
     
   //create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);  

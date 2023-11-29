@@ -29,77 +29,78 @@
 #ifndef G4ParticleHPNBodyPhaseSpace_h
 #define G4ParticleHPNBodyPhaseSpace_h 1
 
-#include <fstream>
+#include "G4Neutron.hh"
+#include "G4Pow.hh"
+#include "G4ReactionProduct.hh"
+#include "G4VParticleHPEnergyAngular.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
 #include <CLHEP/Units/PhysicalConstants.h>
 
-#include "globals.hh"
-#include "G4Pow.hh"
-#include "G4ios.hh"
-#include "G4Neutron.hh"
-#include "G4VParticleHPEnergyAngular.hh"
-#include "G4ReactionProduct.hh"
+#include <fstream>
 
 class G4ParticleHPNBodyPhaseSpace : public G4VParticleHPEnergyAngular
 {
   public:
-  
-  G4ParticleHPNBodyPhaseSpace(){
-   theTotalMass = 0.0;
-   theTotalCount = 0;
-  }
-  ~G4ParticleHPNBodyPhaseSpace(){}
-  
-  public:
-  
-  void Init(G4double aMass, G4int aCount)
-  {
-    theTotalMass=aMass;
-    theTotalCount=aCount;
-  }
+    G4ParticleHPNBodyPhaseSpace()
+    {
+      theTotalMass = 0.0;
+      theTotalCount = 0;
+    }
+    ~G4ParticleHPNBodyPhaseSpace() override = default;
 
-  void Init(std::istream & aDataFile)
-  {
-    aDataFile >> theTotalMass >> theTotalCount;
-    theTotalMass *= G4Neutron::Neutron()->GetPDGMass();
-  }
-   
-  G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
-    
+  public:
+    void Init(G4double aMass, G4int aCount)
+    {
+      theTotalMass = aMass;
+      theTotalCount = aCount;
+    }
+
+    void Init(std::istream& aDataFile) override
+    {
+      aDataFile >> theTotalMass >> theTotalCount;
+      theTotalMass *= G4Neutron::Neutron()->GetPDGMass();
+    }
+
+    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+
   private:
-  
-  inline G4double Prob(G4double anEnergy, G4double eMax, G4int n)
-  {
-    G4double result;
-    result = std::sqrt(anEnergy)*G4Pow::GetInstance()->powA(eMax-anEnergy, 3.*n/2.-4.);
-    return result;
-  }
-  
-  inline G4double C(G4double anEnergy, G4double mass)
-  {
-    G4double result(0);
-    if(theTotalCount==3) result = 4./CLHEP::pi/G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass),2);
-    if(theTotalCount==4) result = 105./32./G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 3.5);
-    //if(theTotalCount==5) result = 256./14./CLHEP::pi/G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 5.);
-    if(theTotalCount==5) result = 256./14./CLHEP::pi/G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass), 5);
-    return result;
-  }
-  
-  inline G4double GetEmax(G4double anEnergy, G4double mass)
-  {
-    G4double result;
-    G4double tMass = GetTarget()->GetMass();
-    G4double pMass = GetProjectileRP()->GetMass();
-    G4double availableEnergy = GetQValue() + anEnergy*tMass/(pMass+tMass);
-    result = availableEnergy*(theTotalMass-mass)/theTotalMass;
-    return result;
-  }
-  
-  G4double MeanEnergyOfThisInteraction() {return -1; }
-  
+    inline G4double Prob(G4double anEnergy, G4double eMax, G4int n)
+    {
+      G4double result;
+      result = std::sqrt(anEnergy) * G4Pow::GetInstance()->powA(eMax - anEnergy, 3. * n / 2. - 4.);
+      return result;
+    }
+
+    inline G4double C(G4double anEnergy, G4double mass)
+    {
+      G4double result(0);
+      if (theTotalCount == 3)
+        result = 4. / CLHEP::pi / G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass), 2);
+      if (theTotalCount == 4)
+        result = 105. / 32. / G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 3.5);
+      // if(theTotalCount==5) result =
+      // 256./14./CLHEP::pi/G4Pow::GetInstance()->powA(GetEmax(anEnergy, mass), 5.);
+      if (theTotalCount == 5)
+        result = 256. / 14. / CLHEP::pi / G4Pow::GetInstance()->powN(GetEmax(anEnergy, mass), 5);
+      return result;
+    }
+
+    inline G4double GetEmax(G4double anEnergy, G4double mass)
+    {
+      G4double result;
+      G4double tMass = GetTarget()->GetMass();
+      G4double pMass = GetProjectileRP()->GetMass();
+      G4double availableEnergy = GetQValue() + anEnergy * tMass / (pMass + tMass);
+      result = availableEnergy * (theTotalMass - mass) / theTotalMass;
+      return result;
+    }
+
+    G4double MeanEnergyOfThisInteraction() override { return -1; }
+
   private:
-  
-  G4double theTotalMass; 
-  G4int theTotalCount;
-  
+    G4double theTotalMass;
+    G4int theTotalCount;
 };
 #endif

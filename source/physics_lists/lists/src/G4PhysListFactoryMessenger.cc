@@ -37,6 +37,8 @@
 #include "G4VModularPhysicsList.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4OpticalPhysics.hh"
+#include "G4ThermalNeutrons.hh"
+
 
 G4PhysListFactoryMessenger::G4PhysListFactoryMessenger(G4VModularPhysicsList* pl)
 {
@@ -53,10 +55,16 @@ G4PhysListFactoryMessenger::G4PhysListFactoryMessenger(G4VModularPhysicsList* pl
   theOptical = new G4UIcommand("/physics_lists/factory/addOptical",this);
   theOptical->SetGuidance("Enable optical physics.");
   theOptical->AvailableForStates(G4State_PreInit);
+
+  theThermal = new G4UIcommand("/physics_lists/factory/addThermal",this);
+  theThermal->SetGuidance("Enable special elastic scattering of thermal neutrons (Ekin < 4 eV).");
+  theThermal->SetGuidance("Important note: to be used only with HP-based physics lists!");
+  theThermal->AvailableForStates(G4State_PreInit);
 }
 
 G4PhysListFactoryMessenger::~G4PhysListFactoryMessenger()
 {
+  delete theThermal;
   delete theOptical;
   delete theRadDecay;
   delete theDir;
@@ -69,5 +77,7 @@ void G4PhysListFactoryMessenger::SetNewValue(G4UIcommand* aComm, G4String)
     thePhysList->RegisterPhysics(new G4RadioactiveDecayPhysics(ver));
   } else if(aComm == theOptical) {
     thePhysList->RegisterPhysics(new G4OpticalPhysics(ver));
+  } else if(aComm == theThermal) {
+    thePhysList->RegisterPhysics(new G4ThermalNeutrons(ver));
   }
 }

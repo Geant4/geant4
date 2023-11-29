@@ -53,7 +53,9 @@
 #include "G4INCLThreeVector.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLConfig.hh"
-#include "Randomize.hh"
+#ifdef INCLXX_IN_GEANT4_MODE
+  #include "Randomize.hh"
+#endif
 
 namespace G4INCL {
 
@@ -166,7 +168,7 @@ namespace G4INCL {
 
     class Adapter {
       public:
-        using result_type = unsigned long;
+        using result_type = unsigned long long;
 
         static constexpr result_type min() {
           return std::numeric_limits<Adapter::result_type>::min();
@@ -177,11 +179,13 @@ namespace G4INCL {
         }
 
         result_type operator()() const {
+
           #ifdef INCLXX_IN_GEANT4_MODE
              return G4RandFlat::shootInt(INT_MAX);
           #else
              return shootInteger(max());
           #endif
+
         }
 
     };

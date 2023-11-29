@@ -1,18 +1,16 @@
---------------------------------------------------
+# Example shared History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    analysis/shared History file
-                    ----------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2021-12-10 Ben Morgan (analysisShared-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 15-10-18 G. Cosmo (analysisShared-V10-04-02)
 - Added missing include of G4SteateManager.hh in DetectorConstruction source.
@@ -23,7 +21,7 @@ track of all tags.
 03-07-18 I. Hrivnacova (analysisShared-V10-04-00)
 - Macro & commands review:
   - Removed obsolete /N03 top command directory
-  - Added protection against warnings issued from ReinitializeGeometry() if 
+  - Added protection against warnings issued from ReinitializeGeometry() if
     called in PreInit phase
 
 04-07-16 I. Hrivnacova (analysisShared-V10-02-01)
@@ -35,9 +33,9 @@ track of all tags.
 27-08-15 I. Hrivnacova (analysisShared-V10-01-00)
 - Updated histogram ids in FillHiso (now starting from 0);
   updated for changed function names in HistoManager classes
- 
+
 06-11-14 I. Hrivnacova (analysisShared-V10-00-01)
 - Moved scripts from upper directory in shared
-     
+
 05-11-14 I. Hrivnacova (analysisShared-V10-00-00)
 - Tagged version which will be included in AnaEx0N examples

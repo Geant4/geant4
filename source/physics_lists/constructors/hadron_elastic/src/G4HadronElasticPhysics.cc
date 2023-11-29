@@ -144,12 +144,9 @@ void G4HadronElasticPhysics::ConstructProcess()
   ph->RegisterProcess(hel, particle);
 
   // n
-  particle = G4Neutron::Neutron();
   hel = new G4HadronElasticProcess();
-  hel->AddDataSet(new G4NeutronElasticXS());
   hel->RegisterMe(new G4ChipsElasticModel());
-  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
-  ph->RegisterProcess(hel, particle);
+  G4HadProcesses::BuildNeutronElastic(hel);
 
   // pi+
   particle = G4PionPlus::PionPlus();
@@ -205,6 +202,22 @@ void G4HadronElasticPhysics::ConstructProcess()
     // b-, c- baryons and mesons
     if( G4HadronicParameters::Instance()->EnableBCParticles() ) {
       G4HadronicBuilder::BuildElastic( G4HadParticles::GetBCHadrons() );
+    }
+
+    // light hypernuclei and anti-hypernuclei
+    if ( G4HadronicParameters::Instance()->EnableHyperNuclei() ) {
+      // for light hypernuclei, we can use directly the following method:
+      G4HadronicBuilder::BuildElastic( G4HadParticles::GetHyperNuclei() );
+      // but not for light anti-hypernuclei, because they need a different cross section:
+      for ( auto & pdg : G4HadParticles::GetHyperAntiNuclei() ) {
+	particle = table->FindParticle( pdg );
+	if ( particle == nullptr ) continue;
+	hel = new G4HadronElasticProcess;
+	hel->AddDataSet( anucxs );
+	hel->RegisterMe( lhep0 );
+	if ( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorHadronElastic() );
+	ph->RegisterProcess( hel, particle );
+      }
     }
   }
 }

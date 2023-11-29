@@ -1,18 +1,25 @@
-// ------------------------------------------------------------------
+# Example field04 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                    field04 History file
-                    --------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
+## 2022-11-16 John Apostolakis (fieldex04-V11-00-03)
+- Corrected assignement of epsMax=0.001 .  Also epsMin is dimensionless!
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-10-04 Ben Morgan (fieldex04-V11-00-02)
+- Replace sprintf with std::to_string to fix deprecation warnings on macOS 13
+
+## 2022-08-26 Gabriele Cosmo (fieldex04-V11-00-01)
+- Fixed compilation warning on gcc-12.1 in F04TrajectoryPoint constructor.
+
+## 2021-12-10 Ben Morgan (fieldex04-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 25, 2021 B.Morgan - fieldex04-V10-07-00
 - Use G4StrUtil functions replacing deprecated G4String member functions

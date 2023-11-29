@@ -70,6 +70,7 @@ G4AblaInterface::G4AblaInterface(G4ExcitationHandler* ptr) :
 
 G4AblaInterface::~G4AblaInterface()
 {
+  applyYourselfResult.Clear();
   delete volant;
   delete ablaResult;
   delete theABLAModel;
@@ -90,6 +91,61 @@ void G4AblaInterface::InitialiseModel()
   GetExcitationHandler()->Initialise();
 }
 
+
+G4HadFinalState* G4AblaInterface::ApplyYourself(const G4HadProjectile & thePrimary,
+                                                G4Nucleus & theNucleus)
+{  
+  // This method is adapted from  G4PreCompoundModel::ApplyYourself,
+  // and it is used only by Binary Cascade (BIC) when the latter is coupled with Abla
+  // for nuclear de-excitation.
+  // This method allows BIC+ABLA to be used also for proton and neutron projectile
+  // with kinetic energies below 45 MeV, by creating a "compound" nucleus made
+  // by the system "target nucleus + projectile", before calling the DeExcite
+  // method.
+  const G4ParticleDefinition* primary = thePrimary.GetDefinition();
+  if ( primary != G4Neutron::Definition()  &&  primary != G4Proton::Definition() ) {
+    G4ExceptionDescription ed;
+    ed << "G4AblaModel is used for ";
+    if ( primary ) ed << primary->GetParticleName();
+    G4Exception( "G4AblaInterface::ApplyYourself()", "had040", FatalException, ed, "" );
+    return nullptr;
+  }
+
+  G4int Zp = 0;
+  G4int Ap = 1;
+  if ( primary == G4Proton::Definition() ) Zp = 1;
+  G4double timePrimary = thePrimary.GetGlobalTime();
+  G4int A = theNucleus.GetA_asInt();
+  G4int Z = theNucleus.GetZ_asInt();
+  G4LorentzVector p = thePrimary.Get4Momentum();
+  G4double mass = G4NucleiProperties::GetNuclearMass(A, Z);
+  p += G4LorentzVector( 0.0, 0.0, 0.0, mass );
+
+  G4Fragment anInitialState(A + Ap, Z + Zp, p);
+  anInitialState.SetNumberOfExcitedParticle(1, Zp);
+  anInitialState.SetNumberOfHoles(1, Zp);
+  anInitialState.SetCreationTime( thePrimary.GetGlobalTime() );
+  anInitialState.SetCreatorModelID( secID );
+  
+  G4ReactionProductVector* deExciteResult = DeExcite( anInitialState );
+
+  applyYourselfResult.Clear();
+  applyYourselfResult.SetStatusChange( stopAndKill );
+  for ( auto const & prod : *deExciteResult ) {
+    G4DynamicParticle * aNewDP = 
+      new G4DynamicParticle( prod->GetDefinition(), prod->GetTotalEnergy(), prod->GetMomentum() );
+    G4HadSecondary aNew = G4HadSecondary( aNewDP );
+    G4double time = std::max( prod->GetFormationTime(), 0.0 );
+    aNew.SetTime( timePrimary + time );
+    aNew.SetCreatorModelID( prod->GetCreatorModelID() );
+    delete prod;
+    applyYourselfResult.AddSecondary( aNew );
+  }
+  delete deExciteResult;
+  return &applyYourselfResult;
+}
+
+
 G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment& aFragment) {
   if (!isInitialised) InitialiseModel();
 
@@ -106,14 +162,14 @@ G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment& aFragment) {
   const G4double pyRem        = pRem.y() / MeV;
   const G4double pzRem        = pRem.z() / MeV;
 
-  eventNumber++;
+  ++eventNumber;
 
   theABLAModel->DeexcitationAblaxx(ARem, ZRem, eStarRem, jRem, pxRem, pyRem,
-                                   pzRem, eventNumber, SRem);
+                                   pzRem, (G4int)eventNumber, SRem);
 
   G4ReactionProductVector* result = new G4ReactionProductVector;
 
-  for(int j = 0; j < ablaResult->ntrack; ++j)
+  for(G4int j = 0; j < ablaResult->ntrack; ++j)
   { // Copy ABLA result to the EventInfo
     G4ReactionProduct* product =
       toG4Particle(ablaResult->avv[j], ablaResult->zvv[j], ablaResult->svv[j],

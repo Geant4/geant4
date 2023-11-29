@@ -29,29 +29,25 @@
 #ifndef G4ParticleHPIsotropic_h
 #define G4ParticleHPIsotropic_h 1
 
-#include "G4ios.hh"
-#include <fstream>
-#include "globals.hh"
 #include "G4ReactionProduct.hh"
 #include "G4VParticleHPEnergyAngular.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <fstream>
 
 class G4ParticleHPIsotropic : public G4VParticleHPEnergyAngular
 {
   public:
-  
-  G4ParticleHPIsotropic(){}
-  
-  ~G4ParticleHPIsotropic(){}
-  
-  public:
-  
-  void Init(std::istream & aDataFile);
-  G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
-  G4double MeanEnergyOfThisInteraction()
-  {
-    return -1.;
-  }
-  private:
+    G4ParticleHPIsotropic() = default;
 
+    ~G4ParticleHPIsotropic() override = default;
+
+  public:
+    void Init(std::istream& aDataFile) override;
+    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+    G4double MeanEnergyOfThisInteraction() override { return -1.; }
+
+  private:
 };
 #endif

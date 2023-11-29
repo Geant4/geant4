@@ -48,38 +48,41 @@ class G4UIcmdWithADoubleAndUnit;
 class G4TransportationManager;
 class G4GeomTestVolume;
 
+#include <vector>
+
 class G4GeometryMessenger : public G4UImessenger
 {
   public:  // with description
 
     G4GeometryMessenger(G4TransportationManager* tman);
-    ~G4GeometryMessenger();
+    ~G4GeometryMessenger() override;
       // Constructor and destructor
 
-    void SetNewValue( G4UIcommand* command, G4String newValues );
-    G4String GetCurrentValue( G4UIcommand* command );
+    void SetNewValue( G4UIcommand* command, G4String newValues ) override;
+    G4String GetCurrentValue( G4UIcommand* command ) override;
   
   private:
 
     void Init();
     void CheckGeometry();
     void ResetNavigator();
-    void SetVerbosity(G4String newValue);
-    void SetCheckMode(G4String newValue);
-    void SetPushFlag(G4String newValue);
+    void SetVerbosity(const G4String& newValue);
+    void SetCheckMode(const G4String& newValue);
+    void SetPushFlag(const G4String& newValue);
     void RecursiveOverlapTest();
 
     G4UIdirectory             *geodir, *navdir, *testdir;
-    G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd;
+    G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd, *parCmd;
     G4UIcmdWithoutParameter   *recCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
     G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd, *errCmd;
 
     G4double tol = 0.0;
     G4int recLevel = 0, recDepth = -1;
+    G4bool checkParallelWorlds = false;
 
     G4TransportationManager* tmanager;
-    G4GeomTestVolume* tvolume = nullptr;
+    std::vector<G4GeomTestVolume*> tvolumes{};
 };
 
 #endif

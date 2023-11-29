@@ -58,7 +58,7 @@ class G4MultiUnion : public G4VSolid
 
     G4MultiUnion() : G4VSolid("") {}
     G4MultiUnion(const G4String& name);
-    ~G4MultiUnion();
+    ~G4MultiUnion() override;
 
     // Build the multiple union by adding nodes
     void AddNode(G4VSolid& solid, const G4Transform3D& trans);
@@ -73,23 +73,23 @@ class G4MultiUnion : public G4VSolid
     inline G4int GetNumberOfSolids()const;
 
     // Navigation methods
-    EInside Inside(const G4ThreeVector& aPoint) const;
+    EInside Inside(const G4ThreeVector& aPoint) const override;
 
     EInside InsideIterator(const G4ThreeVector& aPoint) const;
 
     // Safety methods
-    G4double DistanceToIn(const G4ThreeVector& aPoint) const;
-    G4double DistanceToOut(const G4ThreeVector& aPoint) const;
+    G4double DistanceToIn(const G4ThreeVector& aPoint) const override;
+    G4double DistanceToOut(const G4ThreeVector& aPoint) const override;
     inline void SetAccurateSafety(G4bool flag);
 
     // Exact distance methods
     G4double DistanceToIn(const G4ThreeVector& aPoint,
-                          const G4ThreeVector& aDirection) const;
+                          const G4ThreeVector& aDirection) const override;
     G4double DistanceToOut(const G4ThreeVector& aPoint,
                            const G4ThreeVector& aDirection,
                            const G4bool calcNorm = false,
                            G4bool* validNorm = nullptr,
-                           G4ThreeVector* aNormalVector = nullptr) const;
+                           G4ThreeVector* aNormalVector = nullptr) const override;
 
     G4double DistanceToInNoVoxels(const G4ThreeVector& aPoint,
                                   const G4ThreeVector& aDirection) const;
@@ -105,20 +105,20 @@ class G4MultiUnion : public G4VSolid
                                    const G4ThreeVector& aDirection,
                                    G4ThreeVector*       aNormalVector) const;
 
-    G4ThreeVector SurfaceNormal(const G4ThreeVector& aPoint) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& aPoint) const override;
 
     void Extent(EAxis aAxis, G4double& aMin, G4double& aMax) const;
-    void BoundingLimits(G4ThreeVector& aMin, G4ThreeVector& aMax) const;
+    void BoundingLimits(G4ThreeVector& aMin, G4ThreeVector& aMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;
-    G4double GetCubicVolume();
-    G4double GetSurfaceArea();
+                           G4double& pMin, G4double& pMax) const override;
+    G4double GetCubicVolume() override;
+    G4double GetSurfaceArea() override;
 
-    G4VSolid* Clone() const ;
+    G4VSolid* Clone() const override ;
 
-    G4GeometryType GetEntityType() const { return "G4MultiUnion"; }
+    G4GeometryType GetEntityType() const override { return "G4MultiUnion"; }
 
     void Voxelize();
       // Finalize and prepare for use. User MUST call it once before
@@ -127,13 +127,13 @@ class G4MultiUnion : public G4VSolid
     EInside InsideNoVoxels(const G4ThreeVector& aPoint) const;
     inline G4Voxelizer& GetVoxels() const;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4Polyhedron* CreatePolyhedron () const ;
-    G4Polyhedron* GetPolyhedron () const;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const override ;
+    G4Polyhedron* CreatePolyhedron () const override ;
+    G4Polyhedron* GetPolyhedron () const override;
 
     G4MultiUnion(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -143,7 +143,7 @@ class G4MultiUnion : public G4VSolid
   private:
 
     EInside InsideWithExclusion(const G4ThreeVector& aPoint,
-                                G4SurfBits* bits = 0) const;
+                                G4SurfBits* bits = nullptr) const;
     G4int SafetyFromOutsideNumberNode(const G4ThreeVector& aPoint,
                                       G4double& safety) const;
     G4double DistanceToInCandidates(const G4ThreeVector& aPoint,

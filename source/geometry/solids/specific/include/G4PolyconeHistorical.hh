@@ -39,6 +39,7 @@
 class G4PolyconeHistorical
 {
   public:
+
     G4PolyconeHistorical();
     G4PolyconeHistorical( G4int z_planes );
     ~G4PolyconeHistorical();

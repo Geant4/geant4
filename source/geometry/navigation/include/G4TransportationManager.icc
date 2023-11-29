@@ -108,9 +108,8 @@ inline
 std::vector<G4Navigator*>::iterator
 G4TransportationManager::GetActiveNavigatorsIterator()
 {
-   std::vector<G4Navigator*>::iterator iterator
-     = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
-   return iterator;
+   auto iter = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
+   return iter;
 }
 
 // ----------------------------------------------------------------------------
@@ -133,9 +132,8 @@ inline
 std::vector<G4VPhysicalVolume*>::iterator
 G4TransportationManager::GetWorldsIterator()
 {
-   std::vector<G4VPhysicalVolume*>::iterator iterator
-     = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
-   return iterator;
+   auto iter = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
+   return iter;
 }
 
 // ----------------------------------------------------------------------------

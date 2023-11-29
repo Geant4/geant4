@@ -42,21 +42,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),
- fAbsMaterCmd(0),
- fAbsThickCmd(0),
- fAbsSizYZCmd(0),
- fAbsXposCmd(0),
- fWorldMaterCmd(0),
- fWorldXCmd(0),
- fWorldYZCmd(0)
+:fDetector(Det)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("UI commands specific to this example.");
   
-  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir = new G4UIdirectory("/testem/det/", false);
   fDetDir->SetGuidance("detector construction commands");
       
   fAbsMaterCmd = new G4UIcmdWithAString("/testem/det/setAbsMat",this);

@@ -43,7 +43,7 @@
 #ifndef G4Step_hh
 #define G4Step_hh 1
 
-#include <stdlib.h>              // Include from 'system'
+#include <cstdlib>              // Include from 'system'
 #include <cmath>                 // Include from 'system'
 #include "G4ios.hh"              // Include from 'system'
 #include <iomanip>               // Include from 'system'
@@ -78,11 +78,21 @@ class G4Step
 
     G4StepPoint* GetPreStepPoint() const;
     void SetPreStepPoint(G4StepPoint* value);
+    G4StepPoint* ResetPreStepPoint(G4StepPoint* value=nullptr);
       // Pre-Step points
+      // If Set method is invoked, the previous StepPoint object is deleted.
+      // If Reset method is invoked, the previous StepPoint object is not deleted
+      // but its pointer is returned. Thus it's the caller's responsibility to 
+      // properly delete it.
 
     G4StepPoint* GetPostStepPoint() const;
     void SetPostStepPoint(G4StepPoint* value);
+    G4StepPoint* ResetPostStepPoint(G4StepPoint* value=nullptr);
       // Post-Step points
+      // If Set method is invoked, the previous StepPoint object is deleted.
+      // If Reset method is invoked, the previous StepPoint object is not deleted
+      // but its pointer is returned. Thus it's the caller's responsibility to 
+      // properly delete it.
 
     G4double GetStepLength() const;
     void SetStepLength(G4double value);

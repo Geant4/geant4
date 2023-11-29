@@ -39,16 +39,12 @@ G4UIsession::G4UIsession()
 }
 
 // --------------------------------------------------------------------
-G4UIsession::G4UIsession(G4int iBatch)
-  : ifBatch(iBatch)
-{
-}
+G4UIsession::G4UIsession(G4int iBatch) : ifBatch(iBatch) {}
 
 // --------------------------------------------------------------------
 G4UIsession::~G4UIsession()
 {
-  if(!ifBatch)
-  {
+  if (ifBatch == 0) {
     --inSession;
   }
 }
@@ -60,14 +56,19 @@ G4UIsession* G4UIsession::SessionStart()
 }
 
 // --------------------------------------------------------------------
-void G4UIsession::PauseSessionStart(const G4String&)
-{
-}
+void G4UIsession::PauseSessionStart(const G4String&) {}
 
 // --------------------------------------------------------------------
 G4int G4UIsession::InSession()
 {
   return inSession;
+}
+
+// --------------------------------------------------------------------
+G4int G4UIsession::ReceiveG4debug(const G4String& coutString)
+{
+  std::cout << coutString << std::flush;
+  return 0;
 }
 
 // --------------------------------------------------------------------

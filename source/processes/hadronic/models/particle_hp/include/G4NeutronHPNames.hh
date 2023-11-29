@@ -29,4 +29,4 @@
 #include "G4ParticleHPNames.hh"
 using G4NeutronHPNames = G4ParticleHPNames;
 
-#endif 
+#endif

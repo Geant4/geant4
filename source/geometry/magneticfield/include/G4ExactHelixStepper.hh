@@ -50,10 +50,10 @@
 
 class G4ExactHelixStepper : public G4MagHelicalStepper
 {
-  public:  // with description
+  public:
 
     G4ExactHelixStepper(G4Mag_EqRhs* EqRhs);
-    ~G4ExactHelixStepper();
+   ~G4ExactHelixStepper() override;
   
     G4ExactHelixStepper(const G4ExactHelixStepper&) = delete;
     G4ExactHelixStepper& operator=(const G4ExactHelixStepper&) = delete;
@@ -62,26 +62,26 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[]  );
+                        G4double yerr[]  ) override;
       // Step 'integration' for step size 'h'
       // Provides helix starting at y[0 to 6]
       // Outputs yout[] and ZERO estimated error yerr[]=0.
   
     void DumbStepper( const G4double y[],
-                            G4ThreeVector   Bfld,
-                            G4double  h,
-                            G4double yout[] );
+                            G4ThreeVector Bfld,
+                            G4double h,
+                            G4double yout[] ) override;
       // Performs a 'dump' Step without error calculation.
   
-    G4double DistChord() const;
+    G4double DistChord() const override;
       // Estimate maximum distance of curved solution and chord ... 
 
-    virtual G4int IntegratorOrder() const;
+    G4int IntegratorOrder() const override;
 
   private:
 
     G4ThreeVector fBfieldValue;
-      //  Initial value of field at last step
+      // Initial value of field at last step
 };
 
 #endif

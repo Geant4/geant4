@@ -25,6 +25,7 @@ geant4_add_module(G4graphics_reps
     G4Polyline.hh
     G4Polymarker.hh
     G4Polymarker.icc
+    G4SceneTreeItem.hh
     G4SmartFilter.hh
     G4Square.hh
     G4Square.icc
@@ -62,6 +63,7 @@ geant4_add_module(G4graphics_reps
     G4PolyhedronArbitrary.cc
     G4Polyline.cc
     G4Polymarker.cc
+    G4SceneTreeItem.cc
     G4Square.cc
     G4Text.cc
     G4Plotter.cc
@@ -74,5 +76,7 @@ geant4_add_module(G4graphics_reps
     HepPolyhedron.cc
     HepPolyhedronProcessor.src)
 
-geant4_module_link_libraries(G4graphics_reps PUBLIC G4globman G4hepgeometry G4intercoms)
-
+geant4_module_compile_definitions(G4graphics_reps PRIVATE G4GREPS_ALLOC_EXPORT)
+geant4_module_link_libraries(G4graphics_reps
+  PUBLIC G4globman G4hepgeometry 
+  PRIVATE G4intercoms)

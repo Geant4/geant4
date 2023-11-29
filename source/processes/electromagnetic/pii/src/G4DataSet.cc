@@ -119,10 +119,10 @@ G4double G4DataSet::FindValue(G4double energy, G4int /* componentId */) const
   if (energies->empty()) return 0;
   if (energy <= (*energies)[0]) return (*data)[0];
 
-  size_t i = energies->size()-1;
+  std::size_t i = energies->size()-1;
   if (energy >= (*energies)[i]) return (*data)[i];
 
-  G4double interpolated = algorithm->Calculate(energy,FindLowerBound(energy),*energies,*data);
+  G4double interpolated = algorithm->Calculate(energy,(G4int)FindLowerBound(energy),*energies,*data);
   return interpolated;
 }
 
@@ -135,8 +135,8 @@ void G4DataSet::PrintData(void) const
     }
   else
     {
-      size_t size = energies->size();
-      for (size_t i(0); i<size; i++)
+      std::size_t size = energies->size();
+      for (std::size_t i(0); i<size; i++)
 	{
 	  G4cout << "Point: " << ((*energies)[i]/unitEnergies)
 		 << " - Data value: " << ((*data)[i]/unitData);
@@ -299,14 +299,14 @@ G4bool G4DataSet::SaveData(const G4String& name) const
   return true;
 }
 
-size_t G4DataSet::FindLowerBound(G4double x) const
+std::size_t G4DataSet::FindLowerBound(G4double x) const
 {
-  size_t lowerBound = 0;
-  size_t upperBound(energies->size() - 1);
+  std::size_t lowerBound = 0;
+  std::size_t upperBound(energies->size() - 1);
   
   while (lowerBound <= upperBound) 
     {
-      size_t midBin((lowerBound + upperBound) / 2);
+      std::size_t midBin((lowerBound + upperBound) / 2);
 
       if (x < (*energies)[midBin]) upperBound = midBin - 1;
       else lowerBound = midBin + 1;
@@ -316,14 +316,14 @@ size_t G4DataSet::FindLowerBound(G4double x) const
 }
 
 
-size_t G4DataSet::FindLowerBound(G4double x, G4DataVector* values) const
+std::size_t G4DataSet::FindLowerBound(G4double x, G4DataVector* values) const
 {
-  size_t lowerBound = 0;;
-  size_t upperBound(values->size() - 1);
+  std::size_t lowerBound = 0;;
+  std::size_t upperBound(values->size() - 1);
   
   while (lowerBound <= upperBound) 
     {
-      size_t midBin((lowerBound + upperBound) / 2);
+      std::size_t midBin((lowerBound + upperBound) / 2);
 
       if (x < (*values)[midBin]) upperBound = midBin - 1;
       else lowerBound = midBin + 1;
@@ -335,7 +335,7 @@ size_t G4DataSet::FindLowerBound(G4double x, G4DataVector* values) const
 
 G4String G4DataSet::FullFileName(const G4String& name) const
 {
-  char* path = std::getenv("G4PIIDATA");
+  const char* path = G4FindDataDir("G4PIIDATA");
   if (!path)
     G4Exception("G4DataSet::FullFileName",
 		"pii00000160",
@@ -354,11 +354,11 @@ void G4DataSet::BuildPdf()
   pdf = new G4DataVector;
   G4Integrator <G4DataSet, G4double(G4DataSet::*)(G4double)> integrator;
 
-  G4int nData = data->size();
+  std::size_t nData = data->size();
   pdf->push_back(0.);
 
   // Integrate the data distribution 
-  G4int i;
+  std::size_t i;
   G4double totalSum = 0.;
   for (i=1; i<nData; i++)
     {
@@ -393,7 +393,7 @@ G4double G4DataSet::RandomSelect(G4int /* componentId */) const
   G4double x = G4UniformRand();
 
   // Locate the random value in the X vector based on the PDF
-  size_t bin = FindLowerBound(x,pdf);
+  G4int bin = (G4int)FindLowerBound(x,pdf);
 
   // Interpolate the PDF to calculate the X value: 
   // linear interpolation in the first bin (to avoid problem with 0),
@@ -414,7 +414,7 @@ G4double G4DataSet::IntegrationFunction(G4double x)
   G4double y = 0;
 
   // Locate the random value in the X vector based on the PDF
-  size_t bin = FindLowerBound(x);
+  G4int bin = (G4int)FindLowerBound(x);
 
   // Interpolate to calculate the X value: 
   // linear interpolation in the first bin (to avoid problem with 0),

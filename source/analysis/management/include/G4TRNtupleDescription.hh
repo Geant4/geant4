@@ -54,16 +54,16 @@ struct G4TRNtupleDescription
         delete fNtupleBinding;
         delete fNtuple;
 
-        {for ( auto mapElement : fIVectorBindingMap ) {
+        {for ( auto& mapElement : fIVectorBindingMap ) {
           delete mapElement.first;
         }}
-        {for ( auto mapElement : fFVectorBindingMap ) {
+        {for ( auto& mapElement : fFVectorBindingMap ) {
           delete mapElement.first;
         }}
-        {for ( auto mapElement : fDVectorBindingMap ) {
+        {for ( auto& mapElement : fDVectorBindingMap ) {
           delete mapElement.first;
         }}
-        {for ( auto mapElement : fSVectorBindingMap ) {
+        {for ( auto& mapElement : fSVectorBindingMap ) {
           delete mapElement.first;
         }}
       }

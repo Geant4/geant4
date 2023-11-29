@@ -236,7 +236,7 @@ inline
 G4double G4PrimaryParticle::GetTotalMomentum() const
 { 
   if (mass<0.)  return kinE; 
-  else          return std::sqrt(kinE*(kinE+2.*mass));
+           return std::sqrt(kinE*(kinE+2.*mass));
 }
 
 inline
@@ -278,7 +278,7 @@ G4double G4PrimaryParticle::GetPz() const
 inline G4double G4PrimaryParticle::GetTotalEnergy() const
 { 
   if (mass<0.)  return kinE; 
-  else          return kinE+mass;
+           return kinE+mass;
 }
 
 inline

@@ -28,22 +28,21 @@
 // Class description:
 //
 // Driver class which uses Runge-Kutta stepper with interpolation property
-// to integrate track with error control 
+// to integrate track with error control
 
 // Created: D.Sorokin, 2018
 // --------------------------------------------------------------------
 #ifndef G4INTERPOLATION_DRIVER_HH
 #define G4INTERPOLATION_DRIVER_HH
 
-#include "G4RKIntegrationDriver.hh"
 #include "G4FieldUtils.hh"
-
+#include "G4RKIntegrationDriver.hh"
 #include "globals.hh"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
-template <class T>
+template <class T, G4bool StepperCachesDchord = true>
 class G4InterpolationDriver : public G4RKIntegrationDriver<T>
 {
   public:
@@ -53,78 +52,79 @@ class G4InterpolationDriver : public G4RKIntegrationDriver<T>
                           G4int numberOfComponents = 6,
                           G4int statisticsVerbosity = 0);
 
-    virtual ~G4InterpolationDriver() override;
+   ~G4InterpolationDriver() override;
 
-    G4InterpolationDriver(const G4InterpolationDriver&)= delete;
-    const G4InterpolationDriver& operator=(const G4InterpolationDriver&)= delete;
+    G4InterpolationDriver(const G4InterpolationDriver&) = delete;
+    const G4InterpolationDriver& operator=(const G4InterpolationDriver&) = delete;
 
-    virtual G4double AdvanceChordLimited(G4FieldTrack& track,
-                                         G4double hstep,
-                                         G4double eps,
-                                         G4double chordDistance) override;
+    G4double AdvanceChordLimited(G4FieldTrack& track,
+                                 G4double hstep,
+                                 G4double eps,
+                                 G4double chordDistance) override;
 
-    virtual void OnStartTracking() override;
-    virtual void OnComputeStep() override;
-    virtual G4bool DoesReIntegrate() const override { return false; }
-     // Interpolation driver does not recalculate when AccurateAdvance is called
-     //  -- reintegration would require other calls
-   
-    virtual G4bool AccurateAdvance(G4FieldTrack& track,
-                                   G4double hstep,
-                                   G4double eps,    // Requested y_err/hstep
-                                   G4double hinitial = 0) override;
+    void OnStartTracking() override;
+    void OnComputeStep(const G4FieldTrack* /*track*/ = nullptr) override;
+    G4bool DoesReIntegrate() const override { return false; }
+      // Interpolation driver does not recalculate when AccurateAdvance
+      // is called -- reintegration would require other calls
+
+    G4bool AccurateAdvance(G4FieldTrack& track,
+                           G4double hstep,
+                           G4double eps,  // Requested y_err/hstep
+                           G4double hinitial = 0) override;
       // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
       // On output track is replaced by value at end of interval.
       // The concept is similar to the odeint routine from NRC p.721-722.
 
-    virtual void SetVerboseLevel(G4int level) override;
-    virtual G4int GetVerboseLevel() const override;
+    void SetVerboseLevel(G4int level) override;
+    G4int GetVerboseLevel() const override;
 
-    virtual void  StreamInfo( std::ostream& os ) const override;
-   
-  private:
+    void StreamInfo(std::ostream& os) const override;
+
+  protected:
 
     struct InterpStepper
     {
-        std::unique_ptr<T> stepper;
-        G4double begin;
-        G4double end;
-        G4double inverseLength;
+      std::unique_ptr<T> stepper;
+      G4double begin;
+      G4double end;
+      G4double inverseLength;
     };
 
     using StepperIterator = typename std::vector<InterpStepper>::iterator;
     using ConstStepperIterator = typename std::vector<InterpStepper>::const_iterator;
 
-    G4double OneGoodStep(StepperIterator it,
-                         field_utils::State& y,
-                         field_utils::State& dydx,
-                         G4double& hstep,
-                         G4double eps,
-                         G4double curveLength);
-      // This takes one Step that is of size htry, or as large 
+    virtual G4double OneGoodStep(StepperIterator it,
+                                 field_utils::State& y,
+                                 field_utils::State& dydx,
+                                 G4double& hstep,
+                                 G4double eps,
+                                 G4double curveLength,
+                                 G4FieldTrack* track = nullptr);
+      // This takes one Step that is of size htry, or as large
       // as possible while satisfying the accuracy criterion of:
       //     yerr < eps * |y_end-y_start|
       // return hdid
 
     void Interpolate(G4double curveLength, field_utils::State& y) const;
 
-    void InterpolateImpl(G4double curveLength, 
-                         ConstStepperIterator it, 
+    void InterpolateImpl(G4double curveLength,
+                         ConstStepperIterator it,
                          field_utils::State& y) const;
 
-    G4double DistChord(const field_utils::State& yBegin, 
-                       G4double curveLengthBegin, 
-                       const field_utils::State& yEnd, 
-                       G4double curveLengthEnd) const;
+    G4double DistChord(const field_utils::State& yBegin,
+                             G4double curveLengthBegin,
+                       const field_utils::State& yEnd,
+                             G4double curveLengthEnd) const;
 
     G4double FindNextChord(const field_utils::State& yBegin,
-                           G4double curveLengthBegin,
-                           field_utils::State& yEnd,
-                           G4double curveLengthEnd,
-                           G4double dChord,
-                           G4double maxChordDistance);
+                                 G4double curveLengthBegin,
+                                 field_utils::State& yEnd,
+                                 G4double curveLengthEnd,
+                                 G4double dChord,
+                                 G4double maxChordDistance);
 
-    G4double CalcChordStep(G4double stepTrialOld, 
+    G4double CalcChordStep(G4double stepTrialOld,
                            G4double dChordStep,
                            G4double fDeltaChord);
 
@@ -134,27 +134,28 @@ class G4InterpolationDriver : public G4RKIntegrationDriver<T>
 
     void AccumulateStatistics(G4int noTrials);
 
-  private:
+  protected:
 
     std::vector<InterpStepper> fSteppers;
     StepperIterator fLastStepper;
     G4bool fKeepLastStepper = false;
 
-    G4double fhnext = DBL_MAX;  // Memory of last good step size for integration
+    G4double fhnext = DBL_MAX;
+      // Memory of last good step size for integration
 
-    // Minimum Step allowed in a Step (in units of length)   // Parameter
     G4double fMinimumStep;
+      // Minimum Step allowed in a Step (in units of length)   // Parameter
 
     G4double fChordStepEstimate = DBL_MAX;
-    const G4double fFractionNextEstimate = 0.98;             // Constant
-    const G4double fSmallestCurveFraction = 0.01;            // Constant
+    const G4double fFractionNextEstimate = 0.98;  // Constant
+    const G4double fSmallestCurveFraction = 0.01;  // Constant
 
-    G4int fVerboseLevel;                                     // Parameter
+    G4int fVerboseLevel;  // Parameter
 
     field_utils::State fdydx;
     G4bool fFirstStep = true;
 
-    const G4int fMaxTrials = 100;                            // Constant
+    G4int fMaxTrials = 100;  // Constant
     G4int fTotalStepsForTrack = 0;
 
     // statistics

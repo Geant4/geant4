@@ -31,6 +31,15 @@
 
 #include "G4PseudoScene.hh"
 
+#include "G4Mesh.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+
+void G4PseudoScene::AddCompound(const G4Mesh& mesh) {
+  // Catches mesh if special mesh rendering set
+  ProcessVolume(*mesh.GetContainerVolume()->GetLogicalVolume()->GetSolid());
+}
+
 void G4PseudoScene::ProcessVolume (const G4VSolid& solid)
 {
   G4ExceptionDescription ed;

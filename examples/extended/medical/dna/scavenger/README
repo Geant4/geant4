@@ -238,8 +238,11 @@ Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
     or print G values to scorer.txt
       root plotG.C > scorer.txt
 
+
     The results show the molecular species (G values) as a function of
-    time (ns). Please ignore the O_2^0 molecule.  
+    time (ns). Please ignore the O_2^0 molecule.
+    The function (plotG()) should have the same name as the
+    file without file extension (plotG).
     
  12 - OTHER
     

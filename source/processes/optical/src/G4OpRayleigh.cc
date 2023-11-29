@@ -86,10 +86,7 @@ G4OpRayleigh::~G4OpRayleigh()
 {
   // VI: inside this PhysicsTable all properties are unique
   //     it is not possible to destroy
-  if(thePhysicsTable)
-  {
-    delete thePhysicsTable;
-  }
+  delete thePhysicsTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -220,8 +217,7 @@ void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
 G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double,
                                        G4ForceCondition*)
 {
-  G4PhysicsFreeVector* rayleigh =
-    static_cast<G4PhysicsFreeVector*>(
+  auto rayleigh = static_cast<G4PhysicsFreeVector*>(
       (*thePhysicsTable)(aTrack.GetMaterial()->GetIndex()));
 
   G4double rsLength = DBL_MAX;
@@ -281,7 +277,7 @@ G4PhysicsFreeVector* G4OpRayleigh::CalculateRayleighMeanFreePaths(
     temperature = material->GetTemperature();
   }
 
-  G4PhysicsFreeVector* rayleighMFPs = new G4PhysicsFreeVector();
+  auto rayleighMFPs = new G4PhysicsFreeVector();
   // This calculates the meanFreePath via the Einstein-Smoluchowski formula
   const G4double c1 =
     scaleFactor * betat * temperature * k_Boltzmann / (6.0 * pi);

@@ -62,7 +62,7 @@ class G4BetheHeitlerModel : public G4VEmModel
 
 public:
 
-  explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
+  explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = nullptr,
                                const G4String& nam = "BetheHeitler");
  
   ~G4BetheHeitlerModel() override;
@@ -111,6 +111,8 @@ protected:
   const G4ParticleDefinition*       fTheElectron;
   const G4ParticleDefinition*       fThePositron;
   G4ParticleChangeForGamma*         fParticleChange;
+
+  G4bool isFirstInstance{false};
 
   static std::vector<ElementData*>  gElementData;
 };

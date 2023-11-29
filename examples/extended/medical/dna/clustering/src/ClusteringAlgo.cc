@@ -215,7 +215,6 @@ void ClusteringAlgo::MergeClusters()
 void ClusteringAlgo::IncludeUnassociatedPoints()
 {
   std::vector<SBPoint*>::iterator itVisitorPt;
-  int nbPtSansCluster = 0;
   // Associate all point not in a cluster if possible ( to the first found cluster)
   for(itVisitorPt = fpSetOfPoints.begin();
       itVisitorPt != fpSetOfPoints.end();
@@ -223,7 +222,6 @@ void ClusteringAlgo::IncludeUnassociatedPoints()
   {
     if(!(*itVisitorPt)->HasCluster())
     {
-      nbPtSansCluster ++;
       FindCluster(*itVisitorPt);
     }
   }

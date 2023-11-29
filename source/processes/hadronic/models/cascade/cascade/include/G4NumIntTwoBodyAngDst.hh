@@ -51,7 +51,7 @@ public:
 			const G4double highKEscale, G4int verbose = 0)
     : G4VTwoBodyAngDst(name, verbose), tcoeff(highKEscale),
       labKE(kebins), cosBins(angles), angDists(dists) {
-    std::fill(angDist, angDist+nDists, 0.);	// Initialize working buffer
+    std::fill(angDist, angDist+nAngles, 0.);	// Initialize working buffer
   }
 
   virtual ~G4NumIntTwoBodyAngDst() {;}

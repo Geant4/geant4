@@ -51,7 +51,7 @@ class G4JPsi : public G4ParticleDefinition
  private:
    static G4JPsi* theInstance;
    G4JPsi(){}
-   ~G4JPsi(){}
+   ~G4JPsi() override= default;
 
  public:
    static G4JPsi* Definition();

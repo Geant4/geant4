@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file ParserChemReaction.cc
-/// \brief Implementation of the ParserChemReaction class
+/// \file scavenger/src/ParserChemReaction.cc
+/// \brief Implementation of the scavenger::ParserChemReaction class
 
 #include "ParserChemReaction.hh"
 #include "G4SystemOfUnits.hh"

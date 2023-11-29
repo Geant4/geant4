@@ -1,0 +1,43 @@
+///\file "hadronic/FlukaCern/.README.txt"
+///\brief Examples FlukaCern README
+
+/*! \page Examples_FlukaCern Category : hadronic/FlukaCern
+
+
+ Examples in this directory demonstrate how to make use of  
+ the interface to `FLUKA` hadron inelastic physics in a G4 application.  
+ 
+ The `FLUKA` interface itself is included,   
+ and located in the `FlukaInterface` subdirectory.    
+   
+ There are 2 independent G4 examples at the process (interaction) level,   
+ in order to study XS and final state respectively (in `ProcessLevel`),   
+ and instructions at the physics list level (in `PhysicsListLevel`).  
+ 
+ All examples benefit from `G4H1` extension (in `utils`),   
+ allowing to make any G4 histogram also compatible with `Flair`.     
+
+
+\link exFlukaCernCrossSection ProcessLevel/CrossSection \endlink
+
+This example allows the study of G4 cross-sections,   
+and in addition, of the `FLUKA` hadron-nucleus reaction cross sections. <br>
+The G4HadronicProcessStore is used to access cross sections. <br>
+The resulting XS can be plotted via `ROOT` or `Flair`.  
+
+
+\link exFlukaCernFinalState ProcessLevel/FinalState \endlink
+
+This example shows how to simulate inelastic hadron-nucleus interactions,  
+using G4 or `FLUKA` models. <br>
+The resulting final states can be plotted via `ROOT` or `Flair`. <br>
+Note that the Geant4 run manager is not used.  
+
+
+\link exFlukaCernPhysicsList PhysicsListLevel \endlink
+
+A `README.md` details how to select a physics list   
+with hadron inelastic physics from FLUKA.
+
+
+*/

@@ -163,7 +163,7 @@ G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
         return DBL_MAX;
     }
 
-    G4int nbReactives = pReactantList->size();
+    G4int nbReactives = (G4int)pReactantList->size();
 
     if (nbReactives == 0)
     {

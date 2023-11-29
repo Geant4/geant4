@@ -1,0 +1,119 @@
+/Par04/detector/setDetectorInnerRadius 80 cm
+/Par04/detector/setDetectorLength 4 m
+/Par04/detector/setNbOfLayers 90
+/Par04/detector/setAbsorber 0 G4_W 1.4 mm true
+/Par04/detector/setAbsorber 1 G4_Si 0.3 mm true
+/Par04/mesh/setSizeOfRhoCells 2.325 mm
+/Par04/mesh/setSizeOfZCells 3.4 mm
+/Par04/mesh/setNbOfRhoCells 18
+/Par04/mesh/setNbOfPhiCells 50
+/Par04/mesh/setNbOfZCells 45
+/Par04/detector/print
+
+# Use default detector dimensions and initialize
+/run/initialize
+
+# If inference model is active, de-activate it because it needs configuration
+/param/InActivateModel inferenceModel
+
+# Use this open statement to create an OpenGL view:
+/vis/open OGL 600x600-0+0
+#
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
+#
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
+#
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+# Draw geometry:
+/vis/drawVolume worlds
+#
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi 0 90 deg
+/vis/viewer/set/targetPoint 0 800 0 mm
+#
+# Specify zoom value:
+/vis/viewer/zoom 10
+#
+# Specify style (surface or wireframe):
+#/vis/viewer/set/style wireframe
+#
+# Draw coordinate axes:
+#/vis/scene/add/axes 0 0 0 1 m
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+#/vis/scene/add/trajectories smooth
+/vis/scene/add/trajectories
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# Draw hits at end of event:
+/vis/scene/add/hits
+#
+# To draw only gammas:
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#
+# Create an attribute filter to draw only particles with certain (high) momentum
+/vis/filtering/trajectories/create/attributeFilter
+# Select attribute "IMag"
+/vis/filtering/trajectories/attributeFilter-0/setAttribute IMag
+# Select trajectories with 25 MeV <= IMag < 1000 GeV
+/vis/filtering/trajectories/attributeFilter-0/addInterval 25 MeV 1000 GeV
+#
+# To superimpose all of the events from a given run:
+/vis/scene/endOfEventAction accumulate
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush
+/vis/viewer/set/background 1 1 1
+
+# Fast Simulation
+# Inference Setup
+## dimension of the latent vector (encoded vector in a Variational Autoencoder model)
+/Par04/inference/setSizeLatentVector 10
+## size of the condition vector (energy, angle and geometry)
+/Par04/inference/setSizeConditionVector 4
+## path to the model which is set to download by cmake
+/Par04/inference/setModelPathName MLModels/Generator.onnx
+/Par04/inference/setProfileFlag 1
+/Par04/inference/setOptimizationFlag 0
+/Par04/inference/setInferenceLibrary ONNX
+## set mesh size for inference == mesh size of a full sim that
+## was used for training; it coincides with readout mesh size
+/Par04/inference/setSizeOfRhoCells 2.325 mm
+/Par04/inference/setSizeOfZCells 3.4 mm
+/Par04/inference/setNbOfRhoCells 18
+/Par04/inference/setNbOfPhiCells 50
+/Par04/inference/setNbOfZCells 45
+## Dynamic readout mesh from particle direction needs to be the first fast sim model!
+/param/ActivateModel defineMesh
+## ML fast sim, configured with the inference setup /Par04/inference
+/param/ActivateModel inferenceModel

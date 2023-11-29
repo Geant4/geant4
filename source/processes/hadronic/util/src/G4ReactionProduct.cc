@@ -46,6 +46,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     timeOfFlight(0.0),
     side(0),
     theCreatorModel(-1),
+    theParentResonanceDef(nullptr),
+    theParentResonanceID(0),
     NewlyAdded(false),
     MayBeKilled(true)
   {
@@ -67,6 +69,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     (aParticleDefinition->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     theCreatorModel = -1;
+    theParentResonanceDef = nullptr;
+    theParentResonanceID = 0;
     NewlyAdded = false;
     MayBeKilled = true;
   }
@@ -85,6 +89,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     timeOfFlight = right.timeOfFlight;
     side = right.side;
     theCreatorModel = right.theCreatorModel;
+    theParentResonanceDef = right.theParentResonanceDef;
+    theParentResonanceID = right.theParentResonanceID;
     NewlyAdded = right.NewlyAdded;
     MayBeKilled = right.MayBeKilled;
   }
@@ -104,6 +110,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
       timeOfFlight = right.timeOfFlight;
       side = right.side;
       theCreatorModel = right.theCreatorModel;
+      theParentResonanceDef = right.theParentResonanceDef;
+      theParentResonanceID = right.theParentResonanceID;
       NewlyAdded = right.NewlyAdded;
       MayBeKilled = right.MayBeKilled;
     }
@@ -124,6 +132,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     theCreatorModel = -1;
+    theParentResonanceDef = nullptr;
+    theParentResonanceID = 0;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
@@ -143,6 +153,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     theCreatorModel = -1;
+    theParentResonanceDef = nullptr;
+    theParentResonanceID = 0;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
@@ -200,6 +212,8 @@ G4Allocator<G4ReactionProduct>*& aRPAllocator()
     timeOfFlight = 0.0;
     side = 0;
     theCreatorModel = -1;
+    theParentResonanceDef = nullptr;
+    theParentResonanceID = 0;
     NewlyAdded = false;
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;

@@ -43,9 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-  :G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0),fDetector(DC),fRndmBeam(0),fGunMessenger(0)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
+  :fDetector(det)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -83,10 +82,6 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(0 == anEvent->GetEventID()) {
-    G4double x0 = -0.5*(fDetector->GetWorldSizeX());
-    fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0.0, 0.0));  
-  }
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.

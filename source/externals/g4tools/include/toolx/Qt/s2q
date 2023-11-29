@@ -1,0 +1,25 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Qt_s2q
+#define toolx_Qt_s2q
+
+#include <QtCore/qglobal.h> //For QT_VERSION.
+
+#include <QtCore/qstring.h>
+
+namespace toolx {
+namespace Qt {
+
+inline QString s2q(const std::string& a_s) {
+#if QT_VERSION < 0x050000
+  return QString::fromAscii(a_s.c_str());
+#else
+  return QString::fromLatin1(a_s.c_str());
+#endif
+}
+
+}}
+
+
+#endif

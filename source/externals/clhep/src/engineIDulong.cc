@@ -36,8 +36,8 @@ static std::vector<unsigned long> gen_crc_table() {
 unsigned long crc32ul(const std::string & s) {
   static const std::vector<unsigned long> crc_table =  gen_crc_table();
   unsigned long crc = 0;
-  int end = s.length();
-  for (int j = 0; j != end; ++j) {
+  unsigned long end = s.length();
+  for (unsigned long j = 0; j != end; ++j) {
     int i = ( (int) ( crc >> 24) ^ s[j] ) & 0xff;
     crc = ( ( crc << 8 ) ^ crc_table[i] ) & 0xffffffffUL;
   }

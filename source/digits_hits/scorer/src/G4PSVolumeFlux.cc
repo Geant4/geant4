@@ -48,14 +48,8 @@
 
 G4PSVolumeFlux::G4PSVolumeFlux(G4String name, G4int direction, G4int depth)
   : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
   , fDirection(direction)
-  , EvtMap(nullptr)
-{
-  ;
-}
-
-G4PSVolumeFlux::~G4PSVolumeFlux() { ; }
+{}
 
 G4bool G4PSVolumeFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -92,7 +86,7 @@ G4bool G4PSVolumeFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4VPhysicalVolume* physVol       = preStepPoint->GetPhysicalVolume();
     G4VPVParameterisation* physParam = physVol->GetParameterisation();
     G4VSolid* solid                  = nullptr;
-    if(physParam)
+    if(physParam != nullptr)
     {  // for parameterized volume
       auto idx = ((G4TouchableHistory*) (preStepPoint->GetTouchable()))
                    ->GetReplicaNumber(indexDepth);
@@ -128,10 +122,10 @@ G4bool G4PSVolumeFlux::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4int index = GetIndex(aStep);
   EvtMap->add(index, flux);
 
-  if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+  if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
   {
     auto filler = G4VScoreHistFiller::Instance();
-    if(!filler)
+    if(filler == nullptr)
     {
       G4Exception(
         "G4PSVolumeFlux::ProcessHits", "SCORER0123", JustWarning,
@@ -155,21 +149,16 @@ void G4PSVolumeFlux::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, (G4VHitsCollection*) EvtMap);
 }
 
-void G4PSVolumeFlux::EndOfEvent(G4HCofThisEvent*) { ; }
-
 void G4PSVolumeFlux::clear() { EvtMap->clear(); }
-
-void G4PSVolumeFlux::DrawAll() { ; }
 
 void G4PSVolumeFlux::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer" << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, flux] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first << "  flux  : " << *(itr->second)
+    G4cout << "  copy no.: " << copy << "  flux  : " << *(flux)
            << G4endl;
   }
 }

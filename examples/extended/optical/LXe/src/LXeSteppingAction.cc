@@ -66,12 +66,14 @@ LXeSteppingAction::~LXeSteppingAction() { delete fSteppingMessenger; }
 void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   G4Track* theTrack = theStep->GetTrack();
+  const G4ParticleDefinition* part = theTrack->GetDefinition();
+  G4int pdg = part->GetPDGEncoding();
 
   if(theTrack->GetCurrentStepNumber() == 1)
     fExpectedNextStatus = Undefined;
 
   LXeUserTrackInformation* trackInformation =
-    (LXeUserTrackInformation*) theTrack->GetUserInformation();
+    static_cast<LXeUserTrackInformation*>(theTrack->GetUserInformation());
 
   G4StepPoint* thePrePoint    = theStep->GetPreStepPoint();
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
@@ -79,21 +81,19 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
   G4StepPoint* thePostPoint    = theStep->GetPostStepPoint();
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
-  G4OpBoundaryProcessStatus boundaryStatus           = Undefined;
-  static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
+  G4OpBoundaryProcessStatus boundaryStatus = Undefined;
 
   // find the boundary process only once
-  if(!boundary)
+  if(nullptr == fBoundary && pdg == -22)
   {
-    G4ProcessManager* pm =
-      theStep->GetTrack()->GetDefinition()->GetProcessManager();
-    G4int nprocesses    = pm->GetProcessListLength();
+    G4ProcessManager* pm = part->GetProcessManager();
+    G4int nprocesses = pm->GetProcessListLength();
     G4ProcessVector* pv = pm->GetProcessList();
     for(G4int i = 0; i < nprocesses; ++i)
     {
-      if((*pv)[i]->GetProcessName() == "OpBoundary")
+      if(nullptr != (*pv)[i] && (*pv)[i]->GetProcessName() == "OpBoundary")
       {
-        boundary = (G4OpBoundaryProcess*) (*pv)[i];
+        fBoundary = dynamic_cast<G4OpBoundaryProcess*>((*pv)[i]);
         break;
       }
     }
@@ -102,48 +102,45 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
   if(theTrack->GetParentID() == 0)
   {
     // This is a primary track
-
-    G4TrackVector* fSecondary = fpSteppingManager->GetfSecondary();
-    G4int tN2ndariesTot       = fpSteppingManager->GetfN2ndariesAtRestDoIt() +
-                          fpSteppingManager->GetfN2ndariesAlongStepDoIt() +
-                          fpSteppingManager->GetfN2ndariesPostStepDoIt();
-
+    auto secondaries = theStep->GetSecondaryInCurrentStep();
     // If we haven't already found the conversion position and there were
     // secondaries generated, then search for it
-    if(!fEventAction->IsConvPosSet() && tN2ndariesTot > 0)
+    // since this is happening before the secondary is being tracked,
+    // the vertex position has not been set yet (set in initial step)
+    if(nullptr != secondaries && !fEventAction->IsConvPosSet())
     {
-      for(size_t lp1 = (*fSecondary).size() - tN2ndariesTot;
-          lp1 < (*fSecondary).size(); ++lp1)
+      if(!secondaries->empty()) 
       {
-        const G4VProcess* creator = (*fSecondary)[lp1]->GetCreatorProcess();
-        if(creator)
-        {
-          G4String creatorName = creator->GetProcessName();
-          if(creatorName == "phot" || creatorName == "compt" ||
-             creatorName == "conv")
-          {
-            // since this is happening before the secondary is being tracked,
-            // the vertex position has not been set yet (set in initial step)
-            fEventAction->SetConvPos((*fSecondary)[lp1]->GetPosition());
-          }
-        }
+	for(auto & tr : *secondaries)
+	{
+	  const G4VProcess* creator = tr->GetCreatorProcess();
+	  if(nullptr != creator)
+	  {
+	    G4int type = creator->GetProcessSubType();
+	    // 12 - photoeffect
+	    // 13 - Compton scattering
+	    // 14 - gamma conversion
+	    if(type >= 12 && type <= 14)
+            {
+	      fEventAction->SetConvPos(tr->GetPosition());
+	    }
+	  }
+	}
       }
     }
-
     if(fOneStepPrimaries && thePrePV->GetName() == "scintillator")
       theTrack->SetTrackStatus(fStopAndKill);
   }
 
-  if(!thePostPV)
+  if(nullptr == thePostPV)
   {  // out of world
     fExpectedNextStatus = Undefined;
     return;
   }
 
-  if(theTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
+  // Optical photon only
+  if(pdg == -22)
   {
-    // Optical photon only
-
     if(thePrePV->GetName() == "Slab")
       // force drawing of photons in WLS slab
       trackInformation->SetForceDrawTrajectory(true);
@@ -152,14 +149,14 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
       theTrack->SetTrackStatus(fStopAndKill);
 
     // Was the photon absorbed by the absorption process
-    if(thePostPoint->GetProcessDefinedStep()->GetProcessName() ==
-       "OpAbsorption")
+    auto proc = thePostPoint->GetProcessDefinedStep(); 
+    if(nullptr != proc && proc->GetProcessName() == "OpAbsorption")
     {
       fEventAction->IncAbsorption();
       trackInformation->AddTrackStatusFlag(absorbed);
     }
-
-    boundaryStatus = boundary->GetStatus();
+    if(nullptr != fBoundary)
+      boundaryStatus = fBoundary->GetStatus();
 
     if(thePostPoint->GetStepStatus() == fGeomBoundary)
     {
@@ -169,12 +166,21 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
       {
         if(boundaryStatus != StepTooSmall)
         {
+          G4cout << "LXeSteppingAction::UserSteppingAction(): "
+		 << "trackID=" << theTrack->GetTrackID() 
+		 << " parentID=" << theTrack->GetParentID()
+		 << " " << part->GetParticleName()
+		 << " E(MeV)=" << theTrack->GetKineticEnergy()
+		 << "n/ at " << theTrack->GetPosition()
+		 << " prePV: " << thePrePV->GetName()
+		 << " postPV: " << thePostPV->GetName()
+		 << G4endl;
           G4ExceptionDescription ed;
-          ed << "LXeSteppingAction::UserSteppingAction(): "
-             << "No reallocation step after reflection!" << G4endl;
-          G4Exception("LXeSteppingAction::UserSteppingAction()", "LXeExpl01",
-                      FatalException, ed,
-                      "Something is wrong with the surface normal or geometry");
+          ed << "LXeSteppingAction: "
+             << "No reallocation step after reflection!"
+	     << "Something is wrong with the surface normal or geometry";
+          G4Exception("LXeSteppingAction:", "LXeExpl01", JustWarning, ed, "");
+	  return;
         }
       }
       fExpectedNextStatus = Undefined;

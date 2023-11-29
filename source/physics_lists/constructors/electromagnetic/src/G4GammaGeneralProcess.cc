@@ -208,29 +208,29 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
 
     const G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
+    std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
     G4double mine = param->MinKinEnergy();
     G4double maxe = param->MaxKinEnergy();
     G4int nd = param->NumberOfBinsPerDecade();
-    size_t nbin1 = std::max(5, nd*G4lrint(std::log10(minPEEnergy/mine)));
-    size_t nbin2 = std::max(5, nd*G4lrint(std::log10(maxe/minMMEnergy)));
+    std::size_t nbin1 = std::max(5, nd*G4lrint(std::log10(minPEEnergy/mine)));
+    std::size_t nbin2 = std::max(5, nd*G4lrint(std::log10(maxe/minMMEnergy)));
 
     G4PhysicsVector* vec = nullptr;
-    G4PhysicsLogVector aVector(mine,minPEEnergy,nbin1,splineFlag);
-    G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE,splineFlag);
-    G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE,splineFlag);
-    G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2,splineFlag);
+    G4PhysicsLogVector aVector(mine,minPEEnergy,nbin1,true);
+    G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE,false);
+    G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE,false);
+    G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2,true);
 
-    for(size_t i=0; i<nTables; ++i) {
+    for(std::size_t i=0; i<nTables; ++i) {
       if(!theT[i]) { continue; }
       //G4cout << "## PreparePhysTable " << i << "." << G4endl;
       G4PhysicsTable* table = theHandler->MakeTable(i);
       //G4cout << "   make table " << table << G4endl;
-      for(size_t j=0; j<numOfCouples; ++j) {
+      for(std::size_t j=0; j<numOfCouples; ++j) {
 	vec = (*table)[j];
 	if (bld->GetFlag(j) && nullptr == vec) {
-	  //G4cout <<" i= "<<i<<" j= "<< j <<" make new vector"<< G4endl;
+	  //G4cout <<"InitialiseProcess iTable="<<i<<" jCouple="<< j <<" make new vector"<< G4endl;
 	  if(i<=1) {
 	    vec = new G4PhysicsVector(aVector);
 	  } else if(i<=5) {
@@ -285,7 +285,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(isTheMaster) {
     const G4ProductionCutsTable* theCoupleTable=
       G4ProductionCutsTable::GetProductionCutsTable();
-    size_t numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
     G4LossTableBuilder* bld = G4LossTableManager::Instance()->GetTableBuilder();
     const std::vector<G4PhysicsTable*>& tables = theHandler->GetTables();
@@ -298,22 +298,21 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4double sigComp(0.), sigPE(0.), sigConv(0.), sigR(0.),
       sigN(0.), sigM(0.), val(0.);
 
-    for(size_t i=0; i<numOfCouples; ++i) {
+    for(G4int i=0; i<numOfCouples; ++i) {
 
       if (bld->GetFlag(i)) {
-
         G4int idx = (!baseMat) ? i : DensityIndex(i);
 	const G4MaterialCutsCouple* couple =
 	  theCoupleTable->GetMaterialCutsCouple(i);
 	const G4Material* material = couple->GetMaterial();
 
 	// energy interval 0
-        size_t nn = (*(tables[0]))[idx]->GetVectorLength();
+        std::size_t nn = (*(tables[0]))[idx]->GetVectorLength();
 	if(1 < verboseLevel) {
           G4cout << "======= Zone 0 ======= N= " << nn
 		 << " for " << material->GetName() << G4endl;
 	}
-        for(size_t j=0; j<nn; ++j) {
+        for(std::size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[0]))[idx]->Energy(j);
           G4double loge = G4Log(e);
           sigComp = theCompton->GetLambda(e, couple, loge);
@@ -336,7 +335,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	if(1 < verboseLevel) {
 	  G4cout << "======= Zone 1 ======= N= " << nn << G4endl;
 	}
-        for(size_t j=0; j<nn; ++j) {
+        for(std::size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[2]))[idx]->Energy(j);
           G4double loge = G4Log(e);
           sigComp = theCompton->GetLambda(e, couple, loge);
@@ -364,7 +363,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	if(1 < verboseLevel) {
 	  G4cout << "======= Zone 2 ======= N= " << nn << G4endl;
 	}
-        for(size_t j=0; j<nn; ++j) {
+        for(std::size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[6]))[idx]->Energy(j);
           G4double loge = G4Log(e);
           sigComp = theCompton->GetLambda(e, couple, loge);
@@ -400,7 +399,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	  G4cout << "======= Zone 3 ======= N= " << nn
 		 << " for " << material->GetName() << G4endl;
 	}
-        for(size_t j=0; j<nn; ++j) {
+        for(std::size_t j=0; j<nn; ++j) {
           G4double e = (*(tables[10]))[idx]->Energy(j);
           G4double loge = G4Log(e);
           sigComp = theCompton->GetLambda(e, couple, loge);
@@ -437,8 +436,9 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	  val = sigN/sum;
 	  (*(tables[14]))[idx]->PutValue(j, val);
 	}
-	for(size_t k=0; k<nTables; ++k) {
-	  if(splineFlag) {
+	for(std::size_t k=0; k<nTables; ++k) {
+	  if(theT[k] && (k <= 1 || k >= 10)) {
+	    //G4cout <<"BuildPhysTable spline iTable="<<k<<" jCouple="<< idx << G4endl;
 	    (*(tables[k]))[idx]->FillSecondDerivatives();
 	  }
 	}
@@ -483,8 +483,8 @@ G4double G4GammaGeneralProcess::PostStepGetPhysicalInteractionLength(
     currentMaterial = couple->GetMaterial();
     factor = 1.0;
     if(baseMat) {
-      basedCoupleIndex = DensityIndex(currentCoupleIndex);
-      factor = DensityFactor(currentCoupleIndex);
+      basedCoupleIndex = DensityIndex((G4int)currentCoupleIndex);
+      factor = DensityFactor((G4int)currentCoupleIndex);
     }
     recompute = true;
   }
@@ -548,7 +548,7 @@ G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume()
     //G4cout << "XS1: " << cross << G4endl;
     peLambda = thePhotoElectric->GetLambda(preStepKinEnergy, currentCouple, preStepLogE);
     cross += peLambda;
-    //G4cout << "XS2: " << cross << G4endl;
+    //G4cout << "XS2: " << peLambda << G4endl;
 
   } else if(preStepKinEnergy < minEEEnergy) {
     cross = ComputeGeneralLambda(1, 2);
@@ -562,10 +562,10 @@ G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume()
     cross = ComputeGeneralLambda(3, 10);
     //G4cout << "XS5: " << cross << G4endl;
   }
-  /*
+  /*  
   G4cout << "xs= " << cross << " idxE= " << idxEnergy
 	 << " idxC= " << currentCoupleIndex
-	 << " E= " << energy << G4endl;
+	 << " E= " << preStepKinEnergy << G4endl;
   */
   return cross;
 }
@@ -589,7 +589,7 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
     if(preStepLambda*q <= peLambda) {
       SelectEmProcess(step, thePhotoElectric);
     } else {
-      if(theT[1] && preStepLambda*q < preStepLambda*GetProbability(1) + peLambda) {
+      if(theT[1] && preStepLambda*q < (preStepLambda - peLambda)*GetProbability(1) + peLambda) {
 	SelectEmProcess(step, theRayleigh);
       } else {
 	SelectEmProcess(step, theCompton);
@@ -604,6 +604,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectEmProcess(step, theCompton);
     } else if(theRayleigh) {
       SelectEmProcess(step, theRayleigh);
+    } else {
+      SelectEmProcess(step, thePhotoElectric);
     }
     break;
 
@@ -616,6 +618,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectEmProcess(step, thePhotoElectric);
     } else if(theGammaNuclear) {
       SelectHadProcess(track, step, theGammaNuclear);
+    } else {
+      SelectEmProcess(step, theConversionEE);
     }
     break;
 
@@ -630,6 +634,8 @@ G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
       SelectHadProcess(track, step, theGammaNuclear);
     } else if(theConversionMM) {
       SelectedProcess(step, theConversionMM);
+    } else {
+      SelectEmProcess(step, theConversionEE);
     }
     break;
   }
@@ -670,7 +676,7 @@ G4bool G4GammaGeneralProcess::StorePhysicsTable(const G4ParticleDefinition* part
      !theRayleigh->StorePhysicsTable(part, directory, ascii))
     { yes = false; }
 
-  for(size_t i=0; i<nTables; ++i) {
+  for(std::size_t i=0; i<nTables; ++i) {
     if(theT[i]) {
       G4String nam = (0==i || 2==i || 6==i || 10==i)
 	? "LambdaGeneral" + nameT[i] : "ProbGeneral" + nameT[i];
@@ -704,12 +710,13 @@ G4GammaGeneralProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
      !theRayleigh->RetrievePhysicsTable(part, directory, ascii))
     { yes = false; }
 
-  for(size_t i=0; i<nTables; ++i) {
+  for(std::size_t i=0; i<nTables; ++i) {
     if(theT[i]) {
       G4String nam = (0==i || 2==i || 6==i || 10==i)
 	? "LambdaGeneral" + nameT[i] : "ProbGeneral" + nameT[i];
-      G4String fnam =  GetPhysicsTableFileName(part,directory,nam,ascii);
-      if(!theHandler->RetrievePhysicsTable(i, part, fnam, ascii, splineFlag))
+      G4String fnam = GetPhysicsTableFileName(part,directory,nam,ascii);
+      G4bool spline = (i <= 1 || i >= 10); 
+      if(!theHandler->RetrievePhysicsTable(i, part, fnam, ascii, spline))
 	{ yes = false; }
     }
   }
@@ -771,6 +778,13 @@ G4VEmProcess* G4GammaGeneralProcess::GetEmProcess(const G4String& name)
     proc = theRayleigh;
   }
   return proc;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4VProcess* G4GammaGeneralProcess::GetCreatorProcess() const
+{
+  return selectedProc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

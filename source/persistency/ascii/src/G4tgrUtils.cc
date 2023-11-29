@@ -78,7 +78,7 @@ G4bool G4tgrUtils::IsNumber(const G4String& str)
 {
   G4int isnum = 1;
   G4int numE  = 0;
-  for(std::size_t ii = 0; ii < str.length(); ++ii)
+  for(G4int ii = 0; ii < (G4int)str.length(); ++ii)
   {
     if(!isdigit(str[ii]) && (str[ii] != '.') && (str[ii] != '-') &&
        (str[ii] != '+'))
@@ -90,7 +90,7 @@ G4bool G4tgrUtils::IsNumber(const G4String& str)
         {
           return 0;
         }
-        if(numE != 0 || ii == str.length() - 1)
+        if(numE != 0 || ii == G4int(str.length() - 1))
         {
           isnum = 0;
           break;
@@ -492,7 +492,7 @@ void G4tgrUtils::CheckWLsize(const std::vector<G4String>& wl,
                              const G4String& methodName)
 {
   G4String outStr = methodName + G4String(".  Line read with number of words ");
-  unsigned int wlsize = wl.size();
+  unsigned int wlsize = (unsigned int)wl.size();
 
   G4bool isOK = CheckListSize(wlsize, nWcheck, st, outStr);
 

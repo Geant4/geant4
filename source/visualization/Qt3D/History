@@ -1,23 +1,100 @@
--------------------------------------------------------------------
+# Category visQt3D History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-04-26 Ben Morgan (visQt3D-V11-01-03)
+- Support compilation against Qt5 and Qt6.
 
-History file for visualization/Qt3D sub-category
------------------------------------------------
+## 2023-03-22 Ben Morgan (visQt3D-V11-01-02)
+- Export public compile definitions to indicate availablity of specific drivers. Moves to
+  "use on link" model.
+
+## 2023-02-06 Ben Morgan (visQt3D-V11-01-01)
+- Isolate private headers and update dependencies
+
+## 2023-01-30 Ben Morgan (visQt3D-V11-01-00)
+- Link to new G4UIcore/UIimplementation modules in place of former G4UIbasic/UIcommon
+
+## 2022-11-25 Gabriele Cosmo (visQt3D-V11-00-12)
+- Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-06 John Allison (visQt3D-V11-00-11)
+- Eliminate G4cerr and introduce G4warn.
+  - `#define G4warn G4cout`
+    - The above is temporary until a genuine G4warn output stream is
+      implemented.
+  - Change G4cerr to G4warn in all cases.
+  - Change G4cout to G4warn in those cases where it is clearly
+    an error report or a warning.
+
+## 2022-10-28 John Allison (visQt3D-V11-00-10)
+- Request kernel visit when cutaway mode changes:
+  - G4Qt3DViewer.cc
+
+## 2022-09-14 John Allison (visQt3D-V11-00-09)
+- G4Qt3DViewer.cc:
+  - Add check on special mesh rendering option in CompareForKernelVisit.
+
+## 2022-09-03 Ben Morgan (visQt3D-V11-00-08)
+- Remove unused header from G4heprandom to resolve consistency test
+
+## 2022-04-06 John Allison (visQt3D-V11-00-07)
+- Fix compiler warnings:
+  - G4Qt3DSceneHandler.hh: Add `using G4VSceneHandler::AddCompound` to
+    avoid warnings.
+  - G4Qt3DSceneHandler.cc: Change `world` to `wrld` to avoid warnings.
+    - `world` shadows an `enum` in `G4VSceneHandler`. Maybe a better solution
+       is to encapsulate the enum.
+
+## 2022-05-03 Ben Morgan (visQt3D-V11-00-06)
+- Preliminary build support for Qt5 and Qt6
+
+## 2022-04-06 John Allison (visQt3D-V11-00-05)
+- `G4Qt3DSceneHandler`:
+  - `void G4Qt3DSceneHandler::AddPrimitive (const G4Polymarker& polymarker)`:
+    - Update to current usage.
+  - `void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)`:
+    - Comment out common line elimination - too expensive for a large
+      polyhedron.
+    - Maybe eliminate altogether in future?.
+    - Allow the graphics-reps utilities to optimise things like this.
+  - Use StandardSpecialMeshRendering(mesh).
+    - Of course, only if special mesh rendering is requested.
+
+## 2022-03-05 John Allison (visQt3D-V11-00-04)
+- G4Qt3DSceneHandler::AddCompound(const G4Mesh& mesh):
+  - For parameterised tetrahedron mesh, call default
+    G4VSceneHandler::DrawTetMeshAsDots(mesh).
+  - Tested on "ICRP145", a Geant4 application that we hope can become
+    a Geant4 advanced example, downloaded from the supplementary material
+    of Kim et al, ICRP, 2020. Adult mesh-type reference computational phantoms,
+    ICRP Publication 145, Ann. ICRP 49(3).
+
+## 2022-01-28 Ben Morgan (visQt3D-V11-00-03)
+- Replace `geant4_global_library_target` with direct file inclusion and
+  call to `geant4_add_category` to define library build from source modules.
+
+## 2022-01-16 John Allison (visQt3D-V11-00-02)
+- G4Qt3DViewer::wheelEvent:
+  - Re-program wheelEvent for perspective projection:
+    - Takes into account the extent of the scene.
+
+## 2021-12-16 John Allison (visQt3D-V11-00-01)
+- G4Qt3DSceneHandler.cc:
+  - AddCompound(const G4Mesh& mesh):
+    - Use base class utility G4VSceneHandler::Draw3DRectMeshAsDots(mesh);
+
+## 2021-12-10 Ben Morgan (visQt3D-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 12 November 2021 - Ben Morgan (visQt3D-V10-07-12)
 - Retire G4VIS_... preprocessor symbols in toolkit build, only required
   by obsolete GNUmake system

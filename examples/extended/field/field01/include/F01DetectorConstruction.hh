@@ -139,6 +139,9 @@ inline void F01DetectorConstruction::ComputeCalorParameters()
 
      fZStartAbs = fZAbsorber-0.5*fAbsorberThickness;
      fZEndAbs   = fZAbsorber+0.5*fAbsorberThickness;
+
+     G4cout << "-- Calorimeter Absorber z-coords:  Start= "
+            << fZStartAbs << " End= " << fZEndAbs << G4endl;
 }
 
 #endif

@@ -66,6 +66,7 @@ namespace G4INCL {
     SigmaPlus,
     SigmaZero,
     SigmaMinus,
+    antiProton,
     KPlus,
     KZero,
     KZeroBar,

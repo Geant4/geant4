@@ -33,7 +33,7 @@
 
 #include "G4VTHnRFileManager.hh"
 
-#include "tools/hdf5/ntuple" // for hid_t
+#include "toolx/hdf5/ntuple" // for hid_t
 
 #include <string_view>
 
@@ -46,11 +46,11 @@ class G4Hdf5HnRFileManager : public G4VTHnRFileManager<HT>
     explicit G4Hdf5HnRFileManager(G4Hdf5RFileManager* rfileManger)
       : G4VTHnRFileManager<HT>(), fRFileManager(rfileManger) {}
     G4Hdf5HnRFileManager() = delete;
-    virtual ~G4Hdf5HnRFileManager() = default;
+    ~G4Hdf5HnRFileManager() override = default;
 
     // Methods for writing objects
-    virtual HT* Read(const G4String& htName, const G4String& fileName,
-                     const G4String& dirName,  G4bool isUserFileName) final;
+    HT* Read(const G4String& htName, const G4String& fileName, const G4String& dirName,
+      G4bool isUserFileName) final;
 
   private:
     // Methods

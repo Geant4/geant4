@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file RunAction.hh
+/// \file B5/include/RunAction.hh
 /// \brief Definition of the B5::RunAction class
 
 #ifndef B5RunAction_h
@@ -46,7 +46,7 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(EventAction* eventAction);
-    ~RunAction() override;
+    ~RunAction() override = default;
 
     void BeginOfRunAction(const G4Run*) override;
     void   EndOfRunAction(const G4Run*) override;

@@ -83,7 +83,6 @@
 #include "G4GMocrenTouchable.hh"
 #include "G4GMocrenFileCTtoDensityMap.hh"
 #include "G4PhantomParameterisation.hh"
-#include "G4PhysicalVolumeSearchScene.hh"
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringBox.hh"
@@ -142,7 +141,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 		 std::strlen(DEFAULT_GDD_FILE_NAME)+1);   // filename
   } else {
     const char * env = std::getenv("G4GMocrenFile_DEST_DIR");
-    int len = std::strlen(env);
+    G4int len = (G4int)std::strlen(env);
     if(len > 256) {
       G4Exception("G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(*)",
                   "gMocren1000", FatalException,
@@ -1194,9 +1193,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
         ;
       }
       
-      kNestedVolumeDimension[0] = phantomPara->GetNoVoxelsX();
-      kNestedVolumeDimension[1] = phantomPara->GetNoVoxelsY();
-      kNestedVolumeDimension[2] = phantomPara->GetNoVoxelsZ();
+      kNestedVolumeDimension[0] = (G4int)phantomPara->GetNoVoxelsX();
+      kNestedVolumeDimension[1] = (G4int)phantomPara->GetNoVoxelsY();
+      kNestedVolumeDimension[2] = (G4int)phantomPara->GetNoVoxelsZ();
       kNestedVolumeDirAxis[0] = 0;
       kNestedVolumeDirAxis[1] = 1;
       kNestedVolumeDirAxis[2] = 2;

@@ -46,16 +46,16 @@
 // ###                           XicPlus                              ###
 // ######################################################################
 
-G4XicPlus* G4XicPlus::theInstance = 0;
+G4XicPlus* G4XicPlus::theInstance = nullptr;
 
 G4XicPlus* G4XicPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "xi_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0) 
+  if (anInstance ==nullptr) 
   {
   // create particle
   //
@@ -72,10 +72,10 @@ G4XicPlus* G4XicPlus::Definition()
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            +1,        4232,
-                false,     0.442e-3*ns,          NULL,
+                false,     0.442e-3*ns,          nullptr,
                 false,       "xi_c");
   }
-  theInstance = reinterpret_cast<G4XicPlus*>(anInstance);
+  theInstance = static_cast<G4XicPlus*>(anInstance);
   return theInstance;
 }
 

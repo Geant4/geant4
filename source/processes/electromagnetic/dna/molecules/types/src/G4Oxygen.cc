@@ -73,6 +73,6 @@ G4Oxygen* G4Oxygen::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0); // Set 2 electrons on 1 single occupancy
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
   }
-  theInstance = reinterpret_cast<G4Oxygen*>(anInstance);
+  theInstance = static_cast<G4Oxygen*>(anInstance);
   return theInstance;
 }

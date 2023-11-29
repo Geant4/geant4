@@ -31,5 +31,5 @@
 #define ExGflashHitsCollection_h
 #include "G4THitsCollection.hh"
 class ExGflashHit;
-typedef G4THitsCollection<ExGflashHit> ExGflashHitsCollection;
+using ExGflashHitsCollection = G4THitsCollection<ExGflashHit>;
 #endif

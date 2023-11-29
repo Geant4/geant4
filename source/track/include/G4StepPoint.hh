@@ -56,11 +56,11 @@ class G4StepPoint
 {
   public:
 
-    G4StepPoint();
-   ~G4StepPoint(){}
+    G4StepPoint() = default;
+   ~G4StepPoint()= default;
       // Constructor/Destructor
 
-    G4StepPoint(const G4StepPoint&);
+    G4StepPoint(const G4StepPoint&) = default;
     G4StepPoint& operator=(const G4StepPoint&);
       // Copy Constructor and assignment operator
 

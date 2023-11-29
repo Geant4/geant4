@@ -1,10 +1,18 @@
+# Example doiPET History
 
-     =========================================================
- 		      Geant4 - doiPET example
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+## 2022-09-08 Susanna Guatelli (doiPET-V11-00-01)
+- Ranecu engine removed, default engine used now
+
+## 2021-12-10 Ben Morgan (doiPET-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 14.11.2021 - G. Cosmo;doiPET-V10-07-03
            - Fixed compilation warnings for unused private variables in

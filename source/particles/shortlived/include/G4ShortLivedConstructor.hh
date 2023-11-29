@@ -41,10 +41,6 @@ class G4ShortLivedConstructor
   //short lived particles
 
   public:
-    G4ShortLivedConstructor();
-    ~G4ShortLivedConstructor();
-  
-  public:
     static void ConstructParticle();
  
   protected:

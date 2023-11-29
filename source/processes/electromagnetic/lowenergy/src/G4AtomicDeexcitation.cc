@@ -74,7 +74,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
   std::vector<G4DynamicParticle*>* vectorOfParticles;
   vectorOfParticles = new std::vector<G4DynamicParticle*>;
 
-  G4DynamicParticle* aParticle;
+  G4DynamicParticle* aParticle = nullptr;
   G4int provShellId = 0;
   G4int counter = 0;
   
@@ -120,7 +120,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	}
       counter++;
-      if (aParticle != 0) {vectorOfParticles->push_back(aParticle);}
+      if (aParticle != nullptr) {vectorOfParticles->push_back(aParticle);}
       else {provShellId = -2;}
     }
   
@@ -168,7 +168,7 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
       G4double partialProb = G4UniformRand();      
       G4double partSum = 0;
       const G4FluoTransition* aShell = transitionManager->ReachableShell(Z,shellNum);      
-      G4int trSize =  (aShell->TransitionProbabilities()).size();
+      G4int trSize = (G4int)(aShell->TransitionProbabilities()).size();
     
       // Loop over the shells wich can provide an electron for a 
       // radiative transition towards shellId:
@@ -233,10 +233,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
       shellNum++;
     }
   // number of shell from wich an electron can reach shellId
-  size_t transitionSize = transitionManager->
+  G4int transitionSize = (G4int)transitionManager->
     ReachableShell(Z,shellNum)->OriginatingShellIds().size();
   
-  size_t index = 0;
+  G4int index = 0;
   
   // find the index of the shell named provShellId in the vector
   // storing the shells from which shellId can be reached 
@@ -309,7 +309,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       const G4AugerTransition* anAugerTransition = 
             transitionManager->ReachableAugerShell(Z,shellNum);
 
-      G4int transitionSize = 
+      G4int transitionSize = (G4int)
             (anAugerTransition->TransitionOriginatingShellIds())->size();
       while (transitionLoopShellIndex < transitionSize) {
 
@@ -317,7 +317,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
                anAugerTransition->TransitionOriginatingShellIds()->begin();
 
         G4int transitionLoopShellId = *(pos+transitionLoopShellIndex);
-        G4int numberOfPossibleAuger = 
+        G4int numberOfPossibleAuger = (G4int)
               (anAugerTransition->AugerTransitionProbabilities(transitionLoopShellId))->size();
         G4int augerIndex = 0;
 
@@ -358,7 +358,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
         transitionRandomShellId = *(pos+transitionRandomShellIndex);
         
 	augerIndex = 0;
-	numberOfPossibleAuger = (anAugerTransition-> 
+	numberOfPossibleAuger = (G4int)(anAugerTransition-> 
 				 AugerTransitionProbabilities(transitionRandomShellId))->size();
 
         while (augerIndex < numberOfPossibleAuger) {

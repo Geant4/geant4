@@ -69,6 +69,6 @@ private:
 
 };
 
-typedef std::vector<G4PlacedPolyhedron> G4PlacedPolyhedronList;
+using G4PlacedPolyhedronList = std::vector<G4PlacedPolyhedron>;
 
 #endif /* G4PLACEDPOLYHEDRON_HH */

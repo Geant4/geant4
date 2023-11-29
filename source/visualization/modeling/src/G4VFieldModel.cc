@@ -52,6 +52,7 @@
 #include <limits>
 #include <vector>
 
+#define G4warn G4cout
 
 // Constructor and destructor
 
@@ -124,7 +125,7 @@ void G4VFieldModel::DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
       if (!globalField) {
         static G4bool warned = false;
         if (!warned) {
-          G4cout << intro << "Null global field pointer." << G4endl;
+          G4warn << intro << "Null global field pointer." << G4endl;
           warned = true;
         }
       }
@@ -132,7 +133,7 @@ void G4VFieldModel::DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
   } else {
     static G4bool warned = false;
     if (!warned) {
-      G4cout << intro << "No global field manager." << G4endl;
+      G4warn << intro << "No global field manager." << G4endl;
       warned = true;
     }
   }
@@ -158,7 +159,7 @@ void G4VFieldModel::DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
   const G4double maxHalfScene =
   std::max(xHalfScene,std::max(yHalfScene,zHalfScene));
   if (maxHalfScene <= 0.) {
-    G4cout << "Scene extent non-positive." << G4endl;
+    G4warn << "Scene extent non-positive." << G4endl;
     return;
   }
 
@@ -259,7 +260,7 @@ void G4VFieldModel::DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
   }	// for (i, x
 
   if (FieldMagnitudeMax <= 0.) {
-    G4cout << "No " << fTypeOfField << " field in this extent." << G4endl;
+    G4warn << "No " << fTypeOfField << " field in this extent." << G4endl;
     return;
   }
 

@@ -1,0 +1,78 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_sg_GL_viewer
+#define toolx_sg_GL_viewer
+
+#include <tools/sg/viewer>
+
+#include "GL_manager"
+#include "GL_action"
+
+namespace toolx {
+namespace sg {
+
+class GL_viewer : public tools::sg::viewer {
+  TOOLS_HEADER(GL_viewer,toolx::sg::GL_viewer,tools::sg::viewer)
+public:
+  void render() {
+    if(!m_ww) return;
+    if(!m_wh) return;
+
+    m_gl_mgr.begin_render(0,0,m_ww,m_wh,
+                          m_clear_color.r(),
+                          m_clear_color.g(),
+                          m_clear_color.b(),
+                          m_clear_color.a());
+
+    GL_action action(m_gl_mgr,m_out,m_ww,m_wh);
+    action.state().m_use_gsto = m_use_gsto;
+
+    action.set_do_transparency(false);
+    action.set_have_to_do_transparency(false);
+    
+    m_sg.render(action);
+    if(!action.end()) { //check that matrices stack are ok.
+      m_out << "toolx::sg::GL_viewer : bad gl_action end." << std::endl;
+    } else {
+      if(action.have_to_do_transparency()) {
+        action.set_do_transparency(true);
+        m_sg.render(action);
+        if(!action.end()) { //check that matrices stack are ok.
+          m_out << "toolx::sg::GL_viewer : bad gl_action end." << std::endl;
+        }
+      }
+    }
+
+    //after_render();
+
+    m_gl_mgr.end_render();
+  }
+
+public:
+  GL_viewer(std::ostream& a_out,unsigned int a_width,unsigned int a_height)
+  :parent(a_out,a_width,a_height)
+  ,m_gl_mgr(a_out)
+  {}
+  virtual ~GL_viewer(){
+    //WARNING : nodes may refer m_gl_mgr (to handle gstos/texs), then
+    //          we have to delete them first.
+    m_sg.clear();
+  }
+public:
+  GL_viewer(const GL_viewer& a_from)
+  :parent(a_from)
+  ,m_gl_mgr(a_from.m_gl_mgr)
+  {}
+  GL_viewer& operator=(const GL_viewer& a_from){
+    parent::operator=(a_from);
+    m_gl_mgr = a_from.m_gl_mgr;
+    return *this;
+  }
+protected:
+  GL_manager m_gl_mgr;
+};
+
+}}
+
+#endif

@@ -35,6 +35,14 @@
    - final-state:   FTFP for all energies
 
 
+ G4HadronInelasticQBBC_ABLA
+ --------------------------
+ Similar to G4HadronInelasticQBBC, with the difference that for the final-state
+ of nuclear inelastic interactions of pion+, pion-, proton and neutron projectiles
+ the ABLA model (instead of the usual Precompound/de-excitation) is utilized for
+ nuclear de-excitation.
+
+
  G4HadronPhysicsFTFP_BERT
  ------------------------
  Hadron nuclear inelastic processes for all hadrons:
@@ -64,6 +72,12 @@
    - final-state:   FTFP for all energies
  - charm and bottom hadrons inelastic:
    - cross section: Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - light hypernuclei inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - light anti-hypernuclei inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   FTFP for all energies
 
 
@@ -132,6 +146,12 @@
  - kaons inelastic:
    - cross section: Glauber-Gribov
    - final-state:   QGSP > 14 GeV; BERT < 15 GeV
+ - light hypernuclei inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 15 GeV; 1 MeV < INCLXX < 20 GeV; Preco < 2 MeV
+ - light anti-hypernuclei inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
  Note: it is possible to specify in the constructor the use of FTFP
        instead of QGSP;
        moreover, NeutronHP can also be activated in the constructor,

@@ -41,29 +41,27 @@
 class G4UIcmdWithAnInteger : public G4UIcommand
 {
   public:
-
+    // Constructor. The command string with full path directory
+    // and the pointer to the messenger must be given
     G4UIcmdWithAnInteger(const char* commandPath, G4UImessenger* messenger);
-      // Constructor. The command string with full path directory
-      // and the pointer to the messenger must be given
 
-    static G4int GetNewIntValue(const char* paramString);
-      // Convert string which represents an integer to an integer
+    // Set the parameter name. The name is used by the range checking.
+    // If "omittable" is set as true, the user of this command can omit
+    // the value when the command is applied. If "omittable" is false,
+    // the user must supply an integer value.
+    // "currentAsDefault" flag is valid only if "omittable" is true. If this
+    // flag is true, the current value is used as the default value when the
+    // user omits the parameter. If this flag is false, the value given by
+    // the next SetDefaultValue() method is used
+    void SetParameterName(const char* theName, G4bool omittable, G4bool currentAsDefault = false);
 
-    void SetParameterName(const char* theName, G4bool omittable,
-                          G4bool currentAsDefault = false);
-      // Set the parameter name. The name is used by the range checking.
-      // If "omittable" is set as true, the user of this command can omit
-      // the value when the command is applied. If "omittable" is false,
-      // the user must supply an integer value.
-      // "currentAsDefault" flag is valid only if "omittable" is true. If this
-      // flag is true, the current value is used as the default value when the
-      // user omits the parameter. If this flag is false, the value given by
-      // the next SetDefaultValue() method is used
-
+    // Set the default value of the parameter. This default value is used
+    // when the user of this command omits the parameter value, and
+    // "omittable" is true and "currentAsDefault" is false
     void SetDefaultValue(G4int defVal);
-      // Set the default value of the parameter. This default value is used
-      // when the user of this command omits the parameter value, and
-      // "omittable" is true and "currentAsDefault" is false
+
+    // Convert string which represents an integer to an integer
+    static G4int GetNewIntValue(const char* paramString);
 };
 
 #endif

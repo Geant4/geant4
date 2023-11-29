@@ -97,8 +97,8 @@ G4CutTubs::G4CutTubs( const G4String &pName,
   // Check on Cutted Planes Normals
   // If there is NO CUT, propose to use G4Tubs instead
   //
-  if ( ( !pLowNorm.x()) && ( !pLowNorm.y())
-    && ( !pHighNorm.x()) && (!pHighNorm.y()) )
+  if ( ( pLowNorm.x() == 0.0) && ( pLowNorm.y() == 0.0)
+    && ( pHighNorm.x() == 0.0) && (pHighNorm.y() == 0.0) )
   {
     std::ostringstream message;
     message << "Inexisting Low/High Normal to Z plane or Parallel to Z."
@@ -166,12 +166,7 @@ G4CutTubs::G4CutTubs( const G4String &pName,
 //                            for usage restricted to object persistency.
 //
 G4CutTubs::G4CutTubs( __void__& a )
-  : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
-    fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.), fZMin(0.), fZMax(0.),
-    sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
-    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.),
-    fLowNorm(G4ThreeVector()), fHighNorm(G4ThreeVector())
+  : G4CSGSolid(a)
 {
 }
 
@@ -179,31 +174,13 @@ G4CutTubs::G4CutTubs( __void__& a )
 //
 // Destructor
 
-G4CutTubs::~G4CutTubs()
-{
-}
+G4CutTubs::~G4CutTubs() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4CutTubs::G4CutTubs(const G4CutTubs& rhs)
-  : G4CSGSolid(rhs),
-    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
-    fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
-    fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
-    fZMin(rhs.fZMin), fZMax(rhs.fZMax),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
-    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
-    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
-    fPhiFullCutTube(rhs.fPhiFullCutTube),
-    halfCarTolerance(rhs.halfCarTolerance),
-    halfRadTolerance(rhs.halfRadTolerance),
-    halfAngTolerance(rhs.halfAngTolerance),
-    fLowNorm(rhs.fLowNorm), fHighNorm(rhs.fHighNorm)
-{
-}
+G4CutTubs::G4CutTubs(const G4CutTubs&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -483,7 +460,7 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Get parameters of the solid
@@ -639,7 +616,7 @@ EInside G4CutTubs::Inside( const G4ThreeVector& p ) const
 
   // Check on the Surface for R
   //
-  if (fRMin) { tolRMin = fRMin + halfRadTolerance; }
+  if (fRMin != 0.0) { tolRMin = fRMin + halfRadTolerance; }
   else       { tolRMin = 0; }
   tolRMax = fRMax - halfRadTolerance;
   if (((r2 <= tolRMin*tolRMin) || (r2 >= tolRMax*tolRMax)) &&
@@ -694,7 +671,7 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
       distSPhi = std::fabs(pPhi - fSPhi);
       distEPhi = std::fabs(pPhi - fSPhi - fDPhi);
     }
-    else if( !fRMin )
+    else if( fRMin == 0.0 )
     {
       distSPhi = 0.;
       distEPhi = 0.;
@@ -709,7 +686,7 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
     ++noSurfaces;
     sumnorm += nR;
   }
-  if( fRMin && (distRMin <= halfCarTolerance) )
+  if( (fRMin != 0.0) && (distRMin <= halfCarTolerance) )
   {
     ++noSurfaces;
     sumnorm -= nR;
@@ -811,7 +788,7 @@ G4ThreeVector G4CutTubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
       side    = kNRMax   ;
     }
   }
-  if (!fPhiFullCutTube  &&  rho ) // Protected against (0,0,z)
+  if (!fPhiFullCutTube  &&  (rho != 0.0) ) // Protected against (0,0,z)
   {
     phi = std::atan2(p.y(),p.x()) ;
 
@@ -959,7 +936,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
 
       if ((tolIRMin2 <= rho2) && (rho2 <= tolIRMax2))
       {
-        if (!fPhiFullCutTube && rho2)
+        if (!fPhiFullCutTube && (rho2 != 0.0))
         {
           // Psi = angle made with central (average) phi of shape
           //
@@ -1001,7 +978,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
 
       if ((tolIRMin2 <= rho2) && (rho2 <= tolIRMax2))
       {
-        if (!fPhiFullCutTube && rho2)
+        if (!fPhiFullCutTube && (rho2 != 0.0))
         {
           // Psi = angle made with central (average) phi of shape
           //
@@ -1169,7 +1146,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
       }   // end if   (t3>tolIRMin2)
     }     // end if   (Inside Outer Radius)
 
-    if ( fRMin )    // Try inner cylinder intersection
+    if ( fRMin != 0.0 )    // Try inner cylinder intersection
     {
       c = (t3 - fRMin*fRMin)/t1 ;
       d = b*b - c ;
@@ -1386,7 +1363,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p ) const
 
   // Distance to Phi
   //
-  if ( (!fPhiFullCutTube) && (rho) )
+  if ( (!fPhiFullCutTube) && ((rho) != 0.0) )
    {
      // Psi=angle from central phi to point
      //
@@ -1550,7 +1527,7 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
     {
       roMin2 = t3 - t2*t2/t1 ; // min ro2 of the plane of movement
 
-      if ( fRMin && (roMin2 < fRMin*(fRMin - kRadTolerance)) )
+      if ( (fRMin != 0.0) && (roMin2 < fRMin*(fRMin - kRadTolerance)) )
       {
         deltaR = t3 - fRMin*fRMin ;
         b      = t2/t1 ;
@@ -1632,7 +1609,7 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
       else if ( vphi > fSPhi + fDPhi + halfAngTolerance ) { vphi -= twopi; }
 
 
-      if ( p.x() || p.y() )  // Check if on z axis (rho not needed later)
+      if ( (p.x() != 0.0) || (p.y() != 0.0) )  // Check if on z axis (rho not needed later)
       {
         // pDist -ve when inside
 
@@ -1648,8 +1625,8 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
 
         if( ( (fDPhi <= pi) && ( (pDistS <= halfCarTolerance)
                               && (pDistE <= halfCarTolerance) ) )
-         || ( (fDPhi >  pi) && !((pDistS >  halfCarTolerance)
-                              && (pDistE >  halfCarTolerance) ) )  )
+         || ( (fDPhi >  pi) && ((pDistS <=  halfCarTolerance)
+                              || (pDistE <=  halfCarTolerance) ) )  )
         {
           // Inside both phi *full* planes
 
@@ -1713,8 +1690,8 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
               {
                 // Leaving via ending phi
                 //
-                if( !((fSPhi-halfAngTolerance <= vphi)
-                     &&(fSPhi+fDPhi+halfAngTolerance >= vphi)) )
+                if( (fSPhi-halfAngTolerance > vphi)
+                     ||(fSPhi+fDPhi+halfAngTolerance < vphi) )
                 {
                   sidephi = kEPhi ;
                   if ( pDistE <= -halfCarTolerance )  { sphi = sphi2 ; }
@@ -1823,7 +1800,7 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl ;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -1899,7 +1876,7 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4CutTubs::GetEntityType() const
 {
-  return G4String("G4CutTubs");
+  return {"G4CutTubs"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1917,7 +1894,7 @@ G4VSolid* G4CutTubs::Clone() const
 
 std::ostream& G4CutTubs::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -1983,11 +1960,11 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
     // Select surface
     G4double select = ssurf[5]*G4QuickRand();
     G4int k = 5;
-    k -= (select <= ssurf[4]);
-    k -= (select <= ssurf[3]);
-    k -= (select <= ssurf[2]);
-    k -= (select <= ssurf[1]);
-    k -= (select <= ssurf[0]);
+    k -= (G4int)(select <= ssurf[4]);
+    k -= (G4int)(select <= ssurf[3]);
+    k -= (G4int)(select <= ssurf[2]);
+    k -= (G4int)(select <= ssurf[1]);
+    k -= (G4int)(select <= ssurf[0]);
 
     // Generate point on selected surface (rejection sampling)
     G4ThreeVector p(0,0,0);
@@ -2012,7 +1989,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
         G4double x = r*std::cos(phi);
         G4double y = r*std::sin(phi);
         G4double z = -fDz - (x*nbot.x() + y*nbot.y())/nbot.z();
-        return G4ThreeVector(x, y, z);
+        return {x, y, z};
       }
       case 3: // base at high z
       {
@@ -2021,7 +1998,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
         G4double x = r*std::cos(phi);
         G4double y = r*std::sin(phi);
         G4double z = fDz - (x*ntop.x() + y*ntop.y())/ntop.z();
-        return G4ThreeVector(x, y, z);
+        return {x, y, z};
       }
       case 4: // external lateral surface
       {
@@ -2051,7 +2028,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   G4double x = rmax*std::cos(sphi + 0.5*dphi);
   G4double y = rmax*std::sin(sphi + 0.5*dphi);
   G4double z = fDz - (x*ntop.x() + y*ntop.y())/ntop.z();
-  return G4ThreeVector(x, y, z);
+  return {x, y, z};
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -2068,12 +2045,12 @@ G4Polyhedron* G4CutTubs::CreatePolyhedron () const
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
 
-  G4Polyhedron *ph  = new G4Polyhedron;
+  auto ph = new G4Polyhedron;
   G4Polyhedron *ph1 = new G4PolyhedronTubs (fRMin, fRMax, fDz, fSPhi, fDPhi);
   G4int nn=ph1->GetNoVertices();
   G4int nf=ph1->GetNoFacets();
-  G4double3* xyz = new G4double3[nn];  // number of nodes
-  G4int4*  faces = new G4int4[nf] ;    // number of faces
+  auto xyz = new G4double3[nn];  // number of nodes
+  auto faces = new G4int4[nf] ;  // number of faces
 
   for(G4int i=0; i<nn; ++i)
   {
@@ -2094,7 +2071,7 @@ G4Polyhedron* G4CutTubs::CreatePolyhedron () const
     }
   }
   G4int iNodes[4];
-  G4int *iEdge=0;
+  G4int* iEdge = nullptr;
   G4int n;
   for(G4int i=0; i<nf ; ++i)
   {

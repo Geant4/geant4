@@ -213,7 +213,7 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis, pVoxelLimit, pTransform, pMin, pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   G4double dx = fDx;
@@ -306,7 +306,7 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
     //
 #ifdef G4SPECDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:\n";
@@ -338,7 +338,7 @@ G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   if (distR > distZ && (x * x + y * y) > 0)
     return G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
   else
-    return G4ThreeVector(0, 0, (p.z() < 0 ? -1. : 1.));
+    return {0, 0, (p.z() < 0 ? -1. : 1.)};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -505,7 +505,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
   {
 #ifdef G4SPECDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:  " << p << G4endl;;
@@ -588,7 +588,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
   if( Inside(p) == kOutside )
   {
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: " << GetName() << "\n"
             << "Position:\n"
             << "   p.x() = "  << p.x()/mm << " mm\n"
@@ -619,7 +619,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4EllipticalTube::GetEntityType() const
 {
-  return G4String("G4EllipticalTube");
+  return {"G4EllipticalTube"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -683,7 +683,7 @@ G4double G4EllipticalTube::GetSurfaceArea()
 
 std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -793,7 +793,7 @@ void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 
 G4VisExtent G4EllipticalTube::GetExtent() const
 {
-  return G4VisExtent( -fDx, fDx, -fDy, fDy, -fDz, fDz );
+  return { -fDx, fDx, -fDy, fDy, -fDz, fDz };
 }
 
 #endif // !defined(G4GEOM_USE_UELLIPTICALTUBE) || !defined(G4GEOM_USE_SYS_USOLIDS)

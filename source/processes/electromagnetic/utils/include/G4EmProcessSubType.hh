@@ -68,7 +68,9 @@ enum G4EmProcessSubType
   fSynchrotronRadiation = 23,
   fTransitionRadiation = 24,
 
-  fSurfaceReflection = 25
+  fSurfaceReflection = 25,
+  fDarkBremsstrahlung = 40,
+  fMuonPairProdByCharged = 49
 };
 
 #endif

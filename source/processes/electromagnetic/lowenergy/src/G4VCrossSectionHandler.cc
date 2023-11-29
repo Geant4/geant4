@@ -118,7 +118,7 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
   delete interpolation;
   interpolation = nullptr;
 
-  for (auto pos : dataMap)
+  for (auto & pos : dataMap)
     {
       G4VEMDataSet* dataSet = pos.second;
       delete dataSet;
@@ -126,8 +126,8 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
 
   if (crossSections != nullptr)
     {
-      size_t n = crossSections->size();
-      for (size_t i=0; i<n; i++)
+      std::size_t n = crossSections->size();
+      for (std::size_t i=0; i<n; i++)
 	{
 	  delete (*crossSections)[i];
 	}
@@ -168,7 +168,7 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
 
 void G4VCrossSectionHandler::PrintData() const
 {
-  for (auto pos : dataMap) 
+  for (auto & pos : dataMap) 
     {
       G4int z = pos.first;
       G4VEMDataSet* dataSet = pos.second;     
@@ -184,13 +184,13 @@ void G4VCrossSectionHandler::PrintData() const
 
 void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 {
-  size_t nZ = activeZ.size();
-  for (size_t i=0; i<nZ; i++)
+  std::size_t nZ = activeZ.size();
+  for (std::size_t i=0; i<nZ; ++i)
     {
       G4int Z = G4int(activeZ[i]);
 
       // Build the complete string identifying the file with the data set      
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadData",
@@ -259,13 +259,13 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
 
 void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 {
-  size_t nZ = activeZ.size();
-  for (size_t i=0; i<nZ; i++)
+  std::size_t nZ = activeZ.size();
+  for (std::size_t i=0; i<nZ; ++i)
     {
       G4int Z = G4int(activeZ[i]);
 
       // Build the complete string identifying the file with the data set      
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       if (!path)
 	{ 
           G4Exception("G4VCrossSectionHandler::LoadNonLogData",
@@ -328,8 +328,8 @@ void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 
 void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 {
-  size_t nZ = activeZ.size();
-  for (size_t i=0; i<nZ; i++)
+  std::size_t nZ = activeZ.size();
+  for (std::size_t i=0; i<nZ; ++i)
     {
       G4int Z = G4int(activeZ[i]);
       
@@ -347,7 +347,7 @@ void G4VCrossSectionHandler::Clear()
   // Reset the map of data sets: remove the data sets from the map 
   if(! dataMap.empty())
     {
-      for (auto pos : dataMap)
+      for (auto & pos : dataMap)
 	{
 	  G4VEMDataSet* dataSet = pos.second;
 	  delete dataSet;
@@ -388,12 +388,12 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy,
 {
   G4double value = 0.;
   auto pos = dataMap.find(Z);
-  if (pos!= dataMap.end())
+  if (pos!= dataMap.cend())
     {
       G4VEMDataSet* dataSet = (*pos).second;
       if (shellIndex >= 0) 
 	{
-	  G4int nComponents = dataSet->NumberOfComponents();
+	  G4int nComponents = (G4int)dataSet->NumberOfComponents();
 	  if(shellIndex < nComponents)    
 	    value = dataSet->GetComponent(shellIndex)->FindValue(energy);
 	  else 
@@ -423,9 +423,9 @@ G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
   G4double value = 0.;
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
-  G4int nElements = material->GetNumberOfElements();
+  std::size_t nElements = material->GetNumberOfElements();
 
-  for (G4int i=0 ; i<nElements ; i++)
+  for (std::size_t i=0 ; i<nElements ; ++i)
     {
       G4int Z = (G4int) (*elementVector)[i]->GetZ();
       G4double elementValue = FindValue(Z,energy);
@@ -488,9 +488,9 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
   
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
-  for (size_t mLocal=0; mLocal<numOfCouples; mLocal++)
+  for (G4int mLocal=0; mLocal<numOfCouples; ++mLocal)
     {
       energies = new G4DataVector;
       data = new G4DataVector;
@@ -503,8 +503,8 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
           log_energies->push_back(std::log10(energy));
 	  G4VEMDataSet* matCrossSet = (*crossSections)[mLocal];
 	  G4double materialCrossSection = 0.0;
-          G4int nElm = matCrossSet->NumberOfComponents();
-          for(G4int j=0; j<nElm; j++) {
+          G4int nElm = (G4int)matCrossSet->NumberOfComponents();
+          for(G4int j=0; j<nElm; ++j) {
             materialCrossSection += matCrossSet->GetComponent(j)->FindValue(energy);
 	  }
 
@@ -534,7 +534,7 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* coupl
   // Select randomly an element within the material, according to the weight
   // determined by the cross sections in the data set
   const G4Material* material = couple->GetMaterial();
-  G4int nElements = material->GetNumberOfElements();
+  G4int nElements = (G4int)material->GetNumberOfElements();
 
   // Special case: the material consists of one element
   if (nElements == 1)
@@ -545,7 +545,7 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* coupl
 
   // Composite material
   const G4ElementVector* elementVector = material->GetElementVector();
-  size_t materialIndex = couple->GetIndex();
+  std::size_t materialIndex = couple->GetIndex();
 
   G4VEMDataSet* materialSet = (*crossSections)[materialIndex];
   G4double materialCrossSection0 = 0.0;
@@ -576,7 +576,7 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
   // by the cross sections in the data set
   const G4Material* material = couple->GetMaterial();
   G4Element* nullElement = 0;
-  G4int nElements = material->GetNumberOfElements();
+  G4int nElements = (G4int)material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
 
   // Special case: the material consists of one element
@@ -588,13 +588,13 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
     {
       // Composite material
 
-      size_t materialIndex = couple->GetIndex();
+      std::size_t materialIndex = couple->GetIndex();
 
       G4VEMDataSet* materialSet = (*crossSections)[materialIndex];
       G4double materialCrossSection0 = 0.0;
       G4DataVector cross;
       cross.clear();
-      for (G4int i=0; i<nElements; i++)
+      for (G4int i=0; i<nElements; ++i)
         {
           G4double cr = materialSet->GetComponent(i)->FindValue(e);
           materialCrossSection0 += cr;
@@ -603,7 +603,7 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4MaterialCut
 
       G4double random = G4UniformRand() * materialCrossSection0;
 
-      for (G4int k=0 ; k < nElements ; k++ )
+      for (G4int k=0 ; k < nElements ; ++k )
         {
           if (random <= cross[k]) return (*elementVector)[k];
         }
@@ -638,8 +638,8 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
       return 0;
     }
 
-  size_t nShells = dataSet->NumberOfComponents();
-  for (size_t i=0; i<nShells; i++)
+  G4int nShells = (G4int)dataSet->NumberOfComponents();
+  for (G4int i=0; i<nShells; ++i)
     {
       const G4VEMDataSet* shellDataSet = dataSet->GetComponent(i);
       if (shellDataSet != nullptr)
@@ -662,15 +662,15 @@ void G4VCrossSectionHandler::ActiveElements()
       G4Exception("G4VCrossSectionHandler::ActiveElements",
 		    "em1001",FatalException,"no MaterialTable found");
 
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
+  std::size_t nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int mLocal2=0; mLocal2<nMaterials; mLocal2++)
+  for (std::size_t mLocal2=0; mLocal2<nMaterials; ++mLocal2)
     {
       const G4Material* material= (*materialTable)[mLocal2];
       const G4ElementVector* elementVector = material->GetElementVector();
-      const G4int nElements = material->GetNumberOfElements();
+      const std::size_t nElements = material->GetNumberOfElements();
 
-      for (G4int iEl=0; iEl<nElements; iEl++)
+      for (std::size_t iEl=0; iEl<nElements; ++iEl)
 	{
 	  G4double Z = (*elementVector)[iEl]->GetZ();
 	  if (!(activeZ.contains(Z)) && Z >= zMin && Z <= zMax)
@@ -699,7 +699,7 @@ G4int G4VCrossSectionHandler::NumberOfComponents(G4int Z) const
   if (pos!= dataMap.end())
     {
       G4VEMDataSet* dataSet = (*pos).second;
-      n = dataSet->NumberOfComponents();
+      n = (G4int)dataSet->NumberOfComponents();
     }
   else
     {

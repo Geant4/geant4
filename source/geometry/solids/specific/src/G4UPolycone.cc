@@ -71,13 +71,13 @@ G4UPolycone::G4UPolycone( const G4String& name,
   {
     G4double z = zPlane[i];
     G4double r = rOuter[i];
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   for (G4int i=numZPlanes-1; i>=0; --i)
   {
     G4double z = zPlane[i];
     G4double r = rInner[i];
-    rzcorners.push_back(G4TwoVector(r,z));
+    rzcorners.emplace_back(r,z);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -108,7 +108,7 @@ G4UPolycone::G4UPolycone(const G4String& name,
   rzcorners.resize(0);
   for (G4int i=0; i<numRZ; ++i)
   {
-    rzcorners.push_back(G4TwoVector(r[i],z[i]));
+    rzcorners.emplace_back(r[i],z[i]);
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -130,9 +130,7 @@ G4UPolycone::G4UPolycone( __void__& a )
 //
 // Destructor
 //
-G4UPolycone::~G4UPolycone()
-{
-}
+G4UPolycone::~G4UPolycone() = default;
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -289,13 +287,13 @@ G4bool G4UPolycone::Reset()
     {
       G4double z = fOriginalParameters.Z_values[i];
       G4double r = fOriginalParameters.Rmax[i];
-      rzcorners.push_back(G4TwoVector(r,z));
+      rzcorners.emplace_back(r,z);
     }
   for (G4int i=fOriginalParameters.Num_z_planes-1; i>=0; --i)
     {
       G4double z = fOriginalParameters.Z_values[i];
       G4double r = fOriginalParameters.Rmin[i];
-      rzcorners.push_back(G4TwoVector(r,z));
+      rzcorners.emplace_back(r,z);
     }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
@@ -447,7 +445,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -464,7 +462,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyconeSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);

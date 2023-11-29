@@ -1,31 +1,44 @@
--------------------------------------------------------------------
+# Category hadr-cohe History
 
-          ==================================================
-          Geant4 - an Object-Oriented Toolkit for Simulation
-          ==================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-           History file for Low Energy Parameterized Models
-           ------------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-11-26 Gabriele Cosmo (hadr-cohe-V11-00-05)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2022-10-25 Alberto Ribon (hadr-cohe-V11-00-04)
+- G4AntiNuclElastic : Vladimir Uzhinsky's extension of the SampleInvariantT method
+  for the simulation of a light anti-hypernucleus projectile elastic scattering
+  on a target nucleus.
+  Note: most of the considered light anti-hypernuclei projectiles have 
+  baryon number equal to -4 : it is assumed that their properties are similar
+  to anti-He4, therefore their elastic scattering is set-up as for anti-He4
+  elastic nuclear scattering. These properties can be improved in the future
+  if theoretical estimations will be available.
 
-04 February 2022 - V.Ivanchenko (hadr-cohe-V10-07-06)
------------------------------------------------------
+## 2022-09-05 Ben Morgan (hadr-cohe-V11-00-03)
+- Update dependencies to address warnings from consistency check
+
+## 2022-02-04 Vladimir Ivanchenko (hadr-cohe-V11-00-02)
 - G4ElasticHadrNucleusHE, G4NeutronElectronElModel, G4NeutrinoElectronNcModel
-  fixed compilation warnings on unused variables; removed commented lines;
-  use Energy(..) method of G4PhysicsVector instead of obsolete GetLowEdgeEnergy(...)
+    fixed compilation warnings on unused variables; removed commented lines;
+    use Energy(..) method of G4PhysicsVector instead of obsolete GetLowEdgeEnergy(...)
 
-03 January 2022 - A.Ribon (hadr-cohe-V10-07-05)
---------------------------------------------------
+## 2022-01-03 Alberto Ribon (hadr-cohe-V11-00-01)
 - G4AntiNuclElastic : Vladimir Uzhinsky's correction in the SampleInvariantT
   method of the highest momentum transfer (which was causing the cosine of
   the polar angle in the center-of-mass system to be larger than 1 in some
-  cases). This should fix the bug #2204.
+  cases). This should be fixed bug #2204.
+
+## 2021-12-10 Ben Morgan (hadr-cohe-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 04 August 2021 - A.Ribon (hadr-cohe-V10-07-04)
 --------------------------------------------------

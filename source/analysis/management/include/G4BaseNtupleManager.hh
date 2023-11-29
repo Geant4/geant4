@@ -40,7 +40,7 @@ class G4BaseNtupleManager : public G4VNtupleManager
   public:
     explicit G4BaseNtupleManager(const G4AnalysisManagerState& state);
     G4BaseNtupleManager() = delete;
-    virtual ~G4BaseNtupleManager() = default;
+    ~G4BaseNtupleManager() override = default;
 
     // deleted copy constructor & assignment operator
     G4BaseNtupleManager(const G4BaseNtupleManager& rhs) = delete;
@@ -48,26 +48,25 @@ class G4BaseNtupleManager : public G4VNtupleManager
 
   protected:
     // Methods for handling ntuples
-    virtual G4int CreateNtuple(G4NtupleBooking* booking) = 0;
+    G4int CreateNtuple(G4NtupleBooking* booking) override = 0;
 
     // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId
-    virtual G4bool FillNtupleIColumn(G4int id, G4int value) final;
-    virtual G4bool FillNtupleFColumn(G4int id, G4float value) final;
-    virtual G4bool FillNtupleDColumn(G4int id, G4double value) final;
-    virtual G4bool FillNtupleSColumn(G4int id, const G4String& value) final;
-    virtual G4bool AddNtupleRow() final;
+    G4bool FillNtupleIColumn(G4int id, G4int value) final;
+    G4bool FillNtupleFColumn(G4int id, G4float value) final;
+    G4bool FillNtupleDColumn(G4int id, G4double value) final;
+    G4bool FillNtupleSColumn(G4int id, const G4String& value) final;
+    G4bool AddNtupleRow() final;
 
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) = 0;
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) = 0;
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) = 0;
-    virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId,
-                                     const G4String& value) = 0;
-    virtual G4bool AddNtupleRow(G4int ntupleId) = 0;
+    G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) override = 0;
+    G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) override = 0;
+    G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) override = 0;
+    G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, const G4String& value) override = 0;
+    G4bool AddNtupleRow(G4int ntupleId) override = 0;
 
     // Fisrt column id
-    virtual G4bool SetFirstNtupleColumnId(G4int firstId) final;
+    G4bool SetFirstNtupleColumnId(G4int firstId) final;
 
   protected:
     G4int   fFirstNtupleColumnId { 0 };

@@ -58,7 +58,7 @@ class G4BraggIonGasModel : public G4BraggModel
 
 public:
 
-  explicit G4BraggIonGasModel(const G4ParticleDefinition* p = 0,
+  explicit G4BraggIonGasModel(const G4ParticleDefinition* p = nullptr,
 			      const G4String& nam = "BraggIonGas");
 
   ~G4BraggIonGasModel() override;

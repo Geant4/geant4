@@ -31,8 +31,7 @@
  */
 
 #include "globals.hh"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include <cmath>
 #include "G4KDTree.hh"
 #include "G4KDMap.hh"
@@ -45,79 +44,88 @@ using namespace std;
 
 G4Allocator<G4KDTree>*& G4KDTree::fgAllocator()
 {
-    G4ThreadLocalStatic G4Allocator<G4KDTree>* _instance = nullptr;
-    return _instance;
+  G4ThreadLocalStatic G4Allocator<G4KDTree>* _instance = nullptr;
+  return _instance;
 }
 
 //______________________________________________________________________
 // KDTree methods
-G4KDTree::G4KDTree(size_t k) :
-    fKDMap(new G4KDMap(k))
-{
-  fDim = k;
-  fRoot = 0;
-  fRect = 0;
-  fNbNodes = 0;
-  fNbActiveNodes = 0;
-}
+G4KDTree::G4KDTree(size_t k)
+  : fDim(k)
+  ,fKDMap(new G4KDMap(k))
+{}
 
 G4KDTree::~G4KDTree()
 {
-  if (fRoot) __Clear_Rec(fRoot);
-  fRoot = 0;
-
-  if (fRect)
-  {
-    delete fRect;
-    fRect = 0;
+  if(fRoot){
+    __Clear_Rec(fRoot);
+    fRoot = nullptr;
   }
 
-  if (fKDMap) delete fKDMap;
+  if(fRect){
+    delete fRect;
+    fRect = nullptr;
+  }
+
+  if(fKDMap){
+    delete fKDMap;
+    fKDMap = nullptr;
+  }
 }
 
 void* G4KDTree::operator new(size_t)
 {
-  if (!fgAllocator()) fgAllocator() = new G4Allocator<G4KDTree>;
-  return (void *) fgAllocator()->MallocSingle();
+  if(!fgAllocator()){
+    fgAllocator() = new G4Allocator<G4KDTree>;
+  }
+  return (void*) fgAllocator()->MallocSingle();
 }
 
-void G4KDTree::operator delete(void *aNode)
+void G4KDTree::operator delete(void* aNode)
 {
   fgAllocator()->FreeSingle((G4KDTree*) aNode);
 }
 
 void G4KDTree::Print(std::ostream& out) const
 {
-  if (fRoot) fRoot->Print(out);
+  if(fRoot){
+    fRoot->Print(out);
+  }
 }
 
 void G4KDTree::Clear()
 {
   __Clear_Rec(fRoot);
-  fRoot = 0;
+  fRoot    = nullptr;
   fNbNodes = 0;
 
-  if (fRect)
+  if(fRect)
   {
     delete fRect;
-    fRect = 0;
+    fRect = nullptr;
   }
 }
 
 void G4KDTree::__Clear_Rec(G4KDNode_Base* node)
 {
-  if (!node) return;
+  if(!node)
+  {
+    return;
+  }
 
-  if (node->GetLeft()) __Clear_Rec(node->GetLeft());
-  if (node->GetRight()) __Clear_Rec(node->GetRight());
+  if(node->GetLeft())
+  {
+    __Clear_Rec(node->GetLeft());
+  }
+  if(node->GetRight())
+  {
+    __Clear_Rec(node->GetRight());
+  }
 
   delete node;
 }
 
-void G4KDTree::__InsertMap(G4KDNode_Base *node)
-{
-  fKDMap->Insert(node);
-}
+void G4KDTree::__InsertMap(G4KDNode_Base* node) { fKDMap->Insert(node); }
 
 void G4KDTree::Build()
 {
@@ -129,7 +137,10 @@ void G4KDTree::Build()
 
   G4KDNode_Base* root = fKDMap->PopOutMiddle(0);
 
-  if(root == 0) return;
+  if(root == nullptr)
+  {
+    return;
+  }
 
   fRoot = root;
   fNbActiveNodes++;
@@ -140,12 +151,12 @@ void G4KDTree::Build()
 
   G4KDNode_Base* parent = fRoot;
 
-  for (size_t n = 0; n < Nnodes; n += fDim)
+  for(size_t n = 0; n < Nnodes; n += fDim)
   {
-    for (size_t dim = 0; dim < fDim; dim++)
+    for(size_t dim = 0; dim < fDim; dim++)
     {
       G4KDNode_Base* node = fKDMap->PopOutMiddle(dim);
-      if (node)
+      if(node)
       {
         parent->Insert(node);
         fNbActiveNodes++;
@@ -158,21 +169,19 @@ void G4KDTree::Build()
 
 G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode_Base* node)
 {
-  //    G4cout << "Nearest(node)" << G4endl ;
-  if (!fRect)
+  if(!fRect)
   {
-    G4cout << "Tree empty" << G4endl;
-    return 0;
+    return nullptr;
   }
 
-  std::vector<G4KDNode_Base* > result;
-  double dist_sq = DBL_MAX;
+  std::vector<G4KDNode_Base*> result;
+  G4double dist_sq = DBL_MAX;
 
   /* Duplicate the bounding hyperrectangle, we will work on the copy */
-  HyperRect *newrect = new HyperRect(*fRect);
+  auto newrect = new HyperRect(*fRect);
 
   /* Search for the nearest neighbour recursively */
-  int nbresult = 0;
+  G4int nbresult = 0;
 
   __NearestToNode(node, fRoot, *node, result, &dist_sq, newrect, nbresult);
 
@@ -180,11 +189,11 @@ G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode_Base* node)
   delete newrect;
 
   /* Store the result */
-  if (!result.empty())
+  if(!result.empty())
   {
     G4KDTreeResultHandle rset(new G4KDTreeResult(this));
-    int j = 0;
-    while (j<nbresult)
+    G4int j = 0;
+    while(j < nbresult)
     {
       rset->Insert(dist_sq, result[j]);
       j++;
@@ -195,24 +204,28 @@ G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode_Base* node)
   }
   else
   {
-    return 0;
+    return nullptr;
   }
 }
 
 G4KDTreeResultHandle G4KDTree::NearestInRange(G4KDNode_Base* node,
-                                              const double& range)
+                                              const G4double& range)
 {
-  if (!node) return 0;
-  int ret(-1);
+  if(!node)
+  {
+    return nullptr;
+  }
+  G4int ret(-1);
 
-  G4KDTreeResult *rset = new G4KDTreeResult(this);
+  auto* rset = new G4KDTreeResult(this);
 
-  const double range_sq = sqr(range);
+  const G4double range_sq = sqr(range);
 
-  if ((ret = __NearestInRange(fRoot, *node, range_sq, range, *rset, 0, node)) == -1)
+  if((ret = __NearestInRange(fRoot, *node, range_sq, range, *rset, 0, node)) ==
+     -1)
   {
     delete rset;
-    return 0;
+    return nullptr;
   }
   rset->Sort();
   rset->Rewind();

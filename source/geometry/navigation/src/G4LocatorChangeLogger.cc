@@ -49,7 +49,7 @@ std::ostream& operator<< ( std::ostream& os,
 //
 std::ostream& G4LocatorChangeLogger::StreamInfo(std::ostream& os) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   G4LocatorChangeRecord::ReportVector( os, this->fName, *this );
   os.precision(oldprc);
   return os;
@@ -65,7 +65,7 @@ std::ostream& G4LocatorChangeLogger::ReportEndChanges( std::ostream& os,
   using std::setw;
   G4int prec= 16;
   const G4bool confirm = true;
-  G4int oldprc = os.precision(prec);
+  G4long oldprc = os.precision(prec);
 
   auto itrecA= startA.cbegin();
   auto itrecB= endB.cbegin();
@@ -90,8 +90,6 @@ std::ostream& G4LocatorChangeLogger::ReportEndChanges( std::ostream& os,
 
   G4bool isLastA= false;
   G4bool isLastB= false;
-
-  G4int  jA=0, jB=0;
 
   G4int maxEvent = std::max( startA[ startA.size() - 1 ].GetCount() ,
                              endB[   endB.size() - 1 ].GetCount() );
@@ -173,14 +171,12 @@ std::ostream& G4LocatorChangeLogger::ReportEndChanges( std::ostream& os,
      if( advanceA )
      {
         ++itrecA;
-        if( !isLastA ) { ++jA; }
         eventA = isLastA ? maxEvent : (*itrecA).GetCount();
      }
      
      if( advanceB )
      {
         ++itrecB;
-        if( !isLastB ) { ++jB; } 
         eventB = isLastB ? maxEvent : (*itrecB).GetCount();
      }
 

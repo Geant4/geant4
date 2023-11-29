@@ -29,4 +29,4 @@
 #include "G4ParticleHPMessenger.hh"
 using G4NeutronHPMessenger = G4ParticleHPMessenger;
 
-#endif 
+#endif

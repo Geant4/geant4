@@ -1,18 +1,35 @@
------------------------------------------------------
+# Example rdecay01 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                    rdecay01 History file
-                    ---------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-15 Vladimir Ivanchenko (rdecay01-V11-00-05)
+- PhysicsList - moved setup of options to the class constructor;
+    use minimal list of particles defined in G4EmBuilder; added
+    extended comments to the code; update header according to C++11
+- rdecay.cc - do not use G4RanecuEngine
+
+## 2022-10-11 Michel Maire (rdecay01-V11-00-04)
+- PhysicsList::PhysicsList() : adjust meanLifeTime and halfLifeTime
+
+## 2022-10-02 Michel Maire (rdecay01-V11-00-03)
+- PhysicsList::PhysicsList() : add SetInternalConversionFlag(G4bool)
+ 
+## 2022-08-26 Gabriele Cosmo (rdecay01-V11-00-02)
+- Fixed compilation warning on gcc-12.1 for EventAction::BeginOfEventAction().
+
+## 2022-04-03 Michel Maire (rdecay01-V11-00-01)
+- PhysicsList : SetThresholdOfHalfLife(1*picosecond*log(2))
+
+## 2021-12-10 Ben Morgan (rdecay01-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
     
 06-10-21 I. Hrivnacova (rdecay01-V10-07-03)
 - Migration to new G4AnalysisManager.hh header;

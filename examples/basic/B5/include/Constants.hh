@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file Constants.hh
+/// \file B5/include/Constants.hh
 /// \brief Definition of B5 example constants.
 
 #ifndef B5Constants_h

@@ -49,16 +49,9 @@
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
   : G4VPrimitivePlotter(name, depth)
-  , HCID(-1)
-  , fCurrentTrkID(-1)
-  , fCurrent(0)
-  , EvtMap(0)
-  , weighted(true)
 {
   SetUnit("");
 }
-
-G4PSPassageCellCurrent::~G4PSPassageCellCurrent() { ; }
 
 G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -70,10 +63,10 @@ G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4int index = GetIndex(aStep);
     EvtMap->add(index, fCurrent);
 
-    if(hitIDMap.size() > 0 && hitIDMap.find(index) != hitIDMap.end())
+    if(!hitIDMap.empty() && hitIDMap.find(index) != hitIDMap.cend())
     {
       auto filler = G4VScoreHistFiller::Instance();
-      if(!filler)
+      if(filler == nullptr)
       {
         G4Exception(
           "G4PSVolumeFlux::ProcessHits", "SCORER0123", JustWarning,
@@ -87,12 +80,12 @@ G4bool G4PSPassageCellCurrent::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep)
 {
-  G4bool Passed = FALSE;
+  G4bool Passed = false;
 
   G4bool IsEnter = aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary;
   G4bool IsExit  = aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary;
@@ -101,7 +94,7 @@ G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep)
 
   if(IsEnter && IsExit)
   {  // Passed at one step
-    Passed = TRUE;
+    Passed = true;
   }
   else if(IsEnter)
   {                         // Enter a new geometry
@@ -111,7 +104,7 @@ G4bool G4PSPassageCellCurrent::IsPassed(G4Step* aStep)
   {  // Exit a current geometry
     if(fCurrentTrkID == trkid)
     {
-      Passed = TRUE;  // if the track is same as entered.
+      Passed = true;  // if the track is same as entered.
     }
   }
   else
@@ -133,28 +126,23 @@ void G4PSPassageCellCurrent::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID, EvtMap);
 }
 
-void G4PSPassageCellCurrent::EndOfEvent(G4HCofThisEvent*) {}
-
 void G4PSPassageCellCurrent::clear() { EvtMap->clear(); }
-
-void G4PSPassageCellCurrent::DrawAll() { ; }
 
 void G4PSPassageCellCurrent::PrintAll()
 {
   G4cout << " MultiFunctionalDet  " << detector->GetName() << G4endl;
   G4cout << " PrimitiveScorer " << GetName() << G4endl;
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
-  std::map<G4int, G4double*>::iterator itr = EvtMap->GetMap()->begin();
-  for(; itr != EvtMap->GetMap()->end(); itr++)
+  for(const auto& [copy, current] : *(EvtMap->GetMap()))
   {
-    G4cout << "  copy no.: " << itr->first
-           << "  cell current : " << *(itr->second) << " [tracks] " << G4endl;
+    G4cout << "  copy no.: " << copy
+           << "  cell current : " << *(current) << " [tracks] " << G4endl;
   }
 }
 
 void G4PSPassageCellCurrent::SetUnit(const G4String& unit)
 {
-  if(unit == "")
+  if(unit.empty())
   {
     unitName  = unit;
     unitValue = 1.0;

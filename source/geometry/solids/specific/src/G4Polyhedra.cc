@@ -137,8 +137,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
   //
   // Build RZ polygon using special PCON/PGON GEANT3 constructor
   //
-  G4ReduciblePolygon* rz =
-    new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
+  auto rz = new G4ReduciblePolygon( rInner, rOuter, zPlane, numZPlanes );
   rz->ScaleA( 1/convertRad );
 
   //
@@ -169,7 +168,7 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                 FatalErrorInArgument, message);
   }
 
-  G4ReduciblePolygon* rz = new G4ReduciblePolygon( r, z, numRZ );
+  auto rz = new G4ReduciblePolygon( r, z, numRZ );
 
   Create( phiStart, phiTotal, theNumSide, rz );
 
@@ -343,7 +342,7 @@ void G4Polyhedra::Create( G4double phiStart,
   //
   // We might have dropped a face or two: recalculate numFace
   //
-  numFace = face-faces;
+  numFace = (G4int)(face-faces);
 
   //
   // Make enclosingCylinder
@@ -430,7 +429,7 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra& source )
   //
   // Original parameters
   //
-  if (source.original_parameters)
+  if (source.original_parameters != nullptr)
   {
     original_parameters =
       new G4PolyhedraHistorical( *source.original_parameters );
@@ -486,11 +485,10 @@ G4bool G4Polyhedra::Reset()
   //
   // Rebuild polyhedra
   //
-  G4ReduciblePolygon* rz =
-    new G4ReduciblePolygon( original_parameters->Rmin,
-                            original_parameters->Rmax,
-                            original_parameters->Z_values,
-                            original_parameters->Num_z_planes );
+  auto rz = new G4ReduciblePolygon( original_parameters->Rmin,
+                                    original_parameters->Rmax,
+                                    original_parameters->Z_values,
+                                    original_parameters->Num_z_planes );
   Create( original_parameters->Start_angle,
           original_parameters->Opening_angle,
           original_parameters->numSide, rz );
@@ -631,7 +629,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // To find the extent, RZ contour of the polycone is subdivided
@@ -648,7 +646,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   for (G4int i=0; i<GetNumRZCorner(); ++i)
   {
     G4PolyhedraSideRZ corner = GetCorner(i);
-    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+    contourRZ.emplace_back(corner.r,corner.z);
   }
   G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
   G4double area = G4GeomTools::PolygonArea(contourRZ);
@@ -688,7 +686,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
   // main loop along triangles
   pMin =  kInfinity;
   pMax = -kInfinity;
-  G4int ntria = triangles.size()/3;
+  G4int ntria = (G4int)triangles.size()/3;
   for (G4int i=0; i<ntria; ++i)
   {
     G4double sinCur = sinStart;
@@ -696,8 +694,8 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
     G4int i3 = i*3;
     for (G4int k=0; k<ksteps+1; ++k) // rotate triangle
     {
-      G4ThreeVectorList* ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
-      G4ThreeVectorList::iterator iter = ptr->begin();
+      auto ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
+      auto iter = ptr->begin();
       iter->set(triangles[i3+0].x()*cosCur,
                 triangles[i3+0].x()*sinCur,
                 triangles[i3+0].y());
@@ -724,7 +722,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
     if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
   // free memory
-  for (G4int k=0; k<ksteps+1; ++k) { delete polygons[k]; polygons[k]=0;}
+  for (G4int k=0; k<ksteps+1; ++k) { delete polygons[k]; polygons[k]=nullptr;}
   return (pMin < pMax);
 }
 
@@ -741,7 +739,7 @@ void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
 //
 G4GeometryType G4Polyhedra::GetEntityType() const
 {
-  return G4String("G4Polyhedra");
+  return {"G4Polyhedra"};
 }
 
 // Make a clone of the object
@@ -755,7 +753,7 @@ G4VSolid* G4Polyhedra::Clone() const
 //
 std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -917,10 +915,10 @@ void G4Polyhedra::SetSurfaceElements() const
     for (G4int i=0; i<nrz; ++i)
     {
       G4PolyhedraSideRZ corner = GetCorner(i);
-      contourRZ.push_back(G4TwoVector(corner.r, corner.z));
+      contourRZ.emplace_back(corner.r, corner.z);
     }
     G4GeomTools::TriangulatePolygon(contourRZ, triangles);
-    G4int ntria = triangles.size();
+    auto ntria = (G4int)triangles.size();
     for (G4int i=0; i<ntria; i+=3)
     {
       G4Polyhedra::surface_element selem;
@@ -950,7 +948,7 @@ void G4Polyhedra::SetSurfaceElements() const
 G4ThreeVector G4Polyhedra::GetPointOnSurface() const
 {
   // Set surface elements
-  if (!fElements)
+  if (fElements == nullptr)
   {
     G4AutoLock l(&surface_elementsMutex);
     SetSurfaceElements();
@@ -1021,7 +1019,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     y = r*std::sin(phi);
     z = (p1.z - p0.z)*u + (p2.z - p0.z)*v + p0.z;
   }
-  return G4ThreeVector(x, y, z);
+  return {x, y, z};
 }
 
 //////////////////////////////////////////////////////////////////////////

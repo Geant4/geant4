@@ -212,6 +212,15 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_jetcounter jetcounter
+ *  Medical dna jetcounter example has its
+ *  <a href="../html_jetcounter/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_mfp mfp
  *  Medical dna mfp example has its
  *  <a href="../html_mfp/html/index.html">standalone documentation </a>
@@ -242,6 +251,15 @@
 /** @defgroup extended_medical_dna_microyz microyz
  *  Medical dna microyz example has its
  *  <a href="../html_microyz/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_moleculardna moleculardna
+ *  Medical dna moleculardna example has its
+ *  <a href="../html_moleculardna/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */

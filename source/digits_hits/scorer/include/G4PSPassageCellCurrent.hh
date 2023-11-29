@@ -48,35 +48,30 @@
 
 class G4PSPassageCellCurrent : public G4VPrimitivePlotter
 {
- public:  // with description
+ public:
   G4PSPassageCellCurrent(G4String name, G4int depth = 0);
-  virtual ~G4PSPassageCellCurrent();
+  ~G4PSPassageCellCurrent() override = default;
 
   inline void Weighted(G4bool flg = true) { weighted = flg; }
   // Multiply track weight
 
- protected:  // with description
-  virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-
-  virtual G4bool IsPassed(G4Step*);
-
- public:
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-
- public:
-  virtual void DrawAll();
-  virtual void PrintAll();
+  void Initialize(G4HCofThisEvent*) override;
+  void clear() override;
+  void PrintAll() override;
 
   virtual void SetUnit(const G4String& unit);
 
+ protected:
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
+
+  virtual G4bool IsPassed(G4Step*);
+
  private:
-  G4int HCID;
-  G4int fCurrentTrkID;
-  G4double fCurrent;
-  G4THitsMap<G4double>* EvtMap;
-  G4bool weighted;
+  G4int HCID{-1};
+  G4int fCurrentTrkID{-1};
+  G4double fCurrent{0};
+  G4THitsMap<G4double>* EvtMap{nullptr};
+  G4bool weighted{true};
 };
 
 #endif

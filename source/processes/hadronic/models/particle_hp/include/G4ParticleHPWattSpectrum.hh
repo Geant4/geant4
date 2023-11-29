@@ -29,61 +29,54 @@
 #ifndef G4ParticleHPWattSpectrum_h
 #define G4ParticleHPWattSpectrum_h 1
 
-#include <fstream>
-#include <CLHEP/Units/SystemOfUnits.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4Exp.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4VParticleHPEDis.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include <fstream>
 
 // we will need a List of these .... one per term.
 
 class G4ParticleHPWattSpectrum : public G4VParticleHPEDis
 {
   public:
-  G4ParticleHPWattSpectrum()
-  {
-    expm1 = G4Exp(-1.);
-  }
-  ~G4ParticleHPWattSpectrum()
-  {
-  }
-  
-  inline void Init(std::istream & aDataFile)
-  {
-    theFractionalProb.Init(aDataFile, CLHEP::eV);
-    theApar.Init(aDataFile, CLHEP::eV);
-    theBpar.Init(aDataFile, CLHEP::eV);
-  }
-  
-  inline G4double GetFractionalProbability(G4double anEnergy)
-  {
-    return theFractionalProb.GetY(anEnergy);
-  }
-  
-  G4double Sample(G4double anEnergy);
-  
+    G4ParticleHPWattSpectrum() { expm1 = G4Exp(-1.); }
+    ~G4ParticleHPWattSpectrum() override = default;
+
+    inline void Init(std::istream& aDataFile) override
+    {
+      theFractionalProb.Init(aDataFile, CLHEP::eV);
+      theApar.Init(aDataFile, CLHEP::eV);
+      theBpar.Init(aDataFile, CLHEP::eV);
+    }
+
+    inline G4double GetFractionalProbability(G4double anEnergy) override
+    {
+      return theFractionalProb.GetY(anEnergy);
+    }
+
+    G4double Sample(G4double anEnergy) override;
+
   private:
-  
-  inline G4double Watt(G4double anEnergy, G4double a, G4double b)
-  {
-    G4double energy = anEnergy/CLHEP::eV;
-    G4double result = G4Exp(-energy/a)*std::sinh(std::sqrt(b*energy));
-    return result;
-  }
-  
+    inline G4double Watt(G4double anEnergy, G4double a, G4double b)
+    {
+      G4double energy = anEnergy / CLHEP::eV;
+      G4double result = G4Exp(-energy / a) * std::sinh(std::sqrt(b * energy));
+      return result;
+    }
+
   private:
-  
-  G4double expm1;
-  
-  G4ParticleHPVector theFractionalProb;
-  
-  G4ParticleHPVector theApar;
-  G4ParticleHPVector theBpar;
-  
+    G4double expm1;
+
+    G4ParticleHPVector theFractionalProb;
+
+    G4ParticleHPVector theApar;
+    G4ParticleHPVector theBpar;
 };
 
 #endif

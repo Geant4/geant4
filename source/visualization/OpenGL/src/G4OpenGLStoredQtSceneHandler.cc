@@ -93,7 +93,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // build a path for tree viewer
     G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
     if ( pGLViewer ) {
-      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),pPVModel,currentPOListIndex);
+      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),pPVModel,(G4int)currentPOListIndex);
     }
 
   } else {  // Not from a G4PhysicalVolumeModel.
@@ -104,7 +104,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
       // build a path for tree viewer
       G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
       if ( pGLViewer ) {
-        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
+        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),(G4int)currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
       }
     }
   }

@@ -283,14 +283,8 @@ public: // Without description
   G4FastStep();
   virtual ~G4FastStep();
   
-  // equal/unequal operator
-  G4bool operator==(const G4FastStep &right) const;
-  G4bool operator!=(const G4FastStep &right) const;
-
-protected:
-  // hide copy constructor and assignment operator as protected
-  G4FastStep (const G4FastStep &right);
-  G4FastStep & operator= (const G4FastStep &right);
+  G4FastStep (const G4FastStep &right) = delete;
+  G4FastStep & operator= (const G4FastStep &right) = delete;
 
 public:
   // ===============================================

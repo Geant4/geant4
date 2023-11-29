@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file PrimaryGeneratorAction.hh
+/// \file B5/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the B5::PrimaryGeneratorAction class
 
 #ifndef B5PrimaryGeneratorAction_h

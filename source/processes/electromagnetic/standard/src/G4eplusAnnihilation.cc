@@ -82,8 +82,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eplusAnnihilation::~G4eplusAnnihilation()
-{}
+G4eplusAnnihilation::~G4eplusAnnihilation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -128,7 +127,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
   fParticleChange.InitializeForPostStep(track);
 
   DefineMaterial(track.GetMaterialCutsCouple());
-  size_t idx = CurrentMaterialCutsCoupleIndex();
+  G4int idx = (G4int)CurrentMaterialCutsCoupleIndex();
   G4double ene(0.0);
   G4VEmModel* model = SelectModel(ene, idx);
 
@@ -141,7 +140,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
   model->SampleSecondaries(&secParticles, MaterialCutsCouple(), 
 			   track.GetDynamicParticle(), gammaCut);
 
-  G4int num0 = secParticles.size();
+  G4int num0 = (G4int)secParticles.size();
 
   // splitting or Russian roulette
   if(biasManager) {
@@ -158,7 +157,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
   }
 
   // save secondaries
-  G4int num = secParticles.size();
+  G4int num = (G4int)secParticles.size();
 
   // Check that entanglement is switched on... (the following flag is
   // set by /process/em/QuantumEntanglement).

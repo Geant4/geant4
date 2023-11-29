@@ -42,12 +42,12 @@
 
 class G4MagErrorStepper : public G4MagIntegratorStepper
 {
-  public:  // with description
+  public:
 
     G4MagErrorStepper(G4EquationOfMotion*EqRhs,
                       G4int numberOfVariables,
                       G4int numStateVariables = 12);
-    virtual ~G4MagErrorStepper();
+    ~G4MagErrorStepper() override;
   
     G4MagErrorStepper(const G4MagErrorStepper&) = delete;
     G4MagErrorStepper& operator=(const G4MagErrorStepper&) = delete;
@@ -56,7 +56,7 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
                   const G4double dydx[],
                         G4double h,
                         G4double yout[],
-                        G4double yerr[] );
+                        G4double yerr[] ) override;
       // The stepper for the Runge Kutta integration. The stepsize 
       // is fixed, with the Step size given by h.
       // Integrates ODE starting values y[0 to 6].
@@ -68,7 +68,7 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
                                      G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
 
-    G4double DistChord() const;
+    G4double DistChord() const override;
 
   private:
 

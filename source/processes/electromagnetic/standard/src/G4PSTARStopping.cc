@@ -82,7 +82,7 @@ void G4PSTARStopping::PrintWarning(G4int i) const
 void G4PSTARStopping::Initialise()
 {
   // this method may be called several times during initialisation
-  G4int nmat = G4Material::GetNumberOfMaterials();
+  G4int nmat = (G4int)G4Material::GetNumberOfMaterials();
   if(nmat == nvectors) { return; }
 
   // loop via material list to add extra data
@@ -352,8 +352,7 @@ void G4PSTARStopping::FindData(G4int j, const G4Material* mat)
 
 void G4PSTARStopping::AddData(const G4float* stop, const G4Material* mat)
 {
-  G4PhysicsFreeVector* v = 
-    new G4PhysicsFreeVector(60, T0[0], T0[59], true);
+  auto v = new G4PhysicsFreeVector(60, T0[0], T0[59], true);
   for(size_t i=0; i<60; ++i) { 
     v->PutValues(i, T0[i], ((G4double)stop[i])*fac); 
   }

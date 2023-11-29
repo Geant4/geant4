@@ -46,15 +46,18 @@
 #include "G4DynamicParticle.hh"
 #include "G4ElementTable.hh"
 #include "G4IsotopeList.hh"
+#include "G4HadronicParameters.hh"
 #include "Randomize.hh"
-#include "G4Log.hh" 
+#include "G4Log.hh"
+#include "G4AutoLock.hh"
 
 G4ElementData* G4NeutronCaptureXS::data = nullptr;
 G4String G4NeutronCaptureXS::gDataDirectory = "";
 
-#ifdef G4MULTITHREADED
-  G4Mutex G4NeutronCaptureXS::neutronCaptureXSMutex = G4MUTEX_INITIALIZER;
-#endif
+namespace
+{
+  G4Mutex neutronCaptureXSMutex = G4MUTEX_INITIALIZER;
+}
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
  : G4VCrossSectionDataSet(Default_Name()),
@@ -99,21 +102,35 @@ G4NeutronCaptureXS::IsIsoApplicable(const G4DynamicParticle*,
 
 G4double 
 G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
-					   G4int ZZ, const G4Material*)
+					   G4int Z, const G4Material*)
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin > emax) { return xs; }
+  if(ekin < emax) { xs = ElementCrossSection(ekin, aParticle->GetLogKineticEnergy(), Z); }
+  return xs;
+}
 
+G4double
+G4NeutronCaptureXS::ComputeCrossSectionPerElement(G4double ekin, G4double loge,
+				                  const G4ParticleDefinition*,
+				                  const G4Element* elm,
+				                  const G4Material*)
+{
+  G4double xs = 0.0;
+  if(ekin < emax) { xs = ElementCrossSection(ekin, loge, elm->GetZasInt()); }
+  return xs;
+}
+
+G4double
+G4NeutronCaptureXS::ElementCrossSection(G4double ekin, G4double loge, G4int ZZ)
+{
   G4int Z = std::min(ZZ, MAXZCAPTURE-1);
-  G4double logEkin = aParticle->GetLogKineticEnergy();
+  G4double logEkin = loge;
   if(ekin < elimit) { ekin = elimit; logEkin = logElimit; }
 
   auto pv = GetPhysicsVector(Z);
-  if(pv == nullptr) { return xs; }
-
   const G4double e1 = pv->Energy(1);
-  xs = (ekin >= e1) ? pv->LogVectorValue(ekin, logEkin) 
+  G4double xs = (ekin >= e1) ? pv->LogVectorValue(ekin, logEkin) 
     : (*pv)[1]*std::sqrt(e1/ekin); 
 
 #ifdef G4VERBOSE
@@ -123,6 +140,16 @@ G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   }
 #endif
   return xs;
+}
+
+G4double
+G4NeutronCaptureXS::ComputeIsoCrossSection(G4double ekin, G4double loge,
+				           const G4ParticleDefinition*,
+				           G4int Z, G4int A,
+				           const G4Isotope*, const G4Element*,
+				           const G4Material*)
+{
+  return IsoCrossSection(ekin, loge, Z, A); 
 }
 
 G4double 
@@ -187,7 +214,7 @@ const G4Isotope*
 G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
 				  G4double kinEnergy, G4double logE)
 {
-  size_t nIso = anElement->GetNumberOfIsotopes();
+  G4int nIso = (G4int)anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
 
   //G4cout << "SelectIsotope NIso= " << nIso << G4endl;
@@ -201,7 +228,7 @@ G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
   G4double sum = 0.0;
 
   // is there isotope wise cross section?
-  size_t j;
+  G4int j;
   if(amax[Z] == amin[Z] || Z >= MAXZCAPTURE) {
     for (j = 0; j<nIso; ++j) {
       sum += abundVector[j];
@@ -212,7 +239,7 @@ G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
     }
     return iso;
   } 
-  size_t nn = temp.size();
+  G4int nn = (G4int)temp.size();
   if(nn < nIso) { temp.resize(nIso, 0.); }
 
   for (j=0; j<nIso; ++j) {
@@ -247,18 +274,14 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 
   if(nullptr == data) { 
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&neutronCaptureXSMutex);
+    G4AutoLock l(&neutronCaptureXSMutex);
     if(nullptr == data) { 
-#endif
       isMaster = true;
       data = new G4ElementData();
       data->SetName("NeutronCapture");
       FindDirectoryPath();
-#ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&neutronCaptureXSMutex);
-#endif
+    l.unlock();
   }
 
   // it is possible re-initialisation for the second run
@@ -272,9 +295,9 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     }
   }
   // prepare isotope selection
-  size_t nIso = temp.size();
+  std::size_t nIso = temp.size();
   for ( auto & elm : *table ) {
-    size_t n = elm->GetNumberOfIsotopes();
+    std::size_t n = elm->GetNumberOfIsotopes();
     if(n > nIso) { nIso = n; }
   }
   temp.resize(nIso, 0.0);
@@ -282,34 +305,20 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 const G4String& G4NeutronCaptureXS::FindDirectoryPath()
 {
-  // check environment variable
   // build the complete string identifying the file with the data set
   if(gDataDirectory.empty()) {
-    char* path = std::getenv("G4PARTICLEXSDATA");
-    if (nullptr != path) {
-      std::ostringstream ost;
-      ost << path << "/neutron/cap";
-      gDataDirectory = ost.str();
-    } else {
-      G4Exception("G4NeutronCaptureXS::Initialise(..)","had013",
-		  FatalException,
-		  "Environment variable G4PARTICLEXSDATA is not defined");
-    }
+    std::ostringstream ost;
+    ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/cap";
+    gDataDirectory = ost.str();
   }
   return gDataDirectory;
 }
 
 void G4NeutronCaptureXS::InitialiseOnFly(G4int Z)
 {
-#ifdef G4MULTITHREADED
-   G4MUTEXLOCK(&neutronCaptureXSMutex);
-   if(nullptr == data->GetElementData(Z)) { 
-#endif
-     Initialise(Z);
-#ifdef G4MULTITHREADED
-   }
-   G4MUTEXUNLOCK(&neutronCaptureXSMutex);
-#endif
+  G4AutoLock l(&neutronCaptureXSMutex);
+  if(nullptr == data->GetElementData(Z)) { Initialise(Z); }
+  l.unlock();
 }
 
 void G4NeutronCaptureXS::Initialise(G4int Z)

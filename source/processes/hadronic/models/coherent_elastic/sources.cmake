@@ -43,18 +43,18 @@ geant4_add_module(G4hadronic_coherent_elastic
 
 geant4_module_link_libraries(G4hadronic_coherent_elastic
   PUBLIC
-    G4bosons
     G4globman
     G4hadronic_mgt
     G4hadronic_util
     G4hadronic_xsect
     G4hepnumerics
-    G4heprandom
-    G4materials
     G4partman
     G4track
   PRIVATE
     G4baryons
     G4cuts
+    G4heprandom
     G4ions
-    G4leptons)
+    G4leptons
+    G4materials
+    G4mesons)

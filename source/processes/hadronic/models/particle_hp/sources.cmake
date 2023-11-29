@@ -9,7 +9,6 @@ geant4_add_module(G4had_par_hp
     G4NRESP71M03.hh
     G4ParticleHPList.hh
     G4ParticleHPIsoData.hh
-    G4ParticleHPLevel.hh
     G4ParticleHP2AInelasticFS.hh
     G4ParticleHPNames.hh
     G4ParticleHP2N2AInelasticFS.hh
@@ -66,7 +65,6 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPFissionERelease.hh
     G4ParticleHPFissionFS.hh
     G4ParticleHPFissionSpectrum.hh
-    G4ParticleHPGamma.hh
     G4ParticleHPHash.hh
     G4ParticleHPHe3InelasticFS.hh
     G4ParticleHPInelastic.hh
@@ -98,6 +96,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPNT2AInelasticFS.hh
     G4ParticleHPNTInelasticFS.hh
     G4ParticleHPNXInelasticFS.hh
+    G4ParticleHPNucLevel.hh
     G4ParticleHPParticleYield.hh
     G4ParticleHPPAInelasticFS.hh
     G4ParticleHPPDInelasticFS.hh
@@ -144,7 +143,6 @@ geant4_add_module(G4had_par_hp
 ### Headers of NeutronHP for backward compatibility - start
     G4NeutronHPList.hh
     G4NeutronHPIsoData.hh
-    G4NeutronHPLevel.hh
     G4NeutronHP2AInelasticFS.hh
     G4NeutronHPNames.hh
     G4NeutronHP2N2AInelasticFS.hh
@@ -201,7 +199,6 @@ geant4_add_module(G4had_par_hp
     G4NeutronHPFissionERelease.hh
     G4NeutronHPFissionFS.hh
     G4NeutronHPFissionSpectrum.hh
-    G4NeutronHPGamma.hh
     G4NeutronHPHash.hh
     G4NeutronHPHe3InelasticFS.hh
     G4NeutronHPInelastic.hh
@@ -261,7 +258,6 @@ geant4_add_module(G4had_par_hp
     G4InterpolationManager.cc
     G4NRESP71M03.cc
     G4ParticleHPIsoData.cc
-    G4ParticleHPLevel.cc
     G4ParticleHP2AInelasticFS.cc
     G4ParticleHPList.cc
     G4ParticleHP2N2AInelasticFS.cc
@@ -318,7 +314,6 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPFissionBaseFS.cc
     G4ParticleHPFissionData.cc
     G4ParticleHPFissionFS.cc
-    G4ParticleHPGamma.cc
     G4ParticleHPHe3InelasticFS.cc
     G4ParticleHPInelastic.cc
     G4ParticleHPInelasticBaseFS.cc
@@ -348,6 +343,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPNT2AInelasticFS.cc
     G4ParticleHPNTInelasticFS.cc
     G4ParticleHPNXInelasticFS.cc
+    G4ParticleHPNucLevel.cc
     G4ParticleHPPAInelasticFS.cc
     G4ParticleHPPDInelasticFS.cc
     G4ParticleHPPInelasticFS.cc

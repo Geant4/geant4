@@ -136,7 +136,7 @@ Initialise(const G4ParticleDefinition* /*particle*/,
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 
-  char *path = getenv("G4LEDATA");
+  const char *path = G4FindDataDir("G4LEDATA");
   std::ostringstream eFullFileName;
   eFullFileName << path << "/dna/sigma_excitationvib_e_sanche.dat";
   std::ifstream input(eFullFileName.str().c_str());

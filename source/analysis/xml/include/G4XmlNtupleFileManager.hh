@@ -37,6 +37,7 @@
 #include "tools/waxml/ntuple"
 
 #include <memory>
+#include <utility>
 
 class G4XmlFileManager;
 class G4XmlNtupleManager;
@@ -46,24 +47,21 @@ class G4XmlNtupleFileManager : public G4VNtupleFileManager
   public:
     explicit G4XmlNtupleFileManager(const G4AnalysisManagerState& state);
     G4XmlNtupleFileManager() = delete;
-    virtual ~G4XmlNtupleFileManager() = default;
+    ~G4XmlNtupleFileManager() override = default;
 
-    virtual std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
+    std::shared_ptr<G4VNtupleManager> CreateNtupleManager() override;
 
     // Methods to be performed at file management
-    virtual G4bool ActionAtOpenFile(const G4String& fileName) override;
-    virtual G4bool ActionAtWrite() override;
-    virtual G4bool ActionAtCloseFile(G4bool reset) override;
-    virtual G4bool Reset() override;
+    G4bool ActionAtOpenFile(const G4String& fileName) override;
+    G4bool ActionAtWrite() override;
+    G4bool ActionAtCloseFile() override;
+    G4bool Reset() override;
 
     void SetFileManager(std::shared_ptr<G4XmlFileManager> fileManager);
 
     std::shared_ptr<G4XmlNtupleManager> GetNtupleManager() const;
 
   private:
-    // Methods
-    G4bool CloseNtupleFiles();
-
     // Static data members
     static constexpr std::string_view fkClass { "G4XmlNtupleFileManager" };
 
@@ -76,7 +74,9 @@ class G4XmlNtupleFileManager : public G4VNtupleFileManager
 
 inline void G4XmlNtupleFileManager::SetFileManager(
   std::shared_ptr<G4XmlFileManager> fileManager)
-{ fFileManager = fileManager; }
+{
+  fFileManager = std::move(fileManager);
+}
 
 inline std::shared_ptr<G4XmlNtupleManager> G4XmlNtupleFileManager::GetNtupleManager() const
 { return fNtupleManager; }

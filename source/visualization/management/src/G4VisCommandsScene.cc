@@ -43,6 +43,8 @@
 #include "G4ios.hh"
 #include <sstream>
 
+#define G4warn G4cout
+
 G4VVisCommandScene::G4VVisCommandScene () {}
 
 G4VVisCommandScene::~G4VVisCommandScene () {}
@@ -97,7 +99,7 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -105,14 +107,14 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
 
   if (searchString == "all" && !activate) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
+      G4warn <<
 	"WARNING: You are not allowed to de-activate all models."
 	"\n  Command ignored."
 	     << G4endl;
@@ -132,10 +134,10 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
       any = true;
       runDurationModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName;
-	if (activate) G4cout << "\" activated.";
-	else  G4cout << "\" de-activated.";
-	G4cout << G4endl;
+	G4warn << "Model \"" << modelName;
+	if (activate) G4warn << "\" activated.";
+	else  G4warn << "\" de-activated.";
+	G4warn << G4endl;
       }
     }
   }
@@ -150,10 +152,10 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
       any = true;
       endOfEventModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName;
-	if (activate) G4cout << "\" activated.";
-	else  G4cout << "\" de-activated.";
-	G4cout << G4endl;
+	G4warn << "Model \"" << modelName;
+	if (activate) G4warn << "\" activated.";
+	else  G4warn << "\" de-activated.";
+	G4warn << G4endl;
       }
     }
   }
@@ -168,17 +170,17 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
       any = true;
       endOfRunModelList[i].fActive = activate;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName;
-	if (activate) G4cout << "\" activated.";
-	else  G4cout << "\" de-activated.";
-	G4cout << G4endl;
+	G4warn << "Model \"" << modelName;
+	if (activate) G4warn << "\" activated.";
+	else  G4warn << "\" de-activated.";
+	G4warn << G4endl;
       }
     }
   }
 
   if (!any) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No match found." << G4endl;
+      G4warn << "WARNING: No match found." << G4endl;
     }
     return;
   }
@@ -225,13 +227,13 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (newName == nextName) fId++;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  std::size_t iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     if (sceneList [iScene] -> GetName () == newName) break;
   }
   if (iScene < nScenes) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << newName << "\" already exists."
+      G4warn << "WARNING: Scene \"" << newName << "\" already exists."
 	     << "\n  New scene not created."
 	     << G4endl;
     }
@@ -293,7 +295,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -301,7 +303,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -313,7 +315,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   else if (action == "refresh") {
     if (!pScene->GetRefreshAtEndOfRun()) {
       if (verbosity >= G4VisManager::errors) {
-	G4cerr <<
+	G4warn <<
 	  "ERROR: Cannot refresh events unless runs refresh too."
 	  "\n  Use \"/vis/scene/endOfRun refresh\"."
 	       << G4endl;
@@ -326,7 +328,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: unrecognised parameter \"" << action << "\"."
              << G4endl;
     }
@@ -367,23 +369,23 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   if (!pScene->GetRefreshAtEndOfEvent() &&
       maxNumberOfKeptEvents != 0 &&
       verbosity >= G4VisManager::warnings) {
-    G4cout << "WARNING: ";
+    G4warn << "WARNING: ";
     if (nCurrentlyKept) {
-      G4cout <<
+      G4warn <<
 	"\n  There are currently " << nCurrentlyKept
 	     << " events kept for refreshing and/or reviewing.";
     } else {
-      G4cout << "The vis manager will keep ";
-      if (maxNumberOfKeptEvents < 0) G4cout << "an unlimited number of";
-      else G4cout << "up to " << maxNumberOfKeptEvents;
-      G4cout << " events.";
+      G4warn << "The vis manager will keep ";
+      if (maxNumberOfKeptEvents < 0) G4warn << "an unlimited number of";
+      else G4warn << "up to " << maxNumberOfKeptEvents;
+      G4warn << " events.";
       if (maxNumberOfKeptEvents > 1 || maxNumberOfKeptEvents < 0)
-	G4cout <<
+	G4warn <<
 	  "\n  This may use a lot of memory."
 	  "\n  It may be changed with, e.g., "
 	  "\"/vis/scene/endOfEventAction accumulate 10\".";
     }
-    G4cout << G4endl;
+    G4warn << G4endl;
   }
 }
 
@@ -426,7 +428,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -434,7 +436,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -442,7 +444,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   if (action == "accumulate") {
     if (pScene->GetRefreshAtEndOfEvent()) {
       if (verbosity >= G4VisManager::errors) {
-	G4cerr <<
+	G4warn <<
 	  "ERROR: Cannot accumulate runs unless events accumulate too."
 	  "\n  Use \"/vis/scene/endOfEventAction accumulate\"."
 	       << G4endl;
@@ -458,7 +460,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
 	"ERROR: unrecognised parameter \"" << action << "\"."
              << G4endl;
     }
@@ -512,9 +514,9 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
   if (currentScene) currentName = currentScene->GetName();
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
+  std::size_t iScene, nScenes = sceneList.size ();
   G4bool found = false;
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     G4Scene* pScene = sceneList [iScene];
     const G4String& iName = pScene -> GetName ();
     if (name != "all") {
@@ -529,13 +531,13 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
     }
     G4cout << " scene \"" << iName << "\"";
     if (verbosity >= G4VisManager::warnings) {
-      G4int i;
+      std::size_t i;
       G4cout << "\n  Run-duration models:";
-      G4int nRunModels = pScene -> GetRunDurationModelList ().size ();
+      std::size_t nRunModels = pScene -> GetRunDurationModelList ().size ();
       if (nRunModels == 0) {
 	G4cout << " none.";
       }
-      for (i = 0; i < nRunModels; i++) {
+      for (i = 0; i < nRunModels; ++i) {
 	if (pScene -> GetRunDurationModelList()[i].fActive)
 	  G4cout << "\n   Active:   ";
 	else G4cout << "\n   Inactive: ";
@@ -543,11 +545,11 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
 	G4cout << pModel -> GetGlobalDescription ();
       }
       G4cout << "\n  End-of-event models:";
-      G4int nEOEModels = pScene -> GetEndOfEventModelList ().size ();
+      std::size_t nEOEModels = pScene -> GetEndOfEventModelList ().size ();
       if (nEOEModels == 0) {
 	G4cout << " none.";
       }
-      for (i = 0; i < nEOEModels; i++) {
+      for (i = 0; i < nEOEModels; ++i) {
 	if (pScene -> GetEndOfEventModelList()[i].fActive)
 	  G4cout << "\n   Active:   ";
 	else G4cout << "\n   Inactive: ";
@@ -555,11 +557,11 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
 	G4cout << pModel -> GetGlobalDescription ();
       }
       G4cout << "\n  End-of-run models:";
-      G4int nEORModels = pScene -> GetEndOfRunModelList ().size ();
+      std::size_t nEORModels = pScene -> GetEndOfRunModelList ().size ();
       if (nEORModels == 0) {
 	G4cout << " none.";
       }
-      for (i = 0; i < nEORModels; i++) {
+      for (i = 0; i < nEORModels; ++i) {
 	if (pScene -> GetEndOfRunModelList()[i].fActive)
 	  G4cout << "\n   Active:   ";
 	else G4cout << "\n   Inactive: ";
@@ -573,11 +575,11 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << G4endl;
   }
   if (!found) {
-    G4cerr << "No scenes found";
+    G4warn << "No scenes found";
     if (name != "all") {
-      G4cerr << " of name \"" << name << "\"";
+      G4warn << " of name \"" << name << "\"";
     }
-    G4cerr << "." << G4endl;
+    G4warn << "." << G4endl;
   }
 }
 
@@ -637,15 +639,15 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     fpVisManager -> SetAvailableSceneHandlers ();
 
   // Check scene name.
-  const G4int nScenes = sceneList.size ();
-  G4int iScene;
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  const std::size_t nScenes = sceneList.size ();
+  std::size_t iScene;
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     G4Scene* scene = sceneList [iScene];
     if (sceneName == scene -> GetName ()) break;
   }
   if (iScene >= nScenes ) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
+      G4warn << "WARNING: Scene \"" << sceneName << "\" not found."
 	"\n  /vis/scene/list to see scenes."
 	     << G4endl;
     }
@@ -657,7 +659,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     fpVisManager -> GetCurrentSceneHandler();
   if (!pCurrentSceneHandler) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current scene handler."
+      G4warn << "WARNING: No current scene handler."
 	     << G4endl;
     }
     return;
@@ -665,7 +667,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
   if (!pCurrentViewer) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current viewer."
+      G4warn << "WARNING: No current viewer."
 	     << G4endl;
     }
     return;
@@ -673,7 +675,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene();
   if (!pCurrentScene) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current scene."
+      G4warn << "WARNING: No current scene."
 	     << G4endl;
     }
     return;
@@ -687,8 +689,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   // For each scene handler, if it contains the scene, clear and
   // rebuild the graphical database, then for each viewer set (make
   // current), clear, (re)draw, and show.
-  const G4int nSceneHandlers = sceneHandlerList.size ();
-  for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
+  const std::size_t nSceneHandlers = sceneHandlerList.size ();
+  for (std::size_t iSH = 0; iSH < nSceneHandlers; ++iSH) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
     G4Scene* aScene = aSceneHandler -> GetScene ();
     if (aScene) {
@@ -696,8 +698,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
       if (sceneName == aSceneName) {
 	aScene->CalculateExtent();  // Check and recalculate extent
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
-	const G4int nViewers = viewerList.size ();
-	for (G4int iV = 0; iV < nViewers; iV++) {
+	const std::size_t nViewers = viewerList.size ();
+	for (std::size_t iV = 0; iV < nViewers; ++iV) {
 	  G4VViewer* aViewer = viewerList [iV];
 	  // Force rebuild of graphical database, if any.
 	  aViewer -> NeedKernelVisit();
@@ -740,7 +742,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     }
     else {
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "WARNING: G4VisCommandSceneNotifyHandlers: scene handler \""
+	G4warn << "WARNING: G4VisCommandSceneNotifyHandlers: scene handler \""
 	       << aSceneHandler->GetName()
 	       << "\" has a null scene."
 	       << G4endl;
@@ -761,7 +763,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   // Take care of special case of scene handler with no viewer yet.  
   if (pCurrentSceneHandler) {
     G4ViewerList& viewerList = pCurrentSceneHandler -> SetViewerList ();
-    const G4int nViewers = viewerList.size ();
+    const std::size_t nViewers = viewerList.size ();
     if (nViewers) {
       pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
       // JA: I don't think we need this. SetView will be called when needed.
@@ -807,7 +809,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -815,7 +817,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4warn <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -831,7 +833,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
       runDurationModelList.erase(runDurationModelList.begin()+i);
       any = true;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+	G4warn << "Model \"" << modelName << "\" removed." << G4endl;
       }
       break;  // Allow only one model at a time to be removed.
     }
@@ -846,7 +848,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
       endOfEventModelList.erase(endOfEventModelList.begin()+i);
       any = true;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+	G4warn << "Model \"" << modelName << "\" removed." << G4endl;
       }
       break;  // Allow only one model at a time to be removed.
     }
@@ -861,7 +863,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
       endOfRunModelList.erase(endOfRunModelList.begin()+i);
       any = true;
       if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Model \"" << modelName << "\" removed." << G4endl;
+	G4warn << "Model \"" << modelName << "\" removed." << G4endl;
       }
       break;  // Allow only one model at a time to be removed.
     }
@@ -869,7 +871,7 @@ void G4VisCommandSceneRemoveModel::SetNewValue (G4UIcommand*,
 
   if (!any) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No match found." << G4endl;
+      G4warn << "WARNING: No match found." << G4endl;
     }
     return;
   }
@@ -903,13 +905,13 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4String& selectName = newValue;
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
+  std::size_t iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; ++iScene) {
     if (sceneList [iScene] -> GetName () == selectName) break;
   }
   if (iScene >= nScenes) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << selectName
+      G4warn << "WARNING: Scene \"" << selectName
       << "\" not found - \"/vis/scene/list\" to see possibilities."
       << G4endl;
     }
@@ -947,7 +949,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
   fpVisManager -> GetCurrentSceneHandler();
   if (!pCurrentSceneHandler) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current scene handler."
+      G4warn << "WARNING: No current scene handler."
       << G4endl;
     }
     return;
@@ -955,7 +957,7 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
   G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
   if (!pCurrentViewer) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current viewer."
+      G4warn << "WARNING: No current viewer."
       << G4endl;
     }
     return;
@@ -963,18 +965,18 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
   G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene();
   if (!pCurrentScene) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: No current scene."
+      G4warn << "WARNING: No current scene."
       << G4endl;
     }
     return;
   }
 
   G4cout << "\n  Run-duration models:";
-  G4int nRunModels = pCurrentScene -> GetRunDurationModelList ().size ();
+  std::size_t nRunModels = pCurrentScene -> GetRunDurationModelList ().size ();
   if (nRunModels == 0) {
     G4cout << " none.";
   }
-  for (G4int i = 0; i < nRunModels; i++) {
+  for (std::size_t i = 0; i < nRunModels; ++i) {
     if (pCurrentScene -> GetRunDurationModelList()[i].fActive)
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";
@@ -985,11 +987,11 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
     DrawExtent(transformedExtent);
   }
   G4cout << "\n  End-of-event models:";
-  G4int nEOEModels = pCurrentScene -> GetEndOfEventModelList ().size ();
+  std::size_t nEOEModels = pCurrentScene -> GetEndOfEventModelList ().size ();
   if (nEOEModels == 0) {
     G4cout << " none.";
   }
-  for (G4int i = 0; i < nEOEModels; i++) {
+  for (std::size_t i = 0; i < nEOEModels; ++i) {
     if (pCurrentScene -> GetEndOfEventModelList()[i].fActive)
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";
@@ -1000,11 +1002,11 @@ void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
     DrawExtent(transformedExtent);
   }
   G4cout << "\n  End-of-run models:";
-  G4int nEORModels = pCurrentScene -> GetEndOfRunModelList ().size ();
+  std::size_t nEORModels = pCurrentScene -> GetEndOfRunModelList ().size ();
   if (nEORModels == 0) {
     G4cout << " none.";
   }
-  for (G4int i = 0; i < nEORModels; i++) {
+  for (std::size_t i = 0; i < nEORModels; ++i) {
     if (pCurrentScene -> GetEndOfRunModelList()[i].fActive)
       G4cout << "\n   Active:   ";
     else G4cout << "\n   Inactive: ";

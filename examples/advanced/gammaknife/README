@@ -73,7 +73,7 @@ GPS (General Particle Source) class is used to generate the primary events.The G
 
 ----> GEOMETRICAL SET-UP.
  
-The Gamma-Knife unit consists of a cast-iron body containing the 60Co sources and the collimation system. Sources are displaced along five parallel rings at the same distance from the isocentre. Depending on the specific ring, sources are located with a different spacing, respectively with an angle of 7.6◦, 8◦, 9◦, 9◦ and 10◦. These angles represent the rotation angles of the scoring mesh (contained in the MachineAngle.in file). Gamma radiation (1.17 and 1.33 MeV), emitted by Co60 sources arranged in a hemispherical shape, focuses on the isocentre, located 401 mm far from the source. The radiation beam is collimated by means of fixed and mobile collimation systems in order to obtain four possible beam diameters at the isocentre: 4, 8, 14 and 18 mm.
+The Gamma-Knife unit consists of a cast-iron body containing the 60Co sources and the collimation system. Sources are displaced along five parallel rings at the same distance from the isocentre. Depending on the specific ring, sources are located with a different spacing, respectively with an angle of 7.6°, 8°, 9°, 9° and 10°. These angles represent the rotation angles of the scoring mesh (contained in the MachineAngle.in file). Gamma radiation (1.17 and 1.33 MeV), emitted by Co60 sources arranged in a hemispherical shape, focuses on the isocentre, located 401 mm far from the source. The radiation beam is collimated by means of fixed and mobile collimation systems in order to obtain four possible beam diameters at the isocentre: 4, 8, 14 and 18 mm.
 
 The elements simulated are:
 

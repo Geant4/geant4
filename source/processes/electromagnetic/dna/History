@@ -1,21 +1,251 @@
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+# Category emdna History
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------*
+-------------------------------------------------------------------------------
 
-18-05-2022, G. Cosmo, emdna-V10-07-16
+## 2023-06-10 Hoang Tran (emdna-V11-01-15)
+- minor correction for DNA material in option6
+
+## 2023-06-09 Hoang Tran (emdna-V11-01-14)
+- use analytical method for DNA material in option6, water is unchanged
+
+## 2023-06-03 Vladimir Ivanchenko (emdna-V11-01-13)
+- G4DNARuddIonisationExtendedModel - model re-written: shared date between
+  threads, applicable for scaled energy interval 100 eV to 100 MeV, if for
+  an ion data is not available proton x-section and effective charge are
+  used, sampling of delta-electron is done using two regions regression method
+
+## 2023-05-25 Hoang Tran (emdna-V11-01-12)
+- Modified DNA cross section file name to new G4EMLOW8.4
+
+## 2023-05-19 Hoang Tran (emdna-V11-01-11)
+- Add DNA cross section to dna_option6
+
+## 2023-05-17 Hoang Tran (emdna-V11-01-10)
+- Fix Compilation warnings on XCode
+
+## 2023-05-04 Hoang Tran (emdna-V11-01-09)
+- correct the initial values of G4DNAEventScheduler
+
+## 2023-04-28 Hoang Tran (emdna-V11-01-08)
+- add time structure (pulsed beam) to water radiolysis (G4VUserPulseInfo)
+
+## 2023-04-26 Hoang Tran (emdna-V11-01-07)
+- correct KDTree bug
+
+## 2023-03-24 Hoang Tran (emdna-V11-01-06)
+- icsd physicslist: deleted unused model,
+- Apdated RegisterModel function with new structure
+- added model data to G4DNAMaterialManager singleton
+
+## 2023-03-08 Gabriele Cosmo (emdna-V11-01-05)
+- Fixed compilation warning on macOS/XCode for implicit type conversion
+  in G4DNAVacuumModel::Initialise().
+
+## 2023-02-09 Hoang Tran (emdna-V11-01-04)
+- Introduced G4DNAMaterialManager to manage available DNA material
+and keeps DNA cross section data in one thread.
+- minor change in G4VDNAModel
+
+## 2023-01-27 Hoang Tran (emdna-V11-01-03)
+- reorganize multiple material model of PTB model.
+G4VDNAModel plays like a data layer for multiple material model.
+The concrete models are independent of G4DNAModelInterface.
+
+## 2023-01-17 Hoang Tran (emdna-V11-01-02)
+- replaced string to material index and clean the files(G4DNAPTBExcitationModel,
+G4DNAPTBIonisationModel, G4DNAPTBElasticModel,G4DNAPTBIonisationStructure,
+G4DNAPTBExcitationStructure) - PTB models
+- added material pointer members for each concrete models(PTB models)
+- removed unused objects (G4DataVector())
+
+## 2023-01-06 Hoang Tran (emdna-V11-01-01)
+- clean G4DNAModelInterface file for the model combination of different materials
+
+## 2022-12-12 Hoang Tran (emdna-V11-01-00)
+- fix coverity of G4DNARuddIonisationExtendedModel, G4DNADingfelderChargeIncreaseModel
+(Uninitialized scalar variable) from cand1 analysis
+
+## 2022-11-24 Vladimir Ivanchenko (emdna-V11-00-39)
+- G4DNARuddIonisationExtendedModel - fixed common work between DNA physics and
+    radioactive decay module - before this update test2.in macro crash, because 
+    only 5 ions have data needed for this model; with this modification of the
+    model scaling relation to the carbon ion is used for any ion, which has
+    no data; low-energy limit is used now more correctly - all ions are stopped 
+    but not killed, because they may have radioactive decay at rest; all commented
+    lines are removed from the class
+
+## 2022-11-23 Gabriele Cosmo (emdna-V11-00-38)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-22 Hoang Tran (emdna-V11-00-37)
+- delete unused tests in dna (G4DNAProcessTest.cc and G4DNATest.cc)
+
+## 2022-11-18 Gabriele Cosmo (emdna-V11-00-36)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-08 Vladimir Ivanchenko (emdna-V11-00-35)
+- G4DNAUeharaScreenedRutherfordElasticModel - code cleanup; introduced 
+    low and high energy limit for the model; removed missleading G4Exception
+
+## 2022-11-01 Hoang Tran (emdna-V11-00-34)
+- Fix Coverity issues for ref-09
+
+## 2022-10-10 Hoang Tran (emdna-V11-00-33)
+- minor correction of IRT-syn model (chemistry). Contact reactions should not happen
+after 1 ps.
+
+## 2022-10-21 Yann Perrot, Le Tuan Anh (emdna-V11-00-32)
+- Add nitrogen models from PTra code
+
+## 2022-10-10 Hoang Tran (emdna-V11-00-31)
+- Fixed minor mistake of file name in G4DNARPWBAIonisationModel,
+- Added protection for HighEnergyLimit/LowEnergyLimit in G4DNARPWBAIonisationModel and
+G4DNARPWBAExcitationModel
+
+## 2022-10-07 Gabriele Cosmo (emdna-V11-00-30)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4ITNavigator2.
+
+## 2022-10-05 Hoang Tran (emdna-V11-00-29)
+- Fix user's report for IRT model.
+   If the first IRTSampling won't give any reactions, end the simu. No StepProcessor in this simu
+
+## 2022-10-03 Hoang Tran (emdna-V11-00-28)
+- Fix Coverity static analysis for ref-08
+ uninit_member in G4DNAMillerGreenExcitationModel, G4DNARuddIonisationModel, G4DNADingfelderChargeDecreaseModel,
+ G4DNADingfelderChargeIncreaseModel,G4DNARuddIonisationExtendedModel, G4DNAGillespieDirectMethod
+ Use auto & instead of auto : G4ITFinder, G4DNAScavengerMaterial, G4MoleculeCounter, G4OCTREE
+
+## 2022-09-08 Hoang Tran (emdna-V11-00-27)
+- Resolve dependency inconsistencies :
+    dna/management/include/G4ChemicalMoleculeFinder.hh includes G4Molecule.hh from G4emdna-molman
+    dna/management/include/G4UserMeshAction.hh includes G4DNAMesh.hh from G4emdna-utils
+    dna/management/include/G4OctreeFinder.hh includes G4IRTUtils.hh from G4emdna-utils
+
+## 2022-09-05 Ben Morgan (emdna-V11-00-26)
+- Partially resolve dependency inconsistencies
+  - NB: cannot be resolved fully without introducing a cycle between
+    G4emdna-man, G4emdna-molman, G4emdna-utils.
+
+## 2022-09-01 Seth R Johnson (emdna-V11-00-25)
+- Define G4CT_MAX_COUNT for changing "compile time counter" depth to fix build
+  errors on NVHPC compiler.
+
+## 2022-08-30 Vladimir Ivanchenko (emdna-V11-00-24)
+- G4DNAExcitation, G4DNAVibExcitation, G4DNARotExcitation - class 
+    cleanup according to the recent G4VEmProcess base class; model
+    headers are moved to source; C++11 keywards are introduced. 
+
+## 2022-06-21 Igor Semeniouk (emdna-V11-00-23)
+- G4DNABornIonisationModel1.cc, G4DNACPA100ElasticModel.cc,
+  G4DNACPA100IonisationModel.cc, G4DNAChampionElasticModel.cc,
+  G4DNAELSEPAElasticModel.cc, G4DNAEmfietzoglouIonisationModel.cc,
+  G4DNAIonElasticModel.cc, G4DNAQuinnPlasmonExcitationModel.cc,
+  G4DNARPWBAIonisationModel.cc, G4DNARelativisticIonisationModel.cc,
+  G4DNASancheExcitationModel.cc :
+  use G4FindDataDir("G4LEDATA") to find dataset path on place of getenv.
+
+## 2022-06-03 Hoang Tran (emdna-V11-00-22)
+- correct DNA ion definitions in G4DNARuddIonisationExtendedModel.
+
+## 2022-06-01 Hoang Tran (emdna-V11-00-21)
+- G4Octree : fixed Coverity warning.
+
+## 2022-05-24 Hoang Tran (emdna-V11-00-20)
+- update data structure to improve performance of the mesoscopic model.
+
+## 2022-05-18 Gabriele Cosmo (emdna-V11-00-19)
 - G4ITTransportation: fixed misuse of bitwise '|' operator instead of logical.
+
+## 2022-05-12 Sergio Losilla (emdna-V11-00-18)
+- Added missing headers.
+
+## 2022-05-11 Hoang Tran (emdna-V11-00-17)
+- change the scavenging filter of the IRT beyond 1 us proposed by Naoki and Jose
+
+## 2022-05-02 Hoang Tran (emdna-V11-00-16)
+- Add localthread for fUse of G4VMoleculeCounter
+
+## 2022-04-27 Miguel A. Cortes-Giraldo and Hoang Tran (emdna-V11-00-15)
+- Incorporation of model based on RPWBA to transport protons at 100-300 MeV.
+- Added G4DNARPWBAExcitationModel, G4DNARPWBAIonisationModel.
+
+## 2022-04-25 Hoang Tran (emdna-V11-00-14)
+- add UserBrownianAction in G4DNABrownianTransportation and
+  G4DNAMolecularDissociation
+- replace G4int by int64_t for width integer types
+- add fResetScavenger in G4SchedulerMessenger
+
+## 2022-04-14 Paolo Dondero (emdna-V11-00-13)
+- save local instances for recurrent access to particle definition in 
+  G4DNAMillerGreenExcitationModel, G4DNARuddIonisationExtendedModel and
+  G4DNARuddIonisationModel
+- use G4Pow and G4Log instead of std::pow and std::log
+- inside G4DNARuddIonisationExtendedModel commented out ions that are not
+  inside G4DNAGenericIonsManager
+
+## 2022-04-14 Hoang Tran (emdna-V11-00-12)
+- Debug the report #2235 which might be related to KDtree algorithm
+- Clean code
+- Delete G4ITFinder.cc
+
+## 2022-04-04 Paolo Dondero (emdna-V11-00-11)
+- save local instances for recurrent access to particle definition in 
+G4DNADingfelderChargeDecreaseModel and G4DNADingfelderChargeIncreaseModel
+- use G4Pow and G4Log instead of std::pow and std::log
+
+## 2022-03-18 SI (emdna-V11-00-10)
+- add protection in G4DNACPA100IonisationModel for cum. xs interpolation
+
+## 2022-03-15 Hoang Tran (emdna-V11-00-09)
+- remove macro commands to control the chemistry models in G4SchedulerMessenger
+(creating models in G4SchedulerMessenger can make circular dependency problems)
+- add flag OctreeFinder in IRT_syn's Initialize()
+
+## 2022-03-04 Hoang Tran (emdna-V11-00-08)
+- add macro commands to control the chemistry models,
+parameters including the chemical molecules and reaction list involved in the radiolysis
+
+## 2022-02-18 Hoang Tran (emdna-V11-00-07)
+- optimize IRT-syn model, use reaction radius and reaction type from the reaction table
+- delete G4VReactionType, G4DNAReactionTypeManager, G4DNATotallyDiffusionControlled,
+G4DNAPartiallyDiffusionControlled
+- delete G4DNAIRT_geomtries
+
+## 2022-02-17 Jonas Hahnfeld (emdna-V11-00-06)
+- `G4ITTransportation`: Make `PrepareState` more function-like, expect semicolon
+- `G4DNAPolyNucleotideReactionProcess`:
+  - Move `PrepareState` and `State` macros into `.cc` file
+  - Make `PrepareState` more function-like, expect semicolon
+  - Move variable `pMoleculeA` under `G4VERBOSE`
+
+## 2022-02-10 Hoang Tran (emdna-V11-00-05)
+- add the condition of water material for the OUTSIDE_OF_MOTHER_VOLUME
+warning in G4DNAMolecularDissociation::DecayIt()
+
+## 2022-02-3 Hoang Tran (emdna-V11-00-04)
+- modify the macro in G4Molecule.cc and G4ITType.hh for linker problems on Windows
+
+## 2022-01-18 Jonas Hahnfeld (emdna-V11-00-03)
+- Prefer pointer to `const G4Material` if possible
+
+## 2022-01-17 Jonas Hahnfeld (emdna-V11-00-02)
+- Remove useless `const_cast` of `G4VSensitiveDetector`
+
+## 2021-12-23 Hoang Tran (emdna-V11-00-01)
+- add G4DNAPolyNucleotideReactionProcess, G4VDNAHitModel
+  files for DNA damage applications
+
+## 2021-12-10 Ben Morgan (emdna-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 8-11-2021, H. Tran, emdna-V10-07-15
 - corrected Circular dependencies for mesoscopic model

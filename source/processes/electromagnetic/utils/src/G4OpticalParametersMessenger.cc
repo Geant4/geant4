@@ -86,7 +86,7 @@ G4OpticalParametersMessenger::G4OpticalParametersMessenger(
     new G4UIcommand("/process/optical/processActivation", this);
   fActivateProcessCmd->SetGuidance(
     "Activate/deactivate the specified optical process");
-  G4UIparameter* par = new G4UIparameter("proc_name", 's', false);
+  auto par = new G4UIparameter("proc_name", 's', false);
   G4String candidates;
   for(G4int i = 0; i < kNoProcess; ++i)
   {

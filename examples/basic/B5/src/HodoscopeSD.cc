@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file HodoscopeSD.cc
+/// \file B5/src/HodoscopeSD.cc
 /// \brief Implementation of the B5::HodoscopeSD class
 
 #include "HodoscopeSD.hh"
@@ -47,11 +47,6 @@ HodoscopeSD::HodoscopeSD(G4String name)
 {
   collectionName.insert( "hodoscopeColl");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HodoscopeSD::~HodoscopeSD()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

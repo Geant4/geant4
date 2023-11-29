@@ -61,8 +61,8 @@ class G4ECDecay : public G4NuclearDecay
 
   private:
     const G4double transitionQ;
-    G4bool applyARM;
     G4double PL1,PL2,PM1,PM2,PN1,PN2;
+    G4bool applyARM;
 
     //Ratio of subshells probability
     static const G4double PL2overPL1[100];

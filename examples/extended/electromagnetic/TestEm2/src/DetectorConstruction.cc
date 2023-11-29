@@ -50,14 +50,10 @@
 #include "G4UnitsTable.hh"
 
 #include "G4AutoDelete.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- :G4VUserDetectorConstruction(),
-  fNLtot(40),fNRtot(50),fDLradl(0.5),fDRradl(0.1),
-  fDLlength(0.),fDRlength(0.),fMaterial(nullptr),
-  fEcalLength(0.),fEcalRadius(0.),
-  fSolidEcal(nullptr),fLogicEcal(nullptr),fPhysiEcal(nullptr)
 {
   DefineMaterials();
   SetMaterial("G4_PbWO4");

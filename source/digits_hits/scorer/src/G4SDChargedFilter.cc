@@ -44,15 +44,9 @@
 
 G4SDChargedFilter::G4SDChargedFilter(G4String name)
   : G4VSDFilter(name)
-{
-  ;
-}
-
-G4SDChargedFilter::~G4SDChargedFilter() { ; }
+{}
 
 G4bool G4SDChargedFilter::Accept(const G4Step* aStep) const
 {
-  if(aStep->GetPreStepPoint()->GetCharge() != 0.)
-    return TRUE;
-  return FALSE;
+  return aStep->GetPreStepPoint()->GetCharge() != 0.;
 }

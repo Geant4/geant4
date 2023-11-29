@@ -131,9 +131,7 @@ void G4eBremParametrizedModel::InitialiseConstants()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremParametrizedModel::~G4eBremParametrizedModel()
-{
-}
+G4eBremParametrizedModel::~G4eBremParametrizedModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -525,8 +523,7 @@ void G4eBremParametrizedModel::SampleSecondaries(
 					      couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
-						   gammaEnergy);
+  auto gamma = new G4DynamicParticle(theGamma,gammaDirection, gammaEnergy);
   vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
@@ -540,7 +537,7 @@ void G4eBremParametrizedModel::SampleSecondaries(
   if(gammaEnergy > SecondaryThreshold()) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
     fParticleChange->SetProposedKineticEnergy(0.0);
-    G4DynamicParticle* el = 
+    auto el =
       new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
 			    direction, finalE);
     vdp->push_back(el);

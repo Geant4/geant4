@@ -114,7 +114,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(
 
 /////////////////////////////////////////////////////////////////////////
 // Destructor
-G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat() {}
+G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat() = default;
 
 G4bool G4SynchrotronRadiationInMat::IsApplicable(
   const G4ParticleDefinition& particle)
@@ -311,7 +311,7 @@ G4VParticleChange* G4SynchrotronRadiationInMat::PostStepDoIt(
       gammaPolarization               = gammaPolarization.unit();
 
       // create G4DynamicParticle object for the SR photon
-      G4DynamicParticle* aGamma =
+      auto aGamma =
         new G4DynamicParticle(G4Gamma::Gamma(), gammaDirection, energyOfSR);
       aGamma->SetPolarization(gammaPolarization.x(), gammaPolarization.y(),
                               gammaPolarization.z());

@@ -1,23 +1,105 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Category hadr-proc History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/processes directory
-            ---------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-06-17 Vladimir Ivanchenko (hadr-proc-V11-01-11)
+- G4NuVacOscProcess - clean-up to resolve Coverity report, removed unused class
+    memebrs
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2023-06-09 Vladimir Ivanchenko (hadr-proc-V11-01-10)
+- G4TauNeutrinoNucleusProcess - clean-up constructor and destructor to resolve
+    Coverity warning
 
-09 February 2022 Gabriele Cosmo (hadr-proc-V11-00-02)
------------------------------------------------------
+## 2023-04-13 Vladimir Grichine (hadr-proc-V11-01-09)
+- G4NuVacOscProcess - new process for vacuum 3- flavor neutrino oscillation
+
+## 2023-02-24 Vladimir Ivanchenko (hadr-proc-V11-01-08)
+- G4NeutronGeneralProcess - added two access methods and removed possible
+    variable shadowing
+
+## 2023-02-18 Vladimir Grichine (hadr-proc-V11-01-07)
+- G4ElNeutrinoNucleusProcess - update the process name to be el-neutrino-nucleus
+
+
+## 2023-02-16 Vladimir Grichine (hadr-proc-V11-01-06)
+- G4(El,Tau)NeutrinoNucleusProcess - neutrino XS biasing in selected detector-region update
+
+
+## 2023-02-15 Vladimir Grichine (hadr-proc-V11-01-05)
+- G4MuNeutrinoNucleusProcess - neutrino XS biasing in selected detector-region update
+
+
+## 2023-02-13 Vladimir Grichine (hadr-proc-V11-01-04)
+- G4NeutrinoElectronProcess - neutrino XS biasing in selected detector-region update
+
+## 2023-02-10 Vladimir Ivanchenko (hadr-proc-V11-01-03)
+- G4NeutronGeneralProcess - added extra Set method
+
+## 2023-02-01 Vladimir Ivanchenko (hadr-proc-V11-01-02)
+- G4HadronElasticProcess, G4NeutronGeneralProcess - fixed problems identified 
+    by Coverity
+
+## 2023-01-17 Vladimir Ivanchenko (hadr-proc-V11-01-01)
+- G4HadronElasticProcess - removed obsolete (try/catch construction not
+    applicable for hadron elastic models; added forgotten integral approach
+    for charged particles
+
+## 2022-12-30 Vladimir Ivanchenko (hadr-proc-V11-01-00)
+- G4NeutronGeneralProcess - optimized code: initialisation methods are
+    moved to the source, avoid double instantiation of capture cross section;
+    reduced number of calls to cross section, added cross section data store
+    pointer
+
+## 2022-11-26 Gabriele Cosmo (hadr-proc-V11-00-11)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-02 Vladimir Grichine (hadr-proc-V11-00-10)
+- G4TauNeutrinoNucleusProcess - added for tau-neutrino hadronic inelastic processes 
+
+## 2022-09-25 Vladimir Ivanchenko (hadr-proc-V11-00-09)
+- G4NeutronGeneralProcess - added SetTimeLimit(..) method 
+
+## 2022-09-05 Ben Morgan (hadr-proc-V11-00-08)
+- Update dependencies to address warnings from consistency check
+
+## 2022-08-30 Vladimir Ivanchenko (hadr-proc-V11-00-07)
+- G4NeutronGeneralProcess - added fatal G4Exception at initialisation 
+    in the case of incomplete configuration of the process
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-proc-V11-00-06)
+- G4NeutronGeneralProcess - use enumerator for neutron general process
+    instead of hard-coded number; do not apply energy cut
+
+## 2022-08-22 Vladimir Ivanchenko (hadr-proc-V11-00-05)
+- G4NeutronGeneralProcess - make it work with QBBC physics list
+- G4HadronElasticProcess - extended debug printout 
+
+## 2022-08-18 Vladimir Ivanchenko (hadr-proc-V11-00-04)
+- G4NeutronGeneralProcess - improved the code, added possible cut on
+    neutron kinetic energy, always elastic initialisation/printout 
+    before the inelastic
+- G4NeutronCaptureProcess - avoid double instantiation of the cross 
+    section
+
+## 2022-08-13 Vladimir Ivanchenko (hadr-proc-V11-00-03)
+- G4NeutronGeneralProcess - new combined process
+
+## 2022-02-09 Gabriele Cosmo (hadr-proc-V11-00-02)
 - Fixed compilation warning on Intel compilers for unused variables.
+
+## 2022-01-18 Jonas Hahnfeld (hadr-proc-V11-00-01)
+- Prefer pointer to `const G4Material` if possible.
+
+## 2021-12-10 Ben Morgan (hadr-proc-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 04 August 2021 Alberto Ribon (hadr-proc-V10-07-06)
 --------------------------------------------------

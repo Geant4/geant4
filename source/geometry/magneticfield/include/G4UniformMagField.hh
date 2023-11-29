@@ -40,7 +40,7 @@
 
 class G4UniformMagField : public G4MagneticField
 {
-  public:  // with description
+  public:
   
     G4UniformMagField(const G4ThreeVector& FieldVector);
       // A field with value equal to FieldVector.
@@ -49,21 +49,21 @@ class G4UniformMagField : public G4MagneticField
                       G4double vTheta,
                       G4double vPhi);
 
-    virtual ~G4UniformMagField() override;
+   ~G4UniformMagField() override;
 
     G4UniformMagField(const G4UniformMagField& p);
     G4UniformMagField& operator = (const G4UniformMagField& p);
       // Copy constructor and assignment operator.
 
-    virtual void GetFieldValue(const G4double yTrack[4],
-                               G4double* MagField) const override final;
+    void GetFieldValue(const G4double yTrack[4],
+                               G4double* MagField) const override;
 
     void SetFieldValue(const G4ThreeVector& newFieldValue);
 
     G4ThreeVector GetConstantFieldValue() const;
       // Return the field value
     
-    virtual G4Field* Clone() const override;
+    G4Field* Clone() const override;
 
   private:
 

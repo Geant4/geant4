@@ -44,7 +44,7 @@ class G4VExceptionHandler
 {
  public:
   G4VExceptionHandler();
-  virtual ~G4VExceptionHandler();
+  virtual ~G4VExceptionHandler() = default;
   G4bool operator==(const G4VExceptionHandler& right) const;
   G4bool operator!=(const G4VExceptionHandler& right) const;
 

@@ -44,8 +44,6 @@ void G4StatDouble::reset()
   m_scale   = 1.;
 }
 
-G4StatDouble::~G4StatDouble() {}
-
 void G4StatDouble::fill(G4double value, G4double weight)
 {
   m_sum_wx += value * weight;

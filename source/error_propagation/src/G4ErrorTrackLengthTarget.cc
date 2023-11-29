@@ -71,9 +71,9 @@ G4ErrorTrackLengthTarget::G4ErrorTrackLengthTarget(const G4double maxTrkLength)
       else
       {
         G4ProcessVector* procvec = pmanager->GetProcessList();
-        size_t isiz              = procvec->size();
+        std::size_t isiz = (G4int)procvec->size();
 
-        for(size_t ii = 0; ii < isiz; ii++)
+        for(G4int ii = 0; ii < (G4int)isiz; ++ii)
         {
           if(((*procvec)[ii])->GetProcessName() == "G4ErrorTrackLengthTarget")
           {

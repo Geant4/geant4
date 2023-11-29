@@ -52,9 +52,10 @@
 #include "G4Log.hh"
 #include "G4DeltaAngle.hh"
 #include "G4LindhardSorensenData.hh"
-#include "G4BraggIonModel.hh"
+#include "G4BraggModel.hh"
 #include "G4BetheBlochModel.hh"
 #include "G4IonICRU73Data.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,27 +63,35 @@ using namespace std;
 
 G4LindhardSorensenData* G4LindhardSorensenIonModel::lsdata = nullptr;
 G4IonICRU73Data* G4LindhardSorensenIonModel::fIonData = nullptr;
-std::vector<G4float>* G4LindhardSorensenIonModel::fact[] = {nullptr};
+
+namespace
+{
+  G4Mutex ionXSMutex = G4MUTEX_INITIALIZER;
+}
 
 G4LindhardSorensenIonModel::G4LindhardSorensenIonModel(const G4ParticleDefinition*, 
                                                        const G4String& nam)
   : G4VEmModel(nam),
-    particle(nullptr),
     twoln10(2.0*G4Log(10.0))
 {
-  fParticleChange = nullptr;
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
-  fBraggModel = new G4BraggIonModel();
+  fBraggModel = new G4BraggModel();
   fBBModel = new G4BetheBlochModel();
   fElimit = 2.0*CLHEP::MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LindhardSorensenIonModel::~G4LindhardSorensenIonModel()
-{}
+G4LindhardSorensenIonModel::~G4LindhardSorensenIonModel() {
+  if(isFirst) {
+    delete lsdata;
+    delete fIonData;
+    lsdata = nullptr;
+    fIonData = nullptr;
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,8 +101,6 @@ void G4LindhardSorensenIonModel::Initialise(const G4ParticleDefinition* p,
   fBraggModel->Initialise(p, ptr);
   fBBModel->Initialise(p, ptr);
   SetParticle(p);
-  //G4cout << "G4LindhardSorensenIonModel::Initialise for " 
-  //       << p->GetParticleName() << G4endl;
 
   // always false before the run
   SetDeexcitationFlag(false);
@@ -104,13 +111,16 @@ void G4LindhardSorensenIonModel::Initialise(const G4ParticleDefinition* p,
       SetAngularDistribution(new G4DeltaAngle());
     }
   }
-  if(IsMaster()) {
+  if(nullptr == lsdata) { 
+    G4AutoLock l(&ionXSMutex);
     if(nullptr == lsdata) { 
+      isFirst = true;
       lsdata = new G4LindhardSorensenData();
-    }
-    if(nullptr == fIonData) {
       fIonData = new G4IonICRU73Data();
     } 
+    l.unlock();
+  }
+  if(isFirst) {
     fIonData->Initialise();
   }
 }
@@ -122,7 +132,8 @@ G4LindhardSorensenIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
                                                  const G4Material* mat,
                                                  G4double kinEnergy)
 {
-  return corr->EffectiveChargeSquareRatio(p,mat,kinEnergy);
+  chargeSquare = corr->EffectiveChargeSquareRatio(p, mat, kinEnergy);
+  return chargeSquare;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -230,7 +241,7 @@ G4LindhardSorensenIonModel::ComputeDEDXPerVolume(const G4Material* mat,
     : fBBModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cutEnergy);
 
   //G4cout << "E(MeV)=" << kinEnergy/MeV << " dedx=" << dedx 
-  //  << "  " << material->GetName() << " Ecut(MeV)=" << cutEnergy << G4endl;
+  //  << "  " << mat->GetName() << " Ecut(MeV)=" << cutEnergy << G4endl;
   return dedx;
 }
 
@@ -247,31 +258,42 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
   if(eloss >= preKinEnergy) { return; }
 
   const G4ParticleDefinition* p = dp->GetDefinition();
+  SetParticle(p);
   const G4Material* mat = couple->GetMaterial();
   const G4double eDensity = mat->GetElectronDensity();
-  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.75);
+  const G4double e = std::max(preKinEnergy - eloss*0.5, preKinEnergy*0.5);
   const G4double tmax = MaxSecondaryEnergy(p, e);
   const G4double escaled = e*pRatio;
   const G4double tau = e/mass;
+  const G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
+  const G4int Z = p->GetAtomicNumber();
 
-  G4double q2 = corr->EffectiveChargeSquareRatio(p, mat, e);
-  GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  const G4int Z = std::max(80, p->GetAtomicNumber());
-
-  G4double res;
+  G4double res = 0.0;
   if(escaled <= fElimit) {
-    res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
+    // data from ICRU73 or ICRU90
+    if(Z > 2 && Z <= 80) {
+      res = fIonData->GetDEDX(mat, Z, escaled, G4Log(escaled));
+      /*
+	G4cout << "  GetDEDX for Z=" << Z << " in " << mat->GetName()
+	<< " Escaled=" << escaled << " E=" 
+	<< e << " dEdx=" << res << G4endl;
+      */
+    }
     if(res > 0.0) {
-      G4double cut = couple->GetProductionCuts()->GetProductionCut(1);
+      auto pcuts = couple->GetProductionCuts();
+      G4double cut = (nullptr == pcuts) ? tmax : pcuts->GetProductionCut(1);
       if(cut < tmax) {
-	const G4double x   = cut/tmax;
+	const G4double x = cut/tmax;
 	res += (G4Log(x)*(tau + 1.)*(tau + 1.)/(tau * (tau + 2.0)) + 1.0 - x) 
 	  *q2*CLHEP::twopi_mc2_rcl2*eDensity;
       }
+      res *= length;
     } else {
-      res = eloss*q2*corr->EffectiveChargeCorrection(p,mat,e)/chargeSquare;
+      // simplified correction
+      res = eloss*q2/chargeSquare;
     }
   } else {
+    // Lindhard-Sorensen model
     const G4double gam = tau + 1.0;
     const G4double beta2 = tau * (tau+2.0)/(gam*gam);
     G4double deltaL0 = 2.0*corr->BarkasCorrection(p, mat, e)*(charge-1.)/charge;
@@ -279,44 +301,44 @@ void G4LindhardSorensenIonModel::CorrectionsAlongStep(
 
     res = eloss + 
       CLHEP::twopi_mc2_rcl2*q2*eDensity*(deltaL+deltaL0)*length/beta2;
-  /*  
-  G4cout << "G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)= " 
-         << preKinEnergy/GeV << " eloss(MeV)= " << eloss
-	 << " L= " << eloss*beta2/(twopi_mc2_rcl2*chargeSquare*eDensity*length)
-	 << " dL0= " << deltaL0
-	 << " dL= " << deltaL << G4endl;
-  */
+    /*   
+    G4cout << "  E(GeV)=" << preKinEnergy/GeV << " eloss(MeV)=" << eloss
+	   << " L= " << eloss*beta2/(twopi_mc2_rcl2*q2*eDensity*length)
+	   << " dL0= " << deltaL0
+	   << " dL= " << deltaL << " dE(MeV)=" << res - eloss << G4endl;
+    */
   }
-  if(res > preKinEnergy) { res = preKinEnergy; }
-  else if(res < 0.0)     { res = eloss; }
-  //G4cout << "G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)=" 
-  //       << preKinEnergy/GeV << " eloss(MeV)=" << eloss 
-  //<< " res(MeV)=" << res << G4endl;
+  if(res > preKinEnergy || 2*res < eloss) { res = eloss; }
+  /*
+  G4cout << "  G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)=" 
+         << preKinEnergy/GeV << " eloss(MeV)=" << eloss 
+	 << " res(MeV)=" << res << G4endl;
+  */
   eloss = res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4LindhardSorensenIonModel::SampleSecondaries(
-                                          vector<G4DynamicParticle*>* vdp,
+					  std::vector<G4DynamicParticle*>* vdp,
                                           const G4MaterialCutsCouple* couple,
                                           const G4DynamicParticle* dp,
-                                          G4double minKinEnergy,
+                                          G4double cut,
                                           G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   // take into account formfactor
-  G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
-
-  G4double maxKinEnergy = std::min(maxEnergy,tmax);
+  const G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(), kineticEnergy);
+  const G4double minKinEnergy = std::min(cut, tmax);
+  const G4double maxKinEnergy = std::min(maxEnergy, tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 
   //G4cout << "G4LindhardSorensenIonModel::SampleSecondaries Emin= " 
   // << minKinEnergy << " Emax= " << maxKinEnergy << G4endl;
 
-  G4double totEnergy     = kineticEnergy + mass;
-  G4double etot2         = totEnergy*totEnergy;
-  G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
+  G4double totEnergy = kineticEnergy + mass;
+  G4double etot2 = totEnergy*totEnergy;
+  G4double beta2 = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
 
   G4double deltaKinEnergy, f; 
   G4double f1 = 0.0;
@@ -399,15 +421,14 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
            << G4endl;
   */
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = 
-    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  auto delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   vdp->push_back(delta);
 
   // Change kinematics of primary particle
   kineticEnergy -= deltaKinEnergy;
   G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
-  finalP               = finalP.unit();
+  finalP = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);

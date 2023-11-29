@@ -46,16 +46,16 @@ class G4MuonDecayChannel : public G4VDecayChannel
 
     G4MuonDecayChannel(const G4String& parentName,
                              G4double  BR);
-    virtual ~G4MuonDecayChannel();
+    ~G4MuonDecayChannel() override = default;
       // Constructor & destructor
 
-    virtual G4DecayProducts* DecayIt(G4double);     
+    G4DecayProducts* DecayIt(G4double) override;     
 
   protected:
 
-    G4MuonDecayChannel();
+    G4MuonDecayChannel() = default;
 
-    G4MuonDecayChannel(const G4MuonDecayChannel&);
+    G4MuonDecayChannel(const G4MuonDecayChannel&) = default;
     G4MuonDecayChannel& operator=(const G4MuonDecayChannel&);
       // Copy constructor and assignment operator
 };

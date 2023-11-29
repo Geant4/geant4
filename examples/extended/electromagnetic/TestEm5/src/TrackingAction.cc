@@ -45,11 +45,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* DET, EventAction* EA)
-:G4UserTrackingAction(),fDetector(DET), fEventAction(EA)
-{ 
-  fXstartAbs = fXendAbs = fPrimaryCharge = fDirX = 0.0;
-}
+TrackingAction::TrackingAction(DetectorConstruction* det, EventAction* event)
+:fDetector(det), fEventAction(event)
+{ }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

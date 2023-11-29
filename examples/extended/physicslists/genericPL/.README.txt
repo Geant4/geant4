@@ -6,7 +6,7 @@
 
 \author  W. Pokorski(1), I. Hrivnacova(2)  \n
 (1) CERN \n
-(2) Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3 \n
+(2) Institut de Physique Nucléaire (IPNO), Université Paris-Sud, CNRS-IN2P3 \n
 
 Examples in the physicslist category show the possible ways how to define
 a physics list from Geant4 physics constructors. This example demonstrates

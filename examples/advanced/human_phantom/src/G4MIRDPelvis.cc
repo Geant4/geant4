@@ -46,24 +46,14 @@
 #include "G4LogicalVolume.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDPelvis::G4MIRDPelvis()
-{
-}
-
-G4MIRDPelvis::~G4MIRDPelvis()
-{
-
-}
-
-
 G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysicalVolume* mother, 
 					   const G4String& colourName, G4bool wireFrame,G4bool)
 {
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
    
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
    
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* skeleton = material -> GetMaterial("skeleton");
  
   delete material;
   /*
@@ -94,34 +84,29 @@ G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysica
   G4double y = 28. * cm; //b2*2
   G4double z = 24. *cm; // z2
 
-  G4VSolid* subPelvis = new G4Box("SubtrPelvis", x/2., y/2., z/2.);
+  auto* subPelvis = new G4Box("SubtrPelvis", x/2., y/2., z/2.);
 
-  
-
-  G4SubtractionSolid* firstPelvis = new G4SubtractionSolid("FirstPelvis",
+  auto* firstPelvis = new G4SubtractionSolid("FirstPelvis",
 							   outPelvis,
-							   inPelvis, 0, G4ThreeVector(0.*cm, -0.8 *cm, 0. * cm)); 
+							   inPelvis, nullptr, G4ThreeVector(0.*cm, -0.8 *cm, 0. * cm)); 
 							   
-    
-  G4SubtractionSolid* secondPelvis = new G4SubtractionSolid("SecondPelvis",
+  auto* secondPelvis = new G4SubtractionSolid("SecondPelvis",
 							    firstPelvis,
-							    subPelvis, 0, 
+							    subPelvis, nullptr, 
 							    G4ThreeVector(0.0,
 									  -14. * cm, 0.*cm));
-  // half of the y size of the box
  
-  
-  G4SubtractionSolid* pelvis = new G4SubtractionSolid("Pelvis", secondPelvis, subPelvis,
-						      0, 
+  auto* pelvis = new G4SubtractionSolid("Pelvis", secondPelvis, subPelvis,
+						      nullptr, 
 						      G4ThreeVector(0.0,
 								    22. * cm, -9. *cm)); 
 
  
-  G4LogicalVolume* logicPelvis = new G4LogicalVolume(pelvis, skeleton,
-						     "logical" + volumeName, 0, 0, 0);
+  auto* logicPelvis = new G4LogicalVolume(pelvis, skeleton,
+						     "logical" + volumeName, nullptr, nullptr, nullptr);
   
  
-  G4VPhysicalVolume* physPelvis = new G4PVPlacement(0,G4ThreeVector(0.0, -3. * cm,-24. * cm),// 0, y02, z position
+  G4VPhysicalVolume* physPelvis = new G4PVPlacement(nullptr,G4ThreeVector(0.0, -3. * cm,-24. * cm),// 0, y02, z position
 						    // with respect to the trunk 
 						    "physicalPelvis",
 						    logicPelvis,
@@ -129,14 +114,12 @@ G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysica
 						    false,
 						    0, true);
 
- 
-
   // Visualization Attributes
   //  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
  
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* PelvisVisAtt = new G4VisAttributes(colour);
+  auto* PelvisVisAtt = new G4VisAttributes(colour);
   PelvisVisAtt->SetForceSolid(wireFrame);
   logicPelvis->SetVisAttributes(PelvisVisAtt);
 
@@ -157,7 +140,6 @@ G4VPhysicalVolume* G4MIRDPelvis::Construct(const G4String& volumeName,G4VPhysica
   // Testing Mass
   G4double PelvisMass = (PelvisVol)*PelvisDensity;
   G4cout << "Mass of Pelvis = " << PelvisMass/gram << " g" << G4endl;
-
-  
+ 
   return physPelvis;
 }

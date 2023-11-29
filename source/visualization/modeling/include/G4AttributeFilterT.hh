@@ -117,11 +117,11 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
       static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
 	G4ExceptionDescription ed;
-	ed <<"Unable to extract attribute definition named "<<fAttName<<' ';
+	ed <<"Unable to extract attribute definition named "<<fAttName<<'\n'
+        << "Available attributes:\n"
+        << *object.GetAttDefs();
 	G4Exception
 	  ("G4AttributeFilterT::Evaluate", "modeling0102", JustWarning, ed, "Invalid attribute definition");
-	G4cerr << "Available attributes:\n"
-	       << *object.GetAttDefs();
 	warnedUnableToExtract = true;
       }
       return false;
@@ -148,11 +148,11 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
       G4ExceptionDescription ed;
-      ed <<"Unable to extract attribute value named "<<fAttName<<' ';
+      ed <<"Unable to extract attribute definition named "<<fAttName<<'\n'
+      << "Available attributes:\n"
+      << *object.GetAttDefs();
       G4Exception
 	("G4AttributeFilterT::Evaluate", "modeling0103", JustWarning, ed, "InvalidAttributeValue");
-      G4cerr << "Available attributes:\n"
-	     << *object.GetAttDefs();
       warnedUnableToExtract = true;
     }
     return false;

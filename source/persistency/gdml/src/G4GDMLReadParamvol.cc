@@ -987,8 +987,8 @@ void G4GDMLReadParamvol::Polycone_dimensionsRead(
     }
   }
 
-  G4int numZPlanes = zplaneList.size();
-  for(G4int i = 0; i < numZPlanes; ++i)
+  std::size_t numZPlanes = zplaneList.size();
+  for(std::size_t i = 0; i < numZPlanes; ++i)
   {
     parameter.dimension[3 + i * 3] = zplaneList[i].rmin * lunit;
     parameter.dimension[4 + i * 3] = zplaneList[i].rmax * lunit;
@@ -1069,8 +1069,8 @@ void G4GDMLReadParamvol::Polyhedra_dimensionsRead(
   parameter.dimension[0] *= aunit;
   parameter.dimension[1] *= aunit;
 
-  for(xercesc::DOMNode* iter = element->getFirstChild(); iter != nullptr;
-      iter                   = iter->getNextSibling())
+  for(auto iter = element->getFirstChild(); iter != nullptr;
+           iter = iter->getNextSibling())
   {
     if(iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)
     {
@@ -1093,8 +1093,8 @@ void G4GDMLReadParamvol::Polyhedra_dimensionsRead(
     }
   }
 
-  G4int numZPlanes = zplaneList.size();
-  for(G4int i = 0; i < numZPlanes; ++i)
+  std::size_t numZPlanes = zplaneList.size();
+  for(std::size_t i = 0; i < numZPlanes; ++i)
   {
     parameter.dimension[4 + i * 3] = zplaneList[i].rmin * lunit;
     parameter.dimension[5 + i * 3] = zplaneList[i].rmax * lunit;

@@ -34,43 +34,42 @@
 #include "G4MoleculeTable.hh"
 #include "G4ITTrackHolder.hh"
 #include "G4DNAEventSet.hh"
-
-class G4DNAMolecularReactionTable;
 class G4DNAMolecularReactionData;
 class G4DNAScavengerMaterial;
+class G4MolecularConfiguration;
 class G4DNAGillespieDirectMethod
 {
  public:
   G4DNAGillespieDirectMethod();
   ~G4DNAGillespieDirectMethod();
   using MolType      = const G4MolecularConfiguration*;
-  using Key          = unsigned int;
-  using Index        = G4Voxel::Index;
+  using Index        = G4VDNAMesh::Index;
+  using Voxel        = G4DNAMesh::Voxel;
   using JumpingData  = std::pair<MolType, Index>;
   using ReactionData = const G4DNAMolecularReactionData;
   using EventIt      = G4DNAEventSet::EventSet::iterator;
 
-  G4double PropensityFunction(const Index& index, ReactionData* data);
-  G4double PropensityFunction(const Index& index, MolType moleType);
+  G4double PropensityFunction(const Voxel& voxel, ReactionData* data);
+  G4double PropensityFunction(const Voxel& voxel, MolType moleType);
   inline void SetVoxelMesh(G4DNAMesh& mesh) { fpMesh = &mesh; }
   void SetTimeStep(const G4double& stepTime);
-  G4double Reaction(const Index& index);
-  G4double DiffusiveJumping(const Index& index);
-  G4double ComputeNumberInNode(const Index& index, MolType type);
-  G4double VolumeOfNode(const Index& index);
   void Initialize();
-  void CreateEvent(unsigned int key);
+  void CreateEvent(const Index& index);
   void SetEventSet(G4DNAEventSet*);
 
  private:
+  G4double Reaction(const Voxel& voxel);
+  G4double DiffusiveJumping(const Voxel& voxel);
+  G4double ComputeNumberInNode(const Voxel& voxel, MolType type);
+  G4double VolumeOfNode(const Voxel& voxel);
   G4DNAMolecularReactionTable* fMolecularReactions;
-  G4DNAMesh* fpMesh;
-  G4double fTimeStep;
-  G4DNAEventSet* fpEventSet;
-  G4double fVerbose;
+  G4DNAMesh* fpMesh = nullptr;
+  G4double fTimeStep = DBL_MAX;
+  G4DNAEventSet* fpEventSet = nullptr;
+  G4double fVerbose         = 0;
   std::map<G4double /*Propensity*/, ReactionData*> fReactionDataMap;
   std::map<G4double /*Propensity*/, JumpingData> fJumpingDataMap;
-  G4bool FindScavenging(const Index& index, MolType, G4double&);
-  G4DNAScavengerMaterial* fpScavengerMaterial;
+  G4bool FindScavenging(const Voxel& voxel, MolType, G4double&);
+  G4DNAScavengerMaterial* fpScavengerMaterial = nullptr;
 };
 #endif

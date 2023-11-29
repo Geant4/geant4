@@ -55,7 +55,7 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack& rStVec )
 inline
 G4FieldTrack& G4FieldTrack::operator= ( const G4FieldTrack& rStVec )
 {
-  if (&rStVec == this) return *this;
+  if (&rStVec == this) { return *this; }
 
   SixVector[0]= rStVec.SixVector[0];
   SixVector[1]= rStVec.SixVector[1];
@@ -79,7 +79,7 @@ G4FieldTrack& G4FieldTrack::operator= ( const G4FieldTrack& rStVec )
 }
 
 inline
-G4FieldTrack::G4FieldTrack(G4FieldTrack&& from)
+G4FieldTrack::G4FieldTrack(G4FieldTrack&& from) noexcept
  : fDistanceAlongCurve( from.fDistanceAlongCurve),
    fKineticEnergy( from.fKineticEnergy ),
    fRestMass_c2( from.fRestMass_c2),
@@ -99,9 +99,10 @@ G4FieldTrack::G4FieldTrack(G4FieldTrack&& from)
 }
 
 inline
-G4FieldTrack& G4FieldTrack::operator=(G4FieldTrack&& from)
+G4FieldTrack& G4FieldTrack::operator=(G4FieldTrack&& from) noexcept
 {
-  if (&from == this) return *this;
+  if (&from == this) { return *this;
+}
 
   SixVector[0]= from.SixVector[0];
   SixVector[1]= from.SixVector[1];
@@ -170,7 +171,7 @@ G4ThreeVector G4FieldTrack::GetPosition() const
 } 
 
 inline
-void G4FieldTrack::SetPosition( G4ThreeVector pPosition) 
+void G4FieldTrack::SetPosition( const G4ThreeVector& pPosition) 
 {
    SixVector[0] = pPosition.x(); 
    SixVector[1] = pPosition.y(); 
@@ -258,7 +259,7 @@ void G4FieldTrack::SetProperTimeOfFlight(G4double nTOF)
 }
 
 inline
-void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
+void G4FieldTrack::SetMomentumDir(const G4ThreeVector& newMomDir)
 {
    fMomentumDir = newMomDir;
 }
@@ -266,20 +267,18 @@ void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
 inline
 G4ThreeVector G4FieldTrack::GetMomentum() const 
 {
-   return G4ThreeVector( SixVector[3], SixVector[4], SixVector[5] );
+   return { SixVector[3], SixVector[4], SixVector[5] };
 } 
 
 inline
-void G4FieldTrack::SetMomentum(G4ThreeVector pMomentum)
+void G4FieldTrack::SetMomentum(const G4ThreeVector& pMomentum)
 {
   SixVector[3] = pMomentum.x(); 
   SixVector[4] = pMomentum.y(); 
   SixVector[5] = pMomentum.z(); 
 
-  if( pMomentum.mag2() > 0.0 ) 
-     fMomentumDir = pMomentum.unit();
-  else
-     fMomentumDir = G4ThreeVector( 0.0, 0.0, 0.0 ); 
+  if( pMomentum.mag2() > 0.0 ) { fMomentumDir = pMomentum.unit(); }
+  else { fMomentumDir = G4ThreeVector( 0.0, 0.0, 0.0 ); }
 }
 
 inline
@@ -380,7 +379,7 @@ inline G4ThreeVector G4FieldTrack::GetSpin() const
 }
 
 inline
-void G4FieldTrack::SetSpin(G4ThreeVector vSpin)
+void G4FieldTrack::SetSpin(const G4ThreeVector& vSpin)
 {
   SetPolarization(vSpin);
 }

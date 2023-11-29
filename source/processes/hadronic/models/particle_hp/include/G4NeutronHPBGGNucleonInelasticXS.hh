@@ -29,4 +29,4 @@
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
 using G4NeutronHPBGGNucleonInelasticXS = G4ParticleHPBGGNucleonInelasticXS;
 
-#endif 
+#endif

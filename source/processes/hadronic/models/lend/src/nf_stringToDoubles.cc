@@ -72,8 +72,8 @@ char *nf_floatToShortestString( double value, int significantDigits, int favorEF
     if( flags & nf_floatToShortestString_includeSign ) sign = "+";
 
     if( !isfinite( value ) ) {
-        sprintf( Fmt, "%%%sf", sign );
-        sprintf( Str_e, Fmt, value );
+        snprintf( Fmt, sizeof Fmt, "%%%sf", sign );
+        snprintf( Str_e, sizeof Str_e, Fmt, value );
         return( strdup( Str_e ) );
     }
 
@@ -81,8 +81,8 @@ char *nf_floatToShortestString( double value, int significantDigits, int favorEF
     if( significantDigits < 0 ) significantDigits = 0;
     if( significantDigits > 24 ) significantDigits = 24;
 
-    sprintf( Fmt, "%%%s.%de", sign, significantDigits );
-    sprintf( Str_e, Fmt, value );
+    snprintf( Fmt, sizeof Fmt, "%%%s.%de", sign, significantDigits );
+    snprintf( Str_e, sizeof Str_e, Fmt, value );
 
     e1 = strchr( Str_e, 'e' );
     if( significantDigits == 0 ) {
@@ -107,14 +107,14 @@ char *nf_floatToShortestString( double value, int significantDigits, int favorEF
     exponent = (int) strtol( e1, &e2, 10 );
     if( exponent != 0 ) {               /* If 0, the exponent was "e+00". */
         for( e1 = Str_e; *e1 != 0; e1++ ) ;
-        sprintf( e1, "e%d", exponent );
+        snprintf( e1, sizeof Str_e, "e%d", exponent );
 
         digitsRightOfPeriod_f = significantDigits - exponent;
         if( ( digitsRightOfPeriod_f > 25 ) || ( exponent > 50 ) ) return( strdup( Str_r ) );
         if( digitsRightOfPeriod_f < 0 ) digitsRightOfPeriod_f = 0;
 
-        sprintf( Fmt, "%%%s.%df", sign, digitsRightOfPeriod_f );
-        sprintf( Str_f, Fmt, value );
+        snprintf( Fmt, sizeof Fmt, "%%%s.%df", sign, digitsRightOfPeriod_f );
+        snprintf( Str_f, sizeof Str_f, Fmt, value );
 
         ne = (int) strlen( Str_e );
         nf = (int) strlen( Str_f );

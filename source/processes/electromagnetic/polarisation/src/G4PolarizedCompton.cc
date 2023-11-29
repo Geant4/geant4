@@ -202,7 +202,7 @@ G4double G4PolarizedCompton::ComputeSaturationFactor(const G4Track& aTrack)
   const G4ParticleMomentum GammaDirection0 =
     aDynamicGamma->GetMomentumDirection();
 
-  G4Material* aMaterial       = aTrack.GetMaterial();
+  const G4Material* aMaterial = aTrack.GetMaterial();
   G4VPhysicalVolume* aPVolume = aTrack.GetVolume();
   G4LogicalVolume* aLVolume   = aPVolume->GetLogicalVolume();
 
@@ -226,7 +226,7 @@ G4double G4PolarizedCompton::ComputeSaturationFactor(const G4Track& aTrack)
       G4cout << " Material     " << aMaterial << G4endl;
     }
 
-    size_t midx                    = CurrentMaterialCutsCoupleIndex();
+    std::size_t midx               = CurrentMaterialCutsCoupleIndex();
     const G4PhysicsVector* aVector = nullptr;
     if(midx < theAsymmetryTable->size())
     {
@@ -295,7 +295,7 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable =
     G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   if(!theAsymmetryTable)
   {
     return;
@@ -306,7 +306,7 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
   G4PhysicsLogVector* aVector = nullptr;
   G4PhysicsLogVector* bVector = nullptr;
 
-  for(size_t i = 0; i < numOfCouples; ++i)
+  for(G4int i = 0; i < numOfCouples; ++i)
   {
     if(theAsymmetryTable->GetFlag(i))
     {

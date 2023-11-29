@@ -205,7 +205,7 @@ protected:
   G4double logemin = 0.0;  // used only for log vector
 
   G4int verboseLevel = 0;
-  G4int idxmax = 0;
+  std::size_t idxmax = 0;
   std::size_t numberOfNodes = 0;
 
   G4PhysicsVectorType type = T_G4PhysicsFreeVector;

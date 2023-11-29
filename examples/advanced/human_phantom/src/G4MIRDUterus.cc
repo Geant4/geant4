@@ -44,23 +44,13 @@
 #include "G4PVPlacement.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDUterus::G4MIRDUterus()
-{
-}
-
-G4MIRDUterus::~G4MIRDUterus()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDUterus::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,  
 					   const G4String& colourName, G4bool wireFrame, G4bool)
 {
- 
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
-  G4Material* soft = material -> GetMaterial("soft_tissue");
+  auto* material = new G4HumanPhantomMaterial();
+  auto* soft = material -> GetMaterial("soft_tissue");
   delete material;
 
   G4double ax= 2.5*cm; //a
@@ -70,18 +60,18 @@ G4VPhysicalVolume* G4MIRDUterus::Construct(const G4String& volumeName,G4VPhysica
   G4double zcut1= -5.* cm; //-b
   G4double zcut2= 2.5*cm; //y1-y0
 
-  G4Ellipsoid* uterus = new G4Ellipsoid("Uterus",
+  auto* uterus = new G4Ellipsoid("Uterus",
 					ax, by, cz,
 					zcut1, zcut2);
 
-  G4LogicalVolume* logicUterus = new G4LogicalVolume(uterus,
-						     soft,
-						     "logical" + volumeName,
-						     0, 0, 0);
+  auto* logicUterus = new G4LogicalVolume(uterus,
+					    soft,
+				            "logical" + volumeName,
+					     nullptr, nullptr, nullptr);
 
 
   // Define rotation and position here!
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto* rm = new G4RotationMatrix();
   rm->rotateX(90.*degree);
   G4VPhysicalVolume* physUterus = new G4PVPlacement(rm,
 						    G4ThreeVector(0. *cm, 2*cm,-21 *cm),
@@ -91,14 +81,12 @@ G4VPhysicalVolume* G4MIRDUterus::Construct(const G4String& volumeName,G4VPhysica
 						    false,
 						    0, true);
 
-
-
   // Visualization Attributes
   //  G4VisAttributes* UterusVisAtt = new G4VisAttributes(G4Colour(0.85,0.44,0.84));
 
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* UterusVisAtt = new G4VisAttributes(colour);  
+  auto* UterusVisAtt = new G4VisAttributes(colour);  
   UterusVisAtt->SetForceSolid(wireFrame);
   logicUterus->SetVisAttributes(UterusVisAtt);
 

@@ -68,9 +68,7 @@ G4UCons::G4UCons( __void__& a )
 //
 // Destructor
 
-G4UCons::~G4UCons()
-{
-}
+G4UCons::~G4UCons() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -300,7 +298,7 @@ G4UCons::CalculateExtent(const EAxis pAxis,
 #endif
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return exist = pMin < pMax;
   }
 
   // Get parameters of the solid

@@ -31,6 +31,7 @@
 #include "G4FermiFragment.hh"
 #include "G4NucleiProperties.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4CoulombBarrier.hh"
 
 G4FermiFragment::G4FermiFragment(G4int anA, G4int aZ, G4int sp, G4double exc)
   : excitEnergy(exc), A(anA), Z(aZ), spin(sp)

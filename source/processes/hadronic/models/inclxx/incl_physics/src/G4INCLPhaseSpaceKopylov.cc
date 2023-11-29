@@ -66,7 +66,7 @@ namespace G4INCL {
     boostV.setY(0.0);
     boostV.setZ(0.0);
 
-    const size_t N = particles.size();
+    const std::size_t N = particles.size();
     masses.resize(N);
     sumMasses.resize(N);
     std::transform(particles.begin(), particles.end(), masses.begin(), std::mem_fn(&Particle::getMass));
@@ -83,8 +83,8 @@ namespace G4INCL {
     restParticle->setMass(sqrtS);
     restParticle->adjustEnergyFromMomentum();
 
-    G4int k=N-1;
-    for (ParticleList::reverse_iterator p=particles.rbegin(); k>0; ++p, --k) {
+    G4int k=G4int(N-1);
+    for (auto p=particles.rbegin(); k>0; ++p, --k) {
       const G4double mu = sumMasses[k-1];
       T *= (k>1) ? betaKopylov(k) : 0.;
 

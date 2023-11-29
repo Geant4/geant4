@@ -33,29 +33,22 @@
 // ----------------------------------------------------------------------
 
 #include "G4CellScoreComposer.hh"
+
 #include "G4Step.hh"
-
-G4CellScoreComposer::G4CellScoreComposer()
-  : fSCScoreValues()
-{}
-
-G4CellScoreComposer::~G4CellScoreComposer() {}
 
 void G4CellScoreComposer::EstimatorCalculation(const G4Step& aStep)
 {
   G4StepPoint* p = aStep.GetPreStepPoint();
-  if(!p)
-  {
-    G4Exception("G4CellScoreComposer::EstimatorCalculation", "Det0191",
-                FatalException, " no pointer to pre PreStepPoint!");
+  if (p == nullptr) {
+    G4Exception("G4CellScoreComposer::EstimatorCalculation", "Det0191", FatalException,
+      " no pointer to pre PreStepPoint!");
   }
-  G4double sl   = aStep.GetStepLength();
-  G4double slw  = sl * p->GetWeight();
+  G4double sl = aStep.GetStepLength();
+  G4double slw = sl * p->GetWeight();
   G4double slwe = slw * p->GetKineticEnergy();
 
   G4double v = p->GetVelocity();
-  if(!(v > 0.))
-  {
+  if (! (v > 0.)) {
     v = 10e-9;
   }
 
@@ -76,17 +69,13 @@ void G4CellScoreComposer::SetCollisionWeight(G4double weight)
 
 const G4CellScoreValues& G4CellScoreComposer::GetStandardCellScoreValues() const
 {
-  if(fSCScoreValues.fSumSLW > 0.)
-  {
+  if (fSCScoreValues.fSumSLW > 0.) {
     // divide by SumSLW or SumSLW_v ?
-    fSCScoreValues.fNumberWeightedEnergy =
-      fSCScoreValues.fSumSLWE_v / fSCScoreValues.fSumSLW_v;
+    fSCScoreValues.fNumberWeightedEnergy = fSCScoreValues.fSumSLWE_v / fSCScoreValues.fSumSLW_v;
 
-    fSCScoreValues.fFluxWeightedEnergy =
-      fSCScoreValues.fSumSLWE / fSCScoreValues.fSumSLW;
+    fSCScoreValues.fFluxWeightedEnergy = fSCScoreValues.fSumSLWE / fSCScoreValues.fSumSLW;
 
-    fSCScoreValues.fAverageTrackWeight =
-      fSCScoreValues.fSumSLW / fSCScoreValues.fSumSL;
+    fSCScoreValues.fAverageTrackWeight = fSCScoreValues.fSumSLW / fSCScoreValues.fSumSL;
   }
   return fSCScoreValues;
 }
@@ -105,7 +94,6 @@ std::ostream& operator<<(std::ostream& out, const G4CellScoreComposer& ps)
   out << "Collisions*Wgt:  " << scores.fSumCollisionsWeight << G4endl;
   out << "NumWGTedEnergy:  " << scores.fNumberWeightedEnergy << G4endl;
   out << "FluxWGTedEnergy: " << scores.fFluxWeightedEnergy << G4endl;
-  out << "Aver.TrackWGT*I: " << scores.fAverageTrackWeight * scores.fImportance
-      << G4endl;
+  out << "Aver.TrackWGT*I: " << scores.fAverageTrackWeight * scores.fImportance << G4endl;
   return out;
 }

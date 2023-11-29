@@ -1547,9 +1547,29 @@ void G4MolecularConfiguration::FinalizeAll()
   const std::vector<G4MolecularConfiguration*>& species =
       GetManager()->GetAllSpecies();
 
-  for(size_t i = 0; i < species.size() ; ++i)
+  for(std::size_t i = 0; i < species.size() ; ++i)
   {
     species[i]->Finalize();
+  }
+
+}
+
+void G4MolecularConfiguration::PrintAll() //hoang added
+{
+  const std::vector<G4MolecularConfiguration*>& species =
+    GetManager()->GetAllSpecies();
+  G4cout<<G4endl;
+  G4cout<<"Molecular Config"<<std::setw(25)<<" | Diffusion Coefficient (m2 / s) "<<std::setw(20)<<" | Radius (nm) "<<G4endl;
+  G4cout<<"__________________________________________"
+            "___________________________________"<<G4endl;
+  for(std::size_t i = 0; i < species.size() ; ++i)
+  {
+    G4cout<<species[i]->GetName()
+           <<std::setw(G4int(30 - species[i]->GetName().length()))
+           <<right<<species[i]->GetDiffusionCoefficient() * 1.0e3<<std::setw(30)
+           <<species[i]->GetVanDerVaalsRadius()/CLHEP::nm<<G4endl;
+    G4cout<<"__________________________________________"
+              "___________________________________"<<G4endl;
   }
 
 }

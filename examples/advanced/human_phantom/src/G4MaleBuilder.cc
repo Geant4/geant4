@@ -32,48 +32,43 @@
 //#include "G4MIRDBodyFactory.hh"
 //#include "G4ORNLMaleBodyFactory.hh"
 #include "G4VBodyFactory.hh"
-G4MaleBuilder::G4MaleBuilder()
-{  
-}
 
 G4MaleBuilder::~G4MaleBuilder()
 {
-  delete body;
+  delete fBody;
 } 
 
 void G4MaleBuilder::BuildMaleGenitalia(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 {
-
-if(motherVolume == 0)
+if (fMotherVolume == nullptr)
     G4Exception("G4PhantomBuilder::BuildMaleGenitalia()", "human_phantom0048", FatalException, "The world volume is missing !!!!!");
   
-  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout <<"MotherVolume: " << fMotherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
 
-  maleGenitaliaVolume = body -> CreateOrgan("MaleGenitalia", motherVolume, colourName, solidVis, sensitivity); 
-
+  fMaleGenitaliaVolume = fBody -> CreateOrgan("MaleGenitalia", fMotherVolume, colourName, solidVis, sensitivity); 
 }
 
 void G4MaleBuilder::BuildLeftTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
 { 
-  if (maleGenitaliaVolume == 0)
+  if (fMaleGenitaliaVolume == nullptr)
     G4Exception("G4FemaleBuilder::BuildLeftTeste()", "human_phantom0049", FatalException, "The maleGenitaliaVolume volume is missing !!!!!");
 
-  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout <<"MotherVolume: " <<  fMotherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
   
-  body -> CreateOrgan("LeftTeste",maleGenitaliaVolume, colourName,solidVis, sensitivity); 
+  fBody -> CreateOrgan("LeftTeste", fMaleGenitaliaVolume, colourName,solidVis, sensitivity); 
 }
 
 void G4MaleBuilder::BuildRightTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
 { 
-  if (maleGenitaliaVolume == 0)
+  if (fMaleGenitaliaVolume == nullptr)
     G4Exception("G4FemaleBuilder::BuildRightTeste()", "human_phantom0050", FatalException, "The maleGenitaliaVolume volume is missing !!!!!");
 
-  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout <<"MotherVolume: " <<  fMotherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
   
-  body -> CreateOrgan("RightTeste",maleGenitaliaVolume, colourName,solidVis, sensitivity); 
+  fBody -> CreateOrgan("RightTeste", fMaleGenitaliaVolume, colourName,solidVis, sensitivity); 
 }
 
 

@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
 #include "eRositaActionInitialization.hh"
 #include "eRositaPrimaryGeneratorAction.hh"
 #include "eRositaEventAction.hh"
@@ -31,30 +32,35 @@
 
 #include "G4GeneralParticleSource.hh"
 
-eRositaActionInitialization::eRositaActionInitialization() : G4VUserActionInitialization()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+eRositaActionInitialization::eRositaActionInitialization()
 {
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 eRositaActionInitialization::~eRositaActionInitialization()
 {
 }
 
-void eRositaActionInitialization::BuildForMaster() const
-{
-    eRositaRunAction* runAction = new eRositaRunAction();
-    SetUserAction(runAction);
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void eRositaActionInitialization::Build() const
 {
-    eRositaPrimaryGeneratorAction* primaryGeneratorAction = new eRositaPrimaryGeneratorAction();
+    auto *primaryGeneratorAction = new eRositaPrimaryGeneratorAction();
     SetUserAction(primaryGeneratorAction);
 
-    eRositaRunAction* runAction = new eRositaRunAction();
-    SetUserAction(runAction);
-    
-    //SetUserAction(new eRositaPrimaryGeneratorAction);
-    //SetUserAction(new eRositaRunAction);
+    auto *runAction = new eRositaRunAction();
+    SetUserAction(runAction);    
     SetUserAction(new eRositaEventAction);
     SetUserAction(new eRositaSteppingAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void eRositaActionInitialization::BuildForMaster() const
+{
+    auto *runAction = new eRositaRunAction();
+    SetUserAction(runAction);
 }

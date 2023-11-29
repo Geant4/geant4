@@ -19,13 +19,15 @@ class torche : public node {
   TOOLS_NODE(torche,tools::sg::torche,node)
 public:
   sf_vec<colorf,float> color;
+  sf_vec<colorf,float> ambient;
   sf_vec3f direction;
   sf<bool> on;
 public:
   virtual const desc_fields& node_desc_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::torche)
-    static const desc_fields s_v(parent::node_desc_fields(),3, //WARNING : take care of count.
+    static const desc_fields s_v(parent::node_desc_fields(),4, //WARNING : take care of count.
       TOOLS_ARG_FIELD_DESC(color),
+      TOOLS_ARG_FIELD_DESC(ambient),
       TOOLS_ARG_FIELD_DESC(direction),
       TOOLS_ARG_FIELD_DESC(on)
     );
@@ -34,6 +36,7 @@ public:
 private:
   void add_fields(){
     add_field(&color);
+    add_field(&ambient);
     add_field(&direction);
     add_field(&on);
   }
@@ -47,14 +50,15 @@ public:
         << std::endl;
       return;
     }
-    state.m_GL_LIGHTING = true; //for separator
-    a_action.enable_light(state.m_light,direction.value(),color.value());
+    state.m_GL_LIGHTING = true;
+    a_action.enable_light(state.m_light,direction.value(),color.value(),ambient.value());
     state.m_light++;
   }
 public:
   torche()
   :parent()
   ,color(colorf_white())
+  ,ambient(colorf_black())
   ,direction(vec3f(0,0,-1))
   ,on(true)
   {
@@ -65,6 +69,7 @@ public:
   torche(const torche& a_from)
   :parent(a_from)
   ,color(a_from.color)
+  ,ambient(a_from.ambient)
   ,direction(a_from.direction)
   ,on(a_from.on)
   {
@@ -73,6 +78,7 @@ public:
   torche& operator=(const torche& a_from){
     parent::operator=(a_from);
     color = a_from.color;
+    ambient = a_from.ambient;
     direction = a_from.direction;
     on = a_from.on;
     return *this;

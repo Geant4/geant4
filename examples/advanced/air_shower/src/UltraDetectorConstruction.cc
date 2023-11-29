@@ -271,7 +271,8 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
   for(auto i=0;i<NENTRIES; ++i){
 
-    lambda = lambda_min + i*(lambda_max-lambda_min)/float(NENTRIES-1);
+    // want energies in increasing order
+    lambda = lambda_min + (NENTRIES-1-i) * (lambda_max-lambda_min)/float(NENTRIES-1);
     RINDEX_ACRYLIC.push_back(0.0);
 
     for (auto jj=0 ; jj<4 ; jj++)

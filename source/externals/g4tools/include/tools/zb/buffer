@@ -39,123 +39,40 @@ protected:
     ZPixel m_pixel;
   };
 
-  class point_writer : public virtual writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ a_z) {
-      if(m_size>=1) { //see zb_action::npix().
-        ZPos x,y;
-        for(int i=-int(m_size);i<=int(m_size);i++) {
-          x = a_x + i;
-          for(int j=-int(m_size);j<=int(m_size);j++) {
-            y = a_y + j;
-            _write(x,y,a_z);
-          }
+  void _write_point(ZPos a_x,ZPos a_y,ZZ a_z,ZPixel a_pixel) {
+    if((a_x<m_begX) || (a_x>m_endX)) return;
+    if((a_y<m_begY) || (a_y>m_endY)) return;
+
+    ZReal zpoint = (ZReal)a_z;
+    unsigned long offset = a_y * m_zbw + a_x;
+    ZReal* zbuff = m_zbuffer + offset;
+
+    if(m_depth_test) {if(zpoint<*zbuff) return;}
+
+    ZPixel* zimage = m_zimage  + offset;
+
+    *zbuff = zpoint;
+    blend(*zimage,a_pixel);
+  }
+  void write_point(ZPos a_x,ZPos a_y,ZZ a_z,unsigned int a_size,ZPixel a_pixel) {
+    if(a_size>=1) { //see zb_action::npix().
+      ZPos x,y;
+      for(int i=-int(a_size);i<=int(a_size);i++) {
+        x = a_x + i;
+        for(int j=-int(a_size);j<=int(a_size);j++) {
+          y = a_y + j;
+          _write_point(x,y,a_z,a_pixel);
         }
-      } else {
-        _write(a_x,a_y,a_z);
       }
+    } else {
+      _write_point(a_x,a_y,a_z,a_pixel);
     }
-  public:
-    point_writer(ZPixel a_pixel,buffer& a_buffer,unsigned int a_size)
-    :writer(a_pixel)
-    ,m_buffer(a_buffer)
-    ,m_size(a_size)
-    {}
-    virtual ~point_writer(){}
-  public:
-    point_writer(const point_writer& a_from)
-    :writer(a_from)
-    ,m_buffer(a_from.m_buffer)
-    ,m_size(a_from.m_size)
-    {}
-    point_writer& operator=(const point_writer& a_from){
-      writer::operator=(a_from);
-      m_size = a_from.m_size;
-      return *this;
-    }
-  public:
-    bool get_pixel(ZPos a_x,ZPos a_y,ZZ /*a_z*/,ZPixel& a_pixel) const {
-      if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX)) {a_pixel=0;return false;}
-      if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY)) {a_pixel=0;return false;}
-      unsigned long offset = a_y * m_buffer.m_zbw + a_x;
-      ZPixel* zimage = m_buffer.m_zimage  + offset;
-      a_pixel = *zimage;
-      return true;
-    }
-  protected:
-    void _write(ZPos a_x,ZPos a_y,ZZ a_z) {
-      if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX)) return;
-      if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY)) return;
-
-      ZReal zpoint = (ZReal)a_z;
-      unsigned long offset = a_y * m_buffer.m_zbw + a_x;
-      ZReal* zbuff = m_buffer.m_zbuffer + offset;
-
-      if(m_buffer.m_depth_test) {if(zpoint<*zbuff) return;}
-
-      ZPixel* zimage = m_buffer.m_zimage  + offset;
-
-      /* transparency :
-      ZPixel old_pix = *zimage;
-      // need the alpha of m_pixel !
-      */
-
-      *zbuff = zpoint;
-      *zimage = m_pixel;
-    }
-  protected:
-    buffer& m_buffer;
-    unsigned int m_size;
-  };
-
-/*
-  class edge_point_writer : public virtual writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ) {
-      if((a_x<m_buffer.m_begX) || (a_x>m_buffer.m_endX))  return;
-      if((a_y<m_buffer.m_begY) || (a_y>m_buffer.m_endY))  return;
-
-      // Computing must be the same as in WriteScanLine routine.
-      ZReal zpoint =
-        (ZReal)(- m_buffer.m_planeDC
-                - m_buffer.m_planeAC * a_x
-                - m_buffer.m_planeBC * a_y);
-
-      // for edge plane quite perpandicular to screen
-      //if((zpoint<m_buffer.m_zmin)||(zpoint>m_buffer.m_zmax)) return;
-
-      unsigned long offset = a_y * m_buffer.m_zbw + a_x;
-      ZReal* zbuff = m_buffer.m_zbuffer + offset;
-
-      if(m_buffer.m_depth_test) {if(zpoint<*zbuff) return;}
-
-      ZPixel* zimage = m_buffer.m_zimage  + offset;
-      *zbuff = zpoint;
-      *zimage = m_pixel;
-    }
-  public:
-    edge_point_writer(ZPixel a_pixel,buffer& a_buffer)
-    :writer(a_pixel)
-    ,m_buffer(a_buffer)
-    {}
-    virtual ~edge_point_writer(){}
-  public:
-    edge_point_writer(const edge_point_writer& a_from)
-    :writer(a_from)
-    ,m_buffer(a_from.m_buffer)
-    {}
-    edge_point_writer& operator=(const edge_point_writer& a_from){
-      writer::operator=(a_from);
-      return *this;
-    }
-  protected:
-    buffer& m_buffer;
-  };
-*/
+  }
 
 public:
   buffer()
   :m_depth_test(true)
+  ,m_blend(false)
   ,m_zbuffer(0)
   //,m_zmin(0),m_zmax(0)
   ,m_zimage(0)
@@ -175,14 +92,18 @@ public:
 protected:
   buffer(const buffer& a_from)
   :m_depth_test(a_from.m_depth_test)
+  ,m_blend(a_from.m_blend)
   {}
   buffer& operator=(const buffer& a_from){
     m_depth_test = a_from.m_depth_test;
+    m_blend = a_from.m_blend;
     return *this;
   }
 public:
   void set_depth_test(bool a_on) {m_depth_test = a_on;}
   //bool depth_test() const {return m_depth_test;}
+  
+  void set_blend(bool a_value) {m_blend = a_value;}
 
   bool change_size(unsigned int a_width,unsigned int a_height){
     if(!a_width||!a_height) return false;
@@ -212,24 +133,12 @@ public:
       return false;
     }
 
-    // Init buffer done by further call to ZBufferErase.
-    /*
-    unsigned int size = m_zbw * m_zbh;
-    ZReal* zbuffer = m_zbuffer;
-    ZPixel* zimage = m_zimage;
-    for(unsigned int count=0;count<size;count++,zbuffer++,zimage++){
-      *zimage = 0;
-      *zbuffer  = - ZREAL_HUGE();
-    }
-    */
-
     set_clip_region(0,0,m_zbw,m_zbh);
     m_polygon.clear();
     return true;
   }
 
-  ZPixel* get_color_buffer(unsigned int& a_width,
-                           unsigned int& a_height) const {
+  ZPixel* get_color_buffer(unsigned int& a_width,unsigned int& a_height) const {
     a_width  = m_zbw;
     a_height = m_zbh;
     return m_zimage;
@@ -257,13 +166,11 @@ public:
     }
   }
 
-  //ZPixel get_pixel(ZPos a_x,ZPos a_y) const {
-  //  return *(m_zimage + a_y * m_zbw + a_x);
-  //}
+  ZPixel* zimage() {return m_zimage;}
 
   bool get_clipped_pixel(ZPos a_x,ZPos a_y,ZPixel& a_pixel) const {
-    if((a_x<m_begX) || (a_x>m_endX))  return false;
-    if((a_y<m_begY) || (a_y>m_endY))  return false;
+    if((a_x<m_begX) || (a_x>m_endX))  {a_pixel = 0;return false;}
+    if((a_y<m_begY) || (a_y>m_endY))  {a_pixel = 0;return false;}
     a_pixel = *(m_zimage + a_y * m_zbw + a_x);
     return true;
   }
@@ -284,39 +191,29 @@ public:
   }
 
   void draw_point(const point& a_p,ZPixel a_pixel,unsigned int a_size){
-    point_writer pw(a_pixel,*this,a_size);
-    pw.write(a_p.x,a_p.y,a_p.z);
-  }
-
-  bool get_pixel(const point& a_p,ZPixel& a_pixel){
-    point_writer pw(a_pixel,*this,1);
-    return pw.get_pixel(a_p.x,a_p.y,a_p.z,a_pixel);
+    write_point(a_p.x,a_p.y,a_p.z,a_size,a_pixel);
   }
 
   void draw_line(const point& a_beg,const point& a_end,ZPixel a_pixel,unsigned int a_size){
-    point_writer pw(a_pixel,*this,a_size);
-    WriteLine(a_beg,a_end,pw);
+    WriteLine(a_beg,a_end,a_size,a_pixel);
   }
 
   void draw_lines(int a_number,const point* a_list,ZPixel a_pixel,unsigned int a_size){
-    point_writer pw(a_pixel,*this,a_size);
     for(int count=1;count<a_number;count++) {
-      WriteLine(a_list[count-1],a_list[count],pw);
+      WriteLine(a_list[count-1],a_list[count],a_size,a_pixel);
     }
   }
 
   void draw_segments(int a_number,const point* a_list,ZPixel a_pixel,unsigned int a_size){
-    point_writer pw(a_pixel,*this,a_size);
     int segment_number = a_number/2;
     for(int count=0;count<segment_number;count++) {
-      WriteLine(a_list[2*count],a_list[2*count+1],pw);
+      WriteLine(a_list[2*count],a_list[2*count+1],a_size,a_pixel);
     }
   }
   void draw_markers(int a_number,const point* a_list,ZPixel a_pixel,unsigned int a_size){
-    point_writer pw(a_pixel,*this,a_size);
     for(int count=0;count<a_number;count++){
       const point& p = a_list[count];
-      pw.write(p.x,p.y,p.z);
+      write_point(p.x,p.y,p.z,a_size,a_pixel);
     }
   }
 
@@ -346,118 +243,56 @@ public:
 
   }
 
-/*
-  void draw_edged_polygon(int a_number,const point* a_list,
-                          ZZ a_A,ZZ a_B,ZZ a_C,ZZ a_D,
-                        //ZZ a_zmin,ZZ a_zmax,
-                          ZPixel a_pixel){
-    // Assume a_list is closed.
-    if(a_number<3) return;
-    if(a_C==0) return; // polygone seen from edge
-    //if(m_zboundPrec<0) m_zboundPrec = 0;
+  typedef unsigned char uchar;
+  static void rgba2pix(float a_r,float a_g,float a_b,float a_a,ZPixel& a_pix) {
+    uchar* _px = (uchar*)&a_pix;
+    *_px = (uchar)(255.0F * a_r);_px++;
+    *_px = (uchar)(255.0F * a_g);_px++;
+    *_px = (uchar)(255.0F * a_b);_px++;
+    *_px = (uchar)(255.0F * a_a);_px++;
+  }
+  static void pix2rgba(const ZPixel& a_pix,float& a_r,float& a_g,float& a_b,float& a_a) {
+    uchar* _px = (uchar*)&a_pix;
+    a_r = (*_px)/255.0f;_px++;
+    a_g = (*_px)/255.0f;_px++;
+    a_b = (*_px)/255.0f;_px++;
+    a_a = (*_px)/255.0f;_px++;
+  }
+protected:
+  void scan_write_point_1(ZPos a_x,ZPos a_y,ZZ a_z,ZPos /*a_beg*/,unsigned int a_size,ZPixel a_pixel) {
+    write_point(a_x,a_y,a_z,a_size,a_pixel);
+  }
+  void scan_write_point_2(ZPos a_x,ZPos a_y,ZZ a_z,ZPos /*a_beg*/,unsigned int a_size,ZPixel a_pixel) {
+    write_point(a_y,a_x,a_z,a_size,a_pixel);
+  }
+  void scan_write_point_3(ZPos a_x,ZPos a_y,ZZ a_z,ZPos a_beg,unsigned int a_size,ZPixel a_pixel) {
+    write_point(a_x,2*a_beg-a_y,a_z,a_size,a_pixel);
+  }
+  void scan_write_point_4(ZPos a_x,ZPos a_y,ZZ a_z,ZPos a_beg,unsigned int a_size,ZPixel a_pixel) {
+    write_point(2*a_beg-a_y,a_x,a_z,a_size,a_pixel);
+  }
 
-    m_scan_pixel   = a_pixel;
-    m_planeAC      = a_A/a_C;
-    m_planeBC      = a_B/a_C;
-    m_planeDC      = a_D/a_C;
-
-    //if this polygon A is quite perpandicular to screen and close
-    //to an other B than |dz| then some pixel of A could overwrite
-    //pixel of B. Your have then to give a lower m_zboundPrec
-
-    //ZZ dz = m_zboundPrec * (a_zmax - a_zmin)/100.;
-    //m_zmin = (ZReal)(a_zmin - dz);
-    //m_zmax = (ZReal)(a_zmax + dz);
-
-    // draw edge :
-
-    edge_point_writer pw(a_pixel,*this);
-
-    // some pixel could be out of range [plane.zmin,plane.zmax].
-    for(int count=1;count<a_number;count++) {
-      WriteLine(a_list[count-1],a_list[count],pw);
+  void blend(ZPixel& a_pix,const ZPixel& a_new) {
+    if(!m_blend) {
+      a_pix = a_new;
+      return;
+    }
+    float _or,_og,_ob,_oa;
+    pix2rgba(a_pix,_or,_og,_ob,_oa);
+    float nr,ng,nb,na;
+    pix2rgba(a_new,nr,ng,nb,na);
+    if((0.0f<=na)&&(na<1.0f)) {
+      // same as glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA):
+      float one_minus_na = 1.0f-na;
+      float pr = nr*na+_or*one_minus_na;
+      float pg = ng*na+_og*one_minus_na;
+      float pb = nb*na+_ob*one_minus_na;
+      float pa = 1;
+      rgba2pix(pr,pg,pb,pa,a_pix);
+    } else {
+      a_pix = a_new;
     }
   }
-*/
-protected:
-  class scan_writer {
-  public:
-    virtual void write(ZPos,ZPos,ZZ,ZPos) = 0;
-  public:
-    virtual ~scan_writer(){}
-  };
-
-  class scan_writer_1 : public virtual scan_writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ a_z,ZPos) {
-      m_writer.write(a_x,a_y,a_z);
-    }
-  public:
-    scan_writer_1(writer& a_writer):m_writer(a_writer){}
-    virtual ~scan_writer_1(){}
-  public:
-    scan_writer_1(const scan_writer_1& a_from)
-    :scan_writer(a_from)
-    ,m_writer(a_from.m_writer)
-    {}
-    scan_writer_1& operator=(const scan_writer_1&){return *this;}
-  protected:
-    writer& m_writer;
-  };
-
-  class scan_writer_2 : public virtual scan_writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ a_z,ZPos) {
-      m_writer.write(a_y,a_x,a_z);
-    }
-  public:
-    scan_writer_2(writer& a_writer):m_writer(a_writer){}
-    virtual ~scan_writer_2(){}
-  public:
-    scan_writer_2(const scan_writer_2& a_from)
-    :scan_writer(a_from)
-    ,m_writer(a_from.m_writer)
-    {}
-    scan_writer_2& operator=(const scan_writer_2&){return *this;}
-  protected:
-    writer& m_writer;
-  };
-
-  class scan_writer_3 : public virtual scan_writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ a_z,ZPos a_beg) {
-      m_writer.write(a_x,2*a_beg-a_y,a_z);
-    }
-  public:
-    scan_writer_3(writer& a_writer):m_writer(a_writer){}
-    virtual ~scan_writer_3(){}
-  public:
-    scan_writer_3(const scan_writer_3& a_from)
-    :scan_writer(a_from)
-    ,m_writer(a_from.m_writer)
-    {}
-    scan_writer_3& operator=(const scan_writer_3&){return *this;}
-  protected:
-    writer& m_writer;
-  };
-
-  class scan_writer_4 : public virtual scan_writer {
-  public:
-    virtual void write(ZPos a_x,ZPos a_y,ZZ a_z,ZPos a_beg) {
-      m_writer.write(2*a_beg-a_y,a_x,a_z);
-    }
-  public:
-    scan_writer_4(writer& a_writer):m_writer(a_writer){}
-    virtual ~scan_writer_4(){}
-  public:
-    scan_writer_4(const scan_writer_4& a_from)
-    :scan_writer(a_from)
-    ,m_writer(a_from.m_writer)
-    {}
-    scan_writer_4& operator=(const scan_writer_4&){return *this;}
-  protected:
-    writer& m_writer;
-  };
 
   static void WriteScanLine(void* a_tag,int a_beg,int a_end,int a_y){
     buffer& a_buffer = *((buffer*)a_tag);
@@ -478,7 +313,6 @@ protected:
 
     ZReal zpoint;
     for(int x=beg;x<=end;x++){
-      // Computing must be the same as in edge_point_writer routine.
       zpoint =
         (ZReal)(- a_buffer.m_planeDC
                 - a_buffer.m_planeAC * x
@@ -489,69 +323,22 @@ protected:
 //       &&(zpoint<=a_buffer.m_zmax)
           ){
           *zbuff = zpoint;
-	  *zimage = a_buffer.m_scan_pixel;
+          a_buffer.blend(*zimage,a_buffer.m_scan_pixel);
         }
       } else {
         *zbuff = zpoint;
-        *zimage = a_buffer.m_scan_pixel;
+        a_buffer.blend(*zimage,a_buffer.m_scan_pixel);
       }
       zbuff  ++;
       zimage ++;
     }
   }
 
-  static void WriteLine(const point& a_beg,
-                        const point& a_end,
-                        writer& a_writer){
-    ZPos dx = a_end.x - a_beg.x;
-    ZPos dy = a_end.y - a_beg.y;
-    ZZ   dz = a_end.z - a_beg.z;
-
-    //  6  2
-    // 5     1
-    // 7     3
-    //  8  4
-    scan_writer_1 sw1(a_writer);
-    scan_writer_2 sw2(a_writer);
-    scan_writer_3 sw3(a_writer);
-    scan_writer_4 sw4(a_writer);
-
-    if( (dx==0) && (dy==0) ) {
-      a_writer.write(a_beg.x,a_beg.y,a_beg.z);
-      a_writer.write(a_end.x,a_end.y,a_end.z);
-
-    } else if(dx==0) {
-      if(dy>0)
-        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy, dx, dz,sw2);
-      else
-        ScanLine ( a_end.y, a_end.x,a_end.z,-dy, dx,-dz,sw2);
-
-    } else if(dx>0) {
-           if((0<=dy) && (dy<=dx))  /*1*/
-        ScanLine ( a_beg.x, a_beg.y,a_beg.z, dx, dy, dz,sw1);
-      else if(dx<dy)                /*2*/
-        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy, dx, dz,sw2);
-      else if((-dx<=dy) && (dy<0) ) /*3*/
-        ScanLine ( a_beg.x, a_beg.y,a_beg.z, dx,-dy, dz,sw3);
-      else if(dy<-dx)               /*4*/
-        ScanLine ( a_end.y, a_end.x,a_end.z,-dy, dx,-dz,sw4);
-
-    } else { //dx<0
-           if((0<=dy) && (dy<=-dx)) /*5*/
-        ScanLine ( a_end.x, a_end.y,a_end.z,-dx, dy,-dz,sw3);
-      else if(-dx<dy)               /*6*/
-        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy,-dx, dz,sw4);
-      else if((dx<=dy) && (dy<0) )  /*7*/
-        ScanLine ( a_end.x, a_end.y,a_end.z,-dx,-dy,-dz,sw1);
-      else if(dy<dx)                /*8*/
-        ScanLine ( a_end.y, a_end.x,a_end.z,-dy,-dx,-dz,sw2);
-    }
-
-  }
-
-  static void ScanLine(ZPos a_x,ZPos a_y,ZZ a_z,
-                       ZPos a_dx,ZPos a_dy,ZZ a_dz,
-                       scan_writer& a_proc){
+  typedef void(buffer::*scan_write_point_func)(ZPos,ZPos,ZZ,ZPos,unsigned int,ZPixel);
+  void ScanLine(ZPos a_x,ZPos a_y,ZZ a_z,
+                ZPos a_dx,ZPos a_dy,ZZ a_dz,
+                unsigned int a_size,ZPixel a_pixel,
+                scan_write_point_func a_func){
     // Mid point algorithm
     // assume 0<dx    0<=dy<=dx
 
@@ -559,25 +346,25 @@ protected:
     ZPos beg = a_y;
     ZZ incz = a_dz/(ZZ)a_dx;
     if(a_dy==0) {
-      a_proc.write(a_x,a_y,a_z,beg);
+      (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       while(a_x<end){
         a_x++;
         a_z += incz;
-        a_proc.write(a_x,a_y,a_z,beg);
+        (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       }
     } else if(a_dy==a_dx) {
-      a_proc.write(a_x,a_y,a_z,beg);
+      (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       while(a_x<end){
         a_x++;
         a_y++;
         a_z += incz;
-        a_proc.write(a_x,a_y,a_z,beg);
+        (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       }
     } else {
       ZPos d = 2 * a_dy - a_dx;
       ZPos incrE = 2 * a_dy;
       ZPos incrNE = 2 * ( a_dy - a_dx);
-      a_proc.write(a_x,a_y,a_z,beg);
+      (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       while(a_x<end){
         if(d<=0){
           d += incrE;
@@ -588,13 +375,60 @@ protected:
           a_y++;
         }
         a_z += incz;
-        a_proc.write(a_x,a_y,a_z,beg);
+        (this->*a_func)(a_x,a_y,a_z,beg,a_size,a_pixel);
       }
     }
   }
 
+  void WriteLine(const point& a_beg,
+                 const point& a_end,
+                 unsigned int a_size,ZPixel a_pixel){
+    ZPos dx = a_end.x - a_beg.x;
+    ZPos dy = a_end.y - a_beg.y;
+    ZZ   dz = a_end.z - a_beg.z;
+
+    //  6  2
+    // 5     1
+    // 7     3
+    //  8  4
+
+    if( (dx==0) && (dy==0) ) {
+      write_point(a_beg.x,a_beg.y,a_beg.z,a_size,a_pixel);
+      write_point(a_end.x,a_end.y,a_end.z,a_size,a_pixel);
+
+    } else if(dx==0) {
+      if(dy>0)
+        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy, dx, dz, a_size,a_pixel,&buffer::scan_write_point_2);
+      else
+        ScanLine ( a_end.y, a_end.x,a_end.z,-dy, dx,-dz, a_size,a_pixel,&buffer::scan_write_point_2);
+
+    } else if(dx>0) {
+           if((0<=dy) && (dy<=dx))  /*1*/
+        ScanLine ( a_beg.x, a_beg.y,a_beg.z, dx, dy, dz, a_size,a_pixel,&buffer::scan_write_point_1);
+      else if(dx<dy)                /*2*/
+        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy, dx, dz, a_size,a_pixel,&buffer::scan_write_point_2);
+      else if((-dx<=dy) && (dy<0) ) /*3*/
+        ScanLine ( a_beg.x, a_beg.y,a_beg.z, dx,-dy, dz, a_size,a_pixel,&buffer::scan_write_point_3);
+      else if(dy<-dx)               /*4*/
+        ScanLine ( a_end.y, a_end.x,a_end.z,-dy, dx,-dz, a_size,a_pixel,&buffer::scan_write_point_4);
+
+    } else { //dx<0
+           if((0<=dy) && (dy<=-dx)) /*5*/
+        ScanLine ( a_end.x, a_end.y,a_end.z,-dx, dy,-dz, a_size,a_pixel,&buffer::scan_write_point_3);
+      else if(-dx<dy)               /*6*/
+        ScanLine ( a_beg.y, a_beg.x,a_beg.z, dy,-dx, dz, a_size,a_pixel,&buffer::scan_write_point_4);
+      else if((dx<=dy) && (dy<0) )  /*7*/
+        ScanLine ( a_end.x, a_end.y,a_end.z,-dx,-dy,-dz, a_size,a_pixel,&buffer::scan_write_point_1);
+      else if(dy<dx)                /*8*/
+        ScanLine ( a_end.y, a_end.x,a_end.z,-dy,-dx,-dz, a_size,a_pixel,&buffer::scan_write_point_2);
+    }
+
+  }
+
+
 protected:
   bool         m_depth_test;
+  bool         m_blend;
   ZReal*       m_zbuffer;
 //ZReal        m_zmin,m_zmax;
 

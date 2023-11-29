@@ -163,7 +163,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
     //    G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
     //    return 0.;
     //}
-    G4int nDB=vARatio.size();                  // A number of nuclei already initialized in AMDB
+    G4int nDB=(G4int)vARatio.size();  // A number of nuclei already initialized in AMDB
     if(nDB && lastARatio==A && m_s==lastSRatio) return lastRRatio;  // VI do not use tolerance
     G4bool found=false;
     G4int i=-1;
@@ -610,7 +610,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTotXS(G4double p, G4int PDG, 
 std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, G4bool F)
 {
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
-    G4int nDB=vItot.size();                   // A number of hadrons already initialized in AMDB
+    G4int nDB=(G4int)vItot.size();  // A number of hadrons already initialized in AMDB
     if(nDB && lastHtot==PDG && lastFtot==F && p>0. && p==lastPtot) return lastRtot;// VI don't use toler.
     //  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
     lastHtot=PDG;

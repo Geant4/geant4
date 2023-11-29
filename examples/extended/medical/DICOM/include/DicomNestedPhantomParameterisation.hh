@@ -67,14 +67,14 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
 public:
     typedef std::map<G4String, G4VisAttributes*> ColourMap_t;
 
-    static G4String defaultColorFile;
+    static G4String fDefaultColorFile;
 
 public:
 
   DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
                 std::vector<G4Material*>& mat,
                 G4int fnZ_ = 0, G4int fnY_ = 0, G4int fnX_ = 0,
-                G4String colorFile = defaultColorFile);
+                G4String colorFile = fDefaultColorFile);
   ~DicomNestedPhantomParameterisation();
 
   G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
@@ -143,7 +143,7 @@ private:
   std::vector<G4Material*> fMaterials;
   size_t* fMaterialIndices; // Index in materials corresponding to each voxel
   ColourMap_t fColours;
-  std::map<G4int, G4VisAttributes*> mColours;
+  std::map<G4int, G4VisAttributes*> fColours2;
   std::vector<G4double> fpZ;
 };
 

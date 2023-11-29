@@ -55,7 +55,7 @@ class G4AdjointProton : public G4ParticleDefinition
  private:
    static G4AdjointProton* theInstance;
    G4AdjointProton(){}
-   ~G4AdjointProton(){}
+   ~G4AdjointProton() override= default;
 
  public:
    static G4AdjointProton* Definition();

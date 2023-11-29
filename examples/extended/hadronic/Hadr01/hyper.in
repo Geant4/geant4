@@ -1,0 +1,27 @@
+#================================================
+#     Macro file for hadr01
+#     06.06.2006 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_PbWO4
+/testhadr/TargetRadius     1  cm
+/testhadr/TargetLength     10 cm
+/testhadr/NumberDivZ       100
+/testhadr/PrintModulo      10
+#
+/run/setCut                1 mm
+#
+/testhadr/BCParticles true
+/testhadr/HyperNuclei true
+#
+/run/initialize
+#
+/gun/particle hyperalpha
+/gun/energy 100. GeV
+/run/beamOn 100
+/gun/particle anti_hyperalpha
+/run/beamOn 100
+#

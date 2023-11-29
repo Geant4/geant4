@@ -38,6 +38,8 @@
 #include "G4UIcommand.hh"
 #include "G4AttValue.hh"
 
+#define G4warn G4cout
+
 namespace G4TrajectoryDrawerUtils {
 
   enum TimesValidity {InvalidTimes, ValidTimes};
@@ -85,7 +87,7 @@ namespace G4TrajectoryDrawerUtils {
 	  if (!trajectoryPointAttValues) {
 	    static G4bool warnedNoAttValues = false;
 	    if (!warnedNoAttValues) {
-	      G4cout <<
+	      G4warn <<
   "*************************************************************************"
   "\n*  WARNING: G4TrajectoryDrawerUtils::GetPointsAndTimes: no att values."
   "\n*************************************************************************"
@@ -112,7 +114,7 @@ namespace G4TrajectoryDrawerUtils {
 	    if (!foundPreTime || !foundPostTime) {
 	      static G4bool warnedTimesNotFound = false;
 	      if (!warnedTimesNotFound) {
-		G4cout <<
+		G4warn <<
   "*************************************************************************"
   "\n*  WARNING: G4TrajectoryDrawerUtils::GetPointsAndTimes: times not found."
   "\n You need to specify \"/vis/scene/add/trajectories rich\""

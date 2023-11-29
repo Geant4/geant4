@@ -1,14 +1,4 @@
-#------------------------------------------------------------------------------
-# CMakeLists.txt
-# Module :
-# Package: Geant4.src.
-#
-# Intermediate level CMakeLists.txt - just process subdirectories
-#
-# Generated on : 24/9/2010
-#
-#
-#------------------------------------------------------------------------------
+# - Define toolkit source code modules and composed libraries
 
 add_subdirectory(analysis)
 add_subdirectory(digits_hits)
@@ -34,10 +24,22 @@ add_subdirectory(physics_lists)
 add_subdirectory(processes)
 add_subdirectory(readout)
 add_subdirectory(run)
-add_subdirectory(tasking)
 add_subdirectory(track)
 add_subdirectory(tracking)
 add_subdirectory(visualization)
+
+# Optional reset of categories
+# This is *only for build testing purposes* as the resultant libraries are not
+# usable by tests, examples, or any other client application
+if(__GEANT4_LIBRARY_DEFINITION_FILE AND (EXISTS ${PROJECT_SOURCE_DIR}/tests))
+  get_filename_component(__lib_def_file "${__GEANT4_LIBRARY_DEFINITION_FILE}" ABSOLUTE)
+  if(NOT EXISTS "${__lib_def_file}")
+    message(FATAL_ERROR "library definition file '${__lib_def_file}' does not exist")
+  endif()
+
+  __geant4_category_reset()
+  include("${__lib_def_file}")
+endif()
 
 # - Compose libs
 geant4_compose_targets()

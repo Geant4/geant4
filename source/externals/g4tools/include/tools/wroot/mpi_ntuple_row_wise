@@ -4,7 +4,7 @@
 #ifndef tools_wroot_mpi_ntuple_row_wise
 #define tools_wroot_mpi_ntuple_row_wise
 
-// MPI pntuple. It uses the inlib/impi interface.
+// MPI pntuple. It uses the tools/impi interface.
 
 #include "base_pntuple_row_wise"
 #include "mpi_basket_add"

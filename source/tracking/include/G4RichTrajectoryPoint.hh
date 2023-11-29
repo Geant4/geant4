@@ -51,13 +51,14 @@
 #ifndef G4RICHTRAJECTORYPOINT_HH
 #define G4RICHTRAJECTORYPOINT_HH
 
-#include <vector>
+#include "G4StepStatus.hh"
+#include "G4ThreeVector.hh"
+#include "G4TouchableHandle.hh"
+#include "G4TrajectoryPoint.hh"
 
 #include "trkgdefs.hh"
-#include "G4TrajectoryPoint.hh"
-#include "G4TouchableHandle.hh"
-#include "G4ThreeVector.hh"
-#include "G4StepStatus.hh"
+
+#include <vector>
 
 class G4Track;
 class G4Step;
@@ -65,76 +66,66 @@ class G4VProcess;
 
 class G4RichTrajectoryPoint : public G4TrajectoryPoint
 {
+ public:  // without description
+  // Constructors/Destructor
+  //
+  G4RichTrajectoryPoint();
+  G4RichTrajectoryPoint(const G4Track*);  // For first point.
+  G4RichTrajectoryPoint(const G4Step*);  // For subsequent points.
+  G4RichTrajectoryPoint(const G4RichTrajectoryPoint& right);
+  ~G4RichTrajectoryPoint() override;
 
-  public: // without description
+  // Operators
+  //
+  G4RichTrajectoryPoint& operator=(const G4RichTrajectoryPoint&) = delete;
+  inline G4bool operator==(const G4RichTrajectoryPoint& right) const;
+  inline void* operator new(size_t);
+  inline void operator delete(void* aRichTrajectoryPoint);
 
-    // Constructors/Destructor
-    //
-    G4RichTrajectoryPoint();
-    G4RichTrajectoryPoint(const G4Track*);  // For first point.
-    G4RichTrajectoryPoint(const G4Step*);   // For subsequent points.
-    G4RichTrajectoryPoint(const G4RichTrajectoryPoint& right);
-    virtual ~G4RichTrajectoryPoint();
+  // Get/Set functions
+  //
+  inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const override;
+  const std::map<G4String, G4AttDef>* GetAttDefs() const override;
+  std::vector<G4AttValue>* CreateAttValues() const override;
 
-    // Operators
-    //
-    G4RichTrajectoryPoint& operator= (const G4RichTrajectoryPoint&) = delete;
-    inline G4bool operator==(const G4RichTrajectoryPoint& right) const;
-    inline void *operator new(size_t);
-    inline void operator delete(void *aRichTrajectoryPoint);
-
-    // Get/Set functions
-    //
-    inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const;
-    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-    virtual std::vector<G4AttValue>* CreateAttValues() const;
-
-  private:
-
-    // Extended member data
-    //
-    std::vector<G4ThreeVector>* fpAuxiliaryPointVector = nullptr;
-    G4double fTotEDep = 0.0;
-    G4double fRemainingEnergy = 0.0;
-    const G4VProcess* fpProcess = nullptr;
-    G4StepStatus fPreStepPointStatus = fUndefined;
-    G4StepStatus fPostStepPointStatus = fUndefined;
-    G4double fPreStepPointGlobalTime = 0.0;
-    G4double fPostStepPointGlobalTime = 0.0;
-    G4TouchableHandle fpPreStepPointVolume;
-    G4TouchableHandle fpPostStepPointVolume;
-    G4double fPreStepPointWeight = 0.0;
-    G4double fPostStepPointWeight = 0.0;
+ private:
+  // Extended member data
+  //
+  std::vector<G4ThreeVector>* fpAuxiliaryPointVector = nullptr;
+  G4double fTotEDep = 0.0;
+  G4double fRemainingEnergy = 0.0;
+  const G4VProcess* fpProcess = nullptr;
+  G4StepStatus fPreStepPointStatus = fUndefined;
+  G4StepStatus fPostStepPointStatus = fUndefined;
+  G4double fPreStepPointGlobalTime = 0.0;
+  G4double fPostStepPointGlobalTime = 0.0;
+  G4TouchableHandle fpPreStepPointVolume;
+  G4TouchableHandle fpPostStepPointVolume;
+  G4double fPreStepPointWeight = 0.0;
+  G4double fPostStepPointWeight = 0.0;
 };
 
-extern G4TRACKING_DLL
-G4Allocator<G4RichTrajectoryPoint>*& aRichTrajectoryPointAllocator();
+extern G4TRACKING_DLL G4Allocator<G4RichTrajectoryPoint>*& aRichTrajectoryPointAllocator();
 
-inline void*
-G4RichTrajectoryPoint::operator new(size_t)
+inline void* G4RichTrajectoryPoint::operator new(size_t)
 {
-  if (aRichTrajectoryPointAllocator() == nullptr)
-  {
+  if (aRichTrajectoryPointAllocator() == nullptr) {
     aRichTrajectoryPointAllocator() = new G4Allocator<G4RichTrajectoryPoint>;
   }
-  return (void *) aRichTrajectoryPointAllocator()->MallocSingle();
+  return (void*)aRichTrajectoryPointAllocator()->MallocSingle();
 }
 
-inline void
-G4RichTrajectoryPoint::operator delete(void *aRichTrajectoryPoint)
+inline void G4RichTrajectoryPoint::operator delete(void* aRichTrajectoryPoint)
 {
-  aRichTrajectoryPointAllocator()->FreeSingle
-    ((G4RichTrajectoryPoint *) aRichTrajectoryPoint);
+  aRichTrajectoryPointAllocator()->FreeSingle((G4RichTrajectoryPoint*)aRichTrajectoryPoint);
 }
 
-inline G4bool
-G4RichTrajectoryPoint::operator==(const G4RichTrajectoryPoint& r) const
+inline G4bool G4RichTrajectoryPoint::operator==(const G4RichTrajectoryPoint& r) const
 {
-  return (this==&r);
+  return (this == &r);
 }
 
-inline const std::vector<G4ThreeVector>*
-G4RichTrajectoryPoint::GetAuxiliaryPoints() const
+inline const std::vector<G4ThreeVector>* G4RichTrajectoryPoint::GetAuxiliaryPoints() const
 {
   return fpAuxiliaryPointVector;
 }

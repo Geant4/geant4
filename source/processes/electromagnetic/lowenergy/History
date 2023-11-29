@@ -1,37 +1,105 @@
--------------------------------------------------------------------
+# Category emlowen History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-03-14 Z.Li (emlowen-V11-01-03)
+- applied clang-tidy, clang-format for: G4LivermoreRayleighModel.cc/hh,
+ G4LivermoreGammaConversion5DModel.cc/hh,
+ G4LivermoreGammaConversionModel.cc/hh,
+ G4LivermoreComptonModel.cc/hh,
+ G4LivermorePhotoElectricModel.cc/hh
+- used access to G4LEDATA via G4EmParameters for G4LivermoreComptonModel,
+ G4LivermoreGammaConversion5DModel,
+ G4LivermoreGammaConversionModel
 
-06.02.2022 V. Ivanchenko, emlowen-V10-07-28
-- G4MicroElecInelasticModel_new - removed not working if{} block
+## 2023-03-05 V. Ivanchenko (emlowen-V11-01-02)
+- G4LowEWentzelVIModel - update according to Coulomb scattering models
 
-06.02.2022 V. Ivanchenko
+## 2023-02-27 Z.Li (emlowen-V11-01-01)
+- G4LivermoreGammaConversionModel, G4LivermoreGammaConversion5DModel - fix
+spline interpolation by calling FillSecondDerivatives()
+
+## 2023-01-27 V. Ivanchenko (emlowen-V11-01-00)
+- G4LivermorePhotoElectricModel, G4LivermoreRayleighModel - do not call
+    directly environment variable - use G4EmParameters method,
+    uniformly implement lock for reading data on fly, minor code format
+
+## 2022-11-23 Gabriele Cosmo (emlowen-V11-00-16)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (emlowen-V11-00-15)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-13 V. Ivanchenko (emlowen-V11-00-14)
+- G4MicroElecElasticModel, G4MicroElecInelasticModel - fixed simple
+    Coverity report
+
+## 2022-10-26 Daren Sawkey (emlowen-V11-00-13)
+- G4PhotoEffectAngularGeneratorPolarized: include factor of 1/8 for L shell
+  diff cross section. Addressing bug 2293.
+
+## 2022-10-19 V. Ivanchenko (emlowen-V11-00-12)
+- G4UAtomicDeexcitation, G4AtomicTransitionManager, G4ShellData, G4AugerData 
+    added de-excitation for heavy elements Z=101-104 proposed by R.Chakma;
+    removed commented lines; improved comments; improved code format; 
+    use ++i instead of i++.
+- G4AtomicTransitionManager - read fluorescence data using new interface
+    G4EmParameters::FluoDirectory()
+- G4LivermoreComptonModel - minor clean-up 
+
+## 2022-10-06 Gabriele Cosmo (emlowen-V11-00-11)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4BoldyshevTripletModel::SampleSecondaries() and in
+  G4Generator2BN::SampleDirection().
+
+## 2022-08-05 V. Ivanchenko (emlowen-V11-00-10)
+- Fixed exception printout in Livermore models
+
+## 2022-07-19 V. Ivanchenko (emlowen-V11-00-09)
+- Fixed Coverity warnings in G4VCrossSectionHandler
+
+## 2022-07-06 V. Ivanchenko (emlowen-V11-00-08)
+- G4Rayleigh scattering moved boundary between low and high energy
+    table from 100 keV to 150 keV to be coherent with G4GammaGeneralProcess
+
+## 2022-05-23 Gabriele Cosmo (emlowen-V11-00-07)
+- Fixed use of potential uninitialised pointer in
+  G4AtomicDeexcitation::GenerateParticles(..).
+
+## 2022-05-20 Z. Li (emlowen-V11-00-06)
+- G4LivermoreGammaConversionModel, G4LivermorePhotoElectricModel,
+  G4LivermoreGammaConversion5DModel: set spline interpolation for EPDL97.
+
+## 2022-04-13 Ben Morgan (emlowen-V11-00-05)
+- Remove Latin-1 characters.
+
+## 2022-02-06 V. Ivanchenko (emlowen-V11-00-04)
+- G4MicroElecInelasticModel_new - removed not working if{} block.
+
+## 2022-02-06 V. Ivanchenko (emlowen-V11-00-03)
 - G4MicroElecInelasticModel_new - C. Inguimbert change interpolate method 
     making a choice between log-log, lin-log, and lin-lin interpolations and
     added a protection for zero input energy. When sample transition the choice
     the choice is implemented for transition from atomic level and Fermi level.
     This MR should fix rare crash due to this model.
 
-04.02.2022 V. Ivanchenko
+## 2022-02-04 V. Ivanchenko (emlowen-V11-00-02)
 - G4hIonEffChargeSquare, G4PenelopeRayleighModel, G4PenelopeRayleighModelMI
-    fixed compilation warning on unused variable
+    fixed compilation warning on unused variable.
 
-18.01.2022 J. Hahnfeld
-- Prefer pointer to `const G4Material` if possible
+## 2022-01-18 Jonas Hahnfeld (emlowen-V11-00-01)
+- Prefer pointer to `const G4Material` if possible.
+
+## 2021-12-10 Ben Morgan (emlowen-V11-00-00)
+- Change to new Markdown History format.
+
+---
+
+# History entries prior to 11.0
 
 25.11.2021 S. Guatelli, emlowen-V10-07-27
 - Added option to activate the ANSTO fluorescence radiation yield (Z < 93)

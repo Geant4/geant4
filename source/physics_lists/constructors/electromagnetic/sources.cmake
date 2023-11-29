@@ -4,6 +4,7 @@
 geant4_add_module(G4phys_ctor_em
   PUBLIC_HEADERS
     G4EmBuilder.hh
+    G4EmDNABuilder.hh
     G4EmDNAChemistry.hh
     G4EmDNAChemistry_option1.hh
     G4EmDNAChemistry_option2.hh
@@ -38,8 +39,11 @@ geant4_add_module(G4phys_ctor_em
     G4EmStandardPhysics_option4.hh
     G4GammaGeneralProcess.hh
     G4OpticalPhysics.hh
+    G4ChemDissociationChannels.hh
+    G4ChemDissociationChannels_option1.hh
   SOURCES
     G4EmBuilder.cc
+    G4EmDNABuilder.cc
     G4EmDNAChemistry.cc
     G4EmDNAChemistry_option1.cc
     G4EmDNAChemistry_option2.cc
@@ -73,19 +77,18 @@ geant4_add_module(G4phys_ctor_em
     G4EmStandardPhysics_option3.cc
     G4EmStandardPhysics_option4.cc
     G4GammaGeneralProcess.cc
-    G4OpticalPhysics.cc)
+    G4OpticalPhysics.cc
+    G4ChemDissociationChannels.cc
+    G4ChemDissociationChannels_option1.cc)
 
 geant4_module_link_libraries(G4phys_ctor_em
   PUBLIC
-    G4decay
     G4emdna-utils
+    G4emdna-processes
+    G4emlowenergy
     G4emutils
     G4globman
-    G4materials
-    G4partman
-    G4procman
     G4run
-    G4transportation
   PRIVATE
     G4baryons
     G4bosons
@@ -94,20 +97,22 @@ geant4_module_link_libraries(G4phys_ctor_em
     G4emdna-models
     G4emdna-molman
     G4emdna-moltypes
-    G4emdna-processes
     G4emhighenergy
-    G4emlowenergy
     G4emstandard
     G4geometrymng
     G4hadronic_mgt
     G4hadronic_util
     G4ions
     G4leptons
+    G4materials
     G4mesons
     G4muons
     G4optical
+    G4partman
     G4phys_builders
     G4phys_ctor_factory
     G4physlist_util
+    G4procman
     G4track
+    G4transportation #NB Only for single enum in header
     G4xrays)

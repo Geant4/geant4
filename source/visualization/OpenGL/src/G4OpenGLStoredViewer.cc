@@ -99,7 +99,9 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetVisAttributesModifiers() !=
        fVP.GetVisAttributesModifiers())                           ||
       (lastVP.IsSpecialMeshRendering() !=
-       fVP.IsSpecialMeshRendering())
+       fVP.IsSpecialMeshRendering())                              ||
+      (lastVP.GetSpecialMeshRenderingOption() !=
+       fVP.GetSpecialMeshRenderingOption())
       )
   return true;
   
@@ -117,6 +119,7 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   /**************************************************************
    If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
+   if (vp.GetCutawayMode() != fVP.GetCutawayMode()) return true;
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
    for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
@@ -476,18 +479,16 @@ void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Text& text)
 {
   // We don't want this to get into a display list or a TODL or a PODL so
   // use the fMemoryForDisplayLists flag.
-  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.fDoNotUseDisplayList = true;
   fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(text);
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
+  fG4OpenGLStoredSceneHandler.fDoNotUseDisplayList = false;
 }
 
 void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Circle& circle)
 {
   // We don't want this to get into a display list or a TODL or a PODL so
   // use the fMemoryForDisplayLists flag.
-  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.fDoNotUseDisplayList = true;
   fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(circle);
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
+  fG4OpenGLStoredSceneHandler.fDoNotUseDisplayList = false;
 }

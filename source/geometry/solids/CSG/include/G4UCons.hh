@@ -56,13 +56,13 @@ class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
                   G4double pSPhi, G4double pDPhi);
       // Constructs a cone with the given name and dimensions
 
-   ~G4UCons();
+   ~G4UCons() override;
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
-                            const G4VPhysicalVolume* pRep );
+                            const G4VPhysicalVolume* pRep ) override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
     G4double GetInnerRadiusMinusZ() const;
     G4double GetOuterRadiusMinusZ() const;
@@ -84,16 +84,16 @@ class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
     void SetStartPhiAngle     (G4double newSPhi, G4bool trig=true);
     void SetDeltaPhiAngle     (G4double newDPhi);
 
-    inline G4GeometryType GetEntityType() const;
+    inline G4GeometryType GetEntityType() const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
+                                 G4double& pMin, G4double& pMax) const override;
 
-    G4Polyhedron* CreatePolyhedron() const;
+    G4Polyhedron* CreatePolyhedron() const override;
 
   public:  // without description
        

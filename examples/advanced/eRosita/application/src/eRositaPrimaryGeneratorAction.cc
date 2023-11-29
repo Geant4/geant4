@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "eRositaActionInitialization.hh"
 #include "eRositaDetectorConstruction.hh"
@@ -39,50 +35,42 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-eRositaPrimaryGeneratorAction::eRositaPrimaryGeneratorAction() 
- : G4VUserPrimaryGeneratorAction()
-{   
-  G4int n_particle = 1;
-//   G4int n_particle = 1000;
-  particleGun = new G4ParticleGun(n_particle);
+eRositaPrimaryGeneratorAction::eRositaPrimaryGeneratorAction()
+{
+    constexpr auto NUMBER_OF_PARTICLES{1};
+    particleGun = new G4ParticleGun(NUMBER_OF_PARTICLES);
 
-// default particle
+    // default particle
+    auto *particleTable = G4ParticleTable::GetParticleTable();
+    auto *particle = particleTable->FindParticle("proton");
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
-  
-  particleGun->SetParticleDefinition(particle);
-  xdirection =  0.0;     // x component of initial momentum vector
-  ydirection = -0.5;     // y              -"-
-  zdirection = -1.0;     // z              -"-
-  particleGun->SetParticleMomentumDirection(
-      G4ThreeVector(xdirection,ydirection,zdirection));
-  particleGun->SetParticleEnergy(100.0*MeV);
+    constexpr auto PARTICLE_ENERGY{100.0 * MeV};
+    particleGun->SetParticleDefinition(particle);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(momentumDirectionX, momentumDirectionY, momentumDirectionZ));
+    particleGun->SetParticleEnergy(PARTICLE_ENERGY);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 eRositaPrimaryGeneratorAction::~eRositaPrimaryGeneratorAction()
 {
-  delete particleGun;
+    delete particleGun;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void eRositaPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
+void eRositaPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
+{
+    constexpr auto INITIAL_POSITION_X{0.0 * cm};
+    constexpr auto INITIAL_POSITION_Y{2.25 * cm};
+    constexpr auto INITIAL_POSITION_Z{4.0 * cm};
+    
+    positionX = INITIAL_POSITION_X;
+    positionY = INITIAL_POSITION_Y;
+    positionZ = INITIAL_POSITION_Z;
 
-  xposition = 0.0*cm;
-  yposition = 2.25*cm;
-  zposition = 4.0*cm;
-
-  particleGun->SetParticlePosition(
-      G4ThreeVector(xposition,yposition,zposition));
-
-  particleGun->GeneratePrimaryVertex(anEvent);
+    particleGun->SetParticlePosition(G4ThreeVector(positionX, positionY, positionZ));
+    particleGun->GeneratePrimaryVertex(event);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

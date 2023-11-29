@@ -30,9 +30,9 @@
 #include "G3toG4ActionInitialization.hh"
 
 // common package includes
-// #include "ExG4EventAction01.hh"
-// #include "ExG4RunAction01.hh"
 #include "GunPrimaryGeneratorAction.hh"
+
+using namespace Common;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

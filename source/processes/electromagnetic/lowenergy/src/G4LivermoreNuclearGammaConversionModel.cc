@@ -102,27 +102,27 @@ void G4LivermoreNuclearGammaConversionModel::Initialise(
     InitialiseElementSelectors(particle, cuts);
 
     // Access to elements  
-    char* path = std::getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
       G4ProductionCutsTable::GetProductionCutsTable();
   
-    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
     for(G4int i=0; i<numOfCouples; ++i) 
     {
       const G4Material* material = 
         theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       const G4ElementVector* theElementVector = material->GetElementVector();
-      G4int nelm = material->GetNumberOfElements();
+      std::size_t nelm = material->GetNumberOfElements();
     
-      for (G4int j=0; j<nelm; ++j) 
-	{
-	  G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-	  if(Z < 1)          { Z = 1; }
-	  else if(Z > maxZ)  { Z = maxZ; }
-	  if(!data[Z]) { ReadData(Z, path); }
-	}
+      for (std::size_t j=0; j<nelm; ++j) 
+      {
+        G4int Z = (G4int)(*theElementVector)[j]->GetZ();
+        if(Z < 1)          { Z = 1; }
+        else if(Z > maxZ)  { Z = maxZ; }
+        if(!data[Z]) { ReadData(Z, path); }
+      }
     }
   }
   if(isInitialised) { return; }
@@ -165,7 +165,7 @@ void G4LivermoreNuclearGammaConversionModel::ReadData(size_t Z, const char* path
 
   if(!datadir) 
   {
-    datadir = std::getenv("G4LEDATA");
+    datadir = G4FindDataDir("G4LEDATA");
     if(!datadir) 
     {
       G4Exception("G4LivermoreNuclearGammaConversionModel::ReadData()",
@@ -188,7 +188,7 @@ void G4LivermoreNuclearGammaConversionModel::ReadData(size_t Z, const char* path
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreNuclearGammaConversionModel::ReadData()",
 		"em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
+		ed,"G4LEDATA version should be G4EMLOW8.0 or later.");
     return;
   } 
   else 
@@ -240,15 +240,15 @@ G4LivermoreNuclearGammaConversionModel::ComputeCrossSectionPerAtom(const G4Parti
   xs = pv->Value(GammaEnergy); 
   
   if(verboseLevel > 0)
-    {
-    G4int n = pv->GetVectorLength() - 1;
+  {
+    std::size_t n = pv->GetVectorLength() - 1;
     G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
 	    << GammaEnergy/MeV << G4endl;
     G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
     G4cout  <<  "    -> first cs value in EADL data file (iu) =" << (*pv)[0] << G4endl;
     G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
     G4cout  <<  "*********************************************************" << G4endl;
-    }
+  }
   return xs;
 }
 

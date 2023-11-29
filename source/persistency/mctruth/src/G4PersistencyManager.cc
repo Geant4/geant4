@@ -74,13 +74,13 @@ void G4PersistencyManager::SetVerboseLevel(G4int v)
   if(TransactionManager() != nullptr)
     TransactionManager()->SetVerboseLevel(m_verbose);
 
-  std::size_t i;
+  G4int i;
 
   G4HCIOcatalog* hcio = G4HCIOcatalog::GetHCIOcatalog();
   if(hcio != nullptr)
   {
     hcio->SetVerboseLevel(m_verbose);
-    for(i = 0; i < hcio->NumberOfHCIOmanager(); ++i)
+    for(i = 0; i < (G4int)hcio->NumberOfHCIOmanager(); ++i)
     {
       hcio->GetHCIOmanager(i)->SetVerboseLevel(m_verbose);
     }
@@ -89,7 +89,7 @@ void G4PersistencyManager::SetVerboseLevel(G4int v)
   if(dcio != nullptr)
   {
     dcio->SetVerboseLevel(m_verbose);
-    for(i = 0; i < dcio->NumberOfDCIOmanager(); ++i)
+    for(i = 0; i < (G4int)dcio->NumberOfDCIOmanager(); ++i)
     {
       dcio->GetDCIOmanager(i)->SetVerboseLevel(m_verbose);
     }

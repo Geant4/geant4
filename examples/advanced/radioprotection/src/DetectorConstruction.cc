@@ -53,14 +53,24 @@
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
 #include "G4SystemOfUnits.hh"
-
 #include "G4NistManager.hh"
 
-DetectorConstruction::DetectorConstruction(AnalysisManager* analysis_manager, G4String detector)
+DetectorConstruction::DetectorConstruction(AnalysisManager* analysis_manager, DetectorMessenger* detector_messenger)
 {
 	analysis = analysis_manager;
+	messenger = detector_messenger;
 	
-	detectorType = detector;
+	detectorType = messenger -> GetDetectorType();
+	detectorSizeWidth = messenger -> GetDetectorSizeWidth();
+	detectorSizeThickness = messenger -> GetDetectorSizeThickness();
+	secondStageSizeDim = messenger -> GetSecondStageSizeWidth();
+	secondStageSizeThickness = messenger -> GetSecondStageSizeThickness();
+	
+	usingWaterPhantom = messenger -> IsPhantomEnabled();
+	
+	detectorPositionDepth = messenger -> GetDetectorPositionDepth();
+	
+	nistMan = G4NistManager::Instance();
 }
 
 DetectorConstruction::~DetectorConstruction(){
@@ -69,36 +79,122 @@ DetectorConstruction::~DetectorConstruction(){
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-
-	if( detectorType == "Diamond" ) return ConstructDiamondDetector();
+	if( usingWaterPhantom == true ) ConstructWorldWithWaterPhantom(); // for medical applications
+	else ConstructVacuumWorld(); // space applications
 	
-	else if( detectorType == "MicroDiamond" ) return ConstructMicroDiamondDetector();
-	
-	else if( detectorType == "Silicon" ) return ConstructSiliconDetector();
-	
-	else if( detectorType == "SiliconBridge" ) return ConstructSiliconBridgeDetector();
-	
+	if( detectorType == "Diamond" ) ConstructDiamondDetector();
+	else if( detectorType == "MicroDiamond" ) ConstructMicroDiamondDetector();
+	else if( detectorType == "Silicon" ) ConstructSiliconDetector();
+	else if( detectorType == "SiliconBridge" ) ConstructSiliconBridgeDetector();
+	else if( detectorType == "DiamondTelescope" ) ConstructDiamondTelescope();
 	else
 	{
 		G4cout << "ERROR: " << detectorType << " is not an allowed detector type. ";
-		G4cout << "Did you change some code in radioprotection.cc and/or DetectorMessenger.cc ?" << G4endl;
-		
 		return 0;
 	}
+	
+	return physical_world;
 }
 
-G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
+void DetectorConstruction::ConstructWorldWithWaterPhantom()
+{
+	//Define materials
+	G4Material* air  = nistMan->FindOrBuildMaterial("G4_AIR");
+	G4Material* water = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+	
+	G4double phantomWidth = 5.*cm;
+	G4double phantomLength = detectorPositionDepth + 2.*cm;
+	
+	G4double worldWidth = phantomWidth + 5*cm;
+	G4double worldLength = phantomLength*2;
+	
+	// In a clinical setup, the water phantom is surrounded by air
+	G4Box* world = new G4Box("world_box", worldWidth/2, worldWidth/2, worldLength/2);
+	G4LogicalVolume* logical_world = new G4LogicalVolume(world, air, "world_log", 0,0,0);
+	
+	//set the logical world volume invisible
+	logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
+	
+	physical_world = new G4PVPlacement(0,
+								G4ThreeVector(),
+								logical_world, 
+								"world_phys",
+								0, 
+								false, 
+								0);
+	
+	G4Box* phantom_box = new G4Box("phantom_box", phantomWidth/2, phantomWidth/2, phantomLength/2);
+	G4LogicalVolume* logical_phantom = new G4LogicalVolume(phantom_box, water, "phantom_log", 0,0,0);
+	
+	//the water phantom starts at z=0
+	G4ThreeVector phantom_position = G4ThreeVector( 0., 0., -phantomLength/2 );
+	
+	 new G4PVPlacement(0, phantom_position, logical_phantom,"phantom_phys",
+				logical_world, 
+				false, 0, 0);
+	 
+	 logical_phantom -> SetVisAttributes(G4VisAttributes(G4Colour(0., 0.2, 0.6)));
+	 
+	 // smaller inner volume where the detector will be placed
+	G4double innerSize = 2.*cm;
+	G4Box* inner_box = new G4Box("inner_box", innerSize/2, innerSize/2, innerSize/2);
+	G4LogicalVolume* logical_inner = new G4LogicalVolume(inner_box, water, "inner_log",0,0,0);
+	
+	G4double innerDepth = phantomLength/2 -detectorPositionDepth;
+	G4ThreeVector inner_position = G4ThreeVector( 0 , 0 , innerDepth );
+	new G4PVPlacement(0, inner_position, logical_inner,"inner_phys",
+				logical_phantom, 
+				false, 0, 0);
+	
+	logical_inner -> SetVisAttributes(G4VisAttributes::GetInvisible());
+	
+	// private member of DetectorConstruction,
+	// needed as mother volume for Construct*Detector()
+	logical_motherVolumeForDetector = logical_inner;
+	materialOfMotherVolume = water;
+	
+	// uncomment to enable a G4Region for the inner volume
+	// e.g. in order to set different cuts
+	//G4Region* inner_region = new G4Region("inner_region");
+	//inner_region -> AddRootLogicalVolume( logical_highPVol );
+}
+
+void DetectorConstruction::ConstructVacuumWorld()
+{
+		//Define Vacuum
+	G4double Z = 1.;
+	G4double A = 1.01*g/mole;
+	G4double vacuumDensity = 1.e-25 *g/cm3;
+	G4double pressure = 3.e-18*pascal;
+	G4double temperature = 2.73*kelvin;
+	G4Material* vacuum = new G4Material("Galactic", Z, A,
+						 vacuumDensity,kStateGas,temperature,pressure);
+	
+	G4double worldSize = 10.*cm;
+	
+	G4Box* world_box = new G4Box("world_box", worldSize/2, worldSize/2, worldSize/2);
+	G4LogicalVolume* logical_world = new G4LogicalVolume(world_box, vacuum, "world_log",0,0,0);
+	physical_world = new G4PVPlacement(0,
+								G4ThreeVector(),
+								logical_world, 
+								"world_phys",
+								0, 
+								false, 
+								0);
+	
+	logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
+	
+	logical_motherVolumeForDetector = logical_world;
+	materialOfMotherVolume = vacuum;
+}
+
+void DetectorConstruction::ConstructDiamondDetector()
 {
 
 //Define each individual element
-//Define Nitrogen
- G4double A = 14.01 * g/mole;
- G4double Z = 7;
- G4Element* elN = new G4Element ("Nitrogen", "N", Z, A);
-
 //Define Oxygen
- A = 16.0 * g/mole;
- Z = 8;
+ G4double A = 16.0 * g/mole;
+ G4double Z = 8;
  G4Element* elO = new G4Element ("Oxygen", "O", Z, A);
 
 //Define Hydrogen 
@@ -115,11 +211,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
  A = 12.01 * g/mole;
  Z = 6;
  G4Element* elC = new G4Element ("Carbon", "C", Z, A);
-
-//Define Air   
- G4Material* Air = new G4Material("Air", 1.29*mg/cm3, 2);
- Air -> AddElement(elN, 70*perCent);
- Air -> AddElement(elO, 30*perCent);
 
 //Define diamond
  A = 12.01 * g/mole;
@@ -148,41 +239,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
  PMMA -> AddElement(elO, 2);
  PMMA -> AddElement(elH, 8);
 
- //define water
- G4Material* water = new G4Material("water", 1*g/cm3, 2);
- water -> AddElement(elH, 2);
- water -> AddElement(elO, 1);
-	
- //Define Vacuum
- G4double vacuumDensity = 1.e-25 *g/cm3;
- G4double pressure = 3.e-18*pascal;
- G4double temperature = 2.73*kelvin;
- G4Material* vacuum = new G4Material("Galactic", Z=1., A=1.01*g/mole,
-			         vacuumDensity,kStateGas,temperature,pressure);
-
- //Define volumes
- // World volume  has size 1cm
- G4double worldx = 0.5 * m;  //half length!!!!
- G4double worldy = 0.5 * m;
- G4double worldz = 0.5 * m;
-
- // World volume, containing all geometry
- G4Box* world = new G4Box("world_box", worldx, worldy, worldz);
-
- G4LogicalVolume* logical_world = new G4LogicalVolume(world, vacuum, "world_log", 0,0,0);
-
- //set the logical world volume invisible
- logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
-
- G4VPhysicalVolume* physical_world = new G4PVPlacement(0,
-						       G4ThreeVector(),
-						       logical_world, 
-							"world_phys",
-							0, 
-							false, 
-							0);
-
-	
+ 
  // Define the geometry of the diamond microdosimeter
  // mother volume of the detector components
  G4double DiaVol_x = 300*micrometer;
@@ -192,9 +249,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
  G4Box* DiaVol_box = new G4Box("DiaVol_box",DiaVol_x,DiaVol_y,DiaVol_z);
 
  G4LogicalVolume* logical_DiaVol = new G4LogicalVolume(DiaVol_box, diamond, "DiaVol_log", 0,0,0);
+ 
+ G4ThreeVector DiaVol_position = {0, 0, -DiaVol_z +detectorSizeThickness/2};
 
- new G4PVPlacement(0, G4ThreeVector(0,0,0), logical_DiaVol,"DiaVol_phys",
-			  logical_world, 
+ new G4PVPlacement(0, DiaVol_position, logical_DiaVol,"DiaVol_phys",
+			  logical_motherVolumeForDetector, 
 			  false, 0, true);
 
  //VacBlock for contact placement
@@ -202,9 +261,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
  G4double vacblock_y = 240*um;
  G4double vacblock_z = 0.25*um; 
 
+ // vacuum (or water) box to place other volumes in
  G4Box* vacblock_box = new G4Box("vacblock_box",vacblock_x,vacblock_y,vacblock_z);
 
- G4LogicalVolume* logical_vacblock = new G4LogicalVolume(vacblock_box, vacuum, "vacblock_log", 0,0,0);
+ G4LogicalVolume* logical_vacblock = new G4LogicalVolume(vacblock_box, materialOfMotherVolume, "vacblock_log", 0,0,0);
 
  new G4PVPlacement(0, 
 	           G4ThreeVector(0,0,DiaVol_z - vacblock_z),
@@ -216,7 +276,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
 //Bdl in DiaVol
  G4double Bdl_x = 300*micrometer;
  G4double Bdl_y = 240*micrometer;
- G4double Bdl_z = 0.69*micrometer; 
+ G4double Bdl_z = detectorSizeThickness/2; 
 	
  G4Box* Bdl_box = new G4Box("Bdl_box",Bdl_x,Bdl_y,Bdl_z);
 
@@ -231,9 +291,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDiamondDetector()
 		   0, true);
 
  //Diamond SV
- G4double SV_x = 75*um;
- G4double SV_y = 75*um;
- G4double SV_z = 0.69*um; 
+ G4double SV_x = detectorSizeWidth/2;
+ G4double SV_y = detectorSizeWidth/2;
+ G4double SV_z = Bdl_z; 
 
  G4Box* SV_box = new G4Box("SV_box",SV_x,SV_y,SV_z);
 
@@ -348,38 +408,24 @@ new G4PVPlacement(0, G4ThreeVector(-245*um,0,DiaVol_z - heightOfTheTube3 - Bdl_z
 	G4VisAttributes vis_GoldCylinder3(G4Colour(255, 255, 0));                    
 	vis_GoldCylinder3.SetForceAuxEdgeVisible(true);
 	logical_GoldCylinder3 -> SetVisAttributes(vis_GoldCylinder3); 
-        
-return physical_world; 
+  
+// no need to return the following, it's been stored earlier!
+//return physical_world; 
 
 }
 
-G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
+void DetectorConstruction::ConstructMicroDiamondDetector()
 {
 	//Define each individual element
-	//Define Nitrogen
-	G4double A = 14.01 * g/mole;
-	G4double Z = 7;
-	G4Element* elN = new G4Element ("Nitrogen", "N", Z, A);
-
-	//Define Oxygen
-	A = 16.0 * g/mole;
-	Z = 8;
-	G4Element* elO = new G4Element ("Oxygen", "O", Z, A);
-
 	//Define Boron
-	A = 10.8 * g/mole;
-	Z = 5;
+	G4double A = 10.8 * g/mole;
+	G4double Z = 5;
 	G4Element* elB = new G4Element ("Boron", "B", Z, A);
 
 	//Define Carbon
 	A = 12.01 * g/mole;
 	Z = 6;
 	G4Element* elC = new G4Element ("Carbon", "C", Z, A);
-
-	//Define Air   
-	G4Material* Air = new G4Material("Air", 1.29*mg/cm3, 2);
-	Air -> AddElement(elN, 70*perCent);
-	Air -> AddElement(elO, 30*perCent);
 
 	//Define diamond
 	A = 12.01 * g/mole;
@@ -393,40 +439,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 	p_diamond -> AddElement(elB, 0.05113*perCent);
 
 	//Define chromium contact
-	G4Material* chromium = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cr");
-	
-	//Define Vacuum
-	G4double vacuumDensity = 1.e-25 *g/cm3;
-	G4double pressure = 3.e-18*pascal;
-	G4double temperature = 2.73*kelvin;
-	G4Material* vacuum = new G4Material("Galactic", Z=1., A=1.01*g/mole,
-			         vacuumDensity,kStateGas,temperature,pressure);
-
-	//Define volumes
-	// World volume  has size 1cm
-	G4double worldx = 0.5 * m;  //half length!!!!
-	G4double worldy = 0.5 * m;
-	G4double worldz = 0.5 * m;
-
-	// World volume, containing all geometry
-	G4Box* world = new G4Box("world_box", worldx, worldy, worldz);
-
-	G4LogicalVolume* logical_world = new G4LogicalVolume(world, vacuum, "world_log", 0,0,0);
-
-	//set the logical world volume invisible
-	logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
-
-	G4VPhysicalVolume* physical_world = new G4PVPlacement(0,
-								G4ThreeVector(),
-								logical_world, 
-								"world_phys",
-								0, 
-								false, 
-								0);
+	G4Material* chromium = nistMan->FindOrBuildMaterial("G4_Cr");
 
 	// sentive volume
-	G4double SVside = 100.*um /2.;
-	G4double SVthickness = 8.*um /2.;
+	G4double SVside = detectorSizeWidth /2.;
+	G4double SVthickness = detectorSizeThickness /2.;
 	G4double SVspacing = 200.*um; //edge-edge distance
 	
 	G4Box* SV_box = new G4Box("SV_box", SVside, SVside, SVthickness);
@@ -461,9 +478,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 	logical_pD -> SetVisAttributes(pDcolour);
 
 	// put them in place
-	G4ThreeVector SVposition = {0., 0., SVthickness};	//position of the first edge (left)
-	G4ThreeVector fePosition = {0., 0., 2.*SVthickness + feThickness};
-	G4ThreeVector pDposition = {0., 0., -pDthickness};
+	G4ThreeVector SVposition = {0., 0., 0};	//position of the first edge (left)
+	G4ThreeVector fePosition = {0., 0., SVthickness + feThickness};
+	G4ThreeVector pDposition = {0., 0., -SVthickness -pDthickness};
 	
 	G4double SVposition_x[4] = { -3.*SVside -1.5*SVspacing, -SVside -0.5*SVspacing, +SVside +0.5*SVspacing, +3.*SVside +1.5*SVspacing };
 
@@ -475,7 +492,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 		SVposition[0] = SVposition_x[i];
 		PVName << "SV_phys" << i;
 		new G4PVPlacement(0, SVposition, logical_SV, PVName.str(),
-					logical_world,
+					logical_motherVolumeForDetector,
 					false, 0, true);
 		PVName.str("");	//reset the string
 		
@@ -483,7 +500,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 		PVName << "frontElec_phys" << i;
 		fePosition[0] = SVposition[0];
 		new G4PVPlacement(0, fePosition, logical_fe, PVName.str(),
-					logical_world,
+					logical_motherVolumeForDetector,
 					false, 0, true);
 		PVName.str("");
 		
@@ -491,7 +508,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 		PVName << "pD_phys" << i;
 		pDposition[0] = SVposition[0];
 		new G4PVPlacement(0, pDposition, logical_pD, PVName.str(),
-					logical_world,
+					logical_motherVolumeForDetector,
 					false, 0, true);
 		PVName.str("");		
 	}
@@ -505,24 +522,179 @@ G4VPhysicalVolume* DetectorConstruction::ConstructMicroDiamondDetector()
 	
 	G4LogicalVolume* logical_sub = new G4LogicalVolume(sub_box, diamond, "sub_log", 0,0,0);
 	
-	G4ThreeVector subPosition = {0,0, -2.*pDthickness -sub_z};
+	G4ThreeVector subPosition = {0,0, -SVthickness -2.*pDthickness -sub_z};
 	
 	new G4PVPlacement(0, subPosition, logical_sub, "sub_phys",
-				logical_world,
+				logical_motherVolumeForDetector,
 				false, 0, true);
 
 	G4VisAttributes subColour(G4Colour(0.5, 0.5, 0.5));
 	subColour.SetForceSolid(false);
 	logical_sub -> SetVisAttributes(subColour);
-	
-	return physical_world;
 }
 
-G4VPhysicalVolume* DetectorConstruction::ConstructSiliconDetector()
+void DetectorConstruction::ConstructDiamondTelescope()
 {
-	//load NIST database
-	G4NistManager* nist = G4NistManager::Instance();
-	nist->SetVerbose(1);
+	//Define each individual element
+	//Define Boron
+	G4double A = 10.8 * g/mole;
+	G4double Z = 5;
+	G4Element* elB = new G4Element ("Boron", "B", Z, A);
+
+	//Define Carbon
+	A = 12.01 * g/mole;
+	Z = 6;
+	G4Element* elC = new G4Element ("Carbon", "C", Z, A);
+
+	//Define diamond
+	A = 12.01 * g/mole;
+	Z = 6;
+	G4Material* diamond = new G4Material("diamond", Z, A, 3.515*g/cm3);
+			
+	//Define p-type diamond (boron doped diamond)
+	G4Material* p_diamond = new G4Material("p_diamond", 3.514*g/cm3, 2);
+	// Boron concentration used is 1e20 cm-3, considering the diamond density and a Boron atomic weight of 10.811u
+	p_diamond -> AddElement(elC, 99.94887*perCent);
+	p_diamond -> AddElement(elB, 0.05113*perCent);
+
+	//Define chromium contact
+	G4Material* chromium = nistMan->FindOrBuildMaterial("G4_Cr");
+
+	// sentive volumes
+	// DE
+	G4double SV_DE_radius = detectorSizeWidth /2.;
+	G4double SV_DE_thickness = detectorSizeThickness /2.;
+	
+	G4Tubs* SV_DE_cyl = new G4Tubs("SV_DE_cyl", 0.*mm, SV_DE_radius, SV_DE_thickness, 0*deg, 360*deg);
+
+	G4LogicalVolume* logical_SV = new G4LogicalVolume(SV_DE_cyl, diamond, "SV_log", 0,0,0);
+	
+	G4VisAttributes SVcolour(G4Colour(0.5, 0.5, 0.5));
+	SVcolour.SetForceSolid(true);
+	logical_SV -> SetVisAttributes(SVcolour);
+	
+	// The E-stage diameter has to be at least the size of the DE.
+	if( secondStageSizeDim < detectorSizeWidth )
+	{
+		G4cout << "WARNING: the telescope E-stage diameter set (" << secondStageSizeDim << ") is smaller than the DE-stage diameter (" << detectorSizeWidth << ").";
+		G4cout << "To be compliant with the telescope structure, the E-stage diameter has to be at least the same size as the DE-stage diameter.";
+		secondStageSizeDim = detectorSizeWidth;
+		G4cout << "E-stage diameter set to default as the DE-stage diameter: " << secondStageSizeDim << ".";
+	}
+
+	// E stage
+	G4double SV_E_thickness = secondStageSizeThickness /2.;
+	G4double SV_E_radius = secondStageSizeDim /2.;
+
+	G4Tubs* SV_E_cyl = new G4Tubs("SV_E_cyl", 0.*mm, SV_E_radius, SV_E_thickness, 0*deg, 360*deg);
+
+	G4LogicalVolume* logical_SV_Estage = new G4LogicalVolume(SV_E_cyl, diamond, "SV_Estage_log", 0,0,0);
+	
+	G4VisAttributes SV_E_colour(G4Colour(0.7, 0.7, 0.7));
+	SV_E_colour.SetForceSolid(true);
+	logical_SV_Estage -> SetVisAttributes(SV_E_colour);
+
+	// DE and E crystals - the DE and E sensitive volumes are embedded in bigger intrinsic diamond matrixes, since they are created by the electric field generated from the front and electrodes, respectively.
+
+	// DE and E crystals thickensses are the same as the DE and E sensitive volumes, while their lateral size is bigger and usually few mm.
+	// Default diamond crystals lateral size
+	G4double d_crystal_width = 2.*mm /2.;
+	
+	if( d_crystal_width < secondStageSizeDim )
+	{
+		G4cout << "The default lateral size (" << d_crystal_width << ") of the diamond crystals in which the DE and the E stages are created was changed to be at least as big as the sensitive volumes (" << secondStageSizeDim << ".";
+		d_crystal_width = secondStageSizeDim;
+	}
+
+	// DE crystal		
+	G4Box* DE_crystal_box = new G4Box("DE_crystal_box", d_crystal_width, d_crystal_width, SV_DE_thickness);
+
+	G4LogicalVolume* logical_DE_crystal = new G4LogicalVolume(DE_crystal_box, diamond, "DE_crystal_log", 0,0,0);
+	
+	G4VisAttributes Diamond_crystal_colour(G4Colour::White());
+	Diamond_crystal_colour.SetForceSolid(false);
+	logical_DE_crystal -> SetVisAttributes(Diamond_crystal_colour);
+
+	// E crystal
+	G4Box* E_crystal_box = new G4Box("E_crystal_box", d_crystal_width, d_crystal_width, SV_E_thickness);
+
+	G4LogicalVolume* logical_E_crystal = new G4LogicalVolume(E_crystal_box, diamond, "E_crystal_log", 0,0,0);
+	
+	logical_E_crystal -> SetVisAttributes(Diamond_crystal_colour);
+
+	// chromium front-electrode
+	G4double feThickness = 100.*nm /2.; // front-electrode thickness
+
+	G4Tubs* fe_cyl = new G4Tubs("frontElec_cyl", 0.*mm, SV_DE_radius, feThickness, 0*deg, 360*deg);
+
+	G4LogicalVolume* logical_fe = new G4LogicalVolume(fe_cyl, chromium, "frontElec_log", 0,0,0);
+	
+	G4VisAttributes fe_colour(G4Colour::Brown());
+	fe_colour.SetForceSolid(false);
+	logical_fe -> SetVisAttributes(fe_colour);
+
+	// chromium back-electrode
+	G4Tubs* fe_cyl_back = new G4Tubs("backElec_cyl", 0.*mm, SV_E_radius, feThickness, 0*deg, 360*deg);
+
+	G4LogicalVolume* logical_fe_back = new G4LogicalVolume(fe_cyl_back, chromium, "backElec_log", 0,0,0);
+	
+	logical_fe_back -> SetVisAttributes(fe_colour);
+
+	// p-type diamond
+	G4double pDthickness = 1.8*um /2.; // p-type diamond dead-layer thickness
+	
+	// the p-type diamond layer has the same lateral size as the intrinsic diamond crystals
+	
+	G4Box* pD_box = new G4Box("pDiam_box", d_crystal_width, d_crystal_width, pDthickness);
+	
+	G4LogicalVolume* logical_pD = new G4LogicalVolume(pD_box, p_diamond, "pDiam_log", 0,0,0);
+	
+	G4VisAttributes pDcolour(G4Colour::Blue());
+	pDcolour.SetForceSolid(false);
+	logical_pD -> SetVisAttributes(pDcolour);
+	
+	// put them in place
+	G4ThreeVector DE_crystal_position = {0., 0., 0.}; // centre of DE SV is at selected depth position
+	G4ThreeVector SVposition = {0., 0., 0.}; // the DE sensitive volume will be positioned into the DE crystal.
+	G4ThreeVector fePosition = {0., 0., SV_DE_thickness + feThickness};
+	G4ThreeVector pDposition = {0., 0., -SV_DE_thickness - pDthickness};
+	G4ThreeVector E_crystal_position = {0., 0., -SV_DE_thickness - 2*pDthickness - SV_E_thickness};
+	G4ThreeVector SV_E_position = {0., 0., 0.}; // the E sensitive volume will be positioned into the E crystal.
+	G4ThreeVector bePosition = {0., 0., -SV_DE_thickness - 2.*pDthickness - 2.*SV_E_thickness - feThickness};
+	
+	// DE crystal
+	new G4PVPlacement(0, DE_crystal_position, logical_DE_crystal, "DEstageCrystal_phys",
+				logical_motherVolumeForDetector,
+				false, 0, true);
+	// DE sensitive volume
+	new G4PVPlacement(0, SVposition, logical_SV, "SV_DE_phys",
+				logical_DE_crystal,
+				false, 0, true);
+	// p-type diamond layer
+	new G4PVPlacement(0, pDposition, logical_pD, "pD_phys",
+				logical_motherVolumeForDetector,
+				false, 0, true);
+	// E crystal
+	new G4PVPlacement(0, E_crystal_position, logical_E_crystal, "EstageCrystal_phys",
+				logical_motherVolumeForDetector,
+				false, 0, true);
+	// E sensitive volume
+	new G4PVPlacement(0, SV_E_position, logical_SV_Estage, "SV_E_phys",
+				logical_E_crystal,
+				false, 0, true);
+	// front-electrode
+	new G4PVPlacement(0, fePosition, logical_fe, "frontElec_phys",
+				logical_motherVolumeForDetector,
+				false, 0, true);
+	// back electrode
+	new G4PVPlacement(0, bePosition, logical_fe_back, "backElec_phys",
+				logical_motherVolumeForDetector,
+				false, 0, true);
+}
+
+void DetectorConstruction::ConstructSiliconDetector()
+{
+	nistMan->SetVerbose(1);
 
 	//Define each individual element
 	//Define Nitrogen
@@ -558,58 +730,30 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconDetector()
 	PMMA -> AddElement(elH, 8);
 
 	//define materials
-	G4Material* silicon = nist->FindOrBuildMaterial("G4_Si");
-	G4Material* SiO2 = nist->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
+	G4Material* silicon = nistMan->FindOrBuildMaterial("G4_Si");
+	G4Material* SiO2 = nistMan->FindOrBuildMaterial("G4_SILICON_DIOXIDE");
 	
-	//Define Vacuum
-	 G4double vacuumDensity = 1.e-25 *g/cm3;
-	 G4double pressure = 3.e-18*pascal;
-	 G4double temperature = 2.73*kelvin;
-	 G4Material* vacuum = new G4Material("Galactic", Z=1., A=1.01*g/mole,
-						 vacuumDensity,kStateGas,temperature,pressure);
-
-	 //Define volumes
-	 // World volume  has size 1cm
-	 G4double worldx = 0.5 * m;  //half length!!!!
-	 G4double worldy = 0.5 * m;
-	 G4double worldz = 0.5 * m;
-
-	 // World volume, containing all geometry
-	 G4Box* world = new G4Box("world_box", worldx, worldy, worldz);
-
-	 G4LogicalVolume* logical_world = new G4LogicalVolume(world, vacuum, "world_log", 0,0,0);
-
-	 //set the logical world volume invisible
-	 logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
-
-	 G4VPhysicalVolume* physical_world = new G4PVPlacement(0,
-								   G4ThreeVector(),
-								   logical_world, 
-								"world_phys",
-								0, 
-								false, 
-								0);
-		
-	// I need to set the size of the SV now, because some other parameters depend on it
-	G4double SV_thick = 25.*um /2.; 
 	
+	 G4double SVspacing = 10.*um;	// distance between the edges of two SV
+	 
 	// PMMA
-	G4double PMMA_x = 200.*um /2.;
-	G4double PMMA_y = 200.*um /2.;
-	G4double PMMA_z = SV_thick;
+	G4double PMMA_x = ( detectorSizeWidth*2. + SVspacing*3 ) /2.;
+	G4double PMMA_y = ( detectorSizeWidth*2. + SVspacing*3 ) /2.;
+	G4double PMMA_z = detectorSizeThickness /2.;
 	
 	G4Box* PMMA_box = new G4Box("PMMA_box", PMMA_x, PMMA_y, PMMA_z);
 	
 	G4LogicalVolume* logical_PMMA = new G4LogicalVolume(PMMA_box, PMMA, "PMMA_log", 0,0,0);
 	
 	new G4PVPlacement(0, G4ThreeVector(), logical_PMMA, "PMMA_phys",
-					logical_world,
+					logical_motherVolumeForDetector,
 					false, 0, true);
 	
 	logical_PMMA -> SetVisAttributes(G4VisAttributes(G4Colour(0., 1., 0.)));
 	
 	// sensitive volumes
-	G4double SV_radius = SV_thick *2;	// full length
+	G4double SV_radius = detectorSizeWidth /2.;	// full length
+	G4double SV_thick = detectorSizeThickness /2.;
 	
 	G4Tubs* SV_cyl = new G4Tubs("SV_cyl", 0., SV_radius, SV_thick, 0.*deg, 360.*deg);
 	//G4RotationMatrix* cylRot = new G4RotationMatrix;
@@ -622,8 +766,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconDetector()
 	logical_SV -> SetVisAttributes(SVcolour);
 	
 	G4ThreeVector SVposition;	//if(volumeName != "SV_phys1")
-		
-	G4double SVspacing = 10.*um;	// distance between the edges of two SV
 	
 	SVposition = { +SVspacing/2. +SV_radius, +SVspacing/2. +SV_radius, 0. };
 	new G4PVPlacement(0, SVposition, logical_SV, "SV_phys1",
@@ -657,24 +799,19 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconDetector()
 	
 	G4LogicalVolume* logical_oxyde = new G4LogicalVolume(oxyde_box, SiO2, "oxyde_log", 0,0,0);
 	
-	G4ThreeVector oxyde_position = G4ThreeVector( 0, 0, PMMA_z + oxyde_z );
+	G4ThreeVector oxyde_position = G4ThreeVector( 0, 0, -PMMA_z -oxyde_z );
 	new G4PVPlacement(0, oxyde_position, logical_oxyde, "oxyde_phys",
-					logical_world,
+					logical_motherVolumeForDetector,
 					false, 0, true);
 	
 	logical_oxyde -> SetVisAttributes(G4VisAttributes(G4Colour(0.6, 0.6, 0.6)));
-
-	return physical_world; 
-
 }
 
-G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
+void DetectorConstruction::ConstructSiliconBridgeDetector()
 {
 //--------------------------------------------------------
 //--------------------- MATERIALS ------------------------
-//--------------------------------------------------------
-	G4NistManager * nistMan = G4NistManager::Instance();
-	
+//--------------------------------------------------------	
 	//Define Water   
 	//G4Material* Water  = nistMan->FindOrBuildMaterial("G4_WATER");
 
@@ -683,9 +820,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 	
 	//Define PMMA
 	//G4Material* perspex  = nistMan->FindOrBuildMaterial("G4_PLEXIGLASS"); //Default 1.19g
-	
-	//Define Air
-	G4Material* Air  = nistMan->FindOrBuildMaterial("G4_AIR");
 	
 	//Define Aluminium
 	G4Material* Aluminium = nistMan->FindOrBuildMaterial("G4_Al");
@@ -737,24 +871,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 //----------------------- Volumes ------------------------
 //--------------------------------------------------------
 
-//-------------------------World -------------------------
-    G4double worldX = 10. * cm;
-    G4double worldY = 10. * cm;
-    G4double worldZ = 10. * cm;
-    
 	G4RotationMatrix* rotMatW = new G4RotationMatrix;
 	rotMatW->rotateY(0*deg);
-	rotMatW->rotateX(0*deg);
+	rotMatW->rotateX(-90*deg);
 	rotMatW->rotateZ(0*deg);
 
-    G4Box* world = new G4Box("world_box", worldX/2., worldY/2., worldZ/2.);
-    G4LogicalVolume* logical_world = new G4LogicalVolume(world, Air, "world_log", 0,0,0);
-    G4VPhysicalVolume* physical_world = new G4PVPlacement(0,G4ThreeVector(0,0,0),logical_world, "world_phys", 0, false, 0);
-	
-	logical_world -> SetVisAttributes(wireFrameWhiteAtt);
-
 //------------------Detector Mother Volume------------------	
-	G4double SVheight = 10.*micrometer;
+	G4double SVheight = detectorSizeThickness;
 	G4double insulationThickness = 1.*micrometer;
 	G4double SiOoverlayerBottomThickness = 1.7*micrometer;
 	G4double AlOverlayerThickness = 1.7*micrometer;
@@ -766,7 +889,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 	G4double baseSiThickness = 300.*micrometer;
 	G4double detectorHeight = (SVheight + baseSiThickness + insulationThickness + SiOoverlayerBottomThickness + AlOverlayerThickness + SiOoverlayerTopThickness);
 
-	G4double SVwidth = 30.*micrometer;
+	G4double SVwidth = detectorSizeWidth;
 	G4double pitch = 20.*micrometer; //distance between the odd and even rows
 
 	G4double bridgingWidth = 20.*micrometer;
@@ -781,10 +904,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 	G4double detectorWidth = SVareaWidth + bufferWidth;
 	G4double detectorLength = SVareaLength + bufferWidth;
 	
-//------------------Detector Mother Volume------------------	
+//------------------Smaller Detector Mother Volume------------------	
 	G4Box* detectorBox = new G4Box("detectorBox", detectorWidth/2., detectorHeight/2., detectorLength/2.);
-	G4LogicalVolume* logicalDetectorReg = new G4LogicalVolume(detectorBox, Air, "detectorReg_log", 0,0,0);
-	new G4PVPlacement(0, G4ThreeVector(0,0,0), logicalDetectorReg, "detectorRegPhys", logical_world , false, 0, true);
+	G4LogicalVolume* logicalDetectorReg = new G4LogicalVolume(detectorBox, materialOfMotherVolume, "detectorReg_log", 0,0,0);
+	new G4PVPlacement(rotMatW, G4ThreeVector(0,0,0), logicalDetectorReg, "detectorRegPhys", logical_motherVolumeForDetector , false, 0, true);
 
 	logicalDetectorReg -> SetVisAttributes(wireFrameWhiteAtt);
 	
@@ -805,7 +928,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 //----------------Sensitive Volume Region---------------------
 //This volume encapsulates the SVs and the "bridging" volumes
 	G4Box* SVregBox = new G4Box("SVregBox", detectorWidth/2., SVheight/2., detectorLength/2.);
-	G4LogicalVolume* logicalSVreg = new G4LogicalVolume(SVregBox, Air, "SVreg_log", 0,0,0);
+	G4LogicalVolume* logicalSVreg = new G4LogicalVolume(SVregBox, materialOfMotherVolume, "SVreg_log", 0,0,0);
 	new G4PVPlacement(0, G4ThreeVector(0,(detectorHeight/2. - overLayerThickness - SVheight/2.),0), logicalSVreg, "SVregPhys", logicalDetectorReg, false, 0, true);
 
     logicalSVreg -> SetVisAttributes(wireFrameWhiteAtt);
@@ -935,21 +1058,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructSiliconBridgeDetector()
 	
 //----------------------------------------
 	new G4PVPlacement(0, G4ThreeVector(0,0,0), logicalAlContact, "physAlContact", logicalSiObotLayer, false, 0, 1);
-
-
-
-	return physical_world; 
 }
 
 
 void DetectorConstruction::ConstructSDandField()
 {
-   SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", analysis);
+   SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", true, analysis);
    G4SDManager::GetSDMpointer()->AddNewDetector(SD);
    SetSensitiveDetector("SV_log", SD);
 
 	if (detectorType == "SiliconBridge")
 	{
 		SetSensitiveDetector("bridgeVol_log", SD);
+	}
+	else if (detectorType == "DiamondTelescope")
+	{
+		SensitiveDetector* SDs2 = new SensitiveDetector("SDs2", "DetectorStage2HitsCollection", false, analysis);
+		G4SDManager::GetSDMpointer()->AddNewDetector(SDs2);
+		SetSensitiveDetector("SV_Estage_log", SDs2);
 	}
 }

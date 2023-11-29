@@ -33,6 +33,6 @@
 
 #include "G4DimensionedType.hh"
 
-typedef G4DimensionedType<G4double> G4DimensionedDouble;
+using G4DimensionedDouble = G4DimensionedType<G4double>;
 
 #endif

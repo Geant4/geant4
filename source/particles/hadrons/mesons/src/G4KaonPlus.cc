@@ -48,16 +48,16 @@
 // ###                          KAONPLUS                              ###
 // ######################################################################
 
-G4KaonPlus* G4KaonPlus::theInstance = 0;
+G4KaonPlus* G4KaonPlus::theInstance = nullptr;
 
 G4KaonPlus* G4KaonPlus::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "kaon+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -74,14 +74,14 @@ G4KaonPlus* G4KaonPlus::Definition()
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,         321,
-                false,       12.380*ns,          NULL,
+                false,       12.380*ns,          nullptr,
                 false,       "kaon");
 
  //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+  auto  table = new G4DecayTable();
 
  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[6];
+  auto  mode = new G4VDecayChannel*[6];
   // kaon+ -> mu+ + nu_mu
   mode[0] = new G4PhaseSpaceDecayChannel("kaon+",0.6355,2,"mu+","nu_mu");
   // kaon+ -> pi+ + pi0
@@ -100,7 +100,7 @@ G4KaonPlus* G4KaonPlus::Definition()
 
    anInstance->SetDecayTable(table);
   }
-  theInstance = reinterpret_cast<G4KaonPlus*>(anInstance);
+  theInstance = static_cast<G4KaonPlus*>(anInstance);
   return theInstance;
 }
 

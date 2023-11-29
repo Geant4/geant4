@@ -50,19 +50,19 @@ class G4DormandPrinceRK78 : public G4MagIntegratorStepper
     G4DormandPrinceRK78(G4EquationOfMotion* EqRhs,
                         G4int numberOfVariables = 6,
                         G4bool primary = true);
-    ~G4DormandPrinceRK78();
+    ~G4DormandPrinceRK78() override;
     
     G4DormandPrinceRK78(const G4DormandPrinceRK78&) = delete;
     G4DormandPrinceRK78& operator=(const G4DormandPrinceRK78&) = delete;
 
     void Stepper( const G4double y[],
                   const G4double dydx[],
-                  G4double h,
-                  G4double yout[],
-                  G4double yerr[]) ;
+                        G4double h,
+                        G4double yout[],
+                        G4double yerr[]) override ;
 
-    G4double  DistChord()   const;
-    inline G4int IntegratorOrder() const { return 7; }
+    G4double  DistChord() const override;
+    inline G4int IntegratorOrder() const override { return 7; }
     
  private :  
     

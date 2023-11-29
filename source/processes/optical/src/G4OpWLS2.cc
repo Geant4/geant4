@@ -199,7 +199,7 @@ G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
     photonPolarization = (cosp * photonPolarization + sinp * perp).unit();
 
     // Generate a new photon:
-    G4DynamicParticle* sec_dp =
+    auto sec_dp =
       new G4DynamicParticle(G4OpticalPhoton::OpticalPhoton(), photonMomentum);
     sec_dp->SetPolarization(photonPolarization);
     sec_dp->SetKineticEnergy(sampledEnergy);
@@ -215,7 +215,7 @@ G4VParticleChange* G4OpWLS2::PostStepDoIt(const G4Track& aTrack,
     proposedSecondaries.push_back(secTrack);
   }
 
-  aParticleChange.SetNumberOfSecondaries(proposedSecondaries.size());
+  aParticleChange.SetNumberOfSecondaries((G4int)proposedSecondaries.size());
   for(auto sec : proposedSecondaries)
   {
     aParticleChange.AddSecondary(sec);
@@ -240,13 +240,13 @@ void G4OpWLS2::BuildPhysicsTable(const G4ParticleDefinition&)
   }
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials                 = G4Material::GetNumberOfMaterials();
+  std::size_t numOfMaterials           = G4Material::GetNumberOfMaterials();
   theIntegralTable                     = new G4PhysicsTable(numOfMaterials);
 
   // loop for materials
-  for(G4int i = 0; i < numOfMaterials; ++i)
+  for(std::size_t i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsFreeVector* physVector = new G4PhysicsFreeVector();
+    auto physVector = new G4PhysicsFreeVector();
 
     // Retrieve vector of WLS2 wavelength intensity for
     // the material from the material's optical properties table.
@@ -274,7 +274,7 @@ void G4OpWLS2::BuildPhysicsTable(const G4ParticleDefinition&)
 
           // loop over all (photon energy, intensity)
           // pairs stored for this material
-          for(size_t j = 1; j < wlsVector->GetVectorLength(); ++j)
+          for(std::size_t j = 1; j < wlsVector->GetVectorLength(); ++j)
           {
             currentPM = wlsVector->Energy(j);
             currentIN = (*wlsVector)[j];
@@ -322,11 +322,11 @@ void G4OpWLS2::UseTimeProfile(const G4String name)
     delete WLSTimeGeneratorProfile;
     WLSTimeGeneratorProfile = nullptr;
   }
-  if(name.compare("delta") == 0)
+  if(name == "delta")
   {
     WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("delta");
   }
-  else if(name.compare("exponential") == 0)
+  else if(name == "exponential")
   {
     WLSTimeGeneratorProfile =
       new G4WLSTimeGeneratorProfileExponential("exponential");

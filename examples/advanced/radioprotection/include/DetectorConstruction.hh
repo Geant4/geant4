@@ -33,15 +33,18 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "AnalysisManager.hh"
+#include "DetectorMessenger.hh"
+#include "G4NistManager.hh"
 
 class G4VPhysicalVolume;
 class DetectorMessenger;
 class G4LogicalVolume;
+class G4Material;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    DetectorConstruction(AnalysisManager* analysis, G4String detector);
+    DetectorConstruction(AnalysisManager* analysis, DetectorMessenger* messenger);
     ~DetectorConstruction();
 
     G4VPhysicalVolume* Construct();
@@ -50,13 +53,30 @@ public:
 
 private:
 	AnalysisManager* analysis;
+	DetectorMessenger* messenger;
 	
 	G4String detectorType;
+	G4double detectorSizeWidth;
+	G4double detectorSizeThickness;
+	G4double secondStageSizeDim;
+	G4double secondStageSizeThickness;
+	G4bool usingWaterPhantom;
+	G4double detectorPositionDepth;
 	
 	// Methods called by Construct() depending on the chosen setup
-	G4VPhysicalVolume* ConstructDiamondDetector();
-	G4VPhysicalVolume* ConstructMicroDiamondDetector();
-	G4VPhysicalVolume* ConstructSiliconDetector();
-	G4VPhysicalVolume* ConstructSiliconBridgeDetector();
+	void ConstructWorldWithWaterPhantom();
+	void ConstructVacuumWorld();
+	void ConstructDiamondDetector();
+	void ConstructMicroDiamondDetector();
+	void ConstructSiliconDetector();
+	void ConstructSiliconBridgeDetector();
+	void ConstructDiamondTelescope();
+	
+	// store these variable across various Construct*() above
+	G4VPhysicalVolume* physical_world;
+	G4LogicalVolume* logical_motherVolumeForDetector;
+	G4Material* materialOfMotherVolume;
+	
+	G4NistManager* nistMan;
 };
 #endif

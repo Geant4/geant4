@@ -64,9 +64,6 @@ public:
   void ClearStore ();
   void ClearTransientStore ();
 
-  static G4int GetDisplayListLimit() {return fDisplayListLimit;}
-  static void SetDisplayListLimit(G4int lim) {fDisplayListLimit = lim;}
-
 protected:
 
   G4bool AddPrimitivePreamble(const G4VMarker& visible);
@@ -87,12 +84,19 @@ protected:
   virtual G4bool ExtraTOProcessing
   (const G4Visible&, size_t /*currentTOListIndex*/) {return true;}
 
-  static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
-  // Display list management.  All static since there's only one OGL store.
-  static G4int  fDisplayListId;  // Workspace.
-  static G4bool fMemoryForDisplayLists;  // avoid memory overflow
-  static G4int  fDisplayListLimit;       // avoid memory overflow
-  
+  static G4int fSceneIdCount;   // static counter for OpenGLStored scenes.
+
+  // Display list management.  Static since there's only one OGL store.
+  // Used to link a TODL or PODL to a display list.
+  static G4int fDisplayListId;
+
+  // Under some circumstances we need to prevent use of a display list.
+  // For example, a transient display of the current time window during
+  // a sequence of evolving time windows. This is set in
+  // G4OpenGLStoredViewer::AddPrimitiveForASingleFrame and acted upon in
+  // AddPrimitivePreambleInternal.
+  G4bool fDoNotUseDisplayList;  // Avoid display list use if true
+
   // PODL = Persistent Object Display List.
   // This "top PODL" was made redundant when the PO list was
   // "unwrapped" 27th October 2011, but keep it for now in case we

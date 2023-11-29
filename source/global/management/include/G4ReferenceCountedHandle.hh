@@ -253,13 +253,13 @@ X* G4ReferenceCountedHandle<X>::operator->() const
 template <class X>
 G4bool G4ReferenceCountedHandle<X>::operator!() const
 {
-  return ((fObj == nullptr) ? true : false);
+  return fObj == nullptr;
 }
 
 template <class X>
 G4ReferenceCountedHandle<X>::operator bool() const
 {
-  return ((fObj != nullptr) ? true : false);
+  return fObj != nullptr;
 }
 
 template <class X>

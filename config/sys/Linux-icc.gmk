@@ -3,12 +3,15 @@
 #
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -fp-model precise -w1 -pthread
+  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  CXXFLAGS  += -fp-model precise -diag-disable=10441
   CPPFLAGS  += -std=c++17
   CXXFLAGS  += -std=c++17
   G4USE_STD17 := 1
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec
+    CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
@@ -41,6 +44,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
+  LOADLIBS += -limf
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
@@ -93,7 +97,6 @@ ifeq ($(G4SYSTEM),Linux-icc)
       QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
       QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
       QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
-      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
     endif
   else                          # Qt4
     ifndef QTFLAGS
@@ -112,13 +115,13 @@ ifeq ($(G4SYSTEM),Linux-icc)
   endif
   ifeq ($(QT_VERSION),5)
     ifndef QTLIBS              # Qt5
-      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
+      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets
     endif
     ifndef QT3DLIBS
-      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender -lQt5PrintSupport
+      QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender
     endif
     ifndef GLQTLIBS
-      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL
     endif
   else                         # Qt4
     ifndef QTLIBS
@@ -134,12 +137,12 @@ ifeq ($(G4SYSTEM),Linux-icc)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
+     $(CXX) -diag-disable=10441 -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
+     $(CXX) -diag-disable=10441 -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
                     $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

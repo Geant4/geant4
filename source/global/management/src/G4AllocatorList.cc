@@ -53,9 +53,6 @@ G4AllocatorList* G4AllocatorList::GetAllocatorListIfExist()
 }
 
 // --------------------------------------------------------------------
-G4AllocatorList::G4AllocatorList() {}
-
-// --------------------------------------------------------------------
 G4AllocatorList::~G4AllocatorList() { fAllocatorList = nullptr; }
 
 // --------------------------------------------------------------------
@@ -108,6 +105,3 @@ void G4AllocatorList::Destroy(G4int nStat, G4int verboseLevel)
   }
   fList.clear();
 }
-
-// --------------------------------------------------------------------
-G4int G4AllocatorList::Size() const { return fList.size(); }

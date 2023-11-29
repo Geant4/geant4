@@ -71,10 +71,11 @@
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
 
-  public:  // without description
+  public:
 
     struct ZSection
     {
+      ZSection() : fZ(0.), fOffset(0.,0.), fScale(1.) {}
       ZSection(G4double z, const G4TwoVector& offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
 
@@ -82,8 +83,6 @@ class G4ExtrudedSolid : public G4TessellatedSolid
       G4TwoVector fOffset;
       G4double    fScale;
     };
-
-  public:  // with description
 
     G4ExtrudedSolid( const G4String&                 pName,
                      const std::vector<G4TwoVector>& polygon,
@@ -93,11 +92,13 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     G4ExtrudedSolid( const G4String&                 pName,
                      const std::vector<G4TwoVector>& polygon,
                            G4double                  halfZ,
-                     const G4TwoVector& off1, G4double scale1,
-                     const G4TwoVector& off2, G4double scale2 );
+                     const G4TwoVector& off1 = G4TwoVector(0.,0.),
+                           G4double scale1 = 1.,
+                     const G4TwoVector& off2 = G4TwoVector(0.,0.),
+                           G4double scale2 = 1. );
       // Special constructor for solid with 2 z-sections
 
-    virtual ~G4ExtrudedSolid();
+    ~G4ExtrudedSolid() override;
       // Destructor
 
     // Accessors
@@ -112,28 +113,27 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     // Solid methods
 
-    EInside  Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
-    G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p ) const;
+    EInside  Inside(const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
+    G4double DistanceToIn(const G4ThreeVector& p,
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p ) const override;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const;
-    G4GeometryType GetEntityType () const;
-    G4VSolid* Clone() const;
+                                 G4double& pMin, G4double& pMax) const override;
+    G4GeometryType GetEntityType () const override;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
-  public:  // without description
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     G4ExtrudedSolid(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -181,8 +181,8 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
   private:
 
-    G4int       fNv;
-    G4int       fNz;
+    std::size_t    fNv;
+    std::size_t    fNz;
     std::vector<G4TwoVector> fPolygon;
     std::vector<ZSection>    fZSections;
     std::vector< std::vector<G4int> > fTriangles;

@@ -128,7 +128,7 @@ void G4DNABornIonisationModel2::Initialise(const G4ParticleDefinition* particle,
   fParticleDef = particle;
 
   // Energy limits
-  char *path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
 
   // ***
 
@@ -397,8 +397,8 @@ void G4DNABornIonisationModel2::SampleSecondaries(std::vector<G4DynamicParticle*
     // here we assume that H_{2}O electronic levels are the same as Oxygen.
     // this can be considered true with a rough 10% error in energy on K-shell,
 
-    size_t secNumberInit = 0;
-    size_t secNumberFinal = 0;
+    std::size_t secNumberInit = 0;
+    std::size_t secNumberFinal = 0;
 
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
@@ -420,7 +420,7 @@ void G4DNABornIonisationModel2::SampleSecondaries(std::vector<G4DynamicParticle*
 
       if(secNumberFinal > secNumberInit) 
       {
-	for (size_t i=secNumberInit; i<secNumberFinal; ++i)
+	for (std::size_t i=secNumberInit; i<secNumberFinal; ++i)
         {
           //Check if there is enough residual energy 
           if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
@@ -802,8 +802,8 @@ G4int G4DNABornIonisationModel2::RandomSelect(G4double k)
   G4int level = 0;
 
   G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
-  const size_t n(fTableData->NumberOfComponents());
-  size_t i(n);
+  const G4int n = (G4int)fTableData->NumberOfComponents();
+  G4int i(n);
   G4double value = 0.;
 
   while (i > 0)

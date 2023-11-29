@@ -294,7 +294,7 @@ G4JpegCoder::WriteHeader( void )
   if( mProperty.Comment != 0 ){
     mOBSP->SetByte( M_Marker ); //FF
     mOBSP->SetByte( M_COM );    //comment
-    int length = strlen( mProperty.Comment ) + 1;
+    int length = (int)strlen( mProperty.Comment ) + 1;
     mOBSP->SetWord( length + 2 );
     mOBSP->CopyByte( mProperty.Comment, length );
   }

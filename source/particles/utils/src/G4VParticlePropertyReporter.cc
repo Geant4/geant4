@@ -54,7 +54,7 @@ G4bool G4VParticlePropertyReporter::FillList(G4String name)
 {
   G4ParticlePropertyData* pData = pPropertyTable->GetParticleProperty(name);
   G4bool result = false;
-  if (pData != 0) {
+  if (pData != nullptr) {
     //the particle exists
     pList.push_back(pData);
     result = true;

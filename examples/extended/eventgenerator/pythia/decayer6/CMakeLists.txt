@@ -41,8 +41,11 @@ set (generator_sources
    ${PROJECT_SOURCE_DIR}/src/upveto.F
    )
 #----------------------------------------------------------------------------
-# Add common subdirectory
+# Add common subdirectory and
+# - disable building examples in common
+# - add a unique prefix to the common library built in this example
 #
+set (EXAMPLES_COMMON OFF)
 set (common_prefix decayer6_)
 add_subdirectory(common) 
 

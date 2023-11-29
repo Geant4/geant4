@@ -36,7 +36,10 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4VUserDetectorConstruction.hh"
+
+#include <memory>
 
 class G4Material;
 class DetectorMessenger;
@@ -48,24 +51,24 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     DetectorConstruction();
-    virtual ~DetectorConstruction();
+    ~DetectorConstruction()override;
 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
     
-    void SetTrackingCut(G4double);
-    void SetMaxStepSize(G4double);
+    void SetTrackingCut(const G4double&);
+    void SetMaxStepSize(const G4double&);
     void PrintParameters() const;
-  
+    void SetTrackerSDRadius(const G4double&);
+
   private:
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
-  
-    DetectorMessenger* fDetectorMessenger;
-    
-    G4Material* fpWaterMaterial;
-    G4double fpTrackingCut;
-    G4double fpMaxStepSize;
+    std::unique_ptr<DetectorMessenger> fDetectorMessenger;
+    G4Material* fpWaterMaterial = nullptr;
+    G4double fpTrackingCut = 11.* CLHEP::eV;
+    G4double fpMaxStepSize = DBL_MAX;
+    G4double fRadius = 0.;
 
 };
 

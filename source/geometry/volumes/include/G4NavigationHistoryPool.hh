@@ -111,8 +111,7 @@ DeRegister(std::vector<G4NavigationLevel> * pLevels)
 //
 inline std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetNewLevels()
 {
-  std::vector<G4NavigationLevel> * aLevelVec =
-    new std::vector<G4NavigationLevel>(kHistoryMax);
+  auto aLevelVec = new std::vector<G4NavigationLevel>(kHistoryMax);
   Register(aLevelVec);
 
   return aLevelVec;
@@ -125,9 +124,9 @@ inline std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetNewLevels()
 //
 inline std::vector<G4NavigationLevel> * G4NavigationHistoryPool::GetLevels()
 {
-  std::vector<G4NavigationLevel> * levels = 0;
+  std::vector<G4NavigationLevel> * levels = nullptr;
 
-  if (fFree.size() !=0)
+  if (!fFree.empty())
   {
     levels = fFree.back();
     fFree.pop_back();

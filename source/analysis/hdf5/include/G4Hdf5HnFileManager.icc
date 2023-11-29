@@ -28,15 +28,13 @@
 
 #include "G4AnalysisUtilities.hh"
 
-#include "tools/hdf5/header"
-#include "tools/hdf5/h2file"
+#include "toolx/hdf5/header"
+#include "toolx/hdf5/h2file"
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/histo/h3d"
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
-
-#include "tools/hdf5/h2file"
 
 //_____________________________________________________________________________
 template <>
@@ -44,7 +42,7 @@ inline
 G4bool G4Hdf5HnFileManager<tools::histo::p1d>::WriteImpl(
   hid_t hdirectory, tools::histo::p1d* ht, const G4String& htName)
 {
-  return tools::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
+  return toolx::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
 }
 
 //_____________________________________________________________________________
@@ -53,7 +51,7 @@ inline
 G4bool G4Hdf5HnFileManager<tools::histo::p2d>::WriteImpl(
   hid_t hdirectory, tools::histo::p2d* ht, const G4String& htName)
 {
-  return tools::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
+  return toolx::hdf5::write_profile(G4cout, hdirectory, htName, *ht);
 }
 
 //_____________________________________________________________________________
@@ -62,7 +60,7 @@ inline
 G4bool G4Hdf5HnFileManager<HT>::WriteImpl(
   hid_t hdirectory, HT* ht, const G4String& htName)
 {
-  return tools::hdf5::write_histo(G4cout, hdirectory, htName, *ht);
+  return toolx::hdf5::write_histo(G4cout, hdirectory, htName, *ht);
 }
 
 //_____________________________________________________________________________
@@ -83,21 +81,21 @@ G4bool G4Hdf5HnFileManager<HT>::WriteExtra(
   }
 
   // create a header with general infos :
-  if(!tools::hdf5::write_header(hfile)) {
-    G4cerr << "tools::hdf5::write_header() failed." << std::endl;
+  if(!toolx::hdf5::write_header(hfile)) {
+    G4cerr << "toolx::hdf5::write_header() failed." << std::endl;
     return false;
   }
 
   // Create directories
-  hid_t hdirectory = tools_H5Gcreate(hfile, "histograms", 0);
+  hid_t hdirectory = toolx_H5Gcreate(hfile, "histograms", 0);
   if ( hdirectory < 0 ) {
-    G4cerr << "tools_H5Gcreate failed " << G4endl;
+    G4cerr << "toolx_H5Gcreate failed " << G4endl;
     return false;
   }
 
-  auto result = tools::hdf5::write_atb(hdirectory, "type", "directory");
+  auto result = toolx::hdf5::write_atb(hdirectory, "type", "directory");
   if ( ! result) {
-    G4cerr << "tools::hdf5::write_atb failed " << G4endl;
+    G4cerr << "toolx::hdf5::write_atb failed " << G4endl;
     return false;
   }
 

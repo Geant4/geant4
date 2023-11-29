@@ -29,4 +29,4 @@
 #include "G4ParticleHPPolynomExpansion.hh"
 using G4NeutronHPPolynomExpansion = G4ParticleHPPolynomExpansion;
 
-#endif 
+#endif

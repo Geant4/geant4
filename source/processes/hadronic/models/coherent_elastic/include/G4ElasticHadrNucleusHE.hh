@@ -195,7 +195,7 @@ private:
 
   static G4ElasticData* fElasticData[NHADRONS][ZMAX];
   G4NistManager*  nistManager;
-  char* fDirectory;
+  const char* fDirectory;
 
   G4bool isMaster;
 

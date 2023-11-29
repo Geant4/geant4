@@ -63,10 +63,10 @@ class G4GeneralParticleSource : public G4VPrimaryGenerator
       // Initialize variables and instantiates the messenger and
       // generator classes
 
-   ~G4GeneralParticleSource();
+   ~G4GeneralParticleSource() override;
       // Delete messenger and others
 
-    void GeneratePrimaryVertex(G4Event*);
+    void GeneratePrimaryVertex(G4Event*) override;
 
     inline G4int GetNumberofSource() { return GPSData->GetSourceVectorSize(); }
       // Return the number of particle gun defined

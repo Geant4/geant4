@@ -253,9 +253,7 @@ G4PVReplica::G4PVReplica( __void__& a )
 }
 
 // ----------------------------------------------------------------------
-G4PVReplica::~G4PVReplica()
-{
-}
+G4PVReplica::~G4PVReplica() = default;
 
 // ----------------------------------------------------------------------
 G4bool G4PVReplica::IsMany() const

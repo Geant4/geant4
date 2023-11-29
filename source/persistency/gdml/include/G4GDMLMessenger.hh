@@ -61,6 +61,7 @@ class G4GDMLMessenger : public G4UImessenger
 
     G4UIdirectory* persistencyDir = nullptr;
     G4UIdirectory* gdmlDir = nullptr;
+    G4UIcmdWithAString* ReaderSchema = nullptr;
     G4UIcmdWithAString* ReaderCmd = nullptr;
     G4UIcmdWithAString* WriterCmd = nullptr;
     G4UIcmdWithAString* TopVolCmd = nullptr;

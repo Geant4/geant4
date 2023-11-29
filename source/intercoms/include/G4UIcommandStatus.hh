@@ -36,13 +36,13 @@
 
 enum G4UIcommandStatus
 {
-  fCommandSucceeded         = 0,
-  fCommandNotFound          = 100,
-  fIllegalApplicationState  = 200,
-  fParameterOutOfRange      = 300,
-  fParameterUnreadable      = 400,
+  fCommandSucceeded = 0,
+  fCommandNotFound = 100,
+  fIllegalApplicationState = 200,
+  fParameterOutOfRange = 300,
+  fParameterUnreadable = 400,
   fParameterOutOfCandidates = 500,
-  fAliasNotFound            = 600
+  fAliasNotFound = 600
 };
 
 #endif

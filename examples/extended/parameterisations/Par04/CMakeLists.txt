@@ -54,10 +54,22 @@ if(INFERENCE_LIB)
    endif()
 endif()
 
+# TORCH
+if(INFERENCE_LIB)
+  find_package(Torch QUIET)
+   if(Torch_FOUND)
+       message("Torch inference library found.")
+          add_definitions(-DUSE_INFERENCE)
+             add_definitions(-DUSE_INFERENCE_TORCH)
+   else()
+      message("Torch not found!")
+   endif()
+endif()
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
@@ -82,19 +94,30 @@ if(OnnxRuntime_FOUND)
    add_dependencies(examplePar04 examplePar04onnxdata)
 endif()
 
+if(Torch_FOUND)
+   target_include_directories(examplePar04 PUBLIC ${TORCH_INCLUDE_DIRS})
+   target_link_libraries(examplePar04 ${TORCH_LIBRARIES})
+   message(STATUS "${TORCH_LIBRARIES}")
+   # Depend on data for runtime
+   add_dependencies(examplePar04 examplePar04torchdata)
+endif()
+
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build Par04. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(Par04_SCRIPTS
-    examplePar04.in vis.mac
+    examplePar04.mac vis.mac
   )
 if(lwtnn_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.in)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.mac vis_lwtnn.mac)
 endif()
 if(OnnxRuntime_FOUND)
-  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx.in)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_onnx.mac vis_onnx.mac)
+endif()
+if(Torch_FOUND)
+  set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_torch.mac vis_torch.mac)
 endif()
 
 foreach(_script ${Par04_SCRIPTS})
@@ -126,6 +149,17 @@ if(OnnxRuntime_FOUND)
     DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
     URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/Generator.onnx
     URL_MD5 cacd07c24b704decca28de990850287e
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    DOWNLOAD_NO_EXTRACT true
+    )
+endif()
+if(Torch_FOUND)
+  ExternalProject_Add(examplePar04torchdata
+    DOWNLOAD_DIR ${PROJECT_BINARY_DIR}/MLModels
+    URL https://cern.ch/geant4-data/datasets/examples/extended/parameterisations/Par04/Generator.pt
+    URL_MD5 a43337f7f976e976f1127015f2ba61db
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
     INSTALL_COMMAND ""

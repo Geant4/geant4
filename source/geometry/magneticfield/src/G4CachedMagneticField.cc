@@ -32,7 +32,7 @@
 
 G4CachedMagneticField::G4CachedMagneticField(G4MagneticField* pMagField, 
                                              G4double         distance)
-  : G4MagneticField(), fpMagneticField(pMagField), fDistanceConst(distance),
+  : fpMagneticField(pMagField), fDistanceConst(distance),
     fLastLocation(DBL_MAX,DBL_MAX,DBL_MAX), fLastValue(DBL_MAX,DBL_MAX,DBL_MAX)
 {
   ClearCounts(); 
@@ -42,17 +42,15 @@ G4Field* G4CachedMagneticField::Clone() const
 {
   // Cannot use copy constructor: need to clone the associated magnetic field
 
-  G4MagneticField* aF = static_cast<G4MagneticField*>(fpMagneticField->Clone());
-  G4CachedMagneticField* cloned = new G4CachedMagneticField(aF, fDistanceConst);
+  auto  aF = static_cast<G4MagneticField*>(fpMagneticField->Clone());
+  auto  cloned = new G4CachedMagneticField(aF, fDistanceConst);
 
   cloned->fLastLocation = fLastLocation;
   cloned->fLastValue = fLastValue;
   return cloned;
 }
 
-G4CachedMagneticField::~G4CachedMagneticField()
-{
-}
+G4CachedMagneticField::~G4CachedMagneticField() = default;
 
 void
 G4CachedMagneticField::ReportStatistics()

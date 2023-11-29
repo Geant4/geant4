@@ -82,7 +82,7 @@ public:
 
 private:
 
-  void AddData(const G4float* s, const G4Material*);
+  void AddData(const G4float* ss, const G4Material*);
 
   void FindData(G4int idx, const G4Material*);
 

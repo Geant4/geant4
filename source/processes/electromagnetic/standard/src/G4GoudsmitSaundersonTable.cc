@@ -87,6 +87,7 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4EmParameters.hh"
 
 #include "G4String.hh"
 
@@ -129,7 +130,7 @@ G4GoudsmitSaundersonTable::G4GoudsmitSaundersonTable(G4bool iselectron) {
 }
 
 G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable() {
-  for (size_t i=0; i<gGSMSCAngularDistributions1.size(); ++i) {
+  for (std::size_t i=0; i<gGSMSCAngularDistributions1.size(); ++i) {
     if (gGSMSCAngularDistributions1[i]) {
       delete [] gGSMSCAngularDistributions1[i]->fUValues;
       delete [] gGSMSCAngularDistributions1[i]->fParamA;
@@ -138,7 +139,7 @@ G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable() {
     }
   }
   gGSMSCAngularDistributions1.clear();
-  for (size_t i=0; i<gGSMSCAngularDistributions2.size(); ++i) {
+  for (std::size_t i=0; i<gGSMSCAngularDistributions2.size(); ++i) {
     if (gGSMSCAngularDistributions2[i]) {
       delete [] gGSMSCAngularDistributions2[i]->fUValues;
       delete [] gGSMSCAngularDistributions2[i]->fParamA;
@@ -152,7 +153,7 @@ G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable() {
     fMottCorrection = nullptr;
   }
   // clear scp correction data
-  for (size_t imc=0; imc<fSCPCPerMatCuts.size(); ++imc) {
+  for (std::size_t imc=0; imc<fSCPCPerMatCuts.size(); ++imc) {
     if (fSCPCPerMatCuts[imc]) {
       fSCPCPerMatCuts[imc]->fVSCPC.clear();
       delete fSCPCPerMatCuts[imc];
@@ -435,16 +436,8 @@ G4GoudsmitSaundersonTable::GSMSCAngularDtr* G4GoudsmitSaundersonTable::GetGSAngu
 
 
 void G4GoudsmitSaundersonTable::LoadMSCData() {
-  char* path = std::getenv("G4LEDATA");
-  if (!path) {
-    G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
-		FatalException,
-		"Environment variable G4LEDATA not defined");
-    return;
-  }
-  //
   gGSMSCAngularDistributions1.resize(gLAMBNUM*gQNUM1,nullptr);
-  const G4String str1 = G4String(path) + "/msc_GS/GSGrid_1/gsDistr_";
+  const G4String str1 = G4EmParameters::Instance()->GetDirLEDATA() + "/msc_GS/GSGrid_1/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
     G4String fname = str1 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);
@@ -455,7 +448,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
       return;
     }
     for (G4int iq=0; iq<gQNUM1; ++iq) {
-      GSMSCAngularDtr *gsd = new GSMSCAngularDtr();
+      auto gsd = new GSMSCAngularDtr();
       infile >> gsd->fNumData;
       gsd->fUValues = new G4double[gsd->fNumData]();
       gsd->fParamA  = new G4double[gsd->fNumData]();
@@ -474,7 +467,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
   //
   // second grid
   gGSMSCAngularDistributions2.resize(gLAMBNUM*gQNUM2,nullptr);
-  const G4String str2 = G4String(path) + "/msc_GS/GSGrid_2/gsDistr_";
+  const G4String str2 = G4EmParameters::Instance()->GetDirLEDATA() + "/msc_GS/GSGrid_2/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
     G4String fname = str2 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);
@@ -488,7 +481,7 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
       G4int numData;
       infile >> numData;
       if (numData>1) {
-        GSMSCAngularDtr *gsd = new GSMSCAngularDtr();
+        auto gsd = new GSMSCAngularDtr();
         gsd->fNumData = numData;
         gsd->fUValues = new G4double[gsd->fNumData]();
         gsd->fParamA  = new G4double[gsd->fNumData]();
@@ -557,7 +550,7 @@ void G4GoudsmitSaundersonTable::InitMoliereMSCParams() {
 
    G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    // get number of materials in the table
-   size_t numMaterials = theMaterialTable->size();
+   std::size_t numMaterials = theMaterialTable->size();
    // make sure that we have long enough vectors
    if(gMoliereBc.size()<numMaterials) {
      gMoliereBc.resize(numMaterials);
@@ -570,10 +563,10 @@ void G4GoudsmitSaundersonTable::InitMoliereMSCParams() {
      maxZ = G4GSMottCorrection::GetMaxZet();
    }
    //
-   for (size_t imat=0; imat<numMaterials; ++imat) {
+   for (std::size_t imat=0; imat<numMaterials; ++imat) {
      const G4Material*      theMaterial     = (*theMaterialTable)[imat];
      const G4ElementVector* theElemVect     = theMaterial->GetElementVector();
-     const G4int            numelems        = theMaterial->GetNumberOfElements();
+     const G4int            numelems        = (G4int)theMaterial->GetNumberOfElements();
      //
      const G4double*        theNbAtomsPerVolVect  = theMaterial->GetVecNbOfAtomsPerVolume();
      G4double               theTotNbAtomsPerVol   = theMaterial->GetTotNbOfAtomsPerVolume();
@@ -617,9 +610,9 @@ G4double G4GoudsmitSaundersonTable::ComputeScatteringPowerCorrection(const G4Mat
   // get the scattering power correction factor
   G4double lekin      = G4Log(ekin);
   G4double remaining  = (lekin-fSCPCPerMatCuts[imc]->fLEmin)*fSCPCPerMatCuts[imc]->fILDel;
-  G4int    lindx      = (G4int)remaining;
+  std::size_t lindx   = (std::size_t)remaining;
   remaining          -= lindx;
-  G4int    imax       = fSCPCPerMatCuts[imc]->fVSCPC.size()-1;
+  std::size_t imax    = fSCPCPerMatCuts[imc]->fVSCPC.size()-1;
   if (lindx>=imax) {
     corFactor = fSCPCPerMatCuts[imc]->fVSCPC[imax];
   } else {
@@ -632,9 +625,9 @@ G4double G4GoudsmitSaundersonTable::ComputeScatteringPowerCorrection(const G4Mat
 void G4GoudsmitSaundersonTable::InitSCPCorrection() {
   // get the material-cuts table
   G4ProductionCutsTable *thePCTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numMatCuts                 = thePCTable->GetTableSize();
+  std::size_t numMatCuts            = thePCTable->GetTableSize();
   // clear container if any
-  for (size_t imc=0; imc<fSCPCPerMatCuts.size(); ++imc) {
+  for (std::size_t imc=0; imc<fSCPCPerMatCuts.size(); ++imc) {
     if (fSCPCPerMatCuts[imc]) {
       fSCPCPerMatCuts[imc]->fVSCPC.clear();
       delete fSCPCPerMatCuts[imc];
@@ -645,7 +638,7 @@ void G4GoudsmitSaundersonTable::InitSCPCorrection() {
   // set size of the container and create the corresponding data structures
   fSCPCPerMatCuts.resize(numMatCuts,nullptr);
   // loop over the material-cuts and create scattering power correction data structure for each
-  for (size_t imc=0; imc<numMatCuts; ++imc) {
+  for (G4int imc=0; imc<(G4int)numMatCuts; ++imc) {
     const G4MaterialCutsCouple *matCut =  thePCTable->GetMaterialCutsCouple(imc);
     // get e- production cut in the current material-cuts in energy
     G4double limit;
@@ -683,7 +676,7 @@ void G4GoudsmitSaundersonTable::InitSCPCorrection() {
          G4double tau     = ekin/CLHEP::electron_mass_c2;
          G4double tauCut  = ecut/CLHEP::electron_mass_c2;
          // Moliere's screening parameter
-         G4int    matindx = matCut->GetMaterial()->GetIndex();
+         G4int    matindx = (G4int)matCut->GetMaterial()->GetIndex();
          G4double A       = GetMoliereXc2(matindx)/(4.0*tau*(tau+2.)*GetMoliereBc(matindx));
          G4double gr      = (1.+2.*A)*G4Log(1.+1./A)-2.;
          G4double dum0    = (tau+2.)/(tau+1.);

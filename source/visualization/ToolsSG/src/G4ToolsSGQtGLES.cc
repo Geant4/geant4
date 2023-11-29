@@ -27,17 +27,11 @@
 
 #include "G4ToolsSGQtGLES.hh"
 
-//
-#define G4TOOLSSG_QT_VIEWER_IN_TAB
-
-#ifdef G4TOOLSSG_QT_VIEWER_IN_TAB
 #include "G4ToolsSGQtViewer.hh"
-#else
-#include "G4ToolsSGViewer.hh"
-#include <tools/Qt/sg_viewer>
-#endif
 
-#include <tools/argcv>
+#include "G4Qt.hh"
+
+#include "G4UIbatch.hh"
 
 G4ToolsSGQtGLES::G4ToolsSGQtGLES():
 parent
@@ -55,11 +49,13 @@ G4ToolsSGQtGLES::~G4ToolsSGQtGLES() {
 
 void G4ToolsSGQtGLES::Initialise() {
   if(fSGSession) return; //done.
-  int* argc = new int;
-  char** argv = nullptr;
-  std::vector<std::string> args;args.push_back("");
-  tools::new_argcv(args,*argc,argv);
-  fSGSession = new tools::Qt::session(G4cout,*argc,argv);
+  G4Qt* interactorManager = G4Qt::getInstance();
+  auto* _qapp =  (QApplication*)interactorManager->GetMainInteractor();
+  if(!_qapp) {
+    G4cerr << "G4ToolsSGQtGLES::Initialise : G4Qt::GetMainInteractor() returns null." << G4endl;
+    return;
+  }
+  fSGSession = new toolx::Qt::session(G4cout,_qapp);
   if(!fSGSession->is_valid()) {
     G4cerr << "G4ToolsSGQtGLES::Initialise : session::is_valid() failed." << G4endl;
     delete fSGSession;
@@ -76,12 +72,7 @@ G4VSceneHandler* G4ToolsSGQtGLES::CreateSceneHandler(const G4String& a_name) {
 G4VViewer* G4ToolsSGQtGLES::CreateViewer(G4VSceneHandler& a_scene,const G4String& a_name) {
   if(!fSGSession) Initialise();
   if(!fSGSession) return nullptr;
-  G4VViewer* pView =
-#ifdef G4TOOLSSG_QT_VIEWER_IN_TAB
-    new G4ToolsSGQtViewer(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
-#else
-    new G4ToolsSGViewer<tools::Qt::session,tools::Qt::sg_viewer>(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
-#endif    
+  G4VViewer* pView = new G4ToolsSGQtViewer(*fSGSession,(G4ToolsSGSceneHandler&)a_scene,a_name);
   if (pView) {
     if (pView->GetViewId() < 0) {
       G4cerr << "G4ToolsSGQtGLES::CreateViewer:"
@@ -101,27 +92,24 @@ G4VViewer* G4ToolsSGQtGLES::CreateViewer(G4VSceneHandler& a_scene,const G4String
 G4bool G4ToolsSGQtGLES::IsUISessionCompatible () const
 {
   G4bool isCompatible = false;
-//  G4UImanager* ui = G4UImanager::GetUIpointer();
-//  G4UIsession* session = ui->GetSession();
-//
-//  // If session is a batch session, it may be:
-//  // a) this is a batch job (the user has not instantiated any UI session);
-//  // b) we are currently processing a UI command, in which case the UI
-//  //    manager creates a temporary batch session and to find out if there is
-//  //    a genuine UI session that the user has instantiated we must drill
-//  //    down through previous sessions to a possible non-batch session.
-//  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
-//    session = batch->GetPreviousSession();
-//  }
-//
-//  // Qt windows are only appropriate in a Qt session.
-//  if (session) {
-//    // If non-zero, this is the originating non-batch session
-//    // The user has instantiated a UI session...
-//    if (dynamic_cast<G4UIQt*>(session)) {
-//      // ...and it's a G4UIQt session, which is OK.
-      isCompatible = true;
-//    }
-//  }
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+  G4UIsession* session = ui->GetSession();
+
+  // If session is a batch session, it may be:
+  // a) this is a batch job (the user has not instantiated any UI session);
+  // b) we are currently processing a UI command, in which case the UI
+  //    manager creates a temporary batch session and to find out if there is
+  //    a genuine UI session that the user has instantiated we must drill
+  //    down through previous sessions to a possible non-batch session.
+  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
+    session = batch->GetPreviousSession();
+  }
+
+  // Qt windows are only appropriate in a Qt session.
+  // This is the originating non-batch session...
+  if (dynamic_cast<G4UIQt*>(session)) {
+    // ...and it's a G4UIQt session, which is OK.
+    isCompatible = true;
+  }
   return isCompatible;
 }

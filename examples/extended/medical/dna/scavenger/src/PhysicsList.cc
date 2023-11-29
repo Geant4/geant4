@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file PhysicsList.cc
-/// \brief Implementation of the PhysicsList class
+/// \file scavenger/src/PhysicsList.cc
+/// \brief Implementation of the scavenger::PhysicsList class
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "EmDNAChemistry.hh"
 #include "G4EmDNAPhysics_option2.hh"
-/**
- * Change the physicsList
-#include "G4EmDNAPhysics.hh"
-#include "G4EmDNAPhysics_option1.hh"
-#include "G4EmDNAPhysics_option3.hh"
-#include "G4EmDNAPhysics_option4.hh"
-#include "G4EmDNAPhysics_option5.hh"
-#include "G4EmDNAPhysics_option6.hh"
-#include "G4EmDNAPhysics_option7.hh"
-#include "G4EmDNAPhysics_option8.hh"
-*/
+
+// // Change the physicsList
+// #include "G4EmDNAPhysics.hh"
+// #include "G4EmDNAPhysics_option1.hh"
+// #include "G4EmDNAPhysics_option3.hh"
+// #include "G4EmDNAPhysics_option4.hh"
+// #include "G4EmDNAPhysics_option5.hh"
+// #include "G4EmDNAPhysics_option6.hh"
+// #include "G4EmDNAPhysics_option7.hh"
+// #include "G4EmDNAPhysics_option8.hh"
+
 #include "G4PhysicsConstructorRegistry.hh"
 #include "G4EmParameters.hh"
 

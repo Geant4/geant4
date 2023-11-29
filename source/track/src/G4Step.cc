@@ -47,20 +47,16 @@ G4Step::G4Step()
 G4Step::~G4Step()
 {
   delete fpPreStepPoint;
-  fpPreStepPoint = nullptr;
   delete fpPostStepPoint;
-  fpPostStepPoint = nullptr;
 
   secondaryInCurrentStep->clear();
   delete secondaryInCurrentStep;
-  secondaryInCurrentStep = nullptr;
 
   if(fSecondary != nullptr)
   {
     fSecondary->clear();
     delete fSecondary;
   }
-  fSecondary = nullptr;
 }
 
 // --------------------------------------------------------------------
@@ -122,10 +118,8 @@ G4Step& G4Step::operator=(const G4Step& right)
     secondaryInCurrentStep           = right.secondaryInCurrentStep;
     fpVectorOfAuxiliaryPointsPointer = right.fpVectorOfAuxiliaryPointsPointer;
 
-    if(fpPreStepPoint != nullptr)
-    {
-      delete fpPreStepPoint;
-    }
+    delete fpPreStepPoint;
+
     if(right.fpPreStepPoint != nullptr)
     {
       fpPreStepPoint = new G4StepPoint(*(right.fpPreStepPoint));
@@ -134,10 +128,9 @@ G4Step& G4Step::operator=(const G4Step& right)
     {
       fpPreStepPoint = new G4StepPoint();
     }
-    if(fpPostStepPoint != nullptr)
-    {
-      delete fpPostStepPoint;
-    }
+
+    delete fpPostStepPoint;
+
     if(right.fpPostStepPoint != nullptr)
     {
       fpPostStepPoint = new G4StepPoint(*(right.fpPostStepPoint));
@@ -209,8 +202,8 @@ G4double G4Step::GetDeltaEnergy() const
 const std::vector<const G4Track*>* G4Step::GetSecondaryInCurrentStep() const
 {
   secondaryInCurrentStep->clear();
-  G4int nSecondary = fSecondary->size();
-  for(G4int i = nSecondaryByLastStep; i < nSecondary; ++i)
+  std::size_t nSecondary = fSecondary->size();
+  for(std::size_t i = nSecondaryByLastStep; i < nSecondary; ++i)
   {
     secondaryInCurrentStep->push_back((*fSecondary)[i]);
   }

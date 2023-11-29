@@ -1,18 +1,23 @@
--------------------------------------------------------------------
+# Example g3tog4 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    g3tog4 examples History file
-                    ----------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-09 I. Hrivnacova (g3tog4Tests-V11-00-02)
+- Removed common examples and test from the top clGeometry directory
+  (added by mistake in the previous update)
+
+## 2022-11-07 I. Hrivnacova (g3tog4Tests-V11-00-01)
+- Updated common directory (excommon-V11-00-01)
+
+## 2021-12-10 Ben Morgan (g3tog4Tests-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 May 24, 2021 B. Morgan (g3tog4Tests-V10-07-00)
 ---------------------------

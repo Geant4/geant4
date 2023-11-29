@@ -352,8 +352,15 @@ ScoreSpecies::WriteWithAnalysisManager(G4VAnalysisManager* analysisManager)
       G4int N = fNEvent;
 
       if(time == *fTimeToRecord.rbegin()){
-        out<<std::setw(12)<<G/N<<std::setw(12)<<
-             std::sqrt(((G2/N)-std::pow(G/N,2))/(N-1));
+        if(N > 1)
+        {
+          out<<std::setw(12)<<G/N<<std::setw(12)<<
+            std::sqrt(((G2/N)-std::pow(G/N,2))/(N-1));
+        }else{
+          out<<std::setw(12)<<G/N<<std::setw(12)<<
+            std::sqrt(((G2/N)-std::pow(G/N,2))/N);
+        }
+
       }
 
       analysisManager->FillNtupleIColumn(fNtupleID, 0, molID);  // MolID

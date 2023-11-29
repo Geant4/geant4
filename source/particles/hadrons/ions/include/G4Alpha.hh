@@ -52,7 +52,7 @@ class G4Alpha : public G4Ions
  private:
    static G4Alpha* theInstance;
    G4Alpha(){}
-   ~G4Alpha(){}
+   ~G4Alpha() override= default;
 
  public:
    static G4Alpha* Definition();

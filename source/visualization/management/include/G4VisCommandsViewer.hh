@@ -245,15 +245,15 @@ private:
   G4double fPanToRight, fPanToUp;
 };
 
-class G4VisCommandViewerReset: public G4VVisCommand {
+class G4VisCommandViewerRebuild: public G4VVisCommand {
 public:
-  G4VisCommandViewerReset ();
-  virtual ~G4VisCommandViewerReset ();
+  G4VisCommandViewerRebuild ();
+  virtual ~G4VisCommandViewerRebuild ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
-  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4VisCommandViewerRebuild (const G4VisCommandViewerRebuild&);
+  G4VisCommandViewerRebuild& operator = (const G4VisCommandViewerRebuild&);
   G4UIcmdWithAString* fpCommand;
 };
 
@@ -269,15 +269,27 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerRebuild: public G4VVisCommand {
+class G4VisCommandViewerReset: public G4VVisCommand {
 public:
-  G4VisCommandViewerRebuild ();
-  virtual ~G4VisCommandViewerRebuild ();
+  G4VisCommandViewerReset ();
+  virtual ~G4VisCommandViewerReset ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4VisCommandViewerRebuild (const G4VisCommandViewerRebuild&);
-  G4VisCommandViewerRebuild& operator = (const G4VisCommandViewerRebuild&);
+  G4VisCommandViewerReset (const G4VisCommandViewerReset&);
+  G4VisCommandViewerReset& operator = (const G4VisCommandViewerReset&);
+  G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerResetCameraParameters: public G4VVisCommand {
+public:
+  G4VisCommandViewerResetCameraParameters ();
+  virtual ~G4VisCommandViewerResetCameraParameters ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerResetCameraParameters (const G4VisCommandViewerResetCameraParameters&);
+  G4VisCommandViewerResetCameraParameters& operator = (const G4VisCommandViewerResetCameraParameters&);
   G4UIcmdWithAString* fpCommand;
 };
 

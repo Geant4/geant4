@@ -113,8 +113,7 @@ G4ScreeningMottCrossSection::G4ScreeningMottCrossSection():
 
 //....Ooooo0ooooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ScreeningMottCrossSection::~G4ScreeningMottCrossSection()
-{}
+G4ScreeningMottCrossSection::~G4ScreeningMottCrossSection() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -251,7 +251,7 @@ void G4StatAnalysis::PrintInfo(std::ostream& os, const std::string& tab) const
 
   std::stringstream ss;
   ss << tab  //<< scientific
-     << setprecision(os.precision()) << right << _sum << left
+     << setprecision((G4int)os.precision()) << right << _sum << left
      << " [sigma: " << right << _sigma << left << " | error: " << right
      << _error << left << " | coeff: " << right << _coeff << left
      << " | eff: " << right << _eff << left << " | fom: " << right << _fom

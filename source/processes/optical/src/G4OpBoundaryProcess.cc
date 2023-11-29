@@ -89,8 +89,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
-                                         G4ProcessType type)
-  : G4VDiscreteProcess(processName, type)
+                                         G4ProcessType ptype)
+  : G4VDiscreteProcess(processName, ptype)
 {
   Initialise();
 
@@ -123,10 +123,12 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
   fRindex1 = fRindex2 = 1.;
   fSint1              = 0.;
   fDichroicVector     = nullptr;
+
+  fNumWarnings = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4OpBoundaryProcess::~G4OpBoundaryProcess() {}
+G4OpBoundaryProcess::~G4OpBoundaryProcess() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4OpBoundaryProcess::PreparePhysicsTable(const G4ParticleDefinition&)
@@ -183,7 +185,8 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
       G4cout << " thePostPV: " << thePostPV->GetName() << G4endl;
   }
 
-  if(aTrack.GetStepLength() <= fCarTolerance)
+  G4double stepLength = aTrack.GetStepLength();
+  if(stepLength <= fCarTolerance)
   {
     fStatus = StepTooSmall;
     if(verboseLevel > 1)
@@ -195,12 +198,30 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
     {
       groupvel = aMPT->GetProperty(kGROUPVEL);
     }
+
     if(groupvel != nullptr)
     {
       aParticleChange.ProposeVelocity(
         groupvel->Value(fPhotonMomentum, idx_groupvel));
     }
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  }
+  else if (stepLength <= 10.*fCarTolerance && fNumWarnings < 10)
+  {  // see bug 2510
+    ++fNumWarnings;
+    {
+      G4ExceptionDescription ed;
+      ed << "G4OpBoundaryProcess: "
+         << "Opticalphoton step length: " << stepLength/mm << " mm." << G4endl
+         << "This is larger than the threshold " << fCarTolerance/mm << " mm "
+            "to set status StepTooSmall." << G4endl
+         << "Boundary scattering may be incorrect. ";
+      if(fNumWarnings == 10)
+      {
+        ed << G4endl << "*** Step size warnings stopped.";
+      }
+      G4Exception("G4OpBoundaryProcess", "OpBoun06", JustWarning, ed, "");
+    }
   }
 
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
@@ -413,7 +434,7 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
           BoundaryProcessVerbose();
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
       }
-      MPT = fMaterial2->GetMaterialPropertiesTable();
+      MPT       = fMaterial2->GetMaterialPropertiesTable();
       rIndexMPV = nullptr;
       if(MPT != nullptr)
       {
@@ -483,6 +504,10 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
   else if(type == dielectric_dichroic)
   {
     DielectricDichroic();
+  }
+  else if(type == coated)
+  {
+    CoatedDielectricDielectric();
   }
   else
   {
@@ -610,6 +635,13 @@ void G4OpBoundaryProcess::BoundaryProcessVerbose() const
     G4cout << "NoRINDEX";
   else if(fStatus == Dichroic)
     G4cout << "Dichroic Transmission";
+  else if(fStatus == CoatedDielectricReflection)
+    G4cout << "Coated Dielectric Reflection";
+  else if(fStatus == CoatedDielectricRefraction)
+    G4cout << "Coated Dielectric Refraction";
+  else if(fStatus == CoatedDielectricFrustratedTransmission)
+    G4cout << "Coated Dielectric Frustrated Transmission";
+
   G4cout << " ***" << G4endl;
 }
 
@@ -742,7 +774,7 @@ void G4OpBoundaryProcess::DielectricMetal()
             {
               fFacetNormal = GetFacetNormal(fOldMomentum, fGlobalNormal);
             }
-            //else
+            // else
             //  case of complex rindex needs to be implemented
           }
           fNewMomentum =
@@ -811,14 +843,14 @@ void G4OpBoundaryProcess::DielectricLUT()
       // Calculate Angle between Normal and Photon Momentum
       G4double anglePhotonToNormal = fOldMomentum.angle(-fGlobalNormal);
       // Round to closest integer: LBNL model array has 91 values
-      G4int angleIncident = std::lrint(anglePhotonToNormal / CLHEP::deg);
+      G4int angleIncident = (G4int)std::lrint(anglePhotonToNormal / CLHEP::deg);
 
       // Take random angles THETA and PHI,
       // and see if below Probability - if not - Redo
       do
       {
-        thetaIndex = G4RandFlat::shootInt(thetaIndexMax - 1);
-        phiIndex   = G4RandFlat::shootInt(phiIndexMax - 1);
+        thetaIndex = (G4int)G4RandFlat::shootInt(thetaIndexMax - 1);
+        phiIndex   = (G4int)G4RandFlat::shootInt(phiIndexMax - 1);
         // Find probability with the new indeces from LUT
         angularDistVal = fOpticalSurface->GetAngularDistributionValue(
           angleIncident, thetaIndex, phiIndex);
@@ -868,8 +900,8 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
 
     // Davis model has 90 reflection bins: round down
     // don't allow angleIncident to be 90 for anglePhotonToNormal close to 90
-    angleIncident = std::min(static_cast<G4int>(
-      std::floor(anglePhotonToNormal / CLHEP::deg)), 89);
+    angleIncident = std::min(
+      static_cast<G4int>(std::floor(anglePhotonToNormal / CLHEP::deg)), 89);
     reflectivityValue = fOpticalSurface->GetReflectivityLUTValue(angleIncident);
 
     if(rand > reflectivityValue)
@@ -891,7 +923,7 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
 
         do
         {
-          random = G4RandFlat::shootInt(1, lutbin + 1);
+          random = (G4int)G4RandFlat::shootInt(1, lutbin + 1);
           angindex =
             (((random * 2) - 1)) + angleIncident * lutbin * 2 + 3640000;
 
@@ -926,7 +958,7 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
 
       do
       {
-        random   = G4RandFlat::shootInt(1, lutbin + 1);
+        random   = (G4int)G4RandFlat::shootInt(1, lutbin + 1);
         angindex = (((random * 2) - 1)) + (angleIncident - 1) * lutbin * 2;
 
         azimuth = fOpticalSurface->GetAngularDistributionValueLUT(angindex - 1);
@@ -1392,7 +1424,6 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4OpBoundaryProcess::CalculateReflectivity()
 {
   G4double realRindex = fRealRIndexMPV->Value(fPhotonMomentum, idx_rrindex);
@@ -1472,4 +1503,313 @@ void G4OpBoundaryProcess::SetVerboseLevel(G4int verbose)
 {
   verboseLevel = verbose;
   G4OpticalParameters::Instance()->SetBoundaryVerboseLevel(verboseLevel);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void G4OpBoundaryProcess::CoatedDielectricDielectric()
+{
+  G4MaterialPropertyVector* pp = nullptr;
+
+  G4MaterialPropertiesTable* MPT = fMaterial2->GetMaterialPropertiesTable();
+  if((pp = MPT->GetProperty(kRINDEX)))
+  {
+    fRindex2 = pp->Value(fPhotonMomentum, idx_rindex2);
+  }
+
+  MPT = fOpticalSurface->GetMaterialPropertiesTable();
+  if((pp = MPT->GetProperty(kCOATEDRINDEX)))
+  {
+    fCoatedRindex = pp->Value(fPhotonMomentum, idx_coatedrindex);
+  }
+  if(MPT->ConstPropertyExists(kCOATEDTHICKNESS))
+  {
+    fCoatedThickness = MPT->GetConstProperty(kCOATEDTHICKNESS);
+  }
+  if(MPT->ConstPropertyExists(kCOATEDFRUSTRATEDTRANSMISSION))
+  {
+    fCoatedFrustratedTransmission =
+      (G4bool)MPT->GetConstProperty(kCOATEDFRUSTRATEDTRANSMISSION);
+  }
+
+  G4double sintTL;
+  G4double wavelength = h_Planck * c_light / fPhotonMomentum;
+  G4double PdotN;
+  G4double E1_perp, E1_parl;
+  G4double s1, E2_perp, E2_parl, E2_total, transCoeff;
+  G4double E2_abs, C_parl, C_perp;
+  G4double alpha;
+  G4ThreeVector A_trans, A_paral, E1pp, E1pl;
+  //G4bool Inside  = false;
+  //G4bool Swap    = false;
+  G4bool through = false;
+  G4bool done    = false;
+
+  do {
+    if (through)
+    {
+      //Swap = !Swap;
+      through = false;
+      fGlobalNormal = -fGlobalNormal;
+      G4SwapPtr(fMaterial1, fMaterial2);
+      G4SwapObj(&fRindex1, &fRindex2);
+    }
+
+    if(fFinish == polished)
+    {
+      fFacetNormal = fGlobalNormal;
+    }
+    else
+    {
+      fFacetNormal = GetFacetNormal(fOldMomentum, fGlobalNormal);
+    }
+
+    PdotN = fOldMomentum * fFacetNormal;
+    G4double cost1 = -PdotN;
+    G4double sint2, cost2 = 0.;
+
+    if (std::abs(cost1) < 1.0 - fCarTolerance)
+    {
+      fSint1 = std::sqrt(1. - cost1 * cost1);
+      sint2 = fSint1 * fRindex1 / fRindex2;
+      sintTL = fSint1 * fRindex1 / fCoatedRindex;
+    } else
+    {
+      fSint1 = 0.0;
+      sint2 = 0.0;
+      sintTL = 0.0;
+    }
+
+    if (fSint1 > 0.0)
+    {
+      A_trans = fOldMomentum.cross(fFacetNormal);
+      A_trans = A_trans.unit();
+      E1_perp = fOldPolarization * A_trans;
+      E1pp = E1_perp * A_trans;
+      E1pl = fOldPolarization - E1pp;
+      E1_parl = E1pl.mag();
+    }
+    else
+    {
+      A_trans = fOldPolarization;
+      E1_perp = 0.0;
+      E1_parl = 1.0;
+    }
+
+    s1 = fRindex1 * cost1;
+
+    if (cost1 > 0.0)
+    {
+      cost2 = std::sqrt(1. - sint2 * sint2);
+    }
+    else
+    {
+      cost2 = -std::sqrt(1. - sint2 * sint2);
+    }
+
+    transCoeff = 0.0;
+
+    if (sintTL >= 1.0)
+    { // --> Angle > Angle Limit
+      //Swap = false;
+    }
+    E2_perp = 2. * s1 * E1_perp / (fRindex1 * cost1 + fRindex2 * cost2);
+    E2_parl = 2. * s1 * E1_parl / (fRindex2 * cost1 + fRindex1 * cost2);
+    E2_total = E2_perp * E2_perp + E2_parl * E2_parl;
+
+    transCoeff = 1. - GetReflectivityThroughThinLayer(
+                        sintTL, E1_perp, E1_parl, wavelength, cost1, cost2);
+    if (!G4BooleanRand(transCoeff))
+    {
+      if(verboseLevel > 2)
+        G4cout << "Reflection from " << fMaterial1->GetName() << " to "
+               << fMaterial2->GetName() << G4endl;
+
+      //Swap = false;
+
+      if (sintTL >= 1.0)
+      {
+        fStatus = TotalInternalReflection;
+      }
+      else
+      {
+        fStatus = CoatedDielectricReflection;
+      }
+
+      PdotN = fOldMomentum * fFacetNormal;
+      fNewMomentum = fOldMomentum - (2. * PdotN) * fFacetNormal;
+
+      if (fSint1 > 0.0) {   // incident ray oblique
+
+        E2_parl = fRindex2 * E2_parl / fRindex1 - E1_parl;
+        E2_perp = E2_perp - E1_perp;
+        E2_total = E2_perp * E2_perp + E2_parl * E2_parl;
+        A_paral = fNewMomentum.cross(A_trans);
+        A_paral = A_paral.unit();
+        E2_abs = std::sqrt(E2_total);
+        C_parl = E2_parl / E2_abs;
+        C_perp = E2_perp / E2_abs;
+
+        fNewPolarization = C_parl * A_paral + C_perp * A_trans;
+
+      }
+      else
+      {               // incident ray perpendicular
+        if (fRindex2 > fRindex1)
+        {
+          fNewPolarization = -fOldPolarization;
+        }
+        else
+        {
+          fNewPolarization = fOldPolarization;
+        }
+      }
+
+    } else { // photon gets transmitted
+      if (verboseLevel > 2)
+        G4cout << "Transmission from " << fMaterial1->GetName() << " to "
+               << fMaterial2->GetName() << G4endl;
+
+      //Inside = !Inside;
+      through = true;
+
+      if (fEfficiency > 0.)
+      {
+        DoAbsorption();
+        return;
+      }
+      else
+      {
+        if (sintTL >= 1.0)
+        {
+          fStatus = CoatedDielectricFrustratedTransmission;
+        }
+        else
+        {
+          fStatus = CoatedDielectricRefraction;
+        }
+
+        if (fSint1 > 0.0) {      // incident ray oblique
+
+          alpha = cost1 - cost2 * (fRindex2 / fRindex1);
+          fNewMomentum = fOldMomentum + alpha * fFacetNormal;
+          fNewMomentum = fNewMomentum.unit();
+          A_paral = fNewMomentum.cross(A_trans);
+          A_paral = A_paral.unit();
+          E2_abs = std::sqrt(E2_total);
+          C_parl = E2_parl / E2_abs;
+          C_perp = E2_perp / E2_abs;
+
+          fNewPolarization = C_parl * A_paral + C_perp * A_trans;
+
+        }
+        else
+        {                  // incident ray perpendicular
+          fNewMomentum = fOldMomentum;
+          fNewPolarization = fOldPolarization;
+        }
+      }
+    }
+
+    fOldMomentum = fNewMomentum.unit();
+    fOldPolarization = fNewPolarization.unit();
+    if ((fStatus == CoatedDielectricFrustratedTransmission) ||
+        (fStatus == CoatedDielectricRefraction))
+    {
+      done = (fNewMomentum * fGlobalNormal <= 0.0);
+    }
+    else
+    {
+      done = (fNewMomentum * fGlobalNormal >= -fCarTolerance);
+    }
+
+  } while (!done);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4double G4OpBoundaryProcess::GetReflectivityThroughThinLayer(G4double sinTL,
+                   G4double E1_perp,
+                   G4double E1_parl,
+                   G4double wavelength, G4double cost1, G4double cost2) {
+  G4complex Reflectivity, Reflectivity_TE, Reflectivity_TM;
+  G4double gammaTL, costTL;
+
+  G4complex i(0, 1);
+  G4complex rTM, rTE;
+  G4complex r1toTL, rTLto2;
+  G4double k0 = 2 * pi / wavelength;
+
+  // Angle > Angle limit
+  if (sinTL >= 1.0) {
+    if (fCoatedFrustratedTransmission) { //Frustrated transmission
+
+      if (cost1 > 0.0)
+      {
+        gammaTL = std::sqrt(fRindex1 * fRindex1 * fSint1 * fSint1 -
+                   fCoatedRindex * fCoatedRindex);
+      }
+      else
+      {
+        gammaTL = -std::sqrt(fRindex1 * fRindex1 * fSint1 * fSint1 -
+                   fCoatedRindex * fCoatedRindex);
+      }
+
+      // TE
+      r1toTL = (fRindex1 * cost1 - i * gammaTL) / (fRindex1 * cost1 + i * gammaTL);
+      rTLto2 = (i * gammaTL - fRindex2 * cost2) / (i * gammaTL + fRindex2 * cost2);
+      if (cost1 != 0.0)
+      {
+        rTE = (r1toTL + rTLto2 * std::exp(-2 * k0 * fCoatedThickness * gammaTL)) /
+                 (1.0 + r1toTL * rTLto2 * std::exp(-2 * k0 * fCoatedThickness * gammaTL));
+      }
+      // TM
+      r1toTL = (fRindex1 * i * gammaTL - fCoatedRindex * fCoatedRindex * cost1) /
+                  (fRindex1 * i * gammaTL + fCoatedRindex * fCoatedRindex * cost1);
+      rTLto2 = (fCoatedRindex * fCoatedRindex * cost2 - fRindex2 * i * gammaTL) /
+                  (fCoatedRindex * fCoatedRindex * cost2 + fRindex2 * i * gammaTL);
+      if (cost1 != 0.0)
+      {
+        rTM = (r1toTL + rTLto2 * std::exp(-2 * k0 * fCoatedThickness * gammaTL)) /
+                 (1.0 + r1toTL * rTLto2 * std::exp(-2 * k0 * fCoatedThickness * gammaTL));
+      }
+    }
+    else
+    { //Total reflection
+      return(1.);
+    }
+  }
+
+  // Angle <= Angle limit
+  else //if (sinTL < 1.0)
+  {
+    if (cost1 > 0.0)
+    {
+      costTL = std::sqrt(1. - sinTL * sinTL);
+    }
+    else
+    {
+      costTL = -std::sqrt(1. - sinTL * sinTL);
+    }
+    // TE
+    r1toTL = (fRindex1 * cost1 - fCoatedRindex * costTL) / (fRindex1 * cost1 + fCoatedRindex * costTL);
+    rTLto2 = (fCoatedRindex * costTL - fRindex2 * cost2) / (fCoatedRindex * costTL + fRindex2 * cost2);
+    if (cost1 != 0.0)
+    {
+      rTE = (r1toTL + rTLto2 * std::exp(2.0 * i * k0 * fCoatedRindex * fCoatedThickness * costTL)) /
+            (1.0 + r1toTL * rTLto2 * std::exp(2.0 * i * k0 * fCoatedRindex * fCoatedThickness * costTL));
+    }
+    // TM
+    r1toTL = (fRindex1 * costTL - fCoatedRindex * cost1) / (fRindex1 * costTL + fCoatedRindex * cost1);
+    rTLto2 = (fCoatedRindex * cost2 - fRindex2 * costTL) / (fCoatedRindex * cost2 + fRindex2 * costTL);
+    if (cost1 != 0.0)
+    {
+      rTM = (r1toTL + rTLto2 * std::exp(2.0 * i * k0 * fCoatedRindex * fCoatedThickness * costTL)) /
+            (1.0 + r1toTL * rTLto2 * std::exp(2.0 * i * k0 * fCoatedRindex * fCoatedThickness * costTL));
+    }
+  }
+
+  Reflectivity_TE = (rTE * conj(rTE)) * (E1_perp * E1_perp) / (E1_perp * E1_perp + E1_parl * E1_parl);
+  Reflectivity_TM = (rTM * conj(rTM)) * (E1_parl * E1_parl) / (E1_perp * E1_perp + E1_parl * E1_parl);
+  Reflectivity = Reflectivity_TE + Reflectivity_TM;
+
+  return real(Reflectivity);
 }

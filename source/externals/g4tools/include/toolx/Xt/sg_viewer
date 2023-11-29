@@ -1,0 +1,183 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Xt_sg_viewer
+#define toolx_Xt_sg_viewer
+
+#include "session"
+
+#include "../sg/GL_viewer"
+
+#include "OpenGLArea"
+
+#include <X11/Shell.h>
+#include <X11/StringDefs.h>
+#include <X11/IntrinsicP.h>
+
+#include <tools/num2s>
+#include <tools/sg/device_interactor>
+#include <tools/sg/keys>
+
+namespace toolx {
+namespace Xt {
+
+class sg_viewer : public sg::GL_viewer {
+  typedef sg::GL_viewer parent;
+public:
+  sg_viewer(session& a_session,
+            int a_x = 0,int a_y = 0,
+            unsigned int a_width = 500,unsigned int a_height = 500,
+            const std::string& a_win_title = "")
+  :parent(a_session.out(),a_width,a_height)
+  ,m_session(a_session)
+  ,m_shell(0)
+  ,m_glarea(0)
+  ,m_interactor(0)
+  {
+    Widget app_widget = a_session.get_app_widget();
+    if(!app_widget) return;
+
+    std::string sgeom;
+    tools::numas(a_width,sgeom);
+    sgeom += "x";
+    tools::numas(a_height,sgeom);
+    sgeom += "+";
+    tools::numas(a_x,sgeom);
+    sgeom += "+";
+    tools::numas(a_y,sgeom);
+
+    Arg args[2];
+    XtSetArg(args[0],XtNgeometry,XtNewString(sgeom.c_str()));
+    XtSetArg(args[1],XtNborderWidth,0);
+
+    m_shell = ::XtAppCreateShell((char*)a_win_title.c_str(),
+                                 (char*)"sg_viewer_shell",
+                                 topLevelShellWidgetClass,XtDisplay(app_widget),args,2);
+    ::XtSetMappedWhenManaged(m_shell,True);
+  
+    m_glarea = ::XtCreateManagedWidget("glarea",OpenGLArea::widget_class(),m_shell,args,0);
+    ::XtAddCallback(m_glarea,XoNpaintCallback,paint_cbk,(XtPointer)this);
+    ::XtAddCallback(m_glarea,XoNeventCallback,event_cbk,(XtPointer)this);
+
+    ::XtAddCallback(m_shell,XtNdestroyCallback,destroy_shell_callback,(XtPointer)this);
+    
+    ::XtRealizeWidget(m_shell);
+
+  //Atom WM_DELETE_WINDOW_atom = ::XInternAtom(XtDisplay(m_shell),"WM_DELETE_WINDOW",False);
+  //::XSetWMProtocols(XtDisplay(m_shell),XtWindow(m_shell),&WM_DELETE_WINDOW_atom,1);
+  }
+  virtual ~sg_viewer() {
+    if(m_shell) {
+      ::XtRemoveCallback(m_glarea,XoNpaintCallback,paint_cbk,(XtPointer)this);
+      ::XtRemoveCallback(m_shell,XtNdestroyCallback,destroy_shell_callback,(XtPointer)this);
+      ::XtDestroyWidget(m_shell);
+    }
+    m_shell = 0;
+    m_glarea = 0;
+  }
+protected:
+  sg_viewer(const sg_viewer& a_from)
+  :parent(a_from)
+  ,m_session(a_from.m_session)
+  ,m_shell(0)
+  ,m_glarea(0)
+  ,m_interactor(0)
+  {}
+  sg_viewer& operator=(const sg_viewer& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+  bool has_window() const {return m_glarea?true:false;}
+
+  bool show() {
+    if(!m_shell) return false;
+    ::XtRealizeWidget(m_shell);
+    ::XtMapWidget(m_shell);
+    // Raise window :
+    if(XtIsWidget(m_shell) && XtIsRealized(m_shell) ) {
+      Display* display = XtDisplay(m_shell);
+      Atom atom = ::XInternAtom(display,"WM_DELETE_WINDOW",False);
+      ::XSetWMProtocols(display,XtWindow(m_shell),&atom,1);
+      ::XRaiseWindow(display,XtWindow(m_shell));
+    }
+    return true;
+  }
+
+  void win_render() {
+    if(m_glarea) OpenGLArea::paint(m_glarea);
+  }
+
+public:
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
+protected:
+  static void paint_cbk(Widget a_widget,XtPointer a_tag,XtPointer){
+    unsigned int width = a_widget->core.width;
+    unsigned int height = a_widget->core.height;
+    //::printf("debug : toolx::Xt::sg_viewer::paint_cbk : %d %d\n",width,height);
+    sg_viewer* _this = (sg_viewer*)a_tag;
+    _this->set_size(width,height);
+    _this->render();
+  }
+  static void event_cbk(Widget,XtPointer a_tag,XtPointer a_data){
+    sg_viewer* _this = (sg_viewer*)a_tag;
+    if(!_this->m_interactor) return;
+    XoAnyCallbackStruct* data = (XoAnyCallbackStruct*)a_data;
+    XEvent* xevent = data->event;
+    switch( xevent->type ) {
+    case KeyPress:{
+      KeySym key_sym;
+      ::XLookupString(&(xevent->xkey),NULL,0,&key_sym,NULL);
+      tools::sg::key_down_event event(_this->convert(key_sym));
+      _this->m_interactor->key_press(event);
+    }return;
+    case KeyRelease:{
+      KeySym key_sym;
+      ::XLookupString(&(xevent->xkey),NULL,0,&key_sym,NULL);
+      tools::sg::key_up_event event(_this->convert(key_sym));
+      _this->m_interactor->key_release(event);
+    }return;
+    case ButtonPress:{
+      if(xevent->xbutton.button==Button4) {  //4=wheel down, or move down double touch on trackpad = zoom in.
+        tools::sg::wheel_rotate_event event(8);  //8=cooking.
+        _this->m_interactor->wheel_rotate(event);
+      } else if(xevent->xbutton.button==Button5) {  //5=wheel up, or move up double touch on trackpad = zoom out.
+        tools::sg::wheel_rotate_event event(-8);  //8=cooking.
+        _this->m_interactor->wheel_rotate(event);
+      } else {
+        tools::sg::mouse_down_event event(xevent->xbutton.x,xevent->xbutton.y);
+        _this->m_interactor->mouse_press(event);
+      }
+    }return;
+    case ButtonRelease:{
+      tools::sg::mouse_up_event event(xevent->xbutton.x,xevent->xbutton.y);
+      _this->m_interactor->mouse_release(event);
+    }return;
+    case MotionNotify:{
+      tools::sg::mouse_move_event event(xevent->xmotion.x,xevent->xmotion.y,0,0,false);
+      _this->m_interactor->mouse_move(event);
+    }return;
+    default:return;}
+  }
+  static void destroy_shell_callback(Widget,XtPointer a_tag,XtPointer) {
+    sg_viewer* _this = (sg_viewer*)a_tag;
+    _this->m_shell = 0;
+    _this->m_glarea = 0;
+  }
+protected:
+  tools::key_code convert(KeySym a_key) {
+    if(a_key==XK_Shift_L) return tools::sg::key_shift();
+    if(a_key==XK_Shift_R) return tools::sg::key_shift();
+    return (tools::key_code)a_key;
+  }
+protected:
+  session& m_session;
+  Widget m_shell;
+  Widget m_glarea;
+  tools::sg::device_interactor* m_interactor;
+};
+
+}}
+
+#endif
+

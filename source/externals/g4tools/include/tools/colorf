@@ -29,6 +29,32 @@ public:
     return *this;
   }
 public:
+  colorf& operator*=(const colorf& a_v) {
+    m_data[0] *= a_v.m_data[0];
+    m_data[1] *= a_v.m_data[1];
+    m_data[2] *= a_v.m_data[2];
+    m_data[3] *= a_v.m_data[3];
+    return *this;
+  }
+  colorf& operator*=(float a_v) {
+    m_data[0] *= a_v;
+    m_data[1] *= a_v;
+    m_data[2] *= a_v;
+    m_data[3] *= a_v;
+    return *this;
+  }
+public:
+  void clamp(float a_min = 0,float a_max = 1) {
+    if(m_data[0]<a_min) m_data[0] = a_min;
+    if(m_data[1]<a_min) m_data[1] = a_min;
+    if(m_data[2]<a_min) m_data[2] = a_min;
+    if(m_data[3]<a_min) m_data[3] = a_min;
+
+    if(a_max<m_data[0]) m_data[0] = a_max;
+    if(a_max<m_data[1]) m_data[1] = a_max;
+    if(a_max<m_data[2]) m_data[2] = a_max;
+    if(a_max<m_data[3]) m_data[3] = a_max;
+  }
   float r() const {return v0();}
   float g() const {return v1();}
   float b() const {return v2();}
@@ -54,7 +80,7 @@ public:
 public:
 //#define tools_stat_colorfs
 #ifdef tools_stat_colorfs
-  //NOTE : the below are deprecated, use functions in inlib/colorfs.
+  //NOTE : the below are deprecated, use functions in tools/colorfs.
   //       colorf::white() replaced by colorf_white()
 
   // our forever 65 named colors taken long time ago from X11.
@@ -155,10 +181,11 @@ struct cmp_colorf {
   }
 };
 
+//default color is lightgrey:
 #if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
-inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1,false);return s_v;}
+inline const colorf& colorf_default() {static const colorf s_v(0.824231F,0.824231F,0.824231F,1,false);return s_v;}
 #else
-inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1);return s_v;}
+inline const colorf& colorf_default() {static const colorf s_v(0.824231F,0.824231F,0.824231F,1);return s_v;}
 #endif
 
 }

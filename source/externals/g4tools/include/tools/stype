@@ -57,7 +57,7 @@ inline const std::string& stype(bool) {
   return s_v;
 }
 
-// for inlib::mcol<T> :
+// for tools::mcol<T> :
 inline const std::string& stype(int64) {
   static const std::string s_v("tools::int64");
   return s_v;

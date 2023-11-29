@@ -53,9 +53,15 @@
 #include "G4Pow.hh"
 #include "G4Exp.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4AutoLock.hh"
 
 const G4int G4BetheHeitlerModel::gMaxZet = 120; 
 std::vector<G4BetheHeitlerModel::ElementData*> G4BetheHeitlerModel::gElementData;
+
+namespace
+{
+  G4Mutex theBetheHMutex = G4MUTEX_INITIALIZER;
+}
 
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*, 
                                          const G4String& nam)
@@ -69,11 +75,8 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 
 G4BetheHeitlerModel::~G4BetheHeitlerModel()
 {
-  if (IsMaster()) {
-    // clear ElementData container
-    for (size_t iz = 0; iz < gElementData.size(); ++iz) {
-      if (gElementData[iz]) delete gElementData[iz];
-    }
+  if (isFirstInstance) {
+    for (auto const & ptr : gElementData) { delete ptr; }
     gElementData.clear(); 
   }
 }
@@ -81,11 +84,23 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
 void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p, 
                                      const G4DataVector& cuts)
 {
-  if (IsMaster()) {
+  if (!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+
+  if (gElementData.empty()) {
+    G4AutoLock l(&theBetheHMutex);
+    if (gElementData.empty()) {
+      isFirstInstance = true;
+      gElementData.resize(gMaxZet+1, nullptr);
+    }
+    l.unlock();
+  }
+
+  // static data should be initialised only in the one instance
+  if(isFirstInstance) {
     InitialiseElementData();
   }
-  if (!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  if (IsMaster()) { 
+  // element selectors should be initialised in the master thread
+  if(IsMaster()) {
     InitialiseElementSelectors(p, cuts); 
   }
 }
@@ -281,11 +296,9 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
                                                  eKinEnergy, pKinEnergy,
                                                  eDirection, pDirection);
   // create G4DynamicParticle object for the particle1
-  G4DynamicParticle* aParticle1= new G4DynamicParticle(
-                     fTheElectron,eDirection,eKinEnergy);
+  auto aParticle1= new G4DynamicParticle(fTheElectron,eDirection,eKinEnergy);
   // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle(
-                     fThePositron,pDirection,pKinEnergy);
+  auto aParticle2= new G4DynamicParticle(fThePositron,pDirection,pKinEnergy);
   // Fill output vector
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
@@ -297,20 +310,14 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 // should be called only by the master and at initialisation
 void G4BetheHeitlerModel::InitialiseElementData() 
 {
-  G4int size = gElementData.size();
-  if (size < gMaxZet+1) {
-    gElementData.resize(gMaxZet+1, nullptr);
-  }
   // create for all elements that are in the detector
-  const G4ElementTable* elemTable = G4Element::GetElementTable();
-  size_t numElems = (*elemTable).size();
-  for (size_t ie = 0; ie < numElems; ++ie) {
-    const G4Element* elem = (*elemTable)[ie];
-    const G4int        iz = std::min(gMaxZet, elem->GetZasInt());
-    if (!gElementData[iz]) { // create it if doesn't exist yet
+  auto elemTable = G4Element::GetElementTable();
+  for (auto const & elem : *elemTable) {
+    const G4int iz = std::min(gMaxZet, elem->GetZasInt());
+    if (nullptr == gElementData[iz]) { // create it if doesn't exist yet
       G4double FZLow     = 8.*elem->GetIonisation()->GetlogZ3();
       G4double FZHigh    = FZLow + 8.*elem->GetfCoulomb();
-      ElementData* elD   = new ElementData(); 
+      auto elD           = new ElementData();
       elD->fDeltaMaxLow  = G4Exp((42.038 - FZLow )/8.29) - 0.958;
       elD->fDeltaMaxHigh = G4Exp((42.038 - FZHigh)/8.29) - 0.958;
       gElementData[iz]   = elD;

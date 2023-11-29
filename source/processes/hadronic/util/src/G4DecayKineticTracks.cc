@@ -54,21 +54,28 @@ void G4DecayKineticTracks::Decay(G4KineticTrackVector *tracks) const {
     daughters = track->GetDefinition()->IsShortLived() ? track->Decay() : 0;
   
     if (daughters) {
+      // Use the integer round mass in keV to get an unique ID for the parent resonance
+      G4int uniqueID = static_cast< G4int >( round( track->Get4Momentum().mag() / CLHEP::keV ) );
+ 
       // Assign to the daughters the creator model ID of their parent
       for (size_t k=0; k<daughters->size(); ++k) {
 	G4KineticTrack* aDaughter = (*daughters)[k];
-	if (aDaughter) aDaughter->SetCreatorModelID(track->GetCreatorModelID());
+	if (aDaughter) {
+          aDaughter->SetCreatorModelID(track->GetCreatorModelID());
+          aDaughter->SetParentResonanceDef(track->GetDefinition());
+          aDaughter->SetParentResonanceID(uniqueID);          
+        }
       }
       
       tracks->insert(tracks->end(), daughters->begin(), daughters->end());
       delete track;		// Remove parent track
       delete daughters;
-      (*tracks)[i] = NULL;	// Flag parent's slot for removal
+      (*tracks)[i] = nullptr;	// Flag parent's slot for removal
     }
   }
 
   // Find and remove null pointers created by decays above
-  for (int j=tracks->size()-1; j>=0; --j) {
-    if (NULL == (*tracks)[j]) tracks->erase(tracks->begin()+j);
+  for (G4int j=(G4int)tracks->size()-1; j>=0; --j) {
+    if (nullptr == (*tracks)[j]) tracks->erase(tracks->begin()+j);
   }
 }

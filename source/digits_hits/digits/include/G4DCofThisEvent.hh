@@ -29,10 +29,10 @@
 #ifndef G4DCofThisEvent_h
 #define G4DCofThisEvent_h 1
 
-#include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VDigiCollection.hh"
-//#include "g4rw/tpordvec.h"
+#include "globals.hh"
+
 #include <vector>
 
 // class description:
@@ -50,38 +50,37 @@ class G4DCofThisEvent
 {
  public:
   G4DCofThisEvent();
-  G4DCofThisEvent(G4int cap);
+  explicit G4DCofThisEvent(G4int cap);
   ~G4DCofThisEvent();
+  G4DCofThisEvent(const G4DCofThisEvent&);
+  G4DCofThisEvent& operator=(const G4DCofThisEvent&);
+
   inline void* operator new(size_t);
   inline void operator delete(void* anDCoTE);
 
   void AddDigiCollection(G4int DCID, G4VDigiCollection* aDC);
 
-  G4DCofThisEvent(const G4DCofThisEvent&);
-  G4DCofThisEvent& operator=(const G4DCofThisEvent&);
-
- private:
-  std::vector<G4VDigiCollection*>* DC;
-
- public:  // with description
-  inline G4VDigiCollection* GetDC(G4int i) const { return (*DC)[i]; }
-  //  Returns a pointer to a digi collection. Null will be returned
-  // if the particular collection is not stored at the current event.
+  //  Returns a pointer to a digi collection.
+  // Returns `nullptr` if the particular collection is not stored in the current event.
   // The integer argument is ID number which is assigned by G4DigiManager
   // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
   // method.
+  inline G4VDigiCollection* GetDC(G4int i) const { return (*DC)[i]; }
+
+  // Return number of digi collections stored
   inline G4int GetNumberOfCollections() const
   {
     G4int n = 0;
-    for(auto dc : *DC)
-      if(dc)
-        n++;
+    for (const G4VDigiCollection* dc : *DC) {
+      if (dc != nullptr) n++;
+    }
     return n;
   }
-  //  Returns the number of digi collections which are stored in this class
-  // object.
- public:
+
   inline size_t GetCapacity() const { return DC->size(); }
+
+ private:
+  std::vector<G4VDigiCollection*>* DC;
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
@@ -92,22 +91,15 @@ extern G4DLLIMPORT G4Allocator<G4DCofThisEvent>*& anDCoTHAllocator_G4MT_TLS_();
 
 inline void* G4DCofThisEvent::operator new(size_t)
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
+  if (anDCoTHAllocator_G4MT_TLS_() == nullptr) {
     anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
-    *anDCoTHAllocator_G4MT_TLS_();
-  void* anDCoTH;
-  anDCoTH = (void*) anDCoTHAllocator.MallocSingle();
-  return anDCoTH;
+  }
+  return (void*)anDCoTHAllocator_G4MT_TLS_()->MallocSingle();
 }
 
 inline void G4DCofThisEvent::operator delete(void* anDCoTH)
 {
-  if(!anDCoTHAllocator_G4MT_TLS_())
-    anDCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4DCofThisEvent>;
-  G4Allocator<G4DCofThisEvent>& anDCoTHAllocator =
-    *anDCoTHAllocator_G4MT_TLS_();
-  anDCoTHAllocator.FreeSingle((G4DCofThisEvent*) anDCoTH);
+  anDCoTHAllocator_G4MT_TLS_()->FreeSingle((G4DCofThisEvent*)anDCoTH);
 }
 
 #endif

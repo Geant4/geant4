@@ -41,14 +41,14 @@
 
 class G4LineCurrentMagField : public G4MagneticField
 {
-  public:  // with description
+  public:
 
     G4LineCurrentMagField(G4double pFieldConstant);
-   ~G4LineCurrentMagField();
+   ~G4LineCurrentMagField() override;
 
     void GetFieldValue(const G4double yTrack[],
-                             G4double B[] ) const;
-    G4Field* Clone() const;
+                             G4double B[] ) const override;
+    G4Field* Clone() const override;
 
   private:
   

@@ -155,7 +155,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   result = fEmCascade->ApplyYourself(thePro, *nucleus);
   G4double ebound = result->GetLocalEnergyDeposit(); 
   G4double edep = 0.0; 
-  G4int nSecondaries = result->GetNumberOfSecondaries();
+  G4int nSecondaries = (G4int)result->GetNumberOfSecondaries();
   G4int nEmCascadeSec = nSecondaries;
 
   // Try decay from bound level 
@@ -167,7 +167,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   if(fBoundDecay) {
     G4HadFinalState* resultDecay = 
       fBoundDecay->ApplyYourself(thePro, *nucleus);
-    G4int n = resultDecay->GetNumberOfSecondaries();
+    G4int n = (G4int)resultDecay->GetNumberOfSecondaries();
     if(0 < n) {
       nSecondaries += n;
       result->AddSecondaries(resultDecay);
@@ -241,10 +241,10 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
     } while(!resultNuc);
 
     edep = resultNuc->GetLocalEnergyDeposit();
-    size_t nnuc = resultNuc->GetNumberOfSecondaries();
+    std::size_t nnuc = resultNuc->GetNumberOfSecondaries();
 
     // add delay time of capture
-    for(size_t i=0; i<nnuc; ++i) { 
+    for(std::size_t i=0; i<nnuc; ++i) { 
       G4HadSecondary* sec = resultNuc->GetSecondary(i);
       sec->SetTime(capTime + sec->GetTime());
     }

@@ -25,10 +25,6 @@
 //
 /// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
-//
-//
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +40,6 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,23 +47,22 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-    virtual ~DetectorMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
+    ~DetectorMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
-    DetectorConstruction* fDetector;
-    
-    G4UIdirectory*             fDetDir;
-    G4UIcmdWithAString*        fAbsMaterCmd;
-    G4UIcmdWithAString*        fGapMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* fGapThickCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeYZCmd;
-    G4UIcmdWithAnInteger*      fNbLayersCmd;    
+    DetectorConstruction* fDetector = nullptr;
+
+    G4UIdirectory*             fDetDir = nullptr;
+    G4UIcmdWithAString*        fAbsMaterCmd = nullptr;
+    G4UIcmdWithAString*        fGapMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fGapThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeYZCmd = nullptr;
+    G4UIcmdWithAnInteger*      fNbLayersCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

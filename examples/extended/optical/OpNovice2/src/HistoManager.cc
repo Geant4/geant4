@@ -116,9 +116,24 @@ void HistoManager::Book()
   analysisMan->CreateH1(
     "z_fresnel", "Z momentum dir of Fresnel-refracted photons", n, xmn, xmx);
   // 20
-  analysisMan->CreateH1("Transmitted", "Transmitted photons", n, xmn, xmx);
+  analysisMan->CreateH1("Fresnel refraction", "Fresnel-refracted photons", n,
+                        xmn, xmx);
   // 21
-  analysisMan->CreateH1("Reflected", "Reflected photons", n, xmn, xmx);
+  analysisMan->CreateH1("Fresnel reflection", "Fresnel-reflected photons", n,
+                        xmn, xmx);
+  // 22
+  analysisMan->CreateH1("Total internal reflection",
+                        "Total internal reflected photons", n, xmn, xmx);
+  // 23
+  analysisMan->CreateH1("Fresnel reflection plus TIR",
+                        "Fresnel-reflected plus TIR photons", n, xmn, xmx);
+  // 24
+  analysisMan->CreateH1("Absorption", "Absorbed photons", n, xmn, xmx);
+  // 25
+  analysisMan->CreateH1("Transmitted", "Transmitted photons", n, xmn, xmx);
+  // 26
+  analysisMan->CreateH1("Spike reflection", "Spike reflected photons", n, xmn,
+                        xmx);
 
   for(G4int i = 0; i < analysisMan->GetNofH1s(); ++i)
   {

@@ -54,11 +54,11 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction();
+   ~RunAction() override;
 
   public:
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run*) override;
+    void   EndOfRunAction(const G4Run*) override;
 
     void CountProcesses(G4String procName);
 
@@ -99,23 +99,23 @@ private:
   
   private:
 
-    DetectorConstruction*   fDetector;
-    PrimaryGeneratorAction* fPrimary;
-    HistoManager*           fHistoManager;
+    DetectorConstruction*   fDetector = nullptr;
+    PrimaryGeneratorAction* fPrimary  = nullptr;
+    HistoManager*           fHistoManager = nullptr;
 
     std::map<G4String,G4int>  fProcCounter;
 
-    G4long   fNbSteps;
-    G4double fTrackLength, fStepMin, fStepMax;
+    G4long   fNbSteps = 0;
+    G4double fTrackLength = 0., fStepMin = DBL_MAX, fStepMax = 0.;
 
-    G4double fEdepPrimary, fEdepPrimMin, fEdepPrimMax;
+    G4double fEdepPrimary = 0., fEdepPrimMin = DBL_MAX, fEdepPrimMax = 0.;
     std::map<G4String,MinMaxData> fEtransfByProcess;
-    G4double fEnergyTransfered, fEtransfMin, fEtransfMax;
-    G4double fEnergyLost, fElostMin, fElostMax;
-    G4double fEnergyBalance, fEbalMin, fEbalMax;
+    G4double fEnergyTransfered = 0., fEtransfMin = DBL_MAX, fEtransfMax = 0.;
+    G4double fEnergyLost = 0., fElostMin = DBL_MAX, fElostMax = 0.;
+    G4double fEnergyBalance = 0., fEbalMin = DBL_MAX, fEbalMax = 0.;
 
-    G4double fEdepSecondary, fEdepSecMin, fEdepSecMax;
-    G4double fEdepTotal, fEdepTotMin, fEdepTotMax;
+    G4double fEdepSecondary = 0., fEdepSecMin = DBL_MAX, fEdepSecMax = 0.;
+    G4double fEdepTotal = 0., fEdepTotMin = DBL_MAX, fEdepTotMax = 0.;
 
     std::map<G4String,MinMaxData> fEkinOfSecondaries;
 };

@@ -149,7 +149,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted& source )
 //
 void G4VCSGfaceted::DeleteStuff()
 {
-  if (numFace)
+  if (numFace != 0)
   {
     G4VCSGface **face = faces;
     do    // Loop checking, 13.08.2015, G.Cosmo
@@ -229,7 +229,7 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p ) const
   G4double best = kInfinity;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    G4double distance;
+    G4double distance = kInfinity;
     G4ThreeVector normal = (*face)->Normal( p, &distance );
     if (distance < best)
     {
@@ -429,9 +429,9 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
     
   } while( ++face < faces + numFace );
   
-    return G4VisExtent( -answers[0], answers[1], 
-                        -answers[2], answers[3],
-                        -answers[4], answers[5]  );
+  return { -answers[0], answers[1], 
+           -answers[2], answers[3],
+           -answers[4], answers[5]  };
 }
 
 
@@ -440,7 +440,7 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
 //
 G4GeometryType G4VCSGfaceted::GetEntityType() const
 {
-  return G4String("G4CSGfaceted");
+  return {"G4CSGfaceted"};
 }
 
 

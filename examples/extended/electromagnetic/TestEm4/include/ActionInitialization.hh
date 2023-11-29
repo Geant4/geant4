@@ -33,16 +33,15 @@
 #include "G4VUserActionInitialization.hh"
 
 /// Action initialization class.
-///
 
 class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    ActionInitialization();
-    virtual ~ActionInitialization();
+    ActionInitialization() = default;
+   ~ActionInitialization() override = default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+   void BuildForMaster() const override;
+   void Build() const override;
 };
 
 #endif

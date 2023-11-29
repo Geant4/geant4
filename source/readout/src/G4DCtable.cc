@@ -33,13 +33,15 @@ G4DCtable::G4DCtable() {;}
 
 G4DCtable::~G4DCtable() {;}
 
-G4int G4DCtable::Registor(G4String DMname,G4String DCname)
+G4int G4DCtable::Registor(G4String DMname, G4String DCname)
 {
-  for(int i=0;i<int(DClist.size());i++)
-  { if(DClist[i]==DCname && DMlist[i]==DMname) return -1; }
+  for(std::size_t i=0; i<DClist.size(); ++i)
+  {
+    if(DClist[i]==DCname && DMlist[i]==DMname) return -1;
+  }
   DClist.push_back(DCname);
   DMlist.push_back(DMname);
-  return DClist.size();
+  return (G4int)DClist.size();
 }
 
 G4int G4DCtable::GetCollectionID(G4String DCname) const
@@ -47,18 +49,18 @@ G4int G4DCtable::GetCollectionID(G4String DCname) const
   G4int i = -1;
   if(DCname.find("/")==std::string::npos) // DCname only
   {
-    for(int j=0;j<int(DClist.size());j++)
+    for(std::size_t j=0; j<DClist.size(); ++j)
     {
       if(DClist[j]==DCname)
       { 
         if(i>=0) return -2;
-        i = j;
+        i = (G4int)j;
       }
     }
   }
   else
   {
-    for(int j=0;j<int(DClist.size());j++)
+    for(std::size_t j=0; j<DClist.size(); ++j)
     {
       G4String tgt = DMlist[j];
       tgt += "/";
@@ -66,7 +68,7 @@ G4int G4DCtable::GetCollectionID(G4String DCname) const
       if(tgt==DCname)
       {
         if(i>=0) return -2;
-        i = j;
+        i = (G4int)j;
       }
     }
   }
@@ -88,13 +90,14 @@ G4int G4DCtable::GetCollectionID(G4VDigitizerModule* aDM) const
            << "> has more than one registered digits collections."
            << G4endl;
     G4cerr << "Candidates are : ";
-    for(G4int j=0;j<aDM->GetNumberOfCollections();j++)
+    for(G4int j=0; j<aDM->GetNumberOfCollections(); ++j)
     { G4cerr << aDM->GetCollectionName(j) << " "; }
     G4cerr << G4endl;
     return -1;
   }
-  for(size_t k=0;k<DMlist.size();k++)
-  { if(DMlist[k]==aDM->GetName()) return k; }
+  for(std::size_t k=0; k<DMlist.size(); ++k)
+  {
+    if(DMlist[k]==aDM->GetName()) return (G4int)k;
+  }
   return -1;
 }
-

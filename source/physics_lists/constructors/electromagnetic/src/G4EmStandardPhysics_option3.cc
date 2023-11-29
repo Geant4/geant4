@@ -75,6 +75,8 @@
 #include "G4ePairProduction.hh"
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4LindhardSorensenIonModel.hh"
+#include "G4IonFluctuations.hh"
 #include "G4NuclearStopping.hh"
 
 #include "G4ParticleTable.hh"
@@ -103,6 +105,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(ver);
+  param->SetGeneralProcessActive(true);
   param->SetMinEnergy(10*CLHEP::eV);
   param->SetLowestElectronEnergy(100*CLHEP::eV);
   param->SetNumberOfBinsPerDecade(20);
@@ -117,6 +120,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetMuHadLateralDisplacement(true);
   param->SetLateralDisplacementAlg96(true);
   param->SetUseICRU90Data(true);
+  param->SetFluctuationType(fUrbanFluctuation);
   param->SetFluo(true);
   param->SetMaxNIELEnergy(1*CLHEP::MeV);
   SetPhysicsType(bElectromagnetic);
@@ -199,7 +203,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // e-
   particle = G4Electron::Electron();
  
-  G4eMultipleScattering* msc = new G4eMultipleScattering();
+  G4UrbanMscModel* msc1 = new G4UrbanMscModel();
+  G4EmBuilder::ConstructElectronMscProcess(msc1, nullptr, particle);
+
   G4eIonisation* eIoni = new G4eIonisation();
 
   G4eBremsstrahlung* brem = new G4eBremsstrahlung();
@@ -213,7 +219,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
   G4ePairProduction* ee = new G4ePairProduction();
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eIoni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -221,7 +226,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // e+
   particle = G4Positron::Positron();
  
-  msc = new G4eMultipleScattering();
+  msc1 = new G4UrbanMscModel();
+  G4EmBuilder::ConstructElectronMscProcess(msc1, nullptr, particle);
+
   eIoni = new G4eIonisation();
 
   brem = new G4eBremsstrahlung();
@@ -233,7 +240,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   brem->SetEmModel(br2);
   br2->SetLowEnergyLimit(CLHEP::GeV);
 
-  ph->RegisterProcess(msc, particle);
   ph->RegisterProcess(eIoni, particle);
   ph->RegisterProcess(brem, particle);
   ph->RegisterProcess(ee, particle);
@@ -242,7 +248,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // generic ion
   particle = G4GenericIon::GenericIon();
   G4ionIonisation* ionIoni = new G4ionIonisation();
-  ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+  auto fluc = new G4IonFluctuations();
+  ionIoni->SetFluctModel(fluc);
+  ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(hmsc, particle);
   ph->RegisterProcess(ionIoni, particle);
   if(nullptr != pnuc) { ph->RegisterProcess(pnuc, particle); }

@@ -38,9 +38,7 @@ G4ThreeVector G4Trap::GetSymAxis() const
   G4double cosTheta = 1.0/std::sqrt(1+fTthetaCphi*fTthetaCphi +
                                fTthetaSphi*fTthetaSphi) ;
 
-  return G4ThreeVector(fTthetaCphi*cosTheta,
-                       fTthetaSphi*cosTheta,
-                       cosTheta) ;
+  return { fTthetaCphi*cosTheta, fTthetaSphi*cosTheta, cosTheta } ;
 }
 
 inline

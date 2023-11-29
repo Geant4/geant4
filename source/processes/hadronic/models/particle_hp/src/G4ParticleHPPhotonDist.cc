@@ -27,222 +27,198 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
-// 070523 Try to limit sum of secondary photon energy while keeping distribution shape 
-//        in the of nDiscrete = 1 an nPartial = 1. Most case are satisfied. 
+// 070523 Try to limit sum of secondary photon energy while keeping distribution shape
+//        in the of nDiscrete = 1 an nPartial = 1. Most case are satisfied.
 //        T. Koi
-// 070606 Add Partial case by T. Koi 
+// 070606 Add Partial case by T. Koi
 // 070618 fix memory leaking by T. Koi
 // 080801 fix memory leaking by T. Koi
-// 080801 Correcting data disorder which happened when both InitPartial 
+// 080801 Correcting data disorder which happened when both InitPartial
 //        and InitAnglurar methods was called in a same instance by T. Koi
-// 090514 Fix bug in IC electron emission case 
+// 090514 Fix bug in IC electron emission case
 //        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 //        But it looks like never cause real effect in G4NDL3.13 (at least Natural elements) TK
-// 101111 Change warning message for "repFlag == 2 && isoFlag != 1" case 
+// 101111 Change warning message for "repFlag == 2 && isoFlag != 1" case
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+#include "G4ParticleHPPhotonDist.hh"
+
+#include "G4Electron.hh"
+#include "G4ParticleHPLegendreStore.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4Poisson.hh"
+#include "G4SystemOfUnits.hh"
+
 #include <numeric>
 
-#include "G4ParticleHPPhotonDist.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleHPLegendreStore.hh"
-#include "G4Electron.hh"
-#include "G4Poisson.hh"
-
-G4bool G4ParticleHPPhotonDist::InitMean(std::istream & aDataFile)
+G4bool G4ParticleHPPhotonDist::InitMean(std::istream& aDataFile)
 {
-
   G4bool result = true;
-  if(aDataFile >> repFlag)
-  {
-
+  if (aDataFile >> repFlag) {
     aDataFile >> targetMass;
-    if(repFlag==1)
-    {
-    // multiplicities
+    if (repFlag == 1) {
+      // multiplicities
       aDataFile >> nDiscrete;
       disType = new G4int[nDiscrete];
       energy = new G4double[nDiscrete];
-      //actualMult = new G4int[nDiscrete];
+      // actualMult = new G4int[nDiscrete];
       theYield = new G4ParticleHPVector[nDiscrete];
-      for (G4int i=0; i<nDiscrete; i++)
-      {
-	aDataFile >> disType[i]>>energy[i];
-	energy[i]*=eV;
-	theYield[i].Init(aDataFile, eV);
+      for (G4int i = 0; i < nDiscrete; ++i) {
+        aDataFile >> disType[i] >> energy[i];
+        energy[i] *= eV;
+        theYield[i].Init(aDataFile, eV);
       }
     }
-    else if(repFlag == 2)
-    {
-       aDataFile >> theInternalConversionFlag;
-       aDataFile >> theBaseEnergy;
-       theBaseEnergy*=eV;
-       aDataFile >> theInternalConversionFlag;
-       // theInternalConversionFlag == 1 No IC, theInternalConversionFlag == 2 with IC 
-       aDataFile >> nGammaEnergies;
-       theLevelEnergies = new G4double[nGammaEnergies];
-       theTransitionProbabilities = new G4double[nGammaEnergies];
-       if(theInternalConversionFlag == 2) thePhotonTransitionFraction = new G4double[nGammaEnergies];
-       for(G4int  ii=0; ii<nGammaEnergies; ii++)
-       {
-	 if(theInternalConversionFlag == 1)
-	 {
-           aDataFile >> theLevelEnergies[ii] >> theTransitionProbabilities[ii];
-	   theLevelEnergies[ii]*=eV;
-	 }
-	 else if(theInternalConversionFlag == 2)
-	 {
-           aDataFile >> theLevelEnergies[ii] >> theTransitionProbabilities[ii] >> thePhotonTransitionFraction[ii];
-	   theLevelEnergies[ii]*=eV;
-	 }
-	 else
-	 {
-           throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist: Unknown conversion flag");
-	 }
+    else if (repFlag == 2) {
+      aDataFile >> theInternalConversionFlag;
+      aDataFile >> theBaseEnergy;
+      theBaseEnergy *= eV;
+      aDataFile >> theInternalConversionFlag;
+      aDataFile >> nGammaEnergies;
+      theLevelEnergies = new G4double[nGammaEnergies];
+      theTransitionProbabilities = new G4double[nGammaEnergies];
+      if (theInternalConversionFlag == 2)
+        thePhotonTransitionFraction = new G4double[nGammaEnergies];
+      for (G4int ii = 0; ii < nGammaEnergies; ++ii) {
+        if (theInternalConversionFlag == 1) {
+          aDataFile >> theLevelEnergies[ii] >> theTransitionProbabilities[ii];
+          theLevelEnergies[ii] *= eV;
+        }
+        else if (theInternalConversionFlag == 2) {
+          aDataFile >> theLevelEnergies[ii] >> theTransitionProbabilities[ii]
+            >> thePhotonTransitionFraction[ii];
+          theLevelEnergies[ii] *= eV;
+        }
+        else {
+          throw G4HadronicException(__FILE__, __LINE__,
+                                    "G4ParticleHPPhotonDist: Unknown conversion flag");
+        }
       }
-       // Note, that this is equivalent to using the 'Gamma' classes.
-      // throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist: Transition probability array not sampled for the moment.");
     }
-    else
-    {
-      G4cout << "Data representation in G4ParticleHPPhotonDist: "<<repFlag<<G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist: This data representation is not implemented.");
+    else {
+      G4cout << "Data representation in G4ParticleHPPhotonDist: " << repFlag << G4endl;
+      throw G4HadronicException(
+        __FILE__, __LINE__, "G4ParticleHPPhotonDist: This data representation is not implemented.");
     }
   }
-  else
-  {
+  else {
     result = false;
   }
   return result;
 }
 
-void G4ParticleHPPhotonDist::InitAngular(std::istream & aDataFile)
+void G4ParticleHPPhotonDist::InitAngular(std::istream& aDataFile)
 {
   G4int i, ii;
-  //angular distributions
+  // angular distributions
   aDataFile >> isoFlag;
-  if (isoFlag != 1)
-  {
-    if (repFlag == 2) G4cout << "G4ParticleHPPhotonDist: repFlag == 2 && isoFlag != 1 is unexpected! If you use G4ND3.x, then please report to Geant4 HyperNews. " << G4endl;
+  if (isoFlag != 1) {
+    if (repFlag == 2)
+      G4cout << "G4ParticleHPPhotonDist: repFlag == 2 && isoFlag != 1 is unexpected! If you use "
+                "G4ND3.x, then please report to Geant4 HyperNews. "
+             << G4endl;
     aDataFile >> tabulationType >> nDiscrete2 >> nIso;
-//080731
-      if (theGammas != NULL && nDiscrete2 != nDiscrete) 
-        G4cout << "080731c G4ParticleHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
+    if (theGammas != nullptr && nDiscrete2 != nDiscrete)
+      G4cout << "080731c G4ParticleHPPhotonDist nDiscrete2 != nDiscrete, It looks like something "
+                "wrong in your NDL files. Please update the latest. If you still have this "
+                "messages after the update, then please report to Geant4 Hyper News."
+             << G4endl;
 
-      // The order of cross section (InitPartials) and distribution
-      // (InitAngular here) data are different, we have to re-coordinate
-      // consistent data order.
-      std::vector < G4double > vct_gammas_par; 
-      std::vector < G4double > vct_shells_par; 
-      std::vector < G4int > vct_primary_par; 
-      std::vector < G4int > vct_distype_par; 
-      std::vector < G4ParticleHPVector* > vct_pXS_par;
-      if ( theGammas != NULL && theShells != NULL ) 
-      {
-         //copy the cross section data 
-         for ( i = 0 ; i < nDiscrete ; i++ )
-         {
-            vct_gammas_par.push_back( theGammas[ i ] );
-            vct_shells_par.push_back( theShells[ i ] );
-            vct_primary_par.push_back( isPrimary[ i ] );
-            vct_distype_par.push_back( disType[ i ] );
-            G4ParticleHPVector* hpv = new G4ParticleHPVector;
-            *hpv = thePartialXsec[ i ];
-            vct_pXS_par.push_back( hpv );
-         }
-      }
-     if ( theGammas == NULL ) theGammas = new G4double[nDiscrete2];
-     if ( theShells == NULL ) theShells = new G4double[nDiscrete2];
-//080731
-
-    for (i=0; i< nIso; i++) // isotropic photons
-    {
-       aDataFile >> theGammas[i] >> theShells[i];
-       theGammas[i]*=eV;
-       theShells[i]*=eV;
-    }
-    nNeu = new G4int [nDiscrete2-nIso];
-    if(tabulationType==1)theLegendre=new G4ParticleHPLegendreTable *[nDiscrete2-nIso];
-    if(tabulationType==2)theAngular =new G4ParticleHPAngularP *[nDiscrete2-nIso];
-    for(i=nIso; i< nDiscrete2; i++)
-    {
-      if(tabulationType==1) 
-      {
-        aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i-nIso];
-        theGammas[i]*=eV;
-        theShells[i]*=eV;
-        theLegendre[i-nIso]=new G4ParticleHPLegendreTable[nNeu[i-nIso]];
-        theLegendreManager.Init(aDataFile); 
-        for (ii=0; ii<nNeu[i-nIso]; ii++)
-        {
-          theLegendre[i-nIso][ii].Init(aDataFile);
-        }
-      }
-      else if(tabulationType==2)
-      {
-        aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i-nIso];
-        theGammas[i]*=eV;
-        theShells[i]*=eV;
-        theAngular[i-nIso]=new G4ParticleHPAngularP[nNeu[i-nIso]];
-        for (ii=0; ii<nNeu[i-nIso]; ii++)
-        {
-          theAngular[i-nIso][ii].Init(aDataFile);
-        }
-      }
-      else
-      {
-        G4cout << "tabulation type: tabulationType"<<G4endl;
-        throw G4HadronicException(__FILE__, __LINE__, "cannot deal with this tabulation type for angular distributions.");
+    // The order of cross section (InitPartials) and distribution
+    // (InitAngular here) data are different, we have to re-coordinate
+    // consistent data order.
+    std::vector<G4double> vct_gammas_par;
+    std::vector<G4double> vct_shells_par;
+    std::vector<G4int> vct_primary_par;
+    std::vector<G4int> vct_distype_par;
+    std::vector<G4ParticleHPVector*> vct_pXS_par;
+    if (theGammas != nullptr && theShells != nullptr) {
+      // copy the cross section data
+      for (i = 0; i < nDiscrete; ++i) {
+        vct_gammas_par.push_back(theGammas[i]);
+        vct_shells_par.push_back(theShells[i]);
+        vct_primary_par.push_back(isPrimary[i]);
+        vct_distype_par.push_back(disType[i]);
+        auto hpv = new G4ParticleHPVector;
+        *hpv = thePartialXsec[i];
+        vct_pXS_par.push_back(hpv);
       }
     }
-//080731
-     if ( vct_gammas_par.size() > 0 ) 
-     {
-        //Reordering cross section data to corrsponding distribution data 
-        for ( i = 0 ; i < nDiscrete ; i++ ) 
-        {
-           for ( G4int j = 0 ; j < nDiscrete ; j++ )  
-           {
-              // Checking gamma and shell to identification 
-              if ( theGammas[ i ] == vct_gammas_par [ j ] && theShells [ i ] == vct_shells_par[ j ] )
-              {
-                 isPrimary [ i ] = vct_primary_par [ j ];
-                 disType [ i ] = vct_distype_par [ j ];
-                 thePartialXsec[ i ] = ( *( vct_pXS_par[ j ] ) );
-              }
-           }
+    if (theGammas == nullptr) theGammas = new G4double[nDiscrete2];
+    if (theShells == nullptr) theShells = new G4double[nDiscrete2];
+
+    for (i = 0; i < nIso; ++i)  // isotropic photons
+    {
+      aDataFile >> theGammas[i] >> theShells[i];
+      theGammas[i] *= eV;
+      theShells[i] *= eV;
+    }
+    nNeu = new G4int[nDiscrete2 - nIso];
+    if (tabulationType == 1) theLegendre = new G4ParticleHPLegendreTable*[nDiscrete2 - nIso];
+    if (tabulationType == 2) theAngular = new G4ParticleHPAngularP*[nDiscrete2 - nIso];
+    for (i = nIso; i < nDiscrete2; ++i) {
+      if (tabulationType == 1) {
+        aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i - nIso];
+        theGammas[i] *= eV;
+        theShells[i] *= eV;
+        theLegendre[i - nIso] = new G4ParticleHPLegendreTable[nNeu[i - nIso]];
+        theLegendreManager.Init(aDataFile);
+        for (ii = 0; ii < nNeu[i - nIso]; ++ii) {
+          theLegendre[i - nIso][ii].Init(aDataFile);
         }
-        //Garbage collection 
-        for ( std::vector < G4ParticleHPVector* >::iterator 
-           it = vct_pXS_par.begin() ; it != vct_pXS_par.end() ; it++ )
-        {
-           delete *it;
+      }
+      else if (tabulationType == 2) {
+        aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i - nIso];
+        theGammas[i] *= eV;
+        theShells[i] *= eV;
+        theAngular[i - nIso] = new G4ParticleHPAngularP[nNeu[i - nIso]];
+        for (ii = 0; ii < nNeu[i - nIso]; ++ii) {
+          theAngular[i - nIso][ii].Init(aDataFile);
         }
-     }
-//080731
+      }
+      else {
+        G4cout << "tabulation type: tabulationType" << G4endl;
+        throw G4HadronicException(
+          __FILE__, __LINE__, "cannot deal with this tabulation type for angular distributions.");
+      }
+    }
+
+    if (!vct_gammas_par.empty()) {
+      // Reordering cross section data to corrsponding distribution data
+      for (i = 0; i < nDiscrete; ++i) {
+        for (G4int j = 0; j < nDiscrete; ++j) {
+          // Checking gamma and shell to identification
+          if (theGammas[i] == vct_gammas_par[j] && theShells[i] == vct_shells_par[j]) {
+            isPrimary[i] = vct_primary_par[j];
+            disType[i] = vct_distype_par[j];
+            thePartialXsec[i] = (*(vct_pXS_par[j]));
+          }
+        }
+      }
+      // Garbage collection
+      for (auto it = vct_pXS_par.cbegin(); it != vct_pXS_par.cend(); ++it) {
+        delete *it;
+      }
+    }
   }
 }
 
-
-void G4ParticleHPPhotonDist::InitEnergies(std::istream & aDataFile)
+void G4ParticleHPPhotonDist::InitEnergies(std::istream& aDataFile)
 {
   G4int i, energyDistributionsNeeded = 0;
-  for (i=0; i<nDiscrete; i++)
-  {
-    if( disType[i]==1) energyDistributionsNeeded =1;
+  for (i = 0; i < nDiscrete; ++i) {
+    if (disType[i] == 1) energyDistributionsNeeded = 1;
   }
-  if(!energyDistributionsNeeded) return;
-  aDataFile >>  nPartials;
+  if (energyDistributionsNeeded == 0) return;
+  aDataFile >> nPartials;
   distribution = new G4int[nPartials];
   probs = new G4ParticleHPVector[nPartials];
-  partials = new G4ParticleHPPartial * [nPartials];
+  partials = new G4ParticleHPPartial*[nPartials];
   G4int nen;
   G4int dummy;
-  for (i=0; i<nPartials; i++)
-  {
+  for (i = 0; i < nPartials; ++i) {
     aDataFile >> dummy;
     probs[i].Init(aDataFile, eV);
     aDataFile >> nen;
@@ -252,14 +228,12 @@ void G4ParticleHPPhotonDist::InitEnergies(std::istream & aDataFile)
   }
 }
 
-void G4ParticleHPPhotonDist::InitPartials(std::istream& aDataFile,
-                                          G4ParticleHPVector* theXsec)
+void G4ParticleHPPhotonDist::InitPartials(std::istream& aDataFile, G4ParticleHPVector* theXsec)
 {
-  if (theXsec) theReactionXsec = theXsec;
+  if (theXsec != nullptr) theReactionXsec = theXsec;
 
   aDataFile >> nDiscrete >> targetMass;
-  if(nDiscrete != 1)
-  {
+  if (nDiscrete != 1) {
     theTotalXsec.Init(aDataFile, eV);
   }
   G4int i;
@@ -268,50 +242,40 @@ void G4ParticleHPPhotonDist::InitPartials(std::istream& aDataFile,
   isPrimary = new G4int[nDiscrete];
   disType = new G4int[nDiscrete];
   thePartialXsec = new G4ParticleHPVector[nDiscrete];
-  for(i=0; i<nDiscrete; i++)
-  {
-    aDataFile>>theGammas[i]>>theShells[i]>>isPrimary[i]>>disType[i];
-    theGammas[i]*=eV;
-    theShells[i]*=eV;
+  for (i = 0; i < nDiscrete; ++i) {
+    aDataFile >> theGammas[i] >> theShells[i] >> isPrimary[i] >> disType[i];
+    theGammas[i] *= eV;
+    theShells[i] *= eV;
     thePartialXsec[i].Init(aDataFile, eV);
-  }  
-
-  //G4cout << "G4ParticleHPPhotonDist::InitPartials Test " << G4endl;
-  //G4cout << "G4ParticleHPPhotonDist::InitPartials nDiscrete " << nDiscrete << G4endl;
-  //G4ParticleHPVector* aHP = new G4ParticleHPVector;
-  //aHP->Check(1);
+  }
 }
 
-G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
+G4ReactionProductVector* G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
 {
-
-  //G4cout << "G4ParticleHPPhotonDist::GetPhotons repFlag " << repFlag << G4endl;
-  // the partial cross-section case is not in this yet. @@@@  << 070601 TK add partial 
-  if ( actualMult.Get() == NULL ) {
-     actualMult.Get() = new std::vector<G4int>( nDiscrete );
+  // the partial cross-section case is not all in this yet.
+  if (actualMult.Get() == nullptr) {
+    actualMult.Get() = new std::vector<G4int>(nDiscrete);
   }
   G4int i, ii, iii;
   G4int nSecondaries = 0;
-  G4ReactionProductVector* thePhotons = new G4ReactionProductVector;
+  auto thePhotons = new G4ReactionProductVector;
 
-  if (repFlag==1) {
-    G4double current=0;
-    for (i = 0; i < nDiscrete; i++) {
+  if (repFlag == 1) {
+    G4double current = 0;
+    for (i = 0; i < nDiscrete; ++i) {
       current = theYield[i].GetY(anEnergy);
-      actualMult.Get()->at(i) = G4Poisson(current); // max cut-off still missing @@@
+      actualMult.Get()->at(i) = (G4int)G4Poisson(current);  // max cut-off still missing @@@
       if (nDiscrete == 1 && current < 1.0001) {
         actualMult.Get()->at(i) = static_cast<G4int>(current);
-        if(current<1) 
-        {
+        if (current < 1) {
           actualMult.Get()->at(i) = 0;
-          if(G4UniformRand()<current) actualMult.Get()->at(i) = 1;
+          if (G4UniformRand() < current) actualMult.Get()->at(i) = 1;
         }
       }
       nSecondaries += actualMult.Get()->at(i);
     }
-    //G4cout << "nSecondaries " << nSecondaries  << " anEnergy " << anEnergy/eV << G4endl;
-    for (i = 0; i < nSecondaries; i++) {
-      G4ReactionProduct * theOne = new G4ReactionProduct;
+    for (i = 0; i < nSecondaries; ++i) {
+      auto theOne = new G4ReactionProduct;
       theOne->SetDefinition(G4Gamma::Gamma());
       thePhotons->push_back(theOne);
     }
@@ -323,442 +287,384 @@ G4ReactionProductVector * G4ParticleHPPhotonDist::GetPhotons(G4double anEnergy)
         if (disType[0] == 1) {
           // continuum
           G4ParticleHPVector* temp;
-          temp = partials[ 0 ]->GetY(anEnergy); //@@@ look at, seems fishy
-          G4double maximumE = temp->GetX( temp->GetVectorLength()-1 ); // This is an assumption.
+          temp = partials[0]->GetY(anEnergy);  //@@@ look at, seems fishy
+          G4double maximumE = temp->GetX(temp->GetVectorLength() - 1);  // This is an assumption.
 
-          //G4cout << "start " << actualMult[ 0 ] << " maximumE " << maximumE/eV << G4endl;
-
-          std::vector< G4double > photons_e_best( actualMult.Get()->at(0) , 0.0 );
+          std::vector<G4double> photons_e_best(actualMult.Get()->at(0), 0.0);
           G4double best = DBL_MAX;
-          G4int maxTry = 1000; 
-          for (G4int j = 0; j < maxTry; j++) {
+          G4int maxTry = 1000;
+          for (G4int j = 0; j < maxTry; ++j) {
             std::vector<G4double> photons_e(actualMult.Get()->at(0), 0.0);
-            for (std::vector<G4double>::iterator it = photons_e.begin(); it < photons_e.end(); it++) {
+            for (auto it = photons_e.begin(); it < photons_e.end(); ++it) {
               *it = temp->Sample();
             }
 
-            if (std::accumulate(photons_e.begin(), photons_e.end(), 0.0) > maximumE) {
-              if (std::accumulate(photons_e.begin(), photons_e.end(), 0.0) < best)
+            if (std::accumulate(photons_e.cbegin(), photons_e.cend(), 0.0) > maximumE) {
+              if (std::accumulate(photons_e.cbegin(), photons_e.cend(), 0.0) < best)
                 photons_e_best = photons_e;
               continue;
-
-            } else {
-              G4int iphot = 0;
-              for (std::vector<G4double>::iterator it = photons_e.begin(); it < photons_e.end(); it++) {
-                thePhotons->operator[](iphot)->SetKineticEnergy(*it);   // Replace index count, which was not incremented, 
-                                                                        // with iphot, which is, as per Artem Zontikov,
-                                                                        // bug report 2167
-                iphot++;
-              }  
-              // G4cout << "OK " << actualMult[0] << " j " << j << " total photons E  " 
-              //        << std::accumulate(photons_e.begin(), photons_e.end(), 0.0)/eV << " ratio " 
-              //        << std::accumulate(photons_e.begin(), photons_e.end(), 0.0)/maximumE 
-              //        << G4endl;
-                    
-              break;
             }
-            //G4cout << "Not Good " << actualMult[0] << " j " << j << " total photons E  " 
-            //       << best/eV << " ratio " << best / maximumE 
-            //       << G4endl;
-          }
-               // TKDB
-          delete temp;
+            G4int iphot = 0;
+            for (auto it = photons_e.cbegin(); it < photons_e.cend(); ++it) {
+              thePhotons->operator[](iphot)->SetKineticEnergy(
+                *it);  // Replace index count, which was not incremented,
+                       // with iphot, which is, as per Artem Zontikov,
+                       // bug report 2167
+              ++iphot;
+            }
 
-        } else {
+            break;
+          }
+          delete temp;
+        }
+        else {
           // discrete
           thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
         }
-        count++;
-	if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistency");
+        ++count;
+        if (count > nSecondaries)
+          throw G4HadronicException(__FILE__, __LINE__,
+                                    "G4ParticleHPPhotonDist::GetPhotons inconsistency");
       }
-         
-    } else {  // nDiscrete != 1 or nPartials != 1
-      for (i=0; i<nDiscrete; i++) { 
-        for (ii=0; ii< actualMult.Get()->at(i); ii++) {   
+    }
+    else {  // nDiscrete != 1 or nPartials != 1
+      for (i = 0; i < nDiscrete; ++i) {
+        for (ii = 0; ii < actualMult.Get()->at(i); ++ii) {
           if (disType[i] == 1) {
             // continuum
-            G4double  sum=0, run=0;
-            for (iii = 0; iii < nPartials; iii++) sum+=probs[iii].GetY(anEnergy);
+            G4double sum = 0, run = 0;
+            for (iii = 0; iii < nPartials; ++iii)
+              sum += probs[iii].GetY(anEnergy);
             G4double random = G4UniformRand();
             G4int theP = 0;
-            for (iii = 0; iii < nPartials; iii++) {
-              run+=probs[iii].GetY(anEnergy);
+            for (iii = 0; iii < nPartials; ++iii) {
+              run += probs[iii].GetY(anEnergy);
               theP = iii;
-              if(random<run/sum) break;
+              if (random < run / sum) break;
             }
 
-            if (theP == nPartials) theP=nPartials-1; // das sortiert J aus.
-            sum = 0; 
-            G4ParticleHPVector * temp;
-            temp = partials[theP]->GetY(anEnergy); //@@@ look at, seems fishy
+            if (theP == nPartials) theP = nPartials - 1;  // das sortiert J aus.
+            sum = 0;
+            G4ParticleHPVector* temp;
+            temp = partials[theP]->GetY(anEnergy);  //@@@ look at, seems fishy
             G4double eGamm = temp->Sample();
             thePhotons->operator[](count)->SetKineticEnergy(eGamm);
             delete temp;
-
-          } else { 
+          }
+          else {
             // discrete
             thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
-	  }
-          count++;
-          if (count > nSecondaries) throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPPhotonDist::GetPhotons inconsistency");
+          }
+          ++count;
+          if (count > nSecondaries)
+            throw G4HadronicException(__FILE__, __LINE__,
+                                      "G4ParticleHPPhotonDist::GetPhotons inconsistency");
         }
       }
     }
 
     // now do the angular distributions...
     if (isoFlag == 1) {
-      for (i=0; i< nSecondaries; i++)
-      {
-	G4double costheta = 2.*G4UniformRand()-1;
-	G4double theta = std::acos(costheta);
-	G4double phi = twopi*G4UniformRand();
-	G4double sinth = std::sin(theta);
-	G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-	G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-	thePhotons->operator[](i)->SetMomentum( temp ) ;
-  //      G4cout << "Isotropic distribution in PhotonDist"<<temp<<G4endl;
+      for (i = 0; i < nSecondaries; ++i) {
+        G4double costheta = 2. * G4UniformRand() - 1;
+        G4double theta = std::acos(costheta);
+        G4double phi = twopi * G4UniformRand();
+        G4double sinth = std::sin(theta);
+        G4double en = thePhotons->operator[](i)->GetTotalEnergy();
+        G4ThreeVector temp(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                           en * std::cos(theta));
+        thePhotons->operator[](i)->SetMomentum(temp);
       }
     }
-    else
-    {
-      for(i=0; i<nSecondaries; i++)
-      { 
-	G4double currentEnergy = thePhotons->operator[](i)->GetTotalEnergy();
-	for(ii=0; ii<nDiscrete2; ii++) 
-	{
-          if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
-	}
-	if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14 data. @@
-	if(ii<nIso)
-	{
+    else {
+      for (i = 0; i < nSecondaries; ++i) {
+        G4double currentEnergy = thePhotons->operator[](i)->GetTotalEnergy();
+        for (ii = 0; ii < nDiscrete2; ++ii) {
+          if (std::abs(currentEnergy - theGammas[ii]) < 0.1 * keV) break;
+        }
+        if (ii == nDiscrete2)
+          --ii;  // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14
+                 // data. @@
+        if (ii < nIso) {
           // isotropic distribution
           //
-          //Fix Bugzilla report #1745
-          //G4double theta = pi*G4UniformRand();
-	  G4double costheta = 2.*G4UniformRand()-1;
-	  G4double theta = std::acos(costheta);
-          G4double phi = twopi*G4UniformRand();
+          // Fix Bugzilla report #1745
+          // G4double theta = pi*G4UniformRand();
+          G4double costheta = 2. * G4UniformRand() - 1;
+          G4double theta = std::acos(costheta);
+          G4double phi = twopi * G4UniformRand();
           G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          // DHW G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta );
-          thePhotons->operator[](i)->SetMomentum( tempVector ) ;
-	}
-	else if(tabulationType==1)
-	{
+          // DHW G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi),
+          // en*std::cos(theta) );
+          G4ThreeVector tempVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                                   en * costheta);
+          thePhotons->operator[](i)->SetMomentum(tempVector);
+        }
+        else if (tabulationType == 1) {
           // legendre polynomials
           G4int it(0);
-          for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
+          for (iii = 0; iii < nNeu[ii - nIso]; ++iii)  // find the neutron energy
           {
             it = iii;
-	    if(theLegendre[ii-nIso][iii].GetEnergy()>anEnergy)
-              break;
+            if (theLegendre[ii - nIso][iii].GetEnergy() > anEnergy) break;
           }
           G4ParticleHPLegendreStore aStore(2);
-          aStore.SetCoeff(1, &(theLegendre[ii-nIso][it]));  
-          //aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
-          //TKDB 110512
-          if ( it > 0 ) 
-          {
-             aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
+          aStore.SetCoeff(1, &(theLegendre[ii - nIso][it]));
+          if (it > 0) {
+            aStore.SetCoeff(0, &(theLegendre[ii - nIso][it - 1]));
           }
-          else
-          {
-             aStore.SetCoeff(0, &(theLegendre[ii-nIso][it])); 
+          else {
+            aStore.SetCoeff(0, &(theLegendre[ii - nIso][it]));
           }
           G4double cosTh = aStore.SampleMax(anEnergy);
           G4double theta = std::acos(cosTh);
-          G4double phi = twopi*G4UniformRand();
+          G4double phi = twopi * G4UniformRand();
           G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-          thePhotons->operator[](i)->SetMomentum( tempVector ) ;
-	}
-	else
-	{
+          G4ThreeVector tempVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                                   en * std::cos(theta));
+          thePhotons->operator[](i)->SetMomentum(tempVector);
+        }
+        else {
           // tabulation of probabilities.
           G4int it(0);
-          for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
+          for (iii = 0; iii < nNeu[ii - nIso]; ++iii)  // find the neutron energy
           {
             it = iii;
-	    if(theAngular[ii-nIso][iii].GetEnergy()>anEnergy)
-              break;
+            if (theAngular[ii - nIso][iii].GetEnergy() > anEnergy) break;
           }
-          G4double costh = theAngular[ii-nIso][it].GetCosTh(); // no interpolation yet @@
+          G4double costh = theAngular[ii - nIso][it].GetCosTh();  // no interpolation yet @@
           G4double theta = std::acos(costh);
-          G4double phi = twopi*G4UniformRand();
+          G4double phi = twopi * G4UniformRand();
           G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tmpVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costh );
-          thePhotons->operator[](i)->SetMomentum( tmpVector ) ;
-	}
-      }  
+          G4ThreeVector tmpVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                                  en * costh);
+          thePhotons->operator[](i)->SetMomentum(tmpVector);
+        }
+      }
     }
- 
-  } else if (repFlag == 2) {
-    G4double * running = new G4double[nGammaEnergies];
-    running[0]=theTransitionProbabilities[0];
-    //G4int i; //declaration at 284th
-    for(i=1; i<nGammaEnergies; i++)
-    {
-      running[i]=running[i-1]+theTransitionProbabilities[i];
+  }
+  else if (repFlag == 2) {
+    auto running = new G4double[nGammaEnergies];
+    running[0] = theTransitionProbabilities[0];
+    for (i = 1; i < nGammaEnergies; ++i) {
+      running[i] = running[i - 1] + theTransitionProbabilities[i];
     }
     G4double random = G4UniformRand();
-    G4int it=0;
-    for(i=0; i<nGammaEnergies; i++)
-    {
+    G4int it = 0;
+    for (i = 0; i < nGammaEnergies; ++i) {
       it = i;
-      if(random < running[i]/running[nGammaEnergies-1]) break;
+      if (random < running[i] / running[nGammaEnergies - 1]) break;
     }
-    delete [] running;
+    delete[] running;
     G4double totalEnergy = theBaseEnergy - theLevelEnergies[it];
-    G4ReactionProduct * theOne = new G4ReactionProduct;
+    auto theOne = new G4ReactionProduct;
     theOne->SetDefinition(G4Gamma::Gamma());
     random = G4UniformRand();
-    if(theInternalConversionFlag==2 && random>thePhotonTransitionFraction[it])
-    {
+    if (theInternalConversionFlag == 2 && random > thePhotonTransitionFraction[it]) {
       theOne->SetDefinition(G4Electron::Electron());
-      //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-      //But never enter at least with G4NDL3.13
-      totalEnergy += G4Electron::Electron()->GetPDGMass(); //proposed correction: add this line for electron
+      // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+      // 2009 But never enter at least with G4NDL3.13
+      totalEnergy +=
+        G4Electron::Electron()->GetPDGMass();  // proposed correction: add this line for electron
     }
     theOne->SetTotalEnergy(totalEnergy);
-    if( isoFlag == 1 )
-    {
-      G4double costheta = 2.*G4UniformRand()-1;
+    if (isoFlag == 1) {
+      G4double costheta = 2. * G4UniformRand() - 1;
       G4double theta = std::acos(costheta);
-      G4double phi = twopi*G4UniformRand();
+      G4double phi = twopi * G4UniformRand();
       G4double sinth = std::sin(theta);
-      //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-      //G4double en = theOne->GetTotalEnergy();
+      // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+      // 2009 G4double en = theOne->GetTotalEnergy();
       G4double en = theOne->GetTotalMomentum();
-      //But never cause real effect at least with G4NDL3.13 TK
-      G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-      theOne->SetMomentum( temp ) ;
+      // But never cause real effect at least with G4NDL3.13 TK
+      G4ThreeVector temp(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                         en * std::cos(theta));
+      theOne->SetMomentum(temp);
     }
-    else
-    {
+    else {
       G4double currentEnergy = theOne->GetTotalEnergy();
-      for(ii=0; ii<nDiscrete2; ii++) 
-      {
-        if (std::abs(currentEnergy-theGammas[ii])<0.1*keV) break;
+      for (ii = 0; ii < nDiscrete2; ++ii) {
+        if (std::abs(currentEnergy - theGammas[ii]) < 0.1 * keV) break;
       }
-      if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14 data. @@
-      if(ii<nIso)
-      {
-        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-        // isotropic distribution
-        //G4double theta = pi*G4UniformRand();
-        G4double theta = std::acos(2.*G4UniformRand()-1.);
-        //But this is alos never cause real effect at least with G4NDL3.13 TK  not repFlag == 2 AND isoFlag != 1
-        G4double phi = twopi*G4UniformRand();
+      if (ii == nDiscrete2)
+        --ii;  // fix for what seems an (file12 vs file 14) inconsistency found in the ENDF 7N14
+               // data. @@
+      if (ii < nIso) {
+        // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+        // 2009
+        //  isotropic distribution
+        // G4double theta = pi*G4UniformRand();
+        G4double theta = std::acos(2. * G4UniformRand() - 1.);
+        // But this is alos never cause real effect at least with G4NDL3.13 TK  not repFlag == 2 AND
+        // isoFlag != 1
+        G4double phi = twopi * G4UniformRand();
         G4double sinth = std::sin(theta);
-        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-        //G4double en = theOne->GetTotalEnergy();
+        // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+        // 2009 G4double en = theOne->GetTotalEnergy();
         G4double en = theOne->GetTotalMomentum();
-        //But never cause real effect at least with G4NDL3.13 TK
-        G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-        theOne->SetMomentum( tempVector ) ;
+        // But never cause real effect at least with G4NDL3.13 TK
+        G4ThreeVector tempVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                                 en * std::cos(theta));
+        theOne->SetMomentum(tempVector);
       }
-      else if(tabulationType==1)
-      {
+      else if (tabulationType == 1) {
         // legendre polynomials
         G4int itt(0);
-        for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
+        for (iii = 0; iii < nNeu[ii - nIso]; ++iii)  // find the neutron energy
         {
           itt = iii;
-	  if(theLegendre[ii-nIso][iii].GetEnergy()>anEnergy)
-            break;
+          if (theLegendre[ii - nIso][iii].GetEnergy() > anEnergy) break;
         }
         G4ParticleHPLegendreStore aStore(2);
-        aStore.SetCoeff(1, &(theLegendre[ii-nIso][itt]));  
-        //aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1])); 
-        //TKDB 110512
-        if ( itt > 0 ) 
-        {
-           aStore.SetCoeff(0, &(theLegendre[ii-nIso][itt-1])); 
+        aStore.SetCoeff(1, &(theLegendre[ii - nIso][itt]));
+        // aStore.SetCoeff(0, &(theLegendre[ii-nIso][it-1]));
+        // TKDB 110512
+        if (itt > 0) {
+          aStore.SetCoeff(0, &(theLegendre[ii - nIso][itt - 1]));
         }
-        else
-        {
-           aStore.SetCoeff(0, &(theLegendre[ii-nIso][itt])); 
+        else {
+          aStore.SetCoeff(0, &(theLegendre[ii - nIso][itt]));
         }
         G4double cosTh = aStore.SampleMax(anEnergy);
         G4double theta = std::acos(cosTh);
-        G4double phi = twopi*G4UniformRand();
+        G4double phi = twopi * G4UniformRand();
         G4double sinth = std::sin(theta);
-        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-        //G4double en = theOne->GetTotalEnergy();
+        // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+        // 2009 G4double en = theOne->GetTotalEnergy();
         G4double en = theOne->GetTotalMomentum();
-        //But never cause real effect at least with G4NDL3.13 TK
-        G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
-        theOne->SetMomentum( tempVector ) ;
+        // But never cause real effect at least with G4NDL3.13 TK
+        G4ThreeVector tempVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi),
+                                 en * std::cos(theta));
+        theOne->SetMomentum(tempVector);
       }
-      else
-      {
+      else {
         // tabulation of probabilities.
         G4int itt(0);
-        for (iii=0; iii<nNeu[ii-nIso]; iii++) // find the neutron energy
+        for (iii = 0; iii < nNeu[ii - nIso]; ++iii)  // find the neutron energy
         {
           itt = iii;
-	  if(theAngular[ii-nIso][iii].GetEnergy()>anEnergy)
-            break;
+          if (theAngular[ii - nIso][iii].GetEnergy() > anEnergy) break;
         }
-        G4double costh = theAngular[ii-nIso][itt].GetCosTh(); // no interpolation yet @@
+        G4double costh = theAngular[ii - nIso][itt].GetCosTh();  // no interpolation yet @@
         G4double theta = std::acos(costh);
-        G4double phi = twopi*G4UniformRand();
+        G4double phi = twopi * G4UniformRand();
         G4double sinth = std::sin(theta);
-        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
-        //G4double en = theOne->GetTotalEnergy();
+        // Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25,
+        // 2009 G4double en = theOne->GetTotalEnergy();
         G4double en = theOne->GetTotalMomentum();
-        //But never cause real effect at least with G4NDL3.13 TK
-        G4ThreeVector tmpVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costh );
-        theOne->SetMomentum( tmpVector ) ;
+        // But never cause real effect at least with G4NDL3.13 TK
+        G4ThreeVector tmpVector(en * sinth * std::cos(phi), en * sinth * std::sin(phi), en * costh);
+        theOne->SetMomentum(tmpVector);
       }
     }
     thePhotons->push_back(theOne);
   }
-  else if( repFlag==0 )
-  {
+  else if (repFlag == 0) {
+    if (thePartialXsec == nullptr) {
+      return thePhotons;
+    }
 
-// TK add 
-      if ( thePartialXsec == 0 ) 
-      {
-         //G4cout << "repFlag is 0, but no PartialXsec data" << G4endl;
-         //G4cout << "This is not support yet." << G4endl;
-         return thePhotons;
+    // Partial Case
+
+    auto theOne = new G4ReactionProduct;
+    theOne->SetDefinition(G4Gamma::Gamma());
+    thePhotons->push_back(theOne);
+
+    // Energy
+
+    G4double sum = 0.0;
+    std::vector<G4double> dif(nDiscrete, 0.0);
+    for (G4int j = 0; j < nDiscrete; ++j) {
+      G4double x = thePartialXsec[j].GetXsec(anEnergy);  // x in barn
+      if (x > 0) {
+        sum += x;
       }
+      dif[j] = sum;
+    }
 
-// Partial Case 
+    G4double rand = G4UniformRand();
 
-      G4ReactionProduct * theOne = new G4ReactionProduct;
-      theOne->SetDefinition( G4Gamma::Gamma() );
-      thePhotons->push_back( theOne );
-
-// Energy 
-
-      //G4cout << "Partial Case nDiscrete " << nDiscrete << G4endl;
-      G4double sum = 0.0; 
-      std::vector < G4double > dif( nDiscrete , 0.0 ); 
-      for ( G4int j = 0 ; j < nDiscrete ; j++ ) 
-      {
-         G4double x = thePartialXsec[ j ].GetXsec( anEnergy );  // x in barn 
-         if ( x > 0 ) 
-         {
-            sum += x;   
-         } 
-         dif [ j ] = sum; 
-         //G4cout << "j " << j << ", x " << x << ", dif " << dif [ j ] << G4endl;
+    G4int iphoton = 0;
+    for (G4int j = 0; j < nDiscrete; ++j) {
+      G4double y = rand * sum;
+      if (dif[j] > y) {
+        iphoton = j;
+        break;
       }
-      
-      G4double rand = G4UniformRand();
+    }
 
-      G4int iphoton = 0; 
-      for ( G4int j = 0 ; j < nDiscrete ; j++ ) 
+    // Statistically suppress the photon according to reaction cross section
+    // Fix proposed by Artem Zontikov, Bug report #1824
+    if (theReactionXsec != nullptr) {
+      if (thePartialXsec[iphoton].GetXsec(anEnergy) / theReactionXsec->GetXsec(anEnergy)
+          < G4UniformRand())
       {
-         G4double y = rand*sum; 
-         if ( dif [ j ] > y ) 
-         {
-            iphoton = j; 
-            break;  
-         } 
+        delete thePhotons;
+        thePhotons = nullptr;
+        return thePhotons;
       }
-      //G4cout << "iphoton " << iphoton << G4endl;
-      //G4cout << "photon energy " << theGammas[ iphoton ] /eV  << G4endl;
+    }
 
-      // Statistically suppress the photon according to reaction cross section  
-      // Fix proposed by Artem Zontikov, Bug report #1824
-      if (theReactionXsec) {
-        if (thePartialXsec[iphoton].GetXsec(anEnergy)/theReactionXsec->GetXsec(anEnergy) < G4UniformRand() ) {
-          delete thePhotons;
-          thePhotons = 0;
-          return thePhotons;
+    // Angle
+    G4double cosTheta = 0.0;  // mu
+
+    if (isoFlag == 1) {
+      // Isotropic Case
+
+      cosTheta = 2. * G4UniformRand() - 1;
+    }
+    else {
+      if (iphoton < nIso) {
+        // still Isotropic
+
+        cosTheta = 2. * G4UniformRand() - 1;
+      }
+      else {
+        if (tabulationType == 1) {
+          // Legendre polynomials
+
+          G4int iangle = 0;
+          for (G4int j = 0; j < nNeu[iphoton - nIso]; ++j) {
+            iangle = j;
+            if (theLegendre[iphoton - nIso][j].GetEnergy() > anEnergy) break;
+          }
+
+          G4ParticleHPLegendreStore aStore(2);
+          aStore.SetCoeff(1, &(theLegendre[iphoton - nIso][iangle]));
+          aStore.SetCoeff(0, &(theLegendre[iphoton - nIso][iangle - 1]));
+
+          cosTheta = aStore.SampleMax(anEnergy);
+        }
+        else if (tabulationType == 2) {
+          // tabulation of probabilities.
+
+          G4int iangle = 0;
+          for (G4int j = 0; j < nNeu[iphoton - nIso]; ++j) {
+            iangle = j;
+            if (theAngular[iphoton - nIso][j].GetEnergy() > anEnergy) break;
+          }
+          cosTheta = theAngular[iphoton - nIso][iangle].GetCosTh();
+          // no interpolation yet @@
         }
       }
+    }
 
-// Angle 
-      G4double cosTheta = 0.0; // mu
+    // Set
+    G4double phi = twopi * G4UniformRand();
+    G4double theta = std::acos(cosTheta);
+    G4double sinTheta = std::sin(theta);
 
-      if ( isoFlag == 1 )
-      {
-
-//       Isotropic Case
-
-         cosTheta = 2.*G4UniformRand()-1;
-
-      }
-      else
-      {
-
-         if ( iphoton < nIso )
-         {
-
-//          still Isotropic 
-
-            cosTheta = 2.*G4UniformRand()-1;
-
-         }
-         else
-         {
-
-            //G4cout << "Not Isotropic and isoFlag " << isoFlag  << G4endl;
-            //G4cout << "tabulationType " << tabulationType << G4endl;
-            //G4cout << "nDiscrete2  " << nDiscrete2 << G4endl;
-            //G4cout << "nIso " << nIso << G4endl;
-            //G4cout << "size of nNeu " << nDiscrete2-nIso << G4endl;
-            //G4cout << "nNeu[iphoton-nIso] " << nNeu[iphoton-nIso] << G4endl;
-
-            if ( tabulationType == 1 )
-            {
-//             legendre polynomials
-
-               G4int iangle = 0; 
-               for ( G4int j = 0 ; j < nNeu [ iphoton - nIso ] ; j++ )
-               {
-                  iangle = j;
-                  if ( theLegendre[ iphoton - nIso ][ j ].GetEnergy() > anEnergy ) break;
-               }
- 
-               G4ParticleHPLegendreStore aStore( 2 );
-               aStore.SetCoeff( 1 , &( theLegendre[ iphoton - nIso ][ iangle ] ) );  
-               aStore.SetCoeff( 0 , &( theLegendre[ iphoton - nIso ][ iangle - 1 ] ) ); 
-
-               cosTheta = aStore.SampleMax( anEnergy );
-
-            }
-            else if ( tabulationType == 2 )
-            {
-        
-//             tabulation of probabilities.
-
-               G4int iangle = 0; 
-               for ( G4int j = 0 ; j < nNeu [ iphoton - nIso ] ; j++ )
-               {
-                  iangle = j;
-                  if ( theAngular[ iphoton - nIso ][ j ].GetEnergy() > anEnergy ) break;
-               }
-
-               cosTheta = theAngular[iphoton-nIso][ iangle ].GetCosTh(); // no interpolation yet @@
-
-            }
-         }
-      }
-      
-// Set 
-      G4double phi = twopi*G4UniformRand();
-      G4double theta = std::acos( cosTheta );
-      G4double sinTheta = std::sin( theta );
-
-      G4double photonE = theGammas[ iphoton ];
-      G4ThreeVector direction ( sinTheta*std::cos( phi ) , sinTheta * std::sin( phi ) , cosTheta );
-      G4ThreeVector photonP = photonE * direction;
-      thePhotons->operator[]( 0 )->SetMomentum( photonP ) ;
-    
+    G4double photonE = theGammas[iphoton];
+    G4ThreeVector direction(sinTheta * std::cos(phi), sinTheta * std::sin(phi), cosTheta);
+    G4ThreeVector photonP = photonE * direction;
+    thePhotons->operator[](0)->SetMomentum(photonP);
   }
-  else
-  {
+  else {
     delete thePhotons;
-    thePhotons = 0; // no gamma data available; some work needed @@@@@@@
-  }    
+    thePhotons = nullptr;  // no gamma data available; some work needed @@@@@@@
+  }
   return thePhotons;
 }
-

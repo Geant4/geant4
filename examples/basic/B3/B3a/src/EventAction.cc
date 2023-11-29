@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B3/B3a/src/EventAction.cc
 /// \brief Implementation of the B3a::EventAction class
 
 #include "EventAction.hh"
@@ -47,11 +47,6 @@ namespace B3a
 EventAction::EventAction(RunAction* runAction)
  : fRunAction(runAction)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,8 +74,7 @@ void EventAction::EndOfEventAction(const G4Event* evt )
   const G4double eThreshold = 500*keV;
   G4int nbOfFired = 0;
 
-  G4THitsMap<G4double>* evtMap =
-                     (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
+  auto evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
 
   std::map<G4int,G4double*>::iterator itr;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {

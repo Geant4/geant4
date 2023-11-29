@@ -35,14 +35,18 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
 
 SensitiveDetector::SensitiveDetector(const G4String& name,
-                         const G4String& hitsCollectionName, AnalysisManager* analysis_manager) 
+                         const G4String& hitsCollectionName, 
+                         G4bool isThisAMicrodosimeter,
+                         AnalysisManager* analysis_manager) 
  : G4VSensitiveDetector(name),
    fHitsCollection(NULL)
 {
   collectionName.insert(hitsCollectionName);
   analysis = analysis_manager;
+  isMicrod = isThisAMicrodosimeter; // only false for the E-stage of the telescope
 }
 
 SensitiveDetector::~SensitiveDetector() 
@@ -67,17 +71,33 @@ G4bool SensitiveDetector::ProcessHits(G4Step* aStep,
 {  
   // energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
-
+  
   if (edep==0.) return false;
 
+  // Uncomment the following lines to only score specific physical volumes 
+  /*
   G4String volumeName = aStep -> GetPreStepPoint() -> GetPhysicalVolume()-> GetName();
-
   if(volumeName != "SV_phys1" && volumeName != "sen_bridge" && volumeName != "physSensitiveBridgeVolume" ) 
     return false;  
-
+  */
+  
   SensitiveDetectorHit* newHit = new SensitiveDetectorHit();
 
   newHit -> SetEdep(edep);
+  
+  // step length
+  G4double len = aStep->GetStepLength();
+
+  // only consider ions, protons, and neutrons for path length
+  const G4ParticleDefinition* thisParticle = aStep ->
+                      GetTrack() -> GetParticleDefinition() ;
+  G4String particleName = thisParticle -> GetParticleName();
+  G4int particleZ = thisParticle -> GetAtomicNumber();
+
+  if ( (particleZ < 1) && (particleName != "neutron"))
+    len = 0.;
+
+  newHit->SetPath(len);
   
   fHitsCollection -> insert( newHit );
 
@@ -88,18 +108,31 @@ void SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
 #ifdef ANALYSIS_USE
 // Initialisation of total energy deposition per event to zero
- G4double totalEdepInOneEvent =0;
+ G4double totalEdepInOneEvent=0;
+ G4double totalPathLengthInOneEvent=0;
  
  G4int NbHits = fHitsCollection->entries();
    //G4cout << "number of hits " <<NbHits << G4endl;
-    
-   for (G4int i=0;i<NbHits;i++) 
-	{
-        G4double edep = (*fHitsCollection)[i]->GetEdep();
-	totalEdepInOneEvent = totalEdepInOneEvent + edep;
-      } 
+ 
+ G4double edep, len; 
+ 
+ for (G4int i=0;i<NbHits;i++) 
+ {
+     edep = (*fHitsCollection)[i]->GetEdep();
+     totalEdepInOneEvent = totalEdepInOneEvent + edep;
+ 
+     len = (*fHitsCollection)[i]->GetPath();
+     totalPathLengthInOneEvent = totalPathLengthInOneEvent + len;
+ }
+ 
+ G4int eventID = G4RunManager::GetRunManager() ->
+     GetCurrentEvent() -> GetEventID();
 
 
- if (totalEdepInOneEvent!=0)analysis-> StoreEnergyDeposition(totalEdepInOneEvent/keV);
+ if (totalEdepInOneEvent!=0)
+ {
+     if (isMicrod==true) analysis -> StoreEnergyDeposition(totalEdepInOneEvent/keV, totalPathLengthInOneEvent/um, eventID);
+     else analysis -> StoreSecondStageEnergyDeposition(totalEdepInOneEvent/keV, eventID); 
+ }
 #endif 
 }

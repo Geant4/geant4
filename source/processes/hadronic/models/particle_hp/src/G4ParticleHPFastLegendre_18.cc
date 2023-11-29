@@ -28,6 +28,8 @@
 // A prototype of the low energy neutron transport model.
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
+// Never format because of complexity and size
+// clang-format off
 #include "G4ParticleHPFastLegendre.hh"
 
 const G4double

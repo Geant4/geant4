@@ -55,9 +55,6 @@
 
 int main(int argc,char** argv) {
 
-  // choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
   // Construct the default run manager
   auto* runManager = G4RunManagerFactory::CreateRunManager();
   G4int nThreads = 4;

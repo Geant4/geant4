@@ -1,17 +1,42 @@
+# Example OpNovice2 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example OpNovice2 History file
-                    ------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-11-09 I. Hrivnacova (OpNovice2-V11-00-06)
+- Fixed Doxygen documentation
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-10-26 Daren Sawkey (OpNovice2-V11-00-05)
+- New macro coated.mac, and book-keeping code, to show reflection/refraction
+  from thin film coating. Contribution of Laurie Cappellugola et al, Aix Marseille U.
+
+## 2022-10-20 Daren Sawkey (OpNovice2-V11-00-04)
+- SteppingAction: check that group velocity is correct. Trying to reproduce
+  bug 2442, 2438.
+
+## 2022-10-18 Daren Sawkey (OpNovice2-V11-00-03)
+- SteppingAction: Don't include Absorbed or Detected photons in plots for
+  forward-going particles
+
+## 2022-04-28 Daren Sawkey (OpNovice2-V11-00-02)
+- Add local SteppingVerbose to print velocity with /tracking/verbose 1
+
+## 2022-04-25 Birgit Zatschler and Daren Sawkey (OpNovice2-V11-00-01)
+- Add new macro complexRindex.mac, using dielectric-metal surface with the surface
+  having a complex index of refraction
+- Add new histograms to record separately Fresnel reflection, TIR, absorption, etc.
+- Use new histos to plot spike reflection/absorption vs angle on surface (useful
+  for complex refractive index)
+- PrimaryGeneratorMessenger.cc: fixed command /opnovice2/gun/randomDirection
+- Addresses PR 33.
+
+## 2021-12-10 Ben Morgan (OpNovice2-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 October 06, 2021 I. Hrivnacova (OpNovice2-V10-07-02)
 - Migration to new G4AnalysisManager.hh header;

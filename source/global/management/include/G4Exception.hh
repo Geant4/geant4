@@ -33,41 +33,23 @@
 #ifndef G4EXCEPTION_HH
 #define G4EXCEPTION_HH
 
-#include "G4String.hh"
-#include "G4VExceptionHandler.hh"
-#include "G4ios.hh"
+#include "G4ExceptionSeverity.hh"
+
+#include <sstream>
 
 using G4ExceptionDescription = std::ostringstream;
 
-inline const G4String G4ExceptionErrBannerStart()
-{
-  return "\n-------- EEEE ------- G4Exception-START -------- EEEE -------\n";
-}
-inline const G4String G4ExceptionWarnBannerStart()
-{
-  return "\n-------- WWWW ------- G4Exception-START -------- WWWW -------\n";
-}
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode, G4ExceptionSeverity severity,
+                 const char* description);
 
-inline const G4String G4ExceptionErrBannerEnd()
-{
-  return "\n-------- EEEE ------- G4Exception-END -------- EEEE -------\n";
-}
-inline const G4String G4ExceptionWarnBannerEnd()
-{
-  return "\n-------- WWWW ------- G4Exception-END -------- WWWW -------\n";
-}
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode, G4ExceptionSeverity severity,
+                 G4ExceptionDescription& description);
 
-extern void G4Exception(const char* originOfException,
-                        const char* exceptionCode, G4ExceptionSeverity severity,
-                        const char* description);
-
-extern void G4Exception(const char* originOfException,
-                        const char* exceptionCode, G4ExceptionSeverity severity,
-                        G4ExceptionDescription& description);
-
-extern void G4Exception(const char* originOfException,
-                        const char* exceptionCode, G4ExceptionSeverity severity,
-                        G4ExceptionDescription& description,
-                        const char* comments);
+void G4Exception(const char* originOfException,
+                 const char* exceptionCode, G4ExceptionSeverity severity,
+                 G4ExceptionDescription& description,
+                 const char* comments);
 
 #endif

@@ -46,8 +46,7 @@ public:
   G4VPhysicalVolume* CreateOrgan(const G4String&, G4VPhysicalVolume*, 
 				 const G4String&,G4bool,G4bool);
 
-
 private:
-  std::map<std::string,G4VOrgan*> organ; 
+  std::map<std::string,G4VOrgan*> fOrgan; 
 };
 #endif

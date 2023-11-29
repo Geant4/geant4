@@ -118,15 +118,17 @@ public:
                               const G4String& directory,
                               G4bool ascii) override;
 
-  // Temporary method
-  const G4String& GetSubProcessName() const;
+  // Return sub-process limiting current step
+  const G4VProcess* GetCreatorProcess() const override;
+  inline const G4VProcess* GetSelectedProcess() const;
 
-  // Temporary method
+  // Temporary methods
+  const G4String& GetSubProcessName() const;
   G4int GetSubProcessSubType() const;
 
   G4VEmProcess* GetEmProcess(const G4String& name) override;
 
-  inline const G4VProcess* GetSelectedProcess() const;
+  inline G4HadronicProcess* GetGammaNuclear() const;
 
   // hide copy constructor and assignment operator
   G4GammaGeneralProcess(G4GammaGeneralProcess &) = delete;
@@ -185,7 +187,6 @@ private:
   size_t                       nLowE = 40;
   size_t                       nHighE = 50;
   size_t                       idxEnergy = 0;
-  G4bool                       splineFlag = false;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,6 +229,14 @@ inline void G4GammaGeneralProcess::SelectEmProcess(const G4Step& step, G4VEmProc
 inline const G4VProcess* G4GammaGeneralProcess::GetSelectedProcess() const
 {
   return selectedProc;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4HadronicProcess* G4GammaGeneralProcess::GetGammaNuclear() const
+{
+  return theGammaNuclear;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

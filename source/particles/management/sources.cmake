@@ -9,7 +9,6 @@ geant4_add_module(G4partman
     G4DecayTableMessenger.hh
     G4DynamicParticle.hh
     G4DynamicParticle.icc
-    G4DynamicParticleFastVector.hh
     G4ElectronOccupancy.hh
     G4HyperNucleiProperties.hh
     G4IonTable.hh
@@ -91,8 +90,6 @@ geant4_add_module(G4partman
     G4PrimaryVertex.cc
     G4TauLeptonicDecayChannel.cc
     G4VDecayChannel.cc
-    G4VIsotopeTable.cc
-    G4VUserPrimaryParticleInformation.cc
-    G4VUserPrimaryVertexInformation.cc)
+    G4VIsotopeTable.cc)
 
 geant4_module_link_libraries(G4partman PUBLIC G4globman G4hepgeometry G4heprandom G4intercoms)

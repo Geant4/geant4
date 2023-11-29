@@ -41,10 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunActionMessenger::RunActionMessenger(RunAction* run)
-:G4UImessenger(),fRun(run),
- fRunDir(0),
- fAccCmd(0),
- fVerbCmd(0)
+:fRun(run)
 {
   fRunDir = new G4UIdirectory("/testem/run/");
   fRunDir->SetGuidance("run control");

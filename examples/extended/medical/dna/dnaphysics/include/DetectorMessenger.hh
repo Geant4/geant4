@@ -44,20 +44,24 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
+class PhysicsList;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    DetectorMessenger(DetectorConstruction*);
-    virtual ~DetectorMessenger();
+  DetectorMessenger(DetectorConstruction*, PhysicsList*);
+  ~DetectorMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
     
-  private:
+private:
   
-    DetectorConstruction*      fpDetector;
-    G4UIcmdWithAString*        fpMaterCmd;
+  DetectorConstruction* fpDetector;
+  PhysicsList*          fpPhysList;
+  G4UIdirectory*        fpDetDir;
+  G4UIcmdWithAString*   fpMaterCmd;
+  G4UIcmdWithAString*   fpPhysCmd;
 };
 
 #endif

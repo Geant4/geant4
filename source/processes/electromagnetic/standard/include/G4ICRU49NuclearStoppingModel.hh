@@ -52,7 +52,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VEmModel.hh"
-#include "G4Threading.hh"
 
 class G4ParticleChangeForLoss;
 class G4Pow;
@@ -98,10 +97,6 @@ private:
   G4Pow* g4calc;
   G4double theZieglerFactor;
   static G4double Z23[100];
-
-#ifdef G4MULTITHREADED
-  static G4Mutex ICRU49NuclearMutex;
-#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

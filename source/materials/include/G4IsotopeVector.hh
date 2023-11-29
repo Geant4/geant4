@@ -22,24 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-//
-// 
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
-//      ----------------  G4IsotopeVector  ----------------
-// History:
-// First implementation: Torre Wenaus, November 1995
-// ------------------------------------------------------------
 
 #ifndef G4ISOTOPEVECTOR_HH
 #define G4ISOTOPEVECTOR_HH
 
-#include <vector>
 #include "G4Isotope.hh"
 
-typedef std::vector<G4Isotope*> G4IsotopeVector;
+#include <vector>
+
+using G4IsotopeVector = std::vector<G4Isotope*>;
 
 #endif

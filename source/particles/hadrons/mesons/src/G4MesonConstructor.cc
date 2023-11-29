@@ -67,15 +67,6 @@
 #include "G4BcMesonMinus.hh"
 #include "G4Upsilon.hh"
 
-G4MesonConstructor::G4MesonConstructor()
-{
-}
-
-G4MesonConstructor::~G4MesonConstructor()
-{
-}
-
-
 void G4MesonConstructor::ConstructParticle()
 {
   ConstructLightMesons();

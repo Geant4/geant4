@@ -52,7 +52,7 @@
 class G4ParticleChange;
 class G4VMolecularDissociationDisplacer;
 class G4MoleculeDefinition;
-
+class G4VUserBrownianAction;
 /**
   * G4DNAMolecularDissociation should be called only for molecules.
   * It will dissociate the molecules using the decay associated to
@@ -88,6 +88,11 @@ public:
 
     void SetVerbose(G4int);
 
+    inline void SetUserBrownianAction(G4VUserBrownianAction* pBrownianAction)
+    {
+      fpBrownianAction = pBrownianAction;
+    }
+
     void SetDisplacer(Species*, Displacer*);
     Displacer* GetDisplacer(Species*);
 
@@ -102,7 +107,7 @@ protected:
 
 private:
     using DisplacementMap = std::map<Species*, std::unique_ptr<Displacer>>;
-
+    G4VUserBrownianAction* fpBrownianAction = nullptr;
     G4bool fDecayAtFixedTime;
     DisplacementMap fDisplacementMap;
     G4int fVerbose;

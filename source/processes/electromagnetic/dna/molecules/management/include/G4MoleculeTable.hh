@@ -49,8 +49,11 @@
 #include "G4MoleculeIterator.hh"
 #include "G4ElectronOccupancy.hh"
 
+#include <memory>
+
 class G4MoleculeDefinition;
 class G4MolecularConfiguration;
+class G4MoleculeTableMessenger;
 
 typedef G4MoleculeIterator<G4MoleculeDefinition> G4MoleculeDefinitionIterator;
 typedef G4MoleculeIterator<G4MolecularConfiguration> G4ConfigurationIterator;
@@ -131,6 +134,8 @@ protected:
   typedef std::map<G4String, G4MoleculeDefinition*> MoleculeDefTable;
 
   MoleculeDefTable fMoleculeDefTable;
+  std::unique_ptr<G4MoleculeTableMessenger> fMoleculeDefTableMessenger;
+
 };
 
 #endif /* G4MOLECULETABLE_HH_ */

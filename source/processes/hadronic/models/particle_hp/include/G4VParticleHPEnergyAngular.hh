@@ -31,90 +31,66 @@
 #ifndef G4VParticleHPEnergyAngular_h
 #define G4VParticleHPEnergyAngular_h 1
 
-#include <fstream>
-
+#include "G4Cache.hh"
+#include "G4ReactionProduct.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4ReactionProduct.hh"
-#include "G4Cache.hh"
+
+#include <fstream>
 
 class G4VParticleHPEnergyAngular
 {
+    struct toBeCached
+    {
+        G4ReactionProduct* theProjectileRP{nullptr};
+        G4ReactionProduct* theTarget{nullptr};
+        G4ReactionProduct* theCMS{nullptr};
+        toBeCached() = default;
+    };
 
-   struct toBeCached
-   {
-      G4ReactionProduct* theProjectileRP;
-      G4ReactionProduct* theTarget;
-      G4ReactionProduct* theCMS;
-      toBeCached() : theProjectileRP(0),theTarget(0),theCMS(0) {};
-   };
+  public:
+    G4VParticleHPEnergyAngular()
+    {
+      theQValue = 0;
+      toBeCached val;
+      fCache.Put(val);
+    }
 
-public:
-  
-  G4VParticleHPEnergyAngular()
-  {
-    theQValue=0;
-    toBeCached val;
-    fCache.Put( val );
-  }
+    virtual ~G4VParticleHPEnergyAngular() = default;
 
-  virtual ~G4VParticleHPEnergyAngular()
-  {
-  }
-  
-public:
-  
-  virtual void Init(std::istream & aDataFile) = 0;
-  virtual G4ReactionProduct * Sample(G4double anEnergy, 
-                                     G4double massCode, 
-                                     G4double mass) = 0;
-  virtual G4double MeanEnergyOfThisInteraction() = 0;
+  public:
+    virtual void Init(std::istream& aDataFile) = 0;
+    virtual G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) = 0;
+    virtual G4double MeanEnergyOfThisInteraction() = 0;
     // returns value cashed in sample
-  
-  void SetProjectileRP(G4ReactionProduct * aIncidentParticleRP) 
-  { 
-    fCache.Get().theProjectileRP = aIncidentParticleRP;
-  }
-  
-  void SetTarget(G4ReactionProduct * aTarget)
-  { 
-    fCache.Get().theTarget = aTarget; 
-  }
-  
-  G4ReactionProduct * GetTarget()
-  {
-    return fCache.Get().theTarget;
-  }
-  
-  G4ReactionProduct * GetProjectileRP()
-  {
-    return fCache.Get().theProjectileRP;
-  }
-  
-  G4ReactionProduct * GetCMS()
-  { 
-     *fCache.Get().theCMS = *fCache.Get().theProjectileRP
-                          + *fCache.Get().theTarget;
-     return fCache.Get().theCMS;
-  }
 
-  inline void SetQValue(G4double aValue)
-  {
-    theQValue = aValue;
-  }
+    void SetProjectileRP(G4ReactionProduct* aIncidentParticleRP)
+    {
+      fCache.Get().theProjectileRP = aIncidentParticleRP;
+    }
 
-  virtual void ClearHistories()
-  {
-  }
-  
-protected:
-  
-  inline G4double GetQValue() { return theQValue; }
-  
-private:
-  
-  G4double theQValue;
-    
-  G4Cache<toBeCached> fCache;
+    void SetTarget(G4ReactionProduct* aTarget) { fCache.Get().theTarget = aTarget; }
+
+    G4ReactionProduct* GetTarget() { return fCache.Get().theTarget; }
+
+    G4ReactionProduct* GetProjectileRP() { return fCache.Get().theProjectileRP; }
+
+    G4ReactionProduct* GetCMS()
+    {
+      *fCache.Get().theCMS = *fCache.Get().theProjectileRP + *fCache.Get().theTarget;
+      return fCache.Get().theCMS;
+    }
+
+    inline void SetQValue(G4double aValue) { theQValue = aValue; }
+
+    virtual void ClearHistories() {}
+
+  protected:
+    inline G4double GetQValue() { return theQValue; }
+
+  private:
+    G4double theQValue;
+
+    G4Cache<toBeCached> fCache;
 };
 #endif

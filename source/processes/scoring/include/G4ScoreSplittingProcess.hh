@@ -25,14 +25,14 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4ScoreSplittingProcess.hh
 //
 //  Description:
-//    This process is used to split the length and energy 
-//   of a step in a regular structure into sub-steps, and to 
+//    This process is used to split the length and energy
+//   of a step in a regular structure into sub-steps, and to
 //   call the scorers for each sub-volume.
 //    It invokes sensitive detectors assigned in the *mass*
 //   world.
@@ -40,10 +40,12 @@
 //  Design and first implementation: J. Apostolakis / M.Asai 2010
 //---------------------------------------------------------------
 
-
 #ifndef G4ScoreSplittingProcess_h
 #define G4ScoreSplittingProcess_h 1
 
+#include "G4FieldTrack.hh"
+#include "G4TouchableHandle.hh"
+#include "G4VProcess.hh"
 #include "globals.hh"
 class G4Step;
 class G4Navigator;
@@ -52,13 +54,9 @@ class G4PathFinder;
 class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
-class G4EnergySplitter; 
+class G4EnergySplitter;
 
-#include "G4VProcess.hh"
-#include "G4FieldTrack.hh"
-#include "G4TouchableHandle.hh"
 class G4TouchableHistory;
-// #include "G4TouchableHistory.hh"
 
 //------------------------------------------
 //
@@ -66,101 +64,84 @@ class G4TouchableHistory;
 //
 //------------------------------------------
 
-
 // Class Description:
 
 class G4ScoreSplittingProcess : public G4VProcess
 {
-public: // with description
+  public:  // with description
+    //------------------------
+    // Constructor/Destructor
+    //------------------------
 
-  //------------------------
-  // Constructor/Destructor
-  //------------------------
-  
-  G4ScoreSplittingProcess(const G4String& processName = "ScoreSplittingProc",
-				 G4ProcessType theType = fParameterisation);
-  virtual ~G4ScoreSplittingProcess();
-  
-  //--------------------------------------------------------------
-  //     Process interface
-  //--------------------------------------------------------------
+    G4ScoreSplittingProcess(const G4String& processName = "ScoreSplittingProc",
+                            G4ProcessType theType = fParameterisation);
+    ~G4ScoreSplittingProcess() override;
 
-  void StartTracking(G4Track*);
-  
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AtRest 
-  //------------------------------------------------------------------------
-  
-  G4double AtRestGetPhysicalInteractionLength(
-					      const G4Track& ,
-					      G4ForceCondition* 
-					      );
+    //--------------------------------------------------------------
+    //     Process interface
+    //--------------------------------------------------------------
 
-  G4VParticleChange* AtRestDoIt(
-			       const G4Track& ,
-			       const G4Step&
-			       );
+    void StartTracking(G4Track*) override;
 
-  //------------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for AlongStep 
-  //------------------------------------------------------------------------
-  
-  G4double AlongStepGetPhysicalInteractionLength(
-						 const G4Track&,
-						 G4double  ,
-						 G4double  ,
-						 G4double&,
-						 G4GPILSelection*
-						 );
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AtRest
+    //------------------------------------------------------------------------
 
-  G4VParticleChange* AlongStepDoIt(
-				  const G4Track& ,
-				  const G4Step& 
-				  );
+    G4double AtRestGetPhysicalInteractionLength(const G4Track&, G4ForceCondition*) override;
 
-  //-----------------------------------------------------------------------
-  // GetPhysicalInteractionLength() and DoIt() methods for PostStep
-  //-----------------------------------------------------------------------
-  
-  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-						G4double   previousStepSize,
-						G4ForceCondition* condition);
-  
-  G4VParticleChange* PostStepDoIt(const G4Track& ,const G4Step& );
+    G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override;
 
-private:
-  G4TouchableHistory* CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector newPosition ); 
+    //------------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for AlongStep
+    //------------------------------------------------------------------------
 
-private:
-  void CopyStepStart(const G4Step & step);
+    G4double AlongStepGetPhysicalInteractionLength(const G4Track&, G4double, G4double, G4double&,
+                                                   G4GPILSelection*) override;
 
-  G4Step * fSplitStep;
-  G4StepPoint *fSplitPreStepPoint;
-  G4StepPoint *fSplitPostStepPoint;
+    G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override;
 
-  G4VParticleChange dummyParticleChange;
-  G4ParticleChange xParticleChange;
+    //-----------------------------------------------------------------------
+    // GetPhysicalInteractionLength() and DoIt() methods for PostStep
+    //-----------------------------------------------------------------------
 
-  // G4TransportationManager* fTransportationManager;
-  // G4PathFinder*        fPathFinder;
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track, G4double previousStepSize,
+                                                  G4ForceCondition* condition) override;
 
-  // -------------------------------
-  // Touchables for the Split Step
-  // -------------------------------
-  G4TouchableHandle    fOldTouchableH;
-  G4TouchableHandle    fNewTouchableH;
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  // Memory of Touchables of full step
-  G4TouchableHandle    fInitialTouchableH;
-  G4TouchableHandle    fFinalTouchableH;
+  private:
+    G4TouchableHistory* CreateTouchableForSubStep(G4int newVoxelNum, G4ThreeVector newPosition);
 
-  G4EnergySplitter     *fpEnergySplitter; 
+  private:
+    void CopyStepStart(const G4Step& step);
 
-  // ******************************************************
-  //  For TESTS:
-  // ******************************************************
-public:
-  void Verbose(const G4Step&) const;
+    G4Step* fSplitStep;
+    G4StepPoint* fSplitPreStepPoint;
+    G4StepPoint* fSplitPostStepPoint;
+
+    G4VParticleChange dummyParticleChange;
+    G4ParticleChange xParticleChange;
+
+    // G4TransportationManager* fTransportationManager;
+    // G4PathFinder*        fPathFinder;
+
+    // -------------------------------
+    // Touchables for the Split Step
+    // -------------------------------
+    G4TouchableHandle fOldTouchableH;
+    G4TouchableHandle fNewTouchableH;
+
+    // Memory of Touchables of full step
+    G4TouchableHandle fInitialTouchableH;
+    G4TouchableHandle fFinalTouchableH;
+
+    G4EnergySplitter* fpEnergySplitter;
+
+    // ******************************************************
+    //  For TESTS:
+    // ******************************************************
+  public:
+    void Verbose(const G4Step&) const;
 };
 
 #endif

@@ -38,6 +38,8 @@
 
 #include <sstream>
 
+#define G4warn G4cout
+
 ////////////// /vis/touchable/set/colour ///////////////////////////////////////
 
 G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
@@ -184,7 +186,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -307,11 +309,25 @@ void G4VisCommandsTouchableSet::SetNewValue
      (workingVisAtts,
       G4ModelingParameters::VASVisibility,
       fCurrentTouchableProperties.fTouchablePath));
+    if (verbosity >= G4VisManager::warnings) {
+      static G4bool first = true;
+      if (first) {
+        first = false;
+        G4warn << "WARNING: If \"/vis/touchable/set/visibility\" does not appear to"
+        "\n  work, check that opacity (4th component of colour) is non-zero." << G4endl;
+        G4warn << "ALSO: The volume must be in a requested physical volume tree,"
+        "\n  not in the \"base path\". E.g., if"
+        "\n    /vis/drawVolume volume-name"
+        "\n  there is no way to make a parent of volume-name visible except by"
+        "\n  explicitly adding the parent:"
+        "\n    /vis/scene/add/volume parent-name" << G4endl;
+      }
+    }
   }
   
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
+      G4warn <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: unrecognised command."
       << G4endl;
     }

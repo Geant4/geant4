@@ -48,12 +48,11 @@ class G4NeutralDefinition;
 
 class G4SDNeutralFilter : public G4VSDFilter
 {
- public:  // with description
+ public:
   G4SDNeutralFilter(G4String name);
-  virtual ~G4SDNeutralFilter();
+  ~G4SDNeutralFilter() override = default;
 
- public:  // with description
-  virtual G4bool Accept(const G4Step*) const;
+  G4bool Accept(const G4Step*) const override;
 };
 
 #endif

@@ -40,7 +40,7 @@
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
-
+#include <memory>
 class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
@@ -50,17 +50,18 @@ class DetectorMessenger: public G4UImessenger
   public:
   
     DetectorMessenger(DetectorConstruction*);
-    virtual ~DetectorMessenger();
+    ~DetectorMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
     
     DetectorConstruction*      fpDetector;
-    G4UIdirectory*             fpTestDir;
-    G4UIdirectory*             fpDetDir;
-    G4UIcmdWithADoubleAndUnit* fpTrackingCutCmd;
-    G4UIcmdWithADoubleAndUnit* fpMaxStepSizeCmd;
+    std::unique_ptr<G4UIdirectory>             fpTestDir;
+    std::unique_ptr<G4UIdirectory>             fpDetDir;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpTrackingCutCmd;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fpMaxStepSizeCmd;
+    std::unique_ptr<G4UIcmdWithADoubleAndUnit> fAddRadius;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

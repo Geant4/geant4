@@ -105,6 +105,7 @@
 #define G4LOGICALVOLUME_HH 1
 
 #include <vector>
+#include <memory>
 
 #include "G4Types.hh"
 #include "G4Region.hh"           // Required by inline methods
@@ -120,9 +121,9 @@ class G4VSensitiveDetector;
 class G4VSolid;
 class G4UserLimits;
 class G4SmartVoxelHeader;
-class G4VisAttributes;
 class G4FastSimulationManager;
 class G4MaterialCutsCouple;
+class G4VisAttributes;
 
 class G4LVData
 {
@@ -209,9 +210,9 @@ class G4LogicalVolume
     void SetName(const G4String& pName);
       // Returns and sets the name of the logical volume.
 
-    inline size_t GetNoDaughters() const;
+    inline std::size_t GetNoDaughters() const;
       // Returns the number of daughters (0 to n).
-    inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
+    inline G4VPhysicalVolume* GetDaughter(const std::size_t i) const;
       // Returns the ith daughter. Note numbering starts from 0,
       // and no bounds checking is performed.
     void AddDaughter(G4VPhysicalVolume* p);
@@ -323,11 +324,11 @@ class G4LogicalVolume
       // Equality defined by address only.
       // Returns true if objects are at same address, else false.
 
-    inline const G4VisAttributes* GetVisAttributes () const;
-    inline void SetVisAttributes (const G4VisAttributes* pVA);
-    void  SetVisAttributes (const G4VisAttributes& VA);
-      // Gets and sets visualization attributes. A copy of 'VA' on the heap
-      // will be made in the case the call with a const reference is used.
+    const G4VisAttributes* GetVisAttributes () const;
+    void SetVisAttributes (const G4VisAttributes* pVA);
+    void SetVisAttributes (const G4VisAttributes& VA);
+      // Gets and sets visualization attributes.
+      // Arguments are converted to shared_ptr.
 
     inline G4FastSimulationManager* GetFastSimulationManager () const;
       // Gets current FastSimulationManager pointer if exists, otherwise null.
@@ -405,12 +406,12 @@ class G4LogicalVolume
     G4double fSmartless = 2.0;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
-    const G4VisAttributes* fVisAttributes = nullptr;
-      // Pointer (possibly nullptr) to visualization attributes.
     G4Region* fRegion = nullptr;
-      // Pointer to the cuts region (if any)
+      // Pointer to the cuts region (if any).
     G4double fBiasWeight = 1.0;
       // Weight used in the event biasing technique.
+    std::shared_ptr<const G4VisAttributes> fVisAttributes;
+      // Pointer to visualization attributes.
 
     // Shadow of master pointers.
     // Each worker thread can access this field from the master thread

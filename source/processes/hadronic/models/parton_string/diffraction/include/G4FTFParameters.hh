@@ -32,272 +32,12 @@
 #include <vector>
 #include "G4Types.hh"
 #include "G4Exp.hh"
+#include "G4FTFTunings.hh"
 
 class G4ParticleDefinition;
 class G4VComponentCrossSection;
 class G4LundStringFragmentation;
 
-
-     // NOTE: the settings are different for:
-     //       * baryons projectile
-     //       * anti-baryons projectile
-     //       * pions (chg or pi0) projectile
-     //       * kaons projectile (pdg = +/-321, 311, 130, or 310)
-     //       * "undefined" projectile - nucleon assumed
-
-class G4FTFParamCollection {
-   public:
-   
-      //dtor
-      virtual ~G4FTFParamCollection() {}
-
-     // parameters of excitation
-     //
-     // Proc=0 --> Qexchg w/o excitation
-     //
-     double GetProc0A1()   const  { return fProc0A1; }
-     double GetProc0B1()   const  { return fProc0B1; }
-     double GetProc0A2()   const  { return fProc0A2; }
-     double GetProc0B2()   const  { return fProc0B2; }
-     double GetProc0A3()   const  { return fProc0A3; }
-     double GetProc0Atop() const  { return fProc0Atop; }
-     double GetProc0Ymin() const  { return fProc0Ymin; }
-     //
-     // Proc=1 --> Qexchg w/excitation
-     //
-     double GetProc1A1()   const  { return fProc1A1; }
-     double GetProc1B1()   const  { return fProc1B1; }
-     double GetProc1A2()   const  { return fProc1A2; }
-     double GetProc1B2()   const  { return fProc1B2; }
-     double GetProc1A3()   const  { return fProc1A3; }
-     double GetProc1Atop() const  { return fProc1Atop; }
-     double GetProc1Ymin() const  { return fProc1Ymin; }
-     //
-     // Proc=2 & Proc=3 in case ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )
-     // Update: Proc=2 & Proc=3 in case ( AbsProjectileBaryonNumber > 10 ||  NumberOfTargetNucleons > 10 )
-     // (diffraction dissociation)
-     //
-     // Other parameters have a complex form for baryon projectile
-     // although they're just numbers for e.g. pions projectile
-     //
-     // Proc=2 --> Projectile diffraction
-     //
-     double GetProc2A1()   const  { return fProc2A1; }
-     double GetProc2B1()   const  { return fProc2B1; }
-     double GetProc2A2()   const  { return fProc2A2; }
-     double GetProc2B2()   const  { return fProc2B2; }
-     double GetProc2A3()   const  { return fProc2A3; }
-     double GetProc2Atop() const  { return fProc2Atop; }
-     double GetProc2Ymin() const  { return fProc2Ymin; }
-     //
-     // Proc=3 --> Target diffraction
-     //
-     double GetProc3A1()   const  { return fProc3A1; }
-     double GetProc3B1()   const  { return fProc3B1; }
-     double GetProc3A2()   const  { return fProc3A2; }
-     double GetProc3B2()   const  { return fProc3B2; }
-     double GetProc3A3()   const  { return fProc3A3; }
-     double GetProc3Atop() const  { return fProc3Atop; }
-     double GetProc3Ymin() const  { return fProc3Ymin; }
-     //
-     bool   IsProjDiffDissociation() const { return fProjDiffDissociation; }
-     bool   IsTgtDiffDissociation()  const { return fTgtDiffDissociation; }
-     //
-     // Proc=4 --> Qexchg "w/additional multiplier" in excitation
-     //
-     double GetProc4A1()   const  { return fProc4A1; }
-     double GetProc4B1()   const  { return fProc4B1; }
-     double GetProc4A2()   const  { return fProc4A2; }
-     double GetProc4B2()   const  { return fProc4B2; }
-     double GetProc4A3()   const  { return fProc4A3; }
-     double GetProc4Atop() const  { return fProc4Atop; }
-     double GetProc4Ymin() const  { return fProc4Ymin; }
-     //
-     // 
-     double GetDeltaProbAtQuarkExchange() const  { return fDeltaProbAtQuarkExchange; }  
-     double GetProbOfSameQuarkExchange()  const  { return fProbOfSameQuarkExchange; }
-     double GetProjMinDiffMass()          const  { return fProjMinDiffMass; }
-     double GetProjMinNonDiffMass()       const  { return fProjMinNonDiffMass; }
-     double GetTgtMinDiffMass()           const  { return fTgtMinDiffMass; }
-     double GetTgtMinNonDiffMass()        const  { return fTgtMinNonDiffMass; }
-     double GetAveragePt2()               const  { return fAveragePt2; }
-     double GetProbLogDistrPrD()          const  { return fProbLogDistrPrD; }
-     double GetProbLogDistr()             const  { return fProbLogDistr; }
-
-     // NOTE (JVY): There is also the Pt2Kind parameter but for now it's set to 0., so we'll leave it aside
-
-     // --> FIXME !!! --> void Get/SetBaryonMaxNumberOfCollisions( const double, const double ); // 1st is Plab, 2nd - D=2.
-     //
-     double GetNuclearProjDestructP1()    const { return fNuclearProjDestructP1; }
-     bool   IsNuclearProjDestructP1_NBRNDEP() const { return fNuclearProjDestructP1_NBRNDEP; }
-     double GetNuclearTgtDestructP1()     const { return fNuclearTgtDestructP1; }
-     bool   IsNuclearTgtDestructP1_ADEP() const { return fNuclearTgtDestructP1_ADEP; }
-     double GetNuclearProjDestructP2()    const { return fNuclearProjDestructP2; }
-     double GetNuclearProjDestructP3()    const { return fNuclearProjDestructP3; }
-     double GetNuclearTgtDestructP2()     const { return fNuclearTgtDestructP2; }
-     double GetNuclearTgtDestructP3()     const { return fNuclearTgtDestructP3; }
-     double GetPt2NuclearDestructP1()     const { return fPt2NuclearDestructP1; }
-     double GetPt2NuclearDestructP2()     const { return fPt2NuclearDestructP2; }
-     double GetPt2NuclearDestructP3()     const { return fPt2NuclearDestructP3; }
-     double GetPt2NuclearDestructP4()     const { return fPt2NuclearDestructP4; }      
-     //
-     // separately for baryons, mesons, etc.
-     //
-     double GetR2ofNuclearDestruct()         const { return fR2ofNuclearDestruct; }
-     double GetExciEnergyPerWoundedNucleon() const { return fExciEnergyPerWoundedNucleon; }
-     double GetDofNuclearDestruct()          const { return fDofNuclearDestruct; } 
-     double GetMaxPt2ofNuclearDestruct()     const { return fMaxPt2ofNuclearDestruct; }
-   
-   protected:
-
-      // ctor
-      G4FTFParamCollection();
-
-      // parameters of excitation
-      //
-      //
-      // these are for Inelastic interactions, i.e. Xinelastic=(Xtotal-Xelastix)>0.
-      // for elastic, all the A's & B's, Atop & Ymin are zeros
-      // general formula: Pp = A1*exp(B1*Y) + A2*exp(B2*Y) + A3
-      // but if Y<Ymin, then Pp=max(0.,Atop)
-      // for details, see also G4FTFParameters::GetProcProb( ProcN, y )
-      //
-      // Proc=0 --> Qexchg w/o excitation
-      double fProc0A1; // D=13.71 
-      double fProc0B1; // D=1.75
-      double fProc0A2; // D=-30.69 (or -214.5 as in Doc ?)
-      double fProc0B2; // D=3.     ( or 4. as in Doc ?)
-      double fProc0A3; // D=0.
-      double fProc0Atop; // D=1.   ( or 0.5 as in Doc ?)
-      double fProc0Ymin; // D=0.93 (or 1.1 as in Doc ?)
-      // Proc=1 --> Qexchg w/excitation
-      double fProc1A1; // D=25.
-      double fProc1B1; // D=1.
-      double fProc1A2; // D=-50.34
-      double fProc1B2; // D=1.5
-      double fProc1A3; // D=0.
-      double fProc1Atop; // D=0.
-      double fProc1Ymin; // D=1.4
-      //
-      // NOTE: Proc #2 & 3 are projectile & target diffraction
-      //       they have more complex definition of A1 & A2 
-      //       for *baryons* although they're just numbers for pions
-      //       (example for baryons below)
-      // SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Projectile diffraction
-      // SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Target diffraction
-      //
-      // Also, for ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )
-      // projectile and/or target diffraction (dissociation) may be switched ON/OFF 
-      bool   fProjDiffDissociation;
-      bool   fTgtDiffDissociation;
-      // Proc=2 --> Projectile diffraction
-      double fProc2A1; 
-      double fProc2B1; 
-      double fProc2A2; 
-      double fProc2B2; 
-      double fProc2A3; 
-      double fProc2Atop; 
-      double fProc2Ymin; 
-      // Proc=3 --> Target diffraction
-      double fProc3A1; 
-      double fProc3B1; 
-      double fProc3A2; 
-      double fProc3B2; 
-      double fProc3A3; 
-      double fProc3Atop; 
-      double fProc3Ymin; 
-      // Proc=4 --> Qexchg w/additional multiplier in excitation  
-      double fProc4A1; // D=0.6 (or 1. as in Doc ?)
-      double fProc4B1; // D=0.
-      double fProc4A2; // D=-1.2 (or -2.01 as in Doc ?)
-      double fProc4B2; // D=0.5 
-      double fProc4A3; // D=0.
-      double fProc4Atop; // D=0.
-      double fProc4Ymin; // D=1.4
-      //
-      // parameters of participating baryon excitation 
-      // NOTE: baryon ot HADRON ???
-      // NOTE: this parameters (as C++ class data members) are used for all types of hadrons
-      //       but the values for a specific group of particles can be are different from
-      //       another group of particles
-      //       the defaults listed under coments are for baryons, 
-      //       and they may be different or the same for other hadrons (e.g. mesons)
-      //
-      double fDeltaProbAtQuarkExchange; // D=0. 
-      double fProbOfSameQuarkExchange;  // D=0. if A<=26, otherwise D=1.
-      double fProjMinDiffMass;          // projectile, D=1.16GeV
-      double fProjMinNonDiffMass;       // projectile, D=1.16GeV
-      double fTgtMinDiffMass;           // target, D=1.16GeV
-      double fTgtMinNonDiffMass;        // target, D=1.16GeV
-      double fAveragePt2;               // D=0.3GeV**2 ( or 0.15 as in the Doc ???)
-      double fProbLogDistrPrD;          // D=0.55 (or 0.6 ??? or 0.3 ???)
-      double fProbLogDistr;             // D=0.55 (or 0.6 ??? or 0.3 ???)
-
-      // parameters of nuclear distruction 
-      //
-      // NOTE (JVY): there're 3 cases here:
-      //             * baryon projectile
-      //             * anti-baryon projectile
-      //             * meson projectile
-      //
-      // double fBaryonMaxNumberOfCollisions; // D=2.
-      // void SetBaryonProbOfInteraction( const double ); // ??? this is prob. of inelastic interaction 
-                                                          //     that is set internally based on certain conditions...
-      // general (i.e. for used for baryons,anti-baryons, and mesons)
-      // NOTE: these parameters have stayed THE SAME for quite a while 
-      double fNuclearProjDestructP1; // D=0.00481 in 10.3.ref04 !!!
-                                     // BUT !!! In 10.3.ref04 as well as in 10.2-seriesit's multiplied of AbsProjectileBaryonNumber
-				     // which somehow is 0 for the proton projectile (see in 10.3.ref04 around lines 130-140 In G4FTFParameters.cc).
-				     // For the target destr. it's multipled by the number of target nucleons (12 for Carbon).
-				     // In 10.3.p01 it's set to 1. FLAT OUT for both projectile & target, no multiplications, etc.
-				     // Now, make default at 1.
-      bool   fNuclearProjDestructP1_NBRNDEP;
-      double fNuclearTgtDestructP1;  // Make D=1. as in 10.3.p01
-      bool   fNuclearTgtDestructP1_ADEP;
-      double fNuclearProjDestructP2; // D=4.0
-      double fNuclearProjDestructP3; // D=2.1
-      double fNuclearTgtDestructP2; // D=4.0
-      double fNuclearTgtDestructP3; // D=2.1
-      //
-      double fPt2NuclearDestructP1; // D=0.035
-      double fPt2NuclearDestructP2; // D=0.04
-      double fPt2NuclearDestructP3; // D=4.0
-      double fPt2NuclearDestructP4; // D=2.5 
-      // baryons... well, in fact also mesons...
-      double fR2ofNuclearDestruct;         // D=1.5*fermi*fermi
-      double fExciEnergyPerWoundedNucleon; // D=40MeV
-      double fDofNuclearDestruct;          // D=0.3
-      // NOTE: this parameter has changed from 1. to 9. between 10.2 and 10.4.ref04 !!!
-      //       ... but that's for baryons !
-      //       ... while for mesons it's 1GeV**2
-      double fMaxPt2ofNuclearDestruct;     // D=9GeV**2
-
-};
-
-
-class G4FTFParamCollBaryonProj : public G4FTFParamCollection {
-   public:
-      // ctor 
-      G4FTFParamCollBaryonProj();
-};
-
-class G4FTFParamCollMesonProj : public G4FTFParamCollection {
-
-   public:
-      
-      // ctor
-      G4FTFParamCollMesonProj();
-
-};
-
-class G4FTFParamCollPionProj : public G4FTFParamCollMesonProj {
-
-   public:
-      
-      // ctor
-      G4FTFParamCollPionProj();
-
-};
 
 class G4FTFParameters {
   public:
@@ -463,19 +203,25 @@ class G4FTFParameters {
     G4double Pt2ofNuclearDestruction;     // Pt2
     G4double MaxPt2ofNuclearDestruction;  // Max Pt2
 
+    G4bool EnableDiffDissociationForBGreater10; ///< Control over whether to do nucleon-hadron diffractive dissociation or not.
+
   private:
     G4LundStringFragmentation* StringMass;
     G4double GetMinMass( const G4ParticleDefinition* aParticle );
 
     void Reset(); 
 
-    // JVY, July 31, 2017: encapsulates (current set of) parameters for the baryon projectile
-    //
-    G4FTFParamCollBaryonProj fParCollBaryonProj;
-    
-    // JVY, Feb 14, 2019: encapsulates (current set of) parameters for meson/pion (+/-/0) projectile
-    G4FTFParamCollMesonProj  fParCollMesonProj;
-    G4FTFParamCollPionProj   fParCollPionProj;
+    // Different sets of parameters (called "tunes") of the FTF model are possible.
+    // These tunes are kept as std::array - instead of std::vector - members of this class,
+    // because their size is fixed during a run, and expected to be small.
+    // For the time being, separate parameters are kept for "baryons", "pions", and
+    // the rest of "mesons"; if in the future we make more distinctions between
+    // projectile types (e.g. kaons, anti-baryon, hyperons, etc.), then corresponding
+    // new arrays will be introduced. In all cases, the size of these arrays is the
+    // same (and kept as a static constant in the singleton G4FTFTunings).
+    std::array< G4FTFParamCollBaryonProj, G4FTFTunings::sNumberOfTunes > fArrayParCollBaryonProj;
+    std::array< G4FTFParamCollMesonProj,  G4FTFTunings::sNumberOfTunes > fArrayParCollMesonProj;
+    std::array< G4FTFParamCollPionProj,   G4FTFTunings::sNumberOfTunes > fArrayParCollPionProj;
 
     // Glauber-Gribov hN x-section
     G4VComponentCrossSection* csGGinstance;

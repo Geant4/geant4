@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 // (adapted from B1PrimaryGeneratorAction)
 // Author: A.Knaian (ara@nklabs.com), N.MacFadden (natemacfadden@gmail.com)
 
@@ -40,19 +39,18 @@ class G4Box;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-	public:
-		PrimaryGeneratorAction();    
-		virtual ~PrimaryGeneratorAction();
+public:
+ explicit PrimaryGeneratorAction();    
+ virtual ~PrimaryGeneratorAction();
 
-		// method from the base class
-		virtual void GeneratePrimaries(G4Event*);         
+// method from the base class
+ virtual void GeneratePrimaries(G4Event*) override;         
 
-		// method to access particle gun
-		const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+// method to access particle gun
+ const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
-	private:
-		G4ParticleGun*  fParticleGun;
-		G4Box* fWorldBox;
+private:
+ G4ParticleGun*  fParticleGun;
+ G4Box* fWorldBox;
 };
-
 #endif

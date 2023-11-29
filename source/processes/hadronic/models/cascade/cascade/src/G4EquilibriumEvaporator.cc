@@ -347,8 +347,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
     // fisson part
     W[6] = 0.0;
     if (A >= 100.0 && fission_open) {
-      G4double X2 = Z * Z / A;
-      G4double X1 = 1.0 - 2.0 * Z / A; 
+      G4double X2 = G4double(Z*Z)/G4double(A);
+      G4double X1 = 1.0 - 2.0*G4double(Z)/G4double(A); 
       G4double X = 0.019316 * X2 / (1.0 - 1.79 * X1 * X1);
       G4double EF = EEXS - getQF(X, X2, A, Z, EEXS);
 	  

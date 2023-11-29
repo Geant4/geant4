@@ -103,14 +103,14 @@ G4double G4PolarizationTransition::GammaTransF3Coefficient(G4int K, G4int K2,
 
 G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol) 
 {
-  size_t length = pol.size();
+  std::size_t length = pol.size();
   // Isotropic case
   if(length <= 1) return G4UniformRand()*2.-1.;
 
   // kappa > 0 terms integrate out to zero over phi: 0->2pi, so just need (k,0)
   // terms to generate cos theta distribution
   vector<G4double> polyPDFCoeffs(length, 0.0);
-  for(size_t k = 0; k < length; k += 2) {
+  for(G4int k = 0; k < (G4int)length; k += 2) {
     if ((pol[k]).size() > 0 ) {
       if(fVerbose > 1 && std::abs(((pol)[k])[0].imag()) > kEps) {
         G4cout << "G4PolarizationTransition::GenerateGammaCosTheta WARNING: \n"
@@ -120,8 +120,8 @@ G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol)
   	     << ((pol)[k])[0].imag() << "*i" << G4endl;
       }
       G4double a_k = std::sqrt((G4double)(2*k+1))*GammaTransFCoefficient(k)*((pol)[k])[0].real();
-      size_t nCoeff = fgLegendrePolys.GetNCoefficients(k);
-      for(size_t iCoeff=0; iCoeff < nCoeff; ++iCoeff) {
+      std::size_t nCoeff = fgLegendrePolys.GetNCoefficients(k);
+      for(std::size_t iCoeff=0; iCoeff < nCoeff; ++iCoeff) {
         polyPDFCoeffs[iCoeff] += a_k*fgLegendrePolys.GetCoefficient(iCoeff, k);
       }
     } else {
@@ -143,10 +143,10 @@ G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol)
 G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
 						    const POLAR& pol)
 {
-  size_t length = pol.size();
+  G4int length = (G4int)pol.size();
   // Isotropic case
   G4bool phiIsIsotropic = true;
-  for(size_t i=0; i<length; ++i) {
+  for(G4int i=0; i<length; ++i) {
     if(((pol)[i]).size() > 1) {
       phiIsIsotropic = false;
       break;
@@ -154,18 +154,16 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
   }
   if(phiIsIsotropic) { return G4UniformRand()*CLHEP::twopi; }
 
-  // map<G4int, map<G4int, G4double> > cache;
   map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
-  // if(length > 10) cachePtr = &cache;
 
   // Otherwise, P(phi) can be written as a sum of cos(kappa phi + phi_kappa).
   // Calculate the amplitude and phase for each term
   std::vector<G4double> amp(length, 0.0);
   std::vector<G4double> phase(length, 0.0);
-  for(size_t kappa = 0; kappa < length; ++kappa) {
+  for(G4int kappa = 0; kappa < length; ++kappa) {
     G4complex cAmpSum(0.,0.);
-    for(size_t k = kappa + (kappa % 2); k < length; k += 2) {
-      size_t kmax = (pol[k]).size();
+    for(G4int k = kappa + (kappa % 2); k < length; k += 2) {
+      G4int kmax = (G4int)pol[k].size();
       if(kmax > 0) {
 	if(kappa >= kmax || std::abs(((pol)[k])[kappa]) < kEps) { continue; }
         G4double tmpAmp = GammaTransFCoefficient(k);
@@ -195,7 +193,7 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
   // Normalize PDF and calc max (note: it's not the true max, but the max
   // assuming that all of the phases line up at a max)
   G4double pdfMax = 0.;
-  for(size_t kappa = 0; kappa < length; ++kappa) { pdfMax += amp[kappa]; }
+  for(G4int kappa = 0; kappa < length; ++kappa) { pdfMax += amp[kappa]; }
   if(fVerbose > 1 && pdfMax < kEps) {
     G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING "
 	   << "got pdfMax = 0 for \n";
@@ -206,11 +204,11 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
   }
 
   // Finally, throw phi until it falls in the pdf
-  for(size_t i=0; i<100; ++i) {
+  for(std::size_t i=0; i<100; ++i) {
     G4double phi = G4UniformRand()*CLHEP::twopi;
     G4double prob = G4UniformRand()*pdfMax;
     G4double pdfSum = amp[0];
-    for(size_t kappa = 1; kappa < length; ++kappa) {
+    for(G4int kappa = 1; kappa < length; ++kappa) {
       pdfSum += amp[kappa]*std::cos(phi*kappa + phase[kappa]);
     }
     if(fVerbose > 1 && pdfSum > pdfMax) {
@@ -278,7 +276,7 @@ void G4PolarizationTransition::SampleGammaTransition(
     return;
   }
 
-  size_t newlength = fTwoJ2+1;
+  std::size_t newlength = fTwoJ2+1;
   //POLAR newPol(newlength);
   POLAR newPol;
 
@@ -286,19 +284,19 @@ void G4PolarizationTransition::SampleGammaTransition(
   map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
   //if(newlength > 10 || pol.size() > 10) cachePtr = &cache;
 
-  for(size_t k2=0; k2<newlength; ++k2) {
+  for(G4int k2=0; k2<(G4int)newlength; ++k2) {
     std::vector<G4complex> npolar;
     npolar.resize(k2+1, 0);
     //(newPol[k2]).assign(k2+1, 0);
-    for(size_t k1=0; k1<pol.size(); ++k1) {
-      for(size_t k=0; k<=k1+k2; k+=2) {
+    for(G4int k1=0; k1<(G4int)pol.size(); ++k1) {
+      for(G4int k=0; k<=k1+k2; k+=2) {
         // TransF3Coefficient takes the most time. Only calculate it once per
         // (k, k1, k2) triplet, and wait until the last possible moment to do
         // so. Break out of the inner loops as soon as it is found to be zero.
         G4double tF3 = 0.;
         G4bool recalcTF3 = true;
-        for(size_t kappa2=0; kappa2<=k2; ++kappa2) {
-          G4int ll = (pol[k1]).size();
+        for(G4int kappa2=0; kappa2<=k2; ++kappa2) {
+          G4int ll = (G4int)pol[k1].size();
           for(G4int kappa1 = 1 - ll; kappa1<ll; ++kappa1) {
             if(k+k2<k1 || k+k1<k2) continue;
             G4complex tmpAmp = (kappa1 < 0) ?  
@@ -357,20 +355,20 @@ void G4PolarizationTransition::SampleGammaTransition(
     DumpTransitionData(newPol);
   }
   // Normalize and trim
-  size_t lastNonEmptyK2 = 0;
-  for(size_t k2=0; k2<newlength; ++k2) {
+  std::size_t lastNonEmptyK2 = 0;
+  for(std::size_t k2=0; k2<newlength; ++k2) {
     G4int lastNonZero = -1;
-    for(size_t kappa2=0; kappa2<(newPol[k2]).size(); ++kappa2) {
+    for(std::size_t kappa2=0; kappa2<(newPol[k2]).size(); ++kappa2) {
       if(k2 == 0 && kappa2 == 0) {
         lastNonZero = 0;
         continue;
       }
       if(std::abs((newPol[k2])[kappa2]) > 0.0) {
-        lastNonZero = kappa2;
+        lastNonZero = (G4int)kappa2;
         (newPol[k2])[kappa2] /= (newPol[0])[0];
       }
     }
-    while((newPol[k2]).size() != size_t (lastNonZero+1)) (newPol[k2]).pop_back();
+    while((newPol[k2]).size() != std::size_t (lastNonZero+1)) (newPol[k2]).pop_back();
     if((newPol[k2]).size() > 0) lastNonEmptyK2 = k2;
   }
 
@@ -393,9 +391,9 @@ void G4PolarizationTransition::DumpTransitionData(const POLAR& pol) const
   G4cout << ")--> ";
   (fTwoJ2 % 2) ? G4cout << fTwoJ2 << "/2" : G4cout << fTwoJ2/2;
   G4cout << ", P = [ { ";
-  for(size_t k=0; k<pol.size(); ++k) {
+  for(std::size_t k=0; k<pol.size(); ++k) {
     if(k>0) G4cout << " }, { ";
-    for(size_t kappa=0; kappa<(pol[k]).size(); ++kappa) {
+    for(std::size_t kappa=0; kappa<(pol[k]).size(); ++kappa) {
       if(kappa > 0) G4cout << ", ";
       G4cout << (pol[k])[kappa].real() << " + " << (pol[k])[kappa].imag() << "*i";
     }

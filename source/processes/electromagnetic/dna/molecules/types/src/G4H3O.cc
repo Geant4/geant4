@@ -83,6 +83,6 @@ G4H3O* G4H3O::Definition()
     ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(4, 1);
     ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
   }
-  theInstance = reinterpret_cast<G4H3O*>(anInstance);
+  theInstance = static_cast<G4H3O*>(anInstance);
   return theInstance;
 }

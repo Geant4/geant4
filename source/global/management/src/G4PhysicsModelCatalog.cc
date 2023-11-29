@@ -38,11 +38,11 @@ std::vector< G4int >*    G4PhysicsModelCatalog::theVectorOfModelIDs   = nullptr;
 std::vector< G4String >* G4PhysicsModelCatalog::theVectorOfModelNames = nullptr;
 
 // --------------------------------------------------------------------------
-G4PhysicsModelCatalog::G4PhysicsModelCatalog() {}
-
-// --------------------------------------------------------------------------
 void G4PhysicsModelCatalog::Initialize() {
-  if ( isInitialized ) return;
+  if(isInitialized)
+  {
+    return;
+  }
   if ( theVectorOfModelIDs == nullptr  &&  theVectorOfModelNames == nullptr ) {
     static std::vector< G4int > aVectorOfInts;
     theVectorOfModelIDs = &aVectorOfInts;
@@ -591,6 +591,11 @@ void G4PhysicsModelCatalog::Initialize() {
     // IF YOU ARE NOT SURE, PLEASE CONTACT ONE OF THE COORDINATORS OF THE
     // GEANT4 PHYSICS WORKING GROUPS.
     
+    // Class: G4HadronicAbsorptionINCLXX
+    InsertModel( 26040, "model_hINCLXXCaptureAtRest_EMCascade" );
+    InsertModel( 26041, "model_hINCLXXCaptureAtRest_NuclearCapture" );
+    InsertModel( 26042, "model_hINCLXXCaptureAtRest_DIO" );
+
     // ...
     
     SanityCheck();
@@ -625,17 +630,32 @@ void G4PhysicsModelCatalog::SanityCheck() {
 	isModelIDOutsideRange = true;
       }
       for ( int jdx = idx + 1; jdx < Entries(); ++jdx ) {
-	if ( modelID == (*theVectorOfModelIDs)[ jdx ] ) isModelIDRepeated = true;
-	if ( modelName == (*theVectorOfModelNames)[ jdx ] ) isModelNameRepeated = true;
+        if(modelID == (*theVectorOfModelIDs)[jdx])
+        {
+          isModelIDRepeated = true;
+        }
+        if(modelName == (*theVectorOfModelNames)[jdx])
+        {
+          isModelNameRepeated = true;
+        }
       }
     }
     if ( isModelIDOutsideRange || isModelIDRepeated || isModelNameRepeated ) {
       G4ExceptionDescription ed;
-      if ( isModelIDOutsideRange ) ed << "theVectorOfModelIDs has NOT all entries between "
-	                              << GetMinAllowedModelIDValue() << " and "
-				      << GetMaxAllowedModelIDValue();
-      if ( isModelIDRepeated )     ed << "theVectorOfModelIDs has NOT all unique IDs !";
-      if ( isModelNameRepeated )   ed << "theVectorOfModelNames has NOT all unique names !";
+      if(isModelIDOutsideRange)
+      {
+        ed << "theVectorOfModelIDs has NOT all entries between "
+           << GetMinAllowedModelIDValue() << " and "
+           << GetMaxAllowedModelIDValue();
+      }
+      if(isModelIDRepeated)
+      {
+        ed << "theVectorOfModelIDs has NOT all unique IDs !";
+      }
+      if(isModelNameRepeated)
+      {
+        ed << "theVectorOfModelNames has NOT all unique names !";
+      }
       G4Exception( "G4PhysicsModelCatalog::SanityCheck()", "PhysModelCatalog002",
 		   FatalException, ed, "cannot continue!" );
     }
@@ -644,7 +664,6 @@ void G4PhysicsModelCatalog::SanityCheck() {
 }
 
 // --------------------------------------------------------------------------
-G4PhysicsModelCatalog::~G4PhysicsModelCatalog() {}
 
 // --------------------------------------------------------------------------
 const G4String G4PhysicsModelCatalog::GetModelNameFromID( const G4int modelID ) {
@@ -672,7 +691,10 @@ G4int G4PhysicsModelCatalog::GetModelID( const G4int modelIndex ) {
 
 // --------------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetModelID( const G4String& modelName ) {
-  if ( ! isInitialized ) Initialize();
+  if(!isInitialized)
+  {
+    Initialize();
+  }
   G4int modelID = -1;
   for ( G4int idx = 0; idx < Entries(); ++idx ) {
     if ( (*theVectorOfModelNames)[ idx ] == modelName ) {

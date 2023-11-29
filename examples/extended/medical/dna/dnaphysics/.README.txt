@@ -64,7 +64,14 @@ is activated thanks to the following UI command in dnaphysics.in:
 /process/em/AddDNARegion World DNA_Opt0
 \endverbatim
 
-For now, only the "DNA_Opt0" configuration is allowed.
+For now, the "DNA_Opt0 DNA_Opt2 DNA_Opt4 DNA_Opt4a DNA_Opt6 DNA_Opt6a DNA_Opt7" configuration is allowed.
+
+For allowing enable radioactive decay:
+
+\verbatim
+/dna/test/addPhysics raddecay
+\endverbatim
+
 
 \section dnaphysics_s5 PHYSICS
 

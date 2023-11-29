@@ -74,6 +74,8 @@ G4DecayStrongResonances::Propagate(G4KineticTrackVector* theSecondaries,
     it->SetTotalEnergy(aSecondary->Get4Momentum().t());
     it->SetMomentum(aSecondary->Get4Momentum().vect());
     it->SetCreatorModelID(aSecondary->GetCreatorModelID());
+    it->SetParentResonanceDef(aSecondary->GetParentResonanceDef());
+    it->SetParentResonanceID(aSecondary->GetParentResonanceID());
     delete aSecondary;
     try	{ theResult->push_back(it); }
     catch(...){

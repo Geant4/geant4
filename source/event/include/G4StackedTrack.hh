@@ -40,10 +40,10 @@ class G4StackedTrack
 {
   public:
 
-    G4StackedTrack() : track(nullptr), trajectory(nullptr) {}
+    G4StackedTrack() = default;
     G4StackedTrack(G4Track* aTrack, G4VTrajectory* aTraj = nullptr)
       : track(aTrack), trajectory(aTraj) {}
-   ~G4StackedTrack() {}
+   ~G4StackedTrack() = default;
 
     inline G4Track* GetTrack() const { return track; }
     inline G4VTrajectory* GetTrajectory() const { return trajectory; }

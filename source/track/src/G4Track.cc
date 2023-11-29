@@ -51,7 +51,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
   , fGlobalTime(aValueTime)
   , fVelocity(c_light)
 {
-  fpDynamicParticle = (apValueDynamicParticle)
+  fpDynamicParticle = (apValueDynamicParticle) != nullptr
                     ? apValueDynamicParticle : new G4DynamicParticle();
   // check if the particle type is Optical Photon
   is_OpticalPhoton =
@@ -106,6 +106,10 @@ G4Track& G4Track::operator=(const G4Track& right)
     // Creator model ID
     fCreatorModelID = right.fCreatorModelID;
 
+    // Parent resonance
+    fParentResonanceDef = right.fParentResonanceDef;
+    fParentResonanceID  = right.fParentResonanceID;
+   
     // velocity information
     fVelocity = right.fVelocity;
 
@@ -165,7 +169,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
   }
   else
   {
-    if(fpTouchable != 0)
+    if(fpTouchable)
     {
       mat = fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
     }
@@ -226,11 +230,11 @@ G4Track::GetAuxiliaryTrackInformation(G4int id) const
 {
   if(fpAuxiliaryTrackInformationMap == nullptr)
     return nullptr;
+  
   auto itr = fpAuxiliaryTrackInformationMap->find(id);
   if(itr == fpAuxiliaryTrackInformationMap->cend())
     return nullptr;
-  else
-    return (*itr).second;
+  return (*itr).second;
 }
 
 // --------------------------------------------------------------------
@@ -258,10 +262,9 @@ void G4Track::ClearAuxiliaryTrackInformation()
 {
   if(fpAuxiliaryTrackInformationMap == nullptr)
     return;
-  for(auto itr = fpAuxiliaryTrackInformationMap->cbegin();
-           itr != fpAuxiliaryTrackInformationMap->cend(); ++itr)
+  for(const auto& itr : *fpAuxiliaryTrackInformationMap)
   {
-    delete(*itr).second;
+    delete itr.second;
   }
   delete fpAuxiliaryTrackInformationMap;
   fpAuxiliaryTrackInformationMap = nullptr;

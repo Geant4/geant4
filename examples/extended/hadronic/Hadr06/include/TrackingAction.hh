@@ -54,11 +54,11 @@ class TrackingAction : public G4UserTrackingAction {
     void SetKillNeutrons(G4bool flag)  { fKillNeutron = flag;};
     
   private:
-    EventAction*        fEventAction;
-    TrackingMessenger*  fTrackMessenger;
+    EventAction*        fEventAction    = nullptr;
+    TrackingMessenger*  fTrackMessenger = nullptr;
         
-    G4bool fParticleCount;
-    G4bool fKillNeutron;    
+    G4bool fParticleCount = true;
+    G4bool fKillNeutron   = false;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

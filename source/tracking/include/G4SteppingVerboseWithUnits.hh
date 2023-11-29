@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file 
+/// \file
 /// \brief Definition of the G4SteppingVerboseWithUnits class
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  Stepping Verbose with units for all the applicable double values
@@ -47,36 +47,33 @@ class G4GenericMessenger;
 
 class G4SteppingVerboseWithUnits : public G4SteppingVerbose
 {
-  public:   
+ public:
+  G4SteppingVerboseWithUnits(G4int precision = 4);
+  ~G4SteppingVerboseWithUnits() override;
 
-    G4SteppingVerboseWithUnits(G4int precision = 4);
-   ~G4SteppingVerboseWithUnits() override;
- 
-    G4VSteppingVerbose* Clone() override
-      { return new G4SteppingVerboseWithUnits; }
+  G4VSteppingVerbose* Clone() override { return new G4SteppingVerboseWithUnits; }
 
-    void SetManager(G4SteppingManager* const) override;
-   
-    void TrackingStarted() override;
-    void StepInfo() override;
+  void SetManager(G4SteppingManager* const) override;
 
-    void AtRestDoItInvoked() override;
-    void AlongStepDoItAllDone()override;
-    void PostStepDoItAllDone()override;
-    void AlongStepDoItOneByOne()override;
-    void PostStepDoItOneByOne()override;
-    void DPSLStarted() override;
-    void DPSLUserLimit() override;
-    void DPSLPostStep() override;
-    void DPSLAlongStep() override;
-    void VerboseTrack() override;
-    void VerboseParticleChange() override;
-    void ShowStep() const override;
-  
-  private:
+  void TrackingStarted() override;
+  void StepInfo() override;
 
-    G4int fprec;  
-    G4GenericMessenger* fmessenger = nullptr;
+  void AtRestDoItInvoked() override;
+  void AlongStepDoItAllDone() override;
+  void PostStepDoItAllDone() override;
+  void AlongStepDoItOneByOne() override;
+  void PostStepDoItOneByOne() override;
+  void DPSLStarted() override;
+  void DPSLUserLimit() override;
+  void DPSLPostStep() override;
+  void DPSLAlongStep() override;
+  void VerboseTrack() override;
+  void VerboseParticleChange() override;
+  void ShowStep() const override;
+
+ private:
+  G4int fprec;
+  G4GenericMessenger* fmessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

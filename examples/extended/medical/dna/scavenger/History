@@ -1,18 +1,32 @@
---------------------------------------------------
+# Example scavenger History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Example scavenger History file
-                    ------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-11-09  I. Hrivnacova (scavenger-V11-00-05)
+- Fixed Doxygen documentation
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-04  I. Hrivnacova (scavenger-V11-00-04)
+- Fixed Doxygen file descriptions:
+  when using namespaces the filenames must be provided with a path
+- Fixed .README.txt
+
+## 2022-09-08 Hoang Tran (scavenger-V11-00-03)
+- Fix ROOT macros for error running of ROOT in Windows
+
+## 2022-08-30 Vladimir Ivanchenko (scavenger-V11-00-02)
+- EmDNAChemistry - added forgotten header
+
+## 2022-05-02 Hoang Tran (scavenger-V11-00-01)
+- Add localthread for fUse of G4VMoleculeCounter
+
+## 2021-12-10 Ben Morgan (scavenger-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 08-11-2021: H. Tran  scavenger-V10-07-01
 - delete limit time step

@@ -96,7 +96,7 @@ int lPoPs_addParticleIfNeeded( statusMessageReporting *smr, char const *name, ch
                     ispecial = 1; }
                 else if( Z == 99 ) {
                     if( ( 120 <= A ) && ( A < 126 ) ) {
-                        sprintf( name_, "FissionProductENDL99%d", A );
+                        snprintf( name_, sizeof name_, "FissionProductENDL99%d", A );
                      /* genre = PoPs_genre_atom; */
                         ispecial = 1;
                     }
@@ -108,13 +108,13 @@ int lPoPs_addParticleIfNeeded( statusMessageReporting *smr, char const *name, ch
                 else if( A == 0 ) {
                     strcpy( AStr, "_natural" ); }
                 else {
-                    sprintf( AStr, "%d", A );
+                    snprintf( AStr, sizeof AStr, "%d", A );
                 }
                 if( ( ZStr = lPoPs_ZSymbol( Z ) ) == NULL ) {
                     smr_setReportError2( smr, PoPs_smr_ID, PoPs_errorToken_badName, "string '%s' not a value ZA; Z = %d is not supported", name, Z );
                     return( -1 );
                 }
-                sprintf( name_, "%s%s", ZStr, AStr );
+                snprintf( name_, sizeof name_, "%s%s", ZStr, AStr );
               /* genre = PoPs_genre_atom; */
               /* if( ZA == 1 ) genre = PoPs_genre_baryon; */
             } }

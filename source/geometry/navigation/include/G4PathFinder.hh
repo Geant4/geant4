@@ -50,9 +50,8 @@
 class G4TransportationManager; 
 class G4Navigator;
 
-#include "G4TouchableHandle.hh"
-#include "G4FieldTrack.hh"
 #include "G4MultiNavigator.hh"
+#include "G4TouchableHandle.hh"
 
 class G4PropagatorInField;
 

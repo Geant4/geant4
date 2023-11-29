@@ -31,39 +31,29 @@
 // --------------------------------------------------------------------
 
 #include "G4AdjointTrackingAction.hh"
+
+#include "G4AdjointSteppingAction.hh"
 #include "G4ParticleTable.hh"
 #include "G4Track.hh"
-#include "G4AdjointSteppingAction.hh"
 
 // --------------------------------------------------------------------
 //
-G4AdjointTrackingAction::
-G4AdjointTrackingAction(G4AdjointSteppingAction* anAction)
+G4AdjointTrackingAction::G4AdjointTrackingAction(G4AdjointSteppingAction* anAction)
   : theAdjointSteppingAction(anAction)
-{
-}
-
-// --------------------------------------------------------------------
-//
-G4AdjointTrackingAction::~G4AdjointTrackingAction()
-{
-}
+{}
 
 // --------------------------------------------------------------------
 //
 void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
-  if (G4StrUtil::contains(partType, "adjoint"))
-  {
+  if (G4StrUtil::contains(partType, "adjoint")) {
     is_adjoint_tracking_mode = true;
     theAdjointSteppingAction->SetPrimWeight(aTrack->GetWeight());
   }
-  else
-  {
+  else {
     is_adjoint_tracking_mode = false;
-    if (theUserFwdTrackingAction)
-    {
+    if (theUserFwdTrackingAction != nullptr) {
       theUserFwdTrackingAction->PreUserTrackingAction(aTrack);
     }
   }
@@ -79,40 +69,33 @@ void G4AdjointTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   last_weight = theAdjointSteppingAction->GetLastWeight();
   last_ekin = theAdjointSteppingAction->GetLastEkin();
 
-  if(!is_adjoint_tracking_mode)
-  {
-    if (theUserFwdTrackingAction != nullptr)
-    {
+  if (! is_adjoint_tracking_mode) {
+    if (theUserFwdTrackingAction != nullptr) {
       theUserFwdTrackingAction->PostUserTrackingAction(aTrack);
     }
   }
-  else if (theAdjointSteppingAction->GetDidAdjParticleReachTheExtSource())
-  {
+  else if (theAdjointSteppingAction->GetDidAdjParticleReachTheExtSource()) {
     last_pos = theAdjointSteppingAction->GetLastPosition();
     last_direction = theAdjointSteppingAction->GetLastMomentum();
-    last_direction /=last_direction.mag();
+    last_direction /= last_direction.mag();
     last_cos_th = last_direction.z();
-    G4ParticleDefinition* aPartDef= theAdjointSteppingAction->GetLastPartDef();
-    last_fwd_part_name= aPartDef->GetParticleName();
-    last_fwd_part_name.erase(0,4);
-    last_fwd_part_PDGEncoding=G4ParticleTable::GetParticleTable()
-         ->FindParticle(last_fwd_part_name)->GetPDGEncoding();
+    G4ParticleDefinition* aPartDef = theAdjointSteppingAction->GetLastPartDef();
+    last_fwd_part_name = aPartDef->GetParticleName();
+    last_fwd_part_name.erase(0, 4);
+    last_fwd_part_PDGEncoding =
+      G4ParticleTable::GetParticleTable()->FindParticle(last_fwd_part_name)->GetPDGEncoding();
     last_ekin = theAdjointSteppingAction->GetLastEkin();
     last_ekin_nuc = last_ekin;
-    if (aPartDef->GetParticleType() == "adjoint_nucleus")
-    {
-      G4double  nb_nuc = G4double(aPartDef->GetBaryonNumber());
+    if (aPartDef->GetParticleType() == "adjoint_nucleus") {
+      auto nb_nuc = G4double(aPartDef->GetBaryonNumber());
       last_ekin_nuc /= nb_nuc;
     }
 
     last_fwd_part_index = -1;
     std::size_t i = 0;
-    while(i< pListOfPrimaryFwdParticles->size() && last_fwd_part_index<0)
-    {
-      if ((*pListOfPrimaryFwdParticles)[i]->GetParticleName()
-         == last_fwd_part_name)
-      {
-        last_fwd_part_index=i;
+    while (i < pListOfPrimaryFwdParticles->size() && last_fwd_part_index < 0) {
+      if ((*pListOfPrimaryFwdParticles)[i]->GetParticleName() == last_fwd_part_name) {
+        last_fwd_part_index = (G4int)i;
       }
       ++i;
     }
@@ -128,8 +111,7 @@ void G4AdjointTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     last_fwd_part_PDGEncoding_vec.push_back(last_fwd_part_PDGEncoding);
     last_fwd_part_index_vec.push_back(last_fwd_part_index);
   }
-  else
-  {
+  else {
   }
 }
 

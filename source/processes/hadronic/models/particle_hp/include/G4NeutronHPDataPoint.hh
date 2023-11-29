@@ -29,4 +29,4 @@
 #include "G4ParticleHPDataPoint.hh"
 using G4NeutronHPDataPoint = G4ParticleHPDataPoint;
 
-#endif 
+#endif

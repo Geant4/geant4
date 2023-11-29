@@ -162,7 +162,7 @@ G4Radioactivation::IsRateTableReady(const G4ParticleDefinition& aParticle)
   // Check whether the radioactive decay rates table for the ion has already
   // been calculated.
   G4String aParticleName = aParticle.GetParticleName();
-  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+  for (std::size_t i = 0; i < theParentChainTable.size(); ++i) {
     if (theParentChainTable[i].GetIonName() == aParticleName) return true;
   }
   return false;
@@ -175,7 +175,7 @@ G4Radioactivation::GetChainsFromParent(const G4ParticleDefinition& aParticle)
   // Retrieve the decay rate table for the specified aParticle
   G4String aParticleName = aParticle.GetParticleName();
 
-  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+  for (std::size_t i = 0; i < theParentChainTable.size(); ++i) {
     if (theParentChainTable[i].GetIonName() == aParticleName) {
       theDecayRateVector = theParentChainTable[i].GetItsRates();
     }
@@ -479,7 +479,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
           if (std::abs(daughterExcitation - nearestEnergy) < levelTolerance) {
             // Level half-life is in ns and the threshold is set to 1 micros
             // by default, user can set it via the UI command
-            nearestLevelIndex = levelManager->NearestLevelIndex(daughterExcitation);
+            nearestLevelIndex = (G4int)levelManager->NearestLevelIndex(daughterExcitation);
             if (levelManager->LifeTime(nearestLevelIndex)*ns >= halflifethreshold){
               // save the metastable decay channel 
               summedDecayTable->Insert(theChannel);
@@ -620,7 +620,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
             // first set the taos, one simply need to add to the parent ones
             taos.clear();
             taos = TP;   // load lifetimes of all previous generations 
-            size_t k;
+            std::size_t k;
             //check that TaoPlus differs from other taos from at least 1.e5 relative difference
             //for (k = 0; k < TP.size(); k++){
             //if (std::abs((TaoPlus-TP[k])/TP[k])<1.e-5 ) TaoPlus=1.00001*TP[k];
@@ -826,7 +826,7 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
                << " is not selected for the RDM"<< G4endl;
         G4cout << " There are " << ValidVolumes.size() << " volumes" << G4endl;
         G4cout << " The Valid volumes are " << G4endl;
-        for (size_t i = 0; i< ValidVolumes.size(); i++)
+        for (std::size_t i = 0; i< ValidVolumes.size(); ++i)
                                   G4cout << ValidVolumes[i] << G4endl;
       }
 #endif
@@ -914,7 +914,7 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
       G4double taotime;
       long double decayRate;
 
-      size_t i;
+      std::size_t i;
       G4int numberOfSecondaries;
       G4int totalNumberOfSecondaries = 0;
       G4double currentTime = 0.;
@@ -1072,7 +1072,7 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
           // save the secondaries for buffers
           numberOfSecondaries = tempprods->entries();
           currentTime = finalGlobalTime + theDecayTime;
-          for (index = 0; index < numberOfSecondaries; index++) {
+          for (index = 0; index < numberOfSecondaries; ++index) {
             asecondaryparticle = tempprods->PopProducts();
             if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
               pw.push_back(weight);
@@ -1094,9 +1094,9 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
 
       // now deal with the secondaries in the two stl containers
       // and submmit them back to the tracking manager
-      totalNumberOfSecondaries = pw.size();
+      totalNumberOfSecondaries = (G4int)pw.size();
       fParticleChangeForRadDecay.SetNumberOfSecondaries(totalNumberOfSecondaries);
-      for (index=0; index < totalNumberOfSecondaries; index++) { 
+      for (index=0; index < totalNumberOfSecondaries; ++index) { 
         G4Track* secondary = new G4Track(secondaryparticles[index],
                                          ptime[index], currentPosition);
         secondary->SetGoodForTrackingFlag(); 	   

@@ -59,56 +59,56 @@
 #include "G4ThreeVector.hh"
 #include "G4AnalysisManager.hh"
 
-
 class GammaRayTelAnalysisMessenger;
 class GammaRayTelDetectorConstruction;
 
 class GammaRayTelAnalysis {
 public:
-  virtual ~GammaRayTelAnalysis();
-  
-public:
+	~GammaRayTelAnalysis();
 
+	void BeginOfRun();
 
-  //  void BeginOfRun(G4int n);
+	void EndOfRun();
 
-  void BeginOfRun();
-  void EndOfRun();
-  void EndOfEvent(G4int flag);
+	void EndOfEvent(G4int flag);
 
-  void Init();
-  void Finish();
+	void Init();
 
-  void SetHisto2DMode(G4String str) {histo2DMode = str;};
-  G4String GetHisto2DMode() {return histo2DMode;};
-  
-  void InsertPositionXZ(double x, double z);
-  void InsertPositionYZ(double y, double z);
-  void InsertEnergy(double en);
-  void InsertHits(int nplane);
+	void Finish();
 
-  void setNtuple(float E, float p, float x, float y, float z);
+	void SetHisto2DMode(G4String value) {
+		histo2DMode = value;
+	}
 
-  static GammaRayTelAnalysis* getInstance();
+	auto GetHisto2DMode() -> G4String {
+		return histo2DMode;
+	}
 
-private:
+	void InsertPositionXZ(G4double x, G4double z);
 
-  GammaRayTelAnalysis();
+	void InsertPositionYZ(G4double y, G4double z);
 
-  //void plot1D(IHistogram1D* histo);
-  //void plot2D(IHistogram2D* histo);
-  void Plot();
+	void InsertEnergy(G4double energy);
+
+	void InsertHits(G4int planeNumber);
+
+	void setNtuple(G4double energy, G4int planeNumber, G4double x, G4double y, G4double z);
+
+	static auto getInstance() -> GammaRayTelAnalysis*;
 
 private:
-  static GammaRayTelAnalysis* instance;
+	GammaRayTelAnalysis();
 
-  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;
+	void Plot();
 
-  G4String histo2DMode;
-  G4String histoFileName;
+	static GammaRayTelAnalysis *instance;
 
-  GammaRayTelAnalysisMessenger* analysisMessenger;
+	const GammaRayTelDetectorConstruction *detector{nullptr};
+
+	G4String histo2DMode;
+
+	G4String histogramFileName;
+
+	GammaRayTelAnalysisMessenger *analysisMessenger;
 };
-
-
 #endif

@@ -36,9 +36,9 @@
 
 #include "globals.hh"
 
-class  G4ChargeState  // Charge & moments
+class G4ChargeState
 {
-   public:  // without description
+   public:
 
      inline G4ChargeState(G4double charge,
                           G4double magnetic_dipole_moment,
@@ -99,8 +99,8 @@ class  G4ChargeState  // Charge & moments
                                G4double electric_dipole_moment,
                                G4double magnetic_charge );
    
-   public: // Obsolete
-
+     // Obsolete
+     //
      inline void     SetSpin(G4double spin){ SetPDGSpin( spin); } 
      inline G4double GetSpin() const { return GetPDGSpin(); }
 
@@ -139,7 +139,7 @@ inline G4ChargeState::G4ChargeState( const G4ChargeState& right )
 
 inline G4ChargeState& G4ChargeState::operator = ( const G4ChargeState& right )
 {
-  if (&right == this) return *this;
+  if (&right == this) { return *this; }
 
   fCharge         = right.fCharge;
   fSpin           = right.fSpin;

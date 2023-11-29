@@ -47,7 +47,7 @@ class G4AntiDoubleHyperDoubleNeutron : public G4Ions {
   private:
     static G4AntiDoubleHyperDoubleNeutron* theInstance;
     G4AntiDoubleHyperDoubleNeutron()  {}
-    ~G4AntiDoubleHyperDoubleNeutron() {}
+    ~G4AntiDoubleHyperDoubleNeutron() override = default;
 };
 
 #endif

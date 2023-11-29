@@ -1,0 +1,2931 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+
+          ################################
+          !!! G4Backtrace is activated !!!
+          ################################
+
+
+**************************************************************
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
+    Default Physics Lists FTFP_BERT is instantiated
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -1100 mm 
+
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 1200 mm 	 y : -/+ 1200 mm 	 z : -/+ 1200 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 1000 mm 	 y : -/+ 1000 mm 	 z : -/+ 1000 mm 
+
+
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_POLYSTYRENE
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Enable creation and use of sampling tables         0
+Apply cuts on all EM processes                     0
+Use combined TransportationWithMsc                 Disabled
+Use general process                                1
+Enable linear polarisation for gamma               0
+Enable photoeffect sampling below K-shell          1
+Enable sampling of quantum entanglement            0
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      100 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins per decade of a table               7
+Verbose level                                      1
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary e+- is added to the list of secondary    100 TeV
+Bremsstrahlung energy threshold above which primary
+  muon/hadron is added to the list of secondary    100 TeV
+Lowest triplet kinetic energy                      1 MeV
+Enable sampling of gamma linear polarisation       0
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+Livermore data directory                           epics_2017
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Step function for light ions                       (0.2, 0.1 mm)
+Step function for general ions                     (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
+Use ICRU90 data                                    0
+Fluctuations of dE/dx are enabled                  1
+Type of fluctuation model for leptons and hadrons  Urban
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           0
+Use cut as a final range enabled                   0
+Enable angular generator interface                 0
+Max kinetic energy for CSDA tables                 1 GeV
+Max kinetic energy for NIEL computation            0 eV 
+Linear loss limit                                  0.01
+Read data from file for e+e- pair production by mu 0
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           1
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     0
+Urban msc model lateral displacement alg96         1
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Safety factor for msc step limit for e+-           0.6
+Skin parameter for msc step limitation of e+-      1
+Lambda limit for msc step limit for e+-            1 mm
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of electron single scattering model           0
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+
+phot:  for gamma SubType=12 BuildTable=0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila Fluo
+
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
+
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+     BetheHeitlerLPM : Emin=    0 eV  Emax=  100 TeV  ModifiedTsai
+
+Rayl:  for gamma SubType=11 BuildTable=1
+      Lambda table from 100 eV  to 150 keV, 7 bins/decade, spline: 0
+      LambdaPrime table from 150 keV to 100 TeV in 62 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
+
+msc:  for e-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e-  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+CoulombScat:  for e- XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for e+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 MeV Nbins=42 100 eV  - 100 MeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+        WentzelVIUni : Emin=  100 MeV Emax=  100 TeV Nbins=42 100 MeV - 100 TeV
+          StepLim=UseSafety Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+
+eIoni:  for e+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha : Emin=    0 eV  Emax=  100 TeV
+
+eBrem:  for e+  XStype:4  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB : Emin=    0 eV  Emax=    1 GeV  ModifiedTsai
+            eBremLPM : Emin=    1 GeV Emax=  100 TeV  ModifiedTsai
+
+annihil:  for e+ XStype:2 SubType=5 BuildTable=0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg : Emin=    0 eV  Emax=  100 TeV
+
+CoulombScat:  for e+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from 100 MeV to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=  100 MeV Emax=  100 TeV
+
+msc:  for proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for proton  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for GenericIon  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for GenericIon  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+msc:  for alpha  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc : Emin=    0 eV  Emax=  100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+ionIoni:  for alpha  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon : Emin=    0 eV  Emax=7.9452 MeV
+          BetheBloch : Emin=7.9452 MeV Emax=  100 TeV
+
+msc:  for anti_proton  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for anti_proton  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=    2 MeV
+          BetheBloch : Emin=    2 MeV Emax=  100 TeV
+
+hBrems:  for anti_proton  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for anti_proton  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for anti_proton XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for kaon-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for kaon-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=1.05231 MeV
+          BetheBloch : Emin=1.05231 MeV Emax=  100 TeV
+
+hBrems:  for kaon-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for kaon-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for kaon- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=  200 keV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+
+muBrems:  for mu+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for mu-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+muIoni:  for mu-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=  200 keV
+        MuBetheBloch : Emin=  200 keV Emax=  100 TeV
+
+muBrems:  for mu-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+muPairProd:  for mu-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 21x1001 from 0.85 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi+  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi+  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi+  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi+  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi+ XStype:1 SubType=1 BuildTable=1
+      Lambda table from threshold  to 100 TeV, 7 bins/decade, spline: 0
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+msc:  for pi-  SubType= 10
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
+          StepLim=Minimal Rfact=0.2 Gfact=2.5 Sfact=0.6 DispFlag:0 Skin=1 Llim=1 mm
+
+hIoni:  for pi-  XStype:3  SubType=2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      StepFunction=(0.2, 0.1 mm), integ: 3, fluct: 1, linLossLim= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO : Emin=    0 eV  Emax=297.505 keV
+          BetheBloch : Emin=297.505 keV Emax=  100 TeV
+
+hBrems:  for pi-  XStype:1  SubType=3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+hPairProd:  for pi-  XStype:1  SubType=4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins/decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd : Emin=    0 eV  Emax=  100 TeV  ModifiedMephi
+
+CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for B-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: B-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for D-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: D-Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_hypertriton
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: anti_lambdaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
+
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:               GammaNPreco: 0 eV  ---> 200 MeV
+        Model:            BertiniCascade: 199 MeV ---> 6 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: lambdaInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:           hElasticGlauber: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
+
+
+---------------------------------------------------
+                           Hadronic Processes for sigma-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: sigma-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
+
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
+        Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
+
+
+================================================================
+=======================================================================
+======       Geant4 Native Pre-compound Model Parameters       ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound excitation low energy                  100 keV
+Pre-compound excitation high energy                 30 MeV
+Angular generator for pre-compound model            1
+Use NeverGoBack option for pre-compound model       0
+Use SoftCutOff option for pre-compound model        0
+Use CEM transitions for pre-compound model          1
+Use GNASH transitions for pre-compound model        0
+Use HETC submodel for pre-compound model            0
+=======================================================================
+======       Nuclear De-excitation Module Parameters           ========
+=======================================================================
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy                               10 eV 
+Min energy per nucleon for multifragmentation       200 GeV
+Limit excitation energy for Fermi BreakUp           20 MeV
+Level density (1/MeV)                               0.075
+Use simple level density model                      1
+Use discrete excitation energy of the residual      1
+Time limit for long lived isomeres                  1 ns 
+Isomer production flag                              1
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 0 starts.
+### Run 0 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=1.210000s Real=2.769242s Sys=0.020000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 0
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_POLYSTYRENE
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0173511
+   case=  1     downstream                      electron   0.00198515
+   case=  2     downstream                         gamma   0.0136576
+   case=  3     downstream                          muon   1.35075e-05
+   case=  4     downstream                      neutrino   0.000123324
+   case=  5     downstream                          pion   0.000728961
+   case=  6     downstream                       neutron   0.000581473
+   case=  7     downstream                        proton   0.000211392
+   case=  8     downstream                           ion   6.19472e-06
+   case=  9     downstream                    otherMeson   4.21909e-05
+   case= 10     downstream                   otherBaryon   1.2848e-06
+   case= 11     downstream   below 20 MeV            all   0.0121527
+   case= 12     downstream   below 20 MeV       electron   0.000831977
+   case= 13     downstream   below 20 MeV          gamma   0.0111278
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   1.1164e-05
+   case= 16     downstream   below 20 MeV           pion   1.33288e-06
+   case= 17     downstream   below 20 MeV        neutron   0.000166696
+   case= 18     downstream   below 20 MeV         proton   1.17214e-05
+   case= 19     downstream   below 20 MeV            ion   1.97021e-06
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00519839
+   case= 23     downstream   above 20 MeV       electron   0.00115317
+   case= 24     downstream   above 20 MeV          gamma   0.00252978
+   case= 25     downstream   above 20 MeV           muon   1.35075e-05
+   case= 26     downstream   above 20 MeV       neutrino   0.00011216
+   case= 27     downstream   above 20 MeV           pion   0.000727628
+   case= 28     downstream   above 20 MeV        neutron   0.000414776
+   case= 29     downstream   above 20 MeV         proton   0.000199671
+   case= 30     downstream   above 20 MeV            ion   4.22451e-06
+   case= 31     downstream   above 20 MeV     otherMeson   4.21909e-05
+   case= 32     downstream   above 20 MeV    otherBaryon   1.2848e-06
+   case= 33           side                           all   0.00145159
+   case= 34           side                      electron   7.26962e-05
+   case= 35           side                         gamma   0.00118056
+   case= 36           side                          muon   1.39982e-06
+   case= 37           side                      neutrino   6.90001e-05
+   case= 38           side                          pion   1.87256e-05
+   case= 39           side                       neutron   0.000102263
+   case= 40           side                        proton   5.84157e-06
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson   1.10206e-06
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00117491
+   case= 45           side   below 20 MeV       electron   3.87305e-05
+   case= 46           side   below 20 MeV          gamma   0.00109537
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   6.34758e-06
+   case= 49           side   below 20 MeV           pion   1.08172e-06
+   case= 50           side   below 20 MeV        neutron   3.33835e-05
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.00027668
+   case= 56           side   above 20 MeV       electron   3.39657e-05
+   case= 57           side   above 20 MeV          gamma   8.51956e-05
+   case= 58           side   above 20 MeV           muon   1.39982e-06
+   case= 59           side   above 20 MeV       neutrino   6.26525e-05
+   case= 60           side   above 20 MeV           pion   1.76439e-05
+   case= 61           side   above 20 MeV        neutron   6.88792e-05
+   case= 62           side   above 20 MeV         proton   5.84157e-06
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson   1.10206e-06
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.000662143
+   case= 67       upstream                      electron   2.38168e-05
+   case= 68       upstream                         gamma   0.000520863
+   case= 69       upstream                          muon   2.04687e-06
+   case= 70       upstream                      neutrino   5.28927e-05
+   case= 71       upstream                          pion   2.10911e-06
+   case= 72       upstream                       neutron   5.89259e-05
+   case= 73       upstream                        proton   1.48823e-06
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.000503296
+   case= 78       upstream   below 20 MeV       electron   1.47295e-05
+   case= 79       upstream   below 20 MeV          gamma   0.000462952
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   3.70767e-06
+   case= 82       upstream   below 20 MeV           pion          0
+   case= 83       upstream   below 20 MeV        neutron   2.19062e-05
+   case= 84       upstream   below 20 MeV         proton          0
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000158847
+   case= 89       upstream   above 20 MeV       electron   9.0873e-06
+   case= 90       upstream   above 20 MeV          gamma   5.79112e-05
+   case= 91       upstream   above 20 MeV           muon   2.04687e-06
+   case= 92       upstream   above 20 MeV       neutrino   4.9185e-05
+   case= 93       upstream   above 20 MeV           pion   2.10911e-06
+   case= 94       upstream   above 20 MeV        neutron   3.70197e-05
+   case= 95       upstream   above 20 MeV         proton   1.48823e-06
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    2061.92    36.9508    76189.6
+   case=  1          layer                      electron    1687.62    6.32602    10675.9
+   case=  2          layer                         gamma     256.45    71.7119    18390.5
+   case=  3          layer                          muon       0.94    104.563    98.2888
+   case=  4          layer                      neutrino       2.54    46.0113    116.869
+   case=  5          layer                          pion       17.1     2122.3    36291.4
+   case=  6          layer                       neutron      17.35    160.601    2786.43
+   case=  7          layer                        proton      38.78    66.5071    2579.14
+   case=  8          layer                           ion      39.63    5.04891    200.088
+   case=  9          layer                    otherMeson       1.32    3712.57     4900.6
+   case= 10          layer                   otherBaryon       0.19    791.487    150.383
+   case= 11          layer   below 20 MeV            all    1965.75   0.583028    1146.09
+   case= 12          layer   below 20 MeV       electron    1664.49   0.329969    549.229
+   case= 13          layer   below 20 MeV          gamma     222.27    1.51716    337.219
+   case= 14          layer   below 20 MeV           muon       0.77    4.11981    3.17226
+   case= 15          layer   below 20 MeV       neutrino       0.21    14.2738     2.9975
+   case= 16          layer   below 20 MeV           pion        0.4    10.0484    4.01938
+   case= 17          layer   below 20 MeV        neutron       8.66     6.2999    54.5572
+   case= 18          layer   below 20 MeV         proton      31.18     2.8427    88.6355
+   case= 19          layer   below 20 MeV            ion      37.75    2.81114    106.121
+   case= 20          layer   below 20 MeV     otherMeson       0.01    3.28858   0.0328858
+   case= 21          layer   below 20 MeV    otherBaryon       0.01    10.3968   0.103968
+   case= 22          layer   above 20 MeV            all      96.17    780.322    75043.5
+   case= 23          layer   above 20 MeV       electron      23.13    437.816    10126.7
+   case= 24          layer   above 20 MeV          gamma      34.18    528.183    18053.3
+   case= 25          layer   above 20 MeV           muon       0.17    559.509    95.1166
+   case= 26          layer   above 20 MeV       neutrino       2.33    48.8718    113.871
+   case= 27          layer   above 20 MeV           pion       16.7    2172.89    36287.3
+   case= 28          layer   above 20 MeV        neutron       8.69     314.37    2731.87
+   case= 29          layer   above 20 MeV         proton        7.6    327.699    2490.51
+   case= 30          layer   above 20 MeV            ion       1.88    49.9827    93.9674
+   case= 31          layer   above 20 MeV     otherMeson       1.31    3740.89    4900.57
+   case= 32          layer   above 20 MeV    otherBaryon       0.18    834.881    150.279
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_GRAPHITE
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : Yes
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 1 starts.
+### Run 1 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=6.810000s Real=7.984195s Sys=0.020000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 1
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_GRAPHITE
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0481722
+   case=  1     downstream                      electron   0.00467628
+   case=  2     downstream                         gamma   0.0396556
+   case=  3     downstream                          muon   1.14832e-05
+   case=  4     downstream                      neutrino   0.000362995
+   case=  5     downstream                          pion   0.000756358
+   case=  6     downstream                       neutron   0.00233311
+   case=  7     downstream                        proton   0.000303628
+   case=  8     downstream                           ion   5.1958e-06
+   case=  9     downstream                    otherMeson   6.4298e-05
+   case= 10     downstream                   otherBaryon   3.28914e-06
+   case= 11     downstream   below 20 MeV            all   0.0385548
+   case= 12     downstream   below 20 MeV       electron   0.00248591
+   case= 13     downstream   below 20 MeV          gamma   0.034692
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   1.57781e-05
+   case= 16     downstream   below 20 MeV           pion   7.45471e-06
+   case= 17     downstream   below 20 MeV        neutron   0.00134027
+   case= 18     downstream   below 20 MeV         proton   9.55731e-06
+   case= 19     downstream   below 20 MeV            ion   3.88639e-06
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00961738
+   case= 23     downstream   above 20 MeV       electron   0.00219037
+   case= 24     downstream   above 20 MeV          gamma   0.0049636
+   case= 25     downstream   above 20 MeV           muon   1.14832e-05
+   case= 26     downstream   above 20 MeV       neutrino   0.000347217
+   case= 27     downstream   above 20 MeV           pion   0.000748903
+   case= 28     downstream   above 20 MeV        neutron   0.000992839
+   case= 29     downstream   above 20 MeV         proton   0.000294071
+   case= 30     downstream   above 20 MeV            ion   1.30941e-06
+   case= 31     downstream   above 20 MeV     otherMeson   6.4298e-05
+   case= 32     downstream   above 20 MeV    otherBaryon   3.28914e-06
+   case= 33           side                           all   0.00301391
+   case= 34           side                      electron   0.000111668
+   case= 35           side                         gamma   0.0021088
+   case= 36           side                          muon   1.42731e-06
+   case= 37           side                      neutrino   0.000230986
+   case= 38           side                          pion   1.6189e-05
+   case= 39           side                       neutron   0.000533405
+   case= 40           side                        proton   1.01507e-05
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson   1.27767e-06
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00242206
+   case= 45           side   below 20 MeV       electron   6.64543e-05
+   case= 46           side   below 20 MeV          gamma   0.0019691
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.45855e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.000361554
+   case= 51           side   below 20 MeV         proton   3.67268e-07
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000591845
+   case= 56           side   above 20 MeV       electron   4.52133e-05
+   case= 57           side   above 20 MeV          gamma   0.000139702
+   case= 58           side   above 20 MeV           muon   1.42731e-06
+   case= 59           side   above 20 MeV       neutrino   0.000206401
+   case= 60           side   above 20 MeV           pion   1.6189e-05
+   case= 61           side   above 20 MeV        neutron   0.000171852
+   case= 62           side   above 20 MeV         proton   9.78341e-06
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson   1.27767e-06
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.00199284
+   case= 67       upstream                      electron   3.4107e-05
+   case= 68       upstream                         gamma   0.00120073
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.000233718
+   case= 71       upstream                          pion   2.19411e-05
+   case= 72       upstream                       neutron   0.000498355
+   case= 73       upstream                        proton   2.68857e-06
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson   1.2994e-06
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.00156539
+   case= 78       upstream   below 20 MeV       electron   9.14757e-06
+   case= 79       upstream   below 20 MeV          gamma   0.00113644
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   2.02009e-05
+   case= 82       upstream   below 20 MeV           pion   5.56888e-06
+   case= 83       upstream   below 20 MeV        neutron   0.000394033
+   case= 84       upstream   below 20 MeV         proton          0
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000427451
+   case= 89       upstream   above 20 MeV       electron   2.49595e-05
+   case= 90       upstream   above 20 MeV          gamma   6.42923e-05
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000213517
+   case= 93       upstream   above 20 MeV           pion   1.63722e-05
+   case= 94       upstream   above 20 MeV        neutron   0.000104322
+   case= 95       upstream   above 20 MeV         proton   2.68857e-06
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson   1.2994e-06
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all      12927    10.2903     133022
+   case=  1          layer                      electron    10991.2     2.3032      25315
+   case=  2          layer                         gamma    1300.35    23.9431    31134.4
+   case=  3          layer                          muon       3.16    25.7393    81.3362
+   case=  4          layer                      neutrino       9.25    35.7951    331.105
+   case=  5          layer                          pion      38.31    1341.05    51375.7
+   case=  6          layer                       neutron       85.5    77.2093    6601.39
+   case=  7          layer                        proton      47.37    150.758    7141.39
+   case=  8          layer                           ion      448.5    1.84156    825.937
+   case=  9          layer                    otherMeson        2.6    3452.87    8977.47
+   case= 10          layer                   otherBaryon       0.78    1588.01    1238.64
+   case= 11          layer   below 20 MeV            all    12610.1   0.427379    5389.28
+   case= 12          layer   below 20 MeV       electron      10894   0.241477    2630.65
+   case= 13          layer   below 20 MeV          gamma    1193.67    1.39373    1663.65
+   case= 14          layer   below 20 MeV           muon       2.85    4.19039    11.9426
+   case= 15          layer   below 20 MeV       neutrino       0.83    13.9606    11.5873
+   case= 16          layer   below 20 MeV           pion       0.69    11.9604    8.25265
+   case= 17          layer   below 20 MeV        neutron      50.37    6.11945    308.237
+   case= 18          layer   below 20 MeV         proton      24.07    7.47069     179.82
+   case= 19          layer   below 20 MeV            ion     443.52    1.29503    574.374
+   case= 20          layer   below 20 MeV     otherMeson       0.03    8.55307   0.256592
+   case= 21          layer   below 20 MeV    otherBaryon       0.04    12.6165   0.504661
+   case= 22          layer   above 20 MeV            all     316.97    402.666     127633
+   case= 23          layer   above 20 MeV       electron      97.22     233.33    22684.3
+   case= 24          layer   above 20 MeV          gamma     106.68    276.254    29470.8
+   case= 25          layer   above 20 MeV           muon       0.31     223.85    69.3936
+   case= 26          layer   above 20 MeV       neutrino       8.42    37.9475    319.518
+   case= 27          layer   above 20 MeV           pion      37.62    1365.43    51367.5
+   case= 28          layer   above 20 MeV        neutron      35.13    179.139    6293.16
+   case= 29          layer   above 20 MeV         proton       23.3     298.78    6961.57
+   case= 30          layer   above 20 MeV            ion       4.98    50.5149    251.564
+   case= 31          layer   above 20 MeV     otherMeson       2.57    3493.08    8977.21
+   case= 32          layer   above 20 MeV    otherBaryon       0.74    1673.16    1238.14
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_Si
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 2 starts.
+### Run 2 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=7.960000s Real=8.104688s Sys=0.020000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 2
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_Si
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0697971
+   case=  1     downstream                      electron   0.00514584
+   case=  2     downstream                         gamma   0.0601827
+   case=  3     downstream                          muon   1.13185e-05
+   case=  4     downstream                      neutrino   0.000294311
+   case=  5     downstream                          pion   0.000685834
+   case=  6     downstream                       neutron   0.00315144
+   case=  7     downstream                        proton   0.000260306
+   case=  8     downstream                           ion   1.01354e-05
+   case=  9     downstream                    otherMeson   5.25182e-05
+   case= 10     downstream                   otherBaryon   2.64846e-06
+   case= 11     downstream   below 20 MeV            all   0.0610889
+   case= 12     downstream   below 20 MeV       electron   0.00330768
+   case= 13     downstream   below 20 MeV          gamma   0.055506
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   1.30389e-05
+   case= 16     downstream   below 20 MeV           pion   1.85215e-06
+   case= 17     downstream   below 20 MeV        neutron   0.00225364
+   case= 18     downstream   below 20 MeV         proton   5.01579e-06
+   case= 19     downstream   below 20 MeV            ion   1.6607e-06
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00870818
+   case= 23     downstream   above 20 MeV       electron   0.00183816
+   case= 24     downstream   above 20 MeV          gamma   0.00467672
+   case= 25     downstream   above 20 MeV           muon   1.13185e-05
+   case= 26     downstream   above 20 MeV       neutrino   0.000281272
+   case= 27     downstream   above 20 MeV           pion   0.000683982
+   case= 28     downstream   above 20 MeV        neutron   0.000897805
+   case= 29     downstream   above 20 MeV         proton   0.00025529
+   case= 30     downstream   above 20 MeV            ion   8.47467e-06
+   case= 31     downstream   above 20 MeV     otherMeson   5.25182e-05
+   case= 32     downstream   above 20 MeV    otherBaryon   2.64846e-06
+   case= 33           side                           all   0.00309171
+   case= 34           side                      electron   5.55059e-05
+   case= 35           side                         gamma   0.00166089
+   case= 36           side                          muon   1.16644e-06
+   case= 37           side                      neutrino   0.000148356
+   case= 38           side                          pion   1.12895e-05
+   case= 39           side                       neutron   0.00121326
+   case= 40           side                        proton   7.92019e-07
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson   4.46262e-07
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00272137
+   case= 45           side   below 20 MeV       electron   4.24998e-05
+   case= 46           side   below 20 MeV          gamma   0.00160878
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   1.19669e-05
+   case= 49           side   below 20 MeV           pion   3.26286e-07
+   case= 50           side   below 20 MeV        neutron   0.00105779
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.00037034
+   case= 56           side   above 20 MeV       electron   1.30061e-05
+   case= 57           side   above 20 MeV          gamma   5.21081e-05
+   case= 58           side   above 20 MeV           muon   1.16644e-06
+   case= 59           side   above 20 MeV       neutrino   0.000136389
+   case= 60           side   above 20 MeV           pion   1.09632e-05
+   case= 61           side   above 20 MeV        neutron   0.000155469
+   case= 62           side   above 20 MeV         proton   7.92019e-07
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson   4.46262e-07
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.00240171
+   case= 67       upstream                      electron   2.79801e-05
+   case= 68       upstream                         gamma   0.00111041
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.00011698
+   case= 71       upstream                          pion   2.77734e-06
+   case= 72       upstream                       neutron   0.00114166
+   case= 73       upstream                        proton   1.90613e-06
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.00216241
+   case= 78       upstream   below 20 MeV       electron   1.61123e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00108933
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   1.42822e-05
+   case= 82       upstream   below 20 MeV           pion          0
+   case= 83       upstream   below 20 MeV        neutron   0.00104078
+   case= 84       upstream   below 20 MeV         proton   1.90613e-06
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000239306
+   case= 89       upstream   above 20 MeV       electron   1.18678e-05
+   case= 90       upstream   above 20 MeV          gamma   2.10799e-05
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000102697
+   case= 93       upstream   above 20 MeV           pion   2.77734e-06
+   case= 94       upstream   above 20 MeV        neutron   0.000100883
+   case= 95       upstream   above 20 MeV         proton          0
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all      18419    7.97234     146843
+   case=  1          layer                      electron    14802.9    2.52366    37357.6
+   case=  2          layer                         gamma    3190.23    12.9621      41352
+   case=  3          layer                          muon       2.08    31.5154    65.5521
+   case=  4          layer                      neutrino          6    36.2035    217.221
+   case=  5          layer                          pion      27.44    1668.84    45793.1
+   case=  6          layer                       neutron      92.69    64.6061    5988.34
+   case=  7          layer                        proton      65.75     77.162     5073.4
+   case=  8          layer                           ion     229.12    1.85407    424.804
+   case=  9          layer                    otherMeson       2.26    4202.58    9497.84
+   case= 10          layer                   otherBaryon       0.55    1951.16    1073.14
+   case= 11          layer   below 20 MeV            all    17984.1   0.555162    9984.09
+   case= 12          layer   below 20 MeV       electron    14630.7   0.364427    5331.83
+   case= 13          layer   below 20 MeV          gamma    3015.75    1.26697    3820.87
+   case= 14          layer   below 20 MeV           muon       1.89    4.17725      7.895
+   case= 15          layer   below 20 MeV       neutrino       0.48    13.3524    6.40916
+   case= 16          layer   below 20 MeV           pion       0.42    12.2935    5.16327
+   case= 17          layer   below 20 MeV        neutron      65.47    4.38491     287.08
+   case= 18          layer   below 20 MeV         proton      44.07    6.44338     283.96
+   case= 19          layer   below 20 MeV            ion     225.25    1.06552    240.009
+   case= 20          layer   below 20 MeV     otherMeson       0.03     15.716    0.47148
+   case= 21          layer   below 20 MeV    otherBaryon       0.04    10.1948    0.40779
+   case= 22          layer   above 20 MeV            all     434.94    314.661     136859
+   case= 23          layer   above 20 MeV       electron     172.22    185.958    32025.7
+   case= 24          layer   above 20 MeV          gamma     174.48    215.103    37531.1
+   case= 25          layer   above 20 MeV           muon       0.19    303.458    57.6571
+   case= 26          layer   above 20 MeV       neutrino       5.52    38.1905    210.812
+   case= 27          layer   above 20 MeV           pion      27.02    1694.59    45787.9
+   case= 28          layer   above 20 MeV        neutron      27.22    209.451    5701.26
+   case= 29          layer   above 20 MeV         proton      21.68    220.915    4789.44
+   case= 30          layer   above 20 MeV            ion       3.87    47.7505    184.795
+   case= 31          layer   above 20 MeV     otherMeson       2.23    4258.91    9497.36
+   case= 32          layer   above 20 MeV    otherBaryon       0.51     2103.4    1072.73
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_lAr
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : Yes
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 3 starts.
+### Run 3 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=2.880000s Real=2.984558s Sys=0.010000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 3
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_lAr
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0475061
+   case=  1     downstream                      electron   0.00429097
+   case=  2     downstream                         gamma   0.0398061
+   case=  3     downstream                          muon   1.25897e-05
+   case=  4     downstream                      neutrino   0.00012539
+   case=  5     downstream                          pion   0.000593793
+   case=  6     downstream                       neutron   0.00244348
+   case=  7     downstream                        proton   0.000197917
+   case=  8     downstream                           ion   1.32207e-06
+   case=  9     downstream                    otherMeson   3.46298e-05
+   case= 10     downstream                   otherBaryon          0
+   case= 11     downstream   below 20 MeV            all   0.0407074
+   case= 12     downstream   below 20 MeV       electron   0.00259106
+   case= 13     downstream   below 20 MeV          gamma   0.0362682
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   5.71757e-06
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.00183203
+   case= 18     downstream   below 20 MeV         proton   1.0376e-05
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00679876
+   case= 23     downstream   above 20 MeV       electron   0.0016999
+   case= 24     downstream   above 20 MeV          gamma   0.00353786
+   case= 25     downstream   above 20 MeV           muon   1.25897e-05
+   case= 26     downstream   above 20 MeV       neutrino   0.000119672
+   case= 27     downstream   above 20 MeV           pion   0.000593793
+   case= 28     downstream   above 20 MeV        neutron   0.000611451
+   case= 29     downstream   above 20 MeV         proton   0.000187541
+   case= 30     downstream   above 20 MeV            ion   1.32207e-06
+   case= 31     downstream   above 20 MeV     otherMeson   3.46298e-05
+   case= 32     downstream   above 20 MeV    otherBaryon          0
+   case= 33           side                           all   0.00300847
+   case= 34           side                      electron   6.09104e-05
+   case= 35           side                         gamma   0.00192041
+   case= 36           side                          muon   1.18868e-06
+   case= 37           side                      neutrino   4.45536e-05
+   case= 38           side                          pion   1.50321e-05
+   case= 39           side                       neutron   0.000960791
+   case= 40           side                        proton   4.81854e-06
+   case= 41           side                           ion   3.44836e-07
+   case= 42           side                    otherMeson   4.21449e-07
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00277942
+   case= 45           side   below 20 MeV       electron   4.51171e-05
+   case= 46           side   below 20 MeV          gamma   0.00187422
+   case= 47           side   below 20 MeV           muon   3.24241e-07
+   case= 48           side   below 20 MeV       neutrino   2.23623e-06
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.000857524
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000229042
+   case= 56           side   above 20 MeV       electron   1.57933e-05
+   case= 57           side   above 20 MeV          gamma   4.61826e-05
+   case= 58           side   above 20 MeV           muon   8.64437e-07
+   case= 59           side   above 20 MeV       neutrino   4.23174e-05
+   case= 60           side   above 20 MeV           pion   1.50321e-05
+   case= 61           side   above 20 MeV        neutron   0.000103267
+   case= 62           side   above 20 MeV         proton   4.81854e-06
+   case= 63           side   above 20 MeV            ion   3.44836e-07
+   case= 64           side   above 20 MeV     otherMeson   4.21449e-07
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.00154168
+   case= 67       upstream                      electron   2.25614e-05
+   case= 68       upstream                         gamma   0.000774236
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   3.36032e-05
+   case= 71       upstream                          pion   2.05104e-06
+   case= 72       upstream                       neutron   0.000707557
+   case= 73       upstream                        proton   1.66998e-06
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.00141106
+   case= 78       upstream   below 20 MeV       electron   1.63836e-05
+   case= 79       upstream   below 20 MeV          gamma   0.000764378
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   6.11104e-06
+   case= 82       upstream   below 20 MeV           pion          0
+   case= 83       upstream   below 20 MeV        neutron   0.000624187
+   case= 84       upstream   below 20 MeV         proton          0
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000130619
+   case= 89       upstream   above 20 MeV       electron   6.17777e-06
+   case= 90       upstream   above 20 MeV          gamma   9.85813e-06
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   2.74922e-05
+   case= 93       upstream   above 20 MeV           pion   2.05104e-06
+   case= 94       upstream   above 20 MeV        neutron   8.33699e-05
+   case= 95       upstream   above 20 MeV         proton   1.66998e-06
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    5140.12    14.5164    74616.2
+   case=  1          layer                      electron     3780.9    4.34099    16412.9
+   case=  2          layer                         gamma    1178.63    18.1736    21419.9
+   case=  3          layer                          muon       0.71    111.114    78.8907
+   case=  4          layer                      neutrino       1.88     60.744    114.199
+   case=  5          layer                          pion      13.39    2013.38    26959.1
+   case=  6          layer                       neutron      58.74    39.8858    2342.89
+   case=  7          layer                        proton      15.15    126.028    1909.33
+   case=  8          layer                           ion       89.4    1.80237    161.132
+   case=  9          layer                    otherMeson       1.13    4420.68    4995.37
+   case= 10          layer                   otherBaryon       0.19     1171.1    222.508
+   case= 11          layer   below 20 MeV            all    4967.14   0.671887    3337.36
+   case= 12          layer   below 20 MeV       electron    3719.49   0.434985    1617.92
+   case= 13          layer   below 20 MeV          gamma    1104.48    1.26603    1398.31
+   case= 14          layer   below 20 MeV           muon       0.53    4.39291    2.32824
+   case= 15          layer   below 20 MeV       neutrino       0.14    13.3807    1.87329
+   case= 16          layer   below 20 MeV           pion       0.12    13.0786    1.56943
+   case= 17          layer   below 20 MeV        neutron      47.19    3.75975    177.423
+   case= 18          layer   below 20 MeV         proton       7.37    8.43397    62.1584
+   case= 19          layer   below 20 MeV            ion      87.79   0.859731    75.4758
+   case= 20          layer   below 20 MeV     otherMeson       0.02    7.83413   0.156683
+   case= 21          layer   below 20 MeV    otherBaryon       0.01    13.9762   0.139762
+   case= 22          layer   above 20 MeV            all     172.98    412.064    71278.9
+   case= 23          layer   above 20 MeV       electron      61.41    240.921    14794.9
+   case= 24          layer   above 20 MeV          gamma      74.15    270.015    20021.6
+   case= 25          layer   above 20 MeV           muon       0.18    425.347    76.5624
+   case= 26          layer   above 20 MeV       neutrino       1.74    64.5549    112.326
+   case= 27          layer   above 20 MeV           pion      13.27    2031.47    26957.6
+   case= 28          layer   above 20 MeV        neutron      11.55    187.487    2165.47
+   case= 29          layer   above 20 MeV         proton       7.78    237.426    1847.17
+   case= 30          layer   above 20 MeV            ion       1.61    53.2026    85.6561
+   case= 31          layer   above 20 MeV     otherMeson       1.11    4500.19    4995.21
+   case= 32          layer   above 20 MeV    otherBaryon       0.18    1235.38    222.369
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_Fe
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : Yes
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 4 starts.
+### Run 4 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=38.360000s Real=38.666596s Sys=0.020000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 4
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_Fe
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0143888
+   case=  1     downstream                      electron   0.00032483
+   case=  2     downstream                         gamma   0.00577779
+   case=  3     downstream                          muon   3.58648e-06
+   case=  4     downstream                      neutrino   0.000403655
+   case=  5     downstream                          pion   0.000134971
+   case=  6     downstream                       neutron   0.00766368
+   case=  7     downstream                        proton   6.75161e-05
+   case=  8     downstream                           ion          0
+   case=  9     downstream                    otherMeson   1.14988e-05
+   case= 10     downstream                   otherBaryon   1.27395e-06
+   case= 11     downstream   below 20 MeV            all   0.0128814
+   case= 12     downstream   below 20 MeV       electron   0.000266748
+   case= 13     downstream   below 20 MeV          gamma   0.0055706
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   3.88817e-05
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.00699595
+   case= 18     downstream   below 20 MeV         proton   7.59211e-06
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson   1.59465e-06
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00150744
+   case= 23     downstream   above 20 MeV       electron   5.80819e-05
+   case= 24     downstream   above 20 MeV          gamma   0.000207189
+   case= 25     downstream   above 20 MeV           muon   3.58648e-06
+   case= 26     downstream   above 20 MeV       neutrino   0.000364773
+   case= 27     downstream   above 20 MeV           pion   0.000134971
+   case= 28     downstream   above 20 MeV        neutron   0.000667732
+   case= 29     downstream   above 20 MeV         proton   5.9924e-05
+   case= 30     downstream   above 20 MeV            ion          0
+   case= 31     downstream   above 20 MeV     otherMeson   9.9041e-06
+   case= 32     downstream   above 20 MeV    otherBaryon   1.27395e-06
+   case= 33           side                           all   0.00505949
+   case= 34           side                      electron   4.48743e-06
+   case= 35           side                         gamma   0.000609683
+   case= 36           side                          muon          0
+   case= 37           side                      neutrino   0.000297204
+   case= 38           side                          pion   6.57837e-07
+   case= 39           side                       neutron   0.00414667
+   case= 40           side                        proton   7.94153e-07
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson          0
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00464631
+   case= 45           side   below 20 MeV       electron   4.48743e-06
+   case= 46           side   below 20 MeV          gamma   0.000609683
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.52355e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.0040069
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000413184
+   case= 56           side   above 20 MeV       electron          0
+   case= 57           side   above 20 MeV          gamma          0
+   case= 58           side   above 20 MeV           muon          0
+   case= 59           side   above 20 MeV       neutrino   0.000271968
+   case= 60           side   above 20 MeV           pion   6.57837e-07
+   case= 61           side   above 20 MeV        neutron   0.000139764
+   case= 62           side   above 20 MeV         proton   7.94153e-07
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson          0
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.0128302
+   case= 67       upstream                      electron   4.97679e-05
+   case= 68       upstream                         gamma   0.00270875
+   case= 69       upstream                          muon   6.78624e-06
+   case= 70       upstream                      neutrino   0.000467338
+   case= 71       upstream                          pion   2.05153e-05
+   case= 72       upstream                       neutron   0.00957209
+   case= 73       upstream                        proton   4.9756e-06
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.0120643
+   case= 78       upstream   below 20 MeV       electron   4.07197e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00269121
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   4.28801e-05
+   case= 82       upstream   below 20 MeV           pion   1.31361e-06
+   case= 83       upstream   below 20 MeV        neutron   0.00928619
+   case= 84       upstream   below 20 MeV         proton   2.00813e-06
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000765902
+   case= 89       upstream   above 20 MeV       electron   9.04823e-06
+   case= 90       upstream   above 20 MeV          gamma   1.75392e-05
+   case= 91       upstream   above 20 MeV           muon   6.78624e-06
+   case= 92       upstream   above 20 MeV       neutrino   0.000424458
+   case= 93       upstream   above 20 MeV           pion   1.92017e-05
+   case= 94       upstream   above 20 MeV        neutron   0.000285902
+   case= 95       upstream   above 20 MeV         proton   2.96747e-06
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    56139.2    4.42757     248560
+   case=  1          layer                      electron    42061.7    1.74463      73382
+   case=  2          layer                         gamma    11858.7    6.05404    71792.7
+   case=  3          layer                          muon        4.3    19.8379     85.303
+   case=  4          layer                      neutrino      12.81     38.582    494.235
+   case=  5          layer                          pion      47.36    1271.47    60217.1
+   case=  6          layer                       neutron     846.52    18.8098    15922.9
+   case=  7          layer                        proton     191.11    69.0626    13198.6
+   case=  8          layer                           ion    1111.42   0.979649     1088.8
+   case=  9          layer                    otherMeson       4.18    2600.26    10869.1
+   case= 10          layer                   otherBaryon       1.12    1347.93    1509.68
+   case= 11          layer   below 20 MeV            all    55107.4   0.654734    36080.7
+   case= 12          layer   below 20 MeV       electron    41655.2   0.448366    18676.8
+   case= 13          layer   below 20 MeV          gamma    11491.6    1.21626    13976.7
+   case= 14          layer   below 20 MeV           muon       3.88    4.11981    15.9849
+   case= 15          layer   below 20 MeV       neutrino       1.08    14.7833     15.966
+   case= 16          layer   below 20 MeV           pion       0.83    12.5926    10.4519
+   case= 17          layer   below 20 MeV        neutron     731.45    2.55785    1870.94
+   case= 18          layer   below 20 MeV         proton     121.26     8.0025    970.383
+   case= 19          layer   below 20 MeV            ion    1101.77   0.490282    540.178
+   case= 20          layer   below 20 MeV     otherMeson        0.3     7.4681    2.24043
+   case= 21          layer   below 20 MeV    otherBaryon       0.08    14.4306    1.15445
+   case= 22          layer   above 20 MeV            all    1031.74    205.943     212480
+   case= 23          layer   above 20 MeV       electron     406.46     134.59    54705.3
+   case= 24          layer   above 20 MeV          gamma     367.11     157.49    57816.1
+   case= 25          layer   above 20 MeV           muon       0.42    165.043    69.3181
+   case= 26          layer   above 20 MeV       neutrino      11.73    40.7732    478.269
+   case= 27          layer   above 20 MeV           pion      46.53    1293.93    60206.6
+   case= 28          layer   above 20 MeV        neutron     115.07    122.116    14051.9
+   case= 29          layer   above 20 MeV         proton      69.85    175.063    12228.2
+   case= 30          layer   above 20 MeV            ion       9.65    56.8522    548.623
+   case= 31          layer   above 20 MeV     otherMeson       3.88    2800.74    10866.9
+   case= 32          layer   above 20 MeV    otherBaryon       1.04     1450.5    1508.52
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_Cu
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : No 
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+
+Index : 6     used in the geometry : Yes
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 5 starts.
+### Run 5 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=40.770000s Real=41.119661s Sys=0.020000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 5
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_Cu
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0116505
+   case=  1     downstream                      electron   0.000237704
+   case=  2     downstream                         gamma   0.00531287
+   case=  3     downstream                          muon   6.99118e-06
+   case=  4     downstream                      neutrino   0.000445227
+   case=  5     downstream                          pion   0.000105092
+   case=  6     downstream                       neutron   0.00545476
+   case=  7     downstream                        proton   6.9177e-05
+   case=  8     downstream                           ion          0
+   case=  9     downstream                    otherMeson   1.73719e-05
+   case= 10     downstream                   otherBaryon   1.3309e-06
+   case= 11     downstream   below 20 MeV            all   0.010146
+   case= 12     downstream   below 20 MeV       electron   0.000164175
+   case= 13     downstream   below 20 MeV          gamma   0.00518461
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   2.88693e-05
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.00476685
+   case= 18     downstream   below 20 MeV         proton   1.4573e-06
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00150455
+   case= 23     downstream   above 20 MeV       electron   7.35292e-05
+   case= 24     downstream   above 20 MeV          gamma   0.000128258
+   case= 25     downstream   above 20 MeV           muon   6.99118e-06
+   case= 26     downstream   above 20 MeV       neutrino   0.000416357
+   case= 27     downstream   above 20 MeV           pion   0.000105092
+   case= 28     downstream   above 20 MeV        neutron   0.000687903
+   case= 29     downstream   above 20 MeV         proton   6.77197e-05
+   case= 30     downstream   above 20 MeV            ion          0
+   case= 31     downstream   above 20 MeV     otherMeson   1.73719e-05
+   case= 32     downstream   above 20 MeV    otherBaryon   1.3309e-06
+   case= 33           side                           all   0.00239158
+   case= 34           side                      electron   5.10995e-06
+   case= 35           side                         gamma   0.000519895
+   case= 36           side                          muon          0
+   case= 37           side                      neutrino   0.000305745
+   case= 38           side                          pion          0
+   case= 39           side                       neutron   0.00155863
+   case= 40           side                        proton   2.19572e-06
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson          0
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00197868
+   case= 45           side   below 20 MeV       electron   5.10995e-06
+   case= 46           side   below 20 MeV          gamma   0.000519895
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.65447e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.00142714
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000412894
+   case= 56           side   above 20 MeV       electron          0
+   case= 57           side   above 20 MeV          gamma          0
+   case= 58           side   above 20 MeV           muon          0
+   case= 59           side   above 20 MeV       neutrino   0.0002792
+   case= 60           side   above 20 MeV           pion          0
+   case= 61           side   above 20 MeV        neutron   0.000131499
+   case= 62           side   above 20 MeV         proton   2.19572e-06
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson          0
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.011692
+   case= 67       upstream                      electron   7.54307e-05
+   case= 68       upstream                         gamma   0.00348162
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.000574928
+   case= 71       upstream                          pion   3.17895e-06
+   case= 72       upstream                       neutron   0.00754469
+   case= 73       upstream                        proton   1.2121e-05
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.0107163
+   case= 78       upstream   below 20 MeV       electron   6.68996e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00346568
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   4.1129e-05
+   case= 82       upstream   below 20 MeV           pion          0
+   case= 83       upstream   below 20 MeV        neutron   0.00714119
+   case= 84       upstream   below 20 MeV         proton   1.44918e-06
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.000975616
+   case= 89       upstream   above 20 MeV       electron   8.53107e-06
+   case= 90       upstream   above 20 MeV          gamma   1.59417e-05
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000533799
+   case= 93       upstream   above 20 MeV           pion   3.17895e-06
+   case= 94       upstream   above 20 MeV        neutron   0.000403494
+   case= 95       upstream   above 20 MeV         proton   1.06718e-05
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    61233.4     4.2193     258362
+   case=  1          layer                      electron    45248.2    1.62593    73570.6
+   case=  2          layer                         gamma    13486.7    5.35536    72226.1
+   case=  3          layer                          muon       4.55    26.8675    122.247
+   case=  4          layer                      neutrino      13.57    40.3002    546.874
+   case=  5          layer                          pion      49.75    1283.64      63861
+   case=  6          layer                       neutron     970.61    18.2846    17747.2
+   case=  7          layer                        proton     228.04    56.6574    12920.2
+   case=  8          layer                           ion    1225.18   0.942973    1155.31
+   case=  9          layer                    otherMeson       5.46    2719.71    14849.6
+   case= 10          layer                   otherBaryon       1.31     1040.4    1362.93
+   case= 11          layer   below 20 MeV            all    60166.3   0.671868    40423.8
+   case= 12          layer   below 20 MeV       electron    44840.6   0.455206    20411.7
+   case= 13          layer   below 20 MeV          gamma    13119.4    1.21738    15971.4
+   case= 14          layer   below 20 MeV           muon       4.09    4.11981      16.85
+   case= 15          layer   below 20 MeV       neutrino       1.14    14.0849    16.0568
+   case= 16          layer   below 20 MeV           pion       0.87    11.5245    10.0263
+   case= 17          layer   below 20 MeV        neutron     837.97    2.67158    2238.71
+   case= 18          layer   below 20 MeV         proton     147.94     8.0942    1197.46
+   case= 19          layer   below 20 MeV            ion    1213.95   0.460682    559.245
+   case= 20          layer   below 20 MeV     otherMeson       0.23     7.0344    1.61791
+   case= 21          layer   below 20 MeV    otherBaryon       0.08    9.72238    0.77779
+   case= 22          layer   above 20 MeV            all    1067.11    204.232     217938
+   case= 23          layer   above 20 MeV       electron     407.65    130.403    53158.9
+   case= 24          layer   above 20 MeV          gamma     367.26    153.174    56254.7
+   case= 25          layer   above 20 MeV           muon       0.46    229.124    105.397
+   case= 26          layer   above 20 MeV       neutrino      12.43    42.7045    530.817
+   case= 27          layer   above 20 MeV           pion      48.88    1306.28      63851
+   case= 28          layer   above 20 MeV        neutron     132.64    116.922    15508.5
+   case= 29          layer   above 20 MeV         proton       80.1    146.351    11722.7
+   case= 30          layer   above 20 MeV            ion      11.23     53.078    596.066
+   case= 31          layer   above 20 MeV     otherMeson       5.23       2839      14848
+   case= 32          layer   above 20 MeV    otherBaryon       1.23    1107.44    1362.15
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_W
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : No 
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+
+Index : 6     used in the geometry : No 
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+
+Index : 7     used in the geometry : Yes
+ Material : G4_W
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  97.7189 keV    e-  1.64904 MeV    e+  1.53897 MeV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 6 starts.
+### Run 6 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=92.290000s Real=93.736122s Sys=0.070000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 6
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_W
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.000566305
+   case=  1     downstream                      electron          0
+   case=  2     downstream                         gamma   3.43599e-05
+   case=  3     downstream                          muon          0
+   case=  4     downstream                      neutrino   0.000143971
+   case=  5     downstream                          pion   1.28046e-06
+   case=  6     downstream                       neutron   0.000386693
+   case=  7     downstream                        proton          0
+   case=  8     downstream                           ion          0
+   case=  9     downstream                    otherMeson          0
+   case= 10     downstream                   otherBaryon          0
+   case= 11     downstream   below 20 MeV            all   0.000400757
+   case= 12     downstream   below 20 MeV       electron          0
+   case= 13     downstream   below 20 MeV          gamma   3.43599e-05
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   5.84851e-06
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.000360549
+   case= 18     downstream   below 20 MeV         proton          0
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.000165548
+   case= 23     downstream   above 20 MeV       electron          0
+   case= 24     downstream   above 20 MeV          gamma          0
+   case= 25     downstream   above 20 MeV           muon          0
+   case= 26     downstream   above 20 MeV       neutrino   0.000138123
+   case= 27     downstream   above 20 MeV           pion   1.28046e-06
+   case= 28     downstream   above 20 MeV        neutron   2.61447e-05
+   case= 29     downstream   above 20 MeV         proton          0
+   case= 30     downstream   above 20 MeV            ion          0
+   case= 31     downstream   above 20 MeV     otherMeson          0
+   case= 32     downstream   above 20 MeV    otherBaryon          0
+   case= 33           side                           all   0.00075526
+   case= 34           side                      electron   8.97956e-07
+   case= 35           side                         gamma   5.21109e-05
+   case= 36           side                          muon          0
+   case= 37           side                      neutrino   0.000261642
+   case= 38           side                          pion          0
+   case= 39           side                       neutron   0.000440609
+   case= 40           side                        proton          0
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson          0
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.000487851
+   case= 45           side   below 20 MeV       electron   8.97956e-07
+   case= 46           side   below 20 MeV          gamma   5.21109e-05
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.5267e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.000409576
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000267409
+   case= 56           side   above 20 MeV       electron          0
+   case= 57           side   above 20 MeV          gamma          0
+   case= 58           side   above 20 MeV           muon          0
+   case= 59           side   above 20 MeV       neutrino   0.000236375
+   case= 60           side   above 20 MeV           pion          0
+   case= 61           side   above 20 MeV        neutron   3.10336e-05
+   case= 62           side   above 20 MeV         proton          0
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson          0
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.0338386
+   case= 67       upstream                      electron   6.33368e-05
+   case= 68       upstream                         gamma   0.0038616
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.000783558
+   case= 71       upstream                          pion   1.77437e-05
+   case= 72       upstream                       neutron   0.0290949
+   case= 73       upstream                        proton   1.74283e-05
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.0318994
+   case= 78       upstream   below 20 MeV       electron   5.33855e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00385764
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   6.60248e-05
+   case= 82       upstream   below 20 MeV           pion   1.5432e-06
+   case= 83       upstream   below 20 MeV        neutron   0.0279193
+   case= 84       upstream   below 20 MeV         proton   1.5865e-06
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.00193914
+   case= 89       upstream   above 20 MeV       electron   9.95125e-06
+   case= 90       upstream   above 20 MeV          gamma   3.9652e-06
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000717533
+   case= 93       upstream   above 20 MeV           pion   1.62005e-05
+   case= 94       upstream   above 20 MeV        neutron   0.00117565
+   case= 95       upstream   above 20 MeV         proton   1.58418e-05
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    71199.5    3.74316     266511
+   case=  1          layer                      electron    42059.7     2.0021    84207.6
+   case=  2          layer                         gamma    22241.5    3.86521    85968.2
+   case=  3          layer                          muon       3.83     13.615    52.1455
+   case=  4          layer                      neutrino      11.48      36.19    415.461
+   case=  5          layer                          pion      41.95    1216.96    51051.5
+   case=  6          layer                       neutron     3364.5    6.03847    20316.4
+   case=  7          layer                        proton     124.16    90.3646    11219.7
+   case=  8          layer                           ion    3347.26   0.421291    1410.17
+   case=  9          layer                    otherMeson       3.82    2832.96    10821.9
+   case= 10          layer                   otherBaryon       1.26     831.65    1047.88
+   case= 11          layer   below 20 MeV            all    70064.1   0.875274    61325.3
+   case= 12          layer   below 20 MeV       electron    41634.3   0.699291    29114.5
+   case= 13          layer   below 20 MeV          gamma    21837.3    1.23695    27011.6
+   case= 14          layer   below 20 MeV           muon       3.61    4.16195    15.0246
+   case= 15          layer   below 20 MeV       neutrino       0.98    14.0281    13.7476
+   case= 16          layer   below 20 MeV           pion       0.92    11.8147    10.8695
+   case= 17          layer   below 20 MeV        neutron     3212.2    1.29877     4171.9
+   case= 18          layer   below 20 MeV         proton      44.02     12.438    547.521
+   case= 19          layer   below 20 MeV            ion    3330.53   0.131545    438.114
+   case= 20          layer   below 20 MeV     otherMeson        0.2    6.20099     1.2402
+   case= 21          layer   below 20 MeV    otherBaryon       0.08    10.6108   0.848862
+   case= 22          layer   above 20 MeV            all    1135.32    180.729     205186
+   case= 23          layer   above 20 MeV       electron     425.33     129.53    55093.1
+   case= 24          layer   above 20 MeV          gamma     404.27    145.835    58956.6
+   case= 25          layer   above 20 MeV           muon       0.22    168.731    37.1209
+   case= 26          layer   above 20 MeV       neutrino       10.5    38.2585    401.714
+   case= 27          layer   above 20 MeV           pion      41.03    1243.98    51040.6
+   case= 28          layer   above 20 MeV        neutron      152.3    106.005    16144.5
+   case= 29          layer   above 20 MeV         proton      80.14    133.169    10672.1
+   case= 30          layer   above 20 MeV            ion      16.73    58.1025    972.056
+   case= 31          layer   above 20 MeV     otherMeson       3.62    2989.14    10820.7
+   case= 32          layer   above 20 MeV    otherBaryon       1.18    887.313    1047.03
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_Pb
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : No 
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+
+Index : 6     used in the geometry : No 
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+
+Index : 7     used in the geometry : No 
+ Material : G4_W
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  97.7189 keV    e-  1.64904 MeV    e+  1.53897 MeV proton 70 keV
+
+Index : 8     used in the geometry : Yes
+ Material : G4_Pb
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.6952 keV    e-  1.00699 MeV    e+  946.936 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 7 starts.
+### Run 7 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=60.990000s Real=61.832543s Sys=0.030000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 7
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_Pb
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0385767
+   case=  1     downstream                      electron   0.00013273
+   case=  2     downstream                         gamma   0.00178479
+   case=  3     downstream                          muon   3.08241e-06
+   case=  4     downstream                      neutrino   0.000258764
+   case=  5     downstream                          pion   6.68238e-05
+   case=  6     downstream                       neutron   0.036284
+   case=  7     downstream                        proton   3.93626e-05
+   case=  8     downstream                           ion          0
+   case=  9     downstream                    otherMeson   6.83994e-06
+   case= 10     downstream                   otherBaryon   2.56116e-07
+   case= 11     downstream   below 20 MeV            all   0.0374815
+   case= 12     downstream   below 20 MeV       electron   0.00010831
+   case= 13     downstream   below 20 MeV          gamma   0.00173111
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   1.62784e-05
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.0356242
+   case= 18     downstream   below 20 MeV         proton   1.57178e-06
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00109521
+   case= 23     downstream   above 20 MeV       electron   2.44193e-05
+   case= 24     downstream   above 20 MeV          gamma   5.36794e-05
+   case= 25     downstream   above 20 MeV           muon   3.08241e-06
+   case= 26     downstream   above 20 MeV       neutrino   0.000242485
+   case= 27     downstream   above 20 MeV           pion   6.68238e-05
+   case= 28     downstream   above 20 MeV        neutron   0.000659837
+   case= 29     downstream   above 20 MeV         proton   3.77908e-05
+   case= 30     downstream   above 20 MeV            ion          0
+   case= 31     downstream   above 20 MeV     otherMeson   6.83994e-06
+   case= 32     downstream   above 20 MeV    otherBaryon   2.56116e-07
+   case= 33           side                           all   0.0319098
+   case= 34           side                      electron   8.9233e-07
+   case= 35           side                         gamma   0.000160794
+   case= 36           side                          muon   4.61289e-07
+   case= 37           side                      neutrino   0.000281061
+   case= 38           side                          pion          0
+   case= 39           side                       neutron   0.0314665
+   case= 40           side                        proton          0
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson          0
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.0314714
+   case= 45           side   below 20 MeV       electron   5.76111e-07
+   case= 46           side   below 20 MeV          gamma   0.000160794
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.20242e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.031288
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.000438337
+   case= 56           side   above 20 MeV       electron   3.1622e-07
+   case= 57           side   above 20 MeV          gamma          0
+   case= 58           side   above 20 MeV           muon   4.61289e-07
+   case= 59           side   above 20 MeV       neutrino   0.000259037
+   case= 60           side   above 20 MeV           pion          0
+   case= 61           side   above 20 MeV        neutron   0.000178523
+   case= 62           side   above 20 MeV         proton          0
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson          0
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.0626415
+   case= 67       upstream                      electron   5.3201e-05
+   case= 68       upstream                         gamma   0.00178632
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.000479089
+   case= 71       upstream                          pion   1.05465e-05
+   case= 72       upstream                       neutron   0.0602996
+   case= 73       upstream                        proton   1.0441e-05
+   case= 74       upstream                           ion          0
+   case= 75       upstream                    otherMeson   2.29278e-06
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.0614363
+   case= 78       upstream   below 20 MeV       electron   4.47511e-05
+   case= 79       upstream   below 20 MeV          gamma   0.00176841
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   5.5511e-05
+   case= 82       upstream   below 20 MeV           pion   1.51464e-06
+   case= 83       upstream   below 20 MeV        neutron   0.059563
+   case= 84       upstream   below 20 MeV         proton   3.04222e-06
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.0012052
+   case= 89       upstream   above 20 MeV       electron   8.4499e-06
+   case= 90       upstream   above 20 MeV          gamma   1.79095e-05
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000423578
+   case= 93       upstream   above 20 MeV           pion   9.03189e-06
+   case= 94       upstream   above 20 MeV        neutron   0.000736543
+   case= 95       upstream   above 20 MeV         proton   7.39874e-06
+   case= 96       upstream   above 20 MeV            ion          0
+   case= 97       upstream   above 20 MeV     otherMeson   2.29278e-06
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    47325.9    5.08221     240520
+   case=  1          layer                      electron    27892.6     2.5702    71689.6
+   case=  2          layer                         gamma    16060.4    4.50087    72285.6
+   case=  3          layer                          muon       3.96    21.5768     85.444
+   case=  4          layer                      neutrino      11.79    37.1681    438.212
+   case=  5          layer                          pion      42.42    1246.12    52860.2
+   case=  6          layer                       neutron    2073.67    9.55891      19822
+   case=  7          layer                        proton     117.39    94.2365    11062.4
+   case=  8          layer                           ion     1118.5    1.39333    1558.44
+   case=  9          layer                    otherMeson       4.18    2399.06    10028.1
+   case= 10          layer                   otherBaryon       1.04    663.292    689.824
+   case= 11          layer   below 20 MeV            all    46236.1   0.993479    45934.6
+   case= 12          layer   below 20 MeV       electron    27488.6   0.797962    21934.9
+   case= 13          layer   below 20 MeV          gamma    15679.6    1.21793    19096.6
+   case= 14          layer   below 20 MeV           muon       3.61    4.15038    14.9829
+   case= 15          layer   below 20 MeV       neutrino       0.97    14.2018    13.7757
+   case= 16          layer   below 20 MeV           pion       0.94    11.9482    11.2313
+   case= 17          layer   below 20 MeV        neutron    1926.03    2.05412    3956.29
+   case= 18          layer   below 20 MeV         proton      39.89    12.5493    500.591
+   case= 19          layer   below 20 MeV            ion    1096.02   0.368569    403.959
+   case= 20          layer   below 20 MeV     otherMeson       0.36    5.19836    1.87141
+   case= 21          layer   below 20 MeV    otherBaryon       0.02    17.7512   0.355023
+   case= 22          layer   above 20 MeV            all    1089.76    178.558     194585
+   case= 23          layer   above 20 MeV       electron     403.94    123.174    49754.7
+   case= 24          layer   above 20 MeV          gamma     380.71     139.71    53188.9
+   case= 25          layer   above 20 MeV           muon       0.35    201.317    70.4611
+   case= 26          layer   above 20 MeV       neutrino      10.82     39.227    424.437
+   case= 27          layer   above 20 MeV           pion      41.48    1274.08      52849
+   case= 28          layer   above 20 MeV        neutron     147.64    107.462    15865.7
+   case= 29          layer   above 20 MeV         proton       77.5    136.282    10561.8
+   case= 30          layer   above 20 MeV            ion      22.48    51.3561    1154.48
+   case= 31          layer   above 20 MeV     otherMeson       3.82    2624.66    10026.2
+   case= 32          layer   above 20 MeV    otherBaryon       1.02     675.95    689.469
+ ============================================================= 
+
+
+
+ ------  DetectorConstruction::PrintParameters() ------ 
+ Material         = G4_PbWO4
+ Thickness        = 1000 mm
+ Diameter         = 1000 mm
+ ScoringThickness = 10 mm
+ ------------------------------------------------------ 
+
+
+PrimaryGenerationAction::SetGunPosition() : gun position along z = -550 mm 
+
+Start re-initialization because 
+  Geometry
+has been modified since last Run.
+
+DetectorConstruction::ConstructLayer() : 
+	 World (box) size: 
+	 	 x : -/+ 600 mm 	 y : -/+ 600 mm 	 z : -/+ 600 mm 
+	 Target layer (cylinder) size: 
+	 	 x : -/+ 500 mm 	 y : -/+ 500 mm 	 z : -/+ 500 mm 
+
+
+
+========= Table of registered couples ============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : G4_POLYSTYRENE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.12507 keV    e-  285.029 keV    e+  278.025 keV proton 70 keV
+
+Index : 2     used in the geometry : No 
+ Material : G4_GRAPHITE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.8882 keV    e-  436.578 keV    e+  422.985 keV proton 70 keV
+
+Index : 3     used in the geometry : No 
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.85415 keV    e-  423.338 keV    e+  409.013 keV proton 70 keV
+
+Index : 4     used in the geometry : No 
+ Material : G4_lAr
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.20503 keV    e-  273.977 keV    e+  266.18 keV proton 70 keV
+
+Index : 5     used in the geometry : No 
+ Material : G4_Fe
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  17.2487 keV    e-  954.642 keV    e+  906.513 keV proton 70 keV
+
+Index : 6     used in the geometry : No 
+ Material : G4_Cu
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  20.5458 keV    e-  1.03403 MeV    e+  979.823 keV proton 70 keV
+
+Index : 7     used in the geometry : No 
+ Material : G4_W
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  97.7189 keV    e-  1.64904 MeV    e+  1.53897 MeV proton 70 keV
+
+Index : 8     used in the geometry : No 
+ Material : G4_Pb
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.6952 keV    e-  1.00699 MeV    e+  946.936 keV proton 70 keV
+
+Index : 9     used in the geometry : Yes
+ Material : G4_PbWO4
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  75.7749 keV    e-  842.468 keV    e+  797.806 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+==================================================================
+
+### Run 8 starts.
+### Run 8 starts.
+ Event#=0
+ Event#=10
+ Event#=20
+ Event#=30
+ Event#=40
+ Event#=50
+ Event#=60
+ Event#=70
+ Event#=80
+ Event#=90
+ Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=48.950000s Real=49.424676s Sys=0.010000s
+
+
+ ===============  Run::PrintInfo()  =============== 	 RunID = 8
+ Primary particle PDG code = -211
+ Primary particle kinetic energy = 50 GeV
+ Primary particle direction = (0,0,1)
+ Target material = G4_PbWO4
+ Cubic-volume scoring up-down = 7.85398e+06 mm^3
+ Cubic-volume scoring side    = 3.17301e+07 mm^3
+ Number of events = 100
+ Conversion factor: fluence from mm^-2 to cm^-2 = 100
+ Particle fluence in unit of cm^-2 :
+   case=  0     downstream                           all   0.0129792
+   case=  1     downstream                      electron   7.7635e-05
+   case=  2     downstream                         gamma   0.00219283
+   case=  3     downstream                          muon          0
+   case=  4     downstream                      neutrino   0.000402673
+   case=  5     downstream                          pion   0.000131684
+   case=  6     downstream                       neutron   0.0101049
+   case=  7     downstream                        proton   6.45062e-05
+   case=  8     downstream                           ion          0
+   case=  9     downstream                    otherMeson   4.93521e-06
+   case= 10     downstream                   otherBaryon          0
+   case= 11     downstream   below 20 MeV            all   0.0116541
+   case= 12     downstream   below 20 MeV       electron   6.76429e-05
+   case= 13     downstream   below 20 MeV          gamma   0.00217379
+   case= 14     downstream   below 20 MeV           muon          0
+   case= 15     downstream   below 20 MeV       neutrino   2.9791e-05
+   case= 16     downstream   below 20 MeV           pion          0
+   case= 17     downstream   below 20 MeV        neutron   0.00937916
+   case= 18     downstream   below 20 MeV         proton   3.71143e-06
+   case= 19     downstream   below 20 MeV            ion          0
+   case= 20     downstream   below 20 MeV     otherMeson          0
+   case= 21     downstream   below 20 MeV    otherBaryon          0
+   case= 22     downstream   above 20 MeV            all   0.00132506
+   case= 23     downstream   above 20 MeV       electron   9.99215e-06
+   case= 24     downstream   above 20 MeV          gamma   1.90404e-05
+   case= 25     downstream   above 20 MeV           muon          0
+   case= 26     downstream   above 20 MeV       neutrino   0.000372882
+   case= 27     downstream   above 20 MeV           pion   0.000131684
+   case= 28     downstream   above 20 MeV        neutron   0.000725735
+   case= 29     downstream   above 20 MeV         proton   6.07948e-05
+   case= 30     downstream   above 20 MeV            ion          0
+   case= 31     downstream   above 20 MeV     otherMeson   4.93521e-06
+   case= 32     downstream   above 20 MeV    otherBaryon          0
+   case= 33           side                           all   0.00521211
+   case= 34           side                      electron   7.29686e-06
+   case= 35           side                         gamma   0.00050256
+   case= 36           side                          muon          0
+   case= 37           side                      neutrino   0.000297012
+   case= 38           side                          pion   8.90369e-07
+   case= 39           side                       neutron   0.00440182
+   case= 40           side                        proton   2.5355e-06
+   case= 41           side                           ion          0
+   case= 42           side                    otherMeson          0
+   case= 43           side                   otherBaryon          0
+   case= 44           side   below 20 MeV            all   0.00468615
+   case= 45           side   below 20 MeV       electron   7.29686e-06
+   case= 46           side   below 20 MeV          gamma   0.00050256
+   case= 47           side   below 20 MeV           muon          0
+   case= 48           side   below 20 MeV       neutrino   2.27263e-05
+   case= 49           side   below 20 MeV           pion          0
+   case= 50           side   below 20 MeV        neutron   0.00415357
+   case= 51           side   below 20 MeV         proton          0
+   case= 52           side   below 20 MeV            ion          0
+   case= 53           side   below 20 MeV     otherMeson          0
+   case= 54           side   below 20 MeV    otherBaryon          0
+   case= 55           side   above 20 MeV            all   0.00052596
+   case= 56           side   above 20 MeV       electron          0
+   case= 57           side   above 20 MeV          gamma          0
+   case= 58           side   above 20 MeV           muon          0
+   case= 59           side   above 20 MeV       neutrino   0.000274285
+   case= 60           side   above 20 MeV           pion   8.90369e-07
+   case= 61           side   above 20 MeV        neutron   0.000248249
+   case= 62           side   above 20 MeV         proton   2.5355e-06
+   case= 63           side   above 20 MeV            ion          0
+   case= 64           side   above 20 MeV     otherMeson          0
+   case= 65           side   above 20 MeV    otherBaryon          0
+   case= 66       upstream                           all   0.0227939
+   case= 67       upstream                      electron   3.20999e-05
+   case= 68       upstream                         gamma   0.00290379
+   case= 69       upstream                          muon          0
+   case= 70       upstream                      neutrino   0.000490994
+   case= 71       upstream                          pion   2.40207e-05
+   case= 72       upstream                       neutron   0.0193306
+   case= 73       upstream                        proton   7.39888e-06
+   case= 74       upstream                           ion   4.97398e-06
+   case= 75       upstream                    otherMeson          0
+   case= 76       upstream                   otherBaryon          0
+   case= 77       upstream   below 20 MeV            all   0.0214679
+   case= 78       upstream   below 20 MeV       electron   3.20999e-05
+   case= 79       upstream   below 20 MeV          gamma   0.0028986
+   case= 80       upstream   below 20 MeV           muon          0
+   case= 81       upstream   below 20 MeV       neutrino   3.71301e-05
+   case= 82       upstream   below 20 MeV           pion          0
+   case= 83       upstream   below 20 MeV        neutron   0.0185001
+   case= 84       upstream   below 20 MeV         proton          0
+   case= 85       upstream   below 20 MeV            ion          0
+   case= 86       upstream   below 20 MeV     otherMeson          0
+   case= 87       upstream   below 20 MeV    otherBaryon          0
+   case= 88       upstream   above 20 MeV            all   0.00132593
+   case= 89       upstream   above 20 MeV       electron          0
+   case= 90       upstream   above 20 MeV          gamma   5.19093e-06
+   case= 91       upstream   above 20 MeV           muon          0
+   case= 92       upstream   above 20 MeV       neutrino   0.000453864
+   case= 93       upstream   above 20 MeV           pion   2.40207e-05
+   case= 94       upstream   above 20 MeV        neutron   0.000830485
+   case= 95       upstream   above 20 MeV         proton   7.39888e-06
+   case= 96       upstream   above 20 MeV            ion   4.97398e-06
+   case= 97       upstream   above 20 MeV     otherMeson          0
+   case= 98       upstream   above 20 MeV    otherBaryon          0
+ ------------------------------------------------------------- 
+ Extra information: particle production 	 	      <N>      <E_kin> <Sum_Ekin> [MeV]
+   case=  0          layer                           all    54479.3     4.6814     255040
+   case=  1          layer                      electron    32424.9    2.43222    78864.3
+   case=  2          layer                         gamma    17210.9    4.61569      79440
+   case=  3          layer                          muon       4.31    17.7005     76.289
+   case=  4          layer                      neutrino      12.91    37.0876    478.801
+   case=  5          layer                          pion      43.74    1255.04    54895.4
+   case=  6          layer                       neutron    1664.69    10.6674    17757.9
+   case=  7          layer                        proton     121.38     85.808    10415.4
+   case=  8          layer                           ion    2991.59    0.59473    1779.19
+   case=  9          layer                    otherMeson       3.82    2653.17    10135.1
+   case= 10          layer                   otherBaryon        1.1    1088.21    1197.03
+   case= 11          layer   below 20 MeV            all      53393   0.937707      50067
+   case= 12          layer   below 20 MeV       electron    32004.7   0.761917      24385
+   case= 13          layer   below 20 MeV          gamma    16817.3    1.26703    21308.1
+   case= 14          layer   below 20 MeV           muon       4.03    4.15425    16.7416
+   case= 15          layer   below 20 MeV       neutrino          1    14.1982    14.1982
+   case= 16          layer   below 20 MeV           pion       0.89    12.7774    11.3719
+   case= 17          layer   below 20 MeV        neutron    1536.15    1.90618    2928.17
+   case= 18          layer   below 20 MeV         proton      53.63    9.54569    511.936
+   case= 19          layer   below 20 MeV            ion    2974.99   0.299037    889.633
+   case= 20          layer   below 20 MeV     otherMeson       0.19    6.07858    1.15493
+   case= 21          layer   below 20 MeV    otherBaryon       0.06    12.5302    0.75181
+   case= 22          layer   above 20 MeV            all     1086.3    188.689     204973
+   case= 23          layer   above 20 MeV       electron     420.13    129.673    54479.4
+   case= 24          layer   above 20 MeV          gamma     393.57    147.704      58132
+   case= 25          layer   above 20 MeV           muon       0.28    212.669    59.5473
+   case= 26          layer   above 20 MeV       neutrino      11.91    39.0095    464.603
+   case= 27          layer   above 20 MeV           pion      42.85    1280.84      54884
+   case= 28          layer   above 20 MeV        neutron     128.54    115.371    14829.8
+   case= 29          layer   above 20 MeV         proton      67.75    146.176    9903.44
+   case= 30          layer   above 20 MeV            ion       16.6    53.5876    889.554
+   case= 31          layer   above 20 MeV     otherMeson       3.63    2791.72      10134
+   case= 32          layer   above 20 MeV    otherBaryon       1.04    1150.27    1196.28
+ ============================================================= 
+
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.13 MB
+============================================================

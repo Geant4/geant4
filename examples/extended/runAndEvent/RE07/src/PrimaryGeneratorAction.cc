@@ -32,16 +32,15 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "DetectorConstruction.hh"
-
 #include "G4Electron.hh"
 #include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "DetectorConstruction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  : fDetector(det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det) : fDetector(det)
 {
   G4int numberOfParticles = 1;
   fParticleGun.reset(new G4ParticleGun(numberOfParticles));

@@ -46,7 +46,7 @@ class G4GeomSplitter
   public:
 
     G4GeomSplitter()
-      : totalobj(0), totalspace(0), sharedOffset(nullptr)
+      :  sharedOffset(nullptr)
     {
       G4MUTEXINIT(mutex);
     }
@@ -174,8 +174,8 @@ class G4GeomSplitter
 
   private:
 
-    G4int totalobj;
-    G4int totalspace;
+    G4int totalobj{0};
+    G4int totalspace{0};
     T* sharedOffset;
     G4Mutex mutex;
 };

@@ -27,16 +27,19 @@
 // Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4AnalysisManagerState.hh"
+
 #include "G4AnalysisUtilities.hh"
 #include "G4UnitsTable.hh"
+
+#include <utility>
 
 using namespace G4Analysis;
 
 //_____________________________________________________________________________
-G4AnalysisManagerState::G4AnalysisManagerState(
-                                         const G4String& type, G4bool isMaster)
- : fType(type),
-   fIsMaster(isMaster)
+G4AnalysisManagerState::G4AnalysisManagerState(G4String type, G4bool isMaster)
+  : fType(std::move(type)),
+    fIsMaster(isMaster),
+    fThreadId(G4Threading::G4GetThreadId())
 {}
 
 //

@@ -41,10 +41,12 @@
 template <typename NT>
 class G4TRNtupleManager : public G4BaseRNtupleManager
 {
+  public:
+    G4TRNtupleManager() = delete;
+
   protected:
     explicit G4TRNtupleManager(const G4AnalysisManagerState& state);
-    G4TRNtupleManager() = delete;
-    virtual ~G4TRNtupleManager();
+    ~G4TRNtupleManager() override;
 
     // Methods to manipulate ntuples
     G4bool IsEmpty() const;
@@ -66,30 +68,26 @@ class G4TRNtupleManager : public G4BaseRNtupleManager
     using G4BaseRNtupleManager::SetNtupleSColumn;
 
     // Methods to bind ntuple
-    virtual G4bool SetNtupleIColumn(G4int ntupleId,
-                            const G4String& columnName, G4int& value) final;
-    virtual G4bool SetNtupleFColumn(G4int ntupleId,
-                            const G4String& columnName, G4float& value) final;
-    virtual G4bool SetNtupleDColumn(G4int ntupleId,
-                            const G4String& columnName, G4double& value) final;
-    virtual G4bool SetNtupleSColumn(G4int ntupleId,
-                            const G4String& columnName, G4String& value) final;
+    G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, G4int& value) final;
+    G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, G4float& value) final;
+    G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, G4double& value) final;
+    G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName, G4String& value) final;
 
     // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName,
-                            std::vector<G4int>& vector) override;
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName,
-                            std::vector<G4float>& vector) override;
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName,
-                            std::vector<G4double>& vector) override;
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName,
-                            std::vector<std::string>& vector) override;
+    G4bool SetNtupleIColumn(
+      G4int ntupleId, const G4String& columnName, std::vector<G4int>& vector) override;
+    G4bool SetNtupleFColumn(
+      G4int ntupleId, const G4String& columnName, std::vector<G4float>& vector) override;
+    G4bool SetNtupleDColumn(
+      G4int ntupleId, const G4String& columnName, std::vector<G4double>& vector) override;
+    G4bool SetNtupleSColumn(
+      G4int ntupleId, const G4String& columnName, std::vector<std::string>& vector) override;
 
     using G4BaseRNtupleManager::GetNtupleRow;
-    virtual G4bool GetNtupleRow(G4int ntupleId) final;
+    G4bool GetNtupleRow(G4int ntupleId) final;
 
     // Access methods
-    virtual G4int GetNofNtuples() const final;
+    G4int GetNofNtuples() const final;
 
     // Utility method
     G4TRNtupleDescription<NT>*  GetNtupleDescriptionInFunction(G4int id,

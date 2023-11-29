@@ -39,7 +39,7 @@ endif()
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
 
 if(GEANT4_USE_SYSTEM_CLHEP)
-  find_package(CLHEP 2.4.5.1 REQUIRED CONFIG)
+  find_package(CLHEP 2.4.6.0 REQUIRED CONFIG)
   geant4_save_package_variables(CLHEP CLHEP_DIR)
 else()
   set(CLHEP_FOUND TRUE)
@@ -56,7 +56,6 @@ geant4_add_feature(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
 # to the internal location of expat headers and library target so Geant4
 # clients of expat have a consistent interface.
 #
-# KNOWNISSUE : For internal expat, how to deal with static and shared?
 if(WIN32)
   set(EXPAT_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_EXPAT TRUE)
@@ -117,40 +116,39 @@ endif()
 geant4_add_feature(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
 #-----------------------------------------------------------------------
-#   TBB support
-#
-set(_default_use_tbb OFF)
-if(TBB_DIR)
-  set(_default_use_tbb ON)
-endif()
+# Find required PTL, optional TBB support, defaulting to internal
+option(GEANT4_USE_SYSTEM_PTL "Use system PTL library" OFF)
+option(GEANT4_USE_TBB "Use TBB as PTL's tasking backend" OFF)
+cmake_dependent_option(GEANT4_USE_PTL_LOCKS "Enable mutex locking in PTL task subqueues" OFF "NOT GEANT4_USE_SYSTEM_PTL" OFF)
+mark_as_advanced(GEANT4_USE_SYSTEM_PTL GEANT4_USE_PTL_LOCKS GEANT4_USE_TBB)
 
-option(GEANT4_USE_TBB "Enable (optional) use of TBB as a tasking backend" ${_default_use_tbb})
-if(GEANT4_USE_TBB)
-  find_package(TBB REQUIRED)
-  geant4_save_package_variables(TBB TBB_INCLUDE_DIR TBB_LIBRARY TBB_LIBRARY_DEBUG TBB_LIBRARY_RELEASE TBB_ROOT_DIR)
-endif()
-
-geant4_add_feature(GEANT4_USE_TBB "Enable (optional) use of TBB as a tasking backend")
-
-#-----------------------------------------------------------------------
-# Find required PTL package, defaulting to internal
-option(GEANT4_USE_SYSTEM_PTL "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_PTL)
-  find_package(PTL 2.0.0 REQUIRED)
-  # Backward compatibility for sources.cmake using the variable
+  if(GEANT4_USE_TBB)
+    find_package(PTL 2.0.0 REQUIRED TBB)
+  else()
+    find_package(PTL 2.0.0 REQUIRED)
+    if(PTL_TBB_FOUND AND NOT GEANT4_USE_TBB)
+      set(GEANT4_USE_TBB ON CACHE BOOL "Use TBB as PTL's tasking backend (forced)" FORCE)
+      message(STATUS "Forcing GEANT4_USE_TBB to ON, required by system PTL: ${PTL_DIR}")
+    endif()
+  endif() 
   set(PTL_LIBRARIES PTL::ptl)
   geant4_save_package_variables(PTL PTL_DIR)
 else()
+  # Prempt PTL's find of TBB so we can cache the variables
+  if(GEANT4_USE_TBB)
+    find_package(TBB REQUIRED)
+  endif()
   set(PTL_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_PTL TRUE)
   set(PTL_LIBRARIES G4ptl)
 endif()
-mark_as_advanced(GEANT4_USE_SYSTEM_PTL)
-geant4_add_feature(GEANT4_USE_SYSTEM_PTL "Using system PTL library")
 
-# Internal PTL offers adding locks in task queues to help debugging
-cmake_dependent_option(GEANT4_USE_PTL_LOCKS "Enable mutex locking in PTL task subqueues" OFF "NOT GEANT4_USE_SYSTEM_PTL" OFF)
-mark_as_advanced(GEANT4_USE_PTL_LOCKS)
+geant4_add_feature(GEANT4_USE_SYSTEM_PTL "Using system PTL library")
+geant4_add_feature(GEANT4_USE_PTL_LOCKS "Enabled mutex locking in PTL task subqueues")
+geant4_add_feature(GEANT4_USE_TBB "Using TBB as PTL's tasking backend")
+# Always cache TBB even if not used. Empty vars will not be exported.
+geant4_save_package_variables(TBB TBB_DIR TBB_INCLUDE_DIR TBB_LIBRARY TBB_LIBRARY_DEBUG TBB_LIBRARY_RELEASE)
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
@@ -297,12 +295,7 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  find_package(VecGeom 1.1.18 REQUIRED)
-  # Shim until VecGeom supports config mode properly
-  include("${CMAKE_CURRENT_LIST_DIR}/G4VecGeomShim.cmake")
-  # Backward Compatibility
-  set(VECGEOM_LIBRARIES VecGeom::vecgeom)
-
+  find_package(VecGeom 1.2.0 REQUIRED)
   geant4_save_package_variables(VecGeom VecGeom_DIR)
 
   # If VecCore_DIR is set, means updated VecGeom install used, so

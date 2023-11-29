@@ -74,15 +74,15 @@ const G4int G4PAIySection::fMaxSplineSize = 500;  // Max size of output spline
 
 G4PAIySection::G4PAIySection()
 {
-  fSandia = 0;
+  fSandia = nullptr;
   fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
 
   betaBohr = fine_structure_const;
   G4double cofBetaBohr = 4.0;
-  G4double betaBohr2   = fine_structure_const*fine_structure_const;
-  betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+  G4double betaBohr2 = fine_structure_const*fine_structure_const;
+  betaBohr4 = betaBohr2*betaBohr2*cofBetaBohr;
   
   fSplineEnergy          = G4DataVector(fMaxSplineSize,0.0);
   fRePartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
@@ -244,7 +244,7 @@ void G4PAIySection::Initialize( const G4Material* material,
 
 void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
 {    
-  G4int i, numberOfElements = material->GetNumberOfElements();
+  G4int i, numberOfElements = (G4int)material->GetNumberOfElements();
   G4double sumZ = 0., sumCof = 0.; 
 
   static const G4double p0 =  1.20923e+00; 
@@ -371,12 +371,12 @@ void G4PAIySection::NormShift(G4double betaGammaSq)
 
   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl;
 
-          // Calculation of PAI differrential cross-section (1/(keV*cm))
-          // in the energy points near borders of energy intervals
+  // Calculation of PAI differrential cross-section (1/(keV*cm))
+  // in the energy points near borders of energy intervals
 
-   for(G4int k=1; k<=fIntervalNumber-1; ++k)
+  for(G4int k=1; k<=fIntervalNumber-1; ++k)
    {
-      for(j=1; j<=2; ++j)
+     for(j=1; j<=2; ++j)
       {
          i = (k-1)*2 + j;
          fImPartDielectricConst[i] = fNormalizationCof*
@@ -412,8 +412,8 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
           ++i;
           continue;
       }
-                        // Shifting of arrayes for inserting the geometrical 
-                       // average of 'i' and 'i+1' energy points to 'i+1' place
+      // Shifting of arrayes for inserting the geometrical 
+      // average of 'i' and 'i+1' energy points to 'i+1' place
       fSplineNumber++;
 
       for(G4int j = fSplineNumber; j >= i+2; j-- )
@@ -435,15 +435,15 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
       G4double en1 = sqrt(x1*x2);
       fSplineEnergy[i+1] = en1;
 
-                 // Calculation of logarithmic linear approximation
-                 // in this (enr) energy point, which number is 'i+1' now
+      // Calculation of logarithmic linear approximation
+      // in this (enr) energy point, which number is 'i+1' now
 
       G4double a = log10(y2/yy1)/log10(x2/x1);
       G4double b = log10(yy1) - a*log10(x1);
       G4double y = a*log10(en1) + b;
       y = pow(10.,y);
 
-                 // Calculation of the PAI dif. cross-section at this point
+      // Calculation of the PAI dif. cross-section at this point
 
       fImPartDielectricConst[i+1] = fNormalizationCof*
                                     ImPartDielectricConst(k,fSplineEnergy[i+1]);
@@ -508,8 +508,7 @@ G4double G4PAIySection::RutherfordIntegral( G4int k,
 // Imaginary part of dielectric constant
 // (G4int k - interval number, G4double en1 - energy point)
 
-G4double G4PAIySection::ImPartDielectricConst( G4int    k ,
-                                               G4double energy1 )
+G4double G4PAIySection::ImPartDielectricConst( G4int k, G4double energy1 )
 {
    G4double energy2,energy3,energy4,result;
 
@@ -547,7 +546,7 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
       xx2 = x2 - x0;
       xx12 = xx2/xx1;
       
-      if(xx12<0)
+      if(xx12<0.)
       {
          xx12 = -xx12;
       }
@@ -589,14 +588,9 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
 G4double G4PAIySection::DifPAIySection( G4int              i ,
                                         G4double betaGammaSq  )
 {        
-  G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
-   //G4double beta, be4;
-   //G4double be4;
-   // G4double betaBohr2 = fine_structure_const*fine_structure_const;
-   // G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
+   G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
    be2 = betaGammaSq/(1 + betaGammaSq);
-   //be4 = be2*be2;
-   beta = sqrt(be2);
+   beta = std::sqrt(be2);
    cof = 1;
    x1 = log(2*electron_mass_c2/fSplineEnergy[i]);
 
@@ -618,32 +612,24 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
           be2*((1 +fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) +
           fImPartDielectricConst[i]*fImPartDielectricConst[i]);
 
-     x7 = atan2(fImPartDielectricConst[i],x3);
+     x7 = std::atan2(fImPartDielectricConst[i],x3);
      x6 = x5 * x7;
    }
-    // if(fImPartDielectricConst[i] == 0) x6 = 0;
-   
    x4 = ((x1 + x2)*fImPartDielectricConst[i] + x6)/hbarc;
-   //   if( x4 < 0.0 ) x4 = 0.0;
    x8 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
         fImPartDielectricConst[i]*fImPartDielectricConst[i];
 
    result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i]);
    result = std::max(result, 1.0e-8);
-   result *= fine_structure_const/be2/pi;
+   result *= fine_structure_const/(be2*pi);
    // low energy correction
 
    G4double lowCof = fLowEnergyCof; // 6.0 ; // Ar ~ 4.; -> fLowCof as f(Z1,Z2)? 
 
-   result *= (1 - exp(-beta/betaBohr/lowCof));
-
-   //   result *= (1-exp(-beta/betaBohr))*(1-exp(-beta/betaBohr));
-   //  result *= (1-exp(-be2/betaBohr2));
-   // result *= (1-exp(-be4/betaBohr4));
-   //   if(fDensity >= 0.1)
+   result *= (1 - std::exp(-beta/(betaBohr*lowCof)));
    if(x8 > 0.)
    { 
-      result /= x8;
+     result /= x8;
    }
    return result;
 
@@ -653,13 +639,10 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
 //
 // Calculation od dN/dx of collisions with creation of Cerenkov pseudo-photons
 
-G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
-                                         G4double betaGammaSq  )
+G4double G4PAIySection::PAIdNdxCerenkov( G4int i, G4double betaGammaSq )
 {        
    G4double logarithm, x3, x5, argument, modul2, dNdxC; 
    G4double be2, be4;
-
-   //G4double cof         = 1.0;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
@@ -667,10 +650,10 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
    if( betaGammaSq < 0.01 ) logarithm = log(1.0+betaGammaSq); // 0.0;
    else
    {
-     logarithm  = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
+     logarithm = -std::log( (1/betaGammaSq - fRePartDielectricConst[i])*
                         (1/betaGammaSq - fRePartDielectricConst[i]) + 
                         fImPartDielectricConst[i]*fImPartDielectricConst[i] )*0.5;
-     logarithm += log(1+1.0/betaGammaSq);
+     logarithm += std::log(1+1.0/betaGammaSq);
    }
 
    if( fImPartDielectricConst[i] == 0.0 || betaGammaSq < 0.01 )
@@ -684,7 +667,7 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
           be2*((1.0 +fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) +
           fImPartDielectricConst[i]*fImPartDielectricConst[i]);
      if( x3 == 0.0 ) argument = 0.5*pi;
-     else            argument = atan2(fImPartDielectricConst[i],x3);
+     else            argument = std::atan2(fImPartDielectricConst[i],x3);
      argument *= x5 ;
    }   
    dNdxC = ( logarithm*fImPartDielectricConst[i] + argument )/hbarc;
@@ -693,10 +676,8 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
 
    dNdxC *= fine_structure_const/be2/pi;
 
-   dNdxC *= (1-exp(-be4/betaBohr4));
+   dNdxC *= (1 - std::exp(-be4/betaBohr4));
 
-   //   if(fDensity >= 0.1)
-   // { 
    modul2 = (1.0 + fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) + 
                     fImPartDielectricConst[i]*fImPartDielectricConst[i];
    if(modul2 > 0.)
@@ -712,8 +693,7 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
 // Calculation od dN/dx of collisions with creation of longitudinal EM
 // excitations (plasmons, delta-electrons)
 
-G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
-                                        G4double betaGammaSq  )
+G4double G4PAIySection::PAIdNdxPlasmon( G4int i, G4double betaGammaSq )
 {        
    G4double cof, resonance, modul2, dNdxP;
    G4double be2, be4;
@@ -723,7 +703,7 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
  
-   resonance = log(2*electron_mass_c2*be2/fSplineEnergy[i]);  
+   resonance = std::log(2*electron_mass_c2*be2/fSplineEnergy[i]);  
    resonance *= fImPartDielectricConst[i]/hbarc;
 
    dNdxP = ( resonance + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i] );
@@ -731,10 +711,8 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
    dNdxP = std::max(dNdxP, 1.0e-8);
 
    dNdxP *= fine_structure_const/be2/pi;
-   dNdxP *= (1-exp(-be4/betaBohr4));
+   dNdxP *= (1 - std::exp(-be4/betaBohr4));
 
-//   if( fDensity >= 0.1 )
-//   { 
    modul2 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
      fImPartDielectricConst[i]*fImPartDielectricConst[i];
    if(modul2 > 0.)
@@ -831,7 +809,6 @@ void G4PAIySection::IntegralPlasmon()
         k--;
       }
    }
-
 }   // end of IntegralPlasmon
 
 //////////////////////////////////////////////////////////////////////
@@ -856,8 +833,10 @@ G4double G4PAIySection::SumOverInterval( G4int i )
    //G4cout << "c= " << c << " y0= " << y0 << " yy1= " << yy1 << G4endl;
    a = log10(yy1/y0)/log10(c);
    //G4cout << "a= " << a << G4endl;
-   // b = log10(y0) - a*log10(x0);
-   b = y0/pow(x0,a);
+
+   b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a);
+
    a += 1;
    if(a == 0) 
    {
@@ -895,8 +874,10 @@ G4double G4PAIySection::SumOverIntervaldEdx( G4int i )
    yy1 = fDifPAIySection[i+1];
    c = x1/x0;
    a = log10(yy1/y0)/log10(c);
-   // b = log10(y0) - a*log10(x0);
-   b = y0/pow(x0,a);
+
+   b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a);
+
    a += 2;
    if(a == 0) 
    {
@@ -990,7 +971,7 @@ G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 G4double G4PAIySection::SumOverBorder( G4int      i , 
                                        G4double en0    )
 {               
-  G4double x0,x1,y0,yy1,a,/*c,*/d,e0,result;
+  G4double x0,x1,y0,yy1,a,d,e0,result;
 
    e0 = en0;
    x0 = fSplineEnergy[i];
@@ -998,7 +979,6 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
 
-   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
 
@@ -1031,8 +1011,10 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
    //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
-   //  b0 = log10(y0) - a*log10(x0);
-   b = y0/pow(x0,a);
+
+   b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a);
+
    a += 1;
    if(a == 0)
    {
@@ -1068,7 +1050,6 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
 
-   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
    
@@ -1089,10 +1070,10 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    y0 = fDifPAIySection[i - 1];
    yy1 = fDifPAIySection[i - 2];
 
-   //c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0);
 
+   b = 0.0;
    if(a < 20.) b = y0/pow(x0,a);
 
    a += 2;
@@ -1105,7 +1086,6 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
       result += y0*(e0*e0*pow(d,a-2) - x0*x0)/a;
    }
    return result;
-
 } 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1174,7 +1154,6 @@ G4double G4PAIySection::SumOverBordCerenkov( G4int      i ,
    //G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;    
 
    return result;
-
 } 
 
 ///////////////////////////////////////////////////////////////////////////////

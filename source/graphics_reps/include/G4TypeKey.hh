@@ -38,16 +38,16 @@ class G4TypeKey {
 
 public:
 
-  typedef unsigned long Key;
+  using Key = unsigned long;
 
   // Constructor
-  G4TypeKey():fMyKey(0) {}
+  G4TypeKey() = default;
 
   // Destructor
-  virtual ~G4TypeKey() {}
+  virtual ~G4TypeKey() = default;
 
   G4bool IsValid() {
-    return (0 == fMyKey ? false : true);
+    return (0 != fMyKey);
   }
   
   // Operators
@@ -64,13 +64,13 @@ public:
 protected:
 
   Key NextKey() const {
-    static G4ThreadLocal Key *npKey = 0 ;
-    if (!npKey) { npKey = new Key; *npKey = 0; }
+    static G4ThreadLocal Key *npKey = nullptr ;
+    if (npKey == nullptr) { npKey = new Key; *npKey = 0; }
     Key &nKey = *npKey;
     return ++nKey;
   }
 
-  Key fMyKey;
+  Key fMyKey{0};
 
 };
 

@@ -210,8 +210,8 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
     if((A>=48.) && (A<65) ) fRa=fRa*0.95;
 
     G4double Ref2 = XsTotalHadronic/10./2./pi;  // in fm^2
-    G4double ceff2 =0;
-    G4double rho = 0;
+    G4double ceff2 = 0.0;
+    G4double rho = 0.0;
 
     if  ((theParticle == theAProton) || (theParticle == theANeutron))  
     {
@@ -308,7 +308,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
       }  
     }
 
-    if (theParticle == theAAlpha)
+    if ( (theParticle == theAAlpha) || (ceff2 == 0.0) )
     {
       if(theTargetDef == theProton)
       {

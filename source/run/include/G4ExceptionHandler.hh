@@ -37,31 +37,28 @@
 #ifndef G4ExceptionHandler_hh
 #define G4ExceptionHandler_hh 1
 
-#include "globals.hh"
 #include "G4ExceptionSeverity.hh"
 #include "G4VExceptionHandler.hh"
+#include "globals.hh"
 
 class G4ExceptionHandler : public G4VExceptionHandler
 {
   public:
-
-    G4ExceptionHandler();
-    virtual ~G4ExceptionHandler();
+    G4ExceptionHandler() = default;
+    ~G4ExceptionHandler() override = default;
     G4bool operator==(const G4ExceptionHandler& right) const;
     G4bool operator!=(const G4ExceptionHandler& right) const;
 
     G4ExceptionHandler(const G4ExceptionHandler&) = delete;
     G4ExceptionHandler& operator=(const G4ExceptionHandler&) = delete;
 
-    virtual G4bool Notify(const char* originOfException,
-                          const char* exceptionCode, G4ExceptionSeverity severity,
-                          const char* description);
-      // Will be invoked by G4StateManager when G4Exception occurs.
-      // If TRUE returned, core dump is generated, while if FALSE,
-      // the program execution continues.
+    // Will be invoked by G4StateManager when G4Exception occurs.
+    // If TRUE returned, core dump is generated, while if FALSE,
+    // the program execution continues.
+    G4bool Notify(const char* originOfException, const char* exceptionCode,
+                  G4ExceptionSeverity severity, const char* description) override;
 
   private:
-
     void DumpTrackInfo();
 };
 

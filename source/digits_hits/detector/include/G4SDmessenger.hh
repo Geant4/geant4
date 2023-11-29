@@ -52,8 +52,8 @@ class G4SDmessenger : public G4UImessenger
 {
  public:
   G4SDmessenger(G4SDManager* SDManager);
-  ~G4SDmessenger();
-  void SetNewValue(G4UIcommand* command, G4String newValues);
+  ~G4SDmessenger() override;
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
  private:
   G4SDManager* fSDMan;

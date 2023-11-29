@@ -33,78 +33,78 @@
 #include "G4ORNLMaleBodyFactory.hh"
 #include "G4PVPlacement.hh"
 
-G4PhantomHeadBuilder::G4PhantomHeadBuilder(): model("MIRD")
+G4PhantomHeadBuilder::G4PhantomHeadBuilder(): fModel("MIRD")
 {  
   // sex can be "female" or "male"
-  body = 0;
-  motherVolume = 0;
-  headVolume = 0;
+  fBody = nullptr;
+  fMotherVolume = nullptr;
+  fHeadVolume = nullptr;
 }
 
 G4PhantomHeadBuilder::~G4PhantomHeadBuilder()
 {
-  delete body;
+  delete fBody;
 } 
 
 void G4PhantomHeadBuilder::BuildHead(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
-  if (motherVolume == 0)
+  if (fMotherVolume == nullptr)
     G4Exception("G4PhantomHeadBuilder::BuildHead()", "human_phantom0011", FatalException, "The moder Volume volume is missing !!!!!");
-  
-  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  else
+  {
+  G4cout <<"MotherVolume: " <<  fMotherVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
-  headVolume = body -> CreateOrgan("Head",motherVolume, colourName, solidVis, sensitivity);
+  fHeadVolume = fBody -> CreateOrgan("Head", fMotherVolume, colourName, solidVis, sensitivity);
+}
 }
 
 void G4PhantomHeadBuilder::BuildSkull(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
-  if (headVolume == 0)
+  if (fHeadVolume == nullptr)
     G4Exception("G4PhantomHeadBuilder::BuildSkull()", "human_phantom0012", FatalException, "The head volume is missing !!!!!");
   
-  G4cout <<"MotherVolume: " <<  headVolume -> GetName()<< G4endl;
+  G4cout <<"MotherVolume: " << fHeadVolume -> GetName()<< G4endl;
   G4cout << "sensitivity : "<< sensitivity << G4endl; 
-  body -> CreateOrgan( "Skull",headVolume, colourName, solidVis, sensitivity);
+  fBody -> CreateOrgan( "Skull", fHeadVolume, colourName, solidVis, sensitivity);
 }
 
 void G4PhantomHeadBuilder::BuildBrain(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 { 
- if (headVolume == 0)
+ if (fHeadVolume == nullptr)
    G4Exception("G4PhantomHeadBuilder::BuildBrain()", "human_phantom0013", FatalException, "The head volume is missing !!!!!");
-
-    body -> CreateOrgan("Brain",headVolume, colourName, solidVis, sensitivity);
+    else fBody -> CreateOrgan("Brain", fHeadVolume, colourName, solidVis, sensitivity);
 }
 
 G4VPhysicalVolume* G4PhantomHeadBuilder::GetPhantom()
 {
-  return motherVolume;
+  return fMotherVolume;
 }
 
 void G4PhantomHeadBuilder::SetMotherVolume(G4VPhysicalVolume* mother)
 {
-  motherVolume = mother;
+  fMotherVolume = mother;
 }
 
 
 void G4PhantomHeadBuilder::SetModel(G4String modelFlag)
 {
-  model = modelFlag;
+  fModel = modelFlag;
 
-  if(model=="MIRD" || model =="MIX") body = new G4MIRDBodyFactory();
-  if(model=="ORNLFemale") 
+  if(fModel=="MIRD") fBody = new G4MIRDBodyFactory();
+  else if(fModel=="ORNLFemale") 
 {
 #ifdef G4LIB_USE_GDML
-body = new G4ORNLFemaleBodyFactory();
+fBody = new G4ORNLFemaleBodyFactory();
 #else
-G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
+G4cout << fModel << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
 #endif
 } 
-
- if(model=="ORNLMale") 
+else if(fModel=="ORNLMale") 
 {
 #ifdef G4LIB_USE_GDML
-body = new G4ORNLMaleBodyFactory();
+fBody = new G4ORNLMaleBodyFactory();
 #else
-G4cout << model << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
+G4cout << fModel << " Working with GDML only! set G4LIB_USE_GDML 1" << G4endl;
 #endif
 }
 

@@ -27,12 +27,13 @@
 #ifdef USE_INFERENCE_ONNX
 #ifndef PAR04ONNXINFERENCE_HH
 #define PAR04ONNXINFERENCE_HH
-
-#include "Par04InferenceInterface.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-#include "core/session/onnxruntime_cxx_api.h"
+#include <core/session/onnxruntime_c_api.h>    // for OrtMemoryInfo
+#include <G4String.hh>                         // for G4String
+#include <G4Types.hh>                          // for G4int, G4double
+#include <memory>                              // for unique_ptr
+#include <vector>                              // for vector
+#include "Par04InferenceInterface.hh"          // for Par04InferenceInterface
+#include "core/session/onnxruntime_cxx_api.h"  // for Env, Session, SessionO...
 
 /**
  * @brief Inference using the ONNX runtime.
@@ -53,7 +54,7 @@ class Par04OnnxInference : public Par04InferenceInterface
   /// @param[in] aGenVector Input latent space and conditions
   /// @param[out] aEnergies Model output = generated shower energies
   /// @param[in] aSize Size of the output
-  void RunInference(vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
+  void RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies, int aSize);
 
  private:
   /// Pointer to the ONNX enviroment

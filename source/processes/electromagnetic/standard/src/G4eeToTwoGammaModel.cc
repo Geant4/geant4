@@ -98,8 +98,7 @@ G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
-{}
+G4eeToTwoGammaModel::~G4eeToTwoGammaModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

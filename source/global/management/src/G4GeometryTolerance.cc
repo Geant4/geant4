@@ -51,12 +51,6 @@ G4GeometryTolerance::G4GeometryTolerance()
 }
 
 // ***************************************************************************
-// Empty destructor.
-// ***************************************************************************
-//
-G4GeometryTolerance::~G4GeometryTolerance() {}
-
-// ***************************************************************************
 // Returns the instance of the singleton.
 // Creates it in case it's called for the first time.
 // ***************************************************************************

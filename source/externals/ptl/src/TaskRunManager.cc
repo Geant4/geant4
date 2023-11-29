@@ -18,29 +18,40 @@
 //
 // ---------------------------------------------------------------
 //  Tasking class implementation
-
 #include "PTL/TaskRunManager.hh"
-#include "PTL/AutoLock.hh"
-#include "PTL/Task.hh"
-#include "PTL/TaskGroup.hh"
+
+#ifndef G4GMAKE
+#include "PTL/Config.hh"
+#endif
 #include "PTL/TaskManager.hh"
 #include "PTL/ThreadPool.hh"
 #include "PTL/Threading.hh"
 #include "PTL/Utility.hh"
 
-#include <cstdlib>
-#include <cstring>
-#include <iterator>
+#include <iostream>
 
 using namespace PTL;
 
 //======================================================================================//
 
 TaskRunManager::pointer&
+TaskRunManager::GetPrivateMasterRunManager()
+{
+    static pointer _instance = nullptr;
+    return _instance;
+}
+
+//======================================================================================//
+
+TaskRunManager::pointer&
 TaskRunManager::GetPrivateMasterRunManager(bool init, bool useTBB)
 {
-    static pointer _instance = (init) ? new TaskRunManager(useTBB) : nullptr;
-    return _instance;
+    auto& _v = GetPrivateMasterRunManager();
+    if(!init)
+        return _v;
+    if(!_v)
+        _v = new TaskRunManager(useTBB);
+    return _v;
 }
 
 //======================================================================================//
@@ -48,8 +59,8 @@ TaskRunManager::GetPrivateMasterRunManager(bool init, bool useTBB)
 TaskRunManager*
 TaskRunManager::GetMasterRunManager(bool useTBB)
 {
-    static pointer& _instance = GetPrivateMasterRunManager(true, useTBB);
-    return _instance;
+    auto& _v = GetPrivateMasterRunManager(true, useTBB);
+    return _v;
 }
 
 //======================================================================================//
@@ -65,10 +76,8 @@ TaskRunManager::GetInstance(bool useTBB)
 TaskRunManager::TaskRunManager(bool useTBB)
 : m_workers(std::thread::hardware_concurrency())
 {
-    if(!GetPrivateMasterRunManager(false))
-    {
-        GetPrivateMasterRunManager(false) = this;
-    }
+    if(!GetPrivateMasterRunManager())
+        GetPrivateMasterRunManager() = this;
 
 #if defined(PTL_USE_TBB)
     auto _useTBB = GetEnv<bool>("PTL_FORCE_TBB", GetEnv<bool>("FORCE_TBB", useTBB));
@@ -79,6 +88,14 @@ TaskRunManager::TaskRunManager(bool useTBB)
     // handle TBB
     ThreadPool::set_use_tbb(useTBB);
     m_workers = GetEnv<uint64_t>("PTL_NUM_THREADS", m_workers);
+}
+
+//======================================================================================//
+
+TaskRunManager::~TaskRunManager()
+{
+    if(GetPrivateMasterRunManager() == this)
+        GetPrivateMasterRunManager() = nullptr;
 }
 
 //======================================================================================//

@@ -452,7 +452,9 @@ public:
   /**
    * Dump debugging output.
    */
-  void dump() {
+  void dump()
+  {
+/*
     G4int nProton = 0, nNeutron = 0;
     G4int nPiPlus = 0, nPiZero = 0, nPiMinus = 0;
     G4int nH2 = 0, nHe3 = 0, nAlpha = 0;
@@ -472,6 +474,7 @@ public:
       if(avv[i] ==  4 && zvv[i] ==  2) nAlpha++;
       if(                zvv[i] >   2) nFragments++;
     }
+*/
   }
 
   /**

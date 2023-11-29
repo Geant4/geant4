@@ -161,11 +161,11 @@ G4hCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
 
   // find out lightest element
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int nelm = material->GetNumberOfElements();
+  std::size_t nelm = material->GetNumberOfElements();
 
   // select lightest element
   G4int Z = 300;
-  for (G4int j=0; j<nelm; ++j) {
+  for (std::size_t j=0; j<nelm; ++j) {
     Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
@@ -298,7 +298,7 @@ void G4hCoulombScatteringModel::SampleSecondaries(
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     newDirection = v0.vect().unit();
     newDirection.rotateUz(dir);   
-    G4DynamicParticle* newdp = new G4DynamicParticle(ion, newDirection, trec);
+    auto newdp = new G4DynamicParticle(ion, newDirection, trec);
     fvect->push_back(newdp);
   } else if(trec > 0.0) {
     edep = trec;

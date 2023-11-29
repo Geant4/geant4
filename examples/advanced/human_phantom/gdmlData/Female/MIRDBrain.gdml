@@ -110,7 +110,7 @@
 
  <solids>
 
-  <ellipsoid aunit="cm" lunit="cm" name="Brain" ax="6.58" by="8.57" cz="5.73" />
+  <ellipsoid lunit="cm" name="Brain" ax="6.58" by="8.57" cz="5.73" />
  
  </solids>
 

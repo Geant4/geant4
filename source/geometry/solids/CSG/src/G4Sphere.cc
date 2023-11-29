@@ -92,7 +92,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                 FatalException, message);
   }
   fRmin=pRmin; fRmax=pRmax;
-  fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
+  fRminTolerance = (fRmin) != 0.0 ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
   fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
 
   // Check angles
@@ -107,15 +107,7 @@ G4Sphere::G4Sphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Sphere::G4Sphere( __void__& a )
-  : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.),
-    kAngTolerance(0.), kRadTolerance(0.),
-    fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
-    fDTheta(0.), sinCPhi(0.), cosCPhi(0.),
-    cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
-    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
-    ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
-    tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
-    halfCarTolerance(0.), halfAngTolerance(0.)
+  : G4CSGSolid(a)
 {
 }
 
@@ -123,35 +115,13 @@ G4Sphere::G4Sphere( __void__& a )
 //
 // Destructor
 
-G4Sphere::~G4Sphere()
-{
-}
+G4Sphere::~G4Sphere() = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
 // Copy constructor
 
-G4Sphere::G4Sphere(const G4Sphere& rhs)
-  : G4CSGSolid(rhs), fRminTolerance(rhs.fRminTolerance),
-    fRmaxTolerance(rhs.fRmaxTolerance), kAngTolerance(rhs.kAngTolerance),
-    kRadTolerance(rhs.kRadTolerance), fEpsilon(rhs.fEpsilon),
-    fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
-    fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
-    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
-    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
-    hDPhi(rhs.hDPhi), cPhi(rhs.cPhi), ePhi(rhs.ePhi),
-    sinSTheta(rhs.sinSTheta), cosSTheta(rhs.cosSTheta),
-    sinETheta(rhs.sinETheta), cosETheta(rhs.cosETheta),
-    tanSTheta(rhs.tanSTheta), tanSTheta2(rhs.tanSTheta2),
-    tanETheta(rhs.tanETheta), tanETheta2(rhs.tanETheta2), eTheta(rhs.eTheta),
-    fFullPhiSphere(rhs.fFullPhiSphere), fFullThetaSphere(rhs.fFullThetaSphere),
-    fFullSphere(rhs.fFullSphere),
-    halfCarTolerance(rhs.halfCarTolerance),
-    halfAngTolerance(rhs.halfAngTolerance)
-{
-}
+G4Sphere::G4Sphere(const G4Sphere&) = default;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -340,7 +310,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
 
   // Phi boundaries   : Do not check if it has no phi boundary!
 
-  if ( !fFullPhiSphere && rho2 )  // [fDPhi < twopi] and [p.x or p.y]
+  if ( !fFullPhiSphere && (rho2 != 0.0) )  // [fDPhi < twopi] and [p.x or p.y]
   {
     pPhi = std::atan2(p.y(),p.x()) ;
 
@@ -359,7 +329,7 @@ EInside G4Sphere::Inside( const G4ThreeVector& p ) const
 
   // Theta bondaries
 
-  if ( (rho2 || p.z()) && (!fFullThetaSphere) )
+  if ( ((rho2 != 0.0) || (p.z() != 0.0)) && (!fFullThetaSphere) )
   {
     rho    = std::sqrt(rho2);
     pTheta = std::atan2(rho,p.z());
@@ -414,9 +384,9 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   rho  = std::sqrt(rho2);
 
   G4double    distRMax = std::fabs(radius-fRmax);
-  if (fRmin)  distRMin = std::fabs(radius-fRmin);
+  if (fRmin != 0.0)  distRMin = std::fabs(radius-fRmin);
 
-  if ( rho && !fFullSphere )
+  if ( (rho != 0.0) && !fFullSphere )
   {
     pPhi = std::atan2(p.y(),p.x());
 
@@ -425,12 +395,12 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( !fFullPhiSphere )
   {
-    if ( rho )
+    if ( rho != 0.0 )
     {
       distSPhi = std::fabs( pPhi-fSPhi );
       distEPhi = std::fabs( pPhi-ePhi );
     }
-    else if( !fRmin )
+    else if( fRmin == 0.0 )
     {
       distSPhi = 0.;
       distEPhi = 0.;
@@ -440,7 +410,7 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( !fFullThetaSphere )
   {
-    if ( rho )
+    if ( rho != 0.0 )
     {
       pTheta     = std::atan2(rho,p.z());
       distSTheta = std::fabs(pTheta-fSTheta);
@@ -454,9 +424,9 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
                            cosETheta*p.y()/rho,
                           -sinETheta          );
     }
-    else if( !fRmin )
+    else if( fRmin == 0.0 )
     {
-      if ( fSTheta )
+      if ( fSTheta != 0.0 )
       {
         distSTheta = 0.;
         nTs = G4ThreeVector(0.,0.,-1.);
@@ -468,14 +438,14 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       }
     }
   }
-  if( radius )  { nR = G4ThreeVector(p.x()/radius,p.y()/radius,p.z()/radius); }
+  if( radius != 0.0 )  { nR = G4ThreeVector(p.x()/radius,p.y()/radius,p.z()/radius); }
 
   if( distRMax <= halfCarTolerance )
   {
     ++noSurfaces;
     sumnorm += nR;
   }
-  if( fRmin && (distRMin <= halfCarTolerance) )
+  if( (fRmin != 0.0) && (distRMin <= halfCarTolerance) )
   {
     ++noSurfaces;
     sumnorm -= nR;
@@ -545,7 +515,7 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   //
 
   distRMax=std::fabs(radius-fRmax);
-  if (fRmin)
+  if (fRmin != 0.0)
   {
     distRMin=std::fabs(radius-fRmin);
 
@@ -574,7 +544,7 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   pPhi = std::atan2(p.y(),p.x());
   if (pPhi<0) { pPhi += twopi; }
 
-  if (!fFullPhiSphere && rho)
+  if (!fFullPhiSphere && (rho != 0.0))
   {
     if (fSPhi<0)
     {
@@ -611,7 +581,7 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   // Distance to theta planes
   //
 
-  if (!fFullThetaSphere && radius)
+  if (!fFullThetaSphere && (radius != 0.0))
   {
     pTheta=std::atan2(rho,p.z());
     distSTheta=std::fabs(pTheta-fSTheta)*radius;
@@ -808,7 +778,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
         yi   = p.y() + sd*v.y() ;
         rhoi = std::sqrt(xi*xi + yi*yi) ;
 
-        if (!fFullPhiSphere && rhoi)    // Check phi intersection
+        if (!fFullPhiSphere && (rhoi != 0.0))    // Check phi intersection
         {
           cosPsi = (xi*cosCPhi + yi*sinCPhi)/rhoi ;
 
@@ -918,7 +888,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   //   surface first.
   // - Tolerant check if travelling through solid
 
-  if (fRmin)
+  if (fRmin != 0.0)
   {
     c  = rad2 - fRmin*fRmin ;
     d2 = pDotV3d*pDotV3d - c ;
@@ -980,7 +950,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
           yi   = p.y() + sd*v.y() ;
           rhoi = std::sqrt(xi*xi+yi*yi) ;
 
-          if ( !fFullPhiSphere && rhoi )   // Check phi intersection
+          if ( !fFullPhiSphere && (rhoi != 0.0) )   // Check phi intersection
           {
             cosPsi = (xi*cosCPhi + yi*sinCPhi)/rhoi ;
 
@@ -1192,7 +1162,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     // => sd^2(1-vz^2(1+tan^2(t))+2sd(pdotv2d-pzvztan^2(t))
     //       + (rho2-pz^2tan^2(t)) = 0
 
-    if (fSTheta)
+    if (fSTheta != 0.0)
     {
       dist2STheta = rho2 - p.z()*p.z()*tanSTheta2 ;
     }
@@ -1215,7 +1185,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1 ;
         c  = dist2STheta/t1 ;
@@ -1242,7 +1212,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(fSTheta - halfpi) <= 0) )
             {
-              if ( !fFullPhiSphere && rhoi2 )  // Check phi intersection
+              if ( !fFullPhiSphere && (rhoi2 != 0.0) )  // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1266,7 +1236,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       {
         t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
         t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-        if (t1)
+        if (t1 != 0.0)
         {
           b  = t2/t1 ;
           c  = dist2ETheta/t1 ;
@@ -1289,7 +1259,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
                 && (radi2 >= tolORMin2)
                 && (zi*(eTheta - halfpi) <= 0) )
               {
-                if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+                if (!fFullPhiSphere && (rhoi2 != 0.0))   // Check phi intersection
                 {
                   cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                   if (cosPsi >= cosHDPhiOT)
@@ -1315,7 +1285,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1 ;
         c  = dist2ETheta/t1 ;
@@ -1343,7 +1313,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(eTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)  // Check phi intersection
+              if (!fFullPhiSphere && (rhoi2 != 0.0))  // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1363,11 +1333,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Possible intersection with STheta cone.
       // Second >= 0 root should be considered
 
-      if ( fSTheta )
+      if ( fSTheta != 0.0 )
       {
         t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
         t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-        if (t1)
+        if (t1 != 0.0)
         {
           b  = t2/t1 ;
           c  = dist2STheta/t1 ;
@@ -1390,7 +1360,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
                 && (radi2 >= tolORMin2)
                 && (zi*(fSTheta - halfpi) <= 0) )
               {
-                if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+                if (!fFullPhiSphere && (rhoi2 != 0.0))   // Check phi intersection
                 {
                   cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                   if (cosPsi >= cosHDPhiOT)
@@ -1420,7 +1390,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
         || (t2<0  && tolIRMin2<rad2 && rad2<tolIRMax2 && fSTheta>halfpi)
         || (v.z()<0 && tolIRMin2<rad2 && rad2<tolIRMax2 && fSTheta==halfpi) )
       {
-        if (!fFullPhiSphere && rho2)  // Check phi intersection
+        if (!fFullPhiSphere && (rho2 != 0.0))  // Check phi intersection
         {
           cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/std::sqrt(rho2) ;
           if (cosPsi >= cosHDPhiIT)
@@ -1437,7 +1407,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1 ;
         c  = dist2STheta/t1 ;
@@ -1459,7 +1429,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(fSTheta - halfpi) <= 0) )
             {
-              if ( !fFullPhiSphere && rhoi2 )    // Check phi intersection
+              if ( !fFullPhiSphere && (rhoi2 != 0.0) )    // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if ( cosPsi >= cosHDPhiOT )
@@ -1492,7 +1462,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
         ||   ((v.z()>0) && (eTheta == halfpi)
           && (tolIRMin2 < rad2) && (rad2 < tolIRMax2))  )
       {
-        if (!fFullPhiSphere && rho2)   // Check phi intersection
+        if (!fFullPhiSphere && (rho2 != 0.0))   // Check phi intersection
         {
           cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/std::sqrt(rho2) ;
           if (cosPsi >= cosHDPhiIT)
@@ -1509,7 +1479,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       // Not entering immediately/travelling through
 
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1 ;
         c  = dist2ETheta/t1 ;
@@ -1533,7 +1503,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(eTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              if (!fFullPhiSphere && (rhoi2 != 0.0))   // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1557,7 +1527,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       t1 = 1 - v.z()*v.z()*(1 + tanSTheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanSTheta2 ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1;
         c  = dist2STheta/t1 ;
@@ -1580,7 +1550,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(fSTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              if (!fFullPhiSphere && (rhoi2 != 0.0))   // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if (cosPsi >= cosHDPhiOT)
@@ -1598,7 +1568,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
       }
       t1 = 1 - v.z()*v.z()*(1 + tanETheta2) ;
       t2 = pDotV2d - p.z()*v.z()*tanETheta2 ;
-      if (t1)
+      if (t1 != 0.0)
       {
         b  = t2/t1 ;
         c  = dist2ETheta/t1 ;
@@ -1621,7 +1591,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
               && (radi2 >= tolORMin2)
               && (zi*(eTheta - halfpi) <= 0) )
             {
-              if (!fFullPhiSphere && rhoi2)   // Check phi intersection
+              if (!fFullPhiSphere && (rhoi2 != 0.0))   // Check phi intersection
               {
                 cosPsi = (xi*cosCPhi + yi*sinCPhi)/std::sqrt(rhoi2) ;
                 if ( cosPsi >= cosHDPhiOT )
@@ -1663,7 +1633,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
   //
   // Distance to r shells
   //
-  if (fRmin)
+  if (fRmin != 0.0)
   {
     safeRMin=fRmin-rds;
     safeRMax=rds-fRmax;
@@ -1684,7 +1654,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
   //
   // Distance to phi extent
   //
-  if (!fFullPhiSphere && rho)
+  if (!fFullPhiSphere && (rho != 0.0))
   {
     // Psi=angle from central phi to point
     //
@@ -1759,7 +1729,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   const G4double halfRmaxTolerance = fRmaxTolerance*0.5;
   const G4double halfRminTolerance = fRminTolerance*0.5;
   const G4double Rmax_plus  = fRmax + halfRmaxTolerance;
-  const G4double Rmin_minus = (fRmin) ? fRmin-halfRminTolerance : 0;
+  const G4double Rmin_minus = (fRmin) != 0.0 ? fRmin-halfRminTolerance : 0;
   G4double t1,t2;
   G4double b,c,d;
 
@@ -1840,7 +1810,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     // Always first >=0 root, because would have passed
     // from outside of Rmin surface .
 
-    if (fRmin)
+    if (fRmin != 0.0)
     {
       c  = rad2 - fRmin*fRmin;
       d2 = pDotV3d*pDotV3d - c;
@@ -1897,7 +1867,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     //       + (rho2-pz^2tan^2(t)) = 0
     //
 
-    if(fSTheta) // intersection with first cons
+    if(fSTheta != 0.0) // intersection with first cons
     {
       if( std::fabs(tanSTheta) > 5./kAngTolerance ) // kons is plane z=0
       {
@@ -1940,7 +1910,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 if( calcNorm )
                 {
                   *validNorm = true;
-                  if (rho2)
+                  if (rho2 != 0.0)
                   {
                     rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
 
@@ -1966,7 +1936,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               if( calcNorm )
               {
                 *validNorm = true;
-                if (rho2)
+                if (rho2 != 0.0)
                 {
                   rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
 
@@ -2074,7 +2044,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
                 if( calcNorm )
                 {
                   *validNorm = true;
-                  if (rho2)
+                  if (rho2 != 0.0)
                   {
                     rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
                     *n = G4ThreeVector( p.x()/rhoSecTheta,
@@ -2104,7 +2074,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               if( calcNorm )
               {
                 *validNorm = true;
-                if (rho2)
+                if (rho2 != 0.0)
                 {
                     rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
                     *n = G4ThreeVector( p.x()/rhoSecTheta,
@@ -2182,7 +2152,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   if ( !fFullPhiSphere )
   {
-    if ( p.x() || p.y() ) // Check if on z axis (rho not needed later)
+    if ( (p.x() != 0.0) || (p.y() != 0.0) ) // Check if on z axis (rho not needed later)
     {
       // pDist -ve when inside
 
@@ -2246,8 +2216,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               //
               vphi = std::atan2(v.y(),v.x()) ;
 
-              if( !((fSPhi-halfAngTolerance <= vphi)
-                  &&(fSPhi+fDPhi+halfAngTolerance >= vphi)) )
+              if( (fSPhi-halfAngTolerance > vphi)
+                  ||(fSPhi+fDPhi+halfAngTolerance < vphi) )
               {
                 sidephi = kEPhi;
                 if ( pDistE <= -halfCarTolerance )  { sphi = sphi2; }
@@ -2467,7 +2437,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
       // On z axis + travel not || to z axis -> if phi of vector direction
       // within phi of shape, Step limited by rmax, else Step =0
 
-      if ( v.x() || v.y() )
+      if ( (v.x() != 0.0) || (v.y() != 0.0) )
       {
         vphi = std::atan2(v.y(),v.x()) ;
         if ((fSPhi-halfAngTolerance < vphi) && (vphi < ePhi+halfAngTolerance))
@@ -2542,7 +2512,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           xi = p.x() + snxt*v.x();
           yi = p.y() + snxt*v.y();
           rho2=xi*xi+yi*yi;
-          if (rho2)
+          if (rho2 != 0.0)
           {
             rhoSecTheta = std::sqrt(rho2*(1+tanSTheta2));
             *n = G4ThreeVector( xi/rhoSecTheta, yi/rhoSecTheta,
@@ -2568,7 +2538,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           xi=p.x()+snxt*v.x();
           yi=p.y()+snxt*v.y();
           rho2=xi*xi+yi*yi;
-          if (rho2)
+          if (rho2 != 0.0)
           {
             rhoSecTheta = std::sqrt(rho2*(1+tanETheta2));
             *n = G4ThreeVector( xi/rhoSecTheta, yi/rhoSecTheta,
@@ -2587,7 +2557,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << G4endl;
         DumpInfo();
         std::ostringstream message;
-        G4int oldprc = message.precision(16);
+        G4long oldprc = message.precision(16);
         message << "Undefined side for valid surface normal to solid."
                 << G4endl
                 << "Position:"  << G4endl << G4endl
@@ -2611,7 +2581,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << G4endl;
     DumpInfo();
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Logic error: snxt = kInfinity  ???" << G4endl
             << "Position:"  << G4endl << G4endl
             << "p.x() = "   << p.x()/mm << " mm" << G4endl
@@ -2649,7 +2619,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4int old_prc = G4cout.precision(16);
+     G4long old_prc = G4cout.precision(16);
      G4cout << G4endl;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -2666,7 +2636,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
   //
   safeRMax = fRmax-rds;
   safe = safeRMax;
-  if (fRmin)
+  if (fRmin != 0.0)
   {
      safeRMin = rds-fRmin;
      safe = std::min( safeRMin, safeRMax );
@@ -2732,7 +2702,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p ) const
 
 G4GeometryType G4Sphere::GetEntityType() const
 {
-  return G4String("G4Sphere");
+  return {"G4Sphere"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -2750,7 +2720,7 @@ G4VSolid* G4Sphere::Clone() const
 
 std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -2830,7 +2800,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
     G4double z   = cosSTheta + (cosETheta - cosSTheta)*u;
     G4double rho = std::sqrt(1. - z*z);
     G4double phi = fDPhi*v + fSPhi;
-    return G4ThreeVector(r*rho*std::cos(phi), r*rho*std::sin(phi), r*z);
+    return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
   }
   else if (select < aInner + aOuter + aPhi) // cut in phi
   {
@@ -2839,7 +2809,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
     G4double theta = fDTheta*v + fSTheta;
     G4double z     = std::cos(theta);
     G4double rho   = std::sin(theta);
-    return G4ThreeVector(r*rho*std::cos(phi), r*rho*std::sin(phi), r*z);
+    return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
   }
   else                                     // cut in theta
   {
@@ -2848,7 +2818,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
     G4double phi   = fDPhi*v + fSPhi;
     G4double z     = std::cos(theta);
     G4double rho   = std::sin(theta);
-    return G4ThreeVector(r*rho*std::cos(phi), r*rho*std::sin(phi), r*z);
+    return { r*rho*std::cos(phi), r*rho*std::sin(phi), r*z };
   }
 }
 
@@ -2858,7 +2828,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
 
 G4VisExtent G4Sphere::GetExtent() const
 {
-  return G4VisExtent(-fRmax, fRmax,-fRmax, fRmax,-fRmax, fRmax );
+  return { -fRmax, fRmax,-fRmax, fRmax,-fRmax, fRmax };
 }
 
 

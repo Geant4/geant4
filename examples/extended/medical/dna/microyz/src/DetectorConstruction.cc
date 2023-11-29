@@ -55,25 +55,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
-fDetectorMessenger(0)
+:G4VUserDetectorConstruction()
 {
-  // Default tracking cut
-  fpTrackingCut = 11.*eV; 
-    
-  // Default maximum step size
-  fpMaxStepSize = DBL_MAX; 
-    
   // Create commands for interactive definition of the detector  
-  fDetectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = std::make_unique<DetectorMessenger>(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-DetectorConstruction::~DetectorConstruction()
-{
- delete fDetectorMessenger;
-}
+DetectorConstruction::~DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -115,11 +105,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
          << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/nm
          << " nm" << G4endl;
 
-  G4Box* worldS
+  auto* worldS
     = new G4Box("world",                                    //its name
                 worldLength/2,worldLength/2,worldLength/2); //its size
   
-  G4LogicalVolume* worldLV
+  auto* worldLV
     = new G4LogicalVolume(
                  worldS,   //its solid
                  fpWaterMaterial,      //its material
@@ -127,11 +117,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   
   G4VPhysicalVolume* worldPV
     = new G4PVPlacement(
-                 0,               // no rotation
+                 nullptr,               // no rotation
                  G4ThreeVector(), // at (0,0,0)
                  worldLV,         // its logical volume
                  "World",         // its name
-                 0,               // its mother  volume
+                 nullptr,               // its mother  volume
                  false,           // no boolean operations
                  0,               // copy number
                  false); // checking overlaps 
@@ -152,9 +142,10 @@ void DetectorConstruction::ConstructSDandField()
 
   G4String trackerChamberSDname = "TrackerChamberSD";
   
-  TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname,
+  auto* aTrackerSD = new TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
-  
+  aTrackerSD->SetRadius(fRadius);
+
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
 
   // Setting aTrackerSD to all logical volumes with the same name 
@@ -165,16 +156,21 @@ void DetectorConstruction::ConstructSDandField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetTrackingCut(G4double value)
+void DetectorConstruction::SetTrackingCut(const G4double& value)
 {
   fpTrackingCut = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaxStepSize(G4double value)
+void DetectorConstruction::SetMaxStepSize(const G4double& value)
 {
   fpMaxStepSize = value;
+}
+
+void DetectorConstruction::SetTrackerSDRadius(const G4double& value)
+{
+  fRadius = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -186,6 +182,8 @@ void DetectorConstruction::PrintParameters() const
          << G4BestUnit(fpTrackingCut,"Energy") << G4endl;
   G4cout << "---> The maximum step size is set to " 
          << G4BestUnit(fpMaxStepSize,"Length") << G4endl;
+    G4cout << "---> The TrackerSD radius is set to "
+           << G4BestUnit(fRadius,"Length") << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 

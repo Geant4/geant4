@@ -40,8 +40,8 @@ G4bool G4ParticleDefinition::GetPDGStable() const
 {
   if(IsGeneralIon())
   { return (GetIonLifeTime()<0.); }
-  else
-  { return thePDGStable; }
+  
+  return thePDGStable;
 }
 
 inline
@@ -216,31 +216,33 @@ G4int G4ParticleDefinition::GetParticleDefinitionID() const
 inline
 G4bool G4ParticleDefinition::IsHypernucleus() const
 {
-  if ( GetNumberOfLambdasInHypernucleus() > 0 ) return true;
-  return false;
+  return GetNumberOfLambdasInHypernucleus() > 0;
 }
 
 inline
 G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
 {
-  // PDG code of hypernuclei: 10LZZZAAAI
   G4int numberOfLambdas = 0;
-  if ( thePDGEncoding > 0 ) numberOfLambdas = (thePDGEncoding/10000000)%100;
+  // PDG code of hypernuclei: 10LZZZAAAI
+  if ( thePDGEncoding > 0  &&  thePDGEncoding/1000000000 != 0 ) {
+    numberOfLambdas = (thePDGEncoding/10000000)%100;
+  }
   return numberOfLambdas;
 }
 
 inline
 G4bool G4ParticleDefinition::IsAntiHypernucleus() const
 {
-  if ( GetNumberOfAntiLambdasInAntiHypernucleus() > 0 ) return true;
-  return false;
+  return GetNumberOfAntiLambdasInAntiHypernucleus() > 0;
 }
 
 inline
 G4int G4ParticleDefinition::GetNumberOfAntiLambdasInAntiHypernucleus() const
 {
-  // PDG code of anti-hypernuclei: -10LZZZAAAI
   G4int numberOfAntiLambdas = 0;
-  if ( thePDGEncoding < 0 ) numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  // PDG code of anti-hypernuclei: -10LZZZAAAI
+  if ( thePDGEncoding < 0   &&  thePDGEncoding/1000000000 != 0 ) {
+    numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  }
   return numberOfAntiLambdas;
 }

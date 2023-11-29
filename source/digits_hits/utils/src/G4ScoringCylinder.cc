@@ -28,29 +28,22 @@
 
 #include "G4ScoringCylinder.hh"
 
-#include "G4VPhysicalVolume.hh"
-#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4PVDivision.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4PVDivision.hh"
-#include "G4VisAttributes.hh"
-#include "G4VVisManager.hh"
-#include "G4VScoreColorMap.hh"
-
+#include "G4PhysicalConstants.hh"
 #include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4SDParticleFilter.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSTrackLength.hh"
-#include "G4PSNofStep.hh"
 #include "G4ScoringManager.hh"
 #include "G4StatDouble.hh"
-
-#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Tubs.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4VScoreColorMap.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
   : G4VScoringMesh(wName)
@@ -61,8 +54,6 @@ G4ScoringCylinder::G4ScoringCylinder(G4String wName)
   fDivisionAxisNames[1] = "PHI";
   fDivisionAxisNames[2] = "R";
 }
-
-G4ScoringCylinder::~G4ScoringCylinder() { ; }
 
 void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
 {
@@ -89,7 +80,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
                                    fSize[2],        // Dz
                                    fAngle[0],       // starting phi
                                    fAngle[1]);      // segment phi
-  G4LogicalVolume* tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
+  auto  tubsLogical = new G4LogicalVolume(tubsSolid, nullptr, tubsName);
   new G4PVPlacement(fRotationMatrix, fCenterPosition, tubsLogical,
                     tubsName + "0", worldLogical, false, 0);
 
@@ -110,7 +101,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
                              fSize[2] / fNSegment[IZ],  // half len. in z
                              fAngle[0],                 // starting phi angle
                              fAngle[1]);  // delta angle of the segment
-  layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
+  layerLogical[0] = new G4LogicalVolume(layerSolid[0], nullptr, layerName[0]);
   if(fNSegment[IZ] > 1)
   {
     if(verboseLevel > 9)
@@ -135,7 +126,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   {
     if(verboseLevel > 9)
       G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
-    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), layerLogical[0],
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), layerLogical[0],
                       layerName[0], tubsLogical, false, 0);
   }
   else
@@ -151,7 +142,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   layerSolid[1] =
     new G4Tubs(layerName[1], fSize[0], fSize[1], fSize[2] / fNSegment[IZ],
                fAngle[0], fAngle[1] / fNSegment[IPHI]);
-  layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
+  layerLogical[1] = new G4LogicalVolume(layerSolid[1], nullptr, layerName[1]);
   if(fNSegment[IPHI] > 1)
   {
     if(verboseLevel > 9)
@@ -176,7 +167,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   {
     if(verboseLevel > 9)
       G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
-    new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), layerLogical[1],
+    new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), layerLogical[1],
                       layerName[1], layerLogical[0], false, 0);
   }
   else
@@ -191,7 +182,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   G4VSolid* elementSolid = new G4Tubs(
     elementName, fSize[0], (fSize[1] - fSize[0]) / fNSegment[IR] + fSize[0],
     fSize[2] / fNSegment[IZ], fAngle[0], fAngle[1] / fNSegment[IPHI]);
-  fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
+  fMeshElementLogical = new G4LogicalVolume(elementSolid, nullptr, elementName);
   if(fNSegment[IR] >= 1)
   {
     if(verboseLevel > 9)
@@ -213,12 +204,6 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
       new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kRho,
                        fNSegment[IR], 0.);
     }
-    //  } else if(fNSegment[IR] == 1) {
-    //    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() :
-    //    Placement" << G4endl;
-    // G4cout<<"#@#@#@#@#@ G4ScoringCylinder::Construct() : Placement "<<G4endl;
-    //    new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical,
-    //    elementName, layerLogical[1], false, 0);
   }
   else
   {
@@ -231,7 +216,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume* fWorldPhys)
   fMeshElementLogical->SetSensitiveDetector(fMFD);
 
   // vis. attributes
-  G4VisAttributes* visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
+  auto  visatt = new G4VisAttributes(G4Colour(.5, .5, .5));
   visatt->SetVisibility(true);
   layerLogical[0]->SetVisAttributes(visatt);
   layerLogical[1]->SetVisAttributes(visatt);
@@ -260,7 +245,7 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
                              G4int axflg)
 {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager)
+  if(pVisManager != nullptr)
   {
     // cell vectors
     std::vector<double> ephi;
@@ -277,7 +262,7 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
 
     // projections
     G4int q[3];
-    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    auto itr = map->GetMap()->begin();
     for(; itr != map->GetMap()->end(); itr++)
     {
       if(itr->first < 0)
@@ -349,7 +334,7 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
           G4ThreeVector zpos(
             0., 0., -fSize[2] + fSize[2] / fNSegment[IZ] * (1 + 2. * z));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans =
               G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(zpos);
@@ -396,7 +381,7 @@ void G4ScoringCylinder::Draw(RunScore* map, G4VScoreColorMap* colorMap,
           G4ThreeVector zposn(0., 0., -fSize[2]);
           G4ThreeVector zposp(0., 0., fSize[2]);
           G4Transform3D transn, transp;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             transn =
               G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(zposn);
@@ -460,7 +445,7 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
     return;
   }
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVisManager)
+  if(pVisManager != nullptr)
   {
     // cell vectors
     std::vector<std::vector<std::vector<double>>> cell;  // cell[R][Z][PHI]
@@ -490,7 +475,7 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
 
     // projections
     G4int q[3];
-    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    auto itr = map->GetMap()->begin();
     for(; itr != map->GetMap()->end(); itr++)
     {
       if(itr->first < 0)
@@ -577,7 +562,7 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
           G4ThreeVector zpos(
             0., 0., -fSize[2] + fSize[2] / fNSegment[IZ] * (1 + 2. * z));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans =
               G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(zpos);
@@ -620,7 +605,7 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
           G4ThreeVector zpos(
             0., 0., -fSize[2] + fSize[2] / fNSegment[IZ] * (idxColumn * 2 + 1));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans =
               G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(zpos);
@@ -664,7 +649,7 @@ void G4ScoringCylinder::DrawColumn(RunScore* map, G4VScoreColorMap* colorMap,
           G4ThreeVector zpos(
             0., 0., -fSize[2] + fSize[2] / fNSegment[IZ] * (2. * z + 1));
           G4Transform3D trans;
-          if(fRotationMatrix)
+          if(fRotationMatrix != nullptr)
           {
             trans =
               G4Rotate3D(*fRotationMatrix).inverse() * G4Translate3D(zpos);
@@ -707,15 +692,13 @@ void G4ScoringCylinder::GetRZPhi(G4int index, G4int q[3]) const
   q[k]     = index - q[j] * fNSegment[k] - q[i] * jk;
 }
 
-#include "G4UnitsTable.hh"
-#include "G4VSolid.hh"
-#include "G4SolidStore.hh"
-#include "G4LogicalVolume.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4Material.hh"
-#include "G4VSensitiveDetector.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+#include "G4UnitsTable.hh"
+#include "G4VSensitiveDetector.hh"
+#include "G4VSolid.hh"
 
 void G4ScoringCylinder::DumpVolumes()
 {
@@ -760,7 +743,7 @@ void G4ScoringCylinder::DumpLogVols(G4int lvl)
   {
     G4cout << (*itr)->GetName()
            << "\t Solid = " << (*itr)->GetSolid()->GetName();
-    if((*itr)->GetMaterial())
+    if((*itr)->GetMaterial() != nullptr)
     {
       G4cout << "\t Material = " << (*itr)->GetMaterial()->GetName() << G4endl;
     }
@@ -771,7 +754,7 @@ void G4ScoringCylinder::DumpLogVols(G4int lvl)
     if(lvl < 1)
       continue;
     G4cout << "\t region = ";
-    if((*itr)->GetRegion())
+    if((*itr)->GetRegion() != nullptr)
     {
       G4cout << (*itr)->GetRegion()->GetName();
     }
@@ -780,7 +763,7 @@ void G4ScoringCylinder::DumpLogVols(G4int lvl)
       G4cout << "not defined";
     }
     G4cout << "\t sensitive detector = ";
-    if((*itr)->GetSensitiveDetector())
+    if((*itr)->GetSensitiveDetector() != nullptr)
     {
       G4cout << (*itr)->GetSensitiveDetector()->GetName();
     }
@@ -811,7 +794,7 @@ void G4ScoringCylinder::DumpLogVols(G4int lvl)
     G4cout << G4endl;
     if(lvl < 2)
       continue;
-    if((*itr)->GetMaterial())
+    if((*itr)->GetMaterial() != nullptr)
     {
       G4cout << "\t weight = " << G4BestUnit((*itr)->GetMass(), "Mass")
              << G4endl;
@@ -840,7 +823,7 @@ void G4ScoringCylinder::DumpPhysVols(G4int lvl)
         G4cout << (*itr)->GetName() << "\t logical volume = "
                << (*itr)->GetLogicalVolume()->GetName()
                << "\t mother logical = ";
-        if((*itr)->GetMotherLogical())
+        if((*itr)->GetMotherLogical() != nullptr)
         {
           G4cout << (*itr)->GetMotherLogical()->GetName();
         }
@@ -854,7 +837,7 @@ void G4ScoringCylinder::DumpPhysVols(G4int lvl)
         G4cout << (*itr)->GetName() << "\t logical volume = "
                << (*itr)->GetLogicalVolume()->GetName()
                << "\t mother logical = ";
-        if((*itr)->GetMotherLogical())
+        if((*itr)->GetMotherLogical() != nullptr)
         {
           G4cout << (*itr)->GetMotherLogical()->GetName();
         }

@@ -1,18 +1,31 @@
--------------------------------------------------------------------
+# Example common History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    extended/commmon History file
-                    ------------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-07 I. Hrivnacova (excommon-V11-00-01)
+New coding guidelines, added tests:
+- Added exampleCommon.cc and exampleCommonNoVis.cc
+- Added namespace Common
+- Override keywords
+- Data members initialization in .hh
+- Updated README files
+- Removed trailing whitespaces
+
+## 2021-12-10 Ben Morgan (excommon-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
+24/05/21 B. Morgan (excommon-V10-07-00)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+03/11/20 B. Morgan (excommon-V10-06-00)
+- Support same CMake version range as core Geant4
 
 29/09/17 I. Hrivnacova (excommon-V10-03-00,01)
 - Removed generic class names prefix (ExG4) and introduced a meaningful one
@@ -28,7 +41,7 @@ track of all tags.
 - Fix for Doxygen documentation
 
 09/06/15 I. Hrivnacova (excommon-V10-01-00)
-- Added a client-specific prefix to common library and test 
+- Added a client-specific prefix to common library and test
   to avoid name clashes when building all extended examples at once
 
 06/11/14 I. Hrivnacova (excommon-V10-00-06)
@@ -50,18 +63,18 @@ track of all tags.
 04/11/14 I. Hrivnacova (excommon-V10-00-01)
 - Modifications to facilitate use of common directory via svn:externals:
   merging user classes in the top directoy (include and src),
-  added testCommon.cc for all classes altogether and 
+  added testCommon.cc for all classes altogether and
   added building common library
 
 28/05/14 I. Hrivnacova (excommon-V10-00-00)
 - Removed fPrintModulo from ExG4EventAction01
   and fSetPrintModuloCmd from ExG4EventAction01Messenger,
   now obsolete.
-- Fixed long lines, separators in userActions classes   
+- Fixed long lines, separators in userActions classes
 
 28/02/13 I. Hrivnacova (excommon-V09-06-00)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   Thanks to V. Ivantchenko for pointing at this.
 

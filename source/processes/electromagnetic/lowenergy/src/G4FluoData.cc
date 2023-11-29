@@ -71,7 +71,7 @@ G4FluoData::~G4FluoData()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4FluoData::NumberOfVacancies() const
+std::size_t G4FluoData::NumberOfVacancies() const
 {
   return numberOfVacancies;
 }
@@ -100,7 +100,7 @@ G4int G4FluoData::VacancyId(G4int vacancyIndex) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
+std::size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
 {
   G4int n = 0;
   if (vacancyIndex<0 || vacancyIndex>=numberOfVacancies)
@@ -136,12 +136,12 @@ G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
      
      G4DataVector dataSet = *((*pos).second);
    
-     G4int nData = dataSet.size();
+     G4int nData = (G4int)dataSet.size();
      // The first Element of idMap's dataSets is the original shell of 
      // the vacancy, so we must start from the first element of dataSet
      if (initIndex >= 0 && initIndex < nData)
        {
-	 n =  (G4int) dataSet[initIndex+1];   
+         n = dataSet[initIndex+1];   
        }
    }
  return n;
@@ -163,10 +163,10 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
      
       G4DataVector dataSet = *((*pos).second);
      
-      G4int nData = dataSet.size();
+      G4int nData = (G4int)dataSet.size();
       if (initIndex >= 0 && initIndex < nData)
 	{
-	  n =  dataSet[initIndex];
+          n =  dataSet[initIndex];
 	}
     }
   return n;
@@ -190,10 +190,10 @@ G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
      
       G4DataVector dataSet = *((*pos).second);
      
-      G4int nData = dataSet.size();
+      G4int nData = (G4int)dataSet.size();
       if (initIndex >= 0 && initIndex < nData)
 	{
-	  n =  dataSet[initIndex];
+          n =  dataSet[initIndex];
 	}
     }
   return n;
@@ -214,7 +214,7 @@ void G4FluoData::LoadData(G4int Z)
   G4String name(ost.str());
  
   
-  char* path = std::getenv("G4LEDATA");
+  const char* path = G4FindDataDir("G4LEDATA");
   if (!path)
     { 
       G4String excep("G4FluoData::LoadData()");
@@ -257,11 +257,10 @@ void G4FluoData::LoadData(G4int Z)
 	if (sLocal == 0)
 	  {
 	    // End of a shell data set
-	    idMap[vacIndex] = initIds;
+            idMap[vacIndex] = initIds;
             energyMap[vacIndex] = transEnergies;
-	    probabilityMap[vacIndex] = transProbabilities;
-	    //	    G4double size=transProbabilities->size();
-            G4int n = initIds->size();
+            probabilityMap[vacIndex] = transProbabilities;
+            G4int n = (G4int)initIds->size();
 	    
 	    nInitShells.push_back(n);
 	    numberOfVacancies++;
@@ -335,14 +334,14 @@ void G4FluoData::LoadData(G4int Z)
 
 void G4FluoData::PrintData() 
 {
-  for (G4int i = 0; i <numberOfVacancies; i++)
+  for (G4int i = 0; i <numberOfVacancies; ++i)
     {
       G4cout << "---- TransitionData for the vacancy nb "
-	     <<i
-	     <<" ----- "
-	     <<G4endl;
+	     << i
+	     << " ----- "
+	     << G4endl;
       
-      for (size_t k = 0; k<NumberOfTransitions(i); k++)
+      for (G4int k = 0; k<(G4int)NumberOfTransitions(i); ++k)
 	{ 
 	  G4int id = StartShellId(k,i);
 	// let's start from 1 because the first (index = 0) element of the vector

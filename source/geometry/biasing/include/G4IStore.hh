@@ -56,11 +56,11 @@ class G4IStore : public G4VIStore
     static G4IStore* GetInstance(const G4String& ParallelWorldName);
       // return ptr to singleton instance of the class.
 
-    virtual G4double GetImportance(const G4GeometryCell& gCell) const;
+    G4double GetImportance(const G4GeometryCell& gCell) const override;
       // derive an importance value of a "cell" addressed by a
       // G4GeometryCell from the store.
 
-    virtual G4bool IsKnown(const G4GeometryCell& gCell) const;
+    G4bool IsKnown(const G4GeometryCell& gCell) const override;
       // returns true if the gCell is in the store, else false 
 
     void Clear();
@@ -71,7 +71,7 @@ class G4IStore : public G4VIStore
     void SetParallelWorldVolume(const G4String& paraName);
       // set a reference to parallel world volume of the "importance" geometry
 
-    virtual const G4VPhysicalVolume& GetWorldVolume() const;
+    const G4VPhysicalVolume& GetWorldVolume() const override;
       // return a reference to the world volume of the "importance" geometry
 
     virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
@@ -98,7 +98,7 @@ class G4IStore : public G4VIStore
     explicit G4IStore(const G4String& ParallelWorldName);
       // initialise the importance store for the given geometry
 
-    ~G4IStore();
+    ~G4IStore() override;
       // destructor
 
   private:
@@ -115,11 +115,6 @@ class G4IStore : public G4VIStore
     mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
 
     static G4ThreadLocal G4IStore* fInstance;
-
-#ifdef G4MULTITHREADED
-    static G4Mutex IStoreMutex;
-#endif
-
 };
 
 #endif

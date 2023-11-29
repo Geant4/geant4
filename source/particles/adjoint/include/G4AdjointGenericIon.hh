@@ -55,7 +55,7 @@ class G4AdjointGenericIon : public G4AdjointIons
  private:
    static G4AdjointGenericIon* theInstance;
    G4AdjointGenericIon(){}
-   ~G4AdjointGenericIon(){}
+   ~G4AdjointGenericIon() override= default;
 
  public:
    static G4AdjointGenericIon* Definition();

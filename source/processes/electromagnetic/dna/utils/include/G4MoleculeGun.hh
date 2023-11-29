@@ -48,15 +48,17 @@
 #include "G4ITGun.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4memory.hh"
+
 #include <vector>
 #include <map>
-#include <G4memory.hh>
 
 class G4Track;
 class G4MoleculeGunMessenger;
 class G4MoleculeShootMessenger;
 class G4MoleculeGun;
-typedef int G4ContinuousMedium;
+
+using G4ContinuousMedium = G4int;
 
 //------------------------------------------------------------------------------
 
@@ -139,7 +141,7 @@ public:
    */
   void AddMolecule(const G4String& moleculeName,
                    const G4ThreeVector& position,
-                   double time = 0);
+                   G4double time = 0);
 
   /*
    * Create N molecules at a single point
@@ -148,10 +150,10 @@ public:
    * @param position position where the molecules should pop up
    * @param time time at which the molecules should pop up
    */
-  void AddNMolecules(size_t n,
+  void AddNMolecules(std::size_t n,
                      const G4String& moleculeName,
                      const G4ThreeVector& position,
-                     double time = 0);
+                     G4double time = 0);
 
   /*
    * Create N molecules in a box
@@ -161,11 +163,11 @@ public:
    * @param boxExtension size of the box
    * @param time time at which the molecules should pop up
    */
-  void AddMoleculesRandomPositionInBox(size_t n,
+  void AddMoleculesRandomPositionInBox(std::size_t n,
                                        const G4String& moleculeName,
                                        const G4ThreeVector& boxCenter,
                                        const G4ThreeVector& boxExtension,
-                                       double time = 0);
+                                       G4double time = 0);
 
   /*
    * Create N molecules as component of the continuous medium in a box
@@ -175,22 +177,22 @@ public:
    * @param boxExtension size of the box
    * @param time time at which the molecules should pop up
    */
-//  void AddMoleculeInCMRepresentation(size_t n,
+//  void AddMoleculeInCMRepresentation(std::size_t n,
 //                                     const G4String& moleculeName,
 //                                     const G4ThreeVector& boxCenter,
 //                                     const G4ThreeVector& boxExtension,
-//                                     double time = 0);
+//                                     G4double time = 0);
 
-  void AddMoleculeInCMRepresentation(size_t n,
+  void AddMoleculeInCMRepresentation(std::size_t n,
                                      const G4String& moleculeName,
-                                     double time = 0);
+                                     G4double time = 0);
 
   const std::vector<G4shared_ptr<G4MoleculeShoot> >&
       GetMoleculeShoot() {
     return fShoots;
   }
 
-  typedef std::map<G4String, int> NameNumber;
+  typedef std::map<G4String, G4int> NameNumber;
   void GetNameAndNumber(NameNumber&);
 
 
@@ -199,7 +201,7 @@ public:
 protected:
   void BuildAndPushTrack(const G4String& name,
                          const G4ThreeVector& position,
-                         double time = 0);
+                         G4double time = 0);
   G4MoleculeGunMessenger* fpMessenger;
 
   std::vector<G4shared_ptr<G4MoleculeShoot> > fShoots;

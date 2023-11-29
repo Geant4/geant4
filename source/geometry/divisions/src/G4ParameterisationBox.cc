@@ -47,7 +47,7 @@ G4VParameterisationBox( EAxis axis, G4int nDiv, G4double width,
                         DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
-  G4Box* msol = (G4Box*)(msolid);
+  auto msol = (G4Box*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
     // Get constituent solid  
@@ -60,9 +60,7 @@ G4VParameterisationBox( EAxis axis, G4int nDiv, G4double width,
 }
 
 //--------------------------------------------------------------------------
-G4VParameterisationBox::~G4VParameterisationBox()
-{
-}
+G4VParameterisationBox::~G4VParameterisationBox() = default;
 
 //--------------------------------------------------------------------------
 G4ParameterisationBoxX::
@@ -74,7 +72,7 @@ G4ParameterisationBoxX( EAxis axis, G4int nDiv, G4double width,
   CheckParametersValidity();
   SetType( "DivisionBoxX" );
 
-  G4Box* mbox = (G4Box*)(fmotherSolid);
+  auto mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mbox->GetXHalfLength(), width, offset );
@@ -95,14 +93,12 @@ G4ParameterisationBoxX( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationBoxX::~G4ParameterisationBoxX()
-{
-}
+G4ParameterisationBoxX::~G4ParameterisationBoxX() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationBoxX::GetMaxParameter() const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
   return 2*msol->GetXHalfLength();
 }
 
@@ -111,7 +107,7 @@ void
 G4ParameterisationBoxX::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid );
+  auto msol = (G4Box*)(fmotherSolid );
   G4double mdx = msol->GetXHalfLength( );
 
   //----- translation 
@@ -147,7 +143,7 @@ G4ParameterisationBoxX::
 ComputeDimensions( G4Box& box, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
 
   G4double pDx = fwidth/2. - fhgap;
   G4double pDy = msol->GetYHalfLength();
@@ -177,7 +173,7 @@ G4ParameterisationBoxY( EAxis axis, G4int nDiv, G4double width,
   CheckParametersValidity();
   SetType( "DivisionBoxY" );
 
-  G4Box* mbox = (G4Box*)(fmotherSolid);
+  auto mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mbox->GetYHalfLength(), width, offset );
@@ -198,14 +194,12 @@ G4ParameterisationBoxY( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationBoxY::~G4ParameterisationBoxY()
-{
-}
+G4ParameterisationBoxY::~G4ParameterisationBoxY() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationBoxY::GetMaxParameter() const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
   return 2*msol->GetYHalfLength();
 }
 
@@ -214,7 +208,7 @@ void
 G4ParameterisationBoxY::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
   G4double mdy = msol->GetYHalfLength();
 
   //----- translation 
@@ -249,7 +243,7 @@ G4ParameterisationBoxY::
 ComputeDimensions( G4Box& box, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
 
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = fwidth/2. - fhgap;
@@ -279,7 +273,7 @@ G4ParameterisationBoxZ( EAxis axis, G4int nDiv, G4double width,
   CheckParametersValidity();
   SetType( "DivisionBoxZ" );
 
-  G4Box* mbox = (G4Box*)(fmotherSolid);
+  auto mbox = (G4Box*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
     fnDiv = CalculateNDiv( 2*mbox->GetZHalfLength(), width, offset );
@@ -299,14 +293,12 @@ G4ParameterisationBoxZ( EAxis axis, G4int nDiv, G4double width,
 }
 
 //------------------------------------------------------------------------
-G4ParameterisationBoxZ::~G4ParameterisationBoxZ()
-{
-}
+G4ParameterisationBoxZ::~G4ParameterisationBoxZ() = default;
 
 //------------------------------------------------------------------------
 G4double G4ParameterisationBoxZ::GetMaxParameter() const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
   return 2*msol->GetZHalfLength();
 }
 
@@ -315,7 +307,7 @@ void
 G4ParameterisationBoxZ::
 ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid );
+  auto msol = (G4Box*)(fmotherSolid );
   G4double mdz = msol->GetZHalfLength();
 
    //----- translation 
@@ -351,7 +343,7 @@ G4ParameterisationBoxZ::
 ComputeDimensions( G4Box& box, const G4int,
                    const G4VPhysicalVolume* ) const
 {
-  G4Box* msol = (G4Box*)(fmotherSolid);
+  auto msol = (G4Box*)(fmotherSolid);
 
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = msol->GetYHalfLength();
@@ -370,4 +362,3 @@ ComputeDimensions( G4Box& box, const G4int,
   }
 #endif
 }
-

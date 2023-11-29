@@ -52,7 +52,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalSkinSurface( const G4String& name,
                                 G4LogicalVolume* vol,
                                 G4SurfaceProperty* surfaceProperty );
-    ~G4LogicalSkinSurface();
+    ~G4LogicalSkinSurface() override;
       // Constructor and destructor.
 
     G4LogicalSkinSurface(const G4LogicalSkinSurface&) = delete;

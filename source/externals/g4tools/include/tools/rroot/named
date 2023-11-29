@@ -14,34 +14,34 @@ namespace rroot {
 
 inline bool Named_stream(buffer& a_buffer,std::string& a_name,std::string& a_title) {
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
  {uint32 id,bits;
   if(!Object_stream(a_buffer,id,bits)) return false;}
   if(!a_buffer.read(a_name)) return false;
   if(!a_buffer.read(a_title)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TNamed")) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TNamed")) return false;
   return true;
 }
 
 inline bool AttLine_stream(buffer& a_buffer,short& a_color,short& a_style,short& a_width){
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
   if(!a_buffer.read(a_color)) return false;
   if(!a_buffer.read(a_style)) return false;
   if(!a_buffer.read(a_width)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TAttLine")) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TAttLine")) return false;
   return true;
 }
 
 inline bool AttFill_stream(buffer& a_buffer,short& a_color,short& a_style){
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
   if(!a_buffer.read(a_color)) return false;
   if(!a_buffer.read(a_style)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TAttFill")) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TAttFill")) return false;
   return true;
 }
 
@@ -50,30 +50,30 @@ inline bool AttMarker_stream(buffer& a_buffer) {
   short fMarkerStyle;
   float fMarkerWidth;
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
   if(!a_buffer.read(fMarkerColor)) return false;
   if(!a_buffer.read(fMarkerStyle)) return false;
   if(!a_buffer.read(fMarkerWidth)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TAttMarker")) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TAttMarker")) return false;
   return true;
 }
 
 inline bool GeoAtt_stream(buffer& a_buffer) {
   unsigned int fGeoAtt;            // option flags
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
   if(!a_buffer.read(fGeoAtt)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TGeoAtt")) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TGeoAtt")) return false;
   return true;
 }
 
 inline bool Att3D_stream(buffer& a_buffer) {
   short v;
-  unsigned int s, c;
-  if(!a_buffer.read_version(v,s,c)) return false;
-  if(!a_buffer.check_byte_count(s,c,"TAtt3D")) return false;
+  unsigned int _s, _c;
+  if(!a_buffer.read_version(v,_s,_c)) return false;
+  if(!a_buffer.check_byte_count(_s,_c,"TAtt3D")) return false;
   return true;
 }
 

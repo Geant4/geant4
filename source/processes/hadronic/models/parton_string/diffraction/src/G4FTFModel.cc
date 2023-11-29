@@ -704,7 +704,7 @@ G4bool G4FTFModel::PutOnMassShell() {
   G4double M2target = 0.0;
   G4double WminusTarget = 0.0;
   G4int NumberOfTries = 0;
-  G4double ScaleFactor = 1.0;
+  G4double ScaleFactor = 2.0;
   G4bool OuterSuccess = true;
 
   const G4int maxNumberOfLoops = 1000;
@@ -958,29 +958,14 @@ G4bool G4FTFModel::ExciteParticipants() {
         G4cout << "Annihilation" << G4endl;
         #endif
 
-        NumberOfNNcollisions++;
-
-        // Skipping possible interactions of the annihilated nucleons 
-        while ( theParticipants.Next() ) {   /* Loop checking, 10.08.2015, A.Ribon */  
-          G4InteractionContent& acollision = theParticipants.GetInteraction();
-          G4VSplitableHadron* NextProjectileNucleon = acollision.GetProjectile();
-          G4VSplitableHadron* NextTargetNucleon = acollision.GetTarget();
-          if ( projectile == NextProjectileNucleon  ||  target == NextTargetNucleon ) {
-            acollision.SetStatus( 0 );
-          }
-        }
-
-        // Return to the annihilation
-        theParticipants.StartLoop(); 
-        for ( G4int I = 0; I < CurrentInteraction; ++I ) theParticipants.Next();
-
         // At last, annihilation
         if ( ! HighEnergyInter ) {
           G4bool Annihilation = true;
           G4bool Result = AdjustNucleons( projectile, ProjectileNucleon, target,
                                           TargetNucleon, Annihilation );
           if ( ! Result ) continue;
-        }             
+        }
+
         G4VSplitableHadron* AdditionalString = 0;
         if ( theAnnihilation->Annihilate( projectile, target, AdditionalString, theParameters ) ) {
           InnerSuccess = true;
@@ -993,6 +978,22 @@ G4bool G4FTFModel::ExciteParticipants() {
 
           if ( AdditionalString != 0 ) theAdditionalString.push_back( AdditionalString );
 
+          NumberOfNNcollisions++;
+
+          // Skipping possible interactions of the annihilated nucleons 
+          while ( theParticipants.Next() ) {   /* Loop checking, 10.08.2015, A.Ribon */  
+            G4InteractionContent& acollision = theParticipants.GetInteraction();
+            G4VSplitableHadron* NextProjectileNucleon = acollision.GetProjectile();
+            G4VSplitableHadron* NextTargetNucleon = acollision.GetTarget();
+            if ( projectile == NextProjectileNucleon  ||  target == NextTargetNucleon ) {
+              acollision.SetStatus( 0 );
+            }
+          }
+
+          // Continue the interactions
+          theParticipants.StartLoop(); 
+          for ( G4int i = 0; i < CurrentInteraction; ++i ) theParticipants.Next();
+	  
           /*
           if ( target->GetStatus() == 4 ) {
             // Skipping possible interactions of the annihilated nucleons 
@@ -1046,7 +1047,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
          << "Tr ResidualMassNumber Tr ResidualCharge Tr ResidualExcitationEnergy  "
          << TargetResidualMassNumber << " " << TargetResidualCharge << " "
          << TargetResidualExcitationEnergy << G4endl
-         << "Collis. pr tr " << SelectedAntiBaryon->GetSoftCollisionCount()
+         << "Collis. pr tr " << SelectedAntiBaryon->GetSoftCollisionCount() << " "
          << SelectedTargetNucleon->GetSoftCollisionCount() << G4endl;
   #endif
 
@@ -1245,13 +1246,34 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
       common.PResidualExcitationEnergy = 0.0;
     }
     if ( common.PResidualMassNumber != 0 ) {
-      if ( common.PResidualLambdaNumber > 0 ) {
-        common.PResidualMass = G4HyperNucleiProperties::GetNuclearMass( common.PResidualMassNumber,
-									common.PResidualCharge,
-									common.PResidualLambdaNumber );
+      if ( common.PResidualMassNumber == 1 ) {
+        if ( std::abs( common.PResidualCharge ) == 1 ) {
+          common.PResidualMass = G4Proton::Definition()->GetPDGMass();       
+        } else if ( common.PResidualLambdaNumber == 1 ) {
+          common.PResidualMass = G4Lambda::Definition()->GetPDGMass();
+        } else {
+          common.PResidualMass = G4Neutron::Definition()->GetPDGMass();
+        }
       } else {
-	common.PResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()
-	                       ->GetIonMass( common.PResidualCharge, common.PResidualMassNumber );
+        if ( common.PResidualLambdaNumber > 0 ) {
+          if ( common.PResidualMassNumber == 2 ) {
+            common.PResidualMass = G4Lambda::Definition()->GetPDGMass();
+	    if ( std::abs( common.PResidualCharge ) == 1 ) {   // lambda + proton
+	      common.PResidualMass += G4Proton::Definition()->GetPDGMass();
+	    } else if ( common.PResidualLambdaNumber == 1 ) {  // lambda + neutron
+	      common.PResidualMass += G4Neutron::Definition()->GetPDGMass();
+	    } else {                                           // lambda + lambda
+	      common.PResidualMass += G4Lambda::Definition()->GetPDGMass();
+	    }
+	  } else {
+	    common.PResidualMass = G4HyperNucleiProperties::GetNuclearMass( common.PResidualMassNumber,
+	  								    std::abs( common.PResidualCharge ),
+									    common.PResidualLambdaNumber );
+	  }
+        } else {
+	  common.PResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
+	                         GetIonMass( std::abs( common.PResidualCharge ), common.PResidualMassNumber );
+        }
       }
     }
     common.PNucleonMass = ProjectileNucleon->GetDefinition()->GetPDGMass();  // On-shell (anti-)nucleon mass 
@@ -1264,8 +1286,8 @@ G4int G4FTFModel::AdjustNucleonsAlgorithm_beforeSampling( G4int interactionCase,
       common.TResidualExcitationEnergy = 0.0;
     }
     if ( common.TResidualMassNumber != 0 ) {
-      common.TResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()
-                             ->GetIonMass( common.TResidualCharge, common.TResidualMassNumber );
+      common.TResidualMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
+                             GetIonMass( common.TResidualCharge, common.TResidualMassNumber );
     }
     common.TNucleonMass = TargetNucleon->GetDefinition()->GetPDGMass();  // On-shell nucleon mass
     common.SumMasses =   common.PNucleonMass + common.PResidualMass + common.TNucleonMass 
@@ -1930,14 +1952,17 @@ void G4FTFModel::AdjustNucleonsAlgorithm_afterSampling( G4int interactionCase,
       ProjectileResidualMassNumber       = common.TResidualMassNumber;
       ProjectileResidualCharge           = common.TResidualCharge;
       ProjectileResidualExcitationEnergy = common.TResidualExcitationEnergy;
+      ProjectileResidualLambdaNumber     = common.PResidualLambdaNumber;
     } else {  // interactionCase == 3
       ProjectileResidualMassNumber       = common.PResidualMassNumber;
       ProjectileResidualCharge           = common.PResidualCharge;
       ProjectileResidualExcitationEnergy = common.PResidualExcitationEnergy;
+      ProjectileResidualLambdaNumber     = common.PResidualLambdaNumber;
     }
     #ifdef debugAdjust
-    G4cout << "ProjectileResidualMassNumber ProjectileResidualCharge ProjectileResidualExcitationEnergy "
+    G4cout << "ProjectileResidualMassNumber ProjectileResidualCharge  Lambdas ProjectileResidualExcitationEnergy "
            << ProjectileResidualMassNumber << " " << ProjectileResidualCharge << " "
+           << ProjectileResidualLambdaNumber << " "
            << ProjectileResidualExcitationEnergy << G4endl;
     #endif
     if ( ProjectileResidualMassNumber != 0 ) {
@@ -2311,7 +2336,7 @@ void G4FTFModel::GetResiduals() {
 
       #ifdef debugFTFmodel
       G4VSplitableHadron* targetSplitable = aNucleon->GetSplitableHadron();
-      G4cout << i << " Hit? " << aNucleon->AreYouHit() << " " << targetSplitable << G4endl;
+      G4cout << i << " Hit? " << aNucleon->AreYouHit() << " pointer " << targetSplitable << G4endl;
       if ( targetSplitable ) G4cout << i << "Status " << targetSplitable->GetStatus() << G4endl;
       #endif
 
@@ -2413,7 +2438,7 @@ void G4FTFModel::GetResiduals() {
 
       #ifdef debugFTFmodel
       G4VSplitableHadron* projSplitable = aNucleon->GetSplitableHadron();
-      G4cout << i << " Hit? " << aNucleon->AreYouHit() << " " << projSplitable << G4endl;
+      G4cout << i << " Hit? " << aNucleon->AreYouHit() << " pointer " << projSplitable << G4endl;
       if ( projSplitable ) G4cout << i << "Status " << projSplitable->GetStatus() << G4endl;
       #endif
 
@@ -2691,7 +2716,7 @@ ComputeNucleusProperties( G4V3DNucleus* nucleus,               // input paramete
   }
   #ifdef debugPutOnMassShell
   G4cout << "ExcitationEnergyPerWoundedNucleon " << ExcitationEnergyPerWoundedNucleon << G4endl
-         << "\t Residual Charge, MassNumber (LambdaNumber" << residualCharge << " "
+         << "\t Residual Charge, MassNumber (Number of Lambdas)" << residualCharge << " "
 	 << residualMassNumber << " (" << residualNumberOfLambdas << ") "
          << G4endl << "\t Initial Momentum " << nucleusMomentum
          << G4endl << "\t Residual Momentum   " << residualMomentum << G4endl;
@@ -2702,15 +2727,34 @@ ComputeNucleusProperties( G4V3DNucleus* nucleus,               // input paramete
     residualMass = 0.0;
     residualExcitationEnergy = 0.0;
   } else {
-    if ( residualNumberOfLambdas > 0 ) {
-      residualMass = G4HyperNucleiProperties::GetNuclearMass( residualMassNumber, residualCharge,
-							      residualNumberOfLambdas );
-    } else {
-      residualMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
-	               GetIonMass( residualCharge, residualMassNumber );
-    }
     if ( residualMassNumber == 1 ) {
+      if ( std::abs( residualCharge ) == 1 ) {
+        residualMass = G4Proton::Definition()->GetPDGMass();
+      } else if ( residualNumberOfLambdas == 1 ) {
+        residualMass = G4Lambda::Definition()->GetPDGMass();
+      } else {
+        residualMass = G4Neutron::Definition()->GetPDGMass();
+      } 
       residualExcitationEnergy = 0.0;
+    } else {
+      if ( residualNumberOfLambdas > 0 ) {
+        if ( residualMassNumber == 2 ) {
+	  residualMass = G4Lambda::Definition()->GetPDGMass();
+          if ( std::abs( residualCharge ) == 1 ) {      // lambda + proton
+            residualMass += G4Proton::Definition()->GetPDGMass();
+	  } else if ( residualNumberOfLambdas == 1 ) {  // lambda + neutron
+	    residualMass += G4Neutron::Definition()->GetPDGMass();
+          } else {                                      // lambda + lambda
+	    residualMass += G4Lambda::Definition()->GetPDGMass();
+          }
+        } else {
+	  residualMass = G4HyperNucleiProperties::GetNuclearMass( residualMassNumber, std::abs( residualCharge ),
+	  							  residualNumberOfLambdas );
+        }
+      } else {
+        residualMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
+	               GetIonMass( std::abs( residualCharge ), residualMassNumber );
+      }
     }
     residualMass += residualExcitationEnergy;
   }
@@ -2982,8 +3026,14 @@ CheckKinematics( const G4double sValue,                 // input parameter
   G4cout << "decayMomentum2 " << decayMomentum2 << G4endl 
          << "\t targetWminus projectileWplus " << targetWminus << " " << projectileWplus << G4endl
          << "\t projectileY targetY " << projectileY << " " << targetY << G4endl;
+  if ( isProjectileNucleus ) {
+    G4cout << "Order# of Wounded nucleon i, nucleon Y proj Y nuclY - proj Y " << G4endl;
+  } else {
+    G4cout << "Order# of Wounded nucleon i, nucleon Y targ Y nuclY - targ Y " << G4endl;
+  }
+  G4cout << G4endl;
   #endif
-
+  
   for ( G4int i = 0; i < numberOfInvolvedNucleons; ++i ) {
     G4Nucleon* aNucleon = involvedNucleons[i];
     if ( ! aNucleon ) continue;
@@ -3000,7 +3050,12 @@ CheckKinematics( const G4double sValue,                 // input parameter
     G4double nucleonY = 0.5 * G4Log( (e + pz)/(e - pz) ); 
 
     #ifdef debugPutOnMassShell
-    G4cout << "i nY pY nY-AY AY " << i << " " << nucleonY << " " << projectileY <<G4endl;
+    if( isProjectileNucleus ) {
+      G4cout << " " << i << " " << nucleonY << " " << projectileY << " " <<nucleonY - projectileY << G4endl;
+    } else {
+      G4cout << " " << i << " " << nucleonY << " " << targetY     << " " <<nucleonY - targetY << G4endl;
+    }
+    G4cout << G4endl;
     #endif
 
     if ( std::abs( nucleonY - nucleusY ) > 2  ||  
@@ -3064,7 +3119,11 @@ FinalizeKinematics( const G4double w,                            // input parame
                        + sqr( residual3Momentum.y() );
 
   #ifdef debugPutOnMassShell
-  G4cout << "w residual3Momentum.z() " << w << " " << residual3Momentum.z() << G4endl;
+  if ( isProjectileNucleus ) {
+    G4cout << "Wminus Proj and residual3Momentum.z() " << w << " " << residual3Momentum.z() << G4endl;
+  } else {
+    G4cout << "Wplus  Targ and residual3Momentum.z() " << w << " " << residual3Momentum.z() << G4endl;
+  }
   #endif
 
   G4double residualPz = 0.0;

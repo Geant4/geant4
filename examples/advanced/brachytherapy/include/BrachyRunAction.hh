@@ -39,8 +39,8 @@ class G4Run;
 class BrachyRunAction : public G4UserRunAction
 {
 public:
-  explicit BrachyRunAction();
-  ~BrachyRunAction();
+  explicit BrachyRunAction()=default;
+  ~BrachyRunAction() override =default;
 
 public:
   void BeginOfRunAction(const G4Run*) override;

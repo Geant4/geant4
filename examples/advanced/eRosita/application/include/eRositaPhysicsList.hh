@@ -23,39 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 
 #ifndef EROSITAPHYSICSLIST_HH
 #define EROSITAPHYSICSLIST_HH 1
 
+#include "G4EmConfigurator.hh"
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class eRositaPhysicsList: public G4VUserPhysicsList
-{
-  public:
-    eRositaPhysicsList();
-   ~eRositaPhysicsList();
+class eRositaPhysicsList : public G4VUserPhysicsList {
+public:
+    explicit eRositaPhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
-    // These methods Construct particles 
+    ~eRositaPhysicsList() override;
+
+protected:
+    // Construct particles
+    void ConstructParticle() override;
+    
+    // Construct processes
+    void ConstructProcess() override;
+
+    // Construct bosons
     void ConstructBosons();
+    
+    // Construct leptons
     void ConstructLeptons();
+    
+    // Construct mesons
     void ConstructMesons();
+    
+    // Construct baryons
     void ConstructBaryons();
 
-  // These methods Construct physics processes and register them
-    void ConstructGeneral();
+    // Construct electromagnetic processes and register them    
     void ConstructEM();
-  //  void AddStepMax();
-  
-  private:
-   
+    
+    // Construct other physical processes and register them    
+    void ConstructGeneral();
+    
+    //  void AddStepMax();
+
+    // Set cuts
+    void SetCuts() override;
 };
 #endif

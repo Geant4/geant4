@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+includedir=@PTL_PC_INCLUDEDIR@
+libdir=@PTL_PC_LIBDIR@
+
+Name: G4PTL
+Description: Parallel Tasking Library for C++ (Geant4 Builtin)
+Version: @PTL_VERSION_STRING@
+Requires: @PTL_PC_TBB_REQUIREMENT@
+Libs: -L${libdir} -lG4ptl
+Libs.private: -pthread
+CFlags: -std=c++@CMAKE_CXX_STANDARD@ -pthread -I${includedir}

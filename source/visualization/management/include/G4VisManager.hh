@@ -286,6 +286,10 @@ public: // With description
   void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
+  void DrawGeometry
+  (G4VPhysicalVolume*, const G4Transform3D& t = G4Transform3D());
+  // Draws a geometry tree starting at the specified physical volume.
+
   //////////////////////////////////////////////////////////////////////
   // Optional methods that you may use to bracket a series of Draw
   // messages that have identical objectTransformation to improve
@@ -368,6 +372,7 @@ public: // With description
 
   void Enable();
   void Disable();
+  G4bool IsEnabled() const;
   // Global enable/disable functions.
 
   const G4VTrajectoryModel* CurrentTrajDrawModel() const;
@@ -400,6 +405,8 @@ public: // With description
   G4int                        GetNKeepRequests            () const;
   G4bool                       GetReviewingKeptEvents      () const;
   G4bool                       GetAbortReviewKeptEvents    () const;
+  G4bool                       GetReviewingPlots           () const;
+  G4bool                       GetAbortReviewPlots         () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
 #ifdef G4MULTITHREADED
   G4int                        GetMaxEventQueueSize        () const;
@@ -424,6 +431,8 @@ public: // With description
   void              SetRequestedEvent           (const G4Event*);
   void              SetReviewingKeptEvents      (G4bool);
   void              SetAbortReviewKeptEvents    (G4bool);
+  void              SetReviewingPlots           (G4bool);
+  void              SetAbortReviewPlots         (G4bool);
   void              SetDefaultViewParameters    (const G4ViewParameters&);
 #ifdef G4MULTITHREADED
   void              SetMaxEventQueueSize        (G4int);
@@ -454,6 +463,8 @@ public: // With description
   static std::vector<G4String> VerbosityGuidanceStrings;
   // Guidance on the use of visualization verbosity.
 
+  void PrintAvailableGraphicsSystems (Verbosity, std::ostream& = G4cout) const;
+
 protected:
 
   virtual void RegisterGraphicsSystems () = 0;
@@ -470,8 +481,6 @@ protected:
   // examples.  (It is used in the derived user vis managers to print
   // available graphics systems.)  It is initialised to 1 in the
   // constructor and cannot be changed.
-
-  void PrintAvailableGraphicsSystems   (Verbosity) const;
 
 private:
 
@@ -520,6 +529,8 @@ private:
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fReviewingKeptEvents;
   G4bool                fAbortReviewKeptEvents;
+  G4bool                fReviewingPlots;
+  G4bool                fAbortReviewPlots;
   G4ViewParameters      fDefaultViewParameters;
   G4bool                fIsDrawGroup;
   G4int                 fDrawGroupNestingDepth;

@@ -41,103 +41,105 @@ G4VCollision::~G4VCollision()
 
 G4bool G4VCollision::operator==(const G4VCollision &right) const
 {
-	return (this == (G4VCollision *) &right);
+  return (this == (G4VCollision *) &right);
 }
 
 
 G4bool G4VCollision::operator!=(const G4VCollision &right) const
 {
-	return (this != (G4VCollision *) &right);
+  return (this != (G4VCollision *) &right);
 }
 
 
 G4double G4VCollision::CrossSection(const G4KineticTrack& aTrk1, 
-		const G4KineticTrack& aTrk2) const
+                                    const G4KineticTrack& aTrk2) const
 {
-	G4double sigma = 0.;
+  G4double sigma = 0.;
 
-	const G4VCrossSectionSource* xSource = GetCrossSectionSource();
+  const G4VCrossSectionSource* xSource = GetCrossSectionSource();
 
-	if (xSource != 0)
-	{
-		// There is a cross section for this Collision
-		sigma = xSource->CrossSection(aTrk1,aTrk2);
-	}
-	return sigma;
+  if (xSource != nullptr)
+  {
+    // There is a cross section for this Collision
+    sigma = xSource->CrossSection(aTrk1,aTrk2);
+  }
+  return sigma;
 }
 
 
 void G4VCollision::Print() const
 {
-	G4String name = GetName();
+  G4String name = GetName();
 
-	G4cout << "---- " << name << "---- Cross section" << G4endl;
+  G4cout << "---- " << name << "---- Cross section" << G4endl;
 
-	const G4VCrossSectionSource* xSource = GetCrossSectionSource();
-	if (xSource) xSource->Print();
+  const G4VCrossSectionSource* xSource = GetCrossSectionSource();
+  if (xSource) xSource->Print();
 
-	G4int nComponents = 0;
-	const G4CollisionVector* components = GetComponents();
-	if (components)
-	{
-		nComponents = components->size();
-	}
-	G4cout << "---- " << name << "---- has " << nComponents << " components" <<G4endl;
-	G4int i = 0;
-	G4CollisionVector::const_iterator iter;
-	if (components)
-	{
-		for (iter = components->begin(); iter != components->end(); ++iter)
-		{
-			G4cout << "---- " << name << " ---- Component " << i << G4endl;
-			((*iter))->Print();
-			i++;
-		}
-	}
-
+  G4int nComponents = 0;
+  const G4CollisionVector* components = GetComponents();
+  if (components)
+  {
+    nComponents = (G4int)components->size();
+  }
+  G4cout << "---- " << name << "---- has " << nComponents << " components" <<G4endl;
+  G4int i = 0;
+  if (components)
+  {
+    for (auto iter = components->cbegin(); iter != components->cend(); ++iter)
+    {
+      G4cout << "---- " << name << " ---- Component " << i << G4endl;
+      ((*iter))->Print();
+      ++i;
+    }
+  }
 }
 
 
 void G4VCollision::Print(const G4KineticTrack& trk1, 
-		const G4KineticTrack& trk2) const
+                         const G4KineticTrack& trk2) const
 {
-	G4String name = GetName();
+  G4String name = GetName();
 
-	if (IsInCharge(trk1,trk2))
-	{
-		G4cout << "---- " << name << "is in charge ---- " << G4endl;
-	}
-	else
-	{
-		G4cout << "---- " << name << "is not in charge ---- " << G4endl;
-	}
+  if (IsInCharge(trk1,trk2))
+  {
+    G4cout << "---- " << name << "is in charge ---- " << G4endl;
+  }
+  else
+  {
+    G4cout << "---- " << name << "is not in charge ---- " << G4endl;
+  }
 
-	G4cout << "---- " << name << "---- Cross section" << G4endl;
+  G4cout << "---- " << name << "---- Cross section" << G4endl;
 
-	const G4VCrossSectionSource* xSource = GetCrossSectionSource();
-	if (xSource) xSource->Print();
-	G4cout << "Cross section = " << CrossSection(trk1,trk2) << G4endl;
+  const G4VCrossSectionSource* xSource = GetCrossSectionSource();
+  if (xSource) xSource->Print();
+  G4cout << "Cross section = " << CrossSection(trk1,trk2) << G4endl;
 
-	G4int nComponents = 0;
-	const G4CollisionVector* components = GetComponents();
-	if (components)
-	{
-		nComponents = components->size();
-	}
-	G4cout << "---- " << name << "has " << nComponents << " components" <<G4endl;
+  G4int nComponents = 0;
+  const G4CollisionVector* components = GetComponents();
+  if (components)
+  {
+    nComponents = (G4int)components->size();
+  }
+  G4cout << "---- " << name << "has " << nComponents << " components" <<G4endl;
 
-	G4int i = 0;
-	G4CollisionVector::const_iterator iter;
-	if (components)
-	{
-		for (iter = components->begin(); iter != components->end(); ++iter)
-		{
-			G4cout << "Component " << i << G4endl;
-			((*iter))->Print();
-			i++;
-		}
-	}
+  G4int i = 0;
+  if (components)
+  {
+    for (auto iter = components->cbegin(); iter != components->cend(); ++iter)
+    {
+      G4cout << "Component " << i << G4endl;
+      ((*iter))->Print();
+      ++i;
+    }
+  }
 }
 
-G4VCollision::G4VCollision(void*, void*, void *, void *, void *, void *, void *){}
-void G4VCollision::establish_G4MT_TLS_G4VCollision(){ }
+G4VCollision::G4VCollision(void*, void*, void *, void *, void *, void *, void *)
+{
+}
+
+void G4VCollision::establish_G4MT_TLS_G4VCollision()
+{
+}

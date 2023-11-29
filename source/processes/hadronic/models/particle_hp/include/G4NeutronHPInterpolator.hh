@@ -29,4 +29,4 @@
 #include "G4ParticleHPInterpolator.hh"
 using G4NeutronHPInterpolator = G4ParticleHPInterpolator;
 
-#endif 
+#endif

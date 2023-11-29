@@ -41,8 +41,6 @@ G4SimpleIntegration::G4SimpleIntegration(function pFunction,
   , fTolerance(pTolerance)
 {}
 
-G4SimpleIntegration::~G4SimpleIntegration() {}
-
 // Simple integration methods
 
 G4double G4SimpleIntegration::Trapezoidal(G4double xInitial, G4double xFinal,

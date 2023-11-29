@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 #ifdef USE_INFERENCE_LWTNN
-#include "Par04InferenceInterface.hh"
 #include "Par04LwtnnInference.hh"
+#include <fstream>                     // for ifstream
+#include <lwtnn/parse_json.hh>         // for parse_json_graph
+#include "Par04InferenceInterface.hh"  // for Par04InferenceInterface
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,12 +43,12 @@ Par04LwtnnInference::Par04LwtnnInference(G4String modelPath)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04LwtnnInference::RunInference(vector<float> aGenVector, std::vector<G4double>& aEnergies,
+void Par04LwtnnInference::RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
                                        int aSize)
 {
   // generation vector
   fNetworkInputs inputs;
-  for(int i = 0; i < (unsigned) (aGenVector.size()); ++i)
+  for(std::size_t i = 0; i < aGenVector.size(); ++i)
   {
     inputs["node_0"]["variable_" + std::to_string(i)] = aGenVector[i];
   }

@@ -47,15 +47,15 @@ class G4TauLeptonicDecayChannel : public G4VDecayChannel
     G4TauLeptonicDecayChannel(const G4String& theParentName,
                                     G4double  theBR,
                               const G4String& theLeptonName);
-    virtual ~G4TauLeptonicDecayChannel();
+    ~G4TauLeptonicDecayChannel() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);   
+    G4DecayProducts* DecayIt(G4double) override;   
 
   protected:
 
-    G4TauLeptonicDecayChannel();
+    G4TauLeptonicDecayChannel() = default;
 
-    G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel&);
+    G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel&) = default;
     G4TauLeptonicDecayChannel& operator=(const G4TauLeptonicDecayChannel&);
 
   private:

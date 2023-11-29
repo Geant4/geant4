@@ -52,21 +52,13 @@ G4ThreadLocal F04GlobalField* F04GlobalField::fObject = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04GlobalField::F04GlobalField(F04DetectorConstruction* det) 
-  : G4ElectroMagneticField(),
+  : G4ElectroMagneticField(),   //  old  : G4MagneticField(),
     fMinStep(0.01*mm), fDeltaChord(3.0*mm),
     fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
-    fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
-    fEquation(0), fFieldManager(0),
-    fFieldPropagator(0), fStepper(0), fChordFinder(0),
+    // fEpsMin(2.5e-7), fEpsMax(0.001),  // These are pure numbers -- relative values
+    // fEquation(0), fFieldManager(0),
+    // fFieldPropagator(0), fStepper(0), fChordFinder(0),
     fDetectorConstruction(det)
-//F04GlobalField::F04GlobalField(F04DetectorConstruction* det) 
-//    : G4MagneticField(),
-//    fMinStep(0.01*mm), fDeltaChord(3.0*mm),
-//    fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
-//    fEpsMin(2.5e-7*mm), fEpsMax(0.05*mm),
-//    fEquation(0), fFieldManager(0),
-//    fFieldPropagator(0), fStepper(0), fChordFinder(0),
-//    fDetectorConstruction(det)
 {
   fFieldMessenger = new F04FieldMessenger(this,det);
 

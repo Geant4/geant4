@@ -48,26 +48,17 @@
 #include "G4VSolid.hh"
 #include "G4HumanPhantomColour.hh"
 
-G4MIRDSkull::G4MIRDSkull()
-{
-}
-
-G4MIRDSkull::~G4MIRDSkull()
-{
-}
-
-
 G4VPhysicalVolume* G4MIRDSkull::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
 					  const G4String& colourName,
 					  G4bool wireFrame,G4bool)
 {
   
-  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  auto* material = new G4HumanPhantomMaterial();
    
   G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
    
-  G4Material* skeleton = material -> GetMaterial("skeleton");
+  auto* skeleton = material -> GetMaterial("skeleton");
  
   delete material;
 
@@ -76,26 +67,26 @@ G4VPhysicalVolume* G4MIRDSkull::Construct(const G4String& volumeName,G4VPhysical
   G4double by = 9.8 * cm; // bout
   G4double cz = 8.3 * cm; //cout
  
-  G4Ellipsoid* craniumOut =  new G4Ellipsoid("CraniumOut", ax, by, cz);
+  auto* craniumOut =  new G4Ellipsoid("CraniumOut", ax, by, cz);
 
   ax = 6. * cm; //a in
   by = 9. * cm; //b in 
   cz= 6.5 * cm; // cin
  
-  G4Ellipsoid* craniumIn =  new G4Ellipsoid("CraniumIn", ax, by, cz);
+  auto* craniumIn =  new G4Ellipsoid("CraniumIn", ax, by, cz);
  
 
-  G4SubtractionSolid* cranium =  new G4SubtractionSolid("Cranium",
+  auto* cranium =  new G4SubtractionSolid("Cranium",
 							craniumOut,
-							craniumIn,0,
+							craniumIn, nullptr,
 							G4ThreeVector(0.0, 0.0,1. * cm));
 
-  G4LogicalVolume* logicSkull = new G4LogicalVolume(cranium, skeleton, 
+ auto* logicSkull = new G4LogicalVolume(cranium, skeleton, 
 						    "logical" + volumeName,
-						    0, 0, 0);
+						    nullptr, nullptr, nullptr);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physSkull = new G4PVPlacement(0,
+  G4VPhysicalVolume* physSkull = new G4PVPlacement(nullptr,
 						   G4ThreeVector(0., 0.,7.75 * cm),
 						   "physicalSkull",
 						   logicSkull,
@@ -105,9 +96,9 @@ G4VPhysicalVolume* G4MIRDSkull::Construct(const G4String& volumeName,G4VPhysical
 
   // Visualization Attributes
   //G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  auto* colourPointer = new G4HumanPhantomColour();
   G4Colour colour = colourPointer -> GetColour(colourName);
-  G4VisAttributes* SkullVisAtt = new G4VisAttributes(colour);
+  auto* SkullVisAtt = new G4VisAttributes(colour);
   SkullVisAtt->SetForceSolid(wireFrame); 
   SkullVisAtt->SetLineWidth(4.* mm);
   logicSkull->SetVisAttributes(SkullVisAtt);

@@ -47,10 +47,9 @@ G4int G4ParticlePropertyData::GetQuarkContent(G4int flavor) const
   {
     return theQuarkContent[flavor-1];
   }
-  else
-  {
-    return 0;
-  }  
+  
+      return 0;
+   
 }
 
 inline
@@ -60,10 +59,9 @@ G4int G4ParticlePropertyData::GetAntiQuarkContent(G4int flavor) const
   {
     return theAntiQuarkContent[flavor-1];
   }
-  else
-  {
-    return 0;
-  }  
+  
+      return 0;
+   
 }
 
 inline 

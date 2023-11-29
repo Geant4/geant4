@@ -41,18 +41,18 @@
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction();
-   ~TrackingAction() {};
+    TrackingAction() = default;
+   ~TrackingAction() override = default;
    
-    virtual void  PreUserTrackingAction(const G4Track*);   
-    virtual void PostUserTrackingAction(const G4Track*);
+    void  PreUserTrackingAction(const G4Track*) override;   
+    void PostUserTrackingAction(const G4Track*) override;
     
     void UpdateTrackInfo(G4double, G4double, G4double);    
     
   private:
-    G4int fNbStep1, fNbStep2;
-    G4double fTrackLen1, fTrackLen2;
-    G4double fTime1, fTime2;
+    G4int fNbStep1 = 0, fNbStep2 = 0;
+    G4double fTrackLen1 = 0., fTrackLen2 = 0.;
+    G4double fTime1 = 0., fTime2 = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

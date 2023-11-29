@@ -29,4 +29,4 @@
 #include "G4ParticleHPCaptureFS.hh"
 using G4NeutronHPCaptureFS = G4ParticleHPCaptureFS;
 
-#endif 
+#endif

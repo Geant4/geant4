@@ -126,10 +126,10 @@ public:
 
 class G4TessellatedSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4TessellatedSolid ();
-    virtual ~G4TessellatedSolid ();
+    ~G4TessellatedSolid () override;
 
     G4TessellatedSolid (const G4String& name);
 
@@ -148,17 +148,17 @@ class G4TessellatedSolid : public G4VSolid
     G4int GetNumberOfFacets () const;
     G4int GetFacetIndex (const G4ThreeVector& p) const;
 
-    virtual EInside Inside (const G4ThreeVector& p) const;
-    virtual G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
-    virtual G4double DistanceToIn(const G4ThreeVector& p,
-                                  const G4ThreeVector& v)const;
-    virtual G4double DistanceToIn(const G4ThreeVector& p) const;
-    virtual G4double DistanceToOut(const G4ThreeVector& p) const;
-    virtual G4double DistanceToOut(const G4ThreeVector& p,
+    EInside Inside (const G4ThreeVector& p) const override;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const override;
+    G4double DistanceToIn(const G4ThreeVector& p,
+                                  const G4ThreeVector& v)const override;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
+    G4double DistanceToOut(const G4ThreeVector& p,
                                    const G4ThreeVector& v,
                                    const G4bool calcNorm,
                                          G4bool* validNorm,
-                                         G4ThreeVector* norm) const;
+                                         G4ThreeVector* norm) const override;
 
     virtual G4bool Normal (const G4ThreeVector& p, G4ThreeVector& n) const;
     virtual G4double SafetyFromOutside(const G4ThreeVector& p,
@@ -166,14 +166,14 @@ class G4TessellatedSolid : public G4VSolid
     virtual G4double SafetyFromInside (const G4ThreeVector& p,
                                              G4bool aAccurate = false) const;
 
-    virtual G4GeometryType GetEntityType () const;
-    virtual std::ostream& StreamInfo(std::ostream& os) const;
+    G4GeometryType GetEntityType () const override;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    virtual G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    virtual G4ThreeVector GetPointOnSurface() const;
-    virtual G4double GetSurfaceArea();
-    virtual G4double GetCubicVolume();
+    G4ThreeVector GetPointOnSurface() const override;
+    G4double GetSurfaceArea() override;
+    G4double GetCubicVolume() override;
 
     void SetSolidClosed (const G4bool t);
     G4bool GetSolidClosed () const;
@@ -183,12 +183,12 @@ class G4TessellatedSolid : public G4VSolid
 
     inline G4Voxelizer& GetVoxels();
 
-    virtual G4bool CalculateExtent(const EAxis pAxis,
-                                   const G4VoxelLimits& pVoxelLimit,
-                                   const G4AffineTransform& pTransform,
-                                         G4double& pMin, G4double& pMax) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const override;
 
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
 
     G4double      GetMinXExtent () const;
     G4double      GetMaxXExtent () const;
@@ -197,16 +197,16 @@ class G4TessellatedSolid : public G4VSolid
     G4double      GetMinZExtent () const;
     G4double      GetMaxZExtent () const;
 
-    virtual G4Polyhedron* CreatePolyhedron () const;
-    virtual G4Polyhedron* GetPolyhedron    () const;
-    virtual void DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    virtual G4VisExtent   GetExtent () const;
+    G4Polyhedron* CreatePolyhedron () const override;
+    G4Polyhedron* GetPolyhedron    () const override;
+    void DescribeYourselfTo (G4VGraphicsScene& scene) const override;
+    G4VisExtent   GetExtent () const override;
 
     G4int AllocatedMemoryWithoutVoxels();
     G4int AllocatedMemory();
     void DisplayAllocatedMemory();
 
-  private: // without description
+  private:
 
     void Initialize();
 

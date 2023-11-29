@@ -1,0 +1,70 @@
+///\file "hadronic/ParticleFluence/Sphere/.README.txt"
+///\brief Example ParticleFluence/Sphere README page
+
+/*! \page ExampleSphere Example Sphere
+
+In this example, the particle fluence is evaluated for a very simple
+set-up, consisting of one target solid sphere, at the center of which
+a particle is shot (by default along the z-axis).
+
+The particle fluence is computed in two places: "forward" and "backward",
+defined as the positions immediately after and before, respectively, of
+the target with respect to the direction of the primary particle.
+
+The particle fluence is estimated by summing the track length in a
+"scoring volume" - i.e. a thin hemisphere shell filled up with G4_Galactic
+(very low density gas) material, immediately outside the target sphere -
+and then dividing for the cubic volume of such scoring volume.
+
+Complementary information on average multiplicity, average kinetic energy,
+and average total energy flow (i.e. sum of kinetic energies) for the
+particles produced in the target are also computed.
+
+The particle fluence is evaluated for the following 11 particle types:
+-  all
+-  electron + positron 
+-  gamma
+-  muon- + muon+
+-  neutrino (any flavour and including anti-neutrino)
+-  charged pions
+-  neutron + anti_neutron
+-  proton + anti_proton
+-  ion (and anti-ions)
+-  otherMeson (e.g. kaons, etc.)
+-  otherBaryon (e.g. hyperons, etc.)
+
+The particle fluence is evaluated for the following 3 kinematical ranges:
+-  any kinetic energy
+-  kinetic energy < 20 MeV
+-  kinetic energy > 20 MeV
+
+Look for the string "***LOOKHERE***" for those parameters/options that
+are either hardwired in the code (i.e. not available via UI command),
+or default values of UI commands.
+
+This example uses the physics list factory, therefore you can specify
+the reference physics list you want to use via the PHYSLIST
+environmental variable (by default, if you don't set it, the FTFP_BERT
+physics list is used).
+
+To build this example:
+
+\verbatim
+mkdir Build; cd Build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DGeant4_DIR=/path-to-geant4-libraries ../.
+make
+\endverbatim
+
+To run it:
+
+\verbatim
+./Sphere all_together.g4
+\endverbatim
+
+which shoots 50 GeV pion- on different target materials, 100 events
+in each run, and print out some information on the particle fluence
+at the end of each run.
+Other macros exist for specific materials.
+
+*/

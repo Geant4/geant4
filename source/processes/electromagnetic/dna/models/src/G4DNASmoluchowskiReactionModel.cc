@@ -58,7 +58,7 @@ G4double G4DNASmoluchowskiReactionModel::GetReactionRadius(const G4MolecularConf
     return __output;
 }
 
-G4double G4DNASmoluchowskiReactionModel::GetReactionRadius(const G4int __i)
+G4double G4DNASmoluchowskiReactionModel::GetReactionRadius(const G4int& __i)
 {
     G4double __output = (*fpReactionData)[__i]->GetEffectiveReactionRadius();
     return __output;

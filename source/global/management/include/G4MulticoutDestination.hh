@@ -40,7 +40,7 @@
 //           auto multi = new G4MulticoutDestination();
 //           multi->push_back( G4coutDestinationUPtr( new MyCout1 ) );
 //           multi->push_back( G4coutDestinationUPtr( new MyCout2 ) );
-//           G4coutbuf.SetDestination( multi ); // or G4cerrbuf
+//           G4iosSetDestination( multi ); // or G4cerrbuf
 
 //      ---------------- G4MulticoutDestination ----------------
 //
@@ -63,11 +63,20 @@ class G4MulticoutDestination
 {
  public:
   G4MulticoutDestination() = default;
-  virtual ~G4MulticoutDestination() {}
+  ~G4MulticoutDestination() override = default;
 
   // Forward call to contained destination. Note that the message may have
   // been modified by formatters attached to this
-  virtual G4int ReceiveG4cout(const G4String& msg) override
+  G4int ReceiveG4debug(const G4String& msg) override
+  {
+    G4bool result = true;
+    std::for_each(begin(), end(), [&](G4coutDestinationUPtr& e) {
+      result &= (e->ReceiveG4debug_(msg) == 0);
+    });
+    return (result ? 0 : -1);
+  }
+
+  G4int ReceiveG4cout(const G4String& msg) override
   {
     G4bool result = true;
     std::for_each(begin(), end(), [&](G4coutDestinationUPtr& e) {
@@ -76,7 +85,7 @@ class G4MulticoutDestination
     return (result ? 0 : -1);
   }
 
-  virtual G4int ReceiveG4cerr(const G4String& msg) override
+  G4int ReceiveG4cerr(const G4String& msg) override
   {
     G4bool result = true;
     std::for_each(begin(), end(), [&](G4coutDestinationUPtr& e) {

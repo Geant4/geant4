@@ -33,16 +33,16 @@
 // ###                      ADJOINT TRITON            		      ###
 // ######################################################################
 
-G4AdjointTriton* G4AdjointTriton::theInstance = 0;
+G4AdjointTriton* G4AdjointTriton::theInstance = nullptr;
 
 G4AdjointTriton* G4AdjointTriton::Definition()
 {
-  if (theInstance !=0) return theInstance;
+  if (theInstance !=nullptr) return theInstance;
   const G4String name = "adj_triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4AdjointIons* anInstance =  reinterpret_cast<G4AdjointIons*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  auto  anInstance =  static_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  if (anInstance ==nullptr)
   {
   // create particle
   //
@@ -59,7 +59,7 @@ G4AdjointTriton* G4AdjointTriton::Definition()
                     1,              +1,             0,
                     0,               0,             0,
             "adjoint_nucleus",               0,            +3, 1000010030,
-                 true,            -1.0,          NULL,
+                 true,            -1.0,          nullptr,
 		false,           "static",          0,
                   0.0
               );
@@ -72,7 +72,7 @@ G4AdjointTriton* G4AdjointTriton::Definition()
   //No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
-  theInstance = reinterpret_cast<G4AdjointTriton*>(anInstance);
+  theInstance = static_cast<G4AdjointTriton*>(anInstance);
   return theInstance;
 }
 

@@ -1,0 +1,121 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef toolx_Qt_pixwin
+#define toolx_Qt_pixwin
+
+#include <QtCore/qglobal.h> //For QT_VERSION.
+
+#if QT_VERSION < 0x050000
+#include <QtGui/qwidget.h>
+#else
+#include <QtWidgets/qwidget.h>
+#endif
+
+#include <QtGui/qevent.h>
+#include <QtGui/qpainter.h>
+
+#include <tools/sg/zb_viewer>
+#include <tools/sg/device_interactor>
+
+#ifdef TOOLS_MEM
+#include <tools/mem>
+#endif
+
+namespace toolx {
+namespace Qt {
+
+class pixwin : public QWidget
+{
+  typedef QWidget parent;
+  TOOLS_SCLASS(toolx::Qt::pixwin)
+public:
+  virtual void resizeEvent(QResizeEvent* a_event) {
+  //::printf("debug : toolx::Qt::pixwin::resizeEvent : %d, %d\n",a_event->size().width(),a_event->size().height());
+    parent::resizeEvent(a_event);
+    m_viewer.set_size(a_event->size().width(),a_event->size().height());
+  }
+  virtual void paintEvent(QPaintEvent* a_event) {
+    parent::paintEvent(a_event);
+    if(!m_viewer.render(tools::sg::zb_viewer::get_rgbas,false)) return;  //rgbas because Qt wants an image 32 bits aligned.
+  //static size_t s_count = 0;::printf("debug : toolx::Qt::pixwin::paintEvent %d %d : %lu\n",parent::m_ww,parent::m_wh,s_count);s_count++;
+    QImage image(tools::vec_data(m_viewer.out_buffer()),m_viewer.width(),m_viewer.height(),QImage::Format_RGBA8888);
+    QPixmap pixmap = QPixmap::fromImage(image);
+    QPainter painter(this);
+    painter.drawPixmap(0,0,pixmap);
+  //parent::after_render();
+    m_viewer.out_buffer_clear();
+  }
+
+  virtual void keyPressEvent(QKeyEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::key_down_event _event(convert_key(a_event->key()));
+    m_interactor->key_press(_event);
+  }
+  virtual void keyReleaseEvent(QKeyEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::key_up_event _event(convert_key(a_event->key()));
+    m_interactor->key_release(_event);
+  }
+  virtual void mousePressEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+#if QT_VERSION < 0x060000
+    tools::sg::mouse_down_event _event(a_event->x(),a_event->y());
+#else
+    tools::sg::mouse_down_event _event(a_event->position().x(),a_event->position().y());
+#endif
+    m_interactor->mouse_press(_event);
+  }
+  virtual void mouseReleaseEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+#if QT_VERSION < 0x060000
+    tools::sg::mouse_up_event _event(a_event->x(),a_event->y());
+#else
+    tools::sg::mouse_up_event _event(a_event->position().x(),a_event->position().y());
+#endif
+    m_interactor->mouse_release(_event);
+  }
+  virtual void mouseMoveEvent(QMouseEvent* a_event) {
+    if(!m_interactor) return;
+#if QT_VERSION < 0x060000
+    tools::sg::mouse_move_event _event(a_event->x(),a_event->y(),0,0,false);
+#else
+    tools::sg::mouse_move_event _event(a_event->position().x(),a_event->position().y(),0,0,false);
+#endif
+    m_interactor->mouse_move(_event);
+  }
+//virtual void mouseDoubleClickEvent(QMouseEvent* a_event) {
+//  if(!m_interactor) return;
+//  tools::sg::mouse_double_click_event _event(a_event->x(),a_event->y());
+//  m_interactor->mouse_double_click(_event);
+//}
+  virtual void wheelEvent(QWheelEvent* a_event) {
+    if(!m_interactor) return;
+    tools::sg::wheel_rotate_event _event(a_event->angleDelta().y());
+    m_interactor->wheel_rotate(_event);
+  }
+
+public:
+  pixwin(QWidget* a_parent,tools::sg::zb_viewer& a_viewer):parent(a_parent),m_viewer(a_viewer),m_interactor(0){
+#ifdef TOOLS_MEM
+    tools::mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~pixwin(){
+#ifdef TOOLS_MEM
+    tools::mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  void set_device_interactor(tools::sg::device_interactor* a_interactor) {m_interactor = a_interactor;} //we do not have ownership.
+protected:
+  tools::key_code convert_key(/*Qt::Key*/int a_key) {return a_key;}
+protected:
+  tools::sg::zb_viewer& m_viewer;
+  tools::sg::device_interactor* m_interactor;
+};
+
+}}
+
+
+#endif

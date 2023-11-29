@@ -56,10 +56,8 @@ std::size_t G4BiasingOperationManager::Register(G4VBiasingOperation* option)
 
 G4VBiasingOperation* G4BiasingOperationManager::GetBiasingOperation(std::size_t optionID)
 {
-  if (optionID < fBiasingOperationVector.Size()) return fBiasingOperationVector[optionID];
-  else return 0;
+  if (optionID < fBiasingOperationVector.Size())
+    return fBiasingOperationVector[(G4int)optionID];
+  else
+    return nullptr;
 }
-
-
-
-

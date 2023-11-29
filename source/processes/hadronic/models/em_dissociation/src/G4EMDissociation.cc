@@ -364,8 +364,9 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
   }
 
   G4Fragment* theFragment = new
-    G4Fragment((G4int) typeDaughter->GetBaryonNumber(),
-	       (G4int) typeDaughter->GetPDGCharge(), dynamicDaughter->Get4Momentum(), false);
+    G4Fragment(typeDaughter->GetBaryonNumber(),
+	       G4lrint(typeDaughter->GetPDGCharge()/CLHEP::eplus), 
+	       dynamicDaughter->Get4Momentum());
 
   if (verboseLevel >= 2) {
     G4cout <<"Dynamic properties of the prefragment:" <<G4endl;

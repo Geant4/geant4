@@ -72,7 +72,7 @@ public:
 
   explicit G4IonCoulombCrossSection();
 
-  ~G4IonCoulombCrossSection();
+  ~G4IonCoulombCrossSection() = default;
 
   void Initialise(const G4ParticleDefinition*, G4double cosThetaLim);
 

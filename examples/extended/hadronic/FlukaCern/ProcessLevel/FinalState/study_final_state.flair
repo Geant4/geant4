@@ -1,0 +1,734 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: Study interactions final state: secondaries energy spectra + residual nuclei distribution (0.1M events).
+md5: d41d8cd98f00b204e9800998ecf8427e
+Input:
+EndInput
+
+Page: Plot
+plotengine: Gnuplot
+
+# Run information
+Run: <default>
+	queue:    *Default
+End
+Geometry: Geometry
+	Frame.tsplit: 1.0
+End
+
+# Plots information
+Plot: proton
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 43
+	det.1: 44
+	det.2: 51
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 1
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Protons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: anti_proton
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 23
+	det.1: 24
+	det.2: 26
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 2
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Antiprotons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: neutron
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 38
+	det.1: 39
+	det.2: 43
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 3
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Neutrons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: anti_neutron
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 21
+	det.1: 22
+	det.2: 21
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 4
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Antineutrons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: pi+
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 40
+	det.1: 41
+	det.2: 48
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 5
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Pi+ spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: pi-
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 41
+	det.1: 42
+	det.2: 49
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 6
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Pi- spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: pi0
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 42
+	det.1: 43
+	det.2: 50
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 7
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Pi0 spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: kaon+
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 33
+	det.1: 34
+	det.2: 36
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 8
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Kaon+ spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: kaon-
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 34
+	det.1: 35
+	det.2: 37
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 9
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Kaon- spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: kaon0L
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 35
+	det.1: 36
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 10
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	show.2: 0
+	title: 7 GeV proton - Al nucleus collisions secondaries: kaon0L spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: kaon0S
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 36
+	det.1: 37
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 11
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	show.2: 0
+	title: 7 GeV proton - Al nucleus collisions secondaries: kaon0S spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: deuteron
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 29
+	det.1: 30
+	det.2: 32
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 12
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Deuterons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: triton
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 47
+	det.1: 48
+	det.2: 55
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 13
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Tritons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: He3
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 14
+	det.1: 14
+	det.2: 12
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 14
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: He3 spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: alpha
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 19
+	det.1: 20
+	det.2: 19
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 15
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Alphas spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: Li6
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 16
+	det.1: 16
+	det.2: 15
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 16
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Li6 spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: e-
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.2: 34
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 17
+	key.0: 0
+	key.1: 0
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	show.0: 0
+	show.1: 0
+	title: 7 TeV proton - C nucleus collisions secondaries: Electrons spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: gamma
+	Type: USR-1D
+	cbtics: 1
+	commands:
+		|set xtics add ('1meV' 1e-12, '10meV' 1e-11, '100meV' 1e-10, '1eV' 1e-9, '10eV' 1e-8,'100eV' 1e-7,'1keV' 1e-6, '10keV' 1e-5, '100keV' 1e-4, '1MeV' 1e-3, '10MeV' 0.01, '100MeV' 0.1, '1GeV' 1, '10GeV' 10, '100GeV' 100, '1TeV' 1000, '10TeV' 1e4, '100TeV' 1e5)
+		|set mxtics 10
+	det.0: 32
+	det.1: 33
+	det.2: 35
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 18
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Gammas spectrum (0.1M events)
+	xlabel: Kinetic Energy
+	xlog: 1
+	xmax: 1E4
+	xmin: 1E-5
+	y.0: 1
+	y.1: 1
+	y.2: 1
+	ylabel: dN / d(logE) [1/pr]
+	ylog: 1
+	ymin: 1E-5
+End
+Plot: nucleiA
+	Type: USR-1D
+	cbtics: 1
+	commands: set mxtics 10
+	det.0: 50
+	det.1: 51
+	det.2: 58
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 19
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Residual nuclei spectrum (0.1M events)
+	xlabel: A
+	xmax: 50.5
+	xmin: 0
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	ylabel: N [1/pr]
+	ymin: 1E-5
+End
+Plot: nucleiZ
+	Type: USR-1D
+	cbtics: 1
+	commands: set mxtics 5
+	det.0: 51
+	det.1: 52
+	det.2: 59
+	file.0: results/FTFP_BERT/all_secondaries.hist
+	file.1: results/QGSP_BERT/all_secondaries.hist
+	file.2: results/FLUKAHadronInelastic/all_secondaries.hist
+	grid: 1
+	index: 20
+	lc.0: dark-blue
+	lc.1: light-blue
+	lc.2: green
+	lw.0: 2
+	lw.1: 2
+	lw.2: 2
+	name.0: FTFP BERT
+	name.1: QGSP BERT
+	name.2: FLUKA
+	ndetectors: 3
+	title: 7 TeV proton - C nucleus collisions secondaries: Residual nuclei spectrum (0.1M events)
+	xlabel: Z
+	xmax: 25.5
+	xmin: 0
+	y.0: 0
+	y.1: 0
+	y.2: 0
+	ylabel: N [1/pr]
+	ymin: 1E-5
+End

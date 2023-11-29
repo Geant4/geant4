@@ -76,7 +76,7 @@ public:
   explicit G4PhysicsFreeVector(const G4double* energies, const G4double* values,
                                std::size_t length, G4bool spline = false);
 
-  virtual ~G4PhysicsFreeVector() = default;
+  ~G4PhysicsFreeVector() override = default;
 
   // Filling of the vector with the check on index and energy
   void PutValues(const std::size_t index, 

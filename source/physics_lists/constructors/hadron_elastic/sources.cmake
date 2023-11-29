@@ -7,6 +7,7 @@ geant4_add_module(G4phys_ctor_helastic
     G4HadronDElasticPhysics.hh
     G4HadronElasticPhysics.hh
     G4HadronElasticPhysicsHP.hh
+    G4HadronElasticPhysicsHPT.hh
     G4HadronElasticPhysicsLEND.hh
     G4HadronElasticPhysicsXS.hh
     G4HadronHElasticPhysics.hh
@@ -18,6 +19,7 @@ geant4_add_module(G4phys_ctor_helastic
     G4HadronDElasticPhysics.cc
     G4HadronElasticPhysics.cc
     G4HadronElasticPhysicsHP.cc
+    G4HadronElasticPhysicsHPT.cc
     G4HadronElasticPhysicsLEND.cc
     G4HadronElasticPhysicsXS.cc
     G4HadronHElasticPhysics.cc

@@ -56,7 +56,7 @@ public:
   explicit G4PhysicsLinearVector(G4double Emin, G4double Emax, std::size_t Nbin,
                                  G4bool spline = false);
 
-  virtual ~G4PhysicsLinearVector() = default;
+  ~G4PhysicsLinearVector() override = default;
 
 protected:
 

@@ -55,13 +55,13 @@ std::vector<G4LorentzVector*>* G4FermiPhaseSpaceDecay::Decay(G4double M,
                                const std::vector<G4double>& mr) const
   // Calculates momentum for N fragments (Kopylov's method of sampling is used)
 {
-  size_t N = mr.size();
+  std::size_t N = mr.size();
 
   std::vector<G4LorentzVector*>* P = 
     new std::vector<G4LorentzVector*>(N, nullptr);
 
   G4double mtot = 0.0;
-  for(size_t k=0; k<N; ++k) { mtot += mr[k]; }
+  for(std::size_t k=0; k<N; ++k) { mtot += mr[k]; }
 
   G4double mu = mtot;
   G4double PFragMagCM = 0.0;
@@ -76,7 +76,7 @@ std::vector<G4LorentzVector*>* G4FermiPhaseSpaceDecay::Decay(G4double M,
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
-  for (size_t k = N-1; k>0; --k)
+  for (G4int k = (G4int)N-1; k>0; --k)
     {
       mu -= mr[k];
       if (k>1) { T *= BetaKopylov(k, rndmEngine); }

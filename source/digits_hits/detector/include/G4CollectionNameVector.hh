@@ -30,13 +30,14 @@
 #define G4CollectionNameVector_H 1
 
 #include "globals.hh"
+
 #include <vector>
 
 class G4CollectionNameVector : public std::vector<G4String>
 {
  public:
-  G4CollectionNameVector() { ; }
-  virtual ~G4CollectionNameVector() { ; }
+  G4CollectionNameVector() {}
+  virtual ~G4CollectionNameVector() {}
 
   void insert(G4String str) { push_back(str); }
 };

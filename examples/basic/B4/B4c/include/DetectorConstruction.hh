@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file DetectorConstruction.hh
+/// \file B4/B4c/include/DetectorConstruction.hh
 /// \brief Definition of the B4c::DetectorConstruction class
 
 #ifndef B4cDetectorConstruction_h
@@ -58,8 +58,8 @@ namespace B4c
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    DetectorConstruction();
-    ~DetectorConstruction() override;
+    DetectorConstruction() = default;
+    ~DetectorConstruction() override = default;
 
   public:
     G4VPhysicalVolume* Construct() override;

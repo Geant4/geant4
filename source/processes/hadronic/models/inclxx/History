@@ -1,27 +1,52 @@
--------------------------------------------------------------------
+# Category hadr-inclxx History
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
----------------------------------------------------------------------
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-           History file for the Liege cascade INCL Model
-           ---------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2023-05-15 Alberto Ribon (hadr-inclxx-V11-01-01) -
+Major extension of the INCLXX model to handle antiproton annihilation at rest.
+Work done by Demid Zharenov and Jean-Christophe David.
 
-   ---------------------------------------------------------------
-   * Please list in reverse chronological order (last date on top)
-   ---------------------------------------------------------------
+## 2023-03-17 Alberto Ribon (hadr-inclxx-V11-01-00) -
+G4INCLNNToNLK2piChannel : fixed bug in the method fillFinalState.
+Thanks to Dmitri Konstantinov for reporting it.
 
-18 May 2022 - Gabriele Cosmo (hadr-inclxx-V10-07-08)
-----------------------------------------------------
+## 2022-11-26 Gabriele Cosmo (hadr-inclxx-V11-00-08)
+- Fixed more compilation warnings for implicit type conversions.
+
+## 2022-11-18 Gabriele Cosmo (hadr-inclxx-V11-00-07)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (hadr-inclxx-V11-00-06)
+- G4INCLXXInterface: introduced a protection against unphysical nuclear remnants
+  (i.e. unbound systems), and, if this is the case, resample the collision.
+
+## 2022-10-07 Gabriele Cosmo (hadr-inclxx-V11-00-05)
+- Fixed compilation warnings on Intel/icx compiler for variables set
+  but not used in G4INCLInvFInterpolationTable, G4INCLStore,
+  G4INCLNpiToMissingStrangenessChannel and G4INCLNNToMissingStrangenessChannel.
+
+## 2022-05-25 Alberto Ribon (hadr-inclxx-V11-00-04)
+-  G4INCLParticle, G4INCLEventInfo, G4INCLNucleus, G4INCLDeltaDecayChannel,
+   G4INCLXXInterface : set and propagate the information on parent resonance.
+-  G4INCLPiNElasticChannel : erase the information on parent resonance in
+   the case of charge exchange.
+-  G4INCLPiNToDeltaChannel, G4INCLPiNToOmegaChannel, G4INCLPiNToEtaChannel,
+   G4INCLPiNToMultiPionsChannel, G4INCLNpiToLKpiChannel, G4INCLNpiToLKChannel,
+   G4INCLNpiToLK2piChannel, G4INCLNpiToNKKbChannel, G4INCLNpiToSK2piChannel,  
+   G4INCLNpiToSKpiChannel, G4INCLNpiToSKChannel,
+   G4INCLNpiToMissingStrangenessChannel : erase the information on parent
+   resonance in inelastic channels (where the nucleon and pion initial-state
+   objects are re-used for the final state).
+
+## 2022-05-18 Gabriele Cosmo (hadr-inclxx-V11-00-03)
 - Fixed misuse of bitwise '|' operator instead of logical in INCL::postCascade()
   and in INCL::makeCompoundNucleus().
 
-03 March 2022 - Alberto Ribon (hadr-inclxx-V10-07-07)
------------------------------------------------------
+## 2022-03-03 Alberto Ribon (hadr-inclxx-V11-00-02)
 - G4INCLXXInterface : fixed treatment of kaon0, anti_kaon0, kaon0L, and kaon0S.
   In current reference physics lists, INCLXX is never used for handling kaons,
   although it is capable of doing so, but at process-level or in custom
@@ -29,10 +54,16 @@ code and to keep track of all tags.
   neutral kaon projectiles. The change (provided by Jean-Christophe David)
   fixes this misbehavior.
 
-09 February 2022 - Gabriele Cosmo
----------------------------------
+## 2022-02-09 Gabriele Cosmo (hadr-inclxx-V11-00-01)
 - Fixed compilation warnings on Intel compilers for shadowing of variables
   and not used variable.
+
+## 2021-12-10 Ben Morgan (hadr-inclxx-V11-00-00)
+- Change to new Markdown History format,
+
+---
+
+# History entries prior to 11.0
 
 09 November 2021 - Alberto Ribon (hadr-inclxx-V10-07-06)
 -------------------------------------------------------

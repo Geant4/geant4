@@ -452,7 +452,7 @@ void G4OpenGLXViewer::DrawText(const G4Text& g4text)
 
     // Write characters
     glListBase(fontInfo.fFontBase);
-    glCallLists(strlen(textCString),GL_UNSIGNED_BYTE,(GLubyte*)textCString);
+    glCallLists((G4int)strlen(textCString),GL_UNSIGNED_BYTE,(GLubyte*)textCString);
     glPopAttrib();
   }
 }

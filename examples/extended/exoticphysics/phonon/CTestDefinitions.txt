@@ -18,9 +18,9 @@ if(GEANT4_BUILD_MULTITHREADED)
   endif()
 endif()
 
-set(_compareScript ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/ComparePhonon.cmake)
-set(_causticRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out)
-set(_timingRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out)
+set(_compareScript ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon/ComparePhonon.cmake)
+set(_causticRef ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out)
+set(_timingRef ${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out)
 
 #Check if specific OS references are available, if not use default
 if(EXISTS ${_causticRef}${_MTsuffix})
@@ -55,7 +55,7 @@ geant4_add_test(example-ext-exoticphysics-phonons-run
   WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/examples/extended/exoticphysics/phonon
   DEPENDS example-ext-exoticphysics-phonons-build
   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-              G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps)
+              G4LATTICEDATA=${PROJECT_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps)
 
 # 3. Compare
 geant4_add_test(example-ext-exoticphysics-phonons-timecomp

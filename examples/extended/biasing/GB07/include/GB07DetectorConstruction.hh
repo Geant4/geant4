@@ -32,10 +32,6 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class G4Box;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class GB07DetectorConstruction : public G4VUserDetectorConstruction

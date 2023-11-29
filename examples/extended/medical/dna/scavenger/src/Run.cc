@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Run.cc
-/// \brief Implementation of the Run class
+/// \file scavenger/src/Run.cc
+/// \brief Implementation of the scavenger::Run class
 
 #include "Run.hh"
 #include "G4RunManager.hh"

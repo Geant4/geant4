@@ -35,16 +35,8 @@
 
 #include "G4Types.hh"
 
-#ifdef G4MULTITHREADED
-// #define USE_MULTITHREADED
-#endif
-
-#ifdef   USE_MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
 #include "F01SteppingVerbose.hh"
-#include "G4RunManager.hh"
-#endif
+#include "G4RunManagerFactory.hh"
 
 #include "F01DetectorConstruction.hh"
 #include "F01ActionInitialization.hh"
@@ -53,8 +45,9 @@
 
 #include "G4UImanager.hh"
 
+// To control verbosity 
 #include "G4EmParameters.hh"
-#include "G4HadronicProcessStore.hh"
+#include "G4HadronicParameters.hh"
 
 #include "G4PhysicsListHelper.hh"
 
@@ -70,6 +63,8 @@
 #include "G4Transportation.hh"
 #include "G4CoupledTransportation.hh"
 
+#include "G4TransportationParameters.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -84,15 +79,15 @@ int main(int argc,char** argv)
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  // Construct the default run manager
-  //
-#ifdef USE_MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-#else
   G4VSteppingVerbose::SetInstance(new F01SteppingVerbose);
-  G4RunManager * runManager = new G4RunManager;
-#endif
+  
+  // Construct the sequential (or default) run manager
+  auto* runManager =
+     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
 
+  // G4TransportationWithMscType: fDisabled, fEnabled, fMultipleSteps
+  // G4EmParameters::Instance()->SetTransportationWithMsc(G4TransportationWithMscType::fEnabled);
+  
   // Set mandatory initialization classes
   //
   // Detector construction
@@ -103,10 +98,24 @@ int main(int argc,char** argv)
 
   // Configure the use of low thresholds for looping particles
   //  ( appropriate for typical applications using low-energy physics. )
-  auto plHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-  plHelper->UseLowLooperThresholds();
+  // auto plHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  // plHelper->UseLowLooperThresholds();
+  // plHelper->UseHighLooperThresholds();
   // Request a set of pre-selected values of the parameters for looping
-  //  particles
+  //    particles:
+  //       - High for collider HEP applications,
+  //       - Low  for 'low-E' applications, medical, ..
+  // Note: If helper is used select low or high thresholds , it will overwrite
+  //       values from TransportationParameters!
+    
+  // They are currently applied in the following order:
+  // 1. Transportation Parameters - fine grained control in Transportation construction
+  // 2. Physics List Helper       - impose a fixed set of new values in Transport classes
+  // 3. Run Action (F01RunAction) - revise values at Start of Run
+  // 4. Tracking Action           - could revise value at start of each track (not shown)
+  //     Note that this also could customise by particle type, e.g. giving different values
+  //     to mu-/mu+ , e-/e+ vs others)
+  // If multiple are present, later methods overwrite previous ones in this list.
   
   // Physics list
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
@@ -116,24 +125,43 @@ int main(int argc,char** argv)
   // User action initialization
   runManager->SetUserInitialization(new F01ActionInitialization(detector));
 
-  // Fine grained control of thresholds for looping particles
-  auto runAction= new F01RunAction();
-  runAction->SetWarningEnergy(   10.0 * CLHEP::keV );
-              // Looping particles with E < 10 keV will be killed after 1 step
-              //   with warning.
-              // Looping particles with E > 10 keV will generate a warning.
-  runAction->SetImportantEnergy( 0.1  * CLHEP::MeV );
-  runAction->SetNumberOfTrials( 30 );
-              // Looping particles with E > 0.1 MeV will survive for up to
-              //  30 'tracking' steps, and only be killed if they still loop.
+  G4double warningE   = 10.0 * CLHEP::keV;
+  G4double importantE =  0.1  * CLHEP::MeV;
+  G4int    numTrials  = 30;
+
+  G4bool useTransportParams= true; // Use the new way - Nov 2022
+  
+  if( useTransportParams )
+  {
+    auto transportParams= G4TransportationParameters::Instance();
+    transportParams->SetWarningEnergy(  warningE );
+    transportParams->SetImportantEnergy( importantE );
+    transportParams->SetNumberOfTrials( numTrials );
+    G4cout << "field01: Using G4TransportationParameters to set looper parameters."  << G4endl;
+  }
+  else
+  {
+    // Fine grained control of thresholds for looping particles
+    auto runAction= new F01RunAction();
+    runAction->SetWarningEnergy( warningE );
+    // Looping particles with E < 10 keV will be killed after 1 step
+    //   with warning.
+    // Looping particles with E > 10 keV will generate a warning.
+    runAction->SetImportantEnergy( importantE ); 
+    runAction->SetNumberOfTrials( numTrials ); 
+    // Looping particles with E > 0.1 MeV will survive for up to
+    //  30 'tracking' steps, and only be killed if they still loop.
+
+    G4cout << "field01: Using F01RunAction to set looper parameters."  << G4endl;
+    runManager->SetUserAction(runAction);
+  }
+  
   // Note: this mechanism overwrites the thresholds established by
   //       the call to UseLowLooperThresholds() above.
-  
-  runManager->SetUserAction(runAction);
 
   // Suppress large verbosity from EM & hadronic processes
-  G4EmParameters::Instance()->SetVerbose(-1);
-  G4HadronicProcessStore::Instance()->SetVerbose(0);
+  G4EmParameters::Instance()->SetVerbose(0);
+  G4HadronicParameters::Instance()->SetVerboseLevel(0);
   
   // Initialize G4 kernel
   //
@@ -141,9 +169,8 @@ int main(int argc,char** argv)
 
   // Initialize visualization
   //
-  G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager

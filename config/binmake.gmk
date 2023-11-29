@@ -154,7 +154,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/navigation/include \
               -I$(G4BASE)/geometry/magneticfield/include \
               -I$(G4BASE)/geometry/biasing/include \
-              -I$(G4BASE)/tasking/include \
               -I$(G4BASE)/track/include \
               -I$(G4BASE)/tracking/include \
               -I$(G4BASE)/digits_hits/detector/include \
@@ -227,7 +226,11 @@ LDLIBS1 := $(EXTRALIBS)
 # VISLIBS (and UILIBS?) is handled by the granular library script...
 #
 ifdef GLOBALLIBS
-  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
+  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4mctruth -lG4geomtext
+
+  ifdef G4LIB_USE_GDML
+    LDLIBS2 += -lG4gdml
+  endif
 
   ifdef G4LIB_USE_G3TOG4
     LDLIBS2 += -lG3toG4
@@ -236,7 +239,6 @@ ifdef GLOBALLIBS
   LDLIBS2 += -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
-             -lG4tasking \
              -lG4run \
              -lG4event \
              -lG4tracking \

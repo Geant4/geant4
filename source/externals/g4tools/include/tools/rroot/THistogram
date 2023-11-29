@@ -86,7 +86,7 @@ inline unsigned int new_bin_number(const std::vector< axis_t >& aAxes) {
 template <class T>
 inline void add_outflow(const std::vector< axis_t >& aAxes,std::vector<T>& aVector) {
   // aAxes[].m_offset contains the offset without outflow.
-  unsigned int dim = aAxes.size();
+  std::size_t dim = aAxes.size();
   // new size and offsets :
   std::vector<int> aoff(dim);
 
@@ -107,13 +107,13 @@ inline void add_outflow(const std::vector< axis_t >& aAxes,std::vector<T>& aVect
   for(int index=0;index<oldn;index++) {
     // Get new offset of index :
     offset = index;
-   {for(int iaxis=dim-1;iaxis>=0;iaxis--) {
+   {for(int iaxis=(int)dim-1;iaxis>=0;iaxis--) {
       is[iaxis] = offset/aAxes[iaxis].m_offset;
       offset -= is[iaxis] * aAxes[iaxis].m_offset;
     }}
     // new offset :
     offset = 0;
-   {for(unsigned iaxis=0;iaxis<dim;iaxis++) offset += is[iaxis] * aoff[iaxis];}
+   {for(std::size_t iaxis=0;iaxis<dim;iaxis++) offset += is[iaxis] * aoff[iaxis];}
     aVector[offset] = tmp[index];
   }
 }

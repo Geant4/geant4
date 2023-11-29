@@ -60,11 +60,6 @@ G4PhaseSpaceDecayChannel(const G4String& theParentName,
 }
 
 // --------------------------------------------------------------------
-G4PhaseSpaceDecayChannel::~G4PhaseSpaceDecayChannel()
-{
-}
-
-// --------------------------------------------------------------------
 G4DecayProducts* G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
 {
 #ifdef G4VERBOSE
@@ -127,14 +122,14 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::OneBodyDecayIt()
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
   // create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
+  auto products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // create daughter G4DynamicParticle at rest
-  G4DynamicParticle* daughterparticle
+  auto  daughterparticle
     = new G4DynamicParticle( G4MT_daughters[0], dummy, 0.0);
   if (useGivenDaughterMass) daughterparticle->SetMass(givenDaughterMasses[0]);
   products->PushProducts(daughterparticle);
@@ -169,10 +164,10 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
   // create G4Decayproducts
-  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
+  auto  products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   if (!useGivenDaughterMass)
@@ -267,7 +262,7 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   // create daughter G4DynamicParticle 
   G4double Ekin = std::sqrt(daughtermomentum*daughtermomentum
                           + daughtermass[0]*daughtermass[0]) - daughtermass[0];
-  G4DynamicParticle* daughterparticle
+  auto  daughterparticle
     = new G4DynamicParticle(G4MT_daughters[0],direction,Ekin,daughtermass[0]);
   products->PushProducts(daughterparticle);
   Ekin = std::sqrt(daughtermomentum*daughtermomentum
@@ -315,11 +310,11 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   
   // create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
 
   // create G4Decayproducts
-  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
+  auto  products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   if (!useGivenDaughterMass)
@@ -480,7 +475,7 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4double Ekin = std::sqrt(daughtermomentum[0]*daughtermomentum[0]
                           + daughtermass[0]*daughtermass[0]) - daughtermass[0];
-  G4DynamicParticle* daughterparticle
+  auto  daughterparticle
     = new G4DynamicParticle(G4MT_daughters[0],direction0,Ekin,daughtermass[0]);
   products->PushProducts(daughterparticle);
 
@@ -547,15 +542,15 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 
   // parent particle
   G4ThreeVector dummy;
-  G4DynamicParticle* parentparticle
+  auto  parentparticle
     = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
 
   // create G4Decayproducts
-  G4DecayProducts* products = new G4DecayProducts(*parentparticle);
+  auto  products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
   // daughters'mass
-  G4double* daughtermass = new G4double[numberOfDaughters]; 
+  auto  daughtermass = new G4double[numberOfDaughters]; 
     
   G4double sumofdaughtermass = 0.0;
   for (index=0; index<numberOfDaughters; ++index)
@@ -600,10 +595,10 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   }  
 
   // Calculate daughter momentum
-  G4double* daughtermomentum = new G4double[numberOfDaughters];
+  auto  daughtermomentum = new G4double[numberOfDaughters];
   G4ThreeVector direction;  
   G4DynamicParticle** daughterparticle;
-  G4double* sm = new G4double[numberOfDaughters];
+  auto  sm = new G4double[numberOfDaughters];
   G4double tmas;
   G4double weight = 1.0;
   G4int numberOfTry = 0;
@@ -613,7 +608,7 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   {
     // Generate rundom number in descending order 
     G4double temp;
-    G4double* rd = new G4double[numberOfDaughters];
+    auto  rd = new G4double[numberOfDaughters];
     rd[0] = 1.0;
     for( index=1; index<numberOfDaughters-1; ++index )
     {
@@ -702,9 +697,8 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
         return nullptr;   // Error detection
 
       }
-      else
-      {
-        // calculate weight of this events
+      
+              // calculate weight of this events
         weight *=  daughtermomentum[index]/sm[index];
 #ifdef G4VERBOSE
         if (GetVerboseLevel()>1)
@@ -714,7 +708,7 @@ G4DecayProducts* G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
                  << G4endl;
         }
 #endif
-      }
+     
     }
 
 #ifdef G4VERBOSE
@@ -872,5 +866,5 @@ G4double G4PhaseSpaceDecayChannel::Pmx(G4double e, G4double p1, G4double p2)
    // calcurate momentum of daughter particles in two-body decay
    G4double ppp = (e+p1+p2)*(e+p1-p2)*(e-p1+p2)*(e-p1-p2)/(4.0*e*e);
    if (ppp>0) return std::sqrt(ppp);
-   else       return -1.;
+         return -1.;
 }

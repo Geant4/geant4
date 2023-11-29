@@ -35,7 +35,7 @@
 #include "G4ToolsAnalysisReader.hh"
 #include "globals.hh"
 
-#include "tools/hdf5/ntuple"
+#include "toolx/hdf5/ntuple"
 
 #include <memory>
 #include <string_view>
@@ -51,19 +51,19 @@ class G4Hdf5AnalysisReader : public G4ToolsAnalysisReader
   friend class G4ThreadLocalSingleton<G4Hdf5AnalysisReader>;
 
   public:
-    virtual ~G4Hdf5AnalysisReader();
+    ~G4Hdf5AnalysisReader() override;
 
     // Static methods
     static G4Hdf5AnalysisReader* Instance();
 
     // Access methods
-    tools::hdf5::ntuple* GetNtuple() const;
-    tools::hdf5::ntuple* GetNtuple(G4int ntupleId) const;
+    toolx::hdf5::ntuple* GetNtuple() const;
+    toolx::hdf5::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
 
   protected:
     // Virtual methods from base class
-    virtual G4bool CloseFilesImpl(G4bool reset) final;
+    G4bool CloseFilesImpl(G4bool reset) final;
 
   private:
     G4Hdf5AnalysisReader();

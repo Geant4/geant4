@@ -58,38 +58,36 @@ class G4VSteppingVerbose;
 class G4VUserActionInitialization
 {
   public:
+    G4VUserActionInitialization() = default;
+    virtual ~G4VUserActionInitialization() = default;
 
-    G4VUserActionInitialization();
-    virtual ~G4VUserActionInitialization();
-
+    // Virtual method to be implemented by the user to instantiate
+    // user action class objects.
     virtual void Build() const = 0;
-      // Virtual method to be implemented by the user to instantiate
-      // user action class objects.
 
-    virtual void BuildForMaster() const;
-      // Virtual method to be implemented by the user to instantiate user
-      // run action class object to be used by G4MTRunManager. This method
-      // is not invoked in the sequential mode. The user should not use
-      // this method to instantiate user action classes except for user
-      // run action.
+    // Virtual method to be implemented by the user to instantiate user
+    // run action class object to be used by G4MTRunManager. This method
+    // is not invoked in the sequential mode. The user should not use
+    // this method to instantiate user action classes except for user
+    // run action.
+    virtual void BuildForMaster() const {}
 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-      // Virtual method to be implemented by the user if having a concrete
-      // SteppingVerbose class to be used by the worker thread. In this case
-      // one should instantiate a SteppingVerbose in the concrete
-      // implementation of this method and return its pointer. If this method
-      // is not implemented, the default G4SteppingVerbose will be used.
-      // Please note that this method affects only for the worker thread.
+    // Virtual method to be implemented by the user if having a concrete
+    // SteppingVerbose class to be used by the worker thread. In this case
+    // one should instantiate a SteppingVerbose in the concrete
+    // implementation of this method and return its pointer. If this method
+    // is not implemented, the default G4SteppingVerbose will be used.
+    // Please note that this method affects only for the worker thread.
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const { return nullptr; }
 
   protected:
-
+    // These methods should be used to define user's action classes.
     void SetUserAction(G4VUserPrimaryGeneratorAction*) const;
     void SetUserAction(G4UserRunAction*) const;
     void SetUserAction(G4UserEventAction*) const;
     void SetUserAction(G4UserStackingAction*) const;
     void SetUserAction(G4UserTrackingAction*) const;
     void SetUserAction(G4UserSteppingAction*) const;
-      // These methods should be used to define user's action classes.
 };
 
 #endif

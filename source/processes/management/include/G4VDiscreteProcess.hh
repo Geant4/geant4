@@ -85,12 +85,25 @@ class G4VDiscreteProcess : public G4VProcess
     virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& ,
                              const G4Step&
-                            ) { return 0; }
+                            ) { return nullptr; }
 
     virtual G4VParticleChange* AlongStepDoIt(
                              const G4Track& ,
                              const G4Step& 
-                            ) { return 0; }
+                            ) { return nullptr; }
+
+    // cross section in the unit of inverse length as a 
+    // function of kinetic energy 
+    virtual G4double GetCrossSection(
+                             const G4double,
+                             const G4MaterialCutsCouple*
+                            ) { return 0.0; }
+
+    // minimal energy for non-zero cross section
+    virtual G4double MinPrimaryEnergy(
+                             const G4ParticleDefinition*,
+                             const G4Material*
+                            ) { return 0.0; }
  
   protected:
 

@@ -71,7 +71,7 @@
 
 //============================================================================
 
-//#define debugFTFexictation
+//#define debugFTFexcitation
 //#define debug_heavyHadrons
 
 //============================================================================
@@ -91,7 +91,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
                                                     G4FTFParameters*       theParameters,
                                                     G4ElasticHNScattering* theElastic ) const {
 
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << G4endl << "FTF ExciteParticipants --------------" << G4endl;
   #endif
 
@@ -159,7 +159,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       common.TargetNonDiffStateMinMass += 140.0*MeV;
     }
   };
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Proj Targ PDGcodes " << common.ProjectilePDGcode << " " << common.TargetPDGcode << G4endl
          << "Mprojectile  Y " << common.Pprojectile.mag() << " " << ProjectileRapidity << G4endl        // Uzhi Aug.2019
          << "M0projectile Y " << common.M0projectile << " " << ProjectileRapidity << G4endl;
@@ -179,7 +179,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   common.Ptarget.transform( common.toCms );
 
   G4double SumMasses = common.M0projectile + common.M0target;  // + 220.0*MeV;
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "SqrtS     " << common.SqrtS << G4endl << "M0pr M0tr SumM " << common.M0projectile 
          << " " << common.M0target << " " << SumMasses << G4endl;
   #endif
@@ -188,7 +188,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   common.PZcms2 = ( sqr( common.S ) + sqr( common.M0projectile2 ) + sqr( common.M0target2 )
                     - 2.0 * ( common.S * ( common.M0projectile2 + common.M0target2 ) 
                               + common.M0projectile2 * common.M0target2 ) ) / 4.0 / common.S;
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "PZcms2 after toBePutOnMassShell " << common.PZcms2 << G4endl;
   #endif
   if ( common.PZcms2 < 0.0 ) return false;  // It can be in an interaction with off-shell nuclear nucleon
@@ -211,7 +211,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
                                     + common.Ptarget.y() * common.Ptarget.y() 
                                     + common.PZcms2 ) );
   }
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Start --------------------" << G4endl << "Proj M0 Mdif Mndif " << common.M0projectile
          << " " << common.ProjectileDiffStateMinMass << "  " << common.ProjectileNonDiffStateMinMass
          << G4endl
@@ -231,7 +231,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   common.ProbTargetDiffraction = 
     theParameters->GetProcProb( 3, ProjectileRapidity - TargetRapidity );
   common.ProbOfDiffraction = common.ProbProjectileDiffraction + common.ProbTargetDiffraction;
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Proc Probs " << QeNoExc << " " << QeExc << " " 
          << common.ProbProjectileDiffraction << " " << common.ProbTargetDiffraction << G4endl 
          << "ProjectileRapidity " << ProjectileRapidity << G4endl;
@@ -247,7 +247,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
     common.ProbProjectileDiffraction /= ( 1.0 - QeExc - QeNoExc );
     common.ProbTargetDiffraction     /= ( 1.0 - QeExc - QeNoExc );
   }
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Proc Probs " << QeNoExc << " " << QeExc << " " 
          << common.ProbProjectileDiffraction << " " << common.ProbTargetDiffraction << G4endl 
          << "ProjectileRapidity " << ProjectileRapidity << G4endl;
@@ -266,7 +266,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   } else if ( returnCode == 1 ) {
 
     common.ProbOfDiffraction = common.ProbProjectileDiffraction + common.ProbTargetDiffraction;
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Excitation --------------------" << G4endl
            << "Proj M0 MdMin MndMin " << common.M0projectile << " " 
            << common.ProjectileDiffStateMinMass << "  " << common.ProjectileNonDiffStateMinMass
@@ -282,7 +282,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
     } else {
       common.ProbProjectileDiffraction = 0.0;
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Prob: ProjDiff TargDiff + Sum " << common.ProbProjectileDiffraction << " " 
            << common.ProbTargetDiffraction << " " << common.ProbOfDiffraction << G4endl;
     #endif
@@ -306,7 +306,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       // Transform back and update SplitableHadron Participant.
       common.Pprojectile.transform( common.toLab );
       common.Ptarget.transform( common.toLab );
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "Mproj " << common.Pprojectile.mag() << G4endl << "Mtarg " << common.Ptarget.mag()
              << G4endl;
       #endif
@@ -340,7 +340,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
   G4ParticleDefinition* TestParticle = 0;
   G4double MtestPr = 0.0, MtestTr = 0.0;
 
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Q exchange --------------------------" << G4endl;
   #endif
 
@@ -364,7 +364,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
   //  Target unpacking
   G4int TargQ1 = 0, TargQ2 = 0, TargQ3 = 0;
   UnpackBaryon( common.TargetPDGcode, TargQ1, TargQ2, TargQ3 ); 
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Proj Quarks " << ProjQ1 << " " << ProjQ2 << " " << ProjQ3 << G4endl
          << "Targ Quarks " << TargQ1 << " " << TargQ2 << " " << TargQ3 << G4endl;
   #endif
@@ -384,7 +384,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     if ( ProjExchangeQ != TargQ1 ) NpossibleStates++;
     if ( ProjExchangeQ != TargQ2 ) NpossibleStates++;
     if ( ProjExchangeQ != TargQ3 ) NpossibleStates++;  
-    G4int Nsampled = G4RandFlat::shootInt( G4long( NpossibleStates ) ) + 1;
+    G4int Nsampled = (G4int)G4RandFlat::shootInt( G4long( NpossibleStates ) )+1;
     NpossibleStates = 0;
     if ( ProjExchangeQ != TargQ1 ) {
       if ( ++NpossibleStates == Nsampled ) {
@@ -404,7 +404,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
         isProjQ1Quark ? ProjQ1 = TargExchangeQ : ProjQ2 = TargExchangeQ;
       }
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Exchanged Qs in Pr Tr " << ProjExchangeQ << " " << TargExchangeQ << G4endl;
     #endif
 
@@ -415,26 +415,42 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     while ( attempts++ < maxNumberOfAttempts ) {  /* Loop checking, 10.08.2015, A.Ribon */
 
       // Determination of a new projectile ID which satisfies energy-momentum conservation
+      G4double ProbSpin0 = 0.5;
       G4double Ksi = G4UniformRand();
       if ( aProjQ1 == aProjQ2 ) {
-        if ( aProjQ1 < 3 ) {
-          NewProjCode = 111;      // Pi0-meson
-          if ( Ksi < 0.5 ) {
-            NewProjCode = 221;    // Eta-meson
-            if ( Ksi < 0.25 ) {
-              NewProjCode = 331;  // Eta'-meson
-            }
-          } 
-        } else if ( aProjQ1 == 3 ) {
-          NewProjCode = 221;      // Eta-meson
-          if ( Ksi < 0.5 ) {
-            NewProjCode = 331;    // Eta'-meson
-          }
-        } else if ( aProjQ1 == 4 ) {
-	  NewProjCode = 441;      // Eta_c
-	} else if ( aProjQ1 == 5 ) {
-	  NewProjCode = 553;      // Upsilon
-	}
+        if ( G4UniformRand() < ProbSpin0 ) {  // Meson spin = 0 (pseudo-scalar)
+          if ( aProjQ1 < 3 ) {
+            NewProjCode = 111;                // pi0
+            if ( Ksi < 0.5 ) {
+              NewProjCode = 221;              // eta
+              if ( Ksi < 0.25 ) {
+                NewProjCode = 331;            // eta'
+              }
+            } 
+          } else if ( aProjQ1 == 3 ) {
+              NewProjCode = 221;              // eta
+              if ( Ksi < 0.5 ) {
+                NewProjCode = 331;            // eta'
+              }
+          } else if ( aProjQ1 == 4 ) {
+	    NewProjCode = 441;                // eta_c(1S)
+	  } else if ( aProjQ1 == 5 ) {
+	    NewProjCode = 551;                // eta_b(1S)
+	  }
+        } else {                              // Meson spin = 1 (vector meson)
+          if ( aProjQ1 < 3 ) {
+            NewProjCode = 113;                // rho0
+            if ( Ksi < 0.5 ) {
+              NewProjCode = 223;              // omega
+            } 
+          } else if ( aProjQ1 == 3 ) {
+            NewProjCode = 333;                // phi
+          } else if ( aProjQ1 == 4 ) {
+	    NewProjCode = 443;                // J/psi(1S)
+	  } else if ( aProjQ1 == 5 ) {
+	    NewProjCode = 553;                // Upsilon(1S)
+	  }
+        }
       } else {
         if ( aProjQ1 > aProjQ2 ) {
           NewProjCode = aProjQ1*100 + aProjQ2*10 + 1;
@@ -442,7 +458,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
           NewProjCode = aProjQ2*100 + aProjQ1*10 + 1;
         }
       }
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "NewProjCode " << NewProjCode << G4endl;
       #endif
       // Decide (with 50% probability) whether the projectile hadrons is excited,
@@ -486,7 +502,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
       if ( Qquarks < 0  || ( Qquarks == 0  &&  aProjQ1 != aProjQ2  &&  aProjQ1%2 == 0 ) ) {
 	NewProjCode *= -1;
       }
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "NewProjCode +2 or 0 " << NewProjCode << G4endl;
       G4cout<<"+++++++++++++++++++++++++++++++++++++++"<<G4endl;
       G4cout<<ProjQ1<<" "<<ProjQ2<<" "<<Qquarks<<G4endl;
@@ -500,7 +516,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
       if ( common.SqrtS - common.M0target < common.MminProjectile ) continue;
       MtestPr = common.BrW.SampleMass( TestParticle, TestParticle->GetPDGMass() 
                                                      + 5.0*TestParticle->GetPDGWidth() );
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "TestParticle Name " << NewProjCode << " " << TestParticle->GetParticleName()
              << G4endl
              << "MtestPart MtestPart0 "<<MtestPr<<" "<<TestParticle->GetPDGMass()<<G4endl
@@ -510,7 +526,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
 
       // Targ
       NewTargCode = NewNucleonId( TargQ1, TargQ2, TargQ3 );
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "New TrQ " << TargQ1 << " " << TargQ2 << " " << TargQ3 << G4endl
              << "NewTargCode " << NewTargCode << G4endl;
       #endif
@@ -572,7 +588,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
       
       TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewTargCode );
       if ( ! TestParticle ) continue;
-      #ifdef debugFTFexictation
+      #ifdef debugFTFexcitation
       G4cout << "New targ " << NewTargCode << " " << TestParticle->GetParticleName() << G4endl;
       #endif
       common.MminTarget = common.BrW.GetMinimumMass( TestParticle );
@@ -587,7 +603,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     if ( MtestPr >= common.Pprojectile.mag()  ||  projectile->GetStatus() != 0 ) { 
       common.M0projectile = MtestPr;
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "M0projectile After check " << common.M0projectile << G4endl;
     #endif
     common.M0projectile2 = common.M0projectile * common.M0projectile;
@@ -597,7 +613,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
       common.M0target = MtestTr;
     }
     common.M0target2 = common.M0target * common.M0target;
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "New targ M0 M0^2 " << common.M0target << " " << common.M0target2 << G4endl;
     #endif
     common.TargetDiffStateMinMass    = common.M0target + 220.0*MeV;          // 220 MeV=m_pi+80 MeV;    
@@ -631,7 +647,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     } else {
       exchangedQ = thirdQ;
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Exchange Qs isProjectile Q " << isProjectileExchangedQ << " " << exchangedQ << " ";
     #endif
     // The exchanged quarks (one of the projectile hadron and one of the target hadron)
@@ -670,7 +686,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
       TargQ1 = firstQ;      TargQ2 = secondQ;      TargQ3 = thirdQ;
       ProjQ1 = otherFirstQ; ProjQ2 = otherSecondQ; ProjQ3 = otherThirdQ;
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Exchange Qs Pr  Tr " << ( isProjectileExchangedQ ? exchangedQ : otherExchangedQ )
            << " " << ( isProjectileExchangedQ ? otherExchangedQ : exchangedQ ) << G4endl;
     #endif
@@ -718,7 +734,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
         NewTargCode = newHadCode;
       }
     }
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "NewProjCode NewTargCode " << NewProjCode << " " << NewTargCode << G4endl;
     #endif
 
@@ -859,7 +875,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
   common.PZcms2 = ( sqr( common.S ) + sqr( common.M0projectile2 ) + sqr( common.M0target2 )
                     - 2.0 * ( common.S * ( common.M0projectile2 + common.M0target2 )
                               + common.M0projectile2 * common.M0target2 ) ) / 4.0 / common.S;
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "At the end// NewProjCode " << NewProjCode << G4endl 
          << "At the end// NewTargCode " << NewTargCode << G4endl
          << "M0pr  M0tr  SqS " << common.M0projectile << " " << common.M0target << " " 
@@ -877,7 +893,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
   common.Pprojectile.setE( std::sqrt( common.M0projectile2 + common.PZcms2 ) );
   common.Ptarget.setPz(    -common.PZcms );
   common.Ptarget.setE( std::sqrt( common.M0target2 + common.PZcms2 ) );
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Proj Targ and Proj+Targ in CMS" << G4endl << common.Pprojectile << G4endl 
          << common.Ptarget << G4endl << common.Pprojectile + common.Ptarget << G4endl;
   #endif
@@ -891,7 +907,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
        common.ProbOfDiffraction == 0.0 ) common.ProbExc = 0.0;
 
   if ( G4UniformRand() > common.ProbExc ) {  // Make elastic scattering
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Make elastic scattering of new hadrons" << G4endl;
     #endif
     common.Pprojectile.transform( common.toLab );
@@ -899,7 +915,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     projectile->Set4Momentum( common.Pprojectile );
     target->Set4Momentum( common.Ptarget );
     G4bool Result = theElastic->ElasticScattering( projectile, target, theParameters );
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Result of el. scatt " << Result << G4endl << "Proj Targ and Proj+Targ in Lab"
            << G4endl << projectile->Get4Momentum() << G4endl << target->Get4Momentum() << G4endl
            << projectile->Get4Momentum() + target->Get4Momentum() << " " 
@@ -909,7 +925,7 @@ ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
     return returnCode;
   }
 
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Make excitation of new hadrons" << G4endl;
   #endif
 
@@ -935,7 +951,7 @@ ExciteParticipants_doDiffraction( G4VSplitableHadron* projectile, G4VSplitableHa
   G4bool isProjectileDiffraction = false;
   if ( G4UniformRand() < common.ProbProjectileDiffraction ) {  // projectile diffraction
     isProjectileDiffraction = true;
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "projectile diffraction" << G4endl;
     #endif
     common.ProjMassT2 = common.ProjectileDiffStateMinMass2;
@@ -943,7 +959,7 @@ ExciteParticipants_doDiffraction( G4VSplitableHadron* projectile, G4VSplitableHa
     common.TargMassT2 = common.M0target2;
     common.TargMassT  = common.M0target;
   } else {                                                     // target diffraction
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout << "Target diffraction" << G4endl;
     #endif
     common.ProjMassT2 = common.M0projectile2;
@@ -1041,7 +1057,7 @@ ExciteParticipants_doNonDiffraction( G4VSplitableHadron* projectile,
   // Third of the three utility methods used only by ExciteParticipants: 
   // it does the sampling for the non-diffraction case.
 
-  #ifdef debugFTFexictation
+  #ifdef debugFTFexcitation
   G4cout << "Non-diffraction process" << G4endl;
   #endif
 
@@ -1114,7 +1130,7 @@ ExciteParticipants_doNonDiffraction( G4VSplitableHadron* projectile,
     common.Qplus = -( common.TPlusNew - common.Ptarget.plus() );
     common.Qmomentum.setPz( (common.Qplus - common.Qminus)/2.0 );
     common.Qmomentum.setE(  (common.Qplus + common.Qminus)/2.0 );
-    #ifdef debugFTFexictation
+    #ifdef debugFTFexcitation
     G4cout <<"Sampled: Mpr, MdifPr, Mtr, MdifTr "<<G4endl
            << ( common.Pprojectile + common.Qmomentum ).mag() << " " 
            << common.ProjectileNonDiffStateMinMass << G4endl 
@@ -1145,17 +1161,18 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
   //       << "Defin " << hadron->GetDefinition() << G4endl
   //       << "Defin " << hadron->GetDefinition()->GetPDGEncoding() << G4endl;
 
-  hadron->SplitUp();
+  G4bool HadronIsString = hadron->IsSplit();
+  if( ! HadronIsString ) hadron->SplitUp();
 
   G4Parton* start = hadron->GetNextParton();
-  if ( start == NULL ) { 
+  if ( start == nullptr ) { 
     G4cout << " G4FTFModel::String() Error: No start parton found" << G4endl;
     FirstString = 0; SecondString = 0;
     return;
   }
 
   G4Parton* end = hadron->GetNextParton();
-  if ( end == NULL ) { 
+  if ( end == nullptr ) { 
     G4cout << " G4FTFModel::String() Error: No end parton found" <<  G4endl;
     FirstString = 0; SecondString = 0;
     return;
@@ -1164,6 +1181,18 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
   //G4cout << start << " " << start->GetPDGcode() << " " << end << " " << end->GetPDGcode()
   //       << G4endl
   //       << "Create string " << start->GetPDGcode() << " " << end->GetPDGcode() << G4endl;
+
+  if ( HadronIsString ) {
+    if ( isProjectile ) {
+      FirstString = new G4ExcitedString( end, start, +1 );
+    } else {
+      FirstString = new G4ExcitedString( end, start, -1 );
+    }
+    FirstString->SetTimeOfCreation( hadron->GetTimeOfCreation() );
+    FirstString->SetPosition( hadron->GetPosition() );
+    SecondString = 0;
+    return;
+  }
 
   G4LorentzVector Phadron = hadron->Get4Momentum();
   //G4cout << "String mom " << Phadron << G4endl;

@@ -1,12 +1,19 @@
--------------------------------------------------------------------
--------------------------------------------------------------------
+# Example gammaray_telescope History
 
-     =========================================================
- 		      Geant4 - gammaray_telescope
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                          History file
-                          ------------
+## 2022-11-11 F. Longo and A. Polsini (gammaraytel-V11-00-01)
+- Migration to C++17 standard. General code refactoring.
+
+## 2021-12-10 Ben Morgan (gammaraytel-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
+
 07.10.2021 - I. Hrivnacova (gammaraytel-V10-07-08)
              Migration to new G4AnalysisManager.hh header;
              define the default output file type (root).
@@ -22,7 +29,7 @@
              README file updated.
              Minor change in the GammaRayTelRunAction::OpenFile() method
              to allow filenames longer than the hardcoded 25 character limit.
-             Revision reccomended by N. MacFadden and A. Knaian, nklabs.
+             Revision recommended by N. MacFadden and A. Knaian, nklabs.
 
 19.07.2021 - I. Hrivnacova (gammaraytel-V10-07-06)
              Updated for changes in the analysis category:
@@ -30,7 +37,7 @@
              as this is now done by the Geant4 kernel.
 
 24.05.2021 - B. Morgan (gammaraytel-V10-07-05)
-- Bump required CMake version range to 3.12...3.20, matching core Geant4
+             Bump required CMake version range to 3.12...3.20, matching core Geant4
 
 18.03.2021 - A. Ribon, Tag gammaraytel-V10-07-04
              GammaRayTelHadronPhysics : replaced G4HadronCaptureProcess with
@@ -39,16 +46,16 @@
 
 11.03.2021 - A. Ribon, Tag gammaraytel-V10-07-03
              GammaRayTelHadronPhysics : replaced stopping processes that
-	     have been deleted.
+             have been deleted.
 
 08.03.2021 - A. Ribon, Tag gammaraytel-V10-07-02
              GammaRayTelHadronPhysics : replaced old pion inelastic cross
-	     sections (that have been deleted) with G4BGGPionInelasticXS.
+             sections (that have been deleted) with G4BGGPionInelasticXS.
 
 04.03.2021 - A. Ribon, Tag gammaraytel-V10-07-01
              GammaRayTelHadronPhysics, GammaRayTelIonPhysics : replaced
-	     G4PhotoNuclearProcess (that has been deleted) with
-	     G4HadronInelasticProcess.
+             G4PhotoNuclearProcess (that has been deleted) with
+             G4HadronInelasticProcess.
 
 12.02.2021 - S. Guatelli, Tag gammaraytel-V10-07-00
              Removed the dependency towards G4EmProcessOptions.hh.
@@ -63,14 +70,14 @@
              select the EM physics processes and models.
              Added macro gammaray_polarized.in for system testing.
 
-02.11.2020 - B.Morgan, Tag gammaraytel-V10-06-01
+02.11.2020 - B. Morgan, Tag gammaraytel-V10-06-01
              Support same CMake version range as core Geant4
 
-26.02.2020 - V.Ivanchenko, Tag gammaraytel-V10-06-00
+26.02.2020 - V. Ivanchenko, Tag gammaraytel-V10-06-00
              GammaRayTelHadronPhysics, GammaRayTelIonPhysics - fixed
              compilation problems due to incorrect FTFP instantiation
 
-31.01.2019 - I.Hrivnacova, Tag gammaraytel-V10-05-00
+31.01.2019 - I. Hrivnacova, Tag gammaraytel-V10-05-00
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 21.10.2018 - F. Romano, Tag gammaraytel-V10-04-06
@@ -90,37 +97,37 @@
              symbols.
 
 13.05.2018 - L. Pandola, Tag gammaraytel-V10-04-02
-	     Fix more warnings on clang
+             Fix more warnings on clang
 
 10.05.2018 - L. Pandola, Tag gammaraytel-V10-04-01
              Fix warning on clang
 
 08.05.2018 - F. Longo and L. Pandola, Tag gammaraytel-V10-04-00
-	     Fix problems reported by Valgrind (bug report #1981)
+             Fix problems reported by Valgrind (bug report #1981)
 
 19.11.2016 - A. Dotti gammaraytel-V10-02-02
-	     explicit set of SDs to manager
+             explicit set of SDs to manager
 
 31.10.2016 - F. Longo and L. Pandola, Tag  gammaraytel-V10-02-01
-	     Extended physics list to give the possibility to handle
-	     polarized gamma-rays.
+             Extended physics list to give the possibility to handle
+             polarized gamma-rays.
 
 28.10.2016 - G. Folger, Tag gammaraytel-V10-02-00
-            Remove direct use of aParticleIterator, use GetParticleTableIterator().
+             Remove direct use of aParticleIterator, use GetParticleTableIterator().
              fix required by clang39 on Linux and MAC
 
 27.10.2015 - A. Ribon, Tag gammaraytel-V10-01-00
              GammaRayTelIonPhysics: replaced old G4GGNuclNuclCrossSection
              class with the new, recommended one, G4ComponentGGNuclNuclXsc .
 
-30.10.2014   V.Ivanchenko, Tag gammaraytel-V10-00-08
+30.10.2014 - V. Ivanchenko, Tag gammaraytel-V10-00-08
              Use correct mu- stopping process
 
-10.09.2014   G.Cosmo, Tag gammaraytel-V10-00-07
+10.09.2014 - G. Cosmo, Tag gammaraytel-V10-00-07
              Corrected compilation error in GammaRayTelIonPhysics.cc
              for missing inclusion of units header.
 
-30.06.2014   L.Pandola, Tag gammaraytel-V10-00-06
+30.06.2014 - L. Pandola, Tag gammaraytel-V10-00-06
              Write separate files for each thread/run, if option
              G4STORE_DATA is active.
              Move ordering of commands in macro: the generator action
@@ -128,130 +135,130 @@
              MT Migration: use G4MTRunManager if applicable
              Set some volumes to invisible for faster visualization
 
-14.06.2014   L.Pandola, Tag  gammaraytel-V10-00-05
+14.06.2014 - L. Pandola, Tag  gammaraytel-V10-00-05
              Get rid of additional compiler warning from
              GammaRayTelEventAction showing up when
              G4STORE_DATA=OFF
 
-13.06.2014   L.Pandola, Tag  gammaraytel-V10-00-04
+13.06.2014 - L. Pandola, Tag  gammaraytel-V10-00-04
              Get rid of compiler warning in GammaRayTelRunAction
              showing up when G4STORE_DATA=OFF
 
-12.06.2014   L.Pandola, Tag  gammaraytel-V10-00-03
-	     const access to DetectorConstruction by PrimaryGen
-	     Remove G4ANALYSIS_USE flag (no external dependency!)
-	     Get rid of the extern output file (now member of RunAction)
+12.06.2014 - L. Pandola, Tag  gammaraytel-V10-00-03
+             const access to DetectorConstruction by PrimaryGen
+             Remove G4ANALYSIS_USE flag (no external dependency!)
+             Get rid of the extern output file (now member of RunAction)
 
-11.06.2014   L.Pandola, Tag  gammaraytel-V10-00-02
-	     Migrated hit and digi classes, to make them MT-compliant
-	     Added method ConstructSDandField in the geometry class
+11.06.2014 - L. Pandola, Tag  gammaraytel-V10-00-02
+             Migrated hit and digi classes, to make them MT-compliant
+             Added method ConstructSDandField in the geometry class
              Use G4GlobalFieldManager instead of local field
 
-19.05.2014   F.Longo, Tag gammaraytel-V10-00-01
+19.05.2014 - F. Longo, Tag gammaraytel-V10-00-01
              Removed deprecated RO geometry
 
-07.05.2014   L.Pandola, Tag gammaraytel-V10-00-00
-	     Start to prepare the MT migration: (1) create ActionInitializer
+07.05.2014 - L. Pandola, Tag gammaraytel-V10-00-00
+             Start to prepare the MT migration: (1) create ActionInitializer
              (2) make const Getters in the detector construction; (3)
              retrieve const pointer to geometry from Analysis class
 
-07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-06
-	     Edit physics list according to A. Ribon's suggestions.
+07.11.2013 - L. Pandola, Tag: gammaraytel-V09-06-06
+             Edit physics list according to A. Ribon's suggestions.
              (1) Remove inelastic models for hyperons and anti-hyperons (only
              EM and decay left); (2) use FTFP model down to zero energy for
              anti-p and anti-n (Bertini cascade not available); (3) use
              FTFP+BERT for d,t and alphas.
 
-07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-05
-	     Removed dependency from HEP and LEP models
+07.11.2013 - L. Pandola, Tag: gammaraytel-V09-06-05
+             Removed dependency from HEP and LEP models
 
-04.04.2013   F.Longo and L.Pandola, Tag: gammaraytel-V09-06-04
-	     Migrated analysis from AIDA-based to the g4tools
-	     README and CMakeLists.txt updated accondingly. No
-	     external dependencies any longer
+04.04.2013 - F. Longo and L. Pandola, Tag: gammaraytel-V09-06-04
+             Migrated analysis from AIDA-based to the g4tools
+             README and CMakeLists.txt updated accondingly. No
+             external dependencies any longer
 
-04.01.2013   A.Dotti, Tag: gammaraytel-V09-06-02,gammaraytel-V09-06-03
+04.01.2013 - A. Dotti, Tag: gammaraytel-V09-06-02,gammaraytel-V09-06-03
              New interface for G4VUserPhysicsList needed for MT
 
-12.18.2012   M.Kelsey, Tag: gammaraytel-V09-06-01
-	     GammaRayTelHadronPhysics: Migrate stopping processes
+12.18.2012 - M. Kelsey, Tag: gammaraytel-V09-06-01
+             GammaRayTelHadronPhysics: Migrate stopping processes
 
-12.12.2012   V.Ivanchenko, Tag: gammaraytel-V09-06-00
+12.12.2012 - V. Ivanchenko, Tag: gammaraytel-V09-06-00
              GammaRayTelEMlowePhysics: substitute SetModel by SetEmModel
 
-07.11.2012   L. Pandola and F. Longo, Tag: gammaraytel-V09-05-05
+07.11.2012 - L. Pandola and F. Longo, Tag: gammaraytel-V09-05-05
              Change the logic of the UI/GUI instantiation in the main(),
              to avoid problems observed in the STT when running in batch
              mode. Minor change in the CMakeLists.txt
 
-02.11.2012   L. Pandola, Tag: gammaraytel-V09-05-04
-	     Remove warnings due to two G4Regions without their own
+02.11.2012 - L. Pandola, Tag: gammaraytel-V09-05-04
+             Remove warnings due to two G4Regions without their own
              cut. Change physics list from QGSP_BIC to FTFP_BERT, to
-	     avoid warnings due to the deprecated LEP models.
+             avoid warnings due to the deprecated LEP models.
              Removed gammaraytel.err file.
 
-31.10.2012   L. Pandola and F. Longo, Tag: gammaraytel-V09-05-03
+31.10.2012 - L. Pandola and F. Longo, Tag: gammaraytel-V09-05-03
              Edit the CMakeLists.txt file to fix the AIDA dependency
              and to properly treat the G4STORE_DATA option
 
-30.10.2012   Luciano Pandola, Tag gammaraytel-V09-05-02
-	     Comment out /vis/viewer/update at the EndOfRun (avoids a warning)
-	     Comment out in gammaraytel.in a command which is no
+30.10.2012 - Luciano Pandola, Tag gammaraytel-V09-05-02
+             Comment out /vis/viewer/update at the EndOfRun (avoids a warning)
+             Comment out in gammaraytel.in a command which is no
              longer defined
 
-25.10.2012   Luciano Pandola, Tag: gammaraytel-V09-05-01
-	     Replace CMakeLists.txt to deal with UI/VIS
+25.10.2012 - Luciano Pandola, Tag: gammaraytel-V09-05-01
+             Replace CMakeLists.txt to deal with UI/VIS
 
-11.10.2012   Gabriele Cosmo,  Tag: gammaraytel-V09-05-00
+11.10.2012 - Gabriele Cosmo, Tag: gammaraytel-V09-05-00
              Explicit inclusion of units and constants headers.
 
-03.10.2011   Gunter Folger,   Tag: gammaraytel-V09-04-03
+03.10.2011 - Gunter Folger, Tag: gammaraytel-V09-04-03
              Fix compilation warnings from gcc 4.6 in GammaRayTelEventAction.cc,
-	     GammaRayTelDetectorConstruction.cc and GammaRayTelTrackerROGeometry.cc
+             GammaRayTelDetectorConstruction.cc and GammaRayTelTrackerROGeometry.cc
 
-16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-02
+16.09.2011 - Pere Mato, Tag: gammaraytel-V09-04-02
              Added SVN eol property to file gammaraytel.err to allow proper file comparissons
 
-16.09.2011   Pere Mato,  Tag: gammaraytel-V09-04-01
+16.09.2011 - Pere Mato, Tag: gammaraytel-V09-04-01
              Fixed the error introduced with G4USE_UI conditional code
              Added file gammaraytel.err with the expected error output
 
-11.11.2010   Gunter Folger,  Tag: gammaraytel-V09-03-03
-	     Use new G4MultipleScattering classes
-	     Correct initialisation of G4ThreeVector
-	     Use predefined physics list in place of old style
-	       GammaRayPhysics; latter crashes on exit.
+11.11.2010 - Gunter Folger, Tag: gammaraytel-V09-03-03
+             Use new G4MultipleScattering classes
+             Correct initialisation of G4ThreeVector
+             Use predefined physics list in place of old style
+             GammaRayPhysics; latter crashes on exit.
 
-09.11.2010   Makoto Asai, Tag: gammaraytel-V09-03-02
+09.11.2010 - Makoto Asai, Tag: gammaraytel-V09-03-02
              Fix AIDA file option.
 
-09.11.2010   John Allison, Tag: gammaraytel-V09-03-01
+09.11.2010 - John Allison, Tag: gammaraytel-V09-03-01
              Introduce G4UIExecutive.
 
-03.06.2010   Joseph Perl, Tag: gammaraytel-V09-03-00
+03.06.2010 - Joseph Perl, Tag: gammaraytel-V09-03-00
              Update vis usage
 
-24.11.2008   G.A.P.Cirrone, Tag: gammaraytel-V09-01-02
+24.11.2008 - G. A. P. Cirrone, Tag: gammaraytel-V09-01-02
              Updated History file
 
-24.11.2008   G.A.P.Cirrone, Tag: gammaraytel-V09-01-01
+24.11.2008 - G. A. P. Cirrone, Tag: gammaraytel-V09-01-01
              Fixed compilation problems
 
-11.06.2008   G.A.P.Cirrone (gammaraytel-V09-01-00)
+11.06.2008 - G. A. P. Cirrone (gammaraytel-V09-01-00)
              Fixed errors in compilation
 
-07-12-2005   Susanna Guatelli (gammaraytel-V07-01-00)
+07.12.2005 - Susanna Guatelli (gammaraytel-V07-01-00)
              GammaRayParticles introduced
              G4Exception deriving from Hadronic Physics List deleted
 
-3rd May 2005 John Allison  (examples-V07-00-03)
+03.05.2005 - John Allison (examples-V07-00-03)
              Replaced vis manager with G4VisExecutive.
 
-10.12.2004   Gabriele Cosmo (gammaraytel-V06-02-01)
+10.12.2004 - Gabriele Cosmo (gammaraytel-V06-02-01)
              Replaced usage of M_PI with CLHEP's pi.
 
-01.12.2004   Francesco Longo (gammaraytel-V06-02-00)
+01.12.2004 - Francesco Longo (gammaraytel-V06-02-00)
              Updates and migration to <cmath>.
 
-01.06.2004   Susanna Guatelli
+01.06.2004 - Susanna Guatelli
              Migration to AIDA 3.2.1 and PI 1.2.1.

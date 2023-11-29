@@ -47,21 +47,22 @@ class G4CsvFileManager : public G4VTFileManager<std::ofstream>
   public:
     explicit G4CsvFileManager(const G4AnalysisManagerState& state);
     G4CsvFileManager() = delete;
-    ~G4CsvFileManager() = default;
+    ~G4CsvFileManager() override = default;
 
     using G4BaseFileManager::GetNtupleFileName;
     using G4VTFileManager<std::ofstream>::WriteFile;
     using G4VTFileManager<std::ofstream>::CloseFile;
 
     // Methods to manipulate output files
-    virtual G4bool OpenFile(const G4String& fileName) final;
+    G4bool OpenFile(const G4String& fileName) final;
 
-    virtual G4bool SetHistoDirectoryName(const G4String& dirName) final;
-    virtual G4bool SetNtupleDirectoryName(const G4String& dirName) final;
+    G4bool SetHistoDirectoryName(const G4String& dirName) final;
+    G4bool SetNtupleDirectoryName(const G4String& dirName) final;
 
-    virtual G4String GetFileType() const final { return "csv"; }
+    G4String GetFileType() const final { return "csv"; }
 
     // Specific methods for files per objects
+    G4bool NotifyNtupleFile(CsvNtupleDescription* ntupleDescription);
     G4bool CreateNtupleFile(CsvNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(CsvNtupleDescription* ntupleDescription);
 
@@ -70,9 +71,9 @@ class G4CsvFileManager : public G4VTFileManager<std::ofstream>
 
   protected:
     // Methods derived from templated base class
-    virtual std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
-    virtual G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
-    virtual G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
+    std::shared_ptr<std::ofstream> CreateFileImpl(const G4String& fileName) final;
+    G4bool WriteFileImpl(std::shared_ptr<std::ofstream> file) final;
+    G4bool CloseFileImpl(std::shared_ptr<std::ofstream> file) final;
 
   private:
     // Utility method

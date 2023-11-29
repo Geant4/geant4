@@ -48,24 +48,17 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
-#include "G4Alpha.hh"
 #include "G4PhysicsModelCatalog.hh"
 
 G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
 					   G4EvaporationProbability* aprob):
   G4VEvaporationChannel(),
-  theA(anA),
-  theZ(aZ),
-  secID(-1),
   theProbability(aprob),
-  theCoulombBarrier(new G4CoulombBarrier(anA, aZ))
+  theCoulombBarrier(new G4CoulombBarrier(anA, aZ)),
+  theA(anA), theZ(aZ)
 { 
-  resA = resZ = 0;
   secID = G4PhysicsModelCatalog::GetModelID("model_G4EvaporationChannel");
-  mass = resMass = 0.0; 
   evapMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-  //G4cout << "G4EvaporationChannel: Z= " << theZ << " A= " << theA 
-  //      << " M(GeV)= " << evapMass/GeV << G4endl;
   evapMass2 = evapMass*evapMass;
   theLevelData = G4NuclearLevelData::GetInstance();
 }
@@ -96,7 +89,7 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 
   G4double exEnergy = fragment->GetExcitationEnergy();
   G4double delta0 = theLevelData->GetPairingCorrection(fragZ,fragA);
-  /*
+  /*  
   G4cout << "G4EvaporationChannel::Initialize Z= "<<theZ<<" A= "<<theA 
   	 << " FragZ= " << fragZ << " FragA= " << fragA 
 	 << " exEnergy= " << exEnergy << " d0= " << delta0 << G4endl;
@@ -107,34 +100,30 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
   mass = fragMass + exEnergy;
 
   resMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
-  G4double bCoulomb = 0.0;
+  ekinmax = 0.5*((mass-resMass)*(mass+resMass) + evapMass2)/mass - evapMass;
+
   G4double elim = 0.0;
   if(theZ > 0) {
-    bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA,resZ,exEnergy);
+    bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA, resZ, 0.0);
 
     // for OPTxs >0 penetration under the barrier is taken into account
-    const G4double dCB = 3.5*CLHEP::MeV;
-    elim = (0 != OPTxs) ? 
-      std::max(bCoulomb*0.5, bCoulomb - dCB*theZ) : bCoulomb;
+    elim = (0 != OPTxs) ? bCoulomb*0.6 : bCoulomb;
   }
   /*
   G4cout << "exEnergy= " << exEnergy << " Ec= " << bCoulomb
-         << " d0= " << delta0 
+         << " elim=" << elim << " d0= " << delta0  
 	 << " Free= " << mass - resMass - evapMass 
 	 << G4endl;
   */
   if(mass <= resMass + evapMass + elim) { return 0.0; }
 
-  G4double twoMass = mass + mass;
-  G4double ekinmax = 
-    ((mass-resMass)*(mass+resMass) + evapMass2)/twoMass - evapMass;
   G4double ekinmin = 0.0;
   if(elim > 0.0) {
-    G4double resM = std::max(mass - evapMass - elim, resMass);
+    G4double resM = mass - evapMass - elim;
     ekinmin = 
-      std::max(((mass-resM)*(mass+resM) + evapMass2)/twoMass - evapMass,0.0);
+      std::max(0.5*((mass-resM)*(mass+resM) + evapMass2)/mass - evapMass, 0.0);
   }
-  /*
+  /*  
   G4cout << "Emin= " <<ekinmin<<" Emax= "<<ekinmax
 	 << " mass= " << mass << " resM= " << resMass 
 	 << " evapM= " << evapMass << G4endl;
@@ -142,25 +131,18 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
   if(ekinmax <= ekinmin) { return 0.0; }
 
   theProbability->SetDecayKinematics(resZ, resA, resMass, mass);
-  G4double prob = theProbability->TotalProbability(*fragment, ekinmin, 
+  G4double prob = theProbability->TotalProbability(*fragment, ekinmin,
                                                    ekinmax, bCoulomb,
                                                    exEnergy - delta0);
-  /*  
-  G4cout<<"G4EvaporationChannel: prob= "<< prob << " Z= " << theZ 
-        << " A= " << theA << " E1= " << ekinmin << " E2= " << ekinmax 
-        << G4endl;
-  */
   return prob;
 }
 
 G4Fragment* G4EvaporationChannel::EmittedFragment(G4Fragment* theNucleus)
 {
-  G4double ekin;
+  G4double ekin = ekinmax;
   // assumed, that TotalProbability(...) was already called
   // if value iz zero no possiblity to sample final state
-  if(resA <= 4 || theProbability->GetProbability() == 0.0) {
-    ekin = 0.5*(mass*mass - resMass*resMass + evapMass2)/mass - evapMass;
-  } else {
+  if(resA > 4 && theProbability->GetProbability() > 0.0) {
     ekin = theProbability->SampleEnergy();
   }
   ekin = std::max(ekin, 0.0);
@@ -170,13 +152,27 @@ G4Fragment* G4EvaporationChannel::EmittedFragment(G4Fragment* theNucleus)
   lv.boost(lv0.boostVector());
 
   G4Fragment* evFragment = new G4Fragment(theA, theZ, lv);
-  if(evFragment != nullptr) { evFragment->SetCreatorModelID(secID); }
+  evFragment->SetCreatorModelID(secID);
   lv0 -= lv;
-  theNucleus->SetZandA_asInt(resZ, resA);
-  theNucleus->SetMomentum(lv0);
+  theNucleus->SetZAandMomentum(lv0, resZ, resA);
   theNucleus->SetCreatorModelID(secID);
-  
-  //G4cout << "Residual: Z= " << resZ << " A= " << resA << " Eex= " 
-  //	 << theNucleus->GetExcitationEnergy() << G4endl;
   return evFragment; 
 } 
+
+G4double G4EvaporationChannel::ComputeInverseXSection(G4Fragment* frag,
+                                                      G4double kinEnergy)
+{
+  ComputeProbability(frag, kinEnergy);
+  return theProbability->CrossSection(kinEnergy, bCoulomb);
+}
+
+G4double G4EvaporationChannel::ComputeProbability(G4Fragment* frag,
+                                                  G4double kinEnergy)
+{
+  G4int fragA = frag->GetA_asInt();
+  G4int fragZ = frag->GetZ_asInt();
+  resA = fragA - theA;
+  resZ = fragZ - theZ;
+  bCoulomb = theCoulombBarrier->GetCoulombBarrier(resA, resZ, 0.0);
+  return theProbability->ComputeProbability(kinEnergy, bCoulomb);
+}

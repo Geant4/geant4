@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-00-patch-02    (25-May-2022)
+ Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -26,7 +26,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 /gunExample/selectGunAction 2
 #
 /analysis/setFileName run2
-Set file name: run2
 /analysis/h1/set 1 100 0. 200. keV
 #
 /run/beamOn 100000
@@ -50,12 +49,10 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.200000s Real=0.198842s Sys=0.000000s
+  User=0.190000s Real=0.195883s Sys=0.000000s
 ... write file : run2.root - done
 ... close file : run2.root - done
-G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.013 MB
 ============================================================
-RunManagerKernel is deleted. Good bye :)

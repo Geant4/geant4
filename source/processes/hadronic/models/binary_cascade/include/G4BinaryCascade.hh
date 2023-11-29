@@ -217,6 +217,7 @@ private:
   const G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
   static G4int theBIC_ID;
+  G4bool fBCDEBUG;
 };
 
 #endif

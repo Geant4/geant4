@@ -49,24 +49,24 @@
 #ifndef G4VPhysicsConstructor_hh
 #define G4VPhysicsConstructor_hh 1
 
-#include <vector>
-
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4VUPLSplitter.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+
 #include "rundefs.hh"
+
+#include <vector>
 
 class G4PhysicsBuilderInterface;
 
 class G4VPCData
 {
-  // Encapsulate the fields of class G4VPhysicsConstructor
-  // that are per-thread.
+    // Encapsulate the fields of class G4VPhysicsConstructor
+    // that are per-thread.
 
   public:
-
     using PhysicsBuilders_V = std::vector<G4PhysicsBuilderInterface*>;
     void initialize();
     G4ParticleTable::G4PTblDicIterator* _aParticleIterator;
@@ -108,19 +108,18 @@ using G4VPhyscicsConstructorManager = G4VPCManager;
 class G4VPhysicsConstructor
 {
   public:
-
     G4VPhysicsConstructor(const G4String& = "");
     G4VPhysicsConstructor(const G4String& name, G4int physics_type);
     virtual ~G4VPhysicsConstructor();
 
+    // This method will be invoked in the Construct() method.
+    // Each particle type will be instantiated.
     virtual void ConstructParticle() = 0;
-      // This method will be invoked in the Construct() method.
-      // Each particle type will be instantiated.
 
+    // This method will be invoked in the Construct() method.
+    // Each physics process will be instantiated and
+    // registered to the process manager of each particle type.
     virtual void ConstructProcess() = 0;
-      // This method will be invoked in the Construct() method.
-      // Each physics process will be instantiated and
-      // registered to the process manager of each particle type.
 
     inline void SetPhysicsName(const G4String& = "");
     inline const G4String& GetPhysicsName() const;
@@ -131,37 +130,35 @@ class G4VPhysicsConstructor
     inline G4int GetInstanceID() const;
     static const G4VPCManager& GetSubInstanceManager();
 
+    // Method called by kernel to destroy thread-local data, equivalent to
+    // destructor in sequential mode. Derived classes implementing this
+    // method, must also call this base class method.
     virtual void TerminateWorker();
-      // Method called by kernel to destroy thread-local data, equivalent to
-      // destructor in sequential mode. Derived classes implementing this
-      // method, must also call this base class method.
 
+    // Set/get control flag for output message
+    //  0: Silent
+    //  1: Warning message
+    //  2: More
+    // verbose level is set equal to physics list when registered.
     inline void SetVerboseLevel(G4int value);
     inline G4int GetVerboseLevel() const;
-      // Set/get control flag for output message
-      //  0: Silent
-      //  1: Warning message
-      //  2: More
-      // verbose level is set equal to physics list when registered.
 
   protected:
-
     using PhysicsBuilder_V = G4VPCData::PhysicsBuilders_V;
 
-    inline G4bool RegisterProcess(G4VProcess* process,
-                                  G4ParticleDefinition* particle);
-      // Register a process to the particle type according to the ordering
-      // parameter table. 'true' is returned if the process is registered
-      // successfully.
+    // Register a process to the particle type according to the ordering
+    // parameter table. 'true' is returned if the process is registered
+    // successfully.
+    inline G4bool RegisterProcess(G4VProcess* process, G4ParticleDefinition* particle);
 
     G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
 
+    // This returns a copy of the vector of pointers.
     PhysicsBuilder_V GetBuilders() const;
-      // This returns a copy of the vector of pointers.
+
     void AddBuilder(G4PhysicsBuilderInterface* bld);
 
   protected:
-
     G4int verboseLevel = 0;
     G4String namePhysics = "";
     G4int typePhysics = 0;
@@ -195,7 +192,9 @@ inline const G4String& G4VPhysicsConstructor::GetPhysicsName() const
 
 inline void G4VPhysicsConstructor::SetPhysicsType(G4int val)
 {
-  if(val > 0)  { typePhysics = val; }
+  if (val > 0) {
+    typePhysics = val;
+  }
 }
 
 inline G4int G4VPhysicsConstructor::GetPhysicsType() const
@@ -203,11 +202,10 @@ inline G4int G4VPhysicsConstructor::GetPhysicsType() const
   return typePhysics;
 }
 
-inline G4bool G4VPhysicsConstructor::RegisterProcess(
-  G4VProcess* process, G4ParticleDefinition* particle)
+inline G4bool G4VPhysicsConstructor::RegisterProcess(G4VProcess* process,
+                                                     G4ParticleDefinition* particle)
 {
-  return G4PhysicsListHelper::GetPhysicsListHelper()
-         ->RegisterProcess(process, particle);
+  return G4PhysicsListHelper::GetPhysicsListHelper()->RegisterProcess(process, particle);
 }
 
 inline const G4VPCManager& G4VPhysicsConstructor::GetSubInstanceManager()

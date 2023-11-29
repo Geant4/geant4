@@ -41,7 +41,7 @@ public:
     //::gluTessCallback(tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)errorCallback);
     //::gluTessCallback(tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combineCallback);
 
-    // NOTE : the gluTessCallback_<> are inlib/glutess specific.
+    // NOTE : the gluTessCallback_<> are tools/glutess specific.
     ::gluTessCallback_GLU_TESS_VERTEX_DATA (tobj,vertexCallback);
     ::gluTessCallback_GLU_TESS_BEGIN_DATA  (tobj,beginCallback);
     ::gluTessCallback_GLU_TESS_END_DATA    (tobj,endCallback);

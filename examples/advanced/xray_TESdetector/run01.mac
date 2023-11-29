@@ -1,0 +1,21 @@
+
+#/control/cout/ignoreThreadsExcept 0
+#/run/numberOfThreads 1
+#/control/verbose 1
+/run/verbose 1
+#/process/em/verbose 1
+#/tracking/verbose 1
+
+/testem/phys/addPhysics SpacePhysics_QBBC
+/process/em/AddEmRegion InnerRegion G4EmStandardSS
+
+/run/initialize
+
+/random/setSeeds 123 2004
+/process/list
+
+/analysis/setFileName output.root
+
+#
+/run/printProgress 1000
+/run/beamOn 1000

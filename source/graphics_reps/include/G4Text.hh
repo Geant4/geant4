@@ -79,7 +79,7 @@ public: // With description
   G4Text (const G4VMarker&);
   G4Text (const G4Text&) = default;
   G4Text (G4Text&&) = default;
-  virtual ~G4Text ();
+  ~G4Text () override;
   G4Text& operator= (const G4Text&) = default;
   G4Text& operator= (G4Text&&) = default;
 

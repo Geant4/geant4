@@ -49,13 +49,11 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
 {
 }
 
-G4MagHelicalStepper::~G4MagHelicalStepper()
-{
-}
+G4MagHelicalStepper::~G4MagHelicalStepper() = default;
 
 void
 G4MagHelicalStepper::AdvanceHelix( const G4double yIn[],
-                                         G4ThreeVector Bfld,    
+                                   const G4ThreeVector& Bfld,    
                                          G4double h,
                                          G4double yHelix[],
                                          G4double yHelix2[] )
@@ -153,7 +151,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double yIn[],
 
     // Store 2*h step Helix if exist
 
-    if(yHelix2)
+    if(yHelix2 != nullptr)
     {
       SinT2     = 2.0 * SinT * CosT;
       CosT2     = 1.0 - 2.0 * SinT * SinT;
@@ -242,15 +240,13 @@ G4MagHelicalStepper::DistChord() const
   {
     return GetRadHelix()*(1-std::cos(0.5*Ang));
   }
-  else
+  
+  if(Ang<twopi)
   {
-    if(Ang<twopi)
-    {
-      return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
-    }
-    else  // return Diameter of projected circle
-    {
-      return 2*GetRadHelix();
-    }
+    return GetRadHelix()*(1+std::cos(0.5*(twopi-Ang)));
   }
+  else  // return Diameter of projected circle
+  {
+    return 2*GetRadHelix();
+  } 
 }

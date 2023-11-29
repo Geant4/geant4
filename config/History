@@ -1,19 +1,65 @@
--------------------------------------------------------------------
+# Category config History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Category History file
-                      ---------------------
+--------------------------------------------------------------------------------
 
-History file for Geant4 configuration scripts.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+## 2023-05-10 Ben Morgan (config-V11-01-02)
+- Update config scripts for split of G4persistency library
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-04-02 Ben Morgan (config-V11-01-01)
+- No longer link to QtPrintSupport, which is not used in the toolkit.
+
+## 2023-02-01 Ben Morgan (config-V11-01-00)
+- Update UI/interfaces include paths to reflect new organization
+
+## 2022-11-02 Gabriele Cosmo (config-V11-00-12)
+- Silence ld warnings in Darwin setups.
+
+## 2022-10-31 Gabriele Cosmo (config-V11-00-11)
+- Corrected buffer size in liblist.c tool.
+
+## 2022-10-25 Guy Barrand (config-V11-00-10)
+- G4VIS_BUILD.gmk, G4VIS_USE.gmk: handle vis/ToolsSG by default.
+
+## 2022-10-21 Gunter Folger (config-V11-00-09)
+- Add --gcc-toolchain option for CXX and CC in Linux-clang.
+- Removed protecton in definition of CXX and CC
+
+## 2022-10-19 Gabriele Cosmo (config-V11-00-08)
+- Protected definition of CXX and CC in Linux-clang.
+
+## 2022-10-12 Gabriele Cosmo (config-V11-00-07)
+- Replaced use of deprecated sprintf() with snprintf() in liblist.c tool.
+
+## 2022-10-07 Gabriele Cosmo (config-V11-00-06)
+- Added "-diag-disable=10441" option to Linux-icc, to disable Intel/icc
+  compiler deprecation message.
+
+## 2022-08-30 Gabriele Cosmo (config-V11-00-05)
+- Fixed gcc compilation warnings on liblist.c tool.
+
+## 2022-07-14 Ben Morgan (config-V11-00-04)
+- Remove obsolete G4gl2ps category and library from build
+
+## 2022-03-25 Ben Morgan (config-V11-00-03)
+- Retire G4tasking category and library from build
+
+## 2022-02-06 Gabriele Cosmo (config-V11-00-02)
+- Updated compilation flags for Intel icc/icx compilers.
+- Enable -pthread only for MT builds in other configurations.
+
+## 2022-02-04 Gabriele Cosmo (config-V11-00-01)
+- Added Linux-icx.gmk configuration for Intel OneAPI DPC++ compiler.
+
+## 2021-12-10 Ben Morgan (config-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 4th November 2021 Gabriele Cosmo (config-V10-07-09)
 - Updated default Qt5 include paths for Linux targets.

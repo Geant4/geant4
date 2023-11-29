@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 
 G4Visible::G4Visible ():
-  fpVisAttributes (0),
+  fpVisAttributes (nullptr),
   fAllocatedVisAttributes (false)
 {}
 
@@ -63,6 +63,7 @@ G4Visible::~G4Visible () {
 
 G4Visible& G4Visible::operator= (const G4Visible& rhs) {
   if (&rhs == this) return *this;
+  fInfo = rhs.fInfo;
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
   if (fAllocatedVisAttributes) {
     delete fpVisAttributes;
@@ -74,6 +75,7 @@ G4Visible& G4Visible::operator= (const G4Visible& rhs) {
 
 G4Visible& G4Visible::operator= (G4Visible&& rhs) {
   if (&rhs == this) return *this;
+  fInfo = rhs.fInfo;
   if (fAllocatedVisAttributes) delete fpVisAttributes;
   fpVisAttributes = rhs.fpVisAttributes;
   fAllocatedVisAttributes = rhs.fAllocatedVisAttributes;
@@ -101,13 +103,17 @@ void G4Visible::SetVisAttributes (const G4VisAttributes* pVA) {
 }
 
 G4bool G4Visible::operator != (const G4Visible& right) const {
-  if (fpVisAttributes && right.fpVisAttributes)
+  if (fInfo != right.fInfo) return false;
+  if ((fpVisAttributes != nullptr) && (right.fpVisAttributes != nullptr))
     return *fpVisAttributes != *right.fpVisAttributes;
-  else if (!fpVisAttributes && !right.fpVisAttributes) return false;
-  else return true;
+  if ((fpVisAttributes == nullptr) && (right.fpVisAttributes == nullptr)) return false;
+  return true;
 }
 
 std::ostream& operator << (std::ostream& os, const G4Visible& v) {
-  if (v.fpVisAttributes) return os << *(v.fpVisAttributes);
-  else return os << "No Visualization Attributes";
+  os << "G4Visible: ";
+  if (!v.fInfo.empty()) os << "User information: " << v.fInfo;
+  os << '\n';
+  if (v.fpVisAttributes != nullptr) return os << *(v.fpVisAttributes);
+  return os << "No Visualization Attributes";
 }

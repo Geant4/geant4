@@ -29,24 +29,20 @@
 #ifndef G4EmDNAPhysics_option4_h
 #define G4EmDNAPhysics_option4_h 1
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4EmDNAPhysics.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmDNAPhysics_option4 : public G4VPhysicsConstructor
+class G4EmDNAPhysics_option4 : public G4EmDNAPhysics
 {
 public:
 
-  explicit G4EmDNAPhysics_option4(G4int ver=1, const G4String& name="");
+  explicit G4EmDNAPhysics_option4(G4int ver=1, const G4String& name="G4EmDNAPhysics_option4");
 
-  virtual ~G4EmDNAPhysics_option4();
+  ~G4EmDNAPhysics_option4() override = default;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
-private:
-  G4int  verbose;
+  void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,18 +1,29 @@
--------------------------------------------------------------------
+# Example field01 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    field01 History file
-                    ------------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+## 2022-11-05 J. Apostolakis (fieldex01-V11-00-03)
+- field01.cc: Demonstrate using G4TransporationParameters to set looper values for Transportation.
+- F01FieldSetup:  
+  * Show how to control Epsilon Min/Max
+  * Boris method is now available only by modifying the source code (search for 'Boris')
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-11-05 J. Apostolakis (fieldex01-V11-00-02)
+- Added Boris integration method (temporarily as default) as an option.
+
+## 2022-10-24 I. Hrivnacova fieldex01-V11-00-01)
+- Coding guidelines: start data member with 'f' (RunAction)
+  function members with a capital letter (DetectorConstruction);
+  use G4int, G4double
+
+## 2021-12-10 Ben Morgan (fieldex01-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 Nov  28, 2019 I. Hrivnacova   - fieldex01-V10-05-00
 - Fixed formatting in .README.txt

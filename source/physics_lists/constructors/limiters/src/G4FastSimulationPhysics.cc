@@ -95,7 +95,7 @@ void G4FastSimulationPhysics::ConstructProcess()
       
       if ( itr != fParticlesUnderFastSimulation.end() )
 	{
-	  size_t ipos = itr - fParticlesUnderFastSimulation.begin();
+	  std::size_t ipos = itr - fParticlesUnderFastSimulation.begin();
 	  G4String geometry = fGeometries[ipos];
 	  if ( geometry == "" ) G4FastSimulationHelper::ActivateFastSimulation(pmanager);
 	  else                  G4FastSimulationHelper::ActivateFastSimulation(pmanager, geometry);
@@ -119,7 +119,7 @@ void G4FastSimulationPhysics::ConstructProcess()
 	  G4int icount(0);
 	  
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
-	  for (size_t ip = 0 ; ip < vprocess->size() ; ++ip)
+	  for (G4int ip = 0 ; ip < (G4int)vprocess->size() ; ++ip)
 	    {
 	      G4VProcess* process = (*vprocess)[ip];
 	      G4FastSimulationManagerProcess* pb = dynamic_cast< G4FastSimulationManagerProcess* >(process);

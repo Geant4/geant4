@@ -19,14 +19,6 @@ endif()
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-
-# Setup of ROOT ANALYSIS : optional.
-option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
-if(WITH_ANALYSIS_USE)
-add_definitions(-DANALYSIS_USE)
-else()
-endif()
-
 #----------------------------------------------------------------------------
 # Setup of GDML : optional.
 option(WITH_GDML_USE "Build example with GDML" OFF)
@@ -56,7 +48,7 @@ target_link_libraries(phantom ${Geant4_LIBRARIES} ${GDML_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(human_phantom_SCRIPTS
-    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C
+    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C
   )
 
 foreach(_script ${human_phantom_SCRIPTS})

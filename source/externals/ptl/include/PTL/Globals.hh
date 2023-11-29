@@ -19,14 +19,6 @@
 
 #pragma once
 
-#ifndef FALSE
-#    define FALSE 0
-#endif
-
-#ifndef TRUE
-#    define TRUE 1
-#endif
-
 #include <algorithm>  // Retrieve definitions of min/max
 
 // Include base types
@@ -39,12 +31,6 @@
 #include <tuple>
 #include <type_traits>
 #include <utility>
-
-#if !defined(PTL_FOLD_EXPRESSION)
-#    define PTL_FOLD_EXPRESSION(...)                                                     \
-        ::PTL::mpl::consume_parameters(                                                  \
-            ::std::initializer_list<int>{ (__VA_ARGS__, 0)... })
-#endif
 
 #if !defined(PTL_NO_SANITIZE_THREAD)
 // expect that sanitizer is from compiler which supports __has_attribute
@@ -73,13 +59,6 @@ using enable_if_t = typename std::enable_if<B, T>::type;
 // for pre-C++14 tuple expansion to arguments
 namespace mpl
 {
-//--------------------------------------------------------------------------------------//
-
-template <typename... Args>
-void
-consume_parameters(Args&&...)
-{}
-
 //--------------------------------------------------------------------------------------//
 
 namespace impl
@@ -111,20 +90,20 @@ struct Build_index_tuple
 template <>
 struct Build_index_tuple<1>
 {
-    typedef Index_tuple<0> __type;
+    using __type = Index_tuple<0>;
 };
 
 template <>
 struct Build_index_tuple<0>
 {
-    typedef Index_tuple<> __type;
+    using __type = Index_tuple<>;
 };
 
 /// Class template integer_sequence
 template <typename Tp, Tp... Idx>
 struct integer_sequence
 {
-    typedef Tp              value_type;
+    using value_type = Tp;
     static constexpr size_t size() noexcept { return sizeof...(Idx); }
 };
 
@@ -136,7 +115,7 @@ struct Make_integer_sequence<Tp, NumT, Index_tuple<Idx...>>
 {
     static_assert(NumT >= 0, "Cannot make integer sequence of negative length");
 
-    typedef integer_sequence<Tp, static_cast<Tp>(Idx)...> __type;
+    using __type = integer_sequence<Tp, static_cast<Tp>(Idx)...>;
 };
 
 /// Alias template make_integer_sequence
@@ -167,7 +146,7 @@ apply(FnT&& _func, TupleT _args, impl::index_sequence<Idx...>)
 #if defined(__GNUC__) && (__GNUC__ < 6)
     if(sizeof...(Idx) == 0)
     {
-        consume_parameters(_args);
+        ConsumeParameters(_args);
     }
 #endif
     return std::forward<FnT>(_func)(std::get<Idx>(std::move(_args))...);
@@ -204,19 +183,5 @@ apply(FnT&& _func, TupleT&& _args)
 //--------------------------------------------------------------------------------------//
 
 }  // namespace mpl
-
-namespace thread_pool
-{
-namespace state
-{
-static const short STARTED = 0;
-static const short PARTIAL = 1;
-static const short STOPPED = 2;
-static const short NONINIT = 3;
-
-}  // namespace state
-}  // namespace thread_pool
-
-//--------------------------------------------------------------------------------------//
 
 }  // namespace PTL

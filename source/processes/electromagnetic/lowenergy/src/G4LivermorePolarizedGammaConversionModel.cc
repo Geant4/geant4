@@ -106,21 +106,21 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
       InitialiseElementSelectors(particle, cuts);
       
       // Access to elements
-      char* path = std::getenv("G4LEDATA");
+      const char* path = G4FindDataDir("G4LEDATA");
       
       G4ProductionCutsTable* theCoupleTable =
 	G4ProductionCutsTable::GetProductionCutsTable();
       
-      G4int numOfCouples = theCoupleTable->GetTableSize();
+      G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
       
       for(G4int i=0; i<numOfCouples; ++i) 
 	{
 	  const G4Material* material = 
 	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
 	  const G4ElementVector* theElementVector = material->GetElementVector();
-	  G4int nelm = material->GetNumberOfElements();
+	  std::size_t nelm = material->GetNumberOfElements();
 	  
-	  for (G4int j=0; j<nelm; ++j) 
+	  for (std::size_t j=0; j<nelm; ++j) 
 	    {
 	      G4int Z = (G4int)(*theElementVector)[j]->GetZ();
 	      if(Z < 1)          { Z = 1; }
@@ -152,7 +152,7 @@ G4double G4LivermorePolarizedGammaConversionModel::MinPrimaryEnergy(const G4Mate
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* path)
+void G4LivermorePolarizedGammaConversionModel::ReadData(std::size_t Z, const char* path)
 {
   if (verboseLevel > 1) 
     {
@@ -166,7 +166,7 @@ void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* pa
   
   if(!datadir) 
     {
-      datadir = std::getenv("G4LEDATA");
+      datadir = G4FindDataDir("G4LEDATA");
       if(!datadir) 
 	{
 	  G4Exception("G4LivermorePolarizedGammaConversionModel::ReadData()",
@@ -241,7 +241,7 @@ G4double G4LivermorePolarizedGammaConversionModel::ComputeCrossSectionPerAtom(
   
   if(verboseLevel > 0)
     {
-      G4int n = pv->GetVectorLength() - 1;
+      G4int n = G4int(pv->GetVectorLength() - 1);
       G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
 	      << GammaEnergy/MeV << G4endl;
       G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;

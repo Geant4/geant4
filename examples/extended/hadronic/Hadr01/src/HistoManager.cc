@@ -349,7 +349,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
              << "; pos(mm)= " << track->GetPosition()/mm 
              << ";  dir= " << track->GetMomentumDirection() 
              << G4endl;
-    e = std::log10(e/MeV);
+    e = (e > 0.0) ? std::log10(e/MeV) : -100.;
     if(pd == G4Gamma::Gamma()) {
       fNgam++;
       fHisto->Fill(1,e,1.0);
@@ -463,8 +463,17 @@ void HistoManager::AddTargetStep(const G4Step* step)
 void HistoManager::AddLeakingParticle(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition();
-  const G4StepPoint* sp = track->GetStep()->GetPreStepPoint(); 
-  G4double e = std::log10(sp->GetKineticEnergy()/CLHEP::MeV);
+  const G4StepPoint* sp = track->GetStep()->GetPreStepPoint();
+  const G4double ekin = sp->GetKineticEnergy();
+  G4double e = -100.;
+  if(ekin > 0.0) {
+    e = std::log10(ekin/CLHEP::MeV);
+  } else {
+    G4cout << "### HistoManager::AddLeakingParticle " << pd->GetParticleName()
+	   << "  Eprestep(MeV)=" << ekin << " trackID=" << track->GetTrackID()
+	   << G4endl;
+    return;
+  }
 
   const G4ThreeVector& pos = sp->GetPosition();
   const G4ThreeVector& dir = sp->GetMomentumDirection();

@@ -34,33 +34,7 @@ G4Allocator<G4HitsCollection>*& anHCAllocator_G4MT_TLS_()
   return _instance;
 }
 
-G4HitsCollection::G4HitsCollection()
-  : theCollection((void*) 0)
-{
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-  ;
-}
-
-G4HitsCollection::G4HitsCollection(G4String detName, G4String colNam)
-  : G4VHitsCollection(detName, colNam)
-  , theCollection((void*) 0)
-{
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-  ;
-}
-
-G4HitsCollection::~G4HitsCollection()
-{
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
-  ;
-}
-
 G4bool G4HitsCollection::operator==(const G4HitsCollection& right) const
 {
-  if(!anHCAllocator_G4MT_TLS_())
-    anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
   return (collectionName == right.collectionName);
 }

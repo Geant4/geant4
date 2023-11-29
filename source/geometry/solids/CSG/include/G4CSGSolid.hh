@@ -40,16 +40,14 @@
 
 class G4CSGSolid : public G4VSolid
 {
-  public:  // with description
+  public:
 
     G4CSGSolid(const G4String& pName);
     virtual ~G4CSGSolid();
 
-    virtual std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
-    virtual G4Polyhedron* GetPolyhedron () const;
-
-  public:  // without description
+    G4Polyhedron* GetPolyhedron () const override;
 
     G4CSGSolid(__void__&);
       // Fake default constructor for usage restricted to direct object

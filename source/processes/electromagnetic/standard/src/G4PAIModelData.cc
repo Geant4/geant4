@@ -88,9 +88,9 @@ G4PAIModelData::G4PAIModelData(G4double tmin, G4double tmax, G4int ver)
 
 G4PAIModelData::~G4PAIModelData()
 {
-  size_t n = fPAIxscBank.size();
+  std::size_t n = fPAIxscBank.size();
   if(0 < n) {
-    for(size_t i=0; i<n; ++i) {
+    for(std::size_t i=0; i<n; ++i) {
       if(fPAIxscBank[i]) {
         fPAIxscBank[i]->clearAndDestroy();
 	delete fPAIxscBank[i];
@@ -113,9 +113,9 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
   const G4Material* mat = couple->GetMaterial();     
   fSandia.Initialize(const_cast<G4Material*>(mat));
 
-  G4PhysicsTable* PAItransferTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsTable* PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
-  G4PhysicsLogVector* dEdxMeanVector =
+  auto PAItransferTable = new G4PhysicsTable(fTotBin+1);
+  auto PAIdEdxTable = new G4PhysicsTable(fTotBin+1);
+  auto dEdxMeanVector =
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
 			   fTotBin);
@@ -150,8 +150,8 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     }
     n -= kmin;
 
-    G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n);
-    G4PhysicsFreeVector* dEdxVector = new G4PhysicsFreeVector(n);
+    auto transferVector = new G4PhysicsFreeVector(n);
+    auto dEdxVector = new G4PhysicsFreeVector(n);
 
     //G4double tr0 = 0.0;
     G4double tr = 0.0;
@@ -171,10 +171,7 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     //G4cout << "DEDXVector:" << G4endl;
     //G4cout << *dEdxVector << G4endl;
 
-    G4double ionloss = fPAIySection.GetMeanEnergyLoss();//  total <dE/dx>
-
-    if(ionloss < 0.0) ionloss = 0.0; 
-
+    G4double ionloss = std::max(fPAIySection.GetMeanEnergyLoss(), 0.0);//  total <dE/dx>
     dEdxMeanVector->PutValue(i,ionloss);
 
     PAItransferTable->insertAt(i,transferVector);
@@ -195,9 +192,9 @@ G4double G4PAIModelData::DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
 {
   // VI: iPlace is the low edge index of the bin
   // iPlace is in interval from 0 to (N-1)
-  size_t iPlace(0);
+  std::size_t iPlace(0);
   G4double dEdx = fdEdxTable[coupleIndex]->Value(scaledTkin, iPlace);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
   /*
   G4cout << "G4PAIModelData::DEDXPerVolume: coupleIdx= " << coupleIndex
 	 << " Tscaled= " << scaledTkin << " cut= " << cut 
@@ -239,8 +236,8 @@ G4PAIModelData::CrossSectionPerVolume(G4int coupleIndex,
   G4double cross, cross1, cross2;
 
   // iPlace is in interval from 0 to (N-1)
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
 
   G4bool one = true;
   if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
@@ -285,8 +282,8 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   //G4cout << "=== G4PAIModelData::SampleAlongStepTransfer" << G4endl;
   G4double loss = 0.0;
 
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
  
   G4bool one = true;
   if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
@@ -301,7 +298,7 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   G4double meanN22 = 0.0;
 
   G4PhysicsVector* v1 = (*(fPAIxscBank[coupleIndex]))(iPlace);
-  G4PhysicsVector* v2 = 0;
+  G4PhysicsVector* v2 = nullptr;
 
   G4double e1 = v1->Energy(0);
   G4double e2 = std::min(tmax, v1->GetMaxEnergy());
@@ -335,7 +332,7 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   }
 
   if(meanNumber < 0.0) { return loss; }
-  G4int numOfCollisions = G4Poisson(meanNumber);
+  G4int numOfCollisions = (G4int)G4Poisson(meanNumber);
 
   //G4cout << "meanNumber= " <<  meanNumber << " N= " << numOfCollisions << G4endl;
 
@@ -380,8 +377,8 @@ G4double G4PAIModelData::SamplePostStepTransfer(G4int coupleIndex,
   G4double transfer = 0.0;
   G4double rand = G4UniformRand();
 
-  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
-  size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  std::size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+  std::size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
 
   G4bool one = true;
   if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
@@ -451,15 +448,15 @@ G4double G4PAIModelData::SamplePostStepTransfer(G4int coupleIndex,
 // indexes of particle kinetic enegry and random x-section
 
 G4double G4PAIModelData::GetEnergyTransfer(G4int coupleIndex, 
-					   size_t iPlace, 
+					   std::size_t iPlace, 
 					   G4double position) const
 { 
   G4PhysicsVector* v = (*(fPAIxscBank[coupleIndex]))(iPlace); 
   if(position*v->Energy(0) >= (*v)[0]) { return v->Energy(0); }
 
-  size_t iTransferMax = v->GetVectorLength() - 1;
+  std::size_t iTransferMax = v->GetVectorLength() - 1;
 
-  size_t iTransfer;
+  std::size_t iTransfer;
   G4double x1(0.0), x2(0.0), y1(0.0), y2(0.0), energyTransfer;
 
   //G4cout << "iPlace= " << iPlace << " iTransferMax= " << iTransferMax << G4endl;

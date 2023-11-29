@@ -124,9 +124,6 @@ void G4AxesModel::Construct
   }
 
   G4String annotation = G4BestUnit(length,"Length");
-
-  G4Text* text = 0;
-  G4VisAttributes* va = 0;
   G4int lineSegmentsPerCircle = 6;
 
   G4Colour xColour(colour);
@@ -136,22 +133,19 @@ void G4AxesModel::Construct
      xColour, "x-axis: " + description,
      lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
-    text = new G4Text("x",G4Point3D(x0+1.05*length, y0, z0));
-    text->SetScreenSize(textSize);
-    text->SetOffset(0.5*textSize,0.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(xColour);
-    text->SetVisAttributes(va);
-    fXLabelModel = new G4TextModel(*text,fTransform);
-    delete text;
-    text = new G4Text(annotation,G4Point3D(x0+0.8*length, y0, z0));
-    text->SetScreenSize(textSize);
-    text->SetOffset(-1.5*textSize,-1.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(xColour);
-    text->SetVisAttributes(va);
-    fXAnnotationModel = new G4TextModel(*text,fTransform);
-    delete text;
+    G4VisAttributes va(xColour);
+    G4Text lmtext("x",G4Point3D(x0+1.05*length,y0,z0));
+    lmtext.SetScreenSize(textSize);
+    lmtext.SetOffset(0.5*textSize,0.5*textSize);
+    lmtext.SetLayout(G4Text::centre);
+    lmtext.SetVisAttributes(va);
+    fXLabelModel = new G4TextModel(lmtext,fTransform);
+    G4Text amtext(annotation,G4Point3D(x0+0.8*length,y0,z0));
+    amtext.SetScreenSize(textSize);
+    amtext.SetOffset(-1.5*textSize,-1.5*textSize);
+    amtext.SetLayout(G4Text::centre);
+    amtext.SetVisAttributes(va);
+    fXAnnotationModel = new G4TextModel(amtext,fTransform);
   }
 
   G4Colour yColour(colour);
@@ -161,22 +155,19 @@ void G4AxesModel::Construct
      yColour, "y-axis: " + description,
      lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
-    text = new G4Text("y",G4Point3D(x0, y0+1.05*length, z0));
-    text->SetScreenSize(textSize);
-    text->SetOffset(0.5*textSize,0.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(yColour);
-    text->SetVisAttributes(va);
-    fYLabelModel = new G4TextModel(*text,fTransform);
-    delete text;
-    text = new G4Text(annotation,G4Point3D(x0, y0+0.8*length, z0));
-    text->SetScreenSize(textSize);
-    text->SetOffset(-1.5*textSize,-1.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(yColour);
-    text->SetVisAttributes(va);
-    fYAnnotationModel = new G4TextModel(*text,fTransform);
-    delete text;
+    G4VisAttributes va(yColour);
+    G4Text lmtext("y",G4Point3D(x0,y0+1.05*length,z0));
+    lmtext.SetScreenSize(textSize);
+    lmtext.SetOffset(0.5*textSize,0.5*textSize);
+    lmtext.SetLayout(G4Text::centre);
+    lmtext.SetVisAttributes(va);
+    fYLabelModel = new G4TextModel(lmtext,fTransform);
+    G4Text amtext(annotation,G4Point3D(x0,y0+0.8*length,z0));
+    amtext.SetScreenSize(textSize);
+    amtext.SetOffset(-1.5*textSize,-1.5*textSize);
+    amtext.SetLayout(G4Text::centre);
+    amtext.SetVisAttributes(va);
+    fYAnnotationModel = new G4TextModel(amtext,fTransform);
   }
 
   G4Colour zColour(colour);
@@ -186,22 +177,19 @@ void G4AxesModel::Construct
      zColour, "z-axis: " + description,
      lineSegmentsPerCircle, fTransform);
   if (withAnnotation) {
-    text = new G4Text("z",G4Point3D(x0, y0, z0+1.05*length));
-    text->SetScreenSize(textSize);
-    text->SetOffset(0.5*textSize,0.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(zColour);
-    text->SetVisAttributes(va);
-    fZLabelModel = new G4TextModel(*text,fTransform);
-    delete text;
-    text = new G4Text(annotation,G4Point3D(x0, y0, z0+0.8*length));
-    text->SetScreenSize(textSize);
-    text->SetOffset(-1.5*textSize,-1.5*textSize);
-    text->SetLayout(G4Text::centre);
-    va = new G4VisAttributes(zColour);
-    text->SetVisAttributes(va);
-    fZAnnotationModel = new G4TextModel(*text,fTransform);
-    delete text;
+    G4VisAttributes va(zColour);
+    G4Text lmtext("z",G4Point3D(x0,y0,z0+1.05*length));
+    lmtext.SetScreenSize(textSize);
+    lmtext.SetOffset(0.5*textSize,0.5*textSize);
+    lmtext.SetLayout(G4Text::centre);
+    lmtext.SetVisAttributes(va);
+    fZLabelModel = new G4TextModel(lmtext,fTransform);
+    G4Text amtext(annotation,G4Point3D(x0,y0,z0+0.8*length));
+    amtext.SetScreenSize(textSize);
+    amtext.SetOffset(-1.5*textSize,-1.5*textSize);
+    amtext.SetLayout(G4Text::centre);
+    amtext.SetVisAttributes(va);
+    fZAnnotationModel = new G4TextModel(amtext,fTransform);
   }
 }
 

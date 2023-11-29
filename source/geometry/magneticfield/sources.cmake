@@ -4,8 +4,13 @@
 geant4_add_module(G4magneticfield
   PUBLIC_HEADERS
     G4BFieldIntegrationDriver.hh
+    G4BFieldIntegrationDriver.icc
     G4BogackiShampine23.hh
     G4BogackiShampine45.hh
+    G4BorisScheme.hh
+    G4BorisScheme.icc
+    G4BorisDriver.hh
+    G4BorisDriver.icc
     G4BulirschStoer.hh
     G4BulirschStoer.icc
     G4BulirschStoerDriver.hh
@@ -111,10 +116,22 @@ geant4_add_module(G4magneticfield
     G4UniformGravityField.hh
     G4UniformMagField.hh
     G4VIntegrationDriver.hh
+    # QSS - headers
+    G4QSSDriver.hh
+    G4QSSDriver.icc
+    G4QSSDriverCreator.hh
+    G4QSStepper.hh
+    G4QSS2.hh
+    G4QSS3.hh
+    G4QSS_CustomStats.hh
+    G4qss_misc.hh
+    G4QSSMessenger.hh
   SOURCES
     G4BFieldIntegrationDriver.cc
     G4BogackiShampine23.cc
     G4BogackiShampine45.cc
+    G4BorisDriver.cc
+    G4BorisScheme.cc
     G4BulirschStoer.cc
     G4CachedMagneticField.cc
     G4CashKarpRKF45.cc
@@ -168,12 +185,13 @@ geant4_add_module(G4magneticfield
     G4NystromRK4.cc
     G4OldMagIntDriver.cc
     G4QuadrupoleMagField.cc
+    G4QSSDriverCreator.cc
     G4RepleteEofM.cc
-    G4SextupoleMagField.cc
     G4RKG3_Stepper.cc
     G4RK547FEq1.cc
     G4RK547FEq2.cc
     G4RK547FEq3.cc
+    G4SextupoleMagField.cc
     G4SimpleHeum.cc
     G4SimpleRunge.cc
     G4TrialsCounter.cc
@@ -181,6 +199,18 @@ geant4_add_module(G4magneticfield
     G4UniformElectricField.cc
     G4UniformGravityField.cc
     G4UniformMagField.cc
-    G4VIntegrationDriver.cc)
+    G4VIntegrationDriver.cc
+    G4QSStepper.cc
+    G4QSS3.cc
+    G4QSSMessenger.cc
+)
 
-geant4_module_link_libraries(G4magneticfield PUBLIC G4globman)
+geant4_module_link_libraries(G4magneticfield PUBLIC G4globman G4intercoms)
+# List any source specific properties here
+# For new system, must explicitly add path for generated header
+geant4_module_include_directories(G4magneticfield PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source/particles/management/include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source/intercoms/include>	
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source/track/include>
+)

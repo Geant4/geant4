@@ -219,7 +219,7 @@ void G4CacheReference<V*>::Initialize(unsigned int id)
   }
   if(cache()->size() <= id)
   {
-    cache()->resize(id + 1, static_cast<V*>(0));
+    cache()->resize(id + 1, static_cast<V*>(nullptr));
   }
 }
 

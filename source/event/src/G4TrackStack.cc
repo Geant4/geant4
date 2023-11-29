@@ -40,37 +40,37 @@ G4TrackStack::~G4TrackStack()
 
 void G4TrackStack::clearAndDestroy()
 {
-  for( auto i = begin(); i != end(); ++i )
+  for(auto & i : *this)
   {
-    delete (*i).GetTrack();
-    delete (*i).GetTrajectory();
+    delete i.GetTrack();
+    delete i.GetTrajectory();
   }
   clear();
 }
 
 void G4TrackStack::TransferTo(G4TrackStack* aStack)
 {
-  for(auto i = begin(); i != end(); ++i)
+  for(auto & i : *this)
   {
-    aStack->push_back(*i);
+    aStack->push_back(i);
   }
   clear();
 }
 
 void G4TrackStack::TransferTo(G4SmartTrackStack* aStack)
 {
-  while (size())
+  while (!this->empty())
   {
     aStack->PushToStack(PopFromStack());
   }
 }
 
-G4double G4TrackStack::getTotalEnergy(void) const
+G4double G4TrackStack::getTotalEnergy() const
 {
   G4double totalEnergy = 0.0;
-  for ( auto i = cbegin(); i != cend(); ++i )
+  for (const auto & i : *this)
   {
-    totalEnergy += (*i).GetTrack()->GetDynamicParticle()->GetTotalEnergy();
+    totalEnergy += i.GetTrack()->GetDynamicParticle()->GetTotalEnergy();
   }
   return totalEnergy;
 }

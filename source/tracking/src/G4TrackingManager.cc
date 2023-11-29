@@ -32,12 +32,13 @@
 // --------------------------------------------------------------------
 
 #include "G4TrackingManager.hh"
-#include "G4Trajectory.hh"
-#include "G4SmoothTrajectory.hh"
-#include "G4RichTrajectory.hh"
-#include "G4ios.hh"
+
 #include "G4Profiler.hh"
+#include "G4RichTrajectory.hh"
+#include "G4SmoothTrajectory.hh"
 #include "G4TiMemory.hh"
+#include "G4Trajectory.hh"
+#include "G4ios.hh"
 
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
@@ -68,14 +69,13 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 
   // Clear secondary particle vector
   //
-  for(std:: size_t itr=0; itr<GimmeSecondaries()->size(); ++itr)
-  { 
-    delete (*GimmeSecondaries())[itr];
+  for (auto& itr : *GimmeSecondaries()) {
+    delete itr;
   }
-  GimmeSecondaries()->clear();  
-   
-  if(verboseLevel>0 && (G4VSteppingVerbose::GetSilent()!=1) ) TrackBanner();
-  
+  GimmeSecondaries()->clear();
+
+  if (verboseLevel > 0 && (G4VSteppingVerbose::GetSilent() != 1)) TrackBanner();
+
   // Give SteppingManger the pointer to the track which will be tracked
   //
   fpSteppingManager->SetInitialStep(fpTrack);
@@ -83,8 +83,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // Pre tracking user intervention process
 
   fpTrajectory = nullptr;
-  if( fpUserTrackingAction != nullptr )
-  {
+  if (fpUserTrackingAction != nullptr) {
     fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
 
@@ -92,17 +91,15 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // the PreUserTrackingAction and PostUserTrackingAction
   {
 #if defined(GEANT4_USE_TIMEMORY)
-    ProfilerConfig profiler{ fpTrack };
+    ProfilerConfig profiler{fpTrack};
 #endif
 
 #ifdef G4_STORE_TRAJECTORY
     // Construct a trajectory if it is requested
     //
-    if(StoreTrajectory && (fpTrajectory == nullptr))
-    {
+    if ((StoreTrajectory != 0) && (fpTrajectory == nullptr)) {
       // default trajectory concrete class object
-      switch(StoreTrajectory)
-      {
+      switch (StoreTrajectory) {
         default:
         case 1:
           fpTrajectory = new G4Trajectory(fpTrack);
@@ -131,19 +128,15 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 
     // Track the particle Step-by-Step while it is alive
     //
-    while((fpTrack->GetTrackStatus() == fAlive) ||
-          (fpTrack->GetTrackStatus() == fStopButAlive))
-    {
+    while ((fpTrack->GetTrackStatus() == fAlive) || (fpTrack->GetTrackStatus() == fStopButAlive)) {
       fpTrack->IncrementCurrentStepNumber();
       fpSteppingManager->Stepping();
 #ifdef G4_STORE_TRAJECTORY
-      if(StoreTrajectory)
-      {
+      if (StoreTrajectory != 0) {
         fpTrajectory->AppendStep(fpSteppingManager->GetStep());
       }
 #endif
-      if(EventIsAborted)
-      {
+      if (EventIsAborted) {
         fpTrack->SetTrackStatus(fKillTrackAndSecondaries);
       }
     }
@@ -152,20 +145,17 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   }
 
   // Post tracking user intervention process.
-  if( fpUserTrackingAction != nullptr )
-  {
+  if (fpUserTrackingAction != nullptr) {
     fpUserTrackingAction->PostUserTrackingAction(fpTrack);
   }
 
   // Destruct the trajectory if it was created
 #ifdef G4VERBOSE
-  if(StoreTrajectory&&verboseLevel>10)
-  {
+  if ((StoreTrajectory != 0) && verboseLevel > 10) {
     fpTrajectory->ShowTrajectory();
   }
 #endif
-  if( (!StoreTrajectory) && (fpTrajectory != nullptr) )
-  {
+  if ((StoreTrajectory == 0) && (fpTrajectory != nullptr)) {
     delete fpTrajectory;
     fpTrajectory = nullptr;
   }
@@ -176,9 +166,8 @@ void G4TrackingManager::SetTrajectory(G4VTrajectory* aTrajectory)
 //////////////////////////////////////
 {
 #ifndef G4_STORE_TRAJECTORY
-  G4Exception("G4TrackingManager::SetTrajectory()",
-              "Tracking0015", FatalException,
-              "Invoked without G4_STORE_TRAJECTORY option set!");
+  G4Exception("G4TrackingManager::SetTrajectory()", "Tracking0015", FatalException,
+    "Invoked without G4_STORE_TRAJECTORY option set!");
 #endif
   fpTrajectory = aTrajectory;
 }
@@ -187,7 +176,7 @@ void G4TrackingManager::SetTrajectory(G4VTrajectory* aTrajectory)
 void G4TrackingManager::EventAborted()
 //////////////////////////////////////
 {
-  fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
+  fpTrack->SetTrackStatus(fKillTrackAndSecondaries);
   EventIsAborted = true;
 }
 
@@ -197,17 +186,12 @@ void G4TrackingManager::TrackBanner()
 {
   G4cout << G4endl;
   G4cout << "*******************************************************"
-         << "**************************************************"
-         << G4endl;
+         << "**************************************************" << G4endl;
   G4cout << "* G4Track Information: "
-         << "  Particle = " << fpTrack->GetDefinition()->GetParticleName()
-         << ","
-         << "   Track ID = " << fpTrack->GetTrackID()
-         << ","
-         << "   Parent ID = " << fpTrack->GetParentID()
-         << G4endl;
+         << "  Particle = " << fpTrack->GetDefinition()->GetParticleName() << ","
+         << "   Track ID = " << fpTrack->GetTrackID() << ","
+         << "   Parent ID = " << fpTrack->GetParentID() << G4endl;
   G4cout << "*******************************************************"
-         << "**************************************************"
-         << G4endl;
+         << "**************************************************" << G4endl;
   G4cout << G4endl;
 }

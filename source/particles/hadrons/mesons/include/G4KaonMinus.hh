@@ -51,7 +51,7 @@ class G4KaonMinus : public G4ParticleDefinition
  private:
    static G4KaonMinus* theInstance;
    G4KaonMinus(){}
-   ~G4KaonMinus(){}
+   ~G4KaonMinus() override= default;
 
  public:
    static G4KaonMinus* Definition();

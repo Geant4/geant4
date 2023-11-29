@@ -1,18 +1,20 @@
--------------------------------------------------------------------
+# Category had-im_r History
 
-       ==========================================================
-       Geant4 - an Object-Oriented Toolkit for Physics Simulation
-       ==========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-            History file for hadronic/models/im_r_matrix
-            --------------------------------------------
+-------------------------------------------------------------------------------
 
-This file should be used to summarize modifications introduced in the
-code and to keep track of all tags.
+## 2022-11-26 Gabriele Cosmo (had-im_r-V11-00-01)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+## 2021-12-10 Ben Morgan (had-im_r-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 21-May 2021, Vladimir Ivanchenko          had-im_r_V10-07-02
 - G4XnpElasticLowE, G4XNNElasticLowE, G4XnpTotalLowE - substituted

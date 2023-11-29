@@ -48,14 +48,19 @@ public:
   (G4PhysicalVolumeModel*  // input...the following are outputs
    ,std::multimap<const G4Material*,G4ThreeVector>& positionByMaterial
    ,std::map     <const G4Material*,G4Colour>&      colourByMaterial);
+
   ~ICRP110PhantomPseudoScene();
+
   using G4PseudoScene::AddSolid;  // except for...
   void AddSolid(const G4Box&);
   void ProcessVolume(const G4VSolid&);
+
   const std::multimap<const G4Material*,G4ThreeVector>& GetPositionByMaterial()
   {return fPositionByMaterial;}
+
   const std::map     <const G4Material*,G4Colour>&      GetColourByMaterial()
   {return fColourByMaterial;}
+
 private:
   G4PhysicalVolumeModel* fpPVModel;
   std::multimap<const G4Material*,G4ThreeVector>& fPositionByMaterial;

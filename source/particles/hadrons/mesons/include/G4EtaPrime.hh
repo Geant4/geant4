@@ -50,7 +50,7 @@ class G4EtaPrime : public G4ParticleDefinition
  private:
    static G4EtaPrime* theInstance;
    G4EtaPrime(){}
-   ~G4EtaPrime(){}
+   ~G4EtaPrime() override= default;
 
  public:
    static G4EtaPrime* Definition();

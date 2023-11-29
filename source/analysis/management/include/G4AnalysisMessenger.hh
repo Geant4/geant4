@@ -26,8 +26,17 @@
 
 // The messenger class for G4VAnalysisManager.
 // It implements commands:
+// - /analysis/closeFile
+// - /analysis/compression
+// - /analysis/list
+// - /analysis/openFile
+// - /analysis/reset
 // - /analysis/setActivation
+// - /analysis/setFileName
+// - /analysis/setHistoDirName
+// - /analysis/setNtupleDirName
 // - /analysis/verbose
+// - /analysis/write
 //
 // Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -40,58 +49,65 @@
 #include <memory>
 
 class G4VAnalysisManager;
-class G4HnManager;
-class G4FileMessenger;
-class G4H1Messenger;
-class G4H2Messenger;
-class G4H3Messenger;
-class G4P1Messenger;
-class G4P2Messenger;
 class G4NtupleMessenger;
-class G4HnMessenger;
 
 class G4UIdirectory;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
 
 class G4AnalysisMessenger : public G4UImessenger
 {
   public:
     explicit G4AnalysisMessenger(G4VAnalysisManager* manager);
     G4AnalysisMessenger() = delete;
-    virtual ~G4AnalysisMessenger();
+    ~G4AnalysisMessenger() override;
 
     // Methods
-    void SetH1HnManager(G4HnManager& h1HnManager);
-    void SetH2HnManager(G4HnManager& h2HnManager);
-    void SetH3HnManager(G4HnManager& h3HnManager);
-    void SetP1HnManager(G4HnManager& p1HnManager);
-    void SetP2HnManager(G4HnManager& p2HnManager);
-
-    // Methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value) final;
+    void SetNewValue(G4UIcommand* command, G4String value) final;
 
   private:
+    template <typename CMD>
+    std::unique_ptr<CMD> CreateCommand(
+      G4String name, G4String guidance, G4String paremeterName,
+      G4bool ommitable = false);
+    std::unique_ptr<G4UIcmdWithoutParameter> CreateCommandWithoutParameter(
+      G4String name, G4String guidance);
+
     // Data members
     G4VAnalysisManager* fManager { nullptr }; ///< Associated class
-    std::unique_ptr<G4FileMessenger>  fFileMessenger;
-    std::unique_ptr<G4H1Messenger>  fH1Messenger;
-    std::unique_ptr<G4H2Messenger>  fH2Messenger;
-    std::unique_ptr<G4H3Messenger>  fH3Messenger;
-    std::unique_ptr<G4P1Messenger>  fP1Messenger;
-    std::unique_ptr<G4P2Messenger>  fP2Messenger;
     std::unique_ptr<G4NtupleMessenger>  fNtupleMessenger;
-    std::unique_ptr<G4HnMessenger>  fH1HnMessenger;
-    std::unique_ptr<G4HnMessenger>  fH2HnMessenger;
-    std::unique_ptr<G4HnMessenger>  fH3HnMessenger;
-    std::unique_ptr<G4HnMessenger>  fP1HnMessenger;
-    std::unique_ptr<G4HnMessenger>  fP2HnMessenger;
 
     std::unique_ptr<G4UIdirectory>         fAnalysisDir;
+    std::unique_ptr<G4UIcmdWithAString>    fOpenFileCmd;
+    std::unique_ptr<G4UIcmdWithoutParameter>  fWriteCmd;
+    std::unique_ptr<G4UIcmdWithoutParameter>  fResetCmd;
+         // These command need to revert order of execution master-worker
+         // To be investigated
+    std::unique_ptr<G4UIcmdWithABool>      fCloseFileCmd;
+    std::unique_ptr<G4UIcmdWithABool>      fListCmd;
     std::unique_ptr<G4UIcmdWithABool>      fSetActivationCmd;
     std::unique_ptr<G4UIcmdWithAnInteger>  fVerboseCmd;
     std::unique_ptr<G4UIcmdWithAnInteger>  fCompressionCmd;
+    std::unique_ptr<G4UIcmdWithAString>    fSetFileNameCmd;
+    std::unique_ptr<G4UIcmdWithAString>    fSetHistoDirNameCmd;
+    std::unique_ptr<G4UIcmdWithAString>    fSetNtupleDirNameCmd;
 };
 
-#endif
+//_____________________________________________________________________________
+template <typename CMD>
+std::unique_ptr<CMD> G4AnalysisMessenger::CreateCommand(
+  G4String name, G4String guidance, G4String paremeterName, G4bool ommitable)
+{
+  G4String fullName = "/analysis/" + name;
 
+  auto command = std::make_unique<CMD>(fullName, this);
+  command->SetGuidance(guidance.c_str());
+  command->SetParameterName(paremeterName.c_str(), ommitable);
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  return command;
+}
+
+#endif

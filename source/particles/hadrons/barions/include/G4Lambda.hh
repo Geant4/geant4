@@ -51,7 +51,7 @@ class G4Lambda : public G4ParticleDefinition
  private:
    static G4Lambda* theInstance;
    G4Lambda(){}
-   ~G4Lambda(){}
+   ~G4Lambda() override= default;
 
  public:
    static G4Lambda* Definition();

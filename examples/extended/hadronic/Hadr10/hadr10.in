@@ -3,12 +3,6 @@
 #
 /run/verbose 1
 /event/verbose 0 
-/tracking/verbose 0
-#
-#=======================  INITIALIZE ======================
-#
-/run/initialize
-#
 #=======================  LAYER ===========================
 #
 #--- "Beam pipe" : 2-mm-thick layer of Beryllium
@@ -37,6 +31,12 @@
 /mydet/update
 #
 #=======================  RUNs  ===========================
+#
+/tracking/verbose 0
+#
+#=======================  INITIALIZE ======================
+#
+/run/initialize
 #
 # --- tau ---
 /gun/particle tau-

@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4ParallelWorldProcessStore.hh
@@ -41,12 +41,13 @@
 //
 //---------------------------------------------------------------
 
-
 #ifndef G4ParallelWorldProcessStore_h
 #define G4ParallelWorldProcessStore_h 1
 
 #include "globals.hh"
+
 #include <map>
+
 class G4ParallelWorldProcess;
 
 //------------------------------------------
@@ -55,38 +56,28 @@ class G4ParallelWorldProcess;
 //
 //------------------------------------------
 
-
 // Class Description:
 
-class G4ParallelWorldProcessStore 
-: public std::map<G4ParallelWorldProcess*,G4String>
+class G4ParallelWorldProcessStore : public std::map<G4ParallelWorldProcess*, G4String>
 {
-public: // with description
-  static G4ParallelWorldProcessStore* GetInstance();
-  static G4ParallelWorldProcessStore* GetInstanceIfExist();
+  public:  // with description
+    static G4ParallelWorldProcessStore* GetInstance();
+    static G4ParallelWorldProcessStore* GetInstanceIfExist();
 
-private:
-  static G4ThreadLocal G4ParallelWorldProcessStore* fInstance;
+    // Set Paralle World
+    void SetParallelWorld(G4ParallelWorldProcess* proc, G4String parallelWorldName);
+    void UpdateWorlds();
+    G4ParallelWorldProcess* GetProcess(G4String parallelWorldName);
+    void Clear();
 
-  //------------------------
-  // Constructor/Destructor
-  //------------------------
-private:  
-  G4ParallelWorldProcessStore();
-public:
-  virtual ~G4ParallelWorldProcessStore();
-  
-  //--------------------------------------------------------------
-  // Set Paralle World
-  //--------------------------------------------------------------
+  public:
+    virtual ~G4ParallelWorldProcessStore();
 
-public:
-  void SetParallelWorld(G4ParallelWorldProcess* proc,
-                        G4String parallelWorldName);
-  void UpdateWorlds();
-  G4ParallelWorldProcess* GetProcess(G4String parallelWorldName);
-  void Clear();
+  private:
+    G4ParallelWorldProcessStore();
 
+  private:
+    static G4ThreadLocal G4ParallelWorldProcessStore* fInstance;
 };
 
 #endif

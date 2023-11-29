@@ -34,12 +34,9 @@
 //
 // ************************************************************
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "GammaRayTelPrimaryGeneratorMessenger.hh"
-
 #include "GammaRayTelPrimaryGeneratorAction.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
@@ -48,89 +45,65 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
-(GammaRayTelPrimaryGeneratorAction* GammaRayTelGun)
-  :GammaRayTelAction(GammaRayTelGun)
-{ 
-  RndmCmd = new G4UIcmdWithAString("/gun/random",this);
-  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on(default), off");
-  RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("on");
-  RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  SourceTypeCmd = new G4UIcmdWithAnInteger("/gun/sourceType",this);
-  SourceTypeCmd->SetGuidance("Select the type of incident flux.");
-  SourceTypeCmd->SetGuidance("  Choice : 0(default), 1(isotropic), 2(wide parallel beam)");
-  SourceTypeCmd->SetParameterName("choice",true);
-  SourceTypeCmd->SetDefaultValue((G4int)0);
-  SourceTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger(GammaRayTelPrimaryGeneratorAction *GammaRayTelGun) : GammaRayTelAction(GammaRayTelGun) {
+	rndmCmd = new G4UIcmdWithAString("/gun/random", this);
+	rndmCmd->SetGuidance("Shoot randomly the incident particle.");
+	rndmCmd->SetGuidance("Choice : on(default), off");
+	rndmCmd->SetParameterName("choice", true);
+	rndmCmd->SetDefaultValue("on");
+	rndmCmd->SetCandidates("on off");
+	rndmCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  VertexRadiusCmd = new G4UIcmdWithADoubleAndUnit("/gun/vertexRadius",this);
-  VertexRadiusCmd->SetGuidance("Radius (and unit) of sphere for vertices of incident flux.");
-  VertexRadiusCmd->SetParameterName("choice",true);
-  VertexRadiusCmd->SetDefaultValue((G4double)1.*cm);
-  VertexRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  SpectrumTypeCmd = new G4UIcmdWithAnInteger("/gun/spectrumType",this);
-  SpectrumTypeCmd->SetGuidance("Select the type of incident spectrum.");
-  SpectrumTypeCmd->SetGuidance("  Choice : 0(default), 1(), 2(E^{-gamma}), 3()");
-  SpectrumTypeCmd->SetParameterName("choice",true);
-  SpectrumTypeCmd->SetDefaultValue((G4int)0);
-  SpectrumTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+	sourceTypeCmd = new G4UIcmdWithAnInteger("/gun/sourceType", this);
+	sourceTypeCmd->SetGuidance("Select the type of incident flux.");
+	sourceTypeCmd->SetGuidance("Choice : 0(default), 1(isotropic), 2(wide parallel beam)");
+	sourceTypeCmd->SetParameterName("choice", true);
+	sourceTypeCmd->SetDefaultValue((G4int) 0);
+	sourceTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+	vertexRadiusCmd = new G4UIcmdWithADoubleAndUnit("/gun/vertexRadius", this);
+	vertexRadiusCmd->SetGuidance("Radius (and unit) of sphere for vertices of incident flux.");
+	vertexRadiusCmd->SetParameterName("choice", true);
+	vertexRadiusCmd->SetDefaultValue((G4double) 1. * cm);
+	vertexRadiusCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  SourceGenCmd = new G4UIcmdWithABool("/gun/sourceGen",this);
-  SourceGenCmd->SetGuidance("Select the native Generation");
-  SourceGenCmd->SetGuidance("  Choice : true(native), false(GPS)");
-  SourceGenCmd->SetParameterName("choice",true);
-  SourceGenCmd->SetDefaultValue((G4bool)true);
-  SourceGenCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+	spectrumTypeCmd = new G4UIcmdWithAnInteger("/gun/spectrumType", this);
+	spectrumTypeCmd->SetGuidance("Select the type of incident spectrum.");
+	spectrumTypeCmd->SetGuidance("Choice : 0(default), 1(), 2(E^{-gamma}), 3()");
+	spectrumTypeCmd->SetParameterName("choice", true);
+	spectrumTypeCmd->SetDefaultValue((G4int) 0);
+	spectrumTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+	sourceGenCmd = new G4UIcmdWithABool("/gun/sourceGen", this);
+	sourceGenCmd->SetGuidance("Select the native Generation");
+	sourceGenCmd->SetGuidance("  Choice : true(native), false(GPS)");
+	sourceGenCmd->SetParameterName("choice", true);
+	sourceGenCmd->SetDefaultValue((G4bool) true);
+	sourceGenCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorMessenger::~GammaRayTelPrimaryGeneratorMessenger()
-{
-  delete RndmCmd;
-  delete SourceTypeCmd;
-  delete VertexRadiusCmd;
-  delete SpectrumTypeCmd;
-  delete SourceGenCmd;
+GammaRayTelPrimaryGeneratorMessenger::~GammaRayTelPrimaryGeneratorMessenger() {
+	delete rndmCmd;
+	delete sourceTypeCmd;
+	delete vertexRadiusCmd;
+	delete spectrumTypeCmd;
+	delete sourceGenCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if( command == RndmCmd )
-    { GammaRayTelAction->SetRndmFlag(newValue);}
-  
-  if( command == SourceTypeCmd )
-    { GammaRayTelAction->SetSourceType(SourceTypeCmd->GetNewIntValue(newValue));}
-  
-  if( command == VertexRadiusCmd )
-    { GammaRayTelAction->SetVertexRadius(VertexRadiusCmd->GetNewDoubleValue(newValue));}
-  
-  if( command == SpectrumTypeCmd )
-    { GammaRayTelAction->SetSpectrumType(SpectrumTypeCmd->GetNewIntValue(newValue));}
-
-  if( command == SourceGenCmd )
-    { GammaRayTelAction->SetSourceGen(SourceGenCmd->GetNewBoolValue(newValue));}
+void GammaRayTelPrimaryGeneratorMessenger::SetNewValue(G4UIcommand *command, G4String newValue) {
+	if (command == rndmCmd) {
+		GammaRayTelAction->SetRndmFlag(newValue);
+	} else if (command == sourceTypeCmd) {
+		GammaRayTelAction->SetSourceType(sourceTypeCmd->GetNewIntValue(newValue));
+	} else if (command == vertexRadiusCmd) {
+		GammaRayTelAction->SetVertexRadius(vertexRadiusCmd->GetNewDoubleValue(newValue));
+	} else if (command == spectrumTypeCmd) {
+		GammaRayTelAction->SetSpectrumType(spectrumTypeCmd->GetNewIntValue(newValue));
+	} else if (command == sourceGenCmd) {
+		GammaRayTelAction->SetSourceGen(sourceGenCmd->GetNewBoolValue(newValue));
+	}
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-

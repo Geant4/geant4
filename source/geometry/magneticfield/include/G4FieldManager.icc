@@ -109,32 +109,12 @@ G4double G4FieldManager::GetMinimumEpsilonStep() const
    return fEpsilonMin; 
 }
 
-inline 
-void G4FieldManager::SetMinimumEpsilonStep( G4double newEpsMin )
-{
-   if( (newEpsMin > 0.0) && (std::fabs(1.0+newEpsMin) > 1.0) )
-   {
-     fEpsilonMin = newEpsMin;
-   }
-}
-
 // Maximum for Relative accuracy of any Step
 //
 inline 
 G4double G4FieldManager::GetMaximumEpsilonStep() const
 {
    return fEpsilonMax; 
-}
-
-inline 
-void G4FieldManager::SetMaximumEpsilonStep( G4double newEpsMax )
-{
-   if(    (newEpsMax > 0.0) 
-       && (newEpsMax >= fEpsilonMin ) 
-       && (std::fabs(1.0+newEpsMax)>1.0) )
-   {
-     fEpsilonMax = newEpsMax;
-   }
 }
 
 inline

@@ -38,7 +38,7 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4Hdf5NtupleManager::G4Hdf5NtupleManager(const G4AnalysisManagerState& state)
- : G4TNtupleManager<tools::hdf5::ntuple, G4Hdf5File>(state)
+ : G4TNtupleManager<toolx::hdf5::ntuple, G4Hdf5File>(state)
 {}
 
 //
@@ -52,7 +52,7 @@ void G4Hdf5NtupleManager::CreateTNtuple(
 // return with or without warning otherwise
 
   // Get ntuple file from ntuple description
-  auto ntupleFile = ntupleDescription->fFile;
+  auto ntupleFile = ntupleDescription->GetFile();
   if (! ntupleFile) {
     ntupleFile = fFileManager->GetFile();
   }
@@ -71,13 +71,21 @@ void G4Hdf5NtupleManager::CreateTNtuple(
   // auto compressionLevel = fState.GetCompressionLevel();
   auto compressionLevel = 0;
 
-  // create ntuple
-  ntupleDescription->fNtuple
-    = new tools::hdf5::ntuple(
-            G4cout, directory, ntupleDescription->fNtupleBooking,
-            compressionLevel, basketSize);
+  // Update ntuple name if cycle >0
+  auto ntupleBooking = ntupleDescription->GetNtupleBooking();
+  if (GetCycle() > 0) {
+    auto newNtupleName = ntupleDescription->GetNtupleBooking().name();
+    newNtupleName.append("_v");
+    newNtupleName.append(std::to_string(GetCycle()));
+    ntupleBooking.set_name(newNtupleName);
+  }
 
-  fNtupleVector.push_back(ntupleDescription->fNtuple);
+  // create ntuple
+  ntupleDescription->SetNtuple(
+    new toolx::hdf5::ntuple(
+          G4cout, directory, ntupleBooking, compressionLevel, basketSize));
+
+  fNtupleVector.push_back(ntupleDescription->GetNtuple());
 }
 
 //_____________________________________________________________________________
@@ -85,7 +93,7 @@ void G4Hdf5NtupleManager::CreateTNtupleFromBooking(
   Hdf5NtupleDescription* ntupleDescription)
 {
   // Create file if file name per object is set
-  if ( ntupleDescription->fFileName.size() ) {
+  if (ntupleDescription->GetFileName().size() != 0u) {
     fFileManager->CreateNtupleFile(ntupleDescription);
   }
 
@@ -98,8 +106,8 @@ void G4Hdf5NtupleManager::FinishTNtuple(
   Hdf5NtupleDescription* ntupleDescription,
   G4bool /*fromBooking*/)
 {
-  if ( ! ntupleDescription->fNtuple ) {
-  // Create ntuple from booking if file is open, do nothing otherwise
+  if (ntupleDescription->GetNtuple() == nullptr) {
+    // Create ntuple from booking if file is open, do nothing otherwise
     CreateTNtuple(ntupleDescription, false);
   }
 

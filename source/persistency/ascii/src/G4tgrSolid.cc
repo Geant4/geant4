@@ -158,7 +158,7 @@ void G4tgrSolid::FillSolidParams(const std::vector<G4String>& wl)
 
   G4String solidType = wl[2];
   //--- Default unit (mm) if length, deg if angle
-  for(std::size_t ii = 0; ii < noParRead; ++ii)
+  for(G4int ii = 0; ii < (G4int)noParRead; ++ii)
   {
     G4bool isAngle = 0;
     std::map<G4String, std::set<G4int>>::const_iterator ite =

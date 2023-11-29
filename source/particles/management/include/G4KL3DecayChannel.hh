@@ -43,10 +43,10 @@ class G4KL3DecayChannel : public G4VDecayChannel
                       const G4String& thePionName,
                       const G4String& theLeptonName,
                       const G4String& theNutrinoName);
-    virtual ~G4KL3DecayChannel();
+    ~G4KL3DecayChannel() override = default;
       // Constructor & destructor
 
-    virtual G4DecayProducts* DecayIt(G4double);     
+    G4DecayProducts* DecayIt(G4double) override;     
 
     inline void SetDalitzParameter(G4double aLambda, G4double aXi );
     inline G4double GetDalitzParameterLambda() const;
@@ -54,7 +54,7 @@ class G4KL3DecayChannel : public G4VDecayChannel
 
   protected:
 
-    G4KL3DecayChannel(const G4KL3DecayChannel&);
+    G4KL3DecayChannel(const G4KL3DecayChannel&) = default;
     G4KL3DecayChannel& operator=(const G4KL3DecayChannel&);
       // Copy constructor and assignment operator
 
@@ -83,7 +83,7 @@ class G4KL3DecayChannel : public G4VDecayChannel
 
   private:
 
-    G4KL3DecayChannel();
+    G4KL3DecayChannel() = default;
 
   private:
 

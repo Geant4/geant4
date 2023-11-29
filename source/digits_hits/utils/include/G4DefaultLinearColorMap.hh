@@ -35,11 +35,11 @@
 class G4DefaultLinearColorMap : public G4VScoreColorMap
 {
  public:
-  G4DefaultLinearColorMap(G4String mName);
-  virtual ~G4DefaultLinearColorMap();
+  using G4VScoreColorMap::G4VScoreColorMap;
+  ~G4DefaultLinearColorMap() override = default;
 
  public:
-  virtual void GetMapColor(G4double val, G4double color[4]);
+  void GetMapColor(G4double val, G4double color[4]) override;
 };
 
 #endif

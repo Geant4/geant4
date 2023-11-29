@@ -40,42 +40,42 @@ inline bool to_pointer(const char* a_string,void*& a_value){
 }
 
 inline bool p2s(const void* a_value,std::string& a_s){
-  char s[512];
-  snpf(s,sizeof(s),upointer_format(),(upointer)a_value);
-  a_s = s;
+  char _s[512];
+  snpf(_s,sizeof(_s),upointer_format(),(upointer)a_value);
+  a_s = _s;
   return true;
 }
 
 inline bool p2sx(const void* a_value,std::string& a_s){
-  char s[512];
-  snpf(s,sizeof(s),upointer_format_x(),(upointer)a_value);
-  a_s = s;
+  char _s[512];
+  snpf(_s,sizeof(_s),upointer_format_x(),(upointer)a_value);
+  a_s = _s;
   return true;
 }
 
 /*
 inline std::string p2s(const void* a_value){
-  char s[512];
-  snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
-  return s;
+  char _s[512];
+  snpf(_s,sizeof(_s),"%lu",(unsigned long)a_value);
+  return _s;
 }
 
 inline std::string p2sx(const void* a_value){
-  char s[512];
-  snpf(s,sizeof(s),"0x%lx",(unsigned long)a_value);
-  return s;
+  char _s[512];
+  snpf(_s,sizeof(_s),"0x%lx",(unsigned long)a_value);
+  return _s;
 }
 
 inline std::string char_p2s(const char* a_value) {
-  char s[512];
-  snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
-  return std::string(s);
+  char _s[512];
+  snpf(_s,sizeof(_s),"%lu",(unsigned long)a_value);
+  return std::string(_s);
 }
 
 inline std::string long2s(const long a_value) {
-  char s[512];
-  snpf(s,sizeof(s),"%ld",a_value);
-  return std::string(s);
+  char _s[512];
+  snpf(_s,sizeof(_s),"%ld",a_value);
+  return std::string(_s);
 }
 */
 

@@ -1,18 +1,27 @@
--------------------------------------------------------------------
+# Example Hadr08 History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
 
-                    Hadr08 History file
-                    -------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2022-09-07 Vladimir Ivanchenko (exhadr08-V11-00-02)
+- BiasingOperation - used the Bertini cascade instead of pre-compound 
+    model, the last was not applicable for pion interactions. The Bertini
+    cascade is applied from 0 to 41 MeV, INCLXX from 40 MeV to 12 GeV
+
+## 2022-09-05 Vladimir Ivanchenko (exhadr08-V11-00-01)
+- BiasingOperation - transition from pre-compound model to INCL++
+    is changed from 1-2 MeV to 20-21 MeV in order to fix infinite
+    loops happens in nightly tests
+- Hadr08.cc - run initialisation is moved to macro files
+
+## 2021-12-10 Ben Morgan (exhadr08-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 10-03-21 A. Ribon (exhadr08-V10-07-02)
 - BiasingOperation : added (forgotten) calls to BuildPhysicsTable.

@@ -133,7 +133,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager& right)
 
      G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
      G4ProcessVector* src = right.theProcVector[i];
-     for (std::size_t j=0; j< src->entries() ; ++j)
+     for (G4int j=0; j< (G4int)src->entries() ; ++j)
      {
        // copy j-th process in i-th ProcessVector 
        theProcVector[i]->insert((*src)[j]);
@@ -383,7 +383,7 @@ G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess*, G4int ivec)
 G4int G4ProcessManager::FindInsertPosition(G4int ord, G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
-  G4int ip =  pVector->entries();
+  G4int ip = (G4int)pVector->entries();
   G4int tmp = INT_MAX;
   if (ord == ordLast) return ip;
 
@@ -435,7 +435,7 @@ G4int G4ProcessManager::AddProcess(
 
   // add aProcess to process List
   theProcessList->insert(aProcess);  
-  G4int idx = (theProcessList->entries()) - 1;
+  G4int idx = G4int(theProcessList->entries() - 1);
 
   // check size of the ProcessVector[0]
   if (numberOfProcesses != idx)
@@ -836,7 +836,7 @@ void G4ProcessManager::SetProcessOrderingToSecond(
 
   // find insert position
   G4ProcessVector* pVector = theProcVector[ivec];
-  G4int ip = pVector->entries();
+  G4int ip = (G4int)pVector->entries();
   G4int tmp = INT_MAX;
 
   // find insert position
@@ -1081,7 +1081,7 @@ void G4ProcessManager::DumpInfo()
          << G4endl;
 
   // loop over all processes
-  for (std::size_t idx=0; idx < theProcessList->entries(); ++idx)
+  for (G4int idx=0; idx < (G4int)theProcessList->entries(); ++idx)
   {
     // process name/type
     G4cout << "[" << idx << "]";
@@ -1137,7 +1137,7 @@ void G4ProcessManager::CreateGPILvectors()
   // Create GetPhysicalInteractionLength process vectors just as the inverse
   // order of DoIt() process vector
 
-  for(std::size_t k=0; k<theProcessList->entries(); ++k)
+  for(G4int k=0; k<(G4int)theProcessList->entries(); ++k)
   {
     GetAttribute((*theProcessList)[k])->idxProcVector[0]=-1;
     GetAttribute((*theProcessList)[k])->idxProcVector[2]=-1;
@@ -1148,13 +1148,13 @@ void G4ProcessManager::CreateGPILvectors()
   {
     G4ProcessVector* procGPIL = theProcVector[i];
     G4ProcessVector* procDoIt = theProcVector[i+1];
-    G4int nproc = procDoIt->entries();
+    G4int nproc = (G4int)procDoIt->entries();
     procGPIL->clear();
     for(G4int j=nproc-1;j>=0;--j)
     {
       G4VProcess* aProc = (*procDoIt)[j];
       procGPIL->insert(aProc);
-      GetAttribute(aProc)->idxProcVector[i] = procGPIL->entries()-1;
+      GetAttribute(aProc)->idxProcVector[i] = G4int(procGPIL->entries()-1);
     }
   }
 }
@@ -1162,7 +1162,7 @@ void G4ProcessManager::CreateGPILvectors()
 // --------------------------------------------------------------------
 void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
-  for (std::size_t idx = 0; idx<theProcessList->entries(); ++idx)
+  for (G4int idx = 0; idx<(G4int)theProcessList->entries(); ++idx)
   {
     if (GetAttribute(idx)->isActive)
       ((*theProcessList)[idx])->StartTracking(aTrack);
@@ -1173,7 +1173,7 @@ void G4ProcessManager::StartTracking(G4Track* aTrack)
 // --------------------------------------------------------------------
 void G4ProcessManager::EndTracking()
 {
-  for (std::size_t idx = 0; idx<theProcessList->entries(); ++idx)
+  for (G4int idx = 0; idx<(G4int)theProcessList->entries(); ++idx)
   {
     if (GetAttribute(idx)->isActive)
       ((*theProcessList)[idx])->EndTracking();

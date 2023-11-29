@@ -257,13 +257,13 @@ G4VParticleChange* G4SynchrotronRadiation::PostStepDoIt(
       }
       G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
       G4ThreeVector gammaDirection =
-        genAngle->SampleDirection(aDynamicParticle, energyOfSR, 1, 0);
+        genAngle->SampleDirection(aDynamicParticle, energyOfSR, 1, nullptr);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
       gammaPolarization               = gammaPolarization.unit();
 
       // create G4DynamicParticle object for the SR photon
-      G4DynamicParticle* aGamma =
+      auto aGamma =
         new G4DynamicParticle(theGamma, gammaDirection, energyOfSR);
       aGamma->SetPolarization(gammaPolarization.x(), gammaPolarization.y(),
                               gammaPolarization.z());
@@ -401,7 +401,7 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma,
     // mean and rms of photon energy
     G4double Emean = 8. / (15. * std::sqrt(3.)) * Ecr;
     G4double E_rms = std::sqrt(211. / 675.) * Ecr;
-    G4int prec     = G4cout.precision();
+    G4long prec     = G4cout.precision();
     G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n'
            << std::setprecision(4) << "  Ecr   = " << G4BestUnit(Ecr, "Energy")
            << '\n'

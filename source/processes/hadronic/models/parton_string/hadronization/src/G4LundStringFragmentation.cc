@@ -53,11 +53,13 @@ G4LundStringFragmentation::G4LundStringFragmentation()
                             // For ProduceOneHadron it is required
                             // that no one pi-meson can be produced.
     SigmaQT = 0.435 * GeV;
-    Tmt = 190.0 * MeV;
+    Tmt = 190.0 * MeV;       
+
     SetStringTensionParameter(1.*GeV/fermi);
-    SetDiquarkBreakProbability(0.5);
+    SetDiquarkBreakProbability(0.3);
+
     SetStrangenessSuppression((1.0 - 0.12)/2.0);
-    SetDiquarkSuppression(0.15);
+    SetDiquarkSuppression(0.07);
 
     // Check if charmed and bottom hadrons are enabled: if this is the case, then
     // set the non-zero probabilities for c-cbar and b-bbar creation from the vacuum,
@@ -65,7 +67,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
     // hadrons can't/can be created during the string fragmentation of ordinary
     // (i.e. not heavy) projectile hadron nuclear reactions.
     if ( G4HadronicParameters::Instance()->EnableBCParticles() ) {
-      SetProbCCbar(0.005);   // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
+      SetProbCCbar(0.0002);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094; tuned by Uzhi Oct. 2022
       SetProbBBbar(5.0e-5);  // According to O.I. Piskunova Yad. Fiz. 56 (1993) 1094
     } else {
       SetProbCCbar(0.0);
@@ -376,7 +378,8 @@ G4KineticTrack * G4LundStringFragmentation::Splitup(G4FragmentingString *string,
        if (string->GetRightParton()->GetParticleSubType() != "quark") NumberOfpossibleBaryons++;
 
        G4double ActualProb  = ProbDqADq ;
-       ActualProb *= (1.0-sqr(NumberOfpossibleBaryons*1400.0/StringMass));
+       ActualProb *= (1.0-G4Pow::GetInstance()->powA(NumberOfpossibleBaryons*1400.0/StringMass, 8.0));
+       if(ActualProb <0.0) ActualProb = 0.;
 
        SetDiquarkSuppression(ActualProb); 
 
@@ -385,7 +388,8 @@ G4KineticTrack * G4LundStringFragmentation::Splitup(G4FragmentingString *string,
        else if ( NumberOfpossibleBaryons == 4 ){Mth = 2380.0;}  // 2 Mlambda/Msigma + Mk + Mpi
        else {}
 
-       ActualProb = ProbSaS * (1.0 - G4Pow::GetInstance()->powA( Mth/StringMass , 4.0 ));  
+       ActualProb = ProbSaS;
+       ActualProb *= (1.0 - G4Pow::GetInstance()->powA( Mth/StringMass, 2.5 ));
        if ( ActualProb < 0.0 ) ActualProb = 0.0;
        SetStrangenessSuppression((1.0-ActualProb)/2.0);
 
@@ -459,7 +463,7 @@ G4ParticleDefinition * G4LundStringFragmentation::DiQuarkSplitup(G4ParticleDefin
                                                                  G4ParticleDefinition *&created)
 {
    G4double StrSup=GetStrangeSuppress();
-   G4double ProbQQbar = (1.0 - 2.0*StrSup);
+   G4double ProbQQbar = (1.0 - 2.0*StrSup)*1.25;
 
    //... can Diquark break or not?
    if (G4UniformRand() < DiquarkBreakProb ){
@@ -476,7 +480,9 @@ G4ParticleDefinition * G4LundStringFragmentation::DiQuarkSplitup(G4ParticleDefin
 
       G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;  // if we have a quark, we need antiquark
 
+      SetStrangenessSuppression((1.0-ProbQQbar)/2.0);
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
+      SetStrangenessSuppression((1.0-StrSup)/2.0);
 
       //... Build new Diquark
       G4int QuarkEncoding=QuarkPair.second->GetPDGEncoding();
@@ -496,7 +502,7 @@ G4ParticleDefinition * G4LundStringFragmentation::DiQuarkSplitup(G4ParticleDefin
 
       G4int IsParticle=(decay->GetPDGEncoding()>0) ? +1 : -1;  // if we have a diquark, we need quark
 
-      StrangeSuppress=(1.0 - ProbQQbar * 0.9)/2.0;
+      StrangeSuppress=(1.0 - ProbQQbar)/2.0;
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
 
       created = QuarkPair.second;
@@ -550,6 +556,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 	G4double HadronMt, Pt, Pt2, phi;
 
         G4double TmtCur = Tmt;
+
         if ( (string->GetDecayParton()->GetParticleSubType()== "quark") &&
              (pHadron->GetBaryonNumber() != 0) ) {
           TmtCur = Tmt*0.37;			        // q->B     
@@ -674,6 +681,7 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
                 G4double an = 2.5;
                 an +=(sqr(Px)+sqr(Py))/sqr(GeV)-0.5;
                 z=zmin + (zmax-zmin)*G4Pow::GetInstance()->powA(G4UniformRand(),1./an);
+                if( PDGEncodingOfDecayParton > 3000 ) z=zmin+zmax-z;
 	}
 
 	return z;
@@ -723,6 +731,15 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 
 	if (string->IsAFourQuarkString() )
 	{
+          G4int IDleft =std::abs(string->GetLeftParton()->GetPDGEncoding());
+          G4int IDright=std::abs(string->GetRightParton()->GetPDGEncoding());
+
+          if ( (IDleft > 3000) || (IDright > 3000) ) {
+            if ( ! Diquark_AntiDiquark_belowThreshold_lastSplitting(string, LeftHadron, RightHadron) )
+            {
+              return false;
+            } 
+          } else {
 		// The string is qq-qqbar type. Diquarks are on the string ends
 	        if (StringMass-MinimalStringMass < 0.)
 		{
@@ -747,8 +764,8 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
 				RightHadron=FS_LeftHadron[sampledState];
 			}
 		}
-        } else
-	{
+          }  // ID > 3300
+        } else {
 		if (string->DecayIsQuark() && string->StableIsQuark() )
 		{       //... there are quarks on cluster ends
                         #ifdef debug_LUNDfragmentation
@@ -867,12 +884,13 @@ Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
 		}
 
 		isOK = (LeftHadron != nullptr) && (RightHadron != nullptr);
+
 		if(isOK) { isOK = (StringMass > LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()); }
 		++cClusterInterrupt;
 		//... repeat procedure, if mass of cluster is too low to produce hadrons
 		//... ClusterMassCut = 0.15*GeV model parameter
 	}
-	while (isOK == false || cClusterInterrupt < ClusterLoopInterrupt);
+	while (isOK == false && cClusterInterrupt < ClusterLoopInterrupt);
 	/* Loop checking, 07.08.2015, A.Ribon */
   	return isOK;
 }
@@ -1134,6 +1152,7 @@ G4bool G4LundStringFragmentation::Quark_AntiQuark_lastSplitting(G4FragmentingStr
 	NumberOf_FS=0;
 	for (G4int ProdQ=1; ProdQ < 4; ProdQ++)  // Loop over quark-antiquark cases: u-ubar, d-dbar, s-sbar 
 	{                                        // (as last splitting, do not consider c-cbar and b-bbar cases)
+                //G4cout<<"NumberOf_FS ProdQ "<<NumberOf_FS<<" "<<ProdQ<<G4endl;
 		LeftHadronCharge = QuarkCharge - Qcharge[ProdQ-1];
 		G4int SignQ = LeftHadronCharge/3; if (SignQ == 0) SignQ = 1;
 
@@ -1163,7 +1182,7 @@ G4bool G4LundStringFragmentation::Quark_AntiQuark_lastSplitting(G4FragmentingStr
                         //<<ProdQ-1<<" "<<StateQ<<" "<<SignQ*Meson[AbsIDquark-1][ProdQ-1][StateQ]<<G4endl;
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
 						       Meson[AbsIDquark-1][ProdQ-1][StateQ]);
-                        //G4cout<<"LeftHadron "<<LeftHadron<<G4endl;
+                        //G4cout<<"LeftHadron "<<LeftHadron<<G4endl; 
 			if (LeftHadron == NULL) { StateQ++; continue; }
                         //G4cout<<"LeftHadron "<<LeftHadron->GetParticleName()<<G4endl;
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
@@ -1199,7 +1218,6 @@ G4bool G4LundStringFragmentation::Quark_AntiQuark_lastSplitting(G4FragmentingStr
 							       MesonWeight[AbsIDquark-1][ProdQ-1][StateQ]*
 							       MesonWeight[AbsIDanti_quark-1][ProdQ-1][StateAQ]*
 							       Prob_QQbar[ProdQ-1];
-
 					if (string->GetLeftParton()->GetPDGEncoding()>0)
 					{
 						FS_LeftHadron[NumberOf_FS] = RightHadron;
@@ -1249,7 +1267,6 @@ G4int G4LundStringFragmentation::SampleState(void)
         }
 
 	G4double SumWeights=0.;
-
 	for (G4int i=0; i<NumberOf_FS; i++) {SumWeights+=FS_Weight[i];}
 
 	G4double ksi=G4UniformRand();

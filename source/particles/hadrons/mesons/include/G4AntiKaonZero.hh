@@ -51,7 +51,7 @@ class G4AntiKaonZero : public G4ParticleDefinition
  private:
    static G4AntiKaonZero* theInstance;
    G4AntiKaonZero(){}
-   ~G4AntiKaonZero(){}
+   ~G4AntiKaonZero() override= default;
 
  public:
    static G4AntiKaonZero* Definition();

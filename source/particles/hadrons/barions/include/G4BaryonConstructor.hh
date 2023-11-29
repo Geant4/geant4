@@ -38,11 +38,6 @@
 class G4BaryonConstructor
 {
   //This class is a utility class for construction 
-
-  public:
-    G4BaryonConstructor();
-    ~G4BaryonConstructor();
-  
   public:
     static void ConstructParticle();
 

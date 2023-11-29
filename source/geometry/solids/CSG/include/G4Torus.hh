@@ -91,7 +91,7 @@
 class G4Torus : public G4CSGSolid
 {
 
-  public:  // with description
+  public:
 
     G4Torus(const G4String &pName,
                   G4double pRmin,
@@ -100,7 +100,7 @@ class G4Torus : public G4CSGSolid
                   G4double pSPhi,
                   G4double pDPhi);
 
-   ~G4Torus();
+   ~G4Torus() override;
 
     // Accessors
 
@@ -116,41 +116,40 @@ class G4Torus : public G4CSGSolid
 
     // Methods of solid
 
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    inline G4double GetCubicVolume() override;
+    inline G4double GetSurfaceArea() override;
 
-    EInside Inside(const G4ThreeVector& p) const;
-    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    EInside Inside(const G4ThreeVector& p) const override;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const override;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pmin, G4double& pmax) const override;
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
-                           const G4VPhysicalVolume* pRep);
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
-    G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
-    G4double DistanceToIn(const G4ThreeVector& p) const;
+                           const G4VPhysicalVolume* pRep) override;
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const override;
+    G4double DistanceToIn(const G4ThreeVector& p,
+                          const G4ThreeVector& v) const override;
+    G4double DistanceToIn(const G4ThreeVector& p) const override;
     G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
                            const G4bool calcNorm = false,
                                  G4bool* validNorm = nullptr,
-                                 G4ThreeVector* n = nullptr) const;
-    G4double DistanceToOut(const G4ThreeVector& p) const;
+                                 G4ThreeVector* n = nullptr) const override;
+    G4double DistanceToOut(const G4ThreeVector& p) const override;
 
-    G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const override;
 
-    G4ThreeVector GetPointOnSurface() const;
+    G4ThreeVector GetPointOnSurface() const override;
 
-    G4VSolid* Clone() const;
+    G4VSolid* Clone() const override;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const override;
 
     // Visualisation functions
 
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-    G4Polyhedron*       CreatePolyhedron   () const;
-
-  public:  // without description
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const override;
+    G4Polyhedron* CreatePolyhedron   () const override;
 
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
                           G4double pSPhi, G4double pDPhi);

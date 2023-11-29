@@ -41,8 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
-:G4VUserPrimaryGeneratorAction(), 
- fParticleGun(0),fDetector(det)
+:fDetector(det)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);

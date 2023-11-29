@@ -181,7 +181,7 @@ class G4SPSAngDistribution
     G4ThreeVector AngRef1, AngRef2, AngRef3; // Reference axes for ang dist
     G4double MinTheta, MaxTheta, MinPhi, MaxPhi; // min/max theta/phi
     G4double DR,DX,DY ; // Standard deviations for beam divergence 
-    G4double Theta, Phi; // Store these for use with DEBUG
+    G4double Theta{0.}, Phi{0.}; // Store these for use with DEBUG
     G4ThreeVector FocusPoint ; // the focusing point in mother coordinates
     G4bool IPDFThetaExist, IPDFPhiExist; // tell whether IPDF histos exist
     G4PhysicsFreeVector UDefThetaH; // Theta histo data

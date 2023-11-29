@@ -1,17 +1,32 @@
--------------------------------------------------------------------
+# Category phys-builder History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                  Hadronic physics-list/builders History
-                  --------------------------------------
-This file should be used  to briefly summarize all major modifications
-introduced in the code and keeptrack of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-03-17 Alberto Ribon (phys-builders-V11-01-01)
+- G4HadronicBuilder : fixed bug in the method BuildKaonsFTFQGSP_BERT().
+  Thanks to Dmitri Konstantinov for reporting it.
+
+## 2022-12-30 Vladimir Ivanchenko (phys-builders-V11-01-00)
+- Updated table of processes
+
+## 2022-11-24 Gabriele Cosmo (phys-builders-V11-00-02)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-11-11 Alberto Ribon (phys-builder-V11-00-01)
+- G4HadronicBuilder : added new methods to build hadronic physics
+  for light hypernuclei - with FTFP alone, or FTFP + INCLXX - and 
+  light anti-hypernuclei - with FTFP alone - projectiles.
+
+## 2021-12-10 Ben Morgan (phys-builder-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 14-Aug-2021 Vladimir Ivanchenko      (phys-builder-V10-07-08)
 - G4QGSPNeutronBuilder - use G4NeutronInelasticXS cross section

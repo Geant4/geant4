@@ -39,8 +39,8 @@
 #include "G4ElementTable.hh"
 
 G4HumanPhantomMaterial::G4HumanPhantomMaterial(): 
-  soft(0),  skeleton(0),lung(0), adipose(0), glandular(0),
-  adipose_glandular(0)
+ fWater(nullptr), fSoft(nullptr),  fSkeleton(nullptr), fLung(nullptr), fAdipose(nullptr), fGlandular(nullptr),
+  fAdipose_glandular(nullptr)
 {;}
 
 G4HumanPhantomMaterial::~G4HumanPhantomMaterial()
@@ -57,154 +57,154 @@ void G4HumanPhantomMaterial::DefineMaterials()
   // General elements
  
   A = 1.01*g/mole;
-  G4Element* elH = new G4Element ("Hydrogen","H",Z = 1.,A);
+  auto* elH = new G4Element ("Hydrogen","H",Z = 1.,A);
 
   A = 12.011*g/mole;
-  G4Element* elC = new G4Element("Carbon","C",Z = 6.,A);  
+  auto* elC = new G4Element("Carbon","C",Z = 6.,A);  
 
   A = 14.01*g/mole;
-  G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
+  auto* elN = new G4Element("Nitrogen","N",Z = 7.,A);
 
   A = 16.00*g/mole;
-  G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
+  auto* elO = new G4Element("Oxygen","O",Z = 8.,A);
 
   A = 22.99*g/mole;
-  G4Element* elNa = new G4Element("Sodium","Na",Z = 11.,A);
+  auto* elNa = new G4Element("Sodium","Na",Z = 11.,A);
 
   A = 24.305*g/mole;
-  G4Element* elMg = new G4Element("Magnesium","Mg",Z = 12.,A);
+  auto* elMg = new G4Element("Magnesium","Mg",Z = 12.,A);
 
   A = 30.974*g/mole;
-  G4Element* elP = new G4Element("Phosphorus","P",Z = 15.,A);
+  auto* elP = new G4Element("Phosphorus","P",Z = 15.,A);
  
   A = 32.064*g/mole;
-  G4Element* elS = new G4Element("Sulfur","S",Z = 16.,A);
+  auto* elS = new G4Element("Sulfur","S",Z = 16.,A);
  
   A = 35.453*g/mole;
-  G4Element* elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
+  auto* elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
  
   A = 39.098*g/mole;
-  G4Element* elK = new G4Element("Potassium","K",Z = 19.,A);
+  auto* elK = new G4Element("Potassium","K",Z = 19.,A);
 
   A = 40.08*g/mole;
-  G4Element* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
+  auto* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
 
   A = 55.85*g/mole;
-  G4Element* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
+  auto* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
  
   A = 65.38*g/mole;
-  G4Element* elZn = new G4Element("Zinc","Zn",Z = 30.,A);
+  auto* elZn = new G4Element("Zinc","Zn",Z = 30.,A);
 
   A = 85.47 *g/mole;
-  G4Element* elRb = new G4Element("Rb","Rb",Z = 37.,A);
+  auto* elRb = new G4Element("Rb","Rb",Z = 37.,A);
 
   A = 87.62 *g/mole;
-  G4Element* elSr = new G4Element("Sr","Sr",Z = 38.,A);
+  auto* elSr = new G4Element("Sr","Sr",Z = 38.,A);
 
   A = 91.22 *g/mole;
-  G4Element* elZr = new G4Element("Zr","Zr",Z = 40.,A);
+  auto* elZr = new G4Element("Zr","Zr",Z = 40.,A);
 
   A = 207.19 *g/mole;
-  G4Element* elPb = new G4Element("Lead","Pb", Z = 82.,A);
+  auto* elPb = new G4Element("Lead","Pb", Z = 82.,A);
 
   // Water
   d = 1.000*g/cm3;
-  matH2O = new G4Material("Water",d,2);
-  matH2O->AddElement(elH,2);
-  matH2O->AddElement(elO,1);
-  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+  fWater = new G4Material("Water",d,2);
+  fWater->AddElement(elH,2);
+  fWater->AddElement(elO,1);
+  fWater->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
   // MIRD soft tissue
   d = 0.9869 *g/cm3;
-  soft = new G4Material("soft_tissue",d,16);
-  soft->AddElement(elH,0.1047);
-  soft->AddElement(elC,0.2302);
-  soft->AddElement(elN,0.0234);
-  soft->AddElement(elO,0.6321);
-  soft->AddElement(elNa,0.0013);
-  soft->AddElement(elMg,0.00015);
-  soft->AddElement(elP,0.0024);
-  soft->AddElement(elS,0.0022);
-  soft->AddElement(elCl,0.0014);
-  soft->AddElement(elK,0.0021);
-  soft->AddElement(elFe,0.000063);
-  soft->AddElement(elZn,0.000032);
-  soft->AddElement(elRb,0.0000057);
-  soft->AddElement(elSr,0.00000034);
-  soft->AddElement(elZr,0.000008);
-  soft->AddElement(elPb,0.00000016);
+  fSoft = new G4Material("soft_tissue",d,16);
+  fSoft->AddElement(elH,0.1047);
+  fSoft->AddElement(elC,0.2302);
+  fSoft->AddElement(elN,0.0234);
+  fSoft->AddElement(elO,0.6321);
+  fSoft->AddElement(elNa,0.0013);
+  fSoft->AddElement(elMg,0.00015);
+  fSoft->AddElement(elP,0.0024);
+  fSoft->AddElement(elS,0.0022);
+  fSoft->AddElement(elCl,0.0014);
+  fSoft->AddElement(elK,0.0021);
+  fSoft->AddElement(elFe,0.000063);
+  fSoft->AddElement(elZn,0.000032);
+  fSoft->AddElement(elRb,0.0000057);
+  fSoft->AddElement(elSr,0.00000034);
+  fSoft->AddElement(elZr,0.000008);
+  fSoft->AddElement(elPb,0.00000016);
  
   // MIRD Skeleton
 
   d = 1.4862*g/cm3;
-  skeleton = new G4Material("skeleton",d,15);
-  skeleton -> AddElement(elH,0.0704);
-  skeleton -> AddElement(elC,0.2279);
-  skeleton -> AddElement(elN,0.0387);
-  skeleton -> AddElement(elO,0.4856);
-  skeleton -> AddElement(elNa,0.0032); 
-  skeleton -> AddElement(elMg,0.0011); 
-  skeleton -> AddElement(elP,0.0694);
-  skeleton -> AddElement(elS,0.0017);
-  skeleton -> AddElement(elCl,0.0014);
-  skeleton -> AddElement(elK,0.0015);
-  skeleton -> AddElement(elCa,0.0991);
-  skeleton -> AddElement(elFe,0.00008);
-  skeleton -> AddElement(elZn,0.000048);
-  skeleton -> AddElement(elSr,0.000032);
-  skeleton -> AddElement(elPb,0.000011);
+  fSkeleton = new G4Material("skeleton",d,15);
+  fSkeleton -> AddElement(elH,0.0704);
+  fSkeleton -> AddElement(elC,0.2279);
+  fSkeleton -> AddElement(elN,0.0387);
+  fSkeleton -> AddElement(elO,0.4856);
+  fSkeleton -> AddElement(elNa,0.0032); 
+  fSkeleton -> AddElement(elMg,0.0011); 
+  fSkeleton -> AddElement(elP,0.0694);
+  fSkeleton -> AddElement(elS,0.0017);
+  fSkeleton -> AddElement(elCl,0.0014);
+  fSkeleton -> AddElement(elK,0.0015);
+  fSkeleton -> AddElement(elCa,0.0991);
+  fSkeleton -> AddElement(elFe,0.00008);
+  fSkeleton -> AddElement(elZn,0.000048);
+  fSkeleton -> AddElement(elSr,0.000032);
+  fSkeleton -> AddElement(elPb,0.000011);
  
   // MIRD lung material
   d = 0.2958 *g/cm3;
-  lung = new G4Material("lung_material", d,16);
-  lung -> AddElement(elH, 0.1021);
-  lung -> AddElement(elC, 0.1001);
-  lung -> AddElement(elN,0.028);
-  lung -> AddElement(elO,0.7596);
-  lung -> AddElement(elNa,0.0019);
-  lung -> AddElement(elMg,0.000074);
-  lung -> AddElement(elP,0.00081);
-  lung -> AddElement(elS,0.0023);
-  lung -> AddElement(elCl,0.0027);
-  lung -> AddElement(elK,0.0020);
-  lung -> AddElement(elCa,0.00007);
-  lung -> AddElement(elFe,0.00037);
-  lung -> AddElement(elZn,0.000011);
-  lung -> AddElement(elRb,0.0000037);
-  lung -> AddElement(elSr,0.000000059);
-  lung -> AddElement(elPb,0.00000041);
+  fLung = new G4Material("lung_material", d,16);
+  fLung -> AddElement(elH, 0.1021);
+  fLung -> AddElement(elC, 0.1001);
+  fLung -> AddElement(elN,0.028);
+  fLung -> AddElement(elO,0.7596);
+  fLung -> AddElement(elNa,0.0019);
+  fLung -> AddElement(elMg,0.000074);
+  fLung -> AddElement(elP,0.00081);
+  fLung -> AddElement(elS,0.0023);
+  fLung -> AddElement(elCl,0.0027);
+  fLung -> AddElement(elK,0.0020);
+  fLung -> AddElement(elCa,0.00007);
+  fLung -> AddElement(elFe,0.00037);
+  fLung -> AddElement(elZn,0.000011);
+  fLung -> AddElement(elRb,0.0000037);
+  fLung -> AddElement(elSr,0.000000059);
+  fLung -> AddElement(elPb,0.00000041);
 
   G4double density_adipose = 0.93 *g/cm3;
-  adipose = new G4Material("adipose", density_adipose,8);  
-  adipose -> AddElement(elH, 0.112);
-  adipose -> AddElement(elC, 0.619);
-  adipose -> AddElement(elN, 0.017);
-  adipose -> AddElement(elO, 0.251);
-  adipose -> AddElement(elS, 0.00025);
-  adipose -> AddElement(elP, 0.00025);
-  adipose -> AddElement(elK, 0.00025);
-  adipose -> AddElement(elCa,0.00025);
+  fAdipose = new G4Material("adipose", density_adipose,8);  
+  fAdipose -> AddElement(elH, 0.112);
+  fAdipose -> AddElement(elC, 0.619);
+  fAdipose -> AddElement(elN, 0.017);
+  fAdipose -> AddElement(elO, 0.251);
+  fAdipose -> AddElement(elS, 0.00025);
+  fAdipose -> AddElement(elP, 0.00025);
+  fAdipose -> AddElement(elK, 0.00025);
+  fAdipose -> AddElement(elCa,0.00025);
 
   G4double density_glandular = 1.04 * g/cm3;
-  glandular = new G4Material("glandular", density_glandular,8);
-  glandular -> AddElement(elH, 0.1);
-  glandular -> AddElement(elC,0.184);
-  glandular -> AddElement(elN, 0.032);
-  glandular -> AddElement(elO, 0.679);
-  glandular -> AddElement(elS, 0.00125);
-  glandular -> AddElement(elP, 0.00125);
-  glandular -> AddElement(elK, 0.00125);
-  glandular -> AddElement(elCa,0.00125);
+  fGlandular = new G4Material("glandular", density_glandular,8);
+  fGlandular -> AddElement(elH, 0.1);
+  fGlandular -> AddElement(elC,0.184);
+  fGlandular -> AddElement(elN, 0.032);
+  fGlandular -> AddElement(elO, 0.679);
+  fGlandular -> AddElement(elS, 0.00125);
+  fGlandular -> AddElement(elP, 0.00125);
+  fGlandular -> AddElement(elK, 0.00125);
+  fGlandular -> AddElement(elCa,0.00125);
 
 
   d = (density_adipose * 0.5) + (density_glandular * 0.5);
-  adipose_glandular = new G4Material("adipose_glandular", d, 2);
-  adipose_glandular -> AddMaterial(adipose, 0.5);
-  adipose_glandular -> AddMaterial(glandular, 0.5);
+  fAdipose_glandular = new G4Material("adipose_glandular", d, 2);
+  fAdipose_glandular -> AddMaterial(fAdipose, 0.5);
+  fAdipose_glandular -> AddMaterial(fGlandular, 0.5);
 
   // Air 
   d = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",d,2);
+  auto* matAir = new G4Material("Air",d,2);
   matAir->AddElement(elN,0.7);
   matAir->AddElement(elO,0.3);
 }

@@ -29,4 +29,4 @@
 #include "G4ParticleHPProduct.hh"
 using G4NeutronHPProduct = G4ParticleHPProduct;
 
-#endif 
+#endif

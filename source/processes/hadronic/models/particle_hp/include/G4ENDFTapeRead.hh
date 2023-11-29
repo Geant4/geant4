@@ -31,13 +31,12 @@
  */
 
 #ifndef G4ENDFTAPEREAD_HH
-#define	G4ENDFTAPEREAD_HH
-
-#include "globals.hh"
+#define G4ENDFTAPEREAD_HH
 
 #include "G4ENDFYieldDataContainer.hh"
 #include "G4FFGEnumerations.hh"
 #include "G4TableTemplate.hh"
+#include "globals.hh"
 
 /** G4ENDFTapeRead is a class designed to read in data from unformatted ENDF data
  *  tapes for MT = 454 or MT = 459, which correspond to independent fission
@@ -47,8 +46,8 @@
  */
 class G4ENDFTapeRead
 {
-public:
-// Constructor definition
+  public:
+    // Constructor definition
     /** Default constructor
      *  - Usage:
      *      - \p FileLocation: the absolute path to the file
@@ -58,10 +57,9 @@ public:
      *
      *  - Notes: The data will be read in immediately upon construction.
      */
-    G4ENDFTapeRead( G4String FileLocation,
-                    G4String FileName,
-                    G4FFGEnumerations::YieldType WhichYield,
-                    G4FFGEnumerations::FissionCause WhichCause );
+    G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+                   G4FFGEnumerations::YieldType WhichYield,
+                   G4FFGEnumerations::FissionCause WhichCause);
     /** Overloaded constructor
      *  - Usage:
      *      - \p FileLocation: the absolute path to the file
@@ -72,11 +70,9 @@ public:
      *
      *  - Notes: The data will be read in immediately upon construction.
      */
-    G4ENDFTapeRead( G4String FileLocation,
-                    G4String FileName,
-                    G4FFGEnumerations::YieldType WhichYield,
-                    G4FFGEnumerations::FissionCause WhichCause,
-                    G4int Verbosity );
+    G4ENDFTapeRead(G4String FileLocation, G4String FileName,
+                   G4FFGEnumerations::YieldType WhichYield,
+                   G4FFGEnumerations::FissionCause WhichCause, G4int Verbosity);
     /** Overloaded constructor
      *  - Usage:
      *      - \p DataFile: The absolute path to the data file
@@ -86,38 +82,37 @@ public:
      *
      *  - Notes: The data will be read in immediately upon construction.
      */
-    G4ENDFTapeRead( std::istringstream& dataStream,
-                    G4FFGEnumerations::YieldType WhichYield,
-                    G4FFGEnumerations::FissionCause WhichCause,
-                    G4int Verbosity );
-protected:
-    /** Initialize is a common function called by all constructors. */
-    void Initialize( G4String dataFile );
-    /** Initialize is a common function calles by all constructors */
-    void Initialize( std::istringstream& dataStream );
+    G4ENDFTapeRead(std::istringstream& dataStream, G4FFGEnumerations::YieldType WhichYield,
+                   G4FFGEnumerations::FissionCause WhichCause, G4int Verbosity);
 
-public:
-// Functions
+  protected:
+    /** Initialize is a common function called by all constructors. */
+    void Initialize(G4String dataFile);
+    /** Initialize is a common function calles by all constructors */
+    void Initialize(std::istringstream& dataStream);
+
+  public:
+    // Functions
     /** Returns and array containing the values of each of the energy groups
      *  - Usage: No arguments required
      *
      *  - Notes:
      */
-    G4double* G4GetEnergyGroupValues( void );
+    G4double* G4GetEnergyGroupValues();
     /** Returns the number of energy yield groups that were extracted from the
      *  ENDF tape file
      *  - Usage: No arguments required
      *
      *  - Notes:
      */
-    G4int G4GetNumberOfEnergyGroups( void );
+    G4int G4GetNumberOfEnergyGroups();
     /** Returns the number of fission products that were extracted from the
      *  ENDF tape file
      *  - Usage: No arguments required
      *
      *  - Notes:
      */
-    G4int G4GetNumberOfFissionProducts( void );
+    G4int G4GetNumberOfFissionProducts();
     /** Returns the data for the requested fission product
      *  - Usage:
      *      - \p WhichYield: 0-based index of the fission product for which to
@@ -127,7 +122,7 @@ public:
      *      - This will return a pointer to the next G4FissionYieldContainer.
      *        NULL will be returned if no more fission containers exist.
      */
-    G4ENDFYieldDataContainer* G4GetYield( G4int WhichYield );
+    G4ENDFYieldDataContainer* G4GetYield(G4int WhichYield);
     /** Sets the verbosity levels
      *  - Usage:
      *      - \p WhichVerbosity: Combination of  levels
@@ -140,20 +135,21 @@ public:
      *      - \p GAMMA_INFO: Displays information about gamma sampling
      *      - \p ALPHA_INFO: Displays information about alpha sampling
      *      - \p MOMENTUM_INFO: Displays information about momentum balancing
-     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation or interpolation that occurs
+     *      - \p EXTRAPOLATION_INTERPOLATION_INFO: Displays information about any data extrapolation
+     * or interpolation that occurs
      *      - \p DEBUG: Reports program flow as it steps through functions
      *      - \p PRINT_ALL: Displays any and all output
      */
-    void G4SetVerbosity( G4int WhatVerbosity );
-    
-private:
-// Functions
-    /** Read in the data from an ENDF data tape. */
-    void ReadInData( std::istringstream& dataStream );
+    void G4SetVerbosity(G4int WhatVerbosity);
 
-// Data members
+  private:
+    // Functions
+    /** Read in the data from an ENDF data tape. */
+    void ReadInData(std::istringstream& dataStream);
+
+    // Data members
     /** Stores the number corresponding to the fission cause that will be extracted */
-    //const G4FFGEnumerations::FissionCause Cause_;
+    // const G4FFGEnumerations::FissionCause Cause_;
     /** Counter for the number of energy groups that were extracted */
     G4int EnergyGroups_;
     /** Array containing the values of the extracted energy groups */
@@ -161,15 +157,14 @@ private:
     /** Verbosity level */
     G4int Verbosity_;
     /** Storage for the extracted data */
-    G4TableTemplate< G4ENDFYieldDataContainer >* YieldContainerTable_;
+    G4TableTemplate<G4ENDFYieldDataContainer>* YieldContainerTable_;
     /** Stores the number corresponding to the yield type that will be extracted */
     const G4FFGEnumerations::YieldType YieldType_;
 
-// Destructor function(s)
-public:
+    // Destructor function(s)
+  public:
     /** Default Deconstructor */
-    ~G4ENDFTapeRead( void );
+    ~G4ENDFTapeRead();
 };
 
-#endif	/* G4ENDFTAPEREAD_HH */
-
+#endif /* G4ENDFTAPEREAD_HH */

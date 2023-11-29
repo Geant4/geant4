@@ -342,7 +342,7 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is not on surface (!?) of solid: "
             << GetName() << "\n";
     message << "Position:\n";
@@ -374,7 +374,7 @@ G4ThreeVector G4Ellipsoid::ApproxSurfaceNormal(const G4ThreeVector& p) const
   if  (distR > distZ && rr > 0.) // distR > distZ is correct!
     return G4ThreeVector(x*fSx, y*fSy, z*fSz).unit();
   else
-    return G4ThreeVector(0., 0., std::copysign(1., z - fZMidCut));
+    return { 0., 0., std::copysign(1., z - fZMidCut) };
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -542,7 +542,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
   {
 #ifdef G4SPECSDEBUG
     std::ostringstream message;
-    G4int oldprc = message.precision(16);
+    G4long oldprc = message.precision(16);
     message << "Point p is outside (!?) of solid: "
             << GetName() << G4endl;
     message << "Position:  " << p << G4endl;;
@@ -641,7 +641,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
 
 G4GeometryType G4Ellipsoid::GetEntityType() const
 {
-  return G4String("G4Ellipsoid");
+  return {"G4Ellipsoid"};
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -659,7 +659,7 @@ G4VSolid* G4Ellipsoid::Clone() const
 
 std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 {
-  G4int oldprc = os.precision(16);
+  G4long oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
@@ -705,49 +705,84 @@ G4double G4Ellipsoid::GetCubicVolume()
 
 G4double G4Ellipsoid::LateralSurfaceArea() const
 {
-  const G4int Nphi = 100;
-  const G4int Nz   = 200;
-  G4double rho[Nz + 1];
+  constexpr G4int NPHI = 1000.;
+  constexpr G4double dPhi = CLHEP::halfpi/NPHI;
+  constexpr G4double eps = 4.*DBL_EPSILON;
 
-  // Set array of rho
-  G4double zbot = fZBottomCut / fDz;
-  G4double ztop = fZTopCut / fDz;
-  G4double dz   = (ztop - zbot) / Nz;
-  for (G4int iz = 0; iz < Nz; ++iz)
-  {
-    G4double z = zbot + iz * dz;
-    rho[iz] = std::sqrt((1. + z) * (1. - z));
-  }
-  rho[Nz] = std::sqrt((1. + ztop) * (1. - ztop));
-
-  // Compute area
-  zbot = fZBottomCut;
-  ztop = fZTopCut;
-  dz   = (ztop - zbot) / Nz;
+  G4double aa = fDx*fDx;
+  G4double bb = fDy*fDy;
+  G4double cc = fDz*fDz;
+  G4double ab = fDx*fDy;
+  G4double cc_aa = cc/aa;
+  G4double cc_bb = cc/bb;
+  G4double zmax = std::min(fZTopCut, fDz);
+  G4double zmin = std::max(fZBottomCut,-fDz);
+  G4double zmax_c = zmax/fDz;
+  G4double zmin_c = zmin/fDz;
   G4double area = 0.;
-  G4double dphi = CLHEP::halfpi / Nphi;
-  for (G4int iphi = 0; iphi < Nphi; ++iphi)
+
+  if (aa == bb) // spheroid, use analytical expression
   {
-    G4double phi1 = iphi * dphi;
-    G4double phi2 = (iphi == Nphi - 1) ? CLHEP::halfpi : phi1 + dphi;
-    G4double cos1 = std::cos(phi1) * fDx;
-    G4double cos2 = std::cos(phi2) * fDx;
-    G4double sin1 = std::sin(phi1) * fDy;
-    G4double sin2 = std::sin(phi2) * fDy;
-    for (G4int iz = 0; iz < Nz; ++iz)
+    G4double k = fDz/fDx;
+    G4double kk = k*k;
+    if (kk < 1. - eps)
     {
-      G4double z1   = zbot + iz * dz;
-      G4double z2   = (iz == Nz - 1) ? ztop : z1 + dz;
-      G4double rho1 = rho[iz];
-      G4double rho2 = rho[iz + 1];
-      G4ThreeVector p1(rho1 * cos1, rho1 * sin1, z1);
-      G4ThreeVector p2(rho1 * cos2, rho1 * sin2, z1);
-      G4ThreeVector p3(rho2 * cos1, rho2 * sin1, z2);
-      G4ThreeVector p4(rho2 * cos2, rho2 * sin2, z2);
-      area += ((p4 - p1).cross(p3 - p2)).mag();
+      G4double invk = fDx/fDz;
+      G4double root = std::sqrt(1. - kk);
+      G4double tmax = zmax_c*root;
+      G4double tmin = zmin_c*root;
+      area = CLHEP::pi*ab*
+        ((zmax_c*std::sqrt(kk + tmax*tmax) - zmin_c*std::sqrt(kk + tmin*tmin)) +
+         (std::asinh(tmax*invk) - std::asinh(tmin*invk))*kk/root);
+    }
+    else if (kk > 1. + eps)
+    {
+      G4double invk = fDx/fDz;
+      G4double root = std::sqrt(kk - 1.);
+      G4double tmax = zmax_c*root;
+      G4double tmin = zmin_c*root;
+      area = CLHEP::pi*ab*
+        ((zmax_c*std::sqrt(kk - tmax*tmax) - zmin_c*std::sqrt(kk - tmin*tmin)) +
+         (std::asin(tmax*invk) - std::asin(tmin*invk))*kk/root);
+    }
+    else
+    {
+      area = CLHEP::twopi*fDx*(zmax - zmin);
+    }
+    return area;
+  }
+
+  // ellipsoid, integration along phi
+  for (G4int i = 0; i < NPHI; ++i)
+  {
+    G4double sinPhi = std::sin(dPhi*(i + 0.5));
+    G4double kk = cc_aa + (cc_bb - cc_aa)*sinPhi*sinPhi;
+    if (kk < 1. - eps)
+    {
+      G4double root = std::sqrt(1. - kk);
+      G4double tmax = zmax_c*root;
+      G4double tmin = zmin_c*root;
+      G4double invk = 1./std::sqrt(kk);
+      area += 2.*ab*dPhi*
+        ((zmax_c*std::sqrt(kk + tmax*tmax) - zmin_c*std::sqrt(kk + tmin*tmin)) +
+         (std::asinh(tmax*invk) - std::asinh(tmin*invk))*kk/root);
+    }
+    else if (kk > 1. + eps)
+    {
+      G4double root = std::sqrt(kk - 1.);
+      G4double tmax = zmax_c*root;
+      G4double tmin = zmin_c*root;
+      G4double invk = 1./std::sqrt(kk);
+      area += 2.*ab*dPhi*
+        ((zmax_c*std::sqrt(kk - tmax*tmax) - zmin_c*std::sqrt(kk - tmin*tmin)) +
+         (std::asin(tmax*invk) - std::asin(tmin*invk))*kk/root);
+    }
+    else
+    {
+      area += 4.*ab*dPhi*(zmax_c - zmin_c);
     }
   }
-  return 2. * area;
+  return area;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -867,7 +902,7 @@ void G4Ellipsoid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4Ellipsoid::GetExtent() const
 {
-  return G4VisExtent(-fXmax, fXmax, -fYmax, fYmax, fZBottomCut, fZTopCut);
+  return { -fXmax, fXmax, -fYmax, fYmax, fZBottomCut, fZTopCut };
 }
 
 //////////////////////////////////////////////////////////////////////////

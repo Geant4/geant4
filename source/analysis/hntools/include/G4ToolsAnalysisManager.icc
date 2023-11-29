@@ -25,29 +25,22 @@
 //
 
 #include "G4HnInformation.hh"
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
 
 //_____________________________________________________________________________
 template <typename HT>
 inline
-G4bool G4ToolsAnalysisManager::WriteT(const std::vector<HT*>& htVector,
-                                      const std::vector<G4HnInformation*>& hnVector)
+G4bool G4ToolsAnalysisManager::WriteT(
+  const std::vector<std::pair<HT*, G4HnInformation*>>& hnVector)
 {
   auto result = true;
 
-  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
-    auto info = hnVector[i];
+  for ( auto& [ht, info] : hnVector) {
     auto activation = info->GetActivation();
+
     // skip writing if activation is enabled and H1 is inactivated
     if ( fState.GetIsActivation() && ( ! activation ) ) continue;
 
     auto name = info->GetName();
-    auto ht = htVector[i];
-
     auto fileName = info->GetFileName();
     auto fileManager = GetFileManager(fileName);
 
@@ -67,10 +60,15 @@ G4bool G4ToolsAnalysisManager::WriteT(const std::vector<HT*>& htVector,
       fileName = fileManager->GetFullFileName();
     }
 
+    // update name with a cycle number
+    if (! fileManager->HasCycles() && fState.GetCycle() > 0) {
+      name += "_v" + std::to_string(fState.GetCycle());
+    }
+
     Message(G4Analysis::kVL4, "write", G4Analysis::GetHnType<HT>(),
       name + fileKind + fileName);
 
-    if ( ! fileManager->GetHnFileManager<HT>()->Write(ht, name, fileName) ) {
+    if ( ! fileManager->template GetHnFileManager<HT>()->Write(ht, name, fileName) ) {
       G4Analysis::Warn(
         "Writing " + G4Analysis::GetHnType<HT>() + " " +  name +
         " to file " +  fileName + " failed.",
@@ -78,8 +76,10 @@ G4bool G4ToolsAnalysisManager::WriteT(const std::vector<HT*>& htVector,
       result = false;
     }
 
-    // notify that file has a written object
-    fileManager->SetIsEmpty(fileName, false);
+    if (result) {
+      // notify that file has a written object
+      fileManager->SetIsEmpty(fileName, false);
+    }
 
     Message(G4Analysis::kVL3, "write", G4Analysis::GetHnType<HT>(),
       name + " in the " + fileKind + " file " + fileName);
@@ -90,10 +90,17 @@ G4bool G4ToolsAnalysisManager::WriteT(const std::vector<HT*>& htVector,
 
 //_____________________________________________________________________________
 inline
+G4bool G4ToolsAnalysisManager::IsOpenFileImpl() const
+{
+  return fVFileManager->IsOpenFile();
+}
+
+//_____________________________________________________________________________
+inline
 tools::histo::h1d*  G4ToolsAnalysisManager::GetH1(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const
 {
-  return fH1Manager->GetH1(id, warn, onlyIfActive);
+  return fH1Manager->GetT(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -101,7 +108,7 @@ inline
 tools::histo::h2d*  G4ToolsAnalysisManager::GetH2(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const
 {
-  return fH2Manager->GetH2(id, warn, onlyIfActive);
+  return fH2Manager->GetT(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -109,7 +116,7 @@ inline
 tools::histo::h3d*  G4ToolsAnalysisManager::GetH3(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const
 {
-  return fH3Manager->GetH3(id, warn, onlyIfActive);
+  return fH3Manager->GetT(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -117,7 +124,7 @@ inline
 tools::histo::p1d*  G4ToolsAnalysisManager::GetP1(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const
 {
-  return fP1Manager->GetP1(id, warn, onlyIfActive);
+  return fP1Manager->GetT(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -125,21 +132,21 @@ inline
 tools::histo::p2d*  G4ToolsAnalysisManager::GetP2(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const
 {
-  return fP2Manager->GetP2(id, warn, onlyIfActive);
+  return fP2Manager->GetT(id, warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h1d*>::iterator G4ToolsAnalysisManager::BeginH1()
 {
-  return fH1Manager->BeginH1();
+  return fH1Manager->BeginT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h1d*>::iterator G4ToolsAnalysisManager::EndH1()
 {
-  return fH1Manager->EndH1();
+  return fH1Manager->EndT();
 }
 
 //_____________________________________________________________________________
@@ -147,7 +154,7 @@ inline
 std::vector<tools::histo::h1d*>::const_iterator
 G4ToolsAnalysisManager::BeginConstH1() const
 {
-  return fH1Manager->BeginConstH1();
+  return fH1Manager->BeginConstT();
 }
 
 //_____________________________________________________________________________
@@ -155,21 +162,21 @@ inline
 std::vector<tools::histo::h1d*>::const_iterator
 G4ToolsAnalysisManager::EndConstH1() const
 {
-  return fH1Manager->EndConstH1();
+  return fH1Manager->EndConstT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h2d*>::iterator G4ToolsAnalysisManager::BeginH2()
 {
-  return fH2Manager->BeginH2();
+  return fH2Manager->BeginT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h2d*>::iterator G4ToolsAnalysisManager::EndH2()
 {
-  return fH2Manager->EndH2();
+  return fH2Manager->EndT();
 }
 
 //_____________________________________________________________________________
@@ -177,7 +184,7 @@ inline
 std::vector<tools::histo::h2d*>::const_iterator
 G4ToolsAnalysisManager::BeginConstH2() const
 {
-  return fH2Manager->BeginConstH2();
+  return fH2Manager->BeginConstT();
 }
 
 //_____________________________________________________________________________
@@ -185,21 +192,21 @@ inline
 std::vector<tools::histo::h2d*>::const_iterator
 G4ToolsAnalysisManager::EndConstH2() const
 {
-  return fH2Manager->EndConstH2();
+  return fH2Manager->EndConstT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h3d*>::iterator G4ToolsAnalysisManager::BeginH3()
 {
-  return fH3Manager->BeginH3();
+  return fH3Manager->BeginT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::h3d*>::iterator G4ToolsAnalysisManager::EndH3()
 {
-  return fH3Manager->EndH3();
+  return fH3Manager->EndT();
 }
 
 //_____________________________________________________________________________
@@ -207,7 +214,7 @@ inline
 std::vector<tools::histo::h3d*>::const_iterator
 G4ToolsAnalysisManager::BeginConstH3() const
 {
-  return fH3Manager->BeginConstH3();
+  return fH3Manager->BeginConstT();
 }
 
 //_____________________________________________________________________________
@@ -215,21 +222,21 @@ inline
 std::vector<tools::histo::h3d*>::const_iterator
 G4ToolsAnalysisManager::EndConstH3() const
 {
-  return fH3Manager->EndConstH3();
+  return fH3Manager->EndConstT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::p1d*>::iterator G4ToolsAnalysisManager::BeginP1()
 {
-  return fP1Manager->BeginP1();
+  return fP1Manager->BeginT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::p1d*>::iterator G4ToolsAnalysisManager::EndP1()
 {
-  return fP1Manager->EndP1();
+  return fP1Manager->EndT();
 }
 
 //_____________________________________________________________________________
@@ -237,7 +244,7 @@ inline
 std::vector<tools::histo::p1d*>::const_iterator
 G4ToolsAnalysisManager::BeginConstP1() const
 {
-  return fP1Manager->BeginConstP1();
+  return fP1Manager->BeginConstT();
 }
 
 //_____________________________________________________________________________
@@ -245,21 +252,21 @@ inline
 std::vector<tools::histo::p1d*>::const_iterator
 G4ToolsAnalysisManager::EndConstP1() const
 {
-  return fP1Manager->EndConstP1();
+  return fP1Manager->EndConstT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::p2d*>::iterator G4ToolsAnalysisManager::BeginP2()
 {
-  return fP2Manager->BeginP2();
+  return fP2Manager->BeginT();
 }
 
 //_____________________________________________________________________________
 inline
 std::vector<tools::histo::p2d*>::iterator G4ToolsAnalysisManager::EndP2()
 {
-  return fP2Manager->EndP2();
+  return fP2Manager->EndT();
 }
 
 //_____________________________________________________________________________
@@ -267,7 +274,7 @@ inline
 std::vector<tools::histo::p2d*>::const_iterator
 G4ToolsAnalysisManager::BeginConstP2() const
 {
-  return fP2Manager->BeginConstP2();
+  return fP2Manager->BeginConstT();
 }
 
 //_____________________________________________________________________________
@@ -275,6 +282,5 @@ inline
 std::vector<tools::histo::p2d*>::const_iterator
 G4ToolsAnalysisManager::EndConstP2() const
 {
-  return fP2Manager->EndConstP2();
+  return fP2Manager->EndConstT();
 }
-

@@ -12,7 +12,6 @@ geant4_add_module(G4detector
     G4SDStructure.hh
     G4SDmessenger.hh
     G4SensitiveVolumeList.hh
-    G4SensitiveVolumeList.icc
     G4TrackLogger.hh
     G4TScoreHistFiller.hh
     G4TScoreHistFiller.icc

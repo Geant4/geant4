@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -47,18 +46,29 @@
 
 class G4Step;
 
-class GammaRayTelDummySD : public G4VSensitiveDetector
-{
+class [[deprecated]] GammaRayTelDummySD: public G4VSensitiveDetector {
 public:
-  GammaRayTelDummySD(G4String name):G4VSensitiveDetector(name){};
-  ~GammaRayTelDummySD() {};
-  
-  void Initialize(G4HCofThisEvent* ) {};
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
-  void EndOfEvent(G4HCofThisEvent*) {};
-  void clear() {};
-  void DrawAll() {};
-  void PrintAll() {};
-};
+    explicit GammaRayTelDummySD(G4String name) : G4VSensitiveDetector(name) {
+	}
 
+	~GammaRayTelDummySD() override;
+
+	void Initialize(G4HCofThisEvent *collection);
+
+	auto ProcessHits(G4Step *step, G4TouchableHistory *history) -> G4bool {
+		return false;
+	}
+
+	void EndOfEvent(G4HCofThisEvent *collection) {
+	}
+
+	void clear() {
+	}
+
+	void DrawAll() {
+	}
+
+	void PrintAll() {
+	}
+};
 #endif

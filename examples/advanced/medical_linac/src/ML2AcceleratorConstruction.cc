@@ -192,10 +192,9 @@ G4RotationMatrix * CML2AcceleratorConstruction::rotateAccelerator(G4double angle
 }
 G4String CML2AcceleratorConstruction::getCurrentRotationString()
 {
-	char cR[5];
 	G4int cRI=(G4int)((currentRotationX/deg)+.5);
-	sprintf(cR,"%d",cRI);
-	G4String rotationName=G4String(cR);
+  G4String rotationName=std::to_string(cRI);
+
 	if (bRotate90Y)
 	{rotationName="_Ro90Y"+rotationName;}
 	else

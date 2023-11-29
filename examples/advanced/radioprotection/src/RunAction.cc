@@ -35,20 +35,22 @@
 #include "G4Run.hh"
 
 #ifdef ANALYSIS_USE
-RunAction::RunAction(AnalysisManager* analysis)
+RunAction::RunAction(AnalysisManager* analysis, DetectorMessenger* detector)
 { 
 
   analysisMan = analysis;
+  detectorMess = detector;
 
 }
 #else
-RunAction::RunAction()
-{ }
+RunAction::RunAction(DetectorMessenger* detector)
+{
+   detectorMess = detector;
+}
 #endif
 
 RunAction::~RunAction()
-{
-}
+{ }
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -56,9 +58,30 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << run_number << " start." << G4endl;
 
 #ifdef ANALYSIS_USE
+  G4bool additionalOutput;
+  G4String detectorType = detectorMess -> GetDetectorType();
+  if( detectorType == "DiamondTelescope" ) additionalOutput = true;
+  else additionalOutput = false;
+  
   // Create ROOT file, histograms and ntuple
-  analysisMan -> book();
-#endif 
+  analysisMan -> book(additionalOutput);
+#else
+  G4cout << "Output to file disabled: no file will be generated. "
+  << "To enable it, re-run cmake with the -DWITH_ANALYSIS_USE=ON flag." << G4endl;
+#endif
+  
+  // check if there are pending changes in the geometry
+  if( detectorMess -> AreTherePendingChanges() )
+  {
+    G4cout << "WARNING: pending changes to the geometry found during BeginOfRunAction. " 
+    << "These will be ignored during the current run. "
+    << "Use /geometrySetup/applyChanges if you want to apply them in your next run." << G4endl;
+  }
+  
+  // print the current geometry setup
+  G4cout << "Simulating the " << detectorMess->GetDetectorType() << " detector "
+  << "with dimensions: " << detectorMess->GetDetectorSizeWidth()/um << " um width, "
+  << detectorMess->GetDetectorSizeThickness()/um << " um thickness." << G4endl;
 }
 
 void RunAction::EndOfRunAction(const G4Run* aRun)

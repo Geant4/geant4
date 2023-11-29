@@ -197,8 +197,6 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
   G4double ds;
   G4double dmax;
 
-  G4int trials = 0;
-
   // find table index
   G4int index = G4int(std::log10(Ek/MeV)*100) - index_min;
   if(index > index_max) { index = index_max; }
@@ -210,7 +208,6 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
 
   do{
     // generate k accordimg to std::pow(k,-b)
-    trials++;
 
     // normalization constant
     //  cte1 = (1-b)/(std::pow(kmax,(1-b))-std::pow(kmin2,(1-b)));

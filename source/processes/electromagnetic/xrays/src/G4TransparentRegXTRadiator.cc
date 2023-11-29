@@ -47,7 +47,7 @@ G4TransparentRegXTRadiator::G4TransparentRegXTRadiator(
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator() {}
+G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator() = default;
 
 ///////////////////////////////////////////////////////////////////////////
 void G4TransparentRegXTRadiator::ProcessDescription(std::ostream& out) const

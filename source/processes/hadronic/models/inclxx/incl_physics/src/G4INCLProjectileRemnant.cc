@@ -338,7 +338,7 @@ namespace G4INCL {
     // energies.
     // For the last nucleon, return 0 so that the algorithm will just put it on
     // shell.
-    const unsigned theNewA = levels.size();
+    const std::size_t theNewA = levels.size();
 // assert(theNewA>0);
     if(theNewA==1)
       return 0.;
@@ -347,8 +347,8 @@ namespace G4INCL {
 
     // Compute the sum of the presently occupied energy levels
     const G4double excitedState = std::accumulate(
-        levels.begin(),
-        levels.end(),
+        levels.cbegin(),
+        levels.cend(),
         0.);
 
     return excitedState-groundState;

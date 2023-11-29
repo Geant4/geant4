@@ -27,7 +27,6 @@
 /// \brief Definition of the NeutronHPphysics class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef NeutronHPphysics_h
@@ -44,17 +43,17 @@ class NeutronHPphysics : public G4VPhysicsConstructor
 {
   public:
     NeutronHPphysics(const G4String& name="neutron");
-   ~NeutronHPphysics();
+   ~NeutronHPphysics() override;
 
   public:
     void ConstructParticle() override { };
-    void ConstructProcess() override;
+    void ConstructProcess()  override;
     
   private:
     void DefineCommands();
       
-    G4bool              fThermal;
-    G4GenericMessenger* fMessenger;
+    G4bool              fThermal = true;
+    G4GenericMessenger* fMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

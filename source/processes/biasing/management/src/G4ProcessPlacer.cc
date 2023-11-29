@@ -223,13 +223,13 @@ void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
     G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidArgument",
                 FatalException, "NULL pointer to process-vector !");
   }
-  size_t len = processVec->length();
+  G4int len = (G4int)processVec->length();
   if (len==0)
   {
     G4Exception("G4ProcessPlacer::G4ProcessPlacer()", "InvalidSetup",
                 FatalException, "Length of process-vector is zero !");
   }
-  for (size_t i=0; i<len; i++)
+  for (G4int i=0; i<len; ++i)
   {
     G4VProcess *p = (*processVec)[i];
     if (p)

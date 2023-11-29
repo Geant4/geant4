@@ -1,20 +1,88 @@
--------------------------------------------------------------------
+# Category geom-specific History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                      Sub-Category History file
-                      -------------------------
-This file should be used by G4 developers and category coordinators
-to briefly summarize all major modifications introduced in the code
-and keep track of all directory-tags.
-It DOES NOT substitute the log-message one should put at every
-committal in the source repository !
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2023-06-16 Stephan Hageboeck (geom-specific-V11-01-05)
+- Fix an uninitialised value in G4VCSGfaceted::SurfaceNormal().
+
+## 2023-06-12 Gabriele Cosmo (geom-specific-V11-01-04)
+- Use const iterator in G4Voxelizer::GetPointVoxel().
+- Fixed use of index in G4Tet::GetPointOnSurface().
+
+## 2023-05-10 Gabriele Cosmo (geom-specific-V11-01-03)
+- Applied clang-tidy fixes (readability, modernization, performance, ...).
+
+## 2023-03-20 Gabriele Cosmo (geom-specific-V11-01-02)
+- Fixed more potential uninitialised values in G4PolyconeSide,
+  G4SolidExtentList and G4VTwistSurface.
+
+## 2023-03-13 Gabriele Cosmo (geom-specific-V11-01-01)
+- Fixed potential uninitialised value for boundary type in
+  G4VTwistSurface::GetBoundaryAtPZ().
+
+## 2023-01-02 Evgueni Tcherniaev (geom-specific-V11-01-00)
+- G4QuadrangularFacet: Fixed warning message
+
+## 2022-11-10 Gabriele Cosmo (geom-specific-V11-00-10)
+- Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
+
+## 2022-10-05 Gabriele Cosmo (geom-specific-V11-00-09)
+- Fixed compilation warnings in Intel/icx compiler for variables set
+  but never used.
+
+## 2022-04-03 Evgueni Tcherniaev (geom-specific-V11-00-08)
+- G4GenericTrap.cc, G4UGenericTrap.cc, G4UExtrudedSolid.cc,
+  G4TessellatedSolid.cc, G4TessellatedSolid.cc:
+  revision of CreatePolyhedron()
+
+## 2022-02-04 Evgueni Tcherniaev (geom-specific-V11-00-07)
+- G4VTwistedFaceted: used numerical evaluation of a single
+  integral to calculate lateral face surface area
+
+## 2022-02-01 Evgueni Tcherniaev (geom-specific-V11-00-06)
+- G4ExtrudedSolid, G4UExtrudedSolid: added default values for
+  parameters in the constructor with two z-sections
+- G4ExtrudedSolid::ZSection, G4UExtrudedSolid::ZSection:
+  added default constructor
+
+## 2022-01-26 Evgueni Tcherniaev (geom-specific-V11-00-05)
+- G4GenericTrap::GetCubicVolume(): calculation of volume
+  using analytical expression; removed private function
+  GetFaceCubicVolume();
+- G4GenericTrap::GetSurfaceArea(): improved calculation
+  of the area of lateral faces; private functions
+  GetFaceSurfaceArea(), GetTwistedFaceSurfaceArea()
+  replaced with private function GetLateralFaceArea()
+
+## 2022-01-21 Evgueni Tcherniaev (geom-specific-V11-00-04)
+- G4Ellipsoid::LateralSurfaceArea(): Enhanced calculation of
+  the lateral surface area
+
+## 2022-01-11 Evgueni Tcherniaev (geom-specific-V11-00-03)
+- G4VTwistedFaceted: fCubicVolume, fSurfaceArea made protected,
+  GetCubicVolume(), GetSurfaceArea() moved to *.cc
+- G4VTwistedFaceted, G4TwistedBox, G4TwistedTrd: optimized
+  calculation of volume and surface area
+
+## 2022-01-06 Evgueni Tcherniaev (geom-specific-V11-00-02)
+- G4TwistedTubs: Implemented GetSurfaceArea() based on
+  analytical expressions; added private functions
+  GetLateralArea() and GetPhiCutArea()
+
+## 2021-12-19 Evgueni Tcherniaev (geom-specific-V11-00-01)
+- G4Hype: Used analytical expression in GetCubicVolume()
+  and GetSurfaceArea()
+
+## 2021-12-10 Ben Morgan (geom-specific-V11-00-00)
+- Change to new Markdown History format
+
+---
+
+# History entries prior to 11.0
 
 03-December-2021 E.Tcherniaev      (geom-specific-V10-07-13)
 - G4TwistedTubs: Accurate calculation of the bounding box in

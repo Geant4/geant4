@@ -45,14 +45,7 @@
 class G4TextPPRetriever: public G4VParticlePropertyRetriever
 {
  public:
-  //constructors
-  G4TextPPRetriever();
-  
-  //destructor
-  virtual ~G4TextPPRetriever();
-  
- public:
-  virtual void Retrieve(const G4String& option="");
+  void Retrieve(const G4String& option="") override;
 
  protected:
   void SparseOption(const G4String& option);

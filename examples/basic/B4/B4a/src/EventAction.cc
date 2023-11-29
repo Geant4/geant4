@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-/// \file EventAction.cc
+/// \file B4/B4a/src/EventAction.cc
 /// \brief Implementation of the B4a::EventAction class
 
 #include "EventAction.hh"
@@ -43,16 +43,6 @@ namespace B4a
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void EventAction::BeginOfEventAction(const G4Event* /*event*/)
 {
   // initialisation per event
@@ -66,9 +56,6 @@ void EventAction::BeginOfEventAction(const G4Event* /*event*/)
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
-  // Accumulate statistics
-  //
-
   // get analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
 
@@ -90,8 +77,6 @@ void EventAction::EndOfEventAction(const G4Event* event)
   auto eventID = event->GetEventID();
   auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
-    G4cout << "---> End of event: " << eventID << G4endl;
-
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
                                         << G4BestUnit(fEnergyAbs,"Energy")
@@ -103,9 +88,11 @@ void EventAction::EndOfEventAction(const G4Event* event)
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(fTrackLGap,"Length")
        << G4endl;
+       
+    G4cout << "--> End of event " << eventID << "\n" << G4endl;       
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-}
+} 

@@ -49,7 +49,7 @@ class G4PrimaryTransformer
   public:
 
     G4PrimaryTransformer();
-    virtual ~G4PrimaryTransformer();
+    virtual ~G4PrimaryTransformer() = default;
     
     G4TrackVector* GimmePrimaries(G4Event* anEvent, G4int trackIDCounter=0);
     void CheckUnknown();

@@ -41,7 +41,7 @@ G4ThreadLocal G4int G4ScoringManager::replicaLevel = 3;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {
-  if(!fSManager)
+  if(fSManager == nullptr)
   {
     fSManager = new G4ScoringManager;
   }
@@ -68,11 +68,8 @@ G4ScoringManager::G4ScoringManager()
 }
 
 G4ScoringManager::~G4ScoringManager()
-{
-  if(writer)
-  {
-    delete writer;
-  }
+{ 
+  delete writer;
   delete fDefaultLinearColorMap;
   delete fColorMapDict;
   delete fQuantityMessenger;
@@ -86,7 +83,7 @@ G4int G4ScoringManager::GetReplicaLevel() { return replicaLevel; }
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
   auto sm = FindMesh(map);
-  if(!sm)
+  if(sm == nullptr)
     return;
   if(verboseLevel > 9)
   {
@@ -124,7 +121,7 @@ G4VScoringMesh* G4ScoringManager::FindMesh(const G4String& wName)
     if(msh->GetWorldName() == wName)
       return msh;
   }
-  if(!sm && verboseLevel > 9)
+  if((sm == nullptr) && verboseLevel > 9)
   {
     G4cout << "WARNING : G4ScoringManager::FindMesh() --- <" << wName
            << "> is not found. Null returned." << G4endl;
@@ -151,10 +148,10 @@ void G4ScoringManager::DrawMesh(const G4String& meshName,
                                 const G4String& colorMapName, G4int axflg)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
-  if(mesh)
+  if(mesh != nullptr)
   {
     G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
-    if(!colorMap)
+    if(colorMap == nullptr)
     {
       G4cerr << "WARNING : Score color map <" << colorMapName
              << "> is not found. Default linear color map is used." << G4endl;
@@ -174,10 +171,10 @@ void G4ScoringManager::DrawMesh(const G4String& meshName,
                                 G4int iColumn, const G4String& colorMapName)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
-  if(mesh)
+  if(mesh != nullptr)
   {
     G4VScoreColorMap* colorMap = GetScoreColorMap(colorMapName);
-    if(!colorMap)
+    if(colorMap == nullptr)
     {
       G4cerr << "WARNING : Score color map <" << colorMapName
              << "> is not found. Default linear color map is used." << G4endl;
@@ -198,7 +195,7 @@ void G4ScoringManager::DumpQuantityToFile(const G4String& meshName,
                                           const G4String& option)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
-  if(mesh)
+  if(mesh != nullptr)
   {
     writer->SetScoringMesh(mesh);
     writer->DumpQuantityToFile(psName, fileName, option);
@@ -215,7 +212,7 @@ void G4ScoringManager::DumpAllQuantitiesToFile(const G4String& meshName,
                                                const G4String& option)
 {
   G4VScoringMesh* mesh = FindMesh(meshName);
-  if(mesh)
+  if(mesh != nullptr)
   {
     writer->SetScoringMesh(mesh);
     writer->DumpAllQuantitiesToFile(fileName, option);
@@ -229,7 +226,7 @@ void G4ScoringManager::DumpAllQuantitiesToFile(const G4String& meshName,
 
 void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
 {
-  if(fColorMapDict->find(colorMap->GetName()) != fColorMapDict->end())
+  if(fColorMapDict->find(colorMap->GetName()) != fColorMapDict->cend())
   {
     G4cerr << "ERROR : G4ScoringManager::RegisterScoreColorMap -- "
            << colorMap->GetName()
@@ -243,8 +240,8 @@ void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
 
 G4VScoreColorMap* G4ScoringManager::GetScoreColorMap(const G4String& mapName)
 {
-  ColorMapDictItr mItr = fColorMapDict->find(mapName);
-  if(mItr == fColorMapDict->end())
+  auto mItr = fColorMapDict->find(mapName);
+  if(mItr == fColorMapDict->cend())
   {
     return nullptr;
   }
@@ -256,8 +253,8 @@ void G4ScoringManager::ListScoreColorMaps()
   G4cout << "Registered Score Color Maps "
             "-------------------------------------------------------"
          << G4endl;
-  ColorMapDictItr mItr = fColorMapDict->begin();
-  for(; mItr != fColorMapDict->end(); mItr++)
+  auto mItr = fColorMapDict->cbegin();
+  for(; mItr != fColorMapDict->cend(); ++mItr)
   {
     G4cout << "   " << mItr->first;
   }
@@ -266,7 +263,7 @@ void G4ScoringManager::ListScoreColorMaps()
 
 void G4ScoringManager::Merge(const G4ScoringManager* mgr)
 {
-  for(size_t i = 0; i < GetNumberOfMesh(); i++)
+  for(G4int i = 0; i < (G4int)GetNumberOfMesh(); ++i)
   {
     G4VScoringMesh* fMesh  = GetMesh(i);
     G4VScoringMesh* scMesh = mgr->GetMesh(i);

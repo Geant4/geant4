@@ -43,12 +43,12 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
   SteppingAction(DetectorConstruction*);
-  virtual ~SteppingAction();
+ ~SteppingAction() override = default;
 
-  virtual void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*) override;
   
 private:
-  DetectorConstruction* fDetector;
+  DetectorConstruction* fDetector = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
