@@ -45,7 +45,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
+F06PrimaryGeneratorAction::F06PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);

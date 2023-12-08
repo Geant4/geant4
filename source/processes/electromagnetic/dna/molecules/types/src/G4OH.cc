@@ -40,16 +40,16 @@
 // ######################################################################
 // ###                         Hydroxyl                               ###
 // ######################################################################
-G4OH* G4OH::theInstance = 0;
+G4OH* G4OH::theInstance = nullptr;
 
 G4OH* G4OH::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "OH";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     // create molecule
     //

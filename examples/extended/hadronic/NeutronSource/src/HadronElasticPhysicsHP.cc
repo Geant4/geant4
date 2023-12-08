@@ -46,8 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HadronElasticPhysicsHP::HadronElasticPhysicsHP(G4int ver)
-: G4HadronElasticPhysics(ver),
-  fMessenger(nullptr), fThermal(false)   
+: G4HadronElasticPhysics(ver)
 {
   // define commands for this class
   DefineCommands();    

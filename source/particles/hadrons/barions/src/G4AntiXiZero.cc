@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,38 +33,37 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiXiZero.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                           AntiXiZero                           ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4AntiXiZero* G4AntiXiZero::theInstance = nullptr;
 
 G4AntiXiZero* G4AntiXiZero::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_xi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity   
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+
+    // clang-format off
     anInstance = new G4ParticleDefinition(
                  name,     1.31486*GeV,  2.27e-12*MeV,         0.0,
                     1,              +1,             0,
@@ -75,36 +71,36 @@ G4AntiXiZero* G4AntiXiZero::Definition()
              "baryon",               0,            -1,       -3322,
                 false,        0.290*ns,          nullptr,
                 false,       "xi");
+    // clang-format on
 
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 1.250 * mN);
- 
-    //create Decay Table 
-    auto  table = new G4DecayTable();
-    
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(1.250 * mN);
+
+    // create Decay Table
+    auto table = new G4DecayTable();
+
     // create decay channels
-    auto  mode = new G4VDecayChannel*[1];
+    auto mode = new G4VDecayChannel*[1];
     // anti_xi0 -> anti_lambda + pi0
-    mode[0] = new G4PhaseSpaceDecayChannel("anti_xi0",1.000,2,"anti_lambda","pi0");
-    
-    for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-    delete [] mode;
-    
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_xi0", 1.000, 2, "anti_lambda", "pi0");
+
+    for (G4int index = 0; index < 1; index++)
+      table->Insert(mode[index]);
+    delete[] mode;
+
     anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4AntiXiZero*>(anInstance);
   return theInstance;
 }
 
-G4AntiXiZero*  G4AntiXiZero::AntiXiZeroDefinition()
-{ 
+G4AntiXiZero* G4AntiXiZero::AntiXiZeroDefinition()
+{
   return Definition();
 }
 
-G4AntiXiZero*  G4AntiXiZero::AntiXiZero()
-{ 
+G4AntiXiZero* G4AntiXiZero::AntiXiZero()
+{
   return Definition();
 }
-
-

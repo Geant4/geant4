@@ -22,29 +22,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #ifndef G4SimplePPReporter_h
 #define G4SimplePPReporter_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 #include "G4VParticlePropertyReporter.hh"
+#include "globals.hh"
 
-class G4SimplePPReporter: public G4VParticlePropertyReporter
+class G4SimplePPReporter : public G4VParticlePropertyReporter
 {
-public:
-  void Print(const G4String& option="") override;
+  public:
+    void Print(const G4String& option = "") override;
 };
-
 
 #endif

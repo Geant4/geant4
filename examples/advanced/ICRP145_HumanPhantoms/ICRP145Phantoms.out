@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -252,6 +252,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -291,12 +295,7 @@ Some /vis commands (optionally) take a string to specify colour.
    Phantom box position (max) 270.750 mm, 155.232 mm, 881.445 mm
    Number of tetrahedrons     8233413
 
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.7
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
 @@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
@@ -548,7 +547,7 @@ Auger electron emission enabled                   1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        31709791983.76459 y  
+Threshold for very long decay time at rest        1.00000 y  
 ======================================================================
 
 msc:  for alpha  SubType= 10
@@ -727,26 +726,25 @@ CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
 
 =======================================================
 ======       ParticleHP Physics Parameters     ========
 =======================================================
- UseOnlyPhotoEvaporation ? 0
- SkipMissingIsotopes ?     0
- NeglectDoppler ?          0
- DoNotAdjustFinalState ?   0
- ProduceFissionFragments ? 0
- UseWendtFissionModel ?    0
- UseNRESP71Model ?         0
- UseDBRC ?                 0
+ Use only photo-evaporation      0
+ Skip missing isotopes           0
+ Neglect Doppler                 0
+ Do not adjust final state       0
+ Produce fission fragments       0
+ Use WendtFissionModel           0
+ Use NRESP71Model                0
+ Use DBRC                        0
+ PHP use Poisson                 0
+ PHP check                       1
+ CHECK HP NAMES                  0
+ Enable DEBUG                    0
 =======================================================
 
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -811,411 +809,254 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=0.000000 eV  Emax=100.000000 TeV
-======================================================================
-======          Radioactive Decay Physics Parameters           =======
-======================================================================
-min MeanLife (from G4NuclideTable)                1.00000 ns 
-Max life time (from G4DeexPrecoParameters)        1000.00000 ps 
-Internal e- conversion flag                       1
-Stored internal conversion coefficients           1
-Enabled atomic relaxation mode                    1
-Enable correlated gamma emission                  0
-Max 2J for sampling of angular correlations       10
-Atomic de-excitation enabled                      1
-Auger electron emission enabled                   1
-Check EM cuts disabled for atomic de-excitation   1
-Use Bearden atomic level energies                 0
-Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        31709791983.76459 y  
-======================================================================
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-
   Process: ionElastic
         Model:          NNDiffuseElastic: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
         Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
-  Process: RadioactiveDecay
-
-  Process: RadioactiveDecay
-
----------------------------------------------------
+  Process: Radioactivation
+-----------------------------------------------------------------------
                            Hadronic Processes for He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
         Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
         Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
         Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_He3Inelastic
         Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
         Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_alphaInelastic
         Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
         Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-------------------------------------------------------------------------
                            Hadronic Processes for anti_hypertriton
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: anti_lambdaInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 0.000000 eV  ---> 25.000000 GeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_neutron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.100000 MeV
         Model:              AntiAElastic: 100.000000 MeV ---> 100.000000 TeV
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_neutronInelastic
         Model:                      FTFP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_proton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.100000 MeV
         Model:              AntiAElastic: 100.000000 MeV ---> 100.000000 TeV
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_protonInelastic
         Model:                      FTFP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.100000 MeV/n
         Model:              AntiAElastic: 100.000000 MeV/n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: anti_tritonInelastic
         Model:                      FTFP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:              AntiAGlauber: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
         Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e+
-
   Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
      Cr_sctns:          ElectroNuclearXS: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e-
-
   Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
      Cr_sctns:          ElectroNuclearXS: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for gamma
-
   Process: photonNuclear
         Model:               GammaNPreco: 0.000000 eV  ---> 200.000000 MeV
         Model:            BertiniCascade: 199.000000 MeV ---> 6.000000 GeV
         Model:           TheoFSGenerator: 3.000000 GeV ---> 100.000000 TeV
      Cr_sctns:            GammaNuclearXS: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon+
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: kaon+Inelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: kaon-Inelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: lambdaInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu+
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu-
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0.000000 eV  ---> 1.000000 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: muMinusCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
-
   Process: hadElastic
         Model:             hElasticCHIPS: 19.500000 MeV ---> 100.000000 TeV
         Model:          NeutronHPElastic: 0.000000 eV  ---> 20.000000 MeV
      Cr_sctns:        NeutronHPElasticXS: 0.000000 eV  ---> 20.000000 MeV
-
      Cr_sctns:        G4NeutronElasticXS: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: neutronInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            Binary Cascade: 19.900000 MeV ---> 6.000000 GeV
         Model:        NeutronHPInelastic: 0.000000 eV  ---> 20.000000 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0.000000 eV  ---> 20.000000 MeV
-
      Cr_sctns:      G4NeutronInelasticXS: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: nCapture
         Model:          NeutronHPCapture: 0.000000 eV  ---> 20.000000 MeV
         Model:               nRadCapture: 19.900000 MeV ---> 100.000000 TeV
-     Cr_sctns:        NeutronHPCaptureXS: 0.000000 eV  ---> 20.000000 MeV
-
+     Cr_sctns:        NeutronHPCaptureXS: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: nFission
         Model:          NeutronHPFission: 0.000000 eV  ---> 20.000000 MeV
         Model:                G4LFission: 19.900000 MeV ---> 100.000000 TeV
      Cr_sctns:        NeutronHPFissionXS: 0.000000 eV  ---> 20.000000 MeV
-
      Cr_sctns:                    ZeroXS: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi+
-
   Process: hadElastic
         Model:           hElasticGlauber: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: pi+Inelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi-
-
   Process: hadElastic
         Model:           hElasticGlauber: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: pi-Inelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for proton
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: protonInelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            Binary Cascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0.000000 eV  ---> 100.000000 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for sigma-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV  ---> 100.000000 TeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: sigma-Inelastic
         Model:                      QGSP: 12.000000 GeV ---> 100.000000 TeV
         Model:                      FTFP: 3.000000 GeV ---> 25.000000 GeV
         Model:            BertiniCascade: 0.000000 eV  ---> 6.000000 GeV
      Cr_sctns:            Glauber-Gribov: 0.000000 eV  ---> 100.000000 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0.000000 eV /n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0.000000 eV /n ---> 6.000000 GeV/n
         Model:                      FTFP: 3.000000 GeV/n ---> 100.000000 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0.000000 eV  ---> 25.600000 PeV
-
-
-================================================================
+  Process: Radioactivation
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
@@ -1265,193 +1106,193 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run #0 / Number of event processed : 1000000
 =====================================================================
 organ ID|      Organ Mass (g)   Dose (Gy/source)     Relative Error
-     100|               8.683          5.087e-17              0.426
-     200|               8.683          3.443e-17              0.445
-     300|               0.022          4.113e-17              0.710
-     301|               0.090          5.589e-17              0.721
-     302|               0.028          6.791e-17              0.711
-     303|              11.291          5.730e-17              0.383
-     400|               0.141          5.214e-17              1.000
-     401|               0.390          4.388e-17              0.985
-     402|               0.098          1.744e-17              1.000
-     403|               0.049          2.332e-17              1.000
-     404|               0.098          1.965e-17              1.000
-     405|              28.808          1.485e-17              0.360
-     500|               0.086          1.503e-17              1.000
-     501|               0.024          0.000e+00              1.000
-     600|               0.023          9.872e-18              1.000
-     700|              10.364          3.217e-17              0.391
+     100|               8.683          2.422e-17              0.556
+     200|               8.683          2.773e-17              0.472
+     300|               0.022          3.663e-17              0.720
+     301|               0.090          6.460e-17              0.731
+     302|               0.028          6.385e-17              0.721
+     303|              11.291          5.794e-17              0.377
+     400|               0.141          1.120e-16              0.618
+     401|               0.390          8.655e-17              0.620
+     402|               0.098          5.745e-17              0.513
+     403|               0.049          8.356e-17              0.520
+     404|               0.098          7.863e-17              0.600
+     405|              28.808          4.134e-17              0.260
+     500|               0.086          7.946e-17              0.913
+     501|               0.024          3.193e-17              1.000
+     600|               0.023          0.000e+00              1.000
+     700|              10.364          1.738e-17              0.722
      800|               0.025          0.000e+00              1.000
      801|               0.031          0.000e+00              1.000
      802|               0.052          0.000e+00              1.000
-     803|               0.130          8.369e-17              1.000
-     804|               0.026          1.023e-16              1.000
-     805|               0.052          1.694e-17              0.853
-     806|               0.052          6.597e-18              1.000
-     807|               0.053          8.078e-18              1.000
-     808|               2.777          6.374e-18              1.000
-     900|               1.504          1.043e-17              1.000
-     910|               6.944          5.231e-17              0.515
-    1000|             193.197          3.110e-17              0.111
-    1010|             444.035          3.370e-17              0.071
-    1100|              32.463          3.490e-17              0.273
-    1110|             167.269          3.270e-17              0.116
-    1200|             108.832          2.882e-17              0.153
-    1210|             389.741          2.651e-17              0.085
-    1300|             159.196          2.707e-17              0.136
-    1400|             145.689          3.073e-17              0.138
-    1500|              34.244          3.552e-17              0.261
-    1600|             106.720          3.175e-17              0.154
-    1700|              50.890          3.444e-17              0.214
-    1800|              37.397          3.710e-17              0.247
-    1900|             273.409          2.610e-17              0.107
-    2000|             154.981          1.846e-17              0.155
-    2100|              22.996          1.765e-17              0.414
-    2200|             181.529          2.771e-17              0.123
-    2300|             118.927          3.254e-17              0.137
-    2400|              48.252          3.191e-17              0.225
-    2500|              45.057          3.614e-17              0.220
-    2600|             568.469          1.617e-17              0.091
-    2700|             382.073          1.634e-17              0.110
-    2800|             253.548          3.295e-17              0.099
-    2900|             413.232          3.024e-17              0.082
-    3000|              26.045          2.219e-17              0.299
-    3100|             307.761          3.308e-17              0.088
-    3200|             373.652          2.824e-17              0.092
-    3300|              82.179          2.818e-17              0.185
-    3400|             536.651          2.275e-17              0.080
-    3500|             621.408          2.734e-17              0.074
-    3600|              79.815          2.115e-17              0.228
-    3700|             234.882          1.968e-17              0.126
-    3800|             432.615          1.546e-17              0.112
-    3900|              76.877          2.852e-17              0.197
-    4000|              56.287          3.557e-17              0.207
-    4100|             402.595          3.187e-17              0.075
-    4200|             619.672          3.093e-17              0.065
-    4300|             368.797          2.279e-17              0.085
-    4400|             457.351          2.267e-17              0.085
-    4500|             223.333          1.734e-17              0.128
-    4600|             156.670          2.685e-17              0.136
-    4700|             103.943          1.917e-17              0.178
-    4800|              78.915          1.633e-17              0.240
-    4900|             289.440          1.521e-17              0.126
-    5000|             345.222          1.527e-17              0.111
-    5100|             188.047          2.216e-17              0.127
-    5200|             291.584          2.350e-17              0.105
-    5300|             110.320          2.062e-17              0.155
-    5400|             192.224          2.574e-17              0.122
-    5500|               9.991          6.223e-17              0.301
-    5600|              61.420          4.137e-17              0.181
-    5700|              56.331          3.668e-17              0.190
-    5800|              82.063          2.343e-17              0.190
-    6100|            1517.390          1.243e-17              0.071
-    6200|               7.769          5.465e-17              0.436
-    6300|               5.180          5.837e-17              0.578
-    6400|               7.769          1.133e-17              0.542
-    6500|               5.180          4.383e-17              0.625
-    6600|               0.039          0.000e+00              1.000
-    6601|               0.189          0.000e+00              1.000
-    6700|               1.113          2.725e-17              1.000
-    6701|               0.308          0.000e+00              1.000
-    6702|               6.122          1.828e-17              1.000
+     803|               0.130          3.583e-17              1.000
+     804|               0.026          0.000e+00              1.000
+     805|               0.052          0.000e+00              1.000
+     806|               0.052          0.000e+00              1.000
+     807|               0.053          0.000e+00              1.000
+     808|               2.777          2.932e-17              0.893
+     900|               1.504          3.167e-17              0.604
+     910|               6.944          3.027e-17              0.615
+    1000|             193.197          2.314e-17              0.126
+    1010|             444.035          3.551e-17              0.071
+    1100|              32.463          2.814e-17              0.292
+    1110|             167.269          3.172e-17              0.122
+    1200|             108.832          2.025e-17              0.161
+    1210|             389.741          2.711e-17              0.087
+    1300|             159.196          2.206e-17              0.136
+    1400|             145.689          2.787e-17              0.152
+    1500|              34.244          1.711e-17              0.364
+    1600|             106.720          2.604e-17              0.163
+    1700|              50.890          2.497e-17              0.222
+    1800|              37.397          2.496e-17              0.302
+    1900|             273.409          2.544e-17              0.107
+    2000|             154.981          2.305e-17              0.154
+    2100|              22.996          2.672e-17              0.334
+    2200|             181.529          3.190e-17              0.114
+    2300|             118.927          3.657e-17              0.138
+    2400|              48.252          3.008e-17              0.230
+    2500|              45.057          2.871e-17              0.251
+    2600|             568.469          1.728e-17              0.090
+    2700|             382.073          1.990e-17              0.101
+    2800|             253.548          3.144e-17              0.096
+    2900|             413.232          3.135e-17              0.080
+    3000|              26.045          3.804e-17              0.274
+    3100|             307.761          2.980e-17              0.090
+    3200|             373.652          2.812e-17              0.092
+    3300|              82.179          2.709e-17              0.192
+    3400|             536.651          2.485e-17              0.078
+    3500|             621.408          2.509e-17              0.074
+    3600|              79.815          2.805e-17              0.188
+    3700|             234.882          2.043e-17              0.122
+    3800|             432.615          1.912e-17              0.103
+    3900|              76.877          2.337e-17              0.200
+    4000|              56.287          2.823e-17              0.212
+    4100|             402.595          3.221e-17              0.072
+    4200|             619.672          3.197e-17              0.065
+    4300|             368.797          2.683e-17              0.080
+    4400|             457.351          2.382e-17              0.082
+    4500|             223.333          1.405e-17              0.137
+    4600|             156.670          1.827e-17              0.161
+    4700|             103.943          2.565e-17              0.161
+    4800|              78.915          3.092e-17              0.183
+    4900|             289.440          1.488e-17              0.124
+    5000|             345.222          1.915e-17              0.109
+    5100|             188.047          2.511e-17              0.118
+    5200|             291.584          2.382e-17              0.103
+    5300|             110.320          2.147e-17              0.168
+    5400|             192.224          2.880e-17              0.121
+    5500|               9.991          2.377e-17              0.415
+    5600|              61.420          4.888e-17              0.159
+    5700|              56.331          3.414e-17              0.201
+    5800|              82.063          1.867e-17              0.213
+    6100|            1517.390          1.500e-17              0.066
+    6200|               7.769          5.054e-17              0.515
+    6300|               5.180          2.671e-17              0.837
+    6400|               7.769          2.622e-17              0.551
+    6500|               5.180          4.736e-17              0.696
+    6600|               0.039          3.995e-16              1.000
+    6601|               0.189          2.218e-16              1.000
+    6700|               1.113          6.825e-18              0.965
+    6701|               0.308          2.024e-16              1.000
+    6702|               6.122          5.393e-18              0.718
     6800|               0.039          0.000e+00              1.000
     6801|               0.189          0.000e+00              1.000
     6900|               1.113          0.000e+00              1.000
     6901|               0.308          0.000e+00              1.000
-    6902|               6.122          6.690e-19              0.806
-    7000|              10.364          5.476e-17              0.296
-    7100|              58.000          4.325e-17              0.194
-    7200|               1.784          6.287e-17              0.440
-    7201|               1.193          3.283e-17              0.464
-    7202|               6.008          4.832e-17              0.289
-    7203|             185.286          3.330e-17              0.114
-    7300|             250.000          3.153e-17              0.103
-    7400|              14.547          3.000e-17              0.197
-    7401|               2.264          4.163e-17              0.228
-    7402|               5.692          2.949e-17              0.224
-    7403|             840.096          4.126e-17              0.049
-    7500|              53.337          3.163e-17              0.152
-    7501|             296.663          3.541e-17              0.084
-    7600|               3.071          1.221e-17              0.643
-    7601|               0.223          1.015e-17              0.596
-    7602|             116.634          4.053e-17              0.137
-    7700|              55.000          3.554e-17              0.201
-    7800|               3.993          2.849e-17              0.546
-    7801|               0.289          4.005e-17              0.746
-    7802|              75.671          3.538e-17              0.174
-    7900|              95.000          3.714e-17              0.151
-    8000|               2.824          4.294e-17              0.415
-    8001|               0.205          1.092e-17              0.582
-    8002|              76.924          3.346e-17              0.158
-    8100|              40.000          5.038e-17              0.215
-    8200|               2.779          5.119e-17              0.500
-    8201|               0.203          3.138e-17              0.585
-    8202|             116.946          3.058e-17              0.142
-    8300|              35.000          3.132e-17              0.276
-    8400|               4.451          1.810e-17              0.474
-    8401|               0.324          2.485e-17              0.726
-    8402|              48.524          3.403e-17              0.226
-    8500|              75.000          4.092e-17              0.162
-    8600|              39.976          2.293e-17              0.286
-    8700|             385.839          3.305e-17              0.081
-    8800|             510.000          2.533e-17              0.082
-    8900|             162.338          2.957e-17              0.128
-    9000|              38.359          1.078e-17              0.381
-    9100|               7.652          5.535e-17              0.422
-    9200|             166.542          2.055e-17              0.143
-    9300|              39.362          1.469e-17              0.324
-    9400|               7.892          5.248e-17              0.452
-    9500|            2360.000          2.901e-17              0.038
-    9700|             545.877          2.244e-17              0.081
-    9900|             652.861          2.819e-17              0.068
-   10000|              15.949          1.779e-17              0.519
-   10100|              15.949          1.619e-17              0.463
-   10200|               5.510          3.959e-18              0.996
-   10300|             130.204          3.739e-17              0.126
-   10400|              11.019          6.558e-19              0.834
-   10500|              11.019          4.223e-17              0.448
-   10600|            1200.828          2.390e-17              0.057
-   10700|           14844.730          2.623e-17              0.016
-   10800|            2843.507          3.164e-17              0.032
-   10900|           10887.729          2.667e-17              0.019
-   11000|               1.919          3.722e-17              0.569
-   11001|               0.103          1.629e-17              0.655
-   11002|              49.783          2.537e-17              0.235
-   11003|              22.870          2.977e-17              0.291
-   11300|             173.631          2.747e-17              0.129
-   11400|               0.622          0.000e+00              1.000
-   11500|              17.618          2.754e-17              0.387
-   11600|             975.622          2.128e-17              0.064
-   11700|           11176.900          2.950e-17              0.016
-   11800|            1549.842          2.850e-17              0.044
-   11900|            4510.134          2.761e-17              0.027
-   12000|              44.045          2.533e-17              0.277
-   12100|              44.045          3.644e-17              0.233
-   12200|             259.230          2.009e-17              0.118
-   12201|               8.470          1.162e-17              0.336
-   12300|            1271.006          2.610e-17              0.046
-   12301|              38.418          1.558e-17              0.154
-   12400|             575.709          2.505e-17              0.069
-   12401|              18.843          1.507e-17              0.176
-   12500|            1259.982          2.308e-17              0.049
-   12501|              37.790          1.127e-17              0.144
-   12600|              37.952          1.367e-17              0.363
-   12700|             228.400          2.113e-17              0.128
-   12800|              50.727          2.511e-17              0.274
-   12801|               0.043          1.726e-17              1.000
-   12900|              18.617          5.549e-17              0.306
-   13000|              18.617          5.407e-17              0.305
-   13100|              25.909          1.894e-17              0.441
-   13200|              23.351          1.933e-17              0.425
-   13300|              20.993          2.558e-17              0.438
-   13301|              54.552          1.337e-17              0.308
-   13400|               3.109          6.587e-17              0.590
-   13500|               8.809          3.261e-17              0.513
-   13600|               7.773          3.282e-17              0.422
-   13700|              49.781          4.563e-17              0.176
-   13701|               1.318          3.889e-17              0.366
-   13800|             200.000          3.992e-17              0.101
-   14000|               0.140          3.014e-17              0.425
+    6902|               6.122          0.000e+00              1.000
+    7000|              10.364          3.594e-17              0.351
+    7100|              58.000          2.586e-17              0.213
+    7200|               1.784          2.939e-17              0.534
+    7201|               1.193          2.954e-17              0.585
+    7202|               6.008          2.521e-17              0.370
+    7203|             185.286          2.810e-17              0.119
+    7300|             250.000          3.064e-17              0.103
+    7400|              14.547          4.045e-17              0.190
+    7401|               2.264          3.277e-17              0.277
+    7402|               5.692          3.109e-17              0.208
+    7403|             840.096          3.461e-17              0.052
+    7500|              53.337          3.749e-17              0.149
+    7501|             296.663          3.493e-17              0.086
+    7600|               3.071          5.940e-17              0.435
+    7601|               0.223          4.283e-17              0.464
+    7602|             116.634          4.003e-17              0.134
+    7700|              55.000          4.338e-17              0.174
+    7800|               3.993          1.945e-17              0.496
+    7801|               0.289          1.970e-17              0.562
+    7802|              75.671          3.276e-17              0.177
+    7900|              95.000          3.089e-17              0.165
+    8000|               2.824          5.872e-17              0.384
+    8001|               0.205          3.904e-17              0.505
+    8002|              76.924          4.475e-17              0.155
+    8100|              40.000          5.249e-17              0.200
+    8200|               2.779          5.606e-17              0.508
+    8201|               0.203          6.527e-17              0.630
+    8202|             116.946          3.027e-17              0.145
+    8300|              35.000          4.024e-17              0.246
+    8400|               4.451          3.333e-17              0.394
+    8401|               0.324          2.707e-17              0.417
+    8402|              48.524          3.396e-17              0.216
+    8500|              75.000          3.793e-17              0.176
+    8600|              39.976          1.818e-17              0.309
+    8700|             385.839          2.972e-17              0.084
+    8800|             510.000          2.743e-17              0.079
+    8900|             162.338          2.554e-17              0.136
+    9000|              38.359          1.752e-17              0.336
+    9100|               7.652          2.196e-17              0.728
+    9200|             166.542          2.393e-17              0.130
+    9300|              39.362          2.402e-17              0.282
+    9400|               7.892          3.755e-17              0.568
+    9500|            2360.000          2.561e-17              0.040
+    9700|             545.877          2.553e-17              0.077
+    9900|             652.861          2.339e-17              0.074
+   10000|              15.949          2.699e-17              0.413
+   10100|              15.949          1.041e-17              0.466
+   10200|               5.510          1.660e-17              0.570
+   10300|             130.204          3.505e-17              0.125
+   10400|              11.019          3.075e-17              0.432
+   10500|              11.019          2.954e-17              0.547
+   10600|            1200.828          2.391e-17              0.056
+   10700|           14844.730          2.650e-17              0.016
+   10800|            2843.507          3.053e-17              0.032
+   10900|           10887.729          2.760e-17              0.018
+   11000|               1.919          1.286e-17              0.596
+   11001|               0.103          1.388e-17              0.904
+   11002|              49.783          1.936e-17              0.266
+   11003|              22.870          2.149e-17              0.371
+   11300|             173.631          3.290e-17              0.119
+   11400|               0.622          1.852e-17              0.974
+   11500|              17.618          4.374e-17              0.326
+   11600|             975.622          2.174e-17              0.063
+   11700|           11176.900          2.975e-17              0.016
+   11800|            1549.842          2.890e-17              0.043
+   11900|            4510.134          2.681e-17              0.027
+   12000|              44.045          1.480e-17              0.356
+   12100|              44.045          2.606e-17              0.292
+   12200|             259.230          1.439e-17              0.136
+   12201|               8.470          1.681e-17              0.305
+   12300|            1271.006          2.172e-17              0.049
+   12301|              38.418          1.171e-17              0.156
+   12400|             575.709          2.669e-17              0.067
+   12401|              18.843          1.954e-17              0.155
+   12500|            1259.982          2.518e-17              0.049
+   12501|              37.790          1.591e-17              0.149
+   12600|              37.952          1.460e-17              0.323
+   12700|             228.400          1.503e-17              0.146
+   12800|              50.727          2.016e-17              0.309
+   12801|               0.043          0.000e+00              1.000
+   12900|              18.617          2.163e-17              0.406
+   13000|              18.617          4.617e-17              0.326
+   13100|              25.909          1.265e-17              0.388
+   13200|              23.351          4.138e-17              0.299
+   13300|              20.993          1.222e-17              0.493
+   13301|              54.552          2.871e-17              0.226
+   13400|               3.109          2.423e-17              0.806
+   13500|               8.809          4.004e-17              0.450
+   13600|               7.773          6.183e-17              0.461
+   13700|              49.781          5.724e-17              0.172
+   13701|               1.318          4.167e-17              0.476
+   13800|             200.000          3.619e-17              0.106
+   14000|               0.140          3.904e-17              0.591
 =====================================================================
 
 Graphics systems deleted.

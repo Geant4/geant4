@@ -22,6 +22,7 @@ Very small changes by Stephane Chauvie in January 2008.
 Stephane Chauvie, Oct 2009: changed Physics list; changes in DICOM read. 
 Stephane Chauvie and Andrea Armando; June 2010 adapted for reading  whatever DICOM file
 Jonathan Madsen, Nov 2013: updated DICOM to utilize multithreading now available in Geant4.10
+Alexander Howard, Dec 2023: updated scorer to give correct voxel index for both regular and nested geometries
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@@                                     @@@
@@ -52,9 +53,6 @@ In the application the phantom is placed on a table.
  
 ---> 2a) Installation, OLD version:
 
- - A standard Geant4 example GNUmakefile is provided            
- - Compile it with 'make'/'gmake'
- 
  - A standard Geant4 example CMakeLists.txt is provided
  - Configure via cmake with 'cmake -DGeant4_DIR=/path_to_geant4_install/lib/Geant4-x.x.x /path/to/DICOM/source' then make
 
@@ -264,7 +262,7 @@ There are four possible ways in GEANT4 to treat the navigation in regular voxeli
 
 - The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 - Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
-- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below).
+- Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit scorer can be used for regular (see (10) below) and G4PSDoseDeposit3D for nested parameterisation (see (11) below).
 
 Obsolete option:
 - Use 1D optimisation in replica. It will be very slow because each time a track exits a voxel it has to loop to all other voxels in a 2D slide in order to locate which one it will enter.
@@ -292,7 +290,7 @@ by
 
 --->10) Calculating dose in phantom voxels for regular navigation
 
-As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
+As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit scorer can be used.
 
 It takes into account the fact that,  when the particle travels through the voxels it looses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
 The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length in what we will call the true step length) and the energy loss are correlated.
@@ -303,13 +301,18 @@ chosen. It is triggered at the method RegularDicomDetectorConstruction::Construc
 
 SetScorer(voxel_logic);
 
---->11) Output
+--->11) Calculating dose in phantom voxels for nested parameterisation
+
+For the nested parameterisation the geometry comprises replicas in X and Y which are then parameterised in Z. This means that to get the correct voxel idendification the replica depth has to be taken into account. The G4PSDoseDeposit3D scorers uses a fixed algorithm to calculate the voxel ID, according to the number
+of voxels in each axes and the associated replica depth. G4PSDoseDeposit3D("DoseDeposit", fNoVoxelsZ, fNoVoxelsY, fNoVoxelsX, 0, 2, 1) contains the number of voxels at the top level (0) and then two daughter levels down for the Y-voxels and one depth down for X.
+
+--->12) Output
 dicom.out is produced running the macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
 It is produced, as an example, with a compression value of 32
 
 
---->12) Partial phantom 
+--->13) Partial phantom 
 It is possible to create a partial phantom, that is the intersection of a phantom with a volume. You may define the volume with the command 
 
 /dicom/intersectWithUserVolume 0. 0. 0. 45.*deg 0. 0. TUBE 0. 150. 100.
@@ -322,7 +325,7 @@ Alternatively you can intersect the phantom with an existing Geant4 volume with 
 
 The job will create an ASCII file names "phantom.g4pdcm" containing the partial phantom. To read this file all what is needed is to set the enviromental variable DICOM_PARTIAL_PARAM to 1
 
---->13) Visualisation
+--->14) Visualisation
 
 The Geant4 drivers are not meant for visualizing millions of voxel and visualising the DICOM geometries can be very computationally demanding.
 The users may want to visualise each DICOM slice separately or use higher compression values when visualising a part of DICOM project.

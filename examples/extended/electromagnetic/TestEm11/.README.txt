@@ -164,10 +164,10 @@ Idle> exit
     - 8 : longitudinal energy profile (in MeV.cm2/g), as a function of x/r0
           where r0 is the range of the primary particle 
     - 9 : total energy leakage
-   - 10 : total energy : Edep + Eleak
-   - 11 : energy deposited in absorber 1
-   - 12 : energy deposited in absorber 2
-      ...etc........
+    - 10 : total energy : Edep + Eleak
+    - 11 : energy deposited in absorber 1
+    - 12 : energy deposited in absorber 2
+       ...etc........
       
    The histograms are managed by G4Analysis classes;
    The histos can be individually activated with the command :
@@ -182,7 +182,7 @@ Idle> exit
 \endverbatim
    
    It is possible to choose the format of the histogram file : root (default),
-   hbook, xml, csv, by using namespace in HistoManager.hh    
+   hdf5, xml, csv, by changing the default file type in HistoManager.cc
    
    It is also possible to print selected histograms on an ascii file:
 \verbatim

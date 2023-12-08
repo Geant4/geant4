@@ -32,6 +32,7 @@
 #include "G4UserEventAction.hh"  // for G4UserEventAction
 class G4Event;
 class Par04DetectorConstruction;
+class Par04ParallelFullWorld;
 
 /**
  * @brief Event action class for hits' analysis.
@@ -46,7 +47,7 @@ class Par04DetectorConstruction;
 class Par04EventAction : public G4UserEventAction
 {
  public:
-  Par04EventAction(Par04DetectorConstruction* aDetector);
+  Par04EventAction(Par04DetectorConstruction* aDetector, Par04ParallelFullWorld* aParallel);
   virtual ~Par04EventAction();
 
   /// Timer is started
@@ -57,15 +58,23 @@ class Par04EventAction : public G4UserEventAction
   inline std::vector<G4int>& GetCalRho() { return fCalRho; }
   inline std::vector<G4int>& GetCalPhi() { return fCalPhi; }
   inline std::vector<G4int>& GetCalZ() { return fCalZ; }
-
+  inline std::vector<G4double>& GetPhysicalCalEdep() { return fCalPhysicalEdep; }
+  inline std::vector<G4int>& GetPhysicalCalLayer() { return fCalPhysicalLayer; }
+  inline std::vector<G4int>& GetPhysicalCalSlice() { return fCalPhysicalSlice; }
+  inline std::vector<G4int>& GetPhysicalCalRow() { return fCalPhysicalRow; }
+  void StartTimer();
+  void StopTimer();
  private:
   /// ID of a hit collection to analyse
-  G4int fHitCollectionID;
-  /// Timer measurement
+  G4int fHitCollectionID = -1;
+  G4int fPhysicalFullHitCollectionID = -1;
+  G4int fPhysicalFastHitCollectionID = -1;
+  /// Timer measurement from Geant4
   G4Timer fTimer;
   /// Pointer to detector construction to retrieve (once) the detector
   /// dimensions and size of readout
   Par04DetectorConstruction* fDetector = nullptr;
+  Par04ParallelFullWorld* fParallel = nullptr;
   /// Size of cell along Z axis
   G4double fCellSizeZ = 0;
   /// Size of cell along radius of cylinder
@@ -78,6 +87,12 @@ class Par04EventAction : public G4UserEventAction
   G4int fCellNbPhi = 0;
   /// Number of readout cells along z axis
   G4int fCellNbZ = 0;
+  /// Number of physical readout layers
+  G4int fPhysicalNbLayers = 0;
+  /// Number of physical readout slices
+  G4int fPhysicalNbSlices = 0;
+  /// Number of physical readout rows
+  G4int fPhysicalNbRows = 0;
   /// Cell energy deposits to be stored in ntuple
   std::vector<G4double> fCalEdep;
   /// Cell ID of radius to be stored in ntuple
@@ -86,6 +101,14 @@ class Par04EventAction : public G4UserEventAction
   std::vector<G4int> fCalPhi;
   /// Cell ID of z axis to be stored in ntuple
   std::vector<G4int> fCalZ;
+  /// Physical cell energy deposits to be stored in ntuple
+  std::vector<G4double> fCalPhysicalEdep;
+  /// Physical layer ID to be stored in ntuple
+  std::vector<G4int> fCalPhysicalLayer;
+  /// Physical slice ID to be stored in ntuple
+  std::vector<G4int> fCalPhysicalSlice;
+  /// Physical row ID to be stored in ntuple
+  std::vector<G4int> fCalPhysicalRow;
 };
 
 #endif /* PAR04EVENTACTION_HH */

@@ -9,7 +9,7 @@ This example illustrates how to create a movie.
 
 See https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/Visualization/makingamovie.html#.
 
-A) USING `/vis/viewer/save` AND `/vis/viewer/interpolate`
+A) USING "/vis/viewer/save" AND "/vis/viewer/interpolate"
 =========================================================
 
 1. a. To see a pre-prepared example, start this example in interactive mode

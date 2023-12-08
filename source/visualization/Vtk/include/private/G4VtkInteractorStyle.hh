@@ -29,33 +29,46 @@
 #ifndef G4VTKINTERACTORSTYLE_HH
 #define G4VTKINTERACTORSTYLE_HH
 
+#include "G4ios.hh"
 #include "vtkInteractionStyleModule.h"  // For export macro
-#include "vtkInteractorStyleTrackballCamera.h"
+#include "vtkInteractorStyleMultiTouchCamera.h"
 #include <vtkObjectFactory.h>
 
 // Define interaction style
-class VTKINTERACTIONSTYLE_EXPORT G4VtkInteractorStyle : public vtkInteractorStyleTrackballCamera
+class VTKINTERACTIONSTYLE_EXPORT G4VtkInteractorStyle : public vtkInteractorStyleMultiTouchCamera
 {
   public:
     static G4VtkInteractorStyle* New();
-    vtkTypeMacro(G4VtkInteractorStyle, vtkInteractorStyleTrackballCamera)
+    vtkTypeMacro(G4VtkInteractorStyle, vtkInteractorStyleMultiTouchCamera)
 
-      void OnLeftButtonDown() override
+    void OnMouseMove() override
+    {
+      vtkInteractorStyleMultiTouchCamera::OnMouseMove();
+    }
+
+    void OnLeftButtonDown() override
     {
       // Forward events
-      vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+      vtkInteractorStyleMultiTouchCamera::OnLeftButtonDown();
+    }
+
+
+    void OnLeftButtonUp() override
+    {
+      // Forward events
+      vtkInteractorStyleMultiTouchCamera::OnLeftButtonUp();
     }
 
     void OnMiddleButtonDown() override
     {
       // Forward events
-      vtkInteractorStyleTrackballCamera::OnMiddleButtonDown();
+      vtkInteractorStyleMultiTouchCamera::OnMiddleButtonDown();
     }
 
     void OnRightButtonDown() override
     {
       // Forward events
-      vtkInteractorStyleTrackballCamera::OnRightButtonDown();
+      vtkInteractorStyleMultiTouchCamera::OnRightButtonDown();
     }
 };
 

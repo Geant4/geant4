@@ -99,4 +99,4 @@ geant4_add_module(G4baryons
     G4XibMinus.cc
     G4XibZero.cc)
 
-geant4_module_link_libraries(G4baryons PUBLIC G4partman G4globman)
+geant4_module_link_libraries(G4baryons PUBLIC G4partman PRIVATE G4globman)

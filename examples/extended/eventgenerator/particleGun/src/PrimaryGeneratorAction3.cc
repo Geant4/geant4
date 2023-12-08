@@ -59,11 +59,6 @@ PrimaryGeneratorAction3::PrimaryGeneratorAction3(G4ParticleGun* gun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction3::~PrimaryGeneratorAction3()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PrimaryGeneratorAction3::GeneratePrimaries(G4Event* anEvent)
 {
   //particle direction uniform around fNewUz axis

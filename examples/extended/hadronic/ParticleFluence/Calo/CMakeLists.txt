@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Calo)
 
 #----------------------------------------------------------------------------
@@ -39,12 +39,12 @@ target_link_libraries(Calo ${Geant4_LIBRARIES} )
 # directly there.
 #
 set(SCRIPTS
-  atlasEcal.g4
-  atlasFcal.g4
-  atlasHec.g4
-  atlasTileCal.g4
-  cmsEcal.g4
-  lhcbEcal.g4
+  atlasEcal.in
+  atlasFcal.in
+  atlasHec.in
+  atlasTileCal.in
+  cmsEcal.in
+  lhcbEcal.in
   )
 
 foreach(_script ${SCRIPTS})

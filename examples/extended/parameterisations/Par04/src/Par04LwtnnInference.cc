@@ -43,7 +43,8 @@ Par04LwtnnInference::Par04LwtnnInference(G4String modelPath)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04LwtnnInference::RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
+void Par04LwtnnInference::RunInference(std::vector<float> aGenVector,
+                                       std::vector<G4double>& aEnergies,
                                        int aSize)
 {
   // generation vector

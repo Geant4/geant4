@@ -45,8 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:G4VUserPrimaryGeneratorAction(),
- fDetector(det), fRndmBeam(0.), fTimeExposure(0.), fGunMessenger(nullptr)
+:fDetector(det)
 {
   fParticleGun  = new G4ParticleGun(1);
   SetDefaultKinematic();

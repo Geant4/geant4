@@ -23,23 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ScoreSplittingProcess
 //
+// Class description:
 //
+// This process is used to split the length and energy
+// of a step in a regular structure into sub-steps, and to
+// call the scorers for each sub-volume.
+// It invokes sensitive detectors assigned in the *mass* world.
 //
-//---------------------------------------------------------------
-//
-//  G4ScoreSplittingProcess.hh
-//
-//  Description:
-//    This process is used to split the length and energy
-//   of a step in a regular structure into sub-steps, and to
-//   call the scorers for each sub-volume.
-//    It invokes sensitive detectors assigned in the *mass*
-//   world.
-//
-//  Design and first implementation: J. Apostolakis / M.Asai 2010
-//---------------------------------------------------------------
-
+// Design and first implementation: J.Apostolakis, M.Asai - 2010
+//---------------------------------------------------------------------
 #ifndef G4ScoreSplittingProcess_h
 #define G4ScoreSplittingProcess_h 1
 
@@ -47,31 +41,19 @@
 #include "G4TouchableHandle.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
+
 class G4Step;
 class G4Navigator;
 class G4TransportationManager;
 class G4PathFinder;
-class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
 class G4EnergySplitter;
-
 class G4TouchableHistory;
-
-//------------------------------------------
-//
-//        G4ScoreSplittingProcess class
-//
-//------------------------------------------
-
-// Class Description:
 
 class G4ScoreSplittingProcess : public G4VProcess
 {
-  public:  // with description
-    //------------------------
-    // Constructor/Destructor
-    //------------------------
+  public:
 
     G4ScoreSplittingProcess(const G4String& processName = "ScoreSplittingProc",
                             G4ProcessType theType = fParameterisation);
@@ -109,10 +91,14 @@ class G4ScoreSplittingProcess : public G4VProcess
 
     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
+    void Verbose(const G4Step&) const;
+
   private:
+
     G4TouchableHistory* CreateTouchableForSubStep(G4int newVoxelNum, G4ThreeVector newPosition);
 
   private:
+
     void CopyStepStart(const G4Step& step);
 
     G4Step* fSplitStep;
@@ -121,9 +107,6 @@ class G4ScoreSplittingProcess : public G4VProcess
 
     G4VParticleChange dummyParticleChange;
     G4ParticleChange xParticleChange;
-
-    // G4TransportationManager* fTransportationManager;
-    // G4PathFinder*        fPathFinder;
 
     // -------------------------------
     // Touchables for the Split Step
@@ -136,12 +119,6 @@ class G4ScoreSplittingProcess : public G4VProcess
     G4TouchableHandle fFinalTouchableH;
 
     G4EnergySplitter* fpEnergySplitter;
-
-    // ******************************************************
-    //  For TESTS:
-    // ******************************************************
-  public:
-    void Verbose(const G4Step&) const;
 };
 
 #endif

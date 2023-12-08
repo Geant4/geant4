@@ -45,21 +45,7 @@
 #include "G4ChargedGeantino.hh"
 #include "G4SystemOfUnits.hh"
 
-///////////////////////////////////////////////////////////////////////////
-
-G4BlinePrimaryGeneratorAction::G4BlinePrimaryGeneratorAction()
-{
-  fUserPrimaryAction = 0;
-  fFirstPartOfBline = true;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-G4BlinePrimaryGeneratorAction::~G4BlinePrimaryGeneratorAction()
-{ 
-}
-
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -74,41 +60,41 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // For the first part of a bline the start position and time are defined
   // by using the USER primary action while for the second part the previous
   // values are taken.
-  
+
   if (fFirstPartOfBline)
   {
     // set the position and time defined by using the USER primary action
- 
-    G4Event* tmpEvent = new G4Event();    
+
+    auto  tmpEvent = new G4Event();
     fUserPrimaryAction->GeneratePrimaries(tmpEvent);
     fBlineStartPosition = tmpEvent->GetPrimaryVertex()->GetPosition();
     fT0 = tmpEvent->GetPrimaryVertex()->GetT0();
     delete tmpEvent;
   }
-  fFirstPartOfBline = false;   
+  fFirstPartOfBline = false;
 
-  G4PrimaryVertex* primary_vertex = 
+  auto  primary_vertex =
     new G4PrimaryVertex(fBlineStartPosition, fT0);
 
   // Define the particle to be tracked as Charged Geantino
-    
+
   G4ChargedGeantino* pdef = G4ChargedGeantino::ChargedGeantino();
-   
+
   G4double mass =  pdef->GetPDGMass();
   G4double energy = 10000.*MeV + mass;
   G4double pmom = std::sqrt(energy*energy-mass*mass);
 
-  // The momentum direction and energy do not have an effect in tracing of 
+  // The momentum direction and energy do not have an effect in tracing of
   // bline but still need to be defined.
-   
+
   G4double px = 0.;
   G4double py = 0.;
   G4double pz = pmom;
 
-  G4PrimaryParticle* particle = new G4PrimaryParticle(pdef,px,py,pz);
+  auto  particle = new G4PrimaryParticle(pdef,px,py,pz);
   particle->SetMass( mass );
   particle->SetCharge(pdef->GetPDGCharge());
   primary_vertex->SetPrimary( particle );
- 
+
   anEvent->AddPrimaryVertex( primary_vertex );
 }

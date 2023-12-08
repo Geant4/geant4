@@ -43,10 +43,10 @@ class F05SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  F05SteppingAction(void);
-  virtual ~F05SteppingAction();
+  F05SteppingAction() = default;
+  ~F05SteppingAction() override = default;
 
-  virtual void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*) override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

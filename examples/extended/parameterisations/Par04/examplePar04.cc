@@ -35,37 +35,48 @@
 // for fast simulation in calorimeters.
 //
 //-------------------------------------------------------------------
-#include <G4Exception.hh>                // for G4Exception
-#include <G4ExceptionSeverity.hh>        // for FatalErrorInArgument
-#include <G4RunManager.hh>               // for G4RunManager
-#include <G4String.hh>                   // for G4String
-#include <G4VisManager.hh>               // for G4VisManager
-#include <G4ios.hh>                      // for G4cout, G4endl
-#include <sstream>                       // for char_traits, operator<<, bas...
-#include <string>                        // for allocator, operator+, operat...
 #include "FTFP_BERT.hh"                  // for FTFP_BERT
+#include "Par04ActionInitialisation.hh"  // for Par04ActionInitialisation
+#include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
+#include "Par04ParallelFastWorld.hh"
+#include "Par04ParallelFullWorld.hh"
+
 #include "G4EmParameters.hh"             // for G4EmParameters
 #include "G4FastSimulationPhysics.hh"    // for G4FastSimulationPhysics
 #include "G4HadronicProcessStore.hh"     // for G4HadronicProcessStore
+#include "G4ParallelWorldPhysics.hh"
 #include "G4RunManagerFactory.hh"        // for G4RunManagerFactory, G4RunMa...
 #include "G4Types.hh"                    // for G4bool, G4int
 #include "G4UIExecutive.hh"              // for G4UIExecutive
 #include "G4UImanager.hh"                // for G4UImanager
 #include "G4VisExecutive.hh"             // for G4VisExecutive
-#include "Par04ActionInitialisation.hh"  // for Par04ActionInitialisation
-#include "Par04DetectorConstruction.hh"  // for Par04DetectorConstruction
-#include "time.h"                        // for time
+
+#include "G4Exception.hh"                // for G4Exception
+#include "G4ExceptionSeverity.hh"        // for FatalErrorInArgument
+#include "G4RunManager.hh"               // for G4RunManager
+#include "G4String.hh"                   // for G4String
+#include "G4VisManager.hh"               // for G4VisManager
+#include "G4ios.hh"                      // for G4cout, G4endl
+#include <ctime>                        // for time
+#include <sstream>                       // for char_traits, operator<<, bas...
+#include <string>                        // for allocator, operator+, operat...
 
 int main(int argc, char** argv)
 {
   // Macro name from arguments
   G4String batchMacroName;
   G4bool useInteractiveMode = false;
+  G4int numOfThreadsOrTasks = 8;
+  G4int runManagerTypeInt = 0;
+  G4RunManagerType runManagerType = G4RunManagerType::Serial;
   G4String helpMsg(
     "Usage: " + G4String(argv[0]) +
     " [option(s)] \n You need to specify the mode and the macro file.\nOptions:"
     "\n\t-h\t\tdisplay this help message\n\t-m MACRO\ttriggers a batch mode "
-     "executing MACRO\n\t-i\t\truns interactive mode, use it together with vis*mac macros.");
+     "executing MACRO\n\t-i\t\truns interactive mode, use it together with <-m vis*mac> macros"
+    "\n\t-r\t\trun manager type (0=serial,1=MT,2=tasking)"
+    "\n\t-t\t\tnumber of threads for MT mode (no change for other modes)."
+    );
   if(argc < 2 ) {
     G4Exception("main", "No arguments", FatalErrorInArgument,
                 ("No arguments passed to " + G4String(argv[0]) + "\n" + helpMsg)
@@ -88,6 +99,34 @@ int main(int argc, char** argv)
     {
       useInteractiveMode = true;
     }
+    else if(argument == "-r")
+    {
+      G4int tmp = atoi(argv[i + 1]);
+      ++i;
+      switch (tmp) {
+      case 0:
+        runManagerTypeInt = tmp;
+        runManagerType = G4RunManagerType::Serial;
+        break;
+      case 1:
+        runManagerTypeInt = tmp;
+        runManagerType = G4RunManagerType::MTOnly;
+        break;
+      case 2:
+        runManagerTypeInt = tmp;
+        runManagerType = G4RunManagerType::Tasking;
+        break;
+      default:
+        G4Exception("main", "Wrong Run Manager type", FatalErrorInArgument,
+                "Choose 0 (serial, default), 1 (MT), 2 (tasking)");
+        break;
+      }
+    }
+    else if(argument == "-t")
+    {
+      numOfThreadsOrTasks = atoi(argv[i + 1]);
+      ++i;
+    }
     else
     {
       G4Exception("main", "Unknown argument", FatalErrorInArgument,
@@ -105,7 +144,7 @@ int main(int argc, char** argv)
 
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  G4RunManagerType runManagerType = G4RunManagerType::Default;
+  
   if(useInteractiveMode)
   {
     ui = new G4UIExecutive(argc, argv);
@@ -115,9 +154,15 @@ int main(int argc, char** argv)
   // Initialization of default Run manager
   auto* runManager =
     G4RunManagerFactory::CreateRunManager(runManagerType);
-
+  if(runManagerTypeInt == 1)
+    runManager->SetNumberOfThreads(numOfThreadsOrTasks);
   // Detector geometry:
   auto detector = new Par04DetectorConstruction();
+  auto parallelWorldFull = new Par04ParallelFullWorld("parallelWorldFullSim", detector);
+  auto parallelWorldFast = new Par04ParallelFastWorld("parallelWorldFastSim", detector,
+                                                      parallelWorldFull);
+  detector->RegisterParallelWorld(parallelWorldFull);
+  detector->RegisterParallelWorld(parallelWorldFast);
   runManager->SetUserInitialization(detector);
 
   // Physics list
@@ -129,16 +174,17 @@ int main(int argc, char** argv)
   fastSimulationPhysics->ActivateFastSimulation("e+");
   fastSimulationPhysics->ActivateFastSimulation("gamma");
   physicsList->RegisterPhysics(fastSimulationPhysics);
+  // Add parallel world for readout
+  physicsList->RegisterPhysics( new G4ParallelWorldPhysics("parallelWorldFullSim") );
+  physicsList->RegisterPhysics( new G4ParallelWorldPhysics("parallelWorldFastSim") );
   // reduce verbosity of physics lists
   G4EmParameters::Instance()->SetVerbose(0);
   runManager->SetUserInitialization(physicsList);
-  G4HadronicProcessStore::Instance()->SetVerbose(0);
 
   //-------------------------------
   // UserAction classes
   //-------------------------------
-  runManager->SetUserInitialization(new Par04ActionInitialisation(detector));
-
+  runManager->SetUserInitialization(new Par04ActionInitialisation(detector, parallelWorldFull));
   //----------------
   // Visualization:
   //----------------

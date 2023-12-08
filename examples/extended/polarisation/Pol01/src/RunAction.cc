@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,18 +49,31 @@
 #include "G4PhysicalConstants.hh"
 #include <iomanip>
 
+#include "ProcessesCount.hh"
+#include "G4AccumulableManager.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-: G4UserRunAction(),
-  fGamma(0), fElectron(0), fPositron(0),
-  fDetector(det), fPrimary(prim), fProcCounter(0), fAnalysisManager(0), 
-  fTotalEventCount(0),
-  fPhotonStats(), fElectronStats(), fPositronStats()
+: fDetector(det), fPrimary(prim), fAnalysisManager(0),
+  fTotalEventCount(0)
 {
   fGamma = G4Gamma::Gamma();
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
+
+  auto accumulableManager = G4AccumulableManager::Instance();
+  auto fPhotonStats = new ParticleStatistics("PhotonStats");
+  auto fElectronStats = new ParticleStatistics("ElectronStats");
+  auto fPositronStats = new ParticleStatistics("PositronStats");
+  auto fProcCounter = new ProcessesCount("ProcCounter");
+
+  accumulableManager->RegisterAccumulable(fPhotonStats);
+  accumulableManager->RegisterAccumulable(fElectronStats);
+  accumulableManager->RegisterAccumulable(fPositronStats);
+
+  accumulableManager->RegisterAccumulable(fProcCounter);
 
   BookHisto();
 }
@@ -73,38 +86,40 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
+
+  auto accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Reset();
+
   // save Rndm status
   //  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   //  CLHEP::HepRandom::showEngineStatus();
-  
-  if (fProcCounter) delete fProcCounter;
-  fProcCounter = new ProcessesCount;
+
   fTotalEventCount = 0;
-  fPhotonStats.Clear();
-  fElectronStats.Clear();
-  fPositronStats.Clear();
+
+  // Open file histogram file
+  fAnalysisManager->OpenFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::FillData(const G4ParticleDefinition* particle,
-                         G4double kinEnergy, G4double costheta, 
+                         G4double kinEnergy, G4double costheta,
                          G4double phi,
                          G4double longitudinalPolarization)
 {
+  auto accManager = G4AccumulableManager::Instance();
   G4int id = -1;
-  if (particle == fGamma) { 
-    fPhotonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
-    if(fAnalysisManager) { id = 1; } 
-  } else if (particle == fElectron) { 
-    fElectronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
-    if(fAnalysisManager) { id = 5; } 
+  if (particle == fGamma) {
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PhotonStats"))->FillData(kinEnergy, costheta, longitudinalPolarization);
+    if(fAnalysisManager) { id = 1; }
+  } else if (particle == fElectron) {
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("ElectronStats"))->FillData(kinEnergy, costheta, longitudinalPolarization);
+    if(fAnalysisManager) { id = 5; }
   } else if (particle == fPositron) {
-    fPositronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
-    if(fAnalysisManager) { id = 9; } 
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PositronStats"))->FillData(kinEnergy, costheta, longitudinalPolarization);
+    if(fAnalysisManager) { id = 9; }
   }
   if(id > 0) {
     fAnalysisManager->FillH1(id,kinEnergy,1.0);
@@ -125,13 +140,14 @@ void RunAction::BookHisto()
   fAnalysisManager->SetVerboseLevel(1);
 
   // Open file histogram file
-  fAnalysisManager->OpenFile("pol01");
+  fAnalysisManager->SetFileName("pol01");
+
   fAnalysisManager->SetFirstHistoId(1);
 
   // Creating an 1-dimensional histograms in the root directory of the tree
-  const G4String id[] = { "h1", "h2", "h3", "h4", "h5", 
+  const G4String id[] = { "h1", "h2", "h3", "h4", "h5",
                           "h6", "h7", "h8", "h9", "h10", "h11", "h12"};
-  const G4String title[] = 
+  const G4String title[] =
                 { "Gamma Energy distribution",                      //1
                   "Gamma Cos(Theta) distribution",                  //2
                   "Gamma Phi angular distribution",                 //3
@@ -163,96 +179,101 @@ void RunAction::BookHisto()
 void RunAction::SaveHisto(G4int nevents)
 {
   if(fAnalysisManager) {
-    G4double norm = 1.0/G4double(nevents);
-    for(int i=0; i<12; ++i) {
-      fAnalysisManager->ScaleH1(i, norm);
+    if (IsMaster()) {
+      G4double norm = 1.0/G4double(nevents);
+      for(int i=0; i<12; ++i) {
+	fAnalysisManager->ScaleH1(i, norm);
+      }
     }
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
-  } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::CountProcesses(G4String procName)
+void RunAction::CountProcesses(G4String& procName)
 {
-  // is the process already counted ?
-  // *AS* change to std::map?!
-  size_t nbProc = fProcCounter->size();
-  size_t i = 0;
-  while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
-  if (i == nbProc) fProcCounter->push_back( new ProcessCount(procName));
-  
-  (*fProcCounter)[i]->Count();
+  auto accManager = G4AccumulableManager::Instance();
+  dynamic_cast<ProcessesCount*>(accManager->GetAccumulable("ProcCounter"))->Count(procName);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4int NbOfEvents = aRun->GetNumberOfEvent();
+  //  Total number of events in run (all threads)
+  G4int NbOfEvents = aRun->GetNumberOfEventToBeProcessed();
+  //  G4int NbOfEvents = aRun->GetNumberOfEvent();
+
   if (NbOfEvents == 0) return;
-  
+
   G4int  prec = G4cout.precision(5);
-    
+
   G4Material* material = fDetector->GetMaterial();
   G4double density = material->GetDensity();
-   
-  G4ParticleDefinition* particle = 
-                            fPrimary->GetParticleGun()->GetParticleDefinition();
-  G4String Particle = particle->GetParticleName();    
-  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
-  G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
-         << G4BestUnit(energy,"Energy") << " through " 
-         << G4BestUnit(fDetector->GetBoxSizeZ(),"Length") << " of "
-         << material->GetName() << " (density: " 
-         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-  
-  //frequency of processes
-  G4cout << "\n Process calls frequency --->\n";
-  for (size_t i=0; i< fProcCounter->size();i++) {
-     G4String procName = (*fProcCounter)[i]->GetName();
-     G4int    count    = (*fProcCounter)[i]->GetCounter(); 
-     G4cout << "\t" << procName << " = " << count<<"\n";
-  }
-  
-  if (fTotalEventCount == 0) return;
-  
-  G4cout<<" Gamma: \n";
-  fPhotonStats.PrintResults(fTotalEventCount);
-  G4cout<<" Electron: \n";
-  fElectronStats.PrintResults(fTotalEventCount);
-  G4cout<<" Positron: \n";
-  fPositronStats.PrintResults(fTotalEventCount);
 
+  if (fPrimary != nullptr) {
+    G4ParticleDefinition* particle =
+      fPrimary->GetParticleGun()->GetParticleDefinition();
+    G4String Particle = particle->GetParticleName();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
+    G4cout << "\n The run consists of " << fTotalEventCount << " "<< Particle << " of "
+	   << G4BestUnit(energy,"Energy") << " through "
+	   << G4BestUnit(fDetector->GetBoxSizeZ(),"Length") << " of "
+	   << material->GetName() << " (density: "
+	   << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+
+  }
   //cross check from G4EmCalculator
-  //  G4cout << "\n Verification from G4EmCalculator. \n";  
+  //  G4cout << "\n Verification from G4EmCalculator. \n";
   //  G4EmCalculator emCal;
 
-  //restore default format         
-  G4cout.precision(prec);         
+  auto accManager = G4AccumulableManager::Instance();
+  accManager->Merge();
 
-  // write out histograms  
+  if (IsMaster()) {
+  //frequency of processes
+    G4cout << "\n Process calls frequency --->\n";
+    dynamic_cast<ProcessesCount*>(accManager->GetAccumulable("ProcCounter"))->Print();
+    G4cout<<" Gamma: \n";
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PhotonStats"))->PrintResults(NbOfEvents);
+    G4cout<<" Electron: \n";
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("ElectronStats"))->PrintResults(NbOfEvents);
+    G4cout<<" Positron: \n";
+    dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PositronStats"))->PrintResults(NbOfEvents);
+    G4cout<<G4endl;
+  }
+
+  //restore default format
+  G4cout.precision(prec);
+
+  // write out histograms
   SaveHisto(NbOfEvents);
 
+  if (IsMaster()) {
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EventFinished()
 {
+  auto accManager = G4AccumulableManager::Instance();
+
   ++fTotalEventCount;
-  fPhotonStats.EventFinished();
-  fElectronStats.EventFinished();
-  fPositronStats.EventFinished();
+
+  dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PhotonStats"))->EventFinished();
+  dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("ElectronStats"))->EventFinished();
+  dynamic_cast<ParticleStatistics*>(accManager->GetAccumulable("PositronStats"))->EventFinished();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::ParticleStatistics::ParticleStatistics()
-  : fCurrentNumber(0),
+RunAction::ParticleStatistics::ParticleStatistics(const G4String& name)
+  : G4VAccumulable(name),fCurrentNumber(0),
     fTotalNumber(0), fTotalNumber2(0),
     fSumEnergy(0), fSumEnergy2(0),
     fSumPolarization(0), fSumPolarization2(0),
@@ -274,7 +295,7 @@ void RunAction::ParticleStatistics::EventFinished()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::ParticleStatistics:: FillData(G4double kinEnergy, 
+void RunAction::ParticleStatistics:: FillData(G4double kinEnergy,
                                               G4double costheta,
                                               G4double longitudinalPolarization)
 {
@@ -307,13 +328,30 @@ void RunAction::ParticleStatistics::PrintResults(G4int totalNumberOfEvents)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::ParticleStatistics::Clear()
+void RunAction::ParticleStatistics::Reset()
 {
   fCurrentNumber=0;
   fTotalNumber=fTotalNumber2=0;
   fSumEnergy=fSumEnergy2=0;
   fSumPolarization=fSumPolarization2=0;
   fSumCosTheta=fSumCosTheta2=0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::ParticleStatistics::Merge(const G4VAccumulable& other)
+{
+  auto rstat = dynamic_cast<const RunAction::ParticleStatistics&>(other);
+
+  fCurrentNumber += rstat.fCurrentNumber;
+  fTotalNumber += rstat.fTotalNumber;
+  fTotalNumber2 += rstat.fTotalNumber2;
+  fSumEnergy += rstat.fSumEnergy;
+  fSumEnergy2 += rstat.fSumEnergy2;
+  fSumPolarization += rstat.fSumPolarization;
+  fSumPolarization2 += rstat.fSumPolarization2;
+  fSumCosTheta += rstat.fSumCosTheta;
+  fSumCosTheta2 += rstat.fSumCosTheta2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

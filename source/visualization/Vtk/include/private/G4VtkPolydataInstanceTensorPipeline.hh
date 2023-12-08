@@ -40,6 +40,7 @@ class G4VtkPolydataInstanceTensorPipeline : public G4VtkPolydataInstancePipeline
 
     void Print() override;
 
+
     static std::size_t MakeHash(const G4Polyhedron& p, const G4VtkVisContext& vc);
 
   protected:

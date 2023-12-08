@@ -55,15 +55,15 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class F01SteppingVerbose : public G4SteppingVerbose 
+class F01SteppingVerbose : public G4SteppingVerbose
 {
   public:
 
-    F01SteppingVerbose();
-    virtual ~F01SteppingVerbose();
+    F01SteppingVerbose() = default;
+    ~F01SteppingVerbose() override = default;
 
-    virtual void StepInfo();
-    virtual void TrackingStarted();
+    void StepInfo() override;
+    void TrackingStarted() override;
 
 };
 

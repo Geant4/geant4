@@ -60,8 +60,12 @@ constexpr G4int kVL1 { 1 };
 constexpr G4int kVL2 { 2 };
 constexpr G4int kVL3 { 3 };
 constexpr G4int kVL4 { 4 };
-constexpr unsigned int kDefaultBasketSize = 32000;
-constexpr unsigned int kDefaultBasketEntries = 4000;
+constexpr unsigned int kDim1 { 1 };
+constexpr unsigned int kDim2 { 2 };
+constexpr unsigned int kDim3 { 3 };
+constexpr unsigned int kMaxDim { kDim3 };
+constexpr unsigned int kDefaultBasketSize { 32000 };
+constexpr unsigned int kDefaultBasketEntries {4000 };
 constexpr std::string_view kNamespaceName { "G4Analysis" };
 
 // Warning

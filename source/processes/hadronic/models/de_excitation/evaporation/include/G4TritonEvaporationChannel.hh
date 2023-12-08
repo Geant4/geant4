@@ -34,7 +34,6 @@
 #define G4TritonEvaporationChannel_h 1
 
 #include "G4EvaporationChannel.hh"
-#include "G4TritonCoulombBarrier.hh"
 #include "G4TritonEvaporationProbability.hh"
 
 class G4TritonEvaporationChannel : public G4EvaporationChannel
@@ -44,7 +43,7 @@ public:
   explicit G4TritonEvaporationChannel();
 
   // destructor
-  ~G4TritonEvaporationChannel() override;
+  ~G4TritonEvaporationChannel() override = default;
 
 private:
   const G4TritonEvaporationChannel & operator=

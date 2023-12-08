@@ -56,7 +56,7 @@ void G4BaseFileManager::AddFileName(const G4String& fileName)
 //_____________________________________________________________________________
 G4String G4BaseFileManager::GetFileType() const
 {
-  return G4StrUtil::to_lower_copy(fState.GetType());
+  return fState.GetFileType();
 }
 
 //_____________________________________________________________________________

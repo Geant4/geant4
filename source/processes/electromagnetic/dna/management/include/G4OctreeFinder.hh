@@ -81,9 +81,9 @@ class G4OctreeFinder: public G4VFinder
 private:
     static G4ThreadLocal G4OctreeFinder* fInstance;
     G4OctreeFinder();
-    int fVerbose;
-    G4bool fIsOctreeUsed;
-    G4bool fIsOctreeBuit;
+    int fVerbose{0};
+    G4bool fIsOctreeUsed{false};
+    G4bool fIsOctreeBuit{false};
     Extractor<CONTAINER> fExtractor;
     TreeMap fTreeMap;
     OctreeHandle fTree;

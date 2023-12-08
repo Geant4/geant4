@@ -45,7 +45,9 @@ G4bool G4MPIToolsManager::Send(
   // pack objects
   for (const auto& [ht, info] : hnVector) {
     // skip sending if activation is enabled and HT is inactivated
-    if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ) continue;
+    // or if histogram was deleted
+    if ( ( fState.GetIsActivation() && ( ! info->GetActivation() ) ) ||
+        ( info->GetDeleted() ) ) continue;
     // pack histogram for sending
     // G4cout << "Packed " << i << "th T" << G4endl;
     result &= fHmpi->pack(*ht);

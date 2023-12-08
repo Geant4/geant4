@@ -41,6 +41,10 @@
 //	      Extension of MicroElec to very low energies and new materials
 //	      NIM B, 2020, in review.
 //
+// Based on:
+//		-the class G4OpBoundaryProcess.cc for the surface crossing of 
+//		optical photons. 
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
  
@@ -65,6 +69,8 @@
 #include "G4Material.hh" 
 #include "G4LogicalBorderSurface.hh" 
 #include "G4LogicalSkinSurface.hh" 
+#include "G4OpticalPhoton.hh"
+#include "G4Electron.hh"
 #include "G4TransportationManager.hh" 
   
 // Class Description: 
@@ -114,8 +120,11 @@ class G4MicroElecSurface : public G4VDiscreteProcess
 
   G4MicroElecSurface(const G4MicroElecSurface &right) = delete; 
   G4MicroElecSurface& operator=(const G4MicroElecSurface &right) = delete; 
-      
-private: 
+    
+  void Initialise();
+
+private:
+   // Returns the incident angle of electron	
   G4double GetIncidentAngle(); 
   G4ThreeVector Reflexion(const G4StepPoint* PostStepPoint); 
   
@@ -123,6 +132,7 @@ private:
   typedef std::map<G4String, G4double, std::less<G4String> > WorkFunctionTable;
   WorkFunctionTable tableWF; //Table of all materials simulated 
  
+  G4double theParticleMomentum;
   G4ThreeVector oldMomentum, previousMomentum; 
   G4ThreeVector theGlobalNormal; 
   G4ThreeVector theFacetNormal; 
@@ -130,7 +140,6 @@ private:
   const G4Material* material2;
   G4MicroElecSurfaceStatus theStatus; 
 
-  G4double theParticleMomentum; 
   G4double kCarTolerance; 
   G4double ekint, thetat, thetaft, energyThreshold, crossingProbability; 
   G4bool flag_franchissement_surface, flag_reflexion,flag_normal, teleportToDo, teleportDone, isInitialised; 

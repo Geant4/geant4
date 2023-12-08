@@ -96,23 +96,17 @@ ifeq ($(G4SYSTEM),Linux-clang)
     QT_VERSION := 5
   endif
 
-  ifeq ($(QT_VERSION),5)
-    ifndef QTFLAGS              # Qt5
-      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
-      QTFLAGS   += -I $(QTHOME)/include/QtCore
-      QTFLAGS   += -I $(QTHOME)/include/QtGui
-      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
-      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
-      QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
-    endif
-  else                          # Qt4
-    ifndef QTFLAGS
-      QTFLAGS   := -I$(QTHOME)/include -I$(QTHOME)/include/Qt
-      QTFLAGS   += -I$(QTHOME)/include/QtCore 
-      QTFLAGS   += -I$(QTHOME)/include/QtGui 
-      QTFLAGS   += -I$(QTHOME)/include/QtOpenGL 
+  ifndef QTFLAGS
+    QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
+    QTFLAGS   += -I $(QTHOME)/include/QtCore
+    QTFLAGS   += -I $(QTHOME)/include/QtGui
+    QTFLAGS   += -I $(QTHOME)/include/QtWidgets
+    QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+    QTFLAGS   += -I $(QTHOME)/include/Qt3DCore
+    QTFLAGS   += -I $(QTHOME)/include/Qt3DExtras
+    QTFLAGS   += -I $(QTHOME)/include/Qt3DRender
+    ifeq ($(QT_VERSION),6)
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGLWidgets
     endif
   endif
   ifndef QTLIBPATH
@@ -122,22 +116,25 @@ ifeq ($(G4SYSTEM),Linux-clang)
       QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
     endif
   endif
-  ifeq ($(QT_VERSION),5)
-    ifndef QTLIBS              # Qt5
+  ifeq ($(QT_VERSION),5)       # Qt5
+    ifndef QTLIBS
       QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets
     endif
     ifndef QT3DLIBS
       QT3DLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt53DCore -lQt53DExtras -lQt53DRender
     endif
     ifndef GLQTLIBS
-      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5OpenGL
     endif
-  else                         # Qt4
+  else                         # Qt6
     ifndef QTLIBS
-      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui
+      QTLIBS   := -L$(QTLIBPATH) -lQt6Core -lQt6Gui -lQt6Widgets
+    endif
+    ifndef QT3DLIBS
+      QT3DLIBS := -L$(QTLIBPATH) -lQt6Core -lQt6Gui -lQt6Widgets -lQt63DCore -lQt63DExtras -lQt63DRender
     endif
     ifndef GLQTLIBS
-      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+      GLQTLIBS := -L$(QTLIBPATH) -lQt6Core -lQt6Gui -lQt6Widgets -lQt6OpenGL -lQt6OpenGLWidgets
     endif
   endif
 

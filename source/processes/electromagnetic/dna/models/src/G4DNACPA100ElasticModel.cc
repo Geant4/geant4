@@ -44,6 +44,7 @@
 
 #include "G4DNAMaterialManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4EnvironmentUtils.hh"
 #include "G4SystemOfUnits.hh"
 using namespace std;
 G4DNACPA100ElasticModel::G4DNACPA100ElasticModel(const G4ParticleDefinition*, const G4String& nam)
@@ -77,9 +78,9 @@ void G4DNACPA100ElasticModel::Initialise(const G4ParticleDefinition* p,
                   oss.str().c_str());
     }
 
-    char* path = getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
-    if (!path) {
+    if (path == nullptr) {
       G4Exception("G4DNACPA100ElasticModel::Initialise", "em0006", FatalException,
                   "G4LEDATA environment variable not set.");
       return;
@@ -410,7 +411,7 @@ void G4DNACPA100ElasticModel::ReadDiffCSFile(const std::size_t& materialName,
                                              const G4String& file, const G4double&)
 {
   const char* path = G4FindDataDir("G4LEDATA");
-  if (!path) {
+  if (path == nullptr) {
     G4Exception("G4DNACPA100ElasticModel::ReadAllDiffCSFiles", "em0006", FatalException,
                 "G4LEDATA environment variable not set.");
     return;
@@ -440,7 +441,7 @@ void G4DNACPA100ElasticModel::ReadDiffCSFile(const std::size_t& materialName,
       continue;
     }
     // check if line is empty
-    else if (line.empty()) {
+    if (line.empty()) {
       continue;
     }
     std::istringstream iss(line);

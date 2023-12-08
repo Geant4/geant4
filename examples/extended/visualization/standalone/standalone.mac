@@ -1,6 +1,6 @@
 /control/verbose 2
 /vis/verbose parameters
-/vis/open OGL
+/vis/open
 /vis/scene/create
 /vis/scene/add/userAction
 /vis/scene/add/axes

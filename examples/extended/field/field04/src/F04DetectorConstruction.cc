@@ -67,35 +67,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04DetectorConstruction::F04DetectorConstruction()
- : G4VUserDetectorConstruction(),
-   fDetectorMessenger(0),
-   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
-   fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0),
-   fSolidDegrader(0), fLogicDegrader(0), fPhysiDegrader(0),
-   fSolidCaptureMgnt(0), fLogicCaptureMgnt(0), fPhysiCaptureMgnt(0),
-   fSolidTransferMgnt(0), fLogicTransferMgnt(0), fPhysiTransferMgnt(0),
-   fWorldMaterial(0), fTargetMaterial(0), fDegraderMaterial(0)
 {
-  fWorldSizeZ = 50.*m;
-  fWorldSizeR =  5.*m;
-
-  fTargetRadius       =   0.4*cm;
-  fTargetThickness    =  16.0*cm;
-
   SetTargetAngle(170);
-
-  fDegraderRadius     =  30.0*cm;
-  fDegraderThickness  =   0.1*cm;
-
-  fCaptureMgntRadius  =  0.6*m;
-  fCaptureMgntLength  =  4.0*m;
-
   SetCaptureMgntB1(2.5*tesla);
   SetCaptureMgntB2(5.0*tesla);
-
-  fTransferMgntRadius =  0.3*m;
-  fTransferMgntLength = 15.0*m;
-
   SetTransferMgntB(5.0*tesla);
 
   fDegraderPos = -fTransferMgntLength/2. + fDegraderThickness/2.;
@@ -148,16 +123,16 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 {
   fSolidWorld = new G4Tubs("World",
                0.,GetWorldSizeR(),GetWorldSizeZ()/2.,0.,twopi);
- 
+
   fLogicWorld = new G4LogicalVolume(fSolidWorld,
                                    GetWorldMaterial(),
                                    "World");
 
-  fPhysiWorld = new G4PVPlacement(0,
+  fPhysiWorld = new G4PVPlacement(nullptr,
                                  G4ThreeVector(),
                                  "World",
                                  fLogicWorld,
-                                 0,
+                                 nullptr,
                                  false,
                                  0);
 
@@ -173,7 +148,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
   fCaptureMgntCenter = G4ThreeVector();
 
-  fPhysiCaptureMgnt = new G4PVPlacement(0,
+  fPhysiCaptureMgnt = new G4PVPlacement(nullptr,
                                        fCaptureMgntCenter,
                                        "CaptureMgnt",
                                        fLogicCaptureMgnt,
@@ -197,10 +172,10 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
   fTransferMgntCenter = G4ThreeVector(x,0.,z);
 
-  G4RotationMatrix* g4rot = new G4RotationMatrix();
+  auto  g4rot = new G4RotationMatrix();
   *g4rot = StringToRotationMatrix("Y30,X10");
   *g4rot = g4rot->inverse();
-  if (*g4rot == G4RotationMatrix()) g4rot = NULL;
+  if (*g4rot == G4RotationMatrix()) g4rot = nullptr;
 
   fPhysiTransferMgnt = new G4PVPlacement(g4rot,
                                         fTransferMgntCenter,
@@ -212,11 +187,11 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
   // Test Plane
 
-  G4Tubs* solidTestPlane = new G4Tubs("TestPlane",
+  auto  solidTestPlane = new G4Tubs("TestPlane",
                                       0.,GetTransferMgntRadius(),
                                       1.*mm,0.,twopi);
 
-  G4LogicalVolume* logicTestPlane = new G4LogicalVolume(solidTestPlane,
+  auto  logicTestPlane = new G4LogicalVolume(solidTestPlane,
                                                         fVacuum,
                                                         "TestPlane");
 
@@ -224,7 +199,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
 
   G4ThreeVector testPlaneCenter = G4ThreeVector(0.,0.,z);
 
-  new G4PVPlacement(0,
+  new G4PVPlacement(nullptr,
                     testPlaneCenter,
                     "TestPlane",
                     logicTestPlane,
@@ -253,7 +228,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
       g4rot = new G4RotationMatrix();
       *g4rot = StringToRotationMatrix(angle);
       *g4rot = g4rot->inverse();
-      if (*g4rot == G4RotationMatrix()) g4rot = NULL;
+      if (*g4rot == G4RotationMatrix()) g4rot = nullptr;
 
       G4ThreeVector targetCenter(0.,0.,GetTargetPos());
 
@@ -273,14 +248,14 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
       fSolidDegrader = new G4Tubs("Degrader",
                       0., GetDegraderRadius(),
                       GetDegraderThickness()/2., 0.,twopi);
- 
+
       fLogicDegrader = new G4LogicalVolume(fSolidDegrader,
                                                 GetDegraderMaterial(),
                                                 "Degrader");
 
       G4ThreeVector degraderCenter = G4ThreeVector(0.,0.,GetDegraderPos());
 
-      fPhysiDegrader = new G4PVPlacement(0,
+      fPhysiDegrader = new G4PVPlacement(nullptr,
                                         degraderCenter,
                                         "Degrader",
                                         fLogicDegrader,
@@ -545,7 +520,7 @@ G4RotationMatrix
   while (place < rotation.size()) {
 
         G4double angle;
-        char* p(0);
+        char* p(nullptr);
         G4String current=rotation.substr(place+1);
         angle = strtod(current.c_str(),&p) * deg;
 

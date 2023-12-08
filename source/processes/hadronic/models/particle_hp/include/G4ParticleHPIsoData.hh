@@ -35,26 +35,15 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-
-#include <fstream>
-// #include <strstream>
 #include "G4ParticleHPNames.hh"
 #include "G4ParticleHPVector.hh"
 
-#include <stdlib.h>
 class G4ParticleDefinition;
 
 class G4ParticleHPIsoData
 {
   public:
-    G4ParticleHPIsoData()
-    {
-      theChannelData = nullptr;
-      theFissionData = nullptr;
-      theCaptureData = nullptr;
-      theElasticData = nullptr;
-      theInelasticData = nullptr;
-    }
+    G4ParticleHPIsoData() = default;
 
     ~G4ParticleHPIsoData() { delete theChannelData; }
 
@@ -63,44 +52,33 @@ class G4ParticleHPIsoData
       return std::max(0., theChannelData->GetXsec(energy));
     }
 
-    // G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType);
     G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)
     {
-      G4int M = 0;
-      return Init(A, Z, M, abun, dirName, aFSType);
+      return Init(A, Z, 0, abun, dirName, aFSType);
     };
+
     G4bool Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName, G4String aFSType);
 
-    // void Init(G4int A, G4int Z, G4double abun); //fill PhysicsVector for this Isotope
     void Init(G4int A, G4int Z, G4double abun, G4ParticleDefinition* projectile,
               const char* dataDirVariable)
     {
-      G4int M = 0;
-      Init(A, Z, M, abun, projectile, dataDirVariable);
-    };
+      Init(A, Z, 0, abun, projectile, dataDirVariable);
+    }
+
     void Init(G4int A, G4int Z, G4int M, G4double abun, G4ParticleDefinition* projectile,
               const char* dataDirVariable);  // fill PhysicsVector for this Isotope
 
-    inline G4ParticleHPVector* MakeElasticData() { return theElasticData; }
-    inline G4ParticleHPVector* MakeFissionData() { return theFissionData; }
-    inline G4ParticleHPVector* MakeCaptureData() { return theCaptureData; }
-    inline G4ParticleHPVector* MakeInelasticData() { return theInelasticData; }
-    inline G4ParticleHPVector* MakeChannelData() { return theChannelData; }
+    G4ParticleHPVector* MakeElasticData() { return theElasticData; }
+    G4ParticleHPVector* MakeFissionData() { return theFissionData; }
+    G4ParticleHPVector* MakeCaptureData() { return theCaptureData; }
+    G4ParticleHPVector* MakeInelasticData() { return theInelasticData; }
+    G4ParticleHPVector* MakeChannelData() { return theChannelData; }
 
     G4String GetName(G4int A, G4int Z, G4String base, G4String rest);
 
-    inline void FillChannelData(G4ParticleHPVector* aBuffer)
-    {
-      if (theChannelData != nullptr)
-        throw G4HadronicException(__FILE__, __LINE__, "IsoData has channel full already!!!");
-      theChannelData = new G4ParticleHPVector;
-      for (G4int i = 0; i < aBuffer->GetVectorLength(); i++) {
-        theChannelData->SetPoint(i, aBuffer->GetPoint(i));
-      }
-      theChannelData->Hash();
-    }
+    void FillChannelData(G4ParticleHPVector* aBuffer);
 
-    inline void ThinOut(G4double precision)
+    void ThinOut(G4double precision)
     {
       if (theFissionData != nullptr) theFissionData->ThinOut(precision);
       if (theCaptureData != nullptr) theCaptureData->ThinOut(precision);
@@ -108,12 +86,15 @@ class G4ParticleHPIsoData
       if (theInelasticData != nullptr) theInelasticData->ThinOut(precision);
     }
 
+    G4ParticleHPIsoData& operator=(const G4ParticleHPIsoData& right) = delete;
+    G4ParticleHPIsoData(const G4ParticleHPIsoData&) = delete;
+
   private:
-    G4ParticleHPVector* theFissionData;
-    G4ParticleHPVector* theCaptureData;
-    G4ParticleHPVector* theElasticData;
-    G4ParticleHPVector* theInelasticData;
-    G4ParticleHPVector* theChannelData;
+    G4ParticleHPVector* theFissionData{nullptr};
+    G4ParticleHPVector* theCaptureData{nullptr};
+    G4ParticleHPVector* theElasticData{nullptr};
+    G4ParticleHPVector* theInelasticData{nullptr};
+    G4ParticleHPVector* theChannelData{nullptr};
 
     G4String theFileName;
     G4ParticleHPNames theNames;

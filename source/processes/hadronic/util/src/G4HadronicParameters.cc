@@ -75,6 +75,8 @@ G4HadronicParameters::G4HadronicParameters() {
   fMaxEnergyTransitionFTF_Cascade = 6.0*CLHEP::GeV;
   fMinEnergyTransitionQGS_FTF = 12.0*CLHEP::GeV;
   fMaxEnergyTransitionQGS_FTF = 25.0*CLHEP::GeV;
+  fMinEnergyINCLXX_Pbar = 0.0*CLHEP::GeV;
+  fMaxEnergyINCLXX_Pbar = 10.0*CLHEP::GeV;
   fEnergyThresholdForHeavyHadrons = 1.1*CLHEP::GeV;
   fMessenger = new G4HadronicParametersMessenger( this );
 
@@ -141,6 +143,19 @@ void G4HadronicParameters::SetMinEnergyTransitionQGS_FTF( const G4double val ) {
 void G4HadronicParameters::SetMaxEnergyTransitionQGS_FTF( const G4double val ) {
   if ( ! IsLocked()  &&  val > fMinEnergyTransitionQGS_FTF ) { 
     fMaxEnergyTransitionQGS_FTF = val;
+  }
+}
+
+void G4HadronicParameters::SetMinEnergyINCLXX_Pbar( const G4double val ) {
+  if ( ! IsLocked()  &&  val >= 0.0 ) { 
+    fMinEnergyINCLXX_Pbar = val;
+  }
+}
+
+
+void G4HadronicParameters::SetMaxEnergyINCLXX_Pbar( const G4double val ) {
+  if ( ! IsLocked()  &&  val > fMinEnergyINCLXX_Pbar ) { 
+    fMaxEnergyINCLXX_Pbar = val;
   }
 }
 
@@ -220,6 +235,15 @@ void G4HadronicParameters::SetNeutronKineticEnergyThresholdForSVT( const G4doubl
   // whereas it does not work for G4State_PreInit).
   if ( G4Threading::IsMasterThread()  &&  val > 0.0 ) { 
     fNeutronEkinThresholdForSVT = val;
+  }
+}
+
+
+void G4HadronicParameters::SetTimeThresholdForRadioactiveDecay( const G4double val ) {
+  // This setting works only before initialization 
+  // (else, if used after initialization, it will be ignored).
+  if ( G4Threading::IsMasterThread()  &&  val > 0.0 ) { 
+    fTimeThresholdForRadioactiveDecays = val;
   }
 }
 

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,40 +33,37 @@
 // ----------------------------------------------------------------------
 
 #include "G4PionZero.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DalitzDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                          PIONZERO                              ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VDecayChannel.hh"
 
 G4PionZero* G4PionZero::theInstance = nullptr;
 
 G4PionZero* G4PionZero::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "pi0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,   0.1349766*GeV,  7.73e-06*MeV,         0.0,
                     0,              -1,            +1,
@@ -77,35 +71,35 @@ G4PionZero* G4PionZero::Definition()
               "meson",               0,             0,         111,
                 false,      8.52e-8*ns,          nullptr,
                 false,            "pi",          111);
+    // clang-format on
 
-   // Life time is given from width
-   anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
-     
-  //create Decay Table
-  auto  table = new G4DecayTable();
+    // Life time is given from width
+    anInstance->SetPDGLifeTime(hbar_Planck / (anInstance->GetPDGWidth()));
 
-  // create a decay channel
-  G4VDecayChannel* mode;
-  // pi0 -> gamma + gamma
-  mode = new G4PhaseSpaceDecayChannel("pi0",0.988,2,"gamma","gamma");
-  table->Insert(mode);
-  // pi0 -> gamma + e+ + e-
-  mode = new G4DalitzDecayChannel("pi0",0.012,"e-","e+");
-  table->Insert(mode);
+    // create Decay Table
+    auto table = new G4DecayTable();
 
-   anInstance->SetDecayTable(table);
+    // create a decay channel
+    G4VDecayChannel* mode;
+    // pi0 -> gamma + gamma
+    mode = new G4PhaseSpaceDecayChannel("pi0", 0.988, 2, "gamma", "gamma");
+    table->Insert(mode);
+    // pi0 -> gamma + e+ + e-
+    mode = new G4DalitzDecayChannel("pi0", 0.012, "e-", "e+");
+    table->Insert(mode);
+
+    anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4PionZero*>(anInstance);
   return theInstance;
 }
 
-G4PionZero*  G4PionZero::PionZeroDefinition()
+G4PionZero* G4PionZero::PionZeroDefinition()
 {
   return Definition();
 }
 
-G4PionZero*  G4PionZero::PionZero()
+G4PionZero* G4PionZero::PionZero()
 {
   return Definition();
 }
-

@@ -99,6 +99,6 @@ class G4DNAScavengerProcess : public G4VITProcess
   std::vector<MolType> fpMaterialVector;
   MolType fpMaterialConf;
   const G4DNABoundingBox* fpBoundingBox;
-  G4DNAScavengerMaterial* fpScavengerMaterial;
+  G4DNAScavengerMaterial* fpScavengerMaterial{nullptr};
 };
 #endif  // FLASH1_G4DNASCAVENGERPROCESS_HH

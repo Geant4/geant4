@@ -61,9 +61,9 @@ class DetectorMessenger: public G4UImessenger
 public:
 
   DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
+  ~DetectorMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
@@ -78,6 +78,7 @@ private:
   G4UIcmdWithAnInteger*      fBinCmd;
   G4UIcmdWithAnInteger*      fNOfAbsCmd;
   G4UIcmdWithAnInteger*      fVerbCmd;
+  G4UIcmdWithAnInteger*      fBertCmd;
   G4UIcmdWithABool*          fBeamCmd;
   G4UIcmdWithABool*          fBCCmd;
   G4UIcmdWithABool*          fHNCmd;

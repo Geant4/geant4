@@ -57,11 +57,6 @@ PrimaryGeneratorAction0::PrimaryGeneratorAction0(G4ParticleGun* gun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction0::~PrimaryGeneratorAction0()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PrimaryGeneratorAction0::GeneratePrimaries(G4Event* anEvent)
 {  
   //vertex position fixed

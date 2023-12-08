@@ -35,27 +35,23 @@
 #define G4DNAIRT_HH_
 
 
-#include "globals.hh"
-#include "G4ThreeVector.hh"
-
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
-#include "G4MoleculeTable.hh"
-
-#include "G4VDNAReactionModel.hh"
-#include "G4VITReactionProcess.hh"
-
+#include "G4ITReaction.hh"
 #include "G4ITReactionTable.hh"
 #include "G4ITTrackHolder.hh"
-#include "G4ITReaction.hh"
-
 #include "G4Molecule.hh"
-#include "G4VITReactionProcess.hh"
+#include "G4MoleculeTable.hh"
 #include "G4ParticleChange.hh"
+#include "G4ThreeVector.hh"
+#include "G4VDNAReactionModel.hh"
+#include "G4VITReactionProcess.hh"
+#include "globals.hh"
 
 #include "AddClone_def.hh"
-#include <vector>
+
 #include <map>
+#include <vector>
 
 class G4DNAMolecularReactionTable;
 class G4VDNAReactionModel;

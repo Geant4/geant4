@@ -54,4 +54,5 @@
    - UI commans defined using G4GenericMessenger
    - Histograms (1D, 2D) and ntuple saved in two output files
    - Plotting of histograms with visualization drivers
+   - Offscreen drawing with TSG
    - Started from extended/analysis/A01

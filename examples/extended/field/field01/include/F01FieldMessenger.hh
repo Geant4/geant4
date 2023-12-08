@@ -25,8 +25,8 @@
 //
 /// \file field/field01/include/F01FieldMessenger.hh
 /// \brief  F01FieldMessenger allows interactive user control of
-//     - the strength of the (uniform) magnetic field 
-//     - the key parameters for the accuracy of integration 
+//     - the strength of the (uniform) magnetic field
+//     - the key parameters for the accuracy of integration
 //     - the integration method used - a choice between
 //          * different embedded Runge-Kutta methods or 'tableaus'
 //          * the symplectic Boris method for accelerator setups
@@ -53,24 +53,24 @@ class F01FieldMessenger: public G4UImessenger
 {
   public:
     F01FieldMessenger(F01FieldSetup* );
-    virtual ~F01FieldMessenger();
+    ~F01FieldMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
 
-    F01FieldSetup*             fEMfieldSetup;
+    F01FieldSetup*             fEMfieldSetup = nullptr;
 
-    G4UIdirectory*             fFieldDir;
+    G4UIdirectory*             fFieldDir = nullptr;
 
-    G4UIcmdWithAnInteger*      fStepperCmd;
-    G4UIcmdWithADoubleAndUnit* fMagFieldZCmd;
-    G4UIcmdWith3VectorAndUnit* fMagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* fMinStepCmd;
-    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCmd;
-    G4UIcmdWithADouble*        fEpsMinCmd;
-    G4UIcmdWithADouble*        fEpsMaxCmd;   
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcmdWithAnInteger*      fStepperCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMagFieldZCmd = nullptr;
+    G4UIcmdWith3VectorAndUnit* fMagFieldCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMinStepCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCmd = nullptr;
+    G4UIcmdWithADouble*        fEpsMinCmd = nullptr;
+    G4UIcmdWithADouble*        fEpsMaxCmd = nullptr;
+    G4UIcmdWithoutParameter*   fUpdateCmd = nullptr;
 };
 
 #endif

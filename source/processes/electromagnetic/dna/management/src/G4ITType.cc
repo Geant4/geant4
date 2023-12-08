@@ -35,8 +35,8 @@
 #include "G4ITType.hh"
 #include "G4AutoLock.hh"
 
-/*G4ThreadLocal*/ G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
-G4ThreadLocal G4ITTypeManager* G4ITTypeManager::fgInstance_local = 0;
+/*G4ThreadLocal*/ G4ITTypeManager* G4ITTypeManager::fgInstance = nullptr;
+G4ThreadLocal G4ITTypeManager* G4ITTypeManager::fgInstance_local = nullptr;
 
 G4Mutex deleteMutex=G4MUTEX_INITIALIZER;
 G4Mutex ressourceMutex=G4MUTEX_INITIALIZER;
@@ -56,7 +56,7 @@ G4ITType& G4ITType::operator=(const G4ITType & rhs)
 
 G4ITTypeManager*  G4ITTypeManager::Instance()
 {
-    if(fgInstance == 0)
+    if(fgInstance == nullptr)
     {
         fgInstance =  new G4ITTypeManager();
     }
@@ -66,10 +66,10 @@ G4ITTypeManager*  G4ITTypeManager::Instance()
 void G4ITTypeManager::DeleteInstance()
 {
 	G4AutoLock lock(&deleteMutex);
-	if(fgInstance)
+	if(fgInstance != nullptr)
 	{
 		delete fgInstance ;
-		fgInstance = 0;
+		fgInstance = nullptr;
 	}
 }
 
@@ -94,7 +94,7 @@ G4ITTypeManager::G4ITTypeManager()
 }
 
 G4ITTypeManager::~G4ITTypeManager()
-{;}
+= default;
 
 size_t G4ITTypeManager::size() const
 {

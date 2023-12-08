@@ -3,10 +3,60 @@
 # Define the Geant4 Module.
 geant4_add_module(G4had_par_hp
   PUBLIC_HEADERS
+    G4ArrayOps.hh
+    G4CrossSectionHP.hh
+    G4ENDFTapeRead.hh
+    G4ENDFYieldDataContainer.hh
+    G4FFGDebuggingMacros.hh
+    G4FFGDefaultValues.hh
+    G4FFGEnumerations.hh
+    G4FFGVerboseMacros.hh
+    G4FissionFragmentGenerator.hh
+    G4FissionProductYieldDist.hh
+    G4FPYBiasedLightFragmentDist.hh
+    G4FPYNormalFragmentDist.hh
+    G4FPYNubarValues.hh
+    G4FPYSamplingOps.hh
+    G4FPYTreeStructures.hh
     G4InterpolationIterator.hh
     G4InterpolationManager.hh
     G4InterpolationScheme.hh
     G4NRESP71M03.hh
+    G4NeutronFissionVI.hh
+    G4NeutronHPCapture.hh
+    G4NeutronHPCaptureData.hh
+    G4NeutronHPCaptureFS.hh
+    G4NeutronHPCaptureXS.hh
+    G4NeutronHPElastic.hh
+    G4NeutronHPElasticData.hh
+    G4NeutronHPElasticVI.hh
+    G4NeutronHPElasticXS.hh
+    G4NeutronHPFCFissionFS.hh
+    G4NeutronHPFFFissionFS.hh
+    G4NeutronHPFSFissionFS.hh
+    G4NeutronHPFission.hh
+    G4NeutronHPFissionBaseFS.hh
+    G4NeutronHPFissionData.hh
+    G4NeutronHPFissionERelease.hh
+    G4NeutronHPFissionFS.hh
+    G4NeutronHPFissionSpectrum.hh
+    G4NeutronHPFissionXS.hh
+    G4NeutronHPInelastic.hh
+    G4NeutronHPInelasticData.hh
+    G4NeutronHPInelasticVI.hh
+    G4NeutronHPInelasticXS.hh
+    G4NeutronHPJENDLHEData.hh
+    G4NeutronHPJENDLHEElasticData.hh
+    G4NeutronHPJENDLHEInelasticData.hh
+    G4NeutronHPLCFissionFS.hh
+    G4NeutronHPSCFissionFS.hh
+    G4NeutronHPTCFissionFS.hh
+    G4NeutronHPThermalBoost.hh
+    G4NeutronHPThermalScattering.hh
+    G4NeutronHPThermalScatteringData.hh
+    G4NeutronHPThermalScatteringNames.hh
+    G4NeutronHPWattSpectrum.hh
+    G4NeutronRadCaptureHP.hh
     G4ParticleHPList.hh
     G4ParticleHPIsoData.hh
     G4ParticleHP2AInelasticFS.hh
@@ -71,6 +121,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPInelasticBaseFS.hh
     G4ParticleHPInelasticCompFS.hh
     G4ParticleHPInelasticData.hh
+    G4ParticleHPInelasticXS.hh
     G4ParticleHPInterpolator.hh
     G4ParticleHPIsotropic.hh
     G4ParticleHPJENDLHEData.hh
@@ -120,143 +171,34 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPThreadLocalManager.hh
     G4ParticleHPReactionWhiteBoard.hh
     G4ParticleHPMessenger.hh
-### Fission Fragment Generator - start
-	G4ArrayOps.hh
-	G4ENDFTapeRead.hh
-	G4ENDFYieldDataContainer.hh
-	G4FFGDebuggingMacros.hh
-	G4FFGDefaultValues.hh
-	G4FFGEnumerations.hh
-	G4FFGVerboseMacros.hh
-	G4FissionFragmentGenerator.hh
-	G4FissionProductYieldDist.hh
-	G4FPYBiasedLightFragmentDist.hh
-	G4FPYNormalFragmentDist.hh
-	G4FPYNubarValues.hh
-	G4FPYSamplingOps.hh
-	G4FPYTreeStructures.hh
-	G4ShiftedGaussian.hh
-	G4TableTemplate.hh
-	G4WendtFissionFragmentGenerator.hh
-	G4WattFissionSpectrumValues.hh
-### FissionFragment Generator - end
-### Headers of NeutronHP for backward compatibility - start
-    G4NeutronHPList.hh
-    G4NeutronHPIsoData.hh
-    G4NeutronHP2AInelasticFS.hh
-    G4NeutronHPNames.hh
-    G4NeutronHP2N2AInelasticFS.hh
-    G4NeutronHPPartial.hh
-    G4NeutronHP2NAInelasticFS.hh
-    G4NeutronHPProduct.hh
-    G4NeutronHP2NDInelasticFS.hh
-    G4NeutronHPVector.hh
-    G4NeutronHP2NInelasticFS.hh
-    G4VNeutronHPEDis.hh
-    G4NeutronHP2NPInelasticFS.hh
-    G4NeutronHP2PInelasticFS.hh
-    G4NeutronHP3AInelasticFS.hh
-    G4NeutronHP3NAInelasticFS.hh
-    G4NeutronHP3NInelasticFS.hh
-    G4NeutronHP3NPInelasticFS.hh
-    G4NeutronHP4NInelasticFS.hh
-    G4NeutronHPAInelasticFS.hh
-    G4NeutronHPAngular.hh
-    G4NeutronHPAngularP.hh
-    G4NeutronHPArbitaryTab.hh
-    G4NeutronHPCapture.hh
-    G4NeutronHPCaptureData.hh
-    G4NeutronHPCaptureFS.hh
-    G4NeutronHPChannel.hh
-    G4NeutronHPChannelList.hh
-    G4NeutronHPContAngularPar.hh
-    G4NeutronHPContEnergyAngular.hh
-    G4NeutronHPD2AInelasticFS.hh
-    G4NeutronHPDAInelasticFS.hh
-    G4NeutronHPDInelasticFS.hh
-    G4NeutronHPData.hh
-    G4NeutronHPDataPoint.hh
-    G4NeutronHPDataUsed.hh
-    G4NeutronHPDeExGammas.hh
-    G4NeutronHPDiscreteTwoBody.hh
-    G4NeutronHPElastic.hh
-    G4NeutronHPElasticData.hh
-    G4NeutronHPElasticFS.hh
-    G4NeutronHPElementData.hh
-    G4NeutronHPEnAngCorrelation.hh
-    G4NeutronHPEnergyDistribution.hh
-    G4NeutronHPEvapSpectrum.hh
-    G4NeutronHPFCFissionFS.hh
-    G4NeutronHPFFFissionFS.hh
-    G4NeutronHPFSFissionFS.hh
-    G4NeutronHPFastLegendre.hh
-    G4NeutronHPField.hh
-    G4NeutronHPFieldPoint.hh
-    G4NeutronHPFinalState.hh
-    G4NeutronHPFission.hh
-    G4NeutronHPFissionBaseFS.hh
-    G4NeutronHPFissionData.hh
-    G4NeutronHPFissionERelease.hh
-    G4NeutronHPFissionFS.hh
-    G4NeutronHPFissionSpectrum.hh
-    G4NeutronHPHash.hh
-    G4NeutronHPHe3InelasticFS.hh
-    G4NeutronHPInelastic.hh
-    G4NeutronHPInelasticBaseFS.hh
-    G4NeutronHPInelasticCompFS.hh
-    G4NeutronHPInelasticData.hh
-    G4NeutronHPInterpolator.hh
-    G4NeutronHPIsotropic.hh
-    G4NeutronHPJENDLHEData.hh
-    G4NeutronHPJENDLHEElasticData.hh
-    G4NeutronHPJENDLHEInelasticData.hh
-    G4NeutronHPKallbachMannSyst.hh
-    G4NeutronHPLCFissionFS.hh
-    G4NeutronHPLabAngularEnergy.hh
-    G4NeutronHPLegendreStore.hh
-    G4NeutronHPLegendreTable.hh
-    G4NeutronHPMadlandNixSpectrum.hh
-    G4NeutronHPN2AInelasticFS.hh
-    G4NeutronHPN2PInelasticFS.hh
-    G4NeutronHPN3AInelasticFS.hh
-    G4NeutronHPNAInelasticFS.hh
-    G4NeutronHPNBodyPhaseSpace.hh
-    G4NeutronHPND2AInelasticFS.hh
-    G4NeutronHPNDInelasticFS.hh
-    G4NeutronHPNHe3InelasticFS.hh
-    G4NeutronHPNInelasticFS.hh
-    G4NeutronHPNPAInelasticFS.hh
-    G4NeutronHPNPInelasticFS.hh
-    G4NeutronHPNT2AInelasticFS.hh
-    G4NeutronHPNTInelasticFS.hh
-    G4NeutronHPNXInelasticFS.hh
-    G4NeutronHPNeutronYield.hh
-    G4NeutronHPPAInelasticFS.hh
-    G4NeutronHPPDInelasticFS.hh
-    G4NeutronHPPInelasticFS.hh
-    G4NeutronHPPTInelasticFS.hh
-    G4NeutronHPPhotonDist.hh
-    G4NeutronHPPolynomExpansion.hh
-    G4NeutronHPSCFissionFS.hh
-    G4NeutronHPSimpleEvapSpectrum.hh
-    G4NeutronHPT2AInelasticFS.hh
-    G4NeutronHPTCFissionFS.hh
-    G4NeutronHPTInelasticFS.hh
-    G4NeutronHPThermalBoost.hh
-    G4NeutronHPThermalScattering.hh
-    G4NeutronHPThermalScatteringData.hh
-    G4NeutronHPThermalScatteringNames.hh
-    G4NeutronHPWattSpectrum.hh
-    G4VNeutronHPEnergyAngular.hh
-    G4NeutronHPBGGNucleonInelasticXS.hh
-    G4NeutronHPManager.hh
-    G4NeutronHPThreadLocalManager.hh
-    G4NeutronHPReactionWhiteBoard.hh
-    G4NeutronHPMessenger.hh
-### Headers of NeutronHP for backward compatibility - end
+    G4ShiftedGaussian.hh
+    G4TableTemplate.hh
+    G4WattFissionSpectrumValues.hh
+    G4WendtFissionFragmentGenerator.hh
   SOURCES
+    G4CrossSectionHP.cc
+    G4ENDFTapeRead.cc
+    G4ENDFYieldDataContainer.cc
+    G4FFGDebuggingMacros.cc
+    G4FFGVerboseMacros.cc
+    G4FissionFragmentGenerator.cc
+    G4FissionProductYieldDist.cc
+    G4FPYBiasedLightFragmentDist.cc
+    G4FPYNormalFragmentDist.cc
+    G4FPYSamplingOps.cc
     G4InterpolationManager.cc
     G4NRESP71M03.cc
+    G4NeutronFissionVI.cc
+    G4NeutronHPCapture.cc
+    G4NeutronHPCaptureData.cc
+    G4NeutronHPCaptureFS.cc
+    G4NeutronHPCaptureXS.cc
+    G4NeutronHPElasticVI.cc
+    G4NeutronHPElasticXS.cc
+    G4NeutronHPFissionXS.cc
+    G4NeutronHPInelasticVI.cc
+    G4NeutronHPInelasticXS.cc
+    G4NeutronRadCaptureHP.cc
     G4ParticleHPIsoData.cc
     G4ParticleHP2AInelasticFS.cc
     G4ParticleHPList.cc
@@ -278,9 +220,6 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPAInelasticFS.cc
     G4ParticleHPAngular.cc
     G4ParticleHPArbitaryTab.cc
-    G4ParticleHPCapture.cc
-    G4ParticleHPCaptureData.cc
-    G4ParticleHPCaptureFS.cc
     G4ParticleHPChannel.cc
     G4ParticleHPChannelList.cc
     G4ParticleHPContAngularPar.cc
@@ -319,6 +258,7 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPInelasticBaseFS.cc
     G4ParticleHPInelasticCompFS.cc
     G4ParticleHPInelasticData.cc
+    G4ParticleHPInelasticXS.cc
     G4ParticleHPInterpolator.cc
     G4ParticleHPIsotropic.cc
     G4ParticleHPJENDLHEData.cc
@@ -362,19 +302,8 @@ geant4_add_module(G4had_par_hp
     G4ParticleHPThreadLocalManager.cc
     G4ParticleHPReactionWhiteBoard.cc
     G4ParticleHPMessenger.cc
-### Fission Fragment Generator - start
-	G4ENDFTapeRead.cc
-	G4ENDFYieldDataContainer.cc
-	G4FFGDebuggingMacros.cc
-	G4FFGVerboseMacros.cc
-	G4FissionFragmentGenerator.cc
-	G4FissionProductYieldDist.cc
-	G4FPYBiasedLightFragmentDist.cc
-	G4FPYNormalFragmentDist.cc
-	G4FPYSamplingOps.cc
-	G4ShiftedGaussian.cc
-	G4WendtFissionFragmentGenerator.cc)
-### Fission Fragment Generator - end
+    G4ShiftedGaussian.cc
+    G4WendtFissionFragmentGenerator.cc)
 
 geant4_module_link_libraries(G4had_par_hp
   PUBLIC
@@ -384,16 +313,19 @@ geant4_module_link_libraries(G4had_par_hp
     G4hadronic_mgt
     G4hadronic_util
     G4hadronic_xsect
+    G4hepgeometry
     G4heprandom
     G4intercoms
     G4leptons
     G4materials
     G4partman
   PRIVATE
+    G4hadronic_deex_evaporation
+    G4hadronic_deex_handler
+    G4hadronic_deex_management
     G4hadronic_deex_photon_evaporation
-    G4hepgeometry
     G4ions
-    ${ZLIB_LIBRARIES})
+    ${G4ZLIB_LIBRARIES})
 
 
 # List any source specific properties here

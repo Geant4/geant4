@@ -44,10 +44,6 @@ LXeStackingAction::LXeStackingAction(LXeEventAction* ea)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeStackingAction::~LXeStackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ClassificationOfNewTrack LXeStackingAction::ClassifyNewTrack(
   const G4Track* aTrack)
 {

@@ -107,10 +107,9 @@ int main(int argc,char** argv)
     {
       // -- Specify the processes that will be under biasing:
       // ---- Decide to apply the technique to hadronic inelastic interactions:
-      std::vector< G4String >
-         piPlusProcessesToBias,     piMinusProcessesToBias,
-   	 protonProcessesToBias,  antiProtonProcessesToBias,
-	neutronProcessesToBias, antiNeutronProcessesToBias;
+      std::vector< G4String > piPlusProcessesToBias, piMinusProcessesToBias,
+        protonProcessesToBias, antiProtonProcessesToBias, neutronProcessesToBias,
+        antiNeutronProcessesToBias;
       piPlusProcessesToBias     .push_back(         "pi+Inelastic");
       piMinusProcessesToBias    .push_back(         "pi-Inelastic");
       protonProcessesToBias     .push_back(      "protonInelastic");
@@ -126,8 +125,8 @@ int main(int argc,char** argv)
       biasingPhysics->PhysicsBias("anti_neutron", antiNeutronProcessesToBias);
       // ---- Apply also the technique to some EM processes (producing at least
       // ---- 2 same or 2 particle - anti-particle pairs):
-      std::vector< G4String > gammaProcessesToBias,
-	electronProcessesToBias, positronProcessesToBias;
+      std::vector< G4String > gammaProcessesToBias, electronProcessesToBias,
+        positronProcessesToBias;
       gammaProcessesToBias      .push_back( "conv"            );
       gammaProcessesToBias      .push_back( "photonNuclear"   );
       electronProcessesToBias   .push_back( "electronNuclear" );
@@ -183,8 +182,6 @@ int main(int argc,char** argv)
 
   delete visManager;
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

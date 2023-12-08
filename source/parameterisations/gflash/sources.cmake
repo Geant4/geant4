@@ -35,7 +35,6 @@ geant4_module_link_libraries(G4gflash
     G4partman
     G4navigation
     G4geometrymng
-    G4volumes
     G4intercoms
     G4globman
   PRIVATE

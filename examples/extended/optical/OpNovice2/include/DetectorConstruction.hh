@@ -39,6 +39,8 @@
 #include "G4RunManager.hh"
 #include "G4VUserDetectorConstruction.hh"
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +49,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   DetectorConstruction();
-  virtual ~DetectorConstruction();
+  ~DetectorConstruction() override;
+
+  G4VPhysicalVolume* Construct() override;
 
   G4VPhysicalVolume* GetTank() { return fTank; }
   G4double GetTankXSize() { return fTank_x; }
@@ -59,7 +63,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     fSurface->SetFinish(finish);
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
-  G4OpticalSurfaceFinish GetSurfaceFinish(void)
+  G4OpticalSurfaceFinish GetSurfaceFinish()
   {
     return fSurface->GetFinish();
   }
@@ -75,7 +79,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     fSurface->SetModel(model);
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
-  G4OpticalSurfaceModel GetSurfaceModel(void) { return fSurface->GetModel(); }
+  G4OpticalSurfaceModel GetSurfaceModel() { return fSurface->GetModel(); }
 
   void SetSurfaceSigmaAlpha(G4double v);
   void SetSurfacePolish(G4double v);
@@ -106,32 +110,30 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   void SetTankMaterial(const G4String&);
   G4Material* GetTankMaterial() const { return fTankMaterial; }
 
-  virtual G4VPhysicalVolume* Construct();
-
  private:
-  G4double fExpHall_x;
-  G4double fExpHall_y;
-  G4double fExpHall_z;
+  G4double fExpHall_x = 10.*CLHEP::m;
+  G4double fExpHall_y = 10.*CLHEP::m;
+  G4double fExpHall_z = 10.*CLHEP::m;
 
-  G4VPhysicalVolume* fTank;
+  G4VPhysicalVolume* fTank = nullptr;
 
-  G4double fTank_x;
-  G4double fTank_y;
-  G4double fTank_z;
+  G4double fTank_x = 1.*CLHEP::m;
+  G4double fTank_y = 1.*CLHEP::m;
+  G4double fTank_z = 1.*CLHEP::m;
 
-  G4LogicalVolume* fWorld_LV;
-  G4LogicalVolume* fTank_LV;
+  G4LogicalVolume* fWorld_LV = nullptr;
+  G4LogicalVolume* fTank_LV = nullptr;
 
-  G4Material* fWorldMaterial;
-  G4Material* fTankMaterial;
+  G4Material* fWorldMaterial = nullptr;
+  G4Material* fTankMaterial = nullptr;
 
-  G4OpticalSurface* fSurface;
+  G4OpticalSurface* fSurface = nullptr;
 
-  DetectorMessenger* fDetectorMessenger;
+  DetectorMessenger* fDetectorMessenger = nullptr;
 
-  G4MaterialPropertiesTable* fTankMPT;
-  G4MaterialPropertiesTable* fWorldMPT;
-  G4MaterialPropertiesTable* fSurfaceMPT;
+  G4MaterialPropertiesTable* fTankMPT = nullptr;
+  G4MaterialPropertiesTable* fWorldMPT = nullptr;
+  G4MaterialPropertiesTable* fSurfaceMPT = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

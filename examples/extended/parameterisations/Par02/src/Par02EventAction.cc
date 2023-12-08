@@ -48,7 +48,7 @@ Par02EventAction::Par02EventAction( G4bool aSmear ) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02EventAction::~Par02EventAction() {}
+Par02EventAction::~Par02EventAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

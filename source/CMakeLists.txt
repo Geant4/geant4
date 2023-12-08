@@ -43,3 +43,10 @@ endif()
 
 # - Compose libs
 geant4_compose_targets()
+
+if(GEANT4_USE_VTK)
+  vtk_module_autoinit(
+    TARGETS G4visVtk
+    MODULES ${VTK_LIBRARIES}
+  )
+endif()

@@ -42,9 +42,9 @@ class G4PreCompoundNucleon : public G4PreCompoundFragment
 public:  
 
   G4PreCompoundNucleon(const G4ParticleDefinition*,
-		       G4VCoulombBarrier * aCoulombBarrier);
+                       G4VCoulombBarrier* p = nullptr);
   
-  virtual ~G4PreCompoundNucleon();
+  ~G4PreCompoundNucleon() override = default;
 
   G4PreCompoundNucleon(const G4PreCompoundNucleon &right) = delete;
   const G4PreCompoundNucleon& 

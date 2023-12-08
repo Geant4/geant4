@@ -23,48 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 
 #include "G4MesonConstructor.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 // Mesons
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
+#include "G4AntiBMesonZero.hh"
+#include "G4AntiBsMesonZero.hh"
+#include "G4AntiDMesonZero.hh"
+#include "G4AntiKaonZero.hh"
+#include "G4BMesonMinus.hh"
+#include "G4BMesonPlus.hh"
+#include "G4BMesonZero.hh"
+#include "G4BcMesonMinus.hh"
+#include "G4BcMesonPlus.hh"
+#include "G4BsMesonZero.hh"
+#include "G4DMesonMinus.hh"
+#include "G4DMesonPlus.hh"
+#include "G4DMesonZero.hh"
+#include "G4DsMesonMinus.hh"
+#include "G4DsMesonPlus.hh"
 #include "G4Eta.hh"
 #include "G4EtaPrime.hh"
-
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonZeroShort.hh"
-
-#include "G4DMesonPlus.hh"
-#include "G4DMesonMinus.hh"
-#include "G4DMesonZero.hh"
-#include "G4AntiDMesonZero.hh"
-#include "G4DsMesonPlus.hh"
-#include "G4DsMesonMinus.hh"
 #include "G4Etac.hh"
 #include "G4JPsi.hh"
-
-#include "G4BMesonPlus.hh"
-#include "G4BMesonMinus.hh"
-#include "G4BMesonZero.hh"
-#include "G4AntiBMesonZero.hh"
-#include "G4BsMesonZero.hh"
-#include "G4AntiBsMesonZero.hh"
-#include "G4BcMesonPlus.hh"
-#include "G4BcMesonMinus.hh"
+#include "G4KaonMinus.hh"
+#include "G4KaonPlus.hh"
+#include "G4KaonZero.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
+#include "G4PionMinus.hh"
+#include "G4PionPlus.hh"
+#include "G4PionZero.hh"
 #include "G4Upsilon.hh"
 
 void G4MesonConstructor::ConstructParticle()

@@ -50,12 +50,14 @@
 
 #include "G4NucleusLimits.hh"
 #include "G4ThreeVector.hh"
-#include "G4Threading.hh"
 #include "G4RadioactiveDecayMode.hh"
 
 class G4Fragment;
 class G4RadioactiveDecayMessenger;
 class G4PhotonEvaporation;
+class G4Ions;
+class G4DecayTable;
+class G4ITDecay;
 
 typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
@@ -74,15 +76,27 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
   public: // with description
 
-    G4RadioactiveDecay(const G4String& processName="RadioactiveDecay");
-    ~G4RadioactiveDecay();
+    G4RadioactiveDecay(const G4String& processName="RadioactiveDecay",
+                       const G4double timeThreshold=-1.0);
+    ~G4RadioactiveDecay() override;
 
-    virtual void ProcessDescription(std::ostream& outFile) const;
-
-    G4bool IsApplicable(const G4ParticleDefinition&);
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
     // Return true if the specified isotope is
     //  1) defined as "nucleus" and
     //  2) it is within theNucleusLimit
+
+    G4VParticleChange* AtRestDoIt(const G4Track& theTrack,
+                                  const G4Step& theStep) override;
+
+    G4VParticleChange* PostStepDoIt(const G4Track& theTrack,
+                                    const G4Step& theStep) override;
+
+    void BuildPhysicsTable(const G4ParticleDefinition &) override;
+
+    void ProcessDescription(std::ostream& outFile) const override;
+
+    virtual G4VParticleChange* DecayIt(const G4Track& theTrack,
+                                       const G4Step& theStep);
 
     // Return decay table if it exists, if not, load it from file
     G4DecayTable* GetDecayTable(const G4ParticleDefinition*);
@@ -102,18 +116,12 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // Enable/disable ARM
     void SetARM(G4bool arm) {applyARM = arm;}
 
-    G4DecayTable* LoadDecayTable(const G4ParticleDefinition& theParentNucleus);
+    G4DecayTable* LoadDecayTable(const G4Ions*);
     // Load the decay data of isotope theParentNucleus
 
-    void AddUserDecayDataFile(G4int Z, G4int A,G4String filename);
+    void AddUserDecayDataFile(G4int Z, G4int A, const G4String& filename);
     // Allow the user to replace the radio-active decay data provided in Geant4
     // by its own data file for a given isotope
-
-    inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
-    // Sets the VerboseLevel which controls duggering display
-
-    inline G4int GetVerboseLevel() const {return verboseLevel;}
-    // Returns the VerboseLevel which controls level of debugging output
 
     inline void SetNucleusLimits(G4NucleusLimits theNucleusLimits1)
       {theNucleusLimits = theNucleusLimits1 ;}
@@ -152,105 +160,68 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     }
     inline G4double GetThresholdForVeryLongDecayTime() const {return fThresholdForVeryLongDecayTime;}
 
-    void BuildPhysicsTable(const G4ParticleDefinition &);
+    void StreamInfo(std::ostream& os, const G4String& endline);
 
-    G4VParticleChange* DecayIt(const G4Track& theTrack,
-                               const G4Step&  theStep);
+    G4RadioactiveDecay(const G4RadioactiveDecay& right) = delete;
+    G4RadioactiveDecay& operator=(const G4RadioactiveDecay& right) = delete;
 
   protected:
 
-    void DecayAnalog(const G4Track& theTrack);
+    G4double GetMeanFreePath(const G4Track& theTrack, G4double previousStepSize,
+                             G4ForceCondition* condition) override;
 
-    G4DecayProducts* DoDecay(const G4ParticleDefinition& theParticleDef);
+    G4double GetMeanLifeTime(const G4Track& theTrack,
+                             G4ForceCondition* condition) override;
+
+    // sampling of products 
+    void DecayAnalog(const G4Track& theTrack, G4DecayTable*);
+
+    // sampling products at rest
+    G4DecayProducts* DoDecay(const G4ParticleDefinition&, G4DecayTable*);
 
     // Apply directional bias for "visible" daughters (e+-, gamma, n, p, alpha)
     void CollimateDecay(G4DecayProducts* products);
     void CollimateDecayProduct(G4DynamicParticle* product);
     G4ThreeVector ChooseCollimationDirection() const;
 
-    G4double GetMeanFreePath(const G4Track& theTrack, G4double previousStepSize,
-                             G4ForceCondition* condition);
-
-    G4double GetMeanLifeTime(const G4Track& theTrack,
-                             G4ForceCondition* condition);
-
     // ParticleChange for decay process
     G4ParticleChangeForRadDecay fParticleChangeForRadDecay;
 
     G4RadioactiveDecayMessenger* theRadioactiveDecayMessenger;
     G4PhotonEvaporation* photonEvaporation;
+    G4ITDecay* decayIT;
 
     std::vector<G4String> ValidVolumes;
-    bool isAllVolumesMode;
+    bool isAllVolumesMode{true};
 
     static const G4double levelTolerance;
 
     // Library of decay tables
-    DecayTableMap* dkmap;
-#ifdef G4MULTITHREADED
     static DecayTableMap* master_dkmap;
-#endif
 
   private:
 
-    void StreamInfo(std::ostream& os, const G4String& endline);
-
-    G4RadioactiveDecay(const G4RadioactiveDecay& right);
-    G4RadioactiveDecay& operator=(const G4RadioactiveDecay& right);
-
     G4NucleusLimits theNucleusLimits;
 
-    G4bool isInitialised;
-
-    G4bool applyARM;
+    G4bool isInitialised{false};
+    G4bool applyARM{true};
 
     // Parameters for pre-collimated (biased) decay products
-    G4ThreeVector forceDecayDirection;
-    G4double      forceDecayHalfAngle;
+    G4ThreeVector forceDecayDirection{G4ThreeVector(0., 0., 0.)};
+    G4double forceDecayHalfAngle{0.0};
     static const G4ThreeVector origin;	// (0,0,0) for convenience
 
     // Radioactive decay database directory path 
-    G4String dirPath;
+    static G4String dirPath;
 
-    //User define radioactive decay data files replacing some files in the G4RADECAY database
-    std::map<G4int, G4String> theUserRadioactiveDataFiles;
+    // User define radioactive decay data files replacing some files in the G4RADECAY database
+    static std::map<G4int, G4String>* theUserRDataFiles;
 
-    //The last RadDecayMode
-  G4RadioactiveDecayMode theRadDecayMode{G4RadioactiveDecayMode::IT};
-
-    // Remainder of life time at rest
-    G4double fRemainderLifeTime{0.0};
-    G4int verboseLevel;
-
+    // The last RadDecayMode
+    G4RadioactiveDecayMode theRadDecayMode{G4RadioactiveDecayMode::IT};
+ 
     // Ignore radioactive decays at rest of nuclides happening after this (very long) time threshold
     G4double fThresholdForVeryLongDecayTime;
-
-    // inline implementations 
-    inline
-    G4double AtRestGetPhysicalInteractionLength(const G4Track& track,
-                                                G4ForceCondition* condition)
-    {
-      fRemainderLifeTime =
-        G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition);
-      return fRemainderLifeTime;
-    }
-
-    inline
-    G4VParticleChange* AtRestDoIt(const G4Track& theTrack,
-                                  const G4Step& theStep)
-      {return DecayIt(theTrack, theStep);}
-
-    inline
-    G4VParticleChange* PostStepDoIt(const G4Track& theTrack,
-                                    const G4Step& theStep)
-      {return DecayIt(theTrack, theStep);}
-
-#ifdef G4MULTITHREADED
-  public:
-    static G4Mutex radioactiveDecayMutex;
-  protected:
-    G4int& NumberOfInstances();
-#endif
 };
 
 #endif

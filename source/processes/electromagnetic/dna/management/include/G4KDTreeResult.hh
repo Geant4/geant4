@@ -56,8 +56,8 @@ class G4KDNode_Base;
 struct ResNode;
 class G4KDTreeResult;
 
-typedef G4ReferenceCountedHandle<G4KDTreeResult> G4KDTreeResultHandle;
-typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
+using G4KDTreeResultHandle = G4ReferenceCountedHandle<G4KDTreeResult>;
+using ResNodeHandle = G4ReferenceCountedHandle<ResNode>;
 
 /**
  * G4KDTreeResult enables to go through the nearest entities found
@@ -126,7 +126,7 @@ extern G4DLLIMPORT G4Allocator<G4KDTreeResult>*& aKDTreeAllocator();
 
 inline void * G4KDTreeResult::operator new(size_t)
 {
-  if (!aKDTreeAllocator()) aKDTreeAllocator() = new G4Allocator<G4KDTreeResult>;
+  if (aKDTreeAllocator() == nullptr) aKDTreeAllocator() = new G4Allocator<G4KDTreeResult>;
   return (void *) aKDTreeAllocator()->MallocSingle();
 }
 
@@ -138,7 +138,7 @@ inline void G4KDTreeResult::operator delete(void * object)
 template<typename PointT>
   PointT* G4KDTreeResult::GetItem() const
   {
-    G4KDNode<PointT>* node = (G4KDNode<PointT>*) (GetNode());
+    auto  node = (G4KDNode<PointT>*) (GetNode());
     return node->GetPoint();
   }
 

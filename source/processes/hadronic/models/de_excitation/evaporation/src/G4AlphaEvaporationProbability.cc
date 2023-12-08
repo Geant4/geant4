@@ -39,11 +39,8 @@ G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
     G4EvaporationProbability(4,2,1.0) 
 {}
 
-G4AlphaEvaporationProbability::~G4AlphaEvaporationProbability()
-{}
-
-G4double G4AlphaEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
-{ 
+G4double G4AlphaEvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
+{
   // Data comes from 
   // Dostrovsky, Fraenkel and Friedlander
   // Physical Review, vol 116, num. 3 1959
@@ -52,7 +49,7 @@ G4double G4AlphaEvaporationProbability::CalcAlphaParam(const G4Fragment& fragmen
   // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
   //	G4double Calpha[5] = { 0.10, 0.10, 0.10, 0.08, 0.06};
 
-  G4int aZ = fragment.GetZ_asInt()-GetZ();
+  G4int aZ = fr.GetZ_asInt() - GetZ();
   G4double C;
 	
   if (aZ <= 30) 

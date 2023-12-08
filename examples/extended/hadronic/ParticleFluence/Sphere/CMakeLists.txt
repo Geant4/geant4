@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Sphere)
 
 #----------------------------------------------------------------------------
@@ -39,16 +39,16 @@ target_link_libraries(Sphere ${Geant4_LIBRARIES} )
 # directly there.
 #
 set(Sphere_SCRIPTS
-  all_together.g4
-  polystyrene.g4
-  graphite.g4
-  si.g4
-  lar.g4
-  fe.g4
-  cu.g4
-  w.g4
-  pb.g4
-  pbwo4.g4
+  all_together.in
+  polystyrene.in
+  graphite.in
+  si.in
+  lar.in
+  fe.in
+  cu.in
+  w.in
+  pb.in
+  pbwo4.in
   )
 
 foreach(_script ${Sphere_SCRIPTS})

@@ -41,9 +41,9 @@ using namespace std;
 
 G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinition*,
                                                        const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+    G4VEmModel(nam) 
 {
-  fpWaterDensity = 0;
+  fpWaterDensity = nullptr;
 
   SetLowEnergyLimit(2.*eV);
   SetHighEnergyLimit(100*eV);
@@ -69,8 +69,8 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
   }
 #endif
   
-  fParticleChangeForGamma = 0;
-  fpWaterDensity = 0;
+  fParticleChangeForGamma = nullptr;
+  fpWaterDensity = nullptr;
 
   // Selection of stationary mode
 
@@ -80,8 +80,7 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNASancheExcitationModel::~G4DNASancheExcitationModel()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -160,7 +159,7 @@ Initialise(const G4ParticleDefinition* /*particle*/,
     input>>t;
     tdummyVec.push_back(t);
 
-    fEnergyLevelXS.push_back(std::vector<G4double>());
+    fEnergyLevelXS.emplace_back();
     fEnergyTotalXS.push_back(0);
     std::vector<G4double>& levelXS = fEnergyLevelXS.back();
     levelXS.reserve(9);
@@ -295,9 +294,9 @@ G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
   if (t/eV==tdummyVec.back()) t=t*(1.-1e-12);
   //
 
-  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  auto t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<G4double>::iterator t1 = t2 - 1;
+  auto t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();
@@ -322,9 +321,9 @@ G4double G4DNASancheExcitationModel::TotalCrossSection(G4double t)
   if (t/eV==tdummyVec.back()) t=t*(1.-1e-12);
   //
 
-  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  auto t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<G4double>::iterator t1 = t2 - 1;
+  auto t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();

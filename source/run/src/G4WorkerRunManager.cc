@@ -85,7 +85,10 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM)
          "applications.";
   G4Exception("G4WorkerRunManager::G4WorkerRunManager()", "Run0103", FatalException, msg);
 #endif
-  G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
+  // G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
+     // WorkerG4ParticleTable() would be performed twice,
+     // as it is called already from G4ParticleTable::GetParticleTable()
+     // which is called beforehand by other Geant4 classes
   G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
   if (masterScM != nullptr) G4ScoringManager::GetScoringManager();  // TLS instance for a worker
 
@@ -114,6 +117,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM)
 // --------------------------------------------------------------------
 G4WorkerRunManager::~G4WorkerRunManager()
 {
+  CleanUpPreviousEvents();
   // Put these pointers to zero: owned by master thread
   // If not to zero, the base class destructor will attempt to
   // delete them

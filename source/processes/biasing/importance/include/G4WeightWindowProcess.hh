@@ -40,6 +40,7 @@
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
+#include "G4VTouchable.hh"
 
 class G4SamplingPostStepAction;
 class G4VWeightWindowAlgorithm;
@@ -49,7 +50,6 @@ class G4Step;
 class G4Navigator;
 class G4TransportationManager;
 class G4PathFinder;
-class G4VTouchable;
 
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"

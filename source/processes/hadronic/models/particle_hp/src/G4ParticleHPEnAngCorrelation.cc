@@ -34,6 +34,9 @@
 // June-2019 - E. Mendoza --> Part of the code trying to preserve the baryonic number has been
 // deleted. One has to assume that it is not preserved when using ENDF-6 data and it caused
 // problems.
+//
+// V. Ivanchenko, May-2023 Basic revision of particle HP classes
+//
 
 #include "G4ParticleHPEnAngCorrelation.hh"
 
@@ -41,10 +44,36 @@
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4ParticleHPManager.hh"
+#include "G4Neutron.hh"
+
+G4ParticleHPEnAngCorrelation::G4ParticleHPEnAngCorrelation(const G4ParticleDefinition* proj)
+{
+  theProjectile = (nullptr == proj) ? G4Neutron::Neutron() : proj;
+  toBeCached val;
+  fCache.Put( val );
+}
+
+G4ParticleHPEnAngCorrelation::~G4ParticleHPEnAngCorrelation()
+{
+  delete[] theProducts;
+}
+
+void G4ParticleHPEnAngCorrelation::Init(std::istream& aDataFile)
+{
+  inCharge = true;
+  aDataFile >> targetMass >> frameFlag >> nProducts;
+  //G4cout << "G4ParticleHPEnAngCorrelation::Init " << theProjectile->GetParticleName()
+  //	 << " frameFlag=" << frameFlag << " N=" << nProducts << " Mass=" << targetMass << G4endl;
+  theProducts = new G4ParticleHPProduct[nProducts];
+  for (G4int i = 0; i < nProducts; ++i) {
+    theProducts[i].Init(aDataFile, theProjectile);
+  }
+}
 
 G4ReactionProduct* G4ParticleHPEnAngCorrelation::SampleOne(G4double anEnergy)
 {
-  G4ReactionProduct* result = nullptr;
+  auto result = new G4ReactionProduct;
 
   // do we have an appropriate distribution
   if (nProducts != 1)
@@ -56,27 +85,32 @@ G4ReactionProduct* G4ParticleHPEnAngCorrelation::SampleOne(G4double anEnergy)
 
   G4int icounter = 0;
   G4int icounter_max = 1024;
-  while (temp == nullptr) {
-    icounter++;
-    if (icounter > icounter_max) {
-      G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of "
+  while (temp == nullptr)
+  {
+    ++icounter;
+    if (icounter > icounter_max)
+    {
+      G4cout << "Loop-counter exceeded the threshold value at " 
+             << __LINE__ << "th line of "
              << __FILE__ << "." << G4endl;
       break;
     }
-    temp = theProducts[i++].Sample(anEnergy, 1);
+    temp = theProducts[++i].Sample(anEnergy, 1);
   }
-  if (temp->size() == 1) {
-    result = (*temp)[0];
-
-  } else {
-    if (nullptr != temp) {
-      for (auto const& ptr : *temp) { delete ptr; }
+  if (nullptr != temp)
+  {
+    if (temp->size() == 1)
+    {
+      result = (*temp)[0];
     }
-    throw G4HadronicException(__FILE__, __LINE__, "SampleOne: Yield not correct");
+    else
+    {
+      for (auto const& ptr : *temp) { delete ptr; }
+      throw G4HadronicException(__FILE__, __LINE__,
+				"SampleOne: Yield not correct");
+    }
   }
   delete temp;
-
-  // return result
   return result;
 }
 
@@ -87,14 +121,17 @@ G4ReactionProductVector* G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy)
   G4ReactionProductVector* it;
   G4ReactionProduct theCMS;
   G4LorentzRotation toZ;
-
+  /*
+  G4cout << "G4ParticleHPEnAngCorrelation::Sample for E=" << anEnergy 
+	 << " flag=" << frameFlag << " nProducts=" << nProducts <<G4endl;
+  */
   if (frameFlag == 2 || frameFlag == 3)  // Added for particle HP
   {
-    // simplify and double check @
-    G4ThreeVector the3IncidentPart =
-      fCache.Get().theProjectileRP->GetMomentum();  // theProjectileRP has value in LAB
+    G4ThreeVector the3IncidentPart = fCache.Get().theProjectileRP->GetMomentum();
+      // theProjectileRP has value in LAB
     G4double nEnergy = fCache.Get().theProjectileRP->GetTotalEnergy();
-    G4ThreeVector the3Target = fCache.Get().theTarget->GetMomentum();  // theTarget has value in LAB
+    G4ThreeVector the3Target = fCache.Get().theTarget->GetMomentum();
+      // theTarget has value in LAB
     G4double tEnergy = fCache.Get().theTarget->GetTotalEnergy();
     G4double totE = nEnergy + tEnergy;
     G4ThreeVector the3CMS = the3Target + the3IncidentPart;
@@ -108,36 +145,36 @@ G4ReactionProductVector* G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy)
     // TKDB 100413
     // ENDF-6 Formats Manual ENDF-102
     // CHAPTER 6. FILE 6: PRODUCT ENERGY-ANGLE DISTRIBUTIONS
-    // LCT Reference system for secondary energy and angle (incident energy is always given in the
-    // LAB system) anEnergy = aIncidentPart.GetKineticEnergy();
-    anEnergy =
-      fCache.Get().theProjectileRP->GetKineticEnergy();  // should be same argumment of "anEnergy"
+    // LCT Reference system for secondary energy and angle
+    // incident energy is always given in the LAB system
+    anEnergy = fCache.Get().theProjectileRP->GetKineticEnergy();
+    // should be same argumment of "anEnergy"
 
-    G4LorentzVector Ptmp(aIncidentPart.GetMomentum(), aIncidentPart.GetTotalEnergy());
+    G4LorentzVector Ptmp(aIncidentPart.GetMomentum(),
+                         aIncidentPart.GetTotalEnergy());
 
     toZ.rotateZ(-1 * Ptmp.phi());
     toZ.rotateY(-1 * Ptmp.theta());
   }
   fCache.Get().theTotalMeanEnergy = 0;
-  G4LorentzRotation toLab(toZ.inverse());  // toLab only change axis NOT to LAB system
+  G4LorentzRotation toLab(toZ.inverse());
+  // toLab only change axis NOT to LAB system
 
-  for (i = 0; i < nProducts; i++) {
+  for (i = 0; i < nProducts; ++i) {
     G4int nPart = theProducts[i].GetMultiplicity(anEnergy);
-    //-    if( nParticles[i] == 0 ) continue;
     it = theProducts[i].Sample(anEnergy, nPart);
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
-    // if(aMeanEnergy>0)
+
     // 151120 TK Modified for solving reproducibility problem
     // This change may have side effect.
     if (aMeanEnergy >= 0) {
       fCache.Get().theTotalMeanEnergy += aMeanEnergy;
     }
     else {
-      fCache.Get().theTotalMeanEnergy = anEnergy / nProducts + theProducts[i].GetQValue();
+      fCache.Get().theTotalMeanEnergy = anEnergy/nProducts + theProducts[i].GetQValue();
     }
     if (it != nullptr) {
-      for (unsigned int ii = 0; ii < it->size(); ii++) {
-        // if(!std::getenv("G4PHP_NO_LORENTZ_BOOST")) {
+      for (unsigned int ii = 0; ii < it->size(); ++ii) {
         G4LorentzVector pTmp1(it->operator[](ii)->GetMomentum(),
                               it->operator[](ii)->GetTotalEnergy());
         pTmp1 = toLab * pTmp1;
@@ -153,15 +190,17 @@ G4ReactionProductVector* G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy)
         else if (frameFlag == 2)  // CMS
         {
 #ifdef G4PHPDEBUG
-          if (std::getenv("G4ParticleHPDebug"))
+          if (G4ParticleHPManager::GetInstance()->GetDEBUG())
             G4cout << "G4ParticleHPEnAngCorrelation: before Lorentz boost "
-                   << it->at(ii)->GetKineticEnergy() << " " << it->at(ii)->GetMomentum() << G4endl;
+                   << it->at(ii)->GetKineticEnergy() << " "
+                   << it->at(ii)->GetMomentum() << G4endl;
 #endif
           it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1. * theCMS);
 #ifdef G4PHPDEBUG
-          if (std::getenv("G4ParticleHPDebug"))
+          if (G4ParticleHPManager::GetInstance()->GetDEBUG())
             G4cout << "G4ParticleHPEnAngCorrelation: after Lorentz boost "
-                   << it->at(ii)->GetKineticEnergy() << " " << it->at(ii)->GetMomentum() << G4endl;
+                   << it->at(ii)->GetKineticEnergy() << " "
+                   << it->at(ii)->GetMomentum() << G4endl;
 #endif
         }
         // TK120515 migrate frameFlag (MF6 LCT) = 3
@@ -174,37 +213,32 @@ G4ReactionProductVector* G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy)
               *(it->operator[](ii)),
               -1. * (*fCache.Get().theTarget));  // TK 100413 Is this really need?
 #ifdef G4PHPDEBUG
-            if (std::getenv("G4ParticleHPDebug"))
+            if (G4ParticleHPManager::GetInstance()->GetDEBUG())
               G4cout << "G4ParticleHPEnAngCorrelation: after Lorentz boost "
-                     << it->at(ii)->GetKineticEnergy() << " " << it->at(ii)->GetMomentum()
-                     << G4endl;
+                     << it->at(ii)->GetKineticEnergy() << " "
+                     << it->at(ii)->GetMomentum() << G4endl;
 #endif
           }
           else {
             // CMS
             it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1. * theCMS);
 #ifdef G4PHPDEBUG
-            if (std::getenv("G4ParticleHPDebug"))
+            if (G4ParticleHPManager::GetInstance()->GetDEBUG())
               G4cout << "G4ParticleHPEnAngCorrelation: after Lorentz boost "
-                     << it->at(ii)->GetKineticEnergy() << " " << it->at(ii)->GetMomentum()
-                     << G4endl;
+                     << it->at(ii)->GetKineticEnergy() << " "
+                     << it->at(ii)->GetMomentum() << G4endl;
 #endif
           }
         }
-        else {
-          throw G4HadronicException(
-            __FILE__, __LINE__,
-            "G4ParticleHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");
+        else
+        {
+          throw G4HadronicException(__FILE__, __LINE__,
+            "Sample: The frame of the final state is not specified");
         }
-
-        // }//getenv("G4PHP_NO_LORENTZ_BOOST"))
-        //	G4cout <<  ii << " EnAnG energy after boost " << it->operator[](ii)->GetKineticEnergy()
-        //<< G4endl; //GDEB
         result->push_back(it->operator[](ii));
       }
       delete it;
     }
   }
-
   return result;
 }

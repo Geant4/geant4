@@ -32,7 +32,7 @@
 // This is a modified version of the FTFP_BERT physics list for ATLAS.
 // The physics list FTFP_BERT_ATL has the transition between Bertini (BERT)
 // intra-nuclear cascade model and Fritiof (FTF) string model in the
-// energy region [9, 12] GeV (instead of [4, 5] GeV as in FTFP_BERT).
+// energy region [9, 12] GeV (instead of [3, 6] GeV as in FTFP_BERT).
 //----------------------------------------------------------------------------
 //
 #include <iomanip>   
@@ -52,6 +52,7 @@
 #include "G4HadronPhysicsFTFP_BERT_ATL.hh"
 
 #include "G4WarnPLStatus.hh"
+#include "G4FTFTunings.hh"
 
 FTFP_BERT_ATL::FTFP_BERT_ATL(G4int ver)
 {
@@ -64,6 +65,11 @@ FTFP_BERT_ATL::FTFP_BERT_ATL(G4int ver)
   defaultCutValue = 0.7*CLHEP::mm;  
   SetVerboseLevel(ver);
 
+  // Use the 4th tunes of Fritiof (FTF) string model, meant to to overcome
+  // the problem of too optimistic (i.e. narrow) pion shower energy resolutions
+  // in ATLAS calorimeters with respect to test-beam data.
+  G4FTFTunings::Instance()->SetTuneApplicabilityState( 4, 1 );
+  
   // EM Physics
   RegisterPhysics( new G4EmStandardPhysics(ver));
 

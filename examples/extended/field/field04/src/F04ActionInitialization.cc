@@ -42,13 +42,7 @@
 
 F04ActionInitialization::F04ActionInitialization
                             (F04DetectorConstruction* detConstruction)
- : G4VUserActionInitialization(),
-   fDetConstruction(detConstruction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F04ActionInitialization::~F04ActionInitialization()
+ : fDetConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,9 +58,9 @@ void F04ActionInitialization::Build() const
 {
   SetUserAction(new F04PrimaryGeneratorAction(fDetConstruction));
 
-  F04RunAction* runAction = new F04RunAction();
+  auto  runAction = new F04RunAction();
   SetUserAction(runAction);
-  F04EventAction* eventAction = new F04EventAction(runAction);
+  auto  eventAction = new F04EventAction(runAction);
   SetUserAction(eventAction);
   SetUserAction(new F04TrackingAction());
   SetUserAction(new F04StackingAction());

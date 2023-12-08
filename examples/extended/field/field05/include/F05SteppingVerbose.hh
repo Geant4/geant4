@@ -28,14 +28,14 @@
 //
 //
 //
-//  
+//
 //---------------------------------------------------------------
 //
 // F05SteppingVerbose.hh
 //
 // Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
+//   This class manages the vervose outputs in G4SteppingManager.
+//
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -49,16 +49,16 @@
 
 #include "G4SteppingVerbose.hh"
 
-class F05SteppingVerbose : public G4SteppingVerbose 
+class F05SteppingVerbose : public G4SteppingVerbose
 {
-  public:   
+  public:
 
-    F05SteppingVerbose();
-    virtual ~F05SteppingVerbose();
+    F05SteppingVerbose() = default;
+    ~F05SteppingVerbose() override = default;
       // Constructor/Destructor
 
-    virtual void StepInfo();
-    virtual void TrackingStarted();
+    void StepInfo() override;
+    void TrackingStarted() override;
 
 };
 

@@ -51,7 +51,7 @@ class RunAction : public G4UserRunAction
 public:
 
   RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim=0);
- ~RunAction() override;
+ ~RunAction() override = default;
 
   G4Run* GenerateRun() override;
   void BeginOfRunAction(const G4Run*) override;
@@ -59,11 +59,11 @@ public:
 
 private:
   
-  DetectorConstruction*   fDetector;
-  PrimaryGeneratorAction* fPrimary;
-  Run*                    fRun;      
-  HistoManager*           fHistoManager;
-  G4Timer*                fTimer;
+  DetectorConstruction*   fDetector     = nullptr;
+  PrimaryGeneratorAction* fPrimary      = nullptr;
+  Run*                    fRun          = nullptr;      
+  HistoManager*           fHistoManager = nullptr;
+  G4Timer*                fTimer        = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

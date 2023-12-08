@@ -33,6 +33,7 @@
 
 #include "HistoManager.hh"
 #include "Run.hh"
+#include "SteppingMessenger.hh"
 #include "TrackInformation.hh"
 
 #include "G4Cerenkov.hh"
@@ -51,10 +52,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 SteppingAction::SteppingAction()
   : G4UserSteppingAction()
-{}
+{
+  fSteppingMessenger = new SteppingMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingAction::~SteppingAction() {}
+SteppingAction::~SteppingAction()
+{
+  delete fSteppingMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void SteppingAction::UserSteppingAction(const G4Step* step)
@@ -74,14 +80,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   const G4ParticleDefinition* particleDef =
     theParticle->GetParticleDefinition();
 
-  TrackInformation* trackInfo =
-    (TrackInformation*) (track->GetUserInformation());
+  auto trackInfo = (TrackInformation*) (track->GetUserInformation());
 
   if(particleDef == opticalphoton)
   {
     const G4VProcess* pds = endPoint->GetProcessDefinedStep();
     G4String procname     = pds->GetProcessName();
-    if(procname.compare("OpAbsorption") == 0)
+    if(procname == "OpAbsorption")
     {
       run->AddOpAbsorption();
       if(trackInfo->GetIsFirstTankX())
@@ -89,11 +94,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         run->AddOpAbsorptionPrior();
       }
     }
-    else if(procname.compare("OpRayleigh") == 0)
+    else if(procname == "OpRayleigh")
     {
       run->AddRayleigh();
     }
-    else if(procname.compare("OpWLS") == 0)
+    else if(procname == "OpWLS")
     {
       G4double en = track->GetKineticEnergy();
       run->AddWLSAbsorption();
@@ -112,7 +117,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         analysisMan->FillH1(6, time / ns);
       }
     }
-    else if(procname.compare("OpWLS2") == 0)
+    else if(procname == "OpWLS2")
     {
       G4double en = track->GetKineticEnergy();
       run->AddWLS2Absorption();
@@ -174,8 +179,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
         {
           G4VProcess* currentProcess = (*postStepDoItVector)[i];
 
-          G4OpBoundaryProcess* opProc =
-            dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
+          auto opProc = dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
           if(opProc)
           {
             G4double angle = std::acos(p0.x());
@@ -328,7 +332,19 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
           }
         }
       }
+      // when studying boundary scattering, it can be useful to only
+      // visualize the photon before and after the first surface. If
+      // selected, kill the photon when reaching the second surface
+      // (note that there are 2 steps at the boundary, so the counter
+      // equals 0 and 1 on the first surface)
+      if (fKillOnSecondSurface) {
+        if (trackInfo->GetReflectionNumber() >= 2) {
+          track->SetTrackStatus(fStopAndKill);
+        }
+      }
+      trackInfo->IncrementReflectionNumber();
     }
+
     // This block serves to test that G4OpBoundaryProcess sets the group
     // velocity correctly. It is not necessary to include in user code.
     // Only steps where pre- and post- are the same material, to avoid
@@ -374,12 +390,12 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     for(G4int i = 0; i < n_proc; ++i)
     {
       G4String proc_name = (*proc_vec)[i]->GetProcessName();
-      if(proc_name.compare("Cerenkov") == 0)
+      if(proc_name == "Cerenkov")
       {
         auto cer = (G4Cerenkov*) (*proc_vec)[i];
         n_cer    = cer->GetNumPhotons();
       }
-      else if(proc_name.compare("Scintillation") == 0)
+      else if(proc_name == "Scintillation")
       {
         auto scint = (G4Scintillation*) (*proc_vec)[i];
         n_scint    = scint->GetNumPhotons();
@@ -403,14 +419,14 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       if(sec->GetDynamicParticle()->GetParticleDefinition() == opticalphoton)
       {
         G4String creator_process = sec->GetCreatorProcess()->GetProcessName();
-        if(creator_process.compare("Cerenkov") == 0)
+        if(creator_process == "Cerenkov")
         {
           G4double en = sec->GetKineticEnergy();
           run->AddCerenkovEnergy(en);
           run->AddCerenkov();
           analysisMan->FillH1(1, en / eV);
         }
-        else if(creator_process.compare("Scintillation") == 0)
+        else if(creator_process == "Scintillation")
         {
           G4double en = sec->GetKineticEnergy();
           run->AddScintillationEnergy(en);

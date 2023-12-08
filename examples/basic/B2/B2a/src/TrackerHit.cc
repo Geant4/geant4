@@ -58,8 +58,7 @@ void TrackerHit::Draw()
     G4Circle circle(fPos);
     circle.SetScreenSize(4.);
     circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
-    G4VisAttributes attribs(colour);
+    G4VisAttributes attribs(G4Colour::Red());
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }

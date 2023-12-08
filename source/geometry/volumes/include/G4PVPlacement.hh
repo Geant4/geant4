@@ -30,19 +30,17 @@
 // Class representing a single volume positioned within and relative
 // to a mother volume.
 
-// 24.07.95 P.Kent, First non-stub version
-// 25.07.96 P.Kent, Modified interface for new `Replica' capable geometry
-// 28.08.96 P.Kent. Tidied + transform replaced by rotmat+vector
+// 24.07.95 P.Kent, First non-stub version.
 // ----------------------------------------------------------------------
 #ifndef G4PVPLACEMENT_HH
-#define G4PVPLACEMENT_HH
+#define G4PVPLACEMENT_HH 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 
 class G4PVPlacement : public G4VPhysicalVolume
 {
-  public:  // with description
+  public:
 
     G4PVPlacement(G4RotationMatrix* pRot,
             const G4ThreeVector& tlate,
@@ -85,8 +83,6 @@ class G4PVPlacement : public G4VPhysicalVolume
       //   of moving objects in a given reference frame. ]
       // All other arguments are the same as for the previous constructor.
 
-  public:  // without description
-
     G4PVPlacement(G4RotationMatrix* pRot,
             const G4ThreeVector& tlate,
             const G4String& pName,
@@ -109,8 +105,6 @@ class G4PVPlacement : public G4VPhysicalVolume
       // Utilises both variations above (from 2nd and 3rd constructor).
       // The effect is the same as for the 2nd constructor.
 
-  public:  // with description
-
     ~G4PVPlacement() override;
       // Default destructor.
 
@@ -128,8 +122,6 @@ class G4PVPlacement : public G4VPhysicalVolume
       // by default it is set to maximum precision.
       // Reports a maximum of overlaps errors according to parameter in input.
       // Returns true if the volume is overlapping.
-
-  public:  // without description
 
     G4PVPlacement(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -166,8 +158,6 @@ class G4PVPlacement : public G4VPhysicalVolume
     G4bool fmany = false;   // flag for overlapping structure - not used
     G4bool fallocatedRotM = false;  // flag for allocation of Rotation Matrix
     G4int fcopyNo = 0;      // for identification
-
 };
 
 #endif
-

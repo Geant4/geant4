@@ -36,7 +36,6 @@
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4DeuteronCoulombBarrier.hh"
 
 class G4HETCDeuteron : public G4HETCChargedFragment
 {
@@ -44,30 +43,18 @@ public:
 
   G4HETCDeuteron();
 
-  ~G4HETCDeuteron();
+  ~G4HETCDeuteron() override = default;
+
+  G4HETCDeuteron(const G4HETCDeuteron &right) = delete;
+  const G4HETCDeuteron & operator=(const G4HETCDeuteron &right) = delete; 
+  G4bool operator==(const G4HETCDeuteron &right) const = delete;
+  G4bool operator!=(const G4HETCDeuteron &right) const = delete;
   
 protected:
 
-  virtual G4double GetAlpha() const;
-
-  virtual G4double GetBeta() const;
-
-  virtual G4double GetSpinFactor() const;
-
-  virtual G4double K(const G4Fragment & aFragment);
-
-private:
-
-  // operators  
-  G4HETCDeuteron(const G4HETCDeuteron &right);
-  const G4HETCDeuteron & operator=(const G4HETCDeuteron &right); 
-  G4bool operator==(const G4HETCDeuteron &right) const;
-  G4bool operator!=(const G4HETCDeuteron &right) const;
-    
-private:
-  
-  G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
-
+  G4double GetAlpha() const override;
+  G4double GetSpinFactor() const override;
+  G4double K(const G4Fragment& aFragment) const override;
 };
 
 #endif

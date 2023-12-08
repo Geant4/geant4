@@ -99,6 +99,10 @@ G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 
 G4VisManager::G4VisManager (const G4String& verbosityString)
 : fVerbose         (1)
+, fDefaultGraphicsSystemName("OGL")          // Override in G4VisExecutive
+, fDefaultXGeometryString   ("600x600-0+0")  // Override in G4VisExecutive
+, fDefaultGraphicsSystemBasis ("G4VisManager initialisation")
+, fDefaultXGeometryStringBasis("G4VisManager initialisation")
 , fInitialised     (false)
 , fpGraphicsSystem (0)
 , fpScene          (0)
@@ -672,10 +676,14 @@ void G4VisManager::RegisterMessengers () {
 #include <tools/histo/h2d>
 
 namespace {
+  struct PlotResults {
+    std::size_t fNumberOfPlots = 0;
+    std::size_t fTotalEntries = 0;
+  };
   template <typename HT>  // tools::histo::h1d, etc
-  G4bool PrintListOfHnPlots(const G4String& plotType) {  // h1, etc.
+  PlotResults ResultsOfHnPlots(const G4String& plotType) {  // h1, etc.
+    PlotResults plotResults;
     auto ui = G4UImanager::GetUIpointer();
-    G4bool thereArePlots = false;
     auto keepControlVerbose = ui->GetVerboseLevel();
     ui->SetVerboseLevel(0);
     auto status = ui->ApplyCommand("/analysis/" + plotType + "/getVector");
@@ -683,41 +691,46 @@ namespace {
     if(status==G4UIcommandStatus::fCommandSucceeded) {
       G4String hexString = ui->GetCurrentValues(G4String("/analysis/" + plotType + "/getVector"));
       if(hexString.size()) {
-        void* ptr;
-        std::istringstream is(hexString);
-        is >> ptr;
-        auto _v = (const std::vector<HT*>*)ptr;
-        auto _n = _v->size();
-        if (_n > 0) {
-          thereArePlots = true;
-          G4String isare("are"),plural("s");
-          if (_n == 1) {isare = "is"; plural = "";}
-          G4cout <<
-          "There " << isare << ' ' << _n << ' ' << plotType <<  " histogram" << plural
-          << G4endl;
-          if (_n <= 5) {
-            for (std::size_t i = 0; i < _n; ++i) {
-              const auto& _h = (*_v)[i];
-              G4cout
-              << std::setw(3) << i
-              << " with " << std::setw(6) << _h->entries() << " entries: "
-              << _h->get_title() << G4endl;
-            }
-          }
+        void* ptr; std::istringstream is(hexString); is >> ptr;
+        auto vectorOfPlots = (const std::vector<HT*>*)ptr;
+        for (std::size_t i = 0; i < vectorOfPlots->size(); ++i) {
+          auto plot = (*vectorOfPlots)[i];
+          if (plot == nullptr) continue;  // Ignore deleted plots
+          ++plotResults.fNumberOfPlots;
+          plotResults.fTotalEntries += plot->entries();
         }
       }
     }
-    return thereArePlots;
+    return plotResults;
   }
   void PrintListOfPlots() {
-    G4bool thereArePlots = false;
-    if (PrintListOfHnPlots<tools::histo::h1d>("h1")) thereArePlots = true;
-    if (PrintListOfHnPlots<tools::histo::h2d>("h2")) thereArePlots = true;
-    if (thereArePlots) {
-      G4cout <<
-      "List them with \"/analysis/list\"."
-      "\nView them with \"/vis/plot\" or \"/vis/reviewPlots\"."
+    std::size_t numberOfPlots = 0;
+    std::size_t numberOfEntries = 0;
+    PlotResults h1results = ResultsOfHnPlots<tools::histo::h1d>("h1");
+    numberOfPlots += h1results.fNumberOfPlots;
+    numberOfEntries += h1results.fTotalEntries;
+    PlotResults h2results = ResultsOfHnPlots<tools::histo::h2d>("h2");
+    numberOfPlots += h2results.fNumberOfPlots;
+    numberOfEntries += h2results.fTotalEntries;
+    if (numberOfPlots > 0) {
+      G4warn << "There are histograms that can be viewed with visualization:";
+      if (h1results.fNumberOfPlots > 0) {
+        G4warn << "\n  " << h1results.fNumberOfPlots << " h1 histograms(s)";
+      }
+      if (h2results.fNumberOfPlots > 0) {
+        G4warn << "\n  " << h2results.fNumberOfPlots << " h2 histograms(s)";
+      }
+      G4warn
+      << "\n  List them with \"/analysis/list\"."
+      << "\n  View them immediately with \"/vis/plot\" or \"/vis/reviewPlots\"."
       << G4endl;
+      if (numberOfEntries == 0) {
+        G4warn <<
+        "  But...there are no entries. To make your histograms available for"
+        "\n  plotting in this UI session, use CloseFile(false) in your"
+        "\n  EndOfRunAction and Reset() in your BeginOfRunAction."
+        << G4endl;
+      }
     }
   }
 }
@@ -1736,8 +1749,15 @@ void G4VisManager::PrintAvailableGraphicsSystems
         // Full output
         out << *gs;
       }
-      out << G4endl;
+      out << std::endl;
     }
+    out << "Default graphics system is: " << fDefaultGraphicsSystemName
+    << " (based on " << fDefaultGraphicsSystemBasis << ")."
+    << "\nDefault window size hint is: " << fDefaultXGeometryString
+    << " (based on " << fDefaultXGeometryStringBasis << ")."
+    << "\nNote: Parameters specified on the command line will override these defaults."
+    << "\n      Use \"vis/open\" without parameters to get these defaults."
+    << std::endl;
   } else {
     out << "  NONE!!!  None registered - yet!  Mmmmm!" << G4endl;
   }
@@ -2379,7 +2399,7 @@ void G4VisManager::EndOfRun ()
     << G4endl;
     if (fpScene->GetMaxNumberOfKeptEvents() > 0) {
       G4warn <<
-      "\n  The number of events in the run exceeded the maximum, "
+      "  The number of events in the run exceeded the maximum, "
       << fpScene->GetMaxNumberOfKeptEvents() <<
       ", that may be\n  kept by the vis manager." <<
       "\n  The number of events kept by the vis manager can be changed with"

@@ -44,15 +44,13 @@ using namespace G4DNA;
 //______________________________________________________________________________
 
 G4MolecularDissociationTable::G4MolecularDissociationTable()
-{
-  ;
-}
+= default;
 
 //______________________________________________________________________________
 
 G4MolecularDissociationTable::~G4MolecularDissociationTable()
 {
-  ChannelMap::iterator it_map = fDissociationChannels.begin();
+  auto it_map = fDissociationChannels.begin();
 
   for (; it_map != fDissociationChannels.end(); it_map++)
   {
@@ -60,12 +58,12 @@ G4MolecularDissociationTable::~G4MolecularDissociationTable()
         ->second;
     if (!decayChannels.empty())
     {
-      for (int i = 0; i < (int) decayChannels.size(); i++)
+      for (auto & decayChannel : decayChannels)
       {
-        if (decayChannels[i])
+        if (decayChannel != nullptr)
         {
-          delete decayChannels[i];
-          decayChannels[i] = 0;
+          delete decayChannel;
+          decayChannel = nullptr;
         }
       }
       decayChannels.clear();
@@ -98,8 +96,8 @@ const vector<const G4MolecularDissociationChannel*>*
 G4MolecularDissociationTable::
   GetDecayChannels(const G4MolecularConfiguration* conf) const
 {
-  ChannelMap::const_iterator it_exstates = fDissociationChannels.find(conf);
-  if (it_exstates == fDissociationChannels.end()) return 0;
+  auto it_exstates = fDissociationChannels.find(conf);
+  if (it_exstates == fDissociationChannels.end()) return nullptr;
   return &(it_exstates->second);
 }
 
@@ -108,13 +106,11 @@ G4MolecularDissociationTable::
 const vector<const G4MolecularDissociationChannel*>*
 G4MolecularDissociationTable::GetDecayChannels(const G4String& exState) const
 {
-  for(ChannelMap::const_iterator it = fDissociationChannels.begin() ;
-      it!=fDissociationChannels.end() ; ++it
-      )
+  for(const auto & fDissociationChannel : fDissociationChannels)
   {
-    if(it->first->GetLabel() == exState) return &(it->second);
+    if(fDissociationChannel.first->GetLabel() == exState) return &(fDissociationChannel.second);
   }
-  return 0;
+  return nullptr;
 }
 
 //______________________________________________________________________________

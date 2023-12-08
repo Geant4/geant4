@@ -60,7 +60,7 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-  auto* runManager =
+  auto runManager =
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Set mandatory initialization classes
@@ -69,22 +69,24 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new DetectorConstruction());
 
   // Physics list
-  G4VModularPhysicsList* physicsList = new QBBC;
+  auto physicsList = new QBBC;
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(physicsList);
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization());
 
-  // Initialize visualization
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  // Initialize visualization with the default graphics system
+  auto visManager = new G4VisExecutive(argc, argv);
+  // Constructors can also take optional arguments:
+  // - a graphics system of choice, eg. "OGL"
+  // - and a verbosity argument - see /vis/verbose guidance.
+  // auto visManager = new G4VisExecutive(argc, argv, "OGL", "Quiet");
+  // auto visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

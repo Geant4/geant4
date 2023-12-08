@@ -38,13 +38,13 @@ class LXeActionInitialization : public G4VUserActionInitialization
 {
  public:
   LXeActionInitialization(const LXeDetectorConstruction* det);
-  ~LXeActionInitialization();
+  ~LXeActionInitialization() override = default;
 
   void BuildForMaster() const override;
   void Build() const override;
 
  private:
-  const LXeDetectorConstruction* fDetector;
+  const LXeDetectorConstruction* fDetector = nullptr;
 };
 
 #endif

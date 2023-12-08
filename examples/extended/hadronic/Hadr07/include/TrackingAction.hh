@@ -53,10 +53,10 @@ class TrackingAction : public G4UserTrackingAction {
     void SetParticleCount(G4bool flag) { fParticleCount = flag;};
     
   private:
-    TrackingMessenger*  fTrackMessenger;
-    EventAction*        fEventAct;
+    TrackingMessenger*  fTrackMessenger = nullptr;
+    EventAction*        fEventAct = nullptr;
         
-    G4bool fParticleCount;    
+    G4bool fParticleCount = true;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

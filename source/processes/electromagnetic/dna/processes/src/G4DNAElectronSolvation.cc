@@ -41,14 +41,13 @@
 #include "G4LowEnergyEmProcessSubType.hh"
 
 G4DNAElectronSolvation::G4DNAElectronSolvation(const G4String& processName,
-        G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+        G4ProcessType type):G4VEmProcess (processName, type)
 {
     SetProcessSubType(fLowEnergyElectronSolvation);
 }
 
 G4DNAElectronSolvation::~G4DNAElectronSolvation()
-{}
+= default;
 
 G4bool G4DNAElectronSolvation::IsApplicable(const G4ParticleDefinition& p)
 {
@@ -56,7 +55,7 @@ G4bool G4DNAElectronSolvation::IsApplicable(const G4ParticleDefinition& p)
 }
 
 void G4DNAElectronSolvation::PrintInfo()
-{;}
+{}
 
 void G4DNAElectronSolvation::InitialiseProcess(const G4ParticleDefinition*)
 {
@@ -65,7 +64,7 @@ void G4DNAElectronSolvation::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(false);
 
-    if(!EmModel())
+    if(EmModel() == nullptr)
     {
       SetEmModel(G4DNASolvationModelFactory::GetMacroDefinedModel());
     }

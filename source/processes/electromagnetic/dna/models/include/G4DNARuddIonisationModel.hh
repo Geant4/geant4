@@ -47,24 +47,27 @@ class G4DNARuddIonisationModel : public G4VEmModel
 
 public:
 
-  G4DNARuddIonisationModel(const G4ParticleDefinition* p = 0, 
+  G4DNARuddIonisationModel(const G4ParticleDefinition* p = nullptr, 
 		           const G4String& nam = "DNARuddIonisationModel");
 
-  virtual ~G4DNARuddIonisationModel();
+  ~G4DNARuddIonisationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  G4DNARuddIonisationModel & operator=(const  G4DNARuddIonisationModel &right) = delete;
+  G4DNARuddIonisationModel(const  G4DNARuddIonisationModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+
+  G4double CrossSectionPerVolume(  const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double emin,
-					   G4double emax);
+					   G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SelectStationary(G4bool input); 
 
@@ -92,15 +95,15 @@ private:
   G4double killBelowEnergyForZ1; 
   G4double killBelowEnergyForZ2; 
 
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
   
   // Cross section
 
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
+  using MapFile = std::map<G4String, G4String, std::less<G4String>>;
   MapFile tableFile;
 
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
+  using MapData = std::map<G4String, G4DNACrossSectionDataSet *, std::less<G4String>>;
   MapData tableData;
   
   // Final state
@@ -150,11 +153,6 @@ private:
 
   G4int RandomSelect(G4double energy,const G4String& particle );
   
-  //
-   
-  G4DNARuddIonisationModel & operator=(const  G4DNARuddIonisationModel &right);
-  G4DNARuddIonisationModel(const  G4DNARuddIonisationModel&);
-
   // Reusable particle definitions
   G4ParticleDefinition* protonDef = nullptr;
   G4ParticleDefinition* hydrogenDef = nullptr;

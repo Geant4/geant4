@@ -49,7 +49,7 @@
 G4ICRU90StoppingData::G4ICRU90StoppingData()
 {
   // 1st initialisation
-  for (size_t i = 0; i < nvectors; ++i) {
+  for (std::size_t i = 0; i < nvectors; ++i) {
     materials[i] = nullptr;
     sdata_proton[i] = nullptr;
     sdata_alpha[i] = nullptr;
@@ -63,7 +63,7 @@ G4ICRU90StoppingData::G4ICRU90StoppingData()
 
 G4ICRU90StoppingData::~G4ICRU90StoppingData()
 {
-  for (size_t i = 0; i < nvectors; ++i) {
+  for (std::size_t i = 0; i < nvectors; ++i) {
     delete sdata_proton[i];
     delete sdata_alpha[i];
   }
@@ -89,7 +89,7 @@ void G4ICRU90StoppingData::Initialise()
     const G4Material* mat = (*(G4Material::GetMaterialTable()))[i];
 
     G4bool isThere = false;
-    for (auto& material : materials) {
+    for (auto const & material : materials) {
       if (mat == material) {
         isThere = true;
         break;
@@ -118,8 +118,8 @@ void G4ICRU90StoppingData::Initialise()
 G4double G4ICRU90StoppingData::GetElectronicDEDXforProton(
   const G4Material* mat, G4double kinEnergy) const
 {
-  G4int idx = GetIndex(mat);
-  return (idx < 0) ? 0.0 : GetDEDX(sdata_proton[idx], kinEnergy);
+  const G4int idx = GetIndex(mat);
+  return (idx >= 0) ? GetDEDX(sdata_proton[idx], kinEnergy) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,8 +127,8 @@ G4double G4ICRU90StoppingData::GetElectronicDEDXforProton(
 G4double G4ICRU90StoppingData::GetElectronicDEDXforAlpha(
   const G4Material* mat, G4double scaledKinEnergy) const
 {
-  G4int idx = GetIndex(mat);
-  return (idx < 0) ? 0.0 : GetDEDX(sdata_alpha[idx], scaledKinEnergy);
+  const G4int idx = GetIndex(mat);
+  return (idx >= 0) ? GetDEDX(sdata_alpha[idx], scaledKinEnergy) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,9 +136,9 @@ G4double G4ICRU90StoppingData::GetElectronicDEDXforAlpha(
 void G4ICRU90StoppingData::FillData()
 {
   // clang-format off
-  G4double T0_proton[57] = {  0.0010, 0.001500, 0.0020, 0.0030, 0.0040, 0.0050, 0.0060, 0.0080, 0.010, 0.0150, 0.020, 0.030, 0.040, 0.050, 0.060, 0.080, 0.10, 0.150, 0.20, 0.30, 0.40, 0.50, 0.60, 0.80, 1.00, 1.50, 2.00, 3.00, 4.00, 5.00, 6.00, 8.00, 10.00, 15.00, 20.00, 30.00, 40.00, 50.00, 60.00, 80.00, 100.00, 150.00, 200.00, 300.00, 400.00, 500.00, 600.00, 800.00, 1000.00, 1500.00, 2000.00, 3000.00, 4000.00, 5000.00, 6000.00, 8000.00, 10000.00  };
+  static const G4float T0_proton[57] = {  0.0010f, 0.001500f, 0.0020f, 0.0030f, 0.0040f, 0.0050f, 0.0060f, 0.0080f, 0.010f, 0.0150f, 0.020f, 0.030f, 0.040f, 0.050f, 0.060f, 0.080f, 0.10f, 0.150f, 0.20f, 0.30f, 0.40f, 0.50f, 0.60f, 0.80f, 1.00f, 1.50f, 2.00f, 3.00f, 4.00f, 5.00f, 6.00f, 8.00f, 10.00f, 15.00f, 20.00f, 30.00f, 40.00f, 50.00f, 60.00f, 80.00f, 100.00f, 150.00f, 200.00f, 300.00f, 400.00f, 500.00f, 600.00f, 800.00f, 1000.00f, 1500.00f, 2000.00f, 3000.00f, 4000.00f, 5000.00f, 6000.00f, 8000.00f, 10000.00f };
 
-  G4double T0_alpha[49] = {  0.0010, 0.001500, 0.0020, 0.0030, 0.0040, 0.0050, 0.0060, 0.0080, 0.010, 0.0150, 0.020, 0.030, 0.040, 0.050, 0.060, 0.080, 0.10, 0.150, 0.20, 0.30, 0.40, 0.50, 0.60, 0.80, 1.00, 1.50, 2.00, 3.00, 4.00, 5.00, 6.00, 8.00, 10.00, 15.00, 20.00, 30.00, 40.00, 50.00, 60.00, 80.00, 100.00, 150.00, 200.00, 300.00, 400.00, 500.00, 600.00, 800.00, 1000.00};
+  static const G4float T0_alpha[49] = {  0.0010f, 0.001500f, 0.0020f, 0.0030f, 0.0040f, 0.0050f, 0.0060f, 0.0080f, 0.010f, 0.0150f, 0.020f, 0.030f, 0.040f, 0.050f, 0.060f, 0.080f, 0.10f, 0.150f, 0.20f, 0.30f, 0.40f, 0.50f, 0.60f, 0.80f, 1.00f, 1.50f, 2.00f, 3.00f, 4.00f, 5.00f, 6.00f, 8.00f, 10.00f, 15.00f, 20.00f, 30.00f, 40.00f, 50.00f, 60.00f, 80.00f, 100.00f, 150.00f, 200.00f, 300.00f, 400.00f, 500.00f, 600.00f, 800.00f, 1000.00f };
 
   static const G4float e0_proton[57] = {  119.70f, 146.70f, 169.30f, 207.40f, 239.50f, 267.80f, 293.30f, 338.70f, 378.70f, 450.40f, 506.70f, 590.50f, 648.30f, 687.70f, 713.20f, 734.10f, 729.00f, 667.20f, 592.20f, 476.50f, 401.20f, 349.80f, 312.10f, 258.70f, 222.70f, 168.20f, 137.00f, 101.70f, 81.920f, 69.050f, 59.940f, 47.810f, 40.040f, 28.920f, 22.930f, 16.520f, 13.120f, 10.980f, 9.5140f, 7.6180f, 6.4410f, 4.8150f, 3.9750f, 3.1170f, 2.6860f, 2.4310f, 2.2650f, 2.0690f, 1.9620f, 1.850f, 1.820f, 1.8280f, 1.8610f, 1.8980f, 1.9340f, 1.9980f, 2.0520f  };
 
@@ -164,13 +164,14 @@ void G4ICRU90StoppingData::FillData()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4PhysicsFreeVector* G4ICRU90StoppingData::AddData(G4int n, const G4double* e, const G4float* dedx)
+G4PhysicsFreeVector* G4ICRU90StoppingData::AddData(G4int n, const G4float* e,
+                                                   const G4float* dedx)
 {
   static const G4double fac = CLHEP::MeV * CLHEP::cm2 / CLHEP::g;
 
   auto* data = new G4PhysicsFreeVector(n, e[0], e[n - 1], true);
   for (G4int i = 0; i < n; ++i) {
-    data->PutValues(i, e[i] * CLHEP::MeV, ((G4double)dedx[i]) * fac);
+    data->PutValues(i, ((G4double)e[i]) * CLHEP::MeV, ((G4double)dedx[i]) * fac);
   }
   data->FillSecondDerivatives();
   return data;

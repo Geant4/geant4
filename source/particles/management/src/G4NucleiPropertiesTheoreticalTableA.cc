@@ -34,99 +34,85 @@
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 //
-G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A) 
+G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A)
 {
+  if (A > 339) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex", "PART202", EventMustBeAborted,
+                "Nucleon number larger than 339");
+  }
+  else if (A < 16) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex", "PART202", EventMustBeAborted,
+                " Nucleon number smaller than 16");
+  }
+  else if (Z > 136) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex", "PART202", EventMustBeAborted,
+                "Proton number larger than 136");
+  }
+  else if (Z < 8) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex", "PART202", EventMustBeAborted,
+                "Proton number smaller than 8");
+  }
+  else if (Z > A) {
+    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex", "PART202", EventMustBeAborted,
+                "Nucleon number smaller than Z");
+  }
 
-  if(A>339) {
-    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-                "PART202",
-                EventMustBeAborted,"Nucleon number larger than 339");
-  } else if(A<16) {
-    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-                "PART202",
-                EventMustBeAborted," Nucleon number smaller than 16"); 
-  } else if(Z>136) {
-    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-                "PART202",
-                EventMustBeAborted, "Proton number larger than 136");
-  } else if(Z<8) {
-    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-                "PART202",
-                EventMustBeAborted, "Proton number smaller than 8");
-  } else if(Z>A) {
-    G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-                "PART202",
-                EventMustBeAborted, "Nucleon number smaller than Z"); 
+  for (G4int i = shortTable[Z - 8]; i < shortTable[Z - 8 + 1]; ++i) {
+    if (indexArray[1][i] == A) return i;
   }
-  
-  for (G4int i = shortTable[Z-8]; i < shortTable[Z-8+1]; ++i )
-  {
-    if (indexArray[1][i] == A ) return i;
-  }
-  
+
   return -1;
 }
 
-G4double G4NucleiPropertiesTheoreticalTable::GetMassExcess(G4int Z, G4int A) 
+G4double G4NucleiPropertiesTheoreticalTable::GetMassExcess(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);
-  if (i >= 0)
-  {
-    return AtomicMassExcess[i]*MeV;
+  G4int i = GetIndex(Z, A);
+  if (i >= 0) {
+    return AtomicMassExcess[i] * MeV;
   }
-  
-      return 0.0;
- 
+
+  return 0.0;
 }
 
 G4double G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);
-  if (i >= 0)
-  {
-    const G4double Mh = 7.289034*MeV;  // hydrogen atom mass excess
-    const G4double Mn = 8.071431*MeV;  // neutron mass excess
-    return G4double(Z)*Mh + G4double(A-Z)*Mn - AtomicMassExcess[i]*MeV;
+  G4int i = GetIndex(Z, A);
+  if (i >= 0) {
+    const G4double Mh = 7.289034 * MeV;  // hydrogen atom mass excess
+    const G4double Mn = 8.071431 * MeV;  // neutron mass excess
+    return G4double(Z) * Mh + G4double(A - Z) * Mn - AtomicMassExcess[i] * MeV;
   }
-  
-  
-    return 0.0;
- 
+
+  return 0.0;
 }
 
-G4double  G4NucleiPropertiesTheoreticalTable::GetAtomicMass(G4int Z, G4int A)
+G4double G4NucleiPropertiesTheoreticalTable::GetAtomicMass(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);
-  if (i >= 0)
-  {
-    return AtomicMassExcess[i]*MeV + A*amu_c2;
+  G4int i = GetIndex(Z, A);
+  if (i >= 0) {
+    return AtomicMassExcess[i] * MeV + A * amu_c2;
   }
-  
-      return 0.0;
- 
+
+  return 0.0;
 }
 
-G4double  G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
+G4double G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
 {
-  G4int i=GetIndex(Z, A);
-  if (i >= 0)
-  {
-    return GetAtomicMass(Z,A)
-         - G4double(Z)*electron_mass_c2 + ElectronicBindingEnergy(Z);
+  G4int i = GetIndex(Z, A);
+  if (i >= 0) {
+    return GetAtomicMass(Z, A) - G4double(Z) * electron_mass_c2 + ElectronicBindingEnergy(Z);
   }
-  
-      return 0.0;
- 
+
+  return 0.0;
 }
 
 G4double G4NucleiPropertiesTheoreticalTable::ElectronicBindingEnergy(G4int Z)
 {
-  const G4double ael = 1.433e-5*MeV; // electronic-binding constant
-  return ael*std::pow(G4double(Z),2.39);
+  const G4double ael = 1.433e-5 * MeV;  // electronic-binding constant
+  return ael * std::pow(G4double(Z), 2.39);
 }
 
 G4bool G4NucleiPropertiesTheoreticalTable::IsInTable(G4int Z, G4int A)
 {
-  return (Z <= A && A >= 16 && A <= 339 && Z <= 136
-       && Z >= 8 && GetIndex(Z, A) >= 0);
+  return (Z <= A && A >= 16 && A <= 339 && Z <= 136 && Z >= 8 && GetIndex(Z, A) >= 0);
 }

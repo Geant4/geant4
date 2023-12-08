@@ -38,31 +38,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceRun::OpNoviceRun()
-  : G4Run()
-{
-  fParticle             = nullptr;
-  fEnergy               = -1.;
-  fCerenkovCounter      = 0.;
-  fCerenkov2            = 0.;
-  fScintillationCounter = 0.;
-  fScintillation2       = 0.;
-  fRayleighCounter      = 0.;
-  fRayleigh2            = 0.;
-  fAbsorptionCounter    = 0.;
-  fAbsorption2          = 0.;
-  fMieCounter           = 0.;
-  fMie2                 = 0.;
-  fBoundaryCounter      = 0.;
-  fBoundary2            = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-OpNoviceRun::~OpNoviceRun() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void OpNoviceRun::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 {
   fParticle = particle;
@@ -73,7 +48,7 @@ void OpNoviceRun::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void OpNoviceRun::Merge(const G4Run* run)
 {
-  const OpNoviceRun* localRun = static_cast<const OpNoviceRun*>(run);
+  const auto localRun = static_cast<const OpNoviceRun*>(run);
 
   fParticle = localRun->fParticle;
   fEnergy   = localRun->fEnergy;
@@ -100,7 +75,7 @@ void OpNoviceRun::EndOfRun()
 {
   if(numberOfEvent == 0)
     return;
-  G4double TotNbofEvents = G4double(numberOfEvent);
+  auto TotNbofEvents = G4double(numberOfEvent);
 
   fCerenkovCounter /= TotNbofEvents;
   fCerenkov2 /= TotNbofEvents;

@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-10 Alberto Ribon (rdecay01-V11-01-01)
+- In all macro files, introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+
+## 2023-07-04 Michel Maire (rdecay01-V11-01-00)
+- revision of all headers
+
 ## 2022-11-15 Vladimir Ivanchenko (rdecay01-V11-00-05)
 - PhysicsList - moved setup of options to the class constructor;
     use minimal list of particles defined in G4EmBuilder; added

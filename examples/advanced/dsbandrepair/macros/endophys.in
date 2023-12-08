@@ -1,0 +1,51 @@
+######################### Macro file for Phys_geo #########################
+#
+#=======================  PATHS FOR INPUTS          ======================
+#
+## if don't set semi-lengths for world Box, code will use the sizes 
+## of cell nucleus for calculating: WorldSemiXY = 2*SemiXY, WorldSemiZ = SemiZ.
+/dsbandrepair/det/worldBoxSizes 100 100 2 um  # Set SemiX, SemiY, SemiZ for world box;
+
+/dsbandrepair/det/celldefinitionfile        dnafabric_geometries/human_endothelium.fab2g4dna
+
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelDown.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelLeft.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelRight.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelStraight.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelUp.fab2g4dna
+
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelDown2.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelLeft2.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelRight2.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelStraight2.fab2g4dna
+/dsbandrepair/det/voxeldefinitionfile       dnafabric_geometries/VoxelUp2.fab2g4dna
+#
+#=======================  CHOOSING DNA PHYSICSLIST  ======================
+#
+/dsbandrepair/phys/physicsList G4EmDNAPhysics_option2
+#
+#=======================  INITIALIZE   RUNMANAGER   ======================
+#
+/run/initialize
+#
+#=======================  BEAM SPATIAL DISTRIBUTION ======================
+# beam profile: Parallel, Ellipse
+# See cell-definition file for setting dimensions below:
+/gps/pos/type Plane
+/gps/pos/shape Ellipse
+/gps/pos/halfx 9500 nm
+/gps/pos/halfy 5100 nm
+/gps/pos/centre 0. 0. 1000. nm
+/gps/direction 0 0 -1
+
+#
+#=======================  SET PARTICLE'S INFO       ======================
+# 
+/gps/particle proton
+/gps/energy 1. MeV
+#
+#=======================  SET EVENTS and START A RUN  ======================
+#
+/run/printProgress 10 # Print progress for each mpi process
+/run/beamOn 2
+

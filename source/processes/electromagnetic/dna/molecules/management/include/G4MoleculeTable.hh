@@ -55,8 +55,8 @@ class G4MoleculeDefinition;
 class G4MolecularConfiguration;
 class G4MoleculeTableMessenger;
 
-typedef G4MoleculeIterator<G4MoleculeDefinition> G4MoleculeDefinitionIterator;
-typedef G4MoleculeIterator<G4MolecularConfiguration> G4ConfigurationIterator;
+using G4MoleculeDefinitionIterator = G4MoleculeIterator<G4MoleculeDefinition>;
+using G4ConfigurationIterator = G4MoleculeIterator<G4MolecularConfiguration>;
 
 class G4MoleculeTable
 {
@@ -131,7 +131,7 @@ protected:
   G4MoleculeTable();
 
   static G4MoleculeTable* fpgMoleculeTable;
-  typedef std::map<G4String, G4MoleculeDefinition*> MoleculeDefTable;
+  using MoleculeDefTable = std::map<G4String, G4MoleculeDefinition *>;
 
   MoleculeDefTable fMoleculeDefTable;
   std::unique_ptr<G4MoleculeTableMessenger> fMoleculeDefTableMessenger;

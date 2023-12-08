@@ -50,12 +50,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMethod(kWithDirectMatrix),
-   fWorldVolume(0),
-   fTrdVolume(0)
-   
 {
   fMessenger = new DetectorMessenger(this);
 }
@@ -63,7 +57,7 @@ DetectorConstruction::DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ 
+{
   delete fMessenger;
 }
 
@@ -74,7 +68,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* material = nist->FindOrBuildMaterial("G4_AIR");
-  
+
   // Clean old geometry, if any
   //
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -82,42 +76,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
   G4ReflectionFactory::Instance()->Clean();
-        
+
   // World
-  //  
+  //
   G4double rmin = 0.;
   G4double rmax = 5*cm;
   G4double hz   = 5*cm;
   G4double phiMin = 0.;
   G4double deltaPhi = 360*degree;
-        
-  G4Tubs* solidWorld 
+
+  auto solidWorld
     = new G4Tubs("World",                            //name
                   rmin, rmax, hz, phiMin, deltaPhi); //size
 
-  fWorldVolume 
+  fWorldVolume
     = new G4LogicalVolume(solidWorld,                //solid
                           material,                  //material
                           "World");                  //name
 
   G4VPhysicalVolume* physiWorld
-    = new G4PVPlacement(0,                     //no rotation
+    = new G4PVPlacement(nullptr,               //no rotation
                         G4ThreeVector(),       //at (0,0,0)
                         fWorldVolume,          //logical volume
                         "World",               //name
-                        0,                     //mother volume
+                        nullptr,               //mother volume
                         false,                 //no boolean operation
                         0);                    //copy number
 
-  // Trd volume 
-  //  
+  // Trd volume
+  //
   G4double dX1 = 1*cm;
   G4double dX2 = 1*cm;
-  G4double dY1 = 1*cm; 
+  G4double dY1 = 1*cm;
   G4double dY2 = 2*cm;
-  G4double dZ  = 3*cm; 
+  G4double dZ  = 3*cm;
 
-  G4Trd* solidTrd 
+  auto solidTrd
     = new G4Trd("trd",                               //name
                  dX1/2, dX2/2, dY1/2, dY2/2, dZ/2);  //size
 
@@ -125,10 +119,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     = new G4LogicalVolume(solidTrd,                  //solid
                           material,                  //material
                           "trd");                    //name
-                                
+
 
   // Place Volume1 and Volume2 according to selected methods
-  // 
+  //
   switch ( fMethod ) {
     case kWithDirectMatrix:   PlaceWithDirectMatrix(); break;
     case kWithInverseMatrix:  PlaceWithInverseMatrix(); break;
@@ -147,9 +141,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::PlaceWithDirectMatrix()
 {
-  G4double og = 3*cm; 
+  G4double og = 3*cm;
 
-  // 1st position 
+  // 1st position
   //
   G4double phi = 30*deg;
   // u, v, w are the daughter axes, projected on the mother frame
@@ -158,18 +152,18 @@ void DetectorConstruction::PlaceWithDirectMatrix()
   G4ThreeVector w = G4ThreeVector( std::cos(phi), std::sin(phi),0.);
   G4RotationMatrix rotm1  = G4RotationMatrix(u, v, w);
   G4cout << "\n --> phi = " << phi/deg << " deg;  direct rotation matrix : ";
-  rotm1.print(G4cout);     
+  rotm1.print(G4cout);
   G4ThreeVector position1 = og*w;
   G4Transform3D transform1 = G4Transform3D(rotm1,position1);
 
-  new G4PVPlacement(transform1,         //position, rotation        
+  new G4PVPlacement(transform1,         //position, rotation
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    1);                 //copy number                       
+                    1);                 //copy number
 
-  // 2nd position 
+  // 2nd position
   //
   phi = phi + 90*deg;
   v = G4ThreeVector(-std::sin(phi), std::cos(phi),0.);
@@ -177,31 +171,31 @@ void DetectorConstruction::PlaceWithDirectMatrix()
   G4RotationMatrix rotm2  = G4RotationMatrix(u, v, w);
   G4ThreeVector position2 = og*w;
   G4Transform3D transform2 = G4Transform3D(rotm2,position2);
-  new G4PVPlacement(transform2,         //position, rotation        
+  new G4PVPlacement(transform2,         //position, rotation
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    2);                 //copy number                       
+                    2);                 //copy number
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PlaceWithInverseMatrix()
 {
-  G4double og = 3*cm; 
+  G4double og = 3*cm;
 
   // 1st position
   //
   G4double phi = 30*deg;
-  // u, v, w are the daughter axes, projected on the mother frame     
+  // u, v, w are the daughter axes, projected on the mother frame
   G4ThreeVector u = G4ThreeVector(0, 0, -1);
   G4ThreeVector v = G4ThreeVector(-std::sin(phi), std::cos(phi),0.);
   G4ThreeVector w = G4ThreeVector( std::cos(phi), std::sin(phi),0.);
-  G4RotationMatrix rotm1 = G4RotationMatrix(u, v, w); 
-  G4RotationMatrix* rotm1Inv = new G4RotationMatrix(rotm1.inverse());
+  G4RotationMatrix rotm1 = G4RotationMatrix(u, v, w);
+  auto rotm1Inv = new G4RotationMatrix(rotm1.inverse());
   G4cout << "\n --> phi = " << phi/deg << " deg;  inverse rotation matrix : ";
-  rotm1Inv->print(G4cout);   
+  rotm1Inv->print(G4cout);
   G4ThreeVector position1 = og*w;
 
   new G4PVPlacement(rotm1Inv,
@@ -210,7 +204,7 @@ void DetectorConstruction::PlaceWithInverseMatrix()
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    1);                 //copy number                       
+                    1);                 //copy number
 
   // 2nd position
   //
@@ -218,11 +212,11 @@ void DetectorConstruction::PlaceWithInverseMatrix()
   v = G4ThreeVector(-std::sin(phi), std::cos(phi),0.);
   w = G4ThreeVector( std::cos(phi), std::sin(phi),0.);
   G4RotationMatrix rotm2  = G4RotationMatrix(u, v, w);
-  G4RotationMatrix* rotm2Inv  = new G4RotationMatrix(rotm2.inverse());
+  auto rotm2Inv  = new G4RotationMatrix(rotm2.inverse());
   G4ThreeVector position2 = og*w;
 
   new G4PVPlacement(rotm2Inv,           //rotation
-                    position2,          //position        
+                    position2,          //position
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
@@ -234,7 +228,7 @@ void DetectorConstruction::PlaceWithInverseMatrix()
 
 void DetectorConstruction::PlaceWithAxialRotations()
 {
-  G4double og = 3*cm; 
+  G4double og = 3*cm;
 
   // 1st position (with first G4PVPlacement constructor)
   //
@@ -243,11 +237,11 @@ void DetectorConstruction::PlaceWithAxialRotations()
                G4ThreeVector(std::sin(theta-pi/2), 0., std::cos(theta-pi/2));
   G4RotationMatrix rotm1 = G4RotationMatrix();
   rotm1.rotateY(theta);
-  rotm1.rotate (phi, rotAxis);  
+  rotm1.rotate (phi, rotAxis);
   G4cout << "\n --> direct rotation matrix : "
          << " theta = " << theta/deg << " deg;"
          << " phi  = "  <<  phi/deg << " deg;";
-  rotm1.print(G4cout);        
+  rotm1.print(G4cout);
   G4ThreeVector w = G4ThreeVector( std::sin(theta)*std::cos(phi),
                     std::sin(phi), std::cos(theta)*std::cos(phi));
   G4ThreeVector position1 = og*w;
@@ -265,13 +259,13 @@ void DetectorConstruction::PlaceWithAxialRotations()
   phi = phi + 90*deg;
   //rotm2Inv could be calculated with rotm2.inverse()
   //but also by the following :
-  G4RotationMatrix* rotm2Inv  = new G4RotationMatrix();
-  rotm2Inv->rotate (-phi, rotAxis);  
+  auto rotm2Inv  = new G4RotationMatrix();
+  rotm2Inv->rotate (-phi, rotAxis);
   rotm2Inv->rotateY(-theta);
   w = G4ThreeVector( std::sin(theta)*std::cos(phi),
                      std::sin(phi), std::cos(theta)*std::cos(phi));
   G4ThreeVector position2 = og*w;
-  
+
   new G4PVPlacement(rotm2Inv,           //rotation
                     position2,          //position
                     fTrdVolume,         //logical volume
@@ -290,13 +284,13 @@ void DetectorConstruction::PlaceWithEulerAngles()
   // phi_euler   = (x,n) : precession
   // theta_euler = (z,w) : nutation
   // psi_euler   = (n,u) : proper rotation
-  
-  G4double og = 3*cm;  
+
+  G4double og = 3*cm;
 
   // 1st position (with first G4PVPlacement constructor)
   //
-  G4double phi = 30*deg;   
-  G4double phi_euler   =  phi + pi/2; 
+  G4double phi = 30*deg;
+  G4double phi_euler   =  phi + pi/2;
   G4double theta_euler =  90*deg;
   G4double psi_euler   = -90*deg;
   //attention : clhep Euler constructor build inverse matrix !
@@ -304,35 +298,35 @@ void DetectorConstruction::PlaceWithEulerAngles()
   G4RotationMatrix rotm1 = rotm1Inv.inverse();
   //remark : could be built as rotm1 = G4RotationMatrix(-psi, -theta, -phi)
   G4cout << "\n --> phi = " << phi/deg << " deg;  direct rotation matrix : ";
-  rotm1.print(G4cout);           
+  rotm1.print(G4cout);
   G4ThreeVector w = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);
   G4ThreeVector position1 = og*w;
   G4Transform3D transform1 = G4Transform3D(rotm1,position1);
 
-  new G4PVPlacement(transform1,         //position, rotation        
+  new G4PVPlacement(transform1,         //position, rotation
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    1);                 //copy number                       
+                    1);                 //copy number
 
   // 2nd position (with second G4PVPlacement constructor)
   //
   phi = phi + 90*deg;
-  
-  phi_euler   =  phi + pi/2; 
-  G4RotationMatrix* rotm2Inv  
-                = new G4RotationMatrix(phi_euler,theta_euler,psi_euler);  
+
+  phi_euler   =  phi + pi/2;
+  auto rotm2Inv
+                = new G4RotationMatrix(phi_euler,theta_euler,psi_euler);
   w = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);
   G4ThreeVector position2 = og*w;
-                           
+
   new G4PVPlacement(rotm2Inv,           //rotation
-                    position2,          //position                     
+                    position2,          //position
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
                     false,              //no boolean operation
-                    2);                 //copy number                       
+                    2);                 //copy number
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -341,9 +335,9 @@ void DetectorConstruction::PlaceWithReflections()
 {
 /// Placement with reflections.
 /// In order to better show the reflection symmetry we do not apply
-/// the rotation along Y axis.  
+/// the rotation along Y axis.
 
-  G4double og = 3*cm; 
+  G4double og = 3*cm;
 
   // Place first two positionz in z = + 3cm
   //
@@ -351,9 +345,9 @@ void DetectorConstruction::PlaceWithReflections()
   // 1st position
   G4double phi = 30*deg;
   G4RotationMatrix rotm1;
-  //rotm1.rotateY(90*deg); 
-  rotm1.rotateZ(phi); 
-  G4ThreeVector uz = G4ThreeVector(std::cos(phi), std::sin(phi), 0);    
+  //rotm1.rotateY(90*deg);
+  rotm1.rotateZ(phi);
+  G4ThreeVector uz = G4ThreeVector(std::cos(phi), std::sin(phi), 0);
   G4ThreeVector position = og*uz;
   G4Transform3D transform1(rotm1,position);
   G4Transform3D translateZ = HepGeom::Translate3D(0, 0, 3.*cm);
@@ -368,12 +362,12 @@ void DetectorConstruction::PlaceWithReflections()
   // 2nd position
   phi = phi + pi/2 ;
   G4RotationMatrix rotm2;
-  //rotm2.rotateY(90*deg); 
-  rotm2.rotateZ(phi); 
-  uz = G4ThreeVector(std::cos(phi), std::sin(phi), 0.);    
+  //rotm2.rotateY(90*deg);
+  rotm2.rotateZ(phi);
+  uz = G4ThreeVector(std::cos(phi), std::sin(phi), 0.);
   position = og*uz;
   G4Transform3D transform2 = G4Transform3D(rotm2, position);
-  
+
   new G4PVPlacement(translateZ * transform2, //rotation, position
                     fTrdVolume,              //logical volume
                     "Trd",                   //name
@@ -382,7 +376,7 @@ void DetectorConstruction::PlaceWithReflections()
                     2);                      //copy number
 
 
-  // Place next two positionz in z = - 3cm with reflection 
+  // Place next two positionz in z = - 3cm with reflection
   //
 
   // 3rd position
@@ -411,9 +405,9 @@ void DetectorConstruction::PlaceWithReflections()
 
 #include "G4RunManager.hh"
 
-void DetectorConstruction::SetMethod(EMethod method) { 
+void DetectorConstruction::SetMethod(EMethod method) {
   fMethod = method;
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());  
-}  
+  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -48,6 +48,7 @@
 
 #include "G4ASTARStopping.hh" 
 #include "G4NISTStoppingData.hh" 
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -356,6 +357,7 @@ void G4ASTARStopping::AddData(const G4float* stop, const G4Material* mat)
     v->PutValues(i, T0[i], stop[i]*fac);
   }
   v->FillSecondDerivatives();
+  v->EnableLogBinSearch(G4EmParameters::Instance()->NumberForFreeVector());
   materials.push_back(mat);
   sdata.push_back(v);
   ++nvectors;

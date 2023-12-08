@@ -1,11 +1,15 @@
 # Example ParticleFluence History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
 
-## 2022-10-25 I. Hrivnacova (exhadrParticleFluence-V11-00-01)
+## 2023-10-26 Alberto Ribon (exhadrParticleFluence-V11-01-00)
+- Renamed macro files from *.g4 to *.in, and documented them in README.
+
+## 2022-10-25 Ivana Hrivnacova (exhadrParticleFluence-V11-00-01)
 - Fixes in Doxygen documentation (links, formatting)
 
 ## 2022-06-10 Alberto Ribon (exhadrParticleFluence-V11-00-00)

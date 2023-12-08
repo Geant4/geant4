@@ -69,22 +69,21 @@ struct comparator
     {
       return totalOcc1 < totalOcc2;
     }
-    else
-    {
-      G4int occupancy1 = -1;
-      G4int occupancy2 = -1;
-      const G4int sizeOrbit = occ1.GetSizeOfOrbit();
-      for (G4int i = 0; i < sizeOrbit; i++)
-      {
-        occupancy1 = occ1.GetOccupancy(i);
-        occupancy2 = occ2.GetOccupancy(i);
 
-        if (occupancy1 != occupancy2)
-        {
-          return occupancy1 < occupancy2;
-        }
+    G4int occupancy1 = -1;
+    G4int occupancy2 = -1;
+    const G4int sizeOrbit = occ1.GetSizeOfOrbit();
+    for (G4int i = 0; i < sizeOrbit; i++)
+    {
+      occupancy1 = occ1.GetOccupancy(i);
+      occupancy2 = occ2.GetOccupancy(i);
+
+      if (occupancy1 != occupancy2)
+      {
+        return occupancy1 < occupancy2;
       }
     }
+    
     return false;
   }
 };
@@ -99,9 +98,7 @@ class G4MolecularConfiguration
 {
 public:
 
-  typedef std::function<double(const G4Material*,
-                         double,
-     const G4MolecularConfiguration*)> G4DiffCoeffParam;
+  using G4DiffCoeffParam = std::function<double (const G4Material *, double, const G4MolecularConfiguration *)>;
 
   //____________________________________________________________________________
   // Static methods
@@ -342,8 +339,7 @@ public:
   class G4MolecularConfigurationManager
   {
   public:
-    G4MolecularConfigurationManager() :
-        fMoleculeCreationMutex()
+    G4MolecularConfigurationManager()
     {
       fLastMoleculeID = -1;
     }
@@ -420,29 +416,22 @@ public:
   private:
 
     //__________________________________________________________________________
-    typedef std::map<G4ElectronOccupancy,
-                     G4MolecularConfiguration*,
-                     comparator> ElectronOccupancyTable;
-    typedef std::map<const G4MoleculeDefinition*,
-                     ElectronOccupancyTable > MolElectronConfTable;
+    using ElectronOccupancyTable = std::map<G4ElectronOccupancy, G4MolecularConfiguration *, comparator>;
+    using MolElectronConfTable = std::map<const G4MoleculeDefinition *, ElectronOccupancyTable>;
     MolElectronConfTable fElecOccTable;
 
     //__________________________________________________________________________
-    typedef std::map<int,
-                     G4MolecularConfiguration*> ChargeTable;
-    typedef std::map<const G4MoleculeDefinition*,
-                     ChargeTable> MolChargeConfTable;
+    using ChargeTable = std::map<int, G4MolecularConfiguration *>;
+    using MolChargeConfTable = std::map<const G4MoleculeDefinition *, ChargeTable>;
     MolChargeConfTable fChargeTable;
 
     //__________________________________________________________________________
-    typedef std::map<const G4String,
-                     G4MolecularConfiguration*> LabelTable;
-    typedef std::map<const G4MoleculeDefinition*,
-           std::map<const G4String, G4MolecularConfiguration*> > MolLabelConfTable;
+    using LabelTable = std::map<const G4String, G4MolecularConfiguration *>;
+    using MolLabelConfTable = std::map<const G4MoleculeDefinition *, std::map<const G4String, G4MolecularConfiguration *>>;
     MolLabelConfTable fLabelTable;
 
     //__________________________________________________________________________
-    typedef std::map<G4String, G4MolecularConfiguration*> UserIDTable;
+    using UserIDTable = std::map<G4String, G4MolecularConfiguration *>;
     UserIDTable fUserIDTable;
 
     //__________________________________________________________________________
@@ -550,7 +539,7 @@ inline G4int G4MolecularConfiguration::GetMoleculeID() const
 inline void G4MolecularConfiguration::SetLabel(const G4String& label)
 {
   assert(fLabel == 0 || *fLabel == "");
-  if(fLabel == 0)
+  if(fLabel == nullptr)
   {
     fLabel = new G4String(label);
   }
@@ -563,7 +552,7 @@ inline void G4MolecularConfiguration::SetLabel(const G4String& label)
 
 inline const G4String& G4MolecularConfiguration::GetLabel() const
 {
-  if(fLabel == 0)
+  if(fLabel == nullptr)
     fLabel = new G4String();
 
   return (*fLabel);

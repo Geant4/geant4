@@ -2,6 +2,8 @@
 /control/verbose 1
 /run/verbose 0
 /event/verbose 0
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 /source/switch Leipzig
 /control/execute iridium_source_leipzig_primary.mac
 #

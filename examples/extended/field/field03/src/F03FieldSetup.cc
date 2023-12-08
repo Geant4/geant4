@@ -63,17 +63,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03FieldSetup::F03FieldSetup()
- : fFieldManager(0),
-   fLocalFieldManager(0),
-   fChordFinder(0),
-   fLocalChordFinder(0),
-   fEquation(0),
-   fLocalEquation(0),
-   fMagneticField(0),
-   fLocalMagneticField(0),
-   fStepper(0),
-   fLocalStepper(0),
-   fFieldMessenger(0)
 {
   fMagneticField = new G4UniformMagField(G4ThreeVector(3.3*tesla,
                                                        0.0, // 0.5*tesla,
@@ -83,12 +72,9 @@ F03FieldSetup::F03FieldSetup()
                                                             0.0));
 
   fFieldMessenger = new F03FieldMessenger(this);
- 
+
   fEquation = new G4Mag_UsualEqRhs(fMagneticField);
   fLocalEquation = new G4Mag_UsualEqRhs(fLocalMagneticField);
- 
-  fMinStep     = 0.25*mm ; // minimal step of 1 mm is default
-  fStepperType = 4 ;       // ClassicalRK4 is default stepper
 
   fFieldManager = GetGlobalFieldManager();
   fLocalFieldManager = new G4FieldManager();
@@ -148,7 +134,7 @@ void F03FieldSetup::CreateSteppers()
   delete fStepper;
   fStepper= nullptr;
 
-  delete fLocalStepper; 
+  delete fLocalStepper;
   fLocalStepper= nullptr;
 
   switch ( fStepperType )
@@ -203,7 +189,7 @@ void F03FieldSetup::CreateSteppers()
       fLocalStepper = new G4RKG3_Stepper( fLocalEquation );
       G4cout<<"G4RKG3_Stepper is called"<<G4endl;
       break;
-    default: fStepper = 0;
+    default: fStepper = nullptr;
   }
 }
 
@@ -219,7 +205,7 @@ void F03FieldSetup::SetFieldZValue(G4double fieldStrength)
 
 void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
-  if(fMagneticField) delete fMagneticField;
+  delete fMagneticField;
 
   if(fieldVector != G4ThreeVector(0.,0.,0.))
   {
@@ -230,7 +216,7 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then
     // setting the pointer to zero ensures
     // that it is not used for propagation.
-    fMagneticField = 0;
+    fMagneticField = nullptr;
   }
 
   // Either
@@ -247,7 +233,7 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 
 void F03FieldSetup::SetLocalFieldValue(G4ThreeVector fieldVector)
 {
-  if(fLocalMagneticField) delete fLocalMagneticField;
+  delete fLocalMagneticField;
 
   if(fieldVector != G4ThreeVector(0.,0.,0.))
   {
@@ -258,7 +244,7 @@ void F03FieldSetup::SetLocalFieldValue(G4ThreeVector fieldVector)
     // If the new field's value is Zero, then
     // setting the pointer to zero ensures
     // that it is not used for propagation.
-    fLocalMagneticField = 0;
+    fLocalMagneticField = nullptr;
   }
 
   // Either

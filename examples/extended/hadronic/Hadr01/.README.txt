@@ -97,10 +97,25 @@ run command:
 Hadr01 my.macro QGSP_BERT 
 \endverbatim
 
-If 3d argument is not set then the PHYSLIST environment variable is checked. 
-If both are not defined then reference Phsyics Lists is not instantiated, 
-instead the local Physics List is used which is built from components using 
-UI interface. The choice of the physics is provided by the UI command:
+If 3d argument is not set then the PHYSLIST environment variable is checked.
+If 3d argument is set, it is possible to add the 4th and 5th arguments,
+which defines overlap energies between cascade and string models in GeV:
+
+\verbatim
+Hadr01 my.macro QGSP_BERT 3.5 8.0
+\endverbatim
+
+If 6 arguments are used the last enabling addition of charge exchange
+physics on top of any reference Physics List.
+
+\verbatim
+Hadr01 my.macro QGSP_BERT 3.5 8.0 CI
+\endverbatim
+
+If both 3d argument and the environment variable are not defined then
+reference Phsyics Lists is not instantiated, instead the local Physics List
+is used built from components, which may be configured using UI interface.
+The choice of the physics is provided by the UI command:
 
 \verbatim
 /testhadr/Physics     QGSP_BIC

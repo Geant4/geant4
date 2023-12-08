@@ -49,19 +49,19 @@ public:
 
   G4DNACPA100LogLogInterpolation();
 
-  ~G4DNACPA100LogLogInterpolation();
+  ~G4DNACPA100LogLogInterpolation() override;
  
   G4double Calculate(G4double point, G4int bin, 
        const G4DataVector& energies, 
-       const G4DataVector& data) const;
+       const G4DataVector& data) const override;
 
   G4double Calculate(G4double point, G4int bin,
        const G4DataVector& energies,
        const G4DataVector& data, 
        const G4DataVector& log_energies, 
-       const G4DataVector& log_data) const;
+       const G4DataVector& log_data) const override;
 
-  virtual G4VDataSetAlgorithm* Clone() const; 
+  G4VDataSetAlgorithm* Clone() const override; 
 
 private:
 

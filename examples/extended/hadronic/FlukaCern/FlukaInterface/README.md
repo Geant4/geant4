@@ -14,7 +14,7 @@ please directly follow the `README.md` files included in
 The `FLUKA` hadron inelastic physics are accessible both through a `CrossSectionDataSet` and `HadronicInteraction`.  
 The `CrossSectionDataSet` and `HadronicInteraction` can be used to define processes, themselves used to form a `FLUKAHadronInelasticPhysicsConstructor`.  
 The `FLUKAHadronInelasticPhysicsConstructor` can in turn be used to form any `G4PhysicsList`. One example of `G4PhysicsList` is provided (initially `FTFP_BERT_HP`, but with hadron inelastic physics from `FLUKA` instead).  
-Note that for consistency, all calls to the random engine rely on the G4 random engine (including the calls from within the downloaded `FLUKA` release; see the `FlukaInterface` `Makefile` to see how this is handled).
+Note that for consistency, all calls to the random engine rely on the G4 random engine (including the calls from within the downloaded `FLUKA` release; see the `FlukaInterface` `GNUmakefile` to see how this is handled).
 
 
 # Structure

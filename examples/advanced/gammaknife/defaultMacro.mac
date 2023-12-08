@@ -26,12 +26,15 @@
 
 /run/initialize
 
-
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 # SET OF THE VISUALISATION CHARACTERISTICS
-/vis/scene/create
-/vis/open OGL
-/vis/viewer/flush
+
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 
 /vis/viewer/set/viewpointThetaPhi 80 10 deg
 /vis/viewer/zoom 0.7

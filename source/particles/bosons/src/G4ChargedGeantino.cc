@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,34 +33,32 @@
 // ----------------------------------------------------------------
 
 #include "G4ChargedGeantino.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
-
-// ######################################################################
-// ###                          ChargedGeantino                       ###
-// ######################################################################
 G4ChargedGeantino* G4ChargedGeantino::theInstance = nullptr;
 
-G4ChargedGeantino*  G4ChargedGeantino::Definition() 
+G4ChargedGeantino* G4ChargedGeantino::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
 
   const G4String name = "chargedgeantino";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //      
-  //    Arguments for constructor are as follows 
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // clang-format off
    anInstance = new G4ParticleDefinition(
 	         name,         0.0*MeV,       0.0*MeV,   +1.*eplus, 
 		    0,               0,             0,          
@@ -72,19 +67,18 @@ G4ChargedGeantino*  G4ChargedGeantino::Definition()
     	         true,            -1.0,          nullptr,
 		 false,     "geantino",             0
 	  );
+    // clang-format on
   }
   theInstance = static_cast<G4ChargedGeantino*>(anInstance);
   return theInstance;
 }
 
-
-G4ChargedGeantino*  G4ChargedGeantino::ChargedGeantinoDefinition() 
+G4ChargedGeantino* G4ChargedGeantino::ChargedGeantinoDefinition()
 {
   return Definition();
 }
 
-G4ChargedGeantino*  G4ChargedGeantino::ChargedGeantino() 
+G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()
 {
   return Definition();
 }
-

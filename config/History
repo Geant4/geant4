@@ -6,17 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 --------------------------------------------------------------------------------
 
+## 2023-11-13 Gabriele Cosmo (config-V11-01-03)
+- Updated system scripts for Qt settings: removed Qt4 and added Qt6.
+
 ## 2023-05-10 Ben Morgan (config-V11-01-02)
-- Update config scripts for split of G4persistency library
+- Updated config scripts for split of G4persistency library.
 
 ## 2023-04-02 Ben Morgan (config-V11-01-01)
 - No longer link to QtPrintSupport, which is not used in the toolkit.
 
 ## 2023-02-01 Ben Morgan (config-V11-01-00)
-- Update UI/interfaces include paths to reflect new organization
+- Updated UI/interfaces include paths to reflect new organization.
 
 ## 2022-11-02 Gabriele Cosmo (config-V11-00-12)
-- Silence ld warnings in Darwin setups.
+- Silenced ld warnings in Darwin setups.
 
 ## 2022-10-31 Gabriele Cosmo (config-V11-00-11)
 - Corrected buffer size in liblist.c tool.

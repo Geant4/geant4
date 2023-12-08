@@ -63,4 +63,4 @@ geant4_add_module(G4mesons
     G4PionZero.cc
     G4Upsilon.cc)
 
-geant4_module_link_libraries(G4mesons PUBLIC G4globman G4partman)
+geant4_module_link_libraries(G4mesons PUBLIC G4partman PRIVATE G4globman)

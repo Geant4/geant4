@@ -16,7 +16,7 @@ endif()
 #-----------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 3.16...3.24)
+cmake_minimum_required(VERSION 3.16...3.27)
 
 # - Make overrides for default flags, so they appear in interfaces
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/G4MakeRules_cxx.cmake)

@@ -127,10 +127,9 @@ public:
 
   G4MicroElecInelasticModel_new & operator=(const  G4MicroElecInelasticModel_new &right) = delete;
   G4MicroElecInelasticModel_new(const  G4MicroElecInelasticModel_new&) = delete;
-
 protected:
-
   G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+  
 
 private:
   //
@@ -145,7 +144,7 @@ private:
 					  G4double originalMass, G4int originalZ) ;
   
   G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(const G4ParticleDefinition*,
-							  G4double k, G4int shell);					  
+							  G4double k, G4int shell);
 
   G4double TransferedEnergy(const G4ParticleDefinition*, G4double k,
 			    G4int ionizationLevelIndex, G4double random);
@@ -191,6 +190,7 @@ private:
   G4bool isInitialised ;
   G4bool fasterCode;
   G4bool SEFromFermiLevel;
+
 };
 
 #endif

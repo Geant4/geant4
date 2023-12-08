@@ -6,6 +6,50 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-03 Ben Morgan (emstand-V11-01-24)
+- Use "G4" prefixed version of EXPAT/ZLIB CMake variables
+
+## 2023-10-19 V.Ivanchenko (emstand-V11-01-23)
+- G4UrbanMscModel - (L. Urban) tuned step limit parameterisation for 
+    the case of enabled optional algorithm of lateral displacement.
+    The default tracking is not affected.
+
+## 2023-10-07 V.Ivanchenko (emstand-V11-01-22)
+- G4ASTARStopping, G4PSTARStopping, G4IonICRU73Data - use logarithmic search
+    of bin for free vectors
+
+## 2023-10-05 V.Ivanchenko (emstand-V11-01-21)
+- G4UrbanMscModel - (L. Urban) optional method SampleDisplacementNew(..) is
+    rewritten. This method is not used so far in any EM physics configurations
+    by default but may be enabled via UI command and/or C++ interface
+
+## 2023-10-02 V.Ivanchenko (emstand-V11-01-20)
+- G4eBremsstrahlungRelModel - fixed potential division by zero if advanced
+    compiler options are used, use G4Pow
+
+## 2023-08-21 V.Ivanchenko (emstand-V11-01-19)
+- G4SeltzerBergerModel - implement inheritance from G4VEmModel instead of 
+    G4eBremsstrahlungRelModel, which means re-implementing common methods
+    by cut and paster from G4eBremsstrahlungRelModel and removal LPM 
+    computations; use std::applyOnce approach to initilize static data;
+    upplied code format.
+- G4eBremsstrahlungRelModel - use std::applyOncy approach to initilize
+    static data. This MR is a continuation of implementing a general
+    solution for initialisation of static data proposed by Stephan
+    Hageboeck
+
+## 2023-06-18 V.Ivanchenko (emstand-V11-01-18)
+- G4BetheHeitlerModel, G4PairProductionRelModel, G4eBremsstrahlungRelModel,
+  G4SeltzerBergerModel - further reorganized initialisation for #2543 and 
+    considered neccesity to fix, Initilise(..) method described by Stephan
+    Hageboeck, to have thread safe check if a model is the first 
+    instance of the class, set lock and perform initilisation of all static
+    data. Results of standard EM tests are unchanged.
+
+## 2023-06-17 V.Ivanchenko (emstand-V11-01-17)
+- G4UrbanMscModel - reduced number of re-computations of safety,
+    results of EM tests unchanged
+
 ## 2023-06-13 V.Ivanchenko (emstand-V11-01-16)
 - G4LindHardSorensenIonModel - do not try to use ICRU73 data for projectile Z>80
 

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -37,30 +34,20 @@
 #ifndef G4EtaPrime_h
 #define G4EtaPrime_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         EtaPrime                               ###
-// ######################################################################
 
 class G4EtaPrime : public G4ParticleDefinition
 {
- private:
-   static G4EtaPrime* theInstance;
-   G4EtaPrime(){}
-   ~G4EtaPrime() override= default;
+  public:
+    static G4EtaPrime* Definition();
+    static G4EtaPrime* EtaPrimeDefinition();
+    static G4EtaPrime* EtaPrime();
 
- public:
-   static G4EtaPrime* Definition();
-   static G4EtaPrime* EtaPrimeDefinition();
-   static G4EtaPrime* EtaPrime();
+  private:
+    G4EtaPrime() {}
+    ~G4EtaPrime() override = default;
+
+    static G4EtaPrime* theInstance;
 };
 
 #endif
-
-
-
-
-

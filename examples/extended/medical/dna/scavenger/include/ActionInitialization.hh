@@ -31,11 +31,11 @@
 
 #include "G4VUserActionInitialization.hh"
 
-/// Instantiates and registers to Geant4 kernel all user action classes
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Instantiates and registers to Geant4 kernel all user action classes
 
 class ActionInitialization : public G4VUserActionInitialization {
 public:

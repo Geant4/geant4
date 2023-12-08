@@ -40,9 +40,9 @@
 class LXePMTHit : public G4VHit
 {
  public:
-  LXePMTHit();
+  LXePMTHit() = default;
   LXePMTHit(const LXePMTHit& right);
-  ~LXePMTHit();
+  ~LXePMTHit() override = default;
 
   const LXePMTHit& operator=(const LXePMTHit& right);
   G4bool operator==(const LXePMTHit& right) const;
@@ -50,8 +50,8 @@ class LXePMTHit : public G4VHit
   inline void* operator new(size_t);
   inline void operator delete(void* aHit);
 
-  virtual void Draw();
-  virtual void Print();
+  void Draw() override;
+  void Print() override;
 
   inline void SetDrawit(G4bool b) { fDrawit = b; }
   inline G4bool GetDrawit() { return fDrawit; }
@@ -64,7 +64,7 @@ class LXePMTHit : public G4VHit
 
   inline void SetPMTPhysVol(G4VPhysicalVolume* physVol)
   {
-    this->fPhysVol = physVol;
+    fPhysVol = physVol;
   }
   inline G4VPhysicalVolume* GetPMTPhysVol() { return fPhysVol; }
 
@@ -76,11 +76,11 @@ class LXePMTHit : public G4VHit
   inline G4ThreeVector GetPMTPos() { return fPos; }
 
  private:
-  G4int fPmtNumber;
-  G4int fPhotons;
+  G4int fPmtNumber = -1;
+  G4int fPhotons = 0;
   G4ThreeVector fPos;
-  G4VPhysicalVolume* fPhysVol;
-  G4bool fDrawit;
+  G4VPhysicalVolume* fPhysVol = nullptr;
+  G4bool fDrawit = false;
 };
 
 typedef G4THitsCollection<LXePMTHit> LXePMTHitsCollection;

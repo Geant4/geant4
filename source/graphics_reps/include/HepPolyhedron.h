@@ -435,6 +435,13 @@ class HepPolyhedron {
    */
   G4int createPolyhedron(G4int Nnodes, G4int Nfaces,
                          const G4double xyz[][3], const G4int faces[][4]);
+
+  /**
+   * Calculate the unweighted mean of all the vertices in the polyhedron. Not to be
+   * confused with the polyhedron centre or centre of mass
+   * @return G4Point3D of the unweighted mean vertex position
+   */
+  G4Point3D vertexUnweightedMean() const;
 };
 
 class HepPolyhedronTrd2 : public HepPolyhedron

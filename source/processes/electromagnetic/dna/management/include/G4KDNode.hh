@@ -112,8 +112,8 @@ protected:
    * fSide == 1  : It is the right of the parent node
    */
 
-  G4KDTree* fTree;
-  G4KDNode_Base *fLeft, *fRight, *fParent;
+  G4KDTree* fTree{nullptr};
+  G4KDNode_Base *fLeft{nullptr}, *fRight{nullptr}, *fParent{nullptr};
   /* Left : fLeft->fPosition[axis] < this->fPosition[axis]
    * Right : fRight->fPosition[axis] > this->fPosition[axis]
    * Root node : fParent = 0
@@ -136,7 +136,7 @@ template<typename PointT>
     // For root node :
     // parent = 0, axis = 0, side = 0
     G4KDNode(G4KDTree*, PointT* /*point*/, G4KDNode_Base* /*parent*/);
-    virtual ~G4KDNode();
+    ~G4KDNode() override;
 
     void *operator new(std::size_t);
     void operator delete(void *);
@@ -146,19 +146,19 @@ template<typename PointT>
       return fPoint;
     }
 
-    virtual G4double operator[](std::size_t i) const
+    G4double operator[](std::size_t i) const override
     {
       if(fPoint == nullptr) abort();
       return (*fPoint)[(G4int)i];
     }
 
-    virtual void InactiveNode()
+    void InactiveNode() override
     {
       fValid = false;
       G4KDNode_Base::InactiveNode();
     }
 
-    virtual G4bool IsValid() const
+    G4bool IsValid() const override
     {
       return fValid;
     }
@@ -212,7 +212,7 @@ template<typename PointCopyT>
       fValid = true;
     }
 
-    virtual ~G4KDNodeCopy(){}
+    ~G4KDNodeCopy() override= default;
 
     void *operator new(std::size_t)
     {
@@ -230,18 +230,18 @@ template<typename PointCopyT>
       return fPoint;
     }
 
-    virtual double operator[](std::size_t i) const
+    double operator[](std::size_t i) const override
     {
       return fPoint[i];
     }
 
-    virtual void InactiveNode()
+    void InactiveNode() override
     {
       fValid = false;
       G4KDNode_Base::InactiveNode();
     }
 
-    virtual bool IsValid() const
+    bool IsValid() const override
     {
       return fValid;
     }

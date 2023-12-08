@@ -47,7 +47,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run();
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);         
@@ -59,7 +59,7 @@ class Run : public G4Run
 
     G4int GetIonId (G4String);
 
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
     void EndOfRun();     
    
   private:
@@ -85,12 +85,12 @@ class Run : public G4Run
     static std::map<G4String,G4int> fgIonMap;
     static G4int fgIonId;
 
-    DetectorConstruction* fDetector;
-    G4ParticleDefinition* fParticle;
-    G4double              fEkin;
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double              fEkin = 0.;
 
-    G4double fEnergyDeposit, fEnergyDeposit2;
-    G4double fEnergyFlow,    fEnergyFlow2;            
+    G4double fEnergyDeposit = 0., fEnergyDeposit2 = 0.;
+    G4double fEnergyFlow = 0.,    fEnergyFlow2 = 0.;            
     std::map<G4String,G4int>        fProcCounter;
     std::map<G4String,ParticleData> fParticleDataMap1;                    
     std::map<G4String,ParticleData> fParticleDataMap2;

@@ -43,7 +43,7 @@ class WLSEventAction : public G4UserEventAction
 {
  public:
   WLSEventAction();
-  ~WLSEventAction();
+  ~WLSEventAction() override;
 
   void BeginOfEventAction(const G4Event*) override;
   void EndOfEventAction(const G4Event*) override;
@@ -64,23 +64,23 @@ class WLSEventAction : public G4UserEventAction
   void AddMirror() { fMirror += 1; };
 
  private:
-  WLSEventActionMessenger* fEventMessenger;
+  WLSEventActionMessenger* fEventMessenger = nullptr;
 
-  G4int fVerboseLevel;
+  G4int fVerboseLevel = 0;
 
-  G4int fMPPCCollID;
+  G4int fMPPCCollID = 0;
 
-  G4int fNTIR;
-  G4int fNExiting;
-  G4int fEscapedEnd;
-  G4int fEscapedMid;
-  G4int fBounce;
-  G4int fWLSBounce;
-  G4int fClad1Bounce;
-  G4int fClad2Bounce;
-  G4int fReflected;
-  G4int fEscaped;
-  G4int fMirror;
+  G4int fNTIR = 0;
+  G4int fNExiting = 0;
+  G4int fEscapedEnd = 0;
+  G4int fEscapedMid = 0;
+  G4int fBounce = 0;
+  G4int fWLSBounce = 0;
+  G4int fClad1Bounce = 0;
+  G4int fClad2Bounce = 0;
+  G4int fReflected = 0;
+  G4int fEscaped = 0;
+  G4int fMirror = 0;
 };
 
 #endif

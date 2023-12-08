@@ -34,18 +34,6 @@
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::ActionInitialization()
-  : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ActionInitialization::BuildForMaster() const
 {
   SetUserAction(new RunAction());
@@ -55,7 +43,7 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+  auto primary = new PrimaryGeneratorAction();
   SetUserAction(primary);
   SetUserAction(new RunAction(primary));
   SetUserAction(new SteppingAction());

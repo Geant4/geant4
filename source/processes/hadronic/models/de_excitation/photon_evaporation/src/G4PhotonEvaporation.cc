@@ -47,38 +47,33 @@
 #include "G4FragmentVector.hh"
 #include "G4GammaTransition.hh"
 #include "G4Pow.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
-#include <CLHEP/Units/PhysicalConstants.h>
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PhysicsModelCatalog.hh"
 #include "G4AutoLock.hh"
+
+G4float G4PhotonEvaporation::GREnergy[] = {0.0f};
+G4float G4PhotonEvaporation::GRWidth[] = {0.0f};
 
 namespace
 {
   G4Mutex photEvaporationMutex = G4MUTEX_INITIALIZER;
 }
 
-G4float G4PhotonEvaporation::GREnergy[] = {0.0f};
-G4float G4PhotonEvaporation::GRWidth[] = {0.0f};
-
 G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
-  : fLevelManager(nullptr), fTransition(p), fPolarization(nullptr),
-    fVerbose(1), fPoints(0), vShellNumber(-1), fIndex(0), fSecID(-1),
-    fMaxLifeTime(DBL_MAX), 
-    fICM(true), fRDM(false), fSampleTime(true), 
-    fCorrelatedGamma(false), isInitialised(false)
+  : fTransition(p), fPolarization(nullptr), fVerbose(1)
 {
-  //G4cout << "### New G4PhotonEvaporation() " << this << G4endl;   
+  if (fVerbose > 1) {
+    G4cout << "### New G4PhotonEvaporation() " << this << G4endl;
+  }
   fNuclearLevelData = G4NuclearLevelData::GetInstance(); 
   fTolerance = 20*CLHEP::eV;
 
-  if(!fTransition) { fTransition = new G4GammaTransition(); }
+  if(nullptr == fTransition) { fTransition = new G4GammaTransition(); }
 
-  theA = theZ = fCode = 0;
   fSecID = G4PhysicsModelCatalog::GetModelID("model_G4PhotonEvaporation");
-  fLevelEnergyMax = fStep = fExcEnergy = fProbability = 0.0;
 
-  for(G4int i=0; i<MAXDEPOINT; ++i) { fCummProbability[i] = 0.0; }
-  if(0.0f == GREnergy[1]) { InitialiseGRData(); }
+  if(0.0f == GREnergy[2]) { InitialiseGRData(); }
 }
 
 G4PhotonEvaporation::~G4PhotonEvaporation()
@@ -88,7 +83,7 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
 
 void G4PhotonEvaporation::Initialise()
 {
-  if(isInitialised) { return; }
+  if (isInitialised) { return; }
   isInitialised = true;
 
   G4DeexPrecoParameters* param = fNuclearLevelData->GetParameters();
@@ -101,25 +96,23 @@ void G4PhotonEvaporation::Initialise()
   fTransition->SetPolarizationFlag(fCorrelatedGamma);
   fTransition->SetTwoJMAX(param->GetTwoJMAX());
   fTransition->SetVerbose(fVerbose);
-  if(fVerbose > 1) {
+  if (fVerbose > 1) {
     G4cout << "### G4PhotonEvaporation is initialized " << this << G4endl;   
   }
 }
 
 void G4PhotonEvaporation::InitialiseGRData()
 {
-  if(0.0f == GREnergy[1]) {
-    G4AutoLock l(&photEvaporationMutex);
-    if(0.0f == GREnergy[1]) {
-      G4Pow* g4calc = G4Pow::GetInstance();
-      const G4float GRWfactor = 0.3f;
-      for (G4int A=1; A<MAXGRDATA; ++A) {
-	GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
-	GRWidth[A] = GRWfactor*GREnergy[A];
-      }
+  G4AutoLock l(&photEvaporationMutex);
+  if(0.0f == GREnergy[2]) {
+    G4Pow* g4calc = G4Pow::GetInstance();
+    const G4float GRWfactor = 0.3f;
+    for (G4int A=1; A<MAXGRDATA; ++A) {
+      GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
+      GRWidth[A] = GRWfactor*GREnergy[A];
     }
-    l.unlock();    
   }
+  l.unlock();
 }
 
 G4Fragment* 
@@ -403,11 +396,13 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 	    ntrans = level->NumberOfTransitions();
 	  }
 	}
-        JP1 = fLevelManager->SpinTwo(fIndex); 
+        JP1 = fLevelManager->TwoSpinParity(fIndex); 
       }
     }
     // if a level has no defined transitions
-    if(0 == ntrans) { isDiscrete = false; }
+    if (0 == ntrans) {
+      isDiscrete = false;
+    }
   }
   if(fVerbose > 2) {
     G4long prec = G4cout.precision(4);
@@ -467,15 +462,15 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
         fIndex = fLevelManager->NearestLevelIndex(efinal, fIndex);
       }
     }
-    if(fVerbose > 2) {
+    if (fVerbose > 2) {
       G4cout << "Continues emission efinal(MeV)= " << efinal << G4endl; 
     }
     //discrete part ground state
-  } else if(0 == fIndex) {
+  } else if (0 == fIndex) {
     G4bool isLL = false;
-    if(nullptr != fLevelManager) {
+    if (nullptr != fLevelManager) {
       G4double ltime = fLevelManager->LifeTime(0);
-      if(ltime < 0.0 || ltime > fMaxLifeTime) { isLL = true; }
+      if(ltime > fMaxLifeTime) { isLL = true; }
     }
     nucleus->SetLongLived(isLL);
     return result;
@@ -494,7 +489,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     // stable fragment has life time -1 or above the limit
     // if is called from the radioactive decay the life time is not checked
     G4double ltime = fLevelManager->LifeTime(fIndex);
-    if(ltime < 0.0 || (!fRDM && ltime > fMaxLifeTime)) {
+    if (!fRDM && ltime > fMaxLifeTime) {
       nucleus->SetLongLived(true);
       return result;
     }
@@ -509,25 +504,27 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     G4double prob = level->GammaProbability(idx);
     // prob = 0 means that there is only internal conversion
-    if(fICM && prob < 1.0) {
+    if (prob < 1.0) {
       G4double rndm = G4UniformRand();
-      if(rndm > prob) {
+      if (rndm > prob) {
 	isGamma = false;
-	rndm = (rndm - prob)/(1.0 - prob);
-	vShellNumber = level->SampleShell(idx, rndm);
+	if (fICM) {
+	  rndm = (rndm - prob)/(1.0 - prob);
+	  vShellNumber = level->SampleShell(idx, rndm);
+	}
       }
     }
     // it is discrete transition with possible gamma correlation
     ratio  = level->MultipolarityRatio(idx);
     multiP = level->TransitionType(idx);
     fIndex = level->FinalExcitationIndex(idx);
-    JP2 = fLevelManager->SpinTwo(fIndex); 
+    JP2 = fLevelManager->TwoSpinParity(fIndex); 
 
     // final energy and time
     efinal = fLevelManager->LevelEnergy(fIndex);
     // time is sampled if decay not prompt and this class called not 
     // from radioactive decay and isomer production is enabled 
-    if(fSampleTime && ltime > 0.0) { 
+    if(fSampleTime && ltime < DBL_MAX) { 
       time -= ltime*G4Log(G4UniformRand()); 
     }
     nucleus->SetFloatingLevelNumber(fLevelManager->FloatingLevel(fIndex));
@@ -536,7 +533,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
   G4bool isLL = false;
   if(nullptr != fLevelManager) {
     G4double ltime = fLevelManager->LifeTime(fIndex);
-    if(ltime < 0.0 || ltime > fMaxLifeTime) { isLL = true; }
+    if(ltime > fMaxLifeTime) { isLL = true; }
   }
   nucleus->SetLongLived(isLL);
 

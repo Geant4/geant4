@@ -37,13 +37,7 @@
 
 F02ActionInitialization::F02ActionInitialization
                             (F02DetectorConstruction* detConstruction)
- : G4VUserActionInitialization(),
-   fDetConstruction(detConstruction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F02ActionInitialization::~F02ActionInitialization()
+ : fDetConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,47 +27,27 @@
 #define G4BertiniElectroNuclearBuilder_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4TheoFSGenerator.hh"
-#include "G4GeneratorPrecompoundInterface.hh"
-#include "G4QGSModel.hh"
-#include "G4GammaParticipants.hh"
-#include "G4QGSMFragmentation.hh"
-#include "G4ExcitedStringDecay.hh"
-
 #include "G4CascadeInterface.hh"
-#include "G4ElectroVDNuclearModel.hh"
 #include "G4HadronInelasticProcess.hh"
-#include "G4ElectronNuclearProcess.hh"
-#include "G4PositronNuclearProcess.hh"
-
-//A. Dotti (June2013): No need to change this class for MT
-// Since each thread owns its own instance (created by G4EmExtraPhysics)
 
 class G4BertiniElectroNuclearBuilder 
 {
-  public: 
-    G4BertiniElectroNuclearBuilder(G4bool eNucl);
-    virtual ~G4BertiniElectroNuclearBuilder();
+public: 
+  explicit G4BertiniElectroNuclearBuilder(G4bool eNucl);
+  virtual ~G4BertiniElectroNuclearBuilder() = default;
 
-  public: 
-    virtual void Build();
+  virtual void Build();
 
-  protected:
-    G4HadronInelasticProcess * thePhotoNuclearProcess;
-    G4ElectronNuclearProcess * theElectronNuclearProcess;
-    G4PositronNuclearProcess * thePositronNuclearProcess;
-    G4ElectroVDNuclearModel * theElectroReaction;
-    G4CascadeInterface * theGammaReaction;  
-    
-    G4TheoFSGenerator * theModel;
-    G4GeneratorPrecompoundInterface * theCascade;
-    G4QGSModel< G4GammaParticipants > * theStringModel;
-    G4QGSMFragmentation * theFragmentation;
-    G4ExcitedStringDecay * theStringDecay;
-    G4bool wasActivated;
-    G4bool eActivated;
+  G4BertiniElectroNuclearBuilder& operator=
+  (const G4BertiniElectroNuclearBuilder& right) = delete;
+  G4BertiniElectroNuclearBuilder(const G4BertiniElectroNuclearBuilder&) = delete;
+
+protected:
+
+  G4HadronInelasticProcess* thePhotoNuclearProcess{nullptr};
+  G4CascadeInterface* theGammaReaction{nullptr};
+
+  G4bool eActivated;
 };
 
 #endif

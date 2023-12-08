@@ -41,9 +41,9 @@
 
 #include "G4Types.hh"
 #include "G4VVolumeMaterialScanner.hh"
+#include "G4VTouchable.hh"
 
 class G4VPhysicalVolume;
-class G4VTouchable; 
 class G4VSolid;
 class G4Material;
 

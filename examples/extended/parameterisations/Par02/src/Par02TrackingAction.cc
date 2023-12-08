@@ -48,7 +48,7 @@ Par02TrackingAction::Par02TrackingAction() : G4UserTrackingAction() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02TrackingAction::~Par02TrackingAction() {}
+Par02TrackingAction::~Par02TrackingAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,7 +65,7 @@ void Par02TrackingAction::PreUserTrackingAction( const G4Track* aTrack ) {
 
 void Par02TrackingAction::PostUserTrackingAction( const G4Track* aTrack ) {
   if ( aTrack->GetTrackStatus() == fStopAndKill  &&  aTrack->GetParentID() == 0 ) {
-    Par02PrimaryParticleInformation* info = (Par02PrimaryParticleInformation*) 
+    auto  info = (Par02PrimaryParticleInformation*) 
        aTrack->GetDynamicParticle()->GetPrimaryParticle()->GetUserInformation();
     //info->Print();
     Par02Output::Instance()->SaveTrack( Par02Output::eSaveMC,

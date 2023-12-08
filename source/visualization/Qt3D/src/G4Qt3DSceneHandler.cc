@@ -60,8 +60,12 @@
 // Qt3D seems to offer a choice of type - float or double. It would be nice
 // to use double since it offers the prospect of higher precision, hopefully
 // avoiding some issues that we see at high zoom. But it currently gives the
-// following warning: "findBoundingVolumeComputeData: Position attribute not
-// suited for bounding volume computation", so for now we use float.
+// following warning:
+// Qt5: "findBoundingVolumeComputeData: Position attribute not
+// suited for bounding volume computation",
+// Qt6: "Failed to build graphics pipeline: Geometry doesn't match expected layout
+// An attribute type is not supported "vertexPosition" Qt3DCore::QAttribute::Double"
+// so for now we use float.
 #define PRECISION float
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #define BASETYPE Qt3DRender::QAttribute::Float
@@ -121,19 +125,19 @@ void G4Qt3DSceneHandler::EstablishG4Qt3DQEntities()
   fpPersistentObjects = new G4Qt3DQEntity(fpQt3DScene);  // Hangs from root
   fpPersistentObjects ->setObjectName("G4Qt3DPORoot");
 
-  // Physical volume objects for each world hang from POs
-  G4TransportationManager* transportationManager
-  = G4TransportationManager::GetTransportationManager ();
-  std::size_t nWorlds = transportationManager->GetNoWorlds();
-  std::vector<G4VPhysicalVolume*>::iterator iterWorld
-  = transportationManager->GetWorldsIterator();
-  fpPhysicalVolumeObjects.resize(nWorlds);
-  for (std::size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-    G4VPhysicalVolume* wrld = (*iterWorld);
-    auto entity = new G4Qt3DQEntity(fpPersistentObjects);
-    entity->setObjectName("G4Qt3DPORoot_"+QString(wrld->GetName()));
-    entity->SetPVNodeID(G4PhysicalVolumeModel::G4PhysicalVolumeNodeID(wrld));
-    fpPhysicalVolumeObjects[i] = entity;
+  // Physical volume objects hang from POs
+  if (fpScene) {
+    const auto& sceneModels = fpScene->GetRunDurationModelList();
+    for (const auto& sceneModel : sceneModels) {
+      const auto& pvModel = dynamic_cast<G4PhysicalVolumeModel*>(sceneModel.fpModel);
+      if (pvModel) {
+        auto entity = new G4Qt3DQEntity(fpPersistentObjects);
+        const auto& pv = pvModel->GetTopPhysicalVolume();
+        entity->setObjectName("G4Qt3DPORoot_"+QString(pv->GetName()));
+        entity->SetPVNodeID(G4PhysicalVolumeModel::G4PhysicalVolumeNodeID(pv));
+        fpPhysicalVolumeObjects.push_back(entity);
+      }
+    }
   }
 }
 
@@ -198,7 +202,7 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
   std::size_t iDepth = 1;
   while (iDepth < depth) {
     const auto& children = node->children();
-    const G4int nChildren = children.size();  // int size() (Qt covention?)
+    const G4int nChildren = (G4int)children.size();
     G4int iChild = 0;
     G4Qt3DQEntity* child = nullptr;
     for (; iChild < nChildren; ++iChild) {
@@ -337,10 +341,22 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   polylineAtt->setCount((G4int)nLines);
   polylineAtt->setByteOffset(0);
   polylineAtt->setByteStride(vertexByteSize);
+  // Normal attribute (a dummy with count==0) (Qt6 seems to require)
+  auto dummyNormalLineAtt = new G4Qt3DCompat::QAttribute;
+  dummyNormalLineAtt->setObjectName("Normal attribute");
+  dummyNormalLineAtt->setName(G4Qt3DCompat::QAttribute::defaultNormalAttributeName());
+  dummyNormalLineAtt->setBuffer(polylineBuffer);
+  dummyNormalLineAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
+  dummyNormalLineAtt->setVertexBaseType(BASETYPE);
+  dummyNormalLineAtt->setVertexSize(3);
+  dummyNormalLineAtt->setCount(0);
+  dummyNormalLineAtt->setByteOffset(0);
+  dummyNormalLineAtt->setByteStride(vertexByteSize);
 
   const auto& colour = fpVisAttribs->GetColour();
 
   polylineGeometry->addAttribute(polylineAtt);
+  polylineGeometry->addAttribute(dummyNormalLineAtt);
 
   auto material = new Qt3DExtras::QDiffuseSpecularMaterial();
   material->setObjectName("materialForPolyline");
@@ -354,7 +370,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyline& polyline)
   auto geometryView = new Qt3DCore::QGeometryView(polylineGeometry);
   geometryView->setObjectName("polylineGeometryView");
   geometryView->setGeometry(polylineGeometry);
-  geometryView->setVertexCount(2*nLines);
+  geometryView->setVertexCount((G4int)(2*nLines));
   geometryView->setPrimitiveType(Qt3DCore::QGeometryView::Lines);
   renderer->setView(geometryView);
 #else
@@ -855,6 +871,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
   G4Qt3DCompat::QAttribute* positionAtt = nullptr;
   G4Qt3DCompat::QAttribute* normalAtt   = nullptr;
   G4Qt3DCompat::QAttribute* lineAtt     = nullptr;
+  G4Qt3DCompat::QAttribute* dummyNormalLineAtt = nullptr;
 
   G4Qt3DCompat::QBuffer* vertexBuffer = nullptr;
   if (drawing_style == G4ViewParameters::hlr ||
@@ -945,6 +962,17 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     lineAtt->setCount((G4int)nLines);
     lineAtt->setByteOffset(0);
     lineAtt->setByteStride(vertexByteSize);
+    // Normal attribute (a dummy with count==0) (Qt6 seems to require)
+    dummyNormalLineAtt = new G4Qt3DCompat::QAttribute;
+    dummyNormalLineAtt->setObjectName("Normal attribute");
+    dummyNormalLineAtt->setName(G4Qt3DCompat::QAttribute::defaultNormalAttributeName());
+    dummyNormalLineAtt->setBuffer(lineBuffer);
+    dummyNormalLineAtt->setAttributeType(G4Qt3DCompat::QAttribute::VertexAttribute);
+    dummyNormalLineAtt->setVertexBaseType(BASETYPE);
+    dummyNormalLineAtt->setVertexSize(3);
+    dummyNormalLineAtt->setCount(0);
+    dummyNormalLineAtt->setByteOffset(0);
+    dummyNormalLineAtt->setByteStride(vertexByteSize);
   }
 
   // Create material and renderer(s)...
@@ -957,6 +985,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
     case G4ViewParameters::wireframe:
 
       lineGeometry->addAttribute(lineAtt);
+      lineGeometry->addAttribute(dummyNormalLineAtt);
 
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireframe");
@@ -998,6 +1027,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       // Edges
 
       lineGeometry->addAttribute(lineAtt);
+      lineGeometry->addAttribute(dummyNormalLineAtt);
 
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireFrame");
@@ -1058,6 +1088,7 @@ void G4Qt3DSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron)
       // Edges
 
       lineGeometry->addAttribute(lineAtt);
+      lineGeometry->addAttribute(dummyNormalLineAtt);
 
       material = new Qt3DExtras::QDiffuseSpecularMaterial();
       material->setObjectName("materialForWireframe");

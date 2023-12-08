@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+//      GEANT 4 class header file
 //
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 27 June 1998
@@ -36,21 +33,16 @@
 #ifndef G4VShortLivedParticle_h
 #define G4VShortLivedParticle_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "globals.hh"
 
 class G4VShortLivedParticle : public G4ParticleDefinition
 {
-  //  A virtual class for short lived particles. 
-  //  ShortLivedParticle particles will not be tracked by the TrackingManager
-  //  So, G4VShortLivedParticle is not derived from G4ParticleWIthCuts 
-  private:
-
-   const G4VShortLivedParticle & operator=(const G4VShortLivedParticle &right);
-
+    //  A virtual class for short lived particles.
+    //  ShortLivedParticle particles will not be tracked by the TrackingManager
+    //  So, G4VShortLivedParticle is not derived from G4ParticleWIthCuts
   public:
-
+    // clang-format off
    G4VShortLivedParticle(const G4String&  aName,  
                G4double         mass,     
                G4double         width,
@@ -68,16 +60,15 @@ class G4VShortLivedParticle : public G4ParticleDefinition
                G4bool           stable,
                G4double         lifetime,
                G4DecayTable     *decaytable);
+    // clang-format on
 
-   ~G4VShortLivedParticle() override = default;
+    ~G4VShortLivedParticle() override = default;
 
-   G4bool operator==(const G4VShortLivedParticle &right) const;
-   G4bool operator!=(const G4VShortLivedParticle &right) const;
+    G4bool operator==(const G4VShortLivedParticle& right) const;
+    G4bool operator!=(const G4VShortLivedParticle& right) const;
 
+  private:
+    const G4VShortLivedParticle& operator=(const G4VShortLivedParticle& right);
 };
- 
+
 #endif
-
-
-
-

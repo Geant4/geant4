@@ -118,6 +118,7 @@
 #include "G4hBremsstrahlung.hh"
 #include "G4ionIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4NuclearStopping.hh"
 
 //em process options to allow msc step-limitation to be switched off
 #include "G4EmParameters.hh"
@@ -334,6 +335,8 @@ void DMXPhysicsList::ConstructEM() {
   G4LossTableManager* man = G4LossTableManager::Instance();
   man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
 
+  G4EmParameters* em_params = G4EmParameters::Instance();
+  
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while( (*particleIterator)() ){
@@ -368,7 +371,7 @@ void DMXPhysicsList::ConstructEM() {
 	// process ordering: AddProcess(name, at rest, along step, post step)
 	// Multiple scattering
 	G4eMultipleScattering* msc = new G4eMultipleScattering();
-	msc->SetStepLimitType(fUseDistanceToBoundary);
+	em_params->SetMscStepLimitType(fUseDistanceToBoundary);
 	pmanager->AddProcess(msc,-1, 1, -1);
 
 	// Ionisation
@@ -376,30 +379,30 @@ void DMXPhysicsList::ConstructEM() {
         G4VEmModel* theIoniLiv = new G4LivermoreIonisationModel();
         theIoniLiv->SetHighEnergyLimit(0.1*MeV); 
         eIonisation->AddEmModel(0, theIoniLiv, new G4UniversalFluctuation() );
-	eIonisation->SetStepFunction(0.2, 100*um); //improved precision in tracking  
-	pmanager->AddProcess(eIonisation,-1, 2, 2);
+	em_params->SetStepFunction(0.2, 100*um); //improved precision in tracking  
+	pmanager->AddProcess(eIonisation,-1, 2, 1);
 	
 	// Bremsstrahlung
 	G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
-	pmanager->AddProcess(eBremsstrahlung, -1,-3, 3);
+	pmanager->AddProcess(eBremsstrahlung, -1,-3, 2);
       } 
     else if (particleName == "e+") 
       {
 	//positron	
 	G4eMultipleScattering* msc = new G4eMultipleScattering();
 	msc->SetStepLimitType(fUseDistanceToBoundary);
-	pmanager->AddProcess(msc,-1, 1, 1);
+	pmanager->AddProcess(msc,-1, 1, -1);
 	
 	// Ionisation
 	G4eIonisation* eIonisation = new G4eIonisation();
-	eIonisation->SetStepFunction(0.2, 100*um); //     
-	pmanager->AddProcess(eIonisation,                 -1, 2, 2);
+	// eIonisation->SetStepFunction(0.2, 100*um); //     
+	pmanager->AddProcess(eIonisation,                 -1, 2, 1);
 
 	//Bremsstrahlung (use default, no low-energy available)
-	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
+	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 2);
 
 	//Annihilation
-	pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 4);      
+	pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 3);      
       } 
     else if( particleName == "mu+" || 
 	     particleName == "mu-"    ) 
@@ -421,7 +424,7 @@ void DMXPhysicsList::ConstructEM() {
       
 	//ionisation
 	G4hIonisation* hIonisation = new G4hIonisation();
-	hIonisation->SetStepFunction(0.2, 50*um);
+	em_params->SetStepFunctionMuHad(0.2, 50*um);
 	pmanager->AddProcess(hIonisation,               -1, 2, 1);      
 	
 	//bremmstrahlung
@@ -437,8 +440,9 @@ void DMXPhysicsList::ConstructEM() {
 	
 	//ionisation
 	G4ionIonisation* ionIoni = new G4ionIonisation();
-	ionIoni->SetStepFunction(0.1, 20*um);
-	pmanager->AddProcess(ionIoni,                  -1, 2,-2);
+	em_params->SetStepFunctionLightIons(0.1, 1*CLHEP::um);
+	pmanager->AddProcess(ionIoni,                   -1, 2, 1);
+	pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);	
       }
     else if (particleName == "GenericIon")
       {
@@ -451,9 +455,9 @@ void DMXPhysicsList::ConstructEM() {
 
 	//ionisation
 	G4ionIonisation* ionIoni = new G4ionIonisation();
-	ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-	ionIoni->SetStepFunction(0.1, 20*um);
+	em_params->SetStepFunctionIons(0.1, 1*CLHEP::um);
 	pmanager->AddProcess(ionIoni,                   -1, 2, 1);
+	pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);	
       } 
 
     else if ((!particle->IsShortLived()) &&

@@ -92,6 +92,11 @@ public:
   inline G4double LogVectorValue(const G4double energy,
                                  const G4double theLogEnergy) const;
 
+  // Same as the Value() method above but specialised for free vector
+  // with logarithmic seach of bin number
+  inline G4double LogFreeVectorValue(const G4double energy,
+                                     const G4double theLogEnergy) const;
+
   // Returns the value for the specified index of the dataVector
   // The boundary check will not be done
   inline G4double operator[](const std::size_t index) const;
@@ -194,6 +199,8 @@ private:
                                 const G4double energy) const;
 
   // Assuming (edgeMin <= energy <= edgeMax).
+  inline std::size_t LogBin(const G4double energy, const G4double loge) const;
+  inline std::size_t BinaryBin(const G4double energy) const;
   inline std::size_t GetBin(const G4double energy) const;
 
 protected:
@@ -204,9 +211,14 @@ protected:
   G4double invdBin = 0.0;  // 1/Bin width for linear and log vectors
   G4double logemin = 0.0;  // used only for log vector
 
+  G4double iBin1 = 0.0;  // 1/Bin width for scale log vector
+  G4double lmin1 = 0.0;  // used for log search of free vector
+
   G4int verboseLevel = 0;
   std::size_t idxmax = 0;
+  std::size_t imax1 = 0;
   std::size_t numberOfNodes = 0;
+  std::size_t nLogNodes = 0;
 
   G4PhysicsVectorType type = T_G4PhysicsFreeVector;
   // The type of PhysicsVector (enumerator)
@@ -214,6 +226,7 @@ protected:
   std::vector<G4double> binVector;      // energy
   std::vector<G4double> dataVector;     // crossection/energyloss
   std::vector<G4double> secDerivative;  // second derivatives
+  std::vector<std::size_t> scale;       // log seach
 
 private:
 

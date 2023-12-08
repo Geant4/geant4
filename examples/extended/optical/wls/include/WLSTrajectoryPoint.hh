@@ -47,11 +47,11 @@ class G4VProcess;
 class WLSTrajectoryPoint : public G4TrajectoryPoint
 {
  public:
-  WLSTrajectoryPoint();
+  WLSTrajectoryPoint() = default;
   WLSTrajectoryPoint(const G4Track*);
   WLSTrajectoryPoint(const G4Step*);
   WLSTrajectoryPoint(const WLSTrajectoryPoint& right);
-  ~WLSTrajectoryPoint();
+  ~WLSTrajectoryPoint() override = default;
 
   inline void* operator new(size_t);
   inline void operator delete(void* aTrajectoryPoint);
@@ -65,13 +65,13 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint
   inline G4StepStatus GetStepStatus() const { return fStepStatus; };
   inline G4String GetVolumeName() const { return fVolumeName; };
 
-  virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
-  virtual std::vector<G4AttValue>* CreateAttValues() const;
+  const std::map<G4String, G4AttDef>* GetAttDefs() const override;
+  std::vector<G4AttValue>* CreateAttValues() const override;
 
  private:
-  G4double fTime;
+  G4double fTime = 0.;
   G4ThreeVector fMomentum;
-  G4StepStatus fStepStatus;
+  G4StepStatus fStepStatus = fUndefined;
   G4String fVolumeName;
 };
 

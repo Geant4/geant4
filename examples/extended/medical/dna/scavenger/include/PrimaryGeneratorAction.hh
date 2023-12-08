@@ -34,11 +34,11 @@
 
 class G4GeneralParticleSource;
 
-/// Generates primaries
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Generates primaries
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:

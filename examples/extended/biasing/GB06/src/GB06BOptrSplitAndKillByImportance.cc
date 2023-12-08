@@ -39,7 +39,7 @@
 #include "G4VProcess.hh"
 
 #include "G4TransportationManager.hh"
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHandle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -75,6 +75,7 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
   protected:
     // Methods to manipulate ntuples
     void   CreateNtuple(RootNtupleDescription* ntupleDescription, G4bool warn = true);
+    G4bool Delete(G4int id);
     G4bool Merge();
     G4bool Reset();
     void ClearData();
@@ -96,6 +97,10 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
   private:
     // Static data members
     static constexpr std::string_view fkClass { "G4RootMainNtupleManager" };
+
+    // Methods
+    G4int CreateNtupleFromBooking(G4NtupleBooking* ntupleBooking,
+            std::shared_ptr<G4RootFile> ntupleFile);
 
     // Data members
     G4RootNtupleManager* fNtupleBuilder { nullptr };

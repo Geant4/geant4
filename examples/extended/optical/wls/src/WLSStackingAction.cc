@@ -36,16 +36,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSStackingAction::WLSStackingAction()
-  : fPhotonCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSStackingAction::~WLSStackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ClassificationOfNewTrack WLSStackingAction::ClassifyNewTrack(
   const G4Track* aTrack)
 {

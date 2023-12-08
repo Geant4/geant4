@@ -47,11 +47,6 @@ StepMaxBuilder::StepMaxBuilder(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMaxBuilder::~StepMaxBuilder()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void StepMaxBuilder::ConstructProcess()
 {
   // Step limitation seen as a process

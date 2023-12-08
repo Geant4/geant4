@@ -242,6 +242,9 @@ public: // With description
   // G4VTrajectory::ShowTrajectory for an example of the use of
   // G4Atts.
 
+  const std::map<G4int,G4int>& GetNumberOfTouchables() const {return fNTouchables;}
+  // Total number of touchables drawn at each depth
+  
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
   }
@@ -309,6 +312,7 @@ protected:
   G4VSolid*          fpClippingSolid;
   ClippingMode       fClippingMode;
   G4int              fNClippers;     // No of clipping/cutting solids - only 0 or 1 allowed
+  std::map<G4int,G4int> fNTouchables;   // No of touchables at each depth
 
 private:
 

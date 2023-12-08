@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4PionZero_h
 #define G4PionZero_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         PIONZERO                               ###
-// ######################################################################
 
 class G4PionZero : public G4ParticleDefinition
 {
- private:
-   static G4PionZero* theInstance;
-   G4PionZero(){}
-   ~G4PionZero() override= default;
+  public:
+    static G4PionZero* Definition();
+    static G4PionZero* PionZeroDefinition();
+    static G4PionZero* PionZero();
 
- public:
-   static G4PionZero* Definition();
-   static G4PionZero* PionZeroDefinition();
-   static G4PionZero* PionZero();
+  private:
+    G4PionZero() {}
+    ~G4PionZero() override = default;
+
+    static G4PionZero* theInstance;
 };
 
 #endif

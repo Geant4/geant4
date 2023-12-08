@@ -41,7 +41,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04RunAction::F04RunAction()
-  : fSaveRndm(0), fAutoSeed(false)
 {
   fRunMessenger = new F04RunActionMessenger(this);
 }
@@ -69,7 +68,7 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
      G4cout << "*** AUTOSEED ON ***" << G4endl;
      G4cout << "*******************" << G4endl;
      long seeds[2];
-     time_t systime = time(NULL);
+     time_t systime = time(nullptr);
      seeds[0] = (long) systime;
      seeds[1] = (long) (systime*G4UniformRand());
      G4Random::setTheSeeds(seeds);

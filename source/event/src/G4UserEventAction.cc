@@ -56,8 +56,10 @@ void G4UserEventAction::SetEventManager(G4EventManager* value)
 }
 
 void G4UserEventAction::BeginOfEventAction(const G4Event*)
-{;}
+{}
 
 void G4UserEventAction::EndOfEventAction(const G4Event*)
-{;}
+{}
 
+void G4UserEventAction::MergeSubEvent(G4Event*, const G4Event*)
+{}

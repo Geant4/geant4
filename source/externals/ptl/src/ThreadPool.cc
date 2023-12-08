@@ -764,6 +764,10 @@ ThreadPool::get_valid_queue(task_queue_t*& _queue) const
 }
 //======================================================================================//
 
+// Temporary workaround for shared_ptr constructor GPFLT on Intel Macs and Clang 15
+#if defined (__APPLE__) && defined(__amd64) && defined(__clang__)
+[[clang::optnone]]
+#endif
 void
 ThreadPool::execute_thread(VUserTaskQueue* _task_queue)
 {

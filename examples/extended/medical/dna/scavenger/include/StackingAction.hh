@@ -31,13 +31,12 @@
 
 #include "G4UserStackingAction.hh"
 
-/// Verifies whether physical tracks remain to be processed and
-/// triggers the chemical module
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Verifies whether physical tracks remain to be processed and
+/// triggers the chemical module
 
 class StackingAction : public G4UserStackingAction {
 public:

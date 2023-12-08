@@ -36,236 +36,238 @@
 // - 2 December 1995, G.Cosmo - first design, based on object model.
 // - 29 January 1996, M.Asai - first implementation.
 // - 1996 - 2007,     H.Kurashige - revisions.
-// - 15 March 2019,   M.Novak - log-kinetic energy value is computed only 
-//                    on demand if its stored value is not up-to-date.  
+// - 15 March 2019,   M.Novak - log-kinetic energy value is computed only
+//                    on demand if its stored value is not up-to-date.
 // --------------------------------------------------------------------
 #ifndef G4DynamicParticle_hh
 #define G4DynamicParticle_hh 1
 
-#include <cmath>
-#include <CLHEP/Units/SystemOfUnits.h>
-#include <CLHEP/Units/PhysicalConstants.h>
-
-#include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4ParticleDefinition.hh"
 #include "G4Allocator.hh"
-#include "G4LorentzVector.hh"
-#include "G4Log.hh"
-
-#include "G4ParticleMomentum.hh" // NOTE: means "momentum direction" not
-                                 // "momentum vector". It is a G4ThreeVector
 #include "G4ElectronOccupancy.hh"
+#include "G4Log.hh"
+#include "G4LorentzVector.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleMomentum.hh"  // NOTE: means "momentum direction" not "momentum vector". It is a G4ThreeVector
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <CLHEP/Units/PhysicalConstants.h>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include <cmath>
 
 class G4PrimaryParticle;
 class G4DecayProducts;
 
-class G4DynamicParticle 
+class G4DynamicParticle
 {
   public:
+    //- constructors
+    G4DynamicParticle();
 
-  //- constructors 
-     G4DynamicParticle();
+    G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                      const G4ThreeVector& aMomentumDirection, G4double aKineticEnergy);
+    G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                      const G4ThreeVector& aParticleMomentum);
+    G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                      const G4LorentzVector& aParticleMomentum);
+    G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition, G4double aTotalEnergy,
+                      const G4ThreeVector& aParticleMomentum);
+    G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
+                      const G4ThreeVector& aMomentumDirection, G4double aKineticEnergy,
+                      const G4double dynamicalMass);
 
-     G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
-                       const G4ThreeVector& aMomentumDirection,
-                             G4double aKineticEnergy);
-     G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
-                       const G4ThreeVector& aParticleMomentum);
-     G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
-                       const G4LorentzVector& aParticleMomentum);
-     G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
-                             G4double aTotalEnergy,
-                       const G4ThreeVector& aParticleMomentum);
-     G4DynamicParticle(const G4ParticleDefinition* aParticleDefinition,
-                       const G4ThreeVector& aMomentumDirection,
-                             G4double aKineticEnergy,
-                       const G4double dynamicalMass);
+    G4DynamicParticle(const G4DynamicParticle& right);
 
-     G4DynamicParticle(const G4DynamicParticle& right);
+    //- destructor
+    ~G4DynamicParticle();
 
-  //- destructor
-     ~G4DynamicParticle();
+    //- operators
+    G4DynamicParticle& operator=(const G4DynamicParticle& right);
+    G4bool operator==(const G4DynamicParticle& right) const;
+    G4bool operator!=(const G4DynamicParticle& right) const;
 
-  //- operators
-     G4DynamicParticle& operator=(const G4DynamicParticle &right);
-     G4bool operator==(const G4DynamicParticle& right) const;
-     G4bool operator!=(const G4DynamicParticle& right) const;
+    //- Move constructor & operator
+    G4DynamicParticle(G4DynamicParticle&& from);
+    G4DynamicParticle& operator=(G4DynamicParticle&& from);
 
-  //- Move constructor & operator
-     G4DynamicParticle(G4DynamicParticle&& from);
-     G4DynamicParticle& operator=(G4DynamicParticle&& from);
+    //- new/delete operators are oberloded to use G4Allocator
+    inline void* operator new(size_t);
+    inline void operator delete(void* aDynamicParticle);
 
-  //- new/delete operators are oberloded to use G4Allocator
-     inline void* operator new(size_t);
-     inline void operator delete(void* aDynamicParticle);
+    //- Set/Get methods
 
-  //- Set/Get methods
- 
-     inline const G4ThreeVector& GetMomentumDirection() const;
-       // Returns the normalized direction of the momentum
-     inline void SetMomentumDirection(const G4ThreeVector& aDirection);
-       // Sets the normalized direction of the momentum
-     inline void SetMomentumDirection(G4double px, G4double py, G4double pz);
-       // Sets the normalized direction of the momentum by coordinates
+    // Returns the normalized direction of the momentum
+    inline const G4ThreeVector& GetMomentumDirection() const;
 
-     inline G4ThreeVector GetMomentum() const;
-       // Returns the current particle momentum vector
-     void SetMomentum( const G4ThreeVector& momentum);
-       // set the current particle momentum vector
+    // Sets the normalized direction of the momentum
+    inline void SetMomentumDirection(const G4ThreeVector& aDirection);
 
-     inline G4LorentzVector Get4Momentum() const;
-       // Returns the current particle energy-momentum 4vector
-     void Set4Momentum( const G4LorentzVector& momentum);
-       // Set the current particle energy-momentum 4vector
+    // Sets the normalized direction of the momentum by coordinates
+    inline void SetMomentumDirection(G4double px, G4double py, G4double pz);
 
-     inline G4double GetTotalMomentum() const;
-       // Returns the module of the momentum vector
-     inline G4double GetTotalEnergy() const;
-       // Returns the total energy of the particle
+    // Returns the current particle momentum vector
+    inline G4ThreeVector GetMomentum() const;
 
-     inline G4double GetKineticEnergy() const;
-       // Returns the kinetic energy of a particle
-     inline G4double GetLogKineticEnergy() const;
-       // Returns:
-       // - natural logarithm of the particle kinetic energy (E_k) if E_k > 0
-       // - LOG_EKIN_MIN otherwise
-     inline void SetKineticEnergy(G4double aEnergy);
-       // Sets the kinetic energy of a particle
-     inline G4double GetBeta() const;
-       // Access Lorentz beta
+    // set the current particle momentum vector
+    void SetMomentum(const G4ThreeVector& momentum);
 
-     inline G4double GetProperTime() const;
-       // Returns the current particle proper time
-     inline void SetProperTime( G4double );
-       // Set the current particle Proper Time
+    // Returns the current particle energy-momentum 4vector
+    inline G4LorentzVector Get4Momentum() const;
 
-     inline const G4ThreeVector& GetPolarization() const;
-     inline void SetPolarization(const G4ThreeVector&);
-     inline void SetPolarization(G4double polX, G4double polY, G4double polZ);
-       // Set/Get polarization vector       
+    // Set the current particle energy-momentum 4vector
+    void Set4Momentum(const G4LorentzVector& momentum);
 
-     inline G4double GetMass() const;
-     inline void     SetMass(G4double mass);
-       // Set/Get dynamical mass
-       // The dynamical mass is set to PDG mass in default
+    // Returns the module of the momentum vector
+    inline G4double GetTotalMomentum() const;
 
-     inline G4double GetCharge() const;
-     inline void     SetCharge(G4double charge);
-     inline void     SetCharge(G4int    chargeInUnitOfEplus);
-       // Set/Get dynamical charge 
-       // The dynamical mass is set to PDG charge in default
+    // Returns the total energy of the particle
+    inline G4double GetTotalEnergy() const;
 
-     inline G4double GetSpin() const;
-     inline void     SetSpin(G4double spin);
-     inline void     SetSpin(G4int    spinInUnitOfHalfInteger);
-       // Set/Get dynamical spin
-       // The dynamical spin is set to PDG spin in default
+    // Returns the kinetic energy of a particle
+    inline G4double GetKineticEnergy() const;
 
-     inline G4double GetMagneticMoment() const;
-     inline void     SetMagneticMoment(G4double magneticMoment);
-       // Set/Get dynamical MagneticMoment  
-       // The dynamical mass is set to PDG MagneticMoment in default
+    // Returns:
+    // - natural logarithm of the particle kinetic energy (E_k) if E_k > 0
+    // - LOG_EKIN_MIN otherwise
+    inline G4double GetLogKineticEnergy() const;
 
-     inline const G4ElectronOccupancy* GetElectronOccupancy() const;
-       // Get electron occupancy 
-       // ElectronOccupancy is valid only if the particle is ion
-     inline G4int  GetTotalOccupancy() const;
-     inline G4int  GetOccupancy(G4int orbit) const;
-     inline void   AddElectron(G4int orbit, G4int number = 1);
-     inline void   RemoveElectron(G4int orbit, G4int number = 1);
-  
-     inline const G4ParticleDefinition* GetParticleDefinition() const;
-     void SetDefinition(const G4ParticleDefinition* aParticleDefinition);
-       // Set/Get particle definition  
-       // Following method of GetDefinition() remains 
-       // because of backward compatiblity. May be removed in future 
-     inline G4ParticleDefinition* GetDefinition() const;
-     
-     inline const G4DecayProducts* GetPreAssignedDecayProducts() const;
-     inline void SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts);
-       // Set/Get pre-assigned decay channel
+    // Sets the kinetic energy of a particle
+    inline void SetKineticEnergy(G4double aEnergy);
 
-     inline G4double GetPreAssignedDecayProperTime() const;
-     inline void SetPreAssignedDecayProperTime(G4double);
-       // Set/Get pre-assigned proper time when the particle will decay
-   
-     void DumpInfo(G4int mode = 0) const;
-       // Print out information
-       // - mode 0 : default )(minimum)
-       // - mode 1 : 0 + electron occupancy
+    // Access Lorentz beta
+    inline G4double GetBeta() const;
 
-     inline void  SetVerboseLevel(G4int value);
-     inline G4int GetVerboseLevel() const;
-       // Set/Get controle flag for output message
-       // - 0: Silent
-       // - 1: Warning message
-       // - 2: More
+    // Returns the current particle proper time
+    inline G4double GetProperTime() const;
 
-     inline void SetPrimaryParticle(G4PrimaryParticle* p);
-     inline void SetPDGcode(G4int c);
+    // Set the current particle Proper Time
+    inline void SetProperTime(G4double);
 
-     inline G4PrimaryParticle* GetPrimaryParticle() const;
-       // Return the pointer to the corresponding G4PrimaryParticle object
-       // if this particle is a primary particle OR is defined as a
-       // pre-assigned decay product. Otherwise return nullptr.
+    // Set/Get polarization vector
+    inline const G4ThreeVector& GetPolarization() const;
+    inline void SetPolarization(const G4ThreeVector&);
+    inline void SetPolarization(G4double polX, G4double polY, G4double polZ);
 
-     inline G4int GetPDGcode() const;
-       // Return the PDG code of this particle. If the particle is known to
-       // Geant4, its PDG code defined in G4ParticleDefinition is returned.
-       // If it is unknown (i.e. PDG code in G4ParticleDefinition is 0), the
-       // PDG code defined in the corresponding primary particle or
-       // pre-assigned decay product will be returned if available.
-       // Otherwise (e.g. for geantino) returns 0.
+    // Set/Get dynamical mass
+    // The dynamical mass is set to PDG mass in default
+    inline G4double GetMass() const;
+    inline void SetMass(G4double mass);
+
+    // Set/Get dynamical charge
+    // The dynamical mass is set to PDG charge in default
+    inline G4double GetCharge() const;
+    inline void SetCharge(G4double charge);
+    inline void SetCharge(G4int chargeInUnitOfEplus);
+
+    // Set/Get dynamical spin
+    // The dynamical spin is set to PDG spin in default
+    inline G4double GetSpin() const;
+    inline void SetSpin(G4double spin);
+    inline void SetSpin(G4int spinInUnitOfHalfInteger);
+
+    // Set/Get dynamical MagneticMoment
+    // The dynamical mass is set to PDG MagneticMoment in default
+    inline G4double GetMagneticMoment() const;
+    inline void SetMagneticMoment(G4double magneticMoment);
+
+    // Get electron occupancy
+    // ElectronOccupancy is valid only if the particle is ion
+    inline const G4ElectronOccupancy* GetElectronOccupancy() const;
+    inline G4int GetTotalOccupancy() const;
+    inline G4int GetOccupancy(G4int orbit) const;
+    inline void AddElectron(G4int orbit, G4int number = 1);
+    inline void RemoveElectron(G4int orbit, G4int number = 1);
+
+    // Set/Get particle definition
+    inline const G4ParticleDefinition* GetParticleDefinition() const;
+    void SetDefinition(const G4ParticleDefinition* aParticleDefinition);
+
+    // Following method of GetDefinition() remains
+    // because of backward compatiblity. May be removed in future
+    inline G4ParticleDefinition* GetDefinition() const;
+
+    // Set/Get pre-assigned decay channel
+    inline const G4DecayProducts* GetPreAssignedDecayProducts() const;
+    inline void SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts);
+
+    // Set/Get pre-assigned proper time when the particle will decay
+    inline G4double GetPreAssignedDecayProperTime() const;
+    inline void SetPreAssignedDecayProperTime(G4double);
+
+    // Print out information
+    // - mode 0 : default )(minimum)
+    // - mode 1 : 0 + electron occupancy
+    void DumpInfo(G4int mode = 0) const;
+
+    // Set/Get controle flag for output message
+    // - 0: Silent
+    // - 1: Warning message
+    // - 2: More
+    inline void SetVerboseLevel(G4int value);
+    inline G4int GetVerboseLevel() const;
+
+    inline void SetPrimaryParticle(G4PrimaryParticle* p);
+    inline void SetPDGcode(G4int c);
+
+    // Return the pointer to the corresponding G4PrimaryParticle object
+    // if this particle is a primary particle OR is defined as a
+    // pre-assigned decay product. Otherwise return nullptr.
+    inline G4PrimaryParticle* GetPrimaryParticle() const;
+
+    // Return the PDG code of this particle. If the particle is known to
+    // Geant4, its PDG code defined in G4ParticleDefinition is returned.
+    // If it is unknown (i.e. PDG code in G4ParticleDefinition is 0), the
+    // PDG code defined in the corresponding primary particle or
+    // pre-assigned decay product will be returned if available.
+    // Otherwise (e.g. for geantino) returns 0.
+    inline G4int GetPDGcode() const;
 
   protected:
-
-     void      AllocateElectronOccupancy(); 
-     G4double  GetElectronMass() const;
+    void AllocateElectronOccupancy();
+    G4double GetElectronMass() const;
 
   private:
+    inline void ComputeBeta() const;
 
-     inline void ComputeBeta() const;
+    // The normalized momentum vector
+    G4ThreeVector theMomentumDirection;
 
-     G4ThreeVector theMomentumDirection;
-       // The normalized momentum vector
+    G4ThreeVector thePolarization;
 
-     G4ThreeVector thePolarization;
+    // Contains the static information of this particle
+    const G4ParticleDefinition* theParticleDefinition = nullptr;
 
-     const G4ParticleDefinition* theParticleDefinition = nullptr;
-       // Contains the static information of this particle
+    G4ElectronOccupancy* theElectronOccupancy = nullptr;
 
-     G4ElectronOccupancy* theElectronOccupancy = nullptr;          
-  
-     G4DecayProducts* thePreAssignedDecayProducts = nullptr;
+    G4DecayProducts* thePreAssignedDecayProducts = nullptr;
 
-     G4PrimaryParticle* primaryParticle = nullptr;
-       // This void pointer is used by G4EventManager to maintain the
-       // link between pre-assigned decay products and corresponding
-       // primary particle
+    // This void pointer is used by G4EventManager to maintain the
+    // link between pre-assigned decay products and corresponding
+    // primary particle
+    G4PrimaryParticle* primaryParticle = nullptr;
 
-     G4double theKineticEnergy = 0.0;
+    G4double theKineticEnergy = 0.0;
 
-     mutable G4double theLogKineticEnergy = DBL_MAX;
+    mutable G4double theLogKineticEnergy = DBL_MAX;
 
-     mutable G4double theBeta = -1.0;
+    mutable G4double theBeta = -1.0;
 
-     G4double theProperTime = 0.0;
+    G4double theProperTime = 0.0;
 
-     G4double theDynamicalMass = 0.0;
+    G4double theDynamicalMass = 0.0;
 
-     G4double theDynamicalCharge = 0.0;
+    G4double theDynamicalCharge = 0.0;
 
-     G4double theDynamicalSpin = 0.0;
+    G4double theDynamicalSpin = 0.0;
 
-     G4double theDynamicalMagneticMoment = 0.0;
+    G4double theDynamicalMagneticMoment = 0.0;
 
-     G4double thePreAssignedDecayTime = -1.0;
+    G4double thePreAssignedDecayTime = -1.0;
 
-     G4int verboseLevel = 1;
+    G4int verboseLevel = 1;
 
-     G4int thePDGcode = 0;
+    G4int thePDGcode = 0;
 };
 
 #include "G4DynamicParticle.icc"

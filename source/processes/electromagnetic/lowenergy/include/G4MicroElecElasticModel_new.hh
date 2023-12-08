@@ -78,7 +78,6 @@
 
 #include <map>
 #include <CLHEP/Units/SystemOfUnits.h>
-
 #include "G4MicroElecMaterialStructure.hh"
 #include "G4MicroElecCrossSectionDataSet_new.hh"
 #include "G4VEmModel.hh"

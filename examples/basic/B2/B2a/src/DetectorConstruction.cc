@@ -194,8 +194,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 
   // Visualization attributes
 
-  auto boxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
-  auto chamberVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+  G4VisAttributes boxVisAtt(G4Colour::White());
+  G4VisAttributes chamberVisAtt(G4Colour::Yellow());
 
   worldLV      ->SetVisAttributes(boxVisAtt);
   fLogicTarget ->SetVisAttributes(boxVisAtt);

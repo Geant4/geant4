@@ -38,6 +38,7 @@
 #include "G4Cache.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 class WLSMaterials;
 class WLSDetectorMessenger;
@@ -55,7 +56,7 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   WLSDetectorConstruction();
-  ~WLSDetectorConstruction();
+  ~WLSDetectorConstruction() override;
 
   G4VPhysicalVolume* Construct() override;
   G4VPhysicalVolume* ConstructDetector();
@@ -118,74 +119,74 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
  private:
   std::vector<G4VisAttributes*> fVisAttributes;
 
-  WLSMaterials* fMaterials;
+  WLSMaterials* fMaterials = nullptr;
 
-  G4LogicalVolume* fLogicHole;
-  G4LogicalVolume* fLogicWorld;
+  G4LogicalVolume* fLogicHole = nullptr;
+  G4LogicalVolume* fLogicWorld = nullptr;
 
-  G4VPhysicalVolume* fPhysiWorld;
-  G4VPhysicalVolume* fPhysiHole;
+  G4VPhysicalVolume* fPhysiWorld = nullptr;
+  G4VPhysicalVolume* fPhysiHole = nullptr;
 
-  G4double fWorldSizeX;
-  G4double fWorldSizeY;
-  G4double fWorldSizeZ;
+  G4double fWorldSizeX = -1.;
+  G4double fWorldSizeY = -1.;
+  G4double fWorldSizeZ = -1.;
 
-  G4double fWLSfiberRX;
-  G4double fWLSfiberRY;
-  G4double fWLSfiberZ;
+  G4double fWLSfiberRX = -1.;
+  G4double fWLSfiberRY = 0.5 * CLHEP::mm;
+  G4double fWLSfiberZ = 1. * CLHEP::m;
 
-  G4double fClad1RX;
-  G4double fClad1RY;
-  G4double fClad1Z;
+  G4double fClad1RX = -1.;
+  G4double fClad1RY = -1.;
+  G4double fClad1Z = -1.;
 
-  G4double fClad2RX;
-  G4double fClad2RY;
-  G4double fClad2Z;
+  G4double fClad2RX = -1.;
+  G4double fClad2RY = -1.;
+  G4double fClad2Z = -1.;
 
-  G4double fClrfiberHalfL;
-  G4double fClrfiberZ;
+  G4double fClrfiberHalfL = -1.;
+  G4double fClrfiberZ = -1.;
 
-  G4double fCoupleRX;
-  G4double fCoupleRY;
-  G4double fCoupleZ;
+  G4double fCoupleRX = -1.;
+  G4double fCoupleRY = -1.;
+  G4double fCoupleZ = -1.;
 
-  G4double fMirrorRmax;
-  G4double fMirrorZ;
-  G4bool fMirrorToggle;
+  G4double fMirrorRmax = -1.;
+  G4double fMirrorZ = 0.1 * CLHEP::mm;
+  G4bool fMirrorToggle = true;
 
-  G4String fMPPCShape;
-  G4double fMPPCHalfL;
-  G4double fMPPCZ;
-  G4double fMPPCDist;
-  G4double fMPPCTheta;
+  G4String fMPPCShape = "Circle";
+  G4double fMPPCHalfL = -1.;
+  G4double fMPPCZ = 0.05 * CLHEP::mm;
+  G4double fMPPCDist = 0.;
+  G4double fMPPCTheta = 0;
 
-  G4double fWLSfiberOrigin;
-  G4double fCoupleOrigin;
-  G4double fMirrorOrigin;
-  G4double fMPPCOriginX;
-  G4double fMPPCOriginZ;
+  G4double fWLSfiberOrigin = 0.;
+  G4double fCoupleOrigin = 0.;
+  G4double fMirrorOrigin = 0.;
+  G4double fMPPCOriginX = 0.;
+  G4double fMPPCOriginZ = 0.;
 
-  G4int fNumOfCladLayers;
+  G4int fNumOfCladLayers = 0;
 
-  G4double fMirrorPolish;
-  G4double fMirrorReflectivity;
-  G4double fMPPCPolish;
-  G4double fMPPCReflectivity;
-  G4double fExtrusionPolish;
-  G4double fExtrusionReflectivity;
-  G4double fSurfaceRoughness;
-  G4double fXYRatio;
+  G4double fMirrorPolish = 1.;
+  G4double fMirrorReflectivity = 1.;
+  G4double fMPPCPolish = 1.;
+  G4double fMPPCReflectivity = 0.;
+  G4double fExtrusionPolish = 1.;
+  G4double fExtrusionReflectivity = 1.;
+  G4double fSurfaceRoughness = 1.;
+  G4double fXYRatio = 1.;
 
-  G4double fBarLength;
-  G4double fBarBase;
-  G4double fHoleRadius;
-  G4double fHoleLength;
-  G4double fCoatingThickness;
-  G4double fCoatingRadius;
+  G4double fBarLength = 1. * CLHEP::m;
+  G4double fBarBase = 9.6 * CLHEP::mm;
+  G4double fHoleRadius = 0.9 * CLHEP::mm;
+  G4double fHoleLength = -1.;
+  G4double fCoatingThickness = 0.25 * CLHEP::mm;
+  G4double fCoatingRadius = 1.875 * CLHEP::mm;
 
   void UpdateGeometryParameters();
 
-  WLSDetectorMessenger* fDetectorMessenger;
+  WLSDetectorMessenger* fDetectorMessenger = nullptr;
   G4Cache<WLSPhotonDetSD*> fmppcSD;
 };
 

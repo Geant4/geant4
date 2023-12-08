@@ -25,92 +25,84 @@
 //
 // G4KL3DecayChannel
 
-// Author: H.Kurashige, 30 May 1997 
+// Author: H.Kurashige, 30 May 1997
 // --------------------------------------------------------------------
 #ifndef G4KL3DecayChannel_hh
 #define G4KL3DecayChannel_hh 1
 
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VDecayChannel.hh"
 
 class G4KL3DecayChannel : public G4VDecayChannel
 {
   public:
-
-    G4KL3DecayChannel(const G4String& theParentName,
-                            G4double  theBR,
-                      const G4String& thePionName,
-                      const G4String& theLeptonName,
-                      const G4String& theNutrinoName);
+    // Constructor & destructor
+    G4KL3DecayChannel(const G4String& theParentName, G4double theBR, const G4String& thePionName,
+                      const G4String& theLeptonName, const G4String& theNutrinoName);
     ~G4KL3DecayChannel() override = default;
-      // Constructor & destructor
 
-    G4DecayProducts* DecayIt(G4double) override;     
+    G4DecayProducts* DecayIt(G4double) override;
 
-    inline void SetDalitzParameter(G4double aLambda, G4double aXi );
+    inline void SetDalitzParameter(G4double aLambda, G4double aXi);
     inline G4double GetDalitzParameterLambda() const;
     inline G4double GetDalitzParameterXi() const;
 
   protected:
-
+    // Copy constructor and assignment operator
     G4KL3DecayChannel(const G4KL3DecayChannel&) = default;
     G4KL3DecayChannel& operator=(const G4KL3DecayChannel&);
-      // Copy constructor and assignment operator
 
-    enum { idPi=0, idLepton=1, idNutrino=2 }; 
-      // Assignment of daughter particles for arrays of daughters[] etc.
+    // Assignment of daughter particles for arrays of daughters[] etc.
+    enum
+    {
+      idPi = 0,
+      idLepton = 1,
+      idNutrino = 2
+    };
 
-    void PhaseSpace(G4double Mparent,
-                    const G4double* Mdaughter,
-                    G4double*       Edaughter,
-                    G4double*       Pdaughter);
-      // Calculate momentum of daughters
+    // Calculate momentum of daughters
+    void PhaseSpace(G4double Mparent, const G4double* Mdaughter, G4double* Edaughter,
+                    G4double* Pdaughter);
 
-    G4double DalitzDensity(G4double parentmass, G4double Epi, G4double El,
-                           G4double Enu, G4double massPi, G4double massL,
-                           G4double massNu );
-      // Dalitz Plot Density
-      // KL3 decay   Dalitz Plot Density, see Chounet et al Phys. Rep. 4, 201
-      //  Arguments
-      //    Epi: kinetic enregy of pion
-      //    El:  kinetic enregy of lepton (e or mu)
-      //    Enu: kinetic energy of nutrino
-      //  Constants
-      //    pLambda : linear energy dependence of f+
-      //    pXi0    : = f+(0)/f-
-      //    pNorm   : normalization factor
+    // Dalitz Plot Density
+    // KL3 decay   Dalitz Plot Density, see Chounet et al Phys. Rep. 4, 201
+    //  Arguments
+    //    Epi: kinetic enregy of pion
+    //    El:  kinetic enregy of lepton (e or mu)
+    //    Enu: kinetic energy of nutrino
+    //  Constants
+    //    pLambda : linear energy dependence of f+
+    //    pXi0    : = f+(0)/f-
+    //    pNorm   : normalization factor
+    G4double DalitzDensity(G4double parentmass, G4double Epi, G4double El, G4double Enu,
+                           G4double massPi, G4double massL, G4double massNu);
 
   private:
-
     G4KL3DecayChannel() = default;
 
   private:
-
+    // Used in DalitzDensity() coefficients
     G4double pLambda = 0.0;
     G4double pXi0 = 0.0;
-      // Used in DalitzDensity() coefficients
-};  
+};
 
 // ------------------------
 // Inline methods
 // ------------------------
 
-inline 
-void G4KL3DecayChannel::SetDalitzParameter(G4double aLambda, G4double aXi)
+inline void G4KL3DecayChannel::SetDalitzParameter(G4double aLambda, G4double aXi)
 {
   pLambda = aLambda;
-  pXi0    = aXi;
+  pXi0 = aXi;
 }
 
-inline 
-G4double G4KL3DecayChannel::GetDalitzParameterLambda() const
+inline G4double G4KL3DecayChannel::GetDalitzParameterLambda() const
 {
   return pLambda;
 }
 
-inline 
-G4double G4KL3DecayChannel::GetDalitzParameterXi() const
+inline G4double G4KL3DecayChannel::GetDalitzParameterXi() const
 {
   return pXi0;
 }

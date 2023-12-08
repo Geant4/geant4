@@ -202,11 +202,11 @@ void Par01PionShowerModel::AssignSpotAndCallHit(const Par01EnergySpot &eSpot)
     fFakeStep->GetPreStepPoint()->GetPhysicalVolume();
   G4VSensitiveDetector* pSensitive;
   
-  if( pCurrentVolume != 0 )
+  if( pCurrentVolume != nullptr )
     {
       pSensitive = pCurrentVolume->GetLogicalVolume()->
         GetSensitiveDetector();
-      if( pSensitive != 0 )
+      if( pSensitive != nullptr )
         {
           pSensitive->Hit(fFakeStep);
         }

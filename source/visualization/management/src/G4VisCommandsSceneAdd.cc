@@ -166,6 +166,7 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
 G4VisCommandSceneAddArrow2D::G4VisCommandSceneAddArrow2D () {
   fpCommand = new G4UIcommand("/vis/scene/add/arrow2D", this);
   fpCommand -> SetGuidance ("Adds 2D arrow to current scene.");
+  fpCommand -> SetGuidance ("x,y in range [-1,1]");
   G4bool omitable;
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x1", 'd', omitable = false);
@@ -1163,6 +1164,7 @@ void G4VisCommandSceneAddLine::Line::operator()
 G4VisCommandSceneAddLine2D::G4VisCommandSceneAddLine2D () {
   fpCommand = new G4UIcommand("/vis/scene/add/line2D", this);
   fpCommand -> SetGuidance ("Adds 2D line to current scene.");
+  fpCommand -> SetGuidance ("x,y in range [-1,1]");
   G4bool omitable;
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x1", 'd', omitable = false);
@@ -2658,6 +2660,7 @@ G4VisCommandSceneAddText2D::G4VisCommandSceneAddText2D () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/text2D", this);
   fpCommand -> SetGuidance ("Adds 2D text to current scene.");
+  fpCommand -> SetGuidance ("x,y in range [-1,1]");
   fpCommand -> SetGuidance
     ("Use \"/vis/set/textColour\" to set colour.");
   fpCommand -> SetGuidance
@@ -2727,7 +2730,12 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
     new G4CallbackModel<G4VisCommandSceneAddText2D::G4Text2D>(g4text2D);
   model->SetType("Text2D");
   model->SetGlobalTag("Text2D");
-  model->SetGlobalDescription("Text2D: " + newValue);
+  std::ostringstream oss;
+  oss << "Text2D: \"" << g4text.GetText()
+  << "\" at " << g4text.GetPosition().x() << ',' << g4text.GetPosition().y()
+  << " with size " << g4text.GetScreenSize()
+  << " with offsets " << g4text.GetXOffset() << ',' << g4text.GetYOffset();
+  model->SetGlobalDescription(oss.str());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {

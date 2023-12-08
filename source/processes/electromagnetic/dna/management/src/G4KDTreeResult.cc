@@ -45,10 +45,10 @@ G4Allocator<G4KDTreeResult>*& aKDTreeAllocator()
 struct ResNode
 {
 public:
-  ResNode():fNode(0),fDistanceSqr(0){;}
+  ResNode():fNode(nullptr),fDistanceSqr(0){}
   ResNode(double distsqr, G4KDNode_Base* node):
   fNode(node),fDistanceSqr(distsqr)
-  {;}
+  {}
   
   ResNode(const ResNode& right)
   {
@@ -62,7 +62,7 @@ public:
     fDistanceSqr= rhs.fDistanceSqr;
     return *this;
   }
-  ~ResNode(){;}
+  ~ResNode()= default;
   
   G4bool operator<(const ResNode& right) const
   {
@@ -84,9 +84,7 @@ bool CompareResNode(const ResNode& left,
     return left < right;
 }
 
-G4KDTreeResult::G4KDTreeResult(G4KDTree* tree) :
-//std::list<ResNode>()
-KDTR_parent()
+G4KDTreeResult::G4KDTreeResult(G4KDTree* tree)
 {
     fTree = tree;
 }

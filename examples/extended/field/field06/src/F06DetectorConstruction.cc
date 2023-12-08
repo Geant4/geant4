@@ -68,7 +68,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06DetectorConstruction::F06DetectorConstruction()
- : fVacuum(0), fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0)
+ : fVacuum(nullptr)
 {
   // materials
   DefineMaterials();
@@ -78,7 +78,7 @@ F06DetectorConstruction::F06DetectorConstruction()
 
 F06DetectorConstruction::~F06DetectorConstruction()
 {
-  if (fField) delete fField;
+  delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,52 +104,52 @@ G4VPhysicalVolume* F06DetectorConstruction::Construct()
   G4double expHall_y = 1.0*m;
   G4double expHall_z = 1.0*m;
 
-  fSolidWorld = new G4Box("World",                 //its name
+  auto solidWorld = new G4Box("World",             //its name
                    expHall_x,expHall_y,expHall_z); //its size
 
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,   //its solid
+  auto logicWorld = new G4LogicalVolume(solidWorld,//its solid
                                     fVacuum,       //its material
                                     "World");      //its name
 
-  fPhysiWorld = new G4PVPlacement(0,               //no rotation
+  auto physiWorld = new G4PVPlacement(nullptr,     //no rotation
                                   G4ThreeVector(), //at (0,0,0)
-                                  fLogicWorld,     //its logical volume
+                                  logicWorld,      //its logical volume
                                   "World",         //its name
-                                  0,               //its mother  volume
+                                  nullptr,         //its mother  volume
                                   false,           //no boolean operation
                                   0);              //copy number
 
   G4double maxStep = 1.0*mm;
   G4double maxTime = 41.*s;
 
-  G4UserLimits* stepLimit = new G4UserLimits(maxStep,DBL_MAX,maxTime);
+  auto  stepLimit = new G4UserLimits(maxStep,DBL_MAX,maxTime);
 
-  fLogicWorld->SetUserLimits(stepLimit);
- 
+  logicWorld->SetUserLimits(stepLimit);
+
   //
   // Visualization attributes
   //
-  // fLogicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
+  // logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
 
   //
   //always return the physical World
   //
-  return fPhysiWorld;
+  return physiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4UniformGravityField* F06DetectorConstruction::fField = 0;
+G4ThreadLocal G4UniformGravityField* F06DetectorConstruction::fField = nullptr;
 
 void F06DetectorConstruction::ConstructSDandField()
 {
   using StepperType = G4ClassicalRK4;
-   
+
   if (!fField) {
 
      fField = new G4UniformGravityField();
 
-     G4RepleteEofM* equation = new G4RepleteEofM(fField);
+     auto  equation = new G4RepleteEofM(fField);
 //     G4EqGravityField* equation = new G4EqGravityField(fField);
 
      G4TransportationManager* transportMgr =
@@ -159,10 +159,10 @@ void F06DetectorConstruction::ConstructSDandField()
      fieldManager->SetDetectorField(fField);
 
      const int nVar= 8;  // 12 for RepleteEofM
-     StepperType* stepper = new StepperType(equation,nVar);
+     auto  stepper = new StepperType(equation,nVar);
 
      G4double minStep           = 0.01*mm;
-     G4ChordFinder* chordFinder = nullptr;     
+     G4ChordFinder* chordFinder = nullptr;
      if( stepper )
      {
         auto intgrDriver = new G4IntegrationDriver<StepperType>(minStep,
@@ -175,7 +175,7 @@ void F06DetectorConstruction::ConstructSDandField()
 
      // OLD -- and wrong
      // new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
-     
+
      // Set accuracy parameters
      G4double deltaChord        = 3.0*mm;
      chordFinder->SetDeltaChord( deltaChord );
@@ -187,14 +187,14 @@ void F06DetectorConstruction::ConstructSDandField()
      //
      G4double deltaOneStep = 0.01*mm;
      fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-     //  
+     //
      G4double epsMax       = 1.0e-4;  // Pure number -- maximum relative integration error
-     G4double epsMin       = 2.5e-7;  // 
+     G4double epsMin       = 2.5e-7;  //
      fieldManager->SetMinimumEpsilonStep(epsMin);
      fieldManager->SetMaximumEpsilonStep(epsMax);
      // The acceptable relative accuracy is calculated  as  deltaOneStep / stepsize
      //    but bounded to the interval between these values!
-     
+
      fieldManager->SetChordFinder(chordFinder);
   }
 }

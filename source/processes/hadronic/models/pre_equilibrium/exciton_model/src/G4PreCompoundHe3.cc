@@ -41,14 +41,11 @@
 //
  
 #include "G4PreCompoundHe3.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4CoulombBarrier.hh"
 #include "G4He3.hh"
 
 G4PreCompoundHe3::G4PreCompoundHe3()
-  : G4PreCompoundIon(G4He3::He3(), &theHe3CoulombBarrier)
-{}
-
-G4PreCompoundHe3::~G4PreCompoundHe3()
+  : G4PreCompoundIon(G4He3::He3(), new G4CoulombBarrier(3, 2))
 {}
 
 G4double G4PreCompoundHe3::FactorialFactor(G4int N, G4int P) const
@@ -65,7 +62,7 @@ G4double G4PreCompoundHe3::GetRj(G4int nParticles, G4int nCharged) const
 {
   G4double rj = 0.0;
   if(nCharged >=2 && (nParticles-nCharged) >= 1) {
-    G4double denominator = (nParticles*(nParticles-1)*(nParticles-2));
+    G4double denominator = (G4double)(nParticles*(nParticles-1)*(nParticles-2));
     rj = (3*nCharged*(nCharged-1)*(nParticles-nCharged))/denominator;  
   }
   return rj;

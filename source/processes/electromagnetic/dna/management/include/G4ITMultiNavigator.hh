@@ -55,7 +55,7 @@
 #include "G4ThreeVector.hh"
 #include "G4ITNavigator.hh"
 
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHandle.hh"
 
 #include "G4NavigationHistory.hh"
 #include "G4TrackState.hh"
@@ -82,9 +82,8 @@ template<>
   class G4TrackState<G4ITMultiNavigator> : public G4TrackState<G4ITNavigator>
   {
   public:
-    ~G4TrackState()
-    {
-    }
+    ~G4TrackState() override
+    = default;
 
     G4TrackState()
     {
@@ -103,7 +102,7 @@ template<>
         fLimitTruth[num] = false;
         fLimitedStep[num] = kUndefLimited;
         fCurrentStepSize[num] = fNewSafety[num] = -1.0;
-        fLocatedVolume[num] = 0;
+        fLocatedVolume[num] = nullptr;
       }
 
       fNoLimitingStep = -1; // How many geometries limited the step
@@ -151,13 +150,13 @@ public:
   G4ITMultiNavigator();
   // Constructor - initialisers and setup.
 
-  ~G4ITMultiNavigator();
+  ~G4ITMultiNavigator() override;
   // Destructor. No actions.
 
   G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
                        const G4ThreeVector &pDirection,
                        const G4double pCurrentProposedStepLength,
-                       G4double &pNewSafety);
+                       G4double &pNewSafety) override;
   // Return the distance to the next boundary of any geometry
 
   G4double ObtainFinalStep(G4int navigatorId, G4double &pNewSafety, // for this geom
@@ -173,7 +172,7 @@ public:
 
   G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
                                              const G4ThreeVector &direction,
-                                             const G4TouchableHistory &h);
+                                             const G4TouchableHistory &h) override;
   // Reset the geometrical hierarchy for all geometries.
   // Use the touchable history for the first (mass) geometry.
   // Return the volume in the first (mass) geometry.
@@ -182,37 +181,37 @@ public:
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
                                                const G4ThreeVector* direction =
-                                                   0,
+                                                   nullptr,
                                                const G4bool pRelativeSearch =
                                                    true,
                                                const G4bool ignoreDirection =
-                                                   true);
+                                                   true) override;
   // Locate in all geometries.
   // Return the volume in the first (mass) geometry
   //  Maintain vector of other volumes,  to be returned separately
   //
   // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
+  void LocateGlobalPointWithinVolume(const G4ThreeVector& position) override;
   // Relocate in all geometries for point that has not changed volume
   // (ie is within safety  in all geometries or is distance less that
   // along the direction of a computed step.
 
   G4double ComputeSafety(const G4ThreeVector &globalpoint,
                          const G4double pProposedMaxLength = DBL_MAX,
-                         const G4bool keepState = false);
+                         const G4bool keepState = false) override;
                          // Calculate the isotropic distance to the nearest boundary
                          // in any geometry from the specified point in the global coordinate
                          // system. The geometry must be closed.
 
-  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
+  G4TouchableHandle CreateTouchableHistoryHandle() const override;
   // Returns a reference counted handle to a touchable history.
 
-  virtual G4ThreeVector GetLocalExitNormal(G4bool* obtained);// const
-  virtual G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
-  G4bool* obtained);// const
-  virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
-  G4bool* obtained);// const
+  G4ThreeVector GetLocalExitNormal(G4bool* obtained) override;// const
+  G4ThreeVector GetLocalExitNormalAndCheck(const G4ThreeVector &CurrentE_Point,
+  G4bool* obtained) override;// const
+  G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
+  G4bool* obtained) override;// const
   // Return Exit Surface Normal and validity too.
   // Can only be called if the Navigator's last Step either
   //  - has just crossed a volume geometrical boundary and relocated, or
@@ -235,10 +234,10 @@ public:// without description
 
 protected: // with description
 
-  void ResetState();
+  void ResetState() override;
   // Utility method to reset the navigator state machine.
 
-  void SetupHierarchy();
+  void SetupHierarchy() override;
   // Renavigate & reset hierarchy described by current history
   // o Reset volumes
   // o Recompute transforms and/or solids of replicated/parameterised
@@ -251,7 +250,7 @@ protected: // with description
 private:
 
   G4int fNoActiveNavigators;
-  G4VPhysicalVolume* fLastMassWorld;
+  G4VPhysicalVolume* fLastMassWorld{nullptr};
 
   G4ITNavigator* fpNavigator[fMaxNav];// G4ITNavigator** fpNavigator;
 

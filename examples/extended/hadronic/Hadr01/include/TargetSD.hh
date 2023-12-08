@@ -49,26 +49,20 @@
 
 class G4Step;
 class G4TouchableHistory;
-class G4HCofThisEvent;
 class HistoManager;
 
 class TargetSD : public G4VSensitiveDetector
 {
 public: // Without description
 
-  TargetSD(const G4String&);
-  virtual ~TargetSD();
+  explicit TargetSD(const G4String&);
+  ~TargetSD() override = default;
 
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void PrintAll();
+  G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
 
 private:
 
   HistoManager*  fHisto;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

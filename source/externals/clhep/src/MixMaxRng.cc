@@ -27,7 +27,9 @@
 //   http://dx.doi.org/10.1016/j.chaos.2016.05.003
 //
 // =======================================================================
-// Implementation by Konstantin Savvidy - Copyright 2004-2017
+// Implementation by Konstantin Savvidy - Copyright 2004-2023
+// July 2023 - Updated class structure upon suggestions from Marco Barbone
+// September 2023 - fix (re-)initialization from Gabriele Cosmo
 // =======================================================================
 
 #include "CLHEP/Random/Random.h"
@@ -37,6 +39,7 @@
 
 #include <atomic>
 #include <cmath>
+#include <algorithm>
 #include <iostream>
 #include <string.h>        // for strcmp
 #include <vector>
@@ -79,9 +82,9 @@ MixMaxRng::~MixMaxRng()
 MixMaxRng::MixMaxRng(const MixMaxRng& rng)
   : HepRandomEngine(rng)
 {
-   S.V = rng.S.V;
-   S.sumtot= rng.S.sumtot;
-   S.counter= rng.S.counter;
+   std::copy(rng.V, rng.V+N, V);
+   sumtot= rng.sumtot;
+   counter= rng.counter;
 }
 
 MixMaxRng& MixMaxRng::operator=(const MixMaxRng& rng)
@@ -94,9 +97,9 @@ MixMaxRng& MixMaxRng::operator=(const MixMaxRng& rng)
    //
    HepRandomEngine::operator=(rng);
 
-   S.V = rng.S.V;
-   S.sumtot= rng.S.sumtot;
-   S.counter= rng.S.counter;
+   std::copy(rng.V, rng.V+N, V);
+   sumtot= rng.sumtot;
+   counter= rng.counter;
 
    return *this;
 }
@@ -110,13 +113,13 @@ void MixMaxRng::saveStatus( const char filename[] ) const
      int j;
      fprintf(fh, "mixmax state, file version 1.0\n" );
      fprintf(fh, "N=%u; V[N]={", rng_get_N() );
-     for (j=0; (j< (rng_get_N()-1) ); j++) {
-         fprintf(fh, "%llu, ", S.V[j] );
+     for (j=0; (j< (rng_get_N()-1) ); ++j) {
+         fprintf(fh, "%llu, ", (unsigned long long)V[j] );
      }
-     fprintf(fh, "%llu", S.V[rng_get_N()-1] );
+     fprintf(fh, "%llu", (unsigned long long)V[rng_get_N()-1] );
      fprintf(fh, "}; " );
-     fprintf(fh, "counter=%u; ", S.counter );
-     fprintf(fh, "sumtot=%llu;\n", S.sumtot );
+     fprintf(fh, "counter=%u; ", counter );
+     fprintf(fh, "sumtot=%llu;\n", (unsigned long long)sumtot );
      fclose(fh);
    }
 }
@@ -141,42 +144,41 @@ void MixMaxRng::restoreStatus( const char filename[] )
     
    myuint_t vecVal;
    //printf("mixmax -> read_state: starting to read state from file\n");
-   if (!fscanf(fin, "%llu", &S.V[0]) )
+   if (!fscanf(fin, "%llu", (unsigned long long*) &V[0]) )
    {
      fprintf(stderr, "mixmax -> read_state: error reading file %s\n", filename);
      throw std::runtime_error("Error in reading state file");
    }
 
-   int i;
-   for( i = 1; i < rng_get_N(); i++)
+   for (int i = 1; i < rng_get_N(); ++i)
    {
-     if (!fscanf(fin, ", %llu", &vecVal) )
+     if (!fscanf(fin, ", %llu", (unsigned long long*) &vecVal) )
      {
        fprintf(stderr, "mixmax -> read_state: error reading vector component i=%d from file %s\n", i, filename);
        throw std::runtime_error("Error in reading state file");
      }
-     if(  vecVal <= MixMaxRng::M61 )
+     if( vecVal <= MixMaxRng::M61 )
      {
-       S.V[i] = vecVal;
+       V[i] = vecVal;
      }
      else
      {
        fprintf(stderr, "mixmax -> read_state: Invalid state vector value= %llu"
                " ( must be less than %llu ) "
                " obtained from reading file %s\n"
-               , vecVal, MixMaxRng::M61, filename);
+               , (unsigned long long)vecVal, (unsigned long long)MixMaxRng::M61, filename);
      }
    }
     
-   int counter;
-   if (!fscanf( fin, "}; counter=%i; ", &counter))
+   int incounter;
+   if (!fscanf( fin, "}; counter=%i; ", &incounter))
    {
      fprintf(stderr, "mixmax -> read_state: error reading counter from file %s\n", filename);
      throw std::runtime_error("Error in reading state file");
    }
-   if( counter <= rng_get_N() )
+   if( incounter <= rng_get_N() )
    {
-     S.counter= counter;
+     counter = incounter;
    }
    else
    {
@@ -186,14 +188,14 @@ void MixMaxRng::restoreStatus( const char filename[] )
      throw std::runtime_error("Error in reading state counter");
    }
    precalc();
-   myuint_t sumtot;
-   if (!fscanf( fin, "sumtot=%llu\n", &sumtot))
+   myuint_t insumtot;
+   if (!fscanf( fin, "sumtot=%llu\n", (unsigned long long*) &insumtot))
    {
      fprintf(stderr, "mixmax -> read_state: error reading checksum from file %s\n", filename);
      throw std::runtime_error("Error in reading state file");
    }
 
-   if (S.sumtot != sumtot)
+   if (sumtot != insumtot)
    {
      fprintf(stderr, "mixmax -> checksum error while reading state from file %s - corrupted?\n", filename);
      throw std::runtime_error("Error in reading state checksum");
@@ -209,13 +211,6 @@ void MixMaxRng::showStatus() const
    std::cout << " Current state vector is:" << std::endl;
    print_state();
    std::cout << "---------------------------------------" << std::endl;
-}
-
-void MixMaxRng::setSeed(long longSeed, int /* extraSeed */)
-{
-   //seed_uniquestream(0,0,0,longSeed);
-   theSeed = longSeed;
-   seed_spbox(longSeed);
 }
 
 //  Preferred Seeding method
@@ -259,91 +254,9 @@ constexpr int MixMaxRng::rng_get_N()
    return N;
 }
 
-constexpr long long int MixMaxRng::rng_get_SPECIAL()
-{
-   return SPECIAL;
-}
-
-constexpr int MixMaxRng::rng_get_SPECIALMUL()
-{
-   return SPECIALMUL;
-}
-
-double MixMaxRng::generate(int i)
-{
-   S.counter++;
-#if defined(__clang__) || defined(__llvm__)
-   return INV_M61*static_cast<double>(S.V[i]);
-#elif defined(__GNUC__) && (__GNUC__ < 7) && (!defined(__ICC)) && defined(__x86_64__) && defined(__SSE2_MATH__)
-   int64_t Z=S.V[i];
-   double F=0.0;
-   //#warning Using the inline assembler
-    /* using SSE inline assemly to zero the xmm register, just before int64 -> double conversion,
-       not necessary in GCC-5 or better, but huge penalty on earlier compilers
-    */
-   __asm__ __volatile__(  "pxor %0, %0;"
-                          "cvtsi2sdq %1, %0;"
-                          :"=x"(F)
-                          :"r"(Z)
-                       );
-   return F*INV_M61;
-#else
-  //#warning other method
-   return convert1double(S.V[i]); //get_next_float_packbits();
-#endif
-}
-
-double MixMaxRng::iterate()
-{
-   myuint_t* Y=S.V.data();
-   myuint_t  tempP, tempV;
-   Y[0] = ( tempV = S.sumtot);
-   myuint_t sumtot = Y[0], ovflow = 0; // will keep a running sum of all new elements
-   tempP = 0;              // will keep a partial sum of all old elements
-   myuint_t tempPO;
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[1] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[1]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[2] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[2]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[3] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[3]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[4] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[4]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[5] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[5]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[6] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[6]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[7] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[7]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[8] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[8]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[9] ); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[9]  = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[10]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[10] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[11]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[11] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[12]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[12] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[13]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[13] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[14]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[14] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[15]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[15] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   tempPO = MULWU(tempP); tempP = modadd(tempP, Y[16]); tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); Y[16] = tempV; sumtot += tempV; if (sumtot < tempV) {ovflow++;};
-   S.sumtot = MIXMAX_MOD_MERSENNE(MIXMAX_MOD_MERSENNE(sumtot) + (ovflow <<3 ));
-
-   S.counter=2;
-   return double(S.V[1])*INV_M61;
-}
-
 void MixMaxRng::flatArray(const int size, double* vect )
 {
-   // fill_array( S, size, arrayDbl );
    for (int i=0; i<size; ++i) { vect[i] = flat(); }
-}
-
-MixMaxRng::operator double()
-{
-  return flat();
-}
-
-MixMaxRng::operator float()
-{
-  return float( flat() );
-}
-
-MixMaxRng::operator unsigned int()
-{
-   return static_cast<unsigned int>(get_next());
-   // clhep_get_next returns a 64-bit integer, of which the lower 61 bits
-   // are random and upper 3 bits are zero
 }
 
 std::ostream & MixMaxRng::put ( std::ostream& os ) const
@@ -355,10 +268,10 @@ std::ostream & MixMaxRng::put ( std::ostream& os ) const
    os << beginMarker << " ";
    os << theSeed << "\n";
    for (int i=0; i<rng_get_N(); ++i) {
-      os <<  S.V[i] << "\n";
+      os <<  V[i] << "\n";
    }
-   os << S.counter << "\n";
-   os << S.sumtot << "\n";
+   os << counter << "\n";
+   os << sumtot << "\n";
    os << endMarker << "\n";
    os.precision(pr);
    return os;  
@@ -366,19 +279,19 @@ std::ostream & MixMaxRng::put ( std::ostream& os ) const
 
 std::vector<unsigned long> MixMaxRng::put () const
 {
-   std::vector<unsigned long> v;
-   v.push_back (engineIDulong<MixMaxRng>());
+   std::vector<unsigned long> vec;
+   vec.push_back (engineIDulong<MixMaxRng>());
    for (int i=0; i<rng_get_N(); ++i)
    {
-     v.push_back(static_cast<unsigned long>(S.V[i] & MASK32));
+     vec.push_back(static_cast<unsigned long>(V[i] & MASK32));
        // little-ended order on all platforms
-     v.push_back(static_cast<unsigned long>(S.V[i] >> 32  ));
+     vec.push_back(static_cast<unsigned long>(V[i] >> 32  ));
        // pack uint64 into a data structure which is 32-bit on some platforms
    }
-   v.push_back(static_cast<unsigned long>(S.counter));
-   v.push_back(static_cast<unsigned long>(S.sumtot & MASK32));
-   v.push_back(static_cast<unsigned long>(S.sumtot >> 32));
-   return v;
+   vec.push_back(static_cast<unsigned long>(counter));
+   vec.push_back(static_cast<unsigned long>(sumtot & MASK32));
+   vec.push_back(static_cast<unsigned long>(sumtot >> 32));
+   return vec;
 }
 
 std::istream & MixMaxRng::get  ( std::istream& is)
@@ -408,8 +321,8 @@ std::istream &  MixMaxRng::getState ( std::istream& is )
 {
    char endMarker[MarkerLen];
    is >> theSeed;
-   for (int i=0; i<rng_get_N(); ++i)  is >> S.V[i];
-   is >> S.counter;
+   for (int i=0; i<rng_get_N(); ++i)  is >> V[i];
+   is >> counter;
    myuint_t checksum;
    is >> checksum;
    is >> std::ws;
@@ -421,14 +334,14 @@ std::istream &  MixMaxRng::getState ( std::istream& is )
                  << "\nInput stream is probably mispositioned now.\n";
        return is;
    }
-   if ( S.counter < 0 || S.counter > rng_get_N() ) {
+   if ( counter < 0 || counter > rng_get_N() ) {
        std::cerr << "\nMixMaxRng::getState(): "
                  << "vector read wrong value of counter from file!"
                  << "\nInput stream is probably mispositioned now.\n";
        return is;
    }
    precalc();
-   if ( checksum != S.sumtot) {
+   if ( checksum != sumtot) {
        std::cerr << "\nMixMaxRng::getState(): "
                  << "checksum disagrees with value stored in file!"
                  << "\nInput stream is probably mispositioned now.\n";
@@ -437,31 +350,32 @@ std::istream &  MixMaxRng::getState ( std::istream& is )
    return is;
 }
 
-bool MixMaxRng::get (const std::vector<unsigned long> & v)
+bool MixMaxRng::get (const std::vector<unsigned long> & vec)
 {
-   if ((v[0] & 0xffffffffUL) != engineIDulong<MixMaxRng>()) {
+   if ((vec[0] & 0xffffffffUL) != engineIDulong<MixMaxRng>())
+   {
      std::cerr << 
         "\nMixMaxRng::get(): vector has wrong ID word - state unchanged\n";
      return false;
    }
-   return getState(v);
+   return getState(vec);
 }
 
-bool MixMaxRng::getState (const std::vector<unsigned long> & v)
+bool MixMaxRng::getState (const std::vector<unsigned long> & vec)
 {
-   if (v.size() != VECTOR_STATE_SIZE ) {
+   if (vec.size() != VECTOR_STATE_SIZE ) {
      std::cerr <<
         "\nMixMaxRng::getState(): vector has wrong length - state unchanged\n";
      return false;
    }
    for (int i=1; i<2*rng_get_N() ; i=i+2) {
-     S.V[i/2]= ( (v[i] & MASK32) | ( (myuint_t)(v[i+1]) << 32 ) );
+     V[i/2]= ( (vec[i] & MASK32) | ( (myuint_t)(vec[i+1]) << 32 ) );
      // unpack from a data structure which is 32-bit on some platforms
    }
-   S.counter = (int)v[2*rng_get_N()+1];
+   counter = (int)vec[2*rng_get_N()+1];
    precalc();
-   if ( ( (v[2*rng_get_N()+2] & MASK32)
-        | ( (myuint_t)(v[2*rng_get_N()+3]) << 32 ) ) != S.sumtot) {
+   if ( ( (vec[2*rng_get_N()+2] & MASK32)
+        | ( (myuint_t)(vec[2*rng_get_N()+3]) << 32 ) ) != sumtot) {
      std::cerr << "\nMixMaxRng::getState(): vector has wrong checksum!"
                << "\nInput vector is probably mispositioned now.\n";
      return false;
@@ -469,131 +383,84 @@ bool MixMaxRng::getState (const std::vector<unsigned long> & v)
    return true;
 }
 
-myuint_t MixMaxRng ::MOD_MULSPEC(myuint_t k)
-{
-   switch (N)
-   {
-      case 17:
-          return 0;
-          break;
-      case 8:
-          return 0;
-          break;
-      case 240:
-          return fmodmulM61( 0, SPECIAL , (k) );
-          break;
-      default:
-          std::cerr << "MIXMAX ERROR: " << "Disallowed value of parameter N\n";
-          std::terminate();
-          break;
-   }
-}
-
-myuint_t MixMaxRng::MULWU (myuint_t k)
-{
-   return (( (k)<<(SPECIALMUL) & M61) ^ ( (k) >> (BITS-SPECIALMUL))  );
-}
-
 myuint_t MixMaxRng::iterate_raw_vec(myuint_t* Y, myuint_t sumtotOld)
 {
    // operates with a raw vector, uses known sum of elements of Y
-   int i;
             
    myuint_t  tempP, tempV;
    Y[0] = ( tempV = sumtotOld);
-   myuint_t sumtot = Y[0], ovflow = 0; // will keep a running sum of all new elements
+   myuint_t insumtot = Y[0], ovflow = 0; // will keep a running sum of all new elements
    tempP = 0;              // will keep a partial sum of all old elements
-   for (i=1; (i<N); i++)
+   for (int i=1; (i<N); ++i)
    {
      myuint_t tempPO = MULWU(tempP);
      tempP = modadd(tempP, Y[i]);
      tempV = MIXMAX_MOD_MERSENNE(tempV+tempP+tempPO); // new Y[i] = old Y[i] + old partial * m
      Y[i] = tempV;
-     sumtot += tempV; if (sumtot < tempV) {ovflow++;}
+     insumtot += tempV; if (insumtot < tempV) {++ovflow;}
    }
-   return MIXMAX_MOD_MERSENNE(MIXMAX_MOD_MERSENNE(sumtot) + (ovflow <<3 ));
+   return MIXMAX_MOD_MERSENNE(MIXMAX_MOD_MERSENNE(insumtot) + (ovflow <<3 ));
 }
         
 myuint_t MixMaxRng::get_next()
 {
-   int i;
-   i=S.counter;
+   int i = counter;
             
    if ((i<=(N-1)) )
    {
-     S.counter++;
-     return S.V[i];
+     ++counter;
+     return V[i];
    }
    else
    {
-     S.sumtot = iterate_raw_vec(S.V.data(), S.sumtot);
-     S.counter=2;
-     return S.V[1];
+     sumtot = iterate_raw_vec(V, sumtot);
+     counter=2;
+     return V[1];
    }
 }
 
 myuint_t MixMaxRng::precalc()
 {
-   int i;
-   myuint_t temp;
-   temp = 0;
-   for (i=0; i < N; i++){
-     temp = MIXMAX_MOD_MERSENNE(temp + S.V[i]);
-   }
-   S.sumtot = temp;
+   myuint_t temp = 0;
+   for (int i=0; i < N; ++i) { temp = MIXMAX_MOD_MERSENNE(temp + V[i]); }
+   sumtot = temp;
    return temp;
 }
-            
-double MixMaxRng::get_next_float_packbits()
-{
-   myuint_t Z=get_next();
-   return convert1double(Z);
-}
         
-void MixMaxRng::seed_vielbein(unsigned int index)
+void MixMaxRng::state_init()
 {
-   int i;
-   if (index<N)
-   {
-     for (i=0; i < N; i++){
-       S.V[i] = 0;
-     }
-     S.V[index] = 1;
-   }
-   else
-   {
-     std::terminate();
-   }
-   S.counter = N;  // set the counter to N if iteration should happen right away
-   S.sumtot = 1;
+   for (int i=1; i < N; ++i) { V[i] = 0; }
+   V[0] = 1;
+   counter = N;  // set the counter to N if iteration should happen right away
+   sumtot = 1;
 }
 
 void MixMaxRng::seed_spbox(myuint_t seed)
 {
    // a 64-bit LCG from Knuth line 26, in combination with a bit swap is used to seed
 
+   if (seed == 0)
+     throw std::runtime_error("try seeding with nonzero seed next time");
+
    const myuint_t MULT64=6364136223846793005ULL;
-   int i;
-            
-   myuint_t sumtot=0,ovflow=0;
-   if (seed == 0) throw std::runtime_error("try seeding with nonzero seed next time");
+   sumtot = 0;
             
    myuint_t l = seed;
             
-   for (i=0; i < N; i++){
+   for (int i=0; i < N; ++i)
+   {
      l*=MULT64; l = (l << 32) ^ (l>>32);
-     S.V[i] = l & M61;
-     sumtot += S.V[(i)]; if (sumtot < S.V[(i)]) {ovflow++;}
+     V[i] = l & M61;
+     sumtot = MIXMAX_MOD_MERSENNE(sumtot + V[(i)]); 
    }
-   S.counter = N;  // set the counter to N if iteration should happen right away
-   S.sumtot = MIXMAX_MOD_MERSENNE(MIXMAX_MOD_MERSENNE(sumtot) + (ovflow <<3 ));
+   counter = N;  // set the counter to N if iteration should happen right away
 }
 
 void MixMaxRng::seed_uniquestream( myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID )
 {
-   seed_vielbein(0);
-   S.sumtot = apply_bigskip(S.V.data(), S.V.data(),  clusterID,  machineID,  runID,   streamID );
-   S.counter = 1;
+   state_init();
+   sumtot = apply_bigskip(V, V, clusterID, machineID, runID, streamID );
+   counter = 1;
 }
         
 myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID )
@@ -608,7 +475,7 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
     (this is good enough : a single CPU will not exceed this in the lifetime of the universe, 10^19 sec,
     even if it had a clock cycle of Planch time, 10^44 Hz )
              
-    Caution: never apply this to a derived vector, just choose some mother vector Vin, for example the unit vector by seed_vielbein(X,0),
+    Caution: never apply this to a derived vector, just choose some mother vector Vin, for example the unit vector by state_init(),
     and use it in all your runs, just change runID to get completely nonoverlapping streams of random numbers on a different day.
              
     clusterID and machineID are provided for the benefit of large organizations who wish to ensure that a simulation
@@ -623,7 +490,7 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
    ;
             
    const myuint_t* skipMat[128];
-   for (int i=0; i<128; i++) { skipMat[i] = skipMat17[i];}
+   for (int i=0; i<128; ++i) { skipMat[i] = skipMat17[i]; }
             
    myID_t IDvec[4] = {streamID, runID, machineID, clusterID};
    int r,i,j,  IDindex;
@@ -631,10 +498,10 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
    myuint_t Y[N], cum[N];
    myuint_t coeff;
    myuint_t* rowPtr;
-   myuint_t sumtot=0;
+   myuint_t insumtot=0;
             
-   for (i=0; i<N; i++) { Y[i] = Vin[i]; sumtot = modadd( sumtot, Vin[i]); } ;
-   for (IDindex=0; IDindex<4; IDindex++)
+   for (i=0; i<N; ++i) { Y[i] = Vin[i]; insumtot = modadd( insumtot, Vin[i]); }
+   for (IDindex=0; IDindex<4; ++IDindex)
    { // go from lower order to higher order ID
      id=IDvec[IDindex];
      //printf("now doing ID at level %d, with ID = %d\n", IDindex, id);
@@ -644,26 +511,26 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
        if (id & 1)
        {
          rowPtr = (myuint_t*)skipMat[r + IDindex*8*sizeof(myID_t)];
-         for (i=0; i<N; i++){ cum[i] = 0; }
-         for (j=0; j<N; j++)
+         for (i=0; i<N; ++i){ cum[i] = 0; }
+         for (j=0; j<N; ++j)
          { // j is lag, enumerates terms of the poly
            // for zero lag Y is already given
            coeff = rowPtr[j]; // same coeff for all i
-           for (i =0; i<N; i++){
+           for (i =0; i<N; ++i){
              cum[i] =  fmodmulM61( cum[i], coeff ,  Y[i] ) ;
            }
-           sumtot = iterate_raw_vec(Y, sumtot);
+           insumtot = iterate_raw_vec(Y, insumtot);
          }
-         sumtot=0;
-         for (i=0; i<N; i++){ Y[i] = cum[i]; sumtot = modadd( sumtot, cum[i]); } ;
+         insumtot=0;
+         for (i=0; i<N; ++i){ Y[i] = cum[i]; insumtot = modadd( insumtot, cum[i]); } ;
        }
-       id = (id >> 1); r++; // bring up the r-th bit in the ID
+       id = (id >> 1); ++r; // bring up the r-th bit in the ID
      }
    }
-   sumtot=0;
-   for (i=0; i<N; i++){ Vout[i] = Y[i]; sumtot = modadd( sumtot, Y[i]); }
+   insumtot=0;
+   for (i=0; i<N; ++i){ Vout[i] = Y[i]; insumtot = modadd( insumtot, Y[i]); }
    // returns sumtot, and copy the vector over to Vout
-   return (sumtot) ;
+   return insumtot;
 }
         
 #if defined(__x86_64__)
@@ -696,41 +563,20 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
   }
 #endif
 
-myuint_t MixMaxRng::modadd(myuint_t foo, myuint_t bar)
-{
-#if defined(__x86_64__) && defined(__GNUC__) && (!defined(__ICC))
-   //#warning Using assembler routine in modadd
-   myuint_t out;
-   /* Assembler trick suggested by Andrzej Görlich     */
-   __asm__ ("addq %2, %0; "
-            "btrq $61, %0; "
-            "adcq $0, %0; "
-            :"=r"(out)
-            :"0"(foo), "r"(bar)
-           );
-   return out;
-#else
-   return MIXMAX_MOD_MERSENNE(foo+bar);
-#endif
-}
-
 void MixMaxRng::print_state() const
 {
-   int j;
    std::cout << "mixmax state, file version 1.0\n";
    std::cout << "N=" << rng_get_N() << "; V[N]={";
-   for (j=0; (j< (rng_get_N()-1) ); j++) {
-     std::cout << S.V[j] << ", ";
-   }
-   std::cout << S.V[rng_get_N()-1];
+   for (int j=0; (j< (rng_get_N()-1) ); ++j) { std::cout << V[j] << ", "; }
+   std::cout << V[rng_get_N()-1];
    std::cout << "}; ";
-   std::cout << "counter= " << S.counter;
-   std::cout << "sumtot= " << S.sumtot << "\n";
+   std::cout << "counter= " << counter;
+   std::cout << "sumtot= " << sumtot << "\n";
 }
 
 MixMaxRng MixMaxRng::Branch()
 {
-   S.sumtot = iterate_raw_vec(S.V.data(), S.sumtot); S.counter = 1;
+   sumtot = iterate_raw_vec(V, sumtot); counter = 1;
    MixMaxRng tmp=*this;
    tmp.BranchInplace(0); // daughter id
    return tmp;
@@ -741,11 +587,11 @@ void MixMaxRng::BranchInplace(int id)
    // Dont forget to iterate the mother, when branching the daughter, or else will have collisions!
    // a 64-bit LCG from Knuth line 26, is used to mangle a vector component
    constexpr myuint_t MULT64=6364136223846793005ULL;
-   myuint_t tmp=S.V[id];
-   S.V[1] *= MULT64; S.V[id] &= M61;
-   S.sumtot = MIXMAX_MOD_MERSENNE( S.sumtot + S.V[id] - tmp + M61);
-   S.sumtot = iterate_raw_vec(S.V.data(), S.sumtot);// printf("iterating!\n");
-   S.counter = 1;
+   myuint_t tmp=V[id];
+   V[1] *= MULT64; V[id] &= M61;
+   sumtot = MIXMAX_MOD_MERSENNE( sumtot + V[id] - tmp + M61);
+   sumtot = iterate_raw_vec(V, sumtot);
+   counter = 1;
 }
 
 }  // namespace CLHEP

@@ -40,6 +40,8 @@ using namespace std;
 
 G4DNAPTBAugerModel::G4DNAPTBAugerModel(const G4String& modelAugerName): modelName(modelAugerName)
 {
+    verboseLevel = 0;
+    minElectronEnergy = 0.0;
     // To inform the user that the Auger model is enabled
     G4cout << modelName <<" is constructed" << G4endl;
 }
@@ -67,7 +69,7 @@ void G4DNAPTBAugerModel::ComputeAugerEffect(std::vector<G4DynamicParticle*>* fve
     // Rename material if modified NIST material
     // This is needed when material is obtained from G4MaterialCutsCouple
     G4String materialName = materialNameIni;
-    if(materialName.find("_MODIFIED")){
+    if(materialName.find("_MODIFIED") != 0u){
         materialName = materialName.substr(0,materialName.size()-9);
     }
 
@@ -199,6 +201,6 @@ void G4DNAPTBAugerModel::GenerateAugerWithRandomDirection(std::vector<G4DynamicP
       G4ThreeVector ElectronDirection(xDir,yDir,zDir);
 
       // generation of new particle
-      G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(), ElectronDirection, kineticEnergy) ;
+      auto  dp = new G4DynamicParticle (G4Electron::Electron(), ElectronDirection, kineticEnergy) ;
       fvect->push_back(dp);
 }

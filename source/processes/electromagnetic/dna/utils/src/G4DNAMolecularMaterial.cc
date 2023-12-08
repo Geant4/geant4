@@ -27,15 +27,15 @@
 // Author: Mathieu Karamitros
 //
 
-#include <utility>
-
 #include "G4DNAMolecularMaterial.hh"
+
+#include "G4AutoLock.hh"
 #include "G4Material.hh"
+#include "G4MoleculeTable.hh"
 #include "G4StateManager.hh"
 #include "G4Threading.hh"
-#include "G4AutoLock.hh"
-#include "G4StateManager.hh"
-#include "G4MoleculeTable.hh"
+
+#include <utility>
 
 using namespace std;
 
@@ -58,16 +58,16 @@ bool CompareMaterial::operator()(const G4Material* mat1,
   const G4Material* baseMat1 = mat1->GetBaseMaterial();
   const G4Material* baseMat2 = mat2->GetBaseMaterial();
 
-  if (((baseMat1 != nullptr) || (baseMat2 != nullptr)) == false){
+  if ((baseMat1 == nullptr) && (baseMat2 == nullptr)){
     // None of the materials derives from a base material
     return mat1 < mat2;
   }
-  else if ((baseMat1 != nullptr) && (baseMat2 != nullptr)){
+  if ((baseMat1 != nullptr) && (baseMat2 != nullptr)){
     // Both materials derive from a base material
     return baseMat1 < baseMat2;
   }
 
-  else if ((baseMat1 != nullptr) && (baseMat2 == nullptr)){
+  if ((baseMat1 != nullptr) && (baseMat2 == nullptr)){
     // Only the material 1 derives from a base material
     return baseMat1 < mat2;
   }
@@ -79,7 +79,7 @@ bool CompareMaterial::operator()(const G4Material* mat1,
 
 G4DNAMolecularMaterial* G4DNAMolecularMaterial::Instance()
 {
-  if (!fInstance) fInstance = new G4DNAMolecularMaterial();
+  if (fInstance == nullptr) fInstance = new G4DNAMolecularMaterial();
   return fInstance;
 }
 
@@ -136,8 +136,7 @@ void G4DNAMolecularMaterial::Clear()
 
 //------------------------------------------------------------------------------
 
-G4DNAMolecularMaterial::G4DNAMolecularMaterial() :
-    G4VStateDependent()
+G4DNAMolecularMaterial::G4DNAMolecularMaterial()
 {
   Create();
 }
@@ -151,25 +150,6 @@ G4bool G4DNAMolecularMaterial::Notify(G4ApplicationState requestedState)
     Initialize();
   }
   return true;
-}
-
-//------------------------------------------------------------------------------
-
-G4DNAMolecularMaterial::G4DNAMolecularMaterial(
-    const G4DNAMolecularMaterial& /*rhs*/) :
-    G4VStateDependent()
-{
-  Create();
-}
-
-//------------------------------------------------------------------------------
-
-G4DNAMolecularMaterial&
-G4DNAMolecularMaterial::operator=(const G4DNAMolecularMaterial& rhs)
-{
-  if (this == &rhs) return *this;
-  Create();
-  return *this;
 }
 
 //------------------------------------------------------------------------------
@@ -216,7 +196,7 @@ void G4DNAMolecularMaterial::Initialize()
 
 void G4DNAMolecularMaterial::InitializeDensity()
 {
-  if (fpCompFractionTable){
+  if (fpCompFractionTable != nullptr){
     const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
     fpCompDensityTable = new vector<ComponentMap>(
         G4Material::GetMaterialTable()->size());
@@ -233,10 +213,9 @@ void G4DNAMolecularMaterial::InitializeDensity()
 
       parentDensity = parentMat->GetDensity();
 
-      for (auto it = massFractionComp.cbegin();
-          it != massFractionComp.cend(); ++it){
-        compMat = it->first;
-        massFraction = it->second;
+      for (const auto& it : massFractionComp){
+        compMat = it.first;
+        massFraction = it.second;
         densityComp[compMat] = massFraction * parentDensity;
         compMat = nullptr;
         massFraction = -1;
@@ -257,7 +236,7 @@ void G4DNAMolecularMaterial::InitializeDensity()
 
 void G4DNAMolecularMaterial::InitializeNumMolPerVol()
 {
-  if (fpCompDensityTable){
+  if (fpCompDensityTable != nullptr){
     fpCompNumMolPerVolTable = new vector<ComponentMap>(fNMaterials);
 
     const G4Material* compMat(nullptr);
@@ -267,9 +246,8 @@ void G4DNAMolecularMaterial::InitializeNumMolPerVol()
       ComponentMap& densityComp = (*fpCompDensityTable)[i];
       ComponentMap& numMolPerVol = (*fpCompNumMolPerVolTable)[i];
 
-      for (auto it = massFractionComp.cbegin();
-          it != massFractionComp.cend(); ++it){
-        compMat = it->first;
+      for (auto& it : massFractionComp){
+        compMat = it.first;
         numMolPerVol[compMat] = densityComp[compMat]
             / compMat->GetMassOfMolecule();
         compMat = nullptr;
@@ -348,7 +326,7 @@ const std::vector<G4double>*
 G4DNAMolecularMaterial::
 GetDensityTableFor(const G4Material* lookForMaterial) const
 {
-  if (!fpCompDensityTable){
+  if (fpCompDensityTable == nullptr){
     if (fIsInitialized){
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
@@ -383,7 +361,7 @@ GetDensityTableFor(const G4Material* lookForMaterial) const
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
 
-  std::vector<G4double>* output = new std::vector<G4double>(materialTable->size());
+  auto  output = new std::vector<G4double>(materialTable->size());
 
   ComponentMap::const_iterator it;
 
@@ -420,7 +398,7 @@ const std::vector<G4double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(
 {
   if(lookForMaterial==nullptr) return nullptr;
 
-  if (!fpCompNumMolPerVolTable){
+  if (fpCompNumMolPerVolTable == nullptr){
     if (fIsInitialized){
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
@@ -454,7 +432,7 @@ const std::vector<G4double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
 
-  std::vector<G4double>* output = new std::vector<G4double>(materialTable->size());
+  auto  output = new std::vector<G4double>(materialTable->size());
 
   ComponentMap::const_iterator it;
 
@@ -522,7 +500,7 @@ G4MolecularConfiguration*
 G4DNAMolecularMaterial::
 GetMolecularConfiguration(const G4Material* material) const
 {
-  G4int material_id = (G4int)material->GetIndex();
+  auto  material_id = (G4int)material->GetIndex();
   auto it = fMaterialToMolecularConf.find(material_id);
   if(it == fMaterialToMolecularConf.cend()) return nullptr;
   return it->second;
@@ -536,7 +514,7 @@ SetMolecularConfiguration(const G4Material* material,
                           G4MolecularConfiguration* molConf)
 {
   assert(material != nullptr);
-  G4int material_id = (G4int)material->GetIndex();
+  auto  material_id = (G4int)material->GetIndex();
   fMaterialToMolecularConf[material_id] = molConf;
 }
 
@@ -547,7 +525,7 @@ G4DNAMolecularMaterial::SetMolecularConfiguration(const G4Material* material,
                                                   const G4String& molUserID)
 {
   assert(material != nullptr);
-  G4int material_id = (G4int)material->GetIndex();
+  auto  material_id = (G4int)material->GetIndex();
   fMaterialToMolecularConf[material_id] =
     G4MoleculeTable::Instance()->GetConfiguration(molUserID, true);
 }

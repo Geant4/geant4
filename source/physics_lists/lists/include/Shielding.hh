@@ -47,7 +47,7 @@ class Shielding : public G4VModularPhysicsList
 {
 public:
   explicit Shielding(G4int verb = 1 , const G4String& n_model = "HP", 
-                     const G4String& HadrPhysVariant = "");
+                     const G4String& HadrPhysVariant = "", G4bool useLightIonQMD = false);
   virtual ~Shielding()=default;  
 
   //delete copy constructor and assignment operator

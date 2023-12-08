@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -63,7 +63,7 @@ SteppingAction::~SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
-{ 
+{
   // Protection
 
   if (!step->GetPostStepPoint()) return;
@@ -77,26 +77,26 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
   // Particle identification
 
-  // The following method avoids the usage of string comparison 
+  // The following method avoids the usage of string comparison
 
-  G4ParticleDefinition * partDef = 
+  G4ParticleDefinition * partDef =
    step->GetTrack()->GetDynamicParticle()->GetDefinition();
 
   if (partDef == G4Gamma::GammaDefinition())
-     flagParticle = 0; 
+     flagParticle = 0;
 
   if (partDef == G4Electron::ElectronDefinition())
-     flagParticle = 1; 
+     flagParticle = 1;
 
   if (partDef == G4Proton::ProtonDefinition())
-     flagParticle = 2; 
+     flagParticle = 2;
 
   if (partDef == G4Alpha::AlphaDefinition())
-     flagParticle = 4; 
+     flagParticle = 4;
 
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
-  
+
   // Usage example
   /*
   G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
@@ -107,20 +107,20 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   */
 
   if (partDef == instance->GetIon("hydrogen"))
-     flagParticle = 3; 
+     flagParticle = 3;
 
   if (partDef == instance->GetIon("alpha+"))
-     flagParticle = 5; 
+     flagParticle = 5;
 
   if (partDef == instance->GetIon("helium"))
-     flagParticle = 6; 
+     flagParticle = 6;
 
   // Alternative method (based on string comparison)
-  
+
   /*
   const G4String& particleName = step->GetTrack()->GetDynamicParticle()->
       GetDefinition()->GetParticleName();
-      
+
   if (particleName == "gamma")         flagParticle = 0;
   else if (particleName == "e-")       flagParticle = 1;
   else if (particleName == "proton")   flagParticle = 2;
@@ -145,7 +145,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   if (processName=="Capture") flagProcess =1;
   // (no subType and procID exists at the moment for this process)
 
-  else if (flagParticle == 1)
+  else if (flagParticle == 0)
+
+  {
+    if      (procID==12) flagProcess =81;
+    else if (procID==13) flagProcess =82;
+    else if (procID==14) flagProcess =83;
+    else if (procID==11) flagProcess =84;
+  }
+
+else if (flagParticle == 1)
 
   {
     if      (procID==58) flagProcess =10;
@@ -158,7 +167,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     else if (procID==1)  flagProcess =120;
     else if (procID==2)  flagProcess =130;
   }
-        
+
   else if (flagParticle == 2)
 
   {
@@ -171,7 +180,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     else if (procID==2)  flagProcess =230;
     else if (procID==8)  flagProcess =240;
   }
-        
+
   else if (flagParticle == 3)
 
   {
@@ -180,7 +189,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     else if (procID==53) flagProcess =33;
     else if (procID==57) flagProcess =35;
   }
-        
+
   else if (flagParticle == 4)
 
   {
@@ -193,7 +202,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     else if (procID==2)  flagProcess =430;
     else if (procID==8)  flagProcess =440;
   }
-        
+
   else if (flagParticle == 5)
 
   {
@@ -207,7 +216,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     else if (procID==2)  flagProcess =530;
     else if (procID==8)  flagProcess =540;
   }
-        
+
   else if (flagParticle == 6)
 
   {
@@ -224,7 +233,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   else if (processName=="ionIoni")                    flagProcess =730;
   else if (processName=="nuclearStopping")            flagProcess =740;
   // (for all GenericIons)
-      
+
   // Alternatively, using process names
 
   /*
@@ -282,10 +291,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     // fill ntuple
     analysisManager->FillNtupleDColumn(0, flagParticle);
     analysisManager->FillNtupleDColumn(1, flagProcess);
-    analysisManager->FillNtupleDColumn(2, x);
-    analysisManager->FillNtupleDColumn(3, y);
-    analysisManager->FillNtupleDColumn(4, z);
-    analysisManager->FillNtupleDColumn(5, 
+    analysisManager->FillNtupleDColumn(2, xp);
+    analysisManager->FillNtupleDColumn(3, yp);
+    analysisManager->FillNtupleDColumn(4, zp);
+    analysisManager->FillNtupleDColumn(5,
                                      step->GetTotalEnergyDeposit()/eV);
 
     analysisManager->FillNtupleDColumn(6,
@@ -301,11 +310,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     analysisManager->FillNtupleDColumn(8, preStep->
                                            GetKineticEnergy()/eV);
 
-    analysisManager->FillNtupleDColumn(9, 
+    analysisManager->FillNtupleDColumn(9,
          preStep->GetMomentumDirection()
         *postStep->GetMomentumDirection() );
 
-    analysisManager->FillNtupleIColumn(10, 
+    analysisManager->FillNtupleIColumn(10,
                                    G4EventManager::GetEventManager()->
                                    GetConstCurrentEvent()->GetEventID());
 
@@ -313,9 +322,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
     analysisManager->FillNtupleIColumn(12, step->GetTrack()->GetParentID());
 
-    analysisManager->FillNtupleIColumn(13, 
+    analysisManager->FillNtupleIColumn(13,
                                    step->GetTrack()->GetCurrentStepNumber());
 
     analysisManager->AddNtupleRow();
   }
-}    
+}

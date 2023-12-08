@@ -80,16 +80,9 @@ G4KalbachCrossSection::ComputeCrossSection(G4double K, G4double cb,
   G4double sig = 0.0;
   G4double signor = 1.0; 
   G4double lambda, mu, nu;
-  G4double ec = 0.5;
+  G4double ec = std::min(4.0, 100./(G4double)resA);  // in MeV
   if(0 < Z) { ec = cb; }
-  //JMQ 13.02.2009 tuning for improving cluster emission ddxs 
-  //               (spallation benchmark) 
-  /*
-    G4double xx = 1.7;
-    if(1 == A) { xx = 1.5; }
-    ec = 1.44 * Z * resZ / (xx*resA13 + paramK[idx][10]);
-    }
-  */
+
   G4double ecsq = ec*ec;
   G4double elab = K * (A + resA) / G4double(resA);    
     
@@ -116,8 +109,9 @@ G4KalbachCrossSection::ComputeCrossSection(G4double K, G4double cb,
     nu = amu1* (paramK[idx][7] + paramK[idx][8]*ec + paramK[idx][9]*ecsq);
   }
   /*
-    G4cout << "## idx= " << idx << " K= " << K << " elab= " << elab << "  ec= " << ec 
-    << " lambda= " << lambda << " mu= " << mu << "  nu= " << nu << G4endl; 
+    G4cout << "## idx=" << idx << " K=" << K << " elab=" << elab 
+           << " ec=" << ec << " lambda=" << lambda << " mu=" << mu 
+           << "  nu=" << nu << G4endl; 
   */
   // threashold cross section
   if(elab < ec) {
@@ -125,10 +119,8 @@ G4KalbachCrossSection::ComputeCrossSection(G4double K, G4double cb,
     if(0 < Z) { p += paramK[idx][1]/ec + paramK[idx][2]/ecsq; }
     G4double a = -2*p*ec + lambda - nu/ecsq;
     G4double b = p*ecsq + mu + 2*nu/ec;
-    G4double ecut;
     G4double det = a*a - 4*p*b;
-    if (det > 0.0) { ecut = (std::sqrt(det) - a)/(2*p); }
-    else           { ecut = -a/(2*p); }
+    G4double ecut = (det > 0.0) ? (std::sqrt(det) - a)/(2*p) : -a/(2*p);
 
     //G4cout << "  elab= " << elab << " ecut= " << ecut << " sig= " << sig
     //	     << "  sig1= " << (p*elab*elab + a*elab + b)*signor << G4endl;

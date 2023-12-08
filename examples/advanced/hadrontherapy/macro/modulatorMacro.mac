@@ -40,10 +40,14 @@
 #
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 ##########################
 # Visualisation 
 #
 #/vis/open OGLI 600x600-0+0
+##/vis/open  ## open the default viewer
 #/vis/viewer/flush
 #/vis/viewer/set/viewpointThetaPhi 50 130 deg
 #/vis/scene/add/axes 0 0 0 0.1 m

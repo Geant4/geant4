@@ -107,6 +107,10 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
     converters[i] = nullptr;
     rangeDoubleVector[i] = nullptr;
     energyDoubleVector[i] = nullptr;
+    if(i < 4)
+    {
+      delete userEnergyCuts[i];
+    }
   }
   fProductionCutsTable = nullptr;
 
@@ -115,33 +119,22 @@ G4ProductionCutsTable::~G4ProductionCutsTable()
 }
 
 // --------------------------------------------------------------------
-void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
+void G4ProductionCutsTable::SetEnergyCutVector(const std::vector<G4double>& cutE,
+                                               std::size_t idx)
 {
-  if(firstUse)
-  {
-    if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
-    {
-      converters[0] = new G4RToEConvForGamma(); 
-      converters[0]->SetVerboseLevel(GetVerboseLevel());
-    }
-    if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
-    {
-      converters[1] = new G4RToEConvForElectron(); 
-      converters[1]->SetVerboseLevel(GetVerboseLevel());
-    }
-    if(G4ParticleTable::GetParticleTable()->FindParticle("e+"))
-    {
-      converters[2] = new G4RToEConvForPositron(); 
-      converters[2]->SetVerboseLevel(GetVerboseLevel());
-    }
-    if(G4ParticleTable::GetParticleTable()->FindParticle("proton"))
-    {
-      converters[3] = new G4RToEConvForProton(); 
-      converters[3]->SetVerboseLevel(GetVerboseLevel());
-    }
-    firstUse = false;
+  if (idx >= 4) {
+    G4ExceptionDescription ed;
+    ed << "Wrong index= " << idx << "; it should be < 4";
+    G4Exception("G4ProductionCutsTable::SetEnergyCutVector()",
+		"CUTS0100", FatalException, ed);
+    return;
   }
+  userEnergyCuts[idx] = new std::vector<G4double>(cutE);
+}
 
+// --------------------------------------------------------------------
+void G4ProductionCutsTable::CreateCoupleTables()
+{
   // Reset "used" flags of all couples
   for(auto CoupleItr=coupleTable.cbegin();
            CoupleItr!=coupleTable.cend(); ++CoupleItr) 
@@ -232,6 +225,51 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
     }
   }
 
+  // resize Range/Energy cuts double vectors if new couple is made
+  if(newCoupleAppears)
+  {
+    for(std::size_t ix=0; ix<NumberOfG4CutIndex; ++ix)
+    {
+      G4double* rangeVOld = rangeDoubleVector[ix];
+      G4double* energyVOld = energyDoubleVector[ix];
+      if(rangeVOld) delete [] rangeVOld;
+      if(energyVOld) delete [] energyVOld;
+      rangeDoubleVector[ix] = new G4double[(*(rangeCutTable[ix])).size()];
+      energyDoubleVector[ix] = new G4double[(*(energyCutTable[ix])).size()];
+    }
+  }
+}
+
+// --------------------------------------------------------------------
+void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
+{
+  CreateCoupleTables();
+
+  if(firstUse)
+  {
+    if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
+    {
+      converters[0] = new G4RToEConvForGamma();
+      converters[0]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
+    {
+      converters[1] = new G4RToEConvForElectron();
+      converters[1]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("e+"))
+    {
+      converters[2] = new G4RToEConvForPositron();
+      converters[2]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("proton"))
+    {
+      converters[3] = new G4RToEConvForProton();
+      converters[3]->SetVerboseLevel(GetVerboseLevel());
+    }
+    firstUse = false;
+  }
+
   // Update RangeEnergy cuts tables
   std::size_t idx = 0;
   G4Timer timer;
@@ -249,10 +287,18 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
       {
         G4double rCut = aCut->GetProductionCut((G4int)ptcl);
         (*(rangeCutTable[ptcl]))[idx] = rCut;
-        // if(converters[ptcl] && (*cItr)->IsUsed())
-        if(converters[ptcl])
+
+        if(nullptr != converters[ptcl])
         {
-          (*(energyCutTable[ptcl]))[idx] = converters[ptcl]->Convert(rCut,aMat);
+          // check user defined cut in energy
+          if(nullptr == userEnergyCuts[ptcl] || userEnergyCuts[ptcl]->size() <= idx)
+          {
+            (*(energyCutTable[ptcl]))[idx] = converters[ptcl]->Convert(rCut,aMat);
+          }
+          else
+          {
+            (*(energyCutTable[ptcl]))[idx] = (*(userEnergyCuts[ptcl]))[idx]; 
+          }
         }
         else
         {
@@ -268,20 +314,6 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* /*currWorld*/)
     G4cout << "G4ProductionCutsTable::UpdateCoupleTable() - "
            << "Elapsed time for calculation of energy cuts: " << G4endl;
     G4cout << timer << G4endl;
-  }
-
-  // resize Range/Energy cuts double vectors if new couple is made
-  if(newCoupleAppears)
-  {
-    for(std::size_t ix=0; ix<NumberOfG4CutIndex; ++ix)
-    {
-      G4double* rangeVOld = rangeDoubleVector[ix];
-      G4double* energyVOld = energyDoubleVector[ix];
-      if(rangeVOld) delete [] rangeVOld;
-      if(energyVOld) delete [] energyVOld;
-      rangeDoubleVector[ix] = new G4double[(*(rangeCutTable[ix])).size()];
-      energyDoubleVector[ix] = new G4double[(*(energyCutTable[ix])).size()];
-    }
   }
 
   // Update Range/Energy cuts double vectors

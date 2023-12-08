@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -34,34 +31,32 @@
 //
 
 #include "G4BcMesonPlus.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                         BcMesonPlus                            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4BcMesonPlus* G4BcMesonPlus::theInstance = nullptr;
 
 G4BcMesonPlus* G4BcMesonPlus::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "Bc+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,      6.2749*GeV,  1.298e-9*MeV,   +1.*eplus,
                     0,              -1,             0,
@@ -69,18 +64,18 @@ G4BcMesonPlus* G4BcMesonPlus::Definition()
               "meson",               0,             0,         541,
                 false,     0.507e-3*ns,          nullptr,
                 false,       "Bc");
+    // clang-format on
   }
   theInstance = static_cast<G4BcMesonPlus*>(anInstance);
   return theInstance;
 }
 
-G4BcMesonPlus*  G4BcMesonPlus::BcMesonPlusDefinition()
+G4BcMesonPlus* G4BcMesonPlus::BcMesonPlusDefinition()
 {
   return Definition();
 }
 
-G4BcMesonPlus*  G4BcMesonPlus::BcMesonPlus()
+G4BcMesonPlus* G4BcMesonPlus::BcMesonPlus()
 {
   return Definition();
 }
-

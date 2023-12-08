@@ -45,7 +45,7 @@ using namespace std;
 
 G4DNAIonElasticModel::G4DNAIonElasticModel (const G4ParticleDefinition*,
                                             const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+    G4VEmModel(nam) 
 {
   killBelowEnergy = 100 * eV;
   lowEnergyLimit = 0 * eV;
@@ -69,9 +69,9 @@ G4DNAIonElasticModel::G4DNAIonElasticModel (const G4ParticleDefinition*,
     << G4endl;
   }
   
-  fParticleChangeForGamma = 0;
-  fpMolWaterDensity = 0;
-  fpTableData = 0;
+  fParticleChangeForGamma = nullptr;
+  fpMolWaterDensity = nullptr;
+  fpTableData = nullptr;
   fParticle_Mass = -1;
 
   // Selection of stationary mode
@@ -84,7 +84,7 @@ G4DNAIonElasticModel::G4DNAIonElasticModel (const G4ParticleDefinition*,
 G4DNAIonElasticModel::~G4DNAIonElasticModel ()
 {
   // For total cross section
-  if(fpTableData) delete fpTableData;
+  delete fpTableData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,7 +122,7 @@ G4DNAIonElasticModel::Initialise (
 
   const char *path = G4FindDataDir("G4LEDATA");
 
-  if (!path)
+  if (path == nullptr)
   {
     G4Exception("G4IonElasticModel::Initialise","em0006",
         FatalException,"G4LEDATA environment variable not set.");
@@ -143,9 +143,9 @@ G4DNAIonElasticModel::Initialise (
   G4String proton, hydrogen, helium, alphaplus, alphaplusplus;
 
   if (
-      (particleDefinition == protonDef && protonDef != 0)
+      (particleDefinition == protonDef && protonDef != nullptr)
       ||
-      (particleDefinition == hydrogenDef && hydrogenDef != 0)
+      (particleDefinition == hydrogenDef && hydrogenDef != nullptr)
   )
   {
     // For total cross section of p,h
@@ -157,11 +157,11 @@ G4DNAIonElasticModel::Initialise (
   }
 
   if (
-      (particleDefinition == instance->GetIon("helium") && heliumDef)
+      (particleDefinition == instance->GetIon("helium") && (heliumDef != nullptr))
       ||
-      (particleDefinition == instance->GetIon("alpha+") && alphaplusDef)
+      (particleDefinition == instance->GetIon("alpha+") && (alphaplusDef != nullptr))
       ||
-      (particleDefinition == instance->GetIon("alpha++") && alphaplusplusDef)
+      (particleDefinition == instance->GetIon("alpha++") && (alphaplusplusDef != nullptr))
   )
   {
     // For total cross section of he,he+,he++
@@ -267,7 +267,7 @@ G4DNAIonElasticModel::CrossSectionPerVolume (const G4Material* material,
     if (ekin < killBelowEnergy) return DBL_MAX;
     //
 
-    if (fpTableData != 0) 
+    if (fpTableData != nullptr) 
     {
       sigma = fpTableData->FindValue(ekin);
     }
@@ -385,19 +385,19 @@ G4DNAIonElasticModel::Theta (G4ParticleDefinition * /*particleDefinition*/,
   if (k==eTdummyVec.back()) k=k*(1.-1e-12);
   //
 
-  std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
+  auto t2 = std::upper_bound(eTdummyVec.begin(),
                                                       eTdummyVec.end(), k);
-  std::vector<G4double>::iterator t1 = t2 - 1;
+  auto t1 = t2 - 1;
 
-  std::vector<G4double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
+  auto e12 = std::upper_bound(eVecm[(*t1)].begin(),
                                                        eVecm[(*t1)].end(),
                                                        integrDiff);
-  std::vector<G4double>::iterator e11 = e12 - 1;
+  auto e11 = e12 - 1;
 
-  std::vector<G4double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
+  auto e22 = std::upper_bound(eVecm[(*t2)].begin(),
                                                        eVecm[(*t2)].end(),
                                                        integrDiff);
-  std::vector<G4double>::iterator e21 = e22 - 1;
+  auto e21 = e22 - 1;
 
   valueT1 = *t1;
   valueT2 = *t2;

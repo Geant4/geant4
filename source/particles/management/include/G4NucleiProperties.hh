@@ -38,55 +38,55 @@
 #ifndef G4NucleiProperties_hh
 #define G4NucleiProperties_hh 1
 
-#include "globals.hh"
 #include "G4ios.hh"
+#include "globals.hh"
 
 class G4NucleiProperties
 {
-  public: 
-
+  public:
     G4NucleiProperties() = default;
-   ~G4NucleiProperties() = default;
+    ~G4NucleiProperties() = default;
 
+    // Give mass of nucleus A,Z
     static G4double GetNuclearMass(const G4double A, const G4double Z);
     static G4double GetNuclearMass(const G4int A, const G4int Z);
-      // Give mass of nucleus A,Z
 
+    // Return 'true' if the nucleus is in the stable table
+    // (i.e. in G4NucleiPropertiesTable)
     static G4bool IsInStableTable(const G4double A, const G4double Z);
     static G4bool IsInStableTable(const G4int A, const G4int Z);
-      // Return 'true' if the nucleus is in the stable table 
-      // (i.e. in G4NucleiPropertiesTable)
 
+    // Give binding energy
     static G4double GetBindingEnergy(const G4int A, const G4int Z);
     static G4double GetBindingEnergy(const G4double A, const G4double Z);
-      // Give binding energy 
 
+    // Calculate Mass Excess of nucleus A,Z
     static G4double GetMassExcess(const G4int A, const G4int Z);
     static G4double GetMassExcess(const G4double A, const G4double Z);
-      // Calculate Mass Excess of nucleus A,Z
 
   private:
-
     // Hidden methods to enforce using GetNuclearMass
 
+    // Give mass of Atom A,Z
     static G4double GetAtomicMass(const G4double A, const G4double Z);
-      // Give mass of Atom A,Z
-  
+
     static G4double AtomicMass(G4double A, G4double Z);
-  
+
     static G4double NuclearMass(G4double A, G4double Z);
-  
+
     static G4double BindingEnergy(G4double A, G4double Z);
-  
+
     static G4double MassExcess(G4double A, G4double Z);
 
-  private: 
-
-    enum  {MaxZ = 120};
+  private:
+    enum
+    {
+      MaxZ = 120
+    };
+    // table of orbit electrons mass - binding energy
     static G4ThreadLocal G4double electronMass[MaxZ];
-      // table of orbit electrons mass - binding energy 
 
-    static G4ThreadLocal G4bool   isIntialized;
+    static G4ThreadLocal G4bool isIntialized;
     static G4ThreadLocal G4double mass_proton;
     static G4ThreadLocal G4double mass_neutron;
     static G4ThreadLocal G4double mass_deuteron;

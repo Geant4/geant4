@@ -84,11 +84,6 @@ ElectromagneticPhysics::ElectromagneticPhysics(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectromagneticPhysics::~ElectromagneticPhysics()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ElectromagneticPhysics::ConstructProcess()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();

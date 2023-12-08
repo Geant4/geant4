@@ -43,9 +43,6 @@ OpNoviceRunAction::OpNoviceRunAction(OpNovicePrimaryGeneratorAction* prim)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceRunAction::~OpNoviceRunAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Run* OpNoviceRunAction::GenerateRun()
 {
   fRun = new OpNoviceRun();

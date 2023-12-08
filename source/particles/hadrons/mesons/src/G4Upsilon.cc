@@ -23,45 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-// 
+//
 
 #include "G4Upsilon.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                             Upsilon                            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Upsilon* G4Upsilon::theInstance = nullptr;
 
 G4Upsilon* G4Upsilon::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "Upsilon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,     9.46030*GeV,     54.00*keV,          0.,
                     2,              -1,            -1,
@@ -69,19 +64,18 @@ G4Upsilon* G4Upsilon::Definition()
               "meson",               0,             0,         553,
                 false,          0.0*ns,          nullptr,
                 false,       "Upsilon",           553);
+    // clang-format on
   }
   theInstance = static_cast<G4Upsilon*>(anInstance);
   return theInstance;
 }
 
-G4Upsilon*  G4Upsilon::UpsilonDefinition()
+G4Upsilon* G4Upsilon::UpsilonDefinition()
 {
   return Definition();
 }
 
-G4Upsilon*  G4Upsilon::Upsilon()
+G4Upsilon* G4Upsilon::Upsilon()
 {
   return Definition();
 }
-
-

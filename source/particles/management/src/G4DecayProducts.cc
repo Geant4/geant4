@@ -28,17 +28,17 @@
 // Author: H.Kurashige, 12 July 1996
 // ------------------------------------------------------------
 
-#include "G4ios.hh"
-#include "globals.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 
-#include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
+#include "G4LorentzVector.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 G4DecayProducts::G4DecayProducts()
-{ 
+{
   theProductVector = new G4DecayProductVector();
 }
 
@@ -48,30 +48,27 @@ G4DecayProducts::G4DecayProducts(const G4DynamicParticle& aParticle)
   theProductVector = new G4DecayProductVector();
 }
 
-G4DecayProducts::G4DecayProducts(const G4DecayProducts& right) 
+G4DecayProducts::G4DecayProducts(const G4DecayProducts& right)
 {
   theProductVector = new G4DecayProductVector();
 
   // copy parent (Deep Copy)
   theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
-  //copy daughters (Deep Copy)
-  for (G4int index=0; index<right.numberOfProducts; ++index)
-  {
+  // copy daughters (Deep Copy)
+  for (G4int index = 0; index < right.numberOfProducts; ++index) {
     G4DynamicParticle* daughter = right.theProductVector->at(index);
-    auto  pDaughter =  new G4DynamicParticle(*daughter);
+    auto pDaughter = new G4DynamicParticle(*daughter);
 
     G4double properTime = daughter->GetPreAssignedDecayProperTime();
-    if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
+    if (properTime > 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
 
-    const G4DecayProducts* pPreAssigned
-      = daughter->GetPreAssignedDecayProducts();
-    if (pPreAssigned != nullptr)
-    {
-      auto  pPA = new G4DecayProducts(*pPreAssigned);
+    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+    if (pPreAssigned != nullptr) {
+      auto pPA = new G4DecayProducts(*pPreAssigned);
       pDaughter->SetPreAssignedDecayProducts(pPA);
     }
-    theProductVector->push_back( pDaughter );
+    theProductVector->push_back(pDaughter);
   }
   numberOfProducts = right.numberOfProducts;
 }
@@ -80,37 +77,32 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
 {
   G4int index;
 
-  if (this != &right)
-  { 
+  if (this != &right) {
     // recreate parent
     delete theParentParticle;
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
-    for (index=0; index<numberOfProducts; ++index)
-    {
+    for (index = 0; index < numberOfProducts; ++index) {
       delete theProductVector->at(index);
     }
     theProductVector->clear();
 
-    //copy daughters (Deep Copy)
-    for (index=0; index<right.numberOfProducts; ++index)
-    {
+    // copy daughters (Deep Copy)
+    for (index = 0; index < right.numberOfProducts; ++index) {
       G4DynamicParticle* daughter = right.theProductVector->at(index);
-      auto  pDaughter =  new G4DynamicParticle(*daughter);
+      auto pDaughter = new G4DynamicParticle(*daughter);
 
       G4double properTime = daughter->GetPreAssignedDecayProperTime();
-      if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
-      
-      const G4DecayProducts* pPreAssigned
-        = daughter->GetPreAssignedDecayProducts();
-      if (pPreAssigned != nullptr)
-      {
-        auto  pPA = new G4DecayProducts(*pPreAssigned);
+      if (properTime > 0.0) pDaughter->SetPreAssignedDecayProperTime(properTime);
+
+      const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+      if (pPreAssigned != nullptr) {
+        auto pPA = new G4DecayProducts(*pPreAssigned);
         pDaughter->SetPreAssignedDecayProducts(pPA);
       }
-      theProductVector->push_back( pDaughter );
-    } 
+      theProductVector->push_back(pDaughter);
+    }
     numberOfProducts = right.numberOfProducts;
   }
   return *this;
@@ -118,51 +110,46 @@ G4DecayProducts& G4DecayProducts::operator=(const G4DecayProducts& right)
 
 G4DecayProducts::~G4DecayProducts()
 {
-  //delete parent
+  // delete parent
   delete theParentParticle;
   theParentParticle = nullptr;
 
   // delete G4DynamicParticle object
-  for (G4int index=0; index<numberOfProducts; ++index)
-  {
+  for (G4int index = 0; index < numberOfProducts; ++index) {
     delete theProductVector->at(index);
   }
   theProductVector->clear();
-  numberOfProducts = 0;    
+  numberOfProducts = 0;
   delete theProductVector;
   theProductVector = nullptr;
 }
 
 G4DynamicParticle* G4DecayProducts::PopProducts()
 {
-  if ( numberOfProducts >0 )
-  {
-    numberOfProducts -= 1;   
+  if (numberOfProducts > 0) {
+    numberOfProducts -= 1;
     G4DynamicParticle* part = theProductVector->back();
     theProductVector->pop_back();
     return part;
   }
-  
-      return nullptr;
- 
+
+  return nullptr;
 }
 
 G4int G4DecayProducts::PushProducts(G4DynamicParticle* aParticle)
 {
   theProductVector->push_back(aParticle);
-  numberOfProducts += 1; 
+  numberOfProducts += 1;
   return numberOfProducts;
 }
 
 G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
 {
-  if ((numberOfProducts > anIndex) && (anIndex >=0) )
-  {
-    return  theProductVector->at(anIndex);
+  if ((numberOfProducts > anIndex) && (anIndex >= 0)) {
+    return theProductVector->at(anIndex);
   }
-  
-      return nullptr;
- 
+
+  return nullptr;
 }
 
 void G4DecayProducts::SetParentParticle(const G4DynamicParticle& aParticle)
@@ -171,66 +158,57 @@ void G4DecayProducts::SetParentParticle(const G4DynamicParticle& aParticle)
   theParentParticle = new G4DynamicParticle(aParticle);
 }
 
-
-void G4DecayProducts::Boost(G4double totalEnergy,
-                            const G4ThreeVector& momentumDirection)
+void G4DecayProducts::Boost(G4double totalEnergy, const G4ThreeVector& momentumDirection)
 {
   // calculate new beta
   G4double mass = theParentParticle->GetMass();
   G4double totalMomentum(0);
-  if ( totalEnergy > mass )
-  {
-    totalMomentum  = std::sqrt( (totalEnergy - mass)*(totalEnergy + mass) );
+  if (totalEnergy > mass) {
+    totalMomentum = std::sqrt((totalEnergy - mass) * (totalEnergy + mass));
   }
-  G4double betax = momentumDirection.x()*totalMomentum/totalEnergy;  
-  G4double betay = momentumDirection.y()*totalMomentum/totalEnergy;  
-  G4double betaz = momentumDirection.z()*totalMomentum/totalEnergy;  
+  G4double betax = momentumDirection.x() * totalMomentum / totalEnergy;
+  G4double betay = momentumDirection.y() * totalMomentum / totalEnergy;
+  G4double betaz = momentumDirection.z() * totalMomentum / totalEnergy;
   Boost(betax, betay, betaz);
 }
 
-void G4DecayProducts::Boost(G4double newbetax,
-                            G4double newbetay,
-                            G4double newbetaz)
-{ 
+void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbetaz)
+{
   G4double mass = theParentParticle->GetMass();
-  G4double energy  = theParentParticle->GetTotalEnergy();
-  G4double momentum  = 0.0;
+  G4double energy = theParentParticle->GetTotalEnergy();
+  G4double momentum = 0.0;
 
-  G4ThreeVector direction(0.0,0.0,1.0);    
+  G4ThreeVector direction(0.0, 0.0, 1.0);
   G4LorentzVector p4;
 
-  if (energy - mass > DBL_MIN)
-  {
+  if (energy - mass > DBL_MIN) {
     // calcurate  beta of initial state
-    momentum  = theParentParticle->GetTotalMomentum();
+    momentum = theParentParticle->GetTotalMomentum();
     direction = theParentParticle->GetMomentumDirection();
-    G4double betax = -1.0*direction.x()*momentum/energy;  
-    G4double betay = -1.0*direction.y()*momentum/energy;  
-    G4double betaz = -1.0*direction.z()*momentum/energy;  
-    
-    for (G4int index=0; index<numberOfProducts; ++index)
-    {
+    G4double betax = -1.0 * direction.x() * momentum / energy;
+    G4double betay = -1.0 * direction.y() * momentum / energy;
+    G4double betaz = -1.0 * direction.z() * momentum / energy;
+
+    for (G4int index = 0; index < numberOfProducts; ++index) {
       // make G4LorentzVector for secondaries
       p4 = (theProductVector->at(index))->Get4Momentum();
 
-      // boost secondaries to theParentParticle's rest frame 
+      // boost secondaries to theParentParticle's rest frame
       p4.boost(betax, betay, betaz);
 
-      // boost secondaries to  new frame 
+      // boost secondaries to  new frame
       p4.boost(newbetax, newbetay, newbetaz);
 
       // change energy/momentum
       (theProductVector->at(index))->Set4Momentum(p4);
     }
   }
-  else
-  {
-    for (G4int index=0; index<numberOfProducts; ++index)
-    {
+  else {
+    for (G4int index = 0; index < numberOfProducts; ++index) {
       // make G4LorentzVector for secondaries
       p4 = (theProductVector->at(index))->Get4Momentum();
 
-      // boost secondaries to  new frame 
+      // boost secondaries to  new frame
       p4.boost(newbetax, newbetay, newbetaz);
 
       // change energy/momentum
@@ -240,9 +218,9 @@ void G4DecayProducts::Boost(G4double newbetax,
 
   // make G4LorentzVector for parent in its rest frame
   mass = theParentParticle->GetMass();
-  G4LorentzVector parent4( 0.0, 0.0, 0.0, mass);
+  G4LorentzVector parent4(0.0, 0.0, 0.0, mass);
 
-  // boost parent to new frame 
+  // boost parent to new frame
   parent4.boost(newbetax, newbetay, newbetaz);
 
   // change energy/momentum
@@ -253,23 +231,21 @@ G4bool G4DecayProducts::IsChecked() const
 {
   G4bool returnValue = true;
 
-  // check parent 
+  // check parent
   // energy/momentum
-  G4double parent_energy  = theParentParticle->GetTotalEnergy();
+  G4double parent_energy = theParentParticle->GetTotalEnergy();
   G4ThreeVector direction = theParentParticle->GetMomentumDirection();
-  G4ThreeVector parent_momentum
-    = direction*(theParentParticle->GetTotalMomentum());
+  G4ThreeVector parent_momentum = direction * (theParentParticle->GetTotalMomentum());
 
   // check momentum direction is a unit vector
-  if ((parent_momentum.mag() >0.0) && (std::fabs(direction.mag()-1.0) >1.0e-6))
-  {
+  if ((parent_momentum.mag() > 0.0) && (std::fabs(direction.mag() - 1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
     G4cout << "G4DecayProducts::IsChecked()::  "
            << " Momentum Direction Vector of Parent is not normalized "
            << "  (=" << direction.mag() << ")" << G4endl;
 #endif
     returnValue = false;
-    parent_momentum = parent_momentum * (1./direction.mag());
+    parent_momentum = parent_momentum * (1. / direction.mag());
   }
 
   // daughters
@@ -278,51 +254,44 @@ G4bool G4DecayProducts::IsChecked() const
   G4double total_energy = parent_energy;
   G4ThreeVector total_momentum = parent_momentum;
 
-  for (G4int index=0; index < numberOfProducts; ++index)
-  {
+  for (G4int index = 0; index < numberOfProducts; ++index) {
     G4DynamicParticle* part = theProductVector->at(index);
     mass = part->GetMass();
     energy = part->GetTotalEnergy();
     direction = part->GetMomentumDirection();
-    momentum = direction*(part->GetTotalMomentum());
+    momentum = direction * (part->GetTotalMomentum());
 
     // check momentum direction is a unit vector
-    if ( (momentum.mag()>0.0) && (std::fabs(direction.mag()-1.0) > 1.0e-6))
-    {
+    if ((momentum.mag() > 0.0) && (std::fabs(direction.mag() - 1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
-      G4cout <<  "G4DecayProducts::IsChecked()::  "
+      G4cout << "G4DecayProducts::IsChecked()::  "
              << " Momentum Direction Vector of Daughter [" << index
              << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
 #endif
       returnValue = false;
-      momentum = momentum * (1./direction.mag());
+      momentum = momentum * (1. / direction.mag());
     }
     // whether daughter stops or not
-    if (energy - mass < DBL_MIN )
-    {
+    if (energy - mass < DBL_MIN) {
 #ifdef G4VERBOSE
-      G4cout <<  "G4DecayProducts::IsChecked()::  "
-             << "  Daughter [" << index << "] has no kinetic energy "<< G4endl;
+      G4cout << "G4DecayProducts::IsChecked()::  "
+             << "  Daughter [" << index << "] has no kinetic energy " << G4endl;
 #endif
       returnValue = false;
     }
-    total_energy -= energy; 
+    total_energy -= energy;
     total_momentum -= momentum;
   }
   // check energy/momentum conservation
-  if ( (std::fabs(total_energy) >1.0e-9*MeV)
-    || (total_momentum.mag() >1.0e-9*MeV ) )
-  { 
+  if ((std::fabs(total_energy) > 1.0e-9 * MeV) || (total_momentum.mag() > 1.0e-9 * MeV)) {
 #ifdef G4VERBOSE
-    G4cout <<  "G4DecayProducts::IsChecked()::  "
-           << " Energy/Momentum is not conserved   "<< G4endl;
-    G4cout << " difference between parent energy & sum of daughters energy: "
-           << total_energy /MeV << "[MeV]  " << G4endl;
+    G4cout << "G4DecayProducts::IsChecked()::  "
+           << " Energy/Momentum is not conserved   " << G4endl;
+    G4cout << " difference between parent energy & sum of daughters energy: " << total_energy / MeV
+           << "[MeV]  " << G4endl;
     G4cout << " difference between parent momentum & sum of daughters momentum: "
-           << " x:" << total_momentum.getX()/MeV
-           << " y:" << total_momentum.getY()/MeV
-           << " z:" << total_momentum.getZ()/MeV
-           << G4endl;
+           << " x:" << total_momentum.getX() / MeV << " y:" << total_momentum.getY() / MeV
+           << " z:" << total_momentum.getZ() / MeV << G4endl;
 #endif
     returnValue = false;
   }
@@ -331,15 +300,14 @@ G4bool G4DecayProducts::IsChecked() const
 
 void G4DecayProducts::DumpInfo() const
 {
-   G4cout << " ----- List of DecayProducts  -----" << G4endl;
-   G4cout << " ------ Parent Particle ----------" << G4endl;
-   if (theParentParticle != nullptr) theParentParticle->DumpInfo();
-   G4cout << " ------ Daughter Particles  ------" << G4endl;  
-   for (G4int index=0; index<numberOfProducts; ++index)
-   {
-     G4cout << " ----------" << index+1 << " -------------" << G4endl;  
-     (theProductVector->at(index))-> DumpInfo();
-   }
-   G4cout << " ----- End List of DecayProducts  -----" << G4endl;
-   G4cout << G4endl;
-} 
+  G4cout << " ----- List of DecayProducts  -----" << G4endl;
+  G4cout << " ------ Parent Particle ----------" << G4endl;
+  if (theParentParticle != nullptr) theParentParticle->DumpInfo();
+  G4cout << " ------ Daughter Particles  ------" << G4endl;
+  for (G4int index = 0; index < numberOfProducts; ++index) {
+    G4cout << " ----------" << index + 1 << " -------------" << G4endl;
+    (theProductVector->at(index))->DumpInfo();
+  }
+  G4cout << " ----- End List of DecayProducts  -----" << G4endl;
+  G4cout << G4endl;
+}

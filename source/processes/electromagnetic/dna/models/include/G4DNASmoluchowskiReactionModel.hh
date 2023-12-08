@@ -64,23 +64,23 @@ class G4DNASmoluchowskiReactionModel : public G4VDNAReactionModel
 {
 public :
     G4DNASmoluchowskiReactionModel();
-    virtual ~G4DNASmoluchowskiReactionModel();
+    ~G4DNASmoluchowskiReactionModel() override;
 
     G4DNASmoluchowskiReactionModel(const G4DNASmoluchowskiReactionModel&) = delete;
     G4DNASmoluchowskiReactionModel& operator=(const G4DNASmoluchowskiReactionModel&) = delete;
 
-    virtual void Initialise(const G4MolecularConfiguration*, const G4Track&) ;
-    virtual void InitialiseToPrint(const G4MolecularConfiguration*) ;
-    virtual G4double GetReactionRadius(const G4MolecularConfiguration*,
-                                       const G4MolecularConfiguration*);
-    virtual G4double GetReactionRadius(const G4int&);
+    void Initialise(const G4MolecularConfiguration*, const G4Track&) override ;
+    void InitialiseToPrint(const G4MolecularConfiguration*) override ;
+    G4double GetReactionRadius(const G4MolecularConfiguration*,
+                                       const G4MolecularConfiguration*) override;
+    G4double GetReactionRadius(const G4int&) override;
 
-    virtual G4bool FindReaction(const G4Track&,
+    G4bool FindReaction(const G4Track&,
                                 const G4Track&,
                                 G4double /*reactionRadius*/,
                                 G4double& /*separationDistance*/,
-                                G4bool /*alongStepInteraction*/) ;
+                                G4bool /*alongStepInteraction*/) override ;
 
 private :
-    const std::vector<const G4DNAMolecularReactionData*>* fpReactionData ;
+    const std::vector<const G4DNAMolecularReactionData*>* fpReactionData{nullptr} ;
 };

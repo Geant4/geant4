@@ -44,23 +44,23 @@ class F04Materials
     static F04Materials* GetInstance();
 
     G4Material* GetMaterial(G4String);
- 
+
   private:
- 
+
     F04Materials();
- 
+
     void CreateMaterials();
 
   private:
 
   static F04Materials* fInstance;
 
-  G4NistManager*     fNistMan;
+  G4NistManager*     fNistMan = nullptr;
 
-  G4Material*        fVacuum;
-  G4Material*        fAir;
-  G4Material*        fSci;
-  G4Material*        fBeO;
+  G4Material*        fVacuum = nullptr;
+  G4Material*        fAir = nullptr;
+  G4Material*        fSci = nullptr;
+  G4Material*        fBeO = nullptr;
 
 };
 

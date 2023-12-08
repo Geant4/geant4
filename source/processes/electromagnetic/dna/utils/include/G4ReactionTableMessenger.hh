@@ -46,8 +46,8 @@ class G4ReactionTableMessenger : public G4UImessenger
 {
 public:
   G4ReactionTableMessenger(G4DNAMolecularReactionTable*);
-  virtual ~G4ReactionTableMessenger();
-  virtual void SetNewValue(G4UIcommand * command,G4String newValue);
+  ~G4ReactionTableMessenger() override;
+  void SetNewValue(G4UIcommand * command,G4String newValue) override;
 
 protected:
   G4DNAMolecularReactionTable* fpTable;

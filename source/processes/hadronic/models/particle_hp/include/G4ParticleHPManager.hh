@@ -23,17 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// P. Arce, June-2014 Conversion neutron_hp to particle_hp
-//
+
 #ifndef G4ParticleHPManager_h
 #define G4ParticleHPManager_h 1
 
-// Class Description
-// Manager of NeutronHP
-// Class Description - End
-
 // 121031 First implementation done by T. Koi (SLAC/PPA)
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 //
 #include "G4ParticleHPReactionWhiteBoard.hh"
 #include "globals.hh"
@@ -54,34 +50,35 @@ class G4ParticleHPManager
 {
   public:
     static G4ParticleHPManager* GetInstance();
-
-  private:
-    G4ParticleHPManager();
-    G4ParticleHPManager(const G4ParticleHPManager&){};
     ~G4ParticleHPManager();
-    static G4ParticleHPManager* instance;
 
-  public:
     G4ParticleHPReactionWhiteBoard* GetReactionWhiteBoard();
     void OpenReactionWhiteBoard();
-    // void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
     void CloseReactionWhiteBoard();
 
-    void GetDataStream(G4String, std::istringstream& iss);
-    void GetDataStream2(G4String, std::istringstream& iss);
+    void GetDataStream(const G4String&, std::istringstream& iss);
+    void GetDataStream2(const G4String&, std::istringstream& iss);
     void SetVerboseLevel(G4int i);
-    G4int GetVerboseLevel() { return verboseLevel; };
+    G4int GetVerboseLevel() const { return verboseLevel; };
 
     void DumpDataSource();
 
-    G4bool GetUseOnlyPhotoEvaporation() { return USE_ONLY_PHOTONEVAPORATION; };
-    G4bool GetSkipMissingIsotopes() { return SKIP_MISSING_ISOTOPES; };
-    G4bool GetNeglectDoppler() { return NEGLECT_DOPPLER; };
-    G4bool GetDoNotAdjustFinalState() { return DO_NOT_ADJUST_FINAL_STATE; };
-    G4bool GetProduceFissionFragments() { return PRODUCE_FISSION_FRAGMENTS; };
-    G4bool GetUseWendtFissionModel() { return USE_WENDT_FISSION_MODEL; };
-    G4bool GetUseNRESP71Model() { return USE_NRESP71_MODEL; };
-    G4bool GetUseDBRC() { return USE_DBRC; };
+    G4bool GetUseOnlyPhotoEvaporation() const { return USE_ONLY_PHOTONEVAPORATION; };
+    G4bool GetSkipMissingIsotopes() const { return SKIP_MISSING_ISOTOPES; };
+    G4bool GetNeglectDoppler() const { return NEGLECT_DOPPLER; };
+    G4bool GetDoNotAdjustFinalState() const { return DO_NOT_ADJUST_FINAL_STATE; };
+    G4bool GetProduceFissionFragments() const { return PRODUCE_FISSION_FRAGMENTS; };
+    G4bool GetUseWendtFissionModel() const { return USE_WENDT_FISSION_MODEL; };
+    G4bool GetUseNRESP71Model() const { return USE_NRESP71_MODEL; };
+    G4bool GetUseDBRC() const { return USE_DBRC; };
+    G4bool GetCheckHPNames() const { return CHECK_HP_NAMES; };
+    G4bool GetPHPCheck() const { return PHP_CHECK; };
+    G4bool GetPHCUsePoisson() const { return PHP_USE_POISSON; };
+    G4bool GetDEBUG() const { return DEBUG; };
+
+    const G4String& GetNeutronHPPath() const { return fDataPath[0]; }; 
+    const G4String& GetParticleHPPath(const G4ParticleDefinition*) const;
+    G4int GetPHPIndex(const G4ParticleDefinition*) const;
 
     void SetUseOnlyPhotoEvaporation(G4bool val) { USE_ONLY_PHOTONEVAPORATION = val; };
     void SetSkipMissingIsotopes(G4bool val) { SKIP_MISSING_ISOTOPES = val; };
@@ -90,7 +87,7 @@ class G4ParticleHPManager
     void SetProduceFissionFragments(G4bool val)
     {
       // Make sure both fission fragment models are not active at same time
-      USE_WENDT_FISSION_MODEL ? PRODUCE_FISSION_FRAGMENTS = false : PRODUCE_FISSION_FRAGMENTS = val;
+      PRODUCE_FISSION_FRAGMENTS = USE_WENDT_FISSION_MODEL ? false : val;
     };
     void SetUseWendtFissionModel(G4bool val)
     {
@@ -101,38 +98,53 @@ class G4ParticleHPManager
     void SetUseNRESP71Model(G4bool val) { USE_NRESP71_MODEL = val; };
     void SetUseDBRC(G4bool val) { USE_DBRC = val; };
 
-    void DumpSetting();  // Needs to be called somewhere to print out information once per run.
+    void DumpSetting();
 
     void RegisterElasticCrossSections(G4PhysicsTable* val) { theElasticCrossSections = val; };
-    G4PhysicsTable* GetElasticCrossSections() { return theElasticCrossSections; };
+    G4PhysicsTable* GetElasticCrossSections() const { return theElasticCrossSections; };
     void RegisterCaptureCrossSections(G4PhysicsTable* val) { theCaptureCrossSections = val; };
-    G4PhysicsTable* GetCaptureCrossSections() { return theCaptureCrossSections; };
-    void RegisterInelasticCrossSections(const G4ParticleDefinition*, G4PhysicsTable*);
-    G4PhysicsTable* GetInelasticCrossSections(const G4ParticleDefinition*);
+    G4PhysicsTable* GetCaptureCrossSections() const { return theCaptureCrossSections; };
+    void RegisterInelasticCrossSections(const G4ParticleDefinition* part, G4PhysicsTable* ptr)
+    {
+      theInelasticCrossSections[GetPHPIndex(part)] = ptr;
+    };
+    G4PhysicsTable* GetInelasticCrossSections(const G4ParticleDefinition* part) const
+    {
+      return theInelasticCrossSections[GetPHPIndex(part)];
+    };
     void RegisterFissionCrossSections(G4PhysicsTable* val) { theFissionCrossSections = val; };
-    G4PhysicsTable* GetFissionCrossSections() { return theFissionCrossSections; };
+    G4PhysicsTable* GetFissionCrossSections() const { return theFissionCrossSections; };
 
-    std::vector<G4ParticleHPChannel*>* GetElasticFinalStates() { return theElasticFSs; };
+    std::vector<G4ParticleHPChannel*>* GetElasticFinalStates() const { return theElasticFSs; };
     void RegisterElasticFinalStates(std::vector<G4ParticleHPChannel*>* val)
     {
       theElasticFSs = val;
     };
-    std::vector<G4ParticleHPChannelList*>* GetInelasticFinalStates(const G4ParticleDefinition*);
-    void RegisterInelasticFinalStates(const G4ParticleDefinition*,
-                                      std::vector<G4ParticleHPChannelList*>*);
-    std::vector<G4ParticleHPChannel*>* GetCaptureFinalStates() { return theCaptureFSs; };
+
+    std::vector<G4ParticleHPChannelList*>*
+    GetInelasticFinalStates(const G4ParticleDefinition* part) const
+    {
+      return theInelasticFSs[GetPHPIndex(part)];
+    };
+    void RegisterInelasticFinalStates(const G4ParticleDefinition* part,
+                                      std::vector<G4ParticleHPChannelList*>* ptr)
+    {
+      theInelasticFSs[GetPHPIndex(part)] = ptr;
+    };
+
+    std::vector<G4ParticleHPChannel*>* GetCaptureFinalStates() const { return theCaptureFSs; };
     void RegisterCaptureFinalStates(std::vector<G4ParticleHPChannel*>* val)
     {
       theCaptureFSs = val;
     };
-    std::vector<G4ParticleHPChannel*>* GetFissionFinalStates() { return theFissionFSs; };
+    std::vector<G4ParticleHPChannel*>* GetFissionFinalStates() const { return theFissionFSs; };
     void RegisterFissionFinalStates(std::vector<G4ParticleHPChannel*>* val)
     {
       theFissionFSs = val;
     };
 
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>*
-    GetThermalScatteringCoherentCrossSections()
+    GetThermalScatteringCoherentCrossSections() const
     {
       return theTSCoherentCrossSections;
     };
@@ -142,7 +154,7 @@ class G4ParticleHPManager
       theTSCoherentCrossSections = val;
     };
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>*
-    GetThermalScatteringIncoherentCrossSections()
+    GetThermalScatteringIncoherentCrossSections() const
     {
       return theTSIncoherentCrossSections;
     };
@@ -152,7 +164,7 @@ class G4ParticleHPManager
       theTSIncoherentCrossSections = val;
     };
     std::map<G4int, std::map<G4double, G4ParticleHPVector*>*>*
-    GetThermalScatteringInelasticCrossSections()
+    GetThermalScatteringInelasticCrossSections() const
     {
       return theTSInelasticCrossSections;
     };
@@ -163,7 +175,7 @@ class G4ParticleHPManager
     };
 
     std::map<G4int, std::map<G4double, std::vector<std::pair<G4double, G4double>*>*>*>*
-    GetThermalScatteringCoherentFinalStates()
+    GetThermalScatteringCoherentFinalStates() const
     {
       return theTSCoherentFinalStates;
     };
@@ -173,7 +185,7 @@ class G4ParticleHPManager
       theTSCoherentFinalStates = val;
     };
     std::map<G4int, std::map<G4double, std::vector<E_isoAng*>*>*>*
-    GetThermalScatteringIncoherentFinalStates()
+    GetThermalScatteringIncoherentFinalStates() const
     {
       return theTSIncoherentFinalStates;
     };
@@ -183,7 +195,7 @@ class G4ParticleHPManager
       theTSIncoherentFinalStates = val;
     };
     std::map<G4int, std::map<G4double, std::vector<E_P_E_isoAng*>*>*>*
-    GetThermalScatteringInelasticFinalStates()
+    GetThermalScatteringInelasticFinalStates() const
     {
       return theTSInelasticFinalStates;
     };
@@ -193,18 +205,26 @@ class G4ParticleHPManager
       theTSInelasticFinalStates = val;
     };
 
-    G4double GetMinADBRC() { return theMinADBRC; };
-    G4double GetMinEnergyDBRC() { return theMinEnergyDBRC; };
-    G4double GetMaxEnergyDBRC() { return theMaxEnergyDBRC; };
+    G4double GetMinADBRC() const { return theMinADBRC; };
+    G4double GetMinEnergyDBRC() const { return theMinEnergyDBRC; };
+    G4double GetMaxEnergyDBRC() const { return theMaxEnergyDBRC; };
+    G4double GetMaxEnergyDoppler() const { return theMaxEnergyDoppler; };
 
     void SetMinADBRC(G4double val) { theMinADBRC = val; };
     void SetMinEnergyDBRC(G4double val) { theMinEnergyDBRC = val; };
     void SetMaxEnergyDBRC(G4double val) { theMaxEnergyDBRC = val; };
+    void SetMaxEnergyDoppler(G4double val) { theMaxEnergyDoppler = val; };
+
+    G4ParticleHPManager(G4ParticleHPManager &) = delete;
+    G4ParticleHPManager & operator=(const G4ParticleHPManager &right) = delete;
 
   private:
-    void register_data_file(G4String, G4String);
+    G4ParticleHPManager();
+    void register_data_file(const G4String&, const G4String&);
+
+    static G4ParticleHPManager* instance;
+
     std::map<G4String, G4String> mDataEvaluation;
-    /*G4ParticleHPReactionWhiteBoard* RWB;*/
 
     G4int verboseLevel{1};
 
@@ -217,14 +237,19 @@ class G4ParticleHPManager
     G4bool USE_WENDT_FISSION_MODEL{false};
     G4bool USE_NRESP71_MODEL{false};
     G4bool USE_DBRC{false};
+    G4bool CHECK_HP_NAMES{false};
+    G4bool PHP_CHECK{true};
+    G4bool PHP_USE_POISSON{false};
+    G4bool DEBUG{false};
+    G4bool isPrinted{false};
 
     G4PhysicsTable* theElasticCrossSections{nullptr};
     G4PhysicsTable* theCaptureCrossSections{nullptr};
-    std::map<const G4ParticleDefinition*, G4PhysicsTable*> theInelasticCrossSections;
+    G4PhysicsTable* theInelasticCrossSections[6]{nullptr};
     G4PhysicsTable* theFissionCrossSections{nullptr};
 
     std::vector<G4ParticleHPChannel*>* theElasticFSs{nullptr};
-    std::map<const G4ParticleDefinition*, std::vector<G4ParticleHPChannelList*>*> theInelasticFSs;
+    std::vector<G4ParticleHPChannelList*>* theInelasticFSs[6]{nullptr};
     std::vector<G4ParticleHPChannel*>* theCaptureFSs{nullptr};
     std::vector<G4ParticleHPChannel*>* theFissionFSs{nullptr};
 
@@ -243,5 +268,8 @@ class G4ParticleHPManager
     G4double theMinADBRC{200.};
     G4double theMinEnergyDBRC;
     G4double theMaxEnergyDBRC;
+    G4double theMaxEnergyDoppler;
+
+    G4String fDataPath[6]{""};
 };
 #endif

@@ -47,7 +47,11 @@
      
        /run/beamOn
      
- 
+   D - BATCH
+     Use the macro batch.in :
+     
+       ./FissionFragment batch.in
+
  2 - GEOMETRY
 	
    The geometry is constructed in the FFDetectorConstruction class. The setup is

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(UHDR)
 
 #----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ target_link_libraries(UHDR ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(UHDR_SCRIPTS
-    beam.in plotG_time.C pulseShape.dat
+    beam.in UHDR.in plotG_time.C pulseShape.dat
   )
 
 foreach(_script ${UHDR_SCRIPTS})

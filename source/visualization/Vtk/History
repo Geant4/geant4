@@ -6,6 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023--07 Stewart Boogert (visVtk-V11-01-15)
+- Fixed missing circles in rendering (introduced in visVTK-V11-01-13)
+
+## 2023-11-03 Ben Morgan (visVTK-V11-01-14)
+- Add missing dependencies on internal modules
+- Remove files no longer being built
+
+## 2023-10-27 Stewart Boogert (vtkVtk-V11-01-13)
+- Fixed gcc shadow warnings
+
+## 2023-09-27 Stewart Boogert (visVtk-V11-01-12)
+- Updated VTK viewer
+  - Added off screen rendering
+  - Fixed bug which locked UI interaction with VtkNative viewer
+  - Many 3D output formats working including GLTF, PLY, OBJ, VRML
+  - Remove cuboid offset present in rectilinear scoring meshes (caused an explosion of draw calls)
+  - Fixed spherical marker size
+  - Added a VTK example to highlight capabilities
+
+## 2023-08-18 John Allison (visVtk-V11-01-11)
+- G4VtkQt:
+  - Simplify IsUISessionCompatible.
+    - Cosmetic improvement to align with Vtk economical coding style.
+
+## 2023-08-14 John Allison (visVtk-V11-01-10)
+- G4VtkQt:
+  - Simplify IsUISessionCompatible.
+    - Exploit new method, G4UImanager::GetBaseSession (intercoms-V11-01-07).
+
 ## 2023-05-23 Gabriele Cosmo (visVtk-V11-01-09)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode>=14.1.
 

@@ -666,7 +666,7 @@ G4double G4SPSAngDistribution::GenerateUserDefTheta()
     //
     G4double bins[1024],vals[1024], sum;
     G4int ii;
-    G4int maxbin = G4int(UDefThetaH.GetVectorLength());
+    auto  maxbin = G4int(UDefThetaH.GetVectorLength());
     bins[0] = UDefThetaH.GetLowEdgeEnergy(std::size_t(0));
     vals[0] = UDefThetaH(std::size_t(0));
     sum = vals[0];
@@ -713,7 +713,7 @@ G4double G4SPSAngDistribution::GenerateUserDefPhi()
     //
     G4double bins[1024],vals[1024], sum;
     G4int ii;
-    G4int maxbin = G4int(UDefPhiH.GetVectorLength());
+    auto  maxbin = G4int(UDefPhiH.GetVectorLength());
     bins[0] = UDefPhiH.GetLowEdgeEnergy(std::size_t(0));
     vals[0] = UDefPhiH(std::size_t(0));
     sum = vals[0];

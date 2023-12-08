@@ -23,26 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 #ifndef G4ShortLivedConstructor_h
 #define G4ShortLivedConstructor_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4Types.hh"
 
 class G4ShortLivedConstructor
 {
-  //This class is a utility class for construction 
-  //short lived particles
+    // This class is a utility class for construction
+    // short lived particles
 
   public:
     static void ConstructParticle();
- 
+
   protected:
     static void ConstructResonances();
     static void ConstructBaryons();
@@ -51,19 +47,8 @@ class G4ShortLivedConstructor
     static void ConstructAntiNuclei();
 
   private:
-    static G4bool isConstructed;
     // flag for checking whether resonces exist or not
+    static G4bool isConstructed;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

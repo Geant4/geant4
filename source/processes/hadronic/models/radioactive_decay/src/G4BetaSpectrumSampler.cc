@@ -35,64 +35,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4BetaSpectrumSampler.hh"
+#include "Randomize.hh"
 
-G4BetaSpectrumSampler::
-G4BetaSpectrumSampler(const G4double* aPDF, G4int pdfSize, G4double e)
+G4double G4BetaSpectrumSampler::shoot(const G4int npoints, const G4double* aCDF,
+                                      const G4double estep)
 {
-  pdf.resize(pdfSize);
-  nBins = pdfSize-1;
-  cdf.resize(nBins);
-  eEnd = e;
-
-  lowerBinEdge = 0;
-  upperBinEdge = 1;
-
-  for (G4int i = 0; i < pdfSize; i++) pdf[i] = aPDF[i];
-
-  // Caclulate binwise CDF using trapezoidal integration
-  G4double sum = pdf[0]/2.;
-  for (G4int i = 1; i < pdfSize; i++) {
-    sum += pdf[i];
-    cdf[i-1] = sum - pdf[i]/2.;
-  }
-}
-
-G4double G4BetaSpectrumSampler::shoot()
-{
-  G4double rand = G4UniformRand()*cdf[nBins-1];
-  G4int ibin = 0;
-
-  while (rand > cdf[ibin]) ibin++;
-
-  G4double x = nBins;
-  if (ibin < nBins) {
-    lowerBinEdge = ibin;
-    upperBinEdge = ibin+1;
-    x = sampleSlopedLine();
-  }
-
-  return x/nBins;
-}
-
-
-G4double G4BetaSpectrumSampler::sampleSlopedLine()
-{
-  G4double x;
-  G4double rand = G4UniformRand();
-  ylower = pdf[lowerBinEdge];
-  yupper = pdf[upperBinEdge];
-
-  if (std::abs(2.*(yupper - ylower)/(yupper + ylower) ) < 1.E-6) {
-    // Slope is near zero, sample flat
-    x = lowerBinEdge + rand*(upperBinEdge - lowerBinEdge);
-
-  } else {
-    // Sample incline
-    x = (yupper*lowerBinEdge - ylower*upperBinEdge +
-         std::sqrt(ylower*ylower + rand*(yupper*yupper - ylower*ylower) ) )
-        /(yupper - ylower);
-  }
-
+  G4double prob = aCDF[npoints - 1]*G4UniformRand();
+  G4int i = 0;
+  for (; i<npoints; ++i) { if (prob <= aCDF[i]) { break; } }
+  const G4double p1 = (i > 0) ? aCDF[i - 1] : aCDF[0];
+  const G4double p2 = aCDF[i];
+  const G4double delta = p2 - p1;
+  const G4double x = (delta > 0.0) ? estep*i - estep*(p2 - prob)/delta : estep*i;
   return x;
 }
 

@@ -43,29 +43,32 @@ class G4DNAQuinnPlasmonExcitationModel: public G4VEmModel
 
 public:
 
-  G4DNAQuinnPlasmonExcitationModel(const G4ParticleDefinition* p = 0,
+  G4DNAQuinnPlasmonExcitationModel(const G4ParticleDefinition* p = nullptr,
                               const G4String& nam = "DNAQuinnPlasmonExcitationModel");
 
-  virtual ~G4DNAQuinnPlasmonExcitationModel();
+  ~G4DNAQuinnPlasmonExcitationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector& = *(new G4DataVector()));
+  G4DNAQuinnPlasmonExcitationModel & operator=(const  G4DNAQuinnPlasmonExcitationModel &right) = delete;
+  G4DNAQuinnPlasmonExcitationModel(const  G4DNAQuinnPlasmonExcitationModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector& = *(new G4DataVector())) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
   virtual G4double GetCrossSection(const G4Material* material,
                                           const G4ParticleDefinition*,
                                           G4double kineticEnergy);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
   
   inline void SelectStationary(G4bool input);
 
@@ -87,9 +90,6 @@ private:
 
   G4int GetNValenceElectron(G4int z);
    
-  G4DNAQuinnPlasmonExcitationModel & operator=(const  G4DNAQuinnPlasmonExcitationModel &right);
-  G4DNAQuinnPlasmonExcitationModel(const  G4DNAQuinnPlasmonExcitationModel&);
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

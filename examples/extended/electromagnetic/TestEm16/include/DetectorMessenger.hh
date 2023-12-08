@@ -33,8 +33,8 @@
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;
@@ -44,26 +44,25 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class DetectorMessenger : public G4UImessenger
 {
-public:
+  public:
+    DetectorMessenger(DetectorConstruction*);
+    ~DetectorMessenger() override = default;
 
-  DetectorMessenger(DetectorConstruction* );
- ~DetectorMessenger();
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  private:
+    DetectorConstruction* fDetector;
 
-private:
-
-  DetectorConstruction*      fDetector;
-
-  G4UIdirectory*             fTestemDir;
-  G4UIdirectory*             fDetDir;
-  G4UIdirectory*             fTrackdir;
-  G4UIcmdWithAString*        fMaterCmd;
-  G4UIcmdWithADoubleAndUnit* fSizeCmd;
-  G4UIcmdWithADoubleAndUnit* fMaxStepCmd;
-  G4UIcmdWithADoubleAndUnit* fMaxStepLength;
+    G4UIdirectory* fTestemDir = nullptr;
+    G4UIdirectory* fDetDir = nullptr;
+    G4UIdirectory* fTrackdir = nullptr;
+    G4UIcmdWithAString* fMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSizeCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMaxStepCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMaxStepLength = nullptr;
+    G4UIcmdWithAString* fGeomFileCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

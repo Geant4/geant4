@@ -113,6 +113,18 @@ class G4HnInformation
     // Deleted default constructor
     G4HnInformation() = delete;
 
+    // Clear all data
+    void Update(const G4HnInformation& other) {
+      // Update all information except name and fHnDimensionInformations
+      for (G4int i = 0; i < (G4int)fHnDimensionInformations.size(); ++i) {
+        SetIsLogAxis(i, other.GetIsLogAxis(i));
+      }
+      fActivation = other.GetActivation();
+      fAscii = other.GetAscii();
+      fPlotting = other.GetPlotting();
+      fFileName = other.GetFileName();
+    }
+
     // Set methods
     void AddDimension(const G4HnDimensionInformation& hnDimensionInformation);
     void SetDimension(G4int dimension, const G4HnDimensionInformation& hnDimensionInformation);
@@ -121,6 +133,7 @@ class G4HnInformation
     void SetActivation(G4bool activation);
     void SetAscii(G4bool ascii);
     void SetPlotting(G4bool plotting);
+    void SetDeleted(G4bool deleted, G4bool keepSetting);
     void SetFileName(const G4String& fileName);
 
     // Get methods
@@ -131,6 +144,8 @@ class G4HnInformation
     G4bool  GetActivation() const;
     G4bool  GetAscii() const;
     G4bool  GetPlotting() const;
+    G4bool  GetDeleted() const;
+    std::pair<G4bool, G4bool>  GetDeletedPair() const;
     G4String GetFileName() const;
 
   private:
@@ -141,6 +156,7 @@ class G4HnInformation
     G4bool   fActivation { true };
     G4bool   fAscii { false };
     G4bool   fPlotting { false };
+    std::pair<G4bool, G4bool> fDeleted { false, false };
     G4String fFileName;
 };
 
@@ -190,6 +206,9 @@ inline void G4HnInformation::SetAscii(G4bool ascii)
 inline void G4HnInformation::SetPlotting(G4bool plotting)
 { fPlotting = plotting; }
 
+inline void G4HnInformation::SetDeleted(G4bool deleted, G4bool keepSetting)
+{ fDeleted = std::make_pair(deleted, keepSetting); }
+
 inline void G4HnInformation::SetFileName(const G4String& fileName)
 { fFileName = fileName; }
 
@@ -213,6 +232,12 @@ inline G4bool  G4HnInformation::GetAscii() const
 
 inline G4bool  G4HnInformation::GetPlotting() const
 { return fPlotting; }
+
+inline G4bool G4HnInformation::GetDeleted() const
+{ return fDeleted.first; }
+
+inline std::pair<G4bool, G4bool> G4HnInformation::GetDeletedPair() const
+{ return fDeleted; }
 
 inline G4String G4HnInformation::GetFileName() const
 { return fFileName; }

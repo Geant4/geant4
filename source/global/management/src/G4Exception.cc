@@ -96,10 +96,13 @@ void G4Exception(const char* originOfException, const char* exceptionCode,
         G4cerr << es_banner << message.str() << "*** Event Must Be Aborted ***"
                << ee_banner << G4endl;
         break;
-      default:
+      case JustWarning:
         G4cout << ws_banner << message.str()
                << "*** This is just a warning message. ***" << we_banner
                << G4endl;
+        toBeAborted = false;
+        break;
+      default:
         toBeAborted = false;
         break;
     }

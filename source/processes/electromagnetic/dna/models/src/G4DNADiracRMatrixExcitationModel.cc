@@ -40,21 +40,19 @@
 #include "G4Gamma.hh"
 #include "G4RandomDirection.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-using namespace std;
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNADiracRMatrixExcitationModel::G4DNADiracRMatrixExcitationModel
 (const G4ParticleDefinition*,const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false), fTableData(0)
+    G4VEmModel(nam)  
 {
-  fpMaterialDensity       = 0;
+  fpMaterialDensity       = nullptr;
   fHighEnergyLimit        = 0;
   fExperimentalEnergyLimit= 0;
   fLowEnergyLimit         = 0;
-  fParticleDefinition     = 0;
+  fParticleDefinition     = nullptr;
 
   verboseLevel = 0;
 
@@ -63,7 +61,7 @@ G4DNADiracRMatrixExcitationModel::G4DNADiracRMatrixExcitationModel
     G4cout << "Dirac R-matrix excitation model is constructed " << G4endl;
   }
   
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
   statCode                = false;
 }
 
@@ -71,7 +69,7 @@ G4DNADiracRMatrixExcitationModel::G4DNADiracRMatrixExcitationModel
 
 G4DNADiracRMatrixExcitationModel::~G4DNADiracRMatrixExcitationModel()
 {
-  if (fTableData) delete fTableData;
+  delete fTableData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -282,9 +280,9 @@ G4int G4DNADiracRMatrixExcitationModel::RandomSelect
 
   std::size_t NOfComp = fTableData->NumberOfComponents();
  
-  auto valuesBuffer = new G4double[NOfComp];
-  
-  const G4int n = (G4int)fTableData->NumberOfComponents();
+  std::vector<G4double> valuesBuffer(NOfComp, 0.0);
+
+  const auto  n = (G4int)fTableData->NumberOfComponents();
   
   G4int i(n);
 
@@ -311,12 +309,10 @@ G4int G4DNADiracRMatrixExcitationModel::RandomSelect
     --i;
     if (valuesBuffer[i] > value)
     {
-      delete[] valuesBuffer;
       return i;
     }
     value -= valuesBuffer[i];
   }
-  if (valuesBuffer) delete[] valuesBuffer;
   return 9999;
 }
 

@@ -125,6 +125,14 @@ void G4hImpactIonisation::InitializeMe()
   modelK = defaultPixeModel;
   modelL = defaultPixeModel;
   modelM = defaultPixeModel;
+
+  // Calculated on the fly, but should be initialized to sensible values
+  fdEdx = 0.0;
+  fRangeNow = 0.0;
+  charge = 0.0; 
+  chargeSquare = 0.0;
+  initialMass = 0.0; 
+  fBarkas = 0.0;
 }
 
 

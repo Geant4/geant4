@@ -20,8 +20,7 @@ geant4_add_module(G4hadronic_deex_management
     G4NuclearLevelData.cc
     G4NucLevel.cc
     G4VEmissionProbability.cc
-    G4VEvaporationChannel.cc
-    G4VEvaporationFactory.cc)
+    G4VEvaporationChannel.cc)
 
 geant4_module_link_libraries(G4hadronic_deex_management
   PUBLIC

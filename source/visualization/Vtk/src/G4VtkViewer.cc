@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
+#include <cmath>
+
 #include "G4VtkViewer.hh"
 
 #include "G4Transform3D.hh"
@@ -46,7 +48,11 @@
 #include "vtkLightCollection.h"
 #include "vtkOBJExporter.h"
 #include "vtkOBJImporter.h"
+#include "vtkGLTFExporter.h"
 #include "vtkOOGLExporter.h"
+#include "vtkJSONRenderWindowExporter.h"
+#include "vtkVtkJSSceneGraphSerializer.h"
+//#include "vtkBufferedArchiver.h"
 #include "vtkPNGWriter.h"
 #include "vtkPNMWriter.h"
 #include "vtkPOVExporter.h"
@@ -160,34 +166,33 @@ void G4VtkViewer::SetView()
   if (radius <= 0.) {
     radius = 1.;
   }
-  G4double cameraDistance = fVP.GetCameraDistance(radius);
+
+  if (firstSetView) cameraDistance = fVP.GetCameraDistance(radius);
   G4Point3D viewpointDirection = fVP.GetViewpointDirection();
-  G4Point3D targetPoint = fVP.GetCurrentTargetPoint();
-  G4Point3D cameraPosition = targetPoint + viewpointDirection.unit() * cameraDistance;
-  renderer->GetActiveCamera()->SetFocalPoint(targetPoint.x(), targetPoint.y(), targetPoint.z());
-  renderer->GetActiveCamera()->SetPosition(cameraPosition.x(), cameraPosition.y(),
-                                           cameraPosition.z());
-  renderer->GetActiveCamera()->SetParallelScale(cameraDistance);
+  G4Point3D targetPosition = fVP.GetCurrentTargetPoint();
+  G4double zoomFactor = fVP.GetZoomFactor();
+  G4double fieldHalfAngle = fVP.GetFieldHalfAngle();
+
+  G4Point3D cameraPosition = targetPosition + viewpointDirection.unit() /zoomFactor  * cameraDistance;
+
+  vtkCamera* activeCamera = renderer->GetActiveCamera();
+  activeCamera->SetFocalPoint(targetPosition.x(), targetPosition.y(), targetPosition.z());
+  activeCamera->SetViewAngle(2*fieldHalfAngle / M_PI * 180);
+  activeCamera->SetPosition(cameraPosition.x(), cameraPosition.y(), cameraPosition.z());
+  activeCamera->SetParallelScale(cameraDistance / zoomFactor);
+
+  if (fieldHalfAngle == 0) {
+    activeCamera->SetParallelProjection(1);
+  }
+  else {
+    activeCamera->SetParallelProjection(0);
+  }
 
   // need to set camera distance and parallel scale on first set view
   if (firstSetView) {
     geant4Callback->SetVtkInitialValues(cameraDistance, cameraDistance);
+    activeCamera->SetParallelScale(cameraDistance);
     firstSetView = false;
-  }
-
-  // projection type and view angle and zoom factor
-  G4double fieldHalfAngle = fVP.GetFieldHalfAngle();
-  G4double zoomFactor = fVP.GetZoomFactor();
-  vtkCamera* activeCamera = renderer->GetActiveCamera();
-  if (fieldHalfAngle == 0) {
-    activeCamera->SetParallelProjection(1);
-    activeCamera->SetParallelScale(activeCamera->GetParallelScale() / zoomFactor);
-  }
-  else {
-    activeCamera->SetParallelProjection(0);
-    activeCamera->SetViewAngle(2 * fieldHalfAngle / M_PI * 180);
-    activeCamera->SetPosition(cameraPosition.x() / zoomFactor, cameraPosition.y() / zoomFactor,
-                              cameraPosition.z() / zoomFactor);
   }
 
   // camera up direction
@@ -197,7 +202,7 @@ void G4VtkViewer::SetView()
   // Light
   const G4Vector3D lightDirection = fVP.GetLightpointDirection();
   G4bool lightsMoveWithCamera = fVP.GetLightsMoveWithCamera();
-  G4Vector3D lightPosition = targetPoint + lightDirection.unit() * cameraDistance;
+  G4Vector3D lightPosition = targetPosition + lightDirection.unit() * cameraDistance;
 
   vtkLightCollection* currentLights = renderer->GetLights();
   if (currentLights->GetNumberOfItems() != 0) {
@@ -323,7 +328,13 @@ void G4VtkViewer::FinishView()
 
   _renderWindow->GetInteractor()->Initialize();
   _renderWindow->Render();
-  _renderWindow->GetInteractor()->Start();
+
+  if (firstFinishView) {
+    firstFinishView = false;
+  }
+  else {
+    _renderWindow->GetInteractor()->Start();
+  }
 }
 
 void G4VtkViewer::ExportScreenShot(G4String path, G4String format)
@@ -349,7 +360,7 @@ void G4VtkViewer::ExportScreenShot(G4String path, G4String format)
     imWriter = vtkPostScriptWriter::New();
   }
   else {
-    imWriter = vtkPNGWriter::New();
+    return;
   }
 
   _renderWindow->Render();
@@ -374,35 +385,43 @@ void G4VtkViewer::ExportScreenShot(G4String path, G4String format)
 
 void G4VtkViewer::ExportOBJScene(G4String path)
 {
-  vtkSmartPointer<vtkRenderWindow> _rw1 = vtkSmartPointer<vtkRenderWindow>::New();
-  _rw1->AddRenderer(_renderWindow->GetRenderers()->GetFirstRenderer());
   vtkSmartPointer<vtkOBJExporter> exporter = vtkSmartPointer<vtkOBJExporter>::New();
-  exporter->SetRenderWindow(_rw1);
+  exporter->SetRenderWindow(_renderWindow);
   exporter->SetFilePrefix(path.c_str());
   exporter->Write();
 }
 
 void G4VtkViewer::ExportVRMLScene(G4String path)
 {
-  vtkSmartPointer<vtkRenderWindow> _rw1 = vtkSmartPointer<vtkRenderWindow>::New();
-  _rw1->AddRenderer(_renderWindow->GetRenderers()->GetFirstRenderer());
   vtkSmartPointer<vtkVRMLExporter> exporter = vtkSmartPointer<vtkVRMLExporter>::New();
-  exporter->SetRenderWindow(_rw1);
+  exporter->SetRenderWindow(_renderWindow);
   exporter->SetFileName((path + ".vrml").c_str());
   exporter->Write();
 }
 
 void G4VtkViewer::ExportVTPScene(G4String path)
 {
-  vtkSmartPointer<vtkRenderWindow> _rw1 = vtkSmartPointer<vtkRenderWindow>::New();
-  _rw1->AddRenderer(_renderWindow->GetRenderers()->GetFirstRenderer());
   vtkSmartPointer<vtkSingleVTPExporter> exporter = vtkSmartPointer<vtkSingleVTPExporter>::New();
-  exporter->SetRenderWindow(_rw1);
+  exporter->SetRenderWindow(_renderWindow);
   exporter->SetFileName((path + ".vtp").c_str());
   exporter->Write();
 }
 
-void G4VtkViewer::ExportGLTFScene(G4String /*fileName*/) {}
+void G4VtkViewer::ExportGLTFScene(G4String fileName) {
+  vtkSmartPointer<vtkGLTFExporter> exporter = vtkSmartPointer<vtkGLTFExporter>::New();
+  exporter->SetRenderWindow(_renderWindow);
+  exporter->SetFileName((fileName+".gltf").c_str());
+  exporter->InlineDataOn();
+  exporter->Write();
+}
+
+void G4VtkViewer::ExportJSONRenderWindowScene(G4String /*fileName*/) {
+  vtkSmartPointer<vtkJSONRenderWindowExporter> exporter = vtkSmartPointer<vtkJSONRenderWindowExporter>::New();
+  vtkSmartPointer<vtkVtkJSSceneGraphSerializer> serializer = vtkSmartPointer<vtkVtkJSSceneGraphSerializer>::New();
+  exporter->SetRenderWindow(_renderWindow);
+  exporter->SetSerializer(serializer);
+  exporter->Write();
+}
 
 void G4VtkViewer::ExportVTPCutter(G4String fileName)
 {
@@ -505,6 +524,13 @@ void G4VtkViewer::ExportFormatStore(G4String fileName, G4String storeName)
     exporter->SetFileName(fileName.c_str());
     exporter->Write();
   }
+  else if (fileName.find("gltf") != std::string::npos) {
+    vtkNew<vtkGLTFExporter> exporter;
+    exporter->SetRenderWindow(tempRenderWindow);
+    exporter->SetFileName(fileName.c_str());
+    exporter->InlineDataOn();
+    exporter->Write();
+  }
 }
 
 void G4VtkViewer::AddViewHUD()
@@ -536,6 +562,10 @@ void G4VtkViewer::AddClipperPlaneWidget(const G4Plane3D& plane)
     1.25);  // This must be set prior to placing the widget.
   clipperPlaneRepresentation->PlaceWidget(bounds);
   clipperPlaneRepresentation->SetNormal(vplane->GetNormal());
+
+  vtkNew<vtkPropCollection> planeRepActors;
+  clipperPlaneRepresentation->GetActors(planeRepActors);
+  planeRepActors->InitTraversal();
 
   SetWidgetInteractor(clipperPlaneWidget);
   clipperPlaneWidget->SetRepresentation(clipperPlaneRepresentation);
@@ -634,6 +664,7 @@ void G4VtkViewer::DisableCutter(G4String /*name*/)
 
 void G4VtkViewer::EnableCutterWidget()
 {
+  G4cout << "enable cutter widget" << G4endl;
   cutterPlaneWidget->SetEnabled(1);
 }
 
@@ -646,7 +677,7 @@ void G4VtkViewer::AddCameraOrientationWidget()
 {
   camOrientWidget->SetParentRenderer(renderer);
   // Enable the widget.
-  camOrientWidget->On();
+  camOrientWidget->Off();
 }
 
 void G4VtkViewer::EnableCameraOrientationWidget()
@@ -666,18 +697,25 @@ void G4VtkViewer::AddImageOverlay(const G4String& fileName, const G4double alpha
                                   const G4double rotation[3], const G4double translation[3])
 {
   auto xScale = (worldTopRight[0] - worldBottomLeft[0]) / (imageTopRight[0] - imageBottomLeft[0]);
-  auto yScale = (worldTopRight[1] - worldBottomLeft[1]) / (imageTopRight[1] - imageBottomLeft[1]);
+  auto yScale = -(worldTopRight[1] - worldBottomLeft[1]) / (imageTopRight[1] - imageBottomLeft[1]);
 
+  G4cout << xScale << " " << yScale << G4endl;
   auto transformation = G4Transform3D::Identity;
   auto scal = G4Scale3D(xScale, yScale, 1);
-  auto rotx = G4RotateX3D(rotation[0]);
-  auto roty = G4RotateY3D(rotation[1]);
-  auto rotz = G4RotateZ3D(rotation[2]);
-  auto tran = G4Translate3D(translation[0] - xScale * (imageBottomLeft[0] + imageTopRight[0]) / 2.0,
-                            translation[1] - yScale * (imageBottomLeft[1] + imageTopRight[1]) / 2.0,
+  auto rotx = G4RotateX3D(rotation[0]/180*M_PI);
+  auto roty = G4RotateY3D(rotation[1]/180*M_PI);
+  auto rotz = G4RotateZ3D(rotation[2]/180*M_PI);
+  auto tranImg = G4Translate3D(  -std::fabs(imageBottomLeft[0] + imageTopRight[0]) / 2.0,
+                                 -std::fabs(imageBottomLeft[1] + imageTopRight[1]) / 2.0,
+                                 0);
+  auto tran = G4Translate3D(translation[0],
+                            translation[1],
                             translation[2]);
-  transformation = tran * rotz * roty * rotx * scal * transformation;
 
+  G4cout << translation[0] << " " << translation[1] << " " << translation[2] << G4endl;
+  transformation = tran * rotz * roty * rotx * scal * tranImg * transformation;
+
+  G4cout << transformation.dx() << " " << transformation.dy() << " " << transformation.dz() << G4endl;
   auto& fVtkSceneHandler = dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
   G4VtkStore& st = fVtkSceneHandler.GetTransientStore();
 
@@ -686,9 +724,10 @@ void G4VtkViewer::AddImageOverlay(const G4String& fileName, const G4double alpha
   st.AddNonG4ObjectImage(fileName, vc);
 }
 
-void G4VtkViewer::Add3DOverlay(const G4String& fileName, const G4double colour[3],
-                               const G4double alpha, const G4double scale[3],
-                               const G4double rotation[3], const G4double translation[3])
+void G4VtkViewer::AddGeometryOverlay(const G4String& fileName, const G4double colour[3],
+                                     const G4double alpha, const G4String& representation,
+                                     const G4double scale[3], const G4double rotation[3],
+                                     const G4double translation[3])
 {
   auto transformation = G4Transform3D::Identity;
   auto scal = G4Scale3D(scale[0], scale[1], scale[2]);
@@ -702,7 +741,12 @@ void G4VtkViewer::Add3DOverlay(const G4String& fileName, const G4double colour[3
   auto& fVtkSceneHandler = dynamic_cast<G4VtkSceneHandler&>(fSceneHandler);
   G4VtkStore& st = fVtkSceneHandler.GetTransientStore();
 
+
   G4VtkVisContext vc = G4VtkVisContext(this, nullptr, false, transformation);
+  if (representation == "w")
+    vc.fDrawingStyle = G4ViewParameters::wireframe;
+  else if (representation == "s")
+    vc.fDrawingStyle = G4ViewParameters::hlhsr;
   vc.alpha = alpha;
   vc.red = colour[0];
   vc.green = colour[1];

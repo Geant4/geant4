@@ -54,9 +54,8 @@
 class G4ITTransportationManager;
 class G4ITNavigator;
 
-#include "G4TouchableHandle.hh"
-#include "G4FieldTrack.hh"
 #include "G4ITMultiNavigator.hh"
+#include "G4TouchableHandle.hh"
 #include "G4TrackState.hh"
 
 class G4PropagatorInField;
@@ -100,9 +99,9 @@ protected:
 
 	// State after calling 'ComputeStep' (others member variables will be affected)
 	G4FieldTrack    fEndState;           // Point, velocity, ... at proposed step end
-	G4bool          fFieldExertedForce;  // In current proposed step
+	G4bool          fFieldExertedForce{false};  // In current proposed step
 
-	G4bool fRelocatedPoint;   //  Signals that point was or is being moved
+	G4bool fRelocatedPoint{true};   //  Signals that point was or is being moved
 	//  from the position of the last location
 	//   or the endpoint resulting from ComputeStep
 	//   -- invalidates fEndState
@@ -113,17 +112,15 @@ protected:
 	G4double      fNewSafetyComputed[ G4ITNavigator::fMaxNav ];  // Safeties for last ComputeSafety
 
 	// State for Step numbers
-	G4int         fLastStepNo, fCurrentStepNo;
+	G4int         fLastStepNo{-1}, fCurrentStepNo{-1};
 
 public:
-	virtual ~G4TrackState(){}
+	~G4TrackState() override= default;
 
 	G4TrackState() :
-        G4TrackStateBase(),
-			fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
-			fFieldExertedForce(false),
-			fRelocatedPoint(true),
-			fLastStepNo(-1), fCurrentStepNo(-1)  {
+        
+			fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.)
+			  {
 
 		G4ThreeVector  Big3Vector( kInfinity, kInfinity, kInfinity );
 		fLastLocatedPosition= Big3Vector;
@@ -145,7 +142,7 @@ public:
 			fLimitTruth[num] = false;
 			fLimitedStep[num] = kUndefLimited;
 			fCurrentStepSize[num] = -1.0;
-			fLocatedVolume[num] = 0;
+			fLocatedVolume[num] = nullptr;
 			fPreSafetyValues[num]= -1.0;
 			fCurrentPreStepSafety[num] = -1.0;
 			fNewSafetyComputed[num]= -1.0;
@@ -190,7 +187,7 @@ public:  // with description
 
 	void PrepareNewTrack( const G4ThreeVector& position,
 			const G4ThreeVector& direction,
-			G4VPhysicalVolume* massStartVol=0);
+			G4VPhysicalVolume* massStartVol=nullptr);
 	//
 	// Check and cache set of active navigators.
 
@@ -281,7 +278,7 @@ protected:  // without description
 protected:
 
 	G4ITPathFinder();  //  Singleton
-	~G4ITPathFinder();
+	~G4ITPathFinder() override;
 
 	inline G4ITNavigator* GetNavigator(G4int n) const;
 
@@ -299,7 +296,7 @@ private:
 
 	G4ITNavigator*  fpNavigator[G4ITNavigator::fMaxNav];
 
-	G4int         fVerboseLevel;            // For debuging purposes
+	G4int         fVerboseLevel{0};            // For debuging purposes
 
 	G4ITTransportationManager* fpTransportManager; // Cache for frequent use
 	// G4PropagatorInField* fpFieldPropagator;
@@ -316,7 +313,7 @@ private:
 
 inline G4VPhysicalVolume* G4ITPathFinder::GetLocatedVolume( G4int navId ) const
 {
-	G4VPhysicalVolume* vol=0;
+	G4VPhysicalVolume* vol=nullptr;
 	if( (navId < G4ITNavigator::fMaxNav) && (navId >=0) ) { vol= fpTrackState->fLocatedVolume[navId]; }
 	return vol;
 }

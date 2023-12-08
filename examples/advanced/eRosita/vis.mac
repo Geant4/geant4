@@ -6,17 +6,10 @@
 /run/verbose 2
 /tracking/verbose 0
 
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphics system)
-#
-
-#/vis/open DAWNFILE
-#/vis/open HepRepFile
-#/vis/open OGL
-/vis/open OGL 600x600-0+0
-#/vis/open OGLSXm
-#/vis/ogl/set/displayListLimit 10000
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 
 #
 # Draw the scene

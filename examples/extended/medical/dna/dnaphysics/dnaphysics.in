@@ -1,23 +1,39 @@
+# Verbosity
 /tracking/verbose 0
 /run/verbose 2
 /control/verbose 2
+#
+# MT
 /run/numberOfThreads 2
 #
+# Material
 #/dna/test/setMat G4_WATER_MODIFIED
 /dna/test/setMat G4_WATER
 #
+# Atomic deexcitation
 /process/em/fluo true
 /process/em/auger true
 /process/em/augerCascade true
-/process/em/deexcitationIgnoreCut true 
+/process/em/deexcitationIgnoreCut true
 #
-/process/em/AddDNARegion World DNA_Opt0
+# Physics
+# - To use Geant4-DNA constructor X, X=0, 2, 4, or 6 (recommended)
+/dna/test/addPhysics DNA_Opt2
+#   OR to use Geant4-DNA activator for World region, X = 0, 2, 4, or 6
+#/process/em/AddDNARegion World DNA_OptX
+# - To add radioactive radioactive decay
 /dna/test/addPhysics raddecay
 #
-/run/initialize 
+# Heavy ions tracking cut
+#/dna/test/addIonsTrackingCut false
 #
+# Run initialization
+/run/initialize
+#
+# Visualization
 #/control/execute vis.mac
 #
+# Incident particle type
 #/gun/particle e-
 /gun/particle proton
 #/gun/particle hydrogen
@@ -26,6 +42,9 @@
 #/gun/particle helium
 #/gun/particle ion
 #/gun/ion 14 28
+#
+# Incident particle energy
 /gun/energy 100 keV
 #
+# Beam on
 /run/beamOn 2

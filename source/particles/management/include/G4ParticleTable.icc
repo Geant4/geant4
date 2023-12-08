@@ -28,92 +28,74 @@
 // Author: H.Kurashige, 27 June 1996 - First implementation
 // --------------------------------------------------------------------
 
-inline  
-void G4ParticleTable::SetVerboseLevel(G4int value )
-{ 
-  verboseLevel = value; 
+inline void G4ParticleTable::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
 }
 
-inline 
-G4int G4ParticleTable::GetVerboseLevel() const 
-{ 
-  return verboseLevel; 
+inline G4int G4ParticleTable::GetVerboseLevel() const
+{
+  return verboseLevel;
 }
 
-
-inline
-const G4String&
-G4ParticleTable::GetKey(const G4ParticleDefinition* particle) const
+inline const G4String& G4ParticleTable::GetKey(const G4ParticleDefinition* particle) const
 {
   return particle->GetParticleName();
 }
 
-inline 
-G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
+inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
 {
-  return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
+  return FindParticle(FindParticle(aPDGEncoding)->GetAntiPDGEncoding());
 }
 
-inline 
-G4ParticleDefinition*
-G4ParticleTable::FindAntiParticle(const G4String& particle_name)
+inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name)
 {
-  G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
+  G4int pcode = FindParticle(particle_name)->GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
-inline 
-G4ParticleDefinition*
-G4ParticleTable::FindAntiParticle(const G4ParticleDefinition* particle)
+inline G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition* particle)
 {
   G4int pcode = particle->GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
-inline 
-G4bool G4ParticleTable::contains(const G4ParticleDefinition* particle) const
+inline G4bool G4ParticleTable::contains(const G4ParticleDefinition* particle) const
 {
   return contains(GetKey(particle));
 }
 
-inline
-void G4ParticleTable::SetReadiness(G4bool val)
+inline void G4ParticleTable::SetReadiness(G4bool val)
 {
   readyToUse = val;
 }
 
-inline
-G4bool G4ParticleTable::GetReadiness() const
+inline G4bool G4ParticleTable::GetReadiness() const
 {
   return readyToUse;
 }
 
-inline
-G4ParticleDefinition* G4ParticleTable::GetGenericIon() const
+inline G4ParticleDefinition* G4ParticleTable::GetGenericIon() const
 {
   return genericIon;
 }
 
-inline 
-void G4ParticleTable::SetGenericIon(G4ParticleDefinition* gi)
+inline void G4ParticleTable::SetGenericIon(G4ParticleDefinition* gi)
 {
   genericIon = gi;
 }
 
-inline
-G4ParticleDefinition* G4ParticleTable::GetGenericMuonicAtom() const
+inline G4ParticleDefinition* G4ParticleTable::GetGenericMuonicAtom() const
 {
   return genericMuonicAtom;
 }
 
-inline 
-void G4ParticleTable::SetGenericMuonicAtom(G4ParticleDefinition* gma)
+inline void G4ParticleTable::SetGenericMuonicAtom(G4ParticleDefinition* gma)
 {
   genericMuonicAtom = gma;
 }
 
-inline
-const G4ParticleDefinition* G4ParticleTable::GetSelectedParticle() const
+inline const G4ParticleDefinition* G4ParticleTable::GetSelectedParticle() const
 {
   return selectedParticle;
 }

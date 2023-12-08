@@ -39,8 +39,8 @@
 class WLSTrackingAction : public G4UserTrackingAction
 {
  public:
-  WLSTrackingAction(){};
-  ~WLSTrackingAction(){};
+  WLSTrackingAction() = default;
+  ~WLSTrackingAction() override = default;
 
   void PreUserTrackingAction(const G4Track*) override;
 };

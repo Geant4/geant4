@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParallelWorldProcessStore
 //
+// Class description:
 //
+// This process takes a parallel world and limits a step
+// on the boundaries of volumes in the parallel world.
+// It invokes sensitive detectors assigned in the parallel world.
+// It switches a material (and a region if defined) in the
+// assigned parallel world over the material (and the region)
+// in the mass world.
 //
-//---------------------------------------------------------------
-//
-//  G4ParallelWorldProcessStore.hh
-//
-//  Description:
-//    This procss takes a parallel world and limits a step
-//   on the boundaries of volumes in the parallel world.
-//    It invokes sensitive detectors assigned in the parallel
-//   world.
-//    It switches a material (and a region if defined) in the
-//   assigned parallel world over the material (and the region)
-//   in the mass world.
-//
-//---------------------------------------------------------------
-
+// Author: M.Asai (SLAC), 2010.
+//---------------------------------------------------------------------
 #ifndef G4ParallelWorldProcessStore_h
 #define G4ParallelWorldProcessStore_h 1
 
@@ -50,33 +45,26 @@
 
 class G4ParallelWorldProcess;
 
-//------------------------------------------
-//
-//        G4ParallelWorldProcessStore class
-//
-//------------------------------------------
-
-// Class Description:
-
 class G4ParallelWorldProcessStore : public std::map<G4ParallelWorldProcess*, G4String>
 {
-  public:  // with description
+  public:
+
     static G4ParallelWorldProcessStore* GetInstance();
     static G4ParallelWorldProcessStore* GetInstanceIfExist();
 
-    // Set Paralle World
-    void SetParallelWorld(G4ParallelWorldProcess* proc, G4String parallelWorldName);
+    void SetParallelWorld(G4ParallelWorldProcess* proc, const G4String& parallelWorldName);
     void UpdateWorlds();
-    G4ParallelWorldProcess* GetProcess(G4String parallelWorldName);
+    G4ParallelWorldProcess* GetProcess(const G4String& parallelWorldName);
     void Clear();
 
-  public:
     virtual ~G4ParallelWorldProcessStore();
 
   private:
+
     G4ParallelWorldProcessStore();
 
   private:
+
     static G4ThreadLocal G4ParallelWorldProcessStore* fInstance;
 };
 

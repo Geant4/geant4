@@ -48,7 +48,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-: G4VUserPhysicsList()
 {
   // instantiate Physics List infrastructure 
   //

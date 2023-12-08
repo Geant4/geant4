@@ -32,18 +32,13 @@
 // 03-09-2008 J.M. Quesada for external choice of inverse cross section option
 // 17-11-2010 V.Ivanchenko integer Z and A
 
-
 #include "G4DeuteronEvaporationProbability.hh"
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3.0)
 {}
 
-G4DeuteronEvaporationProbability::~G4DeuteronEvaporationProbability()
-{}
-
-G4double 
-G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment) 
+G4double G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
 {
   // Data comes from 
   // Dostrovsky, Fraenkel and Friedlander
@@ -54,10 +49,10 @@ G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
   // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
   // C for deuteron is equal to C for protons divided by 2
 
-  G4int aZ = fragment.GetZ_asInt()-GetZ();
+  G4int aZ = fr.GetZ_asInt()-GetZ();
   G4double C;
 	
-  if (aZ >= 70) {
+  if (aZ <= 70) {
     C = 0.10;
   } else {
     C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
@@ -66,7 +61,7 @@ G4DeuteronEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
   return 1.0 + C*0.5;
 }
 
-G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
+G4double G4DeuteronEvaporationProbability::CalcBetaParam(const G4Fragment&) 
 {
   return 0.0;
 }

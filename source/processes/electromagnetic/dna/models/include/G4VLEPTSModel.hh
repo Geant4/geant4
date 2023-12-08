@@ -62,7 +62,7 @@ class G4VLEPTSModel : public G4VEmModel
 public: 
   
   G4VLEPTSModel(const G4String& processName);
-  ~G4VLEPTSModel();
+  ~G4VLEPTSModel() override;
   
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType); //G4ParticleWithCuts::SetCut()
   G4double GetMeanFreePath(const G4Material* mate,
@@ -103,7 +103,7 @@ protected:
   std::map<const G4Material*, G4int> theNXSdat;
   std::map<const G4Material*, G4int> theNXSsub;
   
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   XSType theXSType;
 
   G4int verboseLevel;

@@ -42,7 +42,7 @@ Par03EventAction::Par03EventAction(Par03DetectorConstruction* aDetector)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03EventAction::~Par03EventAction() {}
+Par03EventAction::~Par03EventAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

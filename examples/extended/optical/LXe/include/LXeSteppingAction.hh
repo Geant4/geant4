@@ -42,7 +42,7 @@ class LXeSteppingAction : public G4UserSteppingAction
 {
  public:
   LXeSteppingAction(LXeEventAction*);
-  ~LXeSteppingAction();
+  ~LXeSteppingAction() override;
 
   void UserSteppingAction(const G4Step*) override;
 
@@ -50,12 +50,12 @@ class LXeSteppingAction : public G4UserSteppingAction
   G4bool GetOneStepPrimaries() { return fOneStepPrimaries; }
 
  private:
-  G4bool fOneStepPrimaries;
-  LXeSteppingMessenger* fSteppingMessenger;
-  LXeEventAction* fEventAction;
+  G4bool fOneStepPrimaries = false;
+  LXeSteppingMessenger* fSteppingMessenger = nullptr;
+  LXeEventAction* fEventAction = nullptr;
   G4OpBoundaryProcess* fBoundary = nullptr;
 
-  G4OpBoundaryProcessStatus fExpectedNextStatus;
+  G4OpBoundaryProcessStatus fExpectedNextStatus = Undefined;
 };
 
 #endif

@@ -35,97 +35,54 @@
 #include "G4FermiFragment.hh"
 #include "G4FermiPair.hh"
 #include "G4FermiChannels.hh"
-#include "G4FermiDecayProbability.hh"
 
 #include <vector>
-
-static const G4int maxZ = 9;
-static const G4int maxA = 17;
 
 class G4FermiFragmentsPoolVI
 {
 public:
 
-  explicit G4FermiFragmentsPoolVI();
+  G4FermiFragmentsPoolVI();
 
   ~G4FermiFragmentsPoolVI();
 
-  const G4FermiChannels* ClosestChannels(G4int Z, G4int A, G4double mass) const;
+  void Initialise();
+
+  const G4FermiChannels* ClosestChannels(const G4int Z, const G4int A,
+                                         const G4double mass) const;
 
   void DumpFragment(const G4FermiFragment*) const;
 
   void Dump() const;
 
-  G4bool IsPhysical(G4int Z, G4int A) const;
+  G4bool HasDecay(const G4int Z, const G4int A, const G4double eexc) const;
 
-  G4bool HasChannels(G4int Z, G4int A, G4double exc) const;
+  G4bool IsInitialized() const { return isInitialized; };
 
-  inline const G4FermiDecayProbability* FermiDecayProbability() const;
-
-  inline G4int GetMaxZ() const;
-
-  inline G4int GetMaxA() const;
-
-  inline G4double GetEnergyLimit() const;
-
-  inline G4double GetTolerance() const;
+  G4FermiFragmentsPoolVI(const G4FermiFragmentsPoolVI &right) = delete;  
+  const G4FermiFragmentsPoolVI & operator=
+  (const G4FermiFragmentsPoolVI &right) = delete;
+  G4bool operator==(const G4FermiFragmentsPoolVI &right) const = delete;
+  G4bool operator!=(const G4FermiFragmentsPoolVI &right) const = delete;
   
 private:
 
-  void Initialise();
+  G4bool IsInThePool(const G4int Z, const G4int A, const G4double exc) const;
 
-  G4bool IsInThePool(G4int Z, G4int A, G4double exc) const;
+  G4double fTolerance{0.0};
+  G4double fElim{0.0};
+  G4double fTimeLim{0.0};
 
-  G4bool IsInPhysPairs(const G4FermiFragment* f1, 
-		       const G4FermiFragment* f2) const;
+  const G4int maxZ{9};
+  const G4int maxA{17};
 
-  G4bool IsInUnphysPairs(const G4FermiFragment* f1, 
-                         const G4FermiFragment* f2) const;
-
-  G4double tolerance;
-  G4double elim;
-
-  G4float timelim;
-  G4float elimf;
-
-  G4FermiDecayProbability theDecay;
+  G4bool isInitialized{false};
 
   // pool 
   std::vector<const G4FermiFragment*> fragment_pool;
 
-  // lists of configurations sorted by A 
-  std::vector<const G4FermiFragment*> list_f[maxA]; 
-  // list of channels for "stable" fragments
-  std::vector<G4FermiChannels*>       list_c[maxA];
-  // pairs of stable fragments 
-  std::vector<const G4FermiPair*>     list_p[maxA]; 
+  // list of channels sorted by Z and A
+  std::vector<G4FermiChannels*>* list_c[9][17] = {{nullptr}};
 };
 
-inline G4int G4FermiFragmentsPoolVI::GetMaxZ() const
-{
-  return maxZ;
-}
-
-inline G4int G4FermiFragmentsPoolVI::GetMaxA() const
-{
-  return maxA;
-}
-
-inline const G4FermiDecayProbability* 
-G4FermiFragmentsPoolVI::FermiDecayProbability() const
-{
-  return &theDecay;
-}
-
-inline G4double G4FermiFragmentsPoolVI::GetEnergyLimit() const
-{
-  return elim;
-}
-
-inline G4double G4FermiFragmentsPoolVI::GetTolerance() const
-{
-  return tolerance;
-}
-
 #endif
-

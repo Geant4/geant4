@@ -1,0 +1,21 @@
+# Example radiobiology History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-12-01 A. Sciuto (radiobiology-V11-01-02)
+- Fixed issue with FPE in the RBE.cc file
+
+## 2023-11-14 I. Hrivnacova (radiobiology-V11-01-01)
+- Fixes for Doxygen:
+  - File descriptions
+  - Move class description comments after namespace
+
+## 2023-06-15 L Pandola, D Chiappara, GAP Cirrone, G Petringa, A Sciuto, S Fattori (radiobiology-V11-01-00)
+- First implementation of the new example
+
+
+

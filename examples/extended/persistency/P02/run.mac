@@ -2,7 +2,7 @@
 # Macro file for "persEx02.cc"
 # 
 # can be run in batch, without graphic
-# or interactively: Idle> /control/execute run1.mac
+# or interactively: Idle> /control/execute run.mac
 #
 /run/verbose 2
 /event/verbose 0

@@ -63,7 +63,7 @@ Par02FastSimModelHCal::Par02FastSimModelHCal( G4String aModelName ) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02FastSimModelHCal::~Par02FastSimModelHCal() {}
+Par02FastSimModelHCal::~Par02FastSimModelHCal() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -101,7 +101,7 @@ void Par02FastSimModelHCal::DoIt( const G4FastTrack& aFastTrack,
   // Consider only primary tracks (do nothing else for secondary hadrons)
   G4ThreeVector Pos = aFastTrack.GetPrimaryTrack()->GetPosition();
   if ( ! aFastTrack.GetPrimaryTrack()->GetParentID() ) {
-    Par02EventInformation* info = (Par02EventInformation*) 
+    auto  info = (Par02EventInformation*) 
                             G4EventManager::GetEventManager()->GetUserInformation();
     if ( info->GetDoSmearing() ) {
       // Smearing according to the hadronic calorimeter resolution
@@ -117,7 +117,7 @@ void Par02FastSimModelHCal::DoIt( const G4FastTrack& aFastTrack,
                         SmearEnergy( aFastTrack.GetPrimaryTrack(), res ) );
       Par02Output::Instance()->FillHistogram( 2, (Esm/MeV) / (Edep/MeV) );
       // Setting the values of Pos, Esm, res and eff
-      Par02PrimaryParticleInformation* primaryInfo= 
+      auto  primaryInfo= 
          static_cast<Par02PrimaryParticleInformation*>(
            ( aFastTrack.GetPrimaryTrack()->GetDynamicParticle()->GetPrimaryParticle() )->
             GetUserInformation() ) ;

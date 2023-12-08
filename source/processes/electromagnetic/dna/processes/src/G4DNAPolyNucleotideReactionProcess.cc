@@ -26,12 +26,15 @@
 /// file: G4DNAPolyNucleotideReactionProcess.cc
 /// brief: This file handls reaction process with DNA geometry.
 #include "G4DNAPolyNucleotideReactionProcess.hh"
+
 #include "G4DNAMolecularReactionTable.hh"
-#include "G4Molecule.hh"
-#include "G4ITReactionChange.hh"
 #include "G4IRTUtils.hh"
-#include "G4VDNAHitModel.hh"
+#include "G4ITReactionChange.hh"
 #include "G4LowEnergyEmProcessSubType.hh"
+#include "G4Molecule.hh"
+#include "G4VDNAHitModel.hh"
+
+#include <memory>
 
 #ifndef PrepareState
 #  define PrepareState()                                                       \
@@ -46,10 +49,9 @@
 G4DNAPolyNucleotideReactionProcess::G4DNAPolyNucleotideReactionProcess(
   const G4String& aName, G4int verbosityLevel)
   : G4VITDiscreteProcess(aName, fUserDefined)
-  , fHasAlreadyReachedNullTime(false)
-  , fVerbose(verbosityLevel)
+  , 
+   fVerbose(verbosityLevel)
   , fRCutOff(G4IRTUtils::GetDNADistanceCutOff())
-  , fpDamageModel(nullptr)
 {
   pParticleChange     = &fParticleChange;
   enableAtRestDoIt    = false;
@@ -179,7 +181,7 @@ G4VParticleChange* G4DNAPolyNucleotideReactionProcess::PostStepDoIt(
 void G4DNAPolyNucleotideReactionProcess::StartTracking(G4Track* track)
 {
   G4VProcess::StartTracking(track);
-  G4VITProcess::fpState.reset(new G4PolyNucleotideReactionState());
+  G4VITProcess::fpState = std::make_shared<G4PolyNucleotideReactionState>();
   G4VITProcess::StartTracking(track);
 }
 

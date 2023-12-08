@@ -42,12 +42,12 @@ using namespace std;
 
 G4DNABornExcitationModel2::G4DNABornExcitationModel2(const G4ParticleDefinition*,
                                                      const G4String& nam) :
-G4VEmModel(nam), isInitialised(false), fTableData(0)
+G4VEmModel(nam)  
 {
-  fpMolWaterDensity = 0;
+  fpMolWaterDensity = nullptr;
   fHighEnergy = 0;
   fLowEnergy = 0;
-  fParticleDefinition = 0;
+  fParticleDefinition = nullptr;
 
   verboseLevel = 0;
   // Verbosity scale:
@@ -61,10 +61,10 @@ G4VEmModel(nam), isInitialised(false), fTableData(0)
   {
     G4cout << "Born excitation model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
   fLastBinCallForFinalXS = 0;
-  fTotalXS = 0;
-  fTableData = 0;
+  fTotalXS = nullptr;
+  fTableData = nullptr;
 
   // Selection of stationary mode
 
@@ -76,7 +76,7 @@ G4VEmModel(nam), isInitialised(false), fTableData(0)
 G4DNABornExcitationModel2::~G4DNABornExcitationModel2()
 {
   // Cross section
-  if (fTableData)
+  
     delete fTableData;
 }
 
@@ -91,7 +91,7 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
     G4cout << "Calling G4DNABornExcitationModel2::Initialise()" << G4endl;
   }
 
-  if(fParticleDefinition != 0 && fParticleDefinition != particle)
+  if(fParticleDefinition != nullptr && fParticleDefinition != particle)
   {
     G4Exception("G4DNABornExcitationModel2::Initialise","em0001",
         FatalException,"Model already initialized for another particle type.");
@@ -102,7 +102,7 @@ void G4DNABornExcitationModel2::Initialise(const G4ParticleDefinition* particle,
   std::ostringstream fullFileName;
   const char* path = G4FindDataDir("G4LEDATA");
 
-  if(G4String(path) == "")
+  if(G4String(path).empty())
   {
     G4Exception("G4DNABornExcitationModel2::Initialise","G4LEDATA-CHECK",
         FatalException, "G4LEDATA not defined in environment variables");

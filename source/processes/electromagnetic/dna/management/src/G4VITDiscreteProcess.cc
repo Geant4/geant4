@@ -65,15 +65,13 @@ G4VITDiscreteProcess::G4VITDiscreteProcess(const G4String& aName,
 //------------------------------------------------------------------------------
 
 G4VITDiscreteProcess::~G4VITDiscreteProcess()
-{
-}
+= default;
 
 //------------------------------------------------------------------------------
 
-G4VITDiscreteProcess::G4VITDiscreteProcess(G4VITDiscreteProcess& right) :
-    G4VITProcess(right)
-{
-}
+G4VITDiscreteProcess::G4VITDiscreteProcess(G4VITDiscreteProcess& right) 
+    
+= default;
 
 //------------------------------------------------------------------------------
 

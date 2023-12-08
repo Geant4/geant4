@@ -40,15 +40,15 @@
 class WLSStackingAction : public G4UserStackingAction
 {
  public:
-  WLSStackingAction();
-  ~WLSStackingAction();
+  WLSStackingAction() = default;
+  ~WLSStackingAction() override = default;
 
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
   void NewStage() override;
   void PrepareNewEvent() override;
 
  private:
-  G4int fPhotonCounter;
+  G4int fPhotonCounter = 0;
 };
 
 #endif

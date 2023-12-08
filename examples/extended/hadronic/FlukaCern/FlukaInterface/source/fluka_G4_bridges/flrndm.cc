@@ -30,7 +30,7 @@
 //
 // The FLUKA flrndm object file is replaced 
 // by the object generated after compilation of this file
-// (see FlukaInterface Makefile).
+// (see FlukaInterface GNUmakefile).
 //
 // Author: G.Hugo, 01 August 2022
 //

@@ -35,6 +35,7 @@
 
 #include "G4Cache.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 class LXeMainVolume;
 class LXePMTSD;
@@ -53,7 +54,7 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   LXeDetectorConstruction();
-  ~LXeDetectorConstruction();
+  ~LXeDetectorConstruction() override;
 
   G4VPhysicalVolume* Construct() override;
   void ConstructSDandField() override;
@@ -101,48 +102,48 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
  private:
   void DefineMaterials();
 
-  LXeDetectorMessenger* fDetectorMessenger;
+  LXeDetectorMessenger* fDetectorMessenger = nullptr;
 
-  G4Box* fExperimentalHall_box;
-  G4LogicalVolume* fExperimentalHall_log;
-  G4VPhysicalVolume* fExperimentalHall_phys;
+  G4Box* fExperimentalHall_box = nullptr;
+  G4LogicalVolume* fExperimentalHall_log = nullptr;
+  G4VPhysicalVolume* fExperimentalHall_phys = nullptr;
 
   // Materials & Elements
-  G4Material* fLXe;
-  G4Material* fAl;
-  G4Element* fN;
-  G4Element* fO;
-  G4Material* fAir;
-  G4Material* fVacuum;
-  G4Element* fC;
-  G4Element* fH;
-  G4Material* fGlass;
-  G4Material* fPstyrene;
-  G4Material* fPMMA;
-  G4Material* fPethylene1;
-  G4Material* fPethylene2;
+  G4Element* fN = nullptr;
+  G4Element* fO = nullptr;
+  G4Element* fC = nullptr;
+  G4Element* fH = nullptr;
+  G4Material* fLXe = nullptr;
+  G4Material* fAl = nullptr;
+  G4Material* fAir = nullptr;
+  G4Material* fVacuum = nullptr;
+  G4Material* fGlass = nullptr;
+  G4Material* fPstyrene = nullptr;
+  G4Material* fPMMA = nullptr;
+  G4Material* fPethylene1 = nullptr;
+  G4Material* fPethylene2 = nullptr;
 
   // Geometry
-  G4double fScint_x;
-  G4double fScint_y;
-  G4double fScint_z;
-  G4double fD_mtl;
-  G4int fNx;
-  G4int fNy;
-  G4int fNz;
-  G4int fSaveThreshold;
-  G4double fOuterRadius_pmt;
-  G4int fNfibers;
+  G4double fScint_x = 17.8 * CLHEP::cm;
+  G4double fScint_y = 17.8 * CLHEP::cm;
+  G4double fScint_z = 22.6 * CLHEP::cm;
+  G4double fD_mtl = 0.0635 * CLHEP::cm;
+  G4int fNx = 2;
+  G4int fNy = 2;
+  G4int fNz = 3;
+  G4int fSaveThreshold = 0;
+  G4double fOuterRadius_pmt = 2.3 * CLHEP::cm;
+  G4int fNfibers = 15;
   static G4bool fSphereOn;
-  G4double fRefl;
-  G4bool fWLSslab;
-  G4bool fMainVolumeOn;
-  G4double fSlab_z;
+  G4double fRefl = 1.;
+  G4bool fWLSslab = false;
+  G4bool fMainVolumeOn = true;
+  G4double fSlab_z = 2.5 * CLHEP::mm;
 
-  LXeMainVolume* fMainVolume;
+  LXeMainVolume* fMainVolume = nullptr;
 
-  G4MaterialPropertiesTable* fLXe_mt;
-  G4MaterialPropertiesTable* fMPTPStyrene;
+  G4MaterialPropertiesTable* fLXe_mt = nullptr;
+  G4MaterialPropertiesTable* fMPTPStyrene = nullptr;
 
   // Sensitive Detectors
   G4Cache<LXeScintSD*> fScint_SD;

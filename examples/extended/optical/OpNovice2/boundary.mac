@@ -22,6 +22,7 @@
 /opnovice2/surfaceSigmaAlpha 0.2
 
 /run/initialize
+/opnovice2/stepping/killOnSecondSurface true
 #
 /gun/particle opticalphoton
 /gun/energy 3 eV

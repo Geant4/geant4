@@ -50,11 +50,6 @@ PrimaryGeneratorAction1::PrimaryGeneratorAction1(G4ParticleGun* gun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction1::~PrimaryGeneratorAction1()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
 {
   const G4double r = 2*mm;

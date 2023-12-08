@@ -83,5 +83,5 @@ protected:
     };
 
     std::vector<ModelInfo> fModelInfoList;
-    G4bool fIsInitialized;
+    G4bool fIsInitialized{false};
 };

@@ -50,7 +50,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
   // get number of stored trajectories
 
   G4TrajectoryContainer* trajectoryContainer = event->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
+  std::size_t n_trajectories = 0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
   // periodic printing

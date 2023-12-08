@@ -34,7 +34,7 @@ using namespace std;
 
 G4DNAChargeIncrease::G4DNAChargeIncrease(const G4String& processName,
                                          G4ProcessType type) :
-    G4VEmProcess(processName, type), isInitialised(false)
+    G4VEmProcess(processName, type) 
 {
   SetProcessSubType(fLowEnergyChargeIncrease);
 }
@@ -42,8 +42,7 @@ G4DNAChargeIncrease::G4DNAChargeIncrease(const G4String& processName,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNAChargeIncrease::~G4DNAChargeIncrease()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,7 +69,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "hydrogen")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNADingfelderChargeIncreaseModel);
         EmModel()->SetLowEnergyLimit(100 * eV);
@@ -81,7 +80,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "alpha+" || name == "helium")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNADingfelderChargeIncreaseModel);
         EmModel()->SetLowEnergyLimit(1 * keV);

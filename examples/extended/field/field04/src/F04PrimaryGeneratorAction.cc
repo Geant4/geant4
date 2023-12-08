@@ -33,6 +33,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4TouchableHandle.hh"
 
 #include "G4GeometryManager.hh"
 
@@ -49,9 +50,7 @@
 
 F04PrimaryGeneratorAction::
        F04PrimaryGeneratorAction(F04DetectorConstruction* detectorConstruction)
-  : fDetector(detectorConstruction), fRndmFlag("off"), fFirst(false),
-    fXvertex(0.), fYvertex(0.), fZvertex(0.),
-    fVertexdefined(false)
+  : fDetector(detectorConstruction)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -68,7 +67,6 @@ F04PrimaryGeneratorAction::
 
   fZvertex = -0.5*(fDetector->GetTargetThickness());
   fParticleGun->SetParticlePosition(G4ThreeVector(fXvertex,fYvertex,fZvertex));
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,14 +92,13 @@ void F04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                                  GetNavigatorForTracking();
      if ( theNavigator->GetWorldVolume() )
      {
-       G4Navigator* aNavigator = new G4Navigator();
+       auto  aNavigator = new G4Navigator();
        aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
 
        G4ThreeVector center(0.,0.,0.);
-       aNavigator->LocateGlobalPointAndSetup(center,0,false);
+       aNavigator->LocateGlobalPointAndSetup(center,nullptr,false);
 
-       G4TouchableHistoryHandle touchable = aNavigator->
-                                          CreateTouchableHistoryHandle();
+       G4TouchableHandle touchable = aNavigator->CreateTouchableHistoryHandle();
 
        // set Global2local transform
        fGlobal2local = touchable->GetHistory()->GetTopTransform();
@@ -115,7 +112,7 @@ void F04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4double x0,y0,z0 ;
 
-  if(fVertexdefined)
+  if(fVertexDefined)
   {
     x0 = fXvertex ;
     y0 = fYvertex ;
@@ -150,7 +147,7 @@ void F04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 void F04PrimaryGeneratorAction::SetXvertex(G4double x)
 {
-  fVertexdefined = true;
+  fVertexDefined = true;
   fXvertex = x;
   G4cout << " X coordinate of the primary vertex = " << fXvertex/mm <<
             " mm." << G4endl;
@@ -160,7 +157,7 @@ void F04PrimaryGeneratorAction::SetXvertex(G4double x)
 
 void F04PrimaryGeneratorAction::SetYvertex(G4double y)
 {
-  fVertexdefined = true;
+  fVertexDefined = true;
   fYvertex = y;
   G4cout << " Y coordinate of the primary vertex = " << fYvertex/mm <<
             " mm." << G4endl;
@@ -170,7 +167,7 @@ void F04PrimaryGeneratorAction::SetYvertex(G4double y)
 
 void F04PrimaryGeneratorAction::SetZvertex(G4double z)
 {
-  fVertexdefined = true;
+  fVertexDefined = true;
   fZvertex = z;
   G4cout << " Z coordinate of the primary vertex = " << fZvertex/mm <<
             " mm." << G4endl;

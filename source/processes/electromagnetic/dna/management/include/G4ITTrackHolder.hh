@@ -51,7 +51,7 @@ public:
   PriorityList();
   PriorityList(G4TrackManyList& allMainList);
   PriorityList(const PriorityList& right);
-  virtual ~PriorityList();
+  ~PriorityList() override;
 
   virtual void NotifyDeletingList(G4TrackList* __list);
 
@@ -103,9 +103,9 @@ public:
         return fpWaitingList;
         break;
       case Undefined:
-        return 0;
+        return nullptr;
     }
-    return 0;
+    return nullptr;
   }
 
   int GetNTracks();
@@ -135,9 +135,9 @@ class G4ITTrackHolder : public G4VITTrackHolder
 
 public:
   //----- typedefs -----
-  typedef int Key; //TODO
-  typedef std::map<Key, PriorityList*> MapOfPriorityLists;
-  typedef std::map<double, std::map<Key, G4TrackList*> > MapOfDelayedLists;
+  using Key = int; //TODO
+  using MapOfPriorityLists = std::map<Key, PriorityList*>;
+  using MapOfDelayedLists = std::map<double, std::map<Key, G4TrackList*> >;
 
   //----- Access singletons + constructors/destructors-----
 
@@ -145,8 +145,8 @@ public:
   static G4ITTrackHolder* MasterInstance();
 
   G4ITTrackHolder();
-  virtual
-  ~G4ITTrackHolder();
+  
+  ~G4ITTrackHolder() override;
 
   //----- Time of the next set of tracks -----
   inline double GetNextTime()
@@ -156,7 +156,7 @@ public:
   }
 
   //----- Add new tracks to the list -----
-  virtual void Push(G4Track*);
+  void Push(G4Track*) override;
   static void PushToMaster(G4Track*);
 
   //----- Operations between lists -----
@@ -208,7 +208,7 @@ public:
     return fDelayedList;
   }
 
-  virtual size_t GetNTracks();
+  size_t GetNTracks() override;
 
   // ----- Check track lists are NOT empty -----
   // comment: checking NOT empty faster than checking IS empty

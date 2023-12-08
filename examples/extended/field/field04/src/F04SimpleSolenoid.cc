@@ -40,14 +40,13 @@
 
 F04SimpleSolenoid::F04SimpleSolenoid(G4double Bz, G4double fz,
                                G4LogicalVolume* lv,
-                               G4ThreeVector c) : F04ElementField(c,lv)
-{
-  fBfield  = Bz;
-  fFringeZ = fz;
-
-  fFieldLength = 2.*((G4Tubs*)fVolume->GetSolid())->GetZHalfLength()+fFringeZ;
-  fFieldRadius = ((G4Tubs*)fVolume->GetSolid())->GetOuterRadius();
-}
+                               G4ThreeVector c)
+ : F04ElementField(c,lv),
+   fBfield(Bz),
+   fFringeZ(fz),
+   fFieldLength(2.*((G4Tubs*)fVolume->GetSolid())->GetZHalfLength()+fFringeZ),
+   fFieldRadius(((G4Tubs*)fVolume->GetSolid())->GetOuterRadius())
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

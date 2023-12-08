@@ -48,6 +48,8 @@ modes that can be passed as a parameter to the executable:
 
 \verbatim
 % exampleRE07 processes.mac
+% exampleRE07 specialized.mac
+% exampleRE07 tracking.mac
 \endverbatim
 
 */

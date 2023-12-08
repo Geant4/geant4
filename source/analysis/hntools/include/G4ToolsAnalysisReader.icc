@@ -26,6 +26,8 @@
 
 #include "G4AnalysisUtilities.hh"
 
+#include "G4THnToolsManager.hh"
+
 //_____________________________________________________________________________
 template <typename HT>
 inline

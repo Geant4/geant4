@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4PhysicsFreeVector.hh"
+#include "G4Exp.hh"
 
 // --------------------------------------------------------------------
 G4PhysicsFreeVector::G4PhysicsFreeVector(G4bool spline)
@@ -42,7 +43,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(G4bool spline)
 
 // --------------------------------------------------------------------
 G4PhysicsFreeVector::G4PhysicsFreeVector(G4int length)
-  : G4PhysicsFreeVector((std::size_t)length, false)
+  : G4PhysicsFreeVector(static_cast<std::size_t>(length), false)
 {}
 
 // --------------------------------------------------------------------
@@ -51,7 +52,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(std::size_t length, G4bool spline)
 {
   numberOfNodes = length;
 
-  if(0 < length) {
+  if (0 < length) {
     binVector.resize(numberOfNodes, 0.0);
     dataVector.resize(numberOfNodes, 0.0);
   }
@@ -72,7 +73,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const std::vector<G4double>& energies,
 {
   numberOfNodes = energies.size();
 
-  if(numberOfNodes != values.size())
+  if (numberOfNodes != values.size())
   {
     G4ExceptionDescription ed;
     ed << "The size of energy vector " << numberOfNodes << " != " << values.size();
@@ -93,7 +94,7 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4double* energies,
 {
   numberOfNodes = length;
 
-  if(0 < numberOfNodes) 
+  if (0 < numberOfNodes) 
   {
     binVector.resize(numberOfNodes);
     dataVector.resize(numberOfNodes);
@@ -112,7 +113,7 @@ void G4PhysicsFreeVector::PutValues(const std::size_t index,
                                     const G4double e,
                                     const G4double value)
 {
-  if(index >= numberOfNodes)
+  if (index >= numberOfNodes)
   {
     PrintPutValueError(index, value, "G4PhysicsFreeVector::PutValues ");
     return;
@@ -142,6 +143,37 @@ void G4PhysicsFreeVector::InsertValues(const G4double energy,
 
   ++numberOfNodes;
   Initialise();
+}
+
+// --------------------------------------------------------------------
+void G4PhysicsFreeVector::EnableLogBinSearch(const G4int n)
+{
+  // check if log search is applicable
+  if (0 >= n || edgeMin <= 0.0 || edgeMin == edgeMax || numberOfNodes < 3)
+  {
+    return;
+  }
+  nLogNodes = static_cast<std::size_t>(static_cast<G4int>(numberOfNodes)/n);
+  if (nLogNodes < 3) { nLogNodes = 3; }
+  scale.resize(nLogNodes, 0);
+  imax1 = nLogNodes - 2;
+  iBin1 = (imax1 + 1) / G4Log(edgeMax/edgeMin);
+  lmin1 = G4Log(edgeMin);
+  scale[0] = 0;
+  scale[imax1 + 1] = idxmax;
+  std::size_t j = 0;
+  for (std::size_t i = 1; i <= imax1; ++i)
+  {
+    G4double e = edgeMin*G4Exp(i/iBin1);
+    for (; j <= idxmax; ++j)
+    {
+      if (binVector[j] <= e && e < binVector[j+1])
+      {
+        scale[i] = j;
+        break;
+      }
+    }
+  }
 }
 
 // --------------------------------------------------------------------

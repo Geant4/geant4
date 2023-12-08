@@ -39,13 +39,10 @@
 #include "G4Molecule.hh"
 
 G4DNAEventScheduler::G4DNAEventScheduler()
-  : IEventScheduler()
-  , fpGillespieReaction(new G4DNAGillespieDirectMethod())
+  : fpGillespieReaction(new G4DNAGillespieDirectMethod())
   , fpEventSet(new G4DNAEventSet())
   , fpUpdateSystem(new G4DNAUpdateSystemModel())
-{
-
-}
+{}
 
 void G4DNAEventScheduler::ClearAndReChargeCounter()
 {
@@ -66,7 +63,7 @@ void G4DNAEventScheduler::ClearAndReChargeCounter()
     {
       return;
     }
-    else if(species->empty())
+    if(species->empty())
     {
       G4MoleculeCounter::Instance()->ResetCounter();
       return;
@@ -200,7 +197,7 @@ void G4DNAEventScheduler::Reset()
   fGlobalTime = fEndTime;
 
   //
-  // RecordTime();//Last register for counter
+  LastRegisterForCounter();//Last register for counter
 
   if(fVerbose > 0)
   {
@@ -218,6 +215,7 @@ void G4DNAEventScheduler::Reset()
 
   fpEventSet->RemoveEventSet();
   fpMesh->Reset();
+  fpGillespieReaction->ResetEquilibrium();
 }
 
 void G4DNAEventScheduler::Initialize(const G4DNABoundingBox& boundingBox,
@@ -255,9 +253,9 @@ void G4DNAEventScheduler::Initialize(const G4DNABoundingBox& boundingBox,
     Voxelizing();
     fpGillespieReaction->SetVoxelMesh(*fpMesh);
     fpGillespieReaction->SetEventSet(fpEventSet.get());
-    fpGillespieReaction->SetTimeStep(
-      0);  // reset fTimeStep = 0 in fpGillespieReaction
+    fpGillespieReaction->SetTimeStep(0);// reset fTimeStep = 0 in fpGillespieReaction
     fpGillespieReaction->Initialize();
+    fpGillespieReaction->CreateEvents();
     fpUpdateSystem->SetMesh(fpMesh.get());
     ClearAndReChargeCounter();
     fInitialized = true;
@@ -286,7 +284,7 @@ void G4DNAEventScheduler::InitializeInMesh()
 
   fpGillespieReaction->SetVoxelMesh(*fpMesh);
   fpUpdateSystem->SetMesh(fpMesh.get());
-  fpGillespieReaction->Initialize();
+  fpGillespieReaction->CreateEvents();
 }
 
 void G4DNAEventScheduler::ResetInMesh()
@@ -479,7 +477,7 @@ void G4DNAEventScheduler::RunInMesh()
 
 void G4DNAEventScheduler::Stepping()  // this event loop
 {
-  fStepNumber < fMaxStep ? fStepNumber++ : fRunning = false;
+  fStepNumber < fMaxStep ? fStepNumber++ : static_cast<int>(fRunning = false);
   if(fpEventSet->size() > fpMesh->size())
   {
     G4ExceptionDescription exceptionDescription;
@@ -514,6 +512,14 @@ void G4DNAEventScheduler::Stepping()  // this event loop
   {
     fpUpdateSystem->UpdateSystem(index, *pReaction);
     fpEventSet->RemoveEvent(selected);
+
+    //hoang's exp
+    if(fpGillespieReaction->SetEquilibrium(pReaction))
+    {
+      ResetEventSet();
+    }
+    //end Hoang's exp
+
     // create new event
     fpGillespieReaction->CreateEvent(index);
     fReactionNumber++;
@@ -626,21 +632,43 @@ G4bool G4DNAEventScheduler::CheckingReactionRadius(G4double resolution)
     G4cout << "reactionDataList.empty()" << G4endl;
     return true;
   }
-  else
+  
+  for(auto it : reactionDataList)
   {
-    for(auto it : reactionDataList)
+    if(it->GetEffectiveReactionRadius() >= resolution / CLHEP::pi)
     {
-      if(it->GetEffectiveReactionRadius() >= resolution / CLHEP::pi)
-      {
-        G4cout << it->GetReactant1()->GetName() << " + "
-               << it->GetReactant2()->GetName() << G4endl;
-        G4cout << "G4DNAEventScheduler::ReactionRadius : "
-               << G4BestUnit(it->GetEffectiveReactionRadius(), "Length")
-               << G4endl;
-        G4cout << "resolution : " << G4BestUnit(resolution, "Length") << G4endl;
-        return false;
-      }
+      G4cout << it->GetReactant1()->GetName() << " + "
+             << it->GetReactant2()->GetName() << G4endl;
+      G4cout << "G4DNAEventScheduler::ReactionRadius : "
+             << G4BestUnit(it->GetEffectiveReactionRadius(), "Length")
+             << G4endl;
+      G4cout << "resolution : " << G4BestUnit(resolution, "Length") << G4endl;
+      return false;
     }
-    return true;
   }
+  return true;
+}
+
+void G4DNAEventScheduler::ResetEventSet()
+{
+  fpEventSet->RemoveEventSet();
+  fpGillespieReaction->CreateEvents();
+}
+
+void G4DNAEventScheduler::LastRegisterForCounter()
+{
+  if(fLastRecoredTime == fTimeToRecord.end())
+  {
+    //fully recorded -> happy ending
+    return;
+  }else
+  {
+    auto lastRecorded = --fLastRecoredTime;//fixed
+    while (fLastRecoredTime != fTimeToRecord.end())
+    {
+      fCounterMap[*fLastRecoredTime] = fCounterMap[*lastRecorded];
+      fLastRecoredTime++;
+    }
+  }
+
 }

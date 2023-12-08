@@ -25,36 +25,34 @@
 //
 /// \file particles/src/G4PhononLong.cc
 /// \brief Implementation of the G4PhononLong class
-//
-//
 
 #include "G4PhononLong.hh"
+
 #include "G4ParticleTable.hh"
+#include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 
 G4PhononLong* G4PhononLong::theInstance = nullptr;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhononLong*  G4PhononLong::Definition() 
+G4PhononLong* G4PhononLong::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
 
   const G4String name = "phononL";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //      
-  //    Arguments for constructor are as follows 
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0,
                     0,               0,             0,
@@ -63,16 +61,13 @@ G4PhononLong*  G4PhononLong::Definition()
                  true,            -1.0,          nullptr,
                 false,        "phononL",           0
              );
+    // clang-format on
   }
   theInstance = static_cast<G4PhononLong*>(anInstance);
   return theInstance;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhononLong*  G4PhononLong::PhononDefinition() 
+G4PhononLong* G4PhononLong::PhononDefinition()
 {
   return Definition();
 }
-
-

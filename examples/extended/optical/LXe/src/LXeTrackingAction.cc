@@ -40,10 +40,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeTrackingAction::LXeTrackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   // Let this be up to the user via vis.mac
@@ -60,9 +56,8 @@ void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
 void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-  LXeTrajectory* trajectory =
-    (LXeTrajectory*) fpTrackingManager->GimmeTrajectory();
-  LXeUserTrackInformation* trackInformation =
+  auto trajectory = (LXeTrajectory*) fpTrackingManager->GimmeTrajectory();
+  auto trackInformation =
     (LXeUserTrackInformation*) aTrack->GetUserInformation();
 
   // Let's choose to draw only the photons that hit the sphere and a pmt

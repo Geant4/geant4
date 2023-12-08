@@ -43,8 +43,8 @@ class G4ParticleDefinition;
 class OpNoviceRun : public G4Run
 {
  public:
-  OpNoviceRun();
-  ~OpNoviceRun();
+  OpNoviceRun() = default;
+  ~OpNoviceRun() override = default;
 
   void SetPrimary(G4ParticleDefinition* particle, G4double energy);
 
@@ -83,21 +83,21 @@ class OpNoviceRun : public G4Run
   void EndOfRun();
 
  private:
-  G4ParticleDefinition* fParticle;
+  G4ParticleDefinition* fParticle = nullptr;
 
-  G4double fCerenkovCounter;
-  G4double fCerenkov2;
-  G4double fScintillationCounter;
-  G4double fScintillation2;
-  G4double fRayleighCounter;
-  G4double fRayleigh2;
-  G4double fAbsorptionCounter;
-  G4double fAbsorption2;
-  G4double fMieCounter;
-  G4double fMie2;
-  G4double fBoundaryCounter;
-  G4double fBoundary2;
-  G4double fEnergy;
+  G4double fCerenkovCounter = 0.;
+  G4double fCerenkov2 = 0.;
+  G4double fScintillationCounter = 0.;
+  G4double fScintillation2 = 0.;
+  G4double fRayleighCounter = 0.;
+  G4double fRayleigh2 = 0.;
+  G4double fAbsorptionCounter = 0.;
+  G4double fAbsorption2 = 0.;
+  G4double fMieCounter = 0.;
+  G4double fMie2 = 0.;
+  G4double fBoundaryCounter = 0.;
+  G4double fBoundary2 = 0.;
+  G4double fEnergy = -1.;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

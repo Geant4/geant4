@@ -51,10 +51,10 @@ class TrackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
-    TrackingAction*   fTrackingAction;
+    TrackingAction*   fTrackingAction = nullptr;
     
-    G4UIdirectory*    fTrackingDir;    
-    G4UIcmdWithABool* fCountCmd;
+    G4UIdirectory*    fTrackingDir    = nullptr;    
+    G4UIcmdWithABool* fCountCmd       = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

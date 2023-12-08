@@ -143,7 +143,7 @@
  8- HOW TO START ?
  
    Execute Hadr07 in 'batch' mode from macro files :
- 	% Hadr07   run1.mac
+ 	% Hadr07   neutron.mac
  		
    Execute Hadr07 in 'interactive mode' with visualization :
  	% Hadr07
@@ -154,6 +154,7 @@
  	Idle> exit
 	
  Macros provided in this example:
+  - neutron.mac: neutron (14.1 MeV) in 30 cm of Li7
   - Na22.mac: multilayers. Radioactive source
   - alpha.mac: alpha (400 MeV). Limit the step size from histo 10
   - ionC12.mac: C12 (2.4 GeV). Limit the step size from histo 10

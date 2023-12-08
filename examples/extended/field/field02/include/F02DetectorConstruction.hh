@@ -38,6 +38,8 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Cache.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4Box;
 class G4Tubs;
 class G4LogicalVolume;
@@ -57,7 +59,7 @@ class F02DetectorConstruction : public G4VUserDetectorConstruction
   public:
 
     F02DetectorConstruction();
-    virtual ~F02DetectorConstruction();
+    ~F02DetectorConstruction() override;
 
   public:
 
@@ -71,8 +73,8 @@ class F02DetectorConstruction : public G4VUserDetectorConstruction
      void SetWorldSizeZ(G4double);
      void SetWorldSizeR(G4double);
 
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
+     G4VPhysicalVolume* Construct() override;
+     void ConstructSDandField() override;
 
   public:
 
@@ -96,32 +98,33 @@ class F02DetectorConstruction : public G4VUserDetectorConstruction
 
   private:
 
-     F02DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
-     G4Cache<F02CalorimeterSD*> fCalorimeterSD; // pointer -> sensitive detector
-     G4Cache<F02ElectricFieldSetup*> fEmFieldSetup;
+     F02DetectorMessenger* fDetectorMessenger = nullptr;  // pointer -> Messenger
+     G4Cache<F02CalorimeterSD*> fCalorimeterSD = nullptr; // pointer -> sensitive detector
+     G4Cache<F02ElectricFieldSetup*> fEmFieldSetup = nullptr;
 
-     G4Tubs*            fSolidWorld;     // pointer to the solid World
-     G4LogicalVolume*   fLogicWorld;     // pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;     // pointer to the physical World
+     G4Tubs*            fSolidWorld = nullptr;     // pointer to the solid World
+     G4LogicalVolume*   fLogicWorld = nullptr;     // pointer to the logical World
+     G4VPhysicalVolume* fPhysiWorld = nullptr;     // pointer to the physical World
 
-     G4Tubs*            fSolidAbsorber;  // pointer to the solid Absorber
-     G4LogicalVolume*   fLogicAbsorber;  // pointer to the logical Absorber
-     G4VPhysicalVolume* fPhysiAbsorber;  // pointer to the physical Absorber
+     G4Tubs*            fSolidAbsorber = nullptr;  // pointer to the solid Absorber
+     G4LogicalVolume*   fLogicAbsorber = nullptr;  // pointer to the logical Absorber
+     G4VPhysicalVolume* fPhysiAbsorber = nullptr;  // pointer to the physical Absorber
 
-     G4Material*        fAbsorberMaterial;
-     G4double           fAbsorberThickness;
-     G4double           fAbsorberRadius;
+     G4Material*        fAbsorberMaterial = nullptr;
+     G4double           fAbsorberThickness  = 4. * CLHEP::cm;
+     G4double           fAbsorberRadius  = 10. * CLHEP::cm;
      G4bool             fWorldChanged;
 
-     G4double           fZAbsorber;
-     G4double           fZStartAbs, fZEndAbs;
+     G4double           fZAbsorber = 36. * CLHEP::cm;
+     G4double           fZStartAbs = 0.;
+     G4double           fZEndAbs = 0.;
 
-     G4Material*        fWorldMaterial;
-     G4double           fWorldSizeR;
-     G4double           fWorldSizeZ;
+     G4Material*        fWorldMaterial = nullptr;
+     G4double           fWorldSizeR = 20. * CLHEP::cm;
+     G4double           fWorldSizeZ = 80. * CLHEP::cm;
 
   private:
- 
+
      void DefineMaterials();
      void ComputeCalorParameters();
      G4VPhysicalVolume* ConstructCalorimeter();

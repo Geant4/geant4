@@ -31,35 +31,32 @@
 // Rate is for gammas > 100keV.
 // NOTE: it gives incorrect energy spectrum for neutrino
 
-// Author: P.Gumplinger, 30 July 2007 
+// Author: P.Gumplinger, 30 July 2007
 // Reference: M. Blecher, TRIUMF/PIENU Technote
-//            "Inclusion of pi->enug in the Monte Carlo" 
+//            "Inclusion of pi->enug in the Monte Carlo"
 // --------------------------------------------------------------------
 #ifndef G4PionRadiativeDecayChannel_hh
 #define G4PionRadiativeDecayChannel_hh 1
 
-#include "globals.hh"
-#include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4VDecayChannel.hh"
+#include "Randomize.hh"
+#include "globals.hh"
 
 class G4PionRadiativeDecayChannel : public G4VDecayChannel
 {
   public:
-
-    G4PionRadiativeDecayChannel(const G4String& theParentName,
-                                G4double        theBR);
+    G4PionRadiativeDecayChannel(const G4String& theParentName, G4double theBR);
     ~G4PionRadiativeDecayChannel() override = default;
 
     G4DecayProducts* DecayIt(G4double) override;
 
   protected:
-
     G4PionRadiativeDecayChannel() = default;
 
+    // Copy constructor and assignment operator
     G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel&) = default;
     G4PionRadiativeDecayChannel& operator=(const G4PionRadiativeDecayChannel&);
-      // Copy constructor and assignment operator
 };
 
 #endif

@@ -54,8 +54,12 @@
 
 #include "TrackingManagerHelper.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 EmStandardPhysicsTrackingManager* EmStandardPhysicsTrackingManager::fMasterTrackingManager =
   nullptr;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
 {
@@ -157,12 +161,16 @@ EmStandardPhysicsTrackingManager::EmStandardPhysicsTrackingManager()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 EmStandardPhysicsTrackingManager::~EmStandardPhysicsTrackingManager()
 {
   if (fMasterTrackingManager == this) {
     fMasterTrackingManager = nullptr;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmStandardPhysicsTrackingManager::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -187,6 +195,8 @@ void EmStandardPhysicsTrackingManager::BuildPhysicsTable(const G4ParticleDefinit
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void EmStandardPhysicsTrackingManager::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if (&part == G4Electron::Definition()) {
@@ -209,6 +219,8 @@ void EmStandardPhysicsTrackingManager::PreparePhysicsTable(const G4ParticleDefin
     fGammaProcs.rayleigh->PreparePhysicsTable(part);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
 {
@@ -363,6 +375,8 @@ void EmStandardPhysicsTrackingManager::TrackElectron(G4Track* aTrack)
   ElectronPhysics physics(*this);
   TrackingManagerHelper::TrackChargedParticle(aTrack, physics);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
 {
@@ -553,6 +567,8 @@ void EmStandardPhysicsTrackingManager::TrackPositron(G4Track* aTrack)
   TrackingManagerHelper::TrackChargedParticle(aTrack, physics);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
 {
   class GammaPhysics final : public TrackingManagerHelper::Physics
@@ -685,6 +701,8 @@ void EmStandardPhysicsTrackingManager::TrackGamma(G4Track* aTrack)
   TrackingManagerHelper::TrackNeutralParticle(aTrack, physics);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void EmStandardPhysicsTrackingManager::HandOverOneTrack(G4Track* aTrack)
 {
   const G4ParticleDefinition* part = aTrack->GetParticleDefinition();
@@ -702,3 +720,5 @@ void EmStandardPhysicsTrackingManager::HandOverOneTrack(G4Track* aTrack)
   aTrack->SetTrackStatus(fStopAndKill);
   delete aTrack;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

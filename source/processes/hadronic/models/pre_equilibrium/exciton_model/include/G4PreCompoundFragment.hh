@@ -47,7 +47,7 @@ public:
   G4PreCompoundFragment(const G4ParticleDefinition*,
 			G4VCoulombBarrier * aCoulombBarrier);
   
-  virtual ~G4PreCompoundFragment();
+  ~G4PreCompoundFragment() override = default;
       
   // ================================================
   // Methods for calculating the emission probability
@@ -55,9 +55,9 @@ public:
   
   // Calculates the total (integrated over kinetic energy) emission
   // probability of a fragment
-  G4double CalcEmissionProbability(const G4Fragment & aFragment) override;
+  G4double CalcEmissionProbability(const G4Fragment& aFragment) override;
   
-  G4double SampleKineticEnergy(const G4Fragment & aFragment) override;
+  G4double SampleKineticEnergy(const G4Fragment& aFragment) override;
 
   G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
   const G4PreCompoundFragment& 

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Layer)
 
 #----------------------------------------------------------------------------
@@ -39,16 +39,16 @@ target_link_libraries(Layer ${Geant4_LIBRARIES} )
 # directly there.
 #
 set(SCRIPTS
-  all_together.g4
-  cu.g4
-  fe.g4
-  graphite.g4
-  lar.g4
-  pb.g4
-  pbwo4.g4
-  polystyrene.g4
-  si.g4
-  w.g4
+  all_together.in
+  cu.in
+  fe.in
+  graphite.in
+  lar.in
+  pb.in
+  pbwo4.in
+  polystyrene.in
+  si.in
+  w.in
   )
 
 foreach(_script ${SCRIPTS})

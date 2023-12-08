@@ -67,6 +67,7 @@ class G4VtkPolydataPipeline : public G4VVtkPipeline
 
     virtual void SetPolydata(const G4Polyhedron& polyhedron);
     virtual void SetPolydata(const G4Polyline& polyline);
+    virtual void SetPolydata(vtkPolyData *polydata);
     virtual void SetPolydataData(const G4Point3D& p);
     virtual void SetPolydataData(double x, double y, double z);
 

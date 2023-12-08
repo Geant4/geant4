@@ -37,8 +37,9 @@
   1 - GEOMETRY DEFINITION
 
      The world volume is a simple water box 3.2 x 3.2 x 3.2 um3 for 0.01 Gy of cut-off
-     absorbed dose and 1.6 x 1.6 x 1.6 um3 for 1 Gy.
-     This example is limited at these geometries for these geometries only.
+     absorbed dose and 1.6 x 1.6 x 1.6 um3 for 1 Gy. This example is limited to these geometries.
+     The choice of simulation volume is a compromise between a sufficient number of chemical species a
+     nd an achievable computation time.
 
      Two parameters define the geometry :
      - the material of the box for the physical stage is water.
@@ -97,7 +98,7 @@
 
   8 - RELEVANT MACRO COMMANDS AND MACRO FILE
 
-     The user macro file is: beam.in
+     The user macro files are: beam.in (conventional), UHDR.in (Ultra High Dose Rate)
 
   9 - REACTION BUILDER
 
@@ -128,5 +129,5 @@
     time (ns). Please correct the dose in the TTree *tree = (TTree *) dir->Get("0.010000");
 
  Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
- Contact: H. Tran (tran@lp2i.in2p3.fr)
+ Contact: H. Tran (tran@cenbg.in2p3.fr)
  CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France

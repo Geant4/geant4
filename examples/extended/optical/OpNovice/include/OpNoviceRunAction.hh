@@ -48,15 +48,15 @@ class OpNoviceRunAction : public G4UserRunAction
 {
  public:
   OpNoviceRunAction(OpNovicePrimaryGeneratorAction* = nullptr);
-  ~OpNoviceRunAction();
+  ~OpNoviceRunAction() override = default;
 
   G4Run* GenerateRun() override;
   void BeginOfRunAction(const G4Run*) override;
   void EndOfRunAction(const G4Run*) override;
 
  private:
-  OpNoviceRun* fRun;
-  OpNovicePrimaryGeneratorAction* fPrimary;
+  OpNoviceRun* fRun = nullptr;
+  OpNovicePrimaryGeneratorAction* fPrimary = nullptr;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

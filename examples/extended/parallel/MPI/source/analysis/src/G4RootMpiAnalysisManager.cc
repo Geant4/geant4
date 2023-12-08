@@ -91,7 +91,7 @@ void G4RootMpiAnalysisManager::SetMpiNtupleMerging(tools::impi* impi,
 G4bool G4RootMpiAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
   if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kNone )  {
-    return G4RootAnalysisManager::OpenFileImpl(fileName);
+    return G4ToolsAnalysisManager::OpenFileImpl(fileName);
   }
 
   // Create ntuple manager(s)
@@ -136,20 +136,42 @@ G4bool G4RootMpiAnalysisManager::WriteImpl()
 //_____________________________________________________________________________
 G4bool G4RootMpiAnalysisManager::CloseFileImpl(G4bool reset)
 {
+// Cannot call base class function, as we need to close files also
+// on slave; an option in the base class can be added for this in future
+
+  Message(kVL4, "close", "files");
+
   auto result = true;
-
-  // Call base class method
-  result &= G4RootAnalysisManager::CloseFileImpl(reset);
-
-  // Close file also on Slave
-  // (skipped in base class)
-  if ( fNtupleFileManager->GetMergeMode() == G4NtupleMergeMode::kSlave )  {
-    // close all open files
-    result &= fFileManager->CloseFiles();
+  if (fVNtupleFileManager) {
+    result &= fVNtupleFileManager->ActionAtCloseFile();
   }
 
-  Message(kVL2, "close", "slave files", "", result);
+  // close file also on Slave
+  // - the conditoon used in the base class is commented out
+  // if ( (fVNtupleFileManager == nullptr) ||
+  //      (fVNtupleFileManager->GetMergeMode() != G4NtupleMergeMode::kSlave) )  {
+    if ( ! fVFileManager->CloseFiles() ) {
+      Warn("Closing files failed", fkClass, "CloseFileImpl");
+      result = false;
+    }
+  // }
+
+  // delete empty files
+  if ( ! fVFileManager->DeleteEmptyFiles() ) {
+    Warn("Deleting empty files failed", fkClass, "CloseFileImpl");
+    result = false;
+  }
+
+  // reset histograms
+  if ( reset ) {
+    if ( ! Reset() ) {
+      Warn("Resetting data failed", fkClass, "CloseFileImpl");
+      result = false;
+    }
+  }
+
+  Message(kVL3, "close", "files", "", result);
+  G4cout << "### Done G4RootMpiAnalysisManager::CloseFileImpl" << G4endl;
 
   return result;
-
 }

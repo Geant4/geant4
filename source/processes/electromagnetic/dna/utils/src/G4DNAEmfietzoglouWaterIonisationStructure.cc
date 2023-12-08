@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4DNAEmfietzoglouWaterIonisationStructure::G4DNAEmfietzoglouWaterIonisationStructure(): nLevels(5)
+G4DNAEmfietzoglouWaterIonisationStructure::G4DNAEmfietzoglouWaterIonisationStructure() 
 {
   energyConstant.push_back(10.*eV);
   energyConstant.push_back(13.*eV);
@@ -52,7 +52,7 @@ G4DNAEmfietzoglouWaterIonisationStructure::G4DNAEmfietzoglouWaterIonisationStruc
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNAEmfietzoglouWaterIonisationStructure::~G4DNAEmfietzoglouWaterIonisationStructure()
-{ }
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

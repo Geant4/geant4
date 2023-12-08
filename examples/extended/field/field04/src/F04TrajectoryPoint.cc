@@ -48,13 +48,12 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4ThreadLocal G4Allocator<F04TrajectoryPoint>* F04TrajPointAllocator=0;
+G4ThreadLocal G4Allocator<F04TrajectoryPoint>* F04TrajPointAllocator=nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04TrajectoryPoint::F04TrajectoryPoint()
-      : fTime(0.), fMomentum(0.,0.,0.),
-        fStepStatus(fUndefined), fVolumeName("") {}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,10 +96,6 @@ F04TrajectoryPoint::F04TrajectoryPoint(const F04TrajectoryPoint &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04TrajectoryPoint::~F04TrajectoryPoint() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 const std::map<G4String,G4AttDef>* F04TrajectoryPoint::GetAttDefs() const
 {
   G4bool isNew;
@@ -135,7 +130,7 @@ const std::map<G4String,G4AttDef>* F04TrajectoryPoint::GetAttDefs() const
 
 std::vector<G4AttValue>* F04TrajectoryPoint::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto  values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
 

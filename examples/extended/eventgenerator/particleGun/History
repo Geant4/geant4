@@ -4,7 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
-## 2022-21-01 mma (particleGunExample-V11-00-01)
+## 2023-07-07 Michel Maire (particleGunExample-V11-01-00)
+- revision of all headers
+
+## 2022-01-21 Michel Maire (particleGunExample-V11-00-01)
 - Update reference in PrimaryGeneratorAction2.cc
  
 ## 2021-12-10 Ben Morgan (particleGunExample-V11-00-00)

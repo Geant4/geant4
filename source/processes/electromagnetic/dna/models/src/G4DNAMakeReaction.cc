@@ -39,8 +39,8 @@
 #include "G4UnitsTable.hh"
 
 G4DNAMakeReaction::G4DNAMakeReaction()
-    : G4VITReactionProcess()
-    , fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
+    : 
+     fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
     , fpReactionModel(nullptr)
     , fpTimeStepper(nullptr)
     , fTimeStep(0)
@@ -71,8 +71,8 @@ std::unique_ptr<G4ITReactionChange>
 G4DNAMakeReaction::MakeReaction(const G4Track &trackA,
                                 const G4Track &trackB)
 {
-    G4Track& tA = const_cast<G4Track&>(trackA);
-    G4Track& tB = const_cast<G4Track&>(trackB);
+    auto & tA = const_cast<G4Track&>(trackA);
+    auto & tB = const_cast<G4Track&>(trackB);
     UpdatePositionForReaction( tA , tB );//TODO: should change it
 
     std::unique_ptr<G4ITReactionChange> pChanges(new G4ITReactionChange());
@@ -83,7 +83,7 @@ G4DNAMakeReaction::MakeReaction(const G4Track &trackA,
 
     const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
     const G4int nbProducts = pReactionData->GetNbProducts();
-    if (nbProducts)
+    if (nbProducts != 0)
     {
         const G4double D1 = pMoleculeA->GetDiffusionCoefficient();
         const G4double D2 = pMoleculeB->GetDiffusionCoefficient();
@@ -134,7 +134,7 @@ void G4DNAMakeReaction::UpdatePositionForReaction(G4Track& trackA,
         trackB.SetPosition(p1);
         return;
     }
-    else if(D2 == 0)
+    if(D2 == 0)
     {
         trackA.SetPosition(p2);
         return;

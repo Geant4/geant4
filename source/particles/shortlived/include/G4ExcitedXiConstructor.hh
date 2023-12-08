@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
@@ -35,131 +32,130 @@
 #ifndef G4ExcitedXiConstructor_h
 #define G4ExcitedXiConstructor_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ExcitedBaryonConstructor.hh"
+#include "globals.hh"
 
-class G4ExcitedXiConstructor: public G4ExcitedBaryonConstructor
+class G4ExcitedXiConstructor : public G4ExcitedBaryonConstructor
 {
-  //This class is a utility class for construction 
-  //short lived particles
+    // This class is a utility class for construction
+    // short lived particles
+  public:
+    enum
+    {
+      NStates = 5
+    };
+
+    enum
+    {
+      NumberOfDecayModes = 4
+    };
 
   public:
     G4ExcitedXiConstructor();
-     ~G4ExcitedXiConstructor() override = default;
+    ~G4ExcitedXiConstructor() override = default;
 
-  protected:  
-     G4bool   Exist( G4int ) override{return true;}
+  protected:
+    G4bool Exist(G4int) override { return true; }
 
-     G4int    GetQuarkContents(G4int, G4int) override;
-     G4String GetName(G4int iIso3, G4int iState) override;
-     G4String GetMultipletName(G4int iState) override;
-     G4double GetMass( G4int state, G4int iso) override;
-     G4double GetWidth( G4int state, G4int iso) override;
-     G4int    GetiSpin(G4int iState) override;
-     G4int    GetiParity(G4int iState) override;
-     G4int    GetEncodingOffset(G4int iState) override;
+    G4int GetQuarkContents(G4int, G4int) override;
+    G4String GetName(G4int iIso3, G4int iState) override;
+    G4String GetMultipletName(G4int iState) override;
+    G4double GetMass(G4int state, G4int iso) override;
+    G4double GetWidth(G4int state, G4int iso) override;
+    G4int GetiSpin(G4int iState) override;
+    G4int GetiParity(G4int iState) override;
+    G4int GetEncodingOffset(G4int iState) override;
 
-     G4DecayTable* CreateDecayTable(const G4String& name,
-					    G4int iIso3, G4int iState,
-					    G4bool fAnti = false) override;
-  private:
-    G4DecayTable* AddXiPiMode( G4DecayTable* table, const G4String& name,
-				    G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddXiGammaMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddLambdaKMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddSigmaKMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-
-  public:   
-    enum     { NStates = 5  };
-  private:
-    enum     { XiIsoSpin = 1 };
+    G4DecayTable* CreateDecayTable(const G4String& name, G4int iIso3, G4int iState,
+                                   G4bool fAnti = false) override;
 
   private:
-    static const char* name[ NStates ];
-    static const G4double mass[ NStates ];
-    static const G4double width[ NStates ];
-    static const G4int    iSpin[ NStates ];
-    static const G4int    iParity[ NStates ];
-    static const G4int    encodingOffset[ NStates ];
+    G4DecayTable* AddXiPiMode(G4DecayTable* table, const G4String& name, G4double br, G4int iIso3,
+                              G4bool fAnti);
+    G4DecayTable* AddXiGammaMode(G4DecayTable* table, const G4String& name, G4double br,
+                                 G4int iIso3, G4bool fAnti);
+    G4DecayTable* AddLambdaKMode(G4DecayTable* table, const G4String& name, G4double br,
+                                 G4int iIso3, G4bool fAnti);
+    G4DecayTable* AddSigmaKMode(G4DecayTable* table, const G4String& name, G4double br, G4int iIso3,
+                                G4bool fAnti);
 
-  public:   
-    enum     { NumberOfDecayModes = 4 };
   private:
-    enum     { XiPi=0,  XiGamma=1,  LambdaK=2, SigmaK=3 };
-  private:
-   static const G4double bRatio[ NStates ][ NumberOfDecayModes];
+    enum
+    {
+      XiIsoSpin = 1
+    };
+
+    static const char* name[NStates];
+    static const G4double mass[NStates];
+    static const G4double width[NStates];
+    static const G4int iSpin[NStates];
+    static const G4int iParity[NStates];
+    static const G4int encodingOffset[NStates];
+
+    enum
+    {
+      XiPi = 0,
+      XiGamma = 1,
+      LambdaK = 2,
+      SigmaK = 3
+    };
+
+    static const G4double bRatio[NStates][NumberOfDecayModes];
 };
 
-
-inline
- G4int    G4ExcitedXiConstructor::GetiSpin(G4int iState)
+inline G4int G4ExcitedXiConstructor::GetiSpin(G4int iState)
 {
   return iSpin[iState];
 }
 
-inline
- G4int    G4ExcitedXiConstructor::GetiParity(G4int iState)
+inline G4int G4ExcitedXiConstructor::GetiParity(G4int iState)
 {
   return iParity[iState];
 }
 
-inline
- G4int    G4ExcitedXiConstructor::GetEncodingOffset(G4int iState)
+inline G4int G4ExcitedXiConstructor::GetEncodingOffset(G4int iState)
 {
   return encodingOffset[iState];
 }
 
-inline
- G4int  G4ExcitedXiConstructor::GetQuarkContents(G4int iQ, G4int iIso3)
+inline G4int G4ExcitedXiConstructor::GetQuarkContents(G4int iQ, G4int iIso3)
 {
-  G4int quark=0;
-  if ( iQ == 0 ){
+  G4int quark = 0;
+  if (iQ == 0) {
     // s-quark
     quark = 3;
-  } else if ( iQ == 1 ){
+  }
+  else if (iQ == 1) {
     // s-quark
     quark = 3;
-  }  else if ( iQ == 2 ){
+  }
+  else if (iQ == 2) {
     if (iIso3 == +1) {
       // u-quark
       quark = 2;
-    } else {
+    }
+    else {
       // d-quark
       quark = 1;
     }
-  } 
+  }
   return quark;
 }
 
-inline 
- G4String G4ExcitedXiConstructor::GetMultipletName(G4int iState)
+inline G4String G4ExcitedXiConstructor::GetMultipletName(G4int iState)
 {
   return name[iState];
 }
 
-inline 
- G4String G4ExcitedXiConstructor::GetName(G4int iIso3, G4int iState)
+inline G4String G4ExcitedXiConstructor::GetName(G4int iIso3, G4int iState)
 {
   G4String particle = name[iState];
   if (iIso3 == +1) {
     particle += "0";
-  } else if (iIso3 ==-1) {
+  }
+  else if (iIso3 == -1) {
     particle += "-";
   }
   return particle;
 }
 #endif
-
-
-
-
-
-
-
-
-
-

@@ -38,8 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(const G4String& fileName)
- : G4UserRunAction(),
-   fFileName(fileName)
+ : fFileName(fileName)
 {
   // Create analysis manager
   auto analysisManager = G4AnalysisManager::Instance();
@@ -62,12 +61,6 @@ RunAction::RunAction(const G4String& fileName)
   analysisManager->CreateNtupleDColumn("Ypos");    // column id = 4
   analysisManager->CreateNtupleDColumn("time");    // column id = 5
   analysisManager->FinishNtuple();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,28 +35,25 @@
 #include "G4NucleiProperties.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4VCoulombBarrier.hh"
 
 G4VPreCompoundFragment::G4VPreCompoundFragment(
   const G4ParticleDefinition* part, G4VCoulombBarrier* aCoulombBarrier)
-  : particle(part), theCoulombBarrierPtr(aCoulombBarrier),
-    theMomentum(0.,0.,0.,0.),
-    theA(particle->GetBaryonNumber()),
-    theZ(G4lrint(particle->GetPDGCharge())),
-    theResA(0),theResZ(0),theFragA(0),theFragZ(0),theBindingEnergy(0.0), 
-    theMinKinEnergy(0.0),theMaxKinEnergy(0.0),theResMass(0.0),
-    theReducedMass(0.0),
-    theEmissionProbability(0.0),theCoulombBarrier(0.0),
-    OPTxs(3),useSICB(true)
+  : theA(part->GetBaryonNumber()),
+    theZ(G4lrint(part->GetPDGCharge()/CLHEP::eplus)),
+    particle(part),
+    theCoulombBarrierPtr(aCoulombBarrier)
 {
   theMass = particle->GetPDGMass();
   fNucData = G4NuclearLevelData::GetInstance();
   theParameters = fNucData->GetParameters();
   g4calc = G4Pow::GetInstance();
-  theResA13 = 0.0;
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
-{}
+{
+  delete theCoulombBarrierPtr;
+}
 
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)
@@ -76,7 +73,7 @@ operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
 }
 
 void 
-G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
+G4VPreCompoundFragment::Initialize(const G4Fragment& aFragment)
 {
   theFragA = aFragment.GetA_asInt();
   theFragZ = aFragment.GetZ_asInt();
@@ -89,10 +86,12 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
   }
 
   theResA13 = g4calc->Z13(theResA);
-  theCoulombBarrier = theCoulombBarrierPtr->
-    GetCoulombBarrier(theResA,theResZ,aFragment.GetExcitationEnergy());
-    
-  G4double elim = (0 == OPTxs) ? theCoulombBarrier : theCoulombBarrier*0.5;
+
+  if (0 < theZ) {
+    theCoulombBarrier = theCoulombBarrierPtr->
+      GetCoulombBarrier(theResA, theResZ, aFragment.GetExcitationEnergy());
+  }
+  G4double elim = (0 == OPTxs) ? theCoulombBarrier : theCoulombBarrier*0.6;
   
   // Calculate masses
   theResMass = G4NucleiProperties::GetNuclearMass(theResA, theResZ);
@@ -106,9 +105,9 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
   // after separation - the true assimptotic value
   G4double Ecm = aFragment.GetMomentum().m();
   G4double twoEcm = Ecm + Ecm;
-  theMaxKinEnergy = std::max(((Ecm-theResMass)*(Ecm+theResMass) + theMass*theMass)
-			     /twoEcm - theMass,0.0);
+  theMaxKinEnergy = std::max(((Ecm-theResMass)*(Ecm+theResMass) +
+			      theMass*theMass)/twoEcm - theMass, 0.0);
   theMinKinEnergy = (elim == 0.0) ? 0.0 :
-    std::max(((theMass+elim)*(twoEcm-theMass-elim) + 
-	      theMass*theMass)/twoEcm - theMass,0.0);
+    std::max(((theMass+elim)*(twoEcm-theMass-elim) +
+	      theMass*theMass)/twoEcm - theMass, 0.0);
 }

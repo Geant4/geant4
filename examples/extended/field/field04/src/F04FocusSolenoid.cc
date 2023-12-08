@@ -41,13 +41,11 @@
 
 F04FocusSolenoid::F04FocusSolenoid(G4double Ba, G4double Bb, G4double fz,
                            G4LogicalVolume* lv,
-                           G4ThreeVector c) : F04SimpleSolenoid(Ba, fz, lv, c)
-
-{
-   fHalf = false;
-   fB1 = Ba;
-   fB2 = Bb;
-}
+                           G4ThreeVector c)
+ : F04SimpleSolenoid(Ba, fz, lv, c),
+   fB1(Ba),
+   fB2(Bb)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

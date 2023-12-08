@@ -42,21 +42,29 @@
 // History:
 // - 01/Feb/1996, Makoto Asai - Created
 // - 04/Oct/2011, Pere Mato - Use of G4TrackStack with value semantics
+// - 28/Aug/2023, Makoto Asai - Adding sub-event parallelism
 // --------------------------------------------------------------------
 #ifndef G4StackManager_hh
 #define G4StackManager_hh 1
+
+#include <map>
+#include <vector>
 
 #include "G4UserStackingAction.hh"
 #include "G4StackedTrack.hh"
 #include "G4TrackStack.hh"
 #include "G4SmartTrackStack.hh"
+#include "G4SubEventTrackStack.hh"
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
+#include "G4ExceptionSeverity.hh"
 #include "globals.hh"
 
 class G4StackingMessenger;
 class G4VTrajectory;
+class G4Event;
+class G4ParticleDefinition;
 
 class G4StackManager 
 {
@@ -72,7 +80,7 @@ class G4StackManager
     G4int PushOneTrack(G4Track* newTrack,
                        G4VTrajectory* newTrajectory = nullptr);
     G4Track* PopNextTrack(G4VTrajectory** newTrajectory);
-    G4int PrepareNewEvent();
+    G4int PrepareNewEvent(G4Event* currentEvent);
 
     void ReClassify();
       // Send all tracks stored in the Urgent stack one by one to 
@@ -107,6 +115,31 @@ class G4StackManager
       // If the destination is fKill, the track is deleted.
       // If the origin is fKill, nothing happen.
 
+    void RegisterSubEventType(G4int ty, G4int maxEnt);
+      // Registering a sub-event type and the capacity of the tracks to be 
+      // stored in a G4SubEvent object of the corresponding sub-event type
+
+    void SetDefaultClassification(
+             G4TrackStatus, G4ClassificationOfNewTrack,
+             G4ExceptionSeverity es = G4ExceptionSeverity::IgnoreTheIssue);
+    void SetDefaultClassification(
+             const G4ParticleDefinition*, G4ClassificationOfNewTrack,
+             G4ExceptionSeverity es = G4ExceptionSeverity::IgnoreTheIssue);
+      // Define the default classification for a newly arriving track.
+      // Default can be alternated by the UserStackingAction.
+      // G4ExceptionSeverity can be set to warn the user if the classification
+      // is inproperly changed.
+
+    inline G4ClassificationOfNewTrack GetDefaultClassification()
+    { return fDefaultClassification; }
+
+  public:
+    void ReleaseSubEvent(G4int ty);
+    inline std::size_t GetNSubEventTypes()
+    { return subEvtTypes.size(); }
+    inline G4int GetSubEventType(std::size_t i)
+    { return subEvtTypes[i]; }
+    
     void clear();
     void ClearUrgentStack();
     void ClearWaitingStack(G4int i=0);
@@ -119,8 +152,8 @@ class G4StackManager
     void SetUserStackingAction(G4UserStackingAction* value);
 
   private:
-
-    G4ClassificationOfNewTrack DefaultClassification(G4Track* aTrack);
+    void DefineDefaultClassification(const G4Track* aTrack);
+    void SortOut(G4StackedTrack&,G4ClassificationOfNewTrack);
 
   private:
 
@@ -136,6 +169,18 @@ class G4StackManager
     G4StackingMessenger* theMessenger = nullptr;
     std::vector<G4TrackStack*> additionalWaitingStacks;
     G4int numberOfAdditionalWaitingStacks = 0;
+
+    std::map<G4TrackStatus,
+             std::pair<G4ClassificationOfNewTrack,G4ExceptionSeverity>>
+             defClassTrackStatus;
+    std::map<const G4ParticleDefinition*,
+             std::pair<G4ClassificationOfNewTrack,G4ExceptionSeverity>>
+             defClassPartDef;
+    G4ClassificationOfNewTrack fDefaultClassification = fUrgent;
+    G4ExceptionSeverity fExceptionSeverity = G4ExceptionSeverity::IgnoreTheIssue;
+
+    std::map<G4int,G4SubEventTrackStack*> subEvtStackMap;
+    std::vector<G4int> subEvtTypes;
 };
 
 #endif

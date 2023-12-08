@@ -33,11 +33,11 @@ G4ToolsAnalysisReader::G4ToolsAnalysisReader(const G4String& type)
  : G4VAnalysisReader(type)
 {
   // Create managers
-  fH1Manager = new G4THnToolsManager<1, tools::histo::h1d>(fState);
-  fH2Manager = new G4THnToolsManager<2, tools::histo::h2d>(fState);
-  fH3Manager = new G4THnToolsManager<3, tools::histo::h3d>(fState);
-  fP1Manager = new G4THnToolsManager<2, tools::histo::p1d>(fState);
-  fP2Manager = new G4THnToolsManager<3, tools::histo::p2d>(fState);
+  fH1Manager = new G4THnToolsManager<kDim1, tools::histo::h1d>(fState);
+  fH2Manager = new G4THnToolsManager<kDim2, tools::histo::h2d>(fState);
+  fH3Manager = new G4THnToolsManager<kDim3, tools::histo::h3d>(fState);
+  fP1Manager = new G4THnToolsManager<kDim2, tools::histo::p1d>(fState);
+  fP2Manager = new G4THnToolsManager<kDim3, tools::histo::p2d>(fState);
       // The managers will be deleted by the base class
 
   // Set managers to base class which takes then their ownership

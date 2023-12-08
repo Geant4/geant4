@@ -99,11 +99,11 @@ void G4OpticalParameters::SetDefaults()
 
 void G4OpticalParameters::Initialise()
 {
-  verboseLevel = 0;
+  verboseLevel = 1;
 
   cerenkovStackPhotons          = true;
   cerenkovTrackSecondariesFirst = true;
-  cerenkovVerboseLevel          = 0;
+  cerenkovVerboseLevel          = 1;
   cerenkovMaxPhotons            = 100;
   cerenkovMaxBetaChange         = 10.;
 
@@ -112,22 +112,22 @@ void G4OpticalParameters::Initialise()
   scintStackPhotons          = true;
   scintFiniteRiseTime        = false;
   scintTrackSecondariesFirst = true;
-  scintVerboseLevel          = 0;
+  scintVerboseLevel          = 1;
 
   wlsTimeProfileName = "delta";
-  wlsVerboseLevel    = 0;
+  wlsVerboseLevel    = 1;
 
   wls2TimeProfileName = "delta";
-  wls2VerboseLevel    = 0;
+  wls2VerboseLevel    = 1;
 
-  absorptionVerboseLevel = 0;
+  absorptionVerboseLevel = 1;
 
-  rayleighVerboseLevel = 0;
+  rayleighVerboseLevel = 1;
 
-  mieVerboseLevel = 0;
+  mieVerboseLevel = 1;
 
   boundaryInvokeSD     = false;
-  boundaryVerboseLevel = 0;
+  boundaryVerboseLevel = 1;
 
   processActivation["OpRayleigh"]    = true;
   processActivation["OpBoundary"]    = true;

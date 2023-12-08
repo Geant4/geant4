@@ -74,6 +74,7 @@ class G4VtkVisContext
         green(vc2.green),
         blue(vc2.blue),
         alpha(vc2.alpha),
+        fSize(vc2.fSize),
         fDrawingStyle(vc2.fDrawingStyle)
     {}
 };

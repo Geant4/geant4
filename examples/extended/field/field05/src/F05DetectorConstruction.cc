@@ -67,8 +67,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::F05DetectorConstruction()
- : fVacuum(0), fWorldSizeXY(0), fWorldSizeZ(0), 
-   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0)
+ : fVacuum(nullptr)
 {
   // materials
   DefineMaterials();
@@ -78,7 +77,7 @@ F05DetectorConstruction::F05DetectorConstruction()
 
 F05DetectorConstruction::~F05DetectorConstruction()
 {
-  if (fField) delete fField;
+  delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,29 +99,29 @@ G4VPhysicalVolume* F05DetectorConstruction::Construct()
   // World
   //
 
-  fWorldSizeXY = 20.0*m;
-  fWorldSizeZ  =  1.0*mm;
+  G4double worldSizeXY = 20.0*m;
+  G4double worldSizeZ  =  1.0*mm;
 
-  fSolidWorld = new G4Box("World",                               //its name
-                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2); //its size
- 
-  fLogicWorld = new G4LogicalVolume(fSolidWorld,        //its solid
+  auto solidWorld = new G4Box("World",                        //its name
+                   worldSizeXY/2,worldSizeXY/2,worldSizeZ/2); //its size
+
+  auto logicWorld = new G4LogicalVolume(solidWorld,     //its solid
                                     fVacuum,            //its material
                                     "World");           //its name
- 
-  fPhysiWorld = new G4PVPlacement(0,                    //no rotation
+
+  auto physiWorld = new G4PVPlacement(nullptr,           //no rotation
                                   G4ThreeVector(),      //at (0,0,0)
-                                  fLogicWorld,          //its logical volume
+                                  logicWorld,           //its logical volume
                                   "World",              //its name
-                                  0,                    //its mother  volume
+                                  nullptr,              //its mother  volume
                                   false,                //no boolean operation
                                   0);                   //copy number
-  
+
   G4UserLimits* stepLimit;
   stepLimit = new G4UserLimits(5*mm);
 
-  fLogicWorld->SetUserLimits(stepLimit);
- 
+  logicWorld->SetUserLimits(stepLimit);
+
   //
   // Visualization attributes
   //
@@ -131,12 +130,12 @@ G4VPhysicalVolume* F05DetectorConstruction::Construct()
   //
   //always return the physical World
   //
-  return fPhysiWorld;
+  return physiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal F05Field* F05DetectorConstruction::fField = 0;
+G4ThreadLocal F05Field* F05DetectorConstruction::fField = nullptr;
 
 void F05DetectorConstruction::ConstructSDandField()
 
@@ -146,7 +145,7 @@ void F05DetectorConstruction::ConstructSDandField()
      fField = new F05Field();
 
 //     G4RepleteEofM* equation = new G4RepleteEofM(fField);
-     G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fField);
+     auto  equation = new G4EqEMFieldWithSpin(fField);
 //     equation->SetBField();
 //     equation->SetEField();
 //     equation->SetSpin();
@@ -159,7 +158,7 @@ void F05DetectorConstruction::ConstructSDandField()
 
      G4double minStep           = 0.01*mm;
 
-     G4ChordFinder* chordFinder =
+     auto  chordFinder =
                     new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
 
      // Set accuracy parameters

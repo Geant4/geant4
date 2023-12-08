@@ -24,6 +24,9 @@
 # Initialize geometry and physic 
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 ########################################################################################################## 
 
 /gps/particle proton
@@ -66,6 +69,7 @@
 ######################################################################
 ###/vis/scene/create 
 ###/vis/open OGL 
+####/vis/open  ## open the default viewer
 /vis/viewer/set/background white
 /vis/viewer/set/viewpointThetaPhi 60 130
 /vis/viewer/zoom 1.0

@@ -40,7 +40,7 @@ void G4LEPTSElossDistr::ReadFile()
 
   FILE * fp;
 
-  if ((fp=fopen(fileName.c_str(), "r"))==NULL){
+  if ((fp=fopen(fileName.c_str(), "r"))==nullptr){
     //G4cout << "Error reading " << fileName << G4endl;
     NoBins = 0;
     bFileFound = false;
@@ -60,7 +60,7 @@ void G4LEPTSElossDistr::ReadFile()
     for( G4int ia = 0; ia < nAngles; ia++ ){
       float angleSep; 
       (void) fscanf(fp,"%f \n",&angleSep);
-      G4LEPTSDistribution* dist = new G4LEPTSDistribution();
+      auto  dist = new G4LEPTSDistribution();
       theNDistributions ++;
       mddist angleDist;
       angleDist[angleSep] = dist;
@@ -89,7 +89,7 @@ G4double G4LEPTSElossDistr::Sample( G4double eMin, G4double eMax)
   if( eMin > eMax) return 0.0;
 
   //Get the distribution to do the sampling
-  G4LEPTSDistribution* distr  = 0;
+  G4LEPTSDistribution* distr  = nullptr;
   if( theNDistributions == 1 ){
     distr = (*( (*(theDistributions.begin())).second ).begin()).second;
   } else{

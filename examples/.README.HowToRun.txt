@@ -25,11 +25,10 @@ Here we recall only the basics.
 % cd path_to_exampleXYZ     # go to directory which contains your example
 % mkdir exampleXYZ_build
 % cd exampleXYZ_build
-% cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/Geant4-11.0.0/ ../exampleXYZ
+% cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/cmake/Geant4/ ../exampleXYZ
 % make -j N exampleXYZ      # "N" is the number of processes 
 % make install              # this step is optional              
 \endverbatim
-
 
 \section HowToRun_s2 Execute exampleXYZ in 'batch' mode from macro files
  		

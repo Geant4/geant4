@@ -23,45 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // ------------------------------------------------------------
 // GEANT 4 class header file
 //
-//  History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Gamma 	    
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
-// 
+//  History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Gamma
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
+//
 
 #include "G4AdjointGamma.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                            GAMMA                               ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+
 G4AdjointGamma* G4AdjointGamma::theInstance = nullptr;
 
-
-G4AdjointGamma*  G4AdjointGamma::Definition() 
+G4AdjointGamma* G4AdjointGamma::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
 
   const G4String name = "adj_gamma";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //      
-  //    Arguments for constructor are as follows 
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // clang-format off
    anInstance = new G4ParticleDefinition(
 	         name,         0.0*MeV,       0.0*MeV,         0.0, 
 		    2,              -1,            -1,          
@@ -70,17 +66,18 @@ G4AdjointGamma*  G4AdjointGamma::Definition()
 	         true,             0.0,          nullptr,
                 false,     "adj_gamma",      10000022
 	      );
+    // clang-format on
   }
   theInstance = static_cast<G4AdjointGamma*>(anInstance);
   return theInstance;
 }
 
-G4AdjointGamma*  G4AdjointGamma::AdjointGammaDefinition() 
+G4AdjointGamma* G4AdjointGamma::AdjointGammaDefinition()
 {
   return Definition();
 }
 
-G4AdjointGamma*  G4AdjointGamma::AdjointGamma() 
+G4AdjointGamma* G4AdjointGamma::AdjointGamma()
 {
   return Definition();
 }

@@ -47,6 +47,10 @@ class G4Event;
 namespace Common
 {
 
+/// \brief The primary generator class with particle gun
+///
+/// \author I. Hrivnacova; IPN Orsay
+
 class GunPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:

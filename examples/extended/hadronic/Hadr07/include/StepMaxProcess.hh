@@ -47,30 +47,30 @@ class StepMaxProcess : public G4VDiscreteProcess
   public:
 
      StepMaxProcess(const G4String& processName = "UserMaxStep",
-                   G4ProcessType type    = fUserDefined);
-    ~StepMaxProcess();
+                             G4ProcessType type = fUserDefined);
+    ~StepMaxProcess() override;
 
-     virtual G4bool IsApplicable(const G4ParticleDefinition&);
+     G4bool IsApplicable(const G4ParticleDefinition&) override;
 
      void SetMaxStep1(G4double);
      void ApplyMaxStep2(G4bool);
 
-     virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition);
+     G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4ForceCondition* condition) override;
 
-     virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-     virtual G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
+     G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*) override
      {return DBL_MAX;};    
 
   private:
 
-     G4double fMaxStep1;
-     G4double fMaxStep2;
-     G4bool   fApplyMaxStep2;
+     G4double fMaxStep1 = 0.;
+     G4double fMaxStep2 = 0.;
+     G4bool   fApplyMaxStep2 = true;
      
-     StepMaxMessenger* fMess;
+     StepMaxMessenger* fMess = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

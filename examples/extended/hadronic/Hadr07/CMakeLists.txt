@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Hadr07)
 
 #----------------------------------------------------------------------------
@@ -40,8 +40,8 @@ target_link_libraries(Hadr07 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(Hadr07_SCRIPTS
-   hadr07.in Na22.mac alpha.mac ionC12.mac multiLayers.mac proton.mac vis.mac water.mac 
-   plotHisto.C plot2.C
+   hadr07.in Na22.mac alpha.mac ionC12.mac multiLayers.mac neutron.mac 
+   proton.mac vis.mac water.mac plotHisto.C plot2.C
   )
   
 foreach(_script ${Hadr07_SCRIPTS})

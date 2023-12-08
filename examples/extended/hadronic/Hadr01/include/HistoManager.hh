@@ -89,19 +89,21 @@ public:
 
   void SetVerbose(G4int val);        
 
-  inline void SetTargetRadius(G4double val)            {fRadius  = val;
-                                                        fR2 = val*val;};
-  inline void SetTargetLength(G4double val)            {fLength  = val;};
-  inline void SetNumberOfSlices(G4int val)             {fNSlices = val;};
-  inline void SetNumberOfBinsE(G4int val)              {fNBinsE  = val;};
-  inline void SetDefaultBeamPositionFlag(G4bool f)     {fBeamFlag = f;};        
-  inline void SetMaxEnergyDeposit(G4double val)        {fEdepMax = val;};
+  inline void SetTargetRadius(G4double val) { fRadius = val; fR2 = val*val; };
+  inline void SetTargetLength(G4double val) { fLength = val; };
+  inline void SetNumberOfSlices(G4int val)  { fNSlices = val; };
+  inline void SetNumberOfBinsE(G4int val)   { fNBinsE = val; };
+  inline void SetDefaultBeamPositionFlag(G4bool f) { fBeamFlag = f; };        
+  inline void SetMaxEnergyDeposit(G4double val) { fEdepMax = val; };
 
-  inline G4double Radius()         const               {return fRadius;};
-  inline G4double Length()         const               {return fLength;};
-  inline G4bool   DefaultBeamPosition() const          {return fBeamFlag;};
-  inline G4int    NumberOfSlices() const               {return fNSlices;};
-  inline G4int    GetVerbose()     const               {return fVerbose;};
+  inline G4double Radius() const { return fRadius; };
+  inline G4double Length() const { return fLength; };
+  inline G4bool   DefaultBeamPosition() const { return fBeamFlag; };
+  inline G4int    NumberOfSlices() const { return fNSlices; };
+  inline G4int    GetVerbose() const { return fVerbose; };
+
+  inline G4int PrintBertiniXS() const { return fPrintBertiniXS; };
+  inline void SetPrintBertiniXS(G4int key) { fPrintBertiniXS = key; };
 
 private:
 
@@ -148,6 +150,7 @@ private:
   G4int fNneu_back = 0;
   G4int fNstep = 0;
   G4int fNHisto = 28;
+  G4int fPrintBertiniXS = -1; // 0 - all
 
   G4bool fBeamFlag = true;
   G4bool fHistoBooked = false;

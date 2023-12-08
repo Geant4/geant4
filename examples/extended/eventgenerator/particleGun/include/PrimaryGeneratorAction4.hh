@@ -47,7 +47,7 @@ class PrimaryGeneratorAction4
 {
   public:
     PrimaryGeneratorAction4(G4ParticleGun*);    
-   ~PrimaryGeneratorAction4();
+   ~PrimaryGeneratorAction4() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
@@ -58,12 +58,12 @@ class PrimaryGeneratorAction4
     G4double GetCosAlphaMax() {return fCosAlphaMax;};
             
   private:
-    G4double fRmin3;
-    G4double fRmax3;              //vertex volume
-    G4double fCosAlphaMin;
-    G4double fCosAlphaMax;        //opening angle
+    G4double fRmin3 = 0.;
+    G4double fRmax3 = 0.;              //vertex volume
+    G4double fCosAlphaMin = 0.;
+    G4double fCosAlphaMax = 0.;        //opening angle
 
-    G4ParticleGun*  fParticleGun;
+    G4ParticleGun*  fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

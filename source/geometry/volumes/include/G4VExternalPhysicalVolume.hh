@@ -34,17 +34,17 @@
 //   * volume type is similar to G4PVPlacement -- not replicated
 //   * external navigator may provide 'many'/Boolean operation
 
-// Author: J.Apostolakis, October 2019
+// Author: J.Apostolakis, CERN - October 2019
 // ----------------------------------------------------------------------
 #ifndef G4VEXTERNALPHYSICSVOLUME_HH
-#define G4VEXTERNALPHYSICSVOLUME_HH
+#define G4VEXTERNALPHYSICSVOLUME_HH 1
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 
 class G4VExternalPhysicalVolume : public G4VPhysicalVolume
 {
-  public:  // with description
+  public:
 
     G4VExternalPhysicalVolume( G4RotationMatrix* pRot,
                                const G4ThreeVector& tlate,
@@ -68,8 +68,6 @@ class G4VExternalPhysicalVolume : public G4VPhysicalVolume
       // by default it is set to maximum precision.
       // Reports a maximum of overlaps errors according to parameter in input.
       // Returns true if the volume is overlapping.
-
-  public:  // without description
 
     G4VExternalPhysicalVolume(__void__&);
       // Fake default constructor for usage restricted to direct object
@@ -102,4 +100,3 @@ class G4VExternalPhysicalVolume : public G4VPhysicalVolume
 };
 
 #endif
-

@@ -57,12 +57,12 @@ int main(int argc, char** argv)
 
   auto runManager = G4RunManagerFactory::CreateRunManager();
 
-  DetectorConstruction* detector = new DetectorConstruction();
+  auto detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
-  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  auto opticalPhysics = new G4OpticalPhysics();
 
   physicsList->RegisterPhysics(opticalPhysics);
   runManager->SetUserInitialization(physicsList);

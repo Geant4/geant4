@@ -384,6 +384,13 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   ver2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   ver2Cmd->SetToBeBroadcasted(false);
 
+  nFreeCmd = new G4UIcmdWithAnInteger("/process/em/nForFreeVector",this);
+  nFreeCmd->SetGuidance("Set number for logarithmic bin search algorithm");
+  nFreeCmd->SetParameterName("nFree",true);
+  nFreeCmd->SetDefaultValue(2);
+  nFreeCmd->AvailableForStates(G4State_PreInit);
+  nFreeCmd->SetToBeBroadcasted(false);
+
   transWithMscCmd = new G4UIcmdWithAString("/process/em/transportationWithMsc",this);
   transWithMscCmd->SetGuidance("Enable/disable the G4TransportationWithMsc process");
   transWithMscCmd->SetParameterName("trans",true);
@@ -424,7 +431,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   ssCmd->AvailableForStates(G4State_PreInit);
   ssCmd->SetToBeBroadcasted(false);
 
-  fluc1Cmd = new G4UIcmdWithAString("/process/eloss/setFluctModel",this);
+  fluc1Cmd = new G4UIcmdWithAString("/process/eLoss/setFluctModel",this);
   fluc1Cmd->SetGuidance("Define type of energy loss fluctuation model");
   fluc1Cmd->SetParameterName("Fluc1",true);
   fluc1Cmd->SetCandidates("Dummy Universal Urban");
@@ -511,6 +518,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete ver1Cmd;
   delete ver2Cmd;
   delete transWithMscCmd;
+  delete nFreeCmd;
   delete tripletCmd;
 
   delete mscCmd;
@@ -638,6 +646,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
   } else if (command == ver2Cmd) {
     theParameters->SetWorkerVerbose(ver2Cmd->GetNewIntValue(newValue));
+  } else if (command == nFreeCmd) {
+    theParameters->SetNumberForFreeVector(nFreeCmd->GetNewIntValue(newValue));
   } else if (command == dumpCmd) {
     theParameters->SetIsPrintedFlag(false);
     theParameters->Dump();

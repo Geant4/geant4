@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,30 +35,20 @@
 #ifndef G4Positron_h
 #define G4Positron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-
-// ######################################################################
-// ###                         POSITRON                               ###
-// ######################################################################
 
 class G4Positron : public G4ParticleDefinition
 {
- private:
-   static G4Positron* theInstance;
-   G4Positron(){}
-   ~G4Positron() override= default;
+  public:
+    static G4Positron* Definition();
+    static G4Positron* PositronDefinition();
+    static G4Positron* Positron();
 
- public:
-   static G4Positron* Definition();
-   static G4Positron* PositronDefinition();
-   static G4Positron* Positron();
+  private:
+    G4Positron() {}
+    ~G4Positron() override = default;
+
+    static G4Positron* theInstance;
 };
 
-
 #endif
-
-
-

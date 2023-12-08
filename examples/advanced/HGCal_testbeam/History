@@ -5,6 +5,19 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (exhgcaltb-V11-01-01)
+- Updated vis.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+  - Keep previous driver opening with an extra setting in commented lines
+
+## 2023-10-10 John Allison (exhgcaltb-V11-01-00)
+- vis.mac: Remove defunct command /vis/ogl/set/displayListLimit.
+  - This command no longer operates. There is now no display list limit.
+    (The only limit is available memory.)
+  - The command is deprecated and, anyway, causes a crash if the app is built
+    without an OpenGL driver.
+
 ## 2021-12-10 Ben Morgan (exhgcaltb-V11-00-00)
 - Change to new Markdown History format
 

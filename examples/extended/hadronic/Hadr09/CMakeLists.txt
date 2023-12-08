@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Hadr09)
 
 #----------------------------------------------------------------------------
@@ -39,9 +39,7 @@ target_link_libraries(Hadr09 ${Geant4_LIBRARIES} )
 # build Hadr09. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(Hadr09_SCRIPTS
-    hadr09.in
-  )
+set(Hadr09_SCRIPTS)
 
 foreach(_script ${Hadr09_SCRIPTS})
   configure_file(

@@ -30,7 +30,7 @@
 //  
 // Modified:
 //
-// 5.4.23 V.Grichine - first implementation
+// 05.04.23 V.Grichine - first implementation
 //
 
 #include <iostream>
@@ -38,14 +38,7 @@
 #include "G4NuVacOscProcess.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
-#include "G4ProcessManager.hh"
-#include "G4CrossSectionDataStore.hh"
-#include "G4ProductionCutsTable.hh"
-#include "G4HadronicException.hh"
-#include "G4HadronicInteraction.hh"
-#include "G4VCrossSectionRatio.hh"
-#include "G4VDiscreteProcess.hh"
-#include "G4MuNeutrinoNucleusTotXsc.hh"
+#include "G4HadronicProcessType.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4AffineTransform.hh"
@@ -67,8 +60,9 @@
 
 
 G4NuVacOscProcess::G4NuVacOscProcess(const G4String& eName, const G4String& pName)
-  : G4HadronicProcess( pName, fHadronInelastic )
+  : G4VDiscreteProcess( pName, fHadronic )
 {
+  SetProcessSubType(fNuOscillation);
   fLowestEnergy = 1.*eV;
   fEnvelopeName = eName;
   theNuE       = G4NeutrinoE::NeutrinoE();
@@ -181,44 +175,40 @@ void G4NuVacOscProcess::ProcessDescription(std::ostream& outFile) const
 G4VParticleChange* 
 G4NuVacOscProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
-  if( track.GetTrackStatus() != fAlive ) 
-  { 
-    return theTotalResult; 
+  aParticleChange.Clear();
+  aParticleChange.Initialize(track);
+  if ( track.GetTrackStatus() != fAlive ) 
+  {
+    return &aParticleChange;
   }
-  theTotalResult->Clear();
-  theTotalResult->Initialize(track);
-
   G4double weight = track.GetWeight();
-  theTotalResult->ProposeWeight(weight);
+  aParticleChange.ProposeWeight(weight);
   G4double kineticEnergy = track.GetKineticEnergy();
-
-  if ( kineticEnergy <= fLowestEnergy )   return theTotalResult;
-
+  if ( kineticEnergy <= fLowestEnergy )
+  {
+    return &aParticleChange;
+  }
   const G4DynamicParticle*    dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
   G4LorentzVector lv1 = dynParticle->Get4Momentum();
   
-  G4int aa(0), bb(0); // neutrino flavors
   G4double ll = track.GetTrackLength(); // total track length
   const G4String rName =
     step.GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
   if(rName ==  fEnvelopeName && fNuNuclTotXscBias > 1.) ll *= fNuNuclTotXscBias;
-  G4DynamicParticle* aLept =  nullptr;
+  G4DynamicParticle* aLept = nullptr;
 
-  if( part == theAntiNuE  || 
-      part == theAntiNuMu || 
-      part == theAntiNuTau  ) fAnti = true;
-  else                          fAnti = false;
+  fAnti = (part == theAntiNuE  || part == theAntiNuMu || part == theAntiNuTau);
 
-  if(      part == theNuE   ||  part == theAntiNuE  )   aa = 0;
-  else if( part == theNuMu  ||  part == theAntiNuMu  )  aa = 1;
-  else                                                     aa = 2;
-
-  bb = NuVacProbability( aa, kineticEnergy, ll); // oscillation engine
+  // neutrino flavors aa and bb
+  G4int aa = 2;
+  if (part == theNuE || part == theAntiNuE) { aa = 0; }
+  else if(part == theNuMu || part == theAntiNuMu  ) { aa = 1; }
+  G4int bb = NuVacProbability( aa, kineticEnergy, ll); // oscillation engine
 
   if( bb == aa ) // no change
   {
-    return theTotalResult;
+    return &aParticleChange;
   }
   else if( bb == 0 ) // new flavor (anti)neutrino - kill initial & add new
   {
@@ -235,10 +225,10 @@ G4NuVacOscProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
     if( !fAnti ) aLept = new G4DynamicParticle( theNuTau, lv1 );
     else         aLept = new G4DynamicParticle( theAntiNuTau, lv1 );
   }
-  theTotalResult->ProposeTrackStatus( fStopAndKill );
-  theTotalResult->AddSecondary( aLept );
+  aParticleChange.ProposeTrackStatus( fStopAndKill );
+  aParticleChange.AddSecondary( aLept );
 
-  return theTotalResult;
+  return &aParticleChange;
 }
 
 /////////////////////////////////////////////////////

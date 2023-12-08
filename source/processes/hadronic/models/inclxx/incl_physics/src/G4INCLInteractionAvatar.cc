@@ -53,6 +53,7 @@
 #include "G4INCLRootFinder.hh"
 #include "G4INCLLogger.hh"
 #include "G4INCLConfigEnums.hh"
+#include "G4INCLConfig.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -113,7 +114,7 @@ namespace G4INCL {
   }
 
   void InteractionAvatar::preInteractionLocalEnergy(Particle * const p) {
-    if(!theNucleus || p->isMeson()) return; // Local energy does not make any sense without a nucleus
+    if(!theNucleus || p->isMeson() || p->isPhoton() || p->isAntiNucleon()) return; // Local energy does not make any sense without a nucleus
 
     if(shouldUseLocalEnergy())
       KinematicsUtils::transformToLocalEnergyFrame(theNucleus, p);
@@ -346,6 +347,10 @@ namespace G4INCL {
   G4bool InteractionAvatar::shouldUseLocalEnergy() const {
     if(!theNucleus) return false;
     LocalEnergyType theLocalEnergyType;
+    if(theNucleus->getStore()->getConfig()->getProjectileType()==antiProton ||
+     theNucleus->getStore()->getConfig()->getProjectileType()==antiNeutron){
+      return false;
+    }
     if(getType()==DecayAvatarType || isPiN)
       theLocalEnergyType = theNucleus->getStore()->getConfig()->getLocalEnergyPiType();
     else
@@ -363,12 +368,22 @@ namespace G4INCL {
     if(manyBodyFinalState)
       violationEFunctor = new ViolationEMomentumFunctor(theNucleus, modifiedAndCreated, fs->getTotalEnergyBeforeInteraction(), boostVector, shouldUseLocalEnergy());
     else {
-      Particle * const p = modified.front();
-      // The following condition is necessary for the functor to work
-      // correctly. A similar condition exists in INCL4.6.
-      if(p->getMass() < ParticleTable::minDeltaMass)
-        return false;
-      violationEFunctor = new ViolationEEnergyFunctor(theNucleus, p, fs->getTotalEnergyBeforeInteraction(), shouldUseLocalEnergy());
+      if (modified.empty()) {
+        Particle * const p1 = created.front(); //we destroy all nucleons during annihilation in NNbar case
+         // The following condition is necessary for the functor to work
+         // correctly. A similar condition exists in INCL4.6.
+        if(p1->getMass() < ParticleTable::minDeltaMass)
+          return false;
+        violationEFunctor = new ViolationEEnergyFunctor(theNucleus, p1, fs->getTotalEnergyBeforeInteraction(), shouldUseLocalEnergy());
+      }
+      else{
+        Particle * const p2 = modified.front(); // normal situation
+         // The following condition is necessary for the functor to work
+         // correctly. A similar condition exists in INCL4.6.
+         if(p2->getMass() < ParticleTable::minDeltaMass)
+           return false;
+         violationEFunctor = new ViolationEEnergyFunctor(theNucleus, p2, fs->getTotalEnergyBeforeInteraction(), shouldUseLocalEnergy());
+      }
     }
 
     // Apply the root-finding algorithm
@@ -433,14 +448,14 @@ namespace G4INCL {
       }
 
 //jcd      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
-      if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
-         !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda()) { // This translates AECSVT's loops 1, 3 and 4
+        if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
+           !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda() && !(*i)->isAntiNucleon()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
-        const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
-        G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
-        G4double locEOld;
-        G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
-        for(G4int iterLocE=0;
+         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+         G4double locEOld;
+         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+         for(G4int iterLocE=0;
             deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
             ++iterLocE) {
           locEOld = locE;
@@ -453,13 +468,13 @@ namespace G4INCL {
       }
 
 //jlrs  For lambdas and nuclei with masses higher than 19 also local energy
-      if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
+        if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
-        const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
-        G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
-        G4double locEOld;
-        G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
-        for(G4int iterLocE=0;
+         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+         G4double locEOld;
+         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+         for(G4int iterLocE=0;
             deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
             ++iterLocE) {
           locEOld = locE;
@@ -468,8 +483,8 @@ namespace G4INCL {
           theNucleus->updatePotentialEnergy(*i); // ...update its potential energy...
           locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // ...and recompute locE.
           deltaLocE = std::abs(locE-locEOld);
+         }
         }
-      }
     }
   }
 

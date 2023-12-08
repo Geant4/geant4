@@ -51,7 +51,7 @@ public:
       G4String  returnStr;
         if(size > 0)
         {
-            char* buff = new char[size];
+            auto  buff = new char[size];
             is.read(buff, size);
             returnStr.assign(buff, size);
             delete [] buff;

@@ -44,8 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(EventAction* evt)
-:G4UserTrackingAction(), fTrackMessenger(nullptr),fEventAct(evt),
- fParticleCount(true)
+:fTrackMessenger(nullptr),fEventAct(evt)
 {
   fTrackMessenger = new TrackingMessenger(this); 
 }

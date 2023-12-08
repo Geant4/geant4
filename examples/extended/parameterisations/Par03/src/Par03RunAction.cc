@@ -42,7 +42,7 @@ Par03RunAction::Par03RunAction(Par03DetectorConstruction* aDetector)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03RunAction::~Par03RunAction() {}
+Par03RunAction::~Par03RunAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

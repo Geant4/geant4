@@ -57,7 +57,8 @@
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4EmDNAPhysicsActivator.hh"
-
+#include "G4EmDNABuilder.hh"
+#include "G4GenericIon.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
@@ -65,7 +66,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetDefaultCutValue(1.0*micrometer);
   SetVerboseLevel(1);
  
-  fEmPhysics = "emstandard_opt4"; 
+  fEmPhysics = "emstandard_opt4";
   fEmPhysicsList = new G4EmStandardPhysics_option4();
   fDecayPhysicsList = new G4DecayPhysics();
   fEmDNAActivator = new G4EmDNAPhysicsActivator();
@@ -102,9 +103,19 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
-  if(nullptr != fDecayPhysicsList) fDecayPhysicsList->ConstructProcess();
-  if(nullptr != fRadDecayPhysicsList) fRadDecayPhysicsList->ConstructProcess();
-  fEmDNAActivator->ConstructProcess();
+  fDecayPhysicsList->ConstructProcess();
+  if(nullptr != fRadDecayPhysicsList)
+  { 
+    fRadDecayPhysicsList->ConstructProcess();
+  }
+  if(!fDNAPL)
+  {
+    fEmDNAActivator->ConstructProcess();
+  }
+  if(fIsTrackingCutSet)
+  {
+    TrackingCut();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,51 +129,62 @@ void PhysicsList::AddPhysics(const G4String& name)
   if(name == "emstandard_opt0") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics();
+    fDNAPL = false;
   } else if(name == "emstandard_opt3") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
+    fDNAPL = false;
   } else if(name == "emstandard_opt4") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
-  } else if(name == "decay") {
-    if(nullptr == fDecayPhysicsList) 
-      fDecayPhysicsList = new G4DecayPhysics();
+    fDNAPL = false;
   } else if(name == "raddecay") {
     if(nullptr == fRadDecayPhysicsList) 
       fRadDecayPhysicsList = new G4RadioactiveDecayPhysics();
   } else if(name == "emlivermore") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmLivermorePhysics();
+    fDNAPL = false;
   } else if(name == "empenelope") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-  } else if(name == "DNA_opt0") {
+    fDNAPL = false;
+  } else if(name == "DNA_Opt0") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics();
-  } else if(name == "DNA_opt1") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt1") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option1();
-  } else if(name == "DNA_opt2") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt2") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option2();
-  } else if(name == "DNA_opt3") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt3") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option3();
-  } else if(name == "DNA_opt4") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt4") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option4();
-  } else if(name == "DNA_opt5") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt5") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option5();
-  } else if(name == "DNA_opt6") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt6") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6();
-  } else if(name == "DNA_opt7") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt7") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option7();
-  } else if(name == "DNA_opt8") {
+    fDNAPL = true;
+  } else if(name == "DNA_Opt8") {
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option8();
+    fDNAPL = true;
   } else {
     G4cout << "### PhysicsList::AddPhysics Warning: Physics List <"
 	   << name << "> is does not exist - the command ignored"
@@ -170,3 +192,16 @@ void PhysicsList::AddPhysics(const G4String& name)
   }
 }
 
+void PhysicsList::TrackingCut()
+{
+  auto particle = G4GenericIon::GenericIon();//DNA heavy ions
+  auto particleName = particle->GetParticleName();
+  auto capture = G4EmDNABuilder::FindOrBuildCapture(0.5*CLHEP::MeV, particle);
+  capture->AddRegion("World");
+  capture->SetKinEnergyLimit(0.5*CLHEP::MeV);// 0.5 MeV/u
+}
+
+void PhysicsList::SetTrackingCut(G4bool isCut)
+{
+  fIsTrackingCutSet = isCut;
+}

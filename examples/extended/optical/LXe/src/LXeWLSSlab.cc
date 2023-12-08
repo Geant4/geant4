@@ -47,8 +47,7 @@ LXeWLSSlab::LXeWLSSlab(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
                        G4int pCopyNo, LXeDetectorConstruction* c)
   : G4PVPlacement(pRot, tlate,
                   new G4LogicalVolume(new G4Box("temp", 1., 1., 1.),
-                                      G4Material::GetMaterial("Vacuum"), "temp",
-                                      0, 0, 0),
+                                    G4Material::GetMaterial("Vacuum"), "temp"),
                   "Slab", pMotherLogical, pMany, pCopyNo)
   , fConstructor(c)
 {
@@ -57,14 +56,14 @@ LXeWLSSlab::LXeWLSSlab(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
   G4double slab_x = fScint_x / 2.;
   G4double slab_y = fScint_y / 2.;
 
-  G4Box* ScintSlab_box = new G4Box("Slab", slab_x, slab_y, fSlab_z);
+  auto ScintSlab_box = new G4Box("Slab", slab_x, slab_y, fSlab_z);
 
   fScintSlab_log = new G4LogicalVolume(
-    ScintSlab_box, G4Material::GetMaterial("Polystyrene"), "Slab", 0, 0, 0);
+    ScintSlab_box, G4Material::GetMaterial("Polystyrene"), "Slab");
 
   G4double spacing = 2. * slab_y / fNfibers;
 
-  G4RotationMatrix* rm = new G4RotationMatrix();
+  auto rm = new G4RotationMatrix();
   rm->rotateY(90. * deg);
 
   // Place fibers

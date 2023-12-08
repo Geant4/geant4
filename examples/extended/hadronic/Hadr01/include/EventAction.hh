@@ -56,40 +56,26 @@ class EventAction : public G4UserEventAction
 public: // Without description
 
   EventAction();
-  virtual ~EventAction();
+  ~EventAction() override;
 
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*) override;
+  void EndOfEventAction(const G4Event*) override;
 
-  inline void SetPrintModulo(G4int val);
-  inline void AddEventToDebug(G4int val);
+  void SetPrintModulo(G4int val) { fPrintModulo = val; };
+  void AddEventToDebug(G4int val){ fSelectedEvents.push_back(val); };
+
+  EventAction & operator=(const EventAction &right) = delete;
+  EventAction(const EventAction&) = delete;
 
 private:
 
-  EventAction & operator=(const EventAction &right);
-  EventAction(const EventAction&);
-
   EventActionMessenger* fEventMessenger;
-  G4UImanager*          fUI;
-  std::vector<G4int>    fSelectedEvents;
+  G4UImanager* fUI;
+  std::vector<G4int> fSelectedEvents;
 
-  G4int        fPrintModulo;
-  G4int        fSelected;
-
-  G4bool       fDebugStarted;
-
+  G4int fPrintModulo{100};
+  G4bool fDebugStarted{false};
 };
-
-inline void EventAction::SetPrintModulo(G4int val)   
-{ 
-  fPrintModulo = val;
-}
- 
-inline void EventAction::AddEventToDebug(G4int val)  
-{ 
-  fSelectedEvents.push_back(val);
-  ++fSelected;
-}
 
 #endif
 

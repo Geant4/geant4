@@ -5,6 +5,24 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-18 I. Hrivnacova (exampleB5-V11-01-03)
+- Updated vis.mac macro:
+  Changed "/vis/open OGL [600x600-0+0]" to "/vis/open" to allow run-time choices
+  and simplified comments
+
+## 2023-11-07 I. Hrivnacova (exampleB5-V11-01-02)
+- Fixed and improved setting of G4VisAttribute
+  - Do not create vis attributes with new
+  - Use Geant4 predefined colours (for clarity)
+
+## 2023-11-03 I. Hrivnacova (exampleB5-V11-01-01)
+- Applied auto in main where suitable and not done by clang-tidy
+- Added initialization of DetectorConstruction::fMessenger
+
+## 2023-09-18 I. Hrivnacova (exampleB5-V11-01-00)
+- Added tsg_offscreen.mac (moved from example B1)
+- Removed unused init.mac
+
 ## 2021-12-10 Ben Morgan (exampleB5-V11-00-00)
 - Change to new Markdown History format
 

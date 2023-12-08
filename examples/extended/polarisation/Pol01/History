@@ -5,6 +5,21 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-07-16 Vladimir Ivanchenko (expol01-V11-01-01)
+- removed annoining printout for the default macro
+
+## 2023-07-05 Igor Semeniouk (expol01-V11-01-00)
+-  Pol01 update to allow run in mt mode
+  -  added ActionInitialization class
+  - Pol01.cc - default run manager and initialization via ActionInitialization
+  - RunAction - Updated save histograms logic, scaling in master only
+  - The file histo.mac - removed ( not working )
+  - Convert classes ProcessesCount, RunAction::ParticleStatistics
+  to user defined accumulables.
+  - Add the root macro plotResults.C
+  - DetectorConstruction use  GeometryHasBeenModified(), not recreate
+  the geometry in material definition.
+
 ## 2021-12-10 Ben Morgan (expol01-V11-00-00)
 - Change to new Markdown History format
 

@@ -179,8 +179,8 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 G4GeometryMessenger::~G4GeometryMessenger()
 {
   delete verCmd; delete recCmd; delete rslCmd;
-  delete resCmd; delete rcsCmd; delete rcdCmd; delete errCmd;
-  delete tolCmd;
+  delete resCmd; delete rcsCmd; delete rcdCmd;
+  delete errCmd; delete parCmd; delete tolCmd;
   delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
   for(auto* tvolume: tvolumes) {
@@ -257,6 +257,9 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   }
   else if (command == rcdCmd) {
     recDepth = rcdCmd->GetNewIntValue( newValues );
+  }
+  else if (command == parCmd) {
+    checkParallelWorlds = parCmd->GetNewBoolValue( newValues );
   }
   else if (command == errCmd) {
     Init();

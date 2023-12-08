@@ -879,3 +879,23 @@ void G4UImanager::SetThreadIgnoreInit(G4bool flg)
   }
   threadCout->SetIgnoreInit(flg);
 }
+
+G4UIsession* G4UImanager::GetBaseSession() const
+{
+  // There may be no session - pure batch mode (session == nullptr)
+  // If there is a session, it may be a batch session used for processing macros.
+  // Find base session of this hierarchy of batch sessions.
+  G4UIsession* baseSession = session;
+  while (auto aBatchSession = dynamic_cast<G4UIbatch*>(baseSession)) {
+    auto previousSession = aBatchSession->GetPreviousSession();
+    if (previousSession == nullptr) {
+      // No previouse session - aBatchSession is the desired base session
+      baseSession = aBatchSession;
+      break;
+    }
+    // There is a previous session, which may or may not be a batch.
+    // If not, it will be our desired base - so record and test again.
+    baseSession = previousSession;
+  }
+  return baseSession;
+}

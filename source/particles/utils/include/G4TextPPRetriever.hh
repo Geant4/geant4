@@ -22,39 +22,24 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #ifndef G4TextPPRetriever_h
 #define G4TextPPRetriever_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>
-#include <fstream>       
-
 #include "G4VParticlePropertyRetriever.hh"
+#include "globals.hh"
 
-class G4TextPPRetriever: public G4VParticlePropertyRetriever
+class G4TextPPRetriever : public G4VParticlePropertyRetriever
 {
- public:
-  void Retrieve(const G4String& option="") override;
+  public:
+    void Retrieve(const G4String& option = "") override;
 
- protected:
-  void SparseOption(const G4String& option);
-  G4bool ModifyPropertyTable(const G4ParticleDefinition* );
+  protected:
+    void SparseOption(const G4String& option);
+    G4bool ModifyPropertyTable(const G4ParticleDefinition*);
 
- protected:
-  G4String  baseDir;
-
+  protected:
+    G4String baseDir;
 };
-
 
 #endif

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -80,6 +80,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -610,7 +614,7 @@ G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 End of tracking primary particle, its final energy is :3.47476 GeV
 Physics stage ends
-End of tracking primary particle, its final energy is :3.4755 GeV
+End of tracking primary particle, its final energy is :3.47557 GeV
 Physics stage ends
 
  ======= The summary of simulation results 'neuron' ========
@@ -619,20 +623,20 @@ Physics stage ends
   Kinetic energy of beam         = 3480 A*MeV
   Particle traversals the neuron = 0 of 2
   Full LET of beam as formulas   = 12.827 keV/um
-  Mean LET of beam as simulation = 11.408 +- 0.5129 keV/um
-  Mean track length of beam      = 401.57 +- 0.0053246 um
+  Mean LET of beam as simulation = 10.367 +- 0.12645 keV/um
+  Mean track length of beam      = 417.14 +- 0.020891 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.8848e-06 Gy
   Fluence dose ber beam          = 3.9424e-06 Gy
 
  List of generated physical process:
-                eIoni=   4197
-              ionIoni=   2630
-                  msc=   6618
+                eIoni=   3883
+              ionIoni=   2591
+                  msc=   6089
 
 
  List of generated particles outside neuron structure:
-             e- :    3180  Emean =  1.5519 keV	( 242.31 eV  --> 424.07 keV) 	Eflow/event = 2.4675 MeV
+             e- :    3008  Emean =  1.5752 keV	( 242.23 eV  --> 424.07 keV) 	Eflow/event = 2.3691 MeV
 
  Number of secondary particles inside neuron structure:
 
@@ -640,8 +644,8 @@ Physics stage ends
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:   9.1624
-   Bounding slice:  4.2246
+  All volume:   8.6486
+   Bounding slice:  3.4839
       Neuron:         0
         Soma:         0
     Dendrites:        0
@@ -659,7 +663,7 @@ Physics stage ends
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
  
- Calculation time                      = 2.54758 s 
+ Calculation time                      = 4.56373 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

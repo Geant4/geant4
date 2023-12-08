@@ -45,7 +45,7 @@ void G4ITTrackingInteractivity::TrackBanner(G4Track* track, const G4String& mess
   G4cout << "*******************************************************"
          << "**************************************************"
          << G4endl;
-  if(message != "")
+  if(!message.empty())
       G4cout << message ;
   G4cout << " * G4Track Information: "
          << "   Particle : " << track->GetDefinition()->GetParticleName()
@@ -63,7 +63,7 @@ void G4ITTrackingInteractivity::TrackBanner(G4Track* track, const G4String& mess
 G4ITTrackingInteractivity::G4ITTrackingInteractivity(G4VITSteppingVerbose* verbose)
 {
   fVerboseLevel = 0;
-  if(verbose)
+  if(verbose != nullptr)
   {
     fpVerbose = verbose;
   }

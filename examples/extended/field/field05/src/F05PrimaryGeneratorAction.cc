@@ -44,11 +44,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F05PrimaryGeneratorAction::F05PrimaryGeneratorAction(void)
+F05PrimaryGeneratorAction::F05PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
-  
+
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("mu+");
 
@@ -75,7 +75,7 @@ void F05PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double Kmu = Emu - mu_mass;
 
   G4double x0 = -6.99*m;
-  G4double y0 =  0.00*m; 
+  G4double y0 =  0.00*m;
   G4double z0 =  0.00*m;
 
   fParticleGun->SetParticleEnergy(Kmu);

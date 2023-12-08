@@ -31,7 +31,7 @@ Classes Used
 
 \section field06_s4 PHYSICS
 
- The simulation knows of only six particles: G4Neutron, G4Proton, 
+ The simulation knows of only six particles: G4Neutron, G4Proton,
  G4Electron, G4AntiNeutrinoE, G4MuonPlus and G4MuonMinus
 \verbatim
  RegisterPhysics(new G4StepLimiterPhysics());

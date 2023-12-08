@@ -26,7 +26,6 @@
 /// \file PrimaryGenerator.cc
 /// \brief Implementation of the PrimaryGenerator1 class
 //
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,17 +40,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryGenerator::PrimaryGenerator()
-: G4VPrimaryGenerator()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryGenerator::~PrimaryGenerator()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

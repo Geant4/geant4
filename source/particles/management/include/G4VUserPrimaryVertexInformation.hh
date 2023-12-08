@@ -30,7 +30,7 @@
 // Abstract class from which the user can derive a concrete class
 // for tuning user's information associated with a G4PrimaryVertex
 // class object.
-// It is user's responsibility to construct a concrete class object 
+// It is user's responsibility to construct a concrete class object
 // and set the pointer to the proper G4PrimaryVertex object.
 // The concrete class object is deleted by Geant4 kernel when
 // associated G4PrimaryVertex object is deleted.
@@ -43,7 +43,6 @@
 class G4VUserPrimaryVertexInformation
 {
   public:
-
     G4VUserPrimaryVertexInformation() = default;
     virtual ~G4VUserPrimaryVertexInformation() = default;
 

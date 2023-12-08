@@ -51,25 +51,28 @@ class G4DNAELSEPAElasticModel : public G4VEmModel
 
 public:
 
-  G4DNAELSEPAElasticModel(const G4ParticleDefinition* particle = 0,
+  G4DNAELSEPAElasticModel(const G4ParticleDefinition* particle = nullptr,
                           const G4String& nam = "DNAELSEPAElasticModel");
 
-  virtual ~G4DNAELSEPAElasticModel();
+  ~G4DNAELSEPAElasticModel() override;
 
-  virtual void Initialise(
-                   const G4ParticleDefinition* particle, const G4DataVector&);
+  G4DNAELSEPAElasticModel & operator=(const G4DNAELSEPAElasticModel &right) = delete;
+  G4DNAELSEPAElasticModel(const G4DNAELSEPAElasticModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(
+                   const G4ParticleDefinition* particle, const G4DataVector&) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* particle,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
 
   void SetMaximumEnergy (G4double input)
                    {fhighEnergyLimit = input; SetHighEnergyLimit(input);};
@@ -140,25 +143,21 @@ private:
 
   G4double RandomizeCosTheta(G4int Z, G4double k);
 
-  typedef std::map<G4int,std::map<G4double,std::map<G4double,G4double>>>
-                   TriDimensionMapZ;
+  using TriDimensionMapZ = std::map<G4int, std::map<G4double, std::map<G4double, G4double>>>;
   TriDimensionMapZ fAngleDataZ;
 
   std::map <G4int, std::vector<G4double> > eEdummyVecZ;
 
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  using VecMap = std::map<G4double, std::vector<G4double>>;
   VecMap eCum_Au;
   VecMap eCum_H2O;
 
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  using TriDimensionMap = std::map<G4double, std::map<G4double, G4double>>;
   TriDimensionMap fAngleData_Au;
   TriDimensionMap fAngleData_H2O;
 
   std::vector<G4double> eEdummyVec_Au;
   std::vector<G4double> eEdummyVec_H2O;
-
-  G4DNAELSEPAElasticModel & operator=(const G4DNAELSEPAElasticModel &right);
-  G4DNAELSEPAElasticModel(const G4DNAELSEPAElasticModel&);
 
 };
 

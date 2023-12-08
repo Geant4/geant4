@@ -40,15 +40,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager()
-{
-
-  // // histograms
-  // for (G4int k=0; k<kMaxHisto; k++) fHisto[k] = 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 HistoManager::~HistoManager()
 {
   delete fRootFile;

@@ -39,6 +39,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <set>
 #include <string_view>
 
 class G4AnalysisManagerState;
@@ -61,6 +62,9 @@ class G4THnManager
     // Clear data
     void ClearData();
 
+    // Delete selected object
+    G4bool DeleteT(G4int id, G4bool keepSetting);
+
     // Return true if the H1 vector is empty
     G4bool IsEmpty() const;
 
@@ -79,6 +83,7 @@ class G4THnManager
     const std::vector<HT*>&  GetTVectorRef() const;
     std::vector<std::pair<HT*, G4HnInformation*>>*   GetTHnVector();
     const std::vector<std::pair<HT*, G4HnInformation*>>&  GetTHnVectorRef() const;
+    G4int GetNofHns(G4bool onlyIfExist) const;
 
     // Methods to list/print histograms
     G4bool List(std::ostream& output, G4bool onlyIfActive) const;
@@ -117,6 +122,7 @@ class G4THnManager
     const G4AnalysisManagerState& fState;
     std::vector<HT*>  fTVector;
     std::vector<std::pair<HT*, G4HnInformation*>> fTHnVector;
+    std::set<G4int> fFreeIds;
     std::map<G4String, G4int>    fNameIdMap;
     std::shared_ptr<G4HnManager> fHnManager { nullptr };
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 // 
-// class G4Navigator Implementation
+// G4Navigator class Implementation
 //
 // Original author: Paul Kent, July 95/96
 // Responsible 1996-present: John Apostolakis, Gabriele Cosmo
@@ -39,6 +39,7 @@
 #include "G4VPhysicalVolume.hh"
 
 #include "G4VoxelSafety.hh"
+#include "G4SafetyCalculator.hh"
 
 // Constant determining how precise normals should be (how close to unit
 // vectors). If exceeded, warnings will be issued.
@@ -76,9 +77,9 @@ G4Navigator::G4Navigator()
   fLastStepEndPointLocal = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
 
   fpVoxelSafety = new G4VoxelSafety();
-#ifdef ALTERNATIVE_VOXEL_NAV
   fpvoxelNav    = new G4VoxelNavigation();
-#endif  
+  fpSafetyCalculator = new G4SafetyCalculator( *this, fHistory );
+  fpSafetyCalculator->SetExternalNavigation(fpExternalNav);
 }
 
 // ********************************************************************
@@ -89,9 +90,8 @@ G4Navigator::~G4Navigator()
 {
   delete fpVoxelSafety;
   delete fpExternalNav;
-#ifdef ALTERNATIVE_VOXEL_NAV  
   delete fpvoxelNav;
-#endif
+  delete fpSafetyCalculator;
 }
 
 // ********************************************************************
@@ -619,23 +619,14 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    //
    G4VPhysicalVolume*  motherPhysical = fHistory.GetTopVolume();
    G4LogicalVolume*    motherLogical  = motherPhysical->GetLogicalVolume();
-   G4SmartVoxelHeader* pVoxelHeader   = motherLogical->GetVoxelHeader();
 
    switch( CharacteriseDaughters(motherLogical) )
    {
        case kNormal:
-         if ( pVoxelHeader != nullptr )
-         {
-           GetVoxelNavigator().VoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
-         }
+         GetVoxelNavigator().RelocateWithinVolume( motherPhysical, fLastLocatedPointLocal );
          break;
        case kParameterised:
-         if( GetDaughtersRegularStructureId(motherLogical) != 1 )
-         {
-           // Resets state & returns voxel node
-           //
-           fparamNav.ParamVoxelLocate( pVoxelHeader, fLastLocatedPointLocal );
-         }
+         fparamNav.RelocateWithinVolume( motherPhysical, fLastLocatedPointLocal );
          break;
        case kReplica:
          // Nothing to do
@@ -1605,7 +1596,6 @@ G4Navigator::GetLocalExitNormalAndCheck(
   return GetLocalExitNormal( pValid ); 
 }
 
-
 // ********************************************************************
 // GetGlobalExitNormal
 //
@@ -1787,151 +1777,38 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 //
 G4double G4Navigator::ComputeSafety( const G4ThreeVector& pGlobalpoint,
                                      const G4double pMaxLength,
-                                     const G4bool keepState)
+                                     const G4bool )
 {
-#ifdef G4DEBUG_NAVIGATION
-  G4int oldcoutPrec = G4cout.precision(8);
-  if( fVerbose > 0 )
-  {
-    G4cout << "*** G4Navigator::ComputeSafety: ***" << G4endl
-           << "    Called at point: " << pGlobalpoint << G4endl;
-
-    G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
-    G4cout << "    Volume = " << motherPhysical->GetName() 
-           << " - Maximum length = " << pMaxLength << G4endl; 
-    if( fVerbose >= 4 )
-    {
-       G4cout << "    ----- Upon entering Compute Safety:" << G4endl;
-       PrintState();
-    }
-  }
-#endif
+  G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
+  G4double safety = 0.0;
 
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool stayedOnEndpoint = distEndpointSq < sqr(kCarTolerance); 
   G4bool endpointOnSurface = fEnteredDaughter || fExitedMother;
 
-  if( endpointOnSurface && stayedOnEndpoint )
+  G4bool onSurface = endpointOnSurface && stayedOnEndpoint;
+  if( ! onSurface )
   {
-#ifdef G4DEBUG_NAVIGATION
-    if( fVerbose >= 2 )
-    {
-      G4cout << "    G4Navigator::ComputeSafety() finds that point - "
-             << pGlobalpoint << " - is on surface " << G4endl;
-      if( fEnteredDaughter ) { G4cout << "   entered new daughter volume"; }
-      if( fExitedMother )    { G4cout << "   and exited previous volume."; }
-      G4cout << G4endl;
-      G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
-      G4cout << "   ---- Exiting ComputeSafety  " << G4endl;
-      PrintState();
-      G4cout << "    Returned value of Safety is zero " << G4endl;
-      G4cout.precision(oldcoutPrec);
-    }
-#endif
-    return 0.0;
-  }
+    safety= fpSafetyCalculator->SafetyInCurrentVolume(pGlobalpoint, motherPhysical, pMaxLength);
+    // offload to G4SafetyCalculator - avoids need to save / reload state
 
-  G4double newSafety = 0.0;
-
-    if (keepState)  { SetSavedState(); }
-    
-    // Pseudo-relocate to this point (updates voxel information only)
-    //
-    LocateGlobalPointWithinVolume( pGlobalpoint ); 
-      // --->> DANGER: Side effects on sub-navigator voxel information <<---
-      //       Could be replaced again by 'granular' calls to sub-navigator
-      //       locates (similar side-effects, but faster.  
-      //       Solutions:
-      //        1) Re-locate (to where?)
-      //        2) Insure that the methods using (G4ComputeStep?)
-      //           does a relocation (if information is disturbed only ?)
-
-#ifdef G4DEBUG_NAVIGATION
-    if( fVerbose >= 2 )
-    {
-      G4cout << "  G4Navigator::ComputeSafety() relocates-in-volume to point: "
-             << pGlobalpoint << G4endl;
-    }
-#endif 
-    G4VPhysicalVolume* motherPhysical = fHistory.GetTopVolume();
-    G4LogicalVolume* motherLogical = motherPhysical->GetLogicalVolume();
-    G4SmartVoxelHeader* pVoxelHeader = motherLogical->GetVoxelHeader();
-    G4ThreeVector localPoint = ComputeLocalPoint(pGlobalpoint);
-
-    if ( fHistory.GetTopVolumeType() != kReplica )
-    {
-      switch(CharacteriseDaughters(motherLogical))
-      {
-        case kNormal:
-          if ( pVoxelHeader != nullptr )
-          {
-            newSafety = fpVoxelSafety->ComputeSafety(localPoint,
-                                             *motherPhysical, pMaxLength);
-            // = VoxelNav().ComputeSafety(localPoint,fHistory,pMaxLength); // - Old method
-          }
-          else
-          {
-            newSafety=fnormalNav.ComputeSafety(localPoint,fHistory,pMaxLength);
-          }
-          break;
-        case kParameterised:
-          if( GetDaughtersRegularStructureId(motherLogical) != 1 )
-          {
-            newSafety=fparamNav.ComputeSafety(localPoint,fHistory,pMaxLength);
-          }
-          else  // Regular structure
-          {
-            newSafety=fregularNav.ComputeSafety(localPoint,fHistory,pMaxLength);
-          }
-          break;
-        case kReplica:
-          G4Exception("G4Navigator::ComputeSafety()", "GeomNav0001",
-                      FatalException, "Not applicable for replicated volumes.");
-          break;
-        case kExternal:
-          newSafety = fpExternalNav->ComputeSafety(localPoint, fHistory,
-                                                   pMaxLength);
-          break;
-      }
-    }
-    else
-    {
-      newSafety = freplicaNav.ComputeSafety(pGlobalpoint, localPoint,
-                                            fHistory, pMaxLength);
-    }
-    
-    if (keepState)
-    {
-      RestoreSavedState();
-      // This now overwrites the values of the Safety 'sphere' (correction)
-    }
-    
     // Remember last safety origin & value
     //
-    // We overwrite the Safety 'sphere' - keeping old behaviour
     fPreviousSftOrigin = pGlobalpoint;
-    fPreviousSafety = newSafety;
-  
-#ifdef G4DEBUG_NAVIGATION
-  if( fVerbose > 1 )
-  {
-    G4cout << "   ---- Exiting ComputeSafety  " << G4endl;
-    if( fVerbose > 2 )  { PrintState(); }
-    G4cout << "    Returned value of Safety = " << newSafety << G4endl;
+    fPreviousSafety =    safety;
+    // We overwrite the Safety 'sphere' - keeping old behaviour
   }
-  G4cout.precision(oldcoutPrec);
-#endif
 
-  return newSafety;
+  return safety;
 }
 
 // ********************************************************************
 // CreateTouchableHistoryHandle
 // ********************************************************************
 //
-G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
+G4TouchableHandle G4Navigator::CreateTouchableHistoryHandle() const
 {
-  return { CreateTouchableHistory() };
+  return G4TouchableHandle( CreateTouchableHistory() );
 }
 
 // ********************************************************************
@@ -2202,9 +2079,8 @@ std::ostream& operator << (std::ostream &os,const G4Navigator &n)
   return os;
 }
 
-#ifdef ALTERNATIVE_VOXEL_NAV
 // ********************************************************************
-// SetVoxelNavigation  -- alternative navigator for Voxel geom
+// SetVoxelNavigation: alternative navigator for voxelised geometry
 // ********************************************************************
 //
 void G4Navigator::SetVoxelNavigation(G4VoxelNavigation* voxelNav)
@@ -2212,13 +2088,13 @@ void G4Navigator::SetVoxelNavigation(G4VoxelNavigation* voxelNav)
   delete fpvoxelNav;
   fpvoxelNav = voxelNav;
 }
-#endif
 
 // ********************************************************************
-// InformLastStep:  Derived navigators can inform of its step
-//                    - used to update fLastStepWasZero
+// InformLastStep: derived navigators can inform of its step
+//                 used to update fLastStepWasZero
 // ********************************************************************
-void  G4Navigator::InformLastStep(G4double lastStep, G4bool entersDaughtVol, G4bool exitsMotherVol )
+void  G4Navigator::InformLastStep(G4double lastStep, G4bool entersDaughtVol,
+                                  G4bool exitsMotherVol)
 {
   G4bool zeroStep = ( lastStep == 0.0 );
   fLocatedOnEdge   = fLastStepWasZero && zeroStep;  
@@ -2226,4 +2102,14 @@ void  G4Navigator::InformLastStep(G4double lastStep, G4bool entersDaughtVol, G4b
 
   fExiting = exitsMotherVol;
   fEntering = entersDaughtVol;
+}
+
+// ********************************************************************
+// SetExternalNavigation
+// ********************************************************************
+//
+void G4Navigator::SetExternalNavigation(G4VExternalNavigation* externalNav)
+{
+  fpExternalNav = externalNav;
+  fpSafetyCalculator->SetExternalNavigation(externalNav);
 }

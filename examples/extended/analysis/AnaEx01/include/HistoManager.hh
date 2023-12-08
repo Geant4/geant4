@@ -43,7 +43,7 @@ class HistoManager
 {
   public:
     HistoManager();
-   ~HistoManager();
+   ~HistoManager() = default;
 
     void Book();
     void Save();

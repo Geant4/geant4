@@ -22,65 +22,40 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #ifndef G4HtmlPPReporter_h
 #define G4HtmlPPReporter_h 1
 
+#include "G4VParticlePropertyReporter.hh"
 #include "globals.hh"
-#include "G4ios.hh"
+
 #include <fstream>
 
-#include "G4VParticlePropertyReporter.hh"
-
-class G4HtmlPPReporter: public G4VParticlePropertyReporter
+class G4HtmlPPReporter : public G4VParticlePropertyReporter
 {
- public:
-  void Print(const G4String& option="") override;
-  
- private:
-  void SparseOption(const G4String& option);
-  void GenerateIndex();
-  void GeneratePropertyTable(const G4ParticleDefinition* );
-  
-  void PrintHeader(std::ofstream& );
-  void PrintFooter(std::ofstream& );
-  
-  
- private:
-  static const char *sTABLE, *eTABLE;
-  static const char *sTR, *eTR;
-  static const char *sTD, *eTD;
-  static const char *sB, *eB;
-  static const char *sLFONT, *eLFONT;
-  static const char *sSYMBOL, *eSYMBOL;
-  static const char *sSUP, *eSUP;
-  static const char *sSUB, *eSUB;
-  
- private:
-  G4String  baseDir;
-  G4String  comment;
+  public:
+    void Print(const G4String& option = "") override;
+
+  private:
+    void SparseOption(const G4String& option);
+    void GenerateIndex();
+    void GeneratePropertyTable(const G4ParticleDefinition*);
+
+    void PrintHeader(std::ofstream&);
+    void PrintFooter(std::ofstream&);
+
+  private:
+    static const char *sTABLE, *eTABLE;
+    static const char *sTR, *eTR;
+    static const char *sTD, *eTD;
+    static const char *sB, *eB;
+    static const char *sLFONT, *eLFONT;
+    static const char *sSYMBOL, *eSYMBOL;
+    static const char *sSUP, *eSUP;
+    static const char *sSUB, *eSUB;
+
+    G4String baseDir;
+    G4String comment;
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

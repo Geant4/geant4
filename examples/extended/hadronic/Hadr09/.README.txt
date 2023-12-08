@@ -37,15 +37,12 @@ To build it:
 
 To run it:
 \verbatim
-  ./Hadr09 [Hadr09.in]
+  ./Hadr09
 \endverbatim
 
 which simulates 1000 hadron-nucleus collisions, randomnly selected, and
 prints out some information about the secondaries produced in these
 interactions. It takes only a few seconds to run.
-Notice that the input file, Hadr09.in, which is empty, is not needed
-by Hadr09, and can be omitted; however, it has been created because
-is expected by system testing.
 
 Note: this example has been included in Geant4 10.7, but it should work
       also for early versions of Geant4, in particular 10.6, 10.5 and 10.4.

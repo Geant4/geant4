@@ -36,7 +36,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <math.h>
+#include <cmath>
 
 // CPP UTILS
 #include "string_print.h"

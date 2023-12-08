@@ -29,12 +29,10 @@
 
 using namespace std;
 
-G4ThreadLocal G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance(0);
+G4ThreadLocal G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance(nullptr);
 
 G4MoleculeHandleManager::G4MoleculeHandleManager()
-{
-  //    G4cout << "G4MoleculeHandleManager::G4MoleculeHandleManager()" << G4endl;
-}
+= default;
 
 G4bool G4MoleculeHandleManager::CompMoleculePointer::operator()(const G4Molecule* mol1,
                                                                 const G4Molecule* mol2) const
@@ -44,9 +42,9 @@ G4bool G4MoleculeHandleManager::CompMoleculePointer::operator()(const G4Molecule
 
 G4MoleculeHandleManager::~G4MoleculeHandleManager()
 {
-  if (fMoleculeHandle.empty() == false)
+  if (!fMoleculeHandle.empty())
   {
-    MoleculeHandleMap::iterator it = fMoleculeHandle.begin();
+    auto it = fMoleculeHandle.begin();
     for (; it != fMoleculeHandle.end(); it++)
     {
       it->second.reset();
@@ -56,16 +54,16 @@ G4MoleculeHandleManager::~G4MoleculeHandleManager()
 
 void G4MoleculeHandleManager::DeleteInstance()
 {
-  if (fInstance)
+  if (fInstance != nullptr)
   {
     delete fInstance;
-    fInstance = 0;
+    fInstance = nullptr;
   }
 }
 
 G4MoleculeHandleManager* G4MoleculeHandleManager::Instance()
 {
-  if (!fInstance)
+  if (fInstance == nullptr)
   {
     fInstance = new G4MoleculeHandleManager;
   }
@@ -74,7 +72,7 @@ G4MoleculeHandleManager* G4MoleculeHandleManager::Instance()
 
 G4MoleculeHandle G4MoleculeHandleManager::GetMoleculeHandle(const G4Molecule* molecule)
 {
-  MoleculeHandleMap::iterator it = fMoleculeHandle.find(molecule);
+  auto it = fMoleculeHandle.find(molecule);
   G4MoleculeHandle molHandle;
 
   if (it != fMoleculeHandle.end())

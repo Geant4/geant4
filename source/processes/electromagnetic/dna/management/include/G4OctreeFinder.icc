@@ -44,10 +44,6 @@ G4OctreeFinder<T,CONTAINER> * G4OctreeFinder<T,CONTAINER>::Instance()
 template<class T,typename CONTAINER>
 G4OctreeFinder<T,CONTAINER>::G4OctreeFinder()
     : G4VFinder()
-    , fVerbose(0)
-    , fIsOctreeUsed(false)
-    , fIsOctreeBuit(false)
-
 {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -141,7 +137,7 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4Track& track,
                                                     result,
                                                     G4bool isSorted) const
 {
-    typename TreeMap::const_iterator it = fTreeMap.find(key);
+    auto it = fTreeMap.find(key);
     if (it == fTreeMap.end())
     {
         return;
@@ -151,33 +147,32 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4Track& track,
     {
         return;
     }
-    else
+    
+    it->second->template radiusNeighbors
+    <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+    track.GetPosition(), R, tempResult);
+
+    G4int nBin = 10;
+
+    //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
+    //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
+    G4double value(6.4606e-06);
+
+    G4double binOfR(std::pow(0.00050251 / value,
+    1. / static_cast<G4double>(nBin - 1)));
+
+    if( R <= 0.00050251 )
     {
-        it->second->template radiusNeighbors
-        <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
-        track.GetPosition(), R, tempResult);
-
-        G4int nBin = 10;
-
-        //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
-        //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
-        G4double value(6.4606e-06);
-
-        G4double binOfR(std::pow(0.00050251 / value,
-        1. / static_cast<G4double>(nBin - 1)));
-
-        if( R <= 0.00050251 )
+        if(tempResult.size() < 10 && R < 0.00050251)
         {
-            if(tempResult.size() < 10 && R < 0.00050251)
-            {
-                R *= binOfR;
+            R *= binOfR;
 #ifdef DEBUG
-                G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
+            G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
 #endif
-                FindNearestInRange(track, key, R, tempResult, isSorted);
-            }
+            FindNearestInRange(track, key, R, tempResult, isSorted);
         }
     }
+    
     if(isSorted)
     {
         std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
@@ -195,7 +190,7 @@ void G4OctreeFinder<T,CONTAINER>::FindNearest(const G4Track& track,
                                                      result,
                                                      G4bool isSorted) const
 {
-    typename TreeMap::const_iterator it = fTreeMap.find(key);
+    auto it = fTreeMap.find(key);
     if (it == fTreeMap.end())
     {
         return;
@@ -205,12 +200,11 @@ void G4OctreeFinder<T,CONTAINER>::FindNearest(const G4Track& track,
     {
         return;
     }
-    else
-    {
-        it->second->template radiusNeighbors
-                <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
-                track.GetPosition(), R, tempResult);
-    }
+    
+    it->second->template radiusNeighbors
+            <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+            track.GetPosition(), R, tempResult);
+
     if(isSorted)
     {
         std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
@@ -239,32 +233,30 @@ void G4OctreeFinder<T,CONTAINER>::FindNearestInRange(const G4ThreeVector& positi
     {
         return;
     }
-    else
+    
+    it->second->template radiusNeighbors
+    <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
+    position, R, tempResult);
+
+    G4int nBin = 10;
+    //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
+    //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
+    G4double value(6.4606e-06);
+    G4double binOfR(std::pow(0.00050251 / value,
+    1. / static_cast<G4double>(nBin - 1)));
+
+    if( R <= 0.00050251 )
     {
-        it->second->template radiusNeighbors
-        <std::vector<std::pair<typename CONTAINER::iterator,G4double>>& >(
-        position, R, tempResult);
-
-        G4int nBin = 10;
-        //G4IRTUtils::GetRCutOff(1000 * CLHEP::ns) = 0.00050251
-        //G4IRTUtils::GetRCutOff(0.1 * CLHEP::ns) = 6.4606e-06
-        G4double value(6.4606e-06);
-        G4double binOfR(std::pow(0.00050251 / value,
-        1. / static_cast<G4double>(nBin - 1)));
-
-        if( R <= 0.00050251 )
+        if(tempResult.size() < 10 && R < 0.00050251)
         {
-            if(tempResult.size() < 10 && R < 0.00050251)
-            {
-                R *= binOfR;
+            R *= binOfR;
 #ifdef DEBUG
-                G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
+            G4cout<<"recurring up R : "<< R<<" tempResult.size() : "<<tempResult.size()<<G4endl;
 #endif
-                FindNearestInRange(position, key, R, tempResult, isSorted);
-            }
+            FindNearestInRange(position, key, R, tempResult, isSorted);
         }
-
     }
+
     if(isSorted)
     {
         std::sort(tempResult.begin(),tempResult.end(),fExtractor.compareInterval);
@@ -334,38 +326,36 @@ const std::map<G4int,CONTAINER*>& listMap)
         {
             continue;
         }
+        
+        //#define DEBUG
+#ifdef DEBUG
+        G4cout << "** " << "Create new tree for : " << key << G4endl;
+#endif
+        if(!Mollist->empty())
+        {
+            fTreeMap[key].reset(new Octree(Mollist->begin(),Mollist->end(),fExtractor));
+        }
         else
         {
-//#define DEBUG
-#ifdef DEBUG
-            G4cout << "** " << "Create new tree for : " << key << G4endl;
-#endif
-            if(!Mollist->empty())
-            {
-                fTreeMap[key].reset(new Octree(Mollist->begin(),Mollist->end(),fExtractor));
-            }
-            else
-            {
-                G4ExceptionDescription exceptionDescription;
-                exceptionDescription << "should not create new tree for : " << key;
-                G4Exception("G4OCtreeFinder"
-                            "::BuildReactionMap()", "BuildReactionMap02",
-                            FatalException, exceptionDescription);
-            }
+            G4ExceptionDescription exceptionDescription;
+            exceptionDescription << "should not create new tree for : " << key;
+            G4Exception("G4OCtreeFinder"
+                        "::BuildReactionMap()", "BuildReactionMap02",
+                        FatalException, exceptionDescription);
+        }
 
 #ifdef DEBUG
 
-            auto __it = Mollist->begin();
-            auto __end = Mollist->end();
+        auto __it = Mollist->begin();
+        auto __end = Mollist->end();
 
-            for (; __it != __end; __it++)
-            {
-                G4cout<< "molecule : "<<(*__it)->GetPosition()<< G4endl;
-            }
+        for (; __it != __end; __it++)
+        {
+            G4cout<< "molecule : "<<(*__it)->GetPosition()<< G4endl;
+        }
 #endif
 #undef DEBUG
 
-        }
     }
     fIsOctreeBuit = true;
 }

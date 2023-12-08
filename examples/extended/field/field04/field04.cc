@@ -68,7 +68,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]" 
+    G4cerr << " field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]"
            << G4endl;
   }
 }
@@ -89,7 +89,7 @@ int main(int argc,char** argv)
     PrintUsage();
     return 1;
   }
-  
+
   G4String macro;
   G4String physicsList = "QGSP_BERT";
   G4int randomSeed = 1234;
@@ -103,8 +103,8 @@ int main(int argc,char** argv)
       PrintUsage();
       return 1;
     }
-  }  
-  
+  }
+
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
   G4UIExecutive* ui = nullptr;
   if ( ! macro.size() ) {
@@ -121,7 +121,7 @@ int main(int argc,char** argv)
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
   G4VSteppingVerbose::SetInstance(new F04SteppingVerbose);
-  G4RunManager * runManager = new G4RunManager;
+  auto  runManager = new G4RunManager;
 #endif
 
   G4Random::setTheSeed(randomSeed);
@@ -129,7 +129,7 @@ int main(int argc,char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  F04DetectorConstruction* detector = new F04DetectorConstruction();
+  auto  detector = new F04DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
   runManager->SetUserInitialization(new F04PhysicsList(physicsList));
@@ -158,7 +158,7 @@ int main(int argc,char** argv)
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macro);
   }
-  else  { 
+  else  {
     // interactive mode : define UI session
     if ( startPhase == "preinit" ) {
       // start in PreInit> phase if requested

@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(molecular)
 
 #----------------------------------------------------------------------------
@@ -28,8 +28,8 @@ set(GEOMETRY_FILE_NAME "geometries.tar.gz")
 set(GEOMETRY_FOlDER_NAME "geometries")
 set(GEOMETRY_LOCAL_FILENAME "${PROJECT_BINARY_DIR}/${GEOMETRY_FILE_NAME}")
 set(GEOMETRY_DATASETS_URL
-        "https://cern.ch/geant4-data/datasets/examples/extended/medical/dna/moleculardna/${GEOMETRY_FILE_NAME}")
-set(HASH_MD5 "cbe6ac77f46d33865cf7d6ea2c94ef67")
+        "https://cern.ch/geant4-data/datasets/examples/extended/medical/dna/moleculardna/1/${GEOMETRY_FILE_NAME}")
+set(HASH_MD5 "1bca28e1260a2afeda86514c4d42a921")
 
 if (EXISTS "${GEOMETRY_FOlDER_NAME}")
     set(GEOMETRY_NEEDS_DOWNLOAD FALSE)

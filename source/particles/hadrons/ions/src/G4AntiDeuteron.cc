@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,35 +33,35 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiDeuteron.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                    ANTI DEUTERON                               ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
 
 G4AntiDeuteron* G4AntiDeuteron::theInstance = nullptr;
 
 G4AntiDeuteron* G4AntiDeuteron::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_deuteron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  //             excitation 
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    //             excitation
+
+    // clang-format off
     anInstance = new G4Ions(
                  name,   1.875613*GeV,       0.0*MeV,  -1.0*eplus,
                     2,              +1,             0,
@@ -74,24 +71,23 @@ G4AntiDeuteron* G4AntiDeuteron::Definition()
 		false,        "static",    1000010020,
 		 0.0,                0
               );
+    // clang-format on
 
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( -0.857438230 * mN);
-
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(-0.857438230 * mN);
   }
 
   theInstance = static_cast<G4AntiDeuteron*>(anInstance);
   return theInstance;
 }
 
-G4AntiDeuteron*  G4AntiDeuteron::AntiDeuteronDefinition()
+G4AntiDeuteron* G4AntiDeuteron::AntiDeuteronDefinition()
 {
   return Definition();
 }
 
-G4AntiDeuteron*  G4AntiDeuteron::AntiDeuteron()
+G4AntiDeuteron* G4AntiDeuteron::AntiDeuteron()
 {
   return Definition();
 }
-

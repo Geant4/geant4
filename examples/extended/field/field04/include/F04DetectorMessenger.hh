@@ -47,37 +47,37 @@ class F04DetectorMessenger : public G4UImessenger
   public:
 
     F04DetectorMessenger(F04DetectorConstruction* );
-    virtual ~F04DetectorMessenger();
+    ~F04DetectorMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
 
-    F04DetectorConstruction*   fDetector;
+    F04DetectorConstruction*   fDetector = nullptr;
 
-    G4UIdirectory*          fDetDir;
+    G4UIdirectory*          fDetDir = nullptr;
 
-    G4UIcmdWithAString*        fWorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldRCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldZCmd;
+    G4UIcmdWithAString*        fWorldMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldRCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldZCmd = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fCaptureRCmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureZCmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureRCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fCaptureZCmd = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fTransferRCmd;
-    G4UIcmdWithADoubleAndUnit* fTransferZCmd;
-    G4UIcmdWithADoubleAndUnit* fTransferPCmd;
+    G4UIcmdWithADoubleAndUnit* fTransferRCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTransferZCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTransferPCmd = nullptr;
 
-    G4UIcmdWithAString*        fTgtMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fTgtRadCmd;
-    G4UIcmdWithADoubleAndUnit* fTgtThickCmd;
-    G4UIcmdWithADoubleAndUnit* fTgtPosCmd;
-    G4UIcmdWithAnInteger*      fTgtAngCmd;
+    G4UIcmdWithAString*        fTgtMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTgtRadCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTgtThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTgtPosCmd = nullptr;
+    G4UIcmdWithAnInteger*      fTgtAngCmd = nullptr;
 
-    G4UIcmdWithAString*        fDgrMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fDgrRadCmd;
-    G4UIcmdWithADoubleAndUnit* fDgrThickCmd;
-    G4UIcmdWithADoubleAndUnit* fDgrPosCmd;
+    G4UIcmdWithAString*        fDgrMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDgrRadCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDgrThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDgrPosCmd = nullptr;
 };
 
 #endif

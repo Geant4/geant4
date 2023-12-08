@@ -59,17 +59,18 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra-semi"
+#include "vtkNew.h"
+#include "vtkSmartPointer.h"
 #include "vtkBillboardTextActor3D.h"
 #include "vtkLine.h"
 #include "vtkMatrix3x3.h"
 #include "vtkOBJReader.h"
 #include "vtkPLYReader.h"
+#include "vtkSTLReader.h"
 #include "vtkPolyDataReader.h"
 #include "vtkProperty.h"
 #include "vtkProperty2D.h"
 #include "vtkRegularPolygonSource.h"
-#include "vtkSTLReader.h"
-#include "vtkSmartPointer.h"
 #include "vtkTextProperty.h"
 #pragma GCC diagnostic pop
 
@@ -415,9 +416,9 @@ void G4VtkStore::AddPrimitiveSeparate(const G4Polyhedron& polyhedron, const G4Vt
   G4Transform3D fInvObjTrans = vc.fTransform.inverse();
 
   pl->SetActorTransform(vc.fTransform.dx(), vc.fTransform.dy(), vc.fTransform.dz(),
-                        fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(), fInvObjTrans.yx(),
-                        fInvObjTrans.yy(), fInvObjTrans.yz(), fInvObjTrans.zx(), fInvObjTrans.zy(),
-                        fInvObjTrans.zz());
+                        fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(),
+                        fInvObjTrans.yx(), fInvObjTrans.yy(), fInvObjTrans.yz(),
+                        fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz());
   pl->SetActorColour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), colour.GetAlpha());
 }
 
@@ -428,26 +429,37 @@ void G4VtkStore::AddPrimitiveTensorGlyph(const G4Polyhedron& polyhedron, const G
     return;
   }
 
-  auto hash = G4VtkPolydataInstanceTensorPipeline::MakeHash(polyhedron, vc);
+  // Possible the polyhedron already has a transform baked in (definitely the case
+  // for scoring meshes. Remove them here
+  auto centre = polyhedron.vertexUnweightedMean();
+  auto transform = G4Translate3D(-centre.x(), -centre.y(), -centre.z());
+
+  auto polyhedronNew = G4Polyhedron(polyhedron);
+  auto fTransformNew = G4Transform3D(vc.fTransform*transform.inverse());
+
+  polyhedronNew.Transform(transform);
+
+  auto hash = G4VtkPolydataInstanceTensorPipeline::MakeHash(polyhedronNew, vc);
   std::shared_ptr<G4VtkPolydataInstanceTensorPipeline> pl;
 
   if (tensorGlyphPipeMap.find(hash) == tensorGlyphPipeMap.end()) {
     pl = std::make_shared<G4VtkPolydataInstanceTensorPipeline>(G4String("name"), vc);
-    pl->SetPolydata(polyhedron);
+    pl->SetPolydata(polyhedronNew);
     tensorGlyphPipeMap.insert(std::make_pair(hash, pl));
   }
   else {
     pl = tensorGlyphPipeMap[hash];
   }
 
-  G4Transform3D fInvObjTrans = vc.fTransform.inverse();
+  G4Transform3D fInvObjTrans = fTransformNew.inverse();
   const G4VisAttributes* pVA =
     vc.fViewer->GetApplicableVisAttributes(polyhedron.GetVisAttributes());
   G4Color colour = pVA->GetColour();
 
-  pl->addInstance(vc.fTransform.dx(), vc.fTransform.dy(), vc.fTransform.dz(), fInvObjTrans.xx(),
-                  fInvObjTrans.xy(), fInvObjTrans.xz(), fInvObjTrans.yx(), fInvObjTrans.yy(),
-                  fInvObjTrans.yz(), fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(),
+  pl->addInstance(fTransformNew.dx(), fTransformNew.dy(), fTransformNew.dz(),
+                  fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(),
+                  fInvObjTrans.yx(), fInvObjTrans.yy(), fInvObjTrans.yz(),
+                  fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(),
                   colour.GetRed(), colour.GetGreen(), colour.GetBlue(), colour.GetAlpha(),
                   G4String("null"));
 }
@@ -459,25 +471,35 @@ void G4VtkStore::AddPrimitiveAppend(const G4Polyhedron& polyhedron, const G4VtkV
     return;
   }
 
-  auto hash = G4VtkPolydataInstanceAppendPipeline::MakeHash(polyhedron, vc);
+  // Possible the polyhedron already has a transform baked in (definitely the case
+  // for scoring meshes. Remove them here
+  auto centre = polyhedron.vertexUnweightedMean();
+  auto transform = G4Translate3D(-centre.x(), -centre.y(), -centre.z());
+
+  auto polyhedronNew = G4Polyhedron(polyhedron);
+  auto fTransformNew = G4Transform3D(vc.fTransform*transform.inverse());
+
+  polyhedronNew.Transform(transform);
+
+  auto hash = G4VtkPolydataInstanceAppendPipeline::MakeHash(polyhedronNew, vc);
   std::shared_ptr<G4VtkPolydataInstanceAppendPipeline> pl;
 
   if (appendPipeMap.find(hash) == appendPipeMap.end()) {
     pl = std::make_shared<G4VtkPolydataInstanceAppendPipeline>(G4String("name"), vc);
-    pl->SetPolydata(polyhedron);
-
+    pl->SetPolydata(polyhedronNew);
     appendPipeMap.insert(std::make_pair(hash, pl));
   }
   else {
     pl = appendPipeMap[hash];
   }
 
-  G4Transform3D fInvObjTrans = vc.fTransform.inverse();
+  G4Transform3D fInvObjTrans = fTransformNew.inverse();
 
-  pl->addInstance(vc.fTransform.dx(), vc.fTransform.dy(), vc.fTransform.dz(), fInvObjTrans.xx(),
-                  fInvObjTrans.xy(), fInvObjTrans.xz(), fInvObjTrans.yx(), fInvObjTrans.yy(),
-                  fInvObjTrans.yz(), fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(), 0, 0,
-                  0, 0, G4String("null"));
+  pl->addInstance(fTransformNew.dx(), fTransformNew.dy(), fTransformNew.dz(),
+                  fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(),
+                  fInvObjTrans.yx(), fInvObjTrans.yy(), fInvObjTrans.yz(),
+                  fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(),
+                  0, 0, 0, 0, G4String("null"));
 };
 
 void G4VtkStore::AddPrimitiveTransformBake(const G4Polyhedron& polyhedron,
@@ -488,6 +510,16 @@ void G4VtkStore::AddPrimitiveTransformBake(const G4Polyhedron& polyhedron,
     return;
   }
 
+  // Possible the polyhedron already has a transform baked in (definitely the case
+  // for scoring meshes. Remove them here
+  auto centre = polyhedron.vertexUnweightedMean();
+  auto transform = G4Translate3D(-centre.x(), -centre.y(), -centre.z());
+
+  auto polyhedronNew = G4Polyhedron(polyhedron);
+  auto fTransformNew = G4Transform3D(vc.fTransform*transform.inverse());
+
+  polyhedronNew.Transform(transform);
+
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
     vc.fViewer->GetApplicableVisAttributes(polyhedron.GetVisAttributes());
@@ -496,7 +528,7 @@ void G4VtkStore::AddPrimitiveTransformBake(const G4Polyhedron& polyhedron,
   G4Colour colour = pVA->GetColour();
 
   // Hash the vis (alpha) attributes and polyhedron
-  std::size_t hash = G4VtkPolydataInstanceBakePipeline::MakeHash(polyhedron, vc);
+  std::size_t hash = G4VtkPolydataInstanceBakePipeline::MakeHash(polyhedronNew, vc);
 
   std::shared_ptr<G4VtkPolydataInstanceBakePipeline> pl;
   if (bakePipeMap.find(hash) == bakePipeMap.end()) {
@@ -508,12 +540,13 @@ void G4VtkStore::AddPrimitiveTransformBake(const G4Polyhedron& polyhedron,
     pl = bakePipeMap[hash];
   }
 
-  G4Transform3D fInvObjTrans = vc.fTransform.inverse();
-  pl->SetPolydata(polyhedron);
+  G4Transform3D fInvObjTrans = fTransformNew.inverse();
+  pl->SetPolydata(polyhedronNew);
 
-  pl->addInstance(vc.fTransform.dx(), vc.fTransform.dy(), vc.fTransform.dz(), fInvObjTrans.xx(),
-                  fInvObjTrans.xy(), fInvObjTrans.xz(), fInvObjTrans.yx(), fInvObjTrans.yy(),
-                  fInvObjTrans.yz(), fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(),
+  pl->addInstance(fTransformNew.dx(), fTransformNew.dy(), fTransformNew.dz(),
+                  fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(),
+                  fInvObjTrans.yx(), fInvObjTrans.yy(), fInvObjTrans.yz(),
+                  fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz(),
                   colour.GetRed(), colour.GetGreen(), colour.GetBlue(), colour.GetAlpha(),
                   G4String("null"));
 };
@@ -696,20 +729,43 @@ void G4VtkStore::AddNonG4ObjectImage(const G4String& fileName, const G4VtkVisCon
   imagePipeMap.insert(std::make_pair(fileName, pl));
 }
 
-void G4VtkStore::AddNonG4ObjectPolydata(const G4String fileName, const G4VtkVisContext& /*vc*/)
+void G4VtkStore::AddNonG4ObjectPolydata(const G4String fileName, const G4VtkVisContext& vc)
 {
+
+  vtkSmartPointer<vtkPolyData> pd;
+
   if (fileName.find("obj") != G4String::npos) {
-    vtkSmartPointer<vtkOBJReader> objReader;
+    vtkNew<vtkOBJReader> objReader;
+    objReader->SetFileName(fileName.c_str());
+    objReader->Update();
+    pd = objReader->GetOutput();
   }
   else if (fileName.find("ply") != G4String::npos) {
-    vtkSmartPointer<vtkPLYReader> plyReader;
+    vtkNew<vtkPLYReader> plyReader;
+    plyReader->SetFileName(fileName.c_str());
+    plyReader->Update();
+    pd = plyReader->GetOutput();
   }
   else if (fileName.find("stl") != G4String::npos) {
-    vtkSmartPointer<vtkSTLReader> stlReader;
+    vtkNew<vtkSTLReader> stlReader;
+    stlReader->SetFileName(fileName.c_str());
+    stlReader->Update();
+    pd = stlReader->GetOutput();
   }
   else if (fileName.find("vtp") != G4String::npos && fileName.find("vtu") != G4String::npos) {
-    vtkSmartPointer<vtkPolyDataReader> pldReader;
+    G4cout << "G4VtkStore::AddNonG4ObjectPolydata> vtp/vtu Warning not yet implemented" << G4endl;
   }
+
+  auto pl = std::make_shared<G4VtkPolydataPipeline>(G4String("name"), vc);
+
+
+  G4Transform3D fInvObjTrans = vc.fTransform.inverse();
+  pl->SetPolydata(pd);
+  pl->SetActorTransform(vc.fTransform.dx(), vc.fTransform.dy(), vc.fTransform.dz(),
+                        fInvObjTrans.xx(), fInvObjTrans.xy(), fInvObjTrans.xz(),
+                        fInvObjTrans.yx(), fInvObjTrans.yy(), fInvObjTrans.yz(),
+                        fInvObjTrans.zx(), fInvObjTrans.zy(), fInvObjTrans.zz());
+  pl->SetActorColour(vc.red, vc.green, vc.blue, vc.alpha);
 }
 
 void G4VtkStore::GetBounds(G4double maxBoundIn[6])

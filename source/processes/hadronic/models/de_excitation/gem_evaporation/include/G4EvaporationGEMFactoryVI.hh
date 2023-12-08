@@ -28,7 +28,6 @@
 // by V. Ivanchenko (July 2016)
 //
 
-
 #ifndef G4EvaporationGEMFactoryVI_hh
 #define G4EvaporationGEMFactoryVI_hh 1
 
@@ -40,18 +39,15 @@ public:
 
   explicit G4EvaporationGEMFactoryVI(G4VEvaporationChannel* ptotoEvaporation);
 
-  virtual ~G4EvaporationGEMFactoryVI(); 
+  ~G4EvaporationGEMFactoryVI() override = default;
 
-  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
-
-private:
+  std::vector<G4VEvaporationChannel*>* GetChannel() override;
 
   G4EvaporationGEMFactoryVI(const G4EvaporationGEMFactoryVI & ) = delete;
   const G4EvaporationGEMFactoryVI & operator=
   (const G4EvaporationGEMFactoryVI & val) = delete;
   G4bool operator==(const G4EvaporationGEMFactoryVI & val) const = delete;
   G4bool operator!=(const G4EvaporationGEMFactoryVI & val) const = delete;
-
 };
 
 #endif

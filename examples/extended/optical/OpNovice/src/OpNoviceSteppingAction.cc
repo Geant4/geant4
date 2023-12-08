@@ -44,9 +44,6 @@ OpNoviceSteppingAction::OpNoviceSteppingAction(OpNoviceEventAction* event)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceSteppingAction::~OpNoviceSteppingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
 {
   static G4ParticleDefinition* opticalphoton =
@@ -60,11 +57,11 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
     G4StepPoint* endPoint = step->GetPostStepPoint();
     const G4VProcess* pds = endPoint->GetProcessDefinedStep();
     G4String procname     = pds->GetProcessName();
-    if(procname.compare("OpRayleigh") == 0)
+    if(procname == "OpRayleigh")
       fEventAction->AddRayleigh();
-    else if(procname.compare("OpAbsorption") == 0)
+    else if(procname == "OpAbsorption")
       fEventAction->AddAbsorption();
-    else if(procname.compare("OpMieHG") == 0)
+    else if(procname == "OpMieHG")
       fEventAction->AddMie();
 
     // for boundary scattering, process name in 'transportation'.
@@ -80,8 +77,7 @@ void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
       {
         G4VProcess* currentProcess = (*postStepDoItVector)[i];
 
-        G4OpBoundaryProcess* opProc =
-          dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
+        auto opProc = dynamic_cast<G4OpBoundaryProcess*>(currentProcess);
         if(opProc)
           theStatus = opProc->GetStatus();
       }

@@ -1070,7 +1070,7 @@ void G4SPSEneDistribution::SplineInterpolation()  // MT: Lock in caller
   for (auto & it : SplineInt)
   {
     delete it;
-    it = 0;
+    it = nullptr;
   }
   SplineInt.clear();
   SplineInt.resize(1024,nullptr);

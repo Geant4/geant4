@@ -41,21 +41,9 @@ G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeScintHit::LXeScintHit()
-  : fEdep(0.)
-  , fPos(0.)
-  , fPhysVol(nullptr)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 LXeScintHit::LXeScintHit(G4VPhysicalVolume* pVol)
   : fPhysVol(pVol)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeScintHit::~LXeScintHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

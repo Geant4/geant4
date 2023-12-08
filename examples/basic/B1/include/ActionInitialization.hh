@@ -32,10 +32,10 @@
 
 #include "G4VUserActionInitialization.hh"
 
-/// Action initialization class.
-
 namespace B1
 {
+
+/// Action initialization class.
 
 class ActionInitialization : public G4VUserActionInitialization
 {

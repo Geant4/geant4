@@ -79,7 +79,7 @@ G4bool Par01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep<=0.) return false;
   
-  G4TouchableHistory* hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+  auto  hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
   const G4VPhysicalVolume* physVol = hist->GetVolume();
   G4int copyID = hist->GetReplicaNumber();
   

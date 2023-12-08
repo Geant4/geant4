@@ -26,6 +26,7 @@
 // G4EventManager class implementation
 //
 // Author: M.Asai, SLAC
+// Adding sub-event parallelism: M.Asai, JLAB
 // --------------------------------------------------------------------
 
 #include "G4EventManager.hh"
@@ -45,6 +46,11 @@
 #include "G4Profiler.hh"
 #include "G4TiMemory.hh"
 #include "G4GlobalFastSimulationManager.hh"
+#include "G4AutoLock.hh"
+
+namespace {
+ G4Mutex EventMgrMutex = G4MUTEX_INITIALIZER;
+}
 
 #include <unordered_set>
 
@@ -123,7 +129,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
 #endif
 
-  trackContainer->PrepareNewEvent();
+  trackContainer->PrepareNewEvent(currentEvent);
 
 #ifdef G4_STORE_TRAJECTORY
   trajectoryContainer = nullptr;
@@ -225,7 +231,8 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
           delete aTrajectory;
           aTrajectory = previousTrajectory;
         }
-        if((aTrajectory != nullptr)&&(istop!=fStopButAlive)&&(istop!=fSuspend))
+        if((aTrajectory != nullptr)&&(istop!=fStopButAlive)
+           &&(istop!=fSuspend)&&(istop!=fSuspendAndWait))
         {
           if(trajectoryContainer == nullptr)
           {
@@ -241,6 +248,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
         {
           case fStopButAlive:
           case fSuspend:
+          case fSuspendAndWait:
             trackContainer->PushOneTrack( track, aTrajectory );
             StackTracks( secondaries );
             break;
@@ -257,9 +265,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
 
           case fAlive:
             G4Exception("G4EventManager::DoProcessing", "Event004", JustWarning,
-                "Illegal trackstatus returned from G4TrackingManager."\
+                "Illegal track status returned from G4TrackingManager."\
                 " Continue with simulation.");
             break;
+
           case fKillTrackAndSecondaries:
             if( secondaries != nullptr )
             {
@@ -304,14 +313,70 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   eventProfiler.reset();
 #endif
 
-  if(userEventAction != nullptr)
+//  In case of sub-event parallelism, an event may not be completed at
+//  this point but results of sus-events may be merged later. Thus
+//  userEventAction->EndOfEventAction() is invoked by G4RunManager
+//  immediately prior to deleting the event.
+  if(!subEventPara && (userEventAction != nullptr))
   {
     userEventAction->EndOfEventAction(currentEvent);
+  }
+
+  // Store remaining sub-events to the current event
+  auto nses = trackContainer->GetNSubEventTypes();
+  if(nses>0)
+  {
+#ifdef G4VERBOSE
+    if ( verboseLevel > 2 )
+    {
+      G4cout<<"## End of processing an event --- "
+            <<nses<<" sub-event types registered."<<G4endl;
+    }
+#endif
+    for(std::size_t i=0;i<nses;i++)
+    {
+      auto ty = trackContainer->GetSubEventType(i);
+      trackContainer->ReleaseSubEvent(ty);
+    }
   }
 
   stateManager->SetNewState(G4State_GeomClosed);
   currentEvent = nullptr;
   abortRequested = false;
+}
+
+G4SubEvent* G4EventManager::PopSubEvent(G4int ty)
+{
+  G4AutoLock lock(&EventMgrMutex);
+  if(currentEvent==nullptr) return nullptr;
+  return currentEvent->PopSubEvent(ty);
+}
+
+void G4EventManager::TerminateSubEvent(const G4SubEvent* se,const G4Event* evt)
+{
+  G4AutoLock lock(&EventMgrMutex);
+  auto ev = se->GetEvent();
+  ev->MergeSubEventResults(evt);
+  userEventAction->MergeSubEvent(ev,evt);
+#ifdef G4VERBOSE
+  // Capture this here because termination will delete subevent...
+  G4int seType = se->GetSubEventType();
+#endif
+  ev->TerminateSubEvent(const_cast<G4SubEvent*>(se));
+#ifdef G4VERBOSE
+  if ( verboseLevel > 1 )
+  {
+    G4cout << "A sub-event of type " << seType
+           << " is merged to the event " << ev->GetEventID() << G4endl;
+    if(ev->GetNumberOfRemainingSubEvents()>0)
+    {
+      G4cout << " ---- This event still has " << ev->GetNumberOfRemainingSubEvents()
+             << " sub-events to be processed." << G4endl;
+    }
+    else
+    { G4cout << " ---- This event has no more sub-event remaining." << G4endl; }
+  }
+#endif
 }
 
 void G4EventManager::StackTracks(G4TrackVector* trackVector,

@@ -38,14 +38,6 @@
 // XS cross sections for neutrons
 
 #include "G4HadronElasticPhysicsXS.hh"
-#include "G4VCrossSectionDataSet.hh"
-#include "G4Neutron.hh"
-#include "G4Proton.hh"
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4BGGNucleonElasticXS.hh"
-#include "G4BGGPionElasticXS.hh"
-#include "G4NeutronElasticXS.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -56,16 +48,8 @@ G4HadronElasticPhysicsXS::G4HadronElasticPhysicsXS(G4int ver)
   : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_XS")
 {
   if(ver > 1) { 
-    G4cout << "### G4HadronElasticPhysicsHP: " << GetPhysicsName() 
+    G4cout << "### G4HadronElasticPhysicsXS: " << GetPhysicsName() 
 	   << G4endl; 
   }
-}
-
-G4HadronElasticPhysicsXS::~G4HadronElasticPhysicsXS()
-{}
-
-void G4HadronElasticPhysicsXS::ConstructProcess()
-{
-  G4HadronElasticPhysics::ConstructProcess();
 }
 

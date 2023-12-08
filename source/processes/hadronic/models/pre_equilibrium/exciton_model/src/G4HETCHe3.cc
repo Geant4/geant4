@@ -32,12 +32,10 @@
 
 #include "G4HETCHe3.hh"
 #include "G4He3.hh"
+#include "G4CoulombBarrier.hh"
 
 G4HETCHe3::G4HETCHe3() 
-  : G4HETCChargedFragment(G4He3::He3(), &theHe3CoulombBarrier)
-{}
-
-G4HETCHe3::~G4HETCHe3() 
+  : G4HETCChargedFragment(G4He3::He3(), new G4CoulombBarrier(3, 2))
 {}
 
 G4double G4HETCHe3::GetAlpha() const
@@ -49,22 +47,17 @@ G4double G4HETCHe3::GetAlpha() const
     } 
   else if (theFragZ <= 50) 
     {
-      C = 0.1 + -((theFragZ-50.)/20.)*0.02;
+      C = 0.1 - (theFragZ-30)*0.001;
     } 
   else if (theFragZ < 70) 
     {
-      C = 0.08 + -((theFragZ-70.)/20.)*0.02;
+      C = 0.08 - (theFragZ-70)*0.001;
     }
   else 
     {
       C = 0.06;
     }
   return 1.0 + C*(4.0/3.0);
-}
-  
-G4double G4HETCHe3::GetBeta() const
-{
-  return -theCoulombBarrier;
 }
 
 G4double G4HETCHe3::GetSpinFactor() const
@@ -73,7 +66,7 @@ G4double G4HETCHe3::GetSpinFactor() const
   return 2.0;
 }    
 
-G4double G4HETCHe3::K(const G4Fragment & aFragment)
+G4double G4HETCHe3::K(const G4Fragment& aFragment) const
 {
   // Number of protons in emitted fragment
   G4int Pa = theZ;

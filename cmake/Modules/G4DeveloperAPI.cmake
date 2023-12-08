@@ -1076,7 +1076,7 @@ endmacro()
 #  This is used internally by the property get/set functions.
 #
 function(__geant4_module_validate_property _property)
-  if(NOT (${_property} MATCHES "PUBLIC_HEADERS|PRIVATE_HEADERS|SOURCES|PRIVATE_COMPILE_DEFINITIONS|PUBLIC_COMPILE_DEFINITIONS|INTERFACE_COMPILE_DEFINITIONS|PRIVATE_INCLUDE_DIRECTORIES|PUBLIC_INCLUDE_DIRECTORIES|INTERFACE_INCLUDE_DIRECTORIES|PRIVATE_LINK_LIBRARIES|PUBLIC_LINK_LIBRARIES|INTERFACE_LINK_LIBRARIES|PARENT_TARGET|CMAKE_LIST_FILE|GLOBAL_DEPENDENCIES|IS_INTERFACE"))
+  if(NOT (${_property} MATCHES "PUBLIC_HEADERS|PRIVATE_HEADERS|SOURCES|PRIVATE_COMPILE_DEFINITIONS|PUBLIC_COMPILE_DEFINITIONS|INTERFACE_COMPILE_DEFINITIONS|PRIVATE_INCLUDE_DIRECTORIES|PUBLIC_INCLUDE_DIRECTORIES|INTERFACE_INCLUDE_DIRECTORIES|PRIVATE_LINK_LIBRARIES|PUBLIC_LINK_LIBRARIES|INTERFACE_LINK_LIBRARIES|PARENT_TARGET|CMAKE_LIST_FILE|GLOBAL_DEPENDENCIES|IS_INTERFACE|AUTOMOC"))
     message(FATAL_ERROR "Undefined property '${_property}'")
   endif()
 endfunction()
@@ -1357,13 +1357,12 @@ function(__geant4_add_library _name _type)
       endif()
     endforeach()
 
-    # Temp workaround for modules needing Qt. We use AUTOMOC, but can't yet set
-    # it on a per module basis. However, only have four modules that require
-    # moc-ing, so hard code for now.
-    # TODO: likely need an additional "module target properties" to hold things
-    # that can be passed to set_target_properties
-    if(__g4mod MATCHES "G4UIimplementation|G4OpenGL|G4OpenInventor|G4ToolsSG" AND GEANT4_USE_QT)
-      set_target_properties(${_target_name} PROPERTIES AUTOMOC ON)
+    # Apply any additional properties supported in modules to target
+    if(GEANT4_USE_QT)
+      geant4_get_module_property(_needs_moc ${__g4mod} AUTOMOC)
+      if(_needs_moc)
+        set_target_properties(${_target_name} PROPERTIES AUTOMOC ON)
+      endif()
     endif()
   endforeach()
 

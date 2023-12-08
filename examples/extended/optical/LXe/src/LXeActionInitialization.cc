@@ -47,10 +47,6 @@ LXeActionInitialization::LXeActionInitialization(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::~LXeActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeActionInitialization::BuildForMaster() const
 {
   SetUserAction(new LXeRunAction());
@@ -62,7 +58,7 @@ void LXeActionInitialization::Build() const
 {
   SetUserAction(new LXePrimaryGeneratorAction());
 
-  LXeEventAction* eventAction = new LXeEventAction(fDetector);
+  auto eventAction = new LXeEventAction(fDetector);
   SetUserAction(eventAction);
   SetUserAction(new LXeStackingAction(eventAction));
 

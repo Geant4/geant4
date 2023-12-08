@@ -157,7 +157,7 @@ G4double
 G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,
                                                         G4double eps)
 {
-  G4int Nstats = G4int(1./(eps*eps));
+  auto  Nstats = G4int(1./(eps*eps));
   return ComputeAreaOfExtSurface(aSolid,Nstats);
 }
 

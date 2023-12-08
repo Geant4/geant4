@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-07 Alberto Ribon (phys-ctor-decay-V11-01-01)
+- G4RadioactiveDecayPhysics : replaced G4RadioactiveDecay with
+  G4Radioactivation to be able to run in biasing mode (not only in
+  analogue mode, as before with G4RadioactiveDecay).
+
 ## 2023-01-11 Alberto Ribon (phys-ctor-decay-V11-01-00)
 - G4RadioactiveDecayPhysics : assigned the RadioactiveDecay process
   to G4Triton (which is the only light ion that decays).

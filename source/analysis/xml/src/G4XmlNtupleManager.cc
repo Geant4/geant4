@@ -57,7 +57,6 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
       new tools::waxml::ntuple(
             *(ntupleDescription->GetFile()), G4cerr,
             ntupleDescription->GetNtupleBooking()));
-    fNtupleVector.push_back(ntupleDescription->GetNtuple());
 }
 
 //_____________________________________________________________________________

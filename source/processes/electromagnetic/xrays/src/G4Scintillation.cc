@@ -388,12 +388,16 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
   G4double yield1     = 0.;
   G4double yield2     = 0.;
   G4double yield3     = 0.;
+  G4double timeconstant1 = 0.;
+  G4double timeconstant2 = 0.;
+  G4double timeconstant3 = 0.;
   G4double sum_yields = 0.;
 
   if(fScintillationByParticleType)
   {
     MeanNumberOfPhotons = GetScintillationYieldByParticleType(
-      aTrack, aStep, yield1, yield2, yield3);
+      aTrack, aStep, yield1, yield2, yield3, timeconstant1, timeconstant2,
+      timeconstant3);
   }
   else
   {
@@ -467,7 +471,14 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       {
         numPhot = yield1 / sum_yields * fNumPhotons;
       }
-      scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+      if(fScintillationByParticleType)
+      {
+        scintTime = timeconstant1;
+      }
+      else
+      {
+        scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+      }
       if(fFiniteRiseTime)
       {
         riseTime = MPT->GetConstProperty(kSCINTILLATIONRISETIME1);
@@ -487,7 +498,14 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
       {
         numPhot = yield2 / sum_yields * fNumPhotons;
       }
-      scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+      if(fScintillationByParticleType)
+      {
+        scintTime = timeconstant2;
+      }
+      else
+      {
+        scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+      }
       if(fFiniteRiseTime)
       {
         riseTime = MPT->GetConstProperty(kSCINTILLATIONRISETIME2);
@@ -499,7 +517,14 @@ G4VParticleChange* G4Scintillation::PostStepDoIt(const G4Track& aTrack,
     else if(scnt == 2)
     {
       numPhot   = yield3 / sum_yields * fNumPhotons;
-      scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+      if(fScintillationByParticleType)
+      {
+        scintTime = timeconstant3;
+      }
+      else
+      {
+        scintTime = MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+      }
       if(fFiniteRiseTime)
       {
         riseTime = MPT->GetConstProperty(kSCINTILLATIONRISETIME3);
@@ -634,11 +659,13 @@ G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4Scintillation::GetScintillationYieldByParticleType(
   const G4Track& aTrack, const G4Step& aStep, G4double& yield1,
-  G4double& yield2, G4double& yield3)
+  G4double& yield2, G4double& yield3, G4double& timeconstant1,
+  G4double& timeconstant2, G4double& timeconstant3)
 {
   // new in 10.7, allow multiple time constants with ScintByParticleType
   // Get the G4MaterialPropertyVector containing the scintillation
   // yield as a function of the energy deposited and particle type
+  // In 11.2, allow different time constants for different particles
 
   G4ParticleDefinition* pDef = aTrack.GetDynamicParticle()->GetDefinition();
   G4MaterialPropertyVector* yieldVector = nullptr;
@@ -658,6 +685,21 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kPROTONSCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kPROTONSCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kPROTONSCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kPROTONSCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kPROTONSCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kPROTONSCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kPROTONSCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kPROTONSCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Deuterons
@@ -673,6 +715,21 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kDEUTERONSCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kDEUTERONSCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kDEUTERONSCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kDEUTERONSCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kDEUTERONSCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kDEUTERONSCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kDEUTERONSCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kDEUTERONSCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Tritons
@@ -688,6 +745,21 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kTRITONSCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kTRITONSCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kTRITONSCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kTRITONSCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kTRITONSCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kTRITONSCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kTRITONSCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kTRITONSCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Alphas
@@ -703,6 +775,21 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kALPHASCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kALPHASCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kALPHASCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kALPHASCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kALPHASCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kALPHASCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kALPHASCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kALPHASCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Ions (particles derived from G4VIon and G4Ions) and recoil ions
@@ -720,6 +807,21 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kIONSCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kIONSCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kIONSCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kIONSCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kIONSCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kIONSCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kIONSCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kIONSCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Electrons (must also account for shell-binding energy
@@ -737,22 +839,38 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
     yield3 = MPT->ConstPropertyExists(kELECTRONSCINTILLATIONYIELD3)
                ? MPT->GetConstProperty(kELECTRONSCINTILLATIONYIELD3)
                : 0.;
+    timeconstant1 = MPT->ConstPropertyExists(kELECTRONSCINTILLATIONTIMECONSTANT1)
+                 ? MPT->GetConstProperty(kELECTRONSCINTILLATIONTIMECONSTANT1)
+                 : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT1);
+    if(yield2 > 0.)
+    {
+      timeconstant2 = MPT->ConstPropertyExists(kELECTRONSCINTILLATIONTIMECONSTANT2)
+                   ? MPT->GetConstProperty(kELECTRONSCINTILLATIONTIMECONSTANT2)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT2);
+    }
+    if(yield3 > 0.)
+    {
+      timeconstant3 = MPT->ConstPropertyExists(kELECTRONSCINTILLATIONTIMECONSTANT3)
+                   ? MPT->GetConstProperty(kELECTRONSCINTILLATIONTIMECONSTANT3)
+                   : MPT->GetConstProperty(kSCINTILLATIONTIMECONSTANT3);
+    }
   }
 
   // Throw an exception if no scintillation yield vector is found
-  if(!yieldVector)
+  if(yieldVector == nullptr)
   {
     G4ExceptionDescription ed;
     ed << "\nG4Scintillation::PostStepDoIt(): "
        << "Request for scintillation yield for energy deposit and particle\n"
-       << "type without correct entry in MaterialPropertiesTable.\n"
-       << "ScintillationByParticleType requires at minimum that \n"
-       << "ELECTRONSCINTILLATIONYIELD is set by the user\n"
+       << "type without correct entry in MaterialPropertiesTable. A material\n"
+       << "property (vector) with name like PARTICLESCINTILLATIONYIELD is\n"
+       << "needed (hint: PARTICLE might not be the primary particle."
        << G4endl;
     G4String comments = "Missing MaterialPropertiesTable entry - No correct "
                         "entry in MaterialPropertiesTable";
     G4Exception("G4Scintillation::PostStepDoIt", "Scint01", FatalException, ed,
                 comments);
+    return 0.; // NOLINT: required to help Coverity recognise this as exit point
   }
 
   ///////////////////////////////////////
@@ -777,15 +895,24 @@ G4double G4Scintillation::GetScintillationYieldByParticleType(
   }
   else
   {
-    G4ExceptionDescription ed;
-    ed << "\nG4Scintillation::GetScintillationYieldByParticleType(): Request\n"
-       << "for scintillation light yield above the available energy range\n"
-       << "specified in G4MaterialPropertiesTable. A linear interpolation\n"
-       << "will be performed to compute the scintillation light yield using\n"
-       << "(L_max / E_max) as the photon yield per unit energy." << G4endl;
-    G4String cmt = "\nScintillation yield may be unphysical!\n";
-    G4Exception("G4Scintillation::GetScintillationYieldByParticleType()",
-                "Scint03", JustWarning, ed, cmt);
+    ++fNumEnergyWarnings;
+    if(verboseLevel > 0 && fNumEnergyWarnings <= 10)
+    {
+      G4ExceptionDescription ed;
+      ed << "\nG4Scintillation::GetScintillationYieldByParticleType(): Request\n"
+         << "for scintillation light yield above the available energy range\n"
+         << "specified in G4MaterialPropertiesTable. A linear interpolation\n"
+         << "will be performed to compute the scintillation light yield using\n"
+         << "(L_max / E_max) as the photon yield per unit energy." << G4endl;
+      G4String cmt = "\nScintillation yield may be unphysical!\n";
+
+      if(fNumEnergyWarnings == 10)
+      {
+        ed << G4endl << "*** Scintillation energy warnings stopped.";
+      }
+      G4Exception("G4Scintillation::GetScintillationYieldByParticleType()",
+                  "Scint03", JustWarning, ed, cmt);
+    }
 
     // Units: [# scintillation photons]
     ScintillationYield = yieldVector->GetMaxValue() /

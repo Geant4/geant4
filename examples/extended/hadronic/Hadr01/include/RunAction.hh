@@ -35,7 +35,6 @@
 //
 //      GEANT4 Header file
 //      RunAction
-//
 // 
 // -------------------------------------------------------------
 
@@ -52,20 +51,17 @@ class G4Timer;
 
 class RunAction : public G4UserRunAction
 {
-public: // Without description
+public:
 
   RunAction();
-  virtual ~RunAction();
+  ~RunAction() override = default;
 
-public: // With description
- 
-  virtual void BeginOfRunAction(const G4Run*);
-  // In this method histogramms are booked
+  void BeginOfRunAction(const G4Run*) override;
 
-  virtual void EndOfRunAction(const G4Run*);
-  // In this method BookHisto method is called in which histogramms are filled
+  void EndOfRunAction(const G4Run*) override;
 
 private:
+
   G4Timer* fTimer;
 };
 

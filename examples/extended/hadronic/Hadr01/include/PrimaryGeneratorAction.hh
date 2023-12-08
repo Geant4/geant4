@@ -27,8 +27,6 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-//
-//
 /////////////////////////////////////////////////////////////////////////
 //
 // PrimaryGeneratorAction
@@ -56,17 +54,18 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
   PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  ~PrimaryGeneratorAction() override;
 
-  virtual void GeneratePrimaries(G4Event*);
+  void GeneratePrimaries(G4Event*) override;
+
+  PrimaryGeneratorAction & operator=
+  (const PrimaryGeneratorAction &right) = delete;
+  PrimaryGeneratorAction(const PrimaryGeneratorAction&) = delete;
 
 private:
 
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
-
-  G4ParticleGun*   fParticleGun;
-  HistoManager*    fHisto; 
+  G4ParticleGun* fParticleGun;
+  HistoManager* fHisto; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

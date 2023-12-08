@@ -53,11 +53,6 @@ GammaNuclearPhysicsLEND::GammaNuclearPhysicsLEND(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GammaNuclearPhysicsLEND::~GammaNuclearPhysicsLEND()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void GammaNuclearPhysicsLEND::ConstructProcess()
 {
    G4ProcessManager* pManager = G4Gamma::Gamma()->GetProcessManager();

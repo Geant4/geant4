@@ -51,6 +51,53 @@ G4RootMainNtupleManager::G4RootMainNtupleManager(
 {}
 
 //
+// private functions
+//
+
+//_____________________________________________________________________________
+G4int G4RootMainNtupleManager::CreateNtupleFromBooking(
+  G4NtupleBooking* g4NtupleBooking, std::shared_ptr<G4RootFile> ntupleFile)
+{
+  // Do not create ntuple if it was deleted
+  if ( g4NtupleBooking->GetDeleted()) {
+    // G4cout << "Ntuple " << g4NtupleBooking->fNtupleId << " was deleted" << G4endl;
+    return G4Analysis::kInvalidId;
+  }
+
+  // The ntuple index
+  auto index = g4NtupleBooking->fNtupleId - fFirstId;
+
+  // Do not create ntuple if it already exists
+  if ( (index < G4int(fNtupleVector.size())) && (fNtupleVector[index] != nullptr) ) {
+    // G4cout << "Ntuple " << g4NtupleBooking->fNtupleId << " already exists" << G4endl;
+    return G4Analysis::kInvalidId;
+  }
+
+  // Get ntuple booking
+  const auto& ntupleBooking = g4NtupleBooking->fNtupleBooking;
+
+  Message(kVL4, "create", "main ntuple", ntupleBooking.name());
+
+  // Allocate the ntuple vector element(s) if needed
+  while ( index >= G4int(fNtupleVector.size()) ) {
+    fNtupleVector.push_back(nullptr);
+  }
+
+  // Create ntuple
+  auto ntuple = new tools::wroot::ntuple(*std::get<2>(*ntupleFile), ntupleBooking, fRowWise);
+         // ntuple object is deleted automatically when closing a file
+  auto basketSize = fNtupleBuilder->GetBasketSize();
+  ntuple->set_basket_size(basketSize);
+
+  // Save ntuple & ntuple description pair in vectors
+  fNtupleVector[index] = ntuple;
+
+  Message(kVL3, "create", "main ntuple", ntupleBooking.name());
+
+  return index;
+}
+
+//
 // protected functions
 //
 
@@ -71,21 +118,49 @@ void G4RootMainNtupleManager::CreateNtuple(RootNtupleDescription* ntupleDescript
     return;
   }
 
-  // Get ntuple booking
-  const auto& ntupleBooking = ntupleDescription->GetNtupleBooking();
+  // Create ntuple from g4 booking
+  auto g4NtupleBooking = ntupleDescription->GetG4NtupleBooking();
+  auto index = CreateNtupleFromBooking(g4NtupleBooking, ntupleFile);
 
-  Message(kVL4, "create", "main ntuple", ntupleBooking.name());
+  // Return if ntuple was not created
+  if (index == G4Analysis::kInvalidId) return;
 
-  // Create ntuple
-  auto ntuple = new tools::wroot::ntuple(*std::get<2>(*ntupleFile), ntupleBooking, fRowWise);
-         // ntuple object is deleted automatically when closing a file
-  auto basketSize = fNtupleBuilder->GetBasketSize();
-  ntuple->set_basket_size(basketSize);
+  // Allocate the ntuple description pair vector element(s) if needed
+  while ( index >= G4int(fNtupleDescriptionVector.size()) ) {
+    fNtupleDescriptionVector.push_back(std::make_pair(nullptr, nullptr));
+  }
 
-  fNtupleVector.push_back(ntuple);
-  fNtupleDescriptionVector.push_back(std::make_pair(ntupleDescription, ntupleFile));
+  // Save ntuple description pair in vectors
+  fNtupleDescriptionVector[index] = std::make_pair(ntupleDescription, ntupleFile);
+}
 
-  Message(kVL3, "create", "main ntuple", ntupleBooking.name());
+//_____________________________________________________________________________
+G4bool G4RootMainNtupleManager::Delete(G4int id)
+{
+  if (fNtupleVector.empty()) {
+    // Main ntuples are delete with each new cycle
+    return true;
+  }
+
+  // Proceed with deleting if vector is not empty
+
+  Message(kVL4, "delete", "main ntuple ntupleId: " + to_string(id));
+
+  // Get ntuple description
+  auto index = id - fFirstId;
+  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+    G4Analysis::Warn("Main ntuple " + to_string(id) + " does not exist.",
+      fkClass, "Delete");
+    return false;
+  }
+
+  // Delete main ntuple and update ntuple vector
+  delete fNtupleVector[index];
+  fNtupleVector[index] = nullptr;
+
+  Message(kVL3, "delete", "main ntuple ntupleId: " + to_string(id));
+
+  return true;
 }
 
 //_____________________________________________________________________________
@@ -94,6 +169,9 @@ G4bool G4RootMainNtupleManager::Merge()
   std::size_t counter = 0;
 
   for ( auto ntuple : fNtupleVector ) {
+    // skip deleted ntuples
+    if (ntuple == nullptr) continue;
+
     ntuple->merge_number_of_entries();
 
     // Notify ntuple description that file is not empty
@@ -142,25 +220,11 @@ G4RootMainNtupleManager::GetNtupleFile(RootNtupleDescription* ntupleDescription)
 //_____________________________________________________________________________
 void G4RootMainNtupleManager::CreateNtuplesFromBooking()
 {
-// Create ntuples from booking.
+// Create ntuples from booking (without creating ntuple description)
 // This function is triggered from workers at new cycle.
 
   for (auto [ntupleDescription, ntupleFile] : fNtupleDescriptionVector) {
-
-    // Get ntuple booking
-    const auto& ntupleBooking = ntupleDescription->GetNtupleBooking();
-
-    Message(kVL4, "create", "main ntuple", ntupleBooking.name());
-
-    // Create ntuple
-    auto ntuple = new tools::wroot::ntuple(*std::get<2>(*ntupleFile), ntupleBooking, fRowWise);
-         // ntuple object is deleted automatically when closing a file
-    auto basketSize = fNtupleBuilder->GetBasketSize();
-    ntuple->set_basket_size(basketSize);
-
-    fNtupleVector.push_back(ntuple);
-
-    Message(kVL3, "create", "main ntuple", ntupleBooking.name());
+    CreateNtupleFromBooking(ntupleDescription->GetG4NtupleBooking(), ntupleFile);
   }
 
   SetNewCycle(false);

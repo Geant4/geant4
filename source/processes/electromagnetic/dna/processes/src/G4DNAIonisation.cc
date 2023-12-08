@@ -39,7 +39,7 @@ using namespace std;
 
 G4DNAIonisation::G4DNAIonisation(const G4String& processName,
                                  G4ProcessType type) :
-    G4VEmProcess(processName, type), isInitialised(false)
+    G4VEmProcess(processName, type) 
 {
   SetProcessSubType(fLowEnergyIonisation);
 }
@@ -47,8 +47,7 @@ G4DNAIonisation::G4DNAIonisation(const G4String& processName,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNAIonisation::~G4DNAIonisation()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -83,9 +82,9 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
-        G4DNABornIonisationModel* born =
+        auto  born =
             new G4DNABornIonisationModel();
         SetEmModel(born);
         born->SetLowEnergyLimit(11. * eV);
@@ -95,9 +94,9 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
     }
     else if(name == "e+")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
-        G4LEPTSIonisationModel* lepts =
+        auto  lepts =
             new G4LEPTSIonisationModel();
         SetEmModel(lepts);
         lepts->SetLowEnergyLimit(1. * eV);
@@ -108,15 +107,15 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "proton")
     {
-      if(!EmModel(0)) // MK : Is this a reliable test ? VI: it is useful
+      if(EmModel(0) == nullptr) // MK : Is this a reliable test ? VI: it is useful
       {
-        G4DNARuddIonisationModel* rudd =
+        auto  rudd =
              new G4DNARuddIonisationModel();
         rudd->SetLowEnergyLimit(0 * eV);
         rudd->SetHighEnergyLimit(500 * keV);
         SetEmModel(rudd);
 
-        G4DNABornIonisationModel* born =
+        auto  born =
             new G4DNABornIonisationModel();
         born->SetLowEnergyLimit(500 * keV);
         born->SetHighEnergyLimit(100 * MeV);
@@ -124,14 +123,14 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
       }
 
       AddEmModel(1, EmModel());
-      if(EmModel(1)) AddEmModel(2, EmModel(1));
+      if(EmModel(1) != nullptr) AddEmModel(2, EmModel(1));
     }
 
     if(name == "hydrogen")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
-        G4DNARuddIonisationModel* rudd =
+        auto  rudd =
              new G4DNARuddIonisationModel();
          SetEmModel(rudd);
         rudd->SetLowEnergyLimit(0 * eV);
@@ -142,9 +141,9 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "alpha" || name == "alpha+" || name == "helium")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
-        G4DNARuddIonisationModel* rudd =
+        auto  rudd =
             new G4DNARuddIonisationModel();
         SetEmModel(rudd);
         rudd->SetLowEnergyLimit(0 * keV);
@@ -160,9 +159,9 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
     name == "GenericIon")
     //
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
-        G4DNARuddIonisationExtendedModel* ruddExt =
+        auto  ruddExt =
             new G4DNARuddIonisationExtendedModel();
         SetEmModel(ruddExt);
         ruddExt->SetLowEnergyLimit(0 * keV);
@@ -179,7 +178,7 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4DNAIonisation::PrintInfo()
 {
-  if(EmModel(1))
+  if(EmModel(1) != nullptr)
   {
     G4cout << " Total cross sections computed from " << EmModel(0)->GetName()
            << " and " << EmModel(1)->GetName() << " models" << G4endl;

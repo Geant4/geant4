@@ -1300,7 +1300,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
     float correctionFactor = 5;
     while (fAutoMove) {
       if ( lastMoveTime.elapsed() >= (int)(1000/fNbMaxFramesPerSec)) {
-        float lTime = 1000/lastMoveTime.elapsed();
+        float lTime = 1000.0f/lastMoveTime.elapsed();
         if (((((float)delta.x())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
             ((((float)delta.x())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
           correctionFactor = (float)delta.x()*(lTime/fNbMaxAnglePerSec);
@@ -2332,7 +2332,7 @@ void G4OpenGLQtViewer::encodeVideo()
 void G4OpenGLQtViewer::processEncodeStdout()
 {
   QString tmp = fProcess->readAllStandardOutput ().data();
-  int start = tmp.lastIndexOf("ESTIMATED TIME");
+  auto start = tmp.lastIndexOf("ESTIMATED TIME");
   tmp = tmp.mid(start,tmp.indexOf("\n",start)-start);
   setRecordingInfos(tmp);
 }

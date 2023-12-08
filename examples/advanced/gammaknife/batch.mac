@@ -27,6 +27,8 @@
 
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 # /run/setCutForRegion PatientLog 100000 m
 /run/setCut 1000000000 mm

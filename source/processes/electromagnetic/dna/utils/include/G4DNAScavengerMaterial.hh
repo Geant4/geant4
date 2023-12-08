@@ -32,6 +32,8 @@
 #include <vector>
 #include "G4MoleculeCounter.hh"
 #include "G4VScavengerMaterial.hh"
+#include "G4MoleculeTable.hh"
+
 class G4Material;
 class G4MolecularConfiguration;
 class G4VChemistryWorld;
@@ -78,13 +80,14 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
     {
       return it->second > 0;
     }
-    else
-    {
-      return false;
-    }
+    
+    return false;
+   
   }
 
   void SetCounterAgainstTime() { fCounterAgainstTime = true; }
+  void SetpH(const G4int& ph);
+  G4double GetpH();
 
   std::vector<MolType> GetScavengerList() const
   {
@@ -108,6 +111,9 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   CounterMapType fCounterMap;
   G4bool fCounterAgainstTime;
   G4int fVerbose;
+  MolType fH3Op = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
+  MolType fH2O = G4MoleculeTable::Instance()->GetConfiguration("H2O");
+  MolType fHOm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
   struct Search
   {
     Search() { fLowerBoundSet = false; }
@@ -117,5 +123,7 @@ class G4DNAScavengerMaterial : public G4VScavengerMaterial
   };
 
   std::unique_ptr<Search> fpLastSearch;
+  void WaterEquilibrium();
+
 };
 #endif  // G4DNASCAVENGERMATERIAL_HH

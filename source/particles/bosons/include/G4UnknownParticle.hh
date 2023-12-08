@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -34,43 +31,23 @@
 //  New impelemenataion as an utility class  H.Kurashige, 14 July 2004
 // ----------------------------------------------------------------
 
-
 #ifndef G4UnknownParticle_h
 #define G4UnknownParticle_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         UNKNOWN                                ###
-// ######################################################################
 
 class G4UnknownParticle : public G4ParticleDefinition
 {
- private:
-   static G4UnknownParticle* theInstance;
+  public:
+    static G4UnknownParticle* Definition();
+    static G4UnknownParticle* UnknownParticleDefinition();
+    static G4UnknownParticle* UnknownParticle();
 
- private:
-  G4UnknownParticle(){}
+  private:
+    G4UnknownParticle() {}
+    ~G4UnknownParticle() override = default;
 
- public:
-   ~G4UnknownParticle() override= default;
- 
-   static G4UnknownParticle* Definition();
-   static G4UnknownParticle* UnknownParticleDefinition();
-   static G4UnknownParticle* UnknownParticle();
+    static G4UnknownParticle* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

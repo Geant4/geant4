@@ -1177,5 +1177,5 @@ G4String G4VAnalysisManager::GetType() const
 inline
 G4String G4VAnalysisManager::GetFileType() const
 {
-  return fVFileManager->GetFileType();
+  return fState.GetFileType();
 }

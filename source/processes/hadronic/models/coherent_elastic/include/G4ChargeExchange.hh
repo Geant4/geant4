@@ -24,14 +24,11 @@
 // ********************************************************************
 //
 //
-//
-//
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
 //           28 May 2006 V.Ivanchenko
 //
 // Modified:
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
-//
 //
 
 #ifndef G4ChargeExchange_h
@@ -47,14 +44,15 @@
 #include "G4Nucleus.hh"
 
 class G4ParticleDefinition;
+class G4ChargeExchangeXS;
 
 class G4ChargeExchange : public G4HadronicInteraction
 {
 public:
 
-  explicit G4ChargeExchange();
+  explicit G4ChargeExchange(G4ChargeExchangeXS*);
+  ~G4ChargeExchange() override = default;
 
-  ~G4ChargeExchange() override;
   G4ChargeExchange( const G4ChargeExchange &right ) = delete;
   const G4ChargeExchange & operator=( const G4ChargeExchange &right ) = delete;
   G4bool operator==( const G4ChargeExchange &right ) const = delete;
@@ -63,50 +61,15 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                  G4Nucleus& targetNucleus) override;
 
-  void SetLowestEnergyLimit(G4double value);
-
-  G4double SampleT(G4double p, G4int A);
+  G4double SampleT(const G4ParticleDefinition* theSec, const G4int A,
+		   const G4double tmax) const;
 
 private:
 
-  G4ParticleDefinition* theProton;
-  G4ParticleDefinition* theNeutron;
-  G4ParticleDefinition* theAProton;
-  G4ParticleDefinition* theANeutron;
-  G4ParticleDefinition* thePiPlus;
-  G4ParticleDefinition* thePiMinus;
-  G4ParticleDefinition* thePiZero;
-  G4ParticleDefinition* theKPlus;
-  G4ParticleDefinition* theKMinus;
-  G4ParticleDefinition* theK0S;
-  G4ParticleDefinition* theK0L;
-  G4ParticleDefinition* theL;
-  G4ParticleDefinition* theAntiL;
-  G4ParticleDefinition* theSPlus;
-  G4ParticleDefinition* theASPlus;
-  G4ParticleDefinition* theSMinus;
-  G4ParticleDefinition* theASMinus;
-  G4ParticleDefinition* theS0;
-  G4ParticleDefinition* theAS0;
-  G4ParticleDefinition* theXiMinus;
-  G4ParticleDefinition* theXi0;
-  G4ParticleDefinition* theAXiMinus;
-  G4ParticleDefinition* theAXi0;
-  G4ParticleDefinition* theOmega;
-  G4ParticleDefinition* theAOmega;
-  G4ParticleDefinition* theD;
-  G4ParticleDefinition* theT;
-  G4ParticleDefinition* theA;
-  G4ParticleDefinition* theHe3;
-
-  G4double lowestEnergyLimit;
+  G4ChargeExchangeXS* fXSection;
 
   G4int secID;  // Creator model ID for the secondaries created by this model
+  G4double lowEnergyLimit; // lowest limit to avoid numerical problems
 };
-
-inline void G4ChargeExchange::SetLowestEnergyLimit(G4double value)
-{
-  lowestEnergyLimit = value;
-}
 
 #endif

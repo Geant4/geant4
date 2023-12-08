@@ -124,10 +124,10 @@ protected:
   F01FieldMessenger*       fFieldMessenger = nullptr;
 
   // Parameters / Invariant during tracking loop
-  G4double             fMinStep     = -1.0;
-  G4double             fDeltaOneStep= -1.0;
-  G4double             fDesiredEpsilonMin = 1.0e-05; // tight: 1.0e-8  std: 1.0e-5 to 1.e-6  loose: 1.0e-4
-  G4double             fDesiredEpsilonMax = 0.005;   // tight: 1.0e-5  std: 1.0e-4 to 5.e-3  loose: 1.0e-3+
+  G4double fMinStep     = -1.0;
+  G4double fDeltaOneStep= -1.0;
+  G4double fDesiredEpsilonMin = 1.0e-05; // tight: 1.0e-8  std: 1.0e-5 to 1.e-6  loose: 1.0e-4
+  G4double fDesiredEpsilonMax = 0.005;   // tight: 1.0e-5  std: 1.0e-4 to 5.e-3  loose: 1.0e-3+
 };
 
 #endif

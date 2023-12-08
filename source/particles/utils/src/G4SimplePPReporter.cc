@@ -22,25 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #include "G4SimplePPReporter.hh"
+
 #include "G4ios.hh"
 #include "globals.hh"
 
-/////////////////////
-void G4SimplePPReporter::Print(const G4String& )
+void G4SimplePPReporter::Print(const G4String&)
 {
-  for (const auto ptr : pList){
-    ptr->Print();  
+  for (const auto ptr : pList) {
+    ptr->Print();
     G4cout << G4endl;
   }
-}    
+}

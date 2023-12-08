@@ -46,7 +46,7 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-
+#include "G4CrossSectionDataStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -110,16 +110,19 @@ BiasingOperation::BiasingOperation( G4String name ) : G4VBiasingOperation( name 
   fPionMinusInelasticProcess->RegisterMe( theInclxxModel );
   fPionMinusInelasticProcess->RegisterMe( theBertiniModel );
 
-  G4VCrossSectionDataSet* theProtonXSdata = new G4BGGNucleonInelasticXS( G4Proton::Definition() );
+  G4VCrossSectionDataSet* theProtonXSdata =
+    new G4BGGNucleonInelasticXS( G4Proton::Definition() );
   theProtonXSdata->BuildPhysicsTable( *(G4Proton::Definition()) );
   fProtonInelasticProcess->AddDataSet( theProtonXSdata );
   G4VCrossSectionDataSet* theNeutronXSdata = new G4NeutronInelasticXS;
   theNeutronXSdata->BuildPhysicsTable( *(G4Neutron::Definition()) );
   fNeutronInelasticProcess->AddDataSet( theNeutronXSdata );
-  G4VCrossSectionDataSet* thePionPlusXSdata = new G4BGGPionInelasticXS( G4PionPlus::Definition() );
+  G4VCrossSectionDataSet* thePionPlusXSdata =
+    new G4BGGPionInelasticXS( G4PionPlus::Definition() );
   thePionPlusXSdata->BuildPhysicsTable( *(G4PionPlus::Definition()) );
   fPionPlusInelasticProcess->AddDataSet( thePionPlusXSdata );
-  G4VCrossSectionDataSet* thePionMinusXSdata = new G4BGGPionInelasticXS( G4PionMinus::Definition() );
+  G4VCrossSectionDataSet* thePionMinusXSdata =
+    new G4BGGPionInelasticXS( G4PionMinus::Definition() );
   thePionMinusXSdata->BuildPhysicsTable( *(G4PionMinus::Definition()) );  
   fPionMinusInelasticProcess->AddDataSet( thePionMinusXSdata );
 }
@@ -134,12 +137,28 @@ G4VParticleChange* BiasingOperation::
 ApplyFinalStateBiasing( const G4BiasingProcessInterface* , 
                         const G4Track* track, const G4Step* step, G4bool& ) {
   if ( track->GetParticleDefinition() == G4Proton::Definition() ) {
+     auto particle = track->GetDynamicParticle();
+     auto material = track->GetMaterial();
+     fProtonInelasticProcess->GetCrossSectionDataStore( )
+       ->ComputeCrossSection(particle, material);
     return fProtonInelasticProcess->PostStepDoIt( *track, *step );
   } else if ( track->GetParticleDefinition() == G4Neutron::Definition() ) {
+     auto particle = track->GetDynamicParticle();
+     auto material = track->GetMaterial();
+     fNeutronInelasticProcess->GetCrossSectionDataStore( )
+       ->ComputeCrossSection(particle, material);
     return fNeutronInelasticProcess->PostStepDoIt( *track, *step );
   } else if ( track->GetParticleDefinition() == G4PionPlus::Definition() ) {
+     auto particle = track->GetDynamicParticle();
+     auto material = track->GetMaterial();
+     fPionPlusInelasticProcess->GetCrossSectionDataStore( )
+       ->ComputeCrossSection(particle, material);
     return fPionPlusInelasticProcess->PostStepDoIt( *track, *step );
   } else if ( track->GetParticleDefinition() == G4PionMinus::Definition() ) {
+     auto particle = track->GetDynamicParticle();
+     auto material = track->GetMaterial();
+     fPionMinusInelasticProcess->GetCrossSectionDataStore( )
+       ->ComputeCrossSection(particle, material);
     return fPionMinusInelasticProcess->PostStepDoIt( *track, *step );
   } else {
     G4cerr << "ERROR in BiasingOperation::ApplyFinalStateBiasing : unexpected particle = "

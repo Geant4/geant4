@@ -271,7 +271,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     G4double X2 = Eth/energy;
     if(X2<1. && i%1000==0){
       G4double crs_annihiToMu_theory = 
-	atomicZ*pi*Ru*Ru/3*X2*(1+X2/2)*std::sqrt(1-X2);
+        atomicZ*pi*Ru*Ru/3*X2*(1+X2/2)*std::sqrt(1-X2);
       fAnalysis->FillH1(11,x,crs_annihiToMu_theory/microbarn);
     }
 

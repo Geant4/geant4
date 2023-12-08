@@ -1,7 +1,9 @@
-
-/control/verbose 2
-/run/verbose 2
-/tracking/verbose 2
+#
+# Macro file for "Activation.cc"
+# in interactive mode
+#
+/control/verbose 1
+/run/verbose 1
 #
 /testhadr/det/setMat G4_Co
 /testhadr/det/setThickness 1 cm
@@ -9,10 +11,13 @@
 #
 /run/initialize
 #
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 /gun/particle neutron
 /gun/energy 25 meV
 #
 /control/execute vis.mac
-/tracking/verbose 2
 #
+/tracking/verbose 2
 /run/beamOn 1

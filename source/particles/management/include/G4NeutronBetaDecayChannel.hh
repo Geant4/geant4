@@ -30,35 +30,32 @@
 // This class describes free neutron beta decay kinematics.
 // It neglects neutron/electron polarization without Coulomb effect.
 
-// Author: H.Kurashige, 18 September 2001 
+// Author: H.Kurashige, 18 September 2001
 // --------------------------------------------------------------------
 #ifndef G4NeutronBetaDecayChannel_hh
 #define G4NeutronBetaDecayChannel_hh 1
 
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VDecayChannel.hh"
 
 class G4NeutronBetaDecayChannel : public G4VDecayChannel
 {
   public:
-
-    G4NeutronBetaDecayChannel(const G4String& theParentName,
-                                    G4double  theBR);
+    G4NeutronBetaDecayChannel(const G4String& theParentName, G4double theBR);
     ~G4NeutronBetaDecayChannel() override = default;
 
-    G4DecayProducts* DecayIt(G4double) override;     
-  
-  protected:
+    G4DecayProducts* DecayIt(G4double) override;
 
+  protected:
     G4NeutronBetaDecayChannel() = default;
 
+    // Copy constructor and assignment operator
     G4NeutronBetaDecayChannel(const G4NeutronBetaDecayChannel&);
     G4NeutronBetaDecayChannel& operator=(const G4NeutronBetaDecayChannel&);
-      // Copy constructor and assignment operator
 
+    // e-neutrino angular correlation parameter
     const G4double aENuCorr = -0.102;
-      // e-neutrino angular correlation parameter 
-};  
+};
 
 #endif

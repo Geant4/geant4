@@ -58,7 +58,7 @@ class G4DNAWaterDissociationDisplacer: public G4VMolecularDissociationDisplacer
 {
 public:
   G4DNAWaterDissociationDisplacer();
-  virtual ~G4DNAWaterDissociationDisplacer();
+  ~G4DNAWaterDissociationDisplacer() override;
   
   std::vector<G4ThreeVector>
   GetProductsDisplacement(const G4MolecularDissociationChannel*) const

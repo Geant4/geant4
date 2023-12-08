@@ -28,10 +28,10 @@
 // Class description:
 //
 // Messenger class to interface and exchange information between the
-// decay table/decay channel and UI.  
+// decay table/decay channel and UI.
 //
 // /particle/property/decay/   Decay Table control commands.
-//   Commands : 
+//   Commands :
 //     select * Enter index of decay mode.
 //     dump * Dump decay mode information.
 //     br * Set branching ratio. [0< BR <1.0]
@@ -51,13 +51,12 @@ class G4DecayTable;
 
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger; 
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 
 class G4DecayTableMessenger : public G4UImessenger
 {
   public:
-
     G4DecayTableMessenger(G4ParticleTable* pTable = nullptr);
     ~G4DecayTableMessenger() override;
 
@@ -65,10 +64,9 @@ class G4DecayTableMessenger : public G4UImessenger
     G4String GetCurrentValue(G4UIcommand* command) override;
 
     G4DecayTableMessenger(const G4DecayTableMessenger&) = delete;
-    G4DecayTableMessenger& operator= (const G4DecayTableMessenger&) = delete;
+    G4DecayTableMessenger& operator=(const G4DecayTableMessenger&) = delete;
 
   private:
-
     G4ParticleDefinition* SetCurrentParticle();
 
     G4ParticleTable* theParticleTable = nullptr;
@@ -79,7 +77,7 @@ class G4DecayTableMessenger : public G4UImessenger
     G4UIdirectory* thisDirectory = nullptr;
     G4UIcmdWithoutParameter* dumpCmd = nullptr;
     G4UIcmdWithAnInteger* selectCmd = nullptr;
-    G4UIcmdWithADouble* brCmd = nullptr; 
+    G4UIcmdWithADouble* brCmd = nullptr;
 
     G4int idxCurrentChannel = -1;
 };

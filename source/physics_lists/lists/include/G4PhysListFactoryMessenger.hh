@@ -56,6 +56,8 @@ private:
   G4UIcommand*             theRadDecay;
   G4UIcommand*             theOptical;
   G4UIcommand*             theThermal;
+  G4UIcommand*             theNeutrino;
+  G4UIcommand*             theChargeEx;
   G4UIdirectory*           theDir;
 };
 

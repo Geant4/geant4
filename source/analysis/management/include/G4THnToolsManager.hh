@@ -31,6 +31,7 @@
 #ifndef G4THnToolsManager_h
 #define G4THnToolsManager_h 1
 
+#include "G4AnalysisUtilities.hh"
 #include "G4VTBaseHnManager.hh"
 #include "G4THnManager.hh"
 #include "globals.hh"
@@ -70,6 +71,7 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
                const std::array<G4HnDimensionInformation, DIM>& hnInfo) override;
 
     virtual G4bool Scale(G4int id, G4double factor) override;
+    virtual G4int  GetNofHns(G4bool onlyIfExist) const override;
 
     // Methods to fill histograms
     virtual G4bool Fill(G4int id, std::array<G4double, DIM> value, G4double weight = 1.0) override;
@@ -96,6 +98,9 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
             // Function with specialization per histo type
     virtual G4bool List(std::ostream& output, G4bool onlyIfActive = true) override;
 
+    // Methods to delete selected histograms
+    virtual G4bool Delete(G4int id, G4bool keepSetting) override;
+
     // // Access to Hn manager
     virtual std::shared_ptr<G4HnManager> GetHnManager() override;
     virtual const std::shared_ptr<G4HnManager> GetHnManager() const override;
@@ -115,7 +120,7 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
     void UpdateInformation(G4HnInformation* hnInformation,
                            const std::array<G4HnDimensionInformation, DIM>& hnInfo);
 
-    G4HnInformation* AddInformation(const G4String& name,
+    G4HnInformation* CreateInformation(const G4String& name,
                        const std::array<G4HnDimensionInformation, DIM>& hnInfo);
 
     void AddAnnotation(HT* ht,
@@ -138,7 +143,7 @@ class G4THnToolsManager : public G4VTBaseHnManager<DIM>,
                      G4double weight = 1.0);
 
    // redefine tools::histo::key_axis_x_title() - not available via upper types
-   static const std::array<std::string, 3> fkKeyAxisTitle;
+   static const std::array<std::string, G4Analysis::kMaxDim> fkKeyAxisTitle;
 
    std::unique_ptr<G4UImessenger> fMessenger;
 };

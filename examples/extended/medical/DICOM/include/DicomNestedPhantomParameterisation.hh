@@ -36,10 +36,10 @@
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
+#include "G4VTouchable.hh"
 #include "G4VNestedParameterisation.hh"
 
 class G4VPhysicalVolume;
-class G4VTouchable;
 class G4VSolid;
 class G4Material;
 class G4VisAttributes;

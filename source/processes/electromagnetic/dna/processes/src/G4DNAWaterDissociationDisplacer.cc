@@ -124,7 +124,7 @@ G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 */
 G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer()
         :
-        G4VMolecularDissociationDisplacer(),
+        
         ke(1.7*eV)
 /*#ifdef _WATER_DISPLACER_USE_KREIPL_
         fFastElectronDistrib(0., 5., 0.001)
@@ -222,7 +222,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
     {
         case Ionisation_DissociationDecay:
         {
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "Ionisation_DissociationDecay" << G4endl;
                 G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
@@ -263,7 +263,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
         }
         case A1B1_DissociationDecay:
         {
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "A1B1_DissociationDecay" << G4endl;
                 G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
@@ -289,7 +289,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
         }
         case B1A1_DissociationDecay:
         {
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "B1A1_DissociationDecay" << G4endl;
                 G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
@@ -342,7 +342,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
         }
         case B1A1_DissociationDecay2:
         {
-          if(fVerbose){
+          if(fVerbose != 0){
             G4cout<<"B1A1_DissociationDecay2"<<G4endl;
             G4cout<<"Channel's name: "<<pDecayChannel->GetName()<<G4endl;
           }
@@ -373,7 +373,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
         }
         case AutoIonisation:
         {
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "AutoIonisation" << G4endl;
                 G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
@@ -420,7 +420,7 @@ GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) con
         }
         case DissociativeAttachment:
         {
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "DissociativeAttachment" << G4endl;
                 G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;

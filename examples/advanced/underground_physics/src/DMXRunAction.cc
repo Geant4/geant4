@@ -99,6 +99,8 @@ void DMXRunAction::Book()
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->SetDefaultFileType("root");
   
+  man->SetNtupleMerging(true);
+  
   // Open an output file
   man->OpenFile(savehistFile);
   man->SetFirstHistoId(1);

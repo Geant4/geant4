@@ -39,13 +39,13 @@ class G4UIcmdWithADoubleAndUnit;
 
 class G4UIcmdWith3VectorAndUnit;
 
-/// Kill the primary particle:
-/// - either after a given energy loss
-/// - or after the primary particle has reached a given energy
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Kill the primary particle:
+/// - either after a given energy loss
+/// - or after the primary particle has reached a given energy
 
 class PrimaryKiller : public G4VPrimitiveScorer,
                       public G4UImessenger {

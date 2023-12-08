@@ -26,15 +26,18 @@
 //
 #include "G4DNASecondOrderReaction.hh"
 
-#include <G4VScheduler.hh>
-#include "G4SystemOfUnits.hh"
-#include "G4Molecule.hh"
-#include "G4DNAMolecularMaterial.hh"
-#include "G4MolecularConfiguration.hh"
 #include "G4DNADamage.hh"
-#include "G4UnitsTable.hh"
-#include "G4TrackingInformation.hh"
+#include "G4DNAMolecularMaterial.hh"
 #include "G4LowEnergyEmProcessSubType.hh"
+#include "G4MolecularConfiguration.hh"
+#include "G4Molecule.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TrackingInformation.hh"
+#include "G4UnitsTable.hh"
+
+#include <G4VScheduler.hh>
+
+#include <memory>
 
 #ifndef State
 #define State(theXInfo) (GetState<SecondOrderReactionState>()->theXInfo)
@@ -53,14 +56,14 @@ void G4DNASecondOrderReaction::Create()
   // meaning G4DNASecondOrderReaction contains a class inheriting from G4ProcessState
 
   fIsInitialized = false;
-  fpMolecularConfiguration = 0;
-  fpMaterial = 0;
+  fpMolecularConfiguration = nullptr;
+  fpMaterial = nullptr;
   fReactionRate = -1.;
   fConcentration = -1.;
   fMolarMassOfMaterial = -1.;
   fProposesTimeStep = true;
   fReturnedValue = DBL_MAX;
-  fpMoleculeDensity = 0;
+  fpMoleculeDensity = nullptr;
 
   verboseLevel = 0;
 }
@@ -78,9 +81,8 @@ G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4DNASecondOrderReactio
 }
 
 G4DNASecondOrderReaction::~G4DNASecondOrderReaction()
-{
-  ;
-}
+= default;
+
 G4DNASecondOrderReaction& G4DNASecondOrderReaction::operator=(const G4DNASecondOrderReaction& rhs)
 {
   if (this == &rhs) return *this; // handle self assignment
@@ -89,7 +91,7 @@ G4DNASecondOrderReaction& G4DNASecondOrderReaction::operator=(const G4DNASecondO
   return *this;
 }
 
-G4DNASecondOrderReaction::SecondOrderReactionState::SecondOrderReactionState() : G4ProcessState()
+G4DNASecondOrderReaction::SecondOrderReactionState::SecondOrderReactionState() 
 {
   fPreviousTimeAtPreStepPoint = -1;
   fIsInGoodMaterial = false;
@@ -106,7 +108,7 @@ void
 G4DNASecondOrderReaction::StartTracking(G4Track* track)
 {
   G4VProcess::StartTracking(track);
-  G4VITProcess::fpState.reset(new SecondOrderReactionState());
+  G4VITProcess::fpState = std::make_shared<SecondOrderReactionState>();
   G4VITProcess::StartTracking(track);
 }
 
@@ -139,7 +141,7 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
   const G4Material* material = track.GetMaterial();
 
   G4Molecule* mol = GetMolecule(track);
-  if(!mol) return DBL_MAX;
+  if(mol == nullptr) return DBL_MAX;
   if(mol->GetMolecularConfiguration() != fpMolecularConfiguration)
   {
     //        G4cout <<"mol->GetMolecularConfiguration() != fpMolecularConfiguration" << G4endl;

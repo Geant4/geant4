@@ -25,34 +25,34 @@
 //
 /// \file particles/phonons/src/G4PhononTransFast.cc
 /// \brief Implementation of the G4PhononTransFast class
-//
-//
 
 #include "G4PhononTransFast.hh"
+
 #include "G4ParticleTable.hh"
+#include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 
 G4PhononTransFast* G4PhononTransFast::theInstance = nullptr;
 
-G4PhononTransFast*  G4PhononTransFast::Definition() 
+G4PhononTransFast* G4PhononTransFast::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
 
   const G4String name = "phononTF";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //      
-  //    Arguments for constructor are as follows 
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,         0.0*MeV,       0.0*MeV,         0.0,
                     0,               0,             0,
@@ -61,22 +61,13 @@ G4PhononTransFast*  G4PhononTransFast::Definition()
                  true,            -1.0,          nullptr,
                 false,        "phononTF",       0
              );
+    // clang-format on
   }
   theInstance = static_cast<G4PhononTransFast*>(anInstance);
   return theInstance;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-G4PhononTransFast*  G4PhononTransFast::PhononDefinition() 
+G4PhononTransFast* G4PhononTransFast::PhononDefinition()
 {
   return Definition();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-

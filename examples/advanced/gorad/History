@@ -5,6 +5,23 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (gorad-V11-01-01)
+- Updated vis.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+  - Keep previous driver opening with an extra setting in commented lines
+
+## 2023-11-10 Alberto Ribon (gorad-V11-01-00)
+- run.mac : introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+  Note: in test.mac, the above UI command is commented out
+        because system testing is running with the FTFP_BERT physics,
+        therefore without radioactive decay (hence the command would
+        be undefined).
+
 ## 2021-12-10 Ben Morgan (gorad-V11-00-00)
 - Change to new Markdown History format
 

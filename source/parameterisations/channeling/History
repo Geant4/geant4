@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-23 Alexei Sytov (fastsimchanneling-V11-01-04)
+- G4Log replaced std::log
+- some small issues were fixed to comply with the Geant4 guidelines
+
+## 2023-10-18 Alexei Sytov (fastsimchanneling-V11-01-03)
+- Considerable updates:
+- Revised version of the Baier-Katkov method with a new features of
+  increasing of the photon statistics in certain intervals of spectrum;
+  updates in defaults; some bugs were corrected
+- The electromagnetic shower in W was simulated and preliminarly
+  validated with experimental data from Eur. Phys. J. C 82, 699 (2022)
+- Added the Crystalline Undulator (CU) as a periodically bent crystal 
+  to the internal crystal geometry (still needs to be validated).
+
 ## 2023-06-15 Gabriele Cosmo (fastsimchanneling-V11-01-02)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

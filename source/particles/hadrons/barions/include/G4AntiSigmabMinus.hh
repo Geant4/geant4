@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -39,25 +36,20 @@
 #ifndef G4AntiSigmabMinus_h
 #define G4AntiSigmabMinus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                        AntiSigmabMinus                         ###
-// ######################################################################
 
 class G4AntiSigmabMinus : public G4ParticleDefinition
 {
- private:
-   static G4AntiSigmabMinus* theInstance;
-   G4AntiSigmabMinus(){}
-   ~G4AntiSigmabMinus() override= default;
+  public:
+    static G4AntiSigmabMinus* Definition();
+    static G4AntiSigmabMinus* AntiSigmabMinusDefinition();
+    static G4AntiSigmabMinus* AntiSigmabMinus();
 
- public:
-   static G4AntiSigmabMinus* Definition();
-   static G4AntiSigmabMinus* AntiSigmabMinusDefinition();
-   static G4AntiSigmabMinus* AntiSigmabMinus();
+  private:
+    G4AntiSigmabMinus() {}
+    ~G4AntiSigmabMinus() override = default;
+
+    static G4AntiSigmabMinus* theInstance;
 };
 
 #endif

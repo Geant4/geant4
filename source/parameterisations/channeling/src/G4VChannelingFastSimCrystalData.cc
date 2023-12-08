@@ -27,6 +27,7 @@
 #include "G4VChannelingFastSimCrystalData.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Log.hh"
 
 G4VChannelingFastSimCrystalData::G4VChannelingFastSimCrystalData()
 {
@@ -44,15 +45,21 @@ void G4VChannelingFastSimCrystalData::SetGeometryParameters
 {
     G4int crystalID = crystallogic->GetInstanceID();
 
-    //set bending angle if the volume exists in the list, otherwise default = 0
+    //set bending angle if the it exists in the list, otherwise default = 0
     (fMapBendingAngle.count(crystalID) > 0)
     ? SetBendingAngle(fMapBendingAngle[crystalID],crystallogic)
     : SetBendingAngle(0.,crystallogic);
 
-    //set miscut angle if the volume exists in the list, otherwise default = 0
+    //set miscut angle if the it exists in the list, otherwise default = 0
     (fMapMiscutAngle.count(crystalID) > 0)
     ? SetMiscutAngle(fMapMiscutAngle[crystalID],crystallogic)
     : SetMiscutAngle(0.,crystallogic);
+
+    //set crystalline undulator parameters if they exist in the list,
+    //otherwise default = G4ThreeVector(0,0,0).
+    (fMapCUAmplitudePeriodPhase.count(crystalID) > 0)
+    ? SetCUParameters(fMapCUAmplitudePeriodPhase[crystalID],crystallogic)
+    : SetCUParameters(G4ThreeVector(0.,0.,0.),crystallogic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -78,6 +85,12 @@ void G4VChannelingFastSimCrystalData::SetBendingAngle(G4double tetab,
     fBendingAngle=std::abs(tetab);
     if (fBendingAngle<0.000001)//no bending less then 1 urad
     {
+        if(fBendingAngle>DBL_EPSILON)
+        {
+            G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
+            G4cout << "Warning: bending angle is lower than 1 urad => set to 0" << G4endl;
+        }
+
        fBent=0;
        fBendingAngle=0.;
        fBendingR=0.;//just for convenience (infinity in reality)
@@ -85,8 +98,7 @@ void G4VChannelingFastSimCrystalData::SetBendingAngle(G4double tetab,
        fBendingRsquare=0.;
        fCurv=0.;
 
-       G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
-       G4cout << "Warning: bending angle is lower than 1 urad => set to 0" << G4endl;
+       fCorrectionZ = 1.;
     }
     else
     {
@@ -125,6 +137,72 @@ void G4VChannelingFastSimCrystalData::SetMiscutAngle(G4double tetam,
     }
     fCosMiscutAngle=std::cos(fMiscutAngle);
     fSinMiscutAngle=std::sin(fMiscutAngle);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VChannelingFastSimCrystalData::SetCrystallineUndulatorParameters(
+                                       G4double amplitude,
+                                       G4double period,
+                                       G4double phase,
+                                       const G4LogicalVolume *crystallogic)
+{
+    if (amplitude<DBL_EPSILON||period<DBL_EPSILON)
+    {
+        amplitude = 0.;
+        period=0.;
+        phase=0.;
+        G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
+        G4cout << "Warning: The crystalline undulator parameters are out of range "
+                  "=> the crystalline undulator mode switched off" << G4endl;
+    }
+
+    SetCUParameters(G4ThreeVector(amplitude,period,phase),crystallogic);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VChannelingFastSimCrystalData::SetCUParameters(
+                                      const G4ThreeVector &amplitudePeriodPhase,
+                                      const G4LogicalVolume *crystallogic)
+{
+    G4int crystalID = crystallogic->GetInstanceID();
+
+    //set the crystalline undulator parameters for this logical volume
+    fMapCUAmplitudePeriodPhase[crystalID]=amplitudePeriodPhase;
+    fCUAmplitude=amplitudePeriodPhase.x();
+    G4double period = amplitudePeriodPhase.y();
+    fCUPhase = amplitudePeriodPhase.z();
+
+    //if the amplidude of the crystalline undulator is 0 => no undulator
+    if(fCUAmplitude>DBL_EPSILON&&period>DBL_EPSILON)
+    {
+        //crystalline undulator flag
+        fCU = true;
+
+        fCUK = CLHEP::twopi/period;
+
+        if(fBendingAngle>DBL_EPSILON)
+        {
+            //bent and periodically bent crystal are not compatible
+            SetBendingAngle(0,crystallogic);
+
+            G4cout << "Channeling model: volume " << crystallogic->GetName() << G4endl;
+            G4cout << "Warning: crystalline undulator is not compatible with "
+                      "a bent crystal mode => setting bending angle to 0." << G4endl;
+        }
+    }
+    else
+    {
+        fCU = false;
+        fCUAmplitude = 0.;
+        fCUK = 0.;
+        fCUPhase = 0.;
+        fMapCUAmplitudePeriodPhase[crystalID] = G4ThreeVector(0.,0.,0.);
+    }
+
+    fCUK2 = fCUK*fCUK;
+    fCUAmplitudeK = fCUAmplitude*fCUK;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -286,7 +364,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombAtomicScattering(
           G4double aa1=1.+aa;
 
 //        crystal, with scattering suppression
-          G4double tetamsi=e1*(std::log(aa1)+
+          G4double tetamsi=e1*(G4Log(aa1)+
                            (1.-std::exp(-aa*fBB[ielement]))/aa1+
                            fBBDEXP[ielement]*
                            (expint(fBB[ielement]*aa1)-fE1XBbb[ielement]));
@@ -297,7 +375,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombAtomicScattering(
 //         *(ln(1+a)+(1-exp(-a*b))/(1+a)+(1+b)*exp(b)*(E1XB(b*(1+a))-E1XB(b)))
 
           ksi=G4UniformRand();
-          t=std::sqrt(-tetamsi*std::log(ksi));
+          t=std::sqrt(-tetamsi*G4Log(ksi));
 
           ksi=G4UniformRand();
 
@@ -312,7 +390,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombAtomicScattering(
 //      (calculation of a distance, at which another single scattering can happen)
         ksi=G4UniformRand();
 
-        zss=-std::log(ksi)*step/(e1*(1./teta122-1./fTetamax12[ielement]));
+        zss=-G4Log(ksi)*step/(e1*(1./teta122-1./fTetamax12[ielement]));
         G4double tt;
 
 //      At some step several single scattering can occur.
@@ -353,7 +431,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombAtomicScattering(
 //        (calculation of a distance, at which another single scattering can happen)
           ksi=G4UniformRand();
 
-          zss=-std::log(ksi)*step/(e1*(1./teta122-1./fTetamax12[ielement]));
+          zss=-G4Log(ksi)*step/(e1*(1./teta122-1./fTetamax12[ielement]));
         }
 //********************************************
         return G4ThreeVector(tx,ty,0.);
@@ -388,7 +466,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombElectronScattering(
 //    simulation of scattering length (by the same way single scattering by nucleus
       ksi=G4UniformRand();
 
-      zss=-1.0*std::log(ksi)/(fK3*electronDensity)/(1./eMinIonization-1./fTmax);
+      zss=-1.0*G4Log(ksi)/(fK3*electronDensity)/(1./eMinIonization-1./fTmax);
 
 //********************************************
 //    if at a step a single scattering occur
@@ -417,7 +495,7 @@ G4ThreeVector G4VChannelingFastSimCrystalData::CoulombElectronScattering(
 //      (by the same way single scattering by nucleus
         ksi=G4UniformRand();
 
-        zss=-1.0*std::log(ksi)/(fK3*electronDensity)/(1./eMinIonization-1./fTmax);
+        zss=-1.0*G4Log(ksi)/(fK3*electronDensity)/(1./eMinIonization-1./fTmax);
       }
 //********************************************
     }
@@ -431,7 +509,7 @@ G4double G4VChannelingFastSimCrystalData::IonizationLosses(G4double dz,
 {
     G4double elosses = 0.;
     if (fHadron) {elosses=fKD[ielement]/fV2*
-                (std::log(fMe2Gamma*fV2/fI0[ielement]/fGamma) - fV2)*dz;}
+                (G4Log(fMe2Gamma*fV2/fI0[ielement]/fGamma) - fV2)*dz;}
     return elosses;
 }
 
@@ -465,7 +543,7 @@ else if (X<=1.)
        if (std::abs(R)<=std::abs(E1)*1.0e-15) {break;}
    }
 
-   E1=-0.5772156649015328-std::log(X)+X*E1;
+   E1=-0.5772156649015328-G4Log(X)+X*E1;
 }
 else
 {

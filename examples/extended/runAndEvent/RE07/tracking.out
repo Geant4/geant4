@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -64,15 +64,15 @@ Command is ignored.
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-         G4_Pb: 775.71 MeV :  16.23 MeV     2.092 +- 0.06615 %      54.8 cm  +- 1.28 cm 
-        G4_lAr: 214.08 MeV :  15.48 MeV     7.229 +- 0.2286 %      1.05 m   +- 7.91 cm 
+         G4_Pb: 775.67 MeV :  16.18 MeV     2.086 +- 0.06597 %      54.8 cm  +- 1.28 cm 
+        G4_lAr: 214.11 MeV :  15.42 MeV     7.203 +- 0.2278 %      1.05 m   +- 7.89 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma       509
  Mean number of e-          871
  Mean number of e+          53.7
- Mean number of charged steps  3677.35
- Mean number of neutral steps  3694.33
+ Mean number of charged steps  3676.98
+ Mean number of neutral steps  3695.06
 ------------------------------------------------------------
 

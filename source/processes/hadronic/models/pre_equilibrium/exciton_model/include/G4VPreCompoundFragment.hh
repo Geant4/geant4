@@ -45,19 +45,19 @@
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
-#include "G4VCoulombBarrier.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Pow.hh"
 
 class G4NuclearLevelData;
 class G4DeexPrecoParameters;
+class G4VCoulombBarrier;
 
 class G4VPreCompoundFragment
 {
 public:  
 
   explicit G4VPreCompoundFragment(const G4ParticleDefinition*,
-				  G4VCoulombBarrier * aCoulombBarrier);
+				  G4VCoulombBarrier*);
   
   virtual ~G4VPreCompoundFragment();
   
@@ -71,48 +71,51 @@ public:
   // =====================
   
   // Initialization method
-  void Initialize(const G4Fragment & aFragment);
+  void Initialize(const G4Fragment& aFragment);
     
   // Methods for calculating the emission probability
   // ------------------------------------------------
   
   // Calculates the total (integrated over kinetic energy) emission
   // probability of a fragment
-  virtual G4double CalcEmissionProbability(const G4Fragment & aFragment) = 0;
+  virtual G4double CalcEmissionProbability(const G4Fragment&) = 0;
   
   // sample kinetic energy of emitted fragment
-  virtual G4double SampleKineticEnergy(const G4Fragment & aFragment) = 0;
+  virtual G4double SampleKineticEnergy(const G4Fragment&) = 0;
 
-  inline G4bool IsItPossible(const G4Fragment & aFragment) const;
+  inline G4bool IsItPossible(const G4Fragment& aFragment) const;
   
-  inline G4ReactionProduct * GetReactionProduct() const; 	
+  inline G4ReactionProduct* GetReactionProduct() const; 	
   
-  inline G4int GetA() const;
+  G4int GetA() const { return theA; }
   
-  inline G4int GetZ() const;
+  G4int GetZ() const { return theZ; }
   
-  inline G4int GetRestA() const;
+  G4int GetRestA() const { return theResA; }
   
-  inline G4int GetRestZ() const;
+  G4int GetRestZ() const { return theResZ; }
 
-  inline G4double GetBindingEnergy() const;
+  G4double GetBindingEnergy() const { return theBindingEnergy; }
   
-  inline G4double GetEnergyThreshold() const;
+  G4double GetEnergyThreshold() const
+  {
+    return theMaxKinEnergy - theCoulombBarrier;
+  }
 
-  inline G4double GetEmissionProbability() const;
+  G4double GetEmissionProbability() const { return theEmissionProbability; }
     
-  inline G4double GetNuclearMass() const;
+  G4double GetNuclearMass() const { return theMass; }
   
-  inline G4double GetRestNuclearMass() const;
+  G4double GetRestNuclearMass() const { return theResMass; }
 
-  inline const G4LorentzVector& GetMomentum() const;
+  const G4LorentzVector& GetMomentum() const { return theMomentum; }
   
-  inline void  SetMomentum(const G4LorentzVector & value);
+  void SetMomentum(const G4LorentzVector& lv) { theMomentum = lv; }
   
   //for inverse cross section choice
-  inline void SetOPTxs(G4int);
+  void SetOPTxs(G4int opt) { OPTxs = opt; }
   //for superimposed Coulomb Barrier for inverse cross sections
-  inline void UseSICB(G4bool);
+  void UseSICB(G4bool use) { useSICB = use; } 
 
   G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
   const G4VPreCompoundFragment& 
@@ -124,16 +127,7 @@ protected:
 
   virtual G4double GetAlpha() const = 0;
 
-  virtual G4double GetBeta() const = 0;
-
-private:
-
-  const G4ParticleDefinition* particle;
-  G4VCoulombBarrier * theCoulombBarrierPtr;
-  
-  G4LorentzVector theMomentum;
-  
-protected:
+  virtual G4double GetBeta() const { return -theCoulombBarrier; }
 
   G4NuclearLevelData* fNucData;
   G4DeexPrecoParameters* theParameters;
@@ -141,28 +135,48 @@ protected:
 
   G4int theA;
   G4int theZ;
-  G4int theResA;
-  G4int theResZ;
-  G4int theFragA;
-  G4int theFragZ;
+  G4int theResA{0};
+  G4int theResZ{0};
+  G4int theFragA{0};
+  G4int theFragZ{0};
 
-  G4double theResA13;
-  G4double theBindingEnergy;
-  G4double theMinKinEnergy;
-  G4double theMaxKinEnergy;
-  G4double theResMass;
-  G4double theReducedMass;
+  G4double theResA13{0.0};
+  G4double theBindingEnergy{0.0};
+  G4double theMinKinEnergy{0.0};
+  G4double theMaxKinEnergy{0.0};
+  G4double theResMass{0.0};
+  G4double theReducedMass{0.0};
   G4double theMass;
 
-  G4double theEmissionProbability;
-  G4double theCoulombBarrier;
+  G4double theEmissionProbability{0.0};
+  G4double theCoulombBarrier{0.0};
 
   //for inverse cross section choice
-  G4int OPTxs;
+  G4int OPTxs{3};
   //for superimposed Coulomb Barrier for inverse cross sections
-  G4bool useSICB;
+  G4bool useSICB{true};
+
+private:
+
+  const G4ParticleDefinition* particle;
+  G4VCoulombBarrier* theCoulombBarrierPtr;
+  G4LorentzVector theMomentum{0., 0., 0., 0.};
 };
 
-#include "G4VPreCompoundFragment.icc"
+inline G4bool
+G4VPreCompoundFragment::IsItPossible(const G4Fragment& aFragment) const
+{
+  G4int pplus = aFragment.GetNumberOfCharged();
+  G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+  return (pneut >= theA - theZ && pplus >= theZ && theMaxKinEnergy > 0.0);
+}
+
+inline G4ReactionProduct* G4VPreCompoundFragment::GetReactionProduct() const
+{
+  G4ReactionProduct* theReactionProduct = new G4ReactionProduct(particle);
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
+  return theReactionProduct;
+}
 
 #endif

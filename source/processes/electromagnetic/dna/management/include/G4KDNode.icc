@@ -51,6 +51,10 @@ template<typename PointT>
     fValid = false;
   }
 
+template<typename PointT>
+  G4KDNode<PointT>::~G4KDNode() {} // NOLINT Intel ICC has ODR link failures if this is =default
+                                   // It also cannot be inline, which includes it being inside the class body!
+
 // Assignement should not be used
 template<typename PointT>
   G4KDNode<PointT>& G4KDNode<PointT>::operator=(const G4KDNode<PointT>& right)
@@ -66,15 +70,10 @@ template<typename PointT>
     return *this;
   }
 
-template<typename PointT>
-  G4KDNode<PointT>::~G4KDNode()
-  {
-  }
-
 template<typename Position>
   G4KDNode_Base* G4KDNode_Base::FindParent(const Position& x0)
   {
-    G4KDNode_Base* aParent = 0;
+    G4KDNode_Base* aParent = nullptr;
     G4KDNode_Base* next = this;
     G4int split = -1;
     while(next)

@@ -49,7 +49,7 @@ Par04RunAction::Par04RunAction(Par04DetectorConstruction* aDetector, Par04EventA
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04RunAction::~Par04RunAction() {}
+Par04RunAction::~Par04RunAction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,10 +75,11 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
   // Creating control histograms
   analysisManager->CreateH1("energyParticle", "Primary energy;E_{MC} (GeV);Entries", 1024, 0,
                             1.1 * maxEnergy);
-  analysisManager->CreateH1("energyDeposited", "Deposited energy;E_{MC} (GeV);Entries", 1024, 0,
-                            1.1 * maxEnergy);
+  analysisManager->CreateH1("energyDepositedInVirtual", "Deposited energy;E_{MC} (GeV);Entries",
+                            1024, 0, 1.1 * maxEnergy);
   analysisManager->CreateH1(
-    "energyRatio", "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries", 1024, 0, 1);
+    "energyRatioInVirtual", "Ratio of energy deposited to primary;E_{dep} /  E_{MC};Entries",
+    1024, 0, 1);
   analysisManager->CreateH1("time", "Simulation time; time (s);Entries", 2048, 0, 100);
   analysisManager->CreateH1("longProfile", "Longitudinal profile;t (mm);#LTE#GT (MeV)", cellNumZ,
                             -0.5 * cellSizeZ, (cellNumZ - 0.5) * cellSizeZ);
@@ -103,19 +104,51 @@ void Par04RunAction::BeginOfRunAction(const G4Run*)
     "transSecondMoment", "Second moment of transverse distribution;#LTr^{2}#GT (mm^{2});Entries",
     1024, 0, std::pow(cellNumRho * cellSizeRho, 2) / 5);  // arbitrary scaling of max value on axis
   analysisManager->CreateH1("hitType", "hit type;type (0=full, 1= fast);Entries", 2, -0.5, 1.5);
-  analysisManager->CreateH1("phiProfile", "Azimuthal angle profile, centred at mean;phi;#LTE#GT (MeV)", cellNumPhi,
-                            - (cellNumPhi - 0.5) * cellSizePhi, (cellNumPhi - 0.5) * cellSizePhi);
-  analysisManager->CreateH1("numHits", "Number of hits above 0.5 keV", 4048, 0, 40500);
-  analysisManager->CreateH1("cellEnergy", "Cell energy distribution;log10(E/MeV);Entries", 1024, -4, 2);
+  analysisManager->CreateH1("phiProfile",
+                            "Azimuthal angle profile, centred at mean;phi;#LTE#GT (MeV)",
+                            cellNumPhi, - (cellNumPhi - 0.5) * cellSizePhi,
+                            (cellNumPhi - 0.5) * cellSizePhi);
+  analysisManager->CreateH1("numHitsInVirtual", "Number of hits above 0.5 keV", 4048, 0, 20000);
+  analysisManager->CreateH1("cellEnergy", "Cell energy distribution;log10(E/MeV);Entries",
+                            1024, -4, 2);
+  analysisManager->CreateH1("numDepositsInVirtual", "Number of deposits in all cells per event",
+                            4048, 0, 40000);
+  analysisManager->CreateH1("cellDepositsInVirtual",
+                            "Distribution of number of deposits per cell per event", 4048, 0, 1024);
+  analysisManager->CreateH1("energyDepositedInPhysical",
+                            "Deposited energy in physical detector readout;E_{MC} (GeV);Entries",
+                            1024, 0, 1.1 * maxEnergy);
+  analysisManager->CreateH1("energyRatioInPhysical",
+  "Ratio of energy deposited in physical readout to primary; E_{dep} /  E_{MC};Entries",
+                            1024, 0, 1);
+  analysisManager->CreateH1("numHitsInPhysical", "Number of hits in physical readout above 0.5 keV",
+                            4048, 0, 5000);
+  analysisManager->CreateH1("cellEnergyInPhysical",
+                            "Physical cell energy distribution;log10(E/MeV);Entries", 1024, -4, 2);
+  analysisManager->CreateH1("numDepositsInPhysical",
+                            "Number of deposits in all physical cells per event", 4048, 0, 40000);
+  analysisManager->CreateH1("cellDepositsInPhysical",
+                            "Distribution of number of deposits per physical cell per event",
+                            4048, 0, 1024);
 
   // Creating ntuple
-  analysisManager->CreateNtuple("events", "per event data");
+  analysisManager->CreateNtuple("global", "Event data");
   analysisManager->CreateNtupleDColumn("EnergyMC");
+  analysisManager->CreateNtupleDColumn("SimTime");
+  analysisManager->FinishNtuple();
+
+  analysisManager->CreateNtuple("virtualReadout", "Cylindrical mesh readout");
   analysisManager->CreateNtupleDColumn("EnergyCell", fEventAction->GetCalEdep());
   analysisManager->CreateNtupleIColumn("rhoCell", fEventAction->GetCalRho());
   analysisManager->CreateNtupleIColumn("phiCell", fEventAction->GetCalPhi());
   analysisManager->CreateNtupleIColumn("zCell", fEventAction->GetCalZ());
-  analysisManager->CreateNtupleDColumn("SimTime");
+  analysisManager->FinishNtuple();
+
+  analysisManager->CreateNtuple("physicalReadout", "Detector physical readout");
+  analysisManager->CreateNtupleDColumn("EnergyCell", fEventAction->GetPhysicalCalEdep());
+  analysisManager->CreateNtupleIColumn("layerCell", fEventAction->GetPhysicalCalLayer());
+  analysisManager->CreateNtupleIColumn("rowCell", fEventAction->GetPhysicalCalRow());
+  analysisManager->CreateNtupleIColumn("sliceCell", fEventAction->GetPhysicalCalSlice());
   analysisManager->FinishNtuple();
 
   analysisManager->OpenFile();

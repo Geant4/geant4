@@ -68,8 +68,7 @@ void G4Hdf5NtupleManager::CreateTNtuple(
 
   auto directory = std::get<2>(*ntupleFile);
   auto basketSize = fFileManager->GetBasketSize();
-  // auto compressionLevel = fState.GetCompressionLevel();
-  auto compressionLevel = 0;
+  auto compressionLevel = fFileManager->GetCompressionLevel();
 
   // Update ntuple name if cycle >0
   auto ntupleBooking = ntupleDescription->GetNtupleBooking();
@@ -84,8 +83,6 @@ void G4Hdf5NtupleManager::CreateTNtuple(
   ntupleDescription->SetNtuple(
     new toolx::hdf5::ntuple(
           G4cout, directory, ntupleBooking, compressionLevel, basketSize));
-
-  fNtupleVector.push_back(ntupleDescription->GetNtuple());
 }
 
 //_____________________________________________________________________________

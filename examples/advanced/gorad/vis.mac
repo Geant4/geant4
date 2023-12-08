@@ -5,20 +5,13 @@
 #
 /control/verbose 2
 #
-# Use this open statement to create an OpenGL view:
-/vis/open OGL 1200x1200-0+0
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
-# Use this open statement to create a .prim file suitable for
-# viewing in DAWN:
-#/vis/open DAWNFILE
-#
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-#/vis/open HepRepFile
-#
-# Use this open statement to create a .wrl file suitable for
-# viewing in a VRML viewer:
-#/vis/open VRML2FILE
+## To create an OpenGL view:
+#/vis/open OGL 1200x1200-0+0
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

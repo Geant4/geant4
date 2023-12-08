@@ -77,11 +77,13 @@ public:
     ///calculate the horizontal angle in the co-rotating reference system
     ///within a channel (periodic cell)
     ///(connected with crystal planes/axes either bent or straight)
-    G4double AngleXFromBoxToLattice(G4double tx, G4double z){return tx-AngleXShift(z);}
+    G4double AngleXFromBoxToLattice(G4double tx, G4double z)
+    {return tx-AngleXShift(z)-GetCUtetax(z);}
 
     ///calculate the horizontal angle in the Box reference system
     ///(connected with the bounding box of the volume)
-    G4double AngleXFromLatticeToBox(G4double tx, G4double z){return tx+AngleXShift(z);}
+    G4double AngleXFromLatticeToBox(G4double tx, G4double z)
+    {return tx+AngleXShift(z)+GetCUtetax(z);}
 
     ///auxialiary function to transform the horizontal angle
     G4double AngleXShift(G4double z){return fMiscutAngle + z*fCurv;}
@@ -99,7 +101,8 @@ private:
                              //inside the box; =0 in the case of planes
 
     ///values related to the crystal lattice
-    G4int fNpointsx=0,fNpointsy=0;// number of horizontal and vertical nodes of interpolation
+    G4int fNpointsx=0,fNpointsy=0;// number of horizontal and vertical nodes of
+                                  // interpolation
     G4double fDx=0, fDy=0;// channel (periodic cell)
                       //horizontal and vertical dimensions
 

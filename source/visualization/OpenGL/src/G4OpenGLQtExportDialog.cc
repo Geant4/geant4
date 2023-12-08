@@ -60,6 +60,7 @@ G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
   originalHeight = aHeight;
 
   // Initializations
+  vectorEPSCheckBox = NULL;
   qualitySlider = NULL;
   width = NULL;
   height = NULL;

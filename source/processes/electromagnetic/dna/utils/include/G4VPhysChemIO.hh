@@ -72,7 +72,7 @@ public:
     * process.
     */
    virtual void CreateSolvatedElectron(const G4Track* /*theIncomingTrack*/,
-                                       G4ThreeVector* finalPosition = 0) = 0;
+                                       G4ThreeVector* finalPosition = nullptr) = 0;
 
   //============================================================================
   // FILE OPERATIONS

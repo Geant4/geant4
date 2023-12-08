@@ -36,12 +36,12 @@
 
 class G4VPhysicsConstructor;
 
-/// Geant4 modular physics list using G4EmDNAPhysics_option2
-/// and EmDNAChemistry constructors
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Geant4 modular physics list using G4EmDNAPhysics_option2
+/// and EmDNAChemistry constructors
 
 class PhysicsList : public G4VModularPhysicsList {
 public:

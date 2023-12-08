@@ -1,3 +1,4 @@
+Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
@@ -10,7 +11,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,27 +19,20 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-... set ntuple merging row mode : row-wise - done
-... create file : pol01.root - done
-... open analysis file : pol01.root - done
-... open analysis file : pol01.root - done
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 1
 #
 /testem/det/setMat G4_Fe
 /testem/det/setSizeZ 1.75 mm
+/run/geometryModified
 /testem/phys/addPhysics polarized
 PhysicsList::AddPhysicsList: <polarized>
 #/testem/phys/addPhysics standard
-/run/printProgress 5000
+/run/printProgress 500
 #
 /run/initialize
-userDetector->Construct() start.
 
  The Box is 5 cm  x 5 cm  x 1.75 mm  of G4_Fe
-World is registered to the default region.
-physicsList->Construct() start.
-physicsList->CheckParticleList() start.
-physicsList->setCut() start.
 /run/setCut 0.1 mm
 #
 /polarization/manager/verbose 1
@@ -173,19 +167,6 @@ pol-eIoni:  for e+  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 PolarizedMollerBhabha : Emin=    0 eV  Emax=  100 TeV
 
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Galactic G4_Fe 
- Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 100 um      e- 100 um      e+ 100 um  proton 100 um 
-
 ========= Table of registered couples ============================
 
 Index : 0     used in the geometry : Yes
@@ -204,31 +185,43 @@ Index : 1     used in the geometry : Yes
 
 ==================================================================
 
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 ### Run 0 start.
+... set ntuple merging row mode : row-wise - done
+... create file : pol01.root - done
+... open analysis file : pol01.root - done
+... open analysis file : pol01.root - done
 --> Event 0 starts.
+--> Event 500 starts.
+--> Event 1000 starts.
+--> Event 1500 starts.
+--> Event 2000 starts.
+--> Event 2500 starts.
+--> Event 3000 starts.
+--> Event 3500 starts.
+--> Event 4000 starts.
+--> Event 4500 starts.
 --> Event 5000 starts.
+--> Event 5500 starts.
+--> Event 6000 starts.
+--> Event 6500 starts.
+--> Event 7000 starts.
+--> Event 7500 starts.
+--> Event 8000 starts.
+--> Event 8500 starts.
+--> Event 9000 starts.
+--> Event 9500 starts.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.060000s Real=0.055713s Sys=0.000000s
+  User=0.110000s Real=0.140173s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31124
-	pol-conv = 219
-	msc = 1691
-	pol-eIoni = 684
-	pol-eBrem = 325
-	pol-annihil = 66
-	pol-compt = 280
-	pol-phot = 176
+       Transportation=  31124                   msc=   1691           pol-annihil=     66
+            pol-compt=    280              pol-conv=    219             pol-eBrem=    325
+            pol-eIoni=    684              pol-phot=    176 
  Gamma: 
 Mean Number per Event :1.0054
 Mean Energy :9.6029 MeV +- 1.8442 MeV
@@ -241,6 +234,7 @@ Mean Polarization :-0.73452 +- 0.28136
 Mean Number per Event :0.0156
 Mean Energy :4.0642 MeV +- 1.9962 MeV
 Mean Polarization :-0.57169 +- 0.33581
+
 ... write file : pol01.root - done
 ... close file : pol01.root - done
 ... delete empty file : pol01.root - done
@@ -251,36 +245,7 @@ mixmax state, file version 1.0
 N=17 V[N]={847175755666492636, 1425179808836154274, 1647568236133457718, 1084436876417971381, 166440695823598628, 1332950029560277730, 1392569583841259893, 1534215877070228699, 1030844911574454052, 17057310262608394, 1951505961711811416, 566340641376567458, 1168380125282625022, 345267671194425884, 25187549425416789, 310131633279191295, 1262900853831910112} counter= 11sumtot= 2273095466006287675
 ---------------------------------------
 #
-G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserWorkerInitialization deleted.
-UserWorkerThreadInitialization deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
-G4SDManager deleted.
-EventManager deleted.
-Units table cleared.
-TransportationManager deleted.
-Total navigation history collections cleaned: 7
-G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
-Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '7G4Event', size : 0.000961 MB
-Pool ID '15G4PrimaryVertex', size : 0.000961 MB
-Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00192 MB
-Pool ID '7G4Track', size : 0.00288 MB
-Pool ID '18G4TouchableHistory', size : 0.000961 MB
-Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.018 MB
 ============================================================
-G4Allocator objects are deleted.
-UImanager deleted.
-StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
-RunManager is deleted.

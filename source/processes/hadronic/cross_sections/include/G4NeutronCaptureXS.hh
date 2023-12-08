@@ -58,9 +58,9 @@ class G4NeutronCaptureXS final : public G4VCrossSectionDataSet
 {
 public: 
 
-  explicit G4NeutronCaptureXS();
+  G4NeutronCaptureXS();
 
-  ~G4NeutronCaptureXS() final;
+  ~G4NeutronCaptureXS() override = default;
     
   static const char* Default_Name() {return "G4NeutronCaptureXS";}
 
@@ -122,7 +122,7 @@ private:
 
   std::vector<G4double> temp;
 
-  G4bool isMaster = false;
+  G4bool isInitializer{false};
 
   static const G4int MAXZCAPTURE = 93;
   static G4ElementData* data;

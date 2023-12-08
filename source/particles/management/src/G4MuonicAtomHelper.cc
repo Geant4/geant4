@@ -31,36 +31,37 @@
 // --------------------------------------------------------------------
 
 #include "G4MuonicAtomHelper.hh"
+
 #include "G4DecayTable.hh"
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4ParticleTable.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-G4MuonicAtom* G4MuonicAtomHelper::
-ConstructMuonicAtom(const G4String& name, G4int encoding, G4Ions const* baseion)
+G4MuonicAtom* G4MuonicAtomHelper::ConstructMuonicAtom(const G4String& name, G4int encoding,
+                                                      G4Ions const* baseion)
 {
   // what should static charge be?  for G4Ions, it is Z ... should it
   // be Z-1 here (since there will always be a muon attached), or Z?
   const G4double charge = baseion->GetPDGCharge();
 
-  static const G4String pType("MuonicAtom"); // put in an include? in an enum?
+  static const G4String pType("MuonicAtom");  // put in an include? in an enum?
 
-  G4bool   stable = false;
+  G4bool stable = false;
   // Get the lifetime
   G4int Z = baseion->GetAtomicNumber();
   G4int A = baseion->GetAtomicMass();
   G4double lambdac = GetMuonCaptureRate(Z, A);
   G4double lambdad = GetMuonDecayRate(Z);
-  G4double lifetime = 1./(lambdac+lambdad);
-  G4bool   shortlived = false;
+  G4double lifetime = 1. / (lambdac + lambdad);
+  G4bool shortlived = false;
 
-  const G4double mass =
-    (G4ParticleTable::GetParticleTable()->FindParticle("mu-"))->GetPDGMass() +
-    baseion->GetPDGMass() - GetKShellEnergy(G4double(Z)); //fixme check
+  const G4double mass = (G4ParticleTable::GetParticleTable()->FindParticle("mu-"))->GetPDGMass()
+                        + baseion->GetPDGMass() - GetKShellEnergy(G4double(Z));  // fixme check
 
-  auto  decayTable = new G4DecayTable();
+  auto decayTable = new G4DecayTable();
+  // clang-format off
   auto muatom = new G4MuonicAtom(name, mass, 0.0, charge,
                                  baseion->GetPDGiSpin(),
                                  baseion->GetPDGiParity(),
@@ -78,6 +79,7 @@ ConstructMuonicAtom(const G4String& name, G4int encoding, G4Ions const* baseion)
                                  shortlived,
                                  baseion->GetParticleSubType(),
                                  baseion);
+  // clang-format on
 
   muatom->SetPDGMagneticMoment(baseion->GetPDGMagneticMoment());
 
@@ -86,19 +88,16 @@ ConstructMuonicAtom(const G4String& name, G4int encoding, G4Ions const* baseion)
   // if we choose DIO this will be the channel we'll use, so we put
   // br=1. to force it in that case
 
-  decayTable->Insert(new G4PhaseSpaceDecayChannel(name, 1., 4,
-                                                  "e-","anti_nu_e","nu_mu",
+  decayTable->Insert(new G4PhaseSpaceDecayChannel(name, 1., 4, "e-", "anti_nu_e", "nu_mu",
                                                   baseion->GetParticleName()));
 
-  muatom->SetDIOLifeTime(1./lambdad);
-  muatom->SetNCLifeTime(1./lambdac);
+  muatom->SetDIOLifeTime(1. / lambdad);
+  muatom->SetNCLifeTime(1. / lambdac);
   return muatom;
-
 }
 
 G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
 {
-
   // Initialize data
 
   // Mu- capture data from
@@ -108,17 +107,18 @@ G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
   // Data for Hydrogen from Phys. Rev. Lett. 99(2007)032002
   // Data for Helium from D.F. Measday Phys. Rep. 354(2001)243
 
-  struct capRate {
-    G4int        Z;
-    G4int        A;
-    G4double cRate;
-    G4double cRErr;
+  struct capRate
+  {
+      G4int Z;
+      G4int A;
+      G4double cRate;
+      G4double cRErr;
   };
 
   // this struct has to be sorted by Z when initialized as we exit the
   // loop once Z is above the stored value; cRErr are not used now but
   // are included for completeness and future use
-
+  // clang-format off
   constexpr capRate capRates [] = {
     {  1,   1,  0.000725, 0.000017 },
     {  2,   3,  0.002149, 0.00017 },
@@ -211,44 +211,42 @@ G4double G4MuonicAtomHelper::GetMuonCaptureRate(G4int Z, G4int A)
     { 94, 239, 13.90    , 0.20 },
     { 94, 242, 12.86    , 0.19 }
   };
+  // clang-format on
 
   G4double lambda = -1.;
 
-  std::size_t nCapRates = sizeof(capRates)/sizeof(capRates[0]);
-  for (std::size_t j = 0; j < nCapRates; ++j)
-  {
-    if( capRates[j].Z == Z && capRates[j].A == A )
-    {
+  std::size_t nCapRates = sizeof(capRates) / sizeof(capRates[0]);
+  for (std::size_t j = 0; j < nCapRates; ++j) {
+    if (capRates[j].Z == Z && capRates[j].A == A) {
       lambda = capRates[j].cRate / microsecond;
       break;
     }
     // make sure the data is sorted for the next statement to work correctly
-    if (capRates[j].Z > Z) {break;}
+    if (capRates[j].Z > Z) {
+      break;
+    }
   }
 
-  if (lambda < 0.)
-  {
+  if (lambda < 0.) {
     // ==  Mu capture lifetime (Goulard and Primakoff PRC10(1974)2034.
 
     constexpr G4double b0a = -0.03;
     constexpr G4double b0b = -0.25;
-    constexpr G4double b0c =  3.24;
-    constexpr G4double t1 = 875.e-9; // -10-> -9  suggested by user
+    constexpr G4double b0c = 3.24;
+    constexpr G4double t1 = 875.e-9;  // -10-> -9  suggested by user
     G4double r1 = GetMuonZeff(Z);
     G4double zeff2 = r1 * r1;
 
     // ^-4 -> ^-5 suggested by user
     G4double xmu = zeff2 * 2.663e-5;
-    G4double a2ze = 0.5 *G4double(A) / G4double(Z);
+    G4double a2ze = 0.5 * G4double(A) / G4double(Z);
     G4double r2 = 1.0 - xmu;
-    lambda = t1 * zeff2 * zeff2 * (r2 * r2) * (1.0 - (1.0 - xmu) * .75704) *
-      (a2ze * b0a + 1.0 - (a2ze - 1.0) * b0b -
-       G4double(2 * (A - Z)  + std::abs(a2ze - 1.) ) * b0c / G4double(A * 4) );
-
+    lambda = t1 * zeff2 * zeff2 * (r2 * r2) * (1.0 - (1.0 - xmu) * .75704)
+             * (a2ze * b0a + 1.0 - (a2ze - 1.0) * b0b
+                - G4double(2 * (A - Z) + std::abs(a2ze - 1.)) * b0c / G4double(A * 4));
   }
 
   return lambda;
-
 }
 
 G4double G4MuonicAtomHelper::GetMuonZeff(G4int Z)
@@ -259,6 +257,7 @@ G4double G4MuonicAtomHelper::GetMuonZeff(G4int Z)
   // and if not present from
   // Ford and Wills Nucl Phys 35(1962)295 or interpolated
 
+  // clang-format off
   constexpr size_t maxZ = 100;
   constexpr G4double zeff[maxZ+1] =
     {  0.,
@@ -272,9 +271,14 @@ G4double G4MuonicAtomHelper::GetMuonZeff(G4int Z)
        32.33,32.47,32.61,32.76,32.94,33.11,33.29,33.46,33.64,33.81,
        34.21,34.18,34.00,34.10,34.21,34.31,34.42,34.52,34.63,34.73,
        34.84,34.94,35.05,35.16,35.25,35.36,35.46,35.57,35.67,35.78 };
+  // clang-format on
 
-  if (Z<0) {Z=0;}
-  if (Z>G4int(maxZ)) {Z=maxZ;}
+  if (Z < 0) {
+    Z = 0;
+  }
+  if (Z > G4int(maxZ)) {
+    Z = maxZ;
+  }
 
   return zeff[Z];
 }
@@ -291,18 +295,17 @@ G4double G4MuonicAtomHelper::GetMuonDecayRate(G4int Z)
   // PDG 2012 muon lifetime value is 2.1969811(22) 10e-6s
   // which when inverted gives       0.45517005    10e+6/s
 
-  struct decRate {
-    G4int         Z;
-    G4double  dRate;
-    G4double  dRErr;
+  struct decRate
+  {
+      G4int Z;
+      G4double dRate;
+      G4double dRErr;
   };
 
   // this struct has to be sorted by Z when initialized as we exit the
   // loop once Z is above the stored value
 
-  constexpr decRate decRates [] = {
-    {  1,  0.4558514, 0.0000151 }
-  };
+  constexpr decRate decRates[] = {{1, 0.4558514, 0.0000151}};
 
   G4double lambda = -1.;
 
@@ -318,13 +321,14 @@ G4double G4MuonicAtomHelper::GetMuonDecayRate(G4int Z)
 
   // we'll use the above code once we have more data
   // since we only have one value we just assign it
-  if (Z == 1) { lambda =  decRates[0].dRate/microsecond; }
+  if (Z == 1) {
+    lambda = decRates[0].dRate / microsecond;
+  }
 
-  if (lambda < 0.)
-  {
-    constexpr G4double freeMuonDecayRate =  0.45517005 / microsecond;
+  if (lambda < 0.) {
+    constexpr G4double freeMuonDecayRate = 0.45517005 / microsecond;
     lambda = 1.0;
-    G4double x = GetMuonZeff(Z)*fine_structure_const;
+    G4double x = GetMuonZeff(Z) * fine_structure_const;
     lambda -= 2.5 * x * x;
     lambda *= freeMuonDecayRate;
   }
@@ -338,6 +342,7 @@ G4double G4MuonicAtomHelper::GetKShellEnergy(G4double Z)
   // Calculate the Energy of K Mesoatom Level for this Element using
   // the Energy of Hydrogen Atom taken into account finite size of the
   // nucleus (V.Ivanchenko)
+  // clang-format off
   constexpr G4int ListK = 28;
   constexpr G4double ListZK[ListK] = {
       1., 2.,  4.,  6.,  8., 11., 14., 17., 18., 21., 24.,
@@ -350,32 +355,33 @@ G4double G4MuonicAtomHelper::GetKShellEnergy(G4double Z)
      3.779, 4.237, 5.016, 5.647, 5.966,
      6.793, 7.602, 8.421, 9.249, 10.222,
     10.923,11.984};
+  // clang-format on
 
   // Energy with finite size corrections
-  G4double KEnergy = GetLinApprox(ListK,ListZK,ListKEnergy,Z);
+  G4double KEnergy = GetLinApprox(ListK, ListZK, ListKEnergy, Z);
 
   return KEnergy;
 }
 
 // From G4MuMinusCaptureCascade
-G4double G4MuonicAtomHelper::GetLinApprox(G4int N,
-                                          const G4double* const X,
-                                          const G4double* const Y,
+G4double G4MuonicAtomHelper::GetLinApprox(G4int N, const G4double* const X, const G4double* const Y,
                                           G4double Xuser)
 {
   G4double Yuser;
-  if(Xuser <= X[0])        Yuser = Y[0];
-  else if(Xuser >= X[N-1]) Yuser = Y[N-1];
-  else
-  {
+  if (Xuser <= X[0])
+    Yuser = Y[0];
+  else if (Xuser >= X[N - 1])
+    Yuser = Y[N - 1];
+  else {
     G4int i;
-    for (i=1; i<N; ++i)
-    {
-      if(Xuser <= X[i]) break;
+    for (i = 1; i < N; ++i) {
+      if (Xuser <= X[i]) break;
     }
 
-    if(Xuser == X[i]) Yuser = Y[i];
-    else Yuser = Y[i-1] + (Y[i] - Y[i-1])*(Xuser - X[i-1])/(X[i] - X[i-1]);
+    if (Xuser == X[i])
+      Yuser = Y[i];
+    else
+      Yuser = Y[i - 1] + (Y[i] - Y[i - 1]) * (Xuser - X[i - 1]) / (X[i] - X[i - 1]);
   }
   return Yuser;
 }

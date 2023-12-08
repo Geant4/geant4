@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,31 +35,20 @@
 #ifndef G4AntiProton_h
 #define G4AntiProton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          ANTIPROTON                            ###
-// ######################################################################
 
 class G4AntiProton : public G4ParticleDefinition
 {
- private:
-   static G4AntiProton* theInstance;
-   G4AntiProton(){}
-   ~G4AntiProton() override= default;
+  public:
+    static G4AntiProton* Definition();
+    static G4AntiProton* AntiProtonDefinition();
+    static G4AntiProton* AntiProton();
 
- public:
-   static G4AntiProton* Definition();
-   static G4AntiProton* AntiProtonDefinition();
-   static G4AntiProton* AntiProton();
+  private:
+    G4AntiProton() {}
+    ~G4AntiProton() override = default;
+
+    static G4AntiProton* theInstance;
 };
 
 #endif
-
-
-
-
-
-

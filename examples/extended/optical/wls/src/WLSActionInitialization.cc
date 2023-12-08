@@ -46,10 +46,6 @@ WLSActionInitialization::WLSActionInitialization(WLSDetectorConstruction* det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSActionInitialization::~WLSActionInitialization() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void WLSActionInitialization::BuildForMaster() const
 {
   SetUserAction(new WLSRunAction());
@@ -62,7 +58,7 @@ void WLSActionInitialization::Build() const
   SetUserAction(new WLSPrimaryGeneratorAction(fDetector));
   SetUserAction(new WLSRunAction());
 
-  WLSEventAction* eventAction = new WLSEventAction();
+  auto eventAction = new WLSEventAction();
   SetUserAction(eventAction);
   
   SetUserAction(new WLSTrackingAction());

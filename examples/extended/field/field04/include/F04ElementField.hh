@@ -39,6 +39,8 @@
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 //  class F04ElementField - interface for the EM field of one element
 
 //  This is the interface class used by GlobalField to compute the field
@@ -49,12 +51,8 @@
 //  element. The Construct() function will add the derived object into
 //  GlobalField.
 
-class F04ElementField 
+class F04ElementField
 {
-
-  private:
-
-    F04ElementField& operator=(const F04ElementField&);
 
   public:
 
@@ -65,7 +63,7 @@ class F04ElementField
     void Construct();
 
     ///  Destructor.
-    virtual ~F04ElementField() {}
+    virtual ~F04ElementField() = default;
 
     /// SetMaxStep(G4double) sets the max. step size
     void SetMaxStep(G4double stp)
@@ -134,23 +132,29 @@ class F04ElementField
 
   protected:
 
-    G4LogicalVolume* fVolume;
+    G4LogicalVolume* fVolume = nullptr;
 
     G4AffineTransform fGlobal2local;
 
 //    F04ElementField(const F04ElementField&);
 
   private:
+    F04ElementField& operator=(const F04ElementField&);
 
     static G4ThreadLocal G4Navigator* fNavigator;
 
-    G4String fColor;
+    G4String fColor = "1,1,1";
 
     G4ThreeVector fCenter;
-    G4double fMinX, fMinY, fMinZ, fMaxX, fMaxY, fMaxZ;
+    G4double fMinX = -DBL_MAX;
+    G4double fMinY = -DBL_MAX;
+    G4double fMinZ = -DBL_MAX;
+    G4double fMaxX = DBL_MAX;
+    G4double fMaxY = DBL_MAX;
+    G4double fMaxZ = DBL_MAX;
 
-    G4double fMaxStep;
-    G4UserLimits* fUserLimits;
+    G4double fMaxStep = 1. * CLHEP::mm;
+    G4UserLimits* fUserLimits = nullptr;
 
 };
 

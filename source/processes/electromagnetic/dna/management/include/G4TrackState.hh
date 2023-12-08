@@ -57,7 +57,7 @@ protected:
   static int Create();
   
   G4VTrackStateID() {}
-  virtual ~G4VTrackStateID() {}
+  virtual ~G4VTrackStateID() = default;
 };
 
 //------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ private:
   static const int fID;
   
   G4TrackStateID() {}
-  ~G4TrackStateID() {}
+  ~G4TrackStateID() override = default;
 };
 
 template<class T>
@@ -83,14 +83,14 @@ const int G4TrackStateID<T>::fID (G4VTrackStateID::Create());
 class G4VTrackState
 {
 public:
-  G4VTrackState() {}
-  virtual ~G4VTrackState() {}
+  G4VTrackState() = default;
+  virtual ~G4VTrackState() = default;
   virtual int GetID() = 0;
 };
 
 //------------------------------------------------------------------------------
 
-typedef G4shared_ptr<G4VTrackState> G4VTrackStateHandle;
+using G4VTrackStateHandle = std::shared_ptr<G4VTrackState>;
 
 //------------------------------------------------------------------------------
 //!
@@ -101,9 +101,9 @@ template<class T>
 class G4TrackStateBase : public G4VTrackState
 {
 public:
-  virtual ~G4TrackStateBase() {}
+  ~G4TrackStateBase() override = default;
 
-  virtual int GetID() {
+  int GetID() override {
     return G4TrackStateID<T>::GetID();
   }
 
@@ -126,7 +126,7 @@ class G4TrackState : public G4TrackStateBase<T>
   friend class G4TrackStateDependent<T>; //!
 
 public:
-  virtual ~G4TrackState() {}
+  virtual ~G4TrackState() = default;
 
   static int ID() {
     return G4TrackStateID<T>::GetID();
@@ -152,7 +152,7 @@ public:
   
   G4VTrackStateHandle GetTrackState(void* adress) const
   {
-    std::map<void*, G4VTrackStateHandle>::const_iterator it =
+    auto it =
       fMultipleTrackStates.find(adress);
     if (it == fMultipleTrackStates.end())
     {
@@ -164,7 +164,7 @@ public:
   template<class T>
   G4VTrackStateHandle GetTrackState(T* adress) const
   {
-    std::map<void*, G4VTrackStateHandle>::const_iterator it =
+    auto it =
       fMultipleTrackStates.find((void*)adress);
     if (it == fMultipleTrackStates.end())
     {
@@ -181,7 +181,7 @@ public:
   template<typename T>
   G4VTrackStateHandle GetTrackState() const
   {
-    std::map<int, G4VTrackStateHandle>::const_iterator it =
+    auto it =
       fTrackStates.find(G4TrackStateID<T>::GetID());
     if (it == fTrackStates.end())
     {
@@ -196,8 +196,8 @@ public:
 class G4VTrackStateDependent
 {
 public:
-  G4VTrackStateDependent() {}
-  virtual ~G4VTrackStateDependent() {}
+  G4VTrackStateDependent() = default;
+  virtual ~G4VTrackStateDependent() = default;
   
   virtual void NewTrackState() = 0;
   virtual void LoadTrackState(G4TrackStateManager&) = 0;
@@ -235,18 +235,18 @@ template<class T>
 class G4TrackStateDependent : public G4VTrackStateDependent
 {
 public:
-  typedef T ClassType;
-  typedef G4TrackState<T> StateType;
-  typedef G4shared_ptr<StateType> StateTypeHandle;
+  using ClassType = T;
+  using StateType = G4TrackState<T>;
+  using StateTypeHandle = std::shared_ptr<StateType>;
 
-  virtual ~G4TrackStateDependent() {}
+  ~G4TrackStateDependent() override = default;
 
   virtual void SetTrackState(G4shared_ptr<StateType> state)
   {
     fpTrackState = state;
   }
 
-  virtual G4VTrackStateHandle PopTrackState()
+  G4VTrackStateHandle PopTrackState() override
   {
     G4VTrackStateHandle output =
       G4dynamic_pointer_cast<G4VTrackState>(fpTrackState);
@@ -254,7 +254,7 @@ public:
     return output;
   }
 
-  virtual G4VTrackStateHandle GetTrackState() const
+  G4VTrackStateHandle GetTrackState() const override
   {
     G4VTrackStateHandle output =
       G4dynamic_pointer_cast<G4VTrackState>(fpTrackState);
@@ -266,7 +266,7 @@ public:
     return fpTrackState;
   }
 
-  virtual void LoadTrackState(G4TrackStateManager& manager)
+  void LoadTrackState(G4TrackStateManager& manager) override
   {
     fpTrackState =
       ConvertToConcreteTrackState<ClassType>(manager.GetTrackState(this));
@@ -277,12 +277,12 @@ public:
     }
   }
 
-  virtual void SaveTrackState(G4TrackStateManager& manager)
+  void SaveTrackState(G4TrackStateManager& manager) override
   {
     manager.SetTrackState(this, ConvertToAbstractTrackState(fpTrackState));
   }
 
-  virtual void NewTrackState()
+  void NewTrackState() override
   {
     fpTrackState = StateTypeHandle(new StateType());
   }
@@ -292,7 +292,7 @@ public:
     return StateTypeHandle(new StateType());
   }
 
-  virtual void ResetTrackState()
+  void ResetTrackState() override
   {
     fpTrackState.reset();
   }

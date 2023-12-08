@@ -29,16 +29,16 @@
 
   The basic capabilities of choosing the stepper type are demonstrated in the
   field.in macro file:
-  
+
 \verbatim
 /field/setStepperType  145   ##  Choose a stepper type   ( Tsito
 /field/setStepperType  101   ##  Choose an FSAL stepper  ( FE
 /field/setMinStep 0.1 mm     ##  Smaller steps always s
 /field/update                ##  Initialise using parameters above
 \endverbatim
-  
+
   In addition it is possible to choose to use a new type of stepper, known
-  as 'First Same as Last' or FSAL, which in each step obtains the field value 
+  as 'First Same as Last' or FSAL, which in each step obtains the field value
   at the step endpoint and evaluates the 'right hand size' of the equation
   for the next integration step.  This reduces the number of calls to the field
   evaluation, which can be one the most computationally expensive methods,
@@ -50,15 +50,15 @@
      Number  Name of Stepper      Comments
      ===========================================================================
      Recommended - default since Geant4 10.4:
-     
-       15 - 'DoPri5'  or 
+
+       15 - 'DoPri5'  or
             Dormand Prince 745 : Uses a pair 4th & 5th order formulae (like other 4/5
 	                         well-known and very efficient embedded method
 				 methods); their difference is the error estimate.
                                  Highly recommended in literature, including
                                  Hairer & Wanner, & Numerical Recipes
                                  Used in several established RK code (e.g. DOPRI5)
-     ===========================================================================     
+     ===========================================================================
      Good choices for reasonably smooth fields:
 
        45 - BogackiShampine45  : more efficient embedded 4/5 pair
@@ -89,14 +89,14 @@
 				 step size is not known, this type of stepper
 				 converges faster and more smoothly to good
 				 step sizes.
-     ===========================================================================     
-     The old default and old first alternative - 
-      
+     ===========================================================================
+     The old default and old first alternative -
+
         4 - ClassicalRK4       : original Runge-Kutta method, very robust but slower )
                                ( obtains error estimate by doing 2 half steps )
                                  Good baseline for comparison - long experience of use.
 				 May be good alternative for less smooth fields.
-				 
+
         8 - Cash Karp RKF 45   : The oldest 'embedded' RK method in Geant4 -
 	                         also fairly robust.
                                  Faster than  ClassicalRK4 for smoother fields,
@@ -105,14 +105,14 @@
 
      ===========================================================================
      Other potential choices for non-smooth fields (with kinks, abrupt changes):
-      
+
         3 - SimpleHeum         : low   order, with error obtained from half-steps
        23 - BogackiShampine23  : lower order embedded method  (new in 10.3-beta)
-     ===========================================================================       
+     ===========================================================================
 \endverbatim
 
 \section  field01_s02 Controlling the killing of looping particles
-         
+
 Occasionally tracks 'looping' in a strong magnetic field, making little
 progress even over hundreds of integration steps.  This is due to a
 combination of a strong magnetic field and a thin material (gas or vacuum)
@@ -135,7 +135,7 @@ three thresholds exist
 loop is killed silently (no warning.)
 Above the 'Warning Energy', if a track is selected for killing a warning is
 generated.
-	
+
 - **The 'Important' Energy**: the threshold energy above which a track will survive
 for multiple steps if found looping.
 
@@ -166,7 +166,7 @@ This works only if either
   - the G4ModularPhysicsList and its AddTransporation method are used to create and register a common transportation process for all particles (one for each thread).
 
 \subsection  field01_s02_sub2 ii) Fine grained control (available in Geant4 versions since 7.0)
-       
+
 Fine grained control of the Transportation's parameters for looping particles
 is also possible.
 
@@ -201,18 +201,18 @@ Note that for all pre-configured and modular physics lists share a single
 Transportation process for all types of particles.  So the parameters for
 killing loopers will be shared by all particle types in this case.
 
-\section field01_s1 Background Information    
+\section field01_s1 Background Information
 
 \subsection field01_s1_sub1 GEOMETRY DEFINITION
- 
- The "Absorber" is a solid made of a given material.                
+
+ The "Absorber" is a solid made of a given material.
 
  Three parameters define the absorber :
  - the material of the absorber,
  - the thickness of an absorber,
- - the transverse size of the absorber (the input face is a square). 
+ - the transverse size of the absorber (the input face is a square).
 
- The volume "World" contains the "Absorber". 
+ The volume "World" contains the "Absorber".
  In this test the parameters of the "World" can be changed , too.
 
  In addition a transverse uniform magnetic field can be applied.
@@ -220,9 +220,9 @@ killing loopers will be shared by all particle types in this case.
  The default geometry is constructed in F01DetectorConstruction class,
  but all the parameters can be changed via
  the commands defined in the F01DetectorMessenger class.
- 	
+
 \subsection field01_s1_sub2 AN EVENT : THE PRIMARY GENERATOR
- 
+
  The primary kinematic consists of a single particle (electron, Ekin = 0.5 GeV)
  which hits the
  absorber perpendicular to the input face. The type of the particle
@@ -235,35 +235,35 @@ killing loopers will be shared by all particle types in this case.
  F01PrimaryGeneratorMessenger class.
 
  A RUN is a set of events.
- 	
+
 \subsection field01_s1_sub3 DETECTOR RESPONSE
 
   The spatial distribution of charged particles transported in magnetic
   field is envistigated.
-  A HIT is a record, event per event , of all the 
+  A HIT is a record, event per event , of all the
   informations needed to simulate and analyse the detector response.
 
   In this example a F01CalorHit is defined as a set of 2 informations:
   - the total energy deposit in the absorber,
-  - the total tracklength of all charged particles in the absorber,  
+  - the total tracklength of all charged particles in the absorber,
 
   Therefore  the absorber is declared
   'sensitive detector' (SD), see F01CalorimeterSD, which means they can contribute to the hit.
- 				
+
 \subsection field01_s1_sub4 PHYSICS LIST
- 
+
  The particle's type and the physic processes which will be available
- in this example are set in the FTFP_BERT physics list. This physics list 
+ in this example are set in the FTFP_BERT physics list. This physics list
  requires data files for electromagnetic and hadronic processes.
  See more on installation of the datasets in Geant4 Installation Guide,
 
 \subsection field01_s1_sub5 HOW TO START ?
- 
+
   - Execute field01 in 'batch' mode from macro file e.g.
 \verbatim
 % ./field01 field01.in
 \endverbatim
-		
+
   - Execute field01 in 'interactive' mode with visualization e.g.
 \verbatim
 % ./field01

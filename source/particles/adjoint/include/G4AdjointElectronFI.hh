@@ -23,55 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron 	   
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
+//      History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
 //
 //-------------------------------------------------------------
 //	Documentation:
-//   Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint 
-//   processes act on adjoint particles when they are  tracked backward in the geometry. 
-//   The use of adjoint particles instead of "normal" particles 
-//   during a reverse simulation is based on an idea of M. Asai   
+//   Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint
+//   processes act on adjoint particles when they are  tracked backward in the geometry.
+//   The use of adjoint particles instead of "normal" particles
+//   during a reverse simulation is based on an idea of M. Asai
 //
 #ifndef G4AdjointElectronFI_h
 #define G4AdjointElectronFI_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ADJOINT ELECTRON                       ###
-// ######################################################################
 
 class G4AdjointElectronFI : public G4ParticleDefinition
 {
- private:
-   static G4AdjointElectronFI* theInstance;
-   G4AdjointElectronFI(){}
-   ~G4AdjointElectronFI() override= default;
+  public:
+    static G4AdjointElectronFI* Definition();
+    static G4AdjointElectronFI* AdjointElectronFIDefinition();
+    static G4AdjointElectronFI* AdjointElectronFI();
 
- public:
-   static G4AdjointElectronFI* Definition();
-   static G4AdjointElectronFI* AdjointElectronFIDefinition();
-   static G4AdjointElectronFI* AdjointElectronFI();
+  private:
+    G4AdjointElectronFI() {}
+    ~G4AdjointElectronFI() override = default;
+
+    static G4AdjointElectronFI* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

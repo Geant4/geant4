@@ -47,57 +47,54 @@
 #include "G4PhysicalConstants.hh"
 
 
+G4ITDecay::G4ITDecay(G4PhotonEvaporation* ptr)
+  : G4NuclearDecay("IT decay", IT, 0.0, noFloat), photonEvaporation(ptr)
+{}
+
 G4ITDecay::G4ITDecay(const G4ParticleDefinition* theParentNucleus,
-                     const G4double& branch, const G4double& Qvalue,
-                     const G4double& excitationE, G4PhotonEvaporation* aPhotoEvap)
- : G4NuclearDecay("IT decay", IT, excitationE, noFloat), transitionQ(Qvalue), 
-   applyARM(true), photonEvaporation(aPhotoEvap)
+                     const G4double& branch, const G4double&,
+                     const G4double& excitationE)
+  : G4NuclearDecay("IT decay", IT, excitationE, noFloat)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
-
-  parentZ = theParentNucleus->GetAtomicNumber();
-  parentA = theParentNucleus->GetAtomicMass(); 
-
   SetNumberOfDaughters(1);
-  G4IonTable* theIonTable =
-    (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
-  SetDaughter(0, theIonTable->GetIon(parentZ, parentA, excitationE, noFloat) );
+  SetDaughter(0, theParentNucleus);
+
+  SetupDecay(theParentNucleus);
 }
 
-
-G4ITDecay::~G4ITDecay()
-{}
-
+void G4ITDecay::SetupDecay(const G4ParticleDefinition* theParentNucleus)
+{
+  theParent = theParentNucleus;
+  parentZ = theParentNucleus->GetAtomicNumber();
+  parentA = theParentNucleus->GetAtomicMass();
+}
 
 G4DecayProducts* G4ITDecay::DecayIt(G4double)
 {
-  // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  CheckAndFillParent();
-
   // Set up final state
   // parentParticle is set at rest here because boost with correct momentum 
   // is done later
-  G4LorentzVector atRest(G4MT_parent->GetPDGMass(),
-                         G4ThreeVector(0.,0.,0.) );
-  G4DynamicParticle parentParticle(G4MT_parent, atRest);
+  G4LorentzVector atRest(theParent->GetPDGMass(), G4ThreeVector(0.,0.,0.) );
+  G4DynamicParticle parentParticle(theParent, atRest);
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
   // Let G4PhotonEvaporation do the decay
   G4Fragment parentNucleus(parentA, parentZ, atRest);
 
+  // one emission, parent nucleaus become less excited
   G4Fragment* eOrGamma = photonEvaporation->EmittedFragment(&parentNucleus);
 
   // Modified nuclide is returned as dynDaughter
-  G4IonTable* theIonTable =
-    (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable() );
+  auto theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
   G4ParticleDefinition* daughterIon =
     theIonTable->GetIon(parentZ, parentA, parentNucleus.GetExcitationEnergy(), 
                         G4Ions::FloatLevelBase(parentNucleus.GetFloatingLevelNumber()));
   G4DynamicParticle* dynDaughter = new G4DynamicParticle(daughterIon,
                                                          parentNucleus.GetMomentum());
 
-  if (eOrGamma) {
+  if (nullptr != eOrGamma) {
     G4DynamicParticle* eOrGammaDyn =
       new G4DynamicParticle(eOrGamma->GetParticleDefinition(),
                             eOrGamma->GetMomentum() );
@@ -180,9 +177,8 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
 
 void G4ITDecay::DumpNuclearInfo()
 {
-  G4cout << " G4ITDecay for parent nucleus " << GetParentName() << G4endl;
-  G4cout << " decays to " << GetDaughterName(0)
-         << " + gammas (or electrons), with branching ratio " << GetBR()
-         << "% and Q value " << transitionQ << G4endl;
+  if (theParent != nullptr) {
+    G4cout << " G4ITDecay for parent nucleus " << theParent->GetParticleName() << G4endl;
+  }
 }
 

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -47,11 +47,6 @@ userDetector->Construct() start.
 Water_ts is registered to the default region.
 physicsList->Construct() start.
 @@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
-/cvmfs/geant4.cern.ch/share/data/G4NDL4.7
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -60,16 +55,12 @@ physicsList->setCut() start.
 #
 /run/printProgress 100
 /run/beamOn 1000
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic/CrossSection/6_nat_Carbon
 
 Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered.
 Element TS_H_of_Water,  internal thermal scattering id 0
 Element TS_D_of_Heavy_Water,  internal thermal scattering id 1
 Element TS_C_of_Graphite,  internal thermal scattering id 2
 
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Elastic/CrossSection/6_nat_Carbon
 
 Neutron HP Thermal Scattering: Following material-element pairs or elements are registered.
 Element TS_H_of_Water,  internal thermal scattering id 0
@@ -85,54 +76,43 @@ Element TS_C_of_Graphite,  internal thermal scattering id 2
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
-
   Process: hadElastic
         Model:          NeutronHPElastic: 4 eV  ---> 20 MeV
         Model: NeutronHPThermalScattering: 0 eV  ---> 4 eV 
      Cr_sctns: NeutronHPThermalScatteringData: 0 eV  ---> 4 eV 
-
      Cr_sctns:        NeutronHPElasticXS: 0 eV  ---> 20 MeV
-
-
   Process: neutronInelastic
-        Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
+        Model:        NeutronHPInelastic: 0 eV  ---> 100 TeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
-
-
   Process: nCapture
         Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
-     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 20 MeV
-
+     Cr_sctns:        NeutronHPCaptureXS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
   Process: nFission
         Model:          NeutronHPFission: 0 eV  ---> 20 MeV
      Cr_sctns:        NeutronHPFissionXS: 0 eV  ---> 20 MeV
-
      Cr_sctns:                    ZeroXS: 0 eV  ---> 100 TeV
-
-
-================================================================
 
 =======================================================
 ======       ParticleHP Physics Parameters     ========
 =======================================================
- UseOnlyPhotoEvaporation ? 1
- SkipMissingIsotopes ?     0
- NeglectDoppler ?          0
- DoNotAdjustFinalState ?   1
- ProduceFissionFragments ? 0
- UseWendtFissionModel ?    0
- UseNRESP71Model ?         0
- UseDBRC ?                 0
+ Use only photo-evaporation      1
+ Skip missing isotopes           0
+ Neglect Doppler                 0
+ Do not adjust final state       1
+ Produce fission fragments       0
+ Use WendtFissionModel           0
+ Use NRESP71Model                0
+ Use DBRC                        0
+ PHP use Poisson                 0
+ PHP check                       1
+ CHECK HP NAMES                  0
+ Enable DEBUG                    0
 =======================================================
 
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Capture/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Water_ts> world volume
  This region is in the mass world.
@@ -182,7 +162,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.540000s Real=9.526629s Sys=0.000000s
+  User=8.890000s Real=11.888706s Sys=0.000000s
 
  The run is 1000 neutron of 2 MeV through 50 cm  of Water_ts (density: 1 g/cm3 )
 

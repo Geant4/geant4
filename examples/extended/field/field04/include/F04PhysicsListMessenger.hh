@@ -48,23 +48,23 @@ class F04PhysicsListMessenger : public G4UImessenger
 public:
 
     F04PhysicsListMessenger(F04PhysicsList* );
-    virtual ~F04PhysicsListMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    ~F04PhysicsListMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
-    F04PhysicsList* fPhysicsList;
- 
-    G4UIdirectory* fDirectory;
-    G4UIdirectory* fDecayDirectory;
+    F04PhysicsList* fPhysicsList = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fStepMaxCMD;
+    G4UIdirectory* fDirectory = nullptr;
+    G4UIdirectory* fDecayDirectory = nullptr;
+
+    G4UIcmdWithADoubleAndUnit* fStepMaxCMD = nullptr;
 /*
-    G4UIcmdWithAString*        fRemovePhysicsCMD;
-    G4UIcmdWithoutParameter*   fClearPhysicsCMD;
+    G4UIcmdWithAString*        fRemovePhysicsCMD = nullptr;
+    G4UIcmdWithoutParameter*   fClearPhysicsCMD = nullptr;
 */
-    G4UIcmdWithoutParameter* fPienuCMD;
-    G4UIcmdWithoutParameter* fPimunuCMD;
+    G4UIcmdWithoutParameter* fPienuCMD = nullptr;
+    G4UIcmdWithoutParameter* fPimunuCMD = nullptr;
 };
 #endif

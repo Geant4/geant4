@@ -44,14 +44,14 @@ class WLSEventActionMessenger : public G4UImessenger
 {
  public:
   WLSEventActionMessenger(WLSEventAction*);
-  ~WLSEventActionMessenger();
+  ~WLSEventActionMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  WLSEventAction* fEventAction;
+  WLSEventAction* fEventAction = nullptr;
 
-  G4UIcmdWithAnInteger* fSetVerboseCmd;
+  G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
 };
 
 #endif

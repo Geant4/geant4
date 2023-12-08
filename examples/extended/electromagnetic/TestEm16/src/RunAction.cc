@@ -31,35 +31,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+
 #include "HistoManager.hh"
 #include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
- : G4UserRunAction(),
-   fHistoManager(0)
+RunAction::RunAction() : G4UserRunAction()
 {
-  fHistoManager = new HistoManager();   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
-  delete fHistoManager;  
+  fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(); 
+{
+  fRun = new Run();
   return fRun;
 }
 
@@ -70,28 +61,39 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   if (isMaster) CLHEP::HepRandom::showEngineStatus();
-     
-  //histograms
+
+  // histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
+  if (analysisManager->IsActive()) {
     analysisManager->OpenFile();
-  }       
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  // compute and print statistic 
+  // compute and print statistic
   if (isMaster) fRun->EndOfRun();
-  
+
   // show Rndm status
   if (isMaster) CLHEP::HepRandom::showEngineStatus();
 
-  //save histograms      
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-  if ( analysisManager->IsActive() ) {
+  // save histograms
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->IsActive()) {
+    G4String FileName = analysisManager->GetFileName();
+    if (FileName.find("TestReflection") != std::string::npos) {
+      std::ostringstream ostr;
+      ostr << std::setfill('0') << std::right << std::setw(2) << fRun->GetRunID();
+      // FileName="TestReflection"+ToString(fRun->GetRunID())+".root"; // add
+      // RunID to histogram name
+      FileName =
+        "TestReflection_" + ostr.str() + ".root";  // add them later,  can be done using hadd  see
+                                                   // https://www.mankier.com/1/hadd
+      analysisManager->SetFileName(FileName);
+    }
     analysisManager->Write();
     analysisManager->CloseFile();
   }

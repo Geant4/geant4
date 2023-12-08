@@ -49,28 +49,58 @@
 
 #include <cstdlib>
 
+G4ParticleHPChannel::G4ParticleHPChannel(G4ParticleDefinition* p)
+{
+  fManager = G4ParticleHPManager::GetInstance();
+  if (fManager->GetUseWendtFissionModel()) {
+    wendtFissionGenerator = G4WendtFissionFragmentGenerator::GetInstance();
+    // Make sure both fission fragment models are not active at same time
+    fManager->SetProduceFissionFragments(false);
+  }
+  theProjectile = (nullptr == p) ? G4Neutron::Neutron() : p;
+  theChannelData = new G4ParticleHPVector;
+}
+
+G4ParticleHPChannel::~G4ParticleHPChannel()
+{
+  delete theChannelData;
+  // Following statement disabled to avoid SEGV
+  // theBuffer is also deleted as "theChannelData" in
+  delete[] theIsotopeWiseData;
+  if (theFinalStates != nullptr) {
+    for (G4int i = 0; i < niso; i++) {
+      delete theFinalStates[i];
+    }
+    delete[] theFinalStates;
+  }
+  delete[] active;
+}
+
 G4double G4ParticleHPChannel::GetXsec(G4double energy)
 {
   return std::max(0., theChannelData->GetXsec(energy));
 }
 
-G4double G4ParticleHPChannel::GetWeightedXsec(G4double energy, G4int isoNumber)
+G4double G4ParticleHPChannel::GetWeightedXsec(G4double energy,
+					      G4int isoNumber)
 {
   return theIsotopeWiseData[isoNumber].GetXsec(energy);
 }
 
-G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy, G4int isoNumber)
+G4double G4ParticleHPChannel::GetFSCrossSection(G4double energy,
+						G4int isoNumber)
 {
   return theFinalStates[isoNumber]->GetXsec(energy);
 }
 
-void G4ParticleHPChannel::Init(G4Element* anElement, const G4String dirName, const G4String aFSType)
+void G4ParticleHPChannel::Init(G4Element* anElement, 
+			       const G4String& dirName, const G4String& aFSType)
 {
   theFSType = aFSType;
   Init(anElement, dirName);
 }
 
-void G4ParticleHPChannel::Init(G4Element* anElement, const G4String dirName)
+void G4ParticleHPChannel::Init(G4Element* anElement, const G4String& dirName)
 {
   theDir = dirName;
   theElement = anElement;
@@ -78,30 +108,11 @@ void G4ParticleHPChannel::Init(G4Element* anElement, const G4String dirName)
 
 G4bool G4ParticleHPChannel::Register(G4ParticleHPFinalState* theFS)
 {
-  registerCount++;
-  G4int Z = G4lrint(theElement->GetZ());
+  ++registerCount;
+  G4int Z = theElement->GetZasInt();
 
-  Z = Z - registerCount;
-  if (registerCount > 5)
-    throw G4HadronicException(
-      __FILE__, __LINE__,
-      "Channel: Do not know what to do with this material");  // for Elastic, Capture, Fission case
-  if (Z < 1) return false;
-  /*
-      if(registerCount<5)
-      {
-        Z = Z-registerCount;
-      }
-  */
-  // if(Z=theElement->GetZ()-5) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know
-  // what to do with this material");
-  //  Bug fix by TK on behalf of AH
-  // if ( Z <=theElement->GetZ()-5 ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not
-  // know what to do with this material");
-  G4int count = 0;
-  if (registerCount == 0) count = (G4int)theElement->GetNumberOfIsotopes();
-  if (count == 0 || registerCount != 0) count += theStableOnes.GetNumberOfIsotopes(Z);
-  niso = count;
+  niso = (G4int)theElement->GetNumberOfIsotopes();
+
   delete[] theIsotopeWiseData;
   theIsotopeWiseData = new G4ParticleHPIsoData[niso];
   delete[] active;
@@ -115,31 +126,15 @@ G4bool G4ParticleHPChannel::Register(G4ParticleHPFinalState* theFS)
     theFinalStates[i] = theFS->New();
     theFinalStates[i]->SetProjectile(theProjectile);
   }
-  count = 0;
-  G4int nIsos = niso;
-  if (theElement->GetNumberOfIsotopes() != 0 && registerCount == 0) {
-    for (G4int i1 = 0; i1 < nIsos; ++i1) {
-      // G4cout <<" Init: normal case"<<G4endl;
+  if (niso != 0 && registerCount == 0) {
+    for (G4int i1 = 0; i1 < niso; ++i1) {
       G4int A = theElement->GetIsotope(i1)->GetN();
       G4int M = theElement->GetIsotope(i1)->Getm();
+      //G4cout <<" Init: normal case i=" << i1 
+      //     << " Z=" << Z << " A=" << A << G4endl;
       G4double frac = theElement->GetRelativeAbundanceVector()[i1] / perCent;
-      // theFinalStates[i1]->SetA_Z(A, Z);
-      // UpdateData(A, Z, count++, frac);
       theFinalStates[i1]->SetA_Z(A, Z, M);
-      UpdateData(A, Z, M, count++, frac, theProjectile);
-    }
-  }
-  else {
-    // G4cout <<" Init: mean case: "
-    //        <<theStableOnes.GetNumberOfIsotopes(Z)<<" "
-    //     <<Z<<" "<<theElement
-    //     << G4endl;
-    G4int first = theStableOnes.GetFirstIsotope(Z);
-    for (G4int i1 = 0; i1 < theStableOnes.GetNumberOfIsotopes(Z); ++i1) {
-      G4int A = theStableOnes.GetIsotopeNucleonCount(first + i1);
-      G4double frac = theStableOnes.GetAbundance(first + i1);
-      theFinalStates[i1]->SetA_Z(A, Z);
-      UpdateData(A, Z, count++, frac, theProjectile);
+      UpdateData(A, Z, M, i1, frac, theProjectile);
     }
   }
   G4bool result = HasDataInAnyFinalState();
@@ -150,7 +145,8 @@ G4bool G4ParticleHPChannel::Register(G4ParticleHPFinalState* theFS)
   return result;
 }
 
-void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance,
+void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index,
+                                     G4double abundance,
                                      G4ParticleDefinition* projectile)
 {
   // Initialze the G4FissionFragment generator for this isomer if needed
@@ -159,7 +155,8 @@ void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4d
   }
 
   theFinalStates[index]->Init(A, Z, M, theDir, theFSType, projectile);
-  if (!theFinalStates[index]->HasAnyData()) return;  // nothing there for exactly this isotope.
+  if (!theFinalStates[index]->HasAnyData()) return;
+  // nothing there for exactly this isotope.
 
   // the above has put the X-sec into the FS
   theBuffer = nullptr;
@@ -171,14 +168,15 @@ void G4ParticleHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4d
   else  // get data from CrossSection directory
   {
     G4String tString = "/CrossSection";
-    // active[index] = theIsotopeWiseData[index].Init(A, Z, abundance, theDir, tString);
-    active[index] = theIsotopeWiseData[index].Init(A, Z, M, abundance, theDir, tString);
+    active[index] = theIsotopeWiseData[index].Init(A, Z, M, abundance,
+                                                   theDir, tString);
     if (active[index]) theBuffer = theIsotopeWiseData[index].MakeChannelData();
   }
   if (theBuffer != nullptr) Harmonise(theChannelData, theBuffer);
 }
 
-void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPVector* theNew)
+void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore,
+                                    G4ParticleHPVector* theNew)
 {
   G4int s_tmp = 0, n = 0, m_tmp = 0;
   auto theMerge = new G4ParticleHPVector;
@@ -186,8 +184,8 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPV
   G4ParticleHPVector* aPassive = theNew;
   G4ParticleHPVector* tmp;
   G4int a = s_tmp, p = n, t;
-  while (a < anActive->GetVectorLength()
-         && p < aPassive->GetVectorLength())  // Loop checking, 11.05.2015, T. Koi
+  while (a < anActive->GetVectorLength() && p < aPassive->GetVectorLength())
+    // Loop checking, 11.05.2015, T. Koi
   {
     if (anActive->GetEnergy(a) <= aPassive->GetEnergy(p)) {
       G4double xa = anActive->GetEnergy(a);
@@ -215,9 +213,8 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPV
   }
   while (p != aPassive->GetVectorLength())  // Loop checking, 11.05.2015, T. Koi
   {
-    if (std::abs(theMerge->GetEnergy(std::max(0, m_tmp - 1)) - aPassive->GetEnergy(p))
-          / aPassive->GetEnergy(p)
-        > 0.001)
+    if (std::abs(theMerge->GetEnergy(std::max(0, m_tmp - 1)) -
+		 aPassive->GetEnergy(p)) / aPassive->GetEnergy(p) > 0.001)
       theMerge->SetData(m_tmp++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
     ++p;
   }
@@ -225,18 +222,18 @@ void G4ParticleHPChannel::Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPV
   theStore = theMerge;
 }
 
-G4HadFinalState* G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
-                                                    G4int anIsotope, G4bool isElastic)
+G4HadFinalState*
+G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTrack,
+				   G4int anIsotope, G4bool isElastic)
 {
-  //    G4cout << "G4ParticleHPChannel::ApplyYourself+"<<niso<<G4endl;
+  //G4cout << "G4ParticleHPChannel::ApplyYourself niso=" << niso
+  //	 << " ni=" << anIsotope << " isElastic=" << isElastic <<G4endl;
   if (anIsotope != -1 && anIsotope != -2) {
     // Inelastic Case
-    // G4cout << "G4ParticleHPChannel Inelastic Case"
-    //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
-    G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA(
-      (G4int)this->GetN(anIsotope));
-    G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ(
-      (G4int)this->GetZ(anIsotope));
+    //G4cout << "G4ParticleHPChannel Inelastic Case"
+    //<< " Z= " << GetZ(anIsotope) << " A = " << GetN(anIsotope) << G4endl;
+    fManager->GetReactionWhiteBoard()->SetTargA((G4int)GetN(anIsotope));
+    fManager->GetReactionWhiteBoard()->SetTargZ((G4int)GetZ(anIsotope));
     return theFinalStates[anIsotope]->ApplyYourself(theTrack);
   }
   G4double sum = 0;
@@ -245,8 +242,15 @@ G4HadFinalState* G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTr
   G4ParticleHPThermalBoost aThermalE;
   for (G4int i = 0; i < niso; i++) {
     if (theFinalStates[i]->HasAnyData()) {
+      /*
+      G4cout << "FS: " << i << theTrack.GetDefinition()->GetParticleName()
+	     << " Z=" << theFinalStates[i]->GetZ() 
+	     << " A=" << theFinalStates[i]->GetN() 
+	     << G4endl;
+      */
       xsec[i] = theIsotopeWiseData[i].GetXsec(
-        aThermalE.GetThermalEnergy(theTrack, theFinalStates[i]->GetN(), theFinalStates[i]->GetZ(),
+        aThermalE.GetThermalEnergy(theTrack, theFinalStates[i]->GetN(),
+                                   theFinalStates[i]->GetZ(),
                                    theTrack.GetMaterial()->GetTemperature()));
       sum += xsec[i];
     }
@@ -255,20 +259,13 @@ G4HadFinalState* G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTr
     }
   }
   if (sum == 0) {
-    //      G4cout << "G4ParticleHPChannel::ApplyYourself theFinalState->Initialize+"<<G4endl;
-    //      G4cout << "G4ParticleHPChannel::ApplyYourself theFinalState->Initialize-"<<G4endl;
-    it = static_cast<G4int>(niso * G4UniformRand());
+    it = G4lrint(niso * G4UniformRand());
   }
   else {
-    //      G4cout << "Are we still here? "<<sum<<G4endl;
-    //      G4cout << "TESTHP 23 NISO="<<niso<<G4endl;
     G4double random = G4UniformRand();
     G4double running = 0;
-    //      G4cout << "G4ParticleHPChannel::ApplyYourself Done the sum"<<niso<<G4endl;
-    //      G4cout << "TESTHP 24 NISO="<<niso<<G4endl;
     for (G4int ix = 0; ix < niso; ix++) {
       running += xsec[ix];
-      // if(random<=running/sum)
       if (sum == 0 || random <= running / sum) {
         it = ix;
         break;
@@ -295,8 +292,8 @@ G4HadFinalState* G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTr
     {
       icounter++;
       if (icounter > icounter_max) {
-        G4cout << "Loop-counter exceeded the threshold value at " << __LINE__ << "th line of "
-               << __FILE__ << "." << G4endl;
+        G4cout << "Loop-counter exceeded the threshold value at " 
+               << __LINE__ << "th line of " << __FILE__ << "." << G4endl;
         break;
       }
       if (isElastic) {
@@ -312,9 +309,9 @@ G4HadFinalState* G4ParticleHPChannel::ApplyYourself(const G4HadProjectile& theTr
   // G4cout <<"THE IMPORTANT RETURN"<<G4endl;
   // G4cout << "TK G4ParticleHPChannel Elastic, Capture and Fission Cases "
   //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
-  G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA(A);
-  G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ(Z);
-  G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargM(M);
+  fManager->GetReactionWhiteBoard()->SetTargA(A);
+  fManager->GetReactionWhiteBoard()->SetTargZ(Z);
+  fManager->GetReactionWhiteBoard()->SetTargM(M);
 
   return theFinalState;
 }

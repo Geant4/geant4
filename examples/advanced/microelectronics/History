@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (microelectronics-V11-01-00)
+- Updated vis.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+  - Keep previous driver opening with an extra setting in commented lines
+
 ## 2021-12-10 Ben Morgan (microelectronics-V11-00-00)
 - Change to new Markdown History format
 

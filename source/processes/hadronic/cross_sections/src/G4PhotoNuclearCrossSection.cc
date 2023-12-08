@@ -1502,6 +1502,13 @@ G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
   for (auto & ptr : GDR) { delete [] ptr; }
   for (auto & ptr : HEN) { delete [] ptr; }
+
+  delete [] deuteron_GDR;
+  delete [] deuteron_HR;
+  delete [] triton_GDR;
+  delete [] triton_HR;
+  delete [] he3_GDR;
+  delete [] he3_HR;
 }
 
 

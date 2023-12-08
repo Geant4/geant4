@@ -48,6 +48,7 @@
 
 class G4VSceneHandler;
 
+// clang-format off
 class G4VViewer {
 
 public: // With description
@@ -173,7 +174,7 @@ public: // With description
     SceneTreeScene() = default;
     ~SceneTreeScene() = default;
     void SetViewer(G4VViewer* pViewer) {fpViewer = pViewer;}
-    void SetModel(G4VModel* pModel);
+    void SetModel(G4VModel* pModel);  // ...and more (see .cc)
   private:
     void ProcessVolume(const G4VSolid& solid) override;
     std::list<G4SceneTreeItem>::iterator FindOrInsertModel
@@ -183,6 +184,8 @@ public: // With description
      G4int depth, const G4String& partialPathString, const G4String& fullPathString);
     G4VViewer* fpViewer = nullptr;
     G4VModel* fpModel = nullptr;
+    G4int fMaximumExpandedDepth = 0;  // To be calculated in SetModel
+    const G4int fMaximumExpanded = 30;  // So as not to swamp the GUI
   };
   SceneTreeScene& AccessSceneTreeScene() {return fSceneTreeScene;}
   G4SceneTreeItem& AccessSceneTree() {return fSceneTree;}
@@ -245,29 +248,6 @@ protected:
   // Set the touchable colour attribute.
   // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
 
-  class G4Spline
-  {
-  public:
-
-    // Constructors and destructor
-    G4Spline();
-    ~G4Spline();
-
-    // Operations
-    void AddSplinePoint(const G4Vector3D& v);
-    G4Vector3D GetInterpolatedSplinePoint(G4float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
-    G4int GetNumPoints();
-    G4Vector3D GetPoint(int);
-    // method for computing the Catmull-Rom parametric equation
-    // given a time (t) and a vector quadruple (p1,p2,p3,p4).
-    G4Vector3D CatmullRom_Eq(G4float t, const G4Vector3D& p1, const G4Vector3D& p2,
-                             const G4Vector3D& p3, const G4Vector3D& p4);
-
-  private:
-    std::vector<G4Vector3D> vp;
-    G4float delta_t;
-  };
-  
   //////////////////////////////////////////////////////////////
   // Data members
   G4VSceneHandler&        fSceneHandler;     // Abstract scene for this view.

@@ -382,10 +382,10 @@ install_datasets()
     echo "- error: no openssl or md5sum executable found"
     exit 1
       else
-	  G4MD5CMD="${G4MD5SUM} --tag"
+	  G4MD5CMD="${G4MD5SUM}"
       fi
   else
-      G4MD5CMD="${G4OPENSSL} dgst -md5"
+      G4MD5CMD="${G4OPENSSL} dgst -md5 -r"
   fi
 
   G4TAR=$(which tar)
@@ -438,7 +438,7 @@ install_datasets()
 
       # Validate bundle hash (basic)
       dataset_md5=$(echo $ds | cut -d "|" -f5)
-      actual_md5=$(${G4MD5CMD} ${g4downloaddir}/${dataset_file} | tr -d ' ' | cut -d"=" -f2)
+      actual_md5=$(${G4MD5CMD} ${g4downloaddir}/${dataset_file} | cut -d ' ' -f1)
       echo "+ checking md5 of ${dataset_file}"
       if [ "${actual_md5}" != "${dataset_md5}" ] ; then
         echo "- md5 mismatch for '${dataset_file}' : ${actual_md5}(actual) != ${dataset_md5}(expected)"

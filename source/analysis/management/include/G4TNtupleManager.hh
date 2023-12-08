@@ -57,6 +57,9 @@ class G4TNtupleManager : public G4BaseNtupleManager {
     virtual G4bool Reset();
     void Clear() override;
 
+    // Method to delete selected ntuple
+    G4bool Delete(G4int id) override;
+
     // Methods to create ntuples
     // are implemented in G4NtupleBookingManager base class
 
@@ -87,10 +90,6 @@ class G4TNtupleManager : public G4BaseNtupleManager {
     // Access methods
     NT* GetNtuple() const;
     NT* GetNtuple(G4int ntupleId) const;
-    G4int GetNofNtuples() const final;
-
-    // List ntuples
-    G4bool List(std::ostream& output, G4bool onlyIfActive = true) final;
 
     // Iterators
     typename std::vector<NT*>::iterator BeginNtuple();

@@ -30,7 +30,7 @@
 // A Logical Surface class for surfaces defined by the boundary
 // of two physical volumes.
 
-// Author: John Apostolakis (John.Apostolakis@cern.ch), 17-06-1997
+// Author: John Apostolakis, CERN - 17-06-1997
 // --------------------------------------------------------------------
 #ifndef G4LogicalBorderSurface_hh
 #define G4LogicalBorderSurface_hh 1
@@ -49,7 +49,6 @@ using G4LogicalBorderSurfaceTable
 
 class G4LogicalBorderSurface : public G4LogicalSurface
 {
-
   public:
 
     G4LogicalBorderSurface( const G4String& name,

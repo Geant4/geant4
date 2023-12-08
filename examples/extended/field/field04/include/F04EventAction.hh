@@ -42,22 +42,22 @@ class F04EventAction : public G4UserEventAction
   public:
 
     F04EventAction(F04RunAction* );
-    virtual ~F04EventAction();
+    ~F04EventAction() override;
 
   public:
 
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
 
     G4int GetEventNo();
     void SetEventVerbose(G4int);
- 
+
   private:
 
-    F04RunAction* fRunaction;
-    F04EventActionMessenger* fEventMessenger;
+    F04RunAction* fRunaction = nullptr;
+    F04EventActionMessenger* fEventMessenger = nullptr;
 
-    G4int fVerboseLevel;
+    G4int fVerboseLevel = 0;
 };
 
 #endif

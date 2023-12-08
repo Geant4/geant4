@@ -38,7 +38,7 @@ you will need to install and setup `FLUKA` and its interface. <br>
 See the compulsory "Dependencies" paragraph below.    
    
 A version of the interface to `FLUKA` is directly located at `geant4/examples/extended/hadronic/FlukaCern/FlukaInterface`. <br>  
-Note that for consistency, all calls to the random engine rely on the G4 random engine (including the calls from within the downloaded `FLUKA` release; see the `FlukaInterface` `Makefile` to see how this is handled).   
+Note that for consistency, all calls to the random engine rely on the G4 random engine (including the calls from within the downloaded `FLUKA` release; see the `FlukaInterface` `GNUmakefile` to see how this is handled).   
 
 
 # FLUKA inelastic hadron-nucleus interactions    

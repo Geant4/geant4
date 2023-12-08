@@ -47,7 +47,7 @@ void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   // Use custom trajectory class
   fpTrackingManager->SetTrajectory(new WLSTrajectory(aTrack));
 
-  WLSUserTrackInformation* trackInformation = new WLSUserTrackInformation();
+  auto trackInformation = new WLSUserTrackInformation();
 
   if(aTrack->GetMomentumDirection().z() > 0.0)
   {

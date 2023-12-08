@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-06 Vladimir Ivanchenko (hadr-proc-V11-01-12)
+- G4NuVacOscProcess, G4TauNeutrinoNucleusProcess, G4MuNeutrinoNucleusProcess,
+  G4ElNeutrinoNucleusProcess, G4NeutrinoElectronProcess - use sub-types of
+    neutrino interactions, avoid destruction of internal cross section,
+    removed unused class members and methods.
+
 ## 2023-06-17 Vladimir Ivanchenko (hadr-proc-V11-01-11)
 - G4NuVacOscProcess - clean-up to resolve Coverity report, removed unused class
     memebrs

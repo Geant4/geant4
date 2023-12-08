@@ -35,61 +35,57 @@
 #ifndef G4ParticlePropertyTable_hh
 #define G4ParticlePropertyTable_hh 1
 
+#include "G4ParticleDefinition.hh"
+#include "G4ParticlePropertyData.hh"
+#include "G4ParticleTable.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
 #include <vector>
 
-#include "globals.hh"
-#include "G4ios.hh"
-
-#include "G4ParticlePropertyData.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
- 
 class G4ParticlePropertyTable
 {
   public:
-
-    G4ParticlePropertyTable(const G4ParticlePropertyTable&) = delete;  
+    G4ParticlePropertyTable(const G4ParticlePropertyTable&) = delete;
     G4ParticlePropertyTable& operator=(const G4ParticlePropertyTable&) = delete;
 
-   ~G4ParticlePropertyTable();
+    ~G4ParticlePropertyTable();
 
+    // Return the pointer to G4ParticlePropertyTable object
+    // G4ParticlePropertyTable is a "singleton" and can get its pointer
+    // by this function. At the first time of calling this function,
+    // the G4ParticleTable object is instantiated
     static G4ParticlePropertyTable* GetParticlePropertyTable();
-      // Return the pointer to G4ParticlePropertyTable object
-      // G4ParticlePropertyTable is a "singleton" and can get its pointer 
-      // by this function. At the first time of calling this function, 
-      // the G4ParticleTable object is instantiated 
 
+    // Return the pointer to G4ParticlePropertyData object,
+    // which contains properties for the particle specified.
+    // (return 0 if the specified particle does not exist)
     G4ParticlePropertyData* GetParticleProperty(const G4String& aParticleName);
     G4ParticlePropertyData* GetParticleProperty(const G4ParticleDefinition* aP);
-      // Return the pointer to G4ParticlePropertyData object,
-      // which contains properties for the particle specified.
-      // (return 0 if the specified particle does not exist)
- 
+
+    // Change particle properties for the particle specified.
+    // Return true if properties are successfully set
     G4bool SetParticleProperty(const G4ParticlePropertyData& newProperty);
-      // Change particle properties for the particle specified.
-      // Return true if properties are successfully set 
 
+    // Clear and destroy data
     void Clear();
-      // Clear and destroy data
 
-    void  SetVerboseLevel(G4int value);
+    // Control flag for output message
+    //  0: Silent
+    //  1: Warning message
+    //  2: More
+    void SetVerboseLevel(G4int value);
     G4int GetVerboseLevel() const;
-      // Control flag for output message
-      //  0: Silent
-      //  1: Warning message
-      //  2: More
 
-  protected: 
-
+  protected:
+    // Hidden default constructor; this class is a singleton
     G4ParticlePropertyTable();
-      // Hidden default constructor; this class is a singleton  
-  
-    G4ParticleTable* fParticleTable = nullptr;  
 
-    std::vector<G4ParticlePropertyData*> arrayDataObject; 
-  
+    G4ParticleTable* fParticleTable = nullptr;
+
+    std::vector<G4ParticlePropertyData*> arrayDataObject;
+
   private:
-
     G4int verboseLevel = 1;
     static G4ThreadLocal G4ParticlePropertyTable* fgParticlePropertyTable;
 };

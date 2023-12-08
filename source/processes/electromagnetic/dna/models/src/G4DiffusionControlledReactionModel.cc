@@ -37,12 +37,9 @@
 #include "G4Molecule.hh"
 #include "G4ErrorFunction.hh"
 
-G4DiffusionControlledReactionModel::G4DiffusionControlledReactionModel()
-  : G4VDNAReactionModel()
-{}
+G4DiffusionControlledReactionModel::G4DiffusionControlledReactionModel() = default;
 
-G4DiffusionControlledReactionModel::~G4DiffusionControlledReactionModel() =
-  default;
+G4DiffusionControlledReactionModel::~G4DiffusionControlledReactionModel() = default;
 
 void G4DiffusionControlledReactionModel::Initialise(
   const G4MolecularConfiguration* pMolecule, const G4Track&)
@@ -71,10 +68,8 @@ G4double G4DiffusionControlledReactionModel::GetReactionRadius(
                 "G4DiffusionControlledReactionModel00", FatalException,
                 exceptionDescription);
     return 0.;
-  }else
-  {
-    return reactionData->GetEffectiveReactionRadius();
   }
+  return reactionData->GetEffectiveReactionRadius();
 }
 
 G4double G4DiffusionControlledReactionModel::GetReactionRadius(const G4int& i)
@@ -149,33 +144,31 @@ G4double G4DiffusionControlledReactionModel::GetTimeToEncounter(
     {
       return irt_1;
     }
-    else
+    
+    G4double kdif = 4 * CLHEP::pi * D * SmoluchowskiRadius * Avogadro;
+
+    if(pMolConfA == pMolConfB)
     {
-      G4double kdif = 4 * CLHEP::pi * D * SmoluchowskiRadius * Avogadro;
-
-      if(pMolConfA == pMolConfB)
+      kdif /= 2;
+    }
+    G4double kact   = G4IRTUtils::GetKact(kobs, kdif);
+    G4double sumOfk = kact + kdif;
+    if(sumOfk != 0)
+    {
+      G4double rateFactor = kact / sumOfk;
+      if(G4UniformRand() > rateFactor)
       {
-        kdif /= 2;
+        return -1.0 * ps;
       }
-      G4double kact   = G4IRTUtils::GetKact(kobs, kdif);
-      G4double sumOfk = kact + kdif;
-      if(sumOfk != 0)
-      {
-        G4double rateFactor = kact / sumOfk;
-        if(G4UniformRand() > rateFactor)
-        {
-          return -1.0 * ps;
-        }
-        G4double Y = std::abs(G4RandGauss::shoot(0.0, std::sqrt(2)));
+      G4double Y = std::abs(G4RandGauss::shoot(0.0, std::sqrt(2)));
 
-        if(Y > 0)
-        {
-          X = -(G4Log(G4UniformRand())) / Y;
-        }
-        G4double f     = X * SmoluchowskiRadius * kdif / sumOfk;
-        G4double irt_2 = (f * f) / D;
-        return irt_1 + irt_2;
+      if(Y > 0)
+      {
+        X = -(G4Log(G4UniformRand())) / Y;
       }
+      G4double f     = X * SmoluchowskiRadius * kdif / sumOfk;
+      G4double irt_2 = (f * f) / D;
+      return irt_1 + irt_2;
     }
   }
   return -1.0 * ps;

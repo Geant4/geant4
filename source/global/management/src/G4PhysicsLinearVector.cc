@@ -47,7 +47,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
   : G4PhysicsVector(spline)
 {
   numberOfNodes = Nbin + 1;
-  if(Nbin < 1 || Emin >= Emax)
+  if (Nbin < 1 || Emin >= Emax)
   {
     G4ExceptionDescription ed;
     ed << "G4PhysicsLinearVector with wrong parameters: theNbin= " << Nbin
@@ -55,7 +55,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
     G4Exception("G4PhysicsLinearVector::G4PhysicsLinearVector()", "glob03",
                 FatalException, ed, "theNbins should be > 0 and Emax > Emin");
   }
-  if(numberOfNodes < 2)
+  if (numberOfNodes < 2)
   {
     numberOfNodes = 2;
   }
@@ -66,10 +66,12 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double Emin, G4double Emax,
   binVector[0] = Emin;
   binVector[numberOfNodes - 1] = Emax;
   Initialise();
-
-  for(std::size_t i = 1; i <= idxmax; ++i)
+  if (2 < numberOfNodes)
   {
-    binVector[i] = edgeMin + i / invdBin;
+    for(std::size_t i = 1; i <= idxmax; ++i)
+    {
+      binVector[i] = edgeMin + i / invdBin;
+    }
   }
 }
 

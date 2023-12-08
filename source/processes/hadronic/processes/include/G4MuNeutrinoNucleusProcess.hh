@@ -44,8 +44,6 @@
 #include "G4HadronicProcess.hh"
 
 class G4ParticleDefinition;
-class G4CrossSectionDataStore;
-class G4LogicalVolume;
 class G4MuNeutrinoNucleusTotXsc;
 class G4SafetyHelper;
 
@@ -53,45 +51,44 @@ class G4MuNeutrinoNucleusProcess : public G4HadronicProcess
 {
 public:
 
-  G4MuNeutrinoNucleusProcess(G4String anEnvelopeName , const G4String& procName = "mu-neutrino-nucleus");
+  G4MuNeutrinoNucleusProcess(const G4String& anEnvelopeName,
+                             const G4String& procName = "muNuNucleus");
 
-  virtual ~G4MuNeutrinoNucleusProcess();
-  
+  ~G4MuNeutrinoNucleusProcess() override = default;
+
   G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double previousStepSize,
                              G4ForceCondition* condition
                             ) override;
+
+  G4double GetMeanFreePath(const G4Track &aTrack,
+                           G4double, G4ForceCondition*) override;
   
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep) override;
-
-  // initialise thresholds
-  void PreparePhysicsTable(const G4ParticleDefinition&) override;
-
-  // set internal limit
-  virtual void SetLowestEnergy(G4double);
+				  const G4Step& aStep) override;
 
   void ProcessDescription(std::ostream& outFile) const override;
 
+  // set internal parameters
+  void SetLowestEnergy(G4double);
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
   void SetBiasingFactor(G4double bf);
-  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *) override;
   
+  // hide assignment operator as private 
+  G4MuNeutrinoNucleusProcess& operator=
+  (const G4MuNeutrinoNucleusProcess &right) = delete;
+  G4MuNeutrinoNucleusProcess(const G4MuNeutrinoNucleusProcess&) = delete;
+
 private:
 
-  // hide assignment operator as private 
-  G4MuNeutrinoNucleusProcess& operator=(const G4MuNeutrinoNucleusProcess &right);
-  G4MuNeutrinoNucleusProcess(const G4MuNeutrinoNucleusProcess& );
-
-  G4double lowestEnergy;
-  G4bool   isInitialised, fBiased;
-  G4LogicalVolume* fEnvelope;
-  G4String fEnvelopeName;
   G4MuNeutrinoNucleusTotXsc* fTotXsc;
-  G4double fNuNuclCcBias, fNuNuclNcBias, fNuNuclTotXscBias;
-  G4double fXsc;
   G4SafetyHelper* safetyHelper;
+  G4double lowestEnergy;
+  G4double fNuNuclCcBias{1.0};
+  G4double fNuNuclNcBias{1.0};
+  G4double fNuNuclTotXscBias{1.0};
+  G4String fEnvelopeName;
 };
 
 #endif

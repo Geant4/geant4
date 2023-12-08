@@ -8,11 +8,11 @@
                             field04 Example
                             ---------------
 
-     This example shows how to define/use OVERLAPPING field elements 
+     This example shows how to define/use OVERLAPPING field elements
      in Geant4. Fields might be either magnetic, electric or both.
 
      Credit goes to Tom Roberts and Muons Inc. since much of the code
-     and ideas were taken at liberty from the (GNU GPL) source of 
+     and ideas were taken at liberty from the (GNU GPL) source of
      G4BEAMLINE release 1.12.
 
      http://g4beamline.muonsinc.com
@@ -24,10 +24,10 @@
  1 - main()
 
  See field04.cc.
- 
+
         The example can be run with the following optional arguments:
 
-        % field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]   
+        % field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]
 
         If a macro is provided with the option "-m", the program runs in a batch mode,
         otherwise the program open the interactive session after executing the
@@ -35,7 +35,7 @@
         to start the program without initialization in PreInit phase.
 
         For example:
-        to assign the F04PhysicsList: 
+        to assign the F04PhysicsList:
         % field04 -p QGSP_BERT
 
         an initial random number seed with:
@@ -120,13 +120,13 @@
         - the stronger magnetic field at the edge B2
 
         Example (default values):
-        /field04/SetCaptureR 0.6 m 
+        /field04/SetCaptureR 0.6 m
         /field04/SetCaptureZ 4.0 m
-        /field/SetCaptureB1 2.5 tesla 
+        /field/SetCaptureB1 2.5 tesla
         /field/SetCaptureB2 5.0 tesla
 
 
-        The "TransferMgnt" is a solenoid (vacuum cylinder) with a 
+        The "TransferMgnt" is a solenoid (vacuum cylinder) with a
         constant B-field. When the "TransferMgnt" follows immediately
         the "CaptureMgnt", its relative position is at 0 cm.
 
@@ -144,7 +144,7 @@
         /field04/SetTransferP 0.0 m
 
         The default geometry is constructed in F04DetectorConstruction class,
-        but all the parameters can be changed via the commands defined in 
+        but all the parameters can be changed via the commands defined in
         the F04DetectorMessenger class.
 
 
@@ -185,14 +185,14 @@
         at the TestPlane.
 
 
- 6- PHYSICS 
+ 6- PHYSICS
 
         The F04PhysicsList extends a selected Geant4 physics list.
-        The base physics list name is provided by its name in the F04PhysicsList 
+        The base physics list name is provided by its name in the F04PhysicsList
         constructor.
 
-        In addition to processes defined in the base Geant4 physics list, 
-        there is added the F04StepMax process and the decay of pions can be assigned 
+        In addition to processes defined in the base Geant4 physics list,
+        there is added the F04StepMax process and the decay of pions can be assigned
         via dedicated commands in F04PhysicsListMessenger.
 
         The command to define maximum step:
@@ -223,8 +223,8 @@
 
  7- Overlapping Fields
 
-        The F04GlobalField (a singleton) is instantiated in 
-        F04DetectorConstruction() and assigned to the global field manager 
+        The F04GlobalField (a singleton) is instantiated in
+        F04DetectorConstruction() and assigned to the global field manager
         in UpdateField():
 
         fFieldManager = GetGlobalFieldManager();
@@ -255,20 +255,20 @@
         /field/setDeltaIntersection 0.1 mm
         /field/setEpsMin 2.5e-7 mm
         /field/setEpsMax 0.05 mm
-        
+
         Each field element has a rectilinear bounding box in global
         coordinate space which is checked before a point is verified to
         actually be inside the F04ElementField (IsWithin and IsOutside).
         SetGlobalPoint is called 8 times for the corners of the local
         bounding box, after a local->global coordinate transform.
 
-        The F04ElementField is the interface class used by F04GlobalField to 
+        The F04ElementField is the interface class used by F04GlobalField to
         compute the field value at a given point[].
 
         A beamline element, for example the F04SimpleSolenoid, will derive
         from F04ElementField and implement the computation for the element.
 
-        simpleSolenoid 
+        simpleSolenoid
           = new F04SimpleSolenoid(B, l, logicTransferMgnt,TransferMgntCenter);
 
         Besides the magnetic field and the length of the simple solenoid,
@@ -298,7 +298,7 @@
 
         The F04ElementField constructor will also add the derived object into
         F04GlobalField. Finally, its AddFieldValue() will add the field value
-        for this element to field[]. 
+        for this element to field[].
 
 
  8- User Action Classes
@@ -312,7 +312,7 @@
                                  2 saved on: endOfEvent.rndm
                      /rndm/read random/run0evt8268.rndm
 
-        F04RunAction:  
+        F04RunAction:
                      BeginOfRunAction: Deal with random number storage,
                      initialization etc. Call the Construct() method of
                      F04ElementFields in the FieldList of F04GlobalField object.
@@ -351,7 +351,7 @@
 
         F04SteppingVerbose:
                     Only print track header and step information for
-                    pi+ and mu+. 
+                    pi+ and mu+.
                     Note: the information for primary protons is not printed.
 
         F04Trajectory, TrajectoryPoint:

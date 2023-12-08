@@ -38,10 +38,10 @@ class G4LogicalVolume;
 class G4Material;
 class G4GenericMessenger;
 
-/// Simple detector construction with only a world volume
-
 namespace Common
 {
+
+/// Simple detector construction with only a world volume
 
 class DetectorConstruction0 : public G4VUserDetectorConstruction
 {

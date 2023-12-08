@@ -59,23 +59,26 @@
 class G4DNATransformElectronModel: public G4VEmModel
 {
 public :
-    G4DNATransformElectronModel(const G4ParticleDefinition* p = 0,
+    G4DNATransformElectronModel(const G4ParticleDefinition* p = nullptr,
                                 const G4String& nam = "DNATransformElectronModel");
-    virtual ~G4DNATransformElectronModel();
+    ~G4DNATransformElectronModel() override;
 
-    virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+    G4DNATransformElectronModel & operator=(const  G4DNATransformElectronModel &right) = delete;
+    G4DNATransformElectronModel(const  G4DNATransformElectronModel&) = delete;
 
-    virtual G4double CrossSectionPerVolume(  const G4Material* material,
+    void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+
+    G4double CrossSectionPerVolume(  const G4Material* material,
             const G4ParticleDefinition* p,
             G4double ekin,
             G4double emin,
-            G4double emax);
+            G4double emax) override;
 
-    virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+    void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                    const G4MaterialCutsCouple*,
                                    const G4DynamicParticle*,
                                    G4double tmin,
-                                   G4double maxEnergy);
+                                   G4double maxEnergy) override;
 
     inline void SetVerbose(int);
 
@@ -90,12 +93,9 @@ private:
     // Water density table
     const std::vector<G4double>* fpWaterDensity;
 
-    G4bool fIsInitialised;
+    G4bool fIsInitialised{false};
     G4int fVerboseLevel;
     G4double fEpsilon;
-
-    G4DNATransformElectronModel & operator=(const  G4DNATransformElectronModel &right);
-    G4DNATransformElectronModel(const  G4DNATransformElectronModel&);
 
 };
 

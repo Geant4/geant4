@@ -6,6 +6,138 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-12 John Allison (visman-V11-01-32)
+- G4VisExecutive.icc:
+  - Add single line message "VTK: OpenGL-based drivers suppressed".
+  - Protect all G4cout statements with fVerbosity >= startup.
+- G4VisManager.hh:
+  - Make fVerbosity protected (was private).
+
+## 2023-11-06 John Allison (visman-V11-01-31)
+- G4VisCommandsSceneAdd.cc:
+  - Improve guidance for 2D models.
+  - G4VisCommandSceneAddText2D::SetNewValue:
+    - Improve global description.
+
+## 2023-10-16 John Allison (visman-V11-01-30)
+- G4VisExecutive::SetDefaultsByBuildFlags:
+    - Add missing default for TOOLSSG...ZB drivers.
+
+## 2023-10-13 John Allison (visman-V11-01-29)
+- G4VisExecutive.icc:
+  - Fix default TSG nickname when Vtk suppresses OpenGL.
+
+## 2023-10-06 John Allison (visman-V11-01-28)
+- G4VisManager.cc: A very minor message improvement.
+
+## 2023-09-27 Stewart Boogert (visman-V11-01-27)
+- Updated so that GLES "toolssg" drivers and not used in the case VTK is used.
+
+## 2023-08-24 John Allison (visman-V11-01-26)
+- This is the final update for a more flexible way of choosing a graphics system.
+  - It preserves the existing behaviour in all aspects.
+  - To take advantage of new ways, "/vis/open" should be allowed to use
+    default parameters, either by omitting them altogether or by using '!'.
+  - Without any change of code, i.e., using the existing constructor,
+    G4VisExecutive will take take notice of the environment variable,
+    G4VIS_DEFAULT_DRIVER, which should contain the nickname of the chosen
+    graphics system and, optionally, a window size hint (space separated). E.g:
+    - The format is <graphics-system> [<window-size-hint>], e.g:
+      - (bash) export G4VIS_DEFAULT_DRIVER=TSG
+      - (tcsh) setenv G4VIS_DEFAULT_DRIVER OI
+    - Or on the command line, precede the app invocation, e.g:
+      - G4VIS_DEFAULT_DRIVER=Vtk ./<application-name>
+    - The window-size-hint can optionally be added to all these options, e.g:
+        (bash) export G4VIS_DEFAULT_DRIVER="OGLSX 1000x1000-0+0"
+  - Otherwise G4VisExecutve will choose a graphics system on the basis of
+    batch/interactive running, and Geant4 build options (see list
+    of registered graphics systems printed at the start of job).
+  - Further ways are available by using a new constructor, G4VisExecutive(argc, argv).
+    - This follows G4UIExecutive usage.
+    - If a 3rd argument is supplied, this is your chosen system, e.g.,
+      G4VisExecutive(argc, argv, "Vtk").
+    - Otherwise, it looks at G4VIS_DEFAULT_DRIVER, as above.
+    - Otherwise, it inspects ~/.g4session.
+      - The first line is  <session> [<graphics-system>] [<window-size-hint>]
+        and is used as default.
+      - Subsequent lines are <app-name> <session> [<graphics-system>] [<window-size-hint>]
+      - G4UIExecutive behaviour is preserved.
+    - Otherwise, as above, it will choose a graphics system on the basis of
+      batch/interactive running, and Geant4 build options.
+- G4VisExecutive:
+  - Add new constructor:
+      G4VisExecutive(int argc, char** argv, const G4String& system,
+                     const G4String& verbosityString)
+  - Implement choice by argument and by ~/.g4session.
+- G4VisManager.cc:
+  - Improve messaging in PrintAvailableGraphicsSystems.
+  - Improve readability of code that ignores deleted histograms, etc.,
+
+## 2023-08-19 John Allison (visman-V11-01-25)
+- G4VisManager.cc:
+  - Improve printing about histograms that can be plotted in the ui session.
+
+## 2023-08-14 John Allison (visman-V11-01-24)
+- G4VisExecutive:
+  - Implement default graphics system by environment variable, G4_VIS_DEFAULT_DRIVER.
+  - Simplify default graphics system by run option (batch/interactive).
+    - Exploit new method, G4UImanager::GetBaseSession (intercoms-V11-01-07).
+
+## 2023-07-20 John Allison (visman-V11-01-23)
+- Implement baseline default graphics system based on batch or build flags.
+- G4VisManager:
+  - new data members: fDefaultGraphicsSystemBasis and fDefaultXGeometryStringBasis.
+- G4VisExecutive:
+  - Add code for default graphics system based on batch or build flags.
+
+## 2023-08-02 I. Hrivnacova (visman-V11-01-22)
+- Take into account deleting histograms (new) in G4VisManager:
+  the vector of histograms can contain 'nullptr' elements
+
+## 2023-07-20 John Allison (visman-V11-01-21)
+- Introduce concept of default XGeometryString (aka window size hint - see
+  G4ViewParameters).
+  - In this tag, it is set to "600x600-0+0" in G4VisManager constructor.
+  - In a future tag, it will be chosen in G4VisExecutive - see comments below.
+- G4VisManager: new data member, G4String fDefaultXGeometryString.
+- G4VisCommandsCompound.cc: /vis/open:
+  - Exploit "current as default" for all parameters, including the window-size-hint.
+- G4VisCommandsViewer.cc: /vis/viewer/create:
+  - Exploit "current as default" for all parameters, including the window-size-hint.
+
+## 2023-07-17 John Allison (visman-V11-01-20)
+- Introduce concept of default graphics system.
+  - In this tag, it is set to "OGL" in G4VisManager constructor.
+  - In a future tag, it will be chosen in G4VisExecutive, according to:
+    - environment;
+    - or a possible configuration file, or command line argument;
+    - to be discussed.
+- G4VisManager: new data member, G4String fDefaultGraphicsSystemName.
+- G4VisCommandsCompound.cc: /vis/open:
+  - If no argument and if no existing graphics system, pick up the default.
+    - Otherwise open system same as current one.
+  - If argument is supplied, e.g., "/vis/open TSG", it takes precedence.
+  - Tidy warning messages.
+G4VisCommandsSceneHandler.cc: /vis/sceneHandler/create:
+  - As for /vis/open.
+
+## 2023-07-15 John Allison (visman-V11-01-19)
+- G4VViewer: clang-format.
+
+## 2023-07-08 John Allison (visman-V11-01-18)
+- Remove obsolete attempt at flying (interpolation with splines).
+  - Functionality now delegated to G4ViewParameters.
+
+## 2023-07-01 John Allison (visman-V11-01-17)
+- G4VViewer: Limit the depth of expansion of the scene tree touchables.
+  - This is to prevent the trees of complex detector running off the page.
+  - All touchables are entered but could be in a collapsed item, viewable by
+    expanding the mother with a left click.
+
+## 2023-07-01 John Allison (visman-V11-01-16)
+- Bug fix: Local axes not appearing:
+  - Add /vis/viewer/refresh after /vis/touchable/localAxes.
+
 ## 2023-06-16 John Allison (visman-V11-01-15)
 - G4VisExecutive.icc:
   - Temporary fix to divert OGL to TSG for Qt6.

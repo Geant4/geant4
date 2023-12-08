@@ -41,16 +41,16 @@
 class OpNoviceStackingAction : public G4UserStackingAction
 {
  public:
-  OpNoviceStackingAction();
-  ~OpNoviceStackingAction();
+  OpNoviceStackingAction() = default;
+  ~OpNoviceStackingAction() override= default;
 
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) override;
   void NewStage() override;
   void PrepareNewEvent() override;
 
  private:
-  G4int fScintillationCounter;
-  G4int fCerenkovCounter;
+  G4int fScintillationCounter = 0;
+  G4int fCerenkovCounter = 0;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

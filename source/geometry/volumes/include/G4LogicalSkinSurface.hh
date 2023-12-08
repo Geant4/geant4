@@ -30,7 +30,7 @@
 // A Logical Surface class for the surface surrounding a single logical
 // volume.
 
-// Author: John Apostolakis (John.Apostolakis@cern.ch), 16-06-1997
+// Author: John Apostolakis, CERN - 16-06-1997
 // --------------------------------------------------------------------
 #ifndef G4LogicalSkinSurface_hh
 #define G4LogicalSkinSurface_hh 1
@@ -46,7 +46,6 @@ using G4LogicalSkinSurfaceTable = std::vector<G4LogicalSkinSurface*>;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
-
   public:
 
     G4LogicalSkinSurface( const G4String& name,
@@ -81,7 +80,6 @@ class G4LogicalSkinSurface : public G4LogicalSurface
 
     static G4LogicalSkinSurfaceTable *theSkinSurfaceTable;
       // The static Table of SkinSurfaces.
-
 };
 
 // ********************************************************************

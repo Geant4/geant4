@@ -36,7 +36,6 @@
 #define G4PreCompoundTriton_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4TritonCoulombBarrier.hh"
 
 class G4PreCompoundTriton : public G4PreCompoundIon
 {
@@ -44,7 +43,7 @@ public:
 
   G4PreCompoundTriton();
 
-  virtual ~G4PreCompoundTriton();
+  ~G4PreCompoundTriton() override = default;
 
   G4PreCompoundTriton(const G4PreCompoundTriton &right) = delete;
   const G4PreCompoundTriton& 
@@ -61,11 +60,6 @@ protected:
   G4double CoalescenceFactor(G4int A) const override;
 
   G4double GetAlpha() const override;
-
-private:
-
-  // operators
-  G4TritonCoulombBarrier theTritonCoulombBarrier;
 };
 
 #endif

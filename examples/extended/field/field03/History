@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-07-05 I. Hrivnacova (fieldex03-V11-01-00)
+- Clang-tidy, new coding guidelines
+- Clean-up trailing white-spaces
+
 ## 2021-12-10 Ben Morgan (fieldex03-V11-00-00)
 - Change to new Markdown History format
 
@@ -16,14 +20,14 @@ July 27, 2018 I.Hrivnacova - fieldex03-V10-04-02
 - Added commands:
    /field/setField  Bx By Bz unit
    /field/setLocalField  Bx By Bz unit
-- Fixed geometry (corrected overlaps, parameters handling)   
+- Fixed geometry (corrected overlaps, parameters handling)
   - Activated checkOverlaps in G4PVPlacements
 - Macro review and code clean-up:
   - Removed EventAction, RunAction, RunActionMessenger
     used only for storing random numbers, already available in kernel
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac
-  - Added test for commands defined in the example at the end 
+  - Added test for commands defined in the example at the end
     of field02.in macro
   - Improved visualization of geometry
   - Added "beamOn 10" button in gui.mac
@@ -63,7 +67,7 @@ May 19, 2016 - G.Cosmo - fieldex03-V10-02-00
 - Fixed compilation warnings on gcc-6.1 in F03FieldMessenger.
 
 September 01, 2015 - I. Hrivnacova - fieldex03-V10-01-00
-- Removed F03EventActionMessenger class, now obsolete, and 
+- Removed F03EventActionMessenger class, now obsolete, and
   replaced /event/printModulo commands in macros with /run/printProgress
 - Code cleanup
 
@@ -85,7 +89,7 @@ November 26, 2013 - I.Hrivnacova - fieldex03-V09-06-05
 - Fixed ConstructSDandField():
   Moved setting the SD and field manager to logical volume outside the tests
 - Do not test (fAbsorberThickness > 0.) in ConstructCalorimeter()
-  as setting 0 is not allowed in set command  
+  as setting 0 is not allowed in set command
 
 November 25, 2013 - I.Hrivnacova - fieldex03-V09-06-04
 - Put back cleaning volumes and solid stores in ConstructGeometry()
@@ -94,17 +98,17 @@ November 22, 2013 - P.Gumplinger - fieldex03-V09-06-03
 - add gui.mac back in and removed fWorldChanged
 
 November 21, 2013 - I.Hrivnacova - fieldex03-V09-06-02
-- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
+- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild
   when geometry changes
 - Remove DetectorConstruction::Update and corresponding UI command that
   is not needed anymore
-- Set "ToBeBroadcasted == false" for UI commands that modify detector 
-  since these should be executed only by master     
+- Set "ToBeBroadcasted == false" for UI commands that modify detector
+  since these should be executed only by master
 - Fixed main (do not call gui.mac which does not exist)
-- In F03FieldSetup: 
+- In F03FieldSetup:
   - Do not declare fLocalFieldManager thread-local
     as the F03FieldSetup is already thread-local object
-  - Code clean-up  
+  - Code clean-up
 
 November 12, 2013 P.Gumplinger - fieldex03-V09-06-01
 - migration to MT and code cleanup
@@ -191,8 +195,8 @@ Mar 23rd, 2004 John Apostolakis (fieldex03-V06-00-00)
 
 Dec  1st, 2003 John Apostolakis (fieldex03-V05-02-00)
 -------------------------------
-- Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator, 
-   not a field). 
+- Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator,
+   not a field).
 - FieldSetup is now called only in Detector Construction, not in main.
 
 Nov 25th, 2003 Gabriele Cosmo

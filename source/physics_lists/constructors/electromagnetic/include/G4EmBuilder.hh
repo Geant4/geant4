@@ -40,6 +40,7 @@
 class G4hMultipleScattering;
 class G4ParticleDefinition;
 class G4NuclearStopping;
+class G4VEmModel;
 class G4VMscModel;
 
 class G4EmBuilder
@@ -80,6 +81,8 @@ public:
 
   static void ConstructElectronMscProcess(G4VMscModel* msc1, G4VMscModel* msc2,
                                           G4ParticleDefinition* particle);
+
+  static void ConstructElectronSSProcess(G4VEmModel* ss, G4ParticleDefinition* particle);
 };
 
 #endif

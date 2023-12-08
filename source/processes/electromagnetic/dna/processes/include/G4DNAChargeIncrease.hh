@@ -45,19 +45,19 @@ public:
   G4DNAChargeIncrease(const G4String& processName ="DNAChargeIncrease",
 		     G4ProcessType type = fElectromagnetic);
 
-  virtual ~G4DNAChargeIncrease();
+  ~G4DNAChargeIncrease() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
   
   virtual void PrintInfo();
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
-  G4bool       isInitialised;
+  G4bool       isInitialised{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

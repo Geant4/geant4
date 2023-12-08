@@ -50,13 +50,13 @@ class G4MuonVDNuclearModel : public G4HadronicInteraction
 {
 public:
     
-  explicit G4MuonVDNuclearModel();
-  virtual ~G4MuonVDNuclearModel();
+  G4MuonVDNuclearModel();
+  ~G4MuonVDNuclearModel() override;
 
-  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-					 G4Nucleus& targetNucleus);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+				 G4Nucleus& targetNucleus) override;
 
-  virtual void ModelDescription(std::ostream& outFile) const;
+  void ModelDescription(std::ostream& outFile) const override;
 
 private:
     
@@ -82,7 +82,6 @@ private:
   static G4ElementData* fElementData;             
 
   G4double CutFixed;
-  G4bool isMaster;
 
   G4KokoulinMuonNuclearXS* muNucXS;
 

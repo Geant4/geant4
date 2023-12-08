@@ -101,9 +101,9 @@ template<typename TYPE>
 class TG4MoleculeShoot : public G4MoleculeShoot
 {
 public:
-  TG4MoleculeShoot() : G4MoleculeShoot(){;}
-  virtual ~TG4MoleculeShoot(){;}
-  void Shoot(G4MoleculeGun*){}
+  TG4MoleculeShoot() : G4MoleculeShoot(){}
+  ~TG4MoleculeShoot() override= default;
+  void Shoot(G4MoleculeGun*) override{}
 
 protected:
   void ShootAtRandomPosition(G4MoleculeGun*){}
@@ -129,9 +129,9 @@ class G4MoleculeGun : public G4ITGun
 {
 public:
   G4MoleculeGun();
-  virtual ~G4MoleculeGun();
+  ~G4MoleculeGun() override;
 
-  virtual void DefineTracks();
+  void DefineTracks() override;
 
   /*
    * Create a single molecule
@@ -192,7 +192,7 @@ public:
     return fShoots;
   }
 
-  typedef std::map<G4String, G4int> NameNumber;
+  using NameNumber = std::map<G4String, G4int>;
   void GetNameAndNumber(NameNumber&);
 
 

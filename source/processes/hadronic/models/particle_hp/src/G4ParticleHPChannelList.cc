@@ -30,57 +30,45 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 //
+
 #include "G4ParticleHPChannelList.hh"
 
 #include "G4Element.hh"
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
 #include "G4ParticleHPFinalState.hh"
+#include "G4ParticleHPManager.hh"
+#include "G4ParticleHPThermalBoost.hh"
+#include "G4Neutron.hh"
 
-G4ThreadLocal G4int G4ParticleHPChannelList::trycounter = 0;
-
-G4ParticleHPChannelList::G4ParticleHPChannelList(G4int n, G4ParticleDefinition* projectile)
-  : theProjectile(projectile)
+G4ParticleHPChannelList::G4ParticleHPChannelList(G4int n, G4ParticleDefinition* p)
 {
   nChannels = n;
   theChannels = new G4ParticleHPChannel*[n];
-  allChannelsCreated = false;
-  theInitCount = 0;
-  theElement = nullptr;
-}
-
-#include "G4Neutron.hh"
-G4ParticleHPChannelList::G4ParticleHPChannelList()
-{
-  nChannels = 0;
-  theChannels = nullptr;
-  allChannelsCreated = false;
-  theInitCount = 0;
-  theElement = nullptr;
-  theProjectile = G4Neutron::Neutron();
+  theProjectile = (nullptr == p) ? G4Neutron::Neutron() : p;
 }
 
 G4ParticleHPChannelList::~G4ParticleHPChannelList()
 {
   if (theChannels != nullptr) {
-    for (G4int i = 0; i < nChannels; i++) {
+    for (G4int i = 0; i < nChannels; ++i) {
       delete theChannels[i];
     }
     delete[] theChannels;
   }
 }
 
-#include "G4ParticleHPManager.hh"
-#include "G4ParticleHPThermalBoost.hh"
 G4HadFinalState* G4ParticleHPChannelList::ApplyYourself(const G4Element*,
                                                         const G4HadProjectile& aTrack)
 {
   G4ParticleHPThermalBoost aThermalE;
   G4int i, ii;
+
   // decide on the isotope
   G4int numberOfIsos(0);
-  for (ii = 0; ii < nChannels; ii++) {
+  for (ii = 0; ii < nChannels; ++ii) {
     numberOfIsos = theChannels[ii]->GetNiso();
     if (numberOfIsos != 0) break;
   }
@@ -92,16 +80,14 @@ G4HadFinalState* G4ParticleHPChannelList::ApplyYourself(const G4Element*,
       if (theChannels[ii]->HasAnyData(i)) {
         running[i] += theChannels[ii]->GetWeightedXsec(
           aThermalE.GetThermalEnergy(aTrack, theChannels[ii]->GetN(i), theChannels[ii]->GetZ(i),
-                                     aTrack.GetMaterial()->GetTemperature()),
-          i);
+                                     aTrack.GetMaterial()->GetTemperature()), i);
       }
     }
   }
   G4int isotope = nChannels - 1;
   G4double random = G4UniformRand();
-  for (i = 0; i < numberOfIsos; i++) {
+  for (i = 0; i < numberOfIsos; ++i) {
     isotope = i;
-    // if(random<running[i]/running[numberOfIsos-1]) break;
     if (running[numberOfIsos - 1] != 0)
       if (random < running[i] / running[numberOfIsos - 1]) break;
   }
@@ -122,7 +108,7 @@ G4HadFinalState* G4ParticleHPChannelList::ApplyYourself(const G4Element*,
         isotope);
       targA = (G4int)theChannels[i]->GetN(isotope);  // Will be simply used the last valid value
       targZ = (G4int)theChannels[i]->GetZ(isotope);
-      //	G4cout << " G4ParticleHPChannelList " << i << " targA " << targA << " targZ " << targZ <<
+      //  G4cout << " G4ParticleHPChannelList " << i << " targA " << targA << " targZ " << targZ <<
       //" running " << running[i] << G4endl;
     }
   }
@@ -165,7 +151,7 @@ G4HadFinalState* G4ParticleHPChannelList::ApplyYourself(const G4Element*,
   }
   delete[] running;
 #ifdef G4PHPDEBUG
-  if (std::getenv("G4ParticleHPDebug"))
+  if (G4ParticleHPManager::GetInstance()->GetDEBUG())
     G4cout << " G4ParticleHPChannelList SELECTED ISOTOPE " << isotope << " SELECTED CHANNEL "
            << lChan << G4endl;
 #endif
@@ -176,40 +162,18 @@ void G4ParticleHPChannelList::Init(G4Element* anElement, const G4String& dirName
                                    G4ParticleDefinition* projectile)
 {
   theDir = dirName;
-  //    G4cout << theDir << G4endl;
+  // G4cout << theDir << G4endl;
   theElement = anElement;
-  //    G4cout << theElement << G4endl;
+  // G4cout << theElement->GetName() << G4endl;
   theProjectile = projectile;
 }
 
 void G4ParticleHPChannelList::Register(G4ParticleHPFinalState* theFS, const G4String& aName)
 {
-  if (!allChannelsCreated) {
-    if (nChannels != 0) {
-      auto theBuffer = new G4ParticleHPChannel*[nChannels + 1];
-      G4int i;
-      for (i = 0; i < nChannels; i++) {
-        theBuffer[i] = theChannels[i];
-      }
-      delete[] theChannels;
-      theChannels = theBuffer;
-    }
-    else {
-      theChannels = new G4ParticleHPChannel*[nChannels + 1];
-    }
-    G4String name;
-    name = aName + "/";
-    theChannels[nChannels] = new G4ParticleHPChannel(theProjectile);
-    theChannels[nChannels]->Init(theElement, theDir, name);
-    //      theChannels[nChannels]->SetProjectile( theProjectile );
-    nChannels++;
-  }
-
-  // 110527TKDB  Unnessary codes, Detected by gcc4.6 compiler
-  // G4bool result;
-  // result = theChannels[theInitCount]->Register(theFS);
-  theChannels[theInitCount]->Register(theFS);
-  theInitCount++;
+  theChannels[idx] = new G4ParticleHPChannel(theProjectile);
+  theChannels[idx]->Init(theElement, theDir, aName);
+  theChannels[idx]->Register(theFS);
+  ++idx;
 }
 
 void G4ParticleHPChannelList::DumpInfo()
@@ -219,7 +183,7 @@ void G4ParticleHPChannelList::DumpInfo()
   G4cout << " Number of channels: " << nChannels << G4endl;
   G4cout << " Projectile: " << theProjectile->GetParticleName() << G4endl;
   G4cout << " Directory name: " << theDir << G4endl;
-  for (int i = 0; i < nChannels; i++) {
+  for (G4int i = 0; i < nChannels; ++i) {
     if (theChannels[i]->HasDataInAnyFinalState()) {
       G4cout << "----------------------------------------------------------------" << G4endl;
       theChannels[i]->DumpInfo();

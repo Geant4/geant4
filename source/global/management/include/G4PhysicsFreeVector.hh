@@ -86,6 +86,8 @@ public:
   // If energy coincide with previously added energy then
   // this new pair is added after 
   void InsertValues(const G4double energy, const G4double value);
+
+  void EnableLogBinSearch(const G4int n = 1);
  
   // Obsolete method
   inline void PutValue(const std::size_t index, 

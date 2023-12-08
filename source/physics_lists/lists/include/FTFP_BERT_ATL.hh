@@ -32,7 +32,7 @@
 // This is a modified version of the FTFP_BERT physics list for ATLAS.
 // The physics list FTFP_BERT_ATL has the transition between Bertini (BERT)
 // intra-nuclear cascade model and Fritiof (FTF) string model in the
-// energy region [9, 12] GeV (instead of [4, 5] GeV as in FTFP_BERT).
+// energy region [9, 12] GeV (instead of [3, 6] GeV as in FTFP_BERT).
 //----------------------------------------------------------------------------
 //
 #ifndef FTFP_BERT_ATL_h

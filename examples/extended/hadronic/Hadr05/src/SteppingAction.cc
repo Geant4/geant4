@@ -42,12 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
-:G4UserSteppingAction(),fDetector(det),fEventAct(evt) 
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-SteppingAction::~SteppingAction()
+:fDetector(det),fEventAct(evt) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

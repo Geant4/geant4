@@ -46,44 +46,46 @@ public:
   G4VITDiscreteProcess(const G4String&, G4ProcessType aType = fNotDefined);
   G4VITDiscreteProcess(G4VITDiscreteProcess &);
 
-  virtual ~G4VITDiscreteProcess();
+  ~G4VITDiscreteProcess() override;
+  
+  G4VITDiscreteProcess & operator=(const G4VITDiscreteProcess &right) = delete;
 
 public:
   // with description
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
                                                         G4double previousStepSize,
-                                                        G4ForceCondition* condition);
+                                                        G4ForceCondition* condition) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
                                                          G4double,
                                                          G4double,
                                                          G4double&,
-                                                         G4GPILSelection*)
+                                                         G4GPILSelection*) override
   {
     return -1.0;
   }
   ;
 
-  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track&,
-                                                      G4ForceCondition*)
+  G4double AtRestGetPhysicalInteractionLength(const G4Track&,
+                                                      G4ForceCondition*) override
   {
     return -1.0;
   }
   ;
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
-  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&)
+  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override
   {
-    return 0;
+    return nullptr;
   }
   ;
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&)
+  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override
   {
-    return 0;
+    return nullptr;
   }
   ;
 
@@ -98,7 +100,6 @@ protected:
 private:
   // hide default constructor and assignment operator as private
   G4VITDiscreteProcess();
-  G4VITDiscreteProcess & operator=(const G4VITDiscreteProcess &right);
 
 };
 

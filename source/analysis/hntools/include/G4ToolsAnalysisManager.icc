@@ -26,6 +26,8 @@
 
 #include "G4HnInformation.hh"
 
+#include "G4THnToolsManager.hh"
+
 //_____________________________________________________________________________
 template <typename HT>
 inline
@@ -38,7 +40,9 @@ G4bool G4ToolsAnalysisManager::WriteT(
     auto activation = info->GetActivation();
 
     // skip writing if activation is enabled and H1 is inactivated
-    if ( fState.GetIsActivation() && ( ! activation ) ) continue;
+    // or if histogram was deleted
+    if ( ( fState.GetIsActivation() && ( ! activation ) ) ||
+         ( info->GetDeleted() ) ) continue;
 
     auto name = info->GetName();
     auto fileName = info->GetFileName();

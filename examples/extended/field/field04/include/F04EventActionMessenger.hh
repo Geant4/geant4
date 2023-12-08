@@ -44,15 +44,15 @@ class F04EventActionMessenger: public G4UImessenger
   public:
 
     F04EventActionMessenger(F04EventAction*);
-    virtual ~F04EventActionMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    ~F04EventActionMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
 
-    F04EventAction* fEventAction;
+    F04EventAction* fEventAction = nullptr;
 
-    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAnInteger* fSetVerboseCmd = nullptr;
 };
 
 #endif

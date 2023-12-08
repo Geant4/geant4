@@ -35,6 +35,7 @@
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
+#include "G4HadronicParameters.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
@@ -49,10 +50,10 @@
 // Constructor and destructor
 
 G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
-  : G4UImessenger(), theParams(params), cmdDir(0), localCmdDir(false) {
-  // NOTE: Put under same top-level tree as EM
-  CreateDirectory("/process/had/","Hadronic processes"); cmdDir=0;
-  CreateDirectory("/process/had/cascade/","Bertini-esque cascade parameters");
+  : G4UImessenger(), theParams(params) {
+  G4HadronicParameters::Instance();
+  cmdDir = new G4UIdirectory( "/process/had/cascade/" );
+  cmdDir->SetGuidance( "Bertini-esque cascade parameters" );
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",
 			"Enable information messages");
@@ -123,33 +124,8 @@ G4CascadeParamMessenger::~G4CascadeParamMessenger() {
   delete coalDPmax2Cmd;
   delete coalDPmax3Cmd;
   delete coalDPmax4Cmd;
-  if (localCmdDir) delete cmdDir;
+  delete cmdDir;
 }
-
-
-// Create or reuse existing UIdirectory path
-
-void G4CascadeParamMessenger::CreateDirectory(const char* path,
-					      const char* desc) {
-  G4UImanager* UIman = G4UImanager::GetUIpointer();
-  if (!UIman) return;
-
-  // Directory path must be absolute, prepend "/" if ncessary
-  G4String fullPath = path;
-  if (fullPath[0] != '/') fullPath.insert(0, '/', 1);
-  if (fullPath.back() != '/') fullPath.append('/', 1);
-
-  // See if input path has already been registered
-  G4UIcommand* foundPath = UIman->GetTree()->FindPath(fullPath);
-  if (foundPath) cmdDir = dynamic_cast<G4UIdirectory*>(foundPath);
-
-  if (!cmdDir) {                // Create local deletable directory
-    localCmdDir = true;
-    cmdDir = new G4UIdirectory(fullPath.c_str());
-    cmdDir->SetGuidance(desc);
-  }
-}
-
 
 // Use command argument (literal string) to set envvar maps in container
 

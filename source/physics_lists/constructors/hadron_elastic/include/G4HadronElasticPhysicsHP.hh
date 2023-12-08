@@ -46,7 +46,7 @@ public:
 
   explicit G4HadronElasticPhysicsHP(G4int ver = 1); 
 
-  virtual ~G4HadronElasticPhysicsHP();
+  ~G4HadronElasticPhysicsHP() override = default;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and

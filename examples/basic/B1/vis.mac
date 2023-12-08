@@ -2,31 +2,31 @@
 # of the B1 example when running in interactive mode
 #
 
-# Use these open statements to open selected visualization
-#
-# Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
-#
-# Use this open statement to create an OpenInventor view:
-#/vis/open OI
-#
-# Use this open statement to create a .prim file suitable for
-# viewing in DAWN:
-#/vis/open DAWNFILE
-#
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-#/vis/open HepRepFile
-#
-# Use this open statement to create a .wrl file suitable for
-# viewing in a VRML viewer:
-#/vis/open VRML2FILE
-#
-# Use this open statement to create an offscreen file with TSG:
-#/vis/open TSG_OFFSCREEN 1200x1200
-# See the tsg_offscreen.mac file for more commands to change
-# the file format, file name, picture size, etc.
-#
+# Specify a viewer, e.g., /vis/open OGL, or allow a system choice:
+/vis/open
+# This chooses a graphics system (in order of priority):
+# - by argument in G4VisExecutive construction.
+# - by environment variable, G4VIS_DEFAULT_DRIVER.
+# - by information in ~/.g4session.
+# - by mode (batch/interactive) and if interactive, by your build flags.
+# See "Choosing a graphics viewer" in the Application Guide for details.
+# For example, with environment variable G4VIS_DEFAULT_DRIVER:
+#   The format is <graphics-system> [<window-size-hint>]. Set this, e.g:
+#     (bash) export G4VIS_DEFAULT_DRIVER=TSG
+#     (tcsh) setenv G4VIS_DEFAULT_DRIVER OI
+#   or on the command line, precede the app invocation, e.g:
+#     G4VIS_DEFAULT_DRIVER=Vtk ./<application-name>
+#   The window-size-hint can optionally be added, e.g:
+#     (bash) export G4VIS_DEFAULT_DRIVER="OGLSX 1000x1000-0+0"
+# Other suggestions for G4VIS_DEFAULT_DRIVER (see list of registered
+# graphics systems printed at the start):
+#     DAWNFILE: to create a .prim file suitable for viewing in DAWN.
+#     HepRepFile: to create a .heprep file suitable for viewing in HepRApp.
+#     VRML2FILE: to create a .wrl file suitable for viewing in a VRML viewer.
+#     "TSG_OFFSCREEN 1200x1200": to create an image file with TSG.
+#       See the tsg_offscreen.mac in examples/basic/B5 for more commands
+#       to change the file format, file name, picture size, etc.
+
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false

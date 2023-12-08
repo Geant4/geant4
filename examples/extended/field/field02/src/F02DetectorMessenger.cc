@@ -42,20 +42,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02DetectorMessenger::F02DetectorMessenger(F02DetectorConstruction* det)
- : G4UImessenger(),
-   fDetector(det),
-   fDetDir(0),
-   fAbsMaterCmd(0),
-   fAbsThickCmd(0),
-   fAbsRadCmd(0),
-   fAbsZposCmd(0),
-   fWorldMaterCmd(0),
-   fWorldZCmd(0),
-   fWorldRCmd(0)
+ : fDetector(det)
 {
   fDetDir = new G4UIdirectory("/calor/");
   fDetDir->SetGuidance("F02 detector control.");
- 
+
   fAbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
   fAbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   fAbsMaterCmd->SetParameterName("choice",true);
@@ -133,19 +124,19 @@ void F02DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fWorldMaterCmd )
    { fDetector->SetWorldMaterial(newValue);}
- 
+
   if( command == fAbsThickCmd )
    {fDetector->SetAbsorberThickness(fAbsThickCmd->GetNewDoubleValue(newValue));}
 
   if( command == fAbsRadCmd )
    { fDetector->SetAbsorberRadius(fAbsRadCmd->GetNewDoubleValue(newValue));}
- 
+
   if( command == fAbsZposCmd )
    { fDetector->SetAbsorberZpos(fAbsZposCmd->GetNewDoubleValue(newValue));}
- 
+
   if( command == fWorldZCmd )
    { fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));}
- 
+
   if( command == fWorldRCmd )
    { fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));}
 }

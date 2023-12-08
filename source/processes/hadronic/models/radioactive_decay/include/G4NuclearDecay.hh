@@ -48,29 +48,29 @@ class G4NuclearDecay : public G4VDecayChannel
                    const G4double& excitation,
                    const G4Ions::G4FloatLevelBase& floatingLevel);
 
-    virtual ~G4NuclearDecay();
+    ~G4NuclearDecay() override = default;
 
-    G4RadioactiveDecayMode GetDecayMode() {return theMode;}
+    G4bool IsOKWithParentMass(G4double parentMass) override;
 
-    G4double GetDaughterExcitation() {return daughterEx;}
+    G4RadioactiveDecayMode GetDecayMode() const {return theMode;}
 
-    G4Ions::G4FloatLevelBase GetFloatingLevel() {return floatingLevel;}
+    G4double GetDaughterExcitation() const {return daughterEx;}
+
+    G4Ions::G4FloatLevelBase GetFloatingLevel() const {return floatingLevel;}
 
     G4ParticleDefinition* GetDaughterNucleus() {return GetDaughter(0);}
-
-    void SetHLThreshold(G4double HLT) {halflifeThreshold = HLT;}
-    G4double GetHLThreshold() {return halflifeThreshold;}
 
     virtual void DumpNuclearInfo() = 0;
 
   protected:
+
     const G4RadioactiveDecayMode theMode;
 
   private:
+
     // Needed for variance reduction mode
     const G4double daughterEx;
     const G4Ions::G4FloatLevelBase floatingLevel;
-    G4double halflifeThreshold;
 };
 #endif
 

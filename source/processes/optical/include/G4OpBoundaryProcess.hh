@@ -232,7 +232,8 @@ class G4OpBoundaryProcess : public G4VDiscreteProcess
 
   G4int f_iTE, f_iTM;
 
-  G4int fNumWarnings; // number of times small step warning printed
+  G4int fNumSmallStepWarnings = 0; // number of times small step warning printed
+  G4int fNumBdryTypeWarnings = 0;  // number of times boundary type warning printed
 
   size_t idx_dichroicX      = 0;
   size_t idx_dichroicY      = 0;

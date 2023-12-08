@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-24 Ivana Hrivnacova (proccuts-V11-01-01)
+- G4ProductionCutsTable - Added method CreateCoupleTables()
+  separated from UpdateCoupleTable() needed to prepare
+  class data for usafe new SetEnergyCutVector(...)
+
+## 2023-09-29 Vladimir Ivantchenko (proccuts-V11-01-00)
+- G4ProductionCutsTable - added method SetEnergyCutVector(...)
+    requested by ALICE experiment
+
 ## 2022-11-16 Gabriele Cosmo (proccuts-V11-00-06)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

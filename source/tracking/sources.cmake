@@ -61,7 +61,6 @@ geant4_module_link_libraries(G4tracking
     G4partman
     G4procman
     G4track
-    G4volumes
   PRIVATE
     G4detector
     G4graphics_reps)

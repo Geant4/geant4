@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
@@ -36,64 +33,48 @@
 #define G4ExcitedBaryonConstructor_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-class     G4DecayTable;
+class G4DecayTable;
 
 class G4ExcitedBaryonConstructor
 {
-  //This class is a utility class for construction 
-  //short lived particles
+    // This class is a utility class for construction
+    // short lived particles
 
   public:
-    G4ExcitedBaryonConstructor(G4int nStates = 0, G4int isoSpin=0);
-    virtual  ~G4ExcitedBaryonConstructor() = default;
-  
-  public:
-    virtual  void Construct(G4int indexOfState = -1);
- 
+    G4ExcitedBaryonConstructor(G4int nStates = 0, G4int isoSpin = 0);
+    virtual ~G4ExcitedBaryonConstructor() = default;
+
+    virtual void Construct(G4int indexOfState = -1);
+
   protected:
-    virtual  void ConstructParticle(G4int indexOfState);
-    virtual  void ConstructAntiParticle(G4int indexOfState);
-    
-    
-    virtual  G4double GetCharge(G4int iIsoSpin3);
-    virtual  G4int    GetEncoding(G4int iIsoSpin3, G4int idxState);
+    virtual void ConstructParticle(G4int indexOfState);
+    virtual void ConstructAntiParticle(G4int indexOfState);
+
+    virtual G4double GetCharge(G4int iIsoSpin3);
+    virtual G4int GetEncoding(G4int iIsoSpin3, G4int idxState);
+
+    // following methods are pure virtual
+    // thes methods should be implemented in derived classes
+    virtual G4bool Exist(G4int) = 0;
+    virtual G4int GetQuarkContents(G4int, G4int) = 0;
+    virtual G4String GetName(G4int, G4int) = 0;
+    virtual G4String GetMultipletName(G4int) = 0;
+    virtual G4double GetMass(G4int state, G4int iso) = 0;
+    virtual G4double GetWidth(G4int state, G4int iso) = 0;
+    virtual G4int GetiSpin(G4int) = 0;
+    virtual G4int GetiParity(G4int) = 0;
+    virtual G4int GetEncodingOffset(G4int) = 0;
+    virtual G4DecayTable* CreateDecayTable(const G4String&, G4int, G4int, G4bool) = 0;
 
   protected:
     G4int NumberOfStates;
     G4int iIsoSpin;
 
     const G4String type;
-    const G4int    iConjugation{0};
-    const G4int    iGParity{0};
-    const G4int    leptonNumber{0};
-    const G4int    baryonNumber{1};
-
-    // following methods are pure virtual
-    // thes methods should be implemented in derived classes
-    virtual  G4bool   Exist( G4int ) = 0;
-    virtual  G4int    GetQuarkContents(G4int, G4int)=0;
-    virtual  G4String GetName(G4int, G4int )=0;
-    virtual  G4String GetMultipletName(G4int)=0;
-    virtual  G4double GetMass( G4int state, G4int iso)=0;
-    virtual  G4double GetWidth( G4int state, G4int iso)=0;
-    virtual  G4int    GetiSpin( G4int )=0;
-    virtual  G4int    GetiParity( G4int )=0;
-    virtual  G4int    GetEncodingOffset( G4int )=0;
-    virtual  G4DecayTable* CreateDecayTable(const G4String&,
-					    G4int , G4int, G4bool)=0;
+    const G4int iConjugation{0};
+    const G4int iGParity{0};
+    const G4int leptonNumber{0};
+    const G4int baryonNumber{1};
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

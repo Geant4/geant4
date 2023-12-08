@@ -8,7 +8,6 @@ geant4_add_module(G4parameterisation
     G4FastSimulationHelper.hh
     G4FastSimulationManager.hh
     G4FastSimulationManagerProcess.hh
-    G4FastSimulationMessenger.hh
     G4FastSimulationProcessType.hh
     G4FastSimulationVector.hh
     G4FastSimulationVector.icc
@@ -18,8 +17,9 @@ geant4_add_module(G4parameterisation
     G4GlobalFastSimulationManager.hh
     G4VFastSimSensitiveDetector.hh
     G4VFastSimulationModel.hh
+  PRIVATE_HEADERS
+    G4FastSimulationMessenger.hh
   SOURCES
-    G4FastHit.cc
     G4FastSimHitMaker.cc
     G4FastSimulationHelper.cc
     G4FastSimulationManager.cc
@@ -42,6 +42,6 @@ geant4_module_link_libraries(G4parameterisation
     G4partman
     G4procman
     G4track
-    G4volumes
   PRIVATE
-    G4materials)
+    G4materials
+    G4volumes)

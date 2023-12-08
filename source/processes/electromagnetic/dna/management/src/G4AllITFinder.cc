@@ -36,7 +36,7 @@
 
 using namespace std;
 
-G4ThreadLocal G4AllITFinder* G4AllITFinder::fpInstance = 0;
+G4ThreadLocal G4AllITFinder* G4AllITFinder::fpInstance = nullptr;
 
 G4AllITFinder::G4AllITFinder()
 {
@@ -45,16 +45,16 @@ G4AllITFinder::G4AllITFinder()
 
 G4AllITFinder* G4AllITFinder::Instance()
 {
-  if (!fpInstance) fpInstance = new G4AllITFinder();
+  if (fpInstance == nullptr) fpInstance = new G4AllITFinder();
   return fpInstance;
 }
 
 void G4AllITFinder::DeleteInstance()
 {
-  if (fpInstance)
+  if (fpInstance != nullptr)
   {
     delete fpInstance;
-    fpInstance = 0;
+    fpInstance = nullptr;
   }
 }
 
@@ -65,17 +65,17 @@ G4AllITFinder::~G4AllITFinder()
 
   for (it = fITSubManager.begin(); it != fITSubManager.end();)
   {
-    if (it->second) delete it->second;
+    delete it->second;
     it_tmp = it;
     it++;
     fITSubManager.erase(it_tmp);
   }
-  fpInstance = 0;
+  fpInstance = nullptr;
 }
 
 void G4AllITFinder::UpdatePositionMap()
 {
-  std::map<G4ITType, G4VITFinder*>::iterator it = fITSubManager.begin();
+  auto it = fITSubManager.begin();
 
   for (; it != fITSubManager.end(); it++)
   {
@@ -85,9 +85,9 @@ void G4AllITFinder::UpdatePositionMap()
 
 G4VITFinder* G4AllITFinder::GetInstance(G4ITType type)
 {
-  map<G4ITType, G4VITFinder*>::iterator it = fITSubManager.find(type);
+  auto it = fITSubManager.find(type);
 
-  if (it == fITSubManager.end()) return 0;
+  if (it == fITSubManager.end()) return nullptr;
 
   return it->second;
 }

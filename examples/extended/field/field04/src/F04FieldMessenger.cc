@@ -76,7 +76,7 @@ F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield,
   fStepperCMD->SetParameterName("choice",true);
   fStepperCMD->SetDefaultValue(4);
   fStepperCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
- 
+
   fMinStepCMD = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCMD->SetGuidance("Define minimal step");
   fMinStepCMD->SetParameterName("min step",false,false);

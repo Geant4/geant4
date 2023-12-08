@@ -46,13 +46,13 @@ class HistoManager
 {
   public:
    HistoManager();
-  ~HistoManager();
+  ~HistoManager() = default;
 
   private:
     void Book();
 
 private:
-    G4String fFileName;
+    G4String fFileName = "Activation";
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

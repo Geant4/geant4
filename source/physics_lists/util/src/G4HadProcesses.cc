@@ -186,7 +186,7 @@ void G4HadProcesses::BuildNeutronInelasticAndCapture(G4HadronicProcess* nInel)
   G4HadronicProcess* nCap = new G4NeutronCaptureProcess("nCapture");
   nCap->RegisterMe(new G4NeutronRadCapture());
 
-  if(useNeutronGeneral) {
+  if ( useNeutronGeneral ) {
     auto nGen = G4PhysListUtil::FindNeutronGeneralProcess();
     nGen->SetInelasticProcess(nInel);
     nGen->SetCaptureProcess(nCap);
@@ -196,9 +196,9 @@ void G4HadProcesses::BuildNeutronInelasticAndCapture(G4HadronicProcess* nInel)
     nInel->AddDataSet(new G4NeutronInelasticXS());
     ph->RegisterProcess(nInel, neutron);
     ph->RegisterProcess(nCap, neutron);
-    if( param->ApplyFactorXS() ) {
-      nInel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
-    }
+  }
+  if ( param->ApplyFactorXS() ) {
+    nInel->MultiplyCrossSectionBy( param->XSFactorNucleonInelastic() );
   }
 }
 
@@ -207,7 +207,7 @@ void G4HadProcesses::BuildNeutronElastic(G4HadronicProcess* nEl)
   G4HadronicParameters* param = G4HadronicParameters::Instance();
   G4bool useNeutronGeneral = param->EnableNeutronGeneralProcess();
 
-  if(useNeutronGeneral) {
+  if ( useNeutronGeneral ) {
     auto nGen = G4PhysListUtil::FindNeutronGeneralProcess();
     nGen->SetElasticProcess(nEl);
   } else {
@@ -215,8 +215,8 @@ void G4HadProcesses::BuildNeutronElastic(G4HadronicProcess* nEl)
     nEl->AddDataSet(new G4NeutronElasticXS());
     G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
     ph->RegisterProcess(nEl, neutron);
-    if( param->ApplyFactorXS() ) {
-      nEl->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
-    }
+  }
+  if ( param->ApplyFactorXS() ) {
+    nEl->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
   }
 }

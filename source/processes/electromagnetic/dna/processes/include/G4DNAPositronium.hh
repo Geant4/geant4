@@ -32,14 +32,14 @@ class G4DNAPositronium : public G4VEmProcess
 { 
 public:
   G4DNAPositronium(const G4String& processName ="G4DNAPositronium");
-  ~G4DNAPositronium();
+  ~G4DNAPositronium() override;
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
+  void InitialiseProcess(const G4ParticleDefinition*) override;
   virtual void PrintInfo();
   
 private:
-  G4bool       isInitialised;
+  G4bool       isInitialised{false};
 
 };
 

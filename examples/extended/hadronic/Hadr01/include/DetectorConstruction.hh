@@ -60,7 +60,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 public:
 
   DetectorConstruction();
-  virtual ~DetectorConstruction();
+  ~DetectorConstruction() override;
 
   G4VPhysicalVolume* Construct() override;
   void ConstructSDandField() override;
@@ -75,8 +75,8 @@ private:
 
   void ComputeGeomParameters();
 
-  G4Material*  fTargetMaterial;
-  G4Material*  fWorldMaterial;
+  G4Material* fTargetMaterial;
+  G4Material* fWorldMaterial;
 
   G4Tubs* fSolidW;
   G4Tubs* fSolidA;

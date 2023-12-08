@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -34,35 +32,23 @@
 //  New impelemenataion as an utility class  H.Kurashige, 14 July 2004
 // ----------------------------------------------------------------
 
-
 #ifndef G4Gamma_h
 #define G4Gamma_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                           GAMMA                                ###
-// ######################################################################
 
 class G4Gamma : public G4ParticleDefinition
 {
- private:
-   static G4Gamma* theInstance;
+  public:
+    static G4Gamma* Definition();
+    static G4Gamma* GammaDefinition();
+    static G4Gamma* Gamma();
 
- private: // hide constructor as private
-   G4Gamma(){}
+  private:  // hide constructor as private
+    G4Gamma() {}
+    ~G4Gamma() override = default;
 
- public:
-   ~G4Gamma() override= default;
-
-   static G4Gamma* Definition();
-   static G4Gamma* GammaDefinition();
-   static G4Gamma* Gamma();
+    static G4Gamma* theInstance;
 };
 
-
 #endif
-
-

@@ -45,12 +45,9 @@ G4EvaporationFactory::G4EvaporationFactory(G4VEvaporationChannel* ptr)
   : G4VEvaporationFactory(ptr)
 {}
 
-G4EvaporationFactory::~G4EvaporationFactory()
-{}
-
 std::vector<G4VEvaporationChannel*>* G4EvaporationFactory::GetChannel()
 {
-  std::vector<G4VEvaporationChannel*> * theChannel = 
+  std::vector<G4VEvaporationChannel*>* theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(8);
 

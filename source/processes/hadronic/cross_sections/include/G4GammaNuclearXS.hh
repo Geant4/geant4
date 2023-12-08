@@ -60,11 +60,11 @@ class G4GammaNuclearXS final : public G4VCrossSectionDataSet
 {
 public: 
 
-  explicit G4GammaNuclearXS();
+  G4GammaNuclearXS();
 
-  ~G4GammaNuclearXS() final;
+  ~G4GammaNuclearXS() override = default;
     
-  static const char* Default_Name() {return "GammaNuclearXS";}
+  static const char* Default_Name() { return "GammaNuclearXS"; }
 
   G4bool IsElementApplicable(const G4DynamicParticle*, 
 			     G4int Z, const G4Material*) final;
@@ -101,8 +101,6 @@ private:
 
   void Initialise(G4int Z);
 
-  void InitialiseOnFly(G4int Z);
-
   const G4String& FindDirectoryPath();
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn, G4int Z);
@@ -114,7 +112,6 @@ private:
   G4double fXS = 0.0;  
   G4double fEkin = 0.0;  
   G4int fZ = 0;  
-  G4bool isFirst = false;
 
   static const G4int MAXZGAMMAXS = 95;
   static const G4int MAXNFREE = 11;

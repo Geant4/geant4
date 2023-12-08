@@ -116,8 +116,7 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
     
     //The copyID identifies the voxel    
     std::size_t matIndex = GetMaterialIndex(copyID); 
-    static G4Material* mate = nullptr;
-    mate = fMaterials[matIndex];
+    G4Material* mate = fMaterials[matIndex];
    
     if(true && physVol && G4VVisManager::GetConcreteInstance()) {
         G4String mateName = fMaterials.at(matIndex)->GetName();

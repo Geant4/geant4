@@ -292,6 +292,18 @@ namespace G4INCL {
 
     /// \brief Get the type of antikaon
     ParticleType getAntiKaonType(const G4int isosp);
+       
+    /// \brief Get the type of xi
+    ParticleType getXiType(const G4int isosp);
+    
+    /// \brief Get the type of antinucleon
+    ParticleType getAntiNucleonType(const G4int isosp);
+
+    /// \brief Get the type of antidelta
+    ParticleType getAntiXiType(const G4int isosp);
+
+    /// \brief Get the type of antisigma
+    ParticleType getAntiSigmaType(const G4int isosp); 
 
     /// \brief Get particle width (in s)
     G4double getWidth(const ParticleType t);

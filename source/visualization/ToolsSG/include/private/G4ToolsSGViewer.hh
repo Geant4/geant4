@@ -315,7 +315,7 @@ public:
       //
       // Only do this if there are end-of-event models (e.g., trajectories) that
       // may require it.
-      if (fSceneHandler.GetScene()->GetEndOfEventModelList().size()) {
+      if (fSceneHandler.GetScene() && fSceneHandler.GetScene()->GetEndOfEventModelList().size()) {
         fNeedKernelVisit = true;
         DrawView();  // Draw trajectories, etc., from kept events
       }

@@ -1,6 +1,7 @@
 This repository contains the set of scripts used to train, generate and validate the generative model used
 in this example.
 
+- root2h5.py: translation of ROOT file with showers to h5 files.
 - core/constants.py: defines the set of common variables.
 - core/model.py: defines the VAE model class and a handler to construct the model.
 - utils/preprocess.py: defines the data loading and preprocessing functions.
@@ -26,6 +27,8 @@ python3 setup.py
 ## Full simulation dataset
 
 The full simulation dataset can be downloaded from/linked to [Zenodo](https://zenodo.org/record/6082201#.Ypo5UeDRaL4).
+
+If custom simulation is used, the output of full simulation must be translated to h5 files using `root2h5.py` script. Please see the header of that script to see what name of the root file is expected.
 
 ## Training
 

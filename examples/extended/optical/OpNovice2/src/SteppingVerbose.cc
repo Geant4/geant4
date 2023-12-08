@@ -35,14 +35,6 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingVerbose::SteppingVerbose()
-  : G4SteppingVerbose()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-SteppingVerbose::~SteppingVerbose() = default;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void SteppingVerbose::StepInfo()
 {
   CopyState();

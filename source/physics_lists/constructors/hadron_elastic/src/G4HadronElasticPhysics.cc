@@ -87,12 +87,8 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver, const G4String& nam)
   SetPhysicsType(bHadronElastic);
 }
 
-G4HadronElasticPhysics::~G4HadronElasticPhysics()
-{}
-
 void G4HadronElasticPhysics::ConstructParticle()
 {
-  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
 
@@ -113,7 +109,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   const G4double elimitAntiNuc = 100.*MeV;
   const G4double delta = 0.1*MeV;
   G4double emax = std::max(param->GetMaxEnergy(), elimitAntiNuc+delta);
-  if(param->GetVerboseLevel() > 1) {
+  if ( param->GetVerboseLevel() > 1 ) {
     G4cout << "### HadronElasticPhysics::ConstructProcess: "
 	   << "Elimit for for anti-neuclei " << elimitAntiNuc/CLHEP::GeV << " GeV"
 	   << " for all hadrons Emax(GeV)= " << emax/CLHEP::GeV
@@ -140,7 +136,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4HadronElasticProcess* hel = new G4HadronElasticProcess();
   hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
   hel->RegisterMe(new G4ChipsElasticModel());
-  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
+  if ( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorNucleonElastic() );
   ph->RegisterProcess(hel, particle);
 
   // n
@@ -153,7 +149,7 @@ void G4HadronElasticPhysics::ConstructProcess()
   hel = new G4HadronElasticProcess();
   hel->AddDataSet(new G4BGGPionElasticXS(particle));
   hel->RegisterMe(he);
-  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
+  if ( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
   ph->RegisterProcess(hel, particle);
 
   // pi-
@@ -161,14 +157,14 @@ void G4HadronElasticPhysics::ConstructProcess()
   hel = new G4HadronElasticProcess();
   hel->AddDataSet(new G4BGGPionElasticXS(particle));
   hel->RegisterMe(he);
-  if( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
+  if ( useFactorXS ) hel->MultiplyCrossSectionBy( param->XSFactorPionElastic() );
   ph->RegisterProcess(hel, particle);
 
   // kaons
   G4HadronicBuilder::BuildElastic( G4HadParticles::GetKaons() );
 
   // d, t, He3, alpha
-  for( auto & pdg : G4HadParticles::GetLightIons() ) {
+  for ( auto & pdg : G4HadParticles::GetLightIons() ) {
     particle = table->FindParticle( pdg );
     if ( particle == nullptr ) { continue; }
 
@@ -233,9 +229,17 @@ G4HadronElasticPhysics::GetElasticModel(const G4ParticleDefinition* part) const
 {
   G4HadronElastic* mod = nullptr;
   G4HadronicProcess* hel = GetElasticProcess(part);
-  if(hel) {
-    std::vector<G4HadronicInteraction*>& hi = hel->GetHadronicInteractionList();
-    if( !hi.empty() ) { mod = static_cast<G4HadronElastic*>(hi[0]); }
+  if ( nullptr != hel ) {
+    const std::vector<G4HadronicInteraction*>& hi = hel->GetHadronicInteractionList();
+    if ( !hi.empty() ) {
+      for (auto const & p : hi) {
+        auto ptr = dynamic_cast<G4HadronElastic*>(p);
+        if ( nullptr != ptr ) {
+	  mod = ptr;
+	  break;
+	}
+      }
+    }
   }
   return mod;
 }
@@ -254,7 +258,7 @@ void G4HadronElasticPhysics::AddXSection(const G4ParticleDefinition* part,
 					 G4VCrossSectionDataSet* cross) const
 {
   G4HadronicProcess* hel = GetElasticProcess(part);
-  if(hel) { hel->AddDataSet(cross); }
+  if ( nullptr != hel ) { hel->AddDataSet(cross); }
 }
 
 

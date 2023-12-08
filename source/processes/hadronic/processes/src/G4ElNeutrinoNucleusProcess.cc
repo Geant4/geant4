@@ -48,8 +48,6 @@
 #include "G4VDiscreteProcess.hh"
 
 #include "G4ElNeutrinoNucleusTotXsc.hh"
-//#include "G4NuMuNucleusCcModel.hh"
-//#include "G4NuMuNucleusNcModel.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -64,24 +62,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-G4ElNeutrinoNucleusProcess::G4ElNeutrinoNucleusProcess( G4String anEnvelopeName, const G4String& pName)
-  : G4HadronicProcess( pName, fHadronInelastic ), isInitialised(false), fBiased(true)  // fHadronElastic???
+G4ElNeutrinoNucleusProcess::G4ElNeutrinoNucleusProcess(const G4String& anEnvelopeName, const G4String& pName)
+  : G4HadronicProcess( pName, fNuNucleus )
 {
   lowestEnergy = 1.*keV;
-  fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;
   fTotXsc = new G4ElNeutrinoNucleusTotXsc();
-  fNuNuclCcBias     = 1.;
-  fNuNuclNcBias     = 1.;
-  fNuNuclTotXscBias = 1.;
-  fXsc = 0.;
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
-}
-
-G4ElNeutrinoNucleusProcess::~G4ElNeutrinoNucleusProcess()
-{
-  if( fTotXsc ) delete fTotXsc;
 }
 
 ///////////////////////////////////////////////////////
@@ -118,18 +106,13 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
   //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   G4String rName = aTrack.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
-  G4double totxsc(0.);
+  G4double totxsc =
+    GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
+						    aTrack.GetMaterial());
 
-  if( rName == fEnvelopeName && fNuNuclTotXscBias > 1.)    
+  if ( rName == fEnvelopeName )
   {
-      totxsc = fNuNuclTotXscBias*
-	GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
-						    aTrack.GetMaterial());
-  }
-  else
-  {
-      totxsc = GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
-						    aTrack.GetMaterial());
+    totxsc *= fNuNuclTotXscBias;
   }
   G4double res = (totxsc>0.0) ? 1.0/totxsc : DBL_MAX;
   //G4cout << "         xsection= " << totxsc << G4endl;
@@ -140,10 +123,9 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 
 void G4ElNeutrinoNucleusProcess::ProcessDescription(std::ostream& outFile) const
 {
-
-    outFile << "G4ElNeutrinoNucleusProcess handles the scattering of \n"
-            << "neutrino on electrons by invoking the following  model(s) and \n"
-            << "cross section(s).\n";
+  outFile << "G4ElNeutrinoNucleusProcess handles the scattering of \n"
+	  << "neutrino on electrons by invoking the following  model(s) and \n"
+	  << "cross section(s).\n";
 
 }
 
@@ -248,10 +230,11 @@ G4ElNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
   G4HadProjectile theProj( track );
   G4HadronicInteraction* hadi = nullptr;
   G4HadFinalState* result = nullptr;
-  const G4Element* elm =  GetCrossSectionDataStore()->SampleZandA(dynParticle, material,
-                                                    *targNucleus);
+  const G4Element* elm =
+    GetCrossSectionDataStore()->SampleZandA(dynParticle, material,
+                                            *targNucleus);
   G4int ZZ = elm->GetZasInt();
-  fXsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
+  fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
   G4double ccTotRatio = fTotXsc->GetCcTotRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model
@@ -273,10 +256,10 @@ G4ElNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
   else  // Nc-model                            
   {
 
-    if (pName == "nu_e" )    hadi = (GetHadronicInteractionList())[1]; 
-    else                     hadi = (GetHadronicInteractionList())[3];
+    if (pName == "nu_e" ) hadi = (GetHadronicInteractionList())[1]; 
+    else                  hadi = (GetHadronicInteractionList())[3];
 
-    size_t idx = track.GetMaterialCutsCouple()->GetIndex();
+    std::size_t idx = track.GetMaterialCutsCouple()->GetIndex();
 
     G4double tcut = (*(G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3)))[idx];
 
@@ -346,9 +329,9 @@ G4ElNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
 
     if(efinal > 0.0) 
     {
-    outdir.rotate(phi, it);
-    outdir.rotateUz(indir);
-    theTotalResult->ProposeMomentumDirection(outdir);
+      outdir.rotate(phi, it);
+      outdir.rotateUz(indir);
+      theTotalResult->ProposeMomentumDirection(outdir);
     } 
     else 
     {
@@ -406,16 +389,6 @@ G4ElNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& ste
     result->Clear();
   }
   return theTotalResult;
-}
-
-void 
-G4ElNeutrinoNucleusProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
-{
-  if(!isInitialised) {
-    isInitialised = true;
-    // if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
-  }
-  G4HadronicProcess::PreparePhysicsTable(part);
 }
 
 void 

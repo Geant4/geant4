@@ -1,0 +1,211 @@
+#
+#  Use with a TSG vis driver.
+# Activate with:
+#   /control/execute plotter.mac
+#   /run/beamOn 10  # it will update the plotter regions at end of run.
+#
+
+#/vis/verbose errors
+#/vis/verbose confirmations
+
+#///////////////////////////////////////////////////////////////////////
+#/// activate the TSG vis driver: //////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+/vis/sceneHandler/create TSG scene-handler-plotter
+
+#///////////////////////////////////////////////////////////////////////
+#/// viewer: ///////////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+/vis/viewer/create scene-handler-plotter viewer-plotter 600x600-0+0
+
+/vis/viewer/set/background 1 1 1
+/vis/viewer/zoomTo 1
+/vis/viewer/set/viewpointVector 0 0 1
+
+#///////////////////////////////////////////////////////////////////////
+#/// scene: ////////////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+/vis/plotter/create plotter-0
+
+/vis/scene/create scene-plotter
+/vis/scene/add/plotter plotter-0
+/vis/sceneHandler/attach scene-plotter
+
+#///////////////////////////////////////////////////////////////////////
+#/// create plotter regions and attach histograms to them: /////////////
+#///////////////////////////////////////////////////////////////////////
+/vis/plotter/setLayout plotter-0 2 2  # create 2x2 plotting regions.
+
+# AnaEx03 specific:
+/vis/plotter/add/h1 0 plotter-0 0
+/vis/plotter/add/h1 1 plotter-0 1
+/vis/plotter/add/h1 2 plotter-0 2
+/vis/plotter/add/h1 3 plotter-0 3
+
+#///////////////////////////////////////////////////////////////////////
+#/// plotters customisation: ///////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+
+#  For texts, as titles and axis labels, the good old Hershey vectorial font is used
+# by default, but you can also specify a freetype font  To use a freetype font, you
+# must build Geant4 by specifying -DGEANT4_USE_FREETYPE=ON yin your cmake flags.
+# (The ROOT_default and hippodraw styles (see below) uses freetype fonts).
+#  Two embedded ttf fonts comes with the ToolsSG plotting: roboto_bold (some open source
+# kind of the Microsoft arialbd) and lato_regular (close to an helvetica).
+#  You can use your own .ttf files by using the TOOLS_FONT_PATH environment variable
+# to specify the directory where they could be found.
+
+#///////////////////////////////////////////////////////////////////////
+#/// using styles: /////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+/vis/plotter/style/list
+
+/vis/plotter/addStyle plotter-0 reset
+
+#
+#  The below lines show how to customise a plotter by using an embedded style
+# (for example ROOT_default, hippodraw, default) or a style defined with commands.
+# The description of the embedded styles can be seen in Geant4 source code at:
+#   source/externals/g4tools/include/tools/sg/plotter_some_styles
+#
+#  A style can be applied on all regions by using:
+#   /vis/plotter/addStyle <plotter> <style>
+# or on one region only by using:
+#   /vis/plotter/addRegionStyle <plotter> <region> <style>
+#
+#  The "all regions" styles are applied first, and then the per region ones.
+#
+#  Without using a style, you can customise anyway directly by using
+# the command:
+#   /vis/plotter/addRegionParameter
+# See below for examples.
+#
+#/vis/plotter/addStyle plotter-0 ROOT_default
+#/vis/plotter/addStyle plotter-0 hippodraw
+
+#///////////////////////////////////////////////////////////////////////
+#/// create and use style-0 style: /////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+##/vis/plotter/style/remove style-0
+#/vis/plotter/style/select style-0
+#/vis/plotter/style/add infos_width             0.2   # percent of plotter width.
+#/vis/plotter/style/add bins_style.0.color      blue
+#/vis/plotter/style/add bins_style.0.line_width 3
+#/vis/plotter/style/add infos_style.visible     true
+#/vis/plotter/style/add infos_style.font        roboto_bold.ttf
+#/vis/plotter/style/add infos_style.front_face  cw
+
+#///////////////////////////////////////////////////////////////////////
+# example to have x_axis as ROOT_default:
+#/vis/plotter/style/add x_axis.modeling      hplot
+#/vis/plotter/style/add x_axis.divisions     510
+#/vis/plotter/style/add x_axis.title_hjust   right
+#/vis/plotter/style/add x_axis.label_to_axis 0.005
+#/vis/plotter/style/add x_axis.label_height  0.04
+#/vis/plotter/style/add x_axis.tick_length   0.03
+#/vis/plotter/style/add x_axis.title_to_axis 0.05
+#/vis/plotter/style/add x_axis.title_height  0.04
+#/vis/plotter/style/add x_axis.is_log        false
+
+#/vis/plotter/style/add x_axis.line_style.color       black
+#/vis/plotter/style/add x_axis.line_style.line_width  1
+
+#/vis/plotter/style/add x_axis.ticks_style.color      black
+#/vis/plotter/style/add x_axis.ticks_style.line_width 1
+
+#/vis/plotter/style/add x_axis.labels_style.color      black
+#/vis/plotter/style/add x_axis.labels_style.scale      0.6
+#/vis/plotter/style/add x_axis.labels_style.font       roboto_bold.ttf
+#/vis/plotter/style/add x_axis.labels_style.front_face cw
+#/vis/plotter/style/add x_axis.labels_style.smoothing  true
+
+#/vis/plotter/style/add x_axis.title_style.color       black
+#/vis/plotter/style/add x_axis.title_style.visible     true
+#/vis/plotter/style/add x_axis.title_style.scale       0.6
+#/vis/plotter/style/add x_axis.title_style.font        roboto_bold.ttf
+#/vis/plotter/style/add x_axis.title_style.front_face  cw
+#/vis/plotter/style/add x_axis.title_style.smoothing   true
+
+#/vis/plotter/style/add x_axis.mag_style.color       black
+#/vis/plotter/style/add x_axis.mag_style.scale       0.6
+#/vis/plotter/style/add x_axis.mag_style.font        roboto_bold.ttf
+#/vis/plotter/style/add x_axis.mag_style.front_face  cw
+#/vis/plotter/style/add x_axis.mag_style.smoothing   true
+#///////////////////////////////////////////////////////////////////////
+
+#/vis/plotter/style/list
+#/vis/plotter/style/print style-0
+
+#/vis/plotter/addRegionStyle plotter-0 0 style-0
+#/vis/plotter/addRegionStyle plotter-0 1 style-0
+
+#///////////////////////////////////////////////////////////////////////
+#/// set directly region parameters: ///////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+#
+#  Without passing by a style, a plotting region can be customised directly
+# by using the command:
+#   /vis/plotter/addRegionParameter
+#  Use:
+#   /vis/tsg/plotter/printParameters
+# to see the available parameters.
+#  The declared parameters to be changed are applied after styles.
+#
+
+# to see region borders:
+#/vis/plotter/addRegionParameter plotter-0 0 background_style.line_width 0.001
+#/vis/plotter/addRegionParameter plotter-0 1 background_style.line_width 0.001
+#/vis/plotter/addRegionParameter plotter-0 2 background_style.line_width 0.001
+#/vis/plotter/addRegionParameter plotter-0 3 background_style.line_width 0.001
+
+/vis/plotter/addRegionParameter plotter-0 0 infos_width 0.2
+/vis/plotter/addRegionParameter plotter-0 1 infos_width 0.2
+/vis/plotter/addRegionParameter plotter-0 2 infos_width 0.2
+/vis/plotter/addRegionParameter plotter-0 3 infos_width 0.2
+#
+/vis/plotter/addRegionParameter plotter-0 0 bins_style.0.color blue
+/vis/plotter/addRegionParameter plotter-0 0 bins_style.0.line_width 3
+/vis/plotter/addRegionParameter plotter-0 1 bins_style.0.color blue
+/vis/plotter/addRegionParameter plotter-0 1 bins_style.0.line_width 3
+
+/vis/plotter/addRegionParameter plotter-0 2 bins_style.0.color blue
+/vis/plotter/addRegionParameter plotter-0 2 bins_style.0.line_width 1
+/vis/plotter/addRegionParameter plotter-0 3 bins_style.0.color blue
+/vis/plotter/addRegionParameter plotter-0 3 bins_style.0.line_width 1
+#
+/vis/plotter/addRegionParameter plotter-0 0 x_axis.title detector
+#/vis/plotter/addRegionParameter plotter-0 0 x_axis_automated false
+#/vis/plotter/addRegionParameter plotter-0 0 x_axis_min 0
+#/vis/plotter/addRegionParameter plotter-0 0 x_axis_max 50
+#/vis/plotter/addRegionParameter plotter-0 0 x_axis_is_log true
+#
+#/vis/plotter/addRegionParameter plotter-0 3 title_automated false
+#/vis/plotter/addRegionParameter plotter-0 3 title "my title"
+/vis/plotter/addRegionParameter plotter-0 1 bins_style.0.color red
+/vis/plotter/addRegionParameter plotter-0 3 background_style.back_color "0.95 0.95 0.95"
+
+#///////////////////////////////////////////////////////////////////////
+#/// let's go: /////////////////////////////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+#/run/beamOn 100  #it will update the plotters at end of run.
+
+#///////////////////////////////////////////////////////////////////////
+#/// To produce some "paper" output: ///////////////////////////////////
+#///////////////////////////////////////////////////////////////////////
+# Use gl2ps to produce a PostScript file (may be long if the scene as a lot of primitives):
+#/control/shell rm ./out.eps
+#/vis/tsg/export                   # it produces out.eps
+#/control/shell open    ./out.eps  # if on a Mac.
+#/control/shell display ./out.eps  # with ImageMagick on a Linux.
+
+# Use gl2ps to produce a pdf file (may be long if the scene as a lot of primitives):
+#/control/shell rm ./out.pdf
+#/vis/tsg/export gl2ps_pdf out.pdf
+#/control/shell open ./out.pdf     # if on a Mac.
+#/control/shell display ./out.pdf  # with ImageMagick on a Linux.
+
+# Use the tools::sg offscreen zbuffer to produce an image and put it in a PostScript file:
+#/control/shell rm ./out.ps
+#/vis/tsg/export zb_ps out.ps
+#/control/shell open ./out.ps      # if on a Mac.
+#/control/shell display ./out.ps   # with ImageMagick on a Linux.

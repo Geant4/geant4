@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//
-//
 //---------------------------------------------------------------
 //
 // G4HadronicProcessType.hh
@@ -49,6 +47,9 @@ enum G4HadronicProcessType
   fHadronAtRest =     151,
   fLeptonAtRest =     152,
   fChargeExchange =   161,
+  fNuOscillation =    165,
+  fNuElectron =       166,
+  fNuNucleus =        167,
   fRadioactiveDecay = 210,
   fEMDissociation =   310
 };

@@ -2,6 +2,8 @@
 /tracking/storeTrajectory 1
 /run/initialize
 /gun/sourceGen false
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 /gps/particle e-
 /gps/direction 0 0 -1
 /gps/pos/type Plane

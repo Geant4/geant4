@@ -40,22 +40,15 @@
 
 #include "G4BlineSteppingAction.hh"
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4BlineSteppingAction::
-G4BlineSteppingAction(G4BlineTracer* aBlineTool)
+G4BlineSteppingAction::G4BlineSteppingAction(G4BlineTracer* aBlineTool)
 {
   fBlineTool=aBlineTool;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-G4BlineSteppingAction::~G4BlineSteppingAction()
-{
-}
-
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BlineSteppingAction::UserSteppingAction(const G4Step*)
-{ 
+{
 }

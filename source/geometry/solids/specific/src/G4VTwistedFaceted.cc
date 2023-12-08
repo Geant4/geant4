@@ -288,9 +288,35 @@ void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
 void G4VTwistedFaceted::BoundingLimits(G4ThreeVector& pMin,
                                        G4ThreeVector& pMax) const
 {
-  G4double maxRad = std::sqrt(fDx*fDx + fDy*fDy);
-  pMin.set(-maxRad,-maxRad,-fDz);
-  pMax.set( maxRad, maxRad, fDz);
+  G4double cosPhi = std::cos(fPhi);
+  G4double sinPhi = std::sin(fPhi);
+  G4double tanTheta = std::tan(fTheta);
+  G4double tanAlpha = fTAlph;
+
+  G4double xmid1 = fDy1*tanAlpha;
+  G4double x1 = std::abs(xmid1 + fDx1);
+  G4double x2 = std::abs(xmid1 - fDx1);
+  G4double x3 = std::abs(xmid1 + fDx2);
+  G4double x4 = std::abs(xmid1 - fDx2);
+  G4double xmax1 = std::max(std::max(std::max(x1, x2), x3), x4);
+  G4double rmax1 = std::sqrt(xmax1*xmax1 + fDy1*fDy1);
+
+  G4double xmid2 = fDy2*tanAlpha;
+  G4double x5 = std::abs(xmid2 + fDx3);
+  G4double x6 = std::abs(xmid2 - fDx3);
+  G4double x7 = std::abs(xmid2 + fDx4);
+  G4double x8 = std::abs(xmid2 - fDx4);
+  G4double xmax2 = std::max(std::max(std::max(x5, x6), x7), x8);
+  G4double rmax2 = std::sqrt(xmax2*xmax2 + fDy2*fDy2);
+
+  G4double x0 = fDz*tanTheta*cosPhi;
+  G4double y0 = fDz*tanTheta*sinPhi;
+  G4double xmin = std::min(-x0 - rmax1, x0 - rmax2);
+  G4double ymin = std::min(-y0 - rmax1, y0 - rmax2);
+  G4double xmax = std::max(-x0 + rmax1, x0 + rmax2);
+  G4double ymax = std::max(-y0 + rmax1, y0 + rmax2);
+  pMin.set(xmin, ymin,-fDz);
+  pMax.set(xmax, ymax, fDz);
 }
 
 

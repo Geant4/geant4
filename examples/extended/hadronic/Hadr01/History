@@ -4,8 +4,24 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-06 V. Ivanchenko (exhadr01-V11-01-04)
+- Hadr01.cc - prepare PhysicsList for neutrino and charge exchange physics
+  hadr01.in - added integration test of neutrino and charge exchange physics
+  HistoManager - improved verbose printout
+
+## 2023-10-05 V. Ivanchenko (exhadr01-V11-01-03)
+- Fixed bug in profile histogram, removed methods not needed, replaced
+  virtual keywords with override, used default and deleted constructor
+  in modified classes
+
+## 2023-08-03 V. Ivanchenko (exhadr01-V11-01-02)
+- Hadr01.cc - added possibility to change transition energy cascade/string in 
+  the command line; added possibility to enable charge exchange physics in the
+  command line
+- HistoManager - added option key to print internal Bertini x-section
+
 ## 2023-05-22 V. Ivanchenko (exhadr01-V11-01-01)
-- HistoManager - added protection agains secondary zero-energy particles
+- HistoManager - added protection against secondary zero-energy particles
 
 ## 2022-12-30 V. Ivanchenko (exhadr01-V11-01-00)
 - Added UI commands to enable neutron general process and extra macro file

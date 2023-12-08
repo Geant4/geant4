@@ -5,6 +5,20 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (g3tog4Tests-V11-01-02)
+- Updated vis.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-11-14 I. Hrivnacova (g3tog4Tests-V11-01-01)
+- Fixes for Doxygen:
+  Move class description comments after namespace
+
+## 2023-11-09 I. Hrivnacova (g3tog4Tests-V11-01-00)
+- Coding guidelines - document macros in README files
+- Removed unused macro init.mac
+- Updated common directory (excommon-V11-01-00)
+
 ## 2022-11-09 I. Hrivnacova (g3tog4Tests-V11-00-02)
 - Removed common examples and test from the top clGeometry directory
   (added by mistake in the previous update)

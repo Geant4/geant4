@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,27 +35,20 @@
 #ifndef G4He3_h
 #define G4He3_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                            He3                                 ###
-// ######################################################################
 
 class G4He3 : public G4Ions
 {
- private:
-   static G4He3* theInstance;
-   G4He3(){}
-   ~G4He3() override= default;
+  public:
+    static G4He3* Definition();
+    static G4He3* He3Definition();
+    static G4He3* He3();
 
- public:
-   static G4He3* Definition();
-   static G4He3* He3Definition();
-   static G4He3* He3();
+  private:
+    G4He3() {}
+    ~G4He3() override = default;
+
+    static G4He3* theInstance;
 };
 
 #endif
-

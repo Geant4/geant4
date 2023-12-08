@@ -49,17 +49,15 @@ public:
 
   explicit G4EvaporationDefaultGEMFactory(G4VEvaporationChannel* photoEvaporation);
 
-  virtual ~G4EvaporationDefaultGEMFactory();
+  ~G4EvaporationDefaultGEMFactory() override = default;
 
-  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
+  std::vector<G4VEvaporationChannel*>* GetChannel() override;
 
-private:
-
-  G4EvaporationDefaultGEMFactory(const G4EvaporationDefaultGEMFactory & ) = delete;
-  const G4EvaporationDefaultGEMFactory & operator=(const G4EvaporationDefaultGEMFactory & val) = delete;
-  G4bool operator==(const G4EvaporationDefaultGEMFactory & val) const = delete;
-  G4bool operator!=(const G4EvaporationDefaultGEMFactory & val) const = delete;
-
+  G4EvaporationDefaultGEMFactory(const G4EvaporationDefaultGEMFactory&) = delete;
+  const G4EvaporationDefaultGEMFactory& operator=
+  (const G4EvaporationDefaultGEMFactory& val) = delete;
+  G4bool operator==(const G4EvaporationDefaultGEMFactory& val) const = delete;
+  G4bool operator!=(const G4EvaporationDefaultGEMFactory& val) const = delete;
 };
 
 #endif

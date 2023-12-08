@@ -43,16 +43,15 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
-
-    virtual     
-    G4VPhysicalVolume* Construct();
+   ~DetectorConstruction() override = default;
+     
+    G4VPhysicalVolume* Construct() override;
                         
     G4double GetWorldSize() {return fWorldSize;}; 
 
   private:
   
-    G4double fWorldSize;
+    G4double fWorldSize = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

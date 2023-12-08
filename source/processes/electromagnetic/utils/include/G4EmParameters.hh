@@ -306,6 +306,9 @@ public:
   void SetWorkerVerbose(G4int val);
   G4int WorkerVerbose() const;
 
+  void SetNumberForFreeVector(G4int val);
+  G4int NumberForFreeVector() const;
+
   void SetTransportationWithMsc(G4TransportationWithMscType val);
   G4TransportationWithMscType TransportationWithMsc() const;
 
@@ -457,6 +460,7 @@ private:
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;
+  G4int nForFreeVector;
   G4int tripletConv;  // 5d model triplet generation type
 
   G4TransportationWithMscType fTransportationWithMsc;

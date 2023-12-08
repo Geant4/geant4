@@ -29,14 +29,13 @@
 //
 //
 // -------------------------------------------------------------
-//      GEANT4 Hadr00
+//      genericPL
 //
-//  Application demonstrating Geant4 hadronic cross sections
+//  Application demonstrating  the usage of G4GenericPhysicsList
+//  to build  the concrete physics list at the run time
 //
-//  Author: V.Ivanchenko 20 June 2008
-//
-//  Modified:
-//
+//  Modified from hadronic/Hadr00/Hadr00.cc
+//     Author: V.Ivanchenko 20 June 2008
 // -------------------------------------------------------------
 //
 //
@@ -101,7 +100,7 @@ int main(int argc,char** argv)
 
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( ! macro.size() ) {
     ui = new G4UIExecutive(argc, argv, session);
   }
@@ -129,7 +128,7 @@ int main(int argc,char** argv)
   }
   else {
     // from vector of physics cobstructor names
-    std::vector<G4String>* myConstructors = new std::vector<G4String>;
+    auto  myConstructors = new std::vector<G4String>;
 
     myConstructors->push_back("G4EmStandardPhysics");
     myConstructors->push_back("G4EmExtraPhysics");

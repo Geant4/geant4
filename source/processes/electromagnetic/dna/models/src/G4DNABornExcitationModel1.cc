@@ -39,12 +39,12 @@ using namespace std;
 
 G4DNABornExcitationModel1::G4DNABornExcitationModel1(const G4ParticleDefinition*,
                                                      const G4String& nam) :
-G4VEmModel(nam), isInitialised(false), fTableData(0)
+G4VEmModel(nam)  
 {
-  fpMolWaterDensity = 0;
+  fpMolWaterDensity = nullptr;
   fHighEnergy = 0;
   fLowEnergy = 0;
-  fParticleDefinition = 0;
+  fParticleDefinition = nullptr;
 
   verboseLevel = 0;
   // Verbosity scale:
@@ -58,7 +58,7 @@ G4VEmModel(nam), isInitialised(false), fTableData(0)
   {
     G4cout << "Born excitation model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
 
   // Selection of stationary mode
 
@@ -70,7 +70,7 @@ G4VEmModel(nam), isInitialised(false), fTableData(0)
 G4DNABornExcitationModel1::~G4DNABornExcitationModel1()
 {
   // Cross section
-  if (fTableData)
+  
     delete fTableData;
 }
 
@@ -85,7 +85,7 @@ void G4DNABornExcitationModel1::Initialise(const G4ParticleDefinition* particle,
     G4cout << "Calling G4DNABornExcitationModel1::Initialise()" << G4endl;
   }
 
-  if(fParticleDefinition != 0 && fParticleDefinition != particle)
+  if(fParticleDefinition != nullptr && fParticleDefinition != particle)
   {
     G4Exception("G4DNABornExcitationModel1::Initialise","em0001",
         FatalException,"Model already initialized for another particle type.");
@@ -233,8 +233,8 @@ G4int G4DNABornExcitationModel1::RandomSelect(G4double k)
 {
   G4int level = 0;
 
-  G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
-  const G4int n = (G4int)fTableData->NumberOfComponents();
+  auto  valuesBuffer = new G4double[fTableData->NumberOfComponents()];
+  const auto  n = (G4int)fTableData->NumberOfComponents();
   G4int i(n);
   G4double value = 0.;
 
@@ -260,7 +260,7 @@ G4int G4DNABornExcitationModel1::RandomSelect(G4double k)
     value -= valuesBuffer[i];
   }
 
-  if (valuesBuffer)
+  
     delete[] valuesBuffer;
 
   return level;

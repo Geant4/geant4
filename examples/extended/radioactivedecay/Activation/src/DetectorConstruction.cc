@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,9 +52,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
- fAbsorMaterial(nullptr), fLAbsor(nullptr), fWorldMaterial(nullptr),
- fWorldVolume(nullptr), fDetectorMessenger(nullptr)
 {
   // default geometrical parameters
   fAbsorThickness = 1*cm;

@@ -40,9 +40,7 @@
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -57,21 +55,21 @@ int main(int argc,char** argv) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Construct a serial run manager
-  auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly);
+  //Creating run manager
+  auto runManager = G4RunManagerFactory::CreateRunManager();
+    
+  if (argc==3) { 
+     G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+     runManager->SetNumberOfThreads(nThreads);
+  }
 
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
   runManager->SetUserInitialization(new PhysicsList());
-  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(det);
-  runManager->SetUserAction(prim);
 
-  // set user action classes
-  RunAction* run;
-  runManager->SetUserAction(run = new RunAction(det,prim));
-  runManager->SetUserAction(new EventAction(run));
-  runManager->SetUserAction(new SteppingAction(det,prim,run));
+  // User action initialization
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

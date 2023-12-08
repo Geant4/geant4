@@ -40,15 +40,15 @@ class F04ActionInitialization : public G4VUserActionInitialization
 {
   public:
     F04ActionInitialization(F04DetectorConstruction*);
-    virtual ~F04ActionInitialization();
+    ~F04ActionInitialization() override = default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    G4VSteppingVerbose* InitializeSteppingVerbose() const override;
 
   private:
-    F04DetectorConstruction* fDetConstruction;
+    F04DetectorConstruction* fDetConstruction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

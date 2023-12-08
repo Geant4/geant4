@@ -31,7 +31,7 @@
 // G4ParticleDefinition and UI.
 //
 //   /particle/manage/nuclide   Nuclide Table control commands
-//   Commands : 
+//   Commands :
 //     lifetime * Set threshold of half-life.
 
 // Author: T.Koi, SLAC - 11 November 2015
@@ -49,7 +49,6 @@ class G4UIcmdWithADoubleAndUnit;
 class G4NuclideTableMessenger : public G4UImessenger
 {
   public:
-
     G4NuclideTableMessenger(G4NuclideTable* nuclideTable = nullptr);
     ~G4NuclideTableMessenger() override;
 
@@ -59,13 +58,12 @@ class G4NuclideTableMessenger : public G4UImessenger
     void SetNewValue(G4UIcommand* command, G4String newValues) override;
 
   private:
-
     G4NuclideTable* theNuclideTable = nullptr;
 
     G4UIdirectory* thisDirectory = nullptr;
-    G4UIcmdWithADoubleAndUnit* halflifeCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* halflifeCmd = nullptr;
     G4UIcmdWithADoubleAndUnit* meanlifeCmd = nullptr;
-    G4UIcmdWithADoubleAndUnit* lToleranceCmd = nullptr; 
+    G4UIcmdWithADoubleAndUnit* lToleranceCmd = nullptr;
 };
 
 #endif

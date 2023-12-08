@@ -43,12 +43,12 @@ class F04RunAction : public G4UserRunAction
   public:
 
     F04RunAction();
-    virtual ~F04RunAction();
+    ~F04RunAction() override;
 
   public:
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
     void  SetRndmFreq(G4int val) {fSaveRndm = val;}
     G4int GetRndmFreq()          {return fSaveRndm;}
@@ -56,11 +56,11 @@ class F04RunAction : public G4UserRunAction
     inline void SetAutoSeed (const G4bool val) {fAutoSeed = val;}
 
   private:
- 
-    F04RunActionMessenger* fRunMessenger;
 
-    G4int fSaveRndm;
-    G4bool fAutoSeed;
+    F04RunActionMessenger* fRunMessenger = nullptr;
+
+    G4int fSaveRndm = 0;
+    G4bool fAutoSeed = false;
 
 };
 

@@ -182,33 +182,32 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   // e-
   particle = G4Electron::Electron();
 
-  G4CoulombScattering* ss = new G4CoulombScattering(false);
+  G4VEmModel* ss = nullptr;
   if(param->UseMottCorrection()) {
-    ss->SetEmModel(new G4eDPWACoulombScatteringModel());
+    ss = new G4eDPWACoulombScatteringModel();
   } else {
-    ss->SetEmModel(new G4eCoulombScatteringModel(false));
+    ss = new G4eCoulombScatteringModel(false);
   }
   ph->RegisterProcess(new G4eIonisation(), particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
 
   G4ePairProduction* ee = new G4ePairProduction();
   ph->RegisterProcess(ee, particle);
-  ph->RegisterProcess(ss, particle);
+  G4EmBuilder::ConstructElectronSSProcess(ss, particle);
 
   // e+
   particle = G4Positron::Positron();
 
-  ss = new G4CoulombScattering(false);
   if(param->UseMottCorrection()) {
-    ss->SetEmModel(new G4eDPWACoulombScatteringModel());
+    ss = new G4eDPWACoulombScatteringModel();
   } else {
-    ss->SetEmModel(new G4eCoulombScatteringModel(false));
+    ss = new G4eCoulombScatteringModel(false);
   }
   ph->RegisterProcess(new G4eIonisation(), particle);
   ph->RegisterProcess(new G4eBremsstrahlung(), particle);
   ph->RegisterProcess(ee, particle);
-  ph->RegisterProcess(ss, particle);
   ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+  G4EmBuilder::ConstructElectronSSProcess(ss, particle);
 
   // generic ion
   particle = G4GenericIon::GenericIon();
@@ -217,8 +216,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   ionIoni->SetFluctModel(fluc);
   ionIoni->SetEmModel(new G4LindhardSorensenIonModel());
   ph->RegisterProcess(ionIoni, particle);
-  ss = new G4CoulombScattering(false);
-  ph->RegisterProcess(ss, particle);
+  ph->RegisterProcess(new G4CoulombScattering(false), particle);
 
   // muons, hadrons, ions
   G4EmBuilder::ConstructChargedSS(hmsc);

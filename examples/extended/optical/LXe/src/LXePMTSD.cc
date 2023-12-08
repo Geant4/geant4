@@ -49,11 +49,6 @@
 
 LXePMTSD::LXePMTSD(G4String name)
   : G4VSensitiveDetector(name)
-  , fPMTHitCollection(nullptr)
-  , fPMTPositionsX(nullptr)
-  , fPMTPositionsY(nullptr)
-  , fPMTPositionsZ(nullptr)
-  , fHitCID(-1)
 {
   collectionName.insert("pmtHitCollection");
 }
@@ -151,7 +146,7 @@ G4bool LXePMTSD::ProcessHits_boundary(const G4Step* aStep, G4TouchableHistory*)
   }
   else
   {  // sphere enabled
-    LXeUserTrackInformation* trackInfo =
+    auto trackInfo =
       (LXeUserTrackInformation*) aStep->GetTrack()->GetUserInformation();
     if(trackInfo->GetTrackStatus() & hitSphere)
       // only draw this hit if the photon has hit the sphere first

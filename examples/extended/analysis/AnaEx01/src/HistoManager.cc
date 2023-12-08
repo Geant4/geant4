@@ -47,10 +47,6 @@ HistoManager::HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager() = default;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void HistoManager::Book()
 {
   // Create or get analysis manager

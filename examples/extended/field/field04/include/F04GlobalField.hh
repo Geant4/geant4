@@ -62,7 +62,7 @@
 //  represents an element with an EM field must add the appropriate
 //  ElementField to the global GlobalField object.
 
-typedef std::vector<F04ElementField*> FieldList;
+using FieldList = std::vector<F04ElementField *>;
 
 class F04GlobalField : public G4ElectroMagneticField {
 //class F04GlobalField : public G4MagneticField {
@@ -78,7 +78,7 @@ private:
 
 public:
 
-  virtual ~F04GlobalField();
+  ~F04GlobalField() override;
 
   /// GetObject() returns the single F04GlobalField object.
   /// It is constructed, if necessary.
@@ -88,10 +88,10 @@ public:
   /// GetFieldValue() returns the field value at a given point[].
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
-  virtual void GetFieldValue(const G4double* point, G4double* field) const;
+  void GetFieldValue(const G4double* point, G4double* field) const override;
 
   /// DoesFieldChangeEnergy() returns true.
-  virtual G4bool DoesFieldChangeEnergy() const { return true; }
+  G4bool DoesFieldChangeEnergy() const override { return true; }
 
   /// AddElementField() adds the ElementField object for a single
   /// element to the global field.
@@ -144,31 +144,31 @@ private:
 
   static G4ThreadLocal F04GlobalField* fObject;
 
-  G4int fNfp;
-  G4bool fFirst;
+  G4int fNfp = 0;
+  G4bool fFirst = true;
 
-  FieldList* fFields;
+  FieldList* fFields = nullptr;
 
-  const F04ElementField **fFp;
+  const F04ElementField **fFp = nullptr;
 
 private:
 
-  // A. INVARIANTS: 
+  // A. INVARIANTS:
   // --------------
   // INVARIANT: an integer to indicate the type of RK integration method ('stepper') used
-  G4int fStepperType;
+  G4int fStepperType = 4; // ClassicalRK4 is default stepper;
 
   // INVARIANTS: Accuracy parameters of field propagation (and the integration it uses.)
   // 1. These values are lengths - initialised in src
-  G4double fMinStep;
-  G4double fDeltaChord;
-  G4double fDeltaOneStep;
-  G4double fDeltaIntersection;
+  G4double fMinStep    = 0.01 * CLHEP::mm;
+  G4double fDeltaChord = 3.0 * CLHEP::mm;
+  G4double fDeltaOneStep = 0.01 * CLHEP::mm;
+  G4double fDeltaIntersection = 0.1 * CLHEP::mm;
   // 2. Dimensionless numbers - can initialise here
   G4double fEpsMin = 2.5e-7; // Relative accuracy of integration (minimum)
   G4double fEpsMax = 0.001;  // Relative accuracy of integration (maximum)
 
-  // B. STATE: objects which carry out the propagation and are modified during tracking 
+  // B. STATE: objects which carry out the propagation and are modified during tracking
   // --------
 //  G4Mag_EqRhs*            fEquation;
 //  G4Mag_SpinEqRhs*        fEquation;

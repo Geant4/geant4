@@ -45,16 +45,14 @@ public:
 
   explicit G4EvaporationFactory(G4VEvaporationChannel* photoEvaporation);
 
-  virtual ~G4EvaporationFactory();
+  ~G4EvaporationFactory() override = default;
 
-  virtual std::vector<G4VEvaporationChannel*>* GetChannel();
+  std::vector<G4VEvaporationChannel*>* GetChannel() override;
 
-private:
-
-  G4EvaporationFactory(const G4EvaporationFactory & ) = delete;
-  const G4EvaporationFactory & operator=(const G4EvaporationFactory & val) = delete;
-  G4bool operator==(const G4EvaporationFactory & val) const = delete;
-  G4bool operator!=(const G4EvaporationFactory & val) const = delete;
-
+  G4EvaporationFactory(const G4EvaporationFactory&) = delete;
+  const G4EvaporationFactory& operator=
+  (const G4EvaporationFactory& val) = delete;
+  G4bool operator==(const G4EvaporationFactory& val) const = delete;
+  G4bool operator!=(const G4EvaporationFactory& val) const = delete;
 };
 #endif

@@ -1,0 +1,77 @@
+
+                 Geant4 11.1 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                           10 November 2023
+
+List of fixes included in this public patch since the public release 11.1.2:
+
+  o Configuration:
+    -------------
+    + CMake
+      o Export non-cache variables to Geant4PackageCache to support CMake>=3.27.
+        Addresses problem report #2556.
+    
+  o Externals:
+    ---------
+    + CLHEP
+      o Added missing shootArray() implementation in RandPoissonQ.
+    + G4tools
+      o Updated to version 6.1.1; fixed compilation warnings on Intel/icx
+        compiler and clang-15.
+    + PTL
+      o Disabled optimization of ThreadPool::execute_thread() on Apple/Intel
+        builds. Addressing problem report #2564.
+    
+  o Global:
+    ------
+    + Updated date and version for 11.1.3.
+
+  o Intercoms:
+    ---------
+    + Added missing converter LtoS() in G4UImessenger.
+
+  o Physics Lists:
+    -------------
+    + constructors/decay
+      o G4RadioactiveDecayPhysics: replaced G4RadioactiveDecay with
+        G4Radioactivation to allow running also in biasing mode.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna
+      o Use std::erfc() to avoid precision loss.
+        Fix imported from GitHub PR#58 (https://github.com/Geant4/geant4/pull/58).
+      o Removed unused header inclusion.
+    + low energy
+      o Fix for (rare) infinite loops in G4PenelopeComptonModel.
+        Reported in GitHub PR#61 (https://github.com/Geant4/geant4/pull/61).
+    + utils
+      o In G4TransportationWithMsc, always update momentum direction.
+      o Fixed computation of Birks saturation for compounds in G4EmSaturation.
+        Addressing problem report #2572.
+    + xrays
+      o Added protection against potential infinite loops in G4Cerenkov.
+        Addressing problem report #2555.
+
+  o Examples:
+    --------
+    + extended/parameterisations/Par04
+      o Bump tensorflow to 2.11.1.
+        Fixes GitHub PR#55 (https://github.com/Geant4/geant4/pull/55)
+        and GitHub PR#60 (https://github.com/Geant4/geant4/pull/60).
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.1 series.
+  o  Technical notes distributed for release 11.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.1.3 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

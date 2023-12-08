@@ -38,11 +38,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02DetectorConstruction::Par02DetectorConstruction() {}
+Par02DetectorConstruction::Par02DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02DetectorConstruction::~Par02DetectorConstruction() {}
+Par02DetectorConstruction::~Par02DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

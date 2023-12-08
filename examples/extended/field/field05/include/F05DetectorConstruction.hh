@@ -38,7 +38,7 @@
 #include "globals.hh"
 
 class G4Material;
- 
+
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -50,30 +50,23 @@ class F05Field;
 class F05DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
- 
+
     F05DetectorConstruction();
-    virtual ~F05DetectorConstruction();
+    ~F05DetectorConstruction() override;
 
   public:
- 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
   private:
- 
-     G4Material*        fVacuum;
 
-     G4double           fWorldSizeXY;
-     G4double           fWorldSizeZ;
-
-     G4Box*             fSolidWorld;    //pointer to the solid World
-     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
+     G4Material*        fVacuum = nullptr;
 
      static G4ThreadLocal F05Field* fField;
 
   private:
- 
+
      void DefineMaterials();
 };
 

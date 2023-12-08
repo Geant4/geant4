@@ -58,7 +58,7 @@ public:
   explicit G4HadronElasticPhysics(G4int ver = 1, 
 				  const G4String& nam = "hElasticWEL_CHIPS_XS");
 
-  virtual ~G4HadronElasticPhysics();
+  ~G4HadronElasticPhysics() override = default;
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated

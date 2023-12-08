@@ -74,7 +74,7 @@ Par02PhysicsList::Par02PhysicsList() :  G4VUserPhysicsList() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02PhysicsList::~Par02PhysicsList() {}
+Par02PhysicsList::~Par02PhysicsList() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -144,7 +144,7 @@ void Par02PhysicsList::AddTransportation() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par02PhysicsList::ConstructGeneral() {
-  G4Decay* theDecayProcess = new G4Decay();
+  auto  theDecayProcess = new G4Decay();
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while ( (*particleIterator)() ) {

@@ -72,8 +72,7 @@ void HadCalorimeterHit::Draw()
   // Draw a calorimeter cell with depth propotional to the energy deposition
   G4Transform3D trans(fRot.inverse(),fPos);
   G4VisAttributes attribs;
-  G4Colour colour(1.,0.,0.);
-  attribs.SetColour(colour);
+  attribs.SetColour(G4Colour::Red());
   attribs.SetForceSolid(true);
   G4Box box("dummy",15.*cm,15.*cm,1.*m*fEdep/(0.1*GeV));
   visManager->Draw(box,attribs,trans);

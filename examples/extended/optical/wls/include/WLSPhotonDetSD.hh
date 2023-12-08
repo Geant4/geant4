@@ -45,7 +45,7 @@ class WLSPhotonDetSD : public G4VSensitiveDetector
 {
  public:
   WLSPhotonDetSD(G4String);
-  ~WLSPhotonDetSD();
+  ~WLSPhotonDetSD() override = default;
 
   void Initialize(G4HCofThisEvent*) override;
 
@@ -54,8 +54,8 @@ class WLSPhotonDetSD : public G4VSensitiveDetector
   void EndOfEvent(G4HCofThisEvent*) override;
 
  private:
-  WLSPhotonDetHitsCollection* fPhotonDetHitCollection;
-  G4int fHCID;
+  WLSPhotonDetHitsCollection* fPhotonDetHitCollection = nullptr;
+  G4int fHCID = -1;
 };
 
 #endif

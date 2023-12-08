@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-10 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-01-04)
+- G4EmMessenger, G4NeutrinoPhysicsMessenger - fixed typos
+
+## 2023-11-06 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-01-03)
+- G4EmExtraPhysics - fixed instantiation of e+- nuclear processes
+- G4NeutrinoPhysics - improved neutrino physics
+
+## 2023-10-30 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-01-02)
+- G4EmExtraPhysics, G4EmMessenger - removed neutrino physics
+- G4NeutrinoPhysics, G4NeutrinoPhysicsMessenger - added new physics constructor
+    for neutrino physics and its messenger
+- Clean-up all classes of sub-library
+
+## 2023-10-09 Vladimir Grichine (phys-ctor-glnuclear-V11-01-01)
+- G4EmExtraPhysics, G4EmMessenger - activation of neutrino oscillation
+               and oscillation distance biasing 
+
 ## 2023-02-12 Vladimir Grichine (phys-ctor-glnuclear-V11-01-00)
 - G4EmExtraPhysics - biasing is activated in processes, not XS
 

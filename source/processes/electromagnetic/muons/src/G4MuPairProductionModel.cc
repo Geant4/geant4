@@ -80,44 +80,50 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
+#include "G4ElementDataRegistry.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ModifiedMephi.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4AutoLock.hh"
+
 #include <iostream>
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// static members
-//
-static const G4double ak1 = 6.9;
-static const G4double ak2 = 1.0;
-static const G4int    nzdat = 5;
-static const G4int    zdat[5] = {1, 4, 13, 29, 92};
+const G4int G4MuPairProductionModel::ZDATPAIR[] = {1, 4, 13, 29, 92};
 
-static const G4double xgi[] =
-{ 0.0198550717512320, 0.1016667612931865, 0.2372337950418355, 0.4082826787521750,
-  0.5917173212478250, 0.7627662049581645, 0.8983332387068135, 0.9801449282487680 };
+const G4double G4MuPairProductionModel::xgi[] = {
+    0.0198550717512320, 0.1016667612931865, 0.2372337950418355, 0.4082826787521750,
+    0.5917173212478250, 0.7627662049581645, 0.8983332387068135, 0.9801449282487680
+  };
 
-static const G4double wgi[] =
-{ 0.0506142681451880, 0.1111905172266870, 0.1568533229389435, 0.1813418916891810,
-  0.1813418916891810, 0.1568533229389435, 0.1111905172266870, 0.0506142681451880 };
+const G4double G4MuPairProductionModel::wgi[] = {
+    0.0506142681451880, 0.1111905172266870, 0.1568533229389435, 0.1813418916891810,
+    0.1813418916891810, 0.1568533229389435, 0.1111905172266870, 0.0506142681451880
+  };
+
+namespace
+{
+  G4Mutex theMuPairMutex = G4MUTEX_INITIALIZER;
+
+  const G4double ak1 = 6.9;
+  const G4double ak2 = 1.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
 
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    factorForCross(CLHEP::fine_structure_const*CLHEP::fine_structure_const*
-		   CLHEP::classic_electr_radius*CLHEP::classic_electr_radius*
-		   4./(3.*CLHEP::pi)),
-    sqrte(sqrt(G4Exp(1.))),
-    minPairEnergy(4.*CLHEP::electron_mass_c2),
-    lowestKinEnergy(0.85*CLHEP::GeV)
+  factorForCross(CLHEP::fine_structure_const*CLHEP::fine_structure_const*
+		 CLHEP::classic_electr_radius*CLHEP::classic_electr_radius*
+		 4./(3.*CLHEP::pi)),
+  sqrte(std::sqrt(G4Exp(1.))),
+  minPairEnergy(4.*CLHEP::electron_mass_c2),
+  lowestKinEnergy(0.85*CLHEP::GeV)
 {
   nist = G4NistManager::Instance();
 
@@ -149,33 +155,62 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
 { 
   SetParticle(p); 
 
-  if(nullptr == fParticleChange) { 
+  if (nullptr == fParticleChange) { 
     fParticleChange = GetParticleChangeForLoss();
+
+    // define scale of internal table for each thread only once
+    if (0 == nbine) {
+      emin = std::max(lowestKinEnergy, LowEnergyLimit());
+      emax = std::max(HighEnergyLimit(), emin*2);
+      nbine = std::size_t(nYBinPerDecade*std::log10(emax/emin));
+      if(nbine < 3) { nbine = 3; }
+
+      ymin = G4Log(minPairEnergy/emin);
+      dy = -ymin/G4double(nbiny);
+    }
+    if (p == particle) {
+      G4int pdg = std::abs(p->GetPDGEncoding());
+      if (pdg == 2212) {
+	dataName = "pEEPairProd";
+      } else if (pdg == 321) {
+	dataName = "kaonEEPairProd";
+      } else if (pdg == 211) {
+	dataName = "pionEEPairProd";
+      } else if (pdg == 11) {
+	dataName = "eEEPairProd";
+      } else if (pdg == 13) {
+        if (GetName() == "muToMuonPairProd") {
+          dataName = "muMuMuPairProd";
+	} else {
+	  dataName = "muEEPairProd";
+	}
+      } 
+    }
   }
 
   // for low-energy application this process should not work
   if(lowestKinEnergy >= HighEnergyLimit()) { return; }
 
-  // define scale of internal table for each thread only once
-  if(0 == nbine) {
-    emin = std::max(lowestKinEnergy, LowEnergyLimit());
-    emax = std::max(HighEnergyLimit(), emin*2);
-    nbine = size_t(nYBinPerDecade*std::log10(emax/emin));
-    if(nbine < 3) { nbine = 3; }
-
-    ymin = G4Log(minPairEnergy/emin);
-    dy   = -ymin/G4double(nbiny);
-  }
-
-  if(IsMaster() && p == particle) { 
-    if(nullptr == fElementData) { 
-      fElementData = new G4ElementData();
-      G4bool dataFile = G4EmParameters::Instance()->RetrieveMuDataFromFile();
-      if(dataFile)  { dataFile = RetrieveTables(); }
-      if(!dataFile) { MakeSamplingTables(); }
-      if(fTableToFile) { StoreTables(); }
-    }    
-    InitialiseElementSelectors(p, cuts); 
+  if (p == particle) {
+    fElementData =
+      G4ElementDataRegistry::Instance()->GetElementDataByName(dataName);
+    if (nullptr == fElementData) { 
+      G4AutoLock l(&theMuPairMutex);
+      fElementData =
+	G4ElementDataRegistry::Instance()->GetElementDataByName(dataName);
+      if (nullptr == fElementData) { 
+	fElementData = new G4ElementData(NZDATPAIR);
+	fElementData->SetName(dataName);
+      }
+      G4bool useDataFile = G4EmParameters::Instance()->RetrieveMuDataFromFile();
+      if (useDataFile)  { useDataFile = RetrieveTables(); }
+      if (!useDataFile) { MakeSamplingTables(); }
+      if (fTableToFile) { StoreTables(); }
+      l.unlock();
+    }
+    if (IsMaster()) {
+      InitialiseElementSelectors(p, cuts);
+    }
   }
 }
 
@@ -186,7 +221,6 @@ void G4MuPairProductionModel::InitialiseLocal(const G4ParticleDefinition* p,
 {
   if(p == particle && lowestKinEnergy < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
-    fElementData = masterModel->GetElementData();
   }
 }
 
@@ -207,7 +241,7 @@ G4double G4MuPairProductionModel::ComputeDEDXPerVolume(
                                    material->GetAtomicNumDensityVector();
 
   //  loop for elements in the material
-  for (size_t i=0; i<material->GetNumberOfElements(); ++i) {
+  for (std::size_t i=0; i<material->GetNumberOfElements(); ++i) {
      G4double Z = (*theElementVector)[i]->GetZ();
      G4double tmax = MaxSecondaryEnergyForElement(kineticEnergy, Z);
      G4double loss = ComputMuPairLoss(Z, kineticEnergy, cutEnergy, tmax);
@@ -234,14 +268,12 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   G4double aaa = G4Log(minPairEnergy);
   G4double bbb = G4Log(cut);
 
-  G4int kkk = G4lrint((bbb-aaa)/ak1+ak2);
-  if(kkk > 8) { kkk = 8; }
-  else if (kkk < 1) { kkk = 1; }
+  G4int kkk = std::min(std::max(G4lrint((bbb-aaa)/ak1 + ak2), 8), 1);
   G4double hhh = (bbb-aaa)/kkk;
   G4double x = aaa;
 
   for (G4int l=0 ; l<kkk; ++l) {
-    for (G4int ll=0; ll<8; ++ll) {
+    for (G4int ll=0; ll<NINTPAIR; ++ll) {
       G4double ep = G4Exp(x+xgi[ll]*hhh);
       loss += wgi[ll]*ep*ep*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
@@ -266,15 +298,13 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
 
   G4double aaa = G4Log(cut);
   G4double bbb = G4Log(tmax);
-  G4int kkk = G4lrint((bbb-aaa)/ak1 + ak2);
-  if(kkk > 8) { kkk = 8; }
-  else if (kkk < 1) { kkk = 1; }
+  G4int kkk = std::min(std::max(G4lrint((bbb-aaa)/ak1 + ak2), 8), 1);
 
   G4double hhh = (bbb-aaa)/(kkk);
   G4double x = aaa;
 
-  for(G4int l=0; l<kkk; ++l) {
-    for(G4int i=0; i<8; ++i) {
+  for (G4int l=0; l<kkk; ++l) {
+    for (G4int i=0; i<NINTPAIR; ++i) {
       G4double ep = G4Exp(x + xgi[i]*hhh);
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
@@ -314,7 +344,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   G4double a0 = 1.0 / (totalEnergy * residEnergy);
   G4double alf = 4.0 * electron_mass_c2 / pairEnergy;
-  G4double rt = sqrt(1.0 - alf);
+  G4double rt = std::sqrt(1.0 - alf);
   G4double delta = 6.0 * particleMass * particleMass * a0;
   G4double tmnexp = alf/(1.0 + rt) + delta*rt;
 
@@ -322,8 +352,8 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   G4double tmn = G4Log(tmnexp);
 
-  G4double massratio      = particleMass/electron_mass_c2;
-  G4double massratio2     = massratio*massratio;
+  G4double massratio = particleMass/CLHEP::electron_mass_c2;
+  G4double massratio2 = massratio*massratio;
   G4double inv_massratio2 = 1.0 / massratio2;
 
   // zeta calculation
@@ -348,13 +378,13 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double xi0 = 0.5*massratio2*beta;
 
   // Gaussian integration in ln(1-ro) ( with 8 points)
-  G4double rho[8];
-  G4double rho2[8];
-  G4double xi[8];
-  G4double xi1[8];
-  G4double xii[8];
+  G4double rho[NINTPAIR];
+  G4double rho2[NINTPAIR];
+  G4double xi[NINTPAIR];
+  G4double xi1[NINTPAIR];
+  G4double xii[NINTPAIR];
 
-  for (G4int i = 0; i < 8; ++i)
+  for (G4int i = 0; i < NINTPAIR; ++i)
   {
     rho[i] = G4Exp(tmn*xgi[i]) - 1.0; // rho = -asymmetry
     rho2[i] = rho[i] * rho[i];
@@ -363,13 +393,13 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
     xii[i] = 1.0 / xi[i];
   }
 
-  G4double ye1[8];
-  G4double ym1[8];
+  G4double ye1[NINTPAIR];
+  G4double ym1[NINTPAIR];
 
   G4double b40 = 4.0 * beta;
   G4double b62 = 6.0 * beta + 2.0;
 
-  for (G4int i = 0; i < 8; ++i)
+  for (G4int i = 0; i < NINTPAIR; ++i)
   {
     G4double yeu = (b40 + 5.0) + (b40 - 1.0) * rho2[i];
     G4double yed = b62*G4Log(3.0 + xii[i]) + (2.0 * beta - 1.0)*rho2[i] - b40;
@@ -382,10 +412,10 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
     ym1[i] = 1.0 + ymu / ymd;
   }
 
-  G4double be[8];
-  G4double bm[8];
+  G4double be[NINTPAIR];
+  G4double bm[NINTPAIR];
 
-  for(G4int i = 0; i < 8; ++i) {
+  for(G4int i = 0; i < NINTPAIR; ++i) {
     if(xi[i] <= 1000.0) {
       be[i] = ((2.0 + rho2[i])*(1.0 + beta) +
 	       xi[i]*(3.0 + rho2[i]))*G4Log(1.0 + xii[i]) +
@@ -405,9 +435,9 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   G4double sum = 0.0;
 
-  for (G4int i = 0; i < 8; ++i) {
+  for (G4int i = 0; i < NINTPAIR; ++i) {
     G4double screen = screen0*xi1[i]/(1.0 - rho2[i]);
-    G4double ale = G4Log(bbb/z13*sqrt(xi1[i]*ye1[i])/(1. + screen*ye1[i]));
+    G4double ale = G4Log(bbb/z13*std::sqrt(xi1[i]*ye1[i])/(1. + screen*ye1[i]));
     G4double cre = 0.5*G4Log(1. + 2.25*z23*xi1[i]*ye1[i]*inv_massratio2);
 
     G4double fe = (ale-cre)*be[i];
@@ -452,13 +482,13 @@ void G4MuPairProductionModel::MakeSamplingTables()
 {
   G4double factore = G4Exp(G4Log(emax/emin)/G4double(nbine));
 
-  for (G4int iz=0; iz<nzdat; ++iz) {
+  for (G4int iz=0; iz<NZDATPAIR; ++iz) {
 
-    G4double Z = zdat[iz];
+    G4double Z = ZDATPAIR[iz];
     G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
     G4double kinEnergy = emin;
 
-    for (size_t it=0; it<=nbine; ++it) {
+    for (std::size_t it=0; it<=nbine; ++it) {
 
       pv->PutY(it, G4Log(kinEnergy/CLHEP::MeV));
       G4double maxPairEnergy = MaxSecondaryEnergyForElement(kinEnergy, Z);
@@ -471,7 +501,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       G4double coef = G4Log(minPairEnergy/kinEnergy)/ymin;
       G4double ymax = G4Log(maxPairEnergy/kinEnergy)/coef;
       G4double fac  = (ymax - ymin)/dy;
-      size_t imax   = (size_t)fac;
+      std::size_t imax   = (std::size_t)fac;
       fac -= (G4double)imax;
    
       G4double xSec = 0.0;
@@ -485,7 +515,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       pv->PutValue(0, it, 0.0);
       if(0 == it) { pv->PutX(nbiny, 0.0); }
 
-      for (size_t i=0; i<nbiny; ++i) {
+      for (std::size_t i=0; i<nbiny; ++i) {
 
         if(0 == it) { pv->PutX(i, x); }
 
@@ -511,7 +541,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       // to avoid precision lost
       if(it+1 == nbine) { kinEnergy = emax; }
     }
-    fElementData->InitialiseForElement(zdat[iz], pv);
+    fElementData->InitialiseForElement(iz, pv);
   }
 }
 
@@ -530,7 +560,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   //         << aDynamicParticle->GetDefinition()->GetParticleName() << G4endl;
   G4double totalEnergy   = kinEnergy + particleMass;
   G4double totalMomentum = 
-    sqrt(kinEnergy*(kinEnergy + 2.0*particleMass));
+    std::sqrt(kinEnergy*(kinEnergy + 2.0*particleMass));
 
   G4ThreeVector partDirection = aDynamicParticle->GetMomentumDirection();
 
@@ -543,7 +573,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   G4double maxEnergy = std::min(tmax, maxPairEnergy);
   G4double minEnergy = std::max(tmin, minPairEnergy);
 
-  if(minEnergy >= maxEnergy) { return; }
+  if (minEnergy >= maxEnergy) { return; }
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
   // << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
   //    << " ymin= " << ymin << " dy= " << dy << G4endl;
@@ -563,18 +593,18 @@ void G4MuPairProductionModel::SampleSecondaries(
 
   // select sample table via Z
   G4int iz1(0), iz2(0);
-  for(G4int iz=0; iz<nzdat; ++iz) { 
-    if(currentZ == zdat[iz]) {
-      iz1 = iz2 = currentZ; 
+  for (G4int iz=0; iz<NZDATPAIR; ++iz) { 
+    if(currentZ == ZDATPAIR[iz]) {
+      iz1 = iz2 = iz; 
       break;
-    } else if(currentZ < zdat[iz]) {
-      iz2 = zdat[iz];
-      if(iz > 0) { iz1 = zdat[iz-1]; }
+    } else if(currentZ < ZDATPAIR[iz]) {
+      iz2 = iz;
+      if(iz > 0) { iz1 = iz-1; }
       else { iz1 = iz2; }
       break;
     } 
   }
-  if(0 == iz1) { iz1 = iz2 = zdat[nzdat-1]; }
+  if (0 == iz1) { iz1 = iz2 = NZDATPAIR-1; }
 
   G4double pairEnergy = 0.0;
   G4int count = 0;
@@ -587,8 +617,8 @@ void G4MuPairProductionModel::SampleSecondaries(
     G4double x = FindScaledEnergy(iz1, rand, logTkin, yymin, yymax);
     if(iz1 != iz2) {
       G4double x2 = FindScaledEnergy(iz2, rand, logTkin, yymin, yymax);
-      G4double lz1= nist->GetLOGZ(iz1);
-      G4double lz2= nist->GetLOGZ(iz2);
+      G4double lz1= nist->GetLOGZ(ZDATPAIR[iz1]);
+      G4double lz2= nist->GetLOGZ(ZDATPAIR[iz2]);
       //G4cout << count << ".  x= " << x << "  x2= " << x2 
       //             << " Z1= " << iz1 << " Z2= " << iz2 << G4endl;
       x += (x2 - x)*(lnZ - lz1)/(lz2 - lz1);
@@ -605,7 +635,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   // sample r=(E+-E-)/pairEnergy  ( uniformly .....)
   G4double rmax =
     (1.-6.*particleMass*particleMass/(totalEnergy*(totalEnergy-pairEnergy)))
-                                       *sqrt(1.-minPairEnergy/pairEnergy);
+    *std::sqrt(1.-minPairEnergy/pairEnergy);
   G4double r = rmax * (-1.+2.*G4UniformRand()) ;
 
   // compute energies from pairEnergy,r
@@ -653,20 +683,20 @@ void G4MuPairProductionModel::SampleSecondaries(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
-G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
+G4MuPairProductionModel::FindScaledEnergy(G4int iz, G4double rand,
 					  G4double logTkin,
 					  G4double yymin, G4double yymax)
 {
   G4double res = yymin;
-  G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
-  if(nullptr != pv) { 
+  G4Physics2DVector* pv = fElementData->GetElement2DData(iz);
+  if (nullptr != pv) { 
     G4double pmin = pv->Value(yymin, logTkin);
     G4double pmax = pv->Value(yymax, logTkin);
     G4double p0   = pv->Value(0.0, logTkin);
-    if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
+    if(p0 <= 0.0) { DataCorrupted(ZDATPAIR[iz], logTkin); }
     else { res = pv->FindLinearX((pmin + rand*(pmax - pmin))/p0, logTkin); }
   } else {
-    DataCorrupted(Z, logTkin); 
+    DataCorrupted(ZDATPAIR[iz], logTkin); 
   }
   return res;
 }
@@ -687,8 +717,8 @@ void G4MuPairProductionModel::DataCorrupted(G4int Z, G4double logTkin) const
 
 void G4MuPairProductionModel::StoreTables() const
 {
-  for (G4int iz=0; iz<nzdat; ++iz) {
-    G4int Z = zdat[iz];
+  for (G4int iz=0; iz<NZDATPAIR; ++iz) {
+    G4int Z = ZDATPAIR[iz];
     G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
     if(nullptr == pv) { 
       DataCorrupted(Z, 1.0);
@@ -705,27 +735,18 @@ void G4MuPairProductionModel::StoreTables() const
 
 G4bool G4MuPairProductionModel::RetrieveTables()
 {
-  const char* path = G4FindDataDir("G4LEDATA");
-  G4String dir("");
-  if (path) { 
-    std::ostringstream ost;
-    ost << path << "/mupair/";
-    dir = ost.str(); 
-  } else {
-    dir = "./mupair/";
-  }
-
-  for (G4int iz=0; iz<nzdat; ++iz) {
-    G4double Z = zdat[iz];
+  for (G4int iz=0; iz<NZDATPAIR; ++iz) {
+    G4double Z = ZDATPAIR[iz];
     G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
     std::ostringstream ss;
-    ss << dir << particle->GetParticleName() << Z << ".dat";
+    ss << G4EmParameters::Instance()->GetDirLEDATA() << "/mupair/"
+       << particle->GetParticleName() << Z << ".dat";
     std::ifstream infile(ss.str(), std::ios::in);
     if(!pv->Retrieve(infile)) { 
       delete pv;
       return false; 
     }
-    fElementData->InitialiseForElement(Z, pv);
+    fElementData->InitialiseForElement(iz, pv);
   }
   return true;
 }

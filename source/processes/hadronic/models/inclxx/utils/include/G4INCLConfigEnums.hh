@@ -74,10 +74,7 @@ namespace G4INCL {
   enum DeExcitationType {
     DeExcitationNone
 #ifdef INCL_DEEXCITATION_ABLAXX
-    , DeExcitationABLAv3p
-#endif
-#ifdef INCL_DEEXCITATION_ABLACXX
-    , DeExcitationABLACXX
+    , DeExcitationABLAXX
 #endif
 #ifdef INCL_DEEXCITATION_ABLA07
     , DeExcitationABLA07
@@ -122,7 +119,8 @@ namespace G4INCL {
     MultiPionsCrossSections,
 	TruncatedMultiPionsCrossSections,
 	MultiPionsAndResonancesCrossSections,
-	StrangenessCrossSections
+	StrangenessCrossSections,
+  AntiparticlesCrossSections
   };
 
   // Enumerator for phase-space generator

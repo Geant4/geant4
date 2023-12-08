@@ -43,12 +43,7 @@
 
 F02PrimaryGeneratorMessenger::F02PrimaryGeneratorMessenger(
                                            F02PrimaryGeneratorAction* action)
- : G4UImessenger(),
-   fAction(action),
-   fRndmCmd(0),
-   fSetXVertexCmd(0),
-   fSetYVertexCmd(0),
-   fSetZVertexCmd(0)
+ : fAction(action)
 {
   fRndmCmd = new G4UIcmdWithAString("/gun/random",this);
   fRndmCmd->SetGuidance("Shoot randomly the incident particle.");
@@ -57,7 +52,7 @@ F02PrimaryGeneratorMessenger::F02PrimaryGeneratorMessenger(
   fRndmCmd->SetDefaultValue("off");
   fRndmCmd->SetCandidates("on off");
   fRndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
- 
+
   fSetXVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/xvertex",this);
   fSetXVertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
   fSetXVertexCmd->SetParameterName("xv",true);

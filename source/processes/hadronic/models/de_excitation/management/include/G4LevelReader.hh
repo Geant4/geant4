@@ -81,8 +81,6 @@ private:
   G4bool ReadDataItem(std::istream& dataFile, G4float& x);
 
   G4bool ReadDataItem(std::istream& dataFile, G4int& x);
-
-  G4bool ReadDataItem(std::istream& dataFile, G4String& x);
   
   const std::vector<G4float>* NormalizedICCProbability(G4int Z);
 
@@ -95,9 +93,9 @@ private:
   G4double fTransEnergy = 0.;
   G4double fTime = 0.;
   G4double fTimeFactor;
+  G4double fSpin = 0.;
 
   G4float fProb = 0.f;
-  G4float fSpin = 0.f;
   G4float fAlpha = 0.f;
   G4float fAlphaMax;
   G4float fRatio = 0.f;
@@ -121,7 +119,6 @@ private:
   char buffer[20] = {' '};
   char buff1[14] = {' '};
   char buff2[8] = {' '};
-  char bufp[3] = {' '};
 
   std::vector<G4double> vEnergy;
   std::vector<G4int> vSpin;

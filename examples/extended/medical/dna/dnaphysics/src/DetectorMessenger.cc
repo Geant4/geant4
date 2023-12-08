@@ -42,7 +42,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
-
+#include "G4UIcmdWithABool.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* Det, PhysicsList* PL)
@@ -62,6 +62,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det, PhysicsList* PL)
   fpPhysCmd->SetParameterName("Physics", false);
   fpPhysCmd->AvailableForStates(G4State_PreInit);
   fpPhysCmd->SetToBeBroadcasted(false);
+
+  fpTrackingCutCmd = new G4UIcmdWithABool("/dna/test/addIonsTrackingCut", this);
+  fpTrackingCutCmd->SetGuidance("Added Ions Tracking Cut");
+  fpTrackingCutCmd->SetDefaultValue(false);
+  fpTrackingCutCmd->AvailableForStates(G4State_PreInit);
+  fpTrackingCutCmd->SetToBeBroadcasted(false);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,6 +78,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fpMaterCmd;
   delete fpPhysCmd;
   delete fpDetDir;
+  delete fpTrackingCutCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +87,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fpMaterCmd) fpDetector->SetMaterial(newValue);
   else if (command == fpPhysCmd) fpPhysList->AddPhysics(newValue);
+  if (command == fpTrackingCutCmd) fpPhysList->SetTrackingCut(
+      fpTrackingCutCmd->GetNewBoolValue(newValue));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

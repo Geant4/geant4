@@ -70,8 +70,8 @@ G4NistElementBuilder::G4NistElementBuilder(G4int vb) : verbose(vb)
   nIsotopes[0] = 0;
   relAbundance[0] = 0.0;
   Initialise();
-  for (int& i : elmIndex) {
-    i = -1;
+  for (G4int i=0; i<maxNumElements; ++i) {
+    elmIndex[i] = -1;
   }
 }
 

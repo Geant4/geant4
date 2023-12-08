@@ -25,7 +25,6 @@
 //
 //
 
-#include <globals.hh>
 #include <G4DNAMolecularReaction.hh>
 #include <G4DNAMolecularReactionTable.hh>
 #include <G4DNAMolecularStepByStepModel.hh>
@@ -35,11 +34,14 @@
 #include <G4Molecule.hh>
 #include <G4ReferenceCast.hh>
 #include <G4VDNAReactionModel.hh>
+#include <globals.hh>
+
+#include <memory>
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4String& name)
     : G4DNAMolecularStepByStepModel(name,
-                                    std::unique_ptr<G4DNAMoleculeEncounterStepper>(new G4DNAMoleculeEncounterStepper()),
-                                    std::unique_ptr<G4DNAMolecularReaction>(new G4DNAMolecularReaction()))
+                                    std::make_unique<G4DNAMoleculeEncounterStepper>(),
+                                    std::make_unique<G4DNAMolecularReaction>())
 {
 }
 
@@ -66,7 +68,7 @@ void G4DNAMolecularStepByStepModel::Initialize()
 
     if(!fpReactionModel)
     {
-        fpReactionModel.reset(new G4DNASmoluchowskiReactionModel());
+        fpReactionModel = std::make_unique<G4DNASmoluchowskiReactionModel>();
     }
 
     fpReactionModel->SetReactionTable((const G4DNAMolecularReactionTable*) fpReactionTable);

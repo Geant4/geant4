@@ -139,7 +139,7 @@ inline G4double G4PhysicsVector::Interpolation(const std::size_t idx,
 
   G4double res = y1 + b * dy;
 
-  if(useSpline)  // spline interpolation
+  if (useSpline)  // spline interpolation
   {
     const G4double c0 = (2.0 - b) * secDerivative[idx];
     const G4double c1 = (1.0 + b) * secDerivative[idx + 1];
@@ -153,8 +153,30 @@ inline G4double G4PhysicsVector::Interpolation(const std::size_t idx,
 inline std::size_t G4PhysicsVector::ComputeLogVectorBin(
   const G4double loge) const
 {
-  return std::min( static_cast<G4int>((loge - logemin) * invdBin),
-                   static_cast<G4int>(idxmax) );
+  return static_cast<std::size_t>( std::min( static_cast<G4int>((loge - logemin) * invdBin),
+    static_cast<G4int>(idxmax) ) );
+}
+
+// ---------------------------------------------------------------
+inline std::size_t
+G4PhysicsVector::LogBin(const G4double e, const G4double loge) const
+{
+  std::size_t idx =
+  scale[std::min( static_cast<G4int>((loge - lmin1) * iBin1),
+                  static_cast<G4int>(imax1) )];
+  for (; idx <= idxmax; ++idx)
+  {
+    if (e >= binVector[idx] && e <= binVector[idx + 1]) { break; }
+  }
+  return idx;
+}
+
+// ---------------------------------------------------------------
+inline std::size_t G4PhysicsVector::BinaryBin(const G4double e) const
+{
+  // Bin location proposed by K.Genser (FNAL)
+  return std::lower_bound(binVector.cbegin(), binVector.cend(), e) -
+    binVector.cbegin() - 1;
 }
 
 // ---------------------------------------------------------------
@@ -168,14 +190,12 @@ inline std::size_t G4PhysicsVector::GetBin(const G4double e) const
       break;
 
     case T_G4PhysicsLinearVector:
-      bin = std::min( static_cast<G4int>((e - edgeMin) * invdBin),
-                      static_cast<G4int>(idxmax) );
+      bin = static_cast<std::size_t>( std::min( static_cast<G4int>((e - edgeMin) * invdBin),
+                                                static_cast<G4int>(idxmax) ) );
       break;
 
     default:
-      // Bin location proposed by K.Genser (FNAL)
-      bin = std::lower_bound(binVector.cbegin(), binVector.cend(), e) -
-            binVector.cbegin() - 1;
+      bin = (nLogNodes > 0) ? LogBin(e, G4Log(e)) : BinaryBin(e);
   }
   return bin;
 }
@@ -185,12 +205,12 @@ inline G4double
 G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
 {
   G4double res;
-  if(idx + 1 < numberOfNodes &&
-     e >= binVector[idx] && e <= binVector[idx+1])
+  if (idx + 1 < numberOfNodes &&
+      e >= binVector[idx] && e <= binVector[idx+1])
   {
     res = Interpolation(idx, e);
   } 
-  else if(e > edgeMin && e < edgeMax)
+  else if (e > edgeMin && e < edgeMax)
   {
     idx = GetBin(e);
     res = Interpolation(idx, e);
@@ -202,7 +222,7 @@ G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
   } 
   else 
   {
-    res = dataVector[numberOfNodes - 1];
+    res = dataVector[idxmax + 1];
     idx = idxmax;
   }
   return res;
@@ -212,7 +232,7 @@ G4PhysicsVector::Value(const G4double e, std::size_t& idx) const
 inline G4double G4PhysicsVector::Value(G4double e) const
 {
   G4double res;
-  if(e > edgeMin && e < edgeMax)
+  if (e > edgeMin && e < edgeMax)
   {
     const std::size_t idx = GetBin(e);
     res = Interpolation(idx, e);
@@ -223,7 +243,7 @@ inline G4double G4PhysicsVector::Value(G4double e) const
   } 
   else
   {
-    res = dataVector[numberOfNodes - 1];
+    res = dataVector[idxmax + 1];
   }
   return res;
 }
@@ -239,18 +259,39 @@ inline G4double
 G4PhysicsVector::LogVectorValue(const G4double e, const G4double loge) const
 {
   G4double res;
-  if(e > edgeMin && e < edgeMax)
+  if (e > edgeMin && e < edgeMax)
   {
     const std::size_t idx = ComputeLogVectorBin(loge);
     res = Interpolation(idx, e);
   } 
-  else if(e <= edgeMin)
+  else if (e <= edgeMin)
   {
     res = dataVector[0];
   }
   else
   {
-    res = dataVector[numberOfNodes - 1];
+    res = dataVector[idxmax - 1];
+  }
+  return res;
+}
+
+// ---------------------------------------------------------------
+inline G4double 
+G4PhysicsVector::LogFreeVectorValue(const G4double e, const G4double loge) const
+{
+  G4double res;
+  if (e > edgeMin && e < edgeMax)
+  {
+    const std::size_t idx = LogBin(e, loge);
+    res = Interpolation(idx, e);
+  } 
+  else if (e <= edgeMin)
+  {
+    res = dataVector[0];
+  }
+  else
+  {
+    res = dataVector[idxmax + 1];
   }
   return res;
 }

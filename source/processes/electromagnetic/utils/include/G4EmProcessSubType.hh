@@ -67,6 +67,7 @@ enum G4EmProcessSubType
   fScintillation = 22,
   fSynchrotronRadiation = 23,
   fTransitionRadiation = 24,
+  fGammaReflection = 26,
 
   fSurfaceReflection = 25,
   fDarkBremsstrahlung = 40,

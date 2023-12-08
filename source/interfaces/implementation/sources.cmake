@@ -21,6 +21,7 @@ if(GEANT4_USE_QT)
     PUBLIC G4UI_USE_QT
     PRIVATE G4UI_BUILD_QT_SESSION)
   geant4_module_link_libraries(G4UIimplementation PUBLIC G4graphics_reps Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Core)
+  geant4_set_module_property(G4UIimplementation PROPERTY AUTOMOC ON)
 
   # Coupling...
   if(GEANT4_USE_VTK)

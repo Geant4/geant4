@@ -123,8 +123,6 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
   fRindex1 = fRindex2 = 1.;
   fSint1              = 0.;
   fDichroicVector     = nullptr;
-
-  fNumWarnings = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,9 +204,10 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
     }
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
-  else if (stepLength <= 10.*fCarTolerance && fNumWarnings < 10)
+  else if (stepLength <= 10.*fCarTolerance && fNumSmallStepWarnings < 10)
   {  // see bug 2510
-    ++fNumWarnings;
+    ++fNumSmallStepWarnings;
+    if(verboseLevel > 0)
     {
       G4ExceptionDescription ed;
       ed << "G4OpBoundaryProcess: "
@@ -216,7 +215,7 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
          << "This is larger than the threshold " << fCarTolerance/mm << " mm "
             "to set status StepTooSmall." << G4endl
          << "Boundary scattering may be incorrect. ";
-      if(fNumWarnings == 10)
+      if(fNumSmallStepWarnings == 10)
       {
         ed << G4endl << "*** Step size warnings stopped.";
       }
@@ -511,9 +510,20 @@ G4VParticleChange* G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack,
   }
   else
   {
-    G4ExceptionDescription ed;
-    ed << " PostStepDoIt(): Illegal boundary type." << G4endl;
-    G4Exception("G4OpBoundaryProcess", "OpBoun04", JustWarning, ed);
+    if(fNumBdryTypeWarnings <= 10)
+    {
+      ++fNumBdryTypeWarnings;
+      if(verboseLevel > 0)
+      {
+        G4ExceptionDescription ed;
+        ed << " PostStepDoIt(): Illegal boundary type." << G4endl;
+        if(fNumBdryTypeWarnings == 10)
+        {
+          ed << "** Boundary type warnings stopped." << G4endl;
+        }
+        G4Exception("G4OpBoundaryProcess", "OpBoun04", JustWarning, ed);
+      }
+    }
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
 

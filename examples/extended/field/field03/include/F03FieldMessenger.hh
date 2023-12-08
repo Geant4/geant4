@@ -50,22 +50,22 @@ class F03FieldMessenger: public G4UImessenger
 {
   public:
     F03FieldMessenger(F03FieldSetup* );
-    virtual ~F03FieldMessenger();
- 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    ~F03FieldMessenger() override;
+
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
 
-    F03FieldSetup*             fEMfieldSetup;
+    F03FieldSetup*             fEMfieldSetup = nullptr;
 
-    G4UIdirectory*             fFieldDir;
+    G4UIdirectory*             fFieldDir = nullptr;
 
-    G4UIcmdWithAnInteger*      fStepperCmd;
-    G4UIcmdWithADoubleAndUnit* fMagFieldZCmd;
-    G4UIcmdWith3VectorAndUnit* fMagFieldCmd;
-    G4UIcmdWith3VectorAndUnit* fLocalMagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* fMinStepCmd;
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcmdWithAnInteger*      fStepperCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMagFieldZCmd = nullptr;
+    G4UIcmdWith3VectorAndUnit* fMagFieldCmd = nullptr;
+    G4UIcmdWith3VectorAndUnit* fLocalMagFieldCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMinStepCmd = nullptr;
+    G4UIcmdWithoutParameter*   fUpdateCmd = nullptr;
 };
 
 #endif

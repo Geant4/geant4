@@ -56,11 +56,11 @@ class StackingMessenger: public G4UImessenger
 {
 public:
 
-  StackingMessenger(StackingAction*);
-  virtual ~StackingMessenger();
+  explicit StackingMessenger(StackingAction*);
+  ~StackingMessenger() override;
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
+  void SetNewValue(G4UIcommand*, G4String) override;
+  
 private:
     
   StackingAction*     fStackAction;

@@ -77,21 +77,24 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
     
   if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
     G4double CoulombBarrier = GetCoulombBarrier(fragment);
+    G4double InitialLevelDensity = ComputeInitialLevelDensity(fragment);
+    G4double Ux, UxSqrt, UxLog;
+    PrecomputeResidualQuantities(fragment, Ux, UxSqrt, UxLog);
       
     probability = 
-      CalcProbability(fragment,MaximalKineticEnergy,CoulombBarrier);
+      CalcProbability(fragment,MaximalKineticEnergy,CoulombBarrier,Spin,
+                      InitialLevelDensity,Ux,UxSqrt,UxLog);
 
     // Next there is a loop over excited states for this channel 
     // summing probabilities
     std::size_t nn = ExcitEnergies.size();
     if (0 < nn) {
-      G4double SavedSpin = Spin;
       for (std::size_t i = 0; i <nn; ++i) {
-	Spin = ExcitSpins[i];
 	// substract excitation energies
 	G4double Tmax = MaximalKineticEnergy - ExcitEnergies[i];
 	if (Tmax > 0.0) {
-	  G4double width = CalcProbability(fragment,Tmax,CoulombBarrier);
+	  G4double width = CalcProbability(fragment,Tmax,CoulombBarrier,ExcitSpins[i],
+	                                   InitialLevelDensity,Ux,UxSqrt,UxLog);
 	  //JMQ April 2010 added condition to prevent reported crash
 	  // update probability
 	  if (width > 0. && fPlanck < width*ExcitLifetimes[i]) {
@@ -99,17 +102,74 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
 	  }
 	}
       }
-      // Restore Spin
-      Spin = SavedSpin;
     }
   }
   //  Normalization = probability;
   return probability;
 }
 
+G4double G4GEMProbability::ComputeInitialLevelDensity(const G4Fragment & fragment) const
+{
+  G4int A = fragment.GetA_asInt();
+  G4int Z = fragment.GetZ_asInt();
+  G4double U = fragment.GetExcitationEnergy();
+
+  //                       ***PARENT***
+  //JMQ (September 2009) the following quantities refer to the PARENT:
+
+  G4double deltaCN = fNucData->GetPairingCorrection(Z, A);
+  G4double aCN     = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
+  G4double UxCN    = (2.5 + 150.0/G4double(A))*MeV;
+  G4double ExCN    = UxCN + deltaCN;
+  G4double TCN     = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
+  //	                 ***end PARENT***
+
+  //JMQ 160909 fix: initial level density must be calculated according to the
+  // conditions at the initial compound nucleus
+  // (it has been removed from previous "if" for the residual)
+
+  G4double InitialLevelDensity;
+  if ( U < ExCN )
+    {
+      //JMQ fixed bug in units
+      //VI moved the computation here
+      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - 0.25*G4Log(aCN*MeV)
+				  - 1.25*G4Log(UxCN/MeV)
+				  + 2.0*std::sqrt(aCN*UxCN));
+
+      InitialLevelDensity = (pi/12.0)*G4Exp((U-E0CN)/TCN)/TCN;
+    }
+  else
+    {
+      //VI speedup
+      G4double x  = U-deltaCN;
+      G4double x1 = std::sqrt(aCN*x);
+
+      InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
+    }
+
+  return InitialLevelDensity;
+}
+
+void G4GEMProbability::PrecomputeResidualQuantities(const G4Fragment & fragment,
+                                                    G4double &Ux,
+                                                    G4double &UxSqrt,
+                                                    G4double &UxLog) const
+{
+  G4int A = fragment.GetA_asInt();
+  G4int ResidualA = A - theA;
+
+  Ux = (2.5 + 150.0/G4double(ResidualA))*MeV;
+  UxSqrt = std::sqrt(Ux);
+  UxLog = G4Log(Ux/MeV);
+}
+
 G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment, 
                                            G4double MaximalKineticEnergy,
-                                           G4double V)
+                                           G4double V, G4double spin,
+                                           G4double InitialLevelDensity,
+                                           G4double Ux, G4double UxSqrt,
+                                           G4double UxLog) const
 
 // Calculate integrated probability (width) for evaporation channel
 {
@@ -118,7 +178,6 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
   G4int ResidualA = A - theA;
   G4int ResidualZ = Z - theZ;
-  G4double U = fragment.GetExcitationEnergy();
   
   G4double NuclearMass = fragment.ComputeGroundStateMass(theZ, theA);
   
@@ -132,31 +191,19 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   
   G4double a = theEvapLDPptr->
     LevelDensityParameter(ResidualA,ResidualZ,MaximalKineticEnergy+V-delta0);
-  G4double Ux = (2.5 + 150.0/G4double(ResidualA))*MeV;
+  G4double aSqrt = std::sqrt(a);
   G4double Ex = Ux + delta0;
-  G4double T  = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
+  G4double T  = 1.0/(aSqrt/UxSqrt - 1.5/Ux);
   //JMQ fixed bug in units
   G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
-	- 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+	- 1.25*UxLog + 2.0*aSqrt*UxSqrt);
   //                      ***end RESIDUAL ***
-  //                       ***PARENT***
-  //JMQ (September 2009) the following quantities refer to the PARENT:
-     
-  G4double deltaCN = fNucData->GetPairingCorrection(Z, A); 
-  G4double aCN     = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
-  G4double UxCN    = (2.5 + 150.0/G4double(A))*MeV;
-  G4double ExCN    = UxCN + deltaCN;
-  G4double TCN     = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
-  //	                 ***end PARENT***
 
   G4double Width;
-  G4double InitialLevelDensity;
   G4double t = MaximalKineticEnergy/T;
   if ( MaximalKineticEnergy < Ex ) {
     //JMQ 190709 bug in I1 fixed (T was  missing)
     Width = (I1(t,t)*T + (Beta+V)*I0(t))/G4Exp(E0/T);
-    //JMQ 160909 fix:  InitialLevelDensity has been taken away 
-    //(different conditions for initial CN..) 
   } else {
 
     //VI minor speedup
@@ -179,8 +226,8 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   
   //JMQ 14/07/2009 BIG BUG : NuclearMass is in MeV => hbarc instead of 
   //                         hbar_planck must be used
-  //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
-  G4double gg = (2.0*Spin+1.0)*NuclearMass/(pi2* hbarc*hbarc);
+  //    G4double g = (2.0*spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
+  G4double gg = (2.0*spin+1.0)*NuclearMass/(pi2* hbarc*hbarc);
   
   //JMQ 190709 fix on Rb and  geometrical cross sections according to 
   //           Furihata's paper (JAERI-Data/Code 2001-105, p6)
@@ -206,29 +253,6 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double GeometricalXS = pi*Rb*Rb; 
   //end of JMQ fix on Rb by 190709
   
-  //JMQ 160909 fix: initial level density must be calculated according to the 
-  // conditions at the initial compound nucleus 
-  // (it has been removed from previous "if" for the residual) 
-
-  if ( U < ExCN ) 
-    {
-      //JMQ fixed bug in units
-      //VI moved the computation here
-      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - 0.25*G4Log(aCN*MeV) 
-				  - 1.25*G4Log(UxCN/MeV) 
-				  + 2.0*std::sqrt(aCN*UxCN));
-
-      InitialLevelDensity = (pi/12.0)*G4Exp((U-E0CN)/TCN)/TCN;
-    } 
-  else 
-    {
-      //VI speedup
-      G4double x  = U-deltaCN;
-      G4double x1 = std::sqrt(aCN*x);
-
-      InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
-    }
-
   //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according 
   // to Furihata's report:
   Width *= pi*gg*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
@@ -236,7 +260,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   return Width;
 }
 
-G4double G4GEMProbability::I3(G4double s0, G4double sx)
+G4double G4GEMProbability::I3(G4double s0, G4double sx) const
 {
   G4double s2 = s0*s0;
   G4double sx2 = sx*sx;

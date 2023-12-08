@@ -62,7 +62,7 @@
 
 namespace G4INCL {
 
-  enum AnnihilationType {Def=0, PType, NType}; //D
+  enum AnnihilationType {Def=0, PType, NType, PTypeInFlight, NTypeInFlight, NbarPTypeInFlight, NbarNTypeInFlight};
 
   class Nucleus : public Cluster {
   public:
@@ -74,6 +74,9 @@ namespace G4INCL {
 
     /// \brief Dummy assignment operator to silence Coverity warning
     Nucleus &operator=(const Nucleus &rhs);
+
+    AnnihilationType getAType() const;
+    void setAType(AnnihilationType type);
 
     /**
      * Call the Cluster method to generate the initial distribution of
@@ -99,6 +102,9 @@ namespace G4INCL {
         theNkaonplusInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
         theNkaonminusInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
+      if(p->isAntiNucleon()) {
+        theNantiprotonInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
+      }
       if(!p->isTargetSpectator()) theStore->getBook().incrementCascading();
     };
 
@@ -122,6 +128,7 @@ namespace G4INCL {
     G4int getNumberOfEnteringNeutrons() const { return theNnInitial; };
     G4int getNumberOfEnteringPions() const { return theNpionplusInitial+theNpionminusInitial; };
     G4int getNumberOfEnteringKaons() const { return theNkaonplusInitial+theNkaonminusInitial; };
+    G4int getNumberOfEnteringantiProtons() const { return theNantiprotonInitial; };
 
     /** \brief Outgoing - incoming separation energies.
      *
@@ -151,7 +158,9 @@ namespace G4INCL {
           case SigmaPlus:
           case SigmaZero:
           case SigmaMinus:
-          case antiProton: 
+          case antiProton:
+          //case antiNeutron:
+          //case antiLambda: 
             S += thePotential->getSeparationEnergy(*i);
             break;
           case Composite:
@@ -170,6 +179,7 @@ namespace G4INCL {
       S -= theNkaonplusInitial*thePotential->getSeparationEnergy(KPlus);
       S -= theNpionminusInitial*thePotential->getSeparationEnergy(PiMinus);
       S -= theNkaonminusInitial*thePotential->getSeparationEnergy(KMinus);
+      S -= theNantiprotonInitial*thePotential->getSeparationEnergy(antiProton);
       return S;
     }
 
@@ -505,6 +515,8 @@ namespace G4INCL {
     /// \brief The number of entering kaons
     G4int theNkaonplusInitial;
     G4int theNkaonminusInitial;
+    /// \brief The number of entering antiprotons
+    G4int theNantiprotonInitial;
     
     G4double initialInternalEnergy;
     ThreeVector incomingAngularMomentum, incomingMomentum;
@@ -514,14 +526,7 @@ namespace G4INCL {
     G4double initialEnergy;
     Store *theStore;
     G4bool tryCN;
-
-    /// \brief The charge number of the projectile
-    G4int projectileZ;
-    /// \brief The mass number of the projectile
-    G4int projectileA;
-    /// \brief The strangeness number of the projectile
-    G4int projectileS;
-    
+  
     /// \brief The radius of the universe
     G4double theUniverseRadius;
 

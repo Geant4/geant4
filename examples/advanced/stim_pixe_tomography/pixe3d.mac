@@ -1,8 +1,8 @@
 #
-# macro file pixe3d.mac
+# to generate macro file pixe3d.mac
 #
 /control/verbose 1
-/run/verbose 1
+#/run/verbose 1
 #/tracking/verbose 2
 #
 #/tomography/det/setPhantomType 1
@@ -40,8 +40,6 @@
 /tomography/run/scanParameters 10 1 20
 #
 /run/initialize
-#
-/run/printProgress 500000
 #
 # Source definition : energy, type
 #

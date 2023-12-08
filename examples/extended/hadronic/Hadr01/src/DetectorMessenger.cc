@@ -121,6 +121,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fVerbCmd->SetParameterName("verb",false);
   fVerbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  fBertCmd = new G4UIcmdWithAnInteger("/testhadr/printBertiniXS",this);
+  fBertCmd->SetGuidance("Set printout of Bertini crosss ections");
+  fBertCmd->SetParameterName("bert",false);
+  fBertCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   fBCCmd = new G4UIcmdWithABool("/testhadr/BCParticles",this);
   fBCCmd->SetGuidance("Enable b-, c- hadronic physics");
   fBCCmd->SetParameterName("BCparticles",false);
@@ -150,6 +155,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fTestDir;
   delete fBeamCmd;
   delete fVerbCmd;
+  delete fBertCmd;
   delete fEdepCmd;
   delete fBCCmd;
   delete fHNCmd;
@@ -175,6 +181,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     h->SetNumberOfBinsE(fBinCmd->GetNewIntValue(newValue));
   } else if( command == fVerbCmd ) {
     h->SetVerbose(fVerbCmd->GetNewIntValue(newValue));
+  } else if( command == fBertCmd ) {
+    h->SetPrintBertiniXS(fBertCmd->GetNewIntValue(newValue));
   } else if (command == fBeamCmd) {
     h->SetDefaultBeamPositionFlag(fBeamCmd->GetNewBoolValue(newValue));
   } else if (command == fEdepCmd) {

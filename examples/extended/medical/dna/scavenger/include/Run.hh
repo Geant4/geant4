@@ -33,11 +33,11 @@
 
 class G4VPrimitiveScorer;
 
-/// Collects information event per event from the hits collections
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Collects information event per event from the hits collections
 
 class Run : public G4Run {
 public:

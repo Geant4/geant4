@@ -35,7 +35,6 @@
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4He3CoulombBarrier.hh"
 
 class G4HETCHe3 : public G4HETCChargedFragment
 {
@@ -43,27 +42,18 @@ public:
 
   G4HETCHe3();
 
-  ~G4HETCHe3();
+  ~G4HETCHe3() override = default;
+
+  G4HETCHe3(const G4HETCHe3 &right) = delete;
+  const G4HETCHe3 & operator=(const G4HETCHe3 &right) = delete;
+  G4bool operator==(const G4HETCHe3 &right) const = delete;
+  G4bool operator!=(const G4HETCHe3 &right) const = delete;
 
 protected:
 
-  virtual G4double GetAlpha() const;
-
-  virtual G4double GetBeta() const;
-
-  virtual G4double GetSpinFactor() const;
-
-  virtual G4double K(const G4Fragment & aFragment);
-
-private:
-
-  // operators  
-  G4HETCHe3(const G4HETCHe3 &right);
-  const G4HETCHe3 & operator=(const G4HETCHe3 &right);
-  G4bool operator==(const G4HETCHe3 &right) const;
-  G4bool operator!=(const G4HETCHe3 &right) const;
-
-  G4He3CoulombBarrier theHe3CoulombBarrier;
+  G4double GetAlpha() const  override;
+  G4double GetSpinFactor() const  override;
+  G4double K(const G4Fragment& aFragment) const override;
 };
 
 #endif

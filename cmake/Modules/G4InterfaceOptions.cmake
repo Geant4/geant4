@@ -74,12 +74,14 @@ mark_as_advanced(GEANT4_USE_QT_QT6)
 
 # - Vtk
 option(GEANT4_USE_VTK "Build Geant4 with VTK visualisation" OFF)
-mark_as_advanced(GEANT4_USE_VTK)
 if(GEANT4_USE_VTK)
   find_package(VTK 9 REQUIRED COMPONENTS
           CommonColor
           InteractionStyle
           IOExport
+          IOGeometry
+          IOLegacy
+          IOPLY
           GUISupportQt
           RenderingVolumeOpenGL2
           )

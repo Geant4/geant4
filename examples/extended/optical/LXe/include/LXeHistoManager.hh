@@ -43,7 +43,7 @@ class LXeHistoManager
 {
  public:
   LXeHistoManager();
-  ~LXeHistoManager();
+  ~LXeHistoManager() = default;
 
  private:
   void Book();

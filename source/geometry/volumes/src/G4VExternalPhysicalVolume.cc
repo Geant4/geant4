@@ -25,7 +25,7 @@
 // 
 // G4VExternalPhysicalVolume Implementation
 //
-// Author: J.Apostolakis, October 2019
+// Author: J.Apostolakis, CERN - October 2019
 // ----------------------------------------------------------------------
 
 #include "G4VExternalPhysicalVolume.hh"

@@ -55,6 +55,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
+#include "G4LightIonQMDPhysics.hh"
 #include "G4IonElasticPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
@@ -67,7 +68,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 
 Shielding::Shielding(G4int verbose, const G4String& n_model, 
-                     const G4String& HadrPhysVariant )
+                     const G4String& HadrPhysVariant, G4bool useLightIonQMD)
 {
   G4String LEN_model = n_model; 
   size_t find = LEN_model.find("LEND__");
@@ -173,5 +174,9 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
 
   // Ion Physics
   RegisterPhysics( new G4IonElasticPhysics(verbose) );
-  RegisterPhysics( new G4IonQMDPhysics(verbose) );
+  if (useLightIonQMD){
+    RegisterPhysics( new G4LightIonQMDPhysics(verbose) );
+  } else {
+    RegisterPhysics( new G4IonQMDPhysics(verbose) );
+  }
 }

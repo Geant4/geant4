@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-06 Gabriele Cosmo (geommng-V11-01-05)
+- Restore virtual methods in G4TouchableHistory to allow for backwards
+  compatibility with visualization modeling code.
+
+## 2023-09-04 Gabriele Cosmo (geommng-V11-01-04)
+- Made G4TouchableHistoryHandle a typedef of G4TouchableHandle.
+
+## 2023-08-31 Gabriele Cosmo (geommng-V11-01-03)
+- Removed inheritance level for G4TouchableHistory and making G4VTouchable a
+  simple typdef of G4TouchableHistory, therefore no longer acting as base class.
+- Imported G4NavigationHistory, G4NavigationHistoryPool, G4NavigationLevel and
+  G4NavigationLevelRep classes and translation units from "volumes" module.
+
 ## 2023-05-08 Gabriele Cosmo (geommng-V11-01-02)
 - Applied clang-tidy fixes (readability, modernization, performance, ...).
 

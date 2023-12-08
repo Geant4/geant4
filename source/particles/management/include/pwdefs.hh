@@ -33,16 +33,16 @@
 #include "G4Types.hh"
 
 #ifdef WIN32
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4PARTICLES_ALLOC_EXPORT
-    #define G4PART_DLL G4DLLEXPORT
-  #else
-    #define G4PART_DLL G4DLLIMPORT
-  #endif
+//
+// Unique identifier for global module
+//
+#  if defined G4PARTICLES_ALLOC_EXPORT
+#    define G4PART_DLL G4DLLEXPORT
+#  else
+#    define G4PART_DLL G4DLLIMPORT
+#  endif
 #else
-  #define G4PART_DLL
+#  define G4PART_DLL
 #endif
 
 #endif /* G4PWDEFS_HH */

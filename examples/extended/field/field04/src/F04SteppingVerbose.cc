@@ -41,10 +41,6 @@ F04SteppingVerbose::F04SteppingVerbose()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04SteppingVerbose::~F04SteppingVerbose() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F04SteppingVerbose::StepInfo()
 {
   CopyState();
@@ -59,7 +55,7 @@ void F04SteppingVerbose::StepInfo()
   if( verboseLevel >= 1 ){
     if( verboseLevel >= 4 ) VerboseTrack();
     if( verboseLevel >= 3 ){
-      G4cout << G4endl;    
+      G4cout << G4endl;
       G4cout << std::setw( 5) << "#Step#"     << " "
              << std::setw(10) << "X"          << "    "
              << std::setw(10) << "Y"          << "    "
@@ -71,7 +67,7 @@ void F04SteppingVerbose::StepInfo()
              << std::setw(10) << "NextVolu"
              << std::setw(10) << "Process"
              << std::setw(10) << "Dir_x"        << "    "
-             << std::setw(10) << "Dir_y"        << "    "  
+             << std::setw(10) << "Dir_y"        << "    "
              << std::setw(10) << "Dir_z"        << "    "
              << G4endl;
     }
@@ -86,13 +82,13 @@ void F04SteppingVerbose::StepInfo()
            << std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")
            << std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
-    if( fTrack->GetNextVolume() != 0 ) {
+    if( fTrack->GetNextVolume() != nullptr ) {
       G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != nullptr){
       G4cout << "  "
              << std::setw(10) << fStep->GetPostStepPoint()->
                                    GetProcessDefinedStep()->GetProcessName();
@@ -100,7 +96,7 @@ void F04SteppingVerbose::StepInfo()
       G4cout << "   UserLimit";
     }
 
-//    G4cout << std::setw(12) << 
+//    G4cout << std::setw(12) <<
 //                    G4BestUnit(fTrack->GetMomentumDirection().x(),"Length")
 //           << std::setw(12) <<
 //                    G4BestUnit(fTrack->GetMomentumDirection().y(),"Length")
@@ -139,14 +135,14 @@ void F04SteppingVerbose::StepInfo()
                  << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
           G4cout << G4endl;
         }
- 
+
         G4cout << "    :-----------------------------"
                << "----------------------------------"
                << "-- EndOf2ndaries Info ---------------"
                << G4endl;
       }
     }
- 
+
   }
   G4cout.precision(prec);
 }

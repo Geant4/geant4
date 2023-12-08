@@ -66,6 +66,13 @@ class G4Run
     // to the global G4Run object.
     virtual void Merge(const G4Run*);
 
+    // Method to be overwritten by the user for merging sub-event results
+    // (e.g. hits) into the master G4Event.
+    // [N.B.] Trajectories are merged in the base-class method. So, the user
+    // should invoke the base-class method at the end of his/her overwriting
+    // method.
+    virtual void MergeSubEvent(G4Event* masterEv, const G4Event* subEv);
+
     // Store a G4Event object until this run object is deleted.
     // Given the potential large memory size of G4Event and its data-member
     // objects stored in G4Event, the user must be careful and responsible
@@ -84,17 +91,17 @@ class G4Run
 
     inline G4int GetNumberOfEventToBeProcessed() const { return numberOfEventToBeProcessed; }
 
-    // List of names of hits collection.
+    // Returns hits collection.
     inline const G4HCtable* GetHCtable() const { return HCtable; }
 
-    // List of names of digi collection.
+    // Returns digi collection.
     inline const G4DCtable* GetDCtable() const { return DCtable; }
 
     // Returns random number status at the beginning of this run.
     inline const G4String& GetRandomNumberStatus() const { return randomNumberStatus; }
 
     // Returns the event vector.
-    inline const std::vector<const G4Event*>* GetEventVector() const { return eventVector; }
+    inline std::vector<const G4Event*>* GetEventVector() const { return eventVector; }
 
     inline void SetRunID(G4int id) { runID = id; }
     inline void SetNumberOfEventToBeProcessed(G4int n_ev) { numberOfEventToBeProcessed = n_ev; }

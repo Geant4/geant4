@@ -116,9 +116,12 @@ G4BooleanSolid::~G4BooleanSolid()
 
 G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
-    fCubicVolume(rhs.fCubicVolume), fStatistics(rhs.fStatistics),
-    fCubVolEpsilon(rhs.fCubVolEpsilon), fAreaAccuracy(rhs.fAreaAccuracy), 
-    fSurfaceArea(rhs.fSurfaceArea),  createdDisplacedSolid(rhs.createdDisplacedSolid)
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fCubVolStatistics(rhs.fCubVolStatistics),
+    fAreaStatistics(rhs.fAreaStatistics),
+    fCubVolEpsilon(rhs.fCubVolEpsilon),
+    fAreaAccuracy(rhs.fAreaAccuracy),
+    createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
   fPrimitives.resize(0); fPrimitivesSurfaceArea = 0.;
 }
@@ -140,10 +143,11 @@ G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs)
   // Copy data
   //
   fPtrSolidA= rhs.fPtrSolidA; fPtrSolidB= rhs.fPtrSolidB;
-  fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
-  fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
-  fSurfaceArea= rhs.fSurfaceArea;
+  fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+  fCubVolStatistics = rhs.fCubVolStatistics; fCubVolEpsilon = rhs.fCubVolEpsilon;
+  fAreaStatistics = rhs.fAreaStatistics; fAreaAccuracy = rhs.fAreaAccuracy;
   createdDisplacedSolid= rhs.createdDisplacedSolid;
+
   fRebuildPolyhedron = false;
   delete fpPolyhedron; fpPolyhedron = nullptr;
   fPrimitives.resize(0); fPrimitivesSurfaceArea = 0.;
@@ -414,13 +418,13 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Estimate Cubic Volume (capacity) and store it for reuse.
+// Estimate Cubic Volume (capacity) and cache it for reuse.
 
 G4double G4BooleanSolid::GetCubicVolume()
 {
   if(fCubicVolume < 0.)
   {
-    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
+    fCubicVolume = EstimateCubicVolume(fCubVolStatistics, fCubVolEpsilon);
   }
   return fCubicVolume;
 }

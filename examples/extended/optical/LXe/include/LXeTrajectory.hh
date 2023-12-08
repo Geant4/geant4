@@ -40,10 +40,10 @@ class G4ParticleDefinition;
 class LXeTrajectory : public G4Trajectory
 {
  public:
-  LXeTrajectory();
+  LXeTrajectory() = default;
   LXeTrajectory(const G4Track* aTrack);
   LXeTrajectory(LXeTrajectory&);
-  ~LXeTrajectory();
+  ~LXeTrajectory() = default;
 
   void DrawTrajectory() const override;
 
@@ -56,11 +56,11 @@ class LXeTrajectory : public G4Trajectory
   void SetForceNoDrawTrajectory(G4bool b) { fForceNoDraw = b; }
 
  private:
-  G4bool fWls;
-  G4bool fDrawit;
-  G4bool fForceNoDraw;
-  G4bool fForceDraw;
-  G4ParticleDefinition* fParticleDefinition;
+  G4bool fWls = false;
+  G4bool fDrawit = false;
+  G4bool fForceNoDraw = false;
+  G4bool fForceDraw = false;
+  G4ParticleDefinition* fParticleDefinition = nullptr;
 };
 
 extern G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator;

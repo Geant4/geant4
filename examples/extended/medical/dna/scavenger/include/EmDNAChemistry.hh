@@ -41,12 +41,12 @@ class G4DNAMolecularReactionTable;
 
 class G4MolecularConfiguration;
 
-/// Chemistry constructor with reading of the user file defining chemical
-/// reactions and scavengers (reaction with background)
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Chemistry constructor with reading of the user file defining chemical
+/// reactions and scavengers (reaction with background)
 
 class EmDNAChemistry : public G4VUserChemistryList,
                        public G4VPhysicsConstructor,

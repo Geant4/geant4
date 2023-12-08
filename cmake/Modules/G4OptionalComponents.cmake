@@ -60,15 +60,13 @@ if(WIN32)
   set(EXPAT_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_EXPAT TRUE)
   set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
-  set(EXPAT_LIBRARIES G4expat)
+  set(G4EXPAT_LIBRARIES G4expat)
 else()
   option(GEANT4_USE_SYSTEM_EXPAT "Use system Expat library" ON)
 
   if(GEANT4_USE_SYSTEM_EXPAT)
     # If system package requested, find it or fail
     find_package(EXPAT REQUIRED)
-    # Shim only needed until we require CMake >= 3.10
-    include("${CMAKE_CURRENT_LIST_DIR}/G4EXPATShim.cmake")
 
     # Check version requirement externally to provide information
     # on using internal expat.
@@ -78,6 +76,8 @@ else()
       unset(EXPAT_FOUND)
       unset(EXPAT_INCLUDE_DIR CACHE)
       unset(EXPAT_LIBRARY CACHE)
+      unset(EXPAT_LIBRARY_RELEASE CACHE)
+      unset(EXPAT_LIBRARY_DEBUG CACHE)
       message(FATAL_ERROR
 "Detected system expat header and library:
 EXPAT_INCLUDE_DIR = ${__badexpat_include_dir}
@@ -87,13 +87,13 @@ Set the above CMake variables to point to an expat install of the required versi
     endif()
 
     # Backward compatibility for sources.cmake using the variable
-    set(EXPAT_LIBRARIES EXPAT::EXPAT)
-    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+    set(G4EXPAT_LIBRARIES EXPAT::EXPAT)
+    geant4_save_package_variables(EXPAT EXPAT_INCLUDE_DIR EXPAT_LIBRARY EXPAT_LIBRARY_RELEASE EXPAT_LIBRARY_DEBUG)
   else()
     set(EXPAT_FOUND TRUE)
     set(GEANT4_USE_BUILTIN_EXPAT TRUE)
     set(EXPAT_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/expat/include)
-    set(EXPAT_LIBRARIES G4expat)
+    set(G4EXPAT_LIBRARIES G4expat)
   endif()
 endif()
 
@@ -105,12 +105,12 @@ option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
   # Backward compatibility for sources.cmake using the variable
-  set(ZLIB_LIBRARIES ZLIB::ZLIB)
+  set(G4ZLIB_LIBRARIES ZLIB::ZLIB)
   geant4_save_package_variables(ZLIB ZLIB_INCLUDE_DIR ZLIB_LIBRARY_DEBUG ZLIB_LIBRARY_RELEASE)
 else()
   set(ZLIB_FOUND TRUE)
   set(GEANT4_USE_BUILTIN_ZLIB TRUE)
-  set(ZLIB_LIBRARIES G4zlib)
+  set(G4ZLIB_LIBRARIES G4zlib)
 endif()
 
 geant4_add_feature(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
@@ -295,7 +295,7 @@ endif()
 
 # - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  find_package(VecGeom 1.2.0 REQUIRED)
+  find_package(VecGeom 1.2.6 REQUIRED)
   geant4_save_package_variables(VecGeom VecGeom_DIR)
 
   # If VecCore_DIR is set, means updated VecGeom install used, so

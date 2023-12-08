@@ -28,7 +28,7 @@
 // A Logical Surface class for the surface surrounding a single
 // logical volume.
 //
-// Author: John Apostolakis (John.Apostolakis@cern.ch), 26-06-1997
+// Author: John Apostolakis, CERN - 26-06-1997
 // --------------------------------------------------------------------
 
 #include "G4LogicalSkinSurface.hh"
@@ -36,10 +36,9 @@
 
 G4LogicalSkinSurfaceTable *G4LogicalSkinSurface::theSkinSurfaceTable = nullptr;
 
-//
+// --------------------------------------------------------------------
 // Constructor
 //
-
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
                                            G4LogicalVolume* logicalVolume,
                                            G4SurfaceProperty* surfaceProperty)
@@ -55,32 +54,26 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
   theSkinSurfaceTable->push_back(this);
 }
 
-//
+// --------------------------------------------------------------------
 // Default destructor
 //
-
 G4LogicalSkinSurface::~G4LogicalSkinSurface() = default;
 
-//
-// Operators
-//
-
+// --------------------------------------------------------------------
 G4bool
 G4LogicalSkinSurface::operator==(const G4LogicalSkinSurface& right) const
 {
   return (this == (G4LogicalSkinSurface *) &right);
 }
 
+// --------------------------------------------------------------------
 G4bool
 G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface& right) const
 {
   return (this != (G4LogicalSkinSurface *) &right);
 }
 
-//
-// Methods
-//
-
+// --------------------------------------------------------------------
 const G4LogicalSkinSurfaceTable* G4LogicalSkinSurface::GetSurfaceTable()
 {
   if (theSkinSurfaceTable == nullptr)
@@ -90,6 +83,7 @@ const G4LogicalSkinSurfaceTable* G4LogicalSkinSurface::GetSurfaceTable()
   return theSkinSurfaceTable;
 }
 
+// --------------------------------------------------------------------
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
   if (theSkinSurfaceTable != nullptr)
@@ -99,6 +93,7 @@ size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
@@ -112,6 +107,7 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
   return nullptr;
 }
 
+// --------------------------------------------------------------------
 // Dump info for known surfaces
 //
 void G4LogicalSkinSurface::DumpInfo() 
@@ -132,6 +128,7 @@ void G4LogicalSkinSurface::DumpInfo()
   G4cout << G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4LogicalSkinSurface::CleanSurfaceTable()
 {
   if (theSkinSurfaceTable != nullptr)

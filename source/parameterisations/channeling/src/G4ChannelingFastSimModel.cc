@@ -37,7 +37,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ChannelingFastSimModel::G4ChannelingFastSimModel(const G4String& modelName, G4Region* envelope)
+G4ChannelingFastSimModel::G4ChannelingFastSimModel(const G4String& modelName,
+                                                   G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
 }
@@ -115,7 +116,8 @@ G4bool G4ChannelingFastSimModel::ModelTrigger(const G4FastTrack& fastTrack)
       modelTrigger = (crystallogic->GetSolid()->
                       Inside(xyz0)==kInside) &&
                       momentumDirection.z()>0. &&
-                      std::abs(angle) < GetLindhardAngleNumberHighLimit(particleDefinitionID) *
+                      std::abs(angle) <
+                      GetLindhardAngleNumberHighLimit(particleDefinitionID) *
                       fCrystalData->GetLindhardAngle(etotal,mass);
   }
 
@@ -233,13 +235,13 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
 
       //trajectory calculation:
       //Runge-Cutt "3/8"
-      //fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ() is due to dependence of
+      //fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ() is due to dependence of
       //the radius on x; GetCurv gets 1/R for the central ("central plane/axis")
 
       //first step
       kvx1=fCrystalData->Ex(x,y);
       x1=x+tx*dzd3;
-      tx1=tx+(kvx1-fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ())*dzd3;
+      tx1=tx+(kvx1-fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ())*dzd3;
       if (fCrystalData->GetModel()==2)
       {
          kvy1=fCrystalData->Ey(x,y);
@@ -250,8 +252,8 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
       //second step
       kvx2=fCrystalData->Ex(x1,y1);
       x2=x-tx*dzd3+tx1*dz;
-      tx2=tx-(kvx1-fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ())*dzd3+
-              (kvx2-fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ())*dz;
+      tx2=tx-(kvx1-fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ())*dzd3+
+              (kvx2-fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ())*dz;
       if (fCrystalData->GetModel()==2)
       {
          kvy2=fCrystalData->Ey(x1,y1);
@@ -262,7 +264,7 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
       //third step
       kvx3=fCrystalData->Ex(x2,y2);
       x3=x+(tx-tx1+tx2)*dz;
-      tx3=tx+(kvx1-kvx2+kvx3-fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ())*dz;
+      tx3=tx+(kvx1-kvx2+kvx3-fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ())*dz;
       if (fCrystalData->GetModel()==2)
       {
          kvy3=fCrystalData->Ey(x2,y2);
@@ -274,7 +276,7 @@ void G4ChannelingFastSimModel::DoIt(const G4FastTrack& fastTrack,
       kvx4=fCrystalData->Ex(x3,y3);
       x4=x+(tx+3.*tx1+3.*tx2+tx3)*dzd8;
       tx4=tx+(kvx1+3.*kvx2+3.*kvx3+kvx4)*dzd8-
-              fCrystalData->GetCurv()*fCrystalData->GetCorrectionZ()*dz;
+              fCrystalData->GetCurv(z)*fCrystalData->GetCorrectionZ()*dz;
       if (fCrystalData->GetModel()==2)
       {
           kvy4=fCrystalData->Ey(x3,y3);

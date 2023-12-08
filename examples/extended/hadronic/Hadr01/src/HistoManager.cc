@@ -73,13 +73,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-HistoManager* HistoManager::fManager = 0;
+HistoManager* HistoManager::fManager = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager* HistoManager::GetPointer()
 {
-  if(!fManager) {
+  if (nullptr == fManager) {
     static HistoManager manager;
     fManager = &manager;
   }
@@ -96,7 +96,6 @@ HistoManager::HistoManager()
 {
   fHisto = new Histo();
   fHisto->SetVerbose(fVerbose);
-  BookHisto();
   fNeutron = G4Neutron::Neutron();
 }
 
@@ -113,7 +112,7 @@ void HistoManager::BookHisto()
 {
   fHistoBooked = true;
   fHisto->Add1D("1","Energy deposition (MeV/mm/event) in the target",
-               fNSlices,0.0,fLength/mm,MeV/mm);
+                fNSlices,0.0,fLength/mm,MeV/mm);
   fHisto->Add1D("2","Log10 Energy (MeV) of gammas",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("3","Log10 Energy (MeV) of electrons",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("4","Log10 Energy (MeV) of positrons",fNBinsE,-5.,5.,1.0);
@@ -201,7 +200,6 @@ void HistoManager::BeginOfRun()
 
 void HistoManager::EndOfRun()
 {
-
   G4cout << "HistoManager: End of run actions are started" << G4endl;
 
   // Average values
@@ -321,8 +319,8 @@ void HistoManager::EndOfEvent()
 void HistoManager::ScoreNewTrack(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition();
-  G4String name = pd->GetParticleName();
-  G4double ee = track->GetKineticEnergy();
+  const G4String name = pd->GetParticleName();
+  const G4double ee = track->GetKineticEnergy();
   G4double e = ee;
 
   // Primary track
@@ -414,17 +412,21 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 void HistoManager::AddTargetStep(const G4Step* step)
 {
   ++fNstep;
-  G4double fEdep = step->GetTotalEnergyDeposit();
-  if(1 < fVerbose) {
-    G4cout << "TargetSD::ProcessHits: beta1= " 
-           << step->GetPreStepPoint()->GetVelocity()/c_light
-           << "  beta2= " << step->GetPostStepPoint()->GetVelocity()/c_light
-           << " weight= " << step->GetTrack()->GetWeight() 
+  const G4double fEdep = step->GetTotalEnergyDeposit();
+  const G4Track* track = step->GetTrack();
+  const G4ParticleDefinition* pd = track->GetDefinition();
+  if (1 < fVerbose) {
+    G4cout << "TargetSD::ProcessHits: " << pd->GetParticleName() 
+           << " E(MeV)=" << track->GetKineticEnergy()/CLHEP::MeV
+           << " beta1= "
+           << step->GetPreStepPoint()->GetVelocity()/CLHEP::c_light
+           << " beta2= " 
+           << step->GetPostStepPoint()->GetVelocity()/CLHEP::c_light
+           << " weight= " << step->GetTrack()->GetWeight()
+           << " t(ns)=" << track->GetGlobalTime()/CLHEP::ns
            << G4endl;
   }
-  if(fEdep >= DBL_MIN) { 
-    const G4Track* track = step->GetTrack();
-
+  if (fEdep > 0.0) { 
     G4ThreeVector pos = 
       (step->GetPreStepPoint()->GetPosition() +
        step->GetPostStepPoint()->GetPosition())*0.5;
@@ -434,7 +436,6 @@ void HistoManager::AddTargetStep(const G4Step* step)
     // scoring
     fEdepEvt += fEdep;
     fHisto->Fill(0,z,fEdep);
-    const G4ParticleDefinition* pd = track->GetDefinition();
 
     if(pd == G4Gamma::Gamma() || pd == G4Electron::Electron() 
        || pd == G4Positron::Positron()) {
@@ -470,8 +471,8 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     e = std::log10(ekin/CLHEP::MeV);
   } else {
     G4cout << "### HistoManager::AddLeakingParticle " << pd->GetParticleName()
-	   << "  Eprestep(MeV)=" << ekin << " trackID=" << track->GetTrackID()
-	   << G4endl;
+           << "  Eprestep(MeV)=" << ekin << " trackID=" << track->GetTrackID()
+           << G4endl;
     return;
   }
 

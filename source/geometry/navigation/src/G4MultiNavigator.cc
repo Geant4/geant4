@@ -442,8 +442,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 
 // -----------------------------------------------------------------------
 
-G4TouchableHistoryHandle 
-G4MultiNavigator::CreateTouchableHistoryHandle() const
+G4TouchableHandle G4MultiNavigator::CreateTouchableHistoryHandle() const
 {
   G4Exception( "G4MultiNavigator::CreateTouchableHistoryHandle()", 
                "GeomNav0001", FatalException,  

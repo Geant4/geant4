@@ -571,6 +571,8 @@ void G4MPImanager::BeamOn(G4int nevent, G4bool qdivide)
     G4double ntot = master_weight_ + size_ - 1.;
     G4int nproc = G4int(nevent/ntot);
     G4int nproc0 = nevent - nproc*(size_ - 1);
+    fevents_in_master = nproc0;
+    fevents_in_slave = nproc;
 
     if ( verbose_ > 0 && is_master_ ) {
       G4cout << "#events in master=" << nproc0 << " / "

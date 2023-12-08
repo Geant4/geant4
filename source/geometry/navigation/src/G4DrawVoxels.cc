@@ -38,7 +38,7 @@
 #include "G4VVisManager.hh"
 #include "G4Colour.hh"
 #include "G4TransportationManager.hh"
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHandle.hh"
 
 #define voxel_width 0
 
@@ -203,7 +203,7 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const
    // (the drawing is directly in the world volume while the axis
    // are relative to the mother volume of lv's daughter.)
 
-   G4TouchableHistoryHandle aTouchable =
+   G4TouchableHandle aTouchable =
      G4TransportationManager::GetTransportationManager()->
      GetNavigatorForTracking()->CreateTouchableHistoryHandle();
    G4AffineTransform globTransform =

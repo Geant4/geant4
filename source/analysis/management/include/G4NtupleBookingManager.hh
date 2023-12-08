@@ -37,18 +37,35 @@
 
 #include "tools/ntuple_booking"
 
-#include <vector>
+#include <set>
 #include <string_view>
+#include <vector>
 
 struct G4NtupleBooking
 {
   G4NtupleBooking() = default;
   ~G4NtupleBooking() = default;
 
+  void SetDeleted(G4bool deleted, G4bool keepSetting) {
+    fDeleted = std::make_pair(deleted, keepSetting);
+  }
+  G4bool GetDeleted() const {
+    return fDeleted.first;
+  }
+  void Reset() {
+    if (! fDeleted.second) {
+      // Reset information unless "keepSetting" option is true
+      fFileName.clear();
+      fActivation = true;
+    }
+    SetDeleted(false, false);
+  }
+
   tools::ntuple_booking fNtupleBooking;
   G4int fNtupleId { G4Analysis::kInvalidId };
   G4String fFileName;
   G4bool fActivation { true };
+  std::pair<G4bool, G4bool> fDeleted { false, false };
 };
 
 class G4NtupleBookingManager : public G4BaseAnalysisManager
@@ -69,6 +86,12 @@ class G4NtupleBookingManager : public G4BaseAnalysisManager
     void SetFileType(const G4String& fileType);
     G4String GetFileType() const;
     G4bool IsEmpty() const;
+
+    // Access methods
+    tools::ntuple_booking* GetNtuple(G4bool warn,
+                             G4bool onlyIfActive) const;
+    tools::ntuple_booking* GetNtuple(G4int ntupleId, G4bool warn,
+                              G4bool onlyIfActive) const;
 
   protected:
     // Methods to create ntuples
@@ -116,14 +139,20 @@ class G4NtupleBookingManager : public G4BaseAnalysisManager
     G4String GetFileName(G4int id) const;
 
     // Access methods
-    G4int GetNofNtupleBookings() const;
-    // G4int GetNofNtuples() const;
+    G4int GetNofNtuples(G4bool onlyIfExist = false) const;
 
     // Clear data
     void ClearData();
 
+    // Method to delete selected ntuples
+    G4bool Delete(G4int id, G4bool keepSetting);
+
+    // List ntuples
+    G4bool List(std::ostream& output, G4bool onlyIfActive = true);
+
     // Data members
     std::vector<G4NtupleBooking*> fNtupleBookingVector;
+    std::set<G4int> fFreeIds;
 
   private:
     // Methods
@@ -146,6 +175,7 @@ class G4NtupleBookingManager : public G4BaseAnalysisManager
     G4String fFileType;
     G4int    fFirstNtupleColumnId { 0 };
     G4bool   fLockFirstNtupleColumnId { false };
+    G4int    fCurrentNtupleId { G4Analysis::kInvalidId };
 };
 
 #include "G4NtupleBookingManager.icc"

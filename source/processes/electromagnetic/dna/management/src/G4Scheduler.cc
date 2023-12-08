@@ -88,7 +88,7 @@ using G4MemStat::MemStat;
 
 using namespace std;
 
-G4ThreadLocal G4Scheduler* G4Scheduler::fgScheduler(0);
+G4ThreadLocal G4Scheduler* G4Scheduler::fgScheduler(nullptr);
 
 template<typename T>
   inline G4bool IsInf(T value)
@@ -100,7 +100,7 @@ template<typename T>
 
 G4Scheduler* G4Scheduler::Instance()
 {
-  if(fgScheduler == 0) fgScheduler = new G4Scheduler();
+  if(fgScheduler == nullptr) fgScheduler = new G4Scheduler();
   return fgScheduler;
 }
 //_________________________________________________________________________
@@ -122,15 +122,15 @@ G4bool G4Scheduler::Notify(G4ApplicationState requestedState)
 
 void G4Scheduler::DeleteInstance()
 {
-  if(fgScheduler)
-  {
+  
+  
     delete fgScheduler;
-  }
+  
 }
 //_________________________________________________________________________
 
 G4Scheduler::G4Scheduler() :
-    G4VScheduler(), G4VStateDependent(),
+    
     fTrackContainer((G4ITTrackHolder&) *G4ITTrackHolder::Instance())
 {
   Create();
@@ -140,15 +140,15 @@ void G4Scheduler::Create()
 {
   fUseDefaultTimeSteps = true;
   fUserUpperTimeLimit = -1;
-  fpGun = 0;
+  fpGun = nullptr;
   fContinue = true;
 //  fpMainList = 0;
 //  fpWaitingList = 0;
-  fpTrackingInteractivity = 0;
+  fpTrackingInteractivity = nullptr;
 
   fITStepStatus = eUndefined;
 
-  fpUserTimeSteps = 0;
+  fpUserTimeSteps = nullptr;
 
   fTimeStep = DBL_MAX;
   fTSTimeStep = DBL_MAX;
@@ -167,8 +167,8 @@ void G4Scheduler::Create()
 
   fDefaultMinTimeStep = 1 * picosecond;
 
-  fpStepProcessor = 0;
-  fpModelProcessor = 0;
+  fpStepProcessor = nullptr;
+  fpModelProcessor = nullptr;
 
   fNbSteps = 0;
   fMaxSteps = -1;
@@ -176,7 +176,7 @@ void G4Scheduler::Create()
   fRunning = false;
   fInitialized = false;
 
-  fpUserTimeStepAction = 0;
+  fpUserTimeStepAction = nullptr;
   fpModelHandler = new G4ITModelHandler();
   fpTrackingManager = new G4ITTrackingManager();
 
@@ -203,12 +203,12 @@ void G4Scheduler::Create()
 G4Scheduler::~G4Scheduler()
 {
 
-  if(fpMessenger) // is used as a flag to know whether the manager was cleared
+  if(fpMessenger != nullptr) // is used as a flag to know whether the manager was cleared
   {
     Clear();
   }
 
-  fgScheduler = 0;
+  fgScheduler = nullptr;
 
 //  if (fVerbose >= 1)
 //  {
@@ -220,40 +220,40 @@ void G4Scheduler::Clear()
 {
 //  if (fVerbose) G4cout << "*** G4Scheduler is being cleared ***" << G4endl;
 
-  if(fpMessenger)
+  if(fpMessenger != nullptr)
   {
     delete fpMessenger;
-    fpMessenger = 0;
+    fpMessenger = nullptr;
   }
-  if(fpStepProcessor)
+  if(fpStepProcessor != nullptr)
   {
     delete fpStepProcessor;
-    fpStepProcessor = 0;
+    fpStepProcessor = nullptr;
   }
-  if(fpModelProcessor)
+  if(fpModelProcessor != nullptr)
   {
     delete fpModelProcessor;
-    fpModelProcessor = 0;
+    fpModelProcessor = nullptr;
   }
 
   G4ITTypeManager::Instance()->ReleaseRessource();
   ClearList();
-  if(fpTrackingManager)
+  if(fpTrackingManager != nullptr)
   {
     delete fpTrackingManager;
-    fpTrackingManager = 0;
+    fpTrackingManager = nullptr;
   }
 
-  if(fReactionSet)
+  if(fReactionSet != nullptr)
   {
     delete fReactionSet;
-    fReactionSet = 0;
+    fReactionSet = nullptr;
   }
 
-  if(fpModelHandler)
+  if(fpModelHandler != nullptr)
   {
     delete fpModelHandler;
-    fpModelHandler = 0;
+    fpModelHandler = nullptr;
   }
 
    //* DEBUG
@@ -283,14 +283,14 @@ void G4Scheduler::RegisterModel(G4VITStepModel* model, G4double time)
 
 void G4Scheduler::Initialize()
 {
-  if(fpStepProcessor)
-  {
+  
+  
     delete fpStepProcessor;
-  }
-  if(fpModelProcessor)
-  {
+  
+  
+  
     delete fpModelProcessor;
-  }
+  
   // if(fpMasterModelProcessor)
   // {
   //     delete fpMasterModelProcessor;
@@ -320,7 +320,7 @@ void G4Scheduler::Initialize()
 
   if(fUsePreDefinedTimeSteps)
   {
-    if(fpUserTimeSteps == 0) // Extra checking, is it necessary ?
+    if(fpUserTimeSteps == nullptr) // Extra checking, is it necessary ?
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
@@ -380,7 +380,7 @@ void G4Scheduler::Process()
 {
 
 #ifdef G4VERBOSE
-  if(fVerbose)
+  if(fVerbose != 0)
   {
     G4cout << "*** G4Scheduler starts processing " << G4endl;
     if(fVerbose > 2)
@@ -389,7 +389,7 @@ void G4Scheduler::Process()
   }
 #endif
 
-  if (fInitialized == false) Initialize();
+  if (!fInitialized) Initialize();
 
   // fpTrackingManager->Initialize();
   fpModelProcessor->Initialize();
@@ -399,9 +399,9 @@ void G4Scheduler::Process()
   // fpMasterModelProcessor->Initialize();
   // fpMasterStepProcessor->Initialize();
 
-  if (fpGun) fpGun->DefineTracks();
+  if (fpGun != nullptr) fpGun->DefineTracks();
 
-  if (fpTrackingInteractivity) fpTrackingInteractivity->Initialize();
+  if (fpTrackingInteractivity != nullptr) fpTrackingInteractivity->Initialize();
 
   // ___________________
   fRunning = true;
@@ -415,7 +415,7 @@ void G4Scheduler::Process()
         }
     }
 
-  if (fpUserTimeStepAction)
+  if (fpUserTimeStepAction != nullptr)
   {
       fpUserTimeStepAction->StartProcessing();
   }
@@ -467,7 +467,7 @@ void G4Scheduler::Process()
 //  //---------------------------------
 
 #ifdef G4VERBOSE
-  if(fVerbose)
+  if(fVerbose != 0)
   {
     if(trackFound)
     {
@@ -486,7 +486,7 @@ void G4Scheduler::Process()
 
   fRunning = false;
 
-  if (fpUserTimeStepAction) fpUserTimeStepAction->EndProcessing();
+  if (fpUserTimeStepAction != nullptr) fpUserTimeStepAction->EndProcessing();
 
   // ___________________
   EndTracking();
@@ -494,14 +494,14 @@ void G4Scheduler::Process()
 
   Reset();
 
-  if (fpTrackingInteractivity) fpTrackingInteractivity->Finalize();
+  if (fpTrackingInteractivity != nullptr) fpTrackingInteractivity->Finalize();
 }
 
 //_________________________________________________________________________
 
 G4double G4Scheduler::GetNextWatchedTime() const
 {
-  std::set<G4double>::const_iterator up = fWatchedTimes.upper_bound(fGlobalTime);
+  auto up = fWatchedTimes.upper_bound(fGlobalTime);
   if(up == fWatchedTimes.end()) return DBL_MAX;
   return *up;
 }
@@ -567,7 +567,7 @@ void G4Scheduler::SynchronizeTracks()
 G4bool G4Scheduler::CanICarryOn()
 {
   return fGlobalTime < fEndTime && (fMaxSteps == -1 ? true : fNbSteps < fMaxSteps)
-      && fContinue == true;
+      && fContinue;
 }
 
 //_________________________________________________________________________
@@ -589,7 +589,7 @@ void G4Scheduler::PrintWhyDoYouStop()
       << G4BestUnit(fStopTime,"Time") << " =="<< G4endl;
       normalStop = true;
     }
-    if(fTrackContainer.MainListsNOTEmpty() == false) // is empty
+    if(!fTrackContainer.MainListsNOTEmpty()) // is empty
     {
       G4cout << "G4Scheduler: I stop because the current main list of tracks "
       "is empty"
@@ -603,7 +603,7 @@ void G4Scheduler::PrintWhyDoYouStop()
       << G4endl;
       normalStop = true;
     }
-    if(fContinue && normalStop == false)
+    if(fContinue && !normalStop)
     {
       G4cout << "G4Scheduler: It might be that I stop because "
       "I have been told so. You may check "
@@ -619,7 +619,7 @@ void G4Scheduler::PrintWhyDoYouStop()
 void G4Scheduler::DoProcess()
 // We split it from the Process() method to avoid repeating code in SynchronizeTracks
 {
-  if(fpUserTimeStepAction) fpUserTimeStepAction->NewStage();
+  if(fpUserTimeStepAction != nullptr) fpUserTimeStepAction->NewStage();
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_STEPPING)
   MemStat mem_first, mem_second, mem_diff;
@@ -632,7 +632,7 @@ void G4Scheduler::DoProcess()
   while (fGlobalTime < fStopTime
          && fTrackContainer.MainListsNOTEmpty()
          && (fMaxSteps == -1 ? true : fNbSteps < fMaxSteps)
-         && fContinue == true)
+         && fContinue)
   {
 //    G4cout << "Mainlist size : " << fTrackContainer.GetMainList()->size()
 //        << G4endl;
@@ -840,11 +840,10 @@ void G4Scheduler::Stepping()
   }
 
   fReachedUserTimeLimit =
-      ((fTimeStep <= fDefinedMinTimeStep) || ((fTimeStep > fDefinedMinTimeStep)
-          && fabs(fTimeStep - fDefinedMinTimeStep) < fTimeTolerance)) ?
-          true : false;
+      (fTimeStep <= fDefinedMinTimeStep) || ((fTimeStep > fDefinedMinTimeStep)
+          && fabs(fTimeStep - fDefinedMinTimeStep) < fTimeTolerance);
 
-  if (fpUserTimeStepAction) fpUserTimeStepAction->UserPreTimeStepAction();
+  if (fpUserTimeStepAction != nullptr) fpUserTimeStepAction->UserPreTimeStepAction();
   // TODO: pre/post
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
@@ -898,7 +897,7 @@ void G4Scheduler::Stepping()
 
   ++fNbSteps;
 
-  if (fpUserTimeStepAction)
+  if (fpUserTimeStepAction != nullptr)
   {
     fpUserTimeStepAction->UserPostTimeStepAction();
   }
@@ -955,13 +954,13 @@ void G4Scheduler::Stepping()
 
 G4double G4Scheduler::GetLimitingTimeStep() const
 {
-  if (fpUserTimeSteps == 0) return fDefaultMinTimeStep;
+  if (fpUserTimeSteps == nullptr) return fDefaultMinTimeStep;
   if (fabs(fGlobalTime - fUserUpperTimeLimit) < fTimeTolerance)
     return fDefinedMinTimeStep;
 
-  map<G4double, G4double>::const_iterator it_fpUserTimeSteps_i = fpUserTimeSteps
+  auto it_fpUserTimeSteps_i = fpUserTimeSteps
       ->upper_bound(fGlobalTime);
-  map<G4double, G4double>::const_iterator it_fpUserTimeSteps_low = fpUserTimeSteps
+  auto it_fpUserTimeSteps_low = fpUserTimeSteps
       ->lower_bound(fGlobalTime);
 
   // DEBUG
@@ -986,7 +985,7 @@ G4double G4Scheduler::GetLimitingTimeStep() const
     // and fpUserTimeSteps_low->first = X picosecond
     // but the precision is not good enough
     it_fpUserTimeSteps_i = it_fpUserTimeSteps_low;
-    map<G4double, G4double>::const_iterator tmp_it = it_fpUserTimeSteps_low;
+    auto tmp_it = it_fpUserTimeSteps_low;
     ++tmp_it;
     if (tmp_it == fpUserTimeSteps->end())
     {
@@ -1022,7 +1021,7 @@ G4double G4Scheduler::GetLimitingTimeStep() const
 void G4Scheduler::FindUserPreDefinedTimeStep()
 {
 
-  if(fpUserTimeSteps == 0)
+  if(fpUserTimeSteps == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
@@ -1033,9 +1032,9 @@ void G4Scheduler::FindUserPreDefinedTimeStep()
                 exceptionDescription);
     return; // makes coverity happy
   }
-  map<G4double, G4double>::iterator fpUserTimeSteps_i =
+  auto fpUserTimeSteps_i =
       fpUserTimeSteps->upper_bound(fGlobalTime);
-  map<G4double, G4double>::iterator fpUserTimeSteps_low = fpUserTimeSteps
+  auto fpUserTimeSteps_low = fpUserTimeSteps
       ->lower_bound(fGlobalTime);
 
   // DEBUG
@@ -1119,7 +1118,7 @@ void G4Scheduler::EndTracking()
 void G4Scheduler::SetInteractivity(G4ITTrackingInteractivity* interactivity)
 {
   fpTrackingInteractivity = interactivity;
-  if(fpTrackingManager)
+  if(fpTrackingManager != nullptr)
   {
     fpTrackingManager->SetInteractivity(fpTrackingInteractivity);
   }
@@ -1132,25 +1131,6 @@ void G4Scheduler::ForceReinitialization()
 {
   fInitialized = false;
   Initialize();
-}
-
-//_________________________________________________________________________
-G4Scheduler::G4Scheduler(const G4Scheduler&) :
-    G4VScheduler(), G4VStateDependent(),
-    fTrackContainer((G4ITTrackHolder&) *G4ITTrackHolder::Instance())
-
-{
-  Create();
-}
-
-//_________________________________________________________________________
-G4Scheduler& G4Scheduler::operator=(const G4Scheduler& right)
-{
-  if(this != &right)
-  {
-    Create();
-  }
-  return *this;
 }
 
 size_t G4Scheduler::GetNTracks()

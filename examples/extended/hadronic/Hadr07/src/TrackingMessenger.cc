@@ -39,8 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:G4UImessenger(),fTrackingAction(trackA),
- fTrackingDir(nullptr),fCountCmd(nullptr)
+:fTrackingAction(trackA)
 {
   fTrackingDir = new G4UIdirectory("/testhadr/tracking/");
   fTrackingDir->SetGuidance("tracking commands");

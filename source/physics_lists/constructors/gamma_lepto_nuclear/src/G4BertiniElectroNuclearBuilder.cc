@@ -51,53 +51,46 @@
 #include "G4GammaGeneralProcess.hh"
 #include "G4LossTableManager.hh"
 
+#include "G4ElectroVDNuclearModel.hh"
+#include "G4ElectronNuclearProcess.hh"
+#include "G4PositronNuclearProcess.hh"
 #include "G4PhotoNuclearCrossSection.hh"
+
+#include "G4ios.hh"
+
+#include "G4TheoFSGenerator.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4GammaParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+
 
 #include "G4HadronicParameters.hh"
 
-G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl) : 
-  thePhotoNuclearProcess(nullptr), theElectronNuclearProcess(nullptr), 
-  thePositronNuclearProcess(nullptr), theElectroReaction(nullptr), 
-  theGammaReaction(nullptr), theModel(nullptr), theCascade(nullptr), 
-  theStringModel(nullptr), theFragmentation(nullptr), theStringDecay(nullptr), 
-  wasActivated(false), eActivated(eNucl)
+G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl)
+  : eActivated(eNucl)
 {}
-
-G4BertiniElectroNuclearBuilder::~G4BertiniElectroNuclearBuilder() 
-{
-  if(wasActivated) {
-    delete theFragmentation;
-    delete theStringDecay;
-  }
-}
 
 void G4BertiniElectroNuclearBuilder::Build()
 {
-  if(wasActivated) return;
-  wasActivated=true;
-  
+  // gamma
   thePhotoNuclearProcess = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Definition() );
-  thePhotoNuclearProcess->AddDataSet( new G4PhotoNuclearCrossSection );
+  thePhotoNuclearProcess->AddDataSet( new G4PhotoNuclearCrossSection() );
+  theGammaReaction = new G4CascadeInterface();
 
-  if(eActivated) {
-    theElectronNuclearProcess = new G4ElectronNuclearProcess;
-    thePositronNuclearProcess = new G4PositronNuclearProcess;
-    theElectroReaction = new G4ElectroVDNuclearModel;
-  }
-  theGammaReaction = new G4CascadeInterface;
+  auto theModel = new G4TheoFSGenerator;
 
-  theModel = new G4TheoFSGenerator;
-
-  theStringModel = new G4QGSModel< G4GammaParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(theFragmentation=new G4QGSMFragmentation);
+  auto theStringModel = new G4QGSModel< G4GammaParticipants >;
+  auto theStringDecay = new G4ExcitedStringDecay( new G4QGSMFragmentation() );
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
+  auto theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
 
-  G4ProcessManager * aProcMan = nullptr;
+  G4ProcessManager* aProcMan = nullptr;
 
   theGammaReaction->SetMaxEnergy(3.5*GeV);
   thePhotoNuclearProcess->RegisterMe(theGammaReaction);
@@ -106,15 +99,21 @@ void G4BertiniElectroNuclearBuilder::Build()
   thePhotoNuclearProcess->RegisterMe(theModel);
   
   G4GammaGeneralProcess* sp = 
-    (G4GammaGeneralProcess*)G4LossTableManager::Instance()->GetGammaGeneralProcess();
-  if(sp) {
+    dynamic_cast<G4GammaGeneralProcess*>(G4LossTableManager::Instance()->GetGammaGeneralProcess());
+  if ( nullptr != sp ) {
     sp->AddHadProcess(thePhotoNuclearProcess);
   } else {
     aProcMan = G4Gamma::Gamma()->GetProcessManager();
     aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
   }
 
-  if(eActivated) {  
+  // e+, e-
+  if (eActivated) {  
+
+    auto theElectronNuclearProcess = new G4ElectronNuclearProcess();
+    auto thePositronNuclearProcess = new G4PositronNuclearProcess();
+    auto theElectroReaction = new G4ElectroVDNuclearModel();
+
     aProcMan = G4Electron::Electron()->GetProcessManager();
     theElectronNuclearProcess->RegisterMe(theElectroReaction);
     aProcMan->AddDiscreteProcess(theElectronNuclearProcess);

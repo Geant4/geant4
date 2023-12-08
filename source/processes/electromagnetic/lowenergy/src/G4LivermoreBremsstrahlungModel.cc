@@ -72,6 +72,7 @@
 namespace { G4Mutex LivermoreBremsstrahlungModelMutex = G4MUTEX_INITIALIZER; }
 using namespace std;
 
+
 G4Physics2DVector* G4LivermoreBremsstrahlungModel::dataSB[] = {nullptr};
 G4double G4LivermoreBremsstrahlungModel::ylimit[] = {0.0};
 G4double G4LivermoreBremsstrahlungModel::expnumlim = -12.;
@@ -86,7 +87,6 @@ G4LivermoreBremsstrahlungModel::G4LivermoreBremsstrahlungModel(
   : G4eBremsstrahlungRelModel(p,nam),useBicubicInterpolation(false)
 {
   SetLowEnergyLimit(10.0*eV);
-  SetLPMFlag(false);
   SetAngularDistribution(new G4Generator2BS());
 }
 
@@ -145,7 +145,7 @@ void G4LivermoreBremsstrahlungModel::ReadData(G4int Z, const char* path)
   if(dataSB[Z]) { return; }
   const char* datadir = path;
 
-  if(!datadir) {
+  if(nullptr == datadir) {
     datadir = G4FindDataDir("G4LEDATA");
     if(!datadir) {
       G4Exception("G4LivermoreBremsstrahlungModel::ReadData()","em0006",

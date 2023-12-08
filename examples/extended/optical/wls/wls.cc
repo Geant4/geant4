@@ -62,13 +62,13 @@ int main(int argc, char** argv)
   G4Random::setTheSeed(seed);
 
   // Detector construction
-  WLSDetectorConstruction* detector = new WLSDetectorConstruction();
+  auto detector = new WLSDetectorConstruction();
   runManager->SetUserInitialization(detector);
 
   // Physics list
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
-  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  auto opticalPhysics = new G4OpticalPhysics();
 
   auto opticalParams = G4OpticalParameters::Instance();
   opticalParams->SetBoundaryInvokeSD(true);

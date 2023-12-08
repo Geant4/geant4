@@ -37,13 +37,13 @@
 class F05ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    F05ActionInitialization();
-    virtual ~F05ActionInitialization();
+    F05ActionInitialization() = default;
+    ~F05ActionInitialization() override = default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    G4VSteppingVerbose* InitializeSteppingVerbose() const override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

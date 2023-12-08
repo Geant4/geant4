@@ -38,10 +38,10 @@ class G4LogicalVolume;
 class G4Material;
 class G4GenericMessenger;
 
-/// Simple detector construction with a box volume placed in a world
-
 namespace Common
 {
+
+/// Simple detector construction with a box volume placed in a world
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {

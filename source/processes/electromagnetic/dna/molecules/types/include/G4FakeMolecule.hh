@@ -49,7 +49,7 @@ class G4FakeMolecule : public G4MoleculeDefinition
 private:
     static /*G4ThreadLocal*/ G4FakeMolecule* theInstance;
     G4FakeMolecule() {}
-    virtual ~G4FakeMolecule() {}
+    ~G4FakeMolecule() override = default;
 
 public:
     static G4FakeMolecule* Definition();

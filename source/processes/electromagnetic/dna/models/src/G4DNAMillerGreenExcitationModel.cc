@@ -42,9 +42,9 @@ using namespace std;
 
 G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4ParticleDefinition*,
                                                                  const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam)
 {
-  fpMolWaterDensity = 0;
+  fpMolWaterDensity = nullptr;
 
   nLevels=0;
   kineticEnergyCorrection[0]=0.;
@@ -64,7 +64,7 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
   {
     G4cout << "Miller & Green excitation model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
 
   // Selection of stationary mode
 
@@ -74,7 +74,7 @@ G4DNAMillerGreenExcitationModel::G4DNAMillerGreenExcitationModel(const G4Particl
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAMillerGreenExcitationModel::~G4DNAMillerGreenExcitationModel()
-{}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

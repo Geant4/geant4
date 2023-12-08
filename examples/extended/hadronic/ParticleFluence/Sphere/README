@@ -51,9 +51,10 @@ To build this example:
 
 To run it:
 
-  ./Sphere all_together.g4
+  ./Sphere all_together.in
 
 which shoots 50 GeV pion- on different target materials, 100 events
 in each run, and print out some information on the particle fluence
 at the end of each run.
-Other macros exist for specific materials.
+Other macros exist for specific materials:
+cu.in, fe.in, graphite.in, lar.in, pb.in, pbwo4.in, polystyrene.in, si.in, w.in .

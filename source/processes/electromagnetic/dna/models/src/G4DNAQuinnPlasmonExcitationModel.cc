@@ -43,13 +43,13 @@ using namespace std;
 G4DNAQuinnPlasmonExcitationModel::G4DNAQuinnPlasmonExcitationModel
                         (const G4ParticleDefinition*,
                          const G4String& nam):
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
-  fpMaterialDensity       = 0;
+  fpMaterialDensity       = nullptr;
   fLowEnergyLimit         =  10  *  eV;
   fHighEnergyLimit        =  1.0 * GeV;
 
-  for(G4int i=0;i<100;i++) nValenceElectron[i]=0;
+  for(int & i : nValenceElectron) i=0;
 
   verboseLevel = 0;
 
@@ -57,15 +57,14 @@ G4VEmModel(nam), isInitialised(false)
   {
     G4cout << "Quinn plasmon excitation model is constructed " << G4endl;
   }
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
   statCode                = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAQuinnPlasmonExcitationModel::~G4DNAQuinnPlasmonExcitationModel()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,7 +72,7 @@ void G4DNAQuinnPlasmonExcitationModel::Initialise
                         (const G4ParticleDefinition* particle,
                          const G4DataVector& /*cuts*/)
 {
-  for(G4int i=0;i<100;i++) nValenceElectron[i]=0;
+  for(int & i : nValenceElectron) i=0;
 
   if (verboseLevel > 3)
   {
@@ -98,7 +97,7 @@ void G4DNAQuinnPlasmonExcitationModel::Initialise
   G4ProductionCutsTable* theCoupleTable = 
       G4ProductionCutsTable::GetProductionCutsTable();
       
-  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+  auto  numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
   for(G4int i=0;i<numOfCouples;i++){
     
@@ -327,12 +326,12 @@ G4int G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron(G4int z)
            << G4endl;
   }
  
-  const char *datadir=0;
+  const char *datadir=nullptr;
   
-  if(!datadir)
+  if(datadir == nullptr)
   {
      datadir = G4FindDataDir("G4LEDATA");
-     if(!datadir)
+     if(datadir == nullptr)
      {
        G4Exception("G4DNAQuinnPlasmonExcitationModel::GetNValenceElectron()"
                    ,"em0002",FatalException,

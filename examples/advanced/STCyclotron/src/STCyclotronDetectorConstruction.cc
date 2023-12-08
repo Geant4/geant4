@@ -169,7 +169,7 @@ G4VPhysicalVolume* STCyclotronDetectorConstruction::Construct()
   G4double vacuum_atomic_number, vacuum_mass_of_mole, vacuum_density,vacuum_pressure,vacuum_temperature;
   vacuum_atomic_number = 1.;
   vacuum_mass_of_mole = 1.008*g/mole;
-  vacuum_density      = 1.e-30*g/cm3;
+  vacuum_density      = 1.e-25*g/cm3;
   vacuum_pressure     = 1.e-8*bar;
   vacuum_temperature  = 293.*kelvin;     //from PhysicalConstants.h
   G4Material* vacuum_beam = new G4Material("vacuumBeam", vacuum_atomic_number,

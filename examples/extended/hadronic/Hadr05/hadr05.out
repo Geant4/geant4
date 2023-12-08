@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -59,7 +59,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Scintillator    density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  69.969 cm 
-                       Imean:  62.657 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  64.684 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -119,33 +119,33 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=70.650000s Real=74.393096s Sys=0.010000s
+  User=77.620000s Real=95.783088s Sys=0.010000s
 
  ---> The run is 1000 proton of 5 GeV through calorimeter
 
  Process calls frequency :
-                  Decay=      3697            He3Inelastic=         2               NoProcess=   4085800
-        Radioactivation=     81421                    Rayl=    219000          Transportation=   4010458
-         alphaInelastic=         1                 annihil=     57655                   compt=   2646668
-                   conv=     54274              dInelastic=       100                   eBrem=    381243
-                  eIoni=   6155268   hBertiniCaptureAtRest=       493                   hIoni=   1450949
-             hadElastic=   4530517                 ionIoni=   4180268          kaon+Inelastic=        13
-        kaon0LInelastic=        13         kaon0SInelastic=         3         lambdaInelastic=         7
-                    msc=    257189                  muIoni=      6852    muMinusCaptureAtRest=        11
-               nCapture=     53318        neutronInelastic=     93105                    phot=    845133
-          photonNuclear=       200            pi+Inelastic=      1056            pi-Inelastic=       901
-        protonInelastic=      4153         sigma+Inelastic=         1              tInelastic=        16
+                  Decay=      3880            He3Inelastic=         3               NoProcess=   4069264
+        Radioactivation=     60791                    Rayl=    223605          Transportation=   3609053
+                annihil=     59181                   compt=   2687202                    conv=     55908
+             dInelastic=       109                   eBrem=    402329                   eIoni=   6276461
+  hBertiniCaptureAtRest=       510                   hIoni=   1427404              hadElastic=   4511696
+                ionIoni=   4143469          kaon+Inelastic=        10          kaon-Inelastic=         1
+        kaon0LInelastic=        18         kaon0SInelastic=         2         lambdaInelastic=         5
+                    msc=    265702                  muIoni=      7932    muMinusCaptureAtRest=        10
+               nCapture=     52914        neutronInelastic=     92122                    phot=    863678
+          photonNuclear=       221            pi+Inelastic=      1062            pi-Inelastic=       908
+        protonInelastic=      4012         sigma+Inelastic=         1              tInelastic=        14
 
 
 ------------------------------------------------------------
         material      Edep        rmsE        sqrt(E0(GeV))*rmsE/Edep     total tracklen 
  
- 1          Iron    4.0378 GeV   272.5 MeV     15.09 +- 0.477 %       2.135 m   +-  45.2 cm 
- 2  Scintillator    113.38 MeV   30.02 MeV      59.2 +-  1.87 %       21.97 cm  +-  6.06 cm 
+ 1          Iron    4.0596 GeV   285.5 MeV     15.72 +- 0.497 %        2.19 m   +-  48.1 cm 
+ 2  Scintillator    112.75 MeV   29.98 MeV     59.46 +-  1.88 %       22.57 cm  +-  6.66 cm 
 
- Total energy deposited = 4.151 GeV +- 273.3 MeV
- Leakage :  primary = 0 eV    secondaries = 185 MeV  ---> total = 185 MeV +- 158.8 MeV
- Total energy released :  Edep + Eleak = 4.336 GeV +- 186.3 MeV
+ Total energy deposited = 4.172 GeV +- 286 MeV
+ Leakage :  primary = 0 eV    secondaries = 176.4 MeV  ---> total = 176.4 MeV +- 161.6 MeV
+ Total energy released :  Edep + Eleak = 4.349 GeV +- 190.2 MeV
 ------------------------------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0

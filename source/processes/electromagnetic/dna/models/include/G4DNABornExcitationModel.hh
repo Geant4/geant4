@@ -37,7 +37,7 @@
 #include "G4DNABornExcitationModel2.hh"
 
 #ifndef G4DNABornExcitationModel
-typedef G4DNABornExcitationModel1 G4DNABornExcitationModel;
+using G4DNABornExcitationModel = G4DNABornExcitationModel1;
 //typedef G4DNABornExcitationModel2 G4DNABornExcitationModel;
 #endif
 

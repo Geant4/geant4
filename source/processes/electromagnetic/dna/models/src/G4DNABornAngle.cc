@@ -62,7 +62,7 @@ G4DNABornAngle::G4DNABornAngle(const G4String&)
 }    
 
 G4DNABornAngle::~G4DNABornAngle() 
-{}
+= default;
 
 G4ThreeVector& 
 G4DNABornAngle::SampleDirectionForShell(const G4DynamicParticle* dp,

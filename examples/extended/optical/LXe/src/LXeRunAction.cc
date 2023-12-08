@@ -36,8 +36,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeRunAction::LXeRunAction()
-  : fRun(nullptr)
-  , fHistoManager(nullptr)
 {
   // Book predefined histograms
   fHistoManager = new LXeHistoManager();

@@ -1,0 +1,12 @@
+/control/execute geometry.mac
+#control the physics
+/control/execute physics.mac
+/control/execute output.mac
+#/tracking/verbose 1
+/run/initialize
+#
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
+/control/execute primary.mac
+/run/beamOn 1000

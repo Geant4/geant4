@@ -45,7 +45,7 @@
 //        = TV * R * TD * x(inD)
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
-
+//
 // Author: Ivana Hrivnacova (Ivana.Hrivnacova@cern.ch), 16.10.2001
 // --------------------------------------------------------------------
 

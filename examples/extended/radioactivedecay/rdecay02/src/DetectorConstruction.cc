@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,11 +53,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
- fTargetMater(0), fLogicTarget(0),
- fDetectorMater(0), fLogicDetector(0), 
- fWorldMater(0), fPhysiWorld(0),
- fDetectorMessenger(0)
 {
   fTargetLength      = 1*cm; 
   fTargetRadius      = 0.5*cm;

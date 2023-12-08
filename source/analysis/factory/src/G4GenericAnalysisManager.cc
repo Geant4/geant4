@@ -27,7 +27,6 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4GenericAnalysisManager.hh"
-#include "G4GenericAnalysisMessenger.hh"
 #include "G4GenericFileManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
@@ -71,8 +70,6 @@ G4bool G4GenericAnalysisManager::IsInstance()
 G4GenericAnalysisManager::G4GenericAnalysisManager()
  : G4ToolsAnalysisManager("")
 {
-  fMessenger = std::make_unique<G4GenericAnalysisMessenger>(this);
-
   if ( ! G4Threading::IsWorkerThread() ) fgMasterInstance = this;
 
   // File manager
@@ -180,6 +177,14 @@ G4bool G4GenericAnalysisManager::OpenFileImpl(const G4String& fileName)
 }
 
 //_____________________________________________________________________________
+void G4GenericAnalysisManager::SetDefaultFileTypeImpl(const G4String& value)
+{
+  G4VAnalysisManager::SetDefaultFileTypeImpl(value);
+
+  fFileManager->SetDefaultFileType(value);
+}
+
+//_____________________________________________________________________________
 G4bool G4GenericAnalysisManager::WriteH1(G4int id, const G4String& fileName)
 {
   // Experimental extra write
@@ -253,6 +258,7 @@ G4bool G4GenericAnalysisManager::WriteP1(G4int id, const G4String& fileName)
   auto p1Name = GetP1Name(id);
   return fFileManager->WriteTExtra<tools::histo::p1d>(fileName, p1d, p1Name);
 }
+
 //_____________________________________________________________________________
 G4bool G4GenericAnalysisManager::WriteP2(G4int id, const G4String& fileName)
 {
@@ -270,4 +276,18 @@ G4bool G4GenericAnalysisManager::WriteP2(G4int id, const G4String& fileName)
 
   auto p2Name = GetP2Name(id);
   return fFileManager->WriteTExtra<tools::histo::p2d>(fileName, p2d, p2Name);
+}
+
+//_____________________________________________________________________________
+tools::ntuple_booking* G4GenericAnalysisManager::GetNtuple(
+  G4bool warn, G4bool onlyIfActive) const
+{
+  return fNtupleBookingManager->GetNtuple(warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+tools::ntuple_booking* G4GenericAnalysisManager::GetNtuple(
+  G4int ntupleId, G4bool warn, G4bool onlyIfActive) const
+{
+  return fNtupleBookingManager->GetNtuple(ntupleId, warn, onlyIfActive);
 }

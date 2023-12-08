@@ -77,11 +77,11 @@ public :
         return G4FakeParticleID(i);
     }
 
-    G4FakeParticleID(const int d_) : fValue(d_){;}
+    G4FakeParticleID(const int d_) : fValue(d_){}
 
     G4FakeParticleID(){fValue=0;}
-    G4FakeParticleID(const G4FakeParticleID & d_) : fValue(d_.fValue){;}
-    inline G4FakeParticleID & operator=(const G4FakeParticleID & rhs) { this->fValue = rhs.fValue; return *this;}
+    G4FakeParticleID(const G4FakeParticleID & d_)  = default;
+    inline G4FakeParticleID & operator=(const G4FakeParticleID & rhs) = default;
     G4FakeParticleID & operator=(const int & rhs) { this->fValue = rhs; return *this;}
     inline operator int & () { return fValue; }
     inline operator const int & () const { return fValue; }

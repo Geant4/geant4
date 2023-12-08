@@ -1,6 +1,10 @@
 #This macro file is where the user can set up the different parameters one can modify.
 
 /run/initialize
+
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 ##############################################
 #
 # PART1: Set the values for the beam

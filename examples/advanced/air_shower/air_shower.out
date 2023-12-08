@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -62,7 +62,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:  Acrylic    density:  1.190 g/cm3   RadL:  34.080 cm   Nucl.Int.Length:  62.658 cm 
-                       Imean:  67.185 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  68.609 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -82,6 +82,71 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 
+Material properties  for Air : 
+0: RINDEX
+1.7712e-06   1.00027
+6.19921e-06   1.00027
+9: GROUPVEL
+1.7712e-06   299.711
+6.19921e-06   299.711
+Material properties  for Quartz : 
+0: RINDEX
+1.7712e-06   1.54
+6.19921e-06   1.54
+9: GROUPVEL
+1.7712e-06   194.67
+6.19921e-06   194.67
+Material properties  for Acrylic : 
+0: RINDEX
+1.7712e-06   1.47702
+1.90745e-06   1.48461
+2.0664e-06   1.4896
+2.25426e-06   1.49313
+2.47968e-06   1.49633
+2.7552e-06   1.50033
+3.0996e-06   1.50629
+3.54241e-06   1.51533
+4.13281e-06   1.5286
+4.95937e-06   1.54724
+6.19921e-06   1.57237
+9: GROUPVEL
+1.7712e-06   189.801
+1.83933e-06   189.346
+1.98693e-06   193.481
+2.16033e-06   195.703
+2.36697e-06   196.165
+2.61744e-06   195.131
+2.9274e-06   192.931
+3.32101e-06   189.918
+3.83761e-06   186.433
+4.54609e-06   182.787
+6.19921e-06   177.917
+16: ABSLENGTH
+1.7712e-06   33.7719
+2.21615e-06   34.1447
+2.29384e-06   35.5173
+2.38212e-06   35.5173
+2.4748e-06   34.1447
+2.58078e-06   34.1447
+2.69307e-06   32.87
+2.81212e-06   32.87
+2.94219e-06   34.1447
+3.10158e-06   35.5173
+3.2513e-06   34.1447
+3.43671e-06   32.87
+3.64455e-06   27.6547
+3.87258e-06   19.3961
+4.13105e-06   13.0334
+4.43507e-06   6.99127
+4.48721e-06   5.55214
+4.53161e-06   4.15751
+4.56776e-06   3.20801
+4.61378e-06   2.44271
+4.66073e-06   1.8604
+4.69898e-06   1.28345
+4.75755e-06   1.02102
+5.0292e-06   1.11111e-100
+1.23984e-05   1.11111e-100
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -109,6 +174,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -699,8 +768,8 @@ See commands in /vis/modeling/trajectories/ for other options.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1687915079
- float_seed_table[] = 0.813233 0.868755 0.525554 0.630249 0.949336 0.741437 0.0196044 0.551251 0.788266 0.679422 0.587881 0.560283 0.230776 0.328666 0.33805 0.853895 0.901859 0.0414808 0.955325 0.413566 0.61962 0.565286 0.371511 0.667219 
+ Initial seed = 1701824392
+ float_seed_table[] = 0.807803 0.420749 0.971886 0.0606167 0.605103 0.67694 0.110901 0.622805 0.978865 0.440654 0.34328 0.0198284 0.453187 0.991185 0.400452 0.79386 0.640289 0.603793 0.205878 0.0121078 0.645037 0.701408 0.311485 0.967697 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -711,7 +780,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.000000s Real=2.013808s Sys=0.010000s
+  User=1.260000s Real=1.368499s Sys=0.000000s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -728,12 +797,12 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 9
+Total navigation history collections cleaned: 11
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0144 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.025 MB
+Pool ID '17G4DynamicParticle', size : 0.024 MB
 Pool ID '16G4SmartVoxelNode', size : 0.00192 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -741,10 +810,10 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.05 MB
+Pool ID '7G4Track', size : 0.0481 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00481 MB
+Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 14 of which, static: 0
 Dynamic pools deleted: 14 / Total memory freed: 0.1 MB
 ============================================================

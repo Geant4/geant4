@@ -35,8 +35,8 @@
 #include <map> 
 
 class G4LEPTSDistribution;
-typedef std::map<G4double, G4LEPTSDistribution*> mddist;
-typedef std::map<G4double, mddist > mdmddist;
+using mddist = std::map<G4double, G4LEPTSDistribution *>;
+using mdmddist = std::map<G4double, mddist>;
 
 
 class G4LEPTSElossDistr {

@@ -32,7 +32,6 @@
 
 #include "F04SteppingAction.hh"
 #include "G4SteppingManager.hh"
-#include "F04SteppingActionMessenger.hh"
 
 #include "G4ParticleTypes.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -41,39 +40,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04SteppingAction::F04SteppingAction()
- : G4UserSteppingAction(),
-   fSteppingMessenger(0),
-   fTargetVolume(0),
-   fTestPlaneVolume(0)
-{
-  fSteppingMessenger = new F04SteppingActionMessenger();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F04SteppingAction::~F04SteppingAction()
-{
-  delete fSteppingMessenger ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   G4Track* theTrack = theStep->GetTrack();
-  
+
   // Get pointers to test volumes (only once)
   if ( ! fTargetVolume ) {
     fTargetVolume
       = G4LogicalVolumeStore::GetInstance()->GetVolume("Target");
     fTestPlaneVolume
      = G4LogicalVolumeStore::GetInstance()->GetVolume("TestPlane");
-  }   
- 
+  }
+
   if (theTrack->GetParentID()==0) {
     //This is a primary track
-    G4LogicalVolume* theVolume 
+    G4LogicalVolume* theVolume
       = theStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume();
     if (theVolume != fTargetVolume) {
        theTrack->SetTrackStatus(fStopAndKill);
@@ -88,7 +69,7 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
   G4LogicalVolume* thePreLV = thePrePV->GetLogicalVolume();
 
-  G4LogicalVolume* thePostLV = 0;
+  G4LogicalVolume* thePostLV = nullptr;
   G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 
   if (thePostPoint) {
@@ -115,7 +96,7 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
 
 //  G4double z = theTrack->GetPosition().z();
 
-  F04UserTrackInformation* trackInformation =
+  auto  trackInformation =
                       (F04UserTrackInformation*)theTrack->GetUserInformation();
 
   if (trackInformation->GetTrackStatusFlag() != reverse) {
@@ -131,7 +112,7 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
   // check if it is alive
   if (theTrack->GetTrackStatus() == fAlive) { return; }
 
-  if (thePostPoint->GetProcessDefinedStep() != 0) {
+  if (thePostPoint->GetProcessDefinedStep() != nullptr) {
      if (thePostPoint->GetProcessDefinedStep()->GetProcessName() != "Decay")
                                                                        return;
   }

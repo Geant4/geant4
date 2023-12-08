@@ -140,6 +140,13 @@ void G4RootPNtupleManager::CreateNtupleFromMain(
                              G4RootPNtupleDescription* ntupleDescription,
                              tools::wroot::ntuple* mainNtuple)
 {
+  // Do not create pntuple if ntuple was deleted
+  if (mainNtuple == nullptr) {
+    ntupleDescription->SetNtuple(nullptr);
+    ntupleDescription->SetBasePNtuple(nullptr);
+    return;
+  }
+
   Message(kVL4, "create from main", "pntuple", mainNtuple->name());
 
   auto file = fMainNtupleManager->GetNtupleFile(&ntupleDescription->GetDescription());
@@ -427,6 +434,32 @@ void G4RootPNtupleManager::Clear()
 }
 
 //_____________________________________________________________________________
+G4bool G4RootPNtupleManager::Delete(G4int id)
+{
+  if ( IsVerbose(G4Analysis::kVL4) ) {
+    Message(G4Analysis::kVL4, "delete", "pntuple ntupleId " + to_string(id));
+  }
+
+  auto ntupleDescription = GetNtupleDescriptionInFunction(id, "Delete", true);
+
+  if (ntupleDescription == nullptr) return false;
+
+  // Delete/clear ntuple data
+  delete ntupleDescription->GetNtuple();
+  ntupleDescription->SetNtuple(nullptr);
+  ntupleDescription->SetBasePNtuple(nullptr);
+  ntupleDescription->GetMainBranches().clear();
+
+  // Update ntuple vector
+  auto index = id - GetFirstId();
+  fNtupleVector[index] = nullptr;
+
+  Message(G4Analysis::kVL2, "delete", "pntuple ntupleId " + to_string(id));
+
+  return true;
+}
+
+//_____________________________________________________________________________
 
 void  G4RootPNtupleManager::SetActivation(
   G4bool activation)
@@ -470,21 +503,8 @@ G4bool G4RootPNtupleManager::GetNewCycle() const
 }
 
 //_____________________________________________________________________________
-G4int G4RootPNtupleManager::GetNofNtuples() const
-{
-  return (G4int)fNtupleVector.size();
-}
-
-//_____________________________________________________________________________
 void G4RootPNtupleManager::SetNtupleRowWise(G4bool rowWise, G4bool rowMode)
 {
   fRowWise = rowWise;
   fRowMode = rowMode;
-}
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::List(std::ostream& /*output*/, G4bool /*onlyIfActive*/)
-{
-  Warn("Not implemented.", fkClass, "List");
-  return false;
 }

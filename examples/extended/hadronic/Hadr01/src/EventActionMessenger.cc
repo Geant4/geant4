@@ -48,8 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* evAct)
-  : G4UImessenger(), fEventAction(evAct),
-    fPrintCmd(0), fCmd(0)
+  : G4UImessenger(), fEventAction(evAct)
 {   
   fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");
@@ -61,8 +60,7 @@ EventActionMessenger::EventActionMessenger(EventAction* evAct)
   fCmd->SetGuidance("D event to debug");
   fCmd->SetParameterName("fNb",false);
   fCmd->SetRange("fNb>0");
-  fCmd->AvailableForStates(G4State_PreInit,G4State_Idle);      
-
+  fCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -16,7 +16,7 @@ Physics List can be defined by its name given by the -p argument of the of the
 run command or by  the PHYSLIST environment variable.
 
 \verbatim
-./factory -m my.macro [ -p QGSP_BERT ]
+./factory -m run.mac [ -p QGSP_BERT ]
 \endverbatim
 
 By default, FTFP_BERT Physics List will be instantiated if

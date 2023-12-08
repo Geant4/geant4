@@ -48,29 +48,29 @@ class LXeDetectorMessenger : public G4UImessenger
 {
  public:
   LXeDetectorMessenger(LXeDetectorConstruction*);
-  ~LXeDetectorMessenger();
+  ~LXeDetectorMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  LXeDetectorConstruction* fLXeDetector;
-  G4UIdirectory* fDetectorDir;
-  G4UIdirectory* fVolumesDir;
-  G4UIcmdWith3VectorAndUnit* fDimensionsCmd;
-  G4UIcmdWithADoubleAndUnit* fHousingThicknessCmd;
-  G4UIcmdWithADoubleAndUnit* fPmtRadiusCmd;
-  G4UIcmdWithAnInteger* fNxCmd;
-  G4UIcmdWithAnInteger* fNyCmd;
-  G4UIcmdWithAnInteger* fNzCmd;
-  G4UIcmdWithABool* fSphereCmd;
-  G4UIcmdWithADouble* fReflectivityCmd;
-  G4UIcmdWithABool* fWlsCmd;
-  G4UIcmdWithABool* fLxeCmd;
-  G4UIcmdWithAnInteger* fNFibersCmd;
-  G4UIcommand* fDefaultsCmd;
-  G4UIcmdWithADouble* fMainScintYield;
-  G4UIcmdWithADouble* fWLSScintYield;
-  G4UIcmdWithAnInteger* fSaveThresholdCmd;
+  LXeDetectorConstruction* fLXeDetector = nullptr;
+  G4UIdirectory* fDetectorDir = nullptr;
+  G4UIdirectory* fVolumesDir = nullptr;
+  G4UIcmdWith3VectorAndUnit* fDimensionsCmd = nullptr;
+  G4UIcmdWithADoubleAndUnit* fHousingThicknessCmd = nullptr;
+  G4UIcmdWithADoubleAndUnit* fPmtRadiusCmd = nullptr;
+  G4UIcmdWithAnInteger* fNxCmd = nullptr;
+  G4UIcmdWithAnInteger* fNyCmd = nullptr;
+  G4UIcmdWithAnInteger* fNzCmd = nullptr;
+  G4UIcmdWithABool* fSphereCmd = nullptr;
+  G4UIcmdWithADouble* fReflectivityCmd = nullptr;
+  G4UIcmdWithABool* fWlsCmd = nullptr;
+  G4UIcmdWithABool* fLxeCmd = nullptr;
+  G4UIcmdWithAnInteger* fNFibersCmd = nullptr;
+  G4UIcommand* fDefaultsCmd = nullptr;
+  G4UIcmdWithADouble* fMainScintYield = nullptr;
+  G4UIcmdWithADouble* fWLSScintYield = nullptr;
+  G4UIcmdWithAnInteger* fSaveThresholdCmd = nullptr;
 };
 
 #endif

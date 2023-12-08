@@ -95,12 +95,12 @@ public:
 
 private:
   const G4ITBox & operator=(const G4ITBox &right);
-  G4int fNbIT;
-  G4IT * fpFirstIT;
-  G4IT * fpLastIT;
+  G4int fNbIT{0};
+  G4IT * fpFirstIT{nullptr};
+  G4IT * fpLastIT{nullptr};
 
-  G4ITBox* fpPreviousBox;
-  G4ITBox* fpNextBox;
+  G4ITBox* fpPreviousBox{nullptr};
+  G4ITBox* fpNextBox{nullptr};
 };
 
 inline G4bool G4ITBox::Empty() const

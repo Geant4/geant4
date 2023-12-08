@@ -40,16 +40,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F05SteppingAction::F05SteppingAction(void)
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F05SteppingAction::~F05SteppingAction()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F05SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 

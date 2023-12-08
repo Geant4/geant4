@@ -45,7 +45,7 @@ using namespace std;
 
 G4DNADingfelderChargeDecreaseModel::G4DNADingfelderChargeDecreaseModel(const G4ParticleDefinition*,
                                                                        const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
   numberOfPartialCrossSections[0] = 0;
   numberOfPartialCrossSections[1] = 0;
@@ -339,7 +339,7 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<
      + waterBindingEnergy - outgoingParticleBindingEnergy);
   }
 
-  G4DynamicParticle* dp = new G4DynamicParticle (OutgoingParticleDefinition(definition, finalStateIndex),
+  auto  dp = new G4DynamicParticle (OutgoingParticleDefinition(definition, finalStateIndex),
       aDynamicParticle->GetMomentumDirection(),
       outK);
   fvect->push_back(dp);
@@ -391,7 +391,7 @@ G4ParticleDefinition* G4DNADingfelderChargeDecreaseModel::OutgoingParticleDefini
   if (particleDefinition == alphaPlusDef)
     return heliumDef;
 
-  return 0;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -555,7 +555,7 @@ G4int G4DNADingfelderChargeDecreaseModel::RandomSelect(G4double k,
     particleTypeIndex = 2;
 
   const G4int n = numberOfPartialCrossSections[particleTypeIndex];
-  G4double* values(new G4double[n]);
+  auto  values(new G4double[n]);
   G4double value(0);
   G4int i = n;
 

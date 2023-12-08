@@ -48,25 +48,25 @@ class LXeWLSFiber : public G4PVPlacement
 
   static G4LogicalVolume* fClad2_log;
 
-  G4double fFiber_rmin;
-  G4double fFiber_rmax;
-  G4double fFiber_z;
-  G4double fFiber_sphi;
-  G4double fFiber_ephi;
+  G4double fFiber_rmin = 0.;
+  G4double fFiber_rmax = 0.;
+  G4double fFiber_z = 0.;
+  G4double fFiber_sphi = 0.;
+  G4double fFiber_ephi = 0.;
 
-  G4double fClad1_rmin;
-  G4double fClad1_rmax;
-  G4double fClad1_z;
-  G4double fClad1_sphi;
-  G4double fClad1_ephi;
+  G4double fClad1_rmin = 0.;
+  G4double fClad1_rmax = 0.;
+  G4double fClad1_z = 0.;
+  G4double fClad1_sphi = 0.;
+  G4double fClad1_ephi = 0.;
 
-  G4double fClad2_rmin;
-  G4double fClad2_rmax;
-  G4double fClad2_z;
-  G4double fClad2_sphi;
-  G4double fClad2_ephi;
+  G4double fClad2_rmin = 0.;
+  G4double fClad2_rmax = 0.;
+  G4double fClad2_z = 0.;
+  G4double fClad2_sphi = 0.;
+  G4double fClad2_ephi = 0.;
 
-  LXeDetectorConstruction* fConstructor;
+  LXeDetectorConstruction* fConstructor = nullptr;
 };
 
 #endif

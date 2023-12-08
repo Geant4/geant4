@@ -1,9 +1,18 @@
 # Example B3 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2023-11-15 I. Hrivnacova (exampleB3-V11-01-01)
+- Updated vis.mac macros:
+  Changed "/vis/open OGL [600x600-0+0]" to "/vis/open" to allow run-time choices
+  and simplified comments
+
+## 2023-11-03 I. Hrivnacova (exampleB3-V11-01-00)
+- Applied auto in main where suitable and not done by clang-tidy
 
 ## 2022-11-29 I. Hrivnacova (exampleB3-V11-00-02)
 - Activated merging ntuples with score ntuple writer

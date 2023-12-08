@@ -81,6 +81,6 @@ public:
 protected :
     G4VMolecularDissociationDisplacer() = default;
 
-    G4int fVerbose;
+    G4int fVerbose{0};
 };
 

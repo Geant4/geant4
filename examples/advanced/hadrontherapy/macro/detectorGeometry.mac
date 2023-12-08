@@ -20,12 +20,16 @@
 # Initialize geometry and physic 
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 #############################
 # Initialize graphic system #     
 #############################
 # 
 #/vis/scene/create
 #/vis/open OGL
+##/vis/open  ## open the default viewer
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/scene/add/trajectories

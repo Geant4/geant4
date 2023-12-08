@@ -56,8 +56,8 @@ class G4VUserBrownianAction;
 class G4BrownianAction
 {
 public:
-  G4BrownianAction(){;}
-  virtual ~G4BrownianAction(){;}
+  G4BrownianAction()= default;
+  virtual ~G4BrownianAction()= default;
 
 //  virtual G4double GetDiffusionCoefficient(G4Material*,
 //                                           G4Molecule*) { return 0;}
@@ -94,7 +94,7 @@ public:
  *  ** Method 2 can randomly compute the time to the next boundary using the
  *  following formula:
  *
- *  t_random = 1 / (4 * diffusionCoefficient)* pow(geometryStepLength /
+ *  t_random = 1 / (4 * diffusionCoefficient)* std::pow(geometryStepLength /
  *                  InvErfc(G4UniformRand()),2);
  *  For release 10.1, this is using the 1D cumulative density function.
  *
@@ -112,32 +112,32 @@ public:
   G4DNABrownianTransportation(const G4String& aName =
                               "DNABrownianTransportation",
                               G4int verbosityLevel = 0);
-  virtual ~G4DNABrownianTransportation();
+  ~G4DNABrownianTransportation() override;
   G4DNABrownianTransportation(const G4DNABrownianTransportation&) = delete;
   G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation&) = delete;
 
   inline void SetBrownianAction(G4BrownianAction*);
   inline void SetUserBrownianAction(G4VUserBrownianAction*);
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  virtual void StartTracking(G4Track* aTrack);
+  void StartTracking(G4Track* aTrack) override;
 
-  virtual void ComputeStep(const G4Track&,
+  void ComputeStep(const G4Track&,
                            const G4Step&,
                            const G4double,
-                           G4double&);
+                           G4double&) override;
 
-  virtual G4double
+  G4double
   AlongStepGetPhysicalInteractionLength(const G4Track& /*track*/,
                                         G4double /*previousStepSize*/,
                                         G4double /*currentMinimumStep*/,
                                         G4double& /*currentSafety*/,
-                                        G4GPILSelection* /*selection*/);
+                                        G4GPILSelection* /*selection*/) override;
   
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&) override;
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
+  G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&) override;
 
   // Boundary is crossed at time at which:
   // * either 5% of the distribution might be over boundary - the last position
@@ -155,7 +155,7 @@ public:
   // If speed up IS activated, particles are allowed jump over barrier
   inline void UseCumulativeDensitFunction(bool flag = true)
   {
-    if(flag == true)
+    if(flag)
     {
       fUseMaximumTimeBeforeReachingBoundary = false;
       return;
@@ -211,11 +211,11 @@ protected:
   {
   public:
     G4ITBrownianState();
-    virtual ~G4ITBrownianState()
+    ~G4ITBrownianState() override
     {
       ;
     }
-    virtual G4String GetType()
+    G4String GetType() override
     {
       return "G4ITBrownianState";
     }

@@ -99,7 +99,6 @@ void G4RootMpiNtupleFileManager::SetMpiNtupleMergingMode(
   Message(kVL1, "set", "mpi ntuple merging mode", mergingMode);
 }
 
-
 // 
 // public methods
 //
@@ -281,7 +280,7 @@ G4bool G4RootMpiNtupleFileManager::Reset()
   }  
 
   if ( fNtupleMergeMode == G4NtupleMergeMode::kSlave )  {
-    result &= fMpiSlaveNtupleManager->Reset(false);
+    result &= fMpiSlaveNtupleManager->Reset();
   }  
 
   return result;

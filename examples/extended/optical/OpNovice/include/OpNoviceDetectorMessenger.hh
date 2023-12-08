@@ -42,18 +42,19 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OpNoviceDetectorMessenger : public G4UImessenger {
+class OpNoviceDetectorMessenger : public G4UImessenger
+{
 public:
     OpNoviceDetectorMessenger(G4VUserDetectorConstruction*);
-    ~OpNoviceDetectorMessenger();
+    ~OpNoviceDetectorMessenger() override;
     void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
-    G4VUserDetectorConstruction* fOpNoviceDetCon;
-    G4UIdirectory* fDetConDir;
-    G4UIcmdWithABool* fVerboseCmd;
-    G4UIcmdWithABool* fDumpGdmlCmd;
-    G4UIcmdWithAString* fDumpGdmlFileNameCmd;
+    G4VUserDetectorConstruction* fOpNoviceDetCon = nullptr;
+    G4UIdirectory* fDetConDir = nullptr;
+    G4UIcmdWithABool* fVerboseCmd = nullptr;
+    G4UIcmdWithABool* fDumpGdmlCmd = nullptr;
+    G4UIcmdWithAString* fDumpGdmlFileNameCmd = nullptr;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

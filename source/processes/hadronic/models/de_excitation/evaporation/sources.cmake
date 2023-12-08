@@ -47,13 +47,13 @@ geant4_module_link_libraries(G4hadronic_deex_evaporation
   PUBLIC
     G4globman
     G4hadronic_deex_management
-    G4hadronic_deex_util
     G4hadronic_util
   PRIVATE
     G4hadronic_deex_fermi_breakup
     G4hadronic_deex_fission
     G4hadronic_deex_gem_evaporation
     G4hadronic_deex_photon_evaporation
+    G4hadronic_deex_util
     G4hepgeometry
     G4heprandom
     G4materials

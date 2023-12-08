@@ -144,6 +144,14 @@ class G4Material
 
   virtual ~G4Material();
 
+  // These methods allow customisation of corrections to ionisation
+  // computations. Free electron density above zero means that the material
+  // is a conductor. Computation of density effect correction of fly
+  // may be more accurate but require extra computations.
+  void SetChemicalFormula(const G4String& chF);
+  void SetFreeElectronDensity(G4double val);
+  void ComputeDensityEffectOnFly(G4bool val);
+
   G4Material(const G4Material&) = delete;
   const G4Material& operator=(const G4Material&) = delete;
 
@@ -169,7 +177,7 @@ class G4Material
   inline G4double GetPressure() const { return fPressure; }
 
   // number of elements constituing this material:
-  inline size_t GetNumberOfElements() const { return fNumberOfElements; }
+  inline std::size_t GetNumberOfElements() const { return fNumberOfElements; }
 
   // vector of pointers to elements constituing this material:
   inline const G4ElementVector* GetElementVector() const { return theElementVector; }
@@ -215,12 +223,6 @@ class G4Material
   // for chemical compound
   inline G4double GetMassOfMolecule() const { return fMassOfMolecule; }
 
-  void SetChemicalFormula(const G4String& chF);
-
-  void SetFreeElectronDensity(G4double val);
-
-  void ComputeDensityEffectOnFly(G4bool);
-
   // meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
@@ -234,12 +236,12 @@ class G4Material
   }
 
   // the index of this material in the Table:
-  inline size_t GetIndex() const { return fIndexInTable; }
+  inline std::size_t GetIndex() const { return fIndexInTable; }
 
   // the static Table of Materials:
   static G4MaterialTable* GetMaterialTable();
 
-  static size_t GetNumberOfMaterials();
+  static std::size_t GetNumberOfMaterials();
 
   // return  pointer to a material, given its name:
   static G4Material* GetMaterial(const G4String& name, G4bool warning = true);
@@ -248,7 +250,7 @@ class G4Material
   static G4Material* GetMaterial(G4double z, G4double a, G4double dens);
 
   // return  pointer to a composit material, given its propeties:
-  static G4Material* GetMaterial(size_t nComp, G4double dens);
+  static G4Material* GetMaterial(std::size_t nComp, G4double dens);
 
   // printing methods
   friend std::ostream& operator<<(std::ostream&, const G4Material*);
@@ -312,7 +314,7 @@ class G4Material
   G4double fMassOfMolecule;  // Correct for materials built by atoms count
 
   G4State fState;  // Material state
-  size_t fIndexInTable;  // Index in the material table
+  std::size_t fIndexInTable;  // Index in the material table
   G4int fNumberOfElements;  // Number of G4Elements in the material
 
   // Class members used only at initialisation

@@ -46,7 +46,7 @@ class WLSPhotonDetHit : public G4VHit
  public:
   WLSPhotonDetHit();
   WLSPhotonDetHit(G4ThreeVector pExit, G4ThreeVector pArrive, G4double pTime, G4double pEnergy);
-  ~WLSPhotonDetHit();
+  ~WLSPhotonDetHit() override = default;
 
   WLSPhotonDetHit(const WLSPhotonDetHit& right);
   const WLSPhotonDetHit& operator=(const WLSPhotonDetHit& right);
@@ -68,17 +68,17 @@ class WLSPhotonDetHit : public G4VHit
   inline void SetEnergy(G4double en) { fEnergy = en; }
   inline G4double GetEnergy() { return fEnergy; }
 
-  void Print();
+  void Print() override;
 
  private:
   // the arrival time of the photon
-  G4double fArrivalTime;
+  G4double fArrivalTime = 0.;
   // where the photon hit the detector (detector's coordinate)
   G4ThreeVector fPosArrive;
   // where the photon exited the fiber (world's coordinate)
   G4ThreeVector fPosExit;
   // energy of photon
-  G4double fEnergy;
+  G4double fEnergy = 0.;
 };
 
 //--------------------------------------------------

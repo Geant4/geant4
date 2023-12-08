@@ -941,7 +941,7 @@ G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
   parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("window-size-hint", 's', omitable = true);
-  parameter -> SetDefaultValue("none");
+  parameter -> SetCurrentAsDefault (true);
   fpCommand -> SetParameter (parameter);
 }
 
@@ -963,20 +963,32 @@ G4String G4VisCommandViewerCreate::NextName () {
   return oss.str();
 }
 
-G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*) {
-  G4String currentValue;
-  G4VSceneHandler* currentSceneHandler =
-    fpVisManager -> GetCurrentSceneHandler ();
-  if (currentSceneHandler) {
-    currentValue = currentSceneHandler -> GetName ();
-  } else {
-    currentValue = "none";
+G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*)
+{
+  G4String sceneHandlerName;
+  auto currentSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (currentSceneHandler) {  // Get name of last scene handler
+    sceneHandlerName = currentSceneHandler->GetName();
   }
-  currentValue += ' ';
-  currentValue += '"';
-  currentValue += NextName ();
-  currentValue += '"';
-  return currentValue;
+  else {  // No scene handler - ensure a warning message
+    sceneHandlerName = "none";
+  }
+
+  // Default name
+  const auto& viewerName = NextName();
+
+  // Size hint
+  G4String windowSizeHint;
+  auto currentViewer = fpVisManager->GetCurrentViewer();
+  if (currentViewer) {  // Get hint from last viewer
+    windowSizeHint = currentViewer->GetViewParameters().GetXGeometryString();
+  }
+  else {  // No viewer - must be first time
+    windowSizeHint = fpVisManager->GetDefaultXGeometryString();
+  }
+
+  // Add quotes around viewer name
+  return sceneHandlerName + " \"" + viewerName + "\" " + windowSizeHint;
 }
 
 void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command, G4String newValue) {

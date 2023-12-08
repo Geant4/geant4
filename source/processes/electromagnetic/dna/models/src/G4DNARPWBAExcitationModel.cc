@@ -236,8 +236,8 @@ G4int G4DNARPWBAExcitationModel::RandomSelect(G4double k)
 {
   G4int level = 0;
 
-  G4double* valuesBuffer = new G4double[fTableData->NumberOfComponents()];
-  const G4int n = (G4int)fTableData->NumberOfComponents();
+  auto  valuesBuffer = new G4double[fTableData->NumberOfComponents()];
+  const auto  n = (G4int)fTableData->NumberOfComponents();
   G4int i(n);
   G4double value = 0.;
 

@@ -51,13 +51,12 @@ class G4UIdirectory;
 class G4CascadeParamMessenger : public G4UImessenger {
 public:
   G4CascadeParamMessenger(G4CascadeParameters* params);
-  virtual ~G4CascadeParamMessenger();
+  ~G4CascadeParamMessenger() override;
 
   // Interface command needed by G4UImanager -- subclasses should call back!
-  virtual void SetNewValue(G4UIcommand* command, G4String newValue);
+  void SetNewValue(G4UIcommand* command, G4String newValue) override;
 
-protected:		// These commands are intended to be in a base class
-  void CreateDirectory(const char* path, const char* desc);
+protected:
 
   template <class T>
   T* CreateCommand(const G4String& cmd, const G4String& desc);
@@ -65,7 +64,6 @@ protected:		// These commands are intended to be in a base class
 private:
   G4CascadeParameters*  theParams;
   G4UIdirectory* cmdDir;
-  G4bool localCmdDir;		// Flag if created vs. found directory
 
   G4UIcmdWithAnInteger* verboseCmd;
   G4UIcmdWithoutParameter* reportCmd;

@@ -142,19 +142,23 @@
  7. HOW TO START ?
  
    Execute rdecay02 in 'batch' mode from macro files :
- 	% rdecay02   run1.mac
+ 	% rdecay02   run.mac
  		
    Execute rdecay02 in 'interactive mode' with visualization :
  	% rdecay02
-	Idle> control/execute vis.mac
+	Idle> control/execute debug.mac
  	....
  	Idle> type your commands
  	....
  	Idle> exit
 	
+	run.mac  : decay of Ne24. A run of 1000 events
+	debug.mac: interactively. One Ne24 decay,
+	           with visualization and tracking/verbose
+		   
  8. FURTHER EXAMPLES
 
-   There are a number of g4mac files in the ./macros subdirectory, to show 
+   There are a number of macros files in the ./macros subdirectory, to show 
    the features of the G4RadioactiveDecay process. Most of them will lead to 
    the creation of an root file in the same name of the macro file.
 

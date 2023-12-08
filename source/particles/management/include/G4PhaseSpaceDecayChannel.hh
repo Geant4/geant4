@@ -34,52 +34,51 @@
 #ifndef G4PhaseSpaceDecayChannel_hh
 #define G4PhaseSpaceDecayChannel_hh 1
 
+#include "G4Cache.hh"
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VDecayChannel.hh"
-#include "G4Cache.hh"
 
 class G4PhaseSpaceDecayChannel : public G4VDecayChannel
 {
   public:
+    enum
+    {
+      MAX_N_DAUGHTERS = 5
+    };
 
-    enum { MAX_N_DAUGHTERS=5 }; 
-
+    // Constructors
     G4PhaseSpaceDecayChannel(G4int Verbose = 1);
-    G4PhaseSpaceDecayChannel(const G4String& theParentName,
-                                   G4double  theBR,
-                                   G4int     theNumberOfDaughters,
-                             const G4String& theDaughterName1,
+    G4PhaseSpaceDecayChannel(const G4String& theParentName, G4double theBR,
+                             G4int theNumberOfDaughters, const G4String& theDaughterName1,
                              const G4String& theDaughterName2 = "",
                              const G4String& theDaughterName3 = "",
                              const G4String& theDaughterName4 = "",
-                             const G4String& theDaughterName5 = "" );
-      // Constructors 
+                             const G4String& theDaughterName5 = "");
 
+    // Destructor
     ~G4PhaseSpaceDecayChannel() override = default;
-      // Destructor
 
-    G4bool SetDaughterMasses( G4double masses[]);
-      // Give daughter masses instead of sampling masses 
-      // according to PDG mass and width
-  
+    // Give daughter masses instead of sampling masses
+    // according to PDG mass and width
+    G4bool SetDaughterMasses(G4double masses[]);
+
     G4bool SampleDaughterMasses();
 
-    G4DecayProducts* DecayIt(G4double) override;   
+    G4DecayProducts* DecayIt(G4double) override;
     G4bool IsOKWithParentMass(G4double parentMass) override;
 
     static G4double Pmx(G4double e, G4double p1, G4double p2);
- 
-  private:
 
+  private:
     G4DecayProducts* OneBodyDecayIt();
     G4DecayProducts* TwoBodyDecayIt();
     G4DecayProducts* ThreeBodyDecayIt();
     G4DecayProducts* ManyBodyDecayIt();
-     
+
     G4Cache<G4double> current_parent_mass;  // A thread-local object
     G4double givenDaughterMasses[MAX_N_DAUGHTERS];
     G4bool useGivenDaughterMass = false;
-};  
+};
 
 #endif

@@ -35,43 +35,34 @@
 #include "DetectorConstruction.hh"
 
 #include "G4Event.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(DC)
+  : G4VUserPrimaryGeneratorAction(), fDetector(DC)
 {
-  fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("e+");
+  fParticleGun = new G4ParticleGun(1);
+  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("e+");
   fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(10*GeV);
+  fParticleGun->SetParticleEnergy(10 * GeV);
 
-  //set the initial gun position and direction.
-  G4double x0 = -0.5*(fDetector->GetSize());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
-  delete fParticleGun;
+  // set the initial gun position and direction.
+  G4double x0 = -0.5 * (fDetector->GetSize());
+  G4double y0 = 0. * cm, z0 = 0. * cm;
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the beginning of event
+  // this function is called at the beginning of event
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

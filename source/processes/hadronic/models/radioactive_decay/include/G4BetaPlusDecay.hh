@@ -30,6 +30,9 @@
 //  Date:   14 November 2014                                                  //
 //  Description: performs beta+ decay of radioactive nuclei, and returns      //
 //               daughter particles in rest frame of parent nucleus           // 
+//  Modifications:                                                            //
+//    23.08.2023 V.Ivanchenko make it thread safe using static utility        //
+//               G4BetaSpectrumSampler                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,8 +41,6 @@
 
 #include "G4NuclearDecay.hh"
 #include "G4BetaDecayType.hh"
-#include "G4BetaSpectrumSampler.hh"
-
 
 class G4BetaPlusDecay : public G4NuclearDecay
 {
@@ -49,18 +50,30 @@ class G4BetaPlusDecay : public G4NuclearDecay
                     const G4double& ex, const G4Ions::G4FloatLevelBase& flb,
                     const G4BetaDecayType& type);
 
-    virtual ~G4BetaPlusDecay();
+    ~G4BetaPlusDecay() override = default;
 
-    virtual G4DecayProducts* DecayIt(G4double);
+    G4DecayProducts* DecayIt(G4double) override;
 
-    virtual void DumpNuclearInfo();
+    void DumpNuclearInfo() override;
 
   private:
+
     void SetUpBetaSpectrumSampler(const G4int& parentZ, const G4int& parentA,
                                   const G4BetaDecayType& type);
 
-    const G4double endpointEnergy;
-    G4BetaSpectrumSampler* betaSampler;
+    const G4double maxEnergy; // in eMass units
+    const G4double estep;     // in eMass units
+    G4double parentMass;
+    G4double resMass;
+
+    const G4ParticleDefinition* fPrimaryIon;
+    const G4ParticleDefinition* fResIon;
+    const G4ParticleDefinition* fLepton;
+    const G4ParticleDefinition* fNeutrino;
+
+    static const G4int npti{101};
+    G4double cdf[npti];
 };
+
 #endif
 

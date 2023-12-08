@@ -67,6 +67,7 @@ class G4HnMessenger : public G4UImessenger
     void SetHnPlottingToAllCmd();
     void SetHnFileNameCmd();
     void SetHnFileNameToAllCmd();
+    std::unique_ptr<G4UIcommand> CreateSetAxisLogCommand(unsigned int ibin);
 
     // constants
     static constexpr std::string_view fkClass { "G4HnMessenger" };
@@ -74,6 +75,7 @@ class G4HnMessenger : public G4UImessenger
     // Data members
     G4HnManager& fManager; ///< Associated class
     G4String fHnType;
+    unsigned int fHnDimension;
     std::unique_ptr<G4UIcommand>        fSetAsciiCmd;
     std::unique_ptr<G4UIcommand>        fSetActivationCmd;
     std::unique_ptr<G4UIcmdWithABool>   fSetActivationAllCmd;
@@ -81,6 +83,7 @@ class G4HnMessenger : public G4UImessenger
     std::unique_ptr<G4UIcmdWithABool>   fSetPlottingAllCmd;
     std::unique_ptr<G4UIcommand>        fSetFileNameCmd;
     std::unique_ptr<G4UIcmdWithAString> fSetFileNameAllCmd;
+    std::vector<std::unique_ptr<G4UIcommand>> fSetAxisLogCmd;
 };
 
 //_____________________________________________________________________________

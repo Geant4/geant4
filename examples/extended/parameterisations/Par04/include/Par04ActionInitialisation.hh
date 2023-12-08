@@ -29,6 +29,7 @@
 #include "G4VUserActionInitialization.hh"
 
 class Par04DetectorConstruction;
+class Par04ParallelFullWorld;
 
 /**
  * @brief Initialization of user actions.
@@ -41,7 +42,8 @@ class Par04DetectorConstruction;
 class Par04ActionInitialisation : public G4VUserActionInitialization
 {
  public:
-  Par04ActionInitialisation(Par04DetectorConstruction* aDetector);
+  Par04ActionInitialisation(Par04DetectorConstruction* aDetector,
+                            Par04ParallelFullWorld* aParallel);
   ~Par04ActionInitialisation();
   /// Create all user actions.
   virtual void Build() const final;
@@ -52,6 +54,7 @@ class Par04ActionInitialisation : public G4VUserActionInitialization
   /// Pointer to detector to be passed to event and run actions in order to
   /// retrieve detector dimensions
   Par04DetectorConstruction* fDetector = nullptr;
+  Par04ParallelFullWorld* fParallel = nullptr;
 };
 
 #endif /* PAR04ACTIONINITIALISATION_HH */

@@ -71,8 +71,7 @@ void DriftChamberHit::Draw()
   G4Circle circle(fWorldPos);
   circle.SetScreenSize(2);
   circle.SetFillStyle(G4Circle::filled);
-  G4Colour colour(1.,1.,0.);
-  G4VisAttributes attribs(colour);
+  G4VisAttributes attribs(G4Colour::Yellow());
   circle.SetVisAttributes(attribs);
   visManager->Draw(circle);
 }

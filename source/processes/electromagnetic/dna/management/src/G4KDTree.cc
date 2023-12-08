@@ -57,17 +57,17 @@ G4KDTree::G4KDTree(size_t k)
 
 G4KDTree::~G4KDTree()
 {
-  if(fRoot){
+  if(fRoot != nullptr){
     __Clear_Rec(fRoot);
     fRoot = nullptr;
   }
 
-  if(fRect){
+  if(fRect != nullptr){
     delete fRect;
     fRect = nullptr;
   }
 
-  if(fKDMap){
+  if(fKDMap != nullptr){
     delete fKDMap;
     fKDMap = nullptr;
   }
@@ -75,7 +75,7 @@ G4KDTree::~G4KDTree()
 
 void* G4KDTree::operator new(size_t)
 {
-  if(!fgAllocator()){
+  if(fgAllocator() == nullptr){
     fgAllocator() = new G4Allocator<G4KDTree>;
   }
   return (void*) fgAllocator()->MallocSingle();
@@ -88,7 +88,7 @@ void G4KDTree::operator delete(void* aNode)
 
 void G4KDTree::Print(std::ostream& out) const
 {
-  if(fRoot){
+  if(fRoot != nullptr){
     fRoot->Print(out);
   }
 }
@@ -99,7 +99,7 @@ void G4KDTree::Clear()
   fRoot    = nullptr;
   fNbNodes = 0;
 
-  if(fRect)
+  if(fRect != nullptr)
   {
     delete fRect;
     fRect = nullptr;
@@ -108,16 +108,16 @@ void G4KDTree::Clear()
 
 void G4KDTree::__Clear_Rec(G4KDNode_Base* node)
 {
-  if(!node)
+  if(node == nullptr)
   {
     return;
   }
 
-  if(node->GetLeft())
+  if(node->GetLeft() != nullptr)
   {
     __Clear_Rec(node->GetLeft());
   }
-  if(node->GetRight())
+  if(node->GetRight() != nullptr)
   {
     __Clear_Rec(node->GetRight());
   }
@@ -156,7 +156,7 @@ void G4KDTree::Build()
     for(size_t dim = 0; dim < fDim; dim++)
     {
       G4KDNode_Base* node = fKDMap->PopOutMiddle(dim);
-      if(node)
+      if(node != nullptr)
       {
         parent->Insert(node);
         fNbActiveNodes++;
@@ -169,7 +169,7 @@ void G4KDTree::Build()
 
 G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode_Base* node)
 {
-  if(!fRect)
+  if(fRect == nullptr)
   {
     return nullptr;
   }
@@ -202,16 +202,14 @@ G4KDTreeResultHandle G4KDTree::Nearest(G4KDNode_Base* node)
 
     return rset;
   }
-  else
-  {
-    return nullptr;
-  }
+  
+  return nullptr;
 }
 
 G4KDTreeResultHandle G4KDTree::NearestInRange(G4KDNode_Base* node,
                                               const G4double& range)
 {
-  if(!node)
+  if(node == nullptr)
   {
     return nullptr;
   }

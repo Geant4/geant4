@@ -64,9 +64,6 @@ G4PreCompoundTransitions::G4PreCompoundTransitions()
   r0 = param->GetTransitionsR0();
 }
 
-G4PreCompoundTransitions::~G4PreCompoundTransitions() 
-{}
-
 // Calculates transition probabilities with 
 // DeltaN = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
 G4double G4PreCompoundTransitions::
@@ -104,7 +101,7 @@ CalculateProbability(const G4Fragment & aFragment)
     
     // Sample kind of nucleon-projectile 
     G4bool ChargedNucleon(false);
-    if(G4int(P*G4UniformRand()) <= aFragment.GetNumberOfCharged()) {
+    if(G4lrint(P*G4UniformRand()) <= aFragment.GetNumberOfCharged()) {
       ChargedNucleon = true; 
     }
     

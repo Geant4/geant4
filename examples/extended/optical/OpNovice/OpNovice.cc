@@ -86,7 +86,7 @@ int main(int argc, char** argv)
     PrintUsage();
     return 1;
   }
-  G4String gdmlfile = "";
+  G4String gdmlfile;
   G4String macro;
   G4String session;
 #ifdef G4MULTITHREADED
@@ -155,7 +155,7 @@ int main(int argc, char** argv)
   // Physics list
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
-  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  auto opticalPhysics = new G4OpticalPhysics();
   physicsList->RegisterPhysics(opticalPhysics);
   runManager->SetUserInitialization(physicsList);
 

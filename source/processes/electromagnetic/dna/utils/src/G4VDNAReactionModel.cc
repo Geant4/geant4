@@ -27,9 +27,8 @@
 #include "G4VDNAReactionModel.hh"
 
 G4VDNAReactionModel::G4VDNAReactionModel()
-    : fpReactionTable(nullptr)
-{
-}
+     
+= default;
 
 G4VDNAReactionModel::~G4VDNAReactionModel() = default;
 

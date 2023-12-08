@@ -447,7 +447,7 @@ void G4DNAPTBIonisationModel::ReadDiffCSFile(const std::size_t& materialID,
   // get the path of the G4LEDATA data folder
   const char* path = G4FindDataDir("G4LEDATA");
   // if it is not found then quit and print error message
-  if (!path) {
+  if (path == nullptr) {
     G4Exception("G4DNAPTBIonisationModel::ReadAllDiffCSFiles", "em0006", FatalException,
                 "G4LEDATA environment variable was not set.");
     return;
@@ -487,7 +487,7 @@ void G4DNAPTBIonisationModel::ReadDiffCSFile(const std::size_t& materialID,
       continue;
     }
     // check if line is empty
-    else if (line.empty()) {
+    if (line.empty()) {
       // skip the line by beginning a new while loop.
       continue;
     }
@@ -595,7 +595,7 @@ G4double G4DNAPTBIonisationModel::RandomizeEjectedElectronEnergy(
     return secondaryElectronKineticEnergy;
   }
 
-  else if (particleDefinition == G4Proton::ProtonDefinition()) {
+  if (particleDefinition == G4Proton::ProtonDefinition()) {
     G4double maximumKineticEnergyTransfer = 4. * (electron_mass_c2 / proton_mass_c2) * k;
 
     G4double crossSectionMaximum = 0.;

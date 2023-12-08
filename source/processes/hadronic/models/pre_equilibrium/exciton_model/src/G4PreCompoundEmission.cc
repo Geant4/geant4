@@ -104,7 +104,7 @@ G4ReactionProduct*
 G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
   // Choose a Fragment for emission
-  G4VPreCompoundFragment * thePreFragment = 
+  G4VPreCompoundFragment * thePreFragment =
     theFragmentsVector->ChooseFragment();
   if (thePreFragment == nullptr)
     {
@@ -266,11 +266,11 @@ G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg,
 				    G4double E, G4double Ef) const
 {	
   // 25.02.2010 V.Ivanchenko added more protections
-  G4double Aph   = (p*p + h*h + p - 3.0*h)/(4.0*gg);
+  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*gg);
   
   if ( E - Aph < 0.0) { return 0.0; }
   
-  G4double logConst =  (p+h)*G4Log(gg) 
+  G4double logConst = (p+h)*G4Log(gg) 
     - g4calc->logfactorial(p+h-1) - g4calc->logfactorial(p) 
     - g4calc->logfactorial(h);
 

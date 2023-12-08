@@ -41,19 +41,6 @@ G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXePMTHit::LXePMTHit()
-  : fPmtNumber(-1)
-  , fPhotons(0)
-  , fPhysVol(nullptr)
-  , fDrawit(false)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXePMTHit::~LXePMTHit() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 LXePMTHit::LXePMTHit(const LXePMTHit& right)
   : G4VHit()
 {

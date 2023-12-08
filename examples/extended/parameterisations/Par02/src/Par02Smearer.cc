@@ -39,7 +39,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02Smearer* Par02Smearer::fPar02Smearer = 0;
+Par02Smearer* Par02Smearer::fPar02Smearer = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,7 +51,7 @@ Par02Smearer::Par02Smearer() {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02Smearer::~Par02Smearer() {}
+Par02Smearer::~Par02Smearer() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

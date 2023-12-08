@@ -179,4 +179,4 @@ geant4_module_link_libraries(G4emstandard
     G4ions
     G4mesons
     G4procman
-    ${ZLIB_LIBRARIES})
+    ${G4ZLIB_LIBRARIES})

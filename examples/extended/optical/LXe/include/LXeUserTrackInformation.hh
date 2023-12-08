@@ -57,8 +57,8 @@ enum LXeTrackStatus
 class LXeUserTrackInformation : public G4VUserTrackInformation
 {
  public:
-  LXeUserTrackInformation();
-  ~LXeUserTrackInformation();
+  LXeUserTrackInformation() = default;
+  ~LXeUserTrackInformation() override = default;
 
   // Sets the track status to s (does not check validity of flags)
   void SetTrackStatusFlags(int s) { fStatus = s; }
@@ -74,12 +74,12 @@ class LXeUserTrackInformation : public G4VUserTrackInformation
   void SetForceDrawTrajectory(G4bool b) { fForcedraw = b; }
   G4bool GetForceDrawTrajectory() { return fForcedraw; }
 
-  inline virtual void Print() const {};
+  inline virtual void Print() const override {};
 
  private:
-  int fStatus;
-  G4int fReflections;
-  G4bool fForcedraw;
+  int fStatus = active;
+  G4int fReflections = 0;
+  G4bool fForcedraw = false;
 };
 
 #endif

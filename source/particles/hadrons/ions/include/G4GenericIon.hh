@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -36,7 +33,7 @@
 // ****************************************************************
 // This class is used only by G4IonTable and not for tracking
 // G4IonTable creates various ions other than alpha,deuteron,triton,
-// and He3. Processes for these ions will be same as ones for 
+// and He3. Processes for these ions will be same as ones for
 // this "GenericIon". So, user should register processes for ions
 // to this class in his/her UserPhysicsList
 // ----------------------------------------------------------------------
@@ -44,26 +41,20 @@
 #ifndef G4GenericIon_h
 #define G4GenericIon_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                          GenericIon                            ###
-// ######################################################################
 
 class G4GenericIon : public G4Ions
 {
- private:
-   static G4GenericIon* theInstance;
-   G4GenericIon(){}
-   ~G4GenericIon() override= default;
+  public:
+    static G4GenericIon* Definition();
+    static G4GenericIon* GenericIonDefinition();
+    static G4GenericIon* GenericIon();
 
- public:
-   static G4GenericIon* Definition();
-   static G4GenericIon* GenericIonDefinition();
-   static G4GenericIon* GenericIon();
+  private:
+    G4GenericIon() {}
+    ~G4GenericIon() override = default;
+
+    static G4GenericIon* theInstance;
 };
 
 #endif

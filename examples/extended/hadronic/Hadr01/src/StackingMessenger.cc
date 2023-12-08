@@ -47,8 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:G4UImessenger(), fStackAction(stack),
- fKillCmd(0), fKCmd(0)
+  : G4UImessenger(), fStackAction(stack)
 {
   fKillCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries",this);
   fKillCmd->SetGuidance("  Choice : true false");

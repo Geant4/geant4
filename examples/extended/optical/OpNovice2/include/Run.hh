@@ -42,7 +42,7 @@ class Run : public G4Run
 {
  public:
   Run();
-  ~Run();
+  ~Run() override = default;
 
   void SetPrimary(G4ParticleDefinition* particle, G4double energy,
                   G4bool polarized, G4double polarization);
@@ -56,190 +56,190 @@ class Run : public G4Run
   void AddWLS2EmissionEnergy(G4double en) { fWLS2EmissionEnergy += en; }
 
   // number of particles
-  void AddCerenkov(void) { fCerenkovCount += 1; }
-  void AddScintillation(void) { fScintCount += 1; }
-  void AddRayleigh(void) { fRayleighCount += 1; }
-  void AddWLSAbsorption(void) { fWLSAbsorptionCount += 1; }
-  void AddWLSEmission(void) { fWLSEmissionCount += 1; }
-  void AddWLS2Absorption(void) { fWLS2AbsorptionCount += 1; }
-  void AddWLS2Emission(void) { fWLS2EmissionCount += 1; }
+  void AddCerenkov() { fCerenkovCount += 1; }
+  void AddScintillation() { fScintCount += 1; }
+  void AddRayleigh() { fRayleighCount += 1; }
+  void AddWLSAbsorption() { fWLSAbsorptionCount += 1; }
+  void AddWLSEmission() { fWLSEmissionCount += 1; }
+  void AddWLS2Absorption() { fWLS2AbsorptionCount += 1; }
+  void AddWLS2Emission() { fWLS2EmissionCount += 1; }
 
-  void AddOpAbsorption(void) { fOpAbsorption += 1; }
-  void AddOpAbsorptionPrior(void) { fOpAbsorptionPrior += 1; }
+  void AddOpAbsorption() { fOpAbsorption += 1; }
+  void AddOpAbsorptionPrior() { fOpAbsorptionPrior += 1; }
 
-  void AddFresnelRefraction(void) { fBoundaryProcs[FresnelRefraction] += 1; }
-  void AddFresnelReflection(void) { fBoundaryProcs[FresnelReflection] += 1; }
-  void AddTransmission(void) { fBoundaryProcs[Transmission] += 1; }
-  void AddTotalInternalReflection(void)
+  void AddFresnelRefraction() { fBoundaryProcs[FresnelRefraction] += 1; }
+  void AddFresnelReflection() { fBoundaryProcs[FresnelReflection] += 1; }
+  void AddTransmission() { fBoundaryProcs[Transmission] += 1; }
+  void AddTotalInternalReflection()
   {
     fBoundaryProcs[TotalInternalReflection] += 1;
   }
-  void AddLambertianReflection(void)
+  void AddLambertianReflection()
   {
     fBoundaryProcs[LambertianReflection] += 1;
   }
-  void AddLobeReflection(void) { fBoundaryProcs[LobeReflection] += 1; }
-  void AddSpikeReflection(void) { fBoundaryProcs[SpikeReflection] += 1; }
-  void AddBackScattering(void) { fBoundaryProcs[BackScattering] += 1; }
-  void AddAbsorption(void) { fBoundaryProcs[Absorption] += 1; }
-  void AddDetection(void) { fBoundaryProcs[Detection] += 1; }
-  void AddNotAtBoundary(void) { fBoundaryProcs[NotAtBoundary] += 1; }
-  void AddSameMaterial(void) { fBoundaryProcs[SameMaterial] += 1; }
-  void AddStepTooSmall(void) { fBoundaryProcs[StepTooSmall] += 1; }
-  void AddNoRINDEX(void) { fBoundaryProcs[NoRINDEX] += 1; }
+  void AddLobeReflection() { fBoundaryProcs[LobeReflection] += 1; }
+  void AddSpikeReflection() { fBoundaryProcs[SpikeReflection] += 1; }
+  void AddBackScattering() { fBoundaryProcs[BackScattering] += 1; }
+  void AddAbsorption() { fBoundaryProcs[Absorption] += 1; }
+  void AddDetection() { fBoundaryProcs[Detection] += 1; }
+  void AddNotAtBoundary() { fBoundaryProcs[NotAtBoundary] += 1; }
+  void AddSameMaterial() { fBoundaryProcs[SameMaterial] += 1; }
+  void AddStepTooSmall() { fBoundaryProcs[StepTooSmall] += 1; }
+  void AddNoRINDEX() { fBoundaryProcs[NoRINDEX] += 1; }
 
-  void AddTotalSurface(void) { fTotalSurface += 1; }
-  void AddPolishedLumirrorAirReflection(void)
+  void AddTotalSurface() { fTotalSurface += 1; }
+  void AddPolishedLumirrorAirReflection()
   {
     fBoundaryProcs[PolishedLumirrorAirReflection] += 1;
   }
-  void AddPolishedLumirrorGlueReflection(void)
+  void AddPolishedLumirrorGlueReflection()
   {
     fBoundaryProcs[PolishedLumirrorGlueReflection] += 1;
   }
-  void AddPolishedAirReflection(void)
+  void AddPolishedAirReflection()
   {
     fBoundaryProcs[PolishedAirReflection] += 1;
   }
-  void AddPolishedTeflonAirReflection(void)
+  void AddPolishedTeflonAirReflection()
   {
     fBoundaryProcs[PolishedTeflonAirReflection] += 1;
   }
-  void AddPolishedTiOAirReflection(void)
+  void AddPolishedTiOAirReflection()
   {
     fBoundaryProcs[PolishedTiOAirReflection] += 1;
   }
-  void AddPolishedTyvekAirReflection(void)
+  void AddPolishedTyvekAirReflection()
   {
     fBoundaryProcs[PolishedTyvekAirReflection] += 1;
   }
-  void AddPolishedVM2000AirReflection(void)
+  void AddPolishedVM2000AirReflection()
   {
     fBoundaryProcs[PolishedVM2000AirReflection] += 1;
   }
-  void AddPolishedVM2000GlueReflection(void)
+  void AddPolishedVM2000GlueReflection()
   {
     fBoundaryProcs[PolishedVM2000GlueReflection] += 1;
   }
 
-  void AddEtchedLumirrorAirReflection(void)
+  void AddEtchedLumirrorAirReflection()
   {
     fBoundaryProcs[EtchedLumirrorAirReflection] += 1;
   }
-  void AddEtchedLumirrorGlueReflection(void)
+  void AddEtchedLumirrorGlueReflection()
   {
     fBoundaryProcs[EtchedLumirrorGlueReflection] += 1;
   }
-  void AddEtchedAirReflection(void)
+  void AddEtchedAirReflection()
   {
     fBoundaryProcs[EtchedAirReflection] += 1;
   }
-  void AddEtchedTeflonAirReflection(void)
+  void AddEtchedTeflonAirReflection()
   {
     fBoundaryProcs[EtchedTeflonAirReflection] += 1;
   }
-  void AddEtchedTiOAirReflection(void)
+  void AddEtchedTiOAirReflection()
   {
     fBoundaryProcs[EtchedTiOAirReflection] += 1;
   }
-  void AddEtchedTyvekAirReflection(void)
+  void AddEtchedTyvekAirReflection()
   {
     fBoundaryProcs[EtchedTyvekAirReflection] += 1;
   }
-  void AddEtchedVM2000AirReflection(void)
+  void AddEtchedVM2000AirReflection()
   {
     fBoundaryProcs[EtchedVM2000AirReflection] += 1;
   }
-  void AddEtchedVM2000GlueReflection(void)
+  void AddEtchedVM2000GlueReflection()
   {
     fBoundaryProcs[EtchedVM2000GlueReflection] += 1;
   }
 
-  void AddGroundLumirrorAirReflection(void)
+  void AddGroundLumirrorAirReflection()
   {
     fBoundaryProcs[GroundLumirrorAirReflection] += 1;
   }
-  void AddGroundLumirrorGlueReflection(void)
+  void AddGroundLumirrorGlueReflection()
   {
     fBoundaryProcs[GroundLumirrorGlueReflection] += 1;
   }
-  void AddGroundAirReflection(void)
+  void AddGroundAirReflection()
   {
     fBoundaryProcs[GroundAirReflection] += 1;
   }
-  void AddGroundTeflonAirReflection(void)
+  void AddGroundTeflonAirReflection()
   {
     fBoundaryProcs[GroundTeflonAirReflection] += 1;
   }
-  void AddGroundTiOAirReflection(void)
+  void AddGroundTiOAirReflection()
   {
     fBoundaryProcs[GroundTiOAirReflection] += 1;
   }
-  void AddGroundTyvekAirReflection(void)
+  void AddGroundTyvekAirReflection()
   {
     fBoundaryProcs[GroundTyvekAirReflection] += 1;
   }
-  void AddGroundVM2000AirReflection(void)
+  void AddGroundVM2000AirReflection()
   {
     fBoundaryProcs[GroundVM2000AirReflection] += 1;
   }
-  void AddGroundVM2000GlueReflection(void)
+  void AddGroundVM2000GlueReflection()
   {
     fBoundaryProcs[GroundVM2000GlueReflection] += 1;
   }
 
-  void AddDichroic(void) { fBoundaryProcs[Dichroic] += 1; }
-  void AddCoatedDielectricRefraction(void)
+  void AddDichroic() { fBoundaryProcs[Dichroic] += 1; }
+  void AddCoatedDielectricRefraction()
   {
     fBoundaryProcs[CoatedDielectricRefraction] += 1;
   }
-  void AddCoatedDielectricReflection(void)
+  void AddCoatedDielectricReflection()
   {
     fBoundaryProcs[CoatedDielectricReflection] += 1;
   }
-  void AddCoatedDielectricFrustratedTransmission(void)
+  void AddCoatedDielectricFrustratedTransmission()
   {
     fBoundaryProcs[CoatedDielectricFrustratedTransmission] += 1;
   }
 
-  virtual void Merge(const G4Run*);
+  void Merge(const G4Run*) override;
 
   void EndOfRun();
 
  private:
   // primary particle
-  G4ParticleDefinition* fParticle;
-  G4double fEkin;
-  G4bool fPolarized;
-  G4double fPolarization;
+  G4ParticleDefinition* fParticle = nullptr;
+  G4double fEkin = -1.;
+  G4bool fPolarized = false;
+  G4double fPolarization = 0.;
 
-  G4double fCerenkovEnergy;
-  G4double fScintEnergy;
-  G4double fWLSAbsorptionEnergy;
-  G4double fWLSEmissionEnergy;
-  G4double fWLS2AbsorptionEnergy;
-  G4double fWLS2EmissionEnergy;
+  G4double fCerenkovEnergy = 0.;
+  G4double fScintEnergy = 0.;
+  G4double fWLSAbsorptionEnergy = 0.;
+  G4double fWLSEmissionEnergy = 0.;
+  G4double fWLS2AbsorptionEnergy = 0.;
+  G4double fWLS2EmissionEnergy = 0.;
 
   // number of particles
-  G4int fCerenkovCount;
-  G4int fScintCount;
-  G4int fWLSAbsorptionCount;
-  G4int fWLSEmissionCount;
-  G4int fWLS2AbsorptionCount;
-  G4int fWLS2EmissionCount;
+  G4int fCerenkovCount = 0;
+  G4int fScintCount = 0;
+  G4int fWLSAbsorptionCount = 0;
+  G4int fWLSEmissionCount = 0;
+  G4int fWLS2AbsorptionCount = 0;
+  G4int fWLS2EmissionCount = 0;
   // number of events
-  G4int fRayleighCount;
+  G4int fRayleighCount = 0;
 
   // non-boundary processes
-  G4int fOpAbsorption;
+  G4int fOpAbsorption = 0;
 
   // prior to boundary:
-  G4int fOpAbsorptionPrior;
+  G4int fOpAbsorptionPrior = 0;
 
   // boundary proc
   std::vector<G4int> fBoundaryProcs;
 
-  G4int fTotalSurface;
+  G4int fTotalSurface = 0;
 };
 
 #endif /* Run_h */

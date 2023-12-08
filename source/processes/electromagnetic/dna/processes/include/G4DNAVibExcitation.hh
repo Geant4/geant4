@@ -54,7 +54,7 @@ protected:
 
 private:
      
-  G4bool isInitialised;
+  G4bool isInitialised{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

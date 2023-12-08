@@ -43,18 +43,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F06PhysicsList::F06PhysicsList() : G4VModularPhysicsList() 
+F06PhysicsList::F06PhysicsList()
 {
     RegisterPhysics(new G4DecayPhysics());
 
-    G4StepLimiterPhysics* stepLimiterPhysics = new G4StepLimiterPhysics();
+    auto  stepLimiterPhysics = new G4StepLimiterPhysics();
     stepLimiterPhysics->SetApplyToAll(true);
     RegisterPhysics(stepLimiterPhysics);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F06PhysicsList::~F06PhysicsList() {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

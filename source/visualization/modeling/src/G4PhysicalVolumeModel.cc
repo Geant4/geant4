@@ -57,10 +57,6 @@
 
 #define G4warn G4cout
 
-namespace {
-  G4int volumeCount = 0;
-}
-
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*            pVPV
  , G4int                       requestedDepth
@@ -224,18 +220,13 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 
   G4Transform3D startingTransformation = fTransform;
 
-  volumeCount = 0;
+  fNTouchables.clear();  // Keeps count of touchable drawn at each depth
 
   VisitGeometryAndGetVisReps
     (fpTopPV,
      fRequestedDepth,
      startingTransformation,
      sceneHandler);
-
-//  G4cout
-//  << "G4PhysicalVolumeModel::DescribeYourselfTo: volume count: "
-//  << volumeCount
-//  << G4endl;
 
   // Reset or clear data...
   fCurrentDepth     = 0;
@@ -685,7 +676,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       theNewAT = centering * newTranslation * oldRotation * oldScale;
     }
 
-    volumeCount++;
+    auto fullDepth = fCurrentDepth + (G4int)fBaseFullPVPath.size();
+    fNTouchables[fullDepth]++;  // Increment for every touchable drawn at each depth
+
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
 
   }

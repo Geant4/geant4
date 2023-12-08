@@ -50,7 +50,7 @@ const G4int kMaxHisto = 4;
 class HistoManager
 {
   public:
-    HistoManager();
+    HistoManager() = default;
    ~HistoManager();
 
     void Book();

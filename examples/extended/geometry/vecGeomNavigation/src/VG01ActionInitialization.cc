@@ -30,19 +30,27 @@
 #include "VG01ActionInitialization.hh"
 #include "VG01PrimaryGeneratorAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 VG01ActionInitialization::VG01ActionInitialization()
  : G4VUserActionInitialization()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 VG01ActionInitialization::~VG01ActionInitialization()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void VG01ActionInitialization::BuildForMaster() const
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void VG01ActionInitialization::Build() const
 {
   SetUserAction(new VG01PrimaryGeneratorAction);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -45,11 +45,9 @@ G4DNAMesh::Voxel& G4DNAMesh::GetVoxel(const Index& key)
     fIndexMap[key] = G4int(fVoxelVector.size() - 1);
     return voxel;
   }
-  else
-  {
-    auto index = fIndexMap[key];
-    return fVoxelVector[index];
-  }
+  
+  auto index = fIndexMap[key];
+  return fVoxelVector[index];
 }
 
 G4DNAMesh::G4DNAMesh(const G4DNABoundingBox& boundingBox, G4int pixel)
@@ -156,27 +154,27 @@ G4DNAMesh::FindNeighboringVoxels(const Index& index) const
 
   if(index.x - 1 >= 0)
   {
-    neighbors.push_back(Index(index.x - 1, index.y, index.z));
+    neighbors.emplace_back(index.x - 1, index.y, index.z);
   }
   if(index.y - 1 >= 0)
   {
-    neighbors.push_back(Index(index.x, index.y - 1, index.z));
+    neighbors.emplace_back(index.x, index.y - 1, index.z);
   }
   if(index.z - 1 >= 0)
   {
-    neighbors.push_back(Index(index.x, index.y, index.z - 1));
+    neighbors.emplace_back(index.x, index.y, index.z - 1);
   }
   if(index.x + 1 < xMax)
   {
-    neighbors.push_back(Index(index.x + 1, index.y, index.z));
+    neighbors.emplace_back(index.x + 1, index.y, index.z);
   }
   if(index.y + 1 < yMax)
   {
-    neighbors.push_back(Index(index.x, index.y + 1, index.z));
+    neighbors.emplace_back(index.x, index.y + 1, index.z);
   }
   if(index.z + 1 < zMax)
   {
-    neighbors.push_back(Index(index.x, index.y, index.z + 1));
+    neighbors.emplace_back(index.x, index.y, index.z + 1);
   }
 
   return neighbors;

@@ -67,7 +67,7 @@ Par04DetectorConstruction::Par04DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04DetectorConstruction::~Par04DetectorConstruction() {}
+Par04DetectorConstruction::~Par04DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -106,8 +106,8 @@ G4VPhysicalVolume* Par04DetectorConstruction::Construct()
                                         "World",          // name
                                         0,                // mother volume
                                         false,            // not used
-                                        999,              // copy number
-                                        true);            // copy number
+                                        99999,            // copy number
+                                        false);           // check overlaps
   fLogicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //--------- Detector envelope ---------
@@ -126,8 +126,8 @@ G4VPhysicalVolume* Par04DetectorConstruction::Construct()
                     "Detector",                              // name
                     fLogicWorld,                             // mother volume
                     false,                                   // not used
-                    99,                                      // copy number
-                    true);                                   // check overlaps
+                    999,                                    // copy number
+                    false);                                  // check overlaps
 
   // Region for fast simulation
   auto detectorRegion = new G4Region("DetectorRegion");
@@ -145,12 +145,12 @@ G4VPhysicalVolume* Par04DetectorConstruction::Construct()
   {
     for(G4int iMaterial = 0; iMaterial < nbOfMaterials; iMaterial++)
     {
-      auto fSolidLayer         = new G4Tubs("Layer",      // name
-                                            innerRadius,  // inner radius
-                                            innerRadius + fAbsorberThickness[iMaterial],  // outer radius
-                                            fDetectorLength / 2.,  // half-width in Z
-                                            0,                     // start angle
-                                            full2Pi);              // delta angle
+      auto fSolidLayer = new G4Tubs("Layer",      // name
+                                    innerRadius,  // inner radius
+                                    innerRadius + fAbsorberThickness[iMaterial],  // outer radius
+                                    fDetectorLength / 2.,  // half-width in Z
+                                    0,                     // start angle
+                                    full2Pi);              // delta angle
       G4LogicalVolume* logical = new G4LogicalVolume(fSolidLayer,  // solid
                                                      fAbsorberMaterial[iMaterial],  // material
                                                      "Layer");                      // name
@@ -161,7 +161,7 @@ G4VPhysicalVolume* Par04DetectorConstruction::Construct()
                         fLogicDetector,                      // mother volume
                         false,                               // not used
                         iLayer * nbOfMaterials + iMaterial,  // copy number
-                        true);                               // check overlaps
+                        false);                              // check overlaps
       logical->SetVisAttributes(attribs[iMaterial]);
       innerRadius += fAbsorberThickness[iMaterial];
       if(fAbsorberSensitivity[iMaterial])
@@ -229,7 +229,8 @@ void Par04DetectorConstruction::SetAbsorberMaterial(const std::size_t aLayer, co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04DetectorConstruction::SetAbsorberThickness(const std::size_t aLayer, const G4double aThickness)
+void Par04DetectorConstruction::SetAbsorberThickness(const std::size_t aLayer,
+                                                     const G4double aThickness)
 {
   if(aLayer < fAbsorberThickness.size())
     fAbsorberThickness[aLayer] = aThickness;
@@ -244,14 +245,15 @@ void Par04DetectorConstruction::SetAbsorberThickness(const std::size_t aLayer, c
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04DetectorConstruction::SetAbsorberSensitivity(const std::size_t aLayer, const G4bool aSensitivity)
+void Par04DetectorConstruction::SetAbsorberSensitivity(const std::size_t aLayer,
+                                                       const G4bool aSensitivity)
 {
   if(aLayer < fAbsorberSensitivity.size())
     fAbsorberSensitivity[aLayer] = aSensitivity;
   else
     G4Exception(
       "Par04DetectorConstruction::SetAbsorberSensitivity()", "InvalidSetup", FatalException,
-      ("Requested layer " + std::to_string(aLayer) + " is larger than number of available layers (" +
+      ("Requested layer " + std::to_string(aLayer) + " is larger than number of available layers ("+
        std::to_string(fAbsorberSensitivity.size()) + ").")
         .c_str());
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();

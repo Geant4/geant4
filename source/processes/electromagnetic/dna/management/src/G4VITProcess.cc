@@ -25,11 +25,14 @@
 //
 //
 #include "G4VITProcess.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4IT.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TrackingInformation.hh"
 
-/*G4ThreadLocal*/size_t *G4VITProcess::fNbProcess = 0;
+#include <memory>
+
+/*G4ThreadLocal*/size_t *G4VITProcess::fNbProcess = nullptr;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
     G4VProcess(name, type)
@@ -37,13 +40,13 @@ G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
 //fProcessID(fNbProcess)
 {
   fpState.reset();
-  if(!fNbProcess) fNbProcess = new size_t(0);
+  if(fNbProcess == nullptr) fNbProcess = new size_t(0);
   fProcessID = *fNbProcess;
   (*fNbProcess)++;
   SetInstantiateProcessState(true);
-  currentInteractionLength = 0;
-  theInteractionTimeLeft = 0;
-  theNumberOfInteractionLengthLeft = 0;
+  currentInteractionLength = nullptr;
+  theInteractionTimeLeft = nullptr;
+  theNumberOfInteractionLengthLeft = nullptr;
   fProposesTimeStep = false;
 }
 
@@ -55,22 +58,19 @@ G4VITProcess::G4ProcessState::G4ProcessState()
 }
 
 G4VITProcess::G4ProcessState::~G4ProcessState()
-{;}
+= default;
 
 G4VITProcess::~G4VITProcess()
-{
-  //dtor
-  // As the owner, G4IT should delete fProcessState
-}
+= default;
 
 G4VITProcess::G4VITProcess(const G4VITProcess& other) :
     G4VProcess(other), fProcessID(other.fProcessID)
 {
   //copy ctor
   //fpState                             = 0 ;
-  currentInteractionLength            = 0;
-  theInteractionTimeLeft              = 0;
-  theNumberOfInteractionLengthLeft    = 0;
+  currentInteractionLength            = nullptr;
+  theInteractionTimeLeft              = nullptr;
+  theNumberOfInteractionLengthLeft    = nullptr;
   fInstantiateProcessState            = other.fInstantiateProcessState;
   fProposesTimeStep                   = other.fProposesTimeStep;
 }
@@ -88,7 +88,7 @@ void G4VITProcess::StartTracking(G4Track* track)
   if(InstantiateProcessState())
   {
     //        fpState = new G4ProcessState();
-    fpState.reset(new G4ProcessState());
+    fpState = std::make_shared<G4ProcessState>();
   }
 
   theNumberOfInteractionLengthLeft    = &(fpState->theNumberOfInteractionLengthLeft );

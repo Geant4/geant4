@@ -23,31 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementatLepton file 
+//	GEANT 4 class implementatLepton file
 //
 
 #include "G4LeptonConstructor.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 // Leptons
-#include "G4MuonPlus.hh"
+#include "G4AntiNeutrinoE.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4AntiNeutrinoTau.hh"
+#include "G4Electron.hh"
 #include "G4MuonMinus.hh"
+#include "G4MuonPlus.hh"
+#include "G4NeutrinoE.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4NeutrinoTau.hh"
+#include "G4Positron.hh"
 #include "G4TauMinus.hh"
 #include "G4TauPlus.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoTau.hh"
-#include "G4AntiNeutrinoTau.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
 
 void G4LeptonConstructor::ConstructParticle()
 {

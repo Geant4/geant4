@@ -284,7 +284,7 @@ void G4HadronPhysicsINCLXX::Others()
   if( param->GetMaxEnergy() > param->EnergyThresholdForHeavyHadrons() ) {
 
     // anti light ions
-    G4HadronicBuilder::BuildAntiLightIonsFTFP();
+    G4HadronicBuilder::BuildAntiLightIonsINCLXX();
 
     if ( param->EnableHyperNuclei() ) {
       // INCLXX is currently capable of handling light hypernuclei projectiles,

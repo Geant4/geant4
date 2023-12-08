@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-10 I. Hrivnacova (VecGeomNavigation-V11-01-01)
+- Coding guidelines: split long lines, added separators in
+  VG01ActionInitialization.cc
+- Remove run-ntst.mac
+
 ## 2023-01-09 Ben Morgan (VecGeomNavigation-V11-01-00)
 - Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
   scope version to ease use of Geant4 as a CMake subproject. 

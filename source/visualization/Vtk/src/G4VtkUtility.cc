@@ -26,9 +26,11 @@
 // Created by Stewart Boogert on 05/03/2023.
 //
 
+#include "G4VVtkPipeline.hh" // Move basic hashing functionality to G4VtkUtility.(hh/cc
 #include "G4VtkUtility.hh"
 
 #include "G4Transform3D.hh"
+#include "G4Colour.hh"
 
 #include "vtkMatrix4x4.h"
 #include "vtkPlane.h"
@@ -78,4 +80,33 @@ void MaxBounds(G4double* maxBound, G4double* boundToCheck)
 
   if (boundToCheck[4] < maxBound[4]) maxBound[4] = boundToCheck[4];
   if (boundToCheck[5] > maxBound[5]) maxBound[5] = boundToCheck[5];
+}
+
+
+std::size_t MakeHash(const G4ThreeVector &v)
+{
+
+  std::size_t xhash = std::hash<G4double>{}(v.x());
+  std::size_t yhash = std::hash<G4double>{}(v.y());
+  std::size_t zhash = std::hash<G4double>{}(v.z());
+
+  std::hash_combine(xhash, yhash);
+  std::hash_combine(yhash, zhash);
+
+  return xhash;
+}
+
+std::size_t MakeHash(const G4Colour &c)
+{
+
+  std::size_t rhash = std::hash<G4double>{}(c.GetRed());
+  std::size_t ghash = std::hash<G4double>{}(c.GetGreen());
+  std::size_t bhash = std::hash<G4double>{}(c.GetBlue());
+  std::size_t ahash = std::hash<G4double>{}(c.GetAlpha());
+
+  std::hash_combine(rhash, ghash);
+  std::hash_combine(rhash, bhash);
+  std::hash_combine(rhash, ahash);
+
+  return rhash;
 }

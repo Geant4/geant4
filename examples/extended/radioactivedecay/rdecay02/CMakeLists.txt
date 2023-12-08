@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(rdecay02)
 
 #----------------------------------------------------------------------------
@@ -43,6 +43,7 @@ set(rdecay02_SCRIPTS
     debug.mac
     plotHisto.C
     rdecay02.in
+    run.mac
     vis.mac
   )
 

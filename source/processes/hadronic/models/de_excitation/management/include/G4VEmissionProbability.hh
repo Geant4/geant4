@@ -58,23 +58,28 @@ public:
 
   virtual G4double ComputeProbability(G4double anEnergy, G4double CB);
 
-  inline G4int GetZ(void) const { return theZ; }
+  G4int GetZ(void) const { return theZ; }
 	
-  inline G4int GetA(void) const { return theA; }
+  G4int GetA(void) const { return theA; }
 
   // Z, A, rmass are residual parameters
   // fmass is SCM mass of decaying nucleus
   // exc is an excitation of emitted fragment
-  inline void SetDecayKinematics(G4int rZ, G4int rA, G4double rmass, 
-                                 G4double fmass);
+  void SetDecayKinematics(G4int rZ, G4int rA, G4double rmass, G4double fmass)
+  {
+    resZ = rZ;
+    resA = rA;
+    pMass = fmass;
+    pResMass = rmass;
+  }
 
-  inline G4double GetRecoilExcitation() const { return fExcRes; };
+  G4double GetRecoilExcitation() const { return fExcRes; };
 
-  inline void SetEvapExcitation(G4double exc) { fExc = exc; };
+  void SetEvapExcitation(G4double exc) { fExc = exc; };
 
-  inline G4double GetProbability() const { return pProbability; };
+  G4double GetProbability() const { return pProbability; };
 
-  inline void ResetProbability() { pProbability = 0.0; };
+  void ResetProbability() { pProbability = 0.0; };
 
   // this method may be called only if the probability is computed
   // for given initial fragment and decay channel
@@ -128,15 +133,5 @@ private:
 
   G4bool fFD = false;
 };
-
-inline void 
-G4VEmissionProbability::SetDecayKinematics(G4int rZ, G4int rA, G4double rmass, 
-                                           G4double fmass)
-{
-  resZ = rZ;
-  resA = rA;
-  pMass = fmass;
-  pResMass = rmass;
-}
 
 #endif

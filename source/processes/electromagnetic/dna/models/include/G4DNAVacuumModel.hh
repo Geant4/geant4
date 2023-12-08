@@ -59,7 +59,10 @@ class G4DNAVacuumModel : public G4VDNAModel
    * \brief ~G4DNAVacuumModel
    * Destructor
    */
-  virtual ~G4DNAVacuumModel();
+  ~G4DNAVacuumModel() override;
+
+  G4DNAVacuumModel(const G4DNAVacuumModel&) = delete;  // prevent copy-construction
+  G4DNAVacuumModel& operator=(const G4DNAVacuumModel& right) = delete;  // prevent assignement
 
   /*!
    * \brief Initialise
@@ -77,7 +80,7 @@ class G4DNAVacuumModel : public G4VDNAModel
    * \param emax
    * \return cross section value
    */
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  G4double CrossSectionPerVolume(const G4Material* material,
     const G4ParticleDefinition* p, G4double ekin, G4double emin, G4double emax) override;
 
   /*!
@@ -92,9 +95,6 @@ class G4DNAVacuumModel : public G4VDNAModel
  private:
   G4int verboseLevel = 0;  ///< verbose level
 
-  // copy constructor and hide assignment operator
-  G4DNAVacuumModel(const G4DNAVacuumModel&) = delete;  // prevent copy-construction
-  G4DNAVacuumModel& operator=(const G4DNAVacuumModel& right) = delete;  // prevent assignement
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

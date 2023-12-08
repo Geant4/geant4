@@ -20,9 +20,9 @@
 % TestEm0
 ....
 Idle> /run/initialize
-....	
+...
 Idle> /testem/det/setMat Silicon
-Idle> /run/setCut 100 um	
+Idle> /run/setCut 100 um
 Idle> /gun/particle e-
 Idle> /gun/energy 10 MeV
 Idle> /run/beamOn
@@ -38,7 +38,5 @@ Idle> /run/beamOn
 			    
   DirectAccess.cc is a small batch program which shows how to compute the same
   basic data directly from the processes (indeed the models).
-  
-  To run it, change name in the first line on GNUmakefile before to compile.
 
 */

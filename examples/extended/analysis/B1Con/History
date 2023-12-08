@@ -5,6 +5,19 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-14 I. Hrivnacova (B1Con-V11-01-02)
+- Fixes for Doxygen:
+  Move class description comments after namespace
+
+## 2023-09-12 I. Hrivnacova (B1Con-V11-01-01)
+- Removed unused files: init.mac, B1Run.hh, B1ConRun.hh
+- Added description of run*.mac in README's
+
+## 2023-07-03 I. Hrivnacova (B1Con-V11-01-00)
+- Updated for changes in example B1 since creation of this example
+- Added accumulable class for a vector of Edep per event
+  (not present in B1 example but needed here)
+
 ## 2021-12-10 Ben Morgan (B1Con-V11-00-00)
 - Change to new Markdown History format
 

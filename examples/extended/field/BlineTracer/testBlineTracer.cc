@@ -42,7 +42,7 @@ int main()
   runManager->SetUserInitialization(new FTFP_BERT);
 
   // Instantiate the G4BlineTracer class
-  G4BlineTracer* theBlineTool = new G4BlineTracer();
+  auto  theBlineTool = new G4BlineTracer();
 
   // delete it
   delete theBlineTool;

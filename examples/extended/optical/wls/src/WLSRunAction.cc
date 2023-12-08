@@ -43,7 +43,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSRunAction::WLSRunAction()
-  : fRun(nullptr)
 {
   auto analysisManager = G4AnalysisManager::Instance();
 
@@ -55,13 +54,9 @@ WLSRunAction::WLSRunAction()
                             2.*CLHEP::eV, 3.2*CLHEP::eV);
   analysisManager->CreateH1("Time", "Arrival time", 100, 0., 100.*CLHEP::ns);
   analysisManager->CreateH1("Number of photons", "Number of photons", 100, 0., 100.);
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSRunAction::~WLSRunAction() {}
 
 G4Run* WLSRunAction::GenerateRun()
 {
@@ -84,7 +79,7 @@ void WLSRunAction::EndOfRunAction(const G4Run*)
   if (analysisManager->GetH1(0)) {
     G4cout << G4endl << " ----> print histograms statistics ";
     if(isMaster)
-		{
+    {
       G4cout << "for the entire run " << G4endl << G4endl;
     }
     else {
@@ -95,12 +90,10 @@ void WLSRunAction::EndOfRunAction(const G4Run*)
        << analysisManager->GetH1(2)->mean()
        << " rms = "
        << analysisManager->GetH1(2)->rms() << G4endl;
-
   }
 
   analysisManager->Write();
   analysisManager->CloseFile();
-
 
   if(isMaster)
     fRun->EndOfRun();

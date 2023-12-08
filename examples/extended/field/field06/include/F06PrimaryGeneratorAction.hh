@@ -44,16 +44,16 @@ class G4ParticleGun;
 
 class F06PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
 
-  F06PrimaryGeneratorAction(void);    
-  virtual ~F06PrimaryGeneratorAction();
+    F06PrimaryGeneratorAction();
+    ~F06PrimaryGeneratorAction() override;
 
-  virtual void GeneratePrimaries(G4Event*);
+  void GeneratePrimaries(G4Event*) override;
 
-private:
+  private:
 
-  G4ParticleGun* fParticleGun;
+    G4ParticleGun* fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

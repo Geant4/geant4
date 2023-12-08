@@ -123,7 +123,7 @@ G4bool Scorer<Dose>::ProcessHits(G4Step *aStep, G4TouchableHistory *) {
       G4cout << "Stop this beam line (" << name << ", " << energy << " MeV) at actual dose: " << DoseInGray
              << " Gy. Cut-off dose: " << fpScorer->fDosesCutOff / gray
              << " Gy" << G4endl;
-      G4cout << "The beam of "<<1000000 - currentEvent
+      G4cout << "The beam of " << 1000000 - currentEvent
           ->GetStackManager()
           ->GetNUrgentTrack() - 1 << " tracks"
              << " in a volume of " << V * 1e+12 //convert cm3 to um3
@@ -156,7 +156,7 @@ Gvalues::Gvalues()
       fTimeBincmd(
           new G4UIcmdWithAnInteger("/scorer/Gvalues/nOfTimeBins", this)),
       fAddTimeToRecordcmd(new G4UIcmdWithADoubleAndUnit(
-          "/scorer/Gvalues/addTimeToRecord", this)){
+          "/scorer/Gvalues/addTimeToRecord", this)) {
   fSpeciesdir->SetGuidance("ScoreSpecies commands");
   G4MoleculeCounter::Instance()->ResetCounter();
 }
@@ -300,9 +300,10 @@ void Scorer<Gvalues>::SaveScavengerChange() {
     for (auto time_mol: fpScorer->fTimeToRecord) {
       int64_t n_mol = pScavengerMaterial->GetNMoleculesAtTime(it, time_mol);
       if (n_mol < 0) {
-        G4cerr << "SaveScavengerChange()::N molecules not valid < 0 : "
+        G4ExceptionDescription errMsg;
+        errMsg << "SaveScavengerChange()::N molecules not valid < 0 : "
                << it->GetName() << " N : " << n_mol << G4endl;
-        G4Exception("", "N<0", FatalException, "");
+        G4Exception("", "N<0", FatalException, errMsg);
       }
 
       Gvalues::SpeciesInfo &molInfo =
@@ -321,19 +322,18 @@ template<>
 void Scorer<Gvalues>::SaveMoleculeCounter() {
   if (fpEventScheduler == nullptr) {
     G4Exception("fpEventScheduler == nullptr",
-                "Scorer<Gvalues>::SaveMoleculeCounter()", FatalException, "");
+                "Scorer<Gvalues>::SaveMoleculeCounter()", FatalException, "fpEventScheduler == nullptr");
   } else {
     auto counterMap = fpEventScheduler->GetCounterMap();
     if (counterMap.empty()) {
       if (!G4MoleculeCounter::Instance()->InUse()) {
         G4Exception("No counter",
-                    "Scorer<Gvalues>::SaveMoleculeCounter()", JustWarning, "");
+                    "Scorer<Gvalues>::SaveMoleculeCounter()", JustWarning, "G4MoleculeCounter::Instance() is not used");
         return;
       }
 
       G4MoleculeCounter::RecordedMolecules species;
       species = G4MoleculeCounter::Instance()->GetRecordedMolecules();
-
       if (species.get() == nullptr) {
         return;
       } else if (species->empty()) {
@@ -344,14 +344,18 @@ void Scorer<Gvalues>::SaveMoleculeCounter() {
         return;
       }
       for (auto molecule: *species) {
+        if (molecule == G4MoleculeTable::Instance()->GetConfiguration("O2")) {
+          continue;
+        }
         for (auto time_mol: fpScorer->fTimeToRecord) {
           int n_mol =
               G4MoleculeCounter::Instance()->GetNMoleculesAtTime(molecule,
                                                                  time_mol);
 
           if (n_mol < 0) {
-            G4cerr << "N molecules not valid < 0 " << G4endl;
-            G4Exception("", "N<0", FatalException, "");
+            G4ExceptionDescription errMsg;
+            errMsg << "N molecules not valid < 0 " << G4endl;
+            G4Exception("", "N<0", FatalException, errMsg);
           }
 
           Gvalues::SpeciesInfo &molInfo = fpScorer->fSpeciesInfoPerTime[time_mol][molecule];
@@ -368,13 +372,17 @@ void Scorer<Gvalues>::SaveMoleculeCounter() {
         auto time_mol = map_mol.first;
         for (auto it_mol: map_mol.second) {
           auto molecule = it_mol.first;
+          if (molecule == G4MoleculeTable::Instance()->GetConfiguration("O2")) {
+            continue;
+          }
           int n_mol = it_mol.second;
 
           if (n_mol < 0) {
-            G4cerr << "N molecules not valid < 0 "
+            G4ExceptionDescription errMsg;
+            errMsg << "N molecules not valid < 0 "
                    << " molecule : " << it_mol.first->GetName() << " N : " << n_mol
                    << G4endl;
-            G4Exception("", "N<0", FatalException, "");
+            G4Exception("", "N<0", FatalException, errMsg);
           }
 
           Gvalues::SpeciesInfo &molInfo =

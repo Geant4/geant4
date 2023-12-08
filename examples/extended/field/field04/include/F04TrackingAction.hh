@@ -37,11 +37,11 @@ class F04TrackingAction : public G4UserTrackingAction {
 
   public:
 
-    F04TrackingAction() {};
-    virtual ~F04TrackingAction() {};
+    F04TrackingAction() = default;
+    ~F04TrackingAction() override = default;
 
-    virtual void PreUserTrackingAction(const G4Track*);
-    virtual void PostUserTrackingAction(const G4Track*);
+    void PreUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
 
 };
 

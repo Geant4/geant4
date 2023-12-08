@@ -37,13 +37,12 @@
 class G4GeneralParticleSource;
 class G4Event;
 
-/// \ingroup primary_generator
+namespace Common
+{
+
 /// \brief The primary generator class with general particle source
 ///
 /// \author I. Hrivnacova; IPN Orsay
-
-namespace Common
-{
 
 class GpsPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
 {

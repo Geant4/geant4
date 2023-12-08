@@ -45,15 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F03FieldMessenger::F03FieldMessenger(F03FieldSetup* fieldSetup)
- : G4UImessenger(),
-   fEMfieldSetup(fieldSetup),
-   fFieldDir(0),
-   fStepperCmd(0),
-   fMagFieldZCmd(0),
-   fMagFieldCmd(0),
-   fLocalMagFieldCmd(0),
-   fMinStepCmd(0),
-   fUpdateCmd(0)
+ : fEMfieldSetup(fieldSetup)
 {
   fFieldDir = new G4UIdirectory("/field/");
   fFieldDir->SetGuidance("F03 field tracking control.");
@@ -69,26 +61,26 @@ F03FieldMessenger::F03FieldMessenger(F03FieldSetup* fieldSetup)
   fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
- 
+
   fMagFieldZCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
   fMagFieldZCmd->SetGuidance("Define global magnetic field.");
   fMagFieldZCmd->SetGuidance("Global magnetic field will be in Z direction.");
   fMagFieldZCmd->SetParameterName("Bz",false,false);
   fMagFieldZCmd->SetDefaultUnit("tesla");
   fMagFieldZCmd->AvailableForStates(G4State_Idle);
- 
+
   fMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setField",this);
   fMagFieldCmd->SetGuidance("Define global magnetic field.");
   fMagFieldCmd->SetParameterName("Bx","By","Bz",false,false);
   fMagFieldCmd->SetDefaultUnit("tesla");
   fMagFieldCmd->AvailableForStates(G4State_Idle);
- 
+
   fLocalMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setLocalField",this);
   fLocalMagFieldCmd->SetGuidance("Define local magnetic field.");
   fLocalMagFieldCmd->SetParameterName("Blx","Bly","Blz",false,false);
   fLocalMagFieldCmd->SetDefaultUnit("tesla");
   fLocalMagFieldCmd->AvailableForStates(G4State_Idle);
- 
+
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetGuidance("Magnetic field will be in Z direction.");

@@ -95,8 +95,8 @@ namespace G4INCL {
         pion->setMomentum(-mom_nucleon);
 
 #ifdef INCLXX_IN_GEANT4_MODE
-        ParticleType startingNucleonType = nucleon->getType();
-        ParticleType startingPionType = pion->getType();
+    ParticleType startingNucleonType = nucleon->getType();
+    ParticleType startingPionType = pion->getType();
 #endif
 
         G4int iso=ParticleTable::getIsospin(nucleon->getType())+ParticleTable::getIsospin(pion->getType());
@@ -122,13 +122,13 @@ namespace G4INCL {
         }
 
 #ifdef INCLXX_IN_GEANT4_MODE
-        // Erase the parent resonance information if the nucleon or pion changes type
-        if ( startingNucleonType != nucleon->getType() || startingPionType != pion->getType() ) {
-          nucleon->setParentResonancePDGCode(0);
-          nucleon->setParentResonanceID(0);
-          pion->setParentResonancePDGCode(0);
-          pion->setParentResonanceID(0);
-        }
+    // Erase the parent resonance information if the nucleon or pion changes type
+    if ( startingNucleonType != nucleon->getType() || startingPionType != pion->getType() ) {
+      nucleon->setParentResonancePDGCode(0);
+      nucleon->setParentResonanceID(0);
+      pion->setParentResonancePDGCode(0);
+      pion->setParentResonanceID(0);
+    }
 #endif
 
         fs->addModifiedParticle(nucleon);

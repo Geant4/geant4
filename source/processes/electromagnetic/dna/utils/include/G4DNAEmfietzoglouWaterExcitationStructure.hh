@@ -54,7 +54,7 @@ public:
       
 private:
    
-  G4int nLevels;
+  G4int nLevels{5};
 
   std::vector<G4double> energyConstant;
   

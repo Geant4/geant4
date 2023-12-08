@@ -136,9 +136,6 @@ class HadronicGenerator {
     // If the required hadronic collision is not possible, then the method returns
     // immediately an empty "G4VParticleChange", i.e. without secondaries produced.
 
-    const std::map<G4ParticleDefinition*, G4HadronicProcess*>& getAllHadronicProcesses() const { 
-        return fProcessMap;
-    }
     inline G4HadronicProcess* GetHadronicProcess() const;
     inline G4HadronicInteraction* GetHadronicInteraction() const;
     // Returns the hadronic process and the hadronic interaction, respectively,

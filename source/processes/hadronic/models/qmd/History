@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-27 Yoshihide Sato (hadr-qmd-V11-01-03)
+- Add files for the Light Ion QMD which is qmd optimized for light ion. 
+  The name of the added files start with G4LightIonQMD.
+
+## 2023-07-07 Vladimir Ivanchenko (hadr-qmd-V11-01-02)
+- G4QMDMeanField: attempt to fix compilation warning on alma9/gcc-13.1
+    by removing unused map
+- G4QMDReaction - do not create local G4Evaporation class, only define 
+    type of evaporation for local G4ExcitationHandler
+
 ## 2023-06-23 Gabriele Cosmo (hadr-qmd-V11-01-01)
 - G4QMDMeanField: attempt to fix compilation warning on alma9/gcc-13.1
   and minor code cleanup.

@@ -42,7 +42,6 @@
 
 class G4ParticleDefinition;
 class G4CrossSectionDataStore;
-class G4LogicalVolume;
 class G4TauNeutrinoNucleusTotXsc;
 class G4SafetyHelper;
 
@@ -59,21 +58,20 @@ public:
                              G4double previousStepSize,
                              G4ForceCondition* condition
                             ) override;
+
+  G4double GetMeanFreePath(const G4Track &aTrack,
+                           G4double, G4ForceCondition*) override;
  
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep) override;
-
-  // initialise thresholds
-  void PreparePhysicsTable(const G4ParticleDefinition&) override;
+				  const G4Step& aStep) override;
 
   // set internal limit
-  virtual void SetLowestEnergy(G4double);
+  void SetLowestEnergy(G4double);
 
   void ProcessDescription(std::ostream& outFile) const override;
 
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
   void SetBiasingFactor(G4double bf);
-  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *) override;
 
   // hide assignment operator as private 
   G4TauNeutrinoNucleusProcess& operator=
@@ -82,13 +80,13 @@ public:
   
 private:
 
-  G4double lowestEnergy;
-  G4bool   isInitialised{false};
-  G4String fEnvelopeName;
   G4TauNeutrinoNucleusTotXsc* fTotXsc;
-  G4double fNuNuclCcBias{1.0}, fNuNuclNcBias{1.0}, fNuNuclTotXscBias{1.0};
-  G4double fXsc{0.0};
   G4SafetyHelper* safetyHelper;
+  G4double lowestEnergy;
+  G4double fNuNuclCcBias{1.0};
+  G4double fNuNuclNcBias{1.0};
+  G4double fNuNuclTotXscBias{1.0};
+  G4String fEnvelopeName;
 };
 
 #endif

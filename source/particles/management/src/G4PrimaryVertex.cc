@@ -30,6 +30,7 @@
 // --------------------------------------------------------------------
 
 #include "G4PrimaryVertex.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
@@ -40,33 +41,24 @@ G4Allocator<G4PrimaryVertex>*& aPrimaryVertexAllocator()
   return _instance;
 }
 
-// --------------------------------------------------------------------
-G4PrimaryVertex::
-G4PrimaryVertex(G4double x0, G4double y0, G4double z0, G4double t0)
+G4PrimaryVertex::G4PrimaryVertex(G4double x0, G4double y0, G4double z0, G4double t0)
   : X0(x0), Y0(y0), Z0(z0), T0(t0)
-{
-}
+{}
 
-// --------------------------------------------------------------------
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0, G4double t0)
   : X0(xyz0.x()), Y0(xyz0.y()), Z0(xyz0.z()), T0(t0)
-{
-}
+{}
 
-// --------------------------------------------------------------------
 G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex& right)
 {
   *this = right;
 }
 
-// --------------------------------------------------------------------
 G4PrimaryVertex::~G4PrimaryVertex()
 {
-  if(theParticle != nullptr)
-  {
+  if (theParticle != nullptr) {
     G4PrimaryParticle* theNext = theParticle;
-    while(theNext != nullptr)
-    {
+    while (theNext != nullptr) {
       G4PrimaryParticle* thisPrimary = theNext;
       theNext = thisPrimary->GetNext();
       thisPrimary->ClearNext();
@@ -74,52 +66,48 @@ G4PrimaryVertex::~G4PrimaryVertex()
     }
     theParticle = nullptr;
   }
-  delete nextVertex; 
+  delete nextVertex;
   nextVertex = nullptr;
 
   theTail = nullptr;
   tailVertex = nullptr;
 
-  delete userInfo; 
+  delete userInfo;
   userInfo = nullptr;
 }
 
-// --------------------------------------------------------------------
 G4PrimaryVertex& G4PrimaryVertex::operator=(const G4PrimaryVertex& right)
-{  
-  if (this != &right)
-  {
-    X0       = right.X0;
-    Y0       = right.Y0;
-    Z0       = right.Z0;
-    T0       = right.T0;
-    Weight0  = right.Weight0;
+{
+  if (this != &right) {
+    X0 = right.X0;
+    Y0 = right.Y0;
+    Z0 = right.Z0;
+    T0 = right.T0;
+    Weight0 = right.Weight0;
     numberOfParticle = right.numberOfParticle;
 
     delete theParticle;
     theParticle = nullptr;
-    theTail     = nullptr;
-    if (right.theParticle != nullptr )
-    {
+    theTail = nullptr;
+    if (right.theParticle != nullptr) {
       theParticle = new G4PrimaryParticle(*(right.theParticle));
       theTail = theParticle;
       G4PrimaryParticle* np = theParticle->GetNext();
-      while (np != nullptr)   // Loop checking, 09.08.2015, K.Kurashige
+      while (np != nullptr)  // Loop checking, 09.08.2015, K.Kurashige
       {
         theTail = np;
         np = np->GetNext();
       }
     }
-    
+
     delete nextVertex;
     nextVertex = nullptr;
     tailVertex = nullptr;
-    if (right.nextVertex != nullptr )
-    {
+    if (right.nextVertex != nullptr) {
       nextVertex = new G4PrimaryVertex(*(right.nextVertex));
       tailVertex = nextVertex;
       G4PrimaryVertex* nv = nextVertex->GetNext();
-      while (nv != nullptr)   // Loop checking, 09.08.2015, K.Kurashige
+      while (nv != nullptr)  // Loop checking, 09.08.2015, K.Kurashige
       {
         tailVertex = nv;
         nv = nv->GetNext();
@@ -129,55 +117,43 @@ G4PrimaryVertex& G4PrimaryVertex::operator=(const G4PrimaryVertex& right)
     // userInfo cannot be copied
     userInfo = nullptr;
   }
-  return *this; 
+  return *this;
 }
 
-// --------------------------------------------------------------------
-G4bool G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
+G4bool G4PrimaryVertex::operator==(const G4PrimaryVertex& right) const
 {
-  return (this==&right);
+  return (this == &right);
 }
 
-// --------------------------------------------------------------------
-G4bool G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
+G4bool G4PrimaryVertex::operator!=(const G4PrimaryVertex& right) const
 {
-  return (this!=&right);
+  return (this != &right);
 }
 
-// --------------------------------------------------------------------
 G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
-{  
-  if( i >= 0 && i < numberOfParticle )
-  {
+{
+  if (i >= 0 && i < numberOfParticle) {
     G4PrimaryParticle* particle = theParticle;
-    for( G4int j=0; j<i; ++j )
-    { 
-      if( particle == nullptr ) return nullptr;
+    for (G4int j = 0; j < i; ++j) {
+      if (particle == nullptr) return nullptr;
       particle = particle->GetNext();
     }
     return particle;
   }
-  
-  
-    return nullptr; 
- 
+
+  return nullptr;
 }
 
-// --------------------------------------------------------------------
 void G4PrimaryVertex::Print() const
-{ 
-  G4cout << "Vertex  ( "
-         << X0/mm  << "[mm], " 
-         << Y0/mm << "[mm], " 
-         << Z0/mm << "[mm], " 
-         << T0/ns  << "[ns] )" 
+{
+  G4cout << "Vertex  ( " << X0 / mm << "[mm], " << Y0 / mm << "[mm], " << Z0 / mm << "[mm], "
+         << T0 / ns << "[ns] )"
          << " Weight " << Weight0 << G4endl;
-  if(userInfo != nullptr) userInfo->Print();
-  G4cout << "  -- Primary particles :: " 
+  if (userInfo != nullptr) userInfo->Print();
+  G4cout << "  -- Primary particles :: "
          << "   # of primaries =" << numberOfParticle << G4endl;
-  if( theParticle != nullptr)  theParticle->Print();
-  if (nextVertex != nullptr )
-  {
+  if (theParticle != nullptr) theParticle->Print();
+  if (nextVertex != nullptr) {
     G4cout << "Next Vertex " << G4endl;
     nextVertex->Print();
   }

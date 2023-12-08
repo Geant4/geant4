@@ -116,4 +116,4 @@ geant4_add_module(G4detscorer
 
 geant4_module_link_libraries(G4detscorer
   PUBLIC G4detector G4csg G4hits G4partman G4globman
-  PRIVATE G4track G4volumes G4geometrymng)
+  PRIVATE G4track G4geometrymng)

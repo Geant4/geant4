@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-//
 // Geant4 Neutrino Electron Scattering Process -- header file
 // 
 // Created  from G4HadronElasticProcess 15.12.17 V. Grichine
 //  
 // Modified:
 //
-// 2.2.18 V.Grichine PostStepDoIt implementation
+// 02.02.18 V.Grichine PostStepDoIt implementation
 
 // Class Description
 // General process for neutrino electron 2->2 scattering  
@@ -45,7 +44,6 @@
 
 class G4ParticleDefinition;
 class G4CrossSectionDataStore;
-class G4LogicalVolume;
 class G4NeutrinoElectronTotXsc;
 class G4SafetyHelper;
 
@@ -53,44 +51,44 @@ class G4NeutrinoElectronProcess : public G4HadronicProcess
 {
 public:
 
-  G4NeutrinoElectronProcess(G4String anEnvelopeName , const G4String& procName = "neutrino-electron");
+  G4NeutrinoElectronProcess(const G4String& anEnvelopeName,
+                            const G4String& procName = "nuElectron");
 
-  virtual ~G4NeutrinoElectronProcess();
+  ~G4NeutrinoElectronProcess() override = default;
   
-  virtual G4double PostStepGetPhysicalInteractionLength(
+  G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double previousStepSize,
                              G4ForceCondition* condition
                             ) override;
+
+  G4double GetMeanFreePath(const G4Track &aTrack,
+                           G4double, G4ForceCondition*) override;
   
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					  const G4Step& aStep) override;
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+       				  const G4Step& aStep) override;
 
-  // initialise thresholds
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
+  void ProcessDescription(std::ostream& outFile) const override;
 
-  // set internal limit
-  virtual void SetLowestEnergy(G4double);
-
-  virtual void ProcessDescription(std::ostream& outFile) const override;
-
+  // set internal parameters
+  void SetLowestEnergy(G4double);
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
   void SetBiasingFactor(G4double bf);
-  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *) override;
   
+  // hide assignment operator as private 
+  G4NeutrinoElectronProcess& operator=
+  (const G4NeutrinoElectronProcess &right) = delete;
+  G4NeutrinoElectronProcess(const G4NeutrinoElectronProcess&) = delete;
+
 private:
 
-  // hide assignment operator as private 
-  G4NeutrinoElectronProcess& operator=(const G4NeutrinoElectronProcess &right);
-  G4NeutrinoElectronProcess(const G4NeutrinoElectronProcess& );
-
-  G4double lowestEnergy;
-  G4bool   isInitialised, fBiased;
-  G4LogicalVolume* fEnvelope;
-  G4String fEnvelopeName;
   G4NeutrinoElectronTotXsc* fTotXsc;
-  G4double fNuEleCcBias, fNuEleNcBias, fNuEleTotXscBias;
   G4SafetyHelper* safetyHelper;
+  G4double lowestEnergy;
+  G4double fNuEleCcBias{1.0};
+  G4double fNuEleNcBias{1.0};
+  G4double fNuEleTotXscBias{1.0};
+  G4String fEnvelopeName;
 };
 
 #endif

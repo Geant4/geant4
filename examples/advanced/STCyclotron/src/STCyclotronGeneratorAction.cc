@@ -60,8 +60,8 @@ void STCyclotronPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double chargeParticle = fParticleBeam->GetParticleDefinition()->GetPDGCharge()*1.6E-19;
   G4double numberOfPart = std::abs(fBeamCurrent*timePerEvent/chargeParticle); 
   G4String name = fParticleBeam->GetParticleDefinition()->GetParticleName();
-  G4double energy = fParticleBeam->GetParticleEnergy();
-
+ // G4double energy = fParticleBeam->GetParticleEnergy();
+  G4double energy = fParticleBeam -> GetCurrentSource()->GetEneDist()->GetMonoEnergy();
   G4int fPrimariesPerEvent = (G4int)numberOfPart;
   
   if(fPrimariesPerEvent < 1){

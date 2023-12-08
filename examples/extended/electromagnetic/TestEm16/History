@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-10-16 H.Burkhardt (testem16-V11-01-03)
+- minor update of SteppingAction.cc
+
+## 2023-10-16 H.Burkhardt (testem16-V11-01-02)
+- use XRayReflection_data from G4EMLOW
+
+## 2023-09-19 H.Burkhardt (testem16-V11-01-01)
+- extended to test the new process XrayReflection
+  geometry optionally read from gdml file 
+
 ## 2022-08-11 H.Burkhardt (testem16-V11-00-01)
 - minor cleanup in vis.mac and run01.mac to make output
   with multi threading more readable

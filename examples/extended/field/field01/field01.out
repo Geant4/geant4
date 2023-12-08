@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -136,7 +136,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001220s Sys=0.000000s
+  User=0.000000s Real=0.001322s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -218,7 +218,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000746s Sys=0.000000s
+  User=0.000000s Real=0.000832s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -300,7 +300,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000725s Sys=0.000000s
+  User=0.000000s Real=0.000796s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -321,68 +321,68 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1    8.92113 mm   -1.78691 cm    17.5806 m  6.28145e-08 -3.40789e-08         -1      100 MeV    9.34671 meV    4.40903 m      4.40903 m        World  Transportation
-    2    8.92403 mm   -1.78679 cm    13.6125 m  -1.23559e-05 2.85155e-05         -1      100 MeV    8.41188 meV    3.96806 m      8.37709 m        World  Transportation
-    3    8.91722 mm   -1.78731 cm    10.0412 m  3.96458e-05 -3.85094e-05         -1      100 MeV    7.57069 meV    3.57125 m      11.9483 m        World  Transportation
-    4   -967.158 um    -1.5954 cm    6.82712 m  6.58553e-05 -5.02286e-05         -1      100 MeV    6.81368 meV    3.21415 m      15.1625 m        World  Transportation
-    5   -958.285 um   -1.59381 cm    3.93441 m  -9.10665e-05 3.71204e-05         -1      100 MeV    6.13226 meV    2.89271 m      18.0552 m        World  Transportation
-    6   -963.758 um   -1.59356 cm    1.33097 m  -0.000115374 -1.67489e-05         -1      100 MeV    5.51903 meV    2.60344 m      20.6586 m        World  Transportation
-    7   -949.121 um   -1.59515 cm   -1.01213 m  4.12576e-05 0.000127324         -1      100 MeV    4.96728 meV    2.34317 m      23.0018 m        World  Transportation
-    8   -962.698 um   -1.59313 cm   -3.12092 m  -0.000157685 -6.31324e-06         -1      100 MeV    4.47044 meV     2.1088 m      25.1106 m        World  Transportation
-    9   -960.719 um     -1.593 cm   -5.01882 m  -0.000170399 1.31717e-05         -1      100 MeV    4.02354 meV    1.89799 m      27.0086 m        World  Transportation
-   10   -945.594 um   -1.59565 cm   -6.72694 m  9.04455e-05 0.000162039         -1      100 MeV    3.62104 meV    1.70812 m      28.7167 m        World  Transportation
-   11   -972.522 um   -1.59296 cm   -8.26425 m  -0.000174202 -0.000103012         -1      100 MeV    3.25893 meV    1.53731 m       30.254 m        World  Transportation
-   12   -984.115 um   -1.59485 cm   -9.64782 m  1.19868e-05 -0.000217118         -1      100 MeV    2.93304 meV    1.38358 m      31.6376 m        World  Transportation
-   13   -984.877 um   -1.59421 cm    -10.893 m  -5.08682e-05 -0.000224623         -1      100 MeV    2.63974 meV    1.24522 m      32.8828 m        World  Transportation
-   14    800.786 um   -1.17185 cm   -12.0137 m  -0.000243515 3.73474e-05         -1      100 MeV     2.3758 meV    1.12071 m      34.0035 m        World  Transportation
-   15    15.2238 um   -4.43631 mm   -13.0224 m  0.000236792 9.4724e-05         -1      100 MeV    2.13829 meV    1.00868 m      35.0122 m        World  Transportation
-   16   -2.61206 mm    1.70801 mm   -13.9301 m  -0.000267891 2.1271e-05         -1      100 MeV    1.92446 meV    90.7809 cm       35.92 m        World  Transportation
-   17   -4.00024 mm   -6.32998 mm   -14.7471 m  3.9528e-05 -0.000285409         -1      100 MeV    1.73209 meV    81.7063 cm     36.7371 m        World  Transportation
-   18   -3.98467 mm   -6.35405 mm   -15.4824 m  0.000276508 -0.000132098         -1      100 MeV    1.55874 meV    73.5289 cm     37.4724 m        World  Transportation
-   19   -3.97751 mm   -6.35879 mm   -16.1442 m  0.000323174 -6.15286e-05         -1      100 MeV    1.40286 meV     66.176 cm     38.1341 m        World  Transportation
-   20   -514.338 um   -8.12297 mm   -16.7397 m  0.000282701 -0.000188329         -1      100 MeV    1.26263 meV    59.5608 cm     38.7297 m        World  Transportation
-   21   -457.327 um   -1.45866 cm   -17.2758 m  -1.70759e-07 -0.000357301         -1      100 MeV    1.13648 meV      53.61 cm     39.2658 m        World  Transportation
-   22   -423.016 um   -1.45486 cm   -17.7582 m  -0.000374209 -1.95608e-05         -1      100 MeV    1.02269 meV    48.2423 cm     39.7483 m        World  Transportation
-   23    880.064 um   -1.42544 cm   -18.1924 m  0.000142683 0.000367796         -1      100 MeV   0.920428 meV    43.4185 cm     40.1824 m        World  Transportation
-   24    802.829 um   -1.42546 cm   -18.5831 m  0.00014445 -0.000392422         -1      100 MeV   0.828378 meV    39.0763 cm     40.5732 m        World  Transportation
-   25    876.238 um   -1.42123 cm   -18.9348 m  -0.000271515 0.000330125         -1      100 MeV    0.74554 meV    35.1687 cm     40.9249 m        World  Transportation
-   26    807.893 um   -1.42677 cm   -19.2513 m  0.000273734 -0.000342592         -1      100 MeV   0.671084 meV    31.6564 cm     41.2415 m        World  Transportation
-   27    886.273 um   -1.42241 cm   -19.5362 m  -0.00015545 0.000428891         -1      100 MeV   0.603888 meV    28.4866 cm     41.5263 m        World  Transportation
-   28    795.255 um   -1.42272 cm   -19.7926 m  -0.000124947 -0.000466972         -1      100 MeV   0.543499 meV     25.638 cm     41.7827 m        World  Transportation
-   29    865.433 um   -1.42878 cm   -20.0233 m  0.00047133 0.000223749         -1      100 MeV   0.489149 meV    23.0742 cm     42.0134 m        World  Transportation
-   30    1.40242 mm   -1.41072 cm    -20.231 m  -0.000433155 0.000324557         -1      100 MeV   0.440237 meV    20.7669 cm     42.2211 m        World  Transportation
-   31    1.31721 mm   -1.41312 cm   -20.4179 m  -0.000196196 -0.000514169         -1      100 MeV   0.396213 meV    18.6902 cm      42.408 m        World  Transportation
-   32   -319.037 um   -1.49261 cm   -20.5861 m  0.00053364 -0.00014956         -1      100 MeV   0.356629 meV    16.8229 cm     42.5762 m        World  Transportation
-   33    898.805 um   -1.84475 cm   -20.7375 m  0.000190615 0.000522034         -1      100 MeV   0.321114 meV    15.1476 cm     42.7277 m        World  Transportation
-   34   -1.46189 mm   -1.92746 cm   -20.8737 m  -0.00046609 0.000303764         -1      100 MeV   0.288929 meV    13.6294 cm      42.864 m        World  Transportation
-   35    247.118 um   -2.13265 cm   -20.9964 m  -0.000449498 -0.000328146         -1      100 MeV   0.260073 meV    12.2682 cm     42.9867 m        World  Transportation
-   36    224.518 um   -2.13804 cm   -21.1067 m  8.14043e-05 -0.000550583         -1      100 MeV   0.233958 meV    11.0363 cm     43.0971 m        World  Transportation
-   37    256.062 um   -2.14231 cm   -21.2061 m  0.000502151 -0.000240152         -1      100 MeV   0.210562 meV    9.93266 cm     43.1964 m        World  Transportation
-   38    304.238 um   -2.14234 cm   -21.2955 m  0.000505007 0.000233991         -1      100 MeV   0.189506 meV    8.93939 cm     43.2858 m        World  Transportation
-   39     333.68 um   -2.13912 cm   -21.3759 m  0.000188219 0.000523807         -1      100 MeV   0.170555 meV    8.04545 cm     43.3662 m        World  Transportation
-   40    231.893 um   -2.23569 cm   -21.4483 m  -0.000200163 0.000519247         -1      100 MeV   0.153528 meV    7.24223 cm     43.4387 m        World  Transportation
-   41    209.238 um   -2.23293 cm   -21.5135 m  -0.000471082 0.000296287         -1      100 MeV    0.13815 meV    6.51681 cm     43.5038 m        World  Transportation
-   42    178.239 um   -2.23207 cm   -21.5721 m  -0.000556512 -8.86477e-06         -1      100 MeV   0.124335 meV    5.86513 cm     43.5625 m        World  Transportation
-   43    150.285 um   -2.23286 cm   -21.6249 m  -0.00047868 -0.000283965         -1      100 MeV   0.111901 meV    5.27862 cm     43.6153 m        World  Transportation
-   44    131.461 um   -2.23468 cm   -21.6724 m  -0.000299297 -0.000469293         -1      100 MeV   0.100711 meV    4.75076 cm     43.6628 m        World  Transportation
-   45    123.199 um   -2.23689 cm   -21.7152 m  -8.14392e-05 -0.000550543         -1      100 MeV  0.0906401 meV    4.27568 cm     43.7055 m        World  Transportation
-   46    829.389 um   -2.06493 cm   -21.7537 m  0.000127906 -0.00054162         -1      100 MeV  0.0817583 meV    3.85671 cm     43.7441 m        World  Transportation
-   47      836.9 um   -2.06669 cm   -21.7883 m  0.000301625 -0.000467655         -1      100 MeV  0.0734183 meV    3.46329 cm     43.7787 m        World  Transportation
-   48    671.265 um   -2.21725 cm   -21.8195 m  0.000428784 -0.000354743         -1      100 MeV  0.0662205 meV    3.12376 cm       43.81 m        World  Transportation
-   49   -454.602 um   -2.22725 cm   -21.8475 m  0.000509221 -0.000224405         -1      100 MeV  0.0595614 meV    2.80964 cm     43.8381 m        World  Transportation
-   50    592.901 um   -2.29551 cm   -21.8728 m  0.000548798 -9.22693e-05         -1      100 MeV  0.0536423 meV    2.53042 cm     43.8634 m        World  Transportation
-   51    605.501 um   -2.29558 cm   -21.8955 m  0.000555569 3.17603e-05         -1      100 MeV  0.0481699 meV    2.27227 cm     43.8861 m        World  Transportation
-   52    616.721 um    -2.2954 cm   -21.9159 m  0.000538039 0.000142242         -1      100 MeV  0.0433529 meV    2.04504 cm     43.9065 m        World  Transportation
-   53    626.333 um   -2.29505 cm   -21.9344 m  0.00050362 0.000236858         -1      100 MeV  0.0390176 meV    1.84054 cm     43.9249 m        World  Transportation
-   54     1.0511 mm   -2.32086 cm   -21.9509 m  0.000458528 0.000315441         -1      100 MeV   0.035145 meV    1.65786 cm     43.9415 m        World  Transportation
-   55    1.05756 mm   -2.32034 cm   -21.9658 m  0.000407455 0.000379071         -1      100 MeV  0.0316043 meV    1.49084 cm     43.9564 m        World  Transportation
-   56    778.914 um   -2.36491 cm   -21.9792 m  0.000353979 0.000429397         -1      100 MeV  0.0284859 meV    1.34374 cm     43.9699 m        World  Transportation
-   57    782.871 um   -2.36437 cm   -21.9913 m  0.000300612 0.000468301         -1      100 MeV  0.0255994 meV    1.20758 cm     43.9819 m        World  Transportation
-   58    785.258 um   -2.36395 cm        -22 m  0.000259545 0.00049225         -1      100 MeV  0.0184973 meV    8.72558 mm     43.9907 m   OutOfWorld  Transportation
+    1          0 fm          0 fm    17.5806 m  6.28145e-08 -3.40789e-08         -1      100 MeV    9.34653 meV    4.40895 m      4.40895 m        World  Transportation
+    2     2.9005 um    1.26168 um    13.6125 m  -1.23683e-05 2.85633e-05         -1      100 MeV    8.41188 meV    3.96806 m      8.37701 m        World  Transportation
+    3   -3.87279 um   -4.03772 um    10.0412 m  3.97233e-05 -3.81572e-05         -1      100 MeV    7.57069 meV    3.57125 m      11.9483 m        World  Transportation
+    4    613.175 um    -1.0056 cm    6.82712 m  6.60471e-05 -5.04612e-05         -1      100 MeV    6.81368 meV    3.21415 m      15.1624 m        World  Transportation
+    5    622.567 um   -1.00394 cm    3.93441 m  -9.71966e-05 4.18851e-05         -1      100 MeV    6.13226 meV    2.89271 m      18.0551 m        World  Transportation
+    6    616.526 um   -1.00365 cm    1.33097 m  -0.000126553 -1.7578e-05         -1      100 MeV    5.51903 meV    2.60344 m      20.6586 m        World  Transportation
+    7    632.547 um   -1.00543 cm   -1.01213 m  4.86764e-05 0.000140116         -1      100 MeV    4.96728 meV    2.34317 m      23.0017 m        World  Transportation
+    8    617.219 um   -1.00309 cm   -3.12092 m  -0.000180994 -1.0756e-05         -1      100 MeV    4.47044 meV     2.1088 m      25.1105 m        World  Transportation
+    9    619.784 um   -1.00295 cm   -5.01882 m  -0.000194786 1.44934e-05         -1      100 MeV    4.02354 meV    1.89799 m      27.0085 m        World  Transportation
+   10    637.016 um   -1.00594 cm   -6.72694 m  9.92782e-05 0.000184105         -1      100 MeV    3.62104 meV    1.70812 m      28.7166 m        World  Transportation
+   11    606.832 um   -1.00298 cm   -8.26425 m  -0.000191657 -0.000112991         -1      100 MeV    3.25893 meV    1.53731 m      30.2539 m        World  Transportation
+   12    593.303 um   -1.00507 cm   -9.64782 m  1.3341e-05 -0.000246156         -1      100 MeV    2.93304 meV    1.38358 m      31.6375 m        World  Transportation
+   13    592.714 um   -1.00435 cm    -10.893 m  -5.73864e-05 -0.000251958         -1      100 MeV    2.63974 meV    1.24522 m      32.8827 m        World  Transportation
+   14    2.40354 mm    -5.8355 mm   -12.0137 m  -0.000266576 4.2495e-05         -1      100 MeV     2.3758 meV    1.12071 m      34.0034 m        World  Transportation
+   15    1.67523 mm    1.44414 mm   -13.0224 m  0.000262201 0.000102545         -1      100 MeV    2.13829 meV    1.00868 m      35.0121 m        World  Transportation
+   16   -907.758 um    7.60846 mm   -13.9301 m  -0.000290587 2.5148e-05         -1      100 MeV    1.92446 meV    90.7809 cm     35.9199 m        World  Transportation
+   17   -2.36937 mm   -416.676 um   -14.7471 m  3.94644e-05 -0.000305001         -1      100 MeV    1.73209 meV    81.7063 cm      36.737 m        World  Transportation
+   18    -2.3528 mm    -441.46 um   -15.4824 m  0.000283443 -0.000141921         -1      100 MeV    1.55874 meV    73.5289 cm     37.4723 m        World  Transportation
+   19   -2.34545 mm    -446.31 um   -16.1442 m  0.000331153 -6.94555e-05         -1      100 MeV    1.40286 meV     66.176 cm      38.134 m        World  Transportation
+   20     1.0886 mm   -2.25757 mm   -16.7397 m  0.000290982 -0.000199831         -1      100 MeV    1.26263 meV    59.5608 cm     38.7297 m        World  Transportation
+   21    1.04555 mm   -8.71798 mm   -17.2758 m  -5.91348e-06 -0.000374044         -1      100 MeV    1.13648 meV      53.61 cm     39.2658 m        World  Transportation
+   22    1.08208 mm   -8.67886 mm   -17.7582 m   -0.000391 -1.45007e-05         -1      100 MeV    1.02269 meV    48.2423 cm     39.7482 m        World  Transportation
+   23    2.38256 mm   -8.40898 mm   -18.1924 m  0.00015432 0.000380541         -1      100 MeV   0.920428 meV    43.4185 cm     40.1824 m        World  Transportation
+   24    2.30231 mm    -8.4079 mm   -18.5831 m  0.000143653 -0.000409357         -1      100 MeV   0.828378 meV    39.0763 cm     40.5731 m        World  Transportation
+   25    2.37911 mm   -8.36523 mm   -18.9348 m  -0.000276311 0.000346559         -1      100 MeV    0.74554 meV    35.1687 cm     40.9248 m        World  Transportation
+   26    2.30743 mm   -8.42154 mm   -19.2513 m  0.000277934 -0.000358956         -1      100 MeV   0.671084 meV    31.6564 cm     41.2414 m        World  Transportation
+   27    2.38914 mm   -8.37767 mm   -19.5362 m  -0.000153811 0.00044533         -1      100 MeV   0.603888 meV    28.4866 cm     41.5262 m        World  Transportation
+   28    2.29525 mm   -8.37952 mm   -19.7926 m  -0.000135641 -0.00047884         -1      100 MeV   0.543499 meV     25.638 cm     41.7826 m        World  Transportation
+   29    2.36658 mm   -8.44293 mm   -20.0233 m  0.000488565 0.000223254         -1      100 MeV   0.489149 meV    23.0742 cm     42.0134 m        World  Transportation
+   30     2.9015 mm   -8.26826 mm    -20.231 m  -0.00044103 0.000340618         -1      100 MeV   0.440237 meV    20.7669 cm      42.221 m        World  Transportation
+   31    2.81342 mm   -8.29176 mm   -20.4179 m  -0.000209695 -0.000526357         -1      100 MeV   0.396213 meV    18.6902 cm     42.4079 m        World  Transportation
+   32    1.16768 mm   -9.06454 mm   -20.5861 m  0.000547103 -0.000161978         -1      100 MeV   0.356629 meV    16.8229 cm     42.5762 m        World  Transportation
+   33    2.33596 mm    -1.2602 cm   -20.7375 m  0.000204067 0.00053454         -1      100 MeV   0.321114 meV    15.1476 cm     42.7276 m        World  Transportation
+   34   -36.9407 um   -1.33924 cm   -20.8737 m  -0.000475249 0.000319707         -1      100 MeV   0.288929 meV    13.6294 cm     42.8639 m        World  Transportation
+   35     1.6399 mm   -1.54689 cm   -20.9964 m  -0.00046766 -0.000331055         -1      100 MeV   0.260073 meV    12.2682 cm     42.9866 m        World  Transportation
+   36    1.61582 mm   -1.55241 cm   -21.1067 m  7.55298e-05 -0.000568015         -1      100 MeV   0.233958 meV    11.0363 cm      43.097 m        World  Transportation
+   37    1.64765 mm   -1.55685 cm   -21.2061 m  0.000513325 -0.000254764         -1      100 MeV   0.210562 meV    9.93266 cm     43.1963 m        World  Transportation
+   38    1.69724 mm   -1.55696 cm   -21.2955 m  0.000523387 0.000233296         -1      100 MeV   0.189506 meV    8.93939 cm     43.2857 m        World  Transportation
+   39    1.72803 mm   -1.55369 cm   -21.3759 m  0.000201625  0.0005364         -1      100 MeV   0.170555 meV    8.04545 cm     43.3662 m        World  Transportation
+   40     1.6122 mm   -1.64995 cm   -21.4483 m  -0.000198257 0.000537541         -1      100 MeV   0.153528 meV    7.24223 cm     43.4386 m        World  Transportation
+   41    1.58929 mm   -1.64709 cm   -21.5135 m  -0.000480501 0.000312085         -1      100 MeV    0.13815 meV    6.51681 cm     43.5037 m        World  Transportation
+   42    1.55751 mm   -1.64615 cm   -21.5721 m  -0.000573026 -7.6658e-07         -1      100 MeV   0.124335 meV    5.86513 cm     43.5624 m        World  Transportation
+   43    1.52862 mm   -1.64692 cm   -21.6249 m  -0.000497035 -0.000285135         -1      100 MeV   0.111901 meV    5.27862 cm     43.6152 m        World  Transportation
+   44    1.50896 mm   -1.64877 cm   -21.6724 m  -0.000315155 -0.000478611         -1      100 MeV   0.100711 meV    4.75076 cm     43.6627 m        World  Transportation
+   45    1.50013 mm   -1.65103 cm   -21.7152 m  -9.21054e-05 -0.000565527         -1      100 MeV  0.0906401 meV    4.27568 cm     43.7054 m        World  Transportation
+   46    2.23134 mm   -1.48018 cm   -21.7537 m  0.000123537 -0.000559486         -1      100 MeV  0.0817583 meV    3.85671 cm      43.744 m        World  Transportation
+   47     2.2388 mm   -1.48201 cm   -21.7883 m  0.000303481 -0.000485953         -1      100 MeV  0.0734183 meV    3.46329 cm     43.7786 m        World  Transportation
+   48    2.05155 mm   -1.63234 cm   -21.8195 m  0.00043608 -0.000371627         -1      100 MeV  0.0662205 meV    3.12376 cm     43.8099 m        World  Transportation
+   49    924.749 um   -1.64072 cm   -21.8475 m  0.000520843 -0.00023866         -1      100 MeV  0.0595614 meV    2.80964 cm      43.838 m        World  Transportation
+   50    1.96258 mm   -1.71052 cm   -21.8728 m  0.000563569 -0.000103228         -1      100 MeV  0.0536423 meV    2.53042 cm     43.8633 m        World  Transportation
+   51    1.97554 mm   -1.71061 cm   -21.8955 m  0.000572403 2.4351e-05         -1      100 MeV  0.0481699 meV    2.27227 cm      43.886 m        World  Transportation
+   52    1.98712 mm   -1.71044 cm   -21.9159 m  0.000556015 0.000138347         -1      100 MeV  0.0433529 meV    2.04504 cm     43.9065 m        World  Transportation
+   53    1.99707 mm    -1.7101 cm   -21.9344 m  0.000522004 0.000236266         -1      100 MeV  0.0390176 meV    1.84054 cm     43.9249 m        World  Transportation
+   54    2.41825 mm   -1.73651 cm   -21.9509 m  0.000476764 0.00031784         -1      100 MeV   0.035145 meV    1.65786 cm     43.9414 m        World  Transportation
+   55    2.42498 mm   -1.73599 cm   -21.9658 m  0.000425143 0.000384111         -1      100 MeV  0.0316043 meV    1.49084 cm     43.9563 m        World  Transportation
+   56    2.14002 mm   -1.78013 cm   -21.9792 m  0.000370849 0.000436723         -1      100 MeV  0.0284859 meV    1.34374 cm     43.9698 m        World  Transportation
+   57    2.14418 mm   -1.77958 cm   -21.9913 m  0.000316494 0.000477575         -1      100 MeV  0.0255994 meV    1.20758 cm     43.9819 m        World  Transportation
+   58     2.1467 mm   -1.77915 cm        -22 m  0.000274578 0.000502846         -1      100 MeV  0.0184973 meV    8.72558 mm     43.9906 m   OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001013s Sys=0.000000s
+  User=0.000000s Real=0.001088s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -464,7 +464,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001193s Sys=0.000000s
+  User=0.010000s Real=0.001311s Sys=0.000000s
  F01FieldSetup::CreateStepperAndChordFinder() called. 
    1. Creating Stepper.
 G4DormandPrince745 Stepper is chosen
@@ -520,7 +520,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000404s Sys=0.000000s
+  User=0.000000s Real=0.000445s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -547,7 +547,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.020000s Real=0.014555s Sys=0.000000s
+  User=0.010000s Real=0.016340s Sys=0.000000s
 #
 /calor/setAbsMat Xe20CO2
 /calor/setWorldMat Kr20CO2
@@ -616,7 +616,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.005287s Sys=0.000000s
+  User=0.010000s Real=0.010972s Sys=0.000000s
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
 Dynamic pools deleted: 12 / Total memory freed: 0.3 MB

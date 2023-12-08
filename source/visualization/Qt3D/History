@@ -6,6 +6,28 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-14 John Allison (visQt3D-V11-01-07)
+- G4Qt3DSceneHandler.cc: Add dummy normal line attributes - Qt6 seems to require!!
+  - I am puzzled - why do lines need normals?
+  - Fixes wireframe drawing.
+  - Does not seem to fix trajectory line drawing, which is curious.
+
+## 2023-10-07 John Allison (visQt3D-V11-01-06)
+- G4Qt3DSceneHandler.cc:
+  - Establish the top physical volume Qt3D entities from the scene.
+    - This is a better way than using transportation worlds.
+      - In some circumstances, such as the standalone examples,
+        G4TransportationManager is no longer instantiated in time,
+        causing a crash. But this way is better anyway.
+
+## 2023-08-14 John Allison (visQt3D-V11-01-05)
+- G4Qt3D:
+  - Simplify IsUISessionCompatible.
+    - Exploit new method, G4UImanager::GetBaseSession (intercoms-V11-01-07).
+
+## 2023-07-01 John Allison (visQt3D-V11-01-04)
+- Fix precision-loss warning
+
 ## 2023-04-26 Ben Morgan (visQt3D-V11-01-03)
 - Support compilation against Qt5 and Qt6.
 

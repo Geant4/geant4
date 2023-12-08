@@ -38,6 +38,7 @@
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 // 09 Oct 2013   L Pandola  Migration to MT
+// 25 Jul 2023   D Iuso     Fix for possible infinite loops due to FP
 //
 #include "G4PenelopeComptonModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -320,6 +321,13 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double ek1 = eks-ek2-1.0;
 
   G4double taumin = 1.0/ek2;
+  //This is meant to fix a possible (rare) floating point exception in the sampling of tau below,
+  //causing an infinite loop. The maximum of tau is not 1., but the closest double which can 
+  //be represented (i.e. ~ 1. - 1e-16). Fix by Domenico Iuso 
+  static G4double taumax = std::nexttoward(1.0,0.0);
+  if (fVerboseLevel > 3)
+    G4cout << "G4PenelopeComptonModel: maximum value of tau: 1 - " << 1.-taumax << G4endl;
+  //To here. 
   G4double a1 = G4Log(ek2);
   G4double a2 = a1+2.0*ek*(1.0+ek)/(ek2*ek2);
 
@@ -339,6 +347,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  //rejection function
 	  TST = (1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));
 	}while (G4UniformRand()> TST);
+	if (tau > taumax) tau = taumax; //prevent FP exception causing infinite loop
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ek*tau);
 
@@ -394,6 +403,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	    tau = std::pow(taumin,G4UniformRand());
 	  else
 	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
+	  if (tau > taumax) tau = taumax; //prevent FP exception causing infinite loop
 	  cdt1 = (1.0-tau)/(ek*tau);
 	  //Incoherent scattering function
 	  S = 0.;

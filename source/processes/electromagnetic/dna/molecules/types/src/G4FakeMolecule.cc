@@ -40,17 +40,17 @@
 // ######################################################################
 // ###                         FakeMolecule                               ###
 // ######################################################################
-G4FakeMolecule* G4FakeMolecule::theInstance = 0;
+G4FakeMolecule* G4FakeMolecule::theInstance = nullptr;
 
 G4FakeMolecule* G4FakeMolecule::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "None";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
 //    G4ParticleDefinition* anInstance = 0;
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     const G4String formatedName = "None";
 

@@ -62,7 +62,7 @@ G4DNARuddAngle::G4DNARuddAngle(const G4String&)
 }    
 
 G4DNARuddAngle::~G4DNARuddAngle() 
-{}
+= default;
 
 G4ThreeVector& 
 G4DNARuddAngle::SampleDirectionForShell(const G4DynamicParticle* dp,

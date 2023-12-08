@@ -49,10 +49,10 @@ typedef std::vector<G4VTrajectoryPoint*> WLSTrajectoryPointContainer;
 class WLSTrajectory : public G4VTrajectory
 {
  public:
-  WLSTrajectory();
+  WLSTrajectory() = default;
   WLSTrajectory(const G4Track*);
   WLSTrajectory(WLSTrajectory&);
-  ~WLSTrajectory();
+  ~WLSTrajectory() override;
 
   inline void* operator new(size_t);
   inline void operator delete(void*);
@@ -61,42 +61,42 @@ class WLSTrajectory : public G4VTrajectory
     return (this == &right);
   }
 
-  inline virtual G4int GetTrackID() const { return fTrackID; }
-  inline virtual G4int GetParentID() const { return fParentID; }
-  inline virtual G4String GetParticleName() const { return fParticleName; }
-  inline virtual G4double GetCharge() const { return fPDGCharge; }
-  inline virtual G4int GetPDGEncoding() const { return fPDGEncoding; }
-  inline virtual G4ThreeVector GetInitialMomentum() const
+  inline G4int GetTrackID() const override { return fTrackID; }
+  inline G4int GetParentID() const override { return fParentID; }
+  inline G4String GetParticleName() const override { return fParticleName; }
+  inline G4double GetCharge() const override { return fPDGCharge; }
+  inline G4int GetPDGEncoding() const override { return fPDGEncoding; }
+  inline G4ThreeVector GetInitialMomentum() const override
   {
     return fInitialMomentum;
   }
 
-  virtual void ShowTrajectory(std::ostream& os = G4cout) const;
-  virtual void AppendStep(const G4Step* aStep);
-  virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
+  void ShowTrajectory(std::ostream& os = G4cout) const override;
+  void AppendStep(const G4Step* aStep) override;
+  void MergeTrajectory(G4VTrajectory* secondTrajectory) override;
 
   G4ParticleDefinition* GetParticleDefinition();
 
-  virtual int GetPointEntries() const { return fpPointsContainer->size(); }
-  virtual G4VTrajectoryPoint* GetPoint(G4int i) const
+  int GetPointEntries() const override { return fpPointsContainer->size(); }
+  G4VTrajectoryPoint* GetPoint(G4int i) const override
   {
     return (*fpPointsContainer)[i];
   }
 
-  virtual const std::map<G4String, G4AttDef>* GetAttDefs() const;
-  virtual std::vector<G4AttValue>* CreateAttValues() const;
+  const std::map<G4String, G4AttDef>* GetAttDefs() const override;
+  std::vector<G4AttValue>* CreateAttValues() const override;
 
  private:
-  WLSTrajectoryPointContainer* fpPointsContainer;
+  WLSTrajectoryPointContainer* fpPointsContainer = nullptr;
 
-  G4int fTrackID;
-  G4int fParentID;
-  G4double fPDGCharge;
-  G4int fPDGEncoding;
+  G4int fTrackID = 0;
+  G4int fParentID = 0;
+  G4double fPDGCharge = 0.;
+  G4int fPDGEncoding = 0;
   G4String fParticleName;
   G4ThreeVector fInitialMomentum;
 
-  G4ParticleDefinition* fParticleDefinition;
+  G4ParticleDefinition* fParticleDefinition = nullptr;
 };
 
 extern G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator;

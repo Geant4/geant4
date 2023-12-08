@@ -58,8 +58,8 @@ RadioactiveDecayPhysics::RadioactiveDecayPhysics(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RadioactiveDecayPhysics::~RadioactiveDecayPhysics()
-{ }
+///RadioactiveDecayPhysics::~RadioactiveDecayPhysics()
+///{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

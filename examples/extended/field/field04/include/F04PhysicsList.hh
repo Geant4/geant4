@@ -44,7 +44,7 @@ class F04PhysicsList: public G4VModularPhysicsList
 public:
 
     F04PhysicsList(G4String);
-    virtual ~F04PhysicsList();
+    ~F04PhysicsList() override;
 
     void SetStepMax(G4double);
     F04StepMax* GetStepMaxProcess();
@@ -56,15 +56,15 @@ public:
     /// Make sure that the physics list is empty.
     void ClearPhysics();
 */
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
 private:
 
-    G4double fMaxChargedStep;
+    G4double fMaxChargedStep = DBL_MAX;
     static G4ThreadLocal F04StepMax* fStepMaxProcess;
 
-    F04PhysicsListMessenger* fMessenger;
+    F04PhysicsListMessenger* fMessenger = nullptr;
 
 };
 

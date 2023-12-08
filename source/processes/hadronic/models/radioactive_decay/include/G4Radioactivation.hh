@@ -51,26 +51,26 @@ typedef std::vector<G4RadioactiveDecayChainsFromParent> G4RadioactiveDecayParent
 typedef std::vector<G4RadioactiveDecayRatesToDaughter> G4RadioactiveDecayRates;
 typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
-
 class G4Radioactivation : public G4RadioactiveDecay
 {
   public: // with description
 
-    G4Radioactivation(const G4String& processName="Radioactivation");
-    ~G4Radioactivation();
+    G4Radioactivation(const G4String& processName="Radioactivation",
+                      const G4double timeThresholdForRadioactiveDecays=-1.0);
+    ~G4Radioactivation() override;
 
-    virtual void ProcessDescription(std::ostream& outFile) const;
+    G4VParticleChange* DecayIt(const G4Track& theTrack,
+                               const G4Step&  theStep) override;
 
-    // Return decay table if it exists, if not, load it from file
-    G4DecayTable* GetDecayTable1(const G4ParticleDefinition*);
+    void ProcessDescription(std::ostream& outFile) const override;
 
     // Set the decay biasing scheme using the data in "filename"
-    void SetDecayBias(G4String filename);
+    void SetDecayBias(const G4String& filename);
 
     // Set the half-life threshold for isomer production
     void SetHLThreshold(G4double hl) {halflifethreshold = hl;}
 
-    void SetSourceTimeProfile(G4String filename);
+    void SetSourceTimeProfile(const G4String& filename);
     // Set source exposure function using histograms in "filename"
 
     G4bool IsRateTableReady(const G4ParticleDefinition &);
@@ -90,12 +90,12 @@ class G4Radioactivation : public G4RadioactiveDecay
     // and place it in "chainsFromParent".
     // used in VR decay mode only 
 
-    void SetDecayRate(G4int,G4int,G4double, G4int, std::vector<G4double>,
-                      std::vector<G4double>);
+    void SetDecayRate(G4int,G4int,G4double, G4int, std::vector<G4double>&,
+                      std::vector<G4double>&);
     // Sets "theDecayRate" with data supplied in the arguements.
     // used in VR decay mode only 
 
-    std::vector<G4RadioactivityTable*> GetTheRadioactivityTables()
+    std::vector<G4RadioactivityTable*>& GetTheRadioactivityTables()
        {return theRadioactivityTables;}
     // Return vector of G4Radioactivity map - should be used in VR mode only
 
@@ -103,9 +103,8 @@ class G4Radioactivation : public G4RadioactiveDecay
     // Controls whether G4Radioactivation runs in analogue mode or
     // variance reduction mode.  SetBRBias, SetSplitNuclei and
     // SetSourceTimeProfile all turn off analogue mode and use VR mode
-    inline void SetAnalogueMonteCarlo (G4bool r ) {
+    inline void SetAnalogueMonteCarlo (G4bool r) {
       AnalogueMC = r;
-      if (!AnalogueMC) halflifethreshold = 1e-6*CLHEP::s;
     }
 
     // Returns true if the simulation is an analogue Monte Carlo, and false if
@@ -127,8 +126,8 @@ class G4Radioactivation : public G4RadioactiveDecay
     //  Returns the nuclear splitting number
     inline G4int GetSplitNuclei () {return NSplit;}
 
-    G4VParticleChange* DecayIt(const G4Track& theTrack,
-                               const G4Step&  theStep);
+    G4Radioactivation(const G4Radioactivation& right) = delete;
+    G4Radioactivation& operator=(const G4Radioactivation& right) = delete;
 
   protected:
 
@@ -137,7 +136,7 @@ class G4Radioactivation : public G4RadioactiveDecay
     G4int GetDecayTimeBin(const G4double aDecayTime);
 
     G4double GetMeanLifeTime(const G4Track& theTrack,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
     //Add gamma,Xray,conversion,and auger electrons for bias mode
     void AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
@@ -147,10 +146,9 @@ class G4Radioactivation : public G4RadioactiveDecay
                                             std::vector<double>& times_v,
                                             std::vector<G4DynamicParticle*>& secondaries_v);
 
-    G4RadioactivationMessenger* theRadioactivationMessenger;
-
   private:
 
+    G4RadioactivationMessenger* theRadioactivationMessenger;
     G4bool AnalogueMC;
     G4bool BRBias;
     G4int NSplit;
@@ -172,14 +170,6 @@ class G4Radioactivation : public G4RadioactiveDecay
     // for the radioactivity tables
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
     G4int decayWindows[100];
-
-    inline
-    G4VParticleChange* AtRestDoIt(const G4Track& theTrack, const G4Step& theStep)
-      {return DecayIt(theTrack, theStep);}
-
-    inline
-    G4VParticleChange* PostStepDoIt(const G4Track& theTrack, const G4Step& theStep)
-      {return DecayIt(theTrack, theStep);}
 };
 
 #endif

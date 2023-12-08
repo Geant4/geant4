@@ -44,26 +44,34 @@ class G4PhotonEvaporation;
 
 class G4ITDecay : public G4NuclearDecay
 {
-  public:
-    G4ITDecay(const G4ParticleDefinition* theParentNucleus,
-              const G4double& theBR, const G4double& Qvalue,
-              const G4double& excitation, G4PhotonEvaporation* aPhotonEvap);
+public:
 
-    virtual ~G4ITDecay();
+  // constructor for sampling of radiaoctive decay in a thread 
+  G4ITDecay(G4PhotonEvaporation* aPhotonEvap);
 
-    virtual G4DecayProducts* DecayIt(G4double);
+  // constructor to define decay channels in the shared decay table
+  G4ITDecay(const G4ParticleDefinition* theParentNucleus,
+	    const G4double& theBR, const G4double& Qvalue,
+	    const G4double& excitation);
 
-    virtual void DumpNuclearInfo();
+  ~G4ITDecay() override = default;
 
-    void SetARM(G4bool onoff) {applyARM = onoff;}
+  void SetupDecay(const G4ParticleDefinition*);
+
+  G4DecayProducts* DecayIt(G4double) override;
+
+  void DumpNuclearInfo() override;
+
+  void SetARM(G4bool onoff) {applyARM = onoff;}
  
-  private:
-    const G4double transitionQ;
-    G4int parentZ;
-    G4int parentA;
-    G4bool applyARM;
+private:
 
-    G4PhotonEvaporation* photonEvaporation;
+  G4int parentZ{0};
+  G4int parentA{0};
+  G4bool applyARM{true};
+
+  G4PhotonEvaporation* photonEvaporation{nullptr};
+  const G4ParticleDefinition* theParent{nullptr};
 };
 
 #endif

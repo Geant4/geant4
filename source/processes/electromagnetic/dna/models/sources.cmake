@@ -73,6 +73,7 @@ geant4_add_module(G4emdna-models
     G4DNARPWBAExcitationModel.hh
     G4DNARPWBAIonisationModel.hh
     G4VDNAHitModel.hh
+    G4ChemEquilibrium.hh
   SOURCES
     G4DNABornAngle.cc
     G4DNABornExcitationModel1.cc
@@ -139,7 +140,8 @@ geant4_add_module(G4emdna-models
     G4DNAEventScheduler.cc
     G4DNARPWBAExcitationModel.cc
     G4DNARPWBAIonisationModel.cc
-    G4VDNAHitModel.cc)
+    G4VDNAHitModel.cc
+    G4ChemEquilibrium.cc)
 
 geant4_module_link_libraries(G4emdna-models
   PUBLIC

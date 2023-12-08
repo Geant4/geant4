@@ -59,31 +59,28 @@ public:
 
   void SetHETCModel();
 
-  G4ReactionProduct* PerformEmission(G4Fragment & aFragment);
+  G4ReactionProduct* PerformEmission(G4Fragment& aFragment);
 
-  inline G4double GetTotalProbability(const G4Fragment & aFragment);
+  inline G4double GetTotalProbability(const G4Fragment& aFragment);
 
   inline void SetOPTxs(G4int);
 
   inline void UseSICB(G4bool);
 
+  G4PreCompoundEmission(const G4PreCompoundEmission &right) = delete;
+  const G4PreCompoundEmission& operator=
+  (const G4PreCompoundEmission &right) = delete;
+  G4bool operator==(const G4PreCompoundEmission &right) const = delete;
+  G4bool operator!=(const G4PreCompoundEmission &right) const = delete;
+
 private:
 
   void AngularDistribution(G4VPreCompoundFragment * theFragment,
 			   const G4Fragment& aFragment,
-			   G4double KineticEnergy);
+			   G4double kineticEnergy);
 		
   G4double rho(G4int p, G4int h, G4double gg, 
-	       G4double E, G4double Ef) const;
-
-  G4PreCompoundEmission(const G4PreCompoundEmission &right);
-  const G4PreCompoundEmission& operator=(const G4PreCompoundEmission &right);
-  G4bool operator==(const G4PreCompoundEmission &right) const;
-  G4bool operator!=(const G4PreCompoundEmission &right) const;
-
-  //==============
-  // Data Members
-  //==============
+               G4double E, G4double Ef) const;
 
   G4Pow* g4calc;
   G4NuclearLevelData* fNuclData;
@@ -91,8 +88,8 @@ private:
   G4double fFermiEnergy;
 
   // A vector with the allowed emission fragments 
-  G4PreCompoundFragmentVector * theFragmentsVector;
-  G4VPreCompoundEmissionFactory * theFragmentsFactory;
+  G4PreCompoundFragmentVector* theFragmentsVector;
+  G4VPreCompoundEmissionFactory* theFragmentsFactory;
 
   // Momentum of emitted fragment
   G4ThreeVector theFinalMomentum;

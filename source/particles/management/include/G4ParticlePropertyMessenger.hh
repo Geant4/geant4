@@ -31,7 +31,7 @@
 // G4ParticleDefinition and UI.
 //
 // /particle/property/   Particle Table control commands.
-//   Commands : 
+//   Commands :
 //     dump * dump particle properties.
 //     stable * Set stable flag.
 //     lifetime * Set life time.
@@ -53,12 +53,11 @@ class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAnInteger; 
+class G4UIcmdWithAnInteger;
 
 class G4ParticlePropertyMessenger : public G4UImessenger
 {
   public:
-
     G4ParticlePropertyMessenger(G4ParticleTable* pTable = nullptr);
     ~G4ParticlePropertyMessenger() override;
 
@@ -69,20 +68,15 @@ class G4ParticlePropertyMessenger : public G4UImessenger
     G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
-
     G4ParticleTable* theParticleTable = nullptr;
 
-    G4UIdirectory*             thisDirectory = nullptr;
-    G4UIcmdWithoutParameter*   dumpCmd = nullptr;
-    G4UIcmdWithABool*          stableCmd = nullptr; 
-    G4UIcmdWithAnInteger*      verboseCmd = nullptr;
-    G4UIcmdWithADoubleAndUnit* lifetimeCmd = nullptr; 
- 
+    G4UIdirectory* thisDirectory = nullptr;
+    G4UIcmdWithoutParameter* dumpCmd = nullptr;
+    G4UIcmdWithABool* stableCmd = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* lifetimeCmd = nullptr;
+
     G4DecayTableMessenger* fDecayTableMessenger = nullptr;
 };
 
 #endif
-
-
-
-

@@ -31,16 +31,17 @@
 #include "G4SystemOfUnits.hh"
 
 void ChemNO2_NO3ScavengerBuilder
-    ::NO2_NO3ScavengerReaction(
+::NO2_NO3ScavengerReaction(
     G4DNAMolecularReactionTable *pReactionTable) {
-  auto e_aq = G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-  auto OH = G4MoleculeTable::Instance()->GetConfiguration("OH");
-  auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm");
-  auto NO2 = G4MoleculeTable::Instance()->GetConfiguration("NO2");
-  auto NO2m = G4MoleculeTable::Instance()->GetConfiguration("NO2m");
-  auto NO2mm = G4MoleculeTable::Instance()->GetConfiguration("NO2mm");
-  auto NO3m = G4MoleculeTable::Instance()->GetConfiguration("NO3m");
-  auto NO3mm = G4MoleculeTable::Instance()->GetConfiguration("NO3mm");
+  auto table = G4MoleculeTable::Instance();
+  auto e_aq = table->GetConfiguration("e_aq");
+  auto OH = table->GetConfiguration("OH");
+  auto OHm = table->GetConfiguration("OHm");
+  auto NO2 = table->GetConfiguration("NO2");
+  auto NO2m = table->GetConfiguration("NO2m");
+  auto NO2mm = table->GetConfiguration("NO2mm");
+  auto NO3m = table->GetConfiguration("NO3m");
+  auto NO3mm = table->GetConfiguration("NO3mm");
 
   G4DNAMolecularReactionData *reactionData = nullptr;
   //------------------------------------------------------------------

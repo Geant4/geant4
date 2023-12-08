@@ -4,6 +4,17 @@
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
+## 2023-11-10 H. Tran (UHDR-V11-01-04)
+- Added info in .README.txt and README files
+
+## 2023-11-07 I. Hrivnacova (UHDR-V11-01-03)
+- Fixed formatting, links in .README.txt
+
+## 2023-10-12  H Tran (UHDR-V11-01-02)
+- correct scavenger counter
+
+## 2023-10-10  H Tran (UHDR-V11-01-01)
+- Updated equilibrium processes
 
 ## 2023-05-04  H Tran (UHDR-V11-01-00)
 - first commit, example is created on base of chem6

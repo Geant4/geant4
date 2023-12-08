@@ -30,9 +30,6 @@
 /vis/viewer/set/viewpointThetaPhi 85 -75 deg
 #/vis/viewer/set/lightsMove with-camera
 #
-# Set Voxels number to be visualised
-/vis/ogl/set/displayListLimit 4000000
-
 # Specify zoom value:
 #/vis/viewer/zoom 2.
 #

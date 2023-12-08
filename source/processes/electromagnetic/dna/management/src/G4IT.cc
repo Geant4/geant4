@@ -123,11 +123,11 @@ G4IT& G4IT::operator=(const G4IT& right)
 
 G4IT::G4IT(G4Track * aTrack) :
     G4VUserTrackInformation("G4IT"),
-    fpPreviousIT(0),
-    fpNextIT(0),
+    fpPreviousIT(nullptr),
+    fpNextIT(nullptr),
     fpTrackingInformation(new G4TrackingInformation())
 {
-  fpITBox = 0;
+  fpITBox = nullptr;
   fpTrack = aTrack;
   fpKDNode = nullptr;
   fpTrackNode = nullptr;
@@ -138,19 +138,19 @@ G4IT::G4IT(G4Track * aTrack) :
 
 void G4IT::TakeOutBox()
 {
-  if(fpITBox)
+  if(fpITBox != nullptr)
   {
     fpITBox->Extract(this);
     fpITBox = nullptr;
   }
 
-  if(fpTrackNode)
+  if(fpTrackNode != nullptr)
   {
     delete fpTrackNode;
     fpTrackNode = nullptr;
   }
 
-  if(fpKDNode)
+  if(fpKDNode != nullptr)
   {
     InactiveNode(fpKDNode);
     fpKDNode = nullptr;
@@ -161,7 +161,7 @@ G4IT::~G4IT()
 {
   TakeOutBox();
 
-  if(fpTrackingInformation)
+  if(fpTrackingInformation != nullptr)
   {
     delete fpTrackingInformation;
     fpTrackingInformation = nullptr;
@@ -183,11 +183,9 @@ G4bool G4IT::operator<(const G4IT& right) const
   {
     return (this->diff(right));
   }
-  else
-  {
-    return (GetITType() < right.GetITType());
-  }
-  return false;
+  
+  return (GetITType() < right.GetITType());
+ 
 }
 
 G4bool G4IT::operator==(const G4IT& right) const
@@ -213,13 +211,13 @@ double G4IT::operator[](int i) const
 
 const G4ThreeVector& G4IT::GetPosition() const
 {
-  if (fpTrack) return GetTrack()->GetPosition();
+  if (fpTrack != nullptr) return GetTrack()->GetPosition();
   return *(new G4ThreeVector());
 }
 
 void G4IT::RecordCurrentPositionNTime()
 {
-  if (fpTrack)
+  if (fpTrack != nullptr)
   {
     fpTrackingInformation->RecordCurrentPositionNTime(fpTrack);
   }

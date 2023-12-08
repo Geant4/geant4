@@ -36,7 +36,7 @@ Par03ActionInitialisation::Par03ActionInitialisation(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03ActionInitialisation::~Par03ActionInitialisation() {}
+Par03ActionInitialisation::~Par03ActionInitialisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -92,12 +92,12 @@ namespace G4INCL {
       
       /// \brief Nucleon-Pion to Stange particles cross sections
       virtual G4double NpiToLK(Particle const * const p1, Particle const * const p2);
-		G4double p_pimToLK0(Particle const * const p1, Particle const * const p2);
+		  G4double p_pimToLK0(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToSK(Particle const * const p1, Particle const * const p2);
-		G4double p_pipToSpKp(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
+		  G4double p_pipToSpKp(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToLKpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToSKpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToLK2pi(Particle const * const p1, Particle const * const p2);
@@ -120,14 +120,13 @@ namespace G4INCL {
       virtual G4double NKbToNKb(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToSpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToLpi(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_kmToL_pz(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_kmToL_pz(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToS2pi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToL2pi(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_kmToL_pp_pm(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_kmToL_pp_pm(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
-      
-      
+   
   protected:
       /// \brief Maximum number of outgoing pions in NN collisions
       static const G4int nMaxPiNN;

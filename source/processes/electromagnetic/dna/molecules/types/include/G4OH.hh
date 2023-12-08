@@ -61,7 +61,7 @@ class G4OH : public G4MoleculeDefinition
 private:
     static /*G4ThreadLocal*/ G4OH* theInstance;
     G4OH() {}
-    ~G4OH() {}
+    ~G4OH() override = default;
 
 public:
     static G4OH* Definition();

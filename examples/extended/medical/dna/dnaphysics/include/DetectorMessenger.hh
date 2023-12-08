@@ -44,6 +44,7 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 class PhysicsList;
 
 class DetectorMessenger: public G4UImessenger
@@ -62,6 +63,7 @@ private:
   G4UIdirectory*        fpDetDir;
   G4UIcmdWithAString*   fpMaterCmd;
   G4UIcmdWithAString*   fpPhysCmd;
+  G4UIcmdWithABool*     fpTrackingCutCmd;
 };
 
 #endif

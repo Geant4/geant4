@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(B1)
 
 #----------------------------------------------------------------------------
@@ -47,7 +47,6 @@ set(EXAMPLEB1_SCRIPTS
   run1.mac
   run2.mac
   vis.mac
-  tsg_offscreen.mac
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})

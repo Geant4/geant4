@@ -31,20 +31,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04ActionInitialisation::Par04ActionInitialisation(Par04DetectorConstruction* aDetector)
+Par04ActionInitialisation::Par04ActionInitialisation(Par04DetectorConstruction* aDetector,
+                                                     Par04ParallelFullWorld* aParallel)
   : G4VUserActionInitialization()
   , fDetector(aDetector)
+  , fParallel(aParallel)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04ActionInitialisation::~Par04ActionInitialisation() {}
+Par04ActionInitialisation::~Par04ActionInitialisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par04ActionInitialisation::BuildForMaster() const
 {
-  auto eventAction = new Par04EventAction(fDetector);
+  auto eventAction = new Par04EventAction(fDetector, fParallel);
   SetUserAction(new Par04RunAction(fDetector, eventAction));
 }
 
@@ -53,7 +55,7 @@ void Par04ActionInitialisation::BuildForMaster() const
 void Par04ActionInitialisation::Build() const
 {
   SetUserAction(new Par04PrimaryGeneratorAction());
-  auto eventAction = new Par04EventAction(fDetector);
+  auto eventAction = new Par04EventAction(fDetector, fParallel);
   SetUserAction(eventAction);
   SetUserAction(new Par04RunAction(fDetector, eventAction));
 }

@@ -26,7 +26,7 @@
 #include "G4DNAWaterIonisationStructure.hh"
 #include "G4SystemOfUnits.hh"
 
-G4DNAWaterIonisationStructure::G4DNAWaterIonisationStructure(): nLevels(5)
+G4DNAWaterIonisationStructure::G4DNAWaterIonisationStructure() 
 {
   energyConstant.push_back(10.79*eV);
   energyConstant.push_back(13.39*eV);
@@ -39,7 +39,7 @@ G4DNAWaterIonisationStructure::G4DNAWaterIonisationStructure(): nLevels(5)
 
 
 G4DNAWaterIonisationStructure::~G4DNAWaterIonisationStructure()
-{ }
+= default;
  
 
 G4double G4DNAWaterIonisationStructure::IonisationEnergy(G4int level)

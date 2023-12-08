@@ -36,6 +36,8 @@
 #
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 ##########################
 # Set here the cut and the step max for the tracking. 
@@ -102,6 +104,7 @@
 # Visualisation 
 #
 #/vis/open OGLI 600x600-0+0
+##/vis/open  ## open the default viewer
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

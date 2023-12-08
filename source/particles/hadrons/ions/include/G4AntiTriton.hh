@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4AntiTriton_h
 #define G4AntiTriton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                   ANTI   TRITON                                ###
-// ######################################################################
 
 class G4AntiTriton : public G4Ions
 {
- private:
-   static G4AntiTriton* theInstance;
-   G4AntiTriton(){}
-   ~G4AntiTriton() override= default;
+  public:
+    static G4AntiTriton* Definition();
+    static G4AntiTriton* AntiTritonDefinition();
+    static G4AntiTriton* AntiTriton();
 
- public:
-   static G4AntiTriton* Definition();
-   static G4AntiTriton* AntiTritonDefinition();
-   static G4AntiTriton* AntiTriton();
+  private:
+    G4AntiTriton() {}
+    ~G4AntiTriton() override = default;
+
+    static G4AntiTriton* theInstance;
 };
 
 #endif

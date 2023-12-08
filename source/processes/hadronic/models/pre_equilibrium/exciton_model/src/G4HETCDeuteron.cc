@@ -32,18 +32,16 @@
 
 #include "G4HETCDeuteron.hh"
 #include "G4Deuteron.hh"
+#include "G4CoulombBarrier.hh"
 
 G4HETCDeuteron::G4HETCDeuteron() 
-  : G4HETCChargedFragment(G4Deuteron::Deuteron(), &theDeuteronCoulombBarrier)
-{}
-
-G4HETCDeuteron::~G4HETCDeuteron() 
+  : G4HETCChargedFragment(G4Deuteron::Deuteron(), new G4CoulombBarrier(2, 1))
 {}
 
 G4double G4HETCDeuteron::GetAlpha() const
 {
   G4double C = 0.0;
-  if (theFragZ >= 70) 
+  if (theFragZ <= 70) 
     {
       C = 0.10;
     } 
@@ -55,33 +53,27 @@ G4double G4HETCDeuteron::GetAlpha() const
   return 1.0 + C*0.5;
 }
   
-G4double G4HETCDeuteron::GetBeta() const
-{
-  return -theCoulombBarrier;
-}
-
 G4double G4HETCDeuteron::GetSpinFactor() const
 {
   // 2s+1
   return 3.0;
 }
 
-G4double G4HETCDeuteron::K(const G4Fragment & aFragment)
+G4double G4HETCDeuteron::K(const G4Fragment& aFragment) const
 {
   // Number of protons in emitted fragment
   G4int Pa = theZ;
   // Number of neutrons in emitted fragment 
   G4int Na = theA - Pa;
 
-  G4double r = G4double(theResZ)/G4double(theResA);
+  G4double r = (G4double)theResZ/(G4double)theResA;
   
   G4int P = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();
 
-  G4double result = 0.0;
-  if (P > 1) {
-    result = 2.*(H*(H-1.0)*r*(r-1.0)+H*(Na*r+Pa*(1.0-r)) + Pa*Na)
-      /(P*(P-1.0)*r*(1.0 - r));
-  }
+  G4double result = (P > 1) ?
+    2.*(H*(H-1.0)*r*(r-1.0)+H*(Na*r+Pa*(1.0-r)) + Pa*Na)
+    /(P*(P-1.0)*r*(1.0 - r)) : 0.0;
+
   return std::max(0.0,result);
 }

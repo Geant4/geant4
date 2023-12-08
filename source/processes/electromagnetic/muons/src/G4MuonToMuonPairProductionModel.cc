@@ -58,23 +58,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// static members
-//
-static const G4int nzdat = 5;
-static const G4int zdat[5] = {1, 4, 13, 29, 92};
-
-static const G4double xgi[] =
-{ 0.0198550717512320, 0.1016667612931865, 0.2372337950418355, 0.4082826787521750,
-  0.5917173212478250, 0.7627662049581645, 0.8983332387068135, 0.9801449282487680 };
-
-static const G4double wgi[] =
-{ 0.0506142681451880, 0.1111905172266870, 0.1568533229389435, 0.1813418916891810,
-  0.1813418916891810, 0.1568533229389435, 0.1111905172266870, 0.0506142681451880 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-using namespace std;
-
 G4MuonToMuonPairProductionModel::G4MuonToMuonPairProductionModel(
                                  const G4ParticleDefinition* p,
                                  const G4String& nam)
@@ -86,7 +69,7 @@ G4MuonToMuonPairProductionModel::G4MuonToMuonPairProductionModel(
   minPairEnergy = 2.*muonMass;
   mueRatio = muonMass/CLHEP::electron_mass_c2;
   factorForCross = 2./(3*CLHEP::pi)*
-    pow(CLHEP::fine_structure_const*CLHEP::classic_electr_radius/mueRatio, 2);
+    std::pow(CLHEP::fine_structure_const*CLHEP::classic_electr_radius/mueRatio, 2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,14 +102,14 @@ G4double G4MuonToMuonPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double beta = 0.5*pairEnergy*pairEnergy*a0;
   G4double xi0 = 0.5*beta;
 
-  // Gaussian integration in ln(1-ro) ( with 8 points)
-  G4double rho[8];
-  G4double rho2[8];
-  G4double xi[8];
-  G4double xi1[8];
-  G4double xii[8];
+  // Gaussian integration in ln(1-ro) ( with NINTPAIR points)
+  G4double rho[NINTPAIR];
+  G4double rho2[NINTPAIR];
+  G4double xi[NINTPAIR];
+  G4double xi1[NINTPAIR];
+  G4double xii[NINTPAIR];
 
-  for (G4int i = 0; i < 8; ++i)
+  for (G4int i = 0; i < NINTPAIR; ++i)
   {
     rho[i] = G4Exp(tmn*xgi[i]) - 1.0; // rho = -asymmetry
     rho2[i] = rho[i] * rho[i];
@@ -137,10 +120,10 @@ G4double G4MuonToMuonPairProductionModel::ComputeDMicroscopicCrossSection(
 
   G4double ximax = xi0*(1. - rhomax*rhomax);
 
-  G4double Y = 10 * sqrt(particleMass/totalEnergy);
+  G4double Y = 10 * std::sqrt(particleMass/totalEnergy);
   G4double U[8];
 
-  for (G4int i = 0; i < 8; ++i)
+  for (G4int i = 0; i < NINTPAIR; ++i)
   {
     U[i] = U_func(Z, rho2[i], xi[i], Y, pairEnergy);
   }
@@ -148,7 +131,7 @@ G4double G4MuonToMuonPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double UMax = U_func(Z, rhomax*rhomax, ximax, Y, pairEnergy);
 
   G4double sum = 0.0;
-  for (G4int i = 0; i < 8; ++i)
+  for (G4int i = 0; i < NINTPAIR; ++i)
   {
     G4double X = 1 + U[i] - UMax;
     G4double lnX = G4Log(X);
@@ -224,18 +207,18 @@ void G4MuonToMuonPairProductionModel::SampleSecondaries(
 
   // select sample table via Z
   G4int iz1(0), iz2(0);
-  for(G4int iz=0; iz<nzdat; ++iz) { 
-    if(currentZ == zdat[iz]) {
-      iz1 = iz2 = currentZ; 
+  for(G4int iz=0; iz<NZDATPAIR; ++iz) { 
+    if(currentZ == ZDATPAIR[iz]) {
+      iz1 = iz2 = iz; 
       break;
-    } else if(currentZ < zdat[iz]) {
-      iz2 = zdat[iz];
-      if(iz > 0) { iz1 = zdat[iz-1]; }
+    } else if(currentZ < ZDATPAIR[iz]) {
+      iz2 = iz;
+      if(iz > 0) { iz1 = iz-1; }
       else { iz1 = iz2; }
       break;
     } 
   }
-  if(0 == iz1) { iz1 = iz2 = zdat[nzdat-1]; }
+  if(0 == iz1) { iz1 = iz2 = NZDATPAIR-1; }
 
   G4double pairEnergy = 0.0;
   G4int count = 0;
@@ -248,8 +231,8 @@ void G4MuonToMuonPairProductionModel::SampleSecondaries(
     G4double x = FindScaledEnergy(iz1, rand, logTkin, yymin, yymax);
     if(iz1 != iz2) {
       G4double x2 = FindScaledEnergy(iz2, rand, logTkin, yymin, yymax);
-      G4double lz1= nist->GetLOGZ(iz1);
-      G4double lz2= nist->GetLOGZ(iz2);
+      G4double lz1= nist->GetLOGZ(ZDATPAIR[iz1]);
+      G4double lz2= nist->GetLOGZ(ZDATPAIR[iz2]);
       //G4cout << count << ".  x= " << x << "  x2= " << x2 
       //             << " Z1= " << iz1 << " Z2= " << iz2 << G4endl;
       x += (x2 - x)*(lnZ - lz1)/(lz2 - lz1);

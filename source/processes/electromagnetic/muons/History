@@ -6,6 +6,20 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-09-29 V.Ivanchenko (emmuons-V11-01-03)
+- G4MuPairProductionModel, G4MuonToMuonPairProductionModel - updated usage 
+    of G4ElementData - do not use IsMaster() to fill sampling table,
+    use only 5 2-D tables for sampling, code clean-up
+- G4MuBremsstrahlungModel - moved filling of static data to constructor
+- G4TablesForExtrapolator - define particle type when construct muon models
+
+## 2023-09-04 V.Ivanchenko (emmuons-V11-01-02)
+- G4MuonToMuonPairProductionModel - updated usage of G4ElementData
+
+## 2023-08-27 V.Ivanchenko (emmuons-V11-01-01)
+- G4TablesForExtrapolator - do not delete intermediat G4VEmModels created 
+    for initialisation
+
 ## 2023-04-10 V.Ivanchenko (emmuons-V11-01-00)
 - G4MuBremsstrahlung, G4MuPairProduction - fix problem #2531, spline flag
     was lost for mu-, pi-, K-, and pbar dedx and range tables, the max observed 

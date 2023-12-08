@@ -55,14 +55,14 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
 G4HadronElasticPhysicsHP::G4HadronElasticPhysicsHP(G4int ver)
   : G4HadronElasticPhysics(ver, "hElasticWEL_CHIPS_HP")
 {
-  if(ver > 1) { 
+  if ( ver > 1 ) { 
     G4cout << "### G4HadronElasticPhysicsHP: " << GetPhysicsName() 
 	   << G4endl; 
   }
+  auto param = G4HadronicParameters::Instance();
+  // HP is inconsistent with the neutron general process
+  param->SetEnableNeutronGeneralProcess(false);
 }
-
-G4HadronElasticPhysicsHP::~G4HadronElasticPhysicsHP()
-{}
 
 void G4HadronElasticPhysicsHP::ConstructProcess()
 {
@@ -71,13 +71,13 @@ void G4HadronElasticPhysicsHP::ConstructProcess()
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   G4HadronElastic* he = GetElasticModel(neutron);
   G4HadronicProcess* hel = GetElasticProcess(neutron);
-  if(he && hel) { 
-    he->SetMinEnergy(19.5*MeV); 
+  if ( nullptr != he && nullptr != hel ) { 
+    he->SetMinEnergy(19.5*CLHEP::MeV);
     hel->RegisterMe(new G4ParticleHPElastic());
     hel->AddDataSet(new G4ParticleHPElasticData());
   }
 
-  if(G4HadronicParameters::Instance()->GetVerboseLevel() > 1) {
+  if ( G4HadronicParameters::Instance()->GetVerboseLevel() > 1 ) {
     G4cout << "### HadronElasticPhysicsHP is constructed " 
 	   << G4endl;
   }

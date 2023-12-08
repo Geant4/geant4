@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-10-19 Ben Morgan (expar03-V11-01-00)
+- Replace use of deprecated functions with modern equivalents
+
 ## 2022-09-13 Anna Zaborowska (expar03-V11-00-01)
 - Start class member functions with uppercase
   to match guidelines

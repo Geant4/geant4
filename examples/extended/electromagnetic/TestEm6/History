@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-09 I. Hrivnacova (testem6-V11-00-02)
+- Coding guidelines - removed tabulations from RunAction.cc
+- Removed useless macro TestEm6_xs.in
+- Updated README's
+- Fixed warning in plotHisto.C
+
 ## 2022-02-08 Vladimir Ivanchenko (testem6-V11-00-01)
 - RunAction - fixed compilation warning
 

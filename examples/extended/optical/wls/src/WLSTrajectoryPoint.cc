@@ -44,15 +44,6 @@ G4ThreadLocal G4Allocator<WLSTrajectoryPoint>* WLSTrajPointAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSTrajectoryPoint::WLSTrajectoryPoint()
-  : fTime(0.)
-  , fMomentum(0., 0., 0.)
-  , fStepStatus(fUndefined)
-  , fVolumeName("")
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 WLSTrajectoryPoint::WLSTrajectoryPoint(const G4Step* aStep)
   : G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition())
 {
@@ -94,10 +85,6 @@ WLSTrajectoryPoint::WLSTrajectoryPoint(const WLSTrajectoryPoint& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSTrajectoryPoint::~WLSTrajectoryPoint() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 const std::map<G4String, G4AttDef>* WLSTrajectoryPoint::GetAttDefs() const
 {
   G4bool isNew;
@@ -132,7 +119,7 @@ const std::map<G4String, G4AttDef>* WLSTrajectoryPoint::GetAttDefs() const
 
 std::vector<G4AttValue>* WLSTrajectoryPoint::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("Time", G4BestUnit(fTime, "Time"), ""));
   values->push_back(

@@ -38,30 +38,17 @@
 #define G4BetaSpectrumSampler_h 1
 
 #include "globals.hh"
-#include "Randomize.hh"
-#include <vector>
 
 class G4BetaSpectrumSampler
 {
-  public:
-    G4BetaSpectrumSampler(const G4double* aPDF, G4int pdfSize, G4double e);
+public:
 
-    ~G4BetaSpectrumSampler() = default;
+  // sampling of any spectra using cumulative PDF function
+  // energy stepts are uniform starting from zero
+  // no check on array size is performed 
+  static G4double shoot(const G4int npoints, const G4double* aCDF,
+                        const G4double estep);
 
-    G4double shoot();
-
-  private:
-    G4double sampleSlopedLine();  // Method to sample under sloped line
-  
-    std::vector<double> pdf;      // Spectrum shape
-    std::vector<double> cdf;      // Cumulative distribution function
-
-    G4double eEnd;                // Endpoint energy of spectrum
-    G4int nBins;                  // Number of lower bin edges in spectrum 
-    G4int lowerBinEdge;           // Index of lower bin edge 
-    G4int upperBinEdge;           // Index of upper bin edge
-    G4double ylower{0.0};         // Value at lower bin edge
-    G4double yupper{0.0};         // Value at upper bin edge
 };
 #endif
 

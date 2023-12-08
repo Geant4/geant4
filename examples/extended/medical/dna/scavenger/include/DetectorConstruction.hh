@@ -35,11 +35,11 @@ class G4VPhysicalVolume;
 
 class G4LogicalVolume;
 
-/// Defines the geometry and scorers for calculating chemical species yields
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Defines the geometry and scorers for calculating chemical species yields
 
 class DetectorConstruction : public G4VUserDetectorConstruction {
 public:

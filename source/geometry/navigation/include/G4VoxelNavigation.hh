@@ -37,6 +37,7 @@
 #define G4VOXELNAVIGATION_HH
 
 #include "geomdefs.hh"
+#include "G4VNavigation.hh"
 #include "G4NavigationHistory.hh"
 #include "G4NavigationLogger.hh"
 #include "G4AffineTransform.hh"
@@ -60,7 +61,7 @@ class G4VoxelSafety;
 #include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelHeader.hh"
 
-class G4VoxelNavigation
+class G4VoxelNavigation : public G4VNavigation
 {
   public:  // with description
 
@@ -76,7 +77,7 @@ class G4VoxelNavigation
                           const G4ThreeVector& globalPoint,
                           const G4ThreeVector* globalDirection,
                           const G4bool pLocatedOnEdge, 
-                                G4ThreeVector& localPoint );
+                                G4ThreeVector& localPoint ) override;
 
     virtual G4double ComputeStep( const G4ThreeVector& globalPoint,
                                   const G4ThreeVector& globalDirection,
@@ -88,21 +89,19 @@ class G4VoxelNavigation
                                         G4bool& exiting,
                                         G4bool& entering,
                                         G4VPhysicalVolume* (*pBlockedPhysical),
-                                        G4int& blockedReplicaNo );
+                                        G4int& blockedReplicaNo ) override;
 
     virtual G4double ComputeSafety( const G4ThreeVector& globalpoint,
                                     const G4NavigationHistory& history,
-                                    const G4double pMaxLength = DBL_MAX );
+                                    const G4double pMaxLength = DBL_MAX ) override;
 
-    inline G4int GetVerboseLevel() const;
-    void  SetVerboseLevel(G4int level);
+    virtual void RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
+                                       const G4ThreeVector& localPoint ) override;
+
+    virtual G4int GetVerboseLevel() const override;
+    virtual void  SetVerboseLevel(G4int level) override;
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
-
-    inline void CheckMode(G4bool mode);
-      // Run navigation in "check-mode", therefore using additional
-      // verifications and more strict correctness conditions.
-      // Is effective only with G4VERBOSE set.
 
     inline void EnableBestSafety( G4bool flag = false );
       // Enable best-possible evaluation of isotropic safety
@@ -182,7 +181,6 @@ class G4VoxelNavigation
     G4double fHalfTolerance;
       // Surface tolerance
 
-    G4bool fCheck = false;
     G4bool fBestSafety = false; 
 
     G4NavigationLogger* fLogger;

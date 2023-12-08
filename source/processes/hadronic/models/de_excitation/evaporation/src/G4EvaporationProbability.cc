@@ -66,9 +66,9 @@ G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ,
   else if(1 == theZ) { index = theA; }
   else               { index = theA + 1; }
   if(0 == aZ) {
-    ResetIntegrator(30, 0.25*CLHEP::MeV, 0.02);
+    ResetIntegrator(30, 0.15*CLHEP::MeV, 0.02);
   } else {
-    ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
+    ResetIntegrator(30, 0.25*CLHEP::MeV, 0.03);
   }
 }
 
@@ -174,10 +174,10 @@ G4EvaporationProbability::CrossSection(G4double K, G4double CB)
   } else {
     // added barrier penetration factor
     G4double elim = 0.6*CB;
-    if(K > elim) {
-      res = G4KalbachCrossSection::ComputeCrossSection(K, elim, resA13, muu,
-						       index, theZ, theA, resA);
-      res *= (1.0 - elim/K);
+    if (K > elim) {
+      res = G4KalbachCrossSection::ComputeCrossSection(K, CB, resA13, muu,
+    						       index, theZ, theA, resA);
+      //res *= (1.0 - elim/K);
     }
   }
   return res;

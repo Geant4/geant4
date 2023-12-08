@@ -37,18 +37,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F05Field::F05Field() : G4ElectroMagneticField()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F05Field::~F05Field()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F05Field::GetFieldValue( const G4double Point[4], G4double* Bfield ) const
 {
   // Point[0],Point[1],Point[2] are x-, y-, z-cordinates, Point[3] is time
@@ -57,7 +45,7 @@ void F05Field::GetFieldValue( const G4double Point[4], G4double* Bfield ) const
   const G4double Er = 2.113987E+6*volt/m;
 
   G4double Ex,Ey;
- 
+
   G4double posR = std::sqrt(std::pow(Point[0],2) + std::pow(Point[1],2));
   G4double cos_theta, sin_theta;
 
@@ -70,7 +58,7 @@ void F05Field::GetFieldValue( const G4double Point[4], G4double* Bfield ) const
      Ex=0;
      Ey=0;
   }
-  
+
   Bfield[0]=0;
   Bfield[1]=0;
   Bfield[2]=Bz;

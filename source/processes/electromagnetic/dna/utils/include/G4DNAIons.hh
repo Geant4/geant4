@@ -65,7 +65,7 @@ class G4DNAIons : public G4ParticleDefinition
    );
 
  public:
-   virtual    			~G4DNAIons();
+      			~G4DNAIons() override;
    G4DNAIons*    		IonsDefinition();
    G4DNAIons*    		Ions();
 

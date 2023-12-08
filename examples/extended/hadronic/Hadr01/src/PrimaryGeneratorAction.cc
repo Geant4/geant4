@@ -48,8 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0), fHisto(0)
+ : G4VUserPrimaryGeneratorAction()
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
@@ -67,7 +66,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(fHisto->DefaultBeamPosition()) {
+  if (fHisto->DefaultBeamPosition()) {
     static const G4double offset = 2*CLHEP::mm;
     G4double zVertex = -(offset + 0.5*fHisto->Length());
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));

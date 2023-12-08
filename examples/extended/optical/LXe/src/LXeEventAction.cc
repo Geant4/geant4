@@ -52,26 +52,8 @@
 
 LXeEventAction::LXeEventAction(const LXeDetectorConstruction* det)
   : fDetector(det)
-  , fScintCollID(-1)
-  , fPMTCollID(-1)
-  , fVerbose(0)
-  , fPMTThreshold(1)
-  , fForcedrawphotons(false)
-  , fForcenophotons(false)
 {
   fEventMessenger = new LXeEventMessenger(this);
-
-  fHitCount                = 0;
-  fPhotonCount_Scint       = 0;
-  fPhotonCount_Ceren       = 0;
-  fAbsorptionCount         = 0;
-  fBoundaryAbsorptionCount = 0;
-  fTotE                    = 0.0;
-
-  fConvPosSet = false;
-  fEdepMax    = 0.0;
-
-  fPMTsAboveThreshold = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,8 +99,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent)
   {
     for(G4int i = 0; i < n_trajectories; ++i)
     {
-      LXeTrajectory* trj =
-        (LXeTrajectory*) ((*(anEvent->GetTrajectoryContainer()))[i]);
+      auto trj = (LXeTrajectory*) ((*(anEvent->GetTrajectoryContainer()))[i]);
       if(trj->GetParticleName() == "opticalphoton")
       {
         trj->SetForceDrawTrajectory(fForcedrawphotons);
@@ -255,7 +236,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent)
   }
 
   // update the run statistics
-  LXeRun* run = static_cast<LXeRun*>(
+  auto run = static_cast<LXeRun*>(
     G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   run->IncHitCount(fHitCount);

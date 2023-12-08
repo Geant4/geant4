@@ -68,16 +68,6 @@
 //  Constructors:
 
 F02ElectricFieldSetup::F02ElectricFieldSetup()
- : fMinStep(0.010*mm),  // minimal step of 10 microns
-   fFieldManager(0),
-   fChordFinder(0),
-   fEquation(0),
-   fEMfield(0),
-   fElFieldValue(),
-   fStepper(0),
-   fIntgrDriver(0),
-   fStepperType(4),    // ClassicalRK4 -- the default stepper
-   fFieldMessenger(nullptr)   
 {
   fEMfield = new G4UniformElectricField(
                    G4ThreeVector(0.0,100000.0*kilovolt/cm,0.0));
@@ -92,23 +82,13 @@ F02ElectricFieldSetup::F02ElectricFieldSetup()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02ElectricFieldSetup::F02ElectricFieldSetup(G4ThreeVector fieldVector)
-  : fMinStep(0.010*mm),  // minimal step of 10 microns
-    fFieldManager(0),
-    fChordFinder(0),
-    fEquation(0),
-    fEMfield(0),
-    fElFieldValue(),
-    fStepper(0),
-    fIntgrDriver(0),
-    fStepperType(4),    // ClassicalRK4 -- the default stepper
-    fFieldMessenger(nullptr)
 {
   fEMfield = new G4UniformElectricField(fieldVector);
   fEquation = new G4EqMagElectricField(fEMfield);
 
   fFieldManager = GetGlobalFieldManager();
   UpdateIntegrator();
-  
+
   fFieldMessenger = new F02FieldMessenger(this);
 }
 
@@ -120,7 +100,7 @@ F02ElectricFieldSetup::~F02ElectricFieldSetup()
 
   delete fFieldMessenger; fFieldMessenger= nullptr;
    // Delete the messenger first, to avoid messages to deleted classes!
-  
+
   delete fChordFinder;  fChordFinder= nullptr;
   delete fStepper;      fStepper = nullptr;
   delete fEquation;     fEquation = nullptr;
@@ -147,7 +127,7 @@ void F02ElectricFieldSetup::UpdateIntegrator()
      // The chord-finder's destructor deletes the driver
      fIntgrDriver= nullptr;
   }
-  
+
   // Currently driver does not 'own' stepper      ( 17.05.2017 J.A. )
   //   -- so this stepper is still a valid object after this
 
@@ -155,7 +135,7 @@ void F02ElectricFieldSetup::UpdateIntegrator()
      delete fStepper;
      fStepper = nullptr;
   }
-  
+
   // Create the new objects, in turn for all relevant classes
   //  -- Careful to call this after all old objects are destroyed, and
   //      pointers nullified.
@@ -168,7 +148,7 @@ void F02ElectricFieldSetup::UpdateIntegrator()
      fIntgrDriver = new G4MagInt_Driver(fMinStep,
                                         fStepper,
                                         fStepper->GetNumberOfVariables());
-     if( fIntgrDriver ){ 
+     if( fIntgrDriver ){
         fChordFinder = new G4ChordFinder(fIntgrDriver);
      }
   }
@@ -215,20 +195,20 @@ void F02ElectricFieldSetup::CreateStepper()
       G4cout<<"G4CashKarpRKF45 is called"<<G4endl;
       break;
     case 6:
-      fStepper = 0; // new G4RKG3_Stepper( fEquation, nvar );
+      fStepper = nullptr; // new G4RKG3_Stepper( fEquation, nvar );
       G4cout<<"G4RKG3_Stepper is not currently working for Electric Field"
             <<G4endl;
       break;
     case 7:
-      fStepper = 0; // new G4HelixExplicitEuler( fEquation );
+      fStepper = nullptr; // new G4HelixExplicitEuler( fEquation );
       G4cout<<"G4HelixExplicitEuler is not valid for Electric Field"<<G4endl;
       break;
     case 8:
-      fStepper = 0; // new G4HelixImplicitEuler( fEquation );
+      fStepper = nullptr; // new G4HelixImplicitEuler( fEquation );
       G4cout<<"G4HelixImplicitEuler is not valid for Electric Field"<<G4endl;
       break;
     case 9:
-      fStepper = 0; // new G4HelixSimpleRunge( fEquation );
+      fStepper = nullptr; // new G4HelixSimpleRunge( fEquation );
       G4cout<<"G4HelixSimpleRunge is not valid for Electric Field"<<G4endl;
       break;
     default:  /* fStepper = 0; // Older code */
@@ -262,7 +242,7 @@ void F02ElectricFieldSetup::SetFieldZValue(G4double fieldValue)
 
 void F02ElectricFieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
-  if (fEMfield) delete fEMfield;
+  delete fEMfield;
 
   // Set the value of the Global Field value to fieldVector
 
@@ -277,7 +257,7 @@ void F02ElectricFieldSetup::SetFieldValue(G4ThreeVector fieldVector)
   {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
-    fEMfield = 0;
+    fEMfield = nullptr;
   }
   fieldMgr->SetDetectorField(fEMfield);
   fEquation->SetFieldObj(fEMfield);  // must now point to the new field

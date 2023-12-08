@@ -35,7 +35,6 @@
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4ProtonCoulombBarrier.hh"
 
 class G4HETCProton : public G4HETCChargedFragment
 {
@@ -43,28 +42,18 @@ public:
 
   G4HETCProton();
 
-  ~G4HETCProton();
+  ~G4HETCProton() override = default;
+
+  G4HETCProton(const G4HETCProton &right) = delete;
+  const G4HETCProton & operator=(const G4HETCProton &right) = delete;
+  G4bool operator==(const G4HETCProton &right) const = delete;
+  G4bool operator!=(const G4HETCProton &right) const = delete;
 
 protected:
 
-  virtual G4double GetAlpha() const;
-
-  virtual G4double GetBeta() const;
-
-  virtual G4double GetSpinFactor() const;
-
-  virtual G4double K(const G4Fragment & aFragment);
-
-private:
-
-  // operators  
-  G4HETCProton(const G4HETCProton &right);
-  const G4HETCProton & operator=(const G4HETCProton &right);
-  G4bool operator==(const G4HETCProton &right) const;
-  G4bool operator!=(const G4HETCProton &right) const;
-
-  G4ProtonCoulombBarrier theProtonCoulombBarrier;
-
+  G4double GetAlpha() const override;
+  G4double GetSpinFactor() const override;
+  G4double K(const G4Fragment& aFragment) const override;
 };
 
 #endif

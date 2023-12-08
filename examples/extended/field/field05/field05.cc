@@ -81,7 +81,7 @@ int main(int argc,char** argv)
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
   G4VSteppingVerbose::SetInstance(new F05SteppingVerbose);
-  G4RunManager * runManager = new G4RunManager;
+  auto  runManager = new G4RunManager;
 #endif
 
   G4Random::setTheSeed(myseed);

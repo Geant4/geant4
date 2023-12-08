@@ -1,0 +1,25 @@
+#
+# Macro file for "rdecay02.cc"
+#
+/control/verbose 1
+###/control/cout/ignoreThreadsExcept 0
+###/run/numberOfThreads 2
+/run/verbose 1
+#
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/run/initialize
+#
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
+/gun/particle ion
+/gun/ion 10 24
+#
+/analysis/setFileName rdecay02
+/analysis/h1/set 6 100 0. 2. MeV
+###/analysis/ntuple/setActivation 3 true
+#
+/run/printProgress 1000
+/run/beamOn 10000

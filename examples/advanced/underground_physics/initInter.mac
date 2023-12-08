@@ -8,10 +8,10 @@
 /control/verbose 2
 /control/saveHistory
 #
-# (Edit the next line(s) to choose another graphic system)
-/vis/open OGL
-#/vis/open DANWFILE
-#/vis/open Xo
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
 # Trajectories: set to 0 if too many
 # alternatively use /dmx/drawTracks [none charged noscint all]

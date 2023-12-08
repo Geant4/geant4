@@ -37,6 +37,10 @@
 
  ## 2. Sensitive detector
 
+### 2.1. Par04SensitiveDetector
+
+This SD scores energy originating from showers, in a cylinder around the particle 
+direction and position in the calorimeter.
  Sensitive detector inherits from both base classes:
  - G4VSensitiveDetector: for processing of detailed/non-fast simulation hits
  - G4VFastSimSensitiveDetector: for processing of fast sim (G4FastSim) hits.
@@ -45,6 +49,20 @@
  simulation.
  During visualisation, hits are represented as volumes of different colour:
  green for full simulation and red for fast simulation.
+
+### 2.2. Par04ParallelFullSensitiveDetector
+
+This SD represents a physical readout structure to the detector (a regular grid).
+UI settings are available to set number of slices (azimuthal segmentation) and number
+of rows (segmentation along beam axis). Number of layers cannot be changed as it
+corresponds to the number of layers placed at the detector construction time. Only
+deposits in the active (sensitive) layers are scored in this SD.
+
+### 2.2. Par04ParallelFastSensitiveDetector
+
+This SD represents a physical readout that takes into account deposits originating
+from fast simulation, so cells span over active and passive layers. This allows to
+account all energy from the parameterisation.
 
  ## 3. Primary generation
 
@@ -157,26 +175,39 @@
 % ./examplePar04 -i -m vis_torch.mac
 \endverbatim
 
+- Additional options available:
+\verbatim
+% ./examplePar04 -m examplePar04.mac -r 0
+\endverbatim
+For serial run manager mode
+\verbatim
+% ./examplePar04 -m examplePar04.mac -r 1 -t 8
+\endverbatim
+For multi-threaded run manager mode with 8 threads
+\verbatim
+% ./examplePar04 -m examplePar04.mac -r 2
+\endverbatim
+For tasking run manager mode with number of tasks that can be change via env variable G4FORCE_EVENTS_PER_TASK
+
  By default, CMake will attempt to build fast simulation with ONNX Runtime and LWTNN. However, if none
  of those libraries is found, it will proceed with full simulation only. The search can be switched
  off manually switching CMake flag `INFERENCE_LIB` to `OFF` (`-DINFERENCE_LIB=OFF`)
 
  ## 9. Macros
 
+common_settings.mac - A macro with common settings, executed by all other macros (e.g. detector settings).
+
  vis.mac - Allows to run visualization. Pass it to the example in interactive mode ("-i" passed to the executable).
            It can be used to visualize full simulation.
 
  vis_onnx.mac - Allows to run visualization with ONNX Runtime inference. Pass it to the example in interactive mode
-              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
-              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+              ("-i" passed to the executable). It contains necessary settings of the inference.
 
  vis_lwtnn.mac - Allows to run visualization with LWTNN inference. Pass it to the example in interactive mode
-              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
-              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+              ("-i" passed to the executable). It contains necessary settings of the inference.
 
  vis_torch.mac - Allows to run visualization with LibTorch inference. Pass it to the example in interactive mode
-              ("-i" passed to the executable). It contains necessary settings of the inference, and it treats full
-              calorimeter as sensitive material (due to deposition of hits regardless of the volume).
+              ("-i" passed to the executable). It contains necessary settings of the inference.
 
  examplePar04.mac - Runs full simulation. It will run 100 events with single electrons, 10 GeV and
                    along y axis.
@@ -244,7 +275,8 @@
 
  ## 11. Python scripts for training
 
- The scripts available in the training folder were used to train
+ The scripts available in the training folder were used to firstly convert
+ the ROOT files to the h5 files, preprocess the data and then train
  the VAE model of this example. More details can be found in 
  training/README.
 

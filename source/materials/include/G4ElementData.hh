@@ -28,18 +28,24 @@
 // GEANT4 Class file
 //
 // Description: Data structure for cross sections, shell cross sections,
-//              isotope cross sections. Control of vector size should be
-//              performed in user code, no protection in this class
+//              isotope cross sections. Data access via integer variable
+//              Z (atomic number in majority of applications), which may
+//              be in the interval 0 <= Z < length. For isotope like
+//              data a second parameter idx or data ID code are used.
+//              In most cases ID = A - atomic weight number.
+//              There are run time const methods, in which input is not checked
+//              assuming responsibility of consumer code. Another run time
+//              check input and may throwgh a fatal exception
 //
 // Author:      V.Ivanchenko 10.03.2011
 //
-// Modifications:
+// Modifications: 30.09.2023 Extended functionality, data size defined in constructor
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef ElementData_h
-#define ElementData_h 1
+#ifndef G4ElementData_h
+#define G4ElementData_h 1
 
 #include "G4Physics2DVector.hh"
 #include "G4PhysicsVector.hh"
@@ -50,7 +56,7 @@
 class G4ElementData
 {
  public:
-  explicit G4ElementData();
+  explicit G4ElementData(G4int length = 99);
 
   ~G4ElementData();
 
@@ -67,92 +73,176 @@ class G4ElementData
   // reserve vector of components
   void InitialiseForComponent(G4int Z, G4int nComponents = 0);
 
+  // reserve vector of 2D components
+  void InitialiseFor2DComponent(G4int Z, G4int nComponents = 0);
+
   // prepare vector of components
   void AddComponent(G4int Z, G4int id, G4PhysicsVector* v);
 
-  // set name of the dataset
-  void SetName(const G4String& nam);
+  // prepare vector of 2D components
+  void Add2DComponent(G4int Z, G4int id, G4Physics2DVector* v);
+
+  // set name of the dataset (optional)
+  inline void SetName(const G4String& nam);
 
   //--------------------------------------------------------------
-  //
-  // run time methods - no check on validity of input index
+  // run time const methods - no check on validity of input
   // it is a responsibility of the consume code to check the input
-  //
   //--------------------------------------------------------------
+
+  // get name of the dataset
+  inline const G4String& GetName() const;
 
   // get vector for the element
-  inline G4PhysicsVector* GetElementData(G4int Z);
+  inline G4PhysicsVector* GetElementData(G4int Z) const;
 
   // get 2-D vector for the element
-  inline G4Physics2DVector* GetElement2DData(G4int Z);
+  inline G4Physics2DVector* GetElement2DData(G4int Z) const;
+
+  // get vector per shell or per isotope
+  inline G4PhysicsVector* GetComponentDataByID(G4int Z, G4int id) const;
+
+  // get vector per shell or per isotope
+  inline G4Physics2DVector* Get2DComponentDataByID(G4int Z, G4int id) const;
+
+  // return cross section per element
+  inline G4double GetValueForElement(G4int Z, G4double kinEnergy) const;
+
+  //--------------------------------------------------------------
+  // run time const methods with input parameters control
+  //--------------------------------------------------------------
 
   // get number of components for the element
-  inline size_t GetNumberOfComponents(G4int Z);
+  inline std::size_t GetNumberOfComponents(G4int Z) const;
+
+  // get number of 2D components for the element
+  inline std::size_t GetNumberOf2DComponents(G4int Z) const;
 
   // get component ID which may be number of nucleons,
   // or shell number, or any other integer
-  inline G4int GetComponentID(G4int Z, G4int idx);
+  inline G4int GetComponentID(G4int Z, std::size_t idx) const;
 
   // get vector per shell or per isotope
-  inline G4PhysicsVector* GetComponentDataByIndex(G4int Z, G4int idx);
+  inline G4PhysicsVector*
+  GetComponentDataByIndex(G4int Z, std::size_t idx) const;
 
   // get vector per shell or per isotope
-  inline G4PhysicsVector* GetComponentDataByID(G4int Z, G4int id);
+  inline G4Physics2DVector*
+  Get2DComponentDataByIndex(G4int Z, std::size_t idx) const;
 
   // return cross section per element
   // if not available return zero
-  inline G4double GetValueForElement(G4int Z, G4double kinEnergy);
-
-  // return cross section per element
-  // if not available return zero
-  inline G4double GetValueForComponent(G4int Z, G4int idx, G4double kinEnergy);
+  inline G4double
+  GetValueForComponent(G4int Z, std::size_t idx, G4double kinEnergy) const;
 
  private:
-  static const G4int maxNumElm = 99;
-  G4PhysicsVector* elmData[maxNumElm];
-  G4Physics2DVector* elm2Data[maxNumElm];
-  std::vector<G4PhysicsVector*>* compData[maxNumElm];
-  std::vector<G4int>* compID[maxNumElm];
-  G4int compLength[maxNumElm];
 
-  G4String name = "";
+  void DataError(G4int Z, const G4String&);
+
+  const G4int maxNumElm;
+
+  std::vector<G4PhysicsVector*> elmData;
+  std::vector<G4Physics2DVector*> elm2Data;
+  std::vector<std::vector<std::pair<G4int, G4PhysicsVector*> >* > compData;
+  std::vector<std::vector<std::pair<G4int, G4Physics2DVector*> >* > comp2D;
+
+  G4String name{""};
 };
 
-inline void G4ElementData::SetName(const G4String& nam) { name = nam; }
+//--------------------------------------------------------------
+// run time const methods without check on validity of input
+//--------------------------------------------------------------
 
-inline G4PhysicsVector* G4ElementData::GetElementData(G4int Z) { return elmData[Z]; }
-
-inline G4Physics2DVector* G4ElementData::GetElement2DData(G4int Z) { return elm2Data[Z]; }
-
-inline size_t G4ElementData::GetNumberOfComponents(G4int Z) { return compID[Z]->size(); }
-
-inline G4int G4ElementData::GetComponentID(G4int Z, G4int idx) { return (*(compID[Z]))[idx]; }
-
-inline G4PhysicsVector* G4ElementData::GetComponentDataByIndex(G4int Z, G4int idx)
+inline void G4ElementData::SetName(const G4String& nam)
 {
-  return (*(compData[Z]))[idx];
+  name = nam;
 }
 
-inline G4PhysicsVector* G4ElementData::GetComponentDataByID(G4int Z, G4int id)
+inline const G4String& G4ElementData::GetName() const
+{
+  return name;
+}
+
+inline G4PhysicsVector* G4ElementData::GetElementData(G4int Z) const
+{
+  return elmData[Z];
+}
+
+inline G4Physics2DVector* G4ElementData::GetElement2DData(G4int Z) const
+{
+  return elm2Data[Z];
+}
+
+inline G4PhysicsVector*
+G4ElementData::GetComponentDataByID(G4int Z, G4int id) const
 {
   G4PhysicsVector* v = nullptr;
-  for (G4int i = 0; i < compLength[Z]; ++i) {
-    if (id == (*(compID[Z]))[i]) {
-      v = (*(compData[Z]))[i];
+  for (auto const & p : *(compData[Z])) {
+    if (id == p.first) {
+      v = p.second;
       break;
     }
   }
   return v;
 }
 
-inline G4double G4ElementData::GetValueForElement(G4int Z, G4double kinEnergy)
+inline G4Physics2DVector*
+G4ElementData::Get2DComponentDataByID(G4int Z, G4int id) const
+{
+  G4Physics2DVector* v = nullptr;
+  for (auto const & p : *(comp2D[Z])) {
+    if (id == p.first) {
+      v = p.second;
+      break;
+    }
+  }
+  return v;
+}
+
+inline G4double
+G4ElementData::GetValueForElement(G4int Z, G4double kinEnergy) const
 {
   return elmData[Z]->Value(kinEnergy);
 }
 
-inline G4double G4ElementData::GetValueForComponent(G4int Z, G4int idx, G4double kinEnergy)
+//--------------------------------------------------------------
+// run time const methods with check on validity of input
+//--------------------------------------------------------------
+
+inline std::size_t G4ElementData::GetNumberOfComponents(G4int Z) const
 {
-  return (*(compData[Z]))[idx]->Value(kinEnergy);
+  return (nullptr != compData[Z]) ? compData[Z]->size() : 0;
+}
+
+inline std::size_t G4ElementData::GetNumberOf2DComponents(G4int Z) const
+{
+  return (nullptr != comp2D[Z]) ? comp2D[Z]->size() : 0;
+}
+
+inline G4int G4ElementData::GetComponentID(G4int Z, std::size_t idx) const
+{
+  return (idx < GetNumberOfComponents(Z)) ? (*(compData[Z]))[idx].first : 0;
+}
+
+inline G4PhysicsVector*
+G4ElementData::GetComponentDataByIndex(G4int Z, std::size_t idx) const
+{
+  return
+    (idx < GetNumberOfComponents(Z)) ? (*(compData[Z]))[idx].second : nullptr;
+}
+
+inline G4Physics2DVector*
+G4ElementData::Get2DComponentDataByIndex(G4int Z, std::size_t idx) const
+{
+  return
+    (idx < GetNumberOf2DComponents(Z)) ? (*(comp2D[Z]))[idx].second : nullptr;
+}
+
+inline G4double
+G4ElementData::GetValueForComponent(G4int Z, std::size_t idx, G4double e) const
+{
+  return (idx < GetNumberOfComponents(Z)) ?
+	  (*(compData[Z]))[idx].second->Value(e) : 0.0;
 }
 
 #endif

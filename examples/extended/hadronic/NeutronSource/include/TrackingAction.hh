@@ -44,13 +44,13 @@ class TrackingAction : public G4UserTrackingAction {
 
   public:  
     TrackingAction(EventAction*);
-   ~TrackingAction() {};
+   ~TrackingAction() override = default;
    
-    virtual void  PreUserTrackingAction(const G4Track*);   
-    virtual void PostUserTrackingAction(const G4Track*);
+    void  PreUserTrackingAction(const G4Track*) override;   
+    void PostUserTrackingAction(const G4Track*) override;
     
   private:
-    EventAction* fEventAction;
+    EventAction* fEventAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

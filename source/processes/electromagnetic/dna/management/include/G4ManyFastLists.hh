@@ -45,23 +45,23 @@ template<class OBJECT>
   class G4ManyFastLists : public G4FastList<OBJECT>::Watcher
   {
   protected:
-    typedef G4FastList<G4FastList<OBJECT> > ManyLists;
+    using ManyLists = G4FastList<G4FastList<OBJECT>>;
     ManyLists fAssociatedLists;
     // TODO use "marked list" insted of vector
 
-    typedef std::set<typename G4FastList<OBJECT>::Watcher*,
-        sortWatcher<OBJECT>> WatcherSet;
+    using WatcherSet = std::set<typename G4FastList<OBJECT>::Watcher*,
+        sortWatcher<OBJECT>>;
     WatcherSet* fMainListWatchers;
 
   public:
-    typedef G4ManyFastLists_iterator<OBJECT> iterator;
+    using iterator = G4ManyFastLists_iterator<OBJECT>;
 
     G4ManyFastLists() : G4FastList<OBJECT>::Watcher(),
-        fAssociatedLists(), fMainListWatchers(0)
+        fAssociatedLists(), fMainListWatchers(nullptr)
     {
     }
 
-    virtual ~G4ManyFastLists() = default;
+    ~G4ManyFastLists() override = default;
 
     virtual void NotifyDeletingList(G4FastList<OBJECT>* __list)
     {
@@ -90,15 +90,15 @@ template<class OBJECT>
 
     inline void Add(G4FastList<OBJECT>* __list)
     {
-      if (__list == 0) return;
+      if (__list == nullptr) return;
       fAssociatedLists.push_back(__list); // TODO use the table doubling tech
       //__list->AddWatcher(this);
       this->Watch(__list);
 
-      if(fMainListWatchers == 0) return;
+      if(fMainListWatchers == nullptr) return;
 
-      typename WatcherSet::iterator it_watcher = fMainListWatchers->begin();
-      typename WatcherSet::iterator end_watcher = fMainListWatchers->end();
+      auto it_watcher = fMainListWatchers->begin();
+      auto end_watcher = fMainListWatchers->end();
 
 //      G4cout << "G4ManyFastLists::Add -- N watchers ="
 //             << fMainListWatchers->size()
@@ -148,13 +148,13 @@ template<class OBJECT>
 
     inline void Remove(G4FastList<OBJECT>* __list)
     {
-      if (__list == 0) return;
+      if (__list == nullptr) return;
       fAssociatedLists.pop(__list); // TODO use the table doubling tech
       __list->RemoveWatcher(this);
       this->StopWatching(__list);
 
-      typename WatcherSet::iterator it = fMainListWatchers->begin();
-      typename WatcherSet::iterator _end = fMainListWatchers->end();
+      auto it = fMainListWatchers->begin();
+      auto _end = fMainListWatchers->end();
 
       for(;it != _end ;++it)
       {
@@ -203,7 +203,7 @@ template<class OBJECT>
           typename ManyLists::node* __node = __it.GetNode();
           if(__node)
           {
-            __node->GetObject()->SetListNode(0);
+            __node->GetObject()->SetListNode(nullptr);
             delete __node;
           }
 //          delete (*__it);
@@ -231,10 +231,10 @@ template<class OBJECT>
 template<class OBJECT>
   struct G4ManyFastLists_iterator
   {
-    typedef G4FastList<G4FastList<OBJECT> > ManyLists;
+    using ManyLists = G4FastList<G4FastList<OBJECT>>;
 
-    typedef G4ManyFastLists_iterator _Self;
-    typedef G4FastListNode<OBJECT> _Node;
+    using _Self = G4ManyFastLists_iterator;
+    using _Node = G4FastListNode<OBJECT>;
 
     G4FastList_iterator<OBJECT> fIterator;
     typename ManyLists::iterator fCurrentListIt;
@@ -319,8 +319,8 @@ template<class OBJECT>
 
       fIterator--;
 
-      while (((*fCurrentListIt)->empty() || fIterator.GetNode() == 0
-              || fIterator.GetNode()->GetObject() == 0)
+      while (((*fCurrentListIt)->empty() || fIterator.GetNode() == nullptr
+              || fIterator.GetNode()->GetObject() == nullptr)
              && fCurrentListIt != fLists->begin())
       {
         fIterator = (*fCurrentListIt)->begin();
@@ -329,7 +329,7 @@ template<class OBJECT>
         fIterator--;
       }
 
-      if (fIterator.GetNode() == 0 && fCurrentListIt == fLists->begin())
+      if (fIterator.GetNode() == nullptr && fCurrentListIt == fLists->begin())
       {
         fIterator = G4FastList_iterator<OBJECT>();
         return *this;

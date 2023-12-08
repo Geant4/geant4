@@ -5,6 +5,18 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 
+## 2023-08-16 I. Hrivnacova (AnaEx03-V11-01-01)
+- Added UI command /AnaEx03/runAction/printStatistic
+  to call PrintStatistic().
+  This allows to call this function at the end of run
+  before resetting histograms and avoids printing empty
+  statistics in MT mode.
+
+## 2023-08-02 I. Hrivnacova (AnaEx03-V11-01-00)
+- Update example to demonstrate new analysis manager commands
+  for deleting selected histograms
+- Added plotter.mac
+
 ## 2022-11-09 I. Hrivnacova (AnaEx03-V11-00-01)
 - Fixed README files
 

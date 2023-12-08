@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Class G4AssemblyTriplet
+// G4AssemblyTriplet
 //
 // Class description:
 //
@@ -40,8 +40,8 @@
 // Ivana Hrivnacova: extended to support assembly of assemblies
 //                   of volumes and reflections, March 2006
 // ----------------------------------------------------------------------
-#ifndef G4_ASSEMBLYTRIPLET_H
-#define G4_ASSEMBLYTRIPLET_H 
+#ifndef G4_ASSEMBLYTRIPLET_HH
+#define G4_ASSEMBLYTRIPLET_HH
 
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
@@ -51,7 +51,7 @@ class G4AssemblyVolume;
 
 class G4AssemblyTriplet
 {
- public:  // with description
+  public:
 
     G4AssemblyTriplet();
       // Default constructor
@@ -104,28 +104,26 @@ class G4AssemblyTriplet
     inline G4bool IsReflection() const;
       // Return true if the logical or assembly volume has reflection
 
- private:
+  private:
 
-    G4LogicalVolume*  fVolume = nullptr;
+    G4LogicalVolume* fVolume = nullptr;
       // A logical volume
 
-    G4ThreeVector     fTranslation;
+    G4ThreeVector fTranslation;
       // A logical volume translation
 
     G4RotationMatrix* fRotation = nullptr;
       // A logical volume rotation
-
- private:
 
     // Member data for handling assemblies of assemblies and reflections
 
     G4AssemblyVolume* fAssembly = nullptr;
       // An assembly volume
 
-    G4bool            fIsReflection = false;
+    G4bool fIsReflection = false;
       // True if the logical or assembly volume has reflection  
 };
 
 #include "G4AssemblyTriplet.icc"
 
-#endif // G4_ASSEMBLYTRIPLET_H
+#endif // G4_ASSEMBLYTRIPLET_HH

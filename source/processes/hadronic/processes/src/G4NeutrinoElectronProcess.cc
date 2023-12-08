@@ -47,8 +47,6 @@
 #include "G4VDiscreteProcess.hh"
 
 #include "G4NeutrinoElectronTotXsc.hh"
-//#include "G4NeutrinoElectronCcModel.hh"
-//#include "G4NeutrinoElectronNcModel.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
@@ -63,23 +61,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-G4NeutrinoElectronProcess::G4NeutrinoElectronProcess( G4String anEnvelopeName, const G4String& pName)
-  : G4HadronicProcess( pName, fHadronElastic ), isInitialised(false), fBiased(true)  // fHadronElastic???
+G4NeutrinoElectronProcess::G4NeutrinoElectronProcess(const G4String& anEnvelopeName, const G4String& pName)
+  : G4HadronicProcess( pName, fNuElectron )
 {
   lowestEnergy = 1.*keV;
-  fEnvelope  = nullptr;
   fEnvelopeName = anEnvelopeName;
   fTotXsc = new G4NeutrinoElectronTotXsc();
-  fNuEleCcBias     = 1.;
-  fNuEleNcBias     = 1.;
-  fNuEleTotXscBias = 1.;
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
-}
-
-G4NeutrinoElectronProcess::~G4NeutrinoElectronProcess()
-{
-  if( fTotXsc ) delete fTotXsc;
 }
 
 ///////////////////////////////////////////////////////
@@ -116,29 +105,13 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
   //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   G4String rName = aTrack.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
-  G4double totxsc(0.);
-  try
-  {
-    if( rName == fEnvelopeName && fNuEleTotXscBias > 1.)    
-    {
-      totxsc = fNuEleTotXscBias*
-	GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
+  G4double totxsc =
+    GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
 						    aTrack.GetMaterial());
-    }
-    else
-    {
-      totxsc = GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
-						    aTrack.GetMaterial());
-    }
-  }
-  catch(G4HadronicException & aR)
+
+  if ( rName == fEnvelopeName )
   {
-    G4ExceptionDescription ed;
-    aR.Report(ed);
-    DumpState(aTrack,"GetMeanFreePath",ed);
-    ed << " Cross section is not available" << G4endl;
-    G4Exception("G4NeutrinoElectronProcess::GetMeanFreePath", "had002", FatalException,
-		ed);
+    totxsc *= fNuEleTotXscBias;
   }
   G4double res = (totxsc>0.0) ? 1.0/totxsc : DBL_MAX;
   //G4cout << "         xsection= " << totxsc << G4endl;
@@ -149,11 +122,9 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 
 void G4NeutrinoElectronProcess::ProcessDescription(std::ostream& outFile) const
 {
-
-    outFile << "G4NeutrinoElectronProcess handles the scattering of \n"
-            << "neutrino on electrons by invoking the following  model(s) and \n"
-            << "cross section(s).\n";
-
+  outFile << "G4NeutrinoElectronProcess handles the scattering of \n"
+	  << "neutrino on electrons by invoking the following  model(s) and \n"
+	  << "cross section(s).\n";
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -161,9 +132,6 @@ void G4NeutrinoElectronProcess::ProcessDescription(std::ostream& outFile) const
 G4VParticleChange* 
 G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
-  // track.GetVolume()->GetLogicalVolume()->GetName()
-  // if( track.GetVolume()->GetLogicalVolume() != fEnvelope )
- 
   G4String rName = track.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
 
   if( rName != fEnvelopeName ) 
@@ -427,16 +395,6 @@ G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step
     result->Clear();
   }
   return theTotalResult;
-}
-
-void 
-G4NeutrinoElectronProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
-{
-  if(!isInitialised) {
-    isInitialised = true;
-    if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
-  }
-  G4HadronicProcess::PreparePhysicsTable(part);
 }
 
 void 

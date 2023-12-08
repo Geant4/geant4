@@ -33,44 +33,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSRun::WLSRun()
-  : G4Run()
-{
-  fNTIR          = 0.;
-  fNTIR2         = 0.;
-  fNExiting      = 0.;
-  fNExiting2     = 0.;
-  fEscapedEnd    = 0.;
-  fEscapedEnd2   = 0.;
-  fEscapedMid    = 0.;
-  fEscapedMid2   = 0.;
-  fBounce        = 0.;
-  fBounce2       = 0.;
-  fWLSBounce     = 0.;
-  fWLSBounce2    = 0.;
-  fClad1Bounce   = 0.;
-  fClad1Bounce2  = 0.;
-  fClad2Bounce   = 0.;
-  fClad2Bounce2  = 0.;
-  fReflected     = 0.;
-  fReflected2    = 0.;
-  fEscaped       = 0.;
-  fEscaped2      = 0.;
-  fMirror        = 0.;
-  fMirror2       = 0.;
-  fDetectorHits  = 0.;
-  fDetectorHits2 = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSRun::~WLSRun() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void WLSRun::Merge(const G4Run* run)
 {
-  const WLSRun* localRun = static_cast<const WLSRun*>(run);
+  const auto localRun = static_cast<const WLSRun*>(run);
 
   fNTIR += localRun->fNTIR;
   fNTIR2 += localRun->fNTIR2;
@@ -106,7 +71,7 @@ void WLSRun::EndOfRun()
 {
   if(numberOfEvent == 0)
     return;
-  G4double TotNbofEvents = G4double(numberOfEvent);
+  auto TotNbofEvents = G4double(numberOfEvent);
 
   fNTIR           = fNTIR / TotNbofEvents;
   fNTIR2          = fNTIR2 / TotNbofEvents;

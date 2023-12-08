@@ -26,7 +26,6 @@
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-//
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,8 +36,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
-: G4VUserPrimaryGeneratorAction(),
-  fPrimaryGenerator(0)
 { 
   fPrimaryGenerator = new PrimaryGenerator();
 }

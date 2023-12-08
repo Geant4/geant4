@@ -36,17 +36,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList()
-: G4VUserPhysicsList()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructParticle()
 {
   G4Geantino::GeantinoDefinition();

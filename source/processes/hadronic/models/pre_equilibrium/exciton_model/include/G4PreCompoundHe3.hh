@@ -36,7 +36,6 @@
 #define G4PreCompoundHe3_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4He3CoulombBarrier.hh"
 
 class G4PreCompoundHe3 : public G4PreCompoundIon
 {
@@ -44,7 +43,7 @@ public:
 
   G4PreCompoundHe3();
 
-  virtual ~G4PreCompoundHe3();
+  ~G4PreCompoundHe3() override = default;
 
   G4PreCompoundHe3(const G4PreCompoundHe3 &right) = delete;
   const G4PreCompoundHe3& 
@@ -61,10 +60,6 @@ protected:
   G4double CoalescenceFactor(G4int A) const override;
 
   G4double GetAlpha() const override;
-  
-private:
-
-  G4He3CoulombBarrier theHe3CoulombBarrier;
 };
 
 #endif

@@ -116,7 +116,6 @@ void G4FastSimulationPhysics::ConstructProcess()
 	  
 	  G4bool isUnderFastSimulation(false);
 	  G4String processAndGeometryNames;
-	  G4int icount(0);
 	  
 	  G4ProcessVector*  vprocess = pmanager->GetProcessList();
 	  for (G4int ip = 0 ; ip < (G4int)vprocess->size() ; ++ip)
@@ -126,22 +125,10 @@ void G4FastSimulationPhysics::ConstructProcess()
 	      if ( pb != nullptr )
 		{
 		  isUnderFastSimulation = true;
-		  if ( icount < 3 )
-		    {
-		      processAndGeometryNames += pb->GetProcessName();
-		      processAndGeometryNames += "[geom:";
-		      processAndGeometryNames += pb->GetWorldVolume()->GetName();
-		      processAndGeometryNames += "] ";
-		    }
-		  else
-		    {
-		      processAndGeometryNames += "\n                 ";
-		      processAndGeometryNames += pb->GetProcessName();
-		      processAndGeometryNames += "[geom:";
-		      processAndGeometryNames += pb->GetWorldVolume()->GetName();
-		      processAndGeometryNames += "] ";
-		      icount = 0;
-		    }
+		  processAndGeometryNames += pb->GetProcessName();
+		  processAndGeometryNames += "[geom:";
+		  processAndGeometryNames += pb->GetWorldVolume()->GetName();
+		  processAndGeometryNames += "] ";
 		}
 	    }
 	  if ( isUnderFastSimulation ) G4cout << std::setw(14) << particleName << " : " << processAndGeometryNames << G4endl;

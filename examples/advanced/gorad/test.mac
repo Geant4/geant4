@@ -36,6 +36,10 @@
 #######################################################
 /gorad/initialize
 
+# If you use radioactive decay, then uncomment the following UI command,
+# in order to set a very high time threshold to allow all decays to happen
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 #######################################################
 # Selection of primary particle source
 #######################################################

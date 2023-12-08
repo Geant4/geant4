@@ -375,7 +375,7 @@ G4ParticleDefinition* G4DNADingfelderChargeIncreaseModel::OutgoingParticleDefini
     return alphaPlusPlusDef;
   }
 
-  return 0;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

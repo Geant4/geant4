@@ -46,14 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
- : G4UImessenger(),
-   fEMfieldSetup(fieldSetup),
-   fFieldDir(0),
-   fStepperCmd(0),
-   fMagFieldZCmd(0),
-   fMagFieldCmd(0),
-   fMinStepCmd(0),
-   fUpdateCmd(0)
+ : fEMfieldSetup(fieldSetup)
 {
   fFieldDir = new G4UIdirectory("/field/");
   fFieldDir->SetGuidance("F01 field tracking control.");
@@ -76,13 +69,13 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   fMagFieldZCmd->SetParameterName("Bz",false,false);
   fMagFieldZCmd->SetDefaultUnit("tesla");
   fMagFieldZCmd->AvailableForStates(G4State_Idle);
- 
+
   fMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setField",this);
   fMagFieldCmd->SetGuidance("Define magnetic field.");
   fMagFieldCmd->SetParameterName("Bx", "By", "Bz" ,false,false);
   fMagFieldCmd->SetDefaultUnit("tesla");
   fMagFieldCmd->AvailableForStates(G4State_Idle);
- 
+
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetGuidance("Magnetic field will be in Z direction.");
@@ -90,7 +83,7 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   fMinStepCmd->SetDefaultUnit("mm");
   fMinStepCmd->AvailableForStates(G4State_Idle);
 
-  // Commands for integration accuracy 
+  // Commands for integration accuracy
   //  1. Delta One Step =  length of potential error in each integration substep
   //         Recall that there can be up to 300 substeps in a physics step !!
   fDeltaOneStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setDeltaOneStep",this);
@@ -103,15 +96,21 @@ F01FieldMessenger::F01FieldMessenger(F01FieldSetup* fieldSetup)
   // A choice:  Allow the user to reset the Eps Min/Max values to our default
   G4bool omitable= true,   currentAsDefault= false;
   fEpsMinCmd = new G4UIcmdWithADouble("/field/setEpsilonMin",this);
-  fEpsMinCmd->SetGuidance("Define minimum value of the relative integration error (EpsilonMin) - a dimensionless number");
-  fEpsMinCmd->SetGuidance("Limit to ensure that large steps do NOT result in a very low value (ie high accuracy) that integration needs many steps and CPU cycles.");
+  fEpsMinCmd->SetGuidance(
+                "Define minimum value of the relative integration error (EpsilonMin)"
+                " - a dimensionless number\n"
+                "Limit to ensure that large steps do NOT result in a very low value"
+                "(ie high accuracy) that integration needs many steps and CPU cycles.");
   fEpsMinCmd->SetParameterName("minEpsilon",omitable,currentAsDefault);
   fEpsMinCmd->SetDefaultValue(1.0e-4); // A default eps_min
   fEpsMinCmd->AvailableForStates(G4State_Idle);
 
   fEpsMaxCmd = new G4UIcmdWithADouble("/field/setEpsilonMax",this);
-  fEpsMaxCmd->SetGuidance("Define minimum value of the relative integration error (EpsilonMax) - a dimensionless number");
-  fEpsMaxCmd->SetGuidance("Limit to ensure a very small step does NOT result in a large relative error (ie low accuracy) with unreliable results.");
+  fEpsMaxCmd->SetGuidance(
+                "Define minimum value of the relative integration error (EpsilonMax)"
+                " - a dimensionless number\n"
+                "Limit to ensure a very small step does NOT result in a large relative"
+                " error (ie low accuracy) with unreliable results.");
   fEpsMaxCmd->SetParameterName("maxEpsilon",omitable,currentAsDefault);
   fEpsMinCmd->SetDefaultValue(1.0e-5); // A default eps_max
   fEpsMaxCmd->AvailableForStates(G4State_Idle);
@@ -128,7 +127,7 @@ F01FieldMessenger::~F01FieldMessenger()
   delete fMagFieldZCmd;
   delete fMagFieldCmd;
   delete fMinStepCmd;
-  delete fDeltaOneStepCmd;  
+  delete fDeltaOneStepCmd;
   delete fEpsMinCmd;
   delete fEpsMaxCmd;
   delete fFieldDir;
@@ -150,7 +149,7 @@ void F01FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   if( command == fMinStepCmd )
     fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
   if( command == fDeltaOneStepCmd )
-    fEMfieldSetup->SetDeltaOneStep(fDeltaOneStepCmd->GetNewDoubleValue(newValue));  
+    fEMfieldSetup->SetDeltaOneStep(fDeltaOneStepCmd->GetNewDoubleValue(newValue));
   if( command == fEpsMinCmd )
     fEMfieldSetup->SetEpsilonMin(fEpsMinCmd->GetNewDoubleValue(newValue));
   if( command == fEpsMaxCmd )

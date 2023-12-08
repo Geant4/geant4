@@ -60,10 +60,11 @@ To build this example:
 
 To run it:
 
-  ./ConcentricSpheres all_together.g4
+  ./ConcentricSpheres all_together.in
 
 which shoots 50 GeV pion- on three different configurations
 (Scintillator-PbWO4-Copper, LiquidArgon-Lead-Iron, Silicon-Tungsten-Tungsten),
 with 100 events in each run, and print out some information on the
 particle fluence at the end of each run.
-Other macros exist for each of these specific configurations.
+Other macros exist for each of these specific configurations:
+lar_pb_fe.in, sci_pbwo4_cu.in, si_w_w.in .

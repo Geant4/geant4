@@ -58,9 +58,9 @@ public:
   G4DNAElectronSolvation(const G4String& processName =
                             "DNAElectronSolvation",
                            G4ProcessType type = fElectromagnetic);
-  virtual ~G4DNAElectronSolvation();
+  ~G4DNAElectronSolvation() override;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
   virtual void PrintInfo();
 
   static G4String GetDefaultName()
@@ -74,10 +74,10 @@ public:
   }
 
 protected:
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
-  G4bool isInitialised;
+  G4bool isInitialised{false};
 };
 
 #endif

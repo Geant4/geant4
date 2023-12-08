@@ -1,5 +1,5 @@
 #---Adding all advanced examples subdirectories explicitly
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 
 #----------------------------------------------------------------------------
 # some examples require Geant4 build with optional packages
@@ -50,3 +50,4 @@ add_subdirectory(STCyclotron)
 add_subdirectory(HGCal_testbeam)
 add_subdirectory(ICRP110_HumanPhantoms)
 add_subdirectory(ICRP145_HumanPhantoms)
+add_subdirectory(dsbandrepair)

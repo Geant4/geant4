@@ -33,14 +33,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSUserTrackInformation::WLSUserTrackInformation() { fStatus = undefined; }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSUserTrackInformation::~WLSUserTrackInformation() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 // Try adding a status flag and return if it is successful or not
 // Cannot Add Undefine or a flag that conflicts with another flag

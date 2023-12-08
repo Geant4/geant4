@@ -28,133 +28,124 @@
 //  File:   G4BetaMinusDecay.cc                                               //
 //  Author: D.H. Wright (SLAC)                                                //
 //  Date:   25 October 2014                                                   //
+//  Modifications:                                                            //
+//    23.08.2023 V.Ivanchenko make it thread safe using static utility        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "G4BetaMinusDecay.hh"
 #include "G4BetaDecayCorrections.hh"
 #include "G4ThreeVector.hh"
+#include "G4LorentzVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Electron.hh"
+#include "G4AntiNeutrinoE.hh"
+#include "G4RandomDirection.hh"
+#include "G4BetaSpectrumSampler.hh"
 #include <iostream>
 #include <iomanip>
+
+namespace {
+  const G4double eMass = CLHEP::electron_mass_c2;
+}
 
 G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
                                    const G4double& branch, const G4double& e0,
                                    const G4double& excitationE,
                                    const G4Ions::G4FloatLevelBase& flb,
                                    const G4BetaDecayType& betaType)
- : G4NuclearDecay("beta- decay", BetaMinus, excitationE, flb), endpointEnergy(e0)
+ : G4NuclearDecay("beta- decay", BetaMinus, excitationE, flb),
+   maxEnergy(e0),
+   estep(maxEnergy/(G4double)(npti - 1))
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
-
   SetNumberOfDaughters(3);
-  G4IonTable* theIonTable =
-    (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+
+  fPrimaryIon = theParentNucleus;
+  fLepton = G4Electron::Electron();
+  fNeutrino = G4AntiNeutrinoE::AntiNeutrinoE();
+
+  G4IonTable* theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
   G4int daughterZ = theParentNucleus->GetAtomicNumber() + 1;
   G4int daughterA = theParentNucleus->GetAtomicMass();
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
-  SetDaughter(1, "e-");
-  SetDaughter(2, "anti_nu_e");
+  fResIon = const_cast<const G4ParticleDefinition*>(theIonTable->GetIon(daughterZ, daughterA,
+                                                                        excitationE, flb));
+  parentMass = theParentNucleus->GetPDGMass();
+  resMass = fResIon->GetPDGMass();
 
   SetUpBetaSpectrumSampler(daughterZ, daughterA, betaType);
-}
 
+  SetDaughter(0, fResIon);
+  SetDaughter(1, fLepton);
+  SetDaughter(2, fNeutrino);
 
-G4BetaMinusDecay::~G4BetaMinusDecay()
-{
-  delete betaSampler;
-}
-
-
-G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
-{
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
   CheckAndFillParent();
 
   // Fill G4MT_daughters with e-, nu and residual nucleus (stored by SetDaughter)  
   CheckAndFillDaughters();
+}
 
-  G4double parentMass = G4MT_parent->GetPDGMass();
-  G4double eMass = G4MT_daughters[1]->GetPDGMass();
-  G4double nucleusMass = G4MT_daughters[0]->GetPDGMass();
+G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
+{
   // Set up final state
   // parentParticle is set at rest here because boost with correct momentum 
   // is done later
-  G4DynamicParticle parentParticle(G4MT_parent, G4ThreeVector(0,0,0), 0.0);
-  G4DecayProducts* products = new G4DecayProducts(parentParticle);
+  G4DynamicParticle prim(fPrimaryIon, G4ThreeVector(0,0,1), 0.0);
+  G4DecayProducts* products = new G4DecayProducts(prim);
 
-  if (betaSampler) {
-    // Electron, neutrino and daughter nucleus energies
-    G4double eKE = endpointEnergy*betaSampler->shoot();
-    G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass) );
+  // Generate positron isotropic in angle, with energy from stored spectrum
+  const G4double eKE = eMass*G4BetaSpectrumSampler::shoot(npti, cdf, estep);
 
-    G4double cosThetaENu = 2.*G4UniformRand() - 1.;
-    G4double eTE = eMass + eKE;
-    G4double nuEnergy = ((endpointEnergy - eKE)*(parentMass + nucleusMass - eTE)
-            - eMomentum*eMomentum)/(parentMass - eTE + eMomentum*cosThetaENu)/2.;
+  G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass));
+  G4ThreeVector dir = G4RandomDirection();
+  G4DynamicParticle* dp = new G4DynamicParticle(fLepton, dir, eKE);
+  products->PushProducts(dp);
+  /*
+  G4cout << "G4BetaPlusDecay::DecayIt: " << fPrimaryIon->GetParticleName() 
+	 << " -> " << fResIon->GetParticleName() << " + " << fLepton->GetParticleName()
+	 << " + " << fNeutrino->GetParticleName() << " Ee(MeV)=" << eKE
+         << G4endl;
+  */
+  // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
 
-    // Electron 4-vector, isotropic angular distribution
-    G4double cosTheta = 2.*G4UniformRand() - 1.0;
-    G4double sinTheta = std::sqrt(1.0 - cosTheta*cosTheta);
+  // 4-momentum of residual ion and neutrino
+  G4LorentzVector lv(-eMomentum*dir.x(), -eMomentum*dir.y(), -eMomentum*dir.z(),
+                     parentMass - eKE - eMass);
 
-    G4double phi = twopi*G4UniformRand()*rad;
-    G4double sinPhi = std::sin(phi);
-    G4double cosPhi = std::cos(phi);
+  G4double edel =  std::max(lv.e() - resMass, 0.0);
+  if (edel > CLHEP::eV) {
 
-    G4ParticleMomentum eDirection(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
-    G4DynamicParticle* dynamicElectron
-      = new G4DynamicParticle(G4MT_daughters[1], eDirection*eMomentum);
-    products->PushProducts(dynamicElectron);
+    // centrum of mass system
+    G4double M = lv.mag();
 
-    // Neutrino 4-vector
-    G4double sinThetaENu = std::sqrt(1.0 - cosThetaENu*cosThetaENu);
-    phi = twopi*G4UniformRand()*rad;
-    G4double sinPhiNu = std::sin(phi);
-    G4double cosPhiNu = std::cos(phi);
+    // neutrino
+    G4double eNu = 0.5*(M - resMass*resMass/M);
+    G4LorentzVector lvnu(eNu*G4RandomDirection(), eNu);
+    lvnu.boost(lv.boostVector());
+    dir = lvnu.vect().unit();
+    dp = new G4DynamicParticle(fNeutrino, dir, lvnu.e());
+    products->PushProducts(dp);
 
-    G4ParticleMomentum nuDirection;
-    nuDirection.setX(sinThetaENu*cosPhiNu*cosTheta*cosPhi -
-                     sinThetaENu*sinPhiNu*sinPhi + cosThetaENu*sinTheta*cosPhi);
-    nuDirection.setY(sinThetaENu*cosPhiNu*cosTheta*sinPhi +
-                     sinThetaENu*sinPhiNu*cosPhi + cosThetaENu*sinTheta*sinPhi);
-    nuDirection.setZ(-sinThetaENu*cosPhiNu*sinTheta + cosThetaENu*cosTheta);
-
-    G4DynamicParticle* dynamicNeutrino
-      = new G4DynamicParticle(G4MT_daughters[2], nuDirection*nuEnergy);
-    products->PushProducts(dynamicNeutrino);
-
-    // Daughter nucleus 4-vector
-    // p_D = - p_e - p_nu
-    G4DynamicParticle* dynamicDaughter =
-      new G4DynamicParticle(G4MT_daughters[0],
-                            -eDirection*eMomentum - nuDirection*nuEnergy);
-    products->PushProducts(dynamicDaughter);
+    // residual
+    lv -= lvnu;
+    dir = lv.vect().unit();
+    G4double ekin = std::max(lv.e() - resMass, 0.0);
+    dp = new G4DynamicParticle(fResIon, dir, ekin);
+    products->PushProducts(dp);
 
   } else {
-    // electron energy below threshold -> no decay
-    G4DynamicParticle* noDecay =
-      new G4DynamicParticle(G4MT_parent, G4ThreeVector(0,0,0), 0.0);
-    products->PushProducts(noDecay);
+    // neglecting relativistic kinematic and giving all energy to neutrino
+    dp = new G4DynamicParticle(fNeutrino, G4RandomDirection(), edel);
+    products->PushProducts(dp);
+    dp = new G4DynamicParticle(fResIon, G4ThreeVector(0.0,0.0,1.0), 0.0);
+    products->PushProducts(dp);
   }
 
-  // Check energy conservation against Q value, not nuclear masses
-  /*
-  G4int nProd = products->entries();
-  G4DynamicParticle* temp = 0;
-  G4double Esum = 0.0;
-  for (G4int i = 0; i < nProd; i++) {
-    temp = products->operator[](i);
-    // G4cout << temp->GetParticleDefinition()->GetParticleName() << " has " 
-    //        << temp->GetTotalEnergy()/keV << " keV " << G4endl;
-    Esum += temp->GetKineticEnergy();
-  }
-  G4double eCons = (endpointEnergy - Esum)/keV;
-  if (std::abs(eCons) > 0.001) G4cout << " Beta- check: eCons = " << eCons << G4endl;
-  */
   return products;
 }
 
@@ -164,42 +155,41 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
                                            const G4int& daughterA,
                                            const G4BetaDecayType& betaType)
 {
-  G4double e0 = endpointEnergy/CLHEP::electron_mass_c2;
-  G4BetaDecayCorrections corrections(daughterZ, daughterA);
-  betaSampler = 0;
+  cdf[0] = 0.0;
 
-  if (e0 > 0) {
-    // Array to store spectrum pdf
-    G4int npti = 101;
-    G4double* pdf = new G4double[npti];
+  // Check for cases in which Q < 2Me (e.g. z67.a162) 
+  if (maxEnergy > 0.) {
+    G4BetaDecayCorrections corrections(daughterZ, daughterA);
 
+    // Fill array to store cumulative spectrum
     G4double ex;
-    G4double p;  // Electron momentum in units of electron mass
-    G4double f;  // Spectral shape function
-    for (G4int i = 0; i < npti; i++) {
-      ex = e0*std::max(1.e-6, G4double(i)/G4double(npti-1) );
-      p = std::sqrt(ex*(ex+2.) );
-      f = p*(1. + ex)*(e0 - ex)*(e0 - ex);
+    G4double p;   // Positron momentum in units of electron mass
+    G4double f;   // Spectral shape function
+    G4double sum = 0.0;
+    for (G4int i = 1; i < npti; ++i) {
+      ex = estep*i;
+      p = std::sqrt(ex*(ex + 2.));
+      f = p*(1. + ex)*(maxEnergy - ex)*(maxEnergy - ex);
 
       // Apply Fermi factor to get allowed shape
       f *= corrections.FermiFunction(1. + ex);
 
       // Apply shape factor for forbidden transitions
-      f *= corrections.ShapeFactor(betaType, p, e0-ex);
-      pdf[i] = f;
+      f *= corrections.ShapeFactor(betaType, p, maxEnergy - ex);
+      sum += f;
+      cdf[i] = sum;
     }
-    betaSampler = new G4BetaSpectrumSampler(pdf, npti, e0);
-
-    delete[] pdf;
+  } else {
+    for (G4int i = 1; i < npti; ++i) { cdf[i] = 0.0; }
   }
 }
 
 
 void G4BetaMinusDecay::DumpNuclearInfo()
 {
-  G4cout << " G4BetaMinusDecay for parent nucleus " << GetParentName() << G4endl;
-  G4cout << " decays to " << GetDaughterName(0) << " , " << GetDaughterName(1) 
-         << " and " << GetDaughterName(2) << " with branching ratio " << GetBR()
-         << "% and endpoint energy " << endpointEnergy/keV << " keV " << G4endl;
+  G4cout << " G4BetaMinusDecay  " << fPrimaryIon->GetParticleName()
+	 << " -> " << fResIon->GetParticleName() << " + " << fLepton->GetParticleName()
+	 << " + " << fNeutrino->GetParticleName() << " Eemax(MeV)="
+	 << maxEnergy*eMass << " BR=" << GetBR() << "%" << G4endl;
 }
 

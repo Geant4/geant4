@@ -54,7 +54,7 @@ Par01EMShowerModel::Par01EMShowerModel(G4String modelName, G4Region* envelope)
   fTouchableHandle   = new G4TouchableHistory();
   fpNavigator        = new G4Navigator();
   fNaviSetup         = false;
-  fCsI               = 0;
+  fCsI               = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,7 +68,7 @@ Par01EMShowerModel::Par01EMShowerModel(G4String modelName)
   fTouchableHandle   = new G4TouchableHistory();
   fpNavigator        = new G4Navigator();
   fNaviSetup         = false;
-  fCsI               = 0;
+  fCsI               = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,7 +138,7 @@ void Par01EMShowerModel::Explode(const G4FastTrack& fastTrack)
 
   // t : reduced quantity = z/X0:
   G4double    t, bt;
-  if ( fCsI == 0 ) fCsI = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+  if ( fCsI == nullptr ) fCsI = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
   G4double    X0  = fCsI->GetRadlen();
   // Moliere radius:
   G4double Es = 21*MeV;
@@ -225,11 +225,11 @@ void Par01EMShowerModel::AssignSpotAndCallHit(const Par01EnergySpot &eSpot)
     fFakeStep->GetPreStepPoint()->GetPhysicalVolume();
   G4VSensitiveDetector* pSensitive;
   
-  if( pCurrentVolume != 0 )
+  if( pCurrentVolume != nullptr )
     {
       pSensitive = pCurrentVolume->GetLogicalVolume()->
         GetSensitiveDetector();
-      if( pSensitive != 0 )
+      if( pSensitive != nullptr )
         {
           pSensitive->Hit(fFakeStep);
         }

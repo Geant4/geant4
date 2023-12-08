@@ -52,8 +52,6 @@ class PrimaryGeneratorSourceGRASCSV : public PrimaryGeneratorSource
         void SetnParticles(G4int nParticles){ fnParticles = nParticles; }
         G4double RecomputeNParticles();
 
-        G4int nLineCounter; // number the line read from file
-
     private:
         std::ifstream       fInputFile;
         std::list<Primary*> fPrimaryList;

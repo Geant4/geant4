@@ -5,6 +5,16 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-10-26 Alberto Ribon (exhadr08-V11-01-01)
+- BiasingOperation::ApplyFinalStateBiasing : fixed line with more than 100
+  characters.
+
+## 2023-07-26 Ivana Hrivnacova (exhadr08-V11-01-00)
+- Fix in BiasingOperation::ApplyFinalStateBiasing():
+  Added calls to biased processes CrossSectionDataStore::ComputeCrossSection.
+  This fixes a break observed in the ALICE simulation, that can be reproduced
+  in this example by changing "G4_Si" with "G4_SILICON_DIOXIDE".
+
 ## 2022-09-07 Vladimir Ivanchenko (exhadr08-V11-00-02)
 - BiasingOperation - used the Bertini cascade instead of pre-compound 
     model, the last was not applicable for pion interactions. The Bertini

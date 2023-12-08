@@ -30,13 +30,15 @@
 G4LEPTSExcitationModel::G4LEPTSExcitationModel(const G4String& modelName) 
   : G4VLEPTSModel( modelName )
 {
-  theXSType = XSExcitation; 
+  theXSType = XSExcitation;
+  fParticleChangeForGamma = nullptr;
+  LowestExcitationEnergy = 0;
+  LowestNeutralDisociationEnergy = 0; 
 } // constructor
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4LEPTSExcitationModel::~G4LEPTSExcitationModel() {
-}
+G4LEPTSExcitationModel::~G4LEPTSExcitationModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -59,7 +61,7 @@ std::map<G4int,std::vector<G4double> > G4LEPTSExcitationModel::ReadIXS(G4String 
 {
   std::map<G4int,std::vector<G4double> > integralXS = G4VLEPTSModel::ReadIXS( fileTXS, aMaterial);
 
-  if( integralXS.size() == 0 ) return integralXS;
+  if( integralXS.empty() ) return integralXS;
 
   for (G4int jj=theNXSdat[aMaterial]; jj>=0; jj--) {
     if( integralXS[XSDissociation][jj] > 0.001) LowestExcitationEnergy  = integralXS[XSTotal][jj-1];

@@ -45,6 +45,7 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMaterialManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4EnvironmentUtils.hh"
 #include "G4LossTableManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -92,9 +93,9 @@ void G4DNACPA100IonisationModel::Initialise(const G4ParticleDefinition* p,
                   FatalException, oss.str().c_str());
     }
 
-    char* path = getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
-    if (!path) {
+    if (path == nullptr) {
       G4Exception("G4DNACPA100IonisationModel::Initialise", "em0006", FatalException,
                   "G4LEDATA environment variable not set.");
       return;
@@ -192,9 +193,7 @@ void G4DNACPA100IonisationModel::Initialise(const G4ParticleDefinition* p,
       G4cout << "G4DNACPA100IonisationModel::CrossSectionPerVolume:: not good modelData" << G4endl;
       throw;
     }
-    else {
-      fpModelData = dataModel;
-    }
+    fpModelData = dataModel;
   }
 
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
@@ -297,16 +296,13 @@ void G4DNACPA100IonisationModel::SampleSecondaries(
     auto info = std::make_tuple(MatID, k, shell);
 
     secondaryKinetic = -1000 * eV;
-
-    if (useDcs && !fasterCode) {
-      secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergy(info);
-    }
-    if ( (useDcs && fasterCode) || fpG4_WATER->GetIndex() == MatID) {
-      secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergyFromCumulatedDcs(info);
-    }
-    if (!useDcs && fpG4_WATER->GetIndex() != MatID) {
+    if (fpG4_WATER->GetIndex() != MatID) {//for DNA material useDcs = false
       secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergyFromanalytical(info);
-    }
+    }else if(fasterCode){
+        secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergyFromCumulatedDcs(info);
+      }else{
+        secondaryKinetic = fpModelData->RandomizeEjectedElectronEnergy(info);
+      }
 
     G4double cosTheta = 0.;
     G4double phi = 0.;
@@ -362,7 +358,7 @@ void G4DNACPA100IonisationModel::SampleSecondaries(
     if (fpG4_WATER != nullptr && material == G4Material::GetMaterial("G4_WATER")) {
       std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
       std::size_t secNumberFinal = 0;  // So I'll make the diference and then sum the energies
-      if (fAtomDeexcitation && shell == 4) {
+      if ((fAtomDeexcitation != nullptr) && shell == 4) {
         G4int Z = 8;
         auto Kshell = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
         secNumberInit = fvect->size();
@@ -808,7 +804,7 @@ void G4DNACPA100IonisationModel::ReadDiffCSFile(const std::size_t& materialID,
                                                 const G4double& scaleFactor)
 {
   const char* path = G4FindDataDir("G4LEDATA");
-  if (!path) {
+  if (path == nullptr) {
     G4Exception("G4DNACPA100IonisationModel::ReadAllDiffCSFiles", "em0006", FatalException,
                 "G4LEDATA environment variable was not set.");
     return;

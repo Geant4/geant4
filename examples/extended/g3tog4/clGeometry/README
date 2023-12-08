@@ -24,7 +24,7 @@ or number of threads (applicable only with multi-threading mode):
 
 clGeometry callListFile [-m macro ] [-u UIsession] [-t nThreads]
 
-There is provided clGeometry.in macro which can be executed either interactively 
+There are provided clGeometry.in and run.mac macros which can be executed either interactively
 or in batch.
 
 For example:

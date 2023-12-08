@@ -47,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(EventAction* event)
-:G4UserTrackingAction(), fEventAction(event)
+:fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

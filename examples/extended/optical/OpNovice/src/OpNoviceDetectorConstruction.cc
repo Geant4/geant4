@@ -47,15 +47,8 @@
 OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
   : G4VUserDetectorConstruction()
 {
-  fDumpGdmlFileName = "OpNovice_dump.gdml";
-  fVerbose          = false;
-  fDumpGdml         = false;
   // create a messenger for this class
   fDetectorMessenger = new OpNoviceDetectorMessenger(this);
-  fWorld_x = fWorld_y = fWorld_z = 15.0 * m;
-  fExpHall_x = fExpHall_y = fExpHall_z = 10.0 * m;
-  fTank_x = fTank_y = fTank_z = 5.0 * m;
-  fBubble_x = fBubble_y = fBubble_z = 0.5 * m;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,17 +66,15 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4int nelements;
 
   // Air
-  G4Element* N = new G4Element("Nitrogen", "N", z = 7, a = 14.01 * g / mole);
-  G4Element* O = new G4Element("Oxygen", "O", z = 8, a = 16.00 * g / mole);
-  G4Material* air =
-    new G4Material("Air", density = 1.29 * mg / cm3, nelements = 2);
+  auto N = new G4Element("Nitrogen", "N", z = 7, a = 14.01 * g / mole);
+  auto O = new G4Element("Oxygen", "O", z = 8, a = 16.00 * g / mole);
+  auto air = new G4Material("Air", density = 1.29 * mg / cm3, nelements = 2);
   air->AddElement(N, 70. * perCent);
   air->AddElement(O, 30. * perCent);
   //
   // Water
-  G4Element* H = new G4Element("Hydrogen", "H", z = 1, a = 1.01 * g / mole);
-  G4Material* water =
-    new G4Material("Water", density = 1.0 * g / cm3, nelements = 2);
+  auto H = new G4Element("Hydrogen", "H", z = 1, a = 1.01 * g / mole);
+  auto water = new G4Material("Water", density = 1.0 * g / cm3, nelements = 2);
   water->AddElement(H, 2);
   water->AddElement(O, 1);
 
@@ -126,7 +117,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
     5.00, 6.00, 7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 5.00, 4.00
   };
 
-  G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
+  auto myMPT1 = new G4MaterialPropertiesTable();
 
   // Values can be added to the material property table individually.
   // With this method, spline interpolation cannot be set. Arguments
@@ -227,7 +218,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
                                              1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
                                              1.0, 1.0, 1.0, 1.0 };
 
-  G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
+  auto myMPT2 = new G4MaterialPropertiesTable();
   myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2);
 
   G4cout << "Air G4MaterialPropertiesTable:" << G4endl;
@@ -238,57 +229,54 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   // ------------- Volumes --------------
   //
   // The world
-  G4Box* world_box = new G4Box("World", fWorld_x, fWorld_y, fWorld_z);
-  G4LogicalVolume* world_log =
-    new G4LogicalVolume(world_box, air, "World", 0, 0, 0);
+  auto world_box = new G4Box("World", fWorld_x, fWorld_y, fWorld_z);
+  auto world_log = new G4LogicalVolume(world_box, air, "World");
   G4VPhysicalVolume* world_phys = new G4PVPlacement(
-    0, G4ThreeVector(), world_log, "world", 0, false, 0, checkOverlaps);
+    nullptr, G4ThreeVector(), world_log, "world", nullptr, false, 0,
+    checkOverlaps);
 
   // The experimental Hall
-  G4Box* expHall_box = new G4Box("expHall", fExpHall_x, fExpHall_y, fExpHall_z);
-  G4LogicalVolume* expHall_log =
-    new G4LogicalVolume(expHall_box, air, "expHall", 0, 0, 0);
+  auto expHall_box = new G4Box("expHall", fExpHall_x, fExpHall_y, fExpHall_z);
+  auto expHall_log = new G4LogicalVolume(expHall_box, air, "expHall");
   G4VPhysicalVolume* expHall_phys = new G4PVPlacement(
-    0, G4ThreeVector(), expHall_log, "expHall", world_log, false, 0);
+    nullptr, G4ThreeVector(), expHall_log, "expHall", world_log, false, 0);
 
   // The Water Tank
-  G4Box* waterTank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
-  G4LogicalVolume* waterTank_log =
-    new G4LogicalVolume(waterTank_box, water, "Tank", 0, 0, 0);
+  auto waterTank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
+  auto waterTank_log = new G4LogicalVolume(waterTank_box, water, "Tank");
   G4VPhysicalVolume* waterTank_phys = new G4PVPlacement(
-    0, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 0);
+    nullptr, G4ThreeVector(), waterTank_log, "Tank", expHall_log, false, 0);
 
   // The Air Bubble
-  G4Box* bubbleAir_box = new G4Box("Bubble", fBubble_x, fBubble_y, fBubble_z);
-  G4LogicalVolume* bubbleAir_log =
-    new G4LogicalVolume(bubbleAir_box, air, "Bubble", 0, 0, 0);
-  new G4PVPlacement(0, G4ThreeVector(0, 2.5 * m, 0), bubbleAir_log, "Bubble",
-                    waterTank_log, false, 0);
+  auto bubbleAir_box = new G4Box("Bubble", fBubble_x, fBubble_y, fBubble_z);
+  auto bubbleAir_log = new G4LogicalVolume(bubbleAir_box, air, "Bubble");
+  new G4PVPlacement(nullptr, G4ThreeVector(0, 2.5 * m, 0), bubbleAir_log,
+                    "Bubble", waterTank_log, false, 0);
 
   // ------------- Surfaces --------------
 
   // Water Tank
-  G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
+  auto opWaterSurface = new G4OpticalSurface("WaterSurface");
   opWaterSurface->SetType(dielectric_LUTDAVIS);
   opWaterSurface->SetFinish(Rough_LUT);
   opWaterSurface->SetModel(DAVIS);
 
-  G4LogicalBorderSurface* waterSurface = new G4LogicalBorderSurface(
+  auto waterSurface = new G4LogicalBorderSurface(
     "WaterSurface", waterTank_phys, expHall_phys, opWaterSurface);
 
-  G4OpticalSurface* opticalSurface = dynamic_cast<G4OpticalSurface*>(
+  auto opticalSurface = dynamic_cast<G4OpticalSurface*>(
     waterSurface->GetSurface(waterTank_phys, expHall_phys)
       ->GetSurfaceProperty());
   if(opticalSurface)
     opticalSurface->DumpInfo();
 
   // Air Bubble
-  G4OpticalSurface* opAirSurface = new G4OpticalSurface("AirSurface");
+  auto opAirSurface = new G4OpticalSurface("AirSurface");
   opAirSurface->SetType(dielectric_dielectric);
   opAirSurface->SetFinish(polished);
   opAirSurface->SetModel(glisur);
 
-  G4LogicalSkinSurface* airSurface =
+  auto airSurface =
     new G4LogicalSkinSurface("AirSurface", bubbleAir_log, opAirSurface);
 
   opticalSurface = dynamic_cast<G4OpticalSurface*>(
@@ -304,7 +292,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   std::vector<G4double> reflectivity = { 0.3, 0.5 };
   std::vector<G4double> efficiency   = { 0.8, 1.0 };
 
-  G4MaterialPropertiesTable* myST2 = new G4MaterialPropertiesTable();
+  auto myST2 = new G4MaterialPropertiesTable();
 
   myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity);
   myST2->AddProperty("EFFICIENCY", ephoton, efficiency);
@@ -317,7 +305,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   if(fDumpGdml)
   {
-    G4GDMLParser* parser = new G4GDMLParser();
+    auto parser = new G4GDMLParser();
     parser->Write(fDumpGdmlFileName, world_phys);
   }
 

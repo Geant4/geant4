@@ -49,11 +49,13 @@ WLSMaterials::WLSMaterials()
 
 WLSMaterials::~WLSMaterials()
 {
+  delete fAir;
   delete fPMMA;
   delete fPethylene;
   delete fFPethylene;
   delete fPolystyrene;
   delete fSilicone;
+  delete fCoating;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -254,7 +256,7 @@ void WLSMaterials::CreateMaterials()
 
   std::vector<G4double> refractiveIndex = { 1.0, 1.0 };
 
-  G4MaterialPropertiesTable* mpt = new G4MaterialPropertiesTable();
+  auto mpt = new G4MaterialPropertiesTable();
   mpt->AddProperty("RINDEX", energySmall, refractiveIndex);
 
   fAir->SetMaterialPropertiesTable(mpt);
@@ -285,7 +287,7 @@ void WLSMaterials::CreateMaterials()
   };
 
   // Add entries into properties table
-  G4MaterialPropertiesTable* mptWLSfiber = new G4MaterialPropertiesTable();
+  auto mptWLSfiber = new G4MaterialPropertiesTable();
   mptWLSfiber->AddProperty("RINDEX", energySmall, refractiveIndexWLSfiber);
   mptWLSfiber->AddProperty("WLSABSLENGTH", energy, absWLSfiber);
   mptWLSfiber->AddProperty("WLSCOMPONENT", energy, emissionFib);
@@ -302,7 +304,7 @@ void WLSMaterials::CreateMaterials()
   std::vector<G4double> absClad = { 20.0 * m, 20.0 * m };
 
   // Add entries into properties table
-  G4MaterialPropertiesTable* mptClad1 = new G4MaterialPropertiesTable();
+  auto mptClad1 = new G4MaterialPropertiesTable();
   mptClad1->AddProperty("RINDEX", energySmall, refractiveIndexClad1);
   mptClad1->AddProperty("ABSLENGTH", energySmall, absClad);
 
@@ -315,7 +317,7 @@ void WLSMaterials::CreateMaterials()
   std::vector<G4double> refractiveIndexClad2 = { 1.42, 1.42 };
 
   // Add entries into properties table
-  G4MaterialPropertiesTable* mptClad2 = new G4MaterialPropertiesTable();
+  auto mptClad2 = new G4MaterialPropertiesTable();
   mptClad2->AddProperty("RINDEX", energySmall, refractiveIndexClad2);
   mptClad2->AddProperty("ABSLENGTH", energySmall, absClad);
 
@@ -328,7 +330,7 @@ void WLSMaterials::CreateMaterials()
   std::vector<G4double> refractiveIndexSilicone = { 1.46, 1.46 };
 
   // Add entries into properties table
-  G4MaterialPropertiesTable* mptSilicone = new G4MaterialPropertiesTable();
+  auto mptSilicone = new G4MaterialPropertiesTable();
   mptSilicone->AddProperty("RINDEX", energySmall, refractiveIndexSilicone);
   mptSilicone->AddProperty("ABSLENGTH", energySmall, absClad);
 
@@ -350,7 +352,7 @@ void WLSMaterials::CreateMaterials()
   };
 
   // Add entries into properties table
-  G4MaterialPropertiesTable* mptPolystyrene = new G4MaterialPropertiesTable();
+  auto mptPolystyrene = new G4MaterialPropertiesTable();
   mptPolystyrene->AddProperty("RINDEX", energySmall, refractiveIndexPS);
   mptPolystyrene->AddProperty("ABSLENGTH", energySmall, absPS);
   mptPolystyrene->AddProperty("SCINTILLATIONCOMPONENT1", energy, scintilFast);

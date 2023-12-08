@@ -1,0 +1,19 @@
+######################### Macro file for Chem_geo #########################
+#
+/process/had/verbose 0
+/process/em/verbose 0
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/process/verbose 0
+#
+#=======================  CHOOSING CHEMYSTRYLIST   ======================
+# 02 options for chemList: G4EmDNAChemistry_option2 (default), G4EmDNAChemistry_option3
+/dsbandrepair/chem/chemList G4EmDNAChemistry_option2
+#
+#
+#=======================  Set ENDTIME for Chemical reactions   ======================
+#
+/scheduler/endTime 5 nanosecond
+#

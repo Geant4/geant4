@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-07-12 V. Ivanchenko (hadr-pre-V11-01-00)
+- clean-up of the sub-library: use the default Coulomb barrier computation,
+  fix format, removed unused data and methods
+
 ## 2022-11-26 Gabriele Cosmo (hadr-pre-V11-00-02)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

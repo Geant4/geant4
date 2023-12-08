@@ -61,13 +61,6 @@ WLSSteppingAction::WLSSteppingAction(WLSDetectorConstruction* detector,
   , fEventAction(event)
 {
   fSteppingMessenger = new WLSSteppingActionMessenger(this);
-
-  fCounterEnd  = 0;
-  fCounterMid  = 0;
-  fBounceLimit = 100000;
-
-  fOpProcess = nullptr;
-
   ResetCounters();
 }
 
@@ -115,7 +108,7 @@ G4int WLSSteppingAction::ResetSuccessCounter()
 void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   G4Track* theTrack = theStep->GetTrack();
-  WLSUserTrackInformation* trackInformation =
+  auto trackInformation =
     (WLSUserTrackInformation*) theTrack->GetUserInformation();
 
   G4StepPoint* thePrePoint  = theStep->GetPreStepPoint();

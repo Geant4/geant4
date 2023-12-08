@@ -49,13 +49,11 @@ G4VITRestProcess::G4VITRestProcess(const G4String& aName , G4ProcessType aType)
 }
 
 G4VITRestProcess::~G4VITRestProcess()
-{
-}
+= default;
 
 G4VITRestProcess::G4VITRestProcess(const G4VITRestProcess& right)
-                  : G4VITProcess(right)
-{
-}
+                   
+= default;
 
 
 

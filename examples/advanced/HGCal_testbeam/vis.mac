@@ -1,25 +1,14 @@
 # Macro file for the visualization settings of the HGCal testbeam simulation
 #
 
-# Use these open statements to open selected visualization
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
-# Use this open statement to create an OpenGL view:
-/vis/open OGL 800x600-0+0
-#
-# Use this open statement to create an OpenInventor view:
-#/vis/open OI
-#
-# Use this open statement to create a .prim file suitable for
-# viewing in DAWN:
-#/vis/open DAWNFILE
-#
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-#/vis/open HepRepFile
-#
-# Use this open statement to create a .wrl file suitable for
-# viewing in a VRML viewer:
-#/vis/open VRML2FILE
+## To create an OpenGL view:
+#/vis/open OGL 800x600-0+0
+
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -86,9 +75,6 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
-
-# Change the display limits
-/vis/ogl/set/displayListLimit 500000
 
 # Choose geometry setup
 /HGCalTestbeam/setup/configuration 0

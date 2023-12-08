@@ -84,18 +84,14 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual void SetNewCycle(G4bool value) = 0;
     virtual G4bool GetNewCycle() const = 0;
 
-    // Access methods
-    virtual G4int GetNofNtuples() const = 0;
-    // virtual G4int GetNofNtupleBookings() const = 0;
-
     // Set first column Id
     virtual G4bool SetFirstNtupleColumnId(G4int firstId) = 0;
 
     // Clear all date
     virtual void Clear() = 0;
 
-    // List ntuples
-    virtual G4bool List(std::ostream& output, G4bool onlyIfActive = true) = 0;
+    // Methods to delete selected ntuples
+    virtual G4bool Delete(G4int id) = 0;
 };
 
 #endif

@@ -40,16 +40,16 @@
 // ######################################################################
 // ###                         Electron_aq                            ###
 // ######################################################################
-G4Electron_aq* G4Electron_aq::theInstance = 0;
+G4Electron_aq* G4Electron_aq::theInstance = nullptr;
 
 G4Electron_aq* G4Electron_aq::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "e_aq";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
 
     const G4String formatedName = "e_{aq}";

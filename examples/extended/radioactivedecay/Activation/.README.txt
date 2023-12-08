@@ -160,13 +160,13 @@
  
    Execute Activation in 'batch' mode from macro files :
 \verbatim
-% ./Activation   run1.mac
+% ./Activation   run.mac
 \endverbatim
  		
    Execute Activation in 'interactive mode' with visualization :
 \verbatim
 % ./Activation
-Idle> control/execute vis.mac
+Idle> control/execute debug.mac
 ....
 Idle> type your commands
 ....
@@ -176,8 +176,9 @@ Idle> exit
  Macros provided in this example:
   - Bi209.mac: neutron (25 meV) on 10 cm of Bi209
   - Co60.mac:  neutron (25 meV) on 1 cm of Cobalt.
-    
+  - run.mac: simplified Co60.mac (no beam time, no histograms)
+      
  Macros to be run interactively:
-  - debug.mac: neutron (25 meV) on Cobalt
   - vis.mac: To activate visualization
+  - debug.mac: 1 neutron (25 meV) on Cobalt. Visualization and tracking/verbose
 */

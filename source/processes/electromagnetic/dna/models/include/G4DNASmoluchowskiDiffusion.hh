@@ -142,7 +142,7 @@ public:
     double fXmaxDef;
     double fXminDef;
     double fToleranceY;
-    double fSum;
+    double fSum{0};
     double    fIncreasingCumulativeFunction;
 
     enum PreviousAction
@@ -158,8 +158,7 @@ public:
                 double xmax,
                 double toleranceY) :
      fXmax(xmax), fXmin(xmin),
-     fToleranceY(toleranceY),
-     fSum(0)
+     fToleranceY(toleranceY) 
     {
       if(fXmax < fXmin)
       {
@@ -309,7 +308,7 @@ public:
 
   double GetInverseProbability(double proba) // returns sTransform
   {
-    size_t index_low = (size_t) trunc(proba/fEpsilon);
+    auto  index_low = (size_t) trunc(proba/fEpsilon);
     
     if(index_low == 0) // assymptote en 0
     {

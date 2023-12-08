@@ -1,0 +1,25 @@
+#
+# Macro file for "Activation.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+###/testhadr/det/setMat G4_Co
+###/testhadr/det/setThickness 1 cm
+###/testhadr/det/setSizeYZ 1 cm
+#
+/process/em/verbose 0
+/process/had/verbose 0
+#
+/run/initialize
+#
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
+/process/em/printParameters
+#
+/gun/particle neutron
+/gun/energy 25 meV
+#
+/run/printProgress 100
+/run/beamOn 1000

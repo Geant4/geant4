@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(medical_linac)
 
 #----------------------------------------------------------------------------
@@ -31,8 +31,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(ml2 ml2.cc ${sources} ${headers})
-target_link_libraries(ml2 ${Geant4_LIBRARIES} )
+add_executable(medical_linac medical_linac.cc ${sources} ${headers})
+target_link_libraries(medical_linac ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -40,22 +40,8 @@ target_link_libraries(ml2 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(medical_linac_SCRIPTS
-    ml2.mac
-    batch.mac
-    acc1.mac
-    macroAndData/macro_files/accelerator/acc1.mac
-    macroAndData/macro_files/accelerator/acc2_6MeV_3x3.mac
-    macroAndData/macro_files/accelerator/acc2_6MeV_10x10.mac
-    macroAndData/macro_files/accelerator/acc2_15MeV_3x3.mac
-    macroAndData/macro_files/accelerator/accSaturn.mac
-    macroAndData/macro_files/main/batch.mac
-    macroAndData/macro_files/main/ml2.mac
-    macroAndData/macro_files/main/vis.mac
-    macroAndData/experimental/VoxelsTest_In.txt
-    macroAndData/experimental/EXP_Saturn_Cal_Data.txt
-    macroAndData/results/PhSp/PhSp_Acc1.txt
-    macroAndData/results/ROG/ROG_Out.txt
-    macroAndData/results/experimental/VoxelsTest_Out.m
+    run.mac
+    vis.mac
   )
 
 foreach(_script ${medical_linac_SCRIPTS})
@@ -70,10 +56,10 @@ endforeach()
 # Add program to the project targets
 # (this avoids the need of typing the program name after make)
 #
-add_custom_target(medical_linac DEPENDS ml2)
+#add_custom_target(medical_linac DEPENDS ml2)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS ml2 DESTINATION bin)
+install(TARGETS medical_linac DESTINATION bin)
 

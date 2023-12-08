@@ -48,7 +48,7 @@ class WLSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
   WLSPrimaryGeneratorAction(WLSDetectorConstruction*);
-  ~WLSPrimaryGeneratorAction();
+  ~WLSPrimaryGeneratorAction() override;
 
   void GeneratePrimaries(G4Event*) override;
 
@@ -59,19 +59,19 @@ class WLSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   void SetUseSampledEnergy(G4bool v) { fUseSampledEnergy = v; }
 
  protected:
-  G4PhysicsTable* fIntegralTable;
+  G4PhysicsTable* fIntegralTable = nullptr;
 
  private:
   void SetOptPhotonPolar();
   void SetOptPhotonTime();
 
-  WLSDetectorConstruction* fDetector;
-  G4GeneralParticleSource* fParticleGun;
-  WLSPrimaryGeneratorMessenger* fGunMessenger;
+  WLSDetectorConstruction* fDetector = nullptr;
+  G4GeneralParticleSource* fParticleGun = nullptr;
+  WLSPrimaryGeneratorMessenger* fGunMessenger = nullptr;
 
   static G4bool fFirst;
-  G4double fTimeConstant;
-  G4bool fUseSampledEnergy;
+  G4double fTimeConstant = 0.;
+  G4bool fUseSampledEnergy = false;
 };
 
 #endif

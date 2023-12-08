@@ -30,24 +30,20 @@
 #ifndef G4AntiHyperTriton_h
 #define G4AntiHyperTriton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ######################################################################
-// ###                   ANTI  HYPERTRITON                            ###
-// ######################################################################
-
-class G4AntiHyperTriton : public G4Ions {
+class G4AntiHyperTriton : public G4Ions
+{
   public:
     static G4AntiHyperTriton* Definition();
     static G4AntiHyperTriton* AntiHyperTritonDefinition();
     static G4AntiHyperTriton* AntiHyperTriton();
+
   private:
-    static G4AntiHyperTriton* theInstance;
-    G4AntiHyperTriton()  {}
+    G4AntiHyperTriton() {}
     ~G4AntiHyperTriton() override = default;
+
+    static G4AntiHyperTriton* theInstance;
 };
 
 #endif

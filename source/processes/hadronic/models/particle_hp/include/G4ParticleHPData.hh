@@ -32,8 +32,9 @@
 //
 #ifndef G4ParticleHPData_h
 #define G4ParticleHPData_h 1
+
 #include "G4Element.hh"
-#include "G4ParticleHPCaptureData.hh"
+#include "G4NeutronHPCaptureData.hh"
 #include "G4ParticleHPElasticData.hh"
 #include "G4ParticleHPElementData.hh"
 #include "G4ParticleHPFissionData.hh"
@@ -45,31 +46,33 @@
 class G4ParticleHPData
 {
   public:
-    G4ParticleHPData(G4ParticleDefinition* projectile);
+    explicit G4ParticleHPData(G4ParticleDefinition* projectile);
 
     ~G4ParticleHPData();
 
-    inline G4PhysicsVector* MakePhysicsVector(G4Element* thE, G4ParticleHPFissionData* theP)
+    inline G4PhysicsVector* MakePhysicsVector(const G4Element* thE, G4ParticleHPFissionData* theP)
     {
-      if (numEle <= (G4int)thE->GetIndex()) addPhysicsVector();
-      return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
+      auto idx = (G4int)thE->GetIndex();
+      if (numEle <= idx) addPhysicsVector();
+      return DoPhysicsVector((*theData[idx]).GetData(theP));
     }
-    inline G4PhysicsVector* MakePhysicsVector(G4Element* thE, G4ParticleHPCaptureData* theP)
+    inline G4PhysicsVector* MakePhysicsVector(const G4Element* thE, G4NeutronHPCaptureData* theP)
     {
-      if (numEle <= (G4int)thE->GetIndex()) addPhysicsVector();
-      return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
+      auto idx = (G4int)thE->GetIndex();
+      if (numEle <= idx) addPhysicsVector();
+      return DoPhysicsVector((*theData[idx]).GetData(theP));
     }
-    inline G4PhysicsVector* MakePhysicsVector(G4Element* thE, G4ParticleHPElasticData* theP)
+    inline G4PhysicsVector* MakePhysicsVector(const G4Element* thE, G4ParticleHPElasticData* theP)
     {
-      if (numEle <= (G4int)thE->GetIndex()) addPhysicsVector();
-      return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
+      auto idx = (G4int)thE->GetIndex();
+      if (numEle <= idx) addPhysicsVector();
+      return DoPhysicsVector((*theData[idx]).GetData(theP));
     }
-    inline G4PhysicsVector* MakePhysicsVector(G4Element* thE, G4ParticleHPInelasticData* theP)
+    inline G4PhysicsVector* MakePhysicsVector(const G4Element* thE, G4ParticleHPInelasticData* theP)
     {
-      //     G4cout << "entered G4ParticleHPData::MakePhysicsVector!!!"<<G4endl;
-      //     G4cout << "thE->GetIndex()="<<thE->GetIndex()<<G4endl;
-      if (numEle <= (G4int)thE->GetIndex()) addPhysicsVector();
-      return DoPhysicsVector((*theData[thE->GetIndex()]).GetData(theP));
+      auto idx = (G4int)thE->GetIndex();
+      if (numEle <= idx) addPhysicsVector();
+      return DoPhysicsVector((*theData[idx]).GetData(theP));
     }
 
     G4PhysicsVector* DoPhysicsVector(G4ParticleHPVector* theVector);

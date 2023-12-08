@@ -121,18 +121,10 @@ using thread_unlock =
 //   mutex for specific to type T:
 //      G4AutoLock l(G4TypeMutex<G4Cache<T>>());
 template <typename _Tp>
-G4Mutex& G4TypeMutex(const unsigned int& _n = 0)
+G4Mutex& G4TypeMutex()
 {
-  static G4Mutex* _mutex = new G4Mutex();
-  if(_n == 0)
-    return *_mutex;
-
-  static std::vector<G4Mutex*> _mutexes;
-  if(_n > _mutexes.size())
-    _mutexes.resize(_n, nullptr);
-  if(!_mutexes[_n])
-    _mutexes[_n] = new G4Mutex();
-  return *(_mutexes[_n - 1]);
+  static G4Mutex _mutex;
+  return _mutex;
 }
 
 // Helper function for getting a unique static recursive_mutex for a
@@ -143,18 +135,10 @@ G4Mutex& G4TypeMutex(const unsigned int& _n = 0)
 //                        G4RecursiveAutoLock
 //                        l(G4TypeRecursiveMutex<G4Cache<T>>());
 template <typename _Tp>
-G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
+G4RecursiveMutex& G4TypeRecursiveMutex()
 {
-  static auto* _mutex = new G4RecursiveMutex();
-  if(_n == 0)
-    return *(_mutex);
-
-  static std::vector<G4RecursiveMutex*> _mutexes;
-  if(_n > _mutexes.size())
-    _mutexes.resize(_n, nullptr);
-  if(!_mutexes[_n])
-    _mutexes[_n] = new G4RecursiveMutex();
-  return *(_mutexes[_n - 1]);
+  static G4RecursiveMutex _mutex;
+  return _mutex;
 }
 
 #if defined(G4MULTITHREADED)

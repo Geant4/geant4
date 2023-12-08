@@ -37,13 +37,7 @@
 
 F03ActionInitialization::F03ActionInitialization
                             (F03DetectorConstruction* detConstruction)
- : G4VUserActionInitialization(),
-   fDetConstruction(detConstruction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F03ActionInitialization::~F03ActionInitialization()
+ : fDetConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

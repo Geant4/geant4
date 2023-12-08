@@ -99,10 +99,8 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
 #endif
         return (true);
     }
-    else
-    {
-        return false;
-    }
+    
+    return false;
 }
 
 //______________________________________________________________________________
@@ -123,7 +121,7 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
     auto pMotherMolecule = GetMolecule(track);
     auto pMotherMoleculeDefinition = pMotherMolecule->GetDefinition();
 
-    if (pMotherMoleculeDefinition->GetDecayTable())
+    if (pMotherMoleculeDefinition->GetDecayTable() != nullptr)
     {
         const auto pDissociationChannels = pMotherMolecule->GetDissociationChannels();
 
@@ -164,7 +162,7 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
             aParticleChange.ProposeLocalEnergyDeposit(pDecayChannel->GetEnergy());
         }
 
-        if (nbProducts)
+        if (nbProducts != 0)
         {
             std::vector<G4ThreeVector> productsDisplacement(nbProducts);
             G4ThreeVector motherMoleculeDisplacement;
@@ -192,7 +190,7 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
             aParticleChange.SetNumberOfSecondaries(nbProducts);
 
 #ifdef G4VERBOSE
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "Decay Process : " << pMotherMolecule->GetName()
                        << " (trackID :" << track.GetTrackID() << ") "
@@ -261,7 +259,7 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
 
                 pSecondary->SetTrackStatus(fAlive);
 #ifdef G4VERBOSE
-                if (fVerbose)
+                if (fVerbose != 0)
                 {
                     G4cout << "Product : " << pProduct->GetName() << G4endl;
                 }
@@ -270,14 +268,14 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
                 aParticleChange.G4VParticleChange::AddSecondary(pSecondary);
             }
 #ifdef G4VERBOSE
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "-------------" << G4endl;
             }
 #endif
         }
             //DEBUG
-        else if (fVerbose && decayEnergy)
+        else if ((fVerbose != 0) && (decayEnergy != 0.0))
         {
             G4cout << "No products for this channel" << G4endl;
             G4cout << "-------------" << G4endl;

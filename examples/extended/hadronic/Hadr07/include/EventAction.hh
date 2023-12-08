@@ -43,7 +43,7 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction(DetectorConstruction*);
-   ~EventAction() override;
+   ~EventAction() override = default;
 
   public:
     void BeginOfEventAction(const G4Event*) override;
@@ -53,10 +53,10 @@ class EventAction : public G4UserEventAction
     void AddEleak (G4double eleak);
     
   private:
-    DetectorConstruction* fDetector;
+    DetectorConstruction* fDetector = nullptr;
 
     G4double  fEdepAbsor[kMaxAbsor];
-    G4double  fEnergyLeak;
+    G4double  fEnergyLeak = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

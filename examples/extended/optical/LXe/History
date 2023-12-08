@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-02 Daren Sawkey (LXe-V11-01-01)
+- Apply clang-tidy recommendations
+
+## 2023-10-11 Daren Sawkey (LXe-V11-01-00)
+- Apply coding guidelines, especially use of override and variable
+  initialization
+
 ## 2022-09-14 Daren Sawkey (LXe-V11-00-02)
 - change variable name to adhere to naming convention
 

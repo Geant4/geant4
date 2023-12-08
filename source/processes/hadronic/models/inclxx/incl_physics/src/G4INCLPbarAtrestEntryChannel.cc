@@ -34,6 +34,7 @@
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
+#include "G4EnvironmentUtils.hh"
 
 #include "G4INCLPbarAtrestEntryChannel.hh"
 #include "G4INCLRootFinder.hh"
@@ -95,7 +96,7 @@ namespace G4INCL {
           }
       }
       else std::cout << "ERROR no fread_file " << filename << std::endl;
-
+      
       return sum_probs;
   }
 
@@ -105,14 +106,15 @@ namespace G4INCL {
     G4double smallestsum = 0.0;
     G4double biggestsum = yields[0];
     //std::cout << "initial input " << rdm << std::endl;
-    for (G4int i = 0; i < static_cast<G4int>(yields.size()); i++) {
+    for (G4int i = 0; i < static_cast<G4int>(yields.size()-1); i++) {
         if (rdm >= smallestsum && rdm <= biggestsum) {
             //std::cout << smallestsum << " and " << biggestsum << std::endl;
-            stringNumber = i;
+            stringNumber = i+1;
         }
         smallestsum += yields[i];
         biggestsum += yields[i+1];
     }
+    if(stringNumber==-1) stringNumber = static_cast<G4int>(yields.size());
     if(stringNumber==-1){
       INCL_ERROR("ERROR in findStringNumber (stringNumber=-1)");
       std::cout << "ERROR in findStringNumber" << std::endl;
@@ -250,7 +252,7 @@ namespace G4INCL {
            G4Exception("G4INCLDataFile::readData()","rawppbarFS.dat, ...",
                 FatalException, ed);
       }
-      G4String dataPath0(std::getenv("G4INCLDATA"));
+      G4String dataPath0{G4FindDataDir("G4INCLDATA")};
       G4String dataPathppbar(dataPath0 + "/rawppbarFS.dat");
       G4String dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");
       G4String dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
@@ -303,7 +305,8 @@ namespace G4INCL {
         sum = read_file(dataPathppbar, probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum; //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
@@ -357,7 +360,8 @@ namespace G4INCL {
         sum = read_file(dataPathppbark, probabilities, particle_types);
         rdm = ((1-rdm)/kaonicFSprob)*sum;//2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
@@ -412,7 +416,8 @@ namespace G4INCL {
         sum = read_file(dataPathnpbar, probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum; //99.95 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
@@ -466,7 +471,8 @@ namespace G4INCL {
         sum = read_file(dataPathnpbark, probabilities, particle_types);
         rdm = ((1-rdm)/kaonicFSprob)*sum;//3837 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return starlist;
         for(G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++){
           if(particle_types[n][j] == "pi0"){
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);

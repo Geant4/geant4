@@ -46,6 +46,9 @@
 #include <cmath>
 #include <cassert>
 
+// Maximum allowed number of QSS substeps per integration step
+#define QSS_MAX_SUBSTEPS 1000
+
 template <class QSS>
 class G4QSStepper : public G4MagIntegratorStepper
 {
@@ -94,6 +97,8 @@ class G4QSStepper : public G4MagIntegratorStepper
     inline G4EquationOfMotion* GetSpecificEquation() { return GetEquationOfMotion(); }
 
     inline const field_utils::State& GetYOut() const { return fyOut; }
+
+    inline G4double GetLastStepLength() { return fLastStepLength; }
 
   private:
 
@@ -263,7 +268,7 @@ inline void G4QSStepper<QSS>::Stepper(const G4double yInput[],
   t = simulator->time;
   index = simulator->minIndex;
 
-  while (length < max_length && t < Qss_misc::INF) {
+  while (length < max_length && t < Qss_misc::INF && CUR_SUBSTEP(simulator) < QSS_MAX_SUBSTEPS) {
     cf0 = index * coeffs;
     elapsed = t - tx[index];
     method->advance_time_x(cf0, elapsed);
@@ -299,6 +304,10 @@ inline void G4QSStepper<QSS>::Stepper(const G4double yInput[],
     prev_time = t;
     t = simulator->time;
     index = simulator->minIndex;
+  }
+
+  if(CUR_SUBSTEP(simulator) >= QSS_MAX_SUBSTEPS) {
+    max_length = length;
   }
 
   auto* const substep = &LAST_SUBSTEP_STRUCT(simulator);
@@ -395,7 +404,6 @@ inline void G4QSStepper<QSS>::reset(const G4FieldTrack* track)
   this->update_field();
   method->full_definition(get_coeff());
 
-  // TODO
   method->recompute_all_state_times(0);
 
   simulator->time = 0;
@@ -406,22 +414,13 @@ inline void G4QSStepper<QSS>::SetPrecision(G4double dq_rel, G4double dq_min)
 {
   G4double* dQMin = simulator->dQMin;
   G4double* dQRel = simulator->dQRel;
-  // G4double* x = simulator->x;
-  G4double* lqu = simulator->lqu;
   G4int n_vars = simulator->states;
-  // G4int coeffs = method->order() + 1;
-  G4int i;
 
-  if (dq_min <= 0) { dq_min = dq_rel * 1e-3;
-}
+  if (dq_min <= 0) { dq_min = dq_rel * 1e-3; }
 
-  for (i = 0; i < n_vars; ++i) {
+  for (G4int i = 0; i < n_vars; ++i) {
     dQRel[i] = dq_rel;
     dQMin[i] = dq_min;
-
-    // lqu[i] = dQRel[i] * fabs(x[i * coeffs]);  // x[i*coeffs] not always initialised!!
-    // if (lqu[i] < dq_min ) lqu[i] = dq_min;
-    lqu[i]= dq_min;
   }
 }
 

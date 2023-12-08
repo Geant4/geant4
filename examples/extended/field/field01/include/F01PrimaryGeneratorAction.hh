@@ -50,10 +50,10 @@ class F01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     F01PrimaryGeneratorAction(F01DetectorConstruction*);
-    virtual ~F01PrimaryGeneratorAction();
+    ~F01PrimaryGeneratorAction() override;
 
   public:
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
     void SetRndmFlag(G4String val) { fRndmFlag = val; }
     void SetXVertex(G4double x);
     void SetYVertex(G4double y);
@@ -62,16 +62,17 @@ class F01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName();
 
   private:
-    G4ParticleGun*                fParticleGun; //pointer a to G4 service class
-    F01DetectorConstruction*      fDetector;    //pointer to the geometry
+    G4ParticleGun*                fParticleGun = nullptr; //pointer a to G4 service class
+    F01DetectorConstruction*      fDetector = nullptr;    //pointer to the geometry
 
-    F01PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
-    G4String                      fRndmFlag;     //flag for random impact point
+    F01PrimaryGeneratorMessenger* fGunMessenger = nullptr; //messenger of this class
+    G4String                      fRndmFlag = "off";      //flag for random impact point
 
     static G4ParticleDefinition* fgPrimaryParticle;
-    G4double fXVertex, fYVertex, fZVertex;
-    G4bool fVertexDefined;
-
+    G4double fXVertex = 0.;
+    G4double fYVertex = 0.;
+    G4double fZVertex = 0.;
+    G4bool fVertexDefined = false;
 };
 
 #endif

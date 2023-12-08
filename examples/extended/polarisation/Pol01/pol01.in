@@ -3,13 +3,14 @@
 # (can be run in batch, without graphic, without analysis)
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 1
 #
 /testem/det/setMat G4_Fe
 /testem/det/setSizeZ 1.75 mm
 /testem/phys/addPhysics polarized
 #/testem/phys/addPhysics standard
-/run/printProgress 5000
+/run/printProgress 500
 #
 /run/initialize
 /run/setCut 0.1 mm

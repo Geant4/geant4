@@ -27,7 +27,6 @@
 /// \brief Implementation of the EventAction class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,18 +38,6 @@
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::EventAction()
-:G4UserEventAction(),
- fTotalEnergyDeposit(0.), fTotalEnergyFlow(0.)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -64,11 +64,6 @@ PrimaryGeneratorAction4::PrimaryGeneratorAction4(G4ParticleGun* gun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction4::~PrimaryGeneratorAction4()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PrimaryGeneratorAction4::GeneratePrimaries(G4Event* anEvent)
 {  
   //vertex position uniform in spherical shell

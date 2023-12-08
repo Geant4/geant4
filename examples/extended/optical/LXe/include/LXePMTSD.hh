@@ -45,7 +45,7 @@ class LXePMTSD : public G4VSensitiveDetector
 {
  public:
   LXePMTSD(G4String name);
-  ~LXePMTSD();
+  ~LXePMTSD() override;
 
   void Initialize(G4HCofThisEvent*) override;
   G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
@@ -71,13 +71,13 @@ class LXePMTSD : public G4VSensitiveDetector
   void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
 
  private:
-  LXePMTHitsCollection* fPMTHitCollection;
+  LXePMTHitsCollection* fPMTHitCollection = nullptr;
 
-  G4DataVector* fPMTPositionsX;
-  G4DataVector* fPMTPositionsY;
-  G4DataVector* fPMTPositionsZ;
+  G4DataVector* fPMTPositionsX = nullptr;
+  G4DataVector* fPMTPositionsY = nullptr;
+  G4DataVector* fPMTPositionsZ = nullptr;
 
-  G4int fHitCID;
+  G4int fHitCID = -1;
 };
 
 #endif

@@ -55,51 +55,55 @@ class G4DNACrossSectionDataSet : public G4VEMDataSet
 { 
 
 public:
+  G4DNACrossSectionDataSet() = delete;
   G4DNACrossSectionDataSet(G4VDataSetAlgorithm* algo, 
 			   G4double xUnit=CLHEP::MeV, 
 			   G4double dataUnit=CLHEP::barn);
 
-  virtual ~G4DNACrossSectionDataSet();
-
-  virtual G4double FindValue(G4double e, G4int componentId=0) const;
+  ~G4DNACrossSectionDataSet() override;
   
-  virtual void PrintData(void) const;
+  G4DNACrossSectionDataSet(const G4DNACrossSectionDataSet & copy) = delete;
+  G4DNACrossSectionDataSet& operator=(const G4DNACrossSectionDataSet & right) = delete;
 
-  virtual const G4VEMDataSet*  GetComponent(G4int componentId) const 
+  G4double FindValue(G4double e, G4int componentId=0) const override;
+  
+  void PrintData() const override;
+
+  const G4VEMDataSet*  GetComponent(G4int componentId) const override 
   { return components[componentId]; }
 
-  virtual void AddComponent(G4VEMDataSet* dataSet) 
+  void AddComponent(G4VEMDataSet* dataSet) override 
   { components.push_back(dataSet); }
 
-  virtual size_t NumberOfComponents(void) const 
+  size_t NumberOfComponents() const override 
   { return components.size(); }
 
-  virtual const G4DataVector& GetEnergies(G4int componentId) const 
+  const G4DataVector& GetEnergies(G4int componentId) const override 
   { return GetComponent(componentId)->GetEnergies(0); }
 
-  virtual const G4DataVector& GetData(G4int componentId) const 
+  const G4DataVector& GetData(G4int componentId) const override 
   { return GetComponent(componentId)->GetData(0); }
 
-  virtual const G4DataVector& GetLogEnergies(G4int componentId) const 
+  const G4DataVector& GetLogEnergies(G4int componentId) const override 
   { return GetComponent(componentId)->GetLogEnergies(0); }
 
-  virtual const G4DataVector& GetLogData(G4int componentId) const 
+  const G4DataVector& GetLogData(G4int componentId) const override 
   { return GetComponent(componentId)->GetLogData(0); }
 
-  virtual void SetEnergiesData(G4DataVector* x, G4DataVector* values, G4int componentId);
+  void SetEnergiesData(G4DataVector* x, G4DataVector* values, G4int componentId) override;
 
-  virtual void SetLogEnergiesData(G4DataVector* x,
+  void SetLogEnergiesData(G4DataVector* x,
                                   G4DataVector* values,
                                   G4DataVector* log_x, 
                                   G4DataVector* log_values,
-                                  G4int componentId);
+                                  G4int componentId) override;
 
-  virtual G4bool LoadData(const G4String & argFileName);
-  virtual G4bool LoadNonLogData(const G4String & argFileName);
+  G4bool LoadData(const G4String & argFileName) override;
+  G4bool LoadNonLogData(const G4String & argFileName) override;
 
-  virtual G4bool SaveData(const G4String & argFileName) const;
+  G4bool SaveData(const G4String & argFileName) const override;
  
-  virtual G4double RandomSelect(G4int /*componentId */) const { return -1.; };
+  G4double RandomSelect(G4int /*componentId */) const override { return -1.; };
 
 
   //   void CleanUpComponents();
@@ -107,11 +111,6 @@ public:
 private:
 
   G4String FullFileName(const G4String & argFileName) const;
-
-  // Hide copy constructor and assignment operator 
-  G4DNACrossSectionDataSet();
-  G4DNACrossSectionDataSet(const G4DNACrossSectionDataSet & copy);
-  G4DNACrossSectionDataSet& operator=(const G4DNACrossSectionDataSet & right);
 
   std::vector<G4VEMDataSet*> components;          // Owned pointers
 
@@ -126,7 +125,7 @@ private:
   G4double GetUnitData() const { return unitData; }
   const G4VDataSetAlgorithm* GetAlgorithm() const { return algorithm; }
    
-  void CleanUpComponents(void);
+  void CleanUpComponents();
 
 
 };

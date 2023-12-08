@@ -33,7 +33,8 @@
 
 #include "G4PhysicsFreeVector.hh"
 
-G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile) : theProjectile(projectile)
+G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile)
+  : theProjectile(projectile)
 {
   // const char* theDataDirVariable;
   if (projectile == G4Neutron::Neutron()) {

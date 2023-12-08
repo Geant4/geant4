@@ -2,7 +2,7 @@
 
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(exMPI02)
 
 #------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ target_link_libraries(exMPI02 ${G4mpi_LIBRARIES} ${Geant4_LIBRARIES} ${ROOT_LIBR
 #
 set(exMPI02_SCRIPTS
     run.mac
-    v.mac
+    vis.mac
   )
 
 foreach(_script ${exMPI02_SCRIPTS})

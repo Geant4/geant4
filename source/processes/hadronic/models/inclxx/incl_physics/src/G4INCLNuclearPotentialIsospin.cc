@@ -106,17 +106,15 @@ namespace G4INCL {
       vSigmaPlus = -16.;
 
       vLambda = 30.;
-
-//D
-      //insert new particles here
-//D
+      vantiProton = 100.;
 
       const G4double asy = (theA - 2.*theZ)/theA;
       // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC 98, 021602 (2018)
       if      (asy > 0.236) vLambda = 40.91;
       else if (asy > 0.133) vLambda = 56.549 - 678.73*asy + 4905.35*asy*asy - 9789.1*asy*asy*asy;
-        
+         
       const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
+      const G4double theantiProtonSeparationEnergy = ParticleTable::getSeparationEnergy(antiProton,theA,theZ);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
@@ -140,6 +138,8 @@ namespace G4INCL {
       separationEnergy[KShort]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
       separationEnergy[KLong]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
 
+      separationEnergy[antiProton]    = theantiProtonSeparationEnergy;
+
       fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
       fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
       fermiEnergy[DeltaZero] = vDeltaZero - separationEnergy[DeltaZero];
@@ -154,6 +154,8 @@ namespace G4INCL {
       fermiEnergy[SigmaPlus] = vSigmaPlus - separationEnergy[SigmaPlus];
       fermiEnergy[SigmaZero] = vSigmaZero - separationEnergy[SigmaZero];
       fermiEnergy[SigmaMinus] = vSigmaMinus - separationEnergy[SigmaMinus];
+   
+      fermiEnergy[antiProton] = vantiProton - separationEnergy[antiProton];
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -232,7 +234,7 @@ namespace G4INCL {
 
         case Eta:
         case Omega:
-		case EtaPrime:
+		    case EtaPrime:
           return computePionResonancePotentialEnergy(particle);
           break;
 
@@ -248,11 +250,38 @@ namespace G4INCL {
         case Photon:
           return 0.0;
           break;
-//D
+
         case antiProton:
+          return vantiProton;
+          break;
+        case antiNeutron:
+          return vantiProton;
+          break;
+        case antiLambda:
           return 0.0;
           break;
-//D
+        case antiSigmaMinus:
+          return 0.0;
+          break;
+        case antiSigmaPlus:
+          return 0.0;
+          break;
+        case antiSigmaZero:
+          return 0.0;
+          break;
+        case antiXiMinus:
+          return 0.0;
+          break;
+        case antiXiZero:
+          return 0.0;
+          break;
+        case XiMinus:
+          return 0.0;
+          break;
+        case XiZero:
+          return 0.0;
+          break;
+
         case DeltaPlusPlus:
           return vDeltaPlusPlus;
           break;

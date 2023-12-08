@@ -66,6 +66,9 @@ class G4ProductionCutsTable
 
     virtual ~G4ProductionCutsTable();
 
+    void CreateCoupleTables();
+      // Creates material cuts couples table and allocate the other tables
+
     void UpdateCoupleTable(G4VPhysicalVolume* currentWorld);
       // Triggers an update of the table of G4ProductionCuts objects
 
@@ -144,6 +147,10 @@ class G4ProductionCutsTable
     G4double* GetEnergyCutsDoubleVector(std::size_t pcIdx) const;
       // Methods for backward compatibility
 
+    void SetEnergyCutVector(const std::vector<G4double>& cutE, std::size_t idx);
+      // User defined cut vectors (idx < 4) range cut should be defined
+      // to avoid inconsistency in physics
+
     void  SetVerboseLevel(G4int value);
     G4int GetVerboseLevel() const;
       // Control flag for output message
@@ -191,6 +198,7 @@ class G4ProductionCutsTable
     G4bool IsCoupleUsedInTheRegion(const G4MaterialCutsCouple* aCouple,
                                    const G4Region* aRegion) const;
 
+
   private:
 
     static G4ProductionCutsTable* fProductionCutsTable;
@@ -198,6 +206,8 @@ class G4ProductionCutsTable
     std::vector<G4MaterialCutsCouple*> coupleTable;
     std::vector<std::vector<G4double>*> rangeCutTable;
     std::vector<std::vector<G4double>*> energyCutTable;
+
+    std::vector<G4double>* userEnergyCuts[4] = {nullptr, nullptr, nullptr, nullptr};
 
     G4RegionStore* fG4RegionStore = nullptr;
     G4VRangeToEnergyConverter* converters[NumberOfG4CutIndex]; 

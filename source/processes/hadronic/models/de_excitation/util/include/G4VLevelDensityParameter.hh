@@ -37,13 +37,12 @@ class G4VLevelDensityParameter
 {
 public:
 
-  explicit G4VLevelDensityParameter() {};
-  virtual ~G4VLevelDensityParameter() {};
+  G4VLevelDensityParameter() = default;
+  virtual ~G4VLevelDensityParameter() = default;
 
   virtual G4double 
   LevelDensityParameter(G4int A, G4int Z, G4double U) const = 0;
 
-private:  
   G4VLevelDensityParameter(const G4VLevelDensityParameter &right) = delete;
   const G4VLevelDensityParameter & operator=(const G4VLevelDensityParameter &right) = delete;
   G4bool operator==(const G4VLevelDensityParameter &right) const = delete;

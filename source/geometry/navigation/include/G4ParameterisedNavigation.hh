@@ -85,6 +85,9 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
                             const G4NavigationHistory& history,
                             const G4double pProposedMaxLength=DBL_MAX ) override;
 
+    void RelocateWithinVolume( G4VPhysicalVolume* motherPhysical,
+                               const G4ThreeVector& localPoint ) override;
+
   private:
 
     G4double ComputeVoxelSafety( const G4ThreeVector& localPoint,

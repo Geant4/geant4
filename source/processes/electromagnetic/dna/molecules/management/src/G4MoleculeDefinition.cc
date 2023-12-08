@@ -53,22 +53,22 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
                                            G4String aType,
                                            G4FakeParticleID ID) :
     G4ParticleDefinition(name, mass, 0., charge, 0, 0, 0, 0, 0, 0, "Molecule",
-                         0, 0, ID, false, lifetime, NULL, false, aType, 0, 0.0),
+                         0, 0, ID, false, lifetime, nullptr, false, aType, 0, 0.0),
     fDiffusionCoefficient(diffCoeff),
     fAtomsNb(atomsNumber),
     fVanDerVaalsRadius(radius)
 
 {
   fCharge = charge;
-  if(electronicLevels)
+  if(electronicLevels != 0)
   {
     fElectronOccupancy = new G4ElectronOccupancy(electronicLevels);
   }
   else
   {
-    fElectronOccupancy = 0;
+    fElectronOccupancy = nullptr;
   }
-  fDecayTable = NULL;
+  fDecayTable = nullptr;
   G4MoleculeTable::Instance()->Insert(this);
 }
 
@@ -113,7 +113,7 @@ void G4MoleculeDefinition::Serialize(std::ostream& out)
   WRITE(out,this->G4ParticleDefinition::GetParticleType());
   WRITE(out,fDiffusionCoefficient);
   WRITE(out,fCharge);
-  if(fElectronOccupancy)
+  if(fElectronOccupancy != nullptr)
   {
     WRITE(out,fElectronOccupancy->GetSizeOfOrbit());
   }
@@ -129,15 +129,15 @@ void G4MoleculeDefinition::Serialize(std::ostream& out)
 
 G4MoleculeDefinition::~G4MoleculeDefinition()
 {
-  if (fElectronOccupancy)
+  if (fElectronOccupancy != nullptr)
   {
     delete fElectronOccupancy;
-    fElectronOccupancy = 0;
+    fElectronOccupancy = nullptr;
   }
-  if (fDecayTable)
+  if (fDecayTable != nullptr)
   {
     delete fDecayTable;
-    fDecayTable = 0;
+    fDecayTable = nullptr;
   }
 }
 
@@ -189,11 +189,11 @@ G4MoleculeDefinition::
 
 void G4MoleculeDefinition::SetLevelOccupation(G4int shell, G4int eNb)
 {
-  if(fElectronOccupancy)
+  if(fElectronOccupancy != nullptr)
   {
     G4int levelOccupancy = fElectronOccupancy->GetOccupancy(shell);
 
-    if(levelOccupancy)
+    if(levelOccupancy != 0)
     {
 
       fElectronOccupancy->RemoveElectron(shell, levelOccupancy);
@@ -208,7 +208,7 @@ void G4MoleculeDefinition::SetLevelOccupation(G4int shell, G4int eNb)
 void G4MoleculeDefinition::AddDecayChannel(const G4String& molecularConfLabel,
                                            const G4MolecularDissociationChannel* channel)
 {
-  if(!fDecayTable)
+  if(fDecayTable == nullptr)
   {
     fDecayTable = new G4MolecularDissociationTable();
   }
@@ -223,7 +223,7 @@ void G4MoleculeDefinition::AddDecayChannel(const G4String& molecularConfLabel,
 void G4MoleculeDefinition::AddDecayChannel(const G4MolecularConfiguration* molConf,
                                            const G4MolecularDissociationChannel* channel)
 {
-  if (!fDecayTable)
+  if (fDecayTable == nullptr)
   {
     fDecayTable = new G4MolecularDissociationTable();
   }
@@ -235,22 +235,20 @@ void G4MoleculeDefinition::AddDecayChannel(const G4MolecularConfiguration* molCo
 const vector<const G4MolecularDissociationChannel*>*
 G4MoleculeDefinition::GetDecayChannels(const G4String& ExState) const
 {
-  if (fDecayTable)
+  if (fDecayTable != nullptr)
   {
     const vector<const G4MolecularDissociationChannel*>* output =
         fDecayTable->GetDecayChannels(ExState);
     return output;
   }
-  else
-  {
-    G4ExceptionDescription errMsg;
-    errMsg <<  ": no Excited States and Decays for"
-           << GetName()
-           << " are defined.";
-    G4Exception("G4MoleculeDefinition::GetDecayChannels", "",
-                FatalErrorInArgument, errMsg);
-  }
-  return 0;
+  
+  G4ExceptionDescription errMsg;
+  errMsg <<  ": no Excited States and Decays for"
+         << GetName()
+         << " are defined.";
+  G4Exception("G4MoleculeDefinition::GetDecayChannels", "",
+              FatalErrorInArgument, errMsg);
+  return nullptr;
 }
 
 //___________________________________________________________________________
@@ -259,7 +257,7 @@ const vector<const G4MolecularDissociationChannel*>*
 G4MoleculeDefinition::GetDecayChannels(const G4MolecularConfiguration* conf)
   const
 {
-  if(fDecayTable)
+  if(fDecayTable != nullptr)
   {
     const vector<const G4MolecularDissociationChannel*>* output =
         fDecayTable->GetDecayChannels(conf);
@@ -276,7 +274,7 @@ G4MoleculeDefinition::GetDecayChannels(const G4MolecularConfiguration* conf)
 //                FatalErrorInArgument,
 //                errMsg);
 //  }
-  return 0;
+  return nullptr;
 }
 
 //___________________________________________________________________________

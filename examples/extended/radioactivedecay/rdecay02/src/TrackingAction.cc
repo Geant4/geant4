@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* det)
-:G4UserTrackingAction(), fDetector(det)
+:fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

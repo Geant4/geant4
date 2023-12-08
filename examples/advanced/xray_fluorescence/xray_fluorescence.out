@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1969,7 +1969,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found.
 
 
  Material: Anorthosite    density:  2.800 g/cm3   RadL:   8.510 cm   Nucl.Int.Length:  35.737 cm 
-                       Imean: 139.026 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean: 139.030 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -2188,7 +2188,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found.
 
 
  Material: Scintillator    density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  69.969 cm 
-                       Imean:  62.657 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  64.684 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -2315,6 +2315,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -2975,15 +2979,19 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002769s Sys=0.000000s
+  User=0.000000s Real=0.002711s Sys=0.000000s
 Going to save histograms
 ... write file : xrayfluo.root - done
 ... close file : xrayfluo.root - done
 /vis/viewer/update
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
-There are 9 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  9 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
 visManager deleted

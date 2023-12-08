@@ -9,13 +9,15 @@ geant4_add_module(G4phys_ctor_ions
     G4IonPhysicsPHP.hh
     G4IonPhysicsXS.hh
     G4IonQMDPhysics.hh
+    G4LightIonQMDPhysics.hh
   SOURCES
     G4IonBinaryCascadePhysics.cc
     G4IonINCLXXPhysics.cc
     G4IonPhysics.cc
     G4IonPhysicsPHP.cc
     G4IonPhysicsXS.cc
-    G4IonQMDPhysics.cc)
+    G4IonQMDPhysics.cc
+    G4LightIonQMDPhysics.cc)
 
 geant4_module_link_libraries(G4phys_ctor_ions
   PUBLIC

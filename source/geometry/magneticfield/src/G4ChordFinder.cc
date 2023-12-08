@@ -100,21 +100,18 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   G4cout << " G4ChordFinder: stepperDriverId: " << stepperDriverId  << G4endl;
 
-  G4bool useFSALstepper=      (stepperDriverId == kFSALStepperType);       // Was 1
+  G4bool useFSALstepper     = (stepperDriverId == kFSALStepperType);       // Was 1
   G4bool useTemplatedStepper= (stepperDriverId == kTemplatedStepperType);  // Was 2 
   G4bool useRegularStepper  = (stepperDriverId == kRegularStepperType);    // Was 3
   G4bool useBfieldDriver    = (stepperDriverId == kBfieldDriverType);      // Was 4 
-  G4bool useG4QSSDriver       = (stepperDriverId == kQss2DriverType) || (stepperDriverId == kQss3DriverType);
+  G4bool useG4QSSDriver     = (stepperDriverId == kQss2DriverType) || (stepperDriverId == kQss3DriverType);
+ 
+  if( stepperDriverId == kQss3DriverType)
+  {
+    stepperDriverId = kQss2DriverType;
+    G4cout << " G4ChordFinder: QSS 3 is currently replaced by QSS 2 driver." << G4endl;
+  }
 
-  // --- REINSTATE after QSS testing -- to impose DEFAULT 
-  // G4bool useDefault= (stepperDriverId == kDefaultDriverType )
-  //   || ( !useRegularStepper && !useFSALstepper && !useTemplatedStepper && !useG4QSSDriver );
-  //
-  // useBfieldDriver |= useDefault; // Was default in release 10.6, used for 'unknown' since 10.7
-
-  // G4bool useRegularStepper  = !stepperDriverId != 3) && !useFSALStepper && !useTemplatedStepper;
-  // If it's not 0, 1 or 2 then 'BFieldDriver' which combines DoPri5 (short) and helix is used.
-  
   using EquationType = G4Mag_UsualEqRhs;
   
   using TemplatedStepperType =

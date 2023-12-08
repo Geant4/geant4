@@ -41,7 +41,7 @@
 #include "G4Track.hh"
 #include <set>
 
-typedef G4shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
+using G4TrackVectorHandle = G4shared_ptr< std::vector<G4Track*> >;
 
 #ifndef compTrackPerID__
 #define compTrackPerID__
@@ -58,15 +58,15 @@ class G4Track;
 class G4ITReactionSet;
 class G4ITReactionPerTrack;
 class G4ITReaction;
-typedef G4shared_ptr<G4ITReaction> G4ITReactionPtr;
-typedef G4shared_ptr<G4ITReactionPerTrack> G4ITReactionPerTrackPtr;
+using G4ITReactionPtr = G4shared_ptr<G4ITReaction>;
+using G4ITReactionPerTrackPtr = G4shared_ptr<G4ITReactionPerTrack>;
 
-typedef std::list<G4ITReactionPtr> G4ITReactionList;
-typedef std::map<G4Track*,
+using G4ITReactionList = std::list<G4ITReactionPtr>;
+using G4ITReactionPerTrackMap = std::map<G4Track*,
                  G4ITReactionPerTrackPtr,
-                 compTrackPerID> G4ITReactionPerTrackMap;
-typedef std::list<std::pair<G4ITReactionPerTrackPtr,
-                            G4ITReactionList::iterator> > G4ReactionPerTrackIt;
+                 compTrackPerID>;
+using G4ReactionPerTrackIt = std::list<std::pair<G4ITReactionPerTrackPtr,
+                            G4ITReactionList::iterator> >;
 
 struct compReactionPerTime
 {
@@ -74,8 +74,8 @@ struct compReactionPerTime
                      G4ITReactionPtr lhs) const;
 };
 
-typedef std::multiset<G4ITReactionPtr, compReactionPerTime> G4ITReactionPerTime;
-typedef std::multiset<G4ITReactionPtr, compReactionPerTime>::iterator G4ITReactionPerTimeIt;
+using G4ITReactionPerTime = std::multiset<G4ITReactionPtr, compReactionPerTime>;
+using G4ITReactionPerTimeIt = std::multiset<G4ITReactionPtr, compReactionPerTime>::iterator;
 
 class G4ITReaction : public G4enable_shared_from_this<G4ITReaction>
 {
@@ -105,7 +105,7 @@ public:
   void AddIterator(G4ITReactionPerTrackPtr reactionPerTrack,
                    G4ITReactionList::iterator it)
   {
-    fReactionPerTrack.push_back(std::make_pair(reactionPerTrack, it));
+    fReactionPerTrack.emplace_back(reactionPerTrack, it);
   }
 
   void AddIterator(G4ITReactionPerTimeIt it)
@@ -227,20 +227,18 @@ public:
       {
           return true;
       }
-      else
+      
+      reactionPerTrack = it_track->second;
+      auto list = reactionPerTrack->GetReactionList();
+      //for(auto it_list = list.begin(); it_list != list.end(); ++it_list)
+      for(const auto& it_list:list)
       {
-          reactionPerTrack = it_track->second;
-          auto list = reactionPerTrack->GetReactionList();
-          //for(auto it_list = list.begin(); it_list != list.end(); ++it_list)
-          for(const auto& it_list:list)
+          if ((*it_list).GetReactant(trackA)->GetTrackID() == trackB->GetTrackID())
           {
-              if ((*it_list).GetReactant(trackA)->GetTrackID() == trackB->GetTrackID())
-              {
-                  return false;
-              }
+              return false;
           }
-          return true;
       }
+      return true;
   }
 
   void AddReactions(G4double time, G4Track* trackA, G4TrackVectorHandle reactants)
@@ -282,12 +280,9 @@ public:
 
   void RemoveReactionPerTrack(G4ITReactionPerTrackPtr reactionPerTrack)
   {
-    for(auto it =
-            reactionPerTrack->GetListOfIterators().begin() ;
-        it != reactionPerTrack->GetListOfIterators().end() ;
-        ++it)
+    for(auto & it : reactionPerTrack->GetListOfIterators())
     {
-      fReactionPerTrack.erase(*it);
+      fReactionPerTrack.erase(it);
     }
     reactionPerTrack->GetListOfIterators().clear();
     reactionPerTrack->GetReactionList().clear();

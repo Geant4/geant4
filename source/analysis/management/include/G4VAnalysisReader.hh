@@ -38,6 +38,7 @@
 #define G4VAnalysisReader_h 1
 
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
 #include "G4VTBaseHnManager.hh"  // make forward declaration if possible
@@ -49,6 +50,10 @@
 class G4HnManager;
 class G4VRNtupleManager;
 class G4VRFileManager;
+
+using G4Analysis::kDim1;
+using G4Analysis::kDim2;
+using G4Analysis::kDim3;
 
 class G4VAnalysisReader
 {
@@ -128,11 +133,11 @@ class G4VAnalysisReader
     G4bool IsAscii() const;
 
     // Access methods
-    G4int GetNofH1s() const;
-    G4int GetNofH2s() const;
-    G4int GetNofH3s() const;
-    G4int GetNofP1s() const;
-    G4int GetNofP2s() const;
+    G4int GetNofH1s(G4bool onlyIfExist = false) const;
+    G4int GetNofH2s(G4bool onlyIfExist = false) const;
+    G4int GetNofH3s(G4bool onlyIfExist = false) const;
+    G4int GetNofP1s(G4bool onlyIfExist = false) const;
+    G4int GetNofP2s(G4bool onlyIfExist = false) const;
     G4int GetNofNtuples() const;
 
     // Access methods via names
@@ -247,11 +252,11 @@ class G4VAnalysisReader
                  G4bool success = true) const;
 
     // Methods
-    void SetH1Manager(G4VTBaseHnManager<1>* h1Manager);
-    void SetH2Manager(G4VTBaseHnManager<2>* h2Manager);
-    void SetH3Manager(G4VTBaseHnManager<3>* h3Manager);
-    void SetP1Manager(G4VTBaseHnManager<2>* p1Manager);
-    void SetP2Manager(G4VTBaseHnManager<3>* p2Manager);
+    void SetH1Manager(G4VTBaseHnManager<kDim1>* h1Manager);
+    void SetH2Manager(G4VTBaseHnManager<kDim2>* h2Manager);
+    void SetH3Manager(G4VTBaseHnManager<kDim3>* h3Manager);
+    void SetP1Manager(G4VTBaseHnManager<kDim2>* p1Manager);
+    void SetP2Manager(G4VTBaseHnManager<kDim3>* p2Manager);
     void SetNtupleManager(std::shared_ptr<G4VRNtupleManager> ntupleManager);
     void SetFileManager(std::shared_ptr<G4VRFileManager> fileManager);
 
@@ -266,11 +271,11 @@ class G4VAnalysisReader
     static constexpr std::string_view fkClass { "G4VAnalysisReader" };
 
     // Data members
-    std::unique_ptr<G4VTBaseHnManager<1>> fVH1Manager;
-    std::unique_ptr<G4VTBaseHnManager<2>> fVH2Manager;
-    std::unique_ptr<G4VTBaseHnManager<3>> fVH3Manager;
-    std::unique_ptr<G4VTBaseHnManager<2>> fVP1Manager;
-    std::unique_ptr<G4VTBaseHnManager<3>> fVP2Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim1>> fVH1Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim2>> fVH2Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim3>> fVH3Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim2>> fVP1Manager;
+    std::unique_ptr<G4VTBaseHnManager<kDim3>> fVP2Manager;
     std::shared_ptr<G4VRNtupleManager> fVNtupleManager { nullptr };
 };
 

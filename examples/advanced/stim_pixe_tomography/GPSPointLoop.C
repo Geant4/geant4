@@ -79,8 +79,8 @@ void GPSPointLoop()
   }
   fprintf(pfile, "/run/initialize\n");
   fprintf(pfile, "#\n");
-  fprintf(pfile, "/run/printProgress 500000\n");
-  fprintf(pfile, "#\n");
+//  fprintf(pfile, "/run/printProgress 500000\n");
+//  fprintf(pfile, "#\n");
   fprintf(pfile, "# Source definition : energy, type\n");
   fprintf(pfile, "#\n");
   fprintf(pfile, "/gps/energy %.2f MeV\n", energy);

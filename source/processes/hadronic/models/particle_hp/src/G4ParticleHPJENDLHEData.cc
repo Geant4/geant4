@@ -100,8 +100,7 @@ void G4ParticleHPJENDLHEData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   // make a PhysicsVector for each element
 
-  static G4ThreadLocal G4ElementTable* theElementTable = nullptr;
-  if (theElementTable == nullptr) theElementTable = G4Element::GetElementTable();
+  auto theElementTable = G4Element::GetElementTable();
   vElement.clear();
   vElement.resize(numberOfElements);
   for (std::size_t i = 0; i < numberOfElements; ++i) {
@@ -111,88 +110,35 @@ void G4ParticleHPJENDLHEData::BuildPhysicsTable(const G4ParticleDefinition& aP)
     // isotope
     auto nIso = (G4int)(*theElementTable)[i]->GetNumberOfIsotopes();
     auto Z = (G4int)(*theElementTable)[i]->GetZ();
-    if (nIso != 0) {
-      G4bool found_at_least_one = false;
-      for (G4int i1 = 0; i1 < nIso; ++i1) {
-        G4int A = theElement->GetIsotope(i1)->GetN();
+    for (G4int i1 = 0; i1 < nIso; ++i1) {
+      G4int A = theElement->GetIsotope(i1)->GetN();
 
-        if (isThisNewIsotope(Z, A)) {
-          std::stringstream ss;
-          ss << dirName << aFSType << Z << "_" << A << "_" << theNames.GetName(Z - 1);
-          filename = ss.str();
-          std::fstream file;
-          file.open(filename, std::fstream::in);
-          G4int dummy;
-          file >> dummy;
-          if (file.good()) {
-            found_at_least_one = true;
+      if (isThisNewIsotope(Z, A)) {
+	std::stringstream ss;
+	ss << dirName << aFSType << Z << "_" << A << "_" << theNames.GetName(Z - 1);
+	filename = ss.str();
+	std::fstream file;
+	file.open(filename, std::fstream::in);
+	G4int dummy;
+	file >> dummy;
+	if (file.good()) {
+	  vElement[i] = true;
 
-            // read the file
-            G4PhysicsVector* aPhysVec = readAFile(&file);
-            registAPhysicsVector(Z, A, aPhysVec);
-          }
-          else {
-            // G4cout << "No file for "<< reactionType << " Z=" << Z << ", A=" << A << G4endl;
-          }
-          file.close();
-        }
-        else {
-          found_at_least_one = TRUE;
-        }
+	  // read the file
+	  G4PhysicsVector* aPhysVec = readAFile(&file);
+	  registAPhysicsVector(Z, A, aPhysVec);
+	}
+	file.close();
       }
-      if (found_at_least_one) vElement[i] = true;
-    }
-    else {
-      G4StableIsotopes theStableOnes;
-      G4int first = theStableOnes.GetFirstIsotope(Z);
-      G4bool found_at_least_one = FALSE;
-      for (G4int i1 = 0;
-           i1 < theStableOnes.GetNumberOfIsotopes(static_cast<G4int>(theElement->GetZ())); i1++)
-      {
-        G4int A = theStableOnes.GetIsotopeNucleonCount(first + i1);
-        if (isThisNewIsotope(Z, A)) {
-          std::stringstream ss;
-          ss << dirName << aFSType << Z << "_" << A << "_" << theNames.GetName(Z - 1);
-          filename = ss.str();
-
-          std::fstream file;
-          file.open(filename, std::fstream::in);
-          G4int dummy;
-          file >> dummy;
-          if (file.good()) {
-            // G4cout << "Found file for Z=" << Z << ", A=" << A << ", as " << filename << G4endl;
-            found_at_least_one = TRUE;
-            // Read the file
-
-            G4PhysicsVector* aPhysVec = readAFile(&file);
-
-            // Regist the PhysicsVector
-            registAPhysicsVector(Z, A, aPhysVec);
-          }
-          else {
-            // G4cout << "No file for "<< reactionType << " Z=" << Z << ", A=" << A << G4endl;
-          }
-          file.close();
-        }
-        else {
-          found_at_least_one = TRUE;
-        }
-      }
-
-      if (found_at_least_one) vElement[i] = true;
     }
   }
 }
 
-void G4ParticleHPJENDLHEData::DumpPhysicsTable(const G4ParticleDefinition& aP)
-{
-  if (&aP != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__,
-                              "Attempt to use NeutronHP data for particles other than neutrons!!!");
-}
+void G4ParticleHPJENDLHEData::DumpPhysicsTable(const G4ParticleDefinition&)
+{}
 
-G4double G4ParticleHPJENDLHEData::GetCrossSection(const G4DynamicParticle* aP, const G4Element* anE,
-                                                  G4double)
+G4double G4ParticleHPJENDLHEData::GetCrossSection(const G4DynamicParticle* aP,
+                                                  const G4Element* anE, G4double)
 {
   // Primary energy >20MeV
   // Thus not taking into account of Doppler broadening
@@ -204,23 +150,11 @@ G4double G4ParticleHPJENDLHEData::GetCrossSection(const G4DynamicParticle* aP, c
 
   auto nIso = (G4int)anE->GetNumberOfIsotopes();
   auto Z = (G4int)anE->GetZ();
-  if (nIso != 0) {
-    for (G4int i1 = 0; i1 < nIso; ++i1) {
-      G4int A = anE->GetIsotope(i1)->GetN();
-      G4double frac =
-        anE->GetRelativeAbundanceVector()[i1];  // This case does NOT request "*perCent".
-      result += frac * getXSfromThisIsotope(Z, A, ek);
-    }
-  }
-  else {
-    G4StableIsotopes theStableOnes;
-    G4int first = theStableOnes.GetFirstIsotope(Z);
-    for (G4int i1 = 0; i1 < theStableOnes.GetNumberOfIsotopes((G4int)anE->GetZ()); ++i1) {
-      G4int A = theStableOnes.GetIsotopeNucleonCount(first + i1);
-      G4double frac =
-        theStableOnes.GetAbundance(first + i1) * perCent;  // This case requests "*perCent".
-      result += frac * getXSfromThisIsotope(Z, A, ek);
-    }
+  for (G4int i1 = 0; i1 < nIso; ++i1) {
+    G4int A = anE->GetIsotope(i1)->GetN();
+    G4double frac = anE->GetRelativeAbundanceVector()[i1];
+    // This case does NOT request "*perCent".
+    result += frac * getXSfromThisIsotope(Z, A, ek);
   }
   return result;
 }
@@ -279,12 +213,11 @@ void G4ParticleHPJENDLHEData::registAPhysicsVector(G4int Z, G4int A, G4PhysicsVe
 G4double G4ParticleHPJENDLHEData::getXSfromThisIsotope(G4int Z, G4int A, G4double ek)
 {
   G4double aXSection = 0.0;
-  G4bool outOfRange;
 
   G4PhysicsVector* aPhysVec;
   if (mIsotope.find(Z)->second->find(A) != mIsotope.find(Z)->second->end()) {
     aPhysVec = mIsotope.find(Z)->second->find(A)->second;
-    aXSection = aPhysVec->GetValue(ek, outOfRange);
+    aXSection = aPhysVec->Value(ek);
   }
   else {
     // Select closest one in the same Z
@@ -306,7 +239,7 @@ G4double G4ParticleHPJENDLHEData::getXSfromThisIsotope(G4int Z, G4int A, G4doubl
       aPhysVec = mIsotope.find(Z)->second->find(A1)->second;
     }
 
-    aXSection = aPhysVec->GetValue(ek, outOfRange);
+    aXSection = aPhysVec->Value(ek);
     // X^(2/3) factor
     aXSection *= G4Pow::GetInstance()->A23(1.0 * A / A1);
   }

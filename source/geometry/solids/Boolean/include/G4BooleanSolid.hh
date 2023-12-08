@@ -123,17 +123,19 @@ class G4BooleanSolid : public G4VSolid
     G4VSolid* fPtrSolidB = nullptr;
 
     G4double fCubicVolume = -1.0;
-      // Stored value of fCubicVolume 
+      // Cached value of fCubicVolume 
+    G4double fSurfaceArea = -1.0;
+      // Cached value of Surface Area
 
     static G4VBooleanProcessor* fExternalBoolProcessor;
       // External Boolean processor
 
   private:
 
-    G4int    fStatistics = 1000000;
+    G4int    fCubVolStatistics = 1000000;
+    G4int    fAreaStatistics = 1000000;
     G4double fCubVolEpsilon = 0.001;
     G4double fAreaAccuracy = -1;
-    G4double fSurfaceArea = -1.0;
 
     mutable G4bool fRebuildPolyhedron = false;
     mutable G4Polyhedron* fpPolyhedron = nullptr;

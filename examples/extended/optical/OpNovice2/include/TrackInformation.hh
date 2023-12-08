@@ -44,7 +44,7 @@ class TrackInformation : public G4VUserTrackInformation
   TrackInformation();
   TrackInformation(const G4Track* aTrack);
   TrackInformation(const TrackInformation* aTrackInfo);
-  virtual ~TrackInformation();
+  ~TrackInformation() override;
 
   inline void* operator new(size_t);
   inline void operator delete(void* aTrackInfo);
@@ -52,14 +52,17 @@ class TrackInformation : public G4VUserTrackInformation
   TrackInformation& operator=(const TrackInformation& right);
 
   void SetSourceTrackInformation(const G4Track* aTrack);
-  virtual void Print() const;
+  void Print() const override;
 
- public:
   inline G4bool GetIsFirstTankX() const { return fFirstTankX; }
   inline void SetIsFirstTankX(G4bool b) { fFirstTankX = b; }
 
+  inline G4int GetReflectionNumber() const { return fReflectionNumber; }
+  inline void IncrementReflectionNumber() { ++fReflectionNumber; }
+
  private:
-  G4bool fFirstTankX;
+  G4bool fFirstTankX = false;
+  G4int fReflectionNumber = 0;
 };
 
 extern G4ThreadLocal G4Allocator<TrackInformation>* aTrackInformationAllocator;

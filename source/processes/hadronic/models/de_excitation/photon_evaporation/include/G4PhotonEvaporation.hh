@@ -50,9 +50,6 @@
 #include "G4LevelManager.hh"
 #include "G4Fragment.hh"
 
-const G4int MAXDEPOINT = 10;
-const G4int MAXGRDATA = 300;
-
 class G4GammaTransition;
 
 class G4PhotonEvaporation : public G4VEvaporationChannel {
@@ -111,42 +108,44 @@ private:
 
   inline void InitialiseLevelManager(G4int Z, G4int A);
 
-  G4NuclearLevelData*   fNuclearLevelData;
-  const G4LevelManager* fLevelManager;
-  G4GammaTransition*    fTransition;
+  G4NuclearLevelData* fNuclearLevelData;
+  const G4LevelManager* fLevelManager{nullptr};
+  G4GammaTransition* fTransition;
 
   // fPolarization stores polarization tensor for consecutive
   // decays of a nucleus 
-  G4NuclearPolarization* fPolarization;
+  G4NuclearPolarization* fPolarization{nullptr};
 
-  G4int    fVerbose;
-  G4int    theZ;
-  G4int    theA;
-  G4int    fPoints;
-  G4int    fCode;
-  G4int    vShellNumber;
-  size_t   fIndex;
+  G4int fVerbose;
+  G4int theZ{0};
+  G4int theA{0};
+  G4int fPoints{0};
+  G4int fCode{0};
+  G4int vShellNumber{-1};
+  G4int MAXDEPOINT{10};
+  std::size_t fIndex{0};
 
   G4int fSecID;  // Creator model ID for the secondaries created by this model
 
-  static G4float GREnergy[MAXGRDATA];
-  static G4float GRWidth[MAXGRDATA];
-
-  G4double fCummProbability[MAXDEPOINT]; 
-
-  G4double fLevelEnergyMax;
-  G4double fExcEnergy;
-  G4double fProbability;
-  G4double fStep;
-  G4double fMaxLifeTime;
+  G4double fLevelEnergyMax{0.0};
+  G4double fExcEnergy{0.0};
+  G4double fProbability{0.0};
+  G4double fStep{0.0};
+  G4double fMaxLifeTime{DBL_MAX};
 
   G4double fTolerance;
 
-  G4bool   fICM;
-  G4bool   fRDM;
-  G4bool   fSampleTime;
-  G4bool   fCorrelatedGamma;
-  G4bool   isInitialised;
+  G4bool   fICM{true};
+  G4bool   fRDM{false};
+  G4bool   fSampleTime{true};
+  G4bool   fCorrelatedGamma{false};
+  G4bool   isInitialised{false};
+
+  static const G4int MAXGRDATA{300};
+  static G4float GREnergy[MAXGRDATA];
+  static G4float GRWidth[MAXGRDATA];
+
+  G4double fCummProbability[10] = {0.0};
 };
 
 inline void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)

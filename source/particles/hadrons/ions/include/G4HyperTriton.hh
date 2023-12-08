@@ -30,24 +30,20 @@
 #ifndef G4HyperTriton_h
 #define G4HyperTriton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ######################################################################
-// ###                      HYPERTRITON                               ###
-// ######################################################################
-
-class G4HyperTriton : public G4Ions {
+class G4HyperTriton : public G4Ions
+{
   public:
     static G4HyperTriton* Definition();
     static G4HyperTriton* HyperTritonDefinition();
     static G4HyperTriton* HyperTriton();
+
   private:
-    static G4HyperTriton* theInstance;
-    G4HyperTriton()  {}
+    G4HyperTriton() {}
     ~G4HyperTriton() override = default;
+
+    static G4HyperTriton* theInstance;
 };
 
 #endif

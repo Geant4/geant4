@@ -109,7 +109,7 @@ void G4GeneralParticleSource::ListSource()
            << "; Particle type: "
            << thisSrc->GetParticleDefinition()->GetParticleName() << G4endl;
     G4cout << " \t\tEnergy: "
-           << G4BestUnit(thisSrc->GetParticleEnergy(),"Energy") << G4endl;
+	   << G4BestUnit(thisSrc->GetEneDist()->GetMonoEnergy(),"Energy") << G4endl;
     G4cout << " \t\tDirection: "
            << thisSrc->GetAngDist()->GetDirection() << "; Position: ";
     G4cout << G4BestUnit(thisSrc->GetPosDist()->GetCentreCoords(),"Length")

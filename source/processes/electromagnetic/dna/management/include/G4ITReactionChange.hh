@@ -67,8 +67,8 @@ public:
   // To be used by reaction processes
   void Initialize(const G4Track&,
                   const G4Track&,
-                  G4VParticleChange* particleChangeA = 0,
-                  G4VParticleChange* particleChangeB = 0);
+                  G4VParticleChange* particleChangeA = nullptr,
+                  G4VParticleChange* particleChangeB = nullptr);
   void AddSecondary(G4Track* aSecondary);
   inline void KillParents(G4bool);
 
@@ -108,16 +108,16 @@ protected:
   // "equal" means that the objects have the same pointer.
 protected:
   std::map<const G4Track*, G4VParticleChange*> fParticleChange;
-  std::vector<G4Track*>* fSecondaries;
-  G4int fNumberOfSecondaries;
-  G4bool fKillParents;
-  G4bool fParticleChangeIsSet;
+  std::vector<G4Track*>* fSecondaries{nullptr};
+  G4int fNumberOfSecondaries{0};
+  G4bool fKillParents{false};
+  G4bool fParticleChangeIsSet{false};
 };
 
 inline G4Track* G4ITReactionChange::GetSecondary(G4int anIndex) const
 {
-  if (fSecondaries) return (*fSecondaries)[anIndex];
-  else return 0;
+  if (fSecondaries != nullptr) return (*fSecondaries)[anIndex];
+  return nullptr;
 }
 
 inline G4int G4ITReactionChange::GetNumberOfSecondaries() const

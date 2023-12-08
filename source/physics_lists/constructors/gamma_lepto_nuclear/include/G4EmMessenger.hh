@@ -61,34 +61,27 @@ public:
   void SetNewValue(G4UIcommand* aComm, G4String aS) override;
 
 private:
-  G4EmExtraPhysics*   theB;
+  G4EmExtraPhysics* theB;
 
-  G4UIcmdWithABool*   theSynch;
-  G4UIcmdWithABool*   theSynchAll;
-  G4UIcmdWithABool*   theGN;
-  G4UIcmdWithABool*   theGLENDN;
-  G4UIcmdWithABool*   theEN;
-  G4UIcmdWithABool*   theMUN;
-  G4UIcmdWithABool*   theGMM;
-  G4UIcmdWithABool*   theMMM;
-  G4UIcmdWithABool*   thePMM;
-  G4UIcmdWithABool*   thePH;
-  G4UIcmdWithABool*   theNu;
-  G4UIcmdWithABool*   theNuETX;
-  G4UIcmdWithABool*   theXS;
+  G4UIcmdWithABool* theSynch;
+  G4UIcmdWithABool* theSynchAll;
+  G4UIcmdWithABool* theGN;
+  G4UIcmdWithABool* theGLENDN;
+  G4UIcmdWithABool* theEN;
+  G4UIcmdWithABool* theMUN;
+  G4UIcmdWithABool* theGMM;
+  G4UIcmdWithABool* theMMM;
+  G4UIcmdWithABool* thePMM;
+  G4UIcmdWithABool* thePH;
+  G4UIcmdWithABool* theXS;
 
   G4UIcmdWithADouble* theGMM1;
   G4UIcmdWithADouble* thePMM1;
   G4UIcmdWithADouble* thePH1;
-  G4UIcmdWithADouble* theNuEleCcBF;
-  G4UIcmdWithADouble* theNuEleNcBF;
-  G4UIcmdWithADouble* theNuNucleusBF;
   G4UIcmdWithADoubleAndUnit* theGNlowe;
 
-  G4UIcmdWithAString* theNuDN;
-
-  G4UIdirectory*      aDir1;
-  G4UIdirectory*      aDir2;
+  G4UIdirectory* aDir1;
+  G4UIdirectory* aDir2;
 };
 
 #endif

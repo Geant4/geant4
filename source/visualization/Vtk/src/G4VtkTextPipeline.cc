@@ -52,9 +52,9 @@ std::size_t G4VtkTextPipeline::MakeHash(const G4Text& text, const G4VtkVisContex
   return hash;
 }
 
-G4VtkTextPipeline::G4VtkTextPipeline(const G4Text& text, const G4VtkVisContext& vc,
+G4VtkTextPipeline::G4VtkTextPipeline(const G4Text& text, const G4VtkVisContext& vcIn,
                                      const G4VisAttributes* pVA)
-  : G4VVtkPipeline(text.GetText().c_str(), "G4VtkTextPipeline", vc, false, vc.fViewer->renderer)
+  : G4VVtkPipeline(text.GetText().c_str(), "G4VtkTextPipeline", vcIn, false, vcIn.fViewer->renderer)
 {
   G4double x = text.GetPosition().x();
   G4double y = text.GetPosition().y();

@@ -102,7 +102,7 @@ public:
   // Constructors & destructors
   G4VITProcess(const G4String& name, G4ProcessType type = fNotDefined);
 
-  virtual ~G4VITProcess();
+  ~G4VITProcess() override;
   G4VITProcess(const G4VITProcess& other);
   G4VITProcess& operator=(const G4VITProcess& other);
 
@@ -135,9 +135,9 @@ public:
   //__________________________________
   // Initialize and Save process info
 
-  virtual void StartTracking(G4Track*);
+  void StartTracking(G4Track*) override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&)
+  void BuildPhysicsTable(const G4ParticleDefinition&) override
   {
   }
 
@@ -146,7 +146,7 @@ public:
   /** WARNING : Redefine the method of G4VProcess
    * reset (determine the value of)NumberOfInteractionLengthLeft
    */
-  virtual void ResetNumberOfInteractionLengthLeft();
+  void ResetNumberOfInteractionLengthLeft() override;
 
   inline G4bool ProposesTimeStep() const;
 
@@ -166,7 +166,7 @@ protected:
   {
   public:
     G4ProcessState();
-    virtual ~G4ProcessState();
+    ~G4ProcessState() override;
 
     virtual G4String GetType()
     {
@@ -198,11 +198,10 @@ protected:
           G4ProcessState()
       {
       }
-      virtual ~G4ProcessStateBase()
-      {
-      }
+      ~G4ProcessStateBase() override
+      = default;
 
-      virtual G4String GetType()
+      G4String GetType() override
       {
         return typeid(T).name();
       }
@@ -284,7 +283,7 @@ inline G4bool G4VITProcess::ProposesTimeStep() const
 
 inline const size_t& G4VITProcess::GetMaxProcessIndex()
 {
-  if (!fNbProcess) fNbProcess = new size_t(0);
+  if (fNbProcess == nullptr) fNbProcess = new size_t(0);
   return *fNbProcess;
 }
 

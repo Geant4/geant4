@@ -1,8 +1,33 @@
 # Example ICRP110_HumanPhantoms History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-----------------------------------------------------------------------------
+
+## 2023-11-25 C. Mancini (ICRP110Phantoms-V11-01-06)
+- Modified ICRP110PhantomNestedParameterisation.cc:
+  - Removed the "static" descriptor from the  "G4Material* mate" instantiation
+
+## 2023-11-15 I. Hrivnacova, John Allison (ICRP110Phantoms-V11-01-05)
+- Updated vis.mac and standalone.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-10-23 John Allison (ICRP110Phantoms-V11-01-04)
+- openGLVis.mac:
+  - Remove /vis/ogl/set/displayListLimit (see also below).
+
+## 2023-10-20 John Allison (ICRP110Phantoms-V11-01-03)
+- vis.mac: Removed /vis/ogl/set/displayListLimit.
+  - This command no longer operates. There is now no display list limit.
+    (The only limit is available memory.)
+  - The command is deprecated and, anyway, causes a crash if the app is built
+    without an OpenGL driver.
+
+## 2023-09-02 Gabriele Cosmo (ICRP110Phantoms-V11-01-02)
+- Removed forward declaration for G4VTouchable.
 
 ## 2023-03-21 John Allison (ICRP110Phantoms-V11-01-01)
 - standalone.mac: Disable auto refresh *before* creating scene.

@@ -23,25 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      History: 
+//      History:
 //      December 2016, K.L.Genser - first implementation
 //      based on G4GenericIon
 // ----------------------------------------------------------------------
 
 #include "G4GenericMuonicAtom.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                           GenericMuonicAtom                    ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+
 G4GenericMuonicAtom* G4GenericMuonicAtom::theInstance = nullptr;
 
 G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
@@ -50,23 +45,23 @@ G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
   const G4String name = "GenericMuonicAtom";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance = static_cast<G4MuonicAtom*>(pTable->FindParticle(name));
-  if (anInstance == nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  //             excitation   
-//!!!!
-//!!!! this particle should not be used for tracking
-//!!!! all properties except the name and type are meaningless
-//!!!!
+  auto anInstance = static_cast<G4MuonicAtom*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    //             excitation
+    //!!!!
+    //!!!! this particle should not be used for tracking
+    //!!!! all properties except the name and type are meaningless
+    //!!!!
+    // clang-format off
    anInstance = new G4MuonicAtom(
                  name,   0.9382723*GeV,       0.0*MeV,       eplus,
                     1,              +1,             0,          
@@ -76,13 +71,14 @@ G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
                 false,       "generic",             nullptr,         
                   0.0 
               );
+    // clang-format on
   }
 
   theInstance = static_cast<G4GenericMuonicAtom*>(anInstance);
-  // static const int tmpVerbosityFlag = 2; 
+  // static const int tmpVerbosityFlag = 2;
   // if ( tmpVerbosityFlag > 1 ) {
-  //   G4cout << __func__ 
-  //          << " theInstance " 
+  //   G4cout << __func__
+  //          << " theInstance "
   //          << theInstance
   //          << G4endl;
   //   if (theInstance!=nullptr) {
@@ -95,13 +91,12 @@ G4GenericMuonicAtom* G4GenericMuonicAtom::Definition()
 }
 
 // do not inline to avoid undefined reference
-G4GenericMuonicAtom*  G4GenericMuonicAtom::GenericMuonicAtomDefinition()
-{ 
+G4GenericMuonicAtom* G4GenericMuonicAtom::GenericMuonicAtomDefinition()
+{
   return Definition();
 }
 
-G4GenericMuonicAtom*  G4GenericMuonicAtom::GenericMuonicAtom()
-{ 
+G4GenericMuonicAtom* G4GenericMuonicAtom::GenericMuonicAtom()
+{
   return Definition();
 }
-

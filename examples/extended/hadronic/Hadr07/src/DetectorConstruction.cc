@@ -58,8 +58,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),
- fDetectorMessenger(0)
 {
   // default parameter values of the absorbers
   fNbOfAbsor = 1;

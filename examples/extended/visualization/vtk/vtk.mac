@@ -1,0 +1,55 @@
+/vis/viewer/set/background white
+
+# export screen shot
+#/vis/vtk/export bmp exampleVtk
+# export screen shot
+#/vis/vtk/export ps exampleVtk
+# export screen shot
+#/vis/vtk/export jpg exampleVtk
+# export screen shot
+#/vis/vtk/export png exampleVtk
+# export screen shot
+#/vis/vtk/export tiff exampleVtk
+
+# export to VTP file
+/vis/vtk/export vtp exampleVtk
+# export to VRML file
+/vis/vtk/export vrml exampleVtk
+# export to OBJ file
+/vis/vtk/export obj exampleVtkObj
+
+# set cutter
+/vis/vtk/set/cutter
+/vis/vtk/exportCutter exampleVtkCutter.vtp
+
+# set clipper
+/vis/vtk/set/clipper
+
+# set hud
+/vis/vtk/set/hud 1
+# set orientation widget
+/vis/vtk/set/orientation 1
+
+# add overlay
+# 477 511 -2m -2m
+# 870 117 2m 2m
+/vis/vtk/add/imageOverlay DumpOverlayExampleDrawing.png 425 370 707 87 -1000 -1000 1000 1000 0 0 0 0 0 0
+# 117 511 -0.5m -2m
+# 314 117 0.5m 2m
+/vis/vtk/add/imageOverlay DumpOverlayExampleDrawing.png 165 370 307 97  -500 -1000 500 1000 0 -90 0 0 0 0
+
+# dump vtk viewer state
+/vis/vtk/printDebug
+
+# append pipeline
+/vis/vtk/set/polyhedronPipeline tensor
+/vis/viewer/refresh
+/vis/vtk/printDebug
+
+# define scoring mesh
+/score/create/boxMesh boxMesh
+/score/mesh/boxSize 20. 20. 200. cm
+/score/mesh/nBin 50 50 50
+/score/quantity/energyDeposit edepScorer MeV
+/score/filter/particle elecFilter e-
+/score/close

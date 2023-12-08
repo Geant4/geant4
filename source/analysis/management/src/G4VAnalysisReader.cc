@@ -48,31 +48,31 @@ G4VAnalysisReader::~G4VAnalysisReader() = default;
 //
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH1Manager(G4VTBaseHnManager<1>* h1Manager)
+void G4VAnalysisReader::SetH1Manager(G4VTBaseHnManager<kDim1>* h1Manager)
 {
   fVH1Manager.reset(h1Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH2Manager(G4VTBaseHnManager<2>* h2Manager)
+void G4VAnalysisReader::SetH2Manager(G4VTBaseHnManager<kDim2>* h2Manager)
 {
   fVH2Manager.reset(h2Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetH3Manager(G4VTBaseHnManager<3>* h3Manager)
+void G4VAnalysisReader::SetH3Manager(G4VTBaseHnManager<kDim3>* h3Manager)
 {
   fVH3Manager.reset(h3Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetP1Manager(G4VTBaseHnManager<2>* p1Manager)
+void G4VAnalysisReader::SetP1Manager(G4VTBaseHnManager<kDim2>* p1Manager)
 {
   fVP1Manager.reset(p1Manager);
 }
 
 //_____________________________________________________________________________
-void G4VAnalysisReader::SetP2Manager(G4VTBaseHnManager<3>* p2Manager)
+void G4VAnalysisReader::SetP2Manager(G4VTBaseHnManager<kDim3>* p2Manager)
 {
   fVP2Manager.reset(p2Manager);
 }
@@ -396,33 +396,33 @@ G4bool G4VAnalysisReader::GetNtupleRow(G4int ntupleId)
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisReader::GetNofH1s() const
+G4int G4VAnalysisReader::GetNofH1s(G4bool onlyIfExist) const
 {
-  return fVH1Manager->GetHnManager()->GetNofHns();
+  return fVH1Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisReader::GetNofH2s() const
+G4int G4VAnalysisReader::GetNofH2s(G4bool onlyIfExist) const
 {
-  return fVH2Manager->GetHnManager()->GetNofHns();
+  return fVH2Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisReader::GetNofH3s() const
+G4int G4VAnalysisReader::GetNofH3s(G4bool onlyIfExist) const
 {
-  return fVH3Manager->GetHnManager()->GetNofHns();
+  return fVH3Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisReader::GetNofP1s() const
+G4int G4VAnalysisReader::GetNofP1s(G4bool onlyIfExist) const
 {
-  return fVP1Manager->GetHnManager()->GetNofHns();
+  return fVP1Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisReader::GetNofP2s() const
+G4int G4VAnalysisReader::GetNofP2s(G4bool onlyIfExist) const
 {
-  return fVP2Manager->GetHnManager()->GetNofHns();
+  return fVP2Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________

@@ -188,6 +188,8 @@ if(GEANT4_USE_QT)
     PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets OpenGL::GL
     PRIVATE G4UIimplementation)
 
+  geant4_set_module_property(G4OpenGL PROPERTY AUTOMOC ON)
+
   if(QT_VERSION_MAJOR GREATER 5)
     geant4_module_link_libraries(G4OpenGL PRIVATE Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
   endif()

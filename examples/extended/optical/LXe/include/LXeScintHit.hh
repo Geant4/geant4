@@ -40,9 +40,9 @@
 class LXeScintHit : public G4VHit
 {
  public:
-  LXeScintHit();
+  LXeScintHit() = default;
   LXeScintHit(G4VPhysicalVolume* pVol);
-  ~LXeScintHit();
+  ~LXeScintHit() override = default;
 
   LXeScintHit(const LXeScintHit& right);
   const LXeScintHit& operator=(const LXeScintHit& right);
@@ -61,9 +61,9 @@ class LXeScintHit : public G4VHit
   inline const G4VPhysicalVolume* GetPhysV() { return fPhysVol; }
 
  private:
-  G4double fEdep;
+  G4double fEdep = 0.;
   G4ThreeVector fPos;
-  const G4VPhysicalVolume* fPhysVol;
+  const G4VPhysicalVolume* fPhysVol = nullptr;
 };
 
 typedef G4THitsCollection<LXeScintHit> LXeScintHitsCollection;

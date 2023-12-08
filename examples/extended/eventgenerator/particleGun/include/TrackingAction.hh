@@ -46,13 +46,13 @@ class TrackingAction : public G4UserTrackingAction {
 
   public:  
     TrackingAction(PrimaryGeneratorAction*);
-   ~TrackingAction() {};
+   ~TrackingAction() override = default;
    
-    virtual void  PreUserTrackingAction(const G4Track*);
-    virtual void PostUserTrackingAction(const G4Track*);
+    void  PreUserTrackingAction(const G4Track*) override;
+    void PostUserTrackingAction(const G4Track*) override;
     
   private:
-    PrimaryGeneratorAction* fPrimary;
+    PrimaryGeneratorAction* fPrimary = nullptr;
 
    // parameters for generator action #3
     G4ThreeVector fNewUz;

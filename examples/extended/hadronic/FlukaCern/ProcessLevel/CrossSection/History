@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+## 2023-11-09 I. Hrivnacova (HadronNucleusXS-V11-01-01)
+- Coding guidelines - split long lines in XSHistoManager.cc
+
 06-01-23 Gabrielle Hugo (HadronNucleusXS-V11-01-00)
 - Created this example.
 

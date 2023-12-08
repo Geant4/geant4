@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,34 +33,32 @@
 // ----------------------------------------------------------------------
 
 #include "G4DMesonMinus.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                         DMesonMinus                            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DMesonMinus* G4DMesonMinus::theInstance = nullptr;
 
 G4DMesonMinus* G4DMesonMinus::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "D-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,     1.86958*GeV,  6.33e-10*MeV,    -1.*eplus,
                     0,              -1,             0,
@@ -71,18 +66,18 @@ G4DMesonMinus* G4DMesonMinus::Definition()
               "meson",               0,             0,        -411,
                 false,     1.040e-3*ns,          nullptr,
                 false,       "D");
+    // clang-format on
   }
   theInstance = static_cast<G4DMesonMinus*>(anInstance);
   return theInstance;
 }
 
-G4DMesonMinus*  G4DMesonMinus::DMesonMinusDefinition()
+G4DMesonMinus* G4DMesonMinus::DMesonMinusDefinition()
 {
   return Definition();
 }
 
-G4DMesonMinus*  G4DMesonMinus::DMesonMinus()
+G4DMesonMinus* G4DMesonMinus::DMesonMinus()
 {
   return Definition();
 }
-

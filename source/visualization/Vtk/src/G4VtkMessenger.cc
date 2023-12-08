@@ -85,6 +85,10 @@ G4VtkMessenger::G4VtkMessenger()
   fpCommandDebugPrint = new G4UIcommand("/vis/vtk/printDebug", this);
   fpCommandDebugPrint->SetGuidance("Debug print of pipelines");
 
+  // start interactor in native mode
+  fpCommandInteractorStart = new G4UIcommand("/vis/vtk/startInteraction", this);
+  fpCommandInteractorStart->SetGuidance("Start VtkNative window interaction");
+
   /***************************** Set directory *****************************/
   fpDirectorySet = new G4UIdirectory("/vis/vtk/set/", true);
   fpDirectorySet->SetGuidance("G4VtkViewer set commands");
@@ -97,6 +101,10 @@ G4VtkMessenger::G4VtkMessenger()
   // HUD command
   fpCommandHUD = new G4UIcmdWithABool("/vis/vtk/set/hud", this);
   fpCommandHUD->SetGuidance("Enable or disable HUD for VTK");
+
+  // Camera orientation widget
+  fpCameraOrientation = new G4UIcmdWithABool("/vis/vtk/set/orientation", this);
+  fpCameraOrientation->SetGuidance("Enable or disable camera orientation widget");
 
   // Clipper command
   fpCommandClipper = new G4UIcommand("/vis/vtk/set/clipper", this);
@@ -121,7 +129,7 @@ G4VtkMessenger::G4VtkMessenger()
 
   // Shadows command
   fpCommandShadow = new G4UIcommand("/vis/vtk/set/shadows", this);
-  fpCommandClipper->SetGuidance("Enable/disable shadows in VTK");
+  fpCommandShadow->SetGuidance("Enable/disable shadows in VTK");
   auto fpCommandShadowParam = new G4UIparameter("enable", 'b', omitable = true);
   fpCommandShadowParam->SetDefaultValue(1);
   fpCommandShadow->SetParameter(fpCommandShadowParam);
@@ -201,6 +209,66 @@ G4VtkMessenger::G4VtkMessenger()
   parameterImageOverlay->SetGuidance("alpha");
   parameterImageOverlay->SetDefaultValue(0.5);
   fpCommandImageOverlay->SetParameter(parameterImageOverlay);
+
+  fpCommandGeometryOverlay = new G4UIcommand("/vis/vtk/add/geometryOverlay", this);
+  auto parameterGeometryOverlay = new G4UIparameter("filename", 's', omitable = false);
+  parameterGeometryOverlay->SetGuidance("Geometry file name ");
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("xScale", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("scale in x");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("yScale", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("scale in y");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("zScale", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("scale in z");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("xRotation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("rotation in x");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("yRotation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("rotation in y");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("zRotation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("rotation in z");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("xTranslation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("translation in x");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("yTranslation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("translation in y");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("zTranslation", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("translation in z");
+  parameterGeometryOverlay->SetDefaultValue(0.0);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("alpha", 'd', omitable = true);
+  parameterGeometryOverlay->SetGuidance("alpha");
+  parameterGeometryOverlay->SetDefaultValue(0.5);
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
+
+  parameterGeometryOverlay = new G4UIparameter("representation", 's', omitable = true);
+  parameterGeometryOverlay->SetGuidance("representation of mesh");
+  parameterGeometryOverlay->SetDefaultValue("s");
+  fpCommandGeometryOverlay->SetParameter(parameterGeometryOverlay);
 }
 
 G4VtkMessenger::~G4VtkMessenger()
@@ -214,6 +282,7 @@ G4VtkMessenger::~G4VtkMessenger()
   delete fpCommandDebugPrint;
   delete fpCommandPolyhedronPipeline;
   delete fpCommandImageOverlay;
+  delete fpCommandGeometryOverlay;
 }
 
 G4String G4VtkMessenger::GetCurrentValue(G4UIcommand* /*command*/)
@@ -289,6 +358,15 @@ void G4VtkMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       pVtkViewer->DisableHUD();
     }
   }
+  else if (command == fpCameraOrientation) {
+    G4cout << newValue << G4endl;
+    if (G4UIcommand::ConvertToBool(newValue)) {
+      pVtkViewer->EnableCameraOrientationWidget();
+    }
+    else {
+      pVtkViewer->DisableCameraOrientationWidget();
+    }
+  }
   else if (command == fpCommandDebugPrint) {
     pVtkViewer->Print();
   }
@@ -312,7 +390,7 @@ void G4VtkMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     G4double worldTopRight[2] = {1, 1};
     G4double rotation[3] = {0, 0, 0};
     G4double translation[3] = {0, 0, 0};
-    G4double alpha = 0;
+    G4double alpha = 0.5;
 
     std::istringstream iss(newValue);
 
@@ -324,6 +402,31 @@ void G4VtkMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     pVtkViewer->AddImageOverlay(fileName, alpha, imageBottomLeft, worldBottomLeft, imageTopRight,
                                 worldTopRight, rotation, translation);
   }
+  else if (command == fpCommandGeometryOverlay) {
+    G4String temp;
+
+    G4String fileName;
+    G4double scale[3] = {1, 1, 1};
+    G4double rotation[3] = {0,0,0};
+    G4double translation[3] = {0,0,0};
+    G4double colour[3] = {0.5, 0.5, 0.5};
+    G4double alpha = 1.0;
+    G4String representation = "w";
+
+    std::istringstream iss(newValue);
+
+    iss >> fileName
+        >> scale[0] >> scale[1] >> scale[2]
+        >> rotation[0] >> rotation[1] >> rotation[2]
+        >> translation[0] >> translation[1] >> translation[2]
+        >> alpha >> representation;
+
+    G4cout << fileName << G4endl;
+    pVtkViewer->AddGeometryOverlay(fileName, colour, alpha, representation,
+                                   scale, rotation, translation);
+  }
+
+
   else if (command == fpCommandClipper) {
     pVtkViewer->EnableClipper(G4Plane3D(), true);
   }
@@ -332,5 +435,8 @@ void G4VtkMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == fpCommandShadow) {
     pVtkViewer->EnableShadows();
+  }
+  else if (command == fpCommandInteractorStart) {
+    pVtkViewer->StartInteractor();
   }
 }

@@ -58,14 +58,9 @@ WLSPrimaryGeneratorAction::WLSPrimaryGeneratorAction(
   WLSDetectorConstruction* dc)
 {
   fDetector      = dc;
-  fIntegralTable = nullptr;
 
   fParticleGun = new G4GeneralParticleSource();
-
   fGunMessenger = new WLSPrimaryGeneratorMessenger(this);
-
-  fTimeConstant     = 0.;
-  fUseSampledEnergy = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,7 +98,7 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
 
   for(G4int i = 0; i < numOfMaterials; ++i)
   {
-    G4PhysicsFreeVector* vec = new G4PhysicsFreeVector();
+    auto vec = new G4PhysicsFreeVector();
 
     G4MaterialPropertiesTable* MPT =
       (*theMaterialTable)[i]->GetMaterialPropertiesTable();
@@ -168,8 +163,7 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         if(WLSIntensity)
         {
-          G4PhysicsFreeVector* WLSIntegral =
-            (G4PhysicsFreeVector*) ((*fIntegralTable)(
+          auto WLSIntegral = (G4PhysicsFreeVector*) ((*fIntegralTable)(
               fMaterial->GetIndex()));
 
           G4double CIImax   = WLSIntegral->GetMaxValue();

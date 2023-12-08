@@ -41,8 +41,8 @@
 class LXeRun : public G4Run
 {
  public:
-  LXeRun();
-  ~LXeRun();
+  LXeRun() = default;
+  ~LXeRun() override = default;
 
   void IncPhotonCount_Scint(G4int count)
   {
@@ -85,21 +85,21 @@ class LXeRun : public G4Run
   void EndOfRun();
 
  private:
-  G4int fHitCount;
-  G4int fHitCount2;
-  G4int fPhotonCount_Scint;
-  G4int fPhotonCount_Scint2;
-  G4int fPhotonCount_Ceren;
-  G4int fPhotonCount_Ceren2;
-  G4int fAbsorptionCount;
-  G4int fAbsorptionCount2;
-  G4int fBoundaryAbsorptionCount;
-  G4int fBoundaryAbsorptionCount2;
-  G4int fPMTsAboveThreshold;
-  G4int fPMTsAboveThreshold2;
+  G4int fHitCount = 0;
+  G4int fHitCount2 = 0;
+  G4int fPhotonCount_Scint = 0;
+  G4int fPhotonCount_Scint2 = 0;
+  G4int fPhotonCount_Ceren = 0;
+  G4int fPhotonCount_Ceren2 = 0;
+  G4int fAbsorptionCount = 0;
+  G4int fAbsorptionCount2 = 0;
+  G4int fBoundaryAbsorptionCount = 0;
+  G4int fBoundaryAbsorptionCount2 = 0;
+  G4int fPMTsAboveThreshold = 0;
+  G4int fPMTsAboveThreshold2 = 0;
 
-  G4double fTotE;
-  G4double fTotE2;
+  G4double fTotE = 0.;
+  G4double fTotE2 = 0.;
 };
 
 #endif  // LXeRun_h

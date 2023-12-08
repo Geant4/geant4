@@ -4,14 +4,27 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-14 Vladimir Ivanchenko (dnaphysics-V11-01-03)
+- PhysicsList - more clear implementation of two cases: usage of a DNA
+    physics constructor or standard physics constructor + DNA model activator
+
+## 2023-11-09 H. Tran (dnaphysics-V11-01-02)
+- update README files and dnaphysics.in
+
+## 2023-11-09 H. Tran (dnaphysics-V11-01-01)
+- update README & TrackingCut for heavy ions
+
+## 2023-09-09 S. Incerti (dnaphysics-V11-01-00)
+- update README & SteppingAction file with units and addition of gamma processes
+
 ## 2022-11-07 Hoang Tran (dnaphysics-V11-00-03)
 - update README file for radioactive decay
 
 ## 2022-11-04 Vladimir Ivanchenko (dnaphysics-V11-00-02)
 - dnaphysics.cc, DetectorConstruction, DetectorMessenger - added
-    UI command to add different standard EM, DNA physics, and 
+    UI command to add different standard EM, DNA physics, and
     radioactive decay
-- PhysicsList - added possibility to change DNA physics via UI 
+- PhysicsList - added possibility to change DNA physics via UI
     commands
 
 ## 2022-02-28 Vladimir Ivanchenko (dnaphysics-V11-00-01)

@@ -25,7 +25,7 @@
 
 // 26-06-96, Code uses operators (+=, *=, ++, -> etc.) correctly, P. Urban
 // 10-07-96, new data members added by L.Urban
-// 12-12-96, new data members added by L.Urban
+// 12-12-96, new data memberfFreeElecDensitys added by L.Urban
 // 20-01-97, aesthetic rearrangement. RadLength calculation modified.
 //           Data members Zeff and Aeff REMOVED (i.e. passed to the Elements).
 //           (local definition of Zeff in DensityEffect and FluctModel...)
@@ -262,7 +262,7 @@ void G4Material::InitializePointers()
 
   // Store in the static Table of Materials
   fIndexInTable = theMaterialTable.size();
-  for (size_t i = 0; i < fIndexInTable; ++i) {
+  for (std::size_t i = 0; i < fIndexInTable; ++i) {
     if (theMaterialTable[i]->GetName() == fName) {
       G4cout << "G4Material WARNING: duplicate name of material " << fName << G4endl;
       break;
@@ -646,14 +646,14 @@ G4MaterialTable* G4Material::GetMaterialTable() { return &theMaterialTable; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-size_t G4Material::GetNumberOfMaterials() { return theMaterialTable.size(); }
+std::size_t G4Material::GetNumberOfMaterials() { return theMaterialTable.size(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 {
   // search the material by its name
-  for (auto& j : theMaterialTable) {
+  for (auto const & j : theMaterialTable) {
     if (j->GetName() == materialName) {
       return j;
     }
@@ -672,7 +672,7 @@ G4Material* G4Material::GetMaterial(const G4String& materialName, G4bool warn)
 G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 {
   // search the material by its name
-  for (auto mat : theMaterialTable) {
+  for (auto const & mat : theMaterialTable) {
     if (1 == mat->GetNumberOfElements() && z == mat->GetZ() && a == mat->GetA() &&
         dens == mat->GetDensity())
     {
@@ -684,10 +684,10 @@ G4Material* G4Material::GetMaterial(G4double z, G4double a, G4double dens)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4Material::GetMaterial(size_t nComp, G4double dens)
+G4Material* G4Material::GetMaterial(std::size_t nComp, G4double dens)
 {
   // search the material by its name
-  for (auto mat : theMaterialTable) {
+  for (auto const & mat : theMaterialTable) {
     if (nComp == mat->GetNumberOfElements() && dens == mat->GetDensity()) {
       return mat;
     }

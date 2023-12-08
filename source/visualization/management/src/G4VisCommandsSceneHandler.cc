@@ -146,8 +146,8 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
      "\n\"/vis/sceneHandler/attach\".)  Invents a scene handler name if not"
      "\nsupplied.  This scene handler becomes current.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("graphics-system-name",
-				 's', omitable = false);
+  parameter = new G4UIparameter ("graphics-system-name", 's', omitable = true);
+  parameter -> SetCurrentAsDefault(true);
   const G4GraphicsSystemList& gslist =
   fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
@@ -187,14 +187,7 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue(G4UIcommand*) {
     graphicsSystemName = graphicsSystem -> GetName ();
   }
   else {
-    const G4GraphicsSystemList& gslist =
-      fpVisManager -> GetAvailableGraphicsSystems ();
-    if (gslist.size ()) {
-      graphicsSystemName = gslist [0] -> GetName ();
-    }
-    else {
-      graphicsSystemName = "none";
-    }
+    graphicsSystemName = fpVisManager->GetDefaultGraphicsSystemName();
   }
 
   return graphicsSystemName + " " + NextName ();
@@ -219,7 +212,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     " no graphics systems available."
     "\n  Did you instantiate any in"
     " YourVisManager::RegisterGraphicsSystems()?";
-    command->CommandFailed(ed);
+    command->CommandFailed(JustWarning,ed);
     return;
   }
   std::size_t iGS;  // Selector index.
@@ -253,7 +246,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << "\" requested."
     << "\n  Candidates are:";
     fpVisManager->PrintAvailableGraphicsSystems(verbosity,ed);
-    command->CommandFailed(ed);
+    command->CommandFailed(JustWarning,ed);
     return;
   }
 
@@ -283,7 +276,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       ed << "\"" << gsl[iGSBeingTested]->GetNickname()
       << "\" is not compatible with your chosen session,"
       " and no fallback system found.";
-      command->CommandFailed(ed);
+      command->CommandFailed(JustWarning,ed);
       return;
     }
     //  A fallback system found...but go back and check this too.
@@ -319,7 +312,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
       ed <<
       "ERROR: Scene handler \"" << newName
       << "\" already exists.";
-      command->CommandFailed(ed);
+      command->CommandFailed(JustWarning,ed);
       return;
     }
   }
@@ -356,7 +349,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
     << "\" is not the new name \""
     << newName
     << "\".\n  Please report to vis coordinator.";
-    command->CommandFailed(ed);
+    command->CommandFailed(JustWarning,ed);
     return;
   }
 

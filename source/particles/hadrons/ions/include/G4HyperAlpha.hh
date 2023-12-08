@@ -30,24 +30,20 @@
 #ifndef G4HyperAlpha_h
 #define G4HyperAlpha_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ######################################################################
-// ###                      HYPERALPHA                                ###
-// ######################################################################
-
-class G4HyperAlpha : public G4Ions {
+class G4HyperAlpha : public G4Ions
+{
   public:
     static G4HyperAlpha* Definition();
     static G4HyperAlpha* HyperAlphaDefinition();
     static G4HyperAlpha* HyperAlpha();
+
   private:
-    static G4HyperAlpha* theInstance;
-    G4HyperAlpha()  {}
+    G4HyperAlpha() {}
     ~G4HyperAlpha() override = default;
+
+    static G4HyperAlpha* theInstance;
 };
 
 #endif

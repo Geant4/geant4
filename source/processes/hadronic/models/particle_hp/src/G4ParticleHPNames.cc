@@ -39,6 +39,8 @@
 // June-2019 - E. Mendoza --> Modification to allow using an incomplete data library if the
 // G4NEUTRONHP_SKIP_MISSING_ISOTOPES environmental flag is defined. The missing XS are set to 0.
 // Oct-2019 - E. Mendoza --> remove restriction of using isotopes with Z>92
+//
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 
 #include "G4ParticleHPNames.hh"
 
@@ -46,6 +48,7 @@
 #include "G4HadronicParameters.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4SandiaTable.hh"
+#include "G4ios.hh"
 
 #include <fstream>
 
@@ -68,18 +71,32 @@ const G4String G4ParticleHPNames::theString[100] = {
   "Protactinium", "Uranium",     "Neptunium",   "Plutonium",  "Americium",    "Curium",
   "Berkelium",    "Californium", "Einsteinium", "Fermium"};
 
-G4String G4ParticleHPNames::GetName(G4int i)
+G4ParticleHPNames::G4ParticleHPNames(G4int maxOffSet) : theMaxOffSet(maxOffSet)
 {
-  return theString[i];
+  fManager = G4ParticleHPManager::GetInstance();
 }
 
-G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4String base,
-                                                G4String rest, G4bool& aFlag)
+G4String G4ParticleHPNames::GetName(G4int i)
 {
-#ifdef G4VERBOSE
-  G4int verboseLevel = G4ParticleHPManager::GetInstance()->GetVerboseLevel();
-#endif
+  return (i > 0 && i < 100) ? theString[i] : "";
+}
 
+G4String G4ParticleHPNames::itoa(G4int current)
+{
+  const char theDigits[11] = "0123456789";
+  G4String result;
+  G4int digit;
+  do {
+    digit = current - 10 * (current / 10);
+    result = theDigits[digit] + result;
+    current /= 10;
+  } while (current != 0);  // Loop checking, 11.05.2015, T. Koi
+  return result;
+}
+
+G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, const G4String& base,
+                                                const G4String& rest, G4bool& aFlag)
+{
   // G4cout << Z << " " << A << " " << M << " " << base << " " << rest << G4endl;
 
   // Excited isomer indicator
@@ -96,8 +113,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
   aFlag = true;
 
 #ifdef G4VERBOSE
-  if ((std::getenv("NeutronHPNames") != nullptr)
-      && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+  if (fManager->GetDEBUG())
     G4cout << "Names::GetName entered for Z = " << Z << ", A = " << A << G4endl;
 #endif
 
@@ -115,13 +131,11 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
   G4int flip_A = 1;
   G4int delta_A = 0;
 
-  // std::ifstream * check = new std::ifstream(".dummy");
   std::istringstream* check = nullptr;
   G4bool first = true;
 
 #ifdef G4VERBOSE
-  if ((std::getenv("NeutronHPNames") != nullptr)
-      && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+  if (fManager->GetDEBUG())
     G4cout << "entered GetName!!!" << G4endl;
 #endif
 
@@ -136,18 +150,11 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
     result.SetA(myA);
     result.SetZ(myZ);
     result.SetM(M);
-    // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
-
-    // T.K. debug for memory leak
-
-    // check->close();
     delete check;
 
-    // check = new std::ifstream(*theName);
     check = new std::istringstream(std::ios::in);
-    G4ParticleHPManager::GetInstance()->GetDataStream2(*theName, *check);
+    fManager->GetDataStream2(*theName, *check);
     if (!(*check)) {
-      // check->close();
       delete check;
       check = nullptr;
       aFlag = false;
@@ -158,7 +165,6 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
         *biff = base + "/CrossSection/" + itoa(myZ) + "_" + "nat" + "_" + theString[myZ - 1];
         delete theName;
         theName = biff;
-        // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 2 "<<*theName<<G4endl;
         result.SetName(*theName);
         G4double natA = myZ / G4SandiaTable::GetZtoA(myZ);
         result.SetA(natA);
@@ -166,7 +172,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
         result.SetM(M);
         // check = new std::ifstream(*theName);
         check = new std::istringstream(std::ios::in);
-        G4ParticleHPManager::GetInstance()->GetDataStream2(*theName, *check);
+        fManager->GetDataStream2(*theName, *check);
         if (!(*check)) {
           // check->close();
           delete check;
@@ -180,7 +186,6 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
             *biff = base + rest + "/" + itoa(myZ) + "_" + "nat" + "_" + theString[myZ - 1];
           delete theName;
           theName = biff;
-          // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 3 "<<*theName<<G4endl;
           result.SetName(*theName);
           natA = myZ / G4SandiaTable::GetZtoA(myZ);
           result.SetA(natA);
@@ -191,59 +196,43 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
       }
     }
     else {
-      // 070706 T. Koi Modified
-      /*
-      biff = new G4String(); // delete here as theName
-      *biff = base+"/"+rest+itoa(myZ)+"_"+itoa(myA)+"_"+theString[myZ-1];
-      if(theName!=0) delete theName;
-      theName = biff;
-      if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 4 "<<*theName<<G4endl;
-      result.SetName(*theName);
-      result.SetA(myA);
-      result.SetZ(myZ);
-      */
-
       G4double tmpA = myA;
-      // std::ifstream* file = NULL;
       std::istringstream* file = nullptr;
       G4String fileName;
 
       if (rest == "/CrossSection") {
-        // fileName = base+"/"+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
         fileName = base + rest + "/" + itoa(myZ) + "_" + itoa(myA) + sM + "_" + theString[myZ - 1];
-        // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 4a "<<*theName<<G4endl;
+        // if(fManager->GetDEBUG()) G4cout <<"HPWD 4a "<<*theName<<G4endl;
       }
       else {
         // For FS
         fileName =
           base + "/" + rest + "/" + itoa(myZ) + "_" + itoa(myA) + sM + "_" + theString[myZ - 1];
         file = new std::istringstream(std::ios::in);
-        G4ParticleHPManager::GetInstance()->GetDataStream2(fileName, *file);
+        fManager->GetDataStream2(fileName, *file);
 
         if (*file) {
           // isotope FS
-          // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
+          // if(fManager->GetDEBUG()) G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
         }
         else {
           // _nat_ FS
           fileName = base + "/" + rest + "/" + itoa(myZ) + "_" + "nat" + "_" + theString[myZ - 1];
 
           delete file;
-          // file = new std::ifstream(fileName);
           file = new std::istringstream(std::ios::in);
           G4ParticleHPManager::GetInstance()->GetDataStream2(fileName, *file);
           if (*file) {
             // FS neither isotope nor _nat_
-            // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 4b2a "<<*theName<<G4endl;
+            // if(fManager->GetDEBUG()) G4cout <<"HPWD 4b2a "<<*theName<<G4endl;
             G4double natA = myZ / G4SandiaTable::GetZtoA(myZ);
             tmpA = natA;
           }
           else {
-            // if(std::getenv("NeutronHPNames")) G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
+            // if(fManager->GetDEBUG()) G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
             fileName = "INVALID";
           }
         }
-
         delete file;
       }
 
@@ -255,9 +244,9 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
 
     do {
       if (delta_Z > theMaxOffSet) {
-        if (!G4ParticleHPManager::GetInstance()->GetSkipMissingIsotopes()) {
+        if (!fManager->GetSkipMissingIsotopes()) {
 #ifdef G4VERBOSE
-          if (G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
+          if (fManager->GetVerboseLevel() > 0) {
             G4cout << "G4ParticleHPNames: There are no data available for some isotopes in this "
                       "material "
                    << G4endl;
@@ -269,16 +258,14 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
             G4cout << "G4ParticleHPNames: The material was A = " << A << ", Z = " << Z << G4endl;
           }
 #endif
-          throw G4HadronicException(
-            __FILE__, __LINE__,
-            "In case the data sets are at present not available in the neutron data library, "
-            "please contact Hadron Group Coordinator");
+	  G4ExceptionDescription ed;
+	  ed << "Data for Z=" << Z << " A=" << A << " M=" << M << " does not exist in G4NEUTRONHPDATA";
+	  G4Exception("G4ParticleHPName::Init(...)","hadhp01",
+		      JustWarning, ed, "");
         }
         check = new std::istringstream(std::ios::in);
         break;
       }
-
-      // if ( std::abs( myA - A ) > theMaxOffSet )
       if (delta_A > 2 * theMaxOffSet) {
         delta_A = 0;
         flip_A = 1;
@@ -320,9 +307,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
   } while ((check == nullptr) || (!(*check)));  // Loop checking, 11.05.2015, T. Koi
 
 #ifdef G4VERBOSE
-  if (((std::getenv("NeutronHPNamesLogging") != nullptr)
-       || (std::getenv("NeutronHPNames") != nullptr))
-      && G4HadronicParameters::Instance()->GetVerboseLevel() > 0)
+  if (fManager->GetDEBUG())
   {
     G4cout << "Names::GetName: last theName proposal = " << G4endl;
     G4cout << *theName << " " << A << " " << Z << " " << result.GetName() << G4endl;
@@ -333,13 +318,13 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
   if (Z != result.GetZ() || A != result.GetA()) {
     if (rest == "/CrossSection") {
       G4String reac = base;
-      G4String dir = G4FindDataDir("G4NEUTRONHPDATA");
+      G4String dir = fManager->GetNeutronHPPath();
       reac.erase(0, dir.length());
-      if (G4ParticleHPManager::GetInstance()->GetSkipMissingIsotopes()
+      if (fManager->GetSkipMissingIsotopes()
           && (Z != result.GetZ() || !result.IsThisNaturalAbundance()))
       {
 #ifdef G4VERBOSE
-        if (verboseLevel > 0 && G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
+        if (fManager->GetVerboseLevel() > 0) {
           G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A
                  << " is not found and CrossSection set to 0." << G4endl;
         }
@@ -364,7 +349,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
         }
         else {
 #ifdef G4VERBOSE
-          if (verboseLevel > 0 && G4HadronicParameters::Instance()->GetVerboseLevel() > 0) {
+          if (fManager->GetVerboseLevel() > 0) {
             G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A
                    << " is not found and NeutronHP will use " << result.GetName() << G4endl;
           }
@@ -375,10 +360,7 @@ G4ParticleHPDataUsed G4ParticleHPNames::GetName(G4int A, G4int Z, G4int M, G4Str
   }
 
   delete theName;
-  if (aFlag) {
-    // check->close();
-    delete check;
-    check = nullptr;
-  }
+  delete check;
+
   return result;
 }

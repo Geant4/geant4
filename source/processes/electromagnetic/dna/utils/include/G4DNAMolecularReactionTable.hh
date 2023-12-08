@@ -127,7 +127,7 @@ public:
 
     //----------------------------------------------------------------------------
     // Temperature scaling
-    typedef std::function<double(double)> RateParam;
+    using RateParam = std::function<double (double)>;
 
     static double PolynomialParam(double temp_K, std::vector<double> P);
     static double ArrehniusParam(double temp_K, std::vector<double> P);
@@ -181,7 +181,7 @@ public:
     static G4DNAMolecularReactionTable* GetReactionTable();
     static G4DNAMolecularReactionTable* Instance();
     static void DeleteInstance();
-    virtual ~G4DNAMolecularReactionTable();
+    ~G4DNAMolecularReactionTable() override;
 
     using Reactant = const G4MolecularConfiguration;
     using Data = const G4DNAMolecularReactionData;
@@ -236,14 +236,14 @@ public:
     void ScaleReactionRateForNewTemperature(double temp_K);
 
     //_________________________________________________________________
-    void PrintTable(G4VDNAReactionModel* = 0);
+    void PrintTable(G4VDNAReactionModel* = nullptr);
 
     void Reset();
 
 protected:
-    G4bool fVerbose;
+    G4bool fVerbose{false};
 
-    G4VDNAMolecularGeometry* fGeometry;
+    G4VDNAMolecularGeometry* fGeometry{nullptr};
     ReactionDataMap fReactionData;
     ReactivesMV     fReactantsMV;
     ReactionDataMV  fReactionDataMV;

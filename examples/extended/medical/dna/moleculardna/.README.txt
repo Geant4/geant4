@@ -6,8 +6,7 @@
 
 \author N. Lampe, M. Karamitros, D. Sakata, W. G. Shin, M. Dordevic, K.
 Chatzipapas, H. N. Tran (*) et
-al
-.      \n
+al.\n
 (*) contact: tran@cenbg.in2p3.fr
 
 This example is provided by the Geant4-DNA collaboration.
@@ -30,6 +29,7 @@ Related publications can be found at:http://geant4-dna.org
 
 This example shows how to simulate physics, physico-chemistry and chemistry
 processes in DNA geometries.
+Please find its documentation in https://natl.github.io/molecular-docs/
 
 To build the example:
 \verbatim
@@ -56,15 +56,15 @@ ecoli (ecoli.mac) and human cell (human_cell.mac) geometries.
 
 - cylinders.mac : to build a 3 μm sphere filled with 200,000 individual 216 bp
   long straight DNA segments in a 100×30×30 nm placement volume
-- human_cell.mac : to model a fibroblast cell geometry
+- human_cell.mac : to model a fibroblast cell geometry. This mac file, may be used
+to produce data that may be used with the repair model, to produce results published
+in https://doi.org/10.1002/pro6.1186
 - ecoli.mac : to demonstrate a simple model where the bacterial DNA follows a
   large scale fractal ‘Hilbert curve’ geometry
+- more geometry information can be found in https://natl.github.io/molecular-docs/
 
-For the details, please see documentation:
-- To construct DNA geometry models:
+For the details, please see documentation to construct DNA geometry models:
   http://natl.github.io/fractaldna/
-- To simulate radiation-induced DNA damage with these geometries
-  and define damage parameters: https://natl.github.io/molecular-docs/
 
 Macro commands can be used to control the geometry parameters
 
@@ -127,14 +127,13 @@ Macro commands can be used to control the geometry parameters
 # using cylinders DNA geometries, to visualize 200 cylinders, ~2.5 GB
 # are needed. For 2000 cylinders, ~11 GB are needed.
 
+\endverbatim
+
 The DNA parallel world can be activated using the "useParallelPhysicsWorld" flag
 in the PhysicsList.cc and DetectorConstruction.cc files for the physics stage.
 Setting "useParallelPhysicsWorld = false" means that particles will only interact
 with the water volume. Energy deposition in water caused by direct damage is
 recorded using octree data structures associated with DNA volumes.
-
-
-\endverbatim
 
 \section MOLECULARDNA_s2 PHYSICS LIST
 
@@ -230,12 +229,17 @@ molecularDNAsurvival.py
 
 \section MOLECULARDNA_s6 PHASE SPACE READING
 
-\verbatim
 The example can read a phase space file as source for the primary generation,
 defined in the csv format used by the GRAS Two-Stage Analysis [1].
 An example of phase space file and the macro to read it are provided in the
 "/phase_space" subdirectory. This simple phase space file only provides 20 electrons
 with an energy of 45 keV on a randomly shaped surface based on the cylinders.mac macro file.
-\endverbatim
 
+An alternative example for DNA damage calculation can be found in /examples/advanced/dsbandrepair
+
+\section MOLECULARDNA_s7 Reference
+
+\verbatim
+[1] https://spitfire.estec.esa.int/trac/GRAS/wiki/GRAS/GRAS-05-02/UserGuideTwoStage
+\endverbatim
 */

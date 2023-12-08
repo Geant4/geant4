@@ -78,20 +78,20 @@ public:
 
   G4ITTransportation(const G4String& aName = "ITTransportation",
                      G4int verbosityLevel = 0);
-  virtual ~G4ITTransportation();
+  ~G4ITTransportation() override;
 
   G4ITTransportation(const G4ITTransportation&);
 
   G4IT_ADD_CLONE(G4VITProcess, G4ITTransportation)
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   virtual void ComputeStep(const G4Track&,
                            const G4Step&,
                            const double timeStep,
                            double& spaceStep);
 
-  virtual void StartTracking(G4Track* aTrack);
+  void StartTracking(G4Track* aTrack) override;
   // Give to the track a pointer to the transportation state
 
   G4bool IsStepLimitedByGeometry()
@@ -103,33 +103,33 @@ public:
 public:
   // without description
 
-  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track&,
-                                                      G4ForceCondition*)
+  G4double AtRestGetPhysicalInteractionLength(const G4Track&,
+                                                      G4ForceCondition*) override
   {
     return -1.0;
   }
   // No operation in  AtRestDoIt.
 
-  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&)
+  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override
   {
-    return 0;
+    return nullptr;
   }
   // No operation in  AtRestDoIt.
 
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track& track,
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track& track,
                                                          G4double, //   previousStepSize
                                                          G4double currentMinimumStep,
                                                          G4double& currentSafety,
-                                                         G4GPILSelection* selection);
+                                                         G4GPILSelection* selection) override;
 
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track&, // track
+  G4double PostStepGetPhysicalInteractionLength(const G4Track&, // track
                                                         G4double, // previousStepSize
-                                                        G4ForceCondition* pForceCond);
+                                                        G4ForceCondition* pForceCond) override;
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track& track,
-                                           const G4Step& stepData);
+  G4VParticleChange* AlongStepDoIt(const G4Track& track,
+                                           const G4Step& stepData) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&) override;
 
   //________________________________________________________
   //    inline virtual G4double GetTransportationTime() ;
@@ -176,8 +176,8 @@ protected:
   {
   public:
     G4ITTransportationState();
-    virtual ~G4ITTransportationState();
-    virtual G4String GetType()
+    ~G4ITTransportationState() override;
+    G4String GetType() override
     {
       return "G4ITTransportationState";
     }
@@ -230,19 +230,19 @@ protected:
   //
   G4double fThreshold_Warning_Energy; //  Warn above this energy
   G4double fThreshold_Important_Energy; //  Hesitate above this
-  G4int fThresholdTrials; //    for this no of trials
+  G4int fThresholdTrials{10}; //    for this no of trials
   // Above 'important' energy a 'looping' particle in field will
   //   *NOT* be abandoned, except after fThresholdTrials attempts.
   G4double fUnimportant_Energy;
   //  Below this energy, no verbosity for looping particles is issued
 
   // Statistics for tracks abandoned
-  G4double fSumEnergyKilled;
-  G4double fMaxEnergyKilled;
+  G4double fSumEnergyKilled{0.0};
+  G4double fMaxEnergyKilled{0.0};
 
   // Whether to avoid calling G4Navigator for short step ( < safety)
   //   If using it, the safety estimate for endpoint will likely be smaller.
-  G4bool fShortStepOptimisation;
+  G4bool fShortStepOptimisation{false};
 
   G4ITSafetyHelper* fpSafetyHelper; // To pass it the safety value obtained
 

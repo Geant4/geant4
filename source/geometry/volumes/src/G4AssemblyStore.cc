@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // G4AssemblyStore
 //
 // Implementation for singleton container
 //
-// History:
-// 9.10.18 G.Cosmo Initial version
+// 9.10.2018 G.Cosmo, CERN - Initial version
 // --------------------------------------------------------------------
 
 #include "G4AssemblyVolume.hh"

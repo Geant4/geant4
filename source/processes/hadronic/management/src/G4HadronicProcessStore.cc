@@ -83,13 +83,16 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
 
 void G4HadronicProcessStore::Clean()
 {
-  for(auto& itr : process)
+  for (auto const& itr : process)
     delete itr;
   process.clear();
 
-  for(auto& itr : extraProcess)
+  for (auto const& itr : extraProcess)
     delete itr;
   extraProcess.clear();
+
+  for (auto const& it : ep_map)
+    delete it.second;
 
   m_map.clear();
   p_map.clear();
@@ -756,6 +759,10 @@ void G4HadronicProcessStore::Dump(G4int verb)
                        pname == "gamma" ||
                        pname == "e+" ||
                        pname == "e-" ||
+                       pname == "nu_e" ||
+                       pname == "anti_nu_e" ||
+                       pname == "nu_mu" ||
+                       pname == "anti_nu_mu" ||
                        pname == "mu+" ||
                        pname == "mu-" ||
 		       pname == "kaon+" ||
@@ -795,19 +802,16 @@ void G4HadronicProcessStore::Dump(G4int verb)
 	if(itp->first == part) {
 	  G4VProcess* proc = (itp->second);
 	  if (wasPrinted[i] == 0) {
-            G4cout << "\n---------------------------------------------------\n"
-           << std::setw(50) << "Hadronic Processes for " 
-	   << part->GetParticleName() << "\n";	  
+            G4cout << "-------------------------------------------------------------------------\n"
+		   << std::setw(50) << "Hadronic Processes for " 
+		   << part->GetParticleName() << "\n";	  
 	    wasPrinted[i] = 1;
 	  }
-	  G4cout << "\n  Process: " << proc->GetProcessName() << G4endl;
+	  G4cout << "  Process: " << proc->GetProcessName() << G4endl;
 	}
       }
     }
   }
-
-  G4cout << "\n================================================================"
-	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -818,13 +822,13 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
   const G4ParticleDefinition* part = particle[idxPart];
   if(part == nullptr || proc == nullptr) { return; }
   if (wasPrinted[idxPart] == 0) {
-    G4cout << "\n---------------------------------------------------\n"  
+    G4cout << "-----------------------------------------------------------------------\n"  
            << std::setw(50) << "Hadronic Processes for " 
 	   << part->GetParticleName() << "\n";
     wasPrinted[idxPart] = 1;	   
   }
   
-  G4cout << "\n  Process: " << proc->GetProcessName();
+  G4cout << "  Process: " << proc->GetProcessName();
 
   // Append the string "/n" (i.e. "per nucleon") on the kinetic energy of ions.
   G4String stringEnergyPerNucleon = "";
@@ -869,9 +873,10 @@ void G4HadronicProcessStore::Print(G4int idxProc, G4int idxPart)
 	if(model[i] == hi) { break; }
       }
       G4cout << "\n        Model: " << std::setw(25) << modelName[i] << ": "  
-	     << G4BestUnit(hi->GetMinEnergy(), "Energy") << stringEnergyPerNucleon
-	     << " ---> " 
-	     << G4BestUnit(hi->GetMaxEnergy(), "Energy") << stringEnergyPerNucleon;
+	     << G4BestUnit(hi->GetMinEnergy(), "Energy")
+	     << stringEnergyPerNucleon << " ---> " 
+	     << G4BestUnit(hi->GetMaxEnergy(), "Energy") 
+	     << stringEnergyPerNucleon;
     }
   }
   G4cout << G4endl;

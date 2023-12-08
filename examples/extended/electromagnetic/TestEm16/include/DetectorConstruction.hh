@@ -33,9 +33,9 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
+#include "G4Cache.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4Cache.hh"
 
 class G4Material;
 class G4UserLimits;
@@ -47,50 +47,44 @@ class G4GlobalMagFieldMessenger;
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
     DetectorConstruction();
-   ~DetectorConstruction();
+    ~DetectorConstruction() override = default;
 
   public:
+    G4VPhysicalVolume* Construct() override;
+    void ConstructSDandField() override;
 
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
-
-     void SetSize        (G4double);
-     void SetMaterial    (G4String);
-     void SetMaxStepSize (G4double);
-     void SetMaxStepLength (G4double);
+    void SetSize(G4double);
+    void SetMaterial(G4String);
+    void SetMaxStepSize(G4double);
+    void SetMaxStepLength(G4double);
+    void SetGeomFileName(G4String);
 
   public:
+    const G4VPhysicalVolume* GetWorld() { return fBox; };
 
-     const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};
+    G4double GetSize() { return fBoxSize; };
+    G4Material* GetMaterial() { return fMaterial; };
 
-     G4double           GetSize()       {return fBoxSize;};
-     G4Material*        GetMaterial()   {return fMaterial;};
-
-     void               PrintParameters();
+    void PrintParameters();
 
   private:
+    G4LogicalVolume* fLBox = nullptr;
+    G4VPhysicalVolume* fBox = nullptr;
 
-     G4LogicalVolume*    fLBox;
-     G4VPhysicalVolume*  fBox;
+    G4double fBoxSize;
+    G4Material* fMaterial = nullptr;
+    G4UserLimits* fUserLimits = nullptr;
+    G4String fGeomFileName;
 
-     G4double            fBoxSize;
-     G4Material*         fMaterial;
-     G4UserLimits*       fUserLimits;
-
-     DetectorMessenger*  fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+    DetectorMessenger* fDetectorMessenger = nullptr;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
 
   private:
-
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
+    void DefineMaterials();
+    G4VPhysicalVolume* ConstructVolumes();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #endif
-

@@ -42,17 +42,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:G4UserEventAction(),
- fDecayChain(),fEvisTot(0.)
 {
   // Set default print level 
   G4RunManager::GetRunManager()->SetPrintProgress(10000);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

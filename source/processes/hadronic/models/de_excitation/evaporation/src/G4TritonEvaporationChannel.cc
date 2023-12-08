@@ -36,6 +36,3 @@ G4TritonEvaporationChannel::G4TritonEvaporationChannel()
   : G4EvaporationChannel(3,1,&pr) 
 {}
 
-G4TritonEvaporationChannel::~G4TritonEvaporationChannel() 
-{}
-

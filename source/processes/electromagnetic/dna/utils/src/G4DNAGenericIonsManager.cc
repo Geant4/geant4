@@ -32,9 +32,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAGenericIonsManager * G4DNAGenericIonsManager :: Instance(void)
+G4DNAGenericIonsManager * G4DNAGenericIonsManager :: Instance()
 {
- if (!theInstance)
+ if (theInstance == nullptr)
   theInstance=new G4DNAGenericIonsManager;
  
  return theInstance;
@@ -44,10 +44,10 @@ G4DNAGenericIonsManager * G4DNAGenericIonsManager :: Instance(void)
 
 G4ParticleDefinition * G4DNAGenericIonsManager :: GetIon(const G4String & name)
 {
- IonsMap::const_iterator i(map.find(name));
+ auto i = map.find(name);
  
  if (i==map.end())
-  return 0;
+  return nullptr;
   
  return i->second;
 }
@@ -81,7 +81,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0,              +1,             0,
 			0,               0,             0,
 			"DNAion",              +26,            +56,           0,
-			true,                -1.0,             0,       
+			true,                -1.0,             nullptr,       
 			false,		      "",               0,             
 			0.0);
 
@@ -90,7 +90,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
             0,              +1,             0,
             0,               0,             0,
             "DNAion",              +14,            +28,           0,
-            true,                -1.0,             0,
+            true,                -1.0,             nullptr,
             false,		      "",               0,
             0.0);
 
@@ -101,7 +101,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0,              +1,             0,
 			0,               0,             0,
 			"DNAion",              +8,            +16,           0,
-			true,                -1.0,             0,       
+			true,                -1.0,             nullptr,       
 			false,		      "",               0,             
 			0.0);
 
@@ -111,7 +111,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0,              +1,             0,
 			0,               0,             0,
 			"DNAion",              +7,            +14,           0,
-			true,                -1.0,             0,       
+			true,                -1.0,             nullptr,       
 			false,		      "",               0,             
 			0.0);
 
@@ -120,7 +120,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0,              +1,             0,
 			0,               0,             0,
 			"DNAion",              +6,            +12,           0,
-			true,                -1.0,             0,       
+			true,                -1.0,             nullptr,       
 			false,		      "",               0,             
 			0.0);
  
@@ -129,7 +129,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			0,              +1,             0,
 			0,               0,             0,
 			"DNAion",		+2,	       +4,	     0,
-			true,                -1.0,             0,       
+			true,                -1.0,             nullptr,       
 			false,		      "",               0,             
 			0.0);
 
@@ -137,28 +137,28 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
                                1,              +1,             0,
                                0,               0,             0,
                        "DNAion",              +1,            +4,           0,
-			true,            -1.0,             0, false,
+			true,            -1.0,             nullptr, false,
 			      "",               0,             0.0);
 
  hydrogen= new G4DNAIons("hydrogen",   0.9382723*GeV,       0.0*MeV,  +0.0*eplus,
                                0,              +1,             0,
                                0,               0,             0,
                        "DNAion",              +1,            +1,           0,
-		        true,            -1.0,             0, false,
+		        true,            -1.0,             nullptr, false,
 			      "",               0,             0.0);
 
  positronium1s= new G4DNAIons("Ps-1s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
                                0,               0,             0,
                                0,               0,             0,
                        "DNAion",               0,             0,           0,
-		            true,            -1.0,             0, false,
+		            true,            -1.0,             nullptr, false,
 			      "",               0,             0.0);
 
  positronium2s= new G4DNAIons("Ps-2s",   2*electron_mass_c2,      0.0*MeV,  +0.0*eplus,
                                0,               0,             0,
                                0,               0,             0,
                        "DNAion",               0,             0,           0,
-		            true,            -1.0,             0, false,
+		            true,            -1.0,             nullptr, false,
 			      "",               0,             0.0);
 
 
@@ -179,5 +179,5 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAGenericIonsManager * G4DNAGenericIonsManager::theInstance(0);
+G4DNAGenericIonsManager * G4DNAGenericIonsManager::theInstance(nullptr);
    

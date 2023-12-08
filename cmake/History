@@ -5,6 +5,39 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2023-11-28 Ben Morgan (cmake-V11-01-30)
+- Bump minimum VecGeom version to 1.2.6
+
+## 2023-11-14 Ben Morgan (cmake-V11-01-29)
+- Export QT_VERSION value to GNUmake setup script
+
+## 2023-11-03 Ben Morgan (cmake-V11-01-28)
+- Prefix ZLIB/EXPAT variables with "G4" to prevent clash with VTK's own internal
+  find of these packages.
+
+## 2023-10-09 Ben Morgan (cmake-V11-01-27)
+- Use FindPython in place of deprecated FindPythonInterp in FindStatTest
+
+## 2023-10-06 Ben Morgan (cmake-V11-01-26)
+- Update G4INCL to v1.2
+- Update G4EMLOW to v8.5
+
+## 2023-09-06 Stewart Boogert (cmake-V11-01-25)
+- Update VTK module deps for geometry IO
+- Updated module init for VTK
+
+## 2023-09-05 Ben Morgan (cmake-V11-01-24)
+- Allow source code modules to have an AUTOMOC property and promote this to
+  consuming target to remove hardcoding of Qt-using modules
+
+## 2023-08-02 Ben Morgan (cmake-V11-01-23)
+- Export non-cache variables to Geant4PackageCache to support CMake>=3.27
+  - Fixes Bugzilla 2556
+
+## 2023-07-05 Igor Semeniouk (cmake-V11-01-22)
+- print md5sum in coreutils format for compatibility with busybox
+
 ## 2023-06-21 Ben Morgan (cmake-V11-01-21)
 - Remobe obsolete and confusing GEANT4_BUILD_TESTS option and configuration
 

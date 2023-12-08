@@ -75,7 +75,7 @@
 
 
 #include "globals.hh"
-#include "G4MicroElecInelasticModel_new.hh"
+#include "G4MicroElecInelasticModel_new.hh"						   
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
@@ -143,37 +143,22 @@ G4MicroElecInelasticModel_new::~G4MicroElecInelasticModel_new()
   }
   tableTCS.clear();
     
-  dataDiffCSMap::iterator iterator_proba;  
   // (1)
-  for (iterator_proba = eNrjTransStorage.begin(); iterator_proba != eNrjTransStorage.end(); ++iterator_proba) {
-    vector<TriDimensionMap>* eNrjTransfData = iterator_proba->second;
-    eNrjTransfData->clear();
-    delete eNrjTransfData;
+  for (auto const & obj : eNrjTransStorage) {
+    delete obj.second;
   }
-  eNrjTransStorage.clear();
-  
-  for (iterator_proba = pNrjTransStorage.begin(); iterator_proba != pNrjTransStorage.end(); ++iterator_proba) {
-    vector<TriDimensionMap>* pNrjTransfData = iterator_proba->second;
-    pNrjTransfData->clear();
-    delete pNrjTransfData;
+  for (auto const & obj : pNrjTransStorage) {
+    delete obj.second;
   }
-  pNrjTransStorage.clear();
-  
-  // (2)
-  for (iterator_proba = eDiffDatatable.begin(); iterator_proba != eDiffDatatable.end(); ++iterator_proba) {
-    vector<TriDimensionMap>* eDiffCrossSectionData = iterator_proba->second;
-    eDiffCrossSectionData->clear();
-    delete eDiffCrossSectionData;
-  }
-  eDiffDatatable.clear();
 
-  for (iterator_proba = pDiffDatatable.begin(); iterator_proba != pDiffDatatable.end(); ++iterator_proba) {
-    vector<TriDimensionMap>* pDiffCrossSectionData = iterator_proba->second;
-    pDiffCrossSectionData->clear();
-    delete pDiffCrossSectionData;
+  // (2)
+  for (auto const & obj : eDiffDatatable) {
+    delete obj.second;
   }
-  pDiffDatatable.clear();
-  
+  for (auto const & obj : pDiffDatatable) {
+    delete obj.second;
+  }
+
   // (3)
   dataProbaShellMap::iterator iterator_probaShell;
   
@@ -309,7 +294,6 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	 	  
 	  if (fasterCode) G4Exception("G4MicroElecInelasticModel_new::Initialise", "em0003",
 				      FatalException, sortieString.c_str());
-				      				      
 	  else {
 	    G4Exception("G4MicroElecInelasticModel_new::Initialise", "em0003",
 			FatalException, "Missing data file:/microelec/sigmadiff_inelastic_e_Si.dat");
@@ -478,13 +462,13 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	pIncidentEnergyStorage[mat] = pTdummyVec;
          
 	//Cleanup support vectors
-	// delete pNrjTransfData;
-	// delete eVecm;
-	// delete pDiffCrossSectionData;
-	// delete pProbaShellMap;
+	//delete pNrjTransfData;
+	//delete eVecm;
+	//delete pDiffCrossSectionData;
+	//delete pProbaShellMap;
       }
     tableTCS[mat] = tableData;
-} 
+  } 
   if (particle==electronDef)
     {
       SetLowEnergyLimit(lowEnergyLimit[electron]);
@@ -669,6 +653,8 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
             
       G4double bindingEnergy = currentMaterialStructure->Energy(Shell);
       G4double limitEnergy = currentMaterialStructure->GetLimitEnergy(Shell);
+	  
+	  G4bool weaklyBound = currentMaterialStructure->IsShellWeaklyBound(Shell);
       
       if (verboseLevel > 3)
 	{
@@ -676,14 +662,18 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
 	  G4cout << "Shell: " << Shell << ", energy: " << bindingEnergy/eV << G4endl;
 	}
       
+	  
+	  if (k<limitEnergy) {
+		if (weaklyBound && k > currentMaterialStructure->GetEnergyGap()) {
+			limitEnergy = currentMaterialStructure->GetEnergyGap();
+		}
+		else return; }
+	  
       // sample deexcitation
       
       std::size_t secNumberInit = 0;  // need to know at a certain point the energy of secondaries
       std::size_t secNumberFinal = 0; // So I'll make the difference and then sum the energies
-      
-      //SI: additional protection if tcs interpolation method is modified
-      //if (k<bindingEnergy) return;
-      if (k<limitEnergy) return;
+
       //	G4cout << currentMaterial << G4endl;
       G4int Z = currentMaterialStructure->GetZ(Shell);     
       G4int shellEnum = currentMaterialStructure->GetEADL_Enumerator(Shell);
@@ -745,10 +735,20 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
       for (std::size_t j=secNumberInit; j < secNumberFinal; ++j) {
         deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
       }      
-      if (SEFromFermiLevel) limitEnergy = currentMaterialStructure->GetEnergyGap();
-      fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic - limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy - deexSecEnergy);
-           
+      // correction CI 12/01/2023 limit energy  = gap
+	  //if (SEFromFermiLevel) limitEnergy = currentMaterialStructure->GetEnergyGap();
+      //fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic - limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
+      //fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy - deexSecEnergy);
+      
+	  // correction CI 09/03/2022 limit energy  = gap
+	  //if (!SEFromFermiLevel && weaklyBound) limitEnergy += currentMaterialStructure->GetInitialEnergy();
+	  //if (!SEFromFermiLevel && weaklyBound) limitEnergy += currentMaterialStructure->GetEnergyGap();
+	  fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic-limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
+	  fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy-deexSecEnergy);
+
+
+
+	  
       if (secondaryKinetic>0)
 	{  
 	  G4DynamicParticle* dp = new G4DynamicParticle(G4Electron::Electron(), deltaDirection, secondaryKinetic); //Esec = Q-El
@@ -791,7 +791,9 @@ G4double G4MicroElecInelasticModel_new::RandomizeEjectedElectronEnergy(
 	} while(G4UniformRand()*crossSectionMaximum > 
 		DifferentialCrossSection(particleDefinition, k,
 		  (secondaryElectronKineticEnergy+currentMaterialStructure->GetLimitEnergy(shell)),shell));
-    }
+    // added 12/01/2023
+	return secondaryElectronKineticEnergy;
+	}
   else if (particleDefinition == G4Proton::ProtonDefinition())
     {      
       G4double maximumEnergyTransfer =
@@ -839,17 +841,24 @@ G4double G4MicroElecInelasticModel_new::RandomizeEjectedElectronEnergyFromCumula
 {
   G4double secondaryElectronKineticEnergy = 0.;
   G4double random = G4UniformRand();
-
-  secondaryElectronKineticEnergy = TransferedEnergy(particleDefinition, k, shell, random)
-    - currentMaterialStructure->GetLimitEnergy(shell) ;
-
-  if (isnan(secondaryElectronKineticEnergy)) { secondaryElectronKineticEnergy = k - currentMaterialStructure->GetLimitEnergy(shell); }
-
-  if (secondaryElectronKineticEnergy < 0.) {
-    secondaryElectronKineticEnergy = k - currentMaterialStructure->GetEnergyGap();
-    SEFromFermiLevel = true;
-  }
-  return secondaryElectronKineticEnergy;
+	G4bool weaklyBound = currentMaterialStructure->IsShellWeaklyBound(shell);
+	G4double transf = TransferedEnergy(particleDefinition, k, shell, random);
+	if (!weaklyBound) {
+		secondaryElectronKineticEnergy = transf - currentMaterialStructure->GetLimitEnergy(shell); //shell energy for core electrons, 
+		if(secondaryElectronKineticEnergy <= 0.) {
+			secondaryElectronKineticEnergy = 0.0;
+		}
+	}																									
+	else {
+		secondaryElectronKineticEnergy = transf - currentMaterialStructure->GetLimitEnergy(shell);
+		// for weaklybound electrons = gap  + average energy in the energy band
+		if (secondaryElectronKineticEnergy <= 0.) {
+			secondaryElectronKineticEnergy = 0.0;
+			SEFromFermiLevel = true;
+		}
+	}
+	//corrections CI 07/02/2022 - added
+	return secondaryElectronKineticEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -901,7 +910,7 @@ G4double G4MicroElecInelasticModel_new::TransferedEnergy(
 	vector<VecMap>* eProbaShellMap = iterator_Proba->second; //Storage of probabilities for energy transfer
 	vector<G4double>* eTdummyVec = iterator_Tdummy->second; //Incident energies for interpolation
 	
-	// k should be in eV
+	// k should be in eV auto, :std::vector<double>::iterator
 	auto k2 = std::upper_bound(eTdummyVec->begin(),
 							    eTdummyVec->end(),
 							    k);
@@ -1001,14 +1010,14 @@ G4double G4MicroElecInelasticModel_new::TransferedEnergy(
       incidentEnergyMap::iterator iterator_Tdummy;
       iterator_Tdummy = pIncidentEnergyStorage.find(currentMaterial);
       
-      if (iterator_Nrj == pNrjTransStorage.end() || iterator_Proba == pProbaShellStorage.end() || 
-	  iterator_Tdummy == pIncidentEnergyStorage.end())
-	{
-	  G4String str = "Material ";
-	  str += currentMaterial + " not found!";
-	  G4Exception("G4MicroElecInelasticModel_new::TransferedEnergy", "em0002", 
-		      FatalException, str);
-	}
+	  if (iterator_Nrj == pNrjTransStorage.end() || iterator_Proba == pProbaShellStorage.end() ||
+		  iterator_Tdummy == pIncidentEnergyStorage.end())
+	  {
+		  G4String str = "Material ";
+		  str += currentMaterial + " not found!";
+		  G4Exception("G4MicroElecInelasticModel_new::TransferedEnergy", "em0002",
+			  FatalException, str);
+	  }
       else 
 	{
 	  vector<TriDimensionMap>* pNrjTransfData = iterator_Nrj->second; //Storage of possible transfer energies
@@ -1085,7 +1094,7 @@ G4double G4MicroElecInelasticModel_new::TransferedEnergy(
 							nrjTransf22);
 	      
 	      // zeros are explicitly set	      
-	      G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);	      
+	      G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 	      return value;
 	    }
 	}
@@ -1262,9 +1271,11 @@ G4double G4MicroElecInelasticModel_new::Interpolate(G4double e1,
 					 G4double xs2)
 {
   G4double value = 0.;
+  if (e == e1 || e1 == e2 ) { return xs1; }
+  if (e == e2) { return xs2; }
 
   // Log-log interpolation by default
-  if (e1 != 0 && e2 != 0 && (e2-e1) != 0 && !fasterCode)
+  if (e1 > 0. && e2 > 0. && xs1 > 0. && xs2 > 0. && !fasterCode)
     {
       G4double a = std::log(xs2/xs1)/ std::log(e2/e1);
       G4double b = std::log(xs2) - a * std::log(e2);
@@ -1273,7 +1284,7 @@ G4double G4MicroElecInelasticModel_new::Interpolate(G4double e1,
     }
 
   // Switch to log-lin interpolation for faster code
-  if ((e2 - e1) != 0 && xs1 != 0 && xs2 != 0 && fasterCode)
+  else if (xs1 > 0. && xs2 > 0. && fasterCode)
     {
       G4double d1 = std::log(xs1);
       G4double d2 = std::log(xs2);
@@ -1282,7 +1293,7 @@ G4double G4MicroElecInelasticModel_new::Interpolate(G4double e1,
 
   // Switch to lin-lin interpolation for faster code
   // in case one of xs1 or xs2 (=cum proba) value is zero
-  if ((e2 - e1) != 0 && (xs1 == 0 || xs2 == 0) && fasterCode)
+  else
     {
       G4double d1 = xs1;
       G4double d2 = xs2;

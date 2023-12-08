@@ -51,8 +51,8 @@
 class G4VDNAHit
 {
 public :
-    G4VDNAHit(){;}
-    virtual ~G4VDNAHit(){;}
+    G4VDNAHit()= default;
+    virtual ~G4VDNAHit()= default;
 };
 
 class G4DNAIndirectHit : public G4VDNAHit
@@ -60,7 +60,7 @@ class G4DNAIndirectHit : public G4VDNAHit
 public :
     G4DNAIndirectHit(const G4String& baseName, const G4Molecule* molecule,
                      const G4ThreeVector& position, G4double time);
-    virtual ~G4DNAIndirectHit();
+    ~G4DNAIndirectHit() override;
 
     inline const G4Molecule* GetMolecule() {return fpMolecule;}
     inline const G4ThreeVector& GetPosition() {return fPosition;}

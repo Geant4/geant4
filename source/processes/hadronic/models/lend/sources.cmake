@@ -159,7 +159,7 @@ geant4_module_link_libraries(G4had_lend
     G4hadronic_xsect
     G4materials
     G4partman
-    ${EXPAT_LIBRARIES} # Almost certainly private, but needs checking
+    ${G4EXPAT_LIBRARIES} # Almost certainly private, but needs checking
   PRIVATE
     G4baryons
     G4bosons

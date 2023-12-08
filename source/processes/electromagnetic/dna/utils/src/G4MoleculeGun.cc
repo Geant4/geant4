@@ -73,7 +73,7 @@ void TG4MoleculeShoot<G4Track>::ShootAtFixedPosition(G4MoleculeGun* gun)
 template<>
 void TG4MoleculeShoot<G4Track>::Shoot(G4MoleculeGun* gun)
 {
-  if(fBoxSize) ShootAtRandomPosition(gun);
+  if(fBoxSize != nullptr) ShootAtRandomPosition(gun);
   else ShootAtFixedPosition(gun);
 }
 
@@ -99,16 +99,16 @@ G4MoleculeGun::G4MoleculeGun()
 
 G4MoleculeGun::~G4MoleculeGun()
 {
-  if (fpMessenger) delete fpMessenger;
+  delete fpMessenger;
 }
 
 //------------------------------------------------------------------------------
 
 void G4MoleculeGun::DefineTracks()
 {
-  for (std::size_t i = 0; i < fShoots.size(); i++)
+  for (const auto & fShoot : fShoots)
   {
-    fShoots[i]->Shoot(this);
+    fShoot->Shoot(this);
   }
 }
 
@@ -167,7 +167,7 @@ void G4MoleculeGun::BuildAndPushTrack(const G4String& name,
   G4MolecularConfiguration* conf =
       G4MoleculeTable::Instance()->GetConfiguration(name);
   assert(conf != 0);
-  G4Molecule* molecule = new G4Molecule(conf);
+  auto  molecule = new G4Molecule(conf);
 
   PushTrack(molecule->BuildTrack(time, position));
 }
@@ -176,9 +176,9 @@ void G4MoleculeGun::BuildAndPushTrack(const G4String& name,
 
 void G4MoleculeGun::GetNameAndNumber(G4MoleculeGun::NameNumber& output)
 {
-  for(std::size_t i = 0 ; i < fShoots.size() ; ++i)
+  for(const auto & fShoot : fShoots)
   {
-    output[fShoots[i]->fMoleculeName]+=fShoots[i]->fNumber;
+    output[fShoot->fMoleculeName]+=fShoot->fNumber;
   }
 }
 
@@ -194,20 +194,19 @@ void G4MoleculeShoot::RandomPosInBox(const G4ThreeVector& boxSize,
 
 //------------------------------------------------------------------------------
 
-G4MoleculeShoot::G4MoleculeShoot() :
-    G4enable_shared_from_this<G4MoleculeShoot>()
+G4MoleculeShoot::G4MoleculeShoot()
 {
   fMoleculeName = "";
   fTime = 0;
   fNumber = 1;
-  fBoxSize = 0;
+  fBoxSize = nullptr;
 }
 
 //------------------------------------------------------------------------------
 
 G4MoleculeShoot::~G4MoleculeShoot()
 {
-  if(fBoxSize) delete fBoxSize;
+  delete fBoxSize;
 }
 
 //------------------------------------------------------------------------------

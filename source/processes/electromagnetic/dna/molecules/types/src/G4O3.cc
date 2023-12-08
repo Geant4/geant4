@@ -40,16 +40,16 @@
 // ######################################################################
 // ###                         Ozone                               ###
 // ######################################################################
-G4O3* G4O3::theInstance = 0;
+G4O3* G4O3::theInstance = nullptr;
 
 G4O3* G4O3::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "O_3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     const G4String formatedName = "O_{3}";
 

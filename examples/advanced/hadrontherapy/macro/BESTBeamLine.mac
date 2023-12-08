@@ -22,6 +22,9 @@
 #
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 #########################
 # Set the primary particle type,
 # energy and position along the X direction
@@ -109,6 +112,7 @@
 #
 #/vis/scene/create
 #/vis/open OGL
+##/vis/open  ## open the default viewer
 #/vis/viewer/flush
 #/vis/viewer/set/viewpointThetaPhi 30 140 deg
 #/vis/viewer/zoomTo 1

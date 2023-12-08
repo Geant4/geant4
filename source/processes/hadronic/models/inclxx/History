@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-12-01 Ben Morgan (hadr-inclxx-V11-01-04)
+- Replace raw std::getenv calls wih G4FindDataDir for G4INCLDATA location.
+
+## 2023-10-19 Jean-Christophe David (hadr-inclxx-V11-01-03) -
+ - Main new files in incl_phys: G4INCLNNbarCEXChannel.cc, G4INCLNNbarToAnnihilationChannel.cc,
+                                G4INCLNNbarToNNbar2piChannel.cc, G4INCLNNbarToNNbarpiChannel.cc,
+                                G4INCLNNbarElasticChannel.cc, G4INCLNNbarToLLbarChannel.cc,
+                                G4INCLNNbarToNNbar3piChannel.cc, G4INCLCrossSectionsAntiparticles.cc
+ - Few corrections in G4INCLXXInterface (.cc and .hh) and 
+   G4INCLNNbarToNNbarChannel.hh has been deleted
+ - G4INCLInteractionAvatar fixed (leak)
+
+## 2023-07-12 Alberto Ribon (hadr-inclxx-V11-01-02) -
+G4INCLPbarAtrestEntryChannel, G4INCLCascade, G4INCLNucleus : fixed Coverity's 
+reports.
+
 ## 2023-05-15 Alberto Ribon (hadr-inclxx-V11-01-01) -
 Major extension of the INCLXX model to handle antiproton annihilation at rest.
 Work done by Demid Zharenov and Jean-Christophe David.

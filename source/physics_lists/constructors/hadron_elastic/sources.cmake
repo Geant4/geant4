@@ -3,6 +3,7 @@
 # Define the Geant4 Module.
 geant4_add_module(G4phys_ctor_helastic
   PUBLIC_HEADERS
+    G4ChargeExchangeMessenger.hh
     G4ChargeExchangePhysics.hh
     G4HadronDElasticPhysics.hh
     G4HadronElasticPhysics.hh
@@ -13,8 +14,10 @@ geant4_add_module(G4phys_ctor_helastic
     G4HadronHElasticPhysics.hh
     G4IonElasticPhysics.hh
     G4HadronElasticPhysicsPHP.hh
+    G4HadronElasticPhysicsVI.hh
     G4ThermalNeutrons.hh
   SOURCES
+    G4ChargeExchangeMessenger.cc
     G4ChargeExchangePhysics.cc
     G4HadronDElasticPhysics.cc
     G4HadronElasticPhysics.cc
@@ -25,6 +28,7 @@ geant4_add_module(G4phys_ctor_helastic
     G4HadronHElasticPhysics.cc
     G4IonElasticPhysics.cc
     G4HadronElasticPhysicsPHP.cc
+    G4HadronElasticPhysicsVI.cc
     G4ThermalNeutrons.cc)
 
 geant4_module_link_libraries(G4phys_ctor_helastic
@@ -32,6 +36,7 @@ geant4_module_link_libraries(G4phys_ctor_helastic
     G4globman
     G4hadronic_coherent_elastic
     G4hadronic_mgt
+    G4intercoms
     G4phys_ctor_hinelastic
     G4run
   PRIVATE
@@ -48,4 +53,5 @@ geant4_module_link_libraries(G4phys_ctor_helastic
     G4phys_ctor_factory
     G4physlist_util
     G4procman
+    G4shortlived
 )

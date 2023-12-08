@@ -5,11 +5,11 @@
 /*! \page Examplefield04 Example field04
 
 
- This example shows how to define/use OVERLAPPING field elements 
+ This example shows how to define/use OVERLAPPING field elements
  in Geant4. Fields might be either magnetic, electric or both.
 
  Credit goes to Tom Roberts and Muons Inc. since much of the code
- and ideas were taken at liberty from the (GNU GPL) source of 
+ and ideas were taken at liberty from the (GNU GPL) source of
  G4BEAMLINE release 1.12.
 
  http://g4beamline.muonsinc.com
@@ -23,7 +23,7 @@ See field04.cc.
 The example can be run with the following optional arguments:
 
 \verbatim
-% field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]   
+% field04 [-m macro ] [-p physicsList] [-r randomSeed] [-s preinit|idle]
 \endverbatim
 
 If a macro is provided with the option "-m", the program runs in a batch mode,
@@ -32,7 +32,7 @@ default initialization macro init_vis.mac. The option "-s preinit" can be used
 to start the program without initialization in PreInit phase.
 
 For example:
-to assign the F04PhysicsList: 
+to assign the F04PhysicsList:
 \verbatim
 % field04 -p QGSP_BERT
 \endverbatim
@@ -124,13 +124,13 @@ to start with a macro file and an initial seed:
 
  Example (default values):
 \verbatim
-/field04/SetCaptureR 0.6 m 
+/field04/SetCaptureR 0.6 m
 /field04/SetCaptureZ 4.0 m
-/field/SetCaptureB1 2.5 tesla 
+/field/SetCaptureB1 2.5 tesla
 /field/SetCaptureB2 5.0 tesla
 \endverbatim
 
- The "TransferMgnt" is a solenoid (vacuum cylinder) with a 
+ The "TransferMgnt" is a solenoid (vacuum cylinder) with a
  constant B-field. When the "TransferMgnt" follows immediately
  the "CaptureMgnt", its relative position is at 0 cm.
 
@@ -149,7 +149,7 @@ to start with a macro file and an initial seed:
 /field04/SetTransferP 0.0 m
 \endverbatim
  The default geometry is constructed in F04DetectorConstruction class,
- but all the parameters can be changed via the commands defined in 
+ but all the parameters can be changed via the commands defined in
  the F04DetectorMessenger class.
 
 \subsection field04_sub_s13 F04Materials
@@ -192,11 +192,11 @@ to start with a macro file and an initial seed:
 \subsection field04_sub_s16 F04PhysicsList
 
  The F04PhysicsList extends a selected Geant4 physics list.
- The base physics list name is provided by its name in the F04PhysicsList 
+ The base physics list name is provided by its name in the F04PhysicsList
  constructor.
 
- In addition to processes defined in the base Geant4 physics list, 
- there is added the F04StepMax process and the decay of pions can be assigned 
+ In addition to processes defined in the base Geant4 physics list,
+ there is added the F04StepMax process and the decay of pions can be assigned
  via dedicated commands in F04PhysicsListMessenger.
 
  The command to define maximum step:
@@ -232,7 +232,7 @@ to start with a macro file and an initial seed:
 
  \subsection field04_sub_s17 Overlapping Fields
 
- The F04GlobalField (a singleton) is instantiated in 
+ The F04GlobalField (a singleton) is instantiated in
  F04DetectorConstruction() and assigned to the global field manager
  in UpdateField():
 \verbatim
@@ -272,13 +272,13 @@ fFieldManager->SetDetectorField(this);
  SetGlobalPoint is called 8 times for the corners of the local
  bounding box, after a local->global coordinate transform.
 
- The F04ElementField is the interface class used by F04GlobalField to 
+ The F04ElementField is the interface class used by F04GlobalField to
  compute the field value at a given point[].
 
  A beamline element, for example the F04SimpleSolenoid, will derive
  from F04ElementField and implement the computation for the element.
 \verbatim
-simpleSolenoid 
+simpleSolenoid
   = new F04SimpleSolenoid(B, l, logicTransferMgnt,TransferMgntCenter);
 \endverbatim
  Besides the magnetic field and the length of the simple solenoid,
@@ -308,7 +308,7 @@ if (fields) {
 \endverbatim
  The F04ElementField constructor will also add the derived object into
  F04GlobalField. Finally, its AddFieldValue() will add the field value
- for this element to field[]. 
+ for this element to field[].
 
 \subsection field04_sub_s18 User Action Classes
 
@@ -322,51 +322,51 @@ if (fields) {
 /rndm/read random/run0evt8268.rndm
 \endverbatim
 
- - F04RunAction: \n  
+ - F04RunAction: \n
    BeginOfRunAction: Deal with random number storage,
    initialization etc. Call the Construct() method of
    F04ElementFields in the FieldList of F04GlobalField object.
    EndOfRunAction: random number storage/status printing.
 
- - F04EventActionMessenger: \n 
+ - F04EventActionMessenger: \n
 \verbatim
 /event/setverbose
 \endverbatim
 
- - F04EventAction(F04RunAction* RA): \n 
+ - F04EventAction(F04RunAction* RA): \n
    Customized BeginOfEvent printing
    EndofEvent:
    saveEngingStatus and showEngineStatus according to flag
    in F04RunAction
 
- - F04TrackingAction: \n 
+ - F04TrackingAction: \n
    PreUserTrackingAction: Instantiate F04UserTrackInformation
    and set the application TrackStatus.
    PostUserTrackingAction: Retreive F04UserTrackInformation
    and decide to save random number status accordingly.
 
- - F04SteppingActionMessenger: \n 
+ - F04SteppingActionMessenger: \n
 
- - F04SteppingAction: \n 
+ - F04SteppingAction: \n
    UserSteppingAction: Kill primary if/when outside Target
    volume. Diagnostic/histogram filling for particles at a
    TestPlane. Find decay position and when particle
    FIRST reverses z-momentum component via using a
    F04UserTrackInformation object.
 
- - F04StackingAction: \n 
+ - F04StackingAction: \n
    Track only primaries, pi+ or mu+
 
- - F04UserTrackInformation: \n 
+ - F04UserTrackInformation: \n
    Keep an application F04TrackStatus for the track: \n
      undefined, left, right, reverse
 
- - F04SteppingVerbose: \n 
+ - F04SteppingVerbose: \n
       Only print track header and step information for
       pi+ and mu+.
       Note: the information for primary protons is not printed.
 
- - F04Trajectory, F04TrajectoryPoint: \n 
+ - F04Trajectory, F04TrajectoryPoint: \n
       Example of application specific implementations
 
 \section field04_s2 HOW TO START ?

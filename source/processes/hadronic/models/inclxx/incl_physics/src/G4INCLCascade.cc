@@ -278,7 +278,7 @@ namespace G4INCL {
       theGlobalInfo.geometricCrossSection = 9.7* //normalization factor from Corradini
         Math::pi*std::pow((1.840 + 1.120*std::pow(currentA,(1./3.))),2)*
         (1. + (Z*G4INCL::PhysicalConstants::eSquared*(currentA+1))/(currentA*kineticEnergy2*(1.840 + 1.120*std::pow(currentA,(1./3.))))); 
-        //xsection formula was borrowed from Corradini et al. https://doi.org/10.1016/j.physletb.2011.09.069    
+         //xsection formula was borrowed from Corradini et al. https://doi.org/10.1016/j.physletb.2011.09.069    
     }
     else{
       theGlobalInfo.geometricCrossSection =
@@ -306,7 +306,7 @@ namespace G4INCL {
       nucleus = new Nucleus(A, Z, S, theConfig, maxUniverseRadius, theAType);
     }
     nucleus->getStore()->getBook().reset();
-    nucleus->initializeParticles();                                 
+    nucleus->initializeParticles();
     propagationModel->setNucleus(nucleus);
     return true;
   }
@@ -356,13 +356,13 @@ namespace G4INCL {
            << " by the INCL++ model" << G4endl;
         G4Exception("G4INCLDataFile::readData()","rawppbarFS.dat, ...", FatalException, ed);
       }
-      G4String dataPath0(std::getenv("G4INCLDATA"));
+      G4String dataPath0(G4FindDataDir("G4INCLDATA"));
       G4String dataPathppbar(dataPath0 + "/rawppbarFS.dat");
       G4String dataPathnpbar(dataPath0 + "/rawnpbarFS.dat");
       G4String dataPathppbark(dataPath0 + "/rawppbarFSkaonic.dat");
       G4String dataPathnpbark(dataPath0 + "/rawnpbarFSkaonic.dat");
 #else
-      G4string path;
+      G4String path;
       if (theConfig) path = theConfig->getINCLXXDataFilePath();
       G4String dataPathppbar(path + "/rawppbarFS.dat");
       INCL_DEBUG("Reading https://doi.org/10.1016/0375-9474(92)90362-N ppbar final states" << dataPathppbar << '\n');
@@ -390,7 +390,8 @@ namespace G4INCL {
         sum = read_file(dataPathppbar, probabilities, particle_types);
         rdm = (rdm/(1.-kaonicFSprob))*sum;  //99.88 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return theEventInfo;
         for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
@@ -424,10 +425,18 @@ namespace G4INCL {
             starlist.push_back(pp);
           } else {
             INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
-            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+            for (G4int jj = 0; jj < static_cast<G4int>(particle_types[n].size()); jj++) {
+#ifdef INCLXX_IN_GEANT4_MODE
               G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+#else
+              std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+#endif              
             }
+#ifdef INCLXX_IN_GEANT4_MODE
             G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+#else
+            std::cout << "Some non-existing FS particle detected when reading pbar FS files" << std::endl;
+#endif              
           }
         }
       } else {
@@ -435,7 +444,8 @@ namespace G4INCL {
         sum = read_file(dataPathppbark, probabilities, particle_types);
         rdm = ((1.-rdm)/kaonicFSprob)*sum;  //2670 normalize by the sum of probabilities in the file
         //now get the line number in the file where the FS particles are stored:
-        G4int n = findStringNumber(rdm, probabilities);
+        G4int n = findStringNumber(rdm, probabilities)-1;
+        if ( n < 0 ) return theEventInfo;
         for (G4int j = 0; j < static_cast<G4int>(particle_types[n].size()); j++) {
           if (particle_types[n][j] == "pi0") {
             Particle *p = new Particle(PiZero, mommy, annihilationPosition);
@@ -466,10 +476,18 @@ namespace G4INCL {
             starlist.push_back(p);
           } else {
             INCL_ERROR("Some non-existing FS particle detected when reading pbar FS files");
-            for (int jj = 0; jj < static_cast<int>(particle_types[n].size()); jj++) {
+            for (G4int jj = 0; jj < static_cast<G4int>(particle_types[n].size()); jj++) {
+#ifdef INCLXX_IN_GEANT4_MODE
               G4cout << "gotcha! " << particle_types[n][jj] << G4endl;
+#else
+              std::cout << "gotcha! " << particle_types[n][jj] << std::endl;
+#endif              
             }
+#ifdef INCLXX_IN_GEANT4_MODE
             G4cout << "Some non-existing FS particle detected when reading pbar FS files" << G4endl;
+#else
+            std::cout << "Some non-existing FS particle detected when reading pbar FS files" << std::endl;
+#endif              
           }
         }
       }
@@ -651,7 +669,7 @@ namespace G4INCL {
 
     // The event bias
     theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
-    
+
     // Forced CN?
     if(!(projectileSpecies.theType==antiProton && kineticEnergy<=theConfig->getAtrestThreshold())){
       if(nucleus->getTryCompoundNucleus()) {
@@ -1193,7 +1211,6 @@ namespace G4INCL {
     theGlobalInfo.nEnergyViolationInteraction += theEventInfo.nEnergyViolationInteraction;
   }
 
-
   G4double INCL::read_file(std::string filename, std::vector<G4double>& probabilities, 
                            std::vector<std::vector<G4String>>& particle_types) {
     std::ifstream file(filename);
@@ -1214,7 +1231,11 @@ namespace G4INCL {
         particle_types.push_back(types);
       }
     } else {
+#ifdef INCLXX_IN_GEANT4_MODE
       G4cout << "ERROR no fread_file " << filename << G4endl;
+#else
+      std::cout << "ERROR no fread_file " << filename << std::endl;
+#endif              
     }
     return sum_probs;
   }
@@ -1225,17 +1246,22 @@ namespace G4INCL {
     G4double smallestsum = 0.0;
     G4double biggestsum = yields[0];
     //G4cout << "initial input " << rdm << G4endl;
-    for (G4int i = 0; i < static_cast<G4int>(yields.size()); i++) {
+    for (G4int i = 0; i < static_cast<G4int>(yields.size()-1); i++) {
       if (rdm >= smallestsum && rdm <= biggestsum) {
         //G4cout << smallestsum << " and " << biggestsum << G4endl;
-        stringNumber = i;
+        stringNumber = i+1;
       }
       smallestsum += yields[i];
       biggestsum += yields[i+1];
     }
+    if(stringNumber==-1) stringNumber = static_cast<G4int>(yields.size());
     if(stringNumber==-1){
       INCL_ERROR("ERROR in findStringNumber (stringNumber=-1)");
+#ifdef INCLXX_IN_GEANT4_MODE
       G4cout << "ERROR in findStringNumber" << G4endl;
+#else
+      std::cout << "ERROR in findStringNumber" << std::endl;
+#endif              
     }
     return stringNumber;
   }

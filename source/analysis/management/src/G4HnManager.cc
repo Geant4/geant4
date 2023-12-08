@@ -40,9 +40,7 @@ using std::to_string;
 //_____________________________________________________________________________
 G4HnManager::G4HnManager(G4String hnType, const G4AnalysisManagerState& state)
   : G4BaseAnalysisManager(state), fHnType(std::move(hnType))
-{
-  fMessenger = std::make_unique<G4HnMessenger>(*this);
-}
+{}
 
 //_____________________________________________________________________________
 G4HnManager::~G4HnManager()
@@ -96,10 +94,28 @@ void  G4HnManager::SetFileName(G4HnInformation* info, const G4String& fileName)
   // Do nothing if file name does not change
   if ( info->GetFileName() == fileName ) return;
 
+  auto hnFileName = fileName;
+  auto extension = GetExtension(fileName);
+  if (extension.size() != 0u) {
+    // Check if valid extension (if present)
+    auto output = G4Analysis::GetOutput(extension);
+    if ( output == G4AnalysisOutput::kNone ) {
+      Warn("The file extension " + extension + " is not supported.",
+        fkClass, "SetFileName");
+      return;
+    }
+  }
+  else {
+    if (fDefaultFileType.size() != 0u) {
+      //add extension if missing and file type is defined
+      hnFileName = fileName + "." + fDefaultFileType;
+    }
+  }
+
   // Save the info and account a new file name if file manager
-  info->SetFileName(fileName);
+  info->SetFileName(hnFileName);
   if (fFileManager) {
-    fFileManager->AddFileName(fileName);
+    fFileManager->AddFileName(hnFileName);
   } else {
     Warn("Failed to set fileName " + fileName +
          " for object " + info->GetName() + ".\nFile manager is not set.",
@@ -107,7 +123,7 @@ void  G4HnManager::SetFileName(G4HnInformation* info, const G4String& fileName)
     return;
   }
 
-  if ( fileName != "" ) {
+  if ( hnFileName != "" ) {
     fNofFileNameObjects++;
   } else {
     fNofFileNameObjects--;
@@ -119,13 +135,50 @@ void  G4HnManager::SetFileName(G4HnInformation* info, const G4String& fileName)
 //
 
 //_____________________________________________________________________________
-G4HnInformation*  G4HnManager::AddHnInformation(const G4String& name, G4int nofDimensions)
+void G4HnManager::CreateMessenger()
 {
-  auto info = new G4HnInformation(name, nofDimensions);
+  fMessenger = std::make_unique<G4HnMessenger>(*this);
+}
+
+//_____________________________________________________________________________
+void G4HnManager::AddHnInformation(G4HnInformation* info)
+{
+  // Add new information
+
   fHnVector.push_back(info);
   ++fNofActiveObjects;
+}
 
-  return info;
+//_____________________________________________________________________________
+void G4HnManager::AddHnInformation(G4HnInformation* info, G4int index)
+{
+  // Replace the information at 'index' position with new one.
+  // Update new information with the previous one settings if the
+  // previous histogram was deleted with 'keepSetting' set true.
+
+  auto previousInfo = fHnVector[index];
+  if (previousInfo->GetDeletedPair().second) {
+    info->Update(*previousInfo);
+  }
+  delete previousInfo;
+
+  fHnVector[index] = info;
+
+  if (info->GetActivation()) { ++fNofActiveObjects; }
+  if (info->GetAscii())      { ++fNofAsciiObjects; }
+  if (info->GetPlotting())   { ++fNofPlottingObjects; }
+  if (! info->GetFileName().empty()) { ++fNofFileNameObjects; }
+}
+
+//_____________________________________________________________________________
+void G4HnManager::SetHnDeleted(G4HnInformation* info, G4bool keepSetting)
+{
+  info->SetDeleted(true, keepSetting);
+
+  if (info->GetActivation()) { --fNofActiveObjects; }
+  if (info->GetAscii())      { --fNofAsciiObjects; }
+  if (info->GetPlotting())   { --fNofPlottingObjects; }
+  if (! info->GetFileName().empty()) { --fNofFileNameObjects; }
 }
 
 //_____________________________________________________________________________

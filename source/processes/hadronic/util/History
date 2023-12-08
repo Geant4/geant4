@@ -7,6 +7,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-30 Jean-Christophe David (hadr-util-V11-01-08)
+- G4HadronicParameters: added Get/SetMin/MaxEnergyINCLXX_Pbar() getters and
+  setters of recommended energy limits in physics lists for the
+  intranuclear cascade model INCLXX, for pbar interactions.
+
+## 2023-11-16 Alberto Ribon (hadr-util-V11-01-07)
+- G4HadronicParameters: introduced Getter/Setter for the time threshold of
+  radioactive decays (i.e. radioactive decays that happen later than this 
+  value are ignored). This offers a C++ interface to set this parameter.
+
 ## 2023-05-25 Alberto Ribon (hadr-util-V11-01-06)
 - G4Fragment : replaced (fatal) G4HadronicException with G4Exception.
   Note: in the method CalculateMassAndExcitationEnergy(), the exception type
@@ -14,7 +24,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 	are difficult to reproduce and fix.
 
 ## 2023-04-25 Vladimir Ivanchenko (hadr-util-V11-01-05)
-- G4HadronicParameters - added extra Boolean method for access to debug
+- G4HadronicParameters: added extra Boolean method for access to debug
     flag for the BinaryCascade, which may be defined via environment
     variable BINARY_CASCADE_DEBUG
 

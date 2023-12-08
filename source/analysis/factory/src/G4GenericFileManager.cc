@@ -289,6 +289,9 @@ G4bool G4GenericFileManager::DeleteEmptyFiles()
     result &= fileManager->DeleteEmptyFiles();
   }
 
+  // Clear all saved file names in base file manager
+  G4BaseFileManager::ClearData();
+
   Message(kVL3, "delete", "empty files", "", result);
 
   return result;

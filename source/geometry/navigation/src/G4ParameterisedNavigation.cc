@@ -49,6 +49,8 @@
 
 #include "G4AuxiliaryNavServices.hh"
 
+#include <cassert>
+
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -682,4 +684,17 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
     }
   }
   return false;
+}
+
+void G4ParameterisedNavigation::RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
+                                                      const G4ThreeVector& localPoint )
+{
+  auto motherLogical = motherPhysical->GetLogicalVolume();
+
+  /* this should only be called on parameterized volumes, which always satisfy the conditions below */
+  assert(motherPhysical->GetRegularStructureId() != 1);
+  assert(motherLogical->GetNoDaughters() == 1);
+
+  if ( auto pVoxelHeader = motherLogical->GetVoxelHeader() )
+    ParamVoxelLocate( pVoxelHeader, localPoint );
 }

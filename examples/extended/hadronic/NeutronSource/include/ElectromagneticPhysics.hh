@@ -42,7 +42,7 @@ class ElectromagneticPhysics : public G4VPhysicsConstructor
 {
   public: 
     ElectromagneticPhysics(const G4String& name = "standard");
-   ~ElectromagneticPhysics() override;
+   ~ElectromagneticPhysics() override = default;
 
   public: 
     // This method is dummy for physics

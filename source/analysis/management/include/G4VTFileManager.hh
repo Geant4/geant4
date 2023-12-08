@@ -140,7 +140,12 @@ template <typename FT>
 inline
 G4bool G4VTFileManager<FT>::DeleteEmptyFiles()
 {
-  return G4TFileManager<FT>::DeleteEmptyFiles();
+  auto result = G4TFileManager<FT>::DeleteEmptyFiles();
+
+  // clean-up also all stored information about file names
+  Clear();
+
+  return result;
 }
 
 //_____________________________________________________________________________
@@ -149,6 +154,7 @@ inline
 void G4VTFileManager<FT>::Clear()
 {
   G4TFileManager<FT>::ClearData();
+  G4BaseFileManager::ClearData();
   UnlockDirectoryNames();
 }
 

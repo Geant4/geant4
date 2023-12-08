@@ -36,6 +36,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronicParameters.hh"
 
@@ -65,6 +66,8 @@
 
 #include "G4PreCompoundModel.hh"
 #include "G4INCLXXInterface.hh"
+#include "G4ComponentAntiNuclNuclearXS.hh"
+
 
 
 void G4HadronicBuilder::BuildFTFP_BERT(const std::vector<G4int>& partList,
@@ -193,6 +196,57 @@ void G4HadronicBuilder::BuildQGSP_FTFP_BERT(const std::vector<G4int>& partList,
   }
 }
 
+void G4HadronicBuilder::BuildINCLXX(const std::vector<G4int>& partList,
+                                       G4bool bert, const G4String& xsName) {
+
+  // FTF
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  auto theModel = new G4TheoFSGenerator("FTFP");
+  auto theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
+  theModel->SetHighEnergyGenerator( theStringModel );
+  theModel->SetTransport( new G4GeneratorPrecompoundInterface() );
+  theModel->SetMaxEnergy( param->GetMaxEnergy() );
+
+  G4CascadeInterface* theCascade = nullptr;
+  if(bert) {
+    theCascade = new G4CascadeInterface();
+    theCascade->SetMaxEnergy( param->GetMaxEnergyTransitionFTF_Cascade() );
+    theModel->SetMinEnergy( param->GetMinEnergyTransitionFTF_Cascade() );
+  }
+
+  // INCLXX
+  auto theModelINCLXX = new G4INCLXXInterface();
+  theModelINCLXX->SetMinEnergy( param->GetMinEnergyINCLXX_Pbar() );
+  theModelINCLXX->SetMaxEnergy( param->GetMaxEnergyINCLXX_Pbar() ); 
+
+  //
+  auto xsinel = G4HadProcesses::InelasticXS( xsName );
+
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for( auto & pdg : partList ) {
+
+    auto part = table->FindParticle( pdg );
+    if ( part == nullptr ) { continue; }
+
+    auto hadi = new G4HadronInelasticProcess( part->GetParticleName()+"Inelastic", part );
+    if( pdg == -2212 ) { // pbar use INCLXX
+      hadi->AddDataSet( xsinel );
+      hadi->RegisterMe( theModelINCLXX );
+      if( param->ApplyFactorXS() ) hadi->MultiplyCrossSectionBy( param->XSFactorHadronInelastic() );
+      ph->RegisterProcess(hadi, part);
+    } else { // other anti-X use FTF
+    hadi->AddDataSet( xsinel );
+    hadi->RegisterMe( theModel );
+    if( theCascade != nullptr ) hadi->RegisterMe( theCascade );
+    if( param->ApplyFactorXS() ) hadi->MultiplyCrossSectionBy( param->XSFactorHadronInelastic() );
+    ph->RegisterProcess(hadi, part);
+  }
+  }
+}
+
 void G4HadronicBuilder::BuildElastic(const std::vector<G4int>& partList) {
 
   G4HadronicParameters* param = G4HadronicParameters::Instance();
@@ -259,6 +313,10 @@ void G4HadronicBuilder::BuildAntiLightIonsFTFP() {
 // Note: currently QGSP cannot be applied for any ion or anti-ion!
 //  BuildQGSP_FTFP_BERT(G4HadParticles::GetLightAntiIons(), false, qElastic, "AntiAGlauber");
 //}
+
+void G4HadronicBuilder::BuildAntiLightIonsINCLXX() {
+  BuildINCLXX(G4HadParticles::GetLightAntiIons(), false, "AntiAGlauber");
+}
 
 void G4HadronicBuilder::BuildBCHadronsFTFP_BERT() {
   if( G4HadronicParameters::Instance()->EnableBCParticles() ) {

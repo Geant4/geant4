@@ -39,7 +39,7 @@ Par02EventInformation::Par02EventInformation( G4bool aSmear ): fDoSmearing( aSme
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02EventInformation::~Par02EventInformation() {}
+Par02EventInformation::~Par02EventInformation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

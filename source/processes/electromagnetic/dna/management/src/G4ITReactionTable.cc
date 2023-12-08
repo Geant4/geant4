@@ -35,19 +35,13 @@
 #include "G4ITReactionTable.hh"
 
 G4ITReactionTable::G4ITReactionTable()
-{
-    //ctor
-}
+= default;
 
 G4ITReactionTable::~G4ITReactionTable()
-{
-    //dtor
-}
+= default;
 
 G4ITReactionTable::G4ITReactionTable(const G4ITReactionTable& /*other*/)
-{
-    //copy ctor
-}
+= default;
 
 G4ITReactionTable& G4ITReactionTable::operator=(const G4ITReactionTable& rhs)
 {

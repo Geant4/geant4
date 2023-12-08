@@ -130,11 +130,16 @@ void G4THnManager<HT>::AddTVector(const std::vector<HT*>& tVector)
   // }
   auto itw = tVector.begin();
   for ( auto t : fTVector ) {
+    // skip deleted histograms
+    if (t == nullptr) {
+      itw++;
+      continue;
+    }
     t->add(*(*itw));
     (*itw++)->reset();
   }
 
-  Message(G4Analysis::kVL1, "merge", "all " + fHnManager->GetHnType());
+  Message(G4Analysis::kVL2, "merge", "all " + fHnManager->GetHnType());
 }
 
 //_____________________________________________________________________________
@@ -183,9 +188,29 @@ typename std::vector<HT*>::const_iterator G4THnManager<HT>::EndConstT() const
 template <typename HT>
 G4int G4THnManager<HT>::RegisterT(const G4String& name, HT* ht, G4HnInformation* info)
 {
-  G4int index = (G4int)fTVector.size();
-  fTVector.push_back(ht);
-  fTHnVector.push_back({ht, info});
+  G4int index = 0;
+  if (fFreeIds.empty()) {
+    index = (G4int)fTVector.size();
+    fTVector.push_back(ht);
+    fTHnVector.push_back({ht, info});
+    fHnManager->AddHnInformation(info);
+  }
+  else {
+    // Get the first freed Id
+    index = *(fFreeIds.begin()) - fHnManager->GetFirstId();
+
+    // Update vectors at the first freed Id position
+    fTVector[index] = ht;
+
+    // Register new information at the freed Id position
+    fHnManager->AddHnInformation(info, index);
+
+    // Register new histo & inforrmation at the freed Id position
+    fTHnVector[index] = {ht, info};
+
+    // Remove the id from the set
+    fFreeIds.erase(fFreeIds.begin());
+  }
 
   fHnManager->SetLockFirstId(true);
   fNameIdMap[name] = index + fHnManager->GetFirstId();
@@ -201,6 +226,8 @@ G4bool G4THnManager<HT>::Reset()
   auto result = true;
 
   for ( auto t : fTVector ) {
+    // skip deleted histograms
+    if ( t == nullptr) continue;
     result &= t->reset();
   }
 
@@ -225,6 +252,30 @@ G4THnManager<HT>::ClearData()
   }
 
   Message(G4Analysis::kVL2, "clear", G4Analysis::GetHnType<HT>());
+}
+
+//_____________________________________________________________________________
+template <typename HT>
+G4bool
+G4THnManager<HT>::DeleteT(G4int id, G4bool keepSetting)
+{
+  auto [ht, info] = GetTHnInFunction(id, "Delete", true, false);
+
+  if (ht == nullptr) return false;
+
+  // Delete histogram and update vectors
+  delete ht;
+  auto index = id - fHnManager->GetFirstId();
+  fTVector[index] = nullptr;
+  fTHnVector[index] = std::make_pair(nullptr, info);
+
+  // Update information
+  fHnManager->SetHnDeleted(info, keepSetting);
+
+  // Register freed Id
+  fFreeIds.insert(id);
+
+  return true;
 }
 
 //_____________________________________________________________________________
@@ -271,6 +322,15 @@ const std::vector<std::pair<HT*, G4HnInformation*>>& G4THnManager<HT>::GetTHnVec
 
 //_____________________________________________________________________________
 template <typename HT>
+G4int G4THnManager<HT>::GetNofHns(G4bool onlyIfExist) const
+{
+
+  return (onlyIfExist) ? G4int(fTVector.size() - fFreeIds.size())
+                       : G4int(fTVector.size());
+}
+
+//_____________________________________________________________________________
+template <typename HT>
 G4bool G4THnManager<HT>::List(std::ostream& output, G4bool onlyIfActive) const
 {
   // Save current output stream formatting
@@ -279,7 +339,7 @@ G4bool G4THnManager<HT>::List(std::ostream& output, G4bool onlyIfActive) const
   // List general info
   output << fHnManager->GetHnType() << ": " << fHnManager->GetNofActiveHns() << " active ";
   if (! onlyIfActive) {
-     output << " of " << fHnManager->GetNofHns() << " defined ";
+     output << " of " << GetNofHns(true) << " defined ";
   }
   output << G4endl;
 
@@ -288,6 +348,8 @@ G4bool G4THnManager<HT>::List(std::ostream& output, G4bool onlyIfActive) const
   size_t maxTitleLength = 0;
   size_t maxEntries = 0;
   for ( const auto& [ht, hnInfo] : fTHnVector) {
+    // skip deleletd objects
+    if (ht == nullptr) continue;
     if (hnInfo->GetName().length() > maxNameLength) {
       maxNameLength = hnInfo->GetName().length();
     }
@@ -307,9 +369,9 @@ G4bool G4THnManager<HT>::List(std::ostream& output, G4bool onlyIfActive) const
   // List objects
   auto id = fHnManager->GetFirstId();
   for (const auto& [ht, hnInfo] : fTHnVector) {
-
-    // skip inactivated objects
-    if (fState.GetIsActivation() && onlyIfActive && (! hnInfo->GetActivation())) {
+    // skip deleted or inactivated objects
+    if ( (fState.GetIsActivation() && onlyIfActive && (! hnInfo->GetActivation())) ||
+         (hnInfo->GetDeleted()) ) {
       id++;
       continue;
     }

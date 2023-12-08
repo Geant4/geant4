@@ -35,9 +35,27 @@
 #include "G4Neutron.hh"
 #include "G4ParticleHPDataUsed.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4Alpha.hh"
+#include "G4Deuteron.hh"
+#include "G4He3.hh"
+#include "G4Proton.hh"
+#include "G4Triton.hh"
+//#include <stdlib.h>
+#include <fstream>
 
-// G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String
-// aFSType)
+void G4ParticleHPIsoData::FillChannelData(G4ParticleHPVector* aBuffer)
+{
+  if (theChannelData != nullptr) {
+    G4Exception("G4ParticleHPIsoData::FillChannelData","hadhp02",
+                FatalException, "Inconsistency: the data uploaded next time");
+  }
+  theChannelData = new G4ParticleHPVector;
+  for (G4int i = 0; i < aBuffer->GetVectorLength(); ++i) {
+    theChannelData->SetPoint(i, aBuffer->GetPoint(i));
+  }
+  theChannelData->Hash();
+}
+
 G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4String dirName,
                                  G4String aFSType)
 {
@@ -45,38 +63,28 @@ G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4Str
   G4double abundance = abun / 100.;
   G4String filename;
   G4bool result = true;
-  // G4ParticleHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
   G4ParticleHPDataUsed aFile = theNames.GetName(A, Z, M, dirName, aFSType, result);
   filename = aFile.GetName();
-  //    if(filename=="") return false;
-  // std::ifstream theChannel(filename);
+
   std::istringstream theChannel(filename, std::ios::in);
-  G4ParticleHPManager::GetInstance()->GetDataStream(filename, theChannel);
+  auto man = G4ParticleHPManager::GetInstance();
+  man->GetDataStream(filename, theChannel);
 
 #ifdef G4PHPDEBUG
-  if (std::getenv("G4ParticleHPDebug"))
+  if (man->GetDEBUG())
     G4cout << "G4ParticleHPIsoData::Init = " << filename << " " << A << " " << Z << G4endl;
 #endif
 
-  if (Z == 1 && (aFile.GetZ() != Z || std::abs(aFile.GetA() - A) > 0.0001)) {
-    if (std::getenv("G4ParticleHPDebug") != nullptr)
+  if (Z == 1 && (aFile.GetZ() != Z || aFile.GetA() != A)) {
+    if (man->GetDEBUG())
       G4cout << "Skipped = " << filename << " " << A << " " << Z << G4endl;
-    // 080901 TKDB No more necessary below protection, cross sections set to 0 in G4ParticleHPNames
-    // And below two lines causes trouble with G4PhysicsVector
-    // theChannel.close();
-    // return false;
+    // 080901 TKDB No more necessary below protection, cross sections set to 0 
   }
   if (!theChannel) { /*theChannel.close()*/
-    ;
     return false;
   }
   // accommodating deficiencie of some compilers
   if (theChannel.eof()) { /*theChannel.close()*/
-    ;
-    return false;
-  }
-  if (!theChannel) { /*theChannel.close()*/
-    ;
     return false;
   }
   G4int dummy;
@@ -85,70 +93,22 @@ G4bool G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun, G4Str
   G4int nData;
   theChannel >> nData;
   theChannelData->Init(theChannel, nData, CLHEP::eV, abundance * CLHEP::barn);
-  //    G4cout << "Channel Data Statistics: "<<theChannelData->GetVectorLength()<<G4endl;
-  //    G4cout << "Channel data"<<G4endl;
-  //     G4int hpw;
-  //     G4cin >> hpw;
-  //    theChannelData->Dump();
-  //    theChannel.close();
   return result;
 }
 
-// void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4double abun) //fill PhysicsVector for this
-// Isotope
-#include "G4Alpha.hh"
-#include "G4Deuteron.hh"
-#include "G4He3.hh"
-#include "G4Proton.hh"
-#include "G4Triton.hh"
 void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun,
-                               G4ParticleDefinition* projectile,
-                               const char* dataDirVariable)  // fill PhysicsVector for this Isotope
+                               G4ParticleDefinition* projectile, const char*)
+// fill PhysicsVector for this Isotope
 {
-  G4String particleName;
-  if (projectile == G4Neutron::Neutron()) {
-    ;
-  }
-  else if (projectile == G4Proton::Proton()) {
-    particleName = "Proton";
-  }
-  else if (projectile == G4Deuteron::Deuteron()) {
-    particleName = "Deuteron";
-  }
-  else if (projectile == G4Triton::Triton()) {
-    particleName = "Triton";
-  }
-  else if (projectile == G4He3::He3()) {
-    particleName = "He3";
-  }
-  else if (projectile == G4Alpha::Alpha()) {
-    particleName = "Alpha";
-  }
-  else {
-    G4String message(
-      "G4ParticleHPInelastic may only be called for neutron, proton, deuteron, triton, He3 or "
-      "alpha, while it is called for "
-      + projectile->GetParticleName());
-    throw G4HadronicException(__FILE__, __LINE__, message.c_str());
-  }
+  auto man = G4ParticleHPManager::GetInstance();
 
-  G4String baseName;
-  if (G4FindDataDir(dataDirVariable) != nullptr) {
-    baseName = G4FindDataDir(dataDirVariable);
-  }
-  else {
-    baseName = G4FindDataDir("G4PARTICLEHPDATA");
-    baseName += "/" + particleName;
-  }
+  G4String baseName = man->GetParticleHPPath(projectile);
 
-  // G4String baseName = getenv(dataDirVariable);
   G4String dirName;
   if (projectile == G4Neutron::Neutron()) {
     dirName = baseName + "/Fission";
-    // if(Z>89)
     if (Z > 87)  // TK Modifed for ENDF VII.0
     {
-      // Init(A, Z, abun, dirName, "/CrossSection/");
       Init(A, Z, M, abun, dirName, "/CrossSection");
     }
     else {
@@ -158,38 +118,20 @@ void G4ParticleHPIsoData::Init(G4int A, G4int Z, G4int M, G4double abun,
     theChannelData = nullptr;  // fast fix for double delete; revisit later. @@@@@@@
 
     dirName = baseName + "/Capture";
-    // Init(A, Z, abun, dirName, "/CrossSection/");
     Init(A, Z, M, abun, dirName, "/CrossSection");
     theCaptureData = theChannelData;
     theChannelData = nullptr;
 
     dirName = baseName + "/Elastic";
-    // Init(A, Z, abun, dirName, "/CrossSection/");
     Init(A, Z, M, abun, dirName, "/CrossSection");
     theElasticData = theChannelData;
     theChannelData = nullptr;
   }
 
   dirName = baseName + "/Inelastic";
-  // Init(A, Z, abun, dirName, "/CrossSection/");
   Init(A, Z, M, abun, dirName, "/CrossSection");
   theInelasticData = theChannelData;
   theChannelData = nullptr;
-
-  //    if(theInelasticData!=0) G4cout << "Inelastic Data Statistics:
-  //    "<<theInelasticData->GetVectorLength()<<G4endl; if(theElasticData!=0) G4cout << "Elastic
-  //    Data Statistics: "<<theElasticData->GetVectorLength()<<G4endl; if(theCaptureData!=0) G4cout
-  //    << "Capture Data Statistics: "<<theCaptureData->GetVectorLength()<<G4endl;
-  //    if(theFissionData!=0) G4cout << "Fission Data Statistics:
-  //    "<<theFissionData->GetVectorLength()<<G4endl;
-  //  G4cout << "Inelastic data"<<G4endl;
-  //  if(theInelasticData!=0) theInelasticData->Dump();
-  //  G4cout << "Elastic data"<<G4endl;
-  //  if(theElasticData!=0) theElasticData->Dump();
-  //  G4cout << "Capture data"<<G4endl;
-  //  if(theCaptureData!=0) theCaptureData->Dump();
-  //  G4cout << "Fission data"<<G4endl;
-  //  if(theFissionData!=0) theFissionData->Dump();
 }
 
 G4String G4ParticleHPIsoData::GetName(G4int A, G4int Z, G4String base, G4String rest)

@@ -36,6 +36,7 @@
 #include "G4AutoDelete.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VIntersectionLocator.hh"
+#include "G4TouchableHandle.hh"
 #include "G4GeometryTolerance.hh"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -686,7 +687,7 @@ LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
 
     // Identify the current volume
     
-    G4TouchableHistoryHandle startTH= nav->CreateTouchableHistoryHandle();
+    G4TouchableHandle startTH= nav->CreateTouchableHistoryHandle();
     G4VPhysicalVolume* motherPhys = startTH->GetVolume();
     G4VSolid*          motherSolid = startTH->GetSolid();
     G4AffineTransform transform = nav->GetGlobalToLocalTransform();

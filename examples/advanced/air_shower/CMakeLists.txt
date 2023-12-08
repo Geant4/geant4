@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(air_shower)
 
 #----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ target_link_libraries(Ultra ${Geant4_LIBRARIES})
 #
 set(air_shower_SCRIPTS
     UltraMacro.mac OpenVis.mac VisDirect.mac Direct.mac Mirror.mac Ground.mac Source.mac
-    do_plots.C
+    do_plots.C README
   )
 
 foreach(_script ${air_shower_SCRIPTS})

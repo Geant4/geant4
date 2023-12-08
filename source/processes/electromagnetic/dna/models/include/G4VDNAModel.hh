@@ -61,7 +61,7 @@ class G4VDNAModel : public G4VEmModel
   /*!
    * \brief ~G4VDNAModel
    */
-  virtual ~G4VDNAModel();
+  ~G4VDNAModel() override;
 
   /*!
    * \brief Initialise
@@ -69,7 +69,7 @@ class G4VDNAModel : public G4VEmModel
    * \param particle
    * \param cuts
    */
-  virtual void Initialise(const G4ParticleDefinition* particle, const G4DataVector& cuts) = 0;
+  void Initialise(const G4ParticleDefinition* particle, const G4DataVector& cuts) override = 0;
 
   /*!
    * \brief CrossSectionPerVolume
@@ -80,8 +80,8 @@ class G4VDNAModel : public G4VEmModel
    * \param emax
    * \return crossSection*numberOfMoleculesPerVolumeUnit
    */
-  virtual G4double CrossSectionPerVolume(const G4Material* material, const G4ParticleDefinition* p,
-    G4double ekin, G4double emin, G4double emax) = 0;
+  G4double CrossSectionPerVolume(const G4Material* material, const G4ParticleDefinition* p,
+    G4double ekin, G4double emin, G4double emax) override = 0;
 
   /*!
    * \brief SampleSecondaries
@@ -89,8 +89,8 @@ class G4VDNAModel : public G4VEmModel
    * ModelInterface or if any charateristic of the incident particle will change. \param
    * materialName \param particleChangeForGamma \param tmin \param tmax
    */
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
-    const G4DynamicParticle*, G4double tmin = 0, G4double tmax = DBL_MAX) = 0;
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, const G4MaterialCutsCouple*,
+    const G4DynamicParticle*, G4double tmin = 0, G4double tmax = DBL_MAX) override = 0;
 
   /*!
    * \brief IsMaterialDefine

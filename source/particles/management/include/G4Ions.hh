@@ -27,7 +27,7 @@
 //
 // Class Description:
 //
-// This is the base class for all nuclei including pre-defined 
+// This is the base class for all nuclei including pre-defined
 // light nuclei such as deuteron, alpha, and proton (Hydrogen).
 // All nuclei/ions created on the fly are objects of this class.
 // Atomic number and atomic mass are valid only for particles derived
@@ -40,18 +40,14 @@
 #ifndef G4Ions_hh
 #define G4Ions_hh 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          Ions                                 ###
-// ######################################################################
+#include "G4ios.hh"
+#include "globals.hh"
 
 class G4Ions : public G4ParticleDefinition
 {
   public:
-
+    // clang-format off
     G4Ions(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -67,23 +63,36 @@ class G4Ions : public G4ParticleDefinition
        G4double            excitation = 0.0, 
        G4int               isomer = 0
     );
+    // clang-format on
 
     ~G4Ions() override = default;
 
     inline G4Ions* IonsDefinition();
     inline G4Ions* Ions();
 
-    inline G4double GetExcitationEnergy() const; 
-      // Get excitation energy of nucleus
-  
-    inline G4int GetIsomerLevel() const; 
-      // Get Isomer level (=0 for ground state)
-   
-    enum class G4FloatLevelBase   // enumerator for floating level base
+    // Get excitation energy of nucleus
+    inline G4double GetExcitationEnergy() const;
+
+    // Get Isomer level (=0 for ground state)
+    inline G4int GetIsomerLevel() const;
+
+    enum class G4FloatLevelBase  // enumerator for floating level base
     {
-      no_Float=0,
-      plus_X, plus_Y, plus_Z, plus_U, plus_V, plus_W,
-      plus_R, plus_S, plus_T, plus_A, plus_B, plus_C, plus_D, plus_E
+      no_Float = 0,
+      plus_X,
+      plus_Y,
+      plus_Z,
+      plus_U,
+      plus_V,
+      plus_W,
+      plus_R,
+      plus_S,
+      plus_T,
+      plus_A,
+      plus_B,
+      plus_C,
+      plus_D,
+      plus_E
     };
 
     static G4Ions::G4FloatLevelBase FloatLevelBase(char flbChar);
@@ -99,86 +108,75 @@ class G4Ions : public G4ParticleDefinition
     inline void SetFloatLevelBase(G4int flbIdx);
 
   protected:
-
     G4Ions() = default;
 
   private:
-
-    G4double theExcitationEnergy = 0.0; 
+    G4double theExcitationEnergy = 0.0;
     G4int theIsomerLevel = 0;
     G4FloatLevelBase floatLevelBase = G4FloatLevelBase::no_Float;
 };
 
 #define noFloat G4Ions::G4FloatLevelBase::no_Float
-#define plusU G4Ions::G4FloatLevelBase::plus_U 
-#define plusV G4Ions::G4FloatLevelBase::plus_V 
-#define plusW G4Ions::G4FloatLevelBase::plus_W 
+#define plusU G4Ions::G4FloatLevelBase::plus_U
+#define plusV G4Ions::G4FloatLevelBase::plus_V
+#define plusW G4Ions::G4FloatLevelBase::plus_W
 #define plusX G4Ions::G4FloatLevelBase::plus_X
-#define plusY G4Ions::G4FloatLevelBase::plus_Y 
-#define plusZ G4Ions::G4FloatLevelBase::plus_Z 
-#define plusR G4Ions::G4FloatLevelBase::plus_R 
-#define plusS G4Ions::G4FloatLevelBase::plus_S 
-#define plusT G4Ions::G4FloatLevelBase::plus_T 
+#define plusY G4Ions::G4FloatLevelBase::plus_Y
+#define plusZ G4Ions::G4FloatLevelBase::plus_Z
+#define plusR G4Ions::G4FloatLevelBase::plus_R
+#define plusS G4Ions::G4FloatLevelBase::plus_S
+#define plusT G4Ions::G4FloatLevelBase::plus_T
 #define plusA G4Ions::G4FloatLevelBase::plus_A
-#define plusB G4Ions::G4FloatLevelBase::plus_B 
-#define plusC G4Ions::G4FloatLevelBase::plus_C 
-#define plusD G4Ions::G4FloatLevelBase::plus_D 
-#define plusE G4Ions::G4FloatLevelBase::plus_E 
+#define plusB G4Ions::G4FloatLevelBase::plus_B
+#define plusC G4Ions::G4FloatLevelBase::plus_C
+#define plusD G4Ions::G4FloatLevelBase::plus_D
+#define plusE G4Ions::G4FloatLevelBase::plus_E
 
 // ------------------------
 // Inline methods
 // ------------------------
 
-inline
-G4Ions* G4Ions::IonsDefinition()
+inline G4Ions* G4Ions::IonsDefinition()
 {
   return this;
 }
 
-inline
-G4Ions* G4Ions::Ions() 
+inline G4Ions* G4Ions::Ions()
 {
   return this;
 }
 
-inline
-G4double G4Ions::GetExcitationEnergy() const 
+inline G4double G4Ions::GetExcitationEnergy() const
 {
   return theExcitationEnergy;
 }
 
-inline
-G4int G4Ions::GetIsomerLevel() const
+inline G4int G4Ions::GetIsomerLevel() const
 {
   return theIsomerLevel;
 }
-    
-inline
-G4Ions::G4FloatLevelBase G4Ions::GetFloatLevelBase() const
+
+inline G4Ions::G4FloatLevelBase G4Ions::GetFloatLevelBase() const
 {
   return floatLevelBase;
 }
 
-inline
-G4int G4Ions::GetFloatLevelBaseIndex() const
+inline G4int G4Ions::GetFloatLevelBaseIndex() const
 {
   return static_cast<G4int>(floatLevelBase);
 }
 
-inline
-void G4Ions::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
+inline void G4Ions::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
 {
   floatLevelBase = flb;
 }
 
-inline
-void G4Ions::SetFloatLevelBase(char flbChar)
+inline void G4Ions::SetFloatLevelBase(char flbChar)
 {
   floatLevelBase = FloatLevelBase(flbChar);
 }
 
-inline
-void G4Ions::SetFloatLevelBase(G4int flbIdx)
+inline void G4Ions::SetFloatLevelBase(G4int flbIdx)
 {
   floatLevelBase = FloatLevelBase(flbIdx);
 }

@@ -30,6 +30,7 @@
 #include "G4Gamma.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Log.hh"
 
 G4BaierKatkov::G4BaierKatkov()
 {
@@ -40,6 +41,10 @@ G4BaierKatkov::G4BaierKatkov()
     //Do not worry if the maximal energy > particle energy
     //this elements of spectrum with non-physical energies
     //will not be processed (they will be 0)
+
+    G4cout << " "<< G4endl;
+    G4cout << "G4BaierKatkov model is activated."<< G4endl;
+    G4cout << " "<< G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,7 +111,7 @@ void G4BaierKatkov::SetSpectrumEnergyRange(G4double emin,
     fMaxPhotonEnergy = emax;
     fNBinsSpectrum = numberOfBins;
 
-    fLogEmaxdEmin = std::log(fMaxPhotonEnergy/fMinPhotonEnergy);
+    fLogEmaxdEmin = G4Log(fMaxPhotonEnergy/fMinPhotonEnergy);
 
     //in initializing fNPhotonsPerBin
     fNPhotonsPerBin.resize(fNBinsSpectrum);
@@ -140,13 +145,100 @@ void G4BaierKatkov::SetSpectrumEnergyRange(G4double emin,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4BaierKatkov::AddStatisticsInPhotonEnergyRegion(G4double emin,
+                                                      G4double emax,
+                                                      G4int timesPhotonStatistics)
+{
+
+    if(timesPhotonStatistics<=1)
+    {
+        G4cout << "G4BaierKatkov model, "
+                  "function AddStatisticsInPhotonEnergyRegion("
+                              << emin/CLHEP::MeV << " MeV, "
+                              << emax/CLHEP::MeV << " MeV, "
+                              << timesPhotonStatistics << ")" << G4endl;
+        G4cout << "Warning: the statistics factor cannot be <=1." << G4endl;
+        G4cout << "The statistics was not added." << G4endl;
+        G4cout << " "<< G4endl;
+    }
+    else if(fMinPhotonEnergy>emin)
+    {
+        G4cout << "G4BaierKatkov model, "
+                  "function AddStatisticsInPhotonEnergyRegion("
+                              << emin/CLHEP::MeV << " MeV, "
+                              << emax/CLHEP::MeV << " MeV, "
+                              << timesPhotonStatistics << ")" << G4endl;
+        G4cout << "Warning: the minimal energy inserted is less then "
+                  "the minimal energy cut of the spectrum: "
+               << fMinPhotonEnergy/CLHEP::MeV << " MeV." << G4endl;
+        G4cout << "The statistics was not added." << G4endl;
+        G4cout << " "<< G4endl;
+    }
+    else if(emax-emin<DBL_EPSILON)
+    {
+        G4cout << "G4BaierKatkov model, "
+                  "function AddStatisticsInPhotonEnergyRegion("
+                              << emin/CLHEP::MeV << " MeV, "
+                              << emax/CLHEP::MeV << " MeV, "
+                              << timesPhotonStatistics << ")" << G4endl;
+        G4cout << "Warning: the maximal energy <= the minimal energy." << G4endl;
+        G4cout << "The statistics was not added." << G4endl;
+        G4cout << " "<< G4endl;
+    }
+    else
+    {
+        G4bool setrange = true;
+        G4double logAddRangeEmindEmin = G4Log(emin/fMinPhotonEnergy);
+        G4double logAddRangeEmaxdEmin = G4Log(emax/fMinPhotonEnergy);
+
+        G4int nAddRange = (G4int)fTimesPhotonStatistics.size();
+        for (G4int j=0;j<nAddRange;j++)
+        {
+            if((logAddRangeEmindEmin>=fLogAddRangeEmindEmin[j]&&
+                logAddRangeEmindEmin< fLogAddRangeEmaxdEmin[j])||
+               (logAddRangeEmaxdEmin> fLogAddRangeEmindEmin[j]&&
+                logAddRangeEmaxdEmin<=fLogAddRangeEmaxdEmin[j])||
+               (logAddRangeEmindEmin<=fLogAddRangeEmindEmin[j]&&
+                logAddRangeEmaxdEmin>=fLogAddRangeEmaxdEmin[j]))
+            {
+                G4cout << "G4BaierKatkov model, "
+                          "function AddStatisticsInPhotonEnergyRegion("
+                                      << emin/CLHEP::MeV << " MeV, "
+                                      << emax/CLHEP::MeV << " MeV, "
+                                      << timesPhotonStatistics << ")" << G4endl;
+               G4cout << "Warning: the energy range intersects another "
+                         "added energy range." << G4endl;
+               G4cout << "The statistics was not added." << G4endl;
+               G4cout << " "<< G4endl;
+               setrange = false;
+               break;
+            }
+        }
+        if (setrange)
+        {
+            fLogAddRangeEmindEmin.push_back(logAddRangeEmindEmin);
+            fLogAddRangeEmaxdEmin.push_back(logAddRangeEmaxdEmin);
+            fTimesPhotonStatistics.push_back(timesPhotonStatistics);
+
+            G4cout << "G4BaierKatkov model: increasing the statistics of photon sampling "
+                      "in Baier-Katkov with a factor of "
+                   << timesPhotonStatistics << G4endl;
+            G4cout << "in the energy spectrum range: ("
+                   << emin/CLHEP::MeV << " MeV, "
+                   << emax/CLHEP::MeV << " MeV)" << G4endl;
+        }
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4BaierKatkov::SetPhotonSamplingParameters(G4double ekin,
                                                 G4double minPhotonAngleX,
                                                 G4double maxPhotonAngleX,
                                                 G4double minPhotonAngleY,
                                                 G4double maxPhotonAngleY)
 {
-    fLogEdEmin = std::log(ekin/fMinPhotonEnergy);
+    fLogEdEmin = G4Log(ekin/fMinPhotonEnergy);
     fMeanPhotonAngleX  = (maxPhotonAngleX+minPhotonAngleX)/2.;
     fParamPhotonAngleX = (maxPhotonAngleX-minPhotonAngleX)/2.;
     fMeanPhotonAngleY  = (maxPhotonAngleY+minPhotonAngleY)/2.;
@@ -161,28 +253,77 @@ void G4BaierKatkov::GeneratePhotonSampling()
     fPhotonAngleInIntegralX.clear();
     fPhotonAngleInIntegralY.clear();
     fPhotonAngleNormCoef.clear();
+    fInsideVirtualCollimator.clear();
     fIBinsSpectrum.clear();
 
     G4double ksi=0.;
-    G4double rho=1.;
-    G4double rhocut=15.;//radial angular cut of the distribution
-    G4double norm=std::atan(rhocut*rhocut)*
-                            CLHEP::pi*fParamPhotonAngleX*fParamPhotonAngleY;
+    std::vector<G4int> moreStatistics;
+    moreStatistics.resize(fTimesPhotonStatistics.size());
+    std::fill(moreStatistics.begin(), moreStatistics.end(), 0);
+    G4int nAddRange = (G4int)fTimesPhotonStatistics.size();
 
-    //sampling of the energy and the angles of a photon emission
+    //sampling of the energy of a photon emission
     //(integration variables, Monte Carlo integration)
     for (G4int j=0;j<fNMCPhotons;j++)
     {
-        ksi = G4UniformRand();
+        ksi = G4UniformRand()*fLogEdEmin;
         fIBinsSpectrum.push_back((G4int)std::trunc(
-                                     ksi*fNBinsSpectrum*fLogEdEmin/fLogEmaxdEmin));
+                                     ksi*fNBinsSpectrum/fLogEmaxdEmin));
         //we consider also the energy outside the spectrum  output range
         //(E>Emax => fLogEdEmin>fLogEmaxdEmin)
         //in this case we don't count the photon in the spectrum output
         if(fIBinsSpectrum[j]<fNBinsSpectrum) {fNPhotonsPerBin[fIBinsSpectrum[j]]+=1;}
 
-        fPhotonEnergyInIntegral.push_back(fMinPhotonEnergy*std::exp(fLogEdEmin*ksi));
+        fPhotonEnergyInIntegral.push_back(fMinPhotonEnergy*std::exp(ksi));
 
+        fPhotonAngleNormCoef.push_back(1.);
+
+        for (G4int j2=0;j2<nAddRange;j2++)
+        {
+            if(ksi>fLogAddRangeEmindEmin[j2]&&
+               ksi<fLogAddRangeEmaxdEmin[j2])
+            {
+               //calculating the current statistics in this region
+               //to increase it proportionally
+               moreStatistics[j2]+=1;
+               fPhotonAngleNormCoef[j]/=fTimesPhotonStatistics[j2];
+               break;
+            }
+        }
+    }
+
+    for (G4int j2=0;j2<nAddRange;j2++)
+    {
+        G4int totalAddRangeStatistics = moreStatistics[j2]*fTimesPhotonStatistics[j2];
+        for (G4int j=moreStatistics[j2];j<totalAddRangeStatistics;j++)
+        {
+            ksi = fLogAddRangeEmindEmin[j2]+
+                  G4UniformRand()*(std::min(fLogAddRangeEmaxdEmin[j2],fLogEdEmin)-
+                                   fLogAddRangeEmindEmin[j2]);
+            fIBinsSpectrum.push_back((G4int)std::trunc(
+                                         ksi*fNBinsSpectrum/fLogEmaxdEmin));
+         /*   //we consider also the energy outside the spectrum  output range
+            //(E>Emax => fLogEdEmin>fLogEmaxdEmin)
+            //in this case we don't count the photon in the spectrum output
+            if(fIBinsSpectrum.back()<fNBinsSpectrum)
+                {fNPhotonsPerBin[fIBinsSpectrum.back()]+=1;}*/
+
+            fPhotonEnergyInIntegral.push_back(fMinPhotonEnergy*std::exp(ksi));
+
+            fPhotonAngleNormCoef.push_back(1./fTimesPhotonStatistics[j2]);
+        }
+    }
+
+    G4double rho=1.;
+    const G4double rhocut=15.;//radial angular cut of the distribution
+    G4double norm=std::atan(rhocut*rhocut)*
+                            CLHEP::pi*fParamPhotonAngleX*fParamPhotonAngleY;
+
+    //sampling of the angles of a photon emission
+    //(integration variables, Monte Carlo integration)
+    G4int nmctotal = (G4int)fPhotonEnergyInIntegral.size();
+    for (G4int j=0;j<nmctotal;j++)
+    {
         //photon distribution with long tails (useful to not exclude particle angles
         //after a strong single scattering)
         //at ellipsescale < 1 => half of statistics of photons
@@ -199,11 +340,40 @@ void G4BaierKatkov::GeneratePhotonSampling()
         fPhotonAngleInIntegralY.push_back(fMeanPhotonAngleY+
                                          fParamPhotonAngleY*
                                           rho*std::sin(CLHEP::twopi*ksi));
-        fPhotonAngleNormCoef.push_back((1.+rho*rho*rho*rho)*norm);
+        fPhotonAngleNormCoef[j]*=(1.+rho*rho*rho*rho)*norm;
+
+        //test if the photon with these angles enter the virtual collimator
+        //(doesn't influence the Geant4 simulations,
+        //but only the accumulation of fTotalSpectrum
+        fInsideVirtualCollimator.push_back(fVirtualCollimatorAngularDiameter >
+                                           std::sqrt(fPhotonAngleInIntegralX[j]*
+                                                     fPhotonAngleInIntegralX[j]+
+                                                     fPhotonAngleInIntegralY[j]*
+                                                     fPhotonAngleInIntegralY[j]));
     }
     //reinitialize the vector of radiation CDF for each photon
-    fPhotonProductionCDF.resize(fNMCPhotons+1);// 0 element is equal to 0
+    fPhotonProductionCDF.resize(nmctotal+1);//0 element equal to 0
     std::fill(fPhotonProductionCDF.begin(), fPhotonProductionCDF.end(), 0.);
+
+    //if we have additional photons
+    if (nmctotal>fNMCPhotons)
+    {
+        //reinitialize intermediate integrals with zeros again
+        fFa.resize(nmctotal);
+        fSs.resize(nmctotal);
+        fSc.resize(nmctotal);
+        fSsx.resize(nmctotal);
+        fSsy.resize(nmctotal);
+        fScx.resize(nmctotal);
+        fScy.resize(nmctotal);
+        std::fill(fFa.begin(), fFa.end(), 0.);
+        std::fill(fSs.begin(), fSs.end(), 0.);
+        std::fill(fSc.begin(), fSc.end(), 0.);
+        std::fill(fSsx.begin(), fSsx.end(), 0.);
+        std::fill(fSsy.begin(), fSsy.end(), 0.);
+        std::fill(fScx.begin(), fScx.end(), 0.);
+        std::fill(fScy.begin(), fScy.end(), 0.);
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -270,13 +440,17 @@ G4double G4BaierKatkov::RadIntegral(G4double etotal, G4double mass,
     G4double e2 = etotal*etotal;
     G4double gammaInverse2 = mass*mass/(etotal*etotal);// 1/gamma^2 of
                                                        //the radiating charge particle
-    G4double coefNormLogdNMC = fLogEdEmin/fNMCPhotons;
+    G4double coefNormLogdNMC = fLogEdEmin/fNMCPhotons;//here fNMCPhotons is correct,
+                                          //additional photons have been already
+                                          //taken into account in weights
     G4double coefNorm = CLHEP::fine_structure_const/(8*(CLHEP::pi2))*coefNormLogdNMC;
     G4double e2pluseprime2 = 0.;//e2pluseprime2 =e2+eprime2
     G4double coefNormom2deprime2 = 0.; //coefNormom2deprime2 = coefNorm*om2/eprime2;
     G4double gammaInverse2om = 0.; //gammaInverse2*om
 
-    for (G4int j=0;j<fNMCPhotons;j++)
+    std::size_t nmctotal = fPhotonEnergyInIntegral.size();
+    for (std::size_t j=0;j<nmctotal;j++)
+        //the final number of photons may be different from fNMCPhotons
     {
         om = fPhotonEnergyInIntegral[j];
         eprime=etotal-om; //E'=E-omega
@@ -342,7 +516,8 @@ G4double G4BaierKatkov::RadIntegral(G4double etotal, G4double mass,
         //we consider also the energy outside the spectrum  output range
         //(E>Emax => fLogEdEmin>fLogEmaxdEmin)
         //in this case we don't count the photon in the spectrum output
-        if(fIBinsSpectrum[j]<fNBinsSpectrum)
+        //we fill the spectrum only in case of the angles inside the virtual collimator
+        if((fIBinsSpectrum[j]<fNBinsSpectrum)&&fInsideVirtualCollimator[j])
             {fSpectrum[fIBinsSpectrum[j]] += totalRadiationProbabilityPhj/
                     (om*coefNormLogdNMC);}
 
@@ -381,13 +556,15 @@ G4bool G4BaierKatkov::SetPhotonProductionParameters(G4double etotal, G4double ma
     //Generally ksi = G4UniformRand() is ok, but
     //we use as a correction for the case
     //when the radiation probability becomes too high (> 0.1)
-    G4double ksi = -std::log(G4UniformRand());
+    G4double ksi = -G4Log(G4UniformRand());
 
     if (ksi< fTotalRadiationProbabilityAlongTrajectory.back())  // photon produced
     {
+      G4double ksi1 = G4UniformRand()*fTotalRadiationProbabilityAlongTrajectory.back();
+
       //randomly choosing the photon to be produced from the sampling list
       //according to the probabilities calculated in the Baier-Katkov integral
-      G4int iphoton = FindVectorIndex(fPhotonProductionCDF,ksi)-1;//index of
+      G4int iphoton = FindVectorIndex(fPhotonProductionCDF,ksi1)-1;//index of
                                                                   //a photon produced
 
       //energy of the photon produced
@@ -406,7 +583,7 @@ G4bool G4BaierKatkov::SetPhotonProductionParameters(G4double etotal, G4double ma
                               momentumDirectionZ);
 
       //random calculation of the radiation point index (iNode)
-      ksi = G4UniformRand()*fTotalRadiationProbabilityAlongTrajectory.back();
+      //ksi = G4UniformRand()*fTotalRadiationProbabilityAlongTrajectory.back();
 
       //sort fTotalRadiationProbabilityAlongTrajectory
       //(increasing but oscillating function => non-monotonic)
@@ -524,8 +701,8 @@ G4bool G4BaierKatkov::DoRadiation(G4double etotal, G4double mass,
         //set the angular limits at the start of the trajectory part
         if(fImin0==0)
         {
-            //radiation within the angle = +-4/gamma ("4" - just an empirical number)
-            G4double radiationAngleLimit=4*mass/etotal;
+            //radiation within the angle = +-fRadiationAngleFactor/gamma
+            G4double radiationAngleLimit=fRadiationAngleFactor*mass/etotal;
 
             SetPhotonSamplingParameters(etotal-mass,
             *std::min_element(fParticleAnglesX.begin(),
@@ -558,9 +735,11 @@ G4bool G4BaierKatkov::DoRadiation(G4double etotal, G4double mass,
         if(fTotalRadiationProbability>fSinglePhotonRadiationProbabilityLimit||
                 flagEndTrajectory)
         {
+            fItrajectories += 1; //count this trajectory !!!correction 19.07.2023
+
             flagPhotonProduced = SetPhotonProductionParameters(etotal,mass);
 
-            fItrajectories += 1; //count this trajectory
+            // correction 19.07.2023 fItrajectories += 1; //count this trajectory
 
             //reinitialize intermediate integrals fFa, fSs, fSc, fSsx, fSsy, fScx, fScy;
             //reset radiation integral internal variables to defaults;

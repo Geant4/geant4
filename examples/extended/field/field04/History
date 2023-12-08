@@ -5,6 +5,15 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2023-09-05 Gabriele Cosmo (fieldex04-V11-01-01)
+- Replaced use of deprecated G4TouchableHistoryHandle with G4TouchableHandle.
+
+## 2023-07-05 Ivana Hrivnacova (fieldex04-V11-01-00)
+- Clang-tidy, new coding guidelines
+- Removed dummy F04SteppingActionMessenger
+- Clean-up trailing white-spaces
+
 ## 2022-11-16 John Apostolakis (fieldex04-V11-00-03)
 - Corrected assignement of epsMax=0.001 .  Also epsMin is dimensionless!
 
@@ -30,12 +39,12 @@ November 19, 2019 G.Cosmo - fieldex04-V10-05-00
 July 27, 2018 I.Hrivnacova - fieldex04-V10-04-02
 - Macro review and code clean-up:
   - Modify handling program according to basic examples
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac and added 'startPhase' program argument
-  - Added test for commands defined in the example at the end 
+  - Added test for commands defined in the example at the end
     of field04.in macro
   - Removed SetCut functions and commands from the physics list and
-    physics list messenger (available in G4 kernel) 
+    physics list messenger (available in G4 kernel)
   - Fixed warnings when geometry parameters are set in PreInit phase
   - Improved visualization of geometry
   - Added "beamOn 10" button in gui.mac
@@ -72,8 +81,8 @@ November 5, 2014 A.Dotti -  (fieldex04-V10-00-11)
 - Bug fixing for shared process.
 
 October 28, 2014 A. Dotti - (fieldex04-V10-00-10)
-- Proting to new optical phsyics processes API 
-  (no statics), requires: xrays-V10-00-06, op-V10-00-09, 
+- Proting to new optical phsyics processes API
+  (no statics), requires: xrays-V10-00-06, op-V10-00-09,
   phys-ctor-em-V10-00-18.
 
 February 28, 2014 G. Cosmo - (fieldex04-V10-00-09)
@@ -172,7 +181,7 @@ Jun 3rd, 2010, Peter Gumplinger    - fieldex04-V09-03-01
   tracking-V09-03-03 by implementing a DrawTrajectory() method.
 
 March 23rd, 2010, Gunter Folger     - fieldex04-V09-03-00
-- Add <ctime> header in src/F04RunAction.cc to fix a compile 
+- Add <ctime> header in src/F04RunAction.cc to fix a compile
   error on windows.
 
 November 6th, 2009 Peter Gumplinger - fieldex04-V09-02-03
@@ -202,7 +211,7 @@ November 25st, 2008 Peter Gumplinger - fieldex04-V09-01-05
 
 November 21st, 2008 Peter Gumplinger - fieldex04-V09-01-04
 ------------------------------------
-- changed F04PhysicsList.cc according to 
+- changed F04PhysicsList.cc according to
   examples/extended/hadronic/Hadr01
 
 July 3rd, 2008 Peter Gumplinger - fieldex04-V09-01-03

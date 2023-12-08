@@ -48,14 +48,14 @@ class OpNovicePrimaryGeneratorMessenger : public G4UImessenger
 {
  public:
   OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction*);
-  ~OpNovicePrimaryGeneratorMessenger();
+  ~OpNovicePrimaryGeneratorMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  OpNovicePrimaryGeneratorAction* fOpNoviceAction;
-  G4UIdirectory* fGunDir;
-  G4UIcmdWithADoubleAndUnit* fPolarCmd;
+  OpNovicePrimaryGeneratorAction* fOpNoviceAction = nullptr;
+  G4UIdirectory* fGunDir = nullptr;
+  G4UIcmdWithADoubleAndUnit* fPolarCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

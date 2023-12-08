@@ -131,6 +131,24 @@ enum G4MaterialConstPropertyIndex
   kCOATEDTHICKNESS,             // thickness of the thin layer in case of coated
   kCOATEDFRUSTRATEDTRANSMISSION,// for incident angle superior to limit angle, use frustrated transmission (if true)
                                 // or total reflection (if false)
+  kPROTONSCINTILLATIONTIMECONSTANT1,   //  these are per-particle time constants for
+  kPROTONSCINTILLATIONTIMECONSTANT2,   //  particle-dependent scintillation
+  kPROTONSCINTILLATIONTIMECONSTANT3,   //    "
+  kDEUTERONSCINTILLATIONTIMECONSTANT1, //    "
+  kDEUTERONSCINTILLATIONTIMECONSTANT2, //    "
+  kDEUTERONSCINTILLATIONTIMECONSTANT3, //    "
+  kTRITONSCINTILLATIONTIMECONSTANT1,   //    "
+  kTRITONSCINTILLATIONTIMECONSTANT2,   //    "
+  kTRITONSCINTILLATIONTIMECONSTANT3,   //    "
+  kALPHASCINTILLATIONTIMECONSTANT1,    //    "
+  kALPHASCINTILLATIONTIMECONSTANT2,    //    "
+  kALPHASCINTILLATIONTIMECONSTANT3,    //    "
+  kIONSCINTILLATIONTIMECONSTANT1,      //    "
+  kIONSCINTILLATIONTIMECONSTANT2,      //    "
+  kIONSCINTILLATIONTIMECONSTANT3,      //    "
+  kELECTRONSCINTILLATIONTIMECONSTANT1, //    "
+  kELECTRONSCINTILLATIONTIMECONSTANT2, //    "
+  kELECTRONSCINTILLATIONTIMECONSTANT3, //    "
 
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
 };

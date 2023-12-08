@@ -99,7 +99,7 @@ void G4ITMANAGER::Push(G4Track* track)
     }
     else
     {
-      G4KDTree* aTree = new G4KDTree();
+      auto  aTree = new G4KDTree();
       fTree.insert(std::make_pair(key, aTree));
       node = aTree->Insert(aIT);
     }
@@ -116,10 +116,8 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position,
   {
     return it->second->Nearest(position);
   }
-  else
-  {
-    return nullptr;
-  }
+  
+  return nullptr;
 }
 
 TEMPLATE
@@ -147,28 +145,22 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, G4int key)
       }
       return output;
     }
-    else
-    {
-      return nullptr;
-    }
+    
+    return nullptr;
   }
-  else
+  
+  auto it = fTree.find(key);
+  if(it != fTree.end())
   {
-    auto it = fTree.find(key);
-    if(it != fTree.end())
-    {
-      G4KDTreeResultHandle output(it->second->Nearest(*point0));
-      if(!output)
-      {
-        return nullptr;
-      }
-      return output;
-    }
-    else
+    G4KDTreeResultHandle output(it->second->Nearest(*point0));
+    if(!output)
     {
       return nullptr;
     }
+    return output;
   }
+  
+  return nullptr;
 }
 
 TEMPLATE
@@ -186,10 +178,8 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(
   {
     return it->second->NearestInRange(position, R);
   }
-  else
-  {
-    return nullptr;
-  }
+  
+  return nullptr;
 }
 
 TEMPLATE
@@ -202,21 +192,15 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0, G4int key,
     auto it              = fTree.find(key);
     if(it != fTree.end())
       return it->second->NearestInRange(node0, R);
-    else
-    {
-      return nullptr;
-    }
+    
+   return nullptr;
   }
-  else
-  {
-    auto it = fTree.find(key);
-    if(it != fTree.end())
-      return it->second->NearestInRange(*point0, R);
-    else
-    {
-      return nullptr;
-    }
-  }
+  
+  auto it = fTree.find(key);
+  if(it != fTree.end())
+    return it->second->NearestInRange(*point0, R);
+    
+  return nullptr;
 }
 
 //#define DEBUG_MEM
@@ -258,44 +242,43 @@ void G4ITMANAGER::UpdatePositionMap()
 
       continue;
     }
-    else
-    {
-      auto currentTree = new G4KDTree();
-      fTree[key]       = currentTree;
+    
+    auto currentTree = new G4KDTree();
+    fTree[key]       = currentTree;
 #if defined(DEBUG_MEM)
-      mem_second = MemoryUsage();
-      mem_diff   = mem_second - mem_first;
-      G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
-                "after creating tree, diff is : "
-             << mem_diff << G4endl;
+    mem_second = MemoryUsage();
+    mem_diff   = mem_second - mem_first;
+    G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+              "after creating tree, diff is : "
+           << mem_diff << G4endl;
 #endif
 
-      G4TrackList* trackList      = listUnion->GetMainList();
-      G4TrackList::iterator __it  = trackList->begin();
-      G4TrackList::iterator __end = trackList->end();
+    G4TrackList* trackList      = listUnion->GetMainList();
+    G4TrackList::iterator __it  = trackList->begin();
+    G4TrackList::iterator __end = trackList->end();
 
-      for(; __it != __end; __it++)
-      {
-        G4IT* currentIT            = GetIT(*__it);
-        G4KDNode_Base* currentNode = currentTree->Insert(currentIT);
-        currentIT->SetNode(currentNode);
-
-#if defined(DEBUG_MEM)
-        mem_second = MemoryUsage();
-        mem_diff   = mem_second - mem_first;
-        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
-                  "after currentIT->SetNode(currentNode), diff is : "
-               << mem_diff << G4endl;
-#endif
-      }
+     for(; __it != __end; __it++)
+     {
+       G4IT* currentIT            = GetIT(*__it);
+       G4KDNode_Base* currentNode = currentTree->Insert(currentIT);
+       currentIT->SetNode(currentNode);
 
 #if defined(DEBUG_MEM)
       mem_second = MemoryUsage();
       mem_diff   = mem_second - mem_first;
       G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
-                "In else{...}, diff is : "
+                "after currentIT->SetNode(currentNode), diff is : "
              << mem_diff << G4endl;
 #endif
     }
+
+#if defined(DEBUG_MEM)
+    mem_second = MemoryUsage();
+    mem_diff   = mem_second - mem_first;
+    G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+              "In else{...}, diff is : "
+           << mem_diff << G4endl;
+#endif
+   
   }
 }

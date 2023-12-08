@@ -35,8 +35,6 @@
 #include "G4VEvaporationChannel.hh"
 
 G4VEvaporation::G4VEvaporation()
-  :thePhotonEvaporation(nullptr),theFBU(nullptr),OPTxs(3),useSICB(true)
-   ,theChannels(nullptr),theChannelFactory(nullptr)
 {}
 
 G4VEvaporation::~G4VEvaporation() 
@@ -49,8 +47,8 @@ G4VEvaporation::~G4VEvaporation()
 void G4VEvaporation::CleanChannels()
 {
   // clean all except photon evaporation
-  if(theChannels) { 
-    for (size_t i=1; i<theChannels->size(); ++i) { 
+  if(nullptr != theChannels) { 
+    for (std::size_t i=1; i<theChannels->size(); ++i) { 
       delete (*theChannels)[i]; 
     }
     delete theChannels;
@@ -65,10 +63,12 @@ void G4VEvaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 {
   // photon evaporation channel is the first
   // G4VEvaporation is responsible for its deletion
-  if(thePhotonEvaporation != ptr) {
+  if (thePhotonEvaporation != ptr) {
     delete thePhotonEvaporation;
     thePhotonEvaporation = ptr;
-    if(theChannels && 0 < theChannels->size()) { (*theChannels)[0] = ptr; }
+    if (nullptr != theChannels && 0 < theChannels->size()) {
+      (*theChannels)[0] = ptr;
+    }
   }
 }
 

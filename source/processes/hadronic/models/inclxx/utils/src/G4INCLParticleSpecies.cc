@@ -117,12 +117,57 @@ namespace G4INCL {
       theA = 1;
       theZ = -1;
       theS = -1;
-      theType = G4INCL::SigmaMinus;
+      theType = G4INCL::SigmaMinus; 
+    } else if(pS=="xi-" || pS=="x-") {
+      theA = 1;
+      theZ = -1;
+      theS = -2;
+      theType = G4INCL::XiMinus; 
+    } else if(pS=="xi0" || pS=="x0") {
+      theA = 1;
+      theZ = 0;
+      theS = -2;
+      theType = G4INCL::XiZero;  
     } else if(pS=="pb" || pS=="antiproton") {
       theA = -1;
       theZ = -1;
       theS = 0;
-      theType = G4INCL::antiProton;
+      theType = G4INCL::antiProton;   
+    } else if(pS=="nb" || pS=="antineutron") {
+      theA = -1;
+      theZ = 0;
+      theS = 0;
+      theType = G4INCL::antiNeutron;
+    } else if(pS=="s+b" || pS=="antisigma+" || pS=="antisigmaplus")  {
+      theA = -1;
+      theZ = -1;
+      theS = 1;
+      theType = G4INCL::antiSigmaPlus;
+    } else if(pS=="s0b" || pS=="antisigma0" || pS=="antisigmazero")  {
+      theA = -1;
+      theZ = 0;
+      theS = 1;
+      theType = G4INCL::antiSigmaZero;
+    } else if(pS=="s-b" || pS=="antisigma-" || pS=="antisigmaminus")  { //Sm = Samarium; Whats wrong with the sign?
+      theA = -1;
+      theZ = 1;
+      theS = 1;
+      theType = G4INCL::antiSigmaMinus;
+    } else if(pS=="antilambda" || pS=="lb" || pS=="l0b")  {
+      theA = -1;
+      theZ = 0;
+      theS = 1;
+      theType = G4INCL::antiLambda;
+    } else if(pS=="antixi-" || pS=="x-b") {
+      theA = -1;
+      theZ = 1;
+      theS = 2;
+      theType = G4INCL::antiXiMinus; 
+    } else if(pS=="antixi0" || pS=="x0b") {
+      theA = -1;
+      theZ = 0;
+      theS = 2;
+      theType = G4INCL::antiXiZero;  
     } else if(pS=="k+" || pS=="kaon+" || pS=="kplus" || pS=="kaonplus") {
       theA = 0;
       theZ = 1;
@@ -187,7 +232,7 @@ namespace G4INCL {
       theA = 0;
       theZ = 0;
       theS = 0;
-      theType = G4INCL::Photon;
+      theType = G4INCL::Photon;    
     } else
       parseNuclide(pS);
   }
@@ -291,7 +336,7 @@ namespace G4INCL {
     std::string firstSection(pS.substr(0,endFirstSection));
     std::string secondSection(pS.substr(beginSecondSection,std::string::npos));
     std::stringstream parsingStream;
-    
+
     if(std::isalpha(firstSection.at(0)) && std::isdigit(firstSection.at(endFirstSection-1))) { // Hypernucleus, must be Fe56-1 style
       std::stringstream parseStrangeness;
       parseStrangeness.str(secondSection);
@@ -369,89 +414,116 @@ namespace G4INCL {
 	
   G4int ParticleSpecies::getPDGCode() const {
     switch (theType) {
-      case Proton:
-        return 2212;
-        break;
-      case Neutron:
-	return 2112;
-	break;
-      case DeltaPlusPlus:
-	return 2224;
-	break;
-      case DeltaPlus:
-        return 2214;
-	break;
-      case DeltaZero:
-	return 2114;
-	break;
-      case DeltaMinus:
-	return 1114;
-	break;
-      case PiPlus:
-	return 211;
-	break;
-      case PiZero:
-	return 111;
-	break;
-      case PiMinus:
-	return -211;
-	break;
-      case Eta:
-	return 221;
-	break;
-      case Omega:
-	return 223;
-	break;
-      case EtaPrime:
-	return 331;
-	break;
-      case Photon:
-	return 22;
-	break;
-      case Lambda:
-	return 3122;
-	break;
-      case SigmaPlus:
-	return 3222;
-	break;
-      case SigmaZero:
-	return 3212;
-	break;
-      case SigmaMinus:
-	return 3112;
-	break;		
+		case Proton:
+		    return 2212;
+			break;
+		case Neutron:
+		    return 2112;
+			break;
+		case DeltaPlusPlus:
+		    return 2224;
+			break;
+		case DeltaPlus:
+		    return 2214;
+			break;
+		case DeltaZero:
+		    return 2114;
+			break;
+		case DeltaMinus:
+		    return 1114;
+			break;
+		case PiPlus:
+		    return 211;
+			break;
+		case PiZero:
+		    return 111;
+			break;
+		case PiMinus:
+		    return -211;
+			break;
+		case Eta:
+		    return 221;
+			break;
+		case Omega:
+		    return 223;
+			break;
+		case EtaPrime:
+		    return 331;
+			break;
+		case Photon:
+		    return 22;
+			break;
+		case Lambda:
+		    return 3122;
+			break;
+		case SigmaPlus:
+		    return 3222;
+			break;
+		case SigmaZero:
+		    return 3212;
+			break;
+		case SigmaMinus:
+		    return 3112;
+			break;			
       case antiProton:
         return -2212;
-        break;	
-      case KPlus:
-	return 321;
-	break;
-      case KZero:
-	return 311;
-	break;
-      case KZeroBar:
-	return -311;
-	break;
-      case KShort:
-	return 310;
-	break;
-      case KLong:
-	return 130;
-	break;
-      case KMinus:
-	return -321;
-	break;		
-      case Composite:
-        if(theA == 1 && theZ == 1 && theS == 0) return 2212;
-        else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
-        else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
-        else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
-        break;
-      default:
-        INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
-        return 0;
-        break;
-    }
+      break;
+		case XiMinus:
+		    return 3312;
+			break;
+		case XiZero:
+		    return 3322;
+			break;			
+		case antiNeutron:
+		    return -2112;
+			break;
+		case antiLambda:
+		    return -3122;
+			break;
+		case antiSigmaPlus:
+		    return -3222;
+			break;
+		case antiSigmaZero:
+		    return -3212;
+			break;
+		case antiSigmaMinus:
+		    return -3112;
+			break;
+		case antiXiMinus:
+		    return -3312;
+			break;
+		case antiXiZero:
+		    return -3322;
+			break;				
+		case KPlus:
+		    return 321;
+			break;
+		case KZero:
+		    return 311;
+			break;
+		case KZeroBar:
+		    return -311;
+			break;
+		case KShort:
+		    return 310;
+			break;
+		case KLong:
+		    return 130;
+			break;
+		case KMinus:
+		    return -321;
+			break;		
+		case Composite:
+			if(theA == 1 && theZ == 1 && theS == 0) return 2212;
+			else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
+			else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
+			else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
+			break;
+		default:
+			INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
+			return 0;
+			break;
+	}	
   }
 }
 

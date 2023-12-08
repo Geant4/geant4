@@ -54,11 +54,6 @@ PrimaryGeneratorAction2::PrimaryGeneratorAction2(G4ParticleGun* gun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction2::~PrimaryGeneratorAction2()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PrimaryGeneratorAction2::GeneratePrimaries(G4Event* anEvent)
 {
   // uniform solid angle

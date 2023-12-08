@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,35 +33,35 @@
 // ----------------------------------------------------------------------
 
 #include "G4He3.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                           He3                                  ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
 
 G4He3* G4He3::theInstance = nullptr;
 
 G4He3* G4He3::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "He3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==nullptr) 
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  //             excitation 
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    //             excitation
+
+    // clang-format off
     anInstance = new G4Ions(
                  name,    2.808391*GeV,       0.0*MeV,  +2.0*eplus,
                     1,              +1,             0,
@@ -74,25 +71,23 @@ G4He3* G4He3::Definition()
 		false,        "static",   -1000020030,
 		 0.0,                0
               );
- 
-    // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( -2.12762485 * mN);
+    // clang-format on
 
+    // Magnetic Moment
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(-2.12762485 * mN);
   }
 
   theInstance = static_cast<G4He3*>(anInstance);
   return theInstance;
 }
 
-G4He3*  G4He3::He3Definition()
+G4He3* G4He3::He3Definition()
 {
   return Definition();
 }
 
-G4He3*  G4He3::He3()
+G4He3* G4He3::He3()
 {
   return Definition();
 }
-
-

@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-26 Alberto Ribon (hadr-string-diff-V11-01-00)
+- G4FTFTunings : introduced a new FTF tune meant to overcome the problem of
+  too optimistic (i.e. narrow) pion shower energy resolutions in ATLAS
+  calorimeters with respect to test-beam data.
+
 ## 2022-11-26 Gabriele Cosmo (hadr-string-diff-V11-00-12)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

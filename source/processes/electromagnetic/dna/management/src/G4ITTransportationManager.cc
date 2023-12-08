@@ -40,7 +40,7 @@
 #include "G4PVPlacement.hh"
 
 G4ThreadLocal G4ITTransportationManager*
-G4ITTransportationManager::fpInstance(0);
+G4ITTransportationManager::fpInstance(nullptr);
 
 G4ITTransportationManager::G4ITTransportationManager()
 {
@@ -50,15 +50,15 @@ G4ITTransportationManager::G4ITTransportationManager()
 G4ITTransportationManager::~G4ITTransportationManager()
 {
   ClearNavigators();
-  if (fpSafetyHelper) delete fpSafetyHelper;
+  delete fpSafetyHelper;
 }
 
 void G4ITTransportationManager::DeleteInstance()
 {
-  if (fpInstance)
+  if (fpInstance != nullptr)
   {
     delete fpInstance;
-    fpInstance = 0;
+    fpInstance = nullptr;
   }
 }
 
@@ -84,7 +84,7 @@ void G4ITTransportationManager::Initialize()
 {
   // Create the navigator for tracking and activate it; add to collections
   //
-  G4ITNavigator* trackingNavigator = new G4ITNavigator();
+  auto  trackingNavigator = new G4ITNavigator();
   trackingNavigator->Activate(true);
   G4Navigator* navForTracking =
       G4TransportationManager::GetTransportationManager()
@@ -97,7 +97,7 @@ void G4ITTransportationManager::Initialize()
 
   size_t n_worlds = G4TransportationManager::GetTransportationManager()
       ->GetNoWorlds();
-  std::vector<G4VPhysicalVolume*>::iterator it =
+  auto it =
       G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
 
   for (size_t i = 0; i < n_worlds; i++, it++)
@@ -109,7 +109,7 @@ void G4ITTransportationManager::Initialize()
 
 G4ITTransportationManager* G4ITTransportationManager::GetTransportationManager()
 {
-  if (fpInstance == 0) fpInstance = new G4ITTransportationManager;
+  if (fpInstance == nullptr) fpInstance = new G4ITTransportationManager;
   return fpInstance;
 }
 
@@ -123,13 +123,13 @@ G4VPhysicalVolume*
 G4ITTransportationManager::GetParallelWorld(const G4String& worldName)
 {
   G4VPhysicalVolume* wPV = IsWorldExisting(worldName);
-  if (!wPV)
+  if (wPV == nullptr)
   {
     wPV = GetNavigatorForTracking()->GetWorldVolume();
     G4LogicalVolume* wLV = wPV->GetLogicalVolume();
-    wLV = new G4LogicalVolume(wLV->GetSolid(), 0, worldName);
+    wLV = new G4LogicalVolume(wLV->GetSolid(), nullptr, worldName);
     wPV = new G4PVPlacement(wPV->GetRotation(), wPV->GetTranslation(), wLV,
-                            worldName, 0, false, 0);
+                            worldName, nullptr, false, 0);
     RegisterWorld(wPV);
   }
   return wPV;
@@ -158,9 +158,9 @@ G4ITNavigator* G4ITTransportationManager::GetNavigator(const G4String& worldName
   // Check if world of that name already exists,
   // create a navigator and register it
   //
-  G4ITNavigator* aNavigator = 0;
+  G4ITNavigator* aNavigator = nullptr;
   G4VPhysicalVolume* aWorld = IsWorldExisting(worldName);
-  if (aWorld)
+  if (aWorld != nullptr)
   {
     aNavigator = new G4ITNavigator();
     aNavigator->SetWorldVolume(aWorld);
@@ -195,8 +195,8 @@ G4ITNavigator* G4ITTransportationManager::GetNavigator(G4VPhysicalVolume* aWorld
       return *pNav;
     }
   }
-  G4ITNavigator* aNavigator = 0;
-  std::vector<G4VPhysicalVolume*>::iterator pWorld = std::find(fWorlds.begin(),
+  G4ITNavigator* aNavigator = nullptr;
+  auto pWorld = std::find(fWorlds.begin(),
                                                                fWorlds.end(),
                                                                aWorld);
   if (pWorld != fWorlds.end())
@@ -233,7 +233,7 @@ void G4ITTransportationManager::DeRegisterNavigator(G4ITNavigator* aNavigator)
                 "GeomNav0003", FatalException,
                 "The navigator for tracking CANNOT be deregistered!");
   }
-  std::vector<G4ITNavigator*>::iterator pNav = std::find(fNavigators.begin(),
+  auto pNav = std::find(fNavigators.begin(),
                                                          fNavigators.end(),
                                                          aNavigator);
   if (pNav != fNavigators.end())
@@ -266,7 +266,7 @@ void G4ITTransportationManager::DeRegisterNavigator(G4ITNavigator* aNavigator)
 //
 G4int G4ITTransportationManager::ActivateNavigator(G4ITNavigator* aNavigator)
 {
-  std::vector<G4ITNavigator*>::iterator pNav = std::find(fNavigators.begin(),
+  auto pNav = std::find(fNavigators.begin(),
                                                          fNavigators.end(),
                                                          aNavigator);
   if (pNav == fNavigators.end())
@@ -304,7 +304,7 @@ G4int G4ITTransportationManager::ActivateNavigator(G4ITNavigator* aNavigator)
 //
 void G4ITTransportationManager::DeActivateNavigator(G4ITNavigator* aNavigator)
 {
-  std::vector<G4ITNavigator*>::iterator pNav = std::find(fNavigators.begin(),
+  auto pNav = std::find(fNavigators.begin(),
                                                          fNavigators.end(),
                                                          aNavigator);
   if (pNav != fNavigators.end())
@@ -319,7 +319,7 @@ void G4ITTransportationManager::DeActivateNavigator(G4ITNavigator* aNavigator)
                 "GeomNav1002", JustWarning, message);
   }
 
-  std::vector<G4ITNavigator*>::iterator pActiveNav = std::find(
+  auto pActiveNav = std::find(
       fActiveNavigators.begin(), fActiveNavigators.end(), aNavigator);
   if (pActiveNav != fActiveNavigators.end())
   {
@@ -358,7 +358,7 @@ void G4ITTransportationManager::InactivateAll()
 G4VPhysicalVolume*
 G4ITTransportationManager::IsWorldExisting(const G4String& name)
 {
-  std::vector<G4VPhysicalVolume*>::iterator pWorld = fWorlds.begin();
+  auto pWorld = fWorlds.begin();
   if (*pWorld == 0)
   {
     *pWorld = fNavigators[0]->GetWorldVolume();
@@ -371,7 +371,7 @@ G4ITTransportationManager::IsWorldExisting(const G4String& name)
       return *pWorld;
     }
   }
-  return 0;
+  return nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -385,7 +385,7 @@ G4bool G4ITTransportationManager::RegisterWorld(G4VPhysicalVolume* aWorld)
 {
   G4bool done = false;
 
-  std::vector<G4VPhysicalVolume*>::iterator pWorld = std::find(fWorlds.begin(),
+  auto pWorld = std::find(fWorlds.begin(),
                                                                fWorlds.end(),
                                                                aWorld);
   if (pWorld == fWorlds.end())
@@ -405,7 +405,7 @@ G4bool G4ITTransportationManager::RegisterWorld(G4VPhysicalVolume* aWorld)
 //
 void G4ITTransportationManager::DeRegisterWorld(G4VPhysicalVolume* aWorld)
 {
-  std::vector<G4VPhysicalVolume*>::iterator pWorld = std::find(fWorlds.begin(),
+  auto pWorld = std::find(fWorlds.begin(),
                                                                fWorlds.end(),
                                                                aWorld);
   if (pWorld != fWorlds.end())

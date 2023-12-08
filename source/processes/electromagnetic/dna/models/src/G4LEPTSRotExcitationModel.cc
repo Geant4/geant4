@@ -31,11 +31,11 @@ G4LEPTSRotExcitationModel::G4LEPTSRotExcitationModel(const G4String&  modelName)
  : G4VLEPTSModel( modelName )
 {
   theXSType = XSRotation;
+  fParticleChangeForGamma = nullptr;
 } 
 
 
-G4LEPTSRotExcitationModel::~G4LEPTSRotExcitationModel() {
-}
+G4LEPTSRotExcitationModel::~G4LEPTSRotExcitationModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

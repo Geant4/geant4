@@ -48,22 +48,22 @@ class DetectorMessenger: public G4UImessenger
   public:
   
     DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+   ~DetectorMessenger() override;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
     
   private:
   
-    DetectorConstruction*      fDetector;
+    DetectorConstruction*      fDetector = nullptr;
     
-    G4UIdirectory*             fRdecayDir;
-    G4UIdirectory*             fDetDir;
-    G4UIcmdWithAString*        fTargMatCmd;
-    G4UIcmdWithAString*        fDetectMatCmd;
-    G4UIcmdWithADoubleAndUnit* fTargRadiusCmd;
-    G4UIcmdWithADoubleAndUnit* fDetectThicknessCmd;
-    G4UIcmdWithADoubleAndUnit* fTargLengthCmd;
-    G4UIcmdWithADoubleAndUnit* fDetectLengthCmd;    
+    G4UIdirectory*             fRdecayDir          = nullptr;
+    G4UIdirectory*             fDetDir             = nullptr;
+    G4UIcmdWithAString*        fTargMatCmd         = nullptr;
+    G4UIcmdWithAString*        fDetectMatCmd       = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTargRadiusCmd      = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDetectThicknessCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTargLengthCmd      = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDetectLengthCmd    = nullptr;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

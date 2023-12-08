@@ -42,9 +42,9 @@ using namespace std;
 
 G4DNAMeltonAttachmentModel::G4DNAMeltonAttachmentModel(const G4ParticleDefinition*,
                                                        const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
-  fpWaterDensity = 0;
+  fpWaterDensity = nullptr;
 
   SetLowEnergyLimit(4.*eV);
   SetHighEnergyLimit(13.*eV);
@@ -69,9 +69,9 @@ G4VEmModel(nam), isInitialised(false)
   }
 #endif
   
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
   fDissociationFlag = true;
-  fData = 0;
+  fData = nullptr;
 
   // Selection of stationary mode
 
@@ -82,7 +82,7 @@ G4VEmModel(nam), isInitialised(false)
 
 G4DNAMeltonAttachmentModel::~G4DNAMeltonAttachmentModel()
 {
-  if(fData) delete fData;
+  delete fData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

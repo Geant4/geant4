@@ -30,12 +30,12 @@ G4LEPTSElasticModel::G4LEPTSElasticModel(const G4String& modelName)
   : G4VLEPTSModel( modelName )
 {
   theXSType = XSElastic;
+  fParticleChangeForGamma = nullptr;
 } // constructor
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4LEPTSElasticModel::~G4LEPTSElasticModel() {
-}
+G4LEPTSElasticModel::~G4LEPTSElasticModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

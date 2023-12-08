@@ -199,7 +199,7 @@ const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
 
 void G4VisAttributes::SetForceLineSegmentsPerCircle (G4int nSegments) {
   const G4int nSegmentsMin = fMinLineSegmentsPerCircle;
-  if (nSegments > 0 && nSegments < nSegmentsMin) {
+  if (nSegments < nSegmentsMin) {
     nSegments = nSegmentsMin;
     G4cout <<
       "G4VisAttributes::SetForcedLineSegmentsPerCircle: attempt to set the"

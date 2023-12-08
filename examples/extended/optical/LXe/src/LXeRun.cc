@@ -36,28 +36,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeRun::LXeRun()
-  : G4Run()
-{
-  fHitCount = fHitCount2 = 0;
-  fPhotonCount_Scint = fPhotonCount_Scint2 = 0;
-  fPhotonCount_Ceren = fPhotonCount_Ceren2 = 0;
-  fAbsorptionCount = fAbsorptionCount2 = 0;
-  fBoundaryAbsorptionCount = fBoundaryAbsorptionCount2 = 0;
-  fPMTsAboveThreshold = fPMTsAboveThreshold2 = 0;
-
-  fTotE = fTotE2 = 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeRun::~LXeRun() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeRun::Merge(const G4Run* run)
 {
-  const LXeRun* localRun = static_cast<const LXeRun*>(run);
+  const auto localRun = static_cast<const LXeRun*>(run);
 
   fHitCount += localRun->fHitCount;
   fHitCount2 += localRun->fHitCount2;
@@ -85,7 +66,7 @@ void LXeRun::EndOfRun()
 
   G4int prec = G4cout.precision();
 
-  G4double n_evt = (G4double) numberOfEvent;
+  auto n_evt = (G4double) numberOfEvent;
   G4cout << "The run was " << numberOfEvent << " events." << G4endl;
 
   G4cout.precision(4);

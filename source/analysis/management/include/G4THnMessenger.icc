@@ -50,11 +50,13 @@ G4THnMessenger<DIM, HT>::G4THnMessenger(G4THnToolsManager<DIM, HT>* manager)
     fSetDimensionCmd[idim] = CreateSetBinsCommand(idim);
   }
 
+  DeleteCmd();
+
   CreateSetTitleCommand();
 
-  for (unsigned int idim = 0; idim < DIM + 1; ++idim) {
+  auto maxDim = (DIM < kMaxDim) ? DIM + 1 : kMaxDim;
+  for (unsigned int idim = 0; idim < maxDim; ++idim) {
     fSetAxisCmd[idim] = CreateSetAxisCommand(idim);
-    fSetAxisLogCmd[idim] = CreateSetAxisLogCommand(idim);
   }
 
   CreateListCommand();
@@ -181,12 +183,6 @@ void G4THnMessenger<DIM, HT>::CreateDimensionParameters(
 template <unsigned int DIM, typename HT>
 void G4THnMessenger<DIM, HT>::AddIdParameter(G4UIcommand& command)
 {
-  // update guidance
-  // // TO DO: this will add a new guidance as a new line !!
-  // auto guidance = command.GetGuidanceLine(0);
-  // guidance += " of given id";
-  // command.SetGuidance(guidance);
-
   // add parameter
   auto htId = new G4UIparameter("id", 'i', false);
   htId->SetGuidance("Histogram id");
@@ -283,6 +279,25 @@ void G4THnMessenger<DIM, HT>::SetCmd()
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
+void G4THnMessenger<DIM, HT>::DeleteCmd()
+{
+  fDeleteCmd = CreateCommand("delete", "Delete ");
+  fDeleteCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*fDeleteCmd);
+
+  auto parKeepSetting = new G4UIparameter("keepSetting", 'b', true);
+  G4String guidance =
+    "If set true, activation, plotting, etc. options will be kept\n"
+    "and applied when a new object with the same id is created.";
+  parKeepSetting->SetGuidance(guidance.c_str());
+  parKeepSetting->SetDefaultValue("false");
+  fDeleteCmd->SetParameter(parKeepSetting);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
 std::unique_ptr<G4UIcommand>
 G4THnMessenger<DIM, HT>::CreateSetBinsCommand(unsigned int idim)
 {
@@ -354,31 +369,6 @@ G4THnMessenger<DIM, HT>::CreateSetAxisCommand(unsigned int idim)
   guidance = GetObjectType() + " " + axis + "-axis title";
   parAxis->SetGuidance(guidance.c_str());
   command->SetParameter(parAxis);
-
-  return command;
-}
-
-//_____________________________________________________________________________
-template <unsigned int DIM, typename HT>
-std::unique_ptr<G4UIcommand>
-G4THnMessenger<DIM, HT>::CreateSetAxisLogCommand(unsigned int idim)
-{
-  G4String xyz{"XYZ"};
-  auto axis = xyz.substr(idim, 1);
-
-  G4String commandName = "set" + axis + "axisLog";
-  G4String guidance =  "Activate " + axis + "-axis  log scale for plotting of the ";
-
-  auto command = CreateCommand(commandName, guidance);
-  command->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  // Add Id parameter
-  AddIdParameter(*command);
-
-  auto parAxisLog = new G4UIparameter("axis", 'b', false);
-  guidance = GetObjectType() + " " + axis + "-axis log scale";
-  parAxisLog->SetGuidance(guidance.c_str());
-  command->SetParameter(parAxisLog);
 
   return command;
 }
@@ -522,6 +512,14 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
     return;
   }
 
+  if ( command == fDeleteCmd.get() ) {
+    auto counter = 0;
+    auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    auto keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->Delete(id, keepSetting);
+    return;
+  }
+
   if ( command == fSetTitleCmd.get() ) {
     auto counter = 0;
     auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
@@ -547,7 +545,7 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
       }
       if ( idim == DIM - 1) {
         // Apply parameters when all dimensions are set
-        fManager->Set(fTmpId[idim], bins, info);
+        fManager->Set(fTmpId[idim], fTmpBins, fTmpInfo);
         return;
       }
     }
@@ -570,14 +568,6 @@ void G4THnMessenger<DIM, HT>::SetNewValue(G4UIcommand* command, G4String newValu
       fManager->SetAxisTitle(idim, id, axisTitle);
       return;
     }  
-    if ( command == fSetAxisLogCmd[idim].get() ) {
-      // TO DO: this should go in HnMessenger
-      auto counter = 0;
-      auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
-      auto axisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
-      fManager->GetHnManager()->SetAxisIsLog(idim, id, axisLog);
-      return;
-    }
   }
 
   if ( command == fListCmd.get() ) {

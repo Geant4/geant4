@@ -90,10 +90,6 @@ DetectorConstruction::~DetectorConstruction()
 {
   delete fArmRotation;
   delete fMessenger;
-
-  for (auto visAttributes: fVisAttributes) {
-    delete visAttributes;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -286,57 +282,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // visualization attributes ------------------------------------------------
 
-  auto visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  visAttributes->SetVisibility(false);
-  worldLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  G4VisAttributes invisible(G4VisAttributes::GetInvisible());
+  G4VisAttributes invisibleBlue(false, G4Colour::Blue());
+  G4VisAttributes invisibleGreen(false, G4Colour::Green());
+  G4VisAttributes invisibleYellow(false, G4Colour::Yellow());
+  G4VisAttributes blue(G4Colour::Blue());
+  G4VisAttributes cgray(G4Colour::Gray());
+  G4VisAttributes green(G4Colour::Green());
+  G4VisAttributes red(G4Colour::Red());
+  G4VisAttributes yellow(G4Colour::Yellow());
 
-  visAttributes = new G4VisAttributes(G4Colour(0.9,0.9,0.9));   // LightGray
-  fMagneticLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  worldLogical->SetVisAttributes(invisible);
+  firstArmLogical->SetVisAttributes(invisible);
+  secondArmLogical->SetVisAttributes(invisible);
 
-  visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  visAttributes->SetVisibility(false);
-  firstArmLogical->SetVisAttributes(visAttributes);
-  secondArmLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  fMagneticLogical->SetVisAttributes(cgray);
+  fHodoscope1Logical->SetVisAttributes(red);
+  fHodoscope2Logical->SetVisAttributes(red);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.8888,0.0,0.0));
-  fHodoscope1Logical->SetVisAttributes(visAttributes);
-  fHodoscope2Logical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  chamber1Logical->SetVisAttributes(green);
+  chamber2Logical->SetVisAttributes(green);
+  fWirePlane1Logical->SetVisAttributes(invisibleGreen);
+  fWirePlane2Logical->SetVisAttributes(invisibleGreen);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  chamber1Logical->SetVisAttributes(visAttributes);
-  chamber2Logical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  emCalorimeterLogical->SetVisAttributes(invisibleYellow);
+  fCellLogical->SetVisAttributes(yellow);
 
-  visAttributes = new G4VisAttributes(G4Colour(0.0,0.8888,0.0));
-  visAttributes->SetVisibility(false);
-  fWirePlane1Logical->SetVisAttributes(visAttributes);
-  fWirePlane2Logical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
-
-  visAttributes = new G4VisAttributes(G4Colour(0.8888,0.8888,0.0));
-  visAttributes->SetVisibility(false);
-  emCalorimeterLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
-
-  visAttributes = new G4VisAttributes(G4Colour(0.9,0.9,0.0));
-  fCellLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
-
-  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
-  hadCalorimeterLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
-
-  visAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
-  visAttributes->SetVisibility(false);
-  HadCalColumnLogical->SetVisAttributes(visAttributes);
-  HadCalCellLogical->SetVisAttributes(visAttributes);
-  HadCalLayerLogical->SetVisAttributes(visAttributes);
-  fHadCalScintiLogical->SetVisAttributes(visAttributes);
-  fVisAttributes.push_back(visAttributes);
+  hadCalorimeterLogical->SetVisAttributes(blue);
+  HadCalColumnLogical->SetVisAttributes(invisibleBlue);
+  HadCalCellLogical->SetVisAttributes(invisibleBlue);
+  HadCalLayerLogical->SetVisAttributes(invisibleBlue);
+  fHadCalScintiLogical->SetVisAttributes(invisibleBlue);
 
   // return the world physical volume ----------------------------------------
 

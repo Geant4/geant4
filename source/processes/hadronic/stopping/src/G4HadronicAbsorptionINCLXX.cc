@@ -56,7 +56,7 @@ G4HadronicAbsorptionINCLXX::G4HadronicAbsorptionINCLXX( G4ParticleDefinition* pd
 {
   G4INCLXXInterface* theModel = new G4INCLXXInterface;
   G4double theMin =  0.0*GeV;
-  G4double theMax = 10.0*GeV;
+  G4double theMax =  0.2*GeV;
   theModel->SetMinEnergy( theMin );
   theModel->SetMaxEnergy( theMax );
   RegisterMe( theModel );

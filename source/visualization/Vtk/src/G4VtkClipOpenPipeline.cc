@@ -38,10 +38,10 @@
 #include "vtkSmartPointer.h"
 #include <vtkClipClosedSurface.h>
 
-G4VtkClipOpenPipeline::G4VtkClipOpenPipeline(G4String nameIn, const G4VtkVisContext& vc,
+G4VtkClipOpenPipeline::G4VtkClipOpenPipeline(G4String nameIn, const G4VtkVisContext& vcIn,
                                              vtkSmartPointer<vtkPolyDataAlgorithm> filter,
                                              G4bool useVcColour)
-  : G4VVtkPipeline(nameIn, G4String("G4VtkClipOpenPipeline"), vc, true, vc.fViewer->renderer)
+  : G4VVtkPipeline(nameIn, G4String("G4VtkClipOpenPipeline"), vcIn, true, vcIn.fViewer->renderer)
 {
   // create implicit function for clipping
   plane = vtkSmartPointer<vtkPlane>::New();
@@ -79,8 +79,10 @@ G4VtkClipOpenPipeline::G4VtkClipOpenPipeline(G4String nameIn, const G4VtkVisCont
 
   // set actor properties from vis context
   if (vc.fDrawingStyle == G4ViewParameters::hsr) {
+    actor->GetProperty()->SetRepresentationToSurface();
   }
   else if (vc.fDrawingStyle == G4ViewParameters::hlr) {
+    actor->GetProperty()->SetRepresentationToSurface();
   }
   else if (vc.fDrawingStyle == G4ViewParameters::wireframe) {
     actor->GetProperty()->SetRepresentationToWireframe();
@@ -96,7 +98,7 @@ G4VtkClipOpenPipeline::G4VtkClipOpenPipeline(G4String nameIn, const G4VtkVisCont
   vc.fViewer->renderer->AddActor(actor);
 }
 
-void G4VtkClipOpenPipeline::SetPlane(G4Plane3D& planeIn)
+void G4VtkClipOpenPipeline::SetPlane(const G4Plane3D& planeIn)
 {
   auto normal = planeIn.normal();
   auto point = planeIn.point();

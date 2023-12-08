@@ -41,7 +41,6 @@
 
 #include "CheckVolumeSD.hh"
 #include "HistoManager.hh"
-#include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
@@ -49,19 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
- :G4VSensitiveDetector(name), fHisto(0)
-{
-  fHisto = HistoManager::GetPointer();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-CheckVolumeSD::~CheckVolumeSD()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void CheckVolumeSD::Initialize(G4HCofThisEvent*)
+ : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,21 +59,6 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if(track->GetTrackID() > 1) { fHisto->AddLeakingParticle(track); }
   return true;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void CheckVolumeSD::EndOfEvent(G4HCofThisEvent*)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void CheckVolumeSD::clear()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void CheckVolumeSD::PrintAll()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

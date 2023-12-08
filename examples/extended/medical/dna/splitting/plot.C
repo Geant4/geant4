@@ -1,7 +1,7 @@
 void plot() {
     Int_t numberOfSplit = 200;
 
-    TFile* ref = new TFile("vrt.root");
+    TFile* ref = new TFile("splitting.root");
     TH1F* clusterSize = (TH1F*)ref->Get("2");
     TH1F* energyDeposit = (TH1F*)ref->Get("1");
 

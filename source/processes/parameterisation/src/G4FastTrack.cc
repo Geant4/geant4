@@ -38,52 +38,39 @@
 //
 //---------------------------------------------------------------
 
-#include "G4ios.hh"
 #include "G4FastTrack.hh"
+
+#include "G4TouchableHandle.hh"
 #include "G4TransportationManager.hh"
-#include "G4TouchableHistoryHandle.hh"
+#include "G4ios.hh"
 
 // -----------
 // Constructor
 // -----------
 //
-G4FastTrack::G4FastTrack(G4Envelope *anEnvelope, G4bool IsUnique)
-  : fTrack                      ( nullptr    ),
-    fAffineTransformationDefined( false      ),
-    fEnvelope                   ( anEnvelope ),
-    fIsUnique                   ( IsUnique   ),
-    fEnvelopeLogicalVolume      ( nullptr    ),
-    fEnvelopePhysicalVolume     ( nullptr    ),
-    fEnvelopeSolid              ( nullptr    )
-{}
-
-// -----------
-// Destructor:
-// -----------
-G4FastTrack::~G4FastTrack()
+G4FastTrack::G4FastTrack(G4Envelope* anEnvelope, G4bool IsUnique)
+  : fEnvelope(anEnvelope), fIsUnique(IsUnique)
 {}
 
 //------------------------------------------------------------
 // The parameterised simulation manager uses the SetCurrentTrack
-// method to setup the current G4FastTrack object 
+// method to setup the current G4FastTrack object
 //------------------------------------------------------------
-void G4FastTrack::SetCurrentTrack(const G4Track& track,
-                                  const G4Navigator* theNavigator) 
+void G4FastTrack::SetCurrentTrack(const G4Track& track, const G4Navigator* theNavigator)
 {
-
   // -- Register track pointer (used everywhere):
   fTrack = &track;
 
   //-----------------------------------------------------
   // First time the track enters the volume or if the
   // Logical Volume was placed n-Times in the geometry :
-  // 
+  //
   // Records the Rotation+Translation for the Envelope !
-  // When the particle is inside or on the boundary, the 
+  // When the particle is inside or on the boundary, the
   // NavigationHistory IS UP TO DATE.
   //------------------------------------------------------
   if (!fAffineTransformationDefined || !fIsUnique) FRecordsAffineTransformation(theNavigator);
-  
+
   //-------------------------------------------
   // Records local position/momentum/direction
   // of the Track.
@@ -107,10 +94,8 @@ void G4FastTrack::SetCurrentTrack(const G4Track& track,
 // This is Done only one time.
 //
 //------------------------------------
-void 
-G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
+void G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
 {
-
   //--------------------------------------------------------
   // Get the touchable history which represents the current
   // volume hierachy the particle is in.
@@ -118,27 +103,27 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // must be deleted by G4FastTrack.
   //--------------------------------------------------------
   const G4Navigator* NavigatorToUse;
-  if(theNavigator != nullptr ) NavigatorToUse = theNavigator;
-  else NavigatorToUse = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  
-  G4TouchableHistoryHandle history = NavigatorToUse->CreateTouchableHistoryHandle();
-  
+  if (theNavigator != nullptr)
+    NavigatorToUse = theNavigator;
+  else
+    NavigatorToUse = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+
+  G4TouchableHandle history = NavigatorToUse->CreateTouchableHistoryHandle();
+
   //-----------------------------------------------------
   // Run accross the hierarchy to find the physical volume
   // associated with the envelope
   //-----------------------------------------------------
-  G4int depth = (G4int)history->GetHistory()->GetDepth();
+  auto depth = (G4int)history->GetHistory()->GetDepth();
   G4int idepth;
   G4bool Done = false;
-  for (idepth = 0; idepth <= depth; ++idepth)
-  {
+  for (idepth = 0; idepth <= depth; ++idepth) {
     G4VPhysicalVolume* currPV = history->GetHistory()->GetVolume(idepth);
-    G4LogicalVolume* currLV   = currPV->GetLogicalVolume();
-    if ( (currLV->GetRegion() == fEnvelope) && (currLV->IsRootRegion()) )
-    {
+    G4LogicalVolume* currLV = currPV->GetLogicalVolume();
+    if ((currLV->GetRegion() == fEnvelope) && (currLV->IsRootRegion())) {
       fEnvelopePhysicalVolume = currPV;
-      fEnvelopeLogicalVolume  = currLV;
-      fEnvelopeSolid          = currLV->GetSolid();
+      fEnvelopeLogicalVolume = currLV;
+      fEnvelopeSolid = currLV->GetSolid();
       Done = true;
       break;
     }
@@ -146,22 +131,18 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   //---------------------------------------------
   //-- Verification: should be removed in future:
   //---------------------------------------------
-  if ( Done == false )
-    {
-      G4ExceptionDescription ed;
-      ed << "Can't find transformation for `" << fEnvelopePhysicalVolume->GetName() << "'" << G4endl;
-      G4Exception("G4FastTrack::FRecordsAffineTransformation()",
-		  "FastSim011",
-		  JustWarning, ed);
-    }
-  else
-    {
-      //-------------------------------------------------------
-      // Records the transformation and inverse transformation:
-      //-------------------------------------------------------
-      fAffineTransformation = history->GetHistory()->GetTransform(idepth);
-      fInverseAffineTransformation = fAffineTransformation.Inverse();
-      
-      fAffineTransformationDefined = true;
-    }
+  if (!Done) {
+    G4ExceptionDescription ed;
+    ed << "Can't find transformation for `" << fEnvelopePhysicalVolume->GetName() << "'" << G4endl;
+    G4Exception("G4FastTrack::FRecordsAffineTransformation()", "FastSim011", JustWarning, ed);
+  }
+  else {
+    //-------------------------------------------------------
+    // Records the transformation and inverse transformation:
+    //-------------------------------------------------------
+    fAffineTransformation = history->GetHistory()->GetTransform(idepth);
+    fInverseAffineTransformation = fAffineTransformation.Inverse();
+
+    fAffineTransformationDefined = true;
+  }
 }

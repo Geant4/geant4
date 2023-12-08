@@ -110,6 +110,8 @@ public:
 
   void BeamOn(G4int nevent, G4bool qdivide=true);
   void Print(const G4String& message);
+  G4int GetEventsInMaster() const {return fevents_in_master;}
+  G4int GetEventsInSlave() const {return fevents_in_slave;}
 
   // misc
   void ShowHelp() const;
@@ -172,6 +174,8 @@ private:
 
   // for beamOn
   pthread_t thread_id_;
+  G4int fevents_in_master = 0;
+  G4int fevents_in_slave = 0;
 
   // parallel parameters
   G4double master_weight_;

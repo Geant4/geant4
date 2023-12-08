@@ -6,6 +6,55 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2022-12-01 John Allison (emutils-V11-01-25)
+- G4EmParametersMessenger:
+  - Fix "/process/eloss/setFluctModel" - change "eloss" to "eLoss".
+
+## 2023-11-08 V.Ivanchenko (emutils-V11-01-24)
+- G4VEmModel - fixed memory leak at exit 
+
+## 2023-11-07 V.Ivanchenko (emutils-V11-01-23)
+- G4EmSaturation - fixed problem #2572 (txenglish@lanl.gov) 
+
+## 2023-11-03 J.Hahnfeld (emutils-V11-01-22)
+- `G4TransportationWithMsc`: Initialize all members.
+
+## 2023-10-27 D.Sawkey (emutils-V11-01-21)
+- G4OpticalParameters: set default verbosity to 1.
+
+## 2023-10-23 J.Hahnfeld (emutils-V11-01-20)
+- Add SingleScattering option to `G4TransportationWithMsc`.
+
+## 2023-10-20 J.Hahnfeld (emutils-V11-01-19)
+- `G4TransportationWithMsc`: Always update momentum direction.
+
+## 2023-10-10 V.Ivanchenko (emutils-V11-01-18)
+- G4VEmModel - restore SetLPMFlag(..) method to allow build of CMSSW with the 
+    Geant4 master and G4HepEm version of CMSSW; no change of any result 
+    is expected; added warning about use of obsolete method.
+
+## 2023-10-06 V.Ivanchenko (emutils-V11-01-17)
+- G4VEmModel - use std::size_t in all places
+- G4EmParameters - added Get/Set method for a new integer number used
+    for logarithmic bin search in free vector
+- G4EmParametersMessanger - added UI command "/process/em/nForFreeVector"
+- G4LossTableManager - apply modified interface to G4LossTableBuilder
+- G4LossTableBuilder - define logarithmic seach method for inverse range table
+- G4EmCorrection - introduce "const" to all variables if possible, reduce
+    number of "if" statements, substitute "isMaster" flag by the new flag
+    "isInitializer", use CLHEP prefix.
+  EM testing suite show identical results, expected minor speed-up.
+
+## 2023-10-04 D.Sawkey (emutils-V11-01-16)
+- G4OpticalParameters: Removed unused scintillation declarations. Responding
+  to issue #182
+
+## 2023-09-19 H.Burkhardt (emutils-V11-01-15)
+-  G4EmProcessSubType - new fGammaReflection = 26
+
+## 2023-09-04 V.Ivanchenko (emutils-V11-01-14)
+- G4VEmModel - do not destruct G4ElementData, do not define LPM flag 
+
 ## 2023-06-16 V.Ivanchenko (emutils-V11-01-13)
 - G4LossTableManager - fixed trivial Coverity report
 

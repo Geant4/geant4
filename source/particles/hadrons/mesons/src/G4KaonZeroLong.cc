@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -35,42 +32,41 @@
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
-//      Update width (PDG2006)              Oct. 11 2006 H.Kurashige 
+//      Update width (PDG2006)              Oct. 11 2006 H.Kurashige
 //
 
 #include "G4KaonZeroLong.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
-#include "G4KL3DecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                      KAONZEROLONG                              ###
-// ######################################################################
+#include "G4KL3DecayChannel.hh"
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4KaonZeroLong* G4KaonZeroLong::theInstance = nullptr;
 
 G4KaonZeroLong* G4KaonZeroLong::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "kaon0L";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,    0.497614*GeV,  1.287e-14*MeV,         0.0,
                     0,              -1,             0,
@@ -78,41 +74,42 @@ G4KaonZeroLong* G4KaonZeroLong::Definition()
               "meson",               0,             0,         130,
                 false,        51.16*ns,          nullptr,
                 false,          "kaon",           130);
+    // clang-format on
 
- //create Decay Table
-  auto  table = new G4DecayTable();
+    // create Decay Table
+    auto table = new G4DecayTable();
 
- // create decay channels
-  auto  mode = new G4VDecayChannel*[6];
-  // kaon0L -> pi0 + pi0 + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon0L",0.1952,3,"pi0","pi0","pi0");
-  // kaon0L -> pi0 + pi+ + pi-
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon0L",0.1254,3,"pi0","pi+","pi-");
-  // kaon0L -> pi- + e+ + nu_e (Ke3)
-  mode[2] = new G4KL3DecayChannel("kaon0L",0.2027,"pi-","e+","nu_e");
-  // kaon0L -> pi+ + e- + anti_nu_e (Ke3)
-  mode[3] = new G4KL3DecayChannel("kaon0L",0.2027,"pi+","e-","anti_nu_e");
-  // kaon0L -> pi- + mu+ + nu_mu (Kmu3)
-  mode[4] = new G4KL3DecayChannel("kaon0L",0.1352,"pi-","mu+","nu_mu");
-  // kaon0L -> pi+ + mu- + anti_nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon0L",0.1352,"pi+","mu-","anti_nu_mu");
+    // create decay channels
+    auto mode = new G4VDecayChannel*[6];
+    // kaon0L -> pi0 + pi0 + pi0
+    mode[0] = new G4PhaseSpaceDecayChannel("kaon0L", 0.1952, 3, "pi0", "pi0", "pi0");
+    // kaon0L -> pi0 + pi+ + pi-
+    mode[1] = new G4PhaseSpaceDecayChannel("kaon0L", 0.1254, 3, "pi0", "pi+", "pi-");
+    // kaon0L -> pi- + e+ + nu_e (Ke3)
+    mode[2] = new G4KL3DecayChannel("kaon0L", 0.2027, "pi-", "e+", "nu_e");
+    // kaon0L -> pi+ + e- + anti_nu_e (Ke3)
+    mode[3] = new G4KL3DecayChannel("kaon0L", 0.2027, "pi+", "e-", "anti_nu_e");
+    // kaon0L -> pi- + mu+ + nu_mu (Kmu3)
+    mode[4] = new G4KL3DecayChannel("kaon0L", 0.1352, "pi-", "mu+", "nu_mu");
+    // kaon0L -> pi+ + mu- + anti_nu_mu (Kmu3)
+    mode[5] = new G4KL3DecayChannel("kaon0L", 0.1352, "pi+", "mu-", "anti_nu_mu");
 
-  for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
-  delete [] mode;
+    for (G4int index = 0; index < 6; index++)
+      table->Insert(mode[index]);
+    delete[] mode;
 
-   anInstance->SetDecayTable(table);
+    anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4KaonZeroLong*>(anInstance);
   return theInstance;
 }
 
-G4KaonZeroLong*  G4KaonZeroLong::KaonZeroLongDefinition()
+G4KaonZeroLong* G4KaonZeroLong::KaonZeroLongDefinition()
 {
   return Definition();
 }
 
-G4KaonZeroLong*  G4KaonZeroLong::KaonZeroLong()
+G4KaonZeroLong* G4KaonZeroLong::KaonZeroLong()
 {
   return Definition();
 }
-

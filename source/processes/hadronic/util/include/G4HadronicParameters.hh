@@ -74,6 +74,13 @@ class G4HadronicParameters {
     // transition region between the two strings models - the Quark Gluon String (QGS)
     // model and the Fritiof (FTF) model.
 
+    inline G4double GetMinEnergyINCLXX_Pbar() const;
+    inline G4double GetMaxEnergyINCLXX_Pbar() const;
+    void SetMinEnergyINCLXX_Pbar( const G4double val );
+    void SetMaxEnergyINCLXX_Pbar( const G4double val );
+    // Getter/Setter of the recommended energy limits, for physics lists, of the
+    // intranuclear cascade model INCLXX, for pbar interaction. 
+
     inline G4double EnergyThresholdForHeavyHadrons() const;
     void SetEnergyThresholdForHeavyHadrons( G4double val );
     // If max kinetic energy is below this limit, then EM and hadronic physics are not 
@@ -158,6 +165,11 @@ class G4HadronicParameters {
     // Getter/Setter for the neutron kinetic energy threshold for 
     // applying the SVT (Sampling of the Velocity of the Target) algorithm.
 
+    inline G4double GetTimeThresholdForRadioactiveDecay() const;
+    void SetTimeThresholdForRadioactiveDecay( const G4double val );
+    // Getter/Setter for the time threshold of radioactive decays
+    // (i.e. radioactive decays that happen later than this value are ignored).
+
   private:
 
     G4HadronicParameters();
@@ -173,6 +185,8 @@ class G4HadronicParameters {
     G4double fMaxEnergyTransitionFTF_Cascade;
     G4double fMinEnergyTransitionQGS_FTF;
     G4double fMaxEnergyTransitionQGS_FTF;
+    G4double fMinEnergyINCLXX_Pbar;
+    G4double fMaxEnergyINCLXX_Pbar;
     G4double fEnergyThresholdForHeavyHadrons;
     G4double fXSFactorNucleonInelastic = 1.0;
     G4double fXSFactorPionInelastic = 1.0;
@@ -185,6 +199,7 @@ class G4HadronicParameters {
     G4double fRelativeDiff = DBL_MAX;
     G4double fAbsoluteDiff = DBL_MAX;
     G4double fNeutronEkinThresholdForSVT = -1.0;
+    G4double fTimeThresholdForRadioactiveDecays = -1.0;
     
     G4int fVerboseLevel = 1;
     G4int fReportLevel = 0;
@@ -223,6 +238,14 @@ inline G4double G4HadronicParameters::GetMinEnergyTransitionQGS_FTF() const {
 inline G4double G4HadronicParameters::GetMaxEnergyTransitionQGS_FTF() const { 
   return fMaxEnergyTransitionQGS_FTF;
 }
+
+inline G4double G4HadronicParameters::GetMinEnergyINCLXX_Pbar() const { 
+  return fMinEnergyINCLXX_Pbar;
+}
+inline G4double G4HadronicParameters::GetMaxEnergyINCLXX_Pbar() const { 
+  return fMaxEnergyINCLXX_Pbar;
+} 
+  
 
 inline G4double G4HadronicParameters::EnergyThresholdForHeavyHadrons() const {
   return fEnergyThresholdForHeavyHadrons;
@@ -328,6 +351,10 @@ inline const G4String& G4HadronicParameters::GetPhysListName() const
 
 inline G4double G4HadronicParameters::GetNeutronKineticEnergyThresholdForSVT() const { 
   return fNeutronEkinThresholdForSVT;
+}
+
+inline G4double G4HadronicParameters::GetTimeThresholdForRadioactiveDecay() const { 
+  return fTimeThresholdForRadioactiveDecays;
 }
 
 #endif

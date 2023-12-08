@@ -46,7 +46,7 @@ class PhysicsList: public G4VUserPhysicsList
   protected:
     // Construct particle and physics
     void ConstructParticle() override;
-    void ConstructProcess() override;
+    void ConstructProcess()  override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

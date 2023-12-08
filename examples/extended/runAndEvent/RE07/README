@@ -50,3 +50,5 @@ a particle or a set of particles.
    modes that can be passed as a parameter to the executable:
 
     % exampleRE07 processes.mac
+    % exampleRE07 specialized.mac
+    % exampleRE07 tracking.mac

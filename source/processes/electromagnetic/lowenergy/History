@@ -6,6 +6,52 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+# 2023-11-06 Ben Morgan (emlowen-V11-01-11)
+- Use G4FindDataDir to access data libraries in place of raw `getenv`.
+
+## 2023-11-03 V. Ivanchenko (emlowen-V11-01-10)
+- G4LivermorePhotoeffectModel - more accurate check on atomic number Z to
+    fix Coverity reports
+- G4MicroElecInelasticModel_new - changed implementation of Interpolate(..)
+    method to avoid division by zero identified by Coverity; attempt to
+    fix destruction 
+- G4MicroElecSurface - removed repeated checks in Initilise(.. ) method 
+    in order to fix Coverity report
+- G4MicroElecLOPhononModel - removed unused class member to address Coverity report
+
+## 2023-10-07 V. Ivanchenko (emlowen-V11-01-09)
+- G4LivermorePhotoeffectModel - use logarithmic search of bin for free vectors,
+    updated use of G4ElementData
+
+## 2023-09-04 V. Ivanchenko (emlowen-V11-01-08)
+- G4LivermorePhotoeffectModel - used update G4ElementData, which is not deleted
+- G4LivermoreBremsstrahlungModel - do not setup LPLM flag
+
+## 2023-08-29 G.Cosmo (emlowen-V11-01-07)
+- Fixed trivial reported Coverity defects in G4MicroElecLOPhononModel
+  and G4MicroElecSurface.
+- Minor code cleanup in G4MicroElecLOPhononModel (removed tabs, formatting...).
+
+## 2023-08-23 G.Cosmo (emlowen-V11-01-06)
+- G4MicroElecCapture, G4MicroElecSurface: fixed compilation warnings for
+  implicit type conversions on XCode.
+  Minor code cleanup (removed tabs, formatting, use of nullptr...).
+
+## 2023-08-03 C.Inguimbert (emlowen-V11-01-05)
+- G4MicroElecInelasticModel_new
+    Simplification of weakly bound electrons treatment, handled now similarly to
+	core electrons with limitEnergy equivalent to binding energy. SampleSecondaries,
+	RandomizeEjectedElectronEnergyFromCumulatedDcs have been updated
+- G4MicroElecMaterialStructure
+    Modification in the GetLimitEnergy function to account for the changes in the treatment
+	of weakly bound electrons
+- G4MicroElecCapture
+	New classe for a best estimate of the non ionizing energy deposition
+
+## 2023-07-25 L.Pandola and D.Iuso (emlowen-V11-01-04)
+- fix for (rare) infinite loops in G4PenelopeComptonModel due to FP. Reported 
+  in https://github.com/Geant4/geant4/pull/61
+
 ## 2023-03-14 Z.Li (emlowen-V11-01-03)
 - applied clang-tidy, clang-format for: G4LivermoreRayleighModel.cc/hh,
  G4LivermoreGammaConversion5DModel.cc/hh,

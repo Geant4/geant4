@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(TestEm6)
 
 #----------------------------------------------------------------------------
@@ -41,6 +41,7 @@ target_link_libraries(TestEm6 ${Geant4_LIBRARIES} )
 #
 set(TestEm6_SCRIPTS
     run01.mac run02.mac run11.mac run12.mac TestEm6.in TestEm6.out vis.mac
+    plotHisto.C
   )
 
 foreach(_script ${TestEm6_SCRIPTS})

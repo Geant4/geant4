@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4AntiAlpha_h
 #define G4AntiAlpha_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                   ANTI   ALPHA                                 ###
-// ######################################################################
 
 class G4AntiAlpha : public G4Ions
 {
- private:
-   static G4AntiAlpha* theInstance;
-   G4AntiAlpha(){}
-   ~G4AntiAlpha() override= default;
+  public:
+    static G4AntiAlpha* Definition();
+    static G4AntiAlpha* AntiAlphaDefinition();
+    static G4AntiAlpha* AntiAlpha();
 
- public:
-   static G4AntiAlpha* Definition();
-   static G4AntiAlpha* AntiAlphaDefinition();
-   static G4AntiAlpha* AntiAlpha();
+  private:
+    G4AntiAlpha() {}
+    ~G4AntiAlpha() override = default;
+
+    static G4AntiAlpha* theInstance;
 };
 
 #endif

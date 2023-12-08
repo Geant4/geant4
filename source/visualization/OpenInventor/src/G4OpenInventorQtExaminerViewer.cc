@@ -914,7 +914,7 @@ bool G4OpenInventorQtExaminerViewer::loadViewPts()
    std::string token;
    SbVec3f axis;
    SbRotation orient;
-   float x, y, z, angle;
+   float x{0.0}, y{0.0}, z{0.0}, angle{0.0};
 
    // Gets the last view point accessed, stored in the first line of the data file.
    fileIn >> token;
@@ -950,7 +950,7 @@ bool G4OpenInventorQtExaminerViewer::loadViewPts()
       orient.setValue(axis.setValue(x, y, z), angle);
       tmp.orientation = orient.getValue();
 
-      int camType;
+      int camType{0};
       parseString<int>(camType, token, error);
       fileIn >> token;
       tmp.camType = (CameraType) camType;
@@ -1017,7 +1017,7 @@ void G4OpenInventorQtExaminerViewer::moveCamera(float dist, bool lookdown)
    SoCamera *cam = getCamera();
    SbVec3f p1, p2;	 // The particle moves from p1 to p2
    SbVec3f particleDir;	 // Direction vector from p1 to p2
-   SbVec3f camPosNew;	 // New position of the camera
+   SbVec3f camPosNew{0.0f, 0.0f, 0.0f};	 // New position of the camera
 
    if(refParticleTrajectory.size() == 0) {
       //refParticleTrajectory hasn't been set yet
@@ -1605,6 +1605,8 @@ void G4OpenInventorQtExaminerViewer::findAndSetRefPath()
          SoFullPath *path = (SoFullPath *)pathList[i];
 
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(path->getTail());
+         if(attHolder != nullptr)
+         {
          for (std::size_t j = 0; j < attHolder->GetAttDefs().size(); ++j) {
             std::ostringstream oss;
             oss << G4AttCheck(attHolder->GetAttValues()[j],
@@ -1659,6 +1661,7 @@ void G4OpenInventorQtExaminerViewer::findAndSetRefPath()
             else{
                //Not a Track ID attribute, fall through
             }
+         }
          }
 
          if(refPathFound)
@@ -2003,9 +2006,6 @@ void G4OpenInventorQtExaminerViewer::createElementsList()
 void
 G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
 {
-   char* value;
-   std::string elementField;
-
    // FWJ DEBUG
    //   G4cout << "AuxWindow: listWidget1 select element CALLBACK" << G4endl;
 
@@ -2013,9 +2013,6 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
 
    if (SoQtExaminerViewer::isAnimating())
       stopAnimating();
-
-   value = strdup(qPrintable(item->text()));
-   //   G4cout << "LOOKING FOR BOOKMARK " << value << G4endl;
 
    if (currentState == ANIMATION || currentState == REVERSED_ANIMATION
        || currentState == PAUSED_ANIMATION ) {
@@ -2029,7 +2026,7 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
    } else if (currentState == VIEWPOINT)
       setSuperimpositionEnabled(superimposition, FALSE);
 
-   elementField = value;
+   std::string elementField = qPrintable(item->text());
 
    std::size_t idx = elementField.find_last_of("[");
    if(idx == std::string::npos)
@@ -2041,7 +2038,7 @@ G4OpenInventorQtExaminerViewer::LookAtSceneElementCB(QListWidgetItem* item)
    SoFullPath *path;
    SoSearchAction search;
    SoNode *root = getSceneManager()->getSceneGraph();
-   int counter;
+   int counter = 0;
    std::size_t idxUnderscore = elementField.find_last_of("_");
 
    parseString<int>(counter, 
@@ -2170,13 +2167,7 @@ void G4OpenInventorQtExaminerViewer::FileLoadRefPathCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   //   G4cout << "Input file name is " << qPrintable(filenamein) << G4endl;
-
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
-   std::ifstream ifs(filename);
+   std::ifstream ifs(qPrintable(filenamein));
    if(ifs.is_open()) {
       refParticleTrajectory.clear();
       float x,y,z;
@@ -2222,13 +2213,7 @@ void G4OpenInventorQtExaminerViewer::FileSaveRefPathCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   //   G4cout << "Input file name is " << qPrintable(filenamein) << G4endl;
-
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
-   std::ofstream ofs(filename);
+   std::ofstream ofs(qPrintable(filenamein));
    if (ofs.is_open()) {
       float x,y,z;
       for (unsigned int i=0; i < refParticleTrajectory.size(); ++i) {
@@ -2440,7 +2425,7 @@ void G4OpenInventorQtExaminerViewer::setStartingPtForAnimation()
       stopAnimating();
 
    SbRotation rot;
-   SbVec3f p1, p2, p2_tmp, camUpV, camD, camD_tmp, leftRightAxis;
+   SbVec3f p1{0.0, 0.0, 0.0}, p2{0.0, 0.0, 0.0}, p2_tmp, camUpV, camD, camD_tmp, leftRightAxis;
    float x1, y1, z1, x2, y2, z2;
 
    if (currentState == ANIMATION) {
@@ -2651,12 +2636,8 @@ G4OpenInventorQtExaminerViewer::FileOpenBookmarkCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
    fileIn.close();
-   fileIn.open(filename);
+   fileIn.open(qPrintable(filenamein));
    if (fileIn.fail()) {
       QMessageBox msgbox;
       msgbox.setFont(*font);
@@ -2683,7 +2664,7 @@ G4OpenInventorQtExaminerViewer::FileOpenBookmarkCB()
       return;
    }
 
-   fileName = filename;
+   fileName = qPrintable(filenamein);
    fileOut.open(fileName.c_str(), std::ios::in);
    fileOut.seekp(0, std::ios::end);
 
@@ -2727,14 +2708,8 @@ G4OpenInventorQtExaminerViewer::FileNewBookmarkCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   //   G4cout << "Input file name is " << qPrintable(filenamein) << G4endl;
-
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
    cleanUpAfterPrevFile();
-   fileName = filename;
+   fileName = qPrintable(filenamein);
    fileOut.open(fileName.c_str());
    if (fileOut.fail()) {
       QMessageBox msgbox;
@@ -2833,14 +2808,9 @@ G4OpenInventorQtExaminerViewer::SaveViewPtCB()
    //                            tr("Bookmark name"), QLineEdit::Normal,
    //                            QString(), &ok);
 
-   const int nVPName = MAX_VP_NAME + 1;
-   char* name = new char[nVPName];
-   //   strncpy(name, strName.c_str(), nVPName);
    namein.truncate(MAX_VP_NAME);
 
-   QByteArray ba = namein.toLocal8Bit();
-   name = strdup(ba.constData());
-   // name = strdup(qPrintable(namein))
+   char* name = strdup(qPrintable(namein));
 
    // FWJ DEBUG
    //   G4cout << "QString is " << qPrintable(namein) << G4endl;
@@ -2851,6 +2821,7 @@ G4OpenInventorQtExaminerViewer::SaveViewPtCB()
          QMessageBox msgbox;
          msgbox.setText("Bookmark name is already in use");
          msgbox.exec();
+         free(name);
          return;
       }
    }
@@ -2862,6 +2833,7 @@ G4OpenInventorQtExaminerViewer::SaveViewPtCB()
                                         AuxWindowDialog->listWidget);
    AuxWindowDialog->listWidget->setCurrentItem(saveViewPtItem);
    AuxWindowDialog->lineEdit->setText(namein);
+   free(name);
 }
 
 
@@ -2973,14 +2945,8 @@ void G4OpenInventorQtExaminerViewer::LoadBookmarkCB(QListWidgetItem* item)
    // FWJ DEBUG
    //   G4cout << "AuxWindow: listWidget LoadBookmark CALLBACK" << G4endl;
 
-   const int nVPName = MAX_VP_NAME + 1;
-   char* vpName = new char[nVPName];
-
-   vpName = strdup(qPrintable(item->text()));
-   //   G4cout << "LOOKING FOR BOOKMARK " << vpName << G4endl;
-
    for (int i = 0; i < (int)viewPtList.size(); i++) {
-      if (!strcmp(viewPtList[i].viewPtName, vpName)) {
+      if (!strcmp(viewPtList[i].viewPtName, qPrintable(item->text()))) {
          viewPtIdx = i;
          break;
       }
@@ -3184,13 +3150,12 @@ void G4OpenInventorQtExaminerViewer::DeleteBookmarkCB()
 
    QString vpnamein = listitem->text();
 
-   const int nVPName = MAX_VP_NAME + 1;
-   char* vpName = new char[nVPName];
-   vpName = strdup(qPrintable(vpnamein));
+   char* vpName = strdup(qPrintable(vpnamein));
    //   G4cout << "DELETING bookmark " << vpName << G4endl;
 
    deleteViewPt(vpName);
    delete listitem;
+   free(vpName);
 }
 
 // Deletes current viewpoint the user is looking at.
@@ -3290,11 +3255,6 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
 
    QString vpnamein = listitem->text();
 
-   const int nVPName = MAX_VP_NAME + 1;
-   //   char* vpName = new char[nVPName];
-   //   vpName = strdup(qPrintable(vpnamein));
-   //   G4cout << "RENAMING bookmark " << vpName << G4endl;
-
    QInputDialog* inputdialog = new QInputDialog(getParentWidget());
    inputdialog->setFont(*font);
    inputdialog->setWindowTitle(tr("Enter"));
@@ -3307,8 +3267,7 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
       return;
    if (newnamein.isEmpty()) return;
 
-   char* newname = new char[nVPName];
-   newname = strdup(qPrintable(newnamein));
+   char* newname = strdup(qPrintable(newnamein));
 
    std::size_t size = viewPtList.size();
    for (std::size_t i = 0; i < size; ++i) {
@@ -3327,7 +3286,7 @@ void G4OpenInventorQtExaminerViewer::RenameBookmarkCB()
    //   if (currentState == VIEWPOINT)
    //      scheduleRedraw();
 
-   delete[] newname;
+   free(newname);
 }
 
 // Renames currently selected viewpoint.
@@ -4025,15 +3984,9 @@ void G4OpenInventorQtExaminerViewer::FileLoadSceneGraphCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   //   G4cout << "Entered file name is " << qPrintable(filenamein) << G4endl;
-
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
    SoInput sceneInput;
 
-   if (sceneInput.openFile(filename)) {
+   if (sceneInput.openFile(qPrintable(filenamein))) {
       // Read the whole file into the database
       newSceneGraph = SoDB::readAll(&sceneInput);
       if (newSceneGraph == NULL) {
@@ -4075,18 +4028,12 @@ void G4OpenInventorQtExaminerViewer::FileSaveSceneGraphCB()
    QStringList filenameinlist = filedialog.selectedFiles();
    QString filenamein = filenameinlist[0];
 
-   //   G4cout << "Entered file name is " << qPrintable(filenamein) << G4endl;
-
-   char* filename = new char[filenamein.size()+1];
-   filename = strdup(qPrintable(filenamein));
-   //   G4cout << "char[] file name is " << filename << G4endl;
-
    SoWriteAction writeAction;
    SoSeparator* root = (SoSeparator*)getSceneGraph();
 
    SoOutput* out = writeAction.getOutput();
 
-   if (out->openFile(filename)) {
+   if (out->openFile(qPrintable(filenamein))) {
       out->setBinary(FALSE);
       writeAction.apply(root);
       out->closeFile();

@@ -36,20 +36,20 @@
 G4DNATransformElectronModel::
 G4DNATransformElectronModel(const G4ParticleDefinition*,
                             const G4String& nam) :
-    G4VEmModel(nam),fIsInitialised(false)
+    G4VEmModel(nam)
 {
   fVerboseLevel = 0;
   SetLowEnergyLimit(0. * eV);
   SetHighEnergyLimit(0.025 * eV);
-  fParticleChangeForGamma = 0;
-  fpWaterDensity = 0;
-  fpWaterDensity = 0;
+  fParticleChangeForGamma = nullptr;
+  fpWaterDensity = nullptr;
+  fpWaterDensity = nullptr;
   fEpsilon = 0.0001 * eV;
 }
 
 //______________________________________________________________________
 G4DNATransformElectronModel::~G4DNATransformElectronModel()
-{}
+= default;
 
 //______________________________________________________________________
 void G4DNATransformElectronModel::

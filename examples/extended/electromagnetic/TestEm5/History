@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-09 I. Hrivnacova (testem5-V11-01-01)
+- Coding guidelines - document macros in README files
+
 ## 2023-04-28 Michel Maire (testem5-V11-01-00)
 - revision of all headers
 

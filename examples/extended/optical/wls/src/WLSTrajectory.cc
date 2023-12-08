@@ -50,20 +50,6 @@ G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSTrajectory::WLSTrajectory()
-  : fpPointsContainer(0)
-  , fTrackID(0)
-  , fParentID(0)
-  , fPDGCharge(0.0)
-  , fPDGEncoding(0)
-  , fParticleName("")
-  , fInitialMomentum(G4ThreeVector())
-{
-  fParticleDefinition = nullptr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 WLSTrajectory::WLSTrajectory(const G4Track* aTrack)
 {
   fParticleDefinition = aTrack->GetDefinition();
@@ -94,8 +80,7 @@ WLSTrajectory::WLSTrajectory(WLSTrajectory& right)
 
   for(size_t i = 0; i < right.fpPointsContainer->size(); ++i)
   {
-    WLSTrajectoryPoint* rightPoint =
-      (WLSTrajectoryPoint*) ((*(right.fpPointsContainer))[i]);
+    auto rightPoint = (WLSTrajectoryPoint*) ((*(right.fpPointsContainer))[i]);
     fpPointsContainer->push_back(new WLSTrajectoryPoint(*rightPoint));
   }
 }
@@ -142,8 +127,8 @@ void WLSTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   if(!secondTrajectory)
     return;
 
-  WLSTrajectory* second = (WLSTrajectory*) secondTrajectory;
-  G4int ent             = second->GetPointEntries();
+  auto second = (WLSTrajectory*) secondTrajectory;
+  G4int ent   = second->GetPointEntries();
   // initial point of the second trajectory should not be merged
   for(G4int i = 1; i < ent; ++i)
   {
@@ -197,7 +182,7 @@ const std::map<G4String, G4AttDef>* WLSTrajectory::GetAttDefs() const
 
 std::vector<G4AttValue>* WLSTrajectory::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto values = new std::vector<G4AttValue>;
 
   values->push_back(
     G4AttValue("ID", G4UIcommand::ConvertToString(fTrackID), ""));

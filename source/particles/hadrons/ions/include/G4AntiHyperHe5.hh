@@ -30,24 +30,20 @@
 #ifndef G4AntiHyperHe5_h
 #define G4AntiHyperHe5_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ##################################################################
-// ###                   ANTI  HYPERHE5                           ###
-// ##################################################################
-
-class G4AntiHyperHe5 : public G4Ions {
+class G4AntiHyperHe5 : public G4Ions
+{
   public:
     static G4AntiHyperHe5* Definition();
     static G4AntiHyperHe5* AntiHyperHe5Definition();
     static G4AntiHyperHe5* AntiHyperHe5();
+
   private:
-    static G4AntiHyperHe5* theInstance;
-    G4AntiHyperHe5()  {}
+    G4AntiHyperHe5() {}
     ~G4AntiHyperHe5() override = default;
+
+    static G4AntiHyperHe5* theInstance;
 };
 
 #endif

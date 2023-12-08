@@ -35,8 +35,7 @@
 
 #include "G4VEvaporationChannel.hh"
 
-G4VEvaporationChannel::G4VEvaporationChannel(const G4String&) 
-  : OPTxs(3), useSICB(true)
+G4VEvaporationChannel::G4VEvaporationChannel(const G4String&)
 {}
 
 void G4VEvaporationChannel::Initialise()

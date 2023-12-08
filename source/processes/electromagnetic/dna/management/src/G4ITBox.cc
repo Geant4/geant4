@@ -34,8 +34,8 @@
 
 #include "G4ITBox.hh"
 
-G4ITBox::G4ITBox() : fNbIT(0), fpFirstIT(0), fpLastIT(0), fpPreviousBox(0), fpNextBox(0)
-{;}
+G4ITBox::G4ITBox() 
+= default;
 
 G4ITBox::~G4ITBox()
 {
@@ -44,7 +44,7 @@ G4ITBox::~G4ITBox()
         G4IT * aIT = fpFirstIT;
         G4IT * nextIT;
 
-        while( aIT != 0 )
+        while( aIT != nullptr )
         {
             nextIT = aIT->GetNext();
             delete aIT;
@@ -52,8 +52,8 @@ G4ITBox::~G4ITBox()
         }
     }
 
-    if(fpPreviousBox)    fpPreviousBox->SetNextBox(fpNextBox) ;
-    if(fpNextBox)        fpNextBox->SetPreviousBox(fpPreviousBox);
+    if(fpPreviousBox != nullptr)    fpPreviousBox->SetNextBox(fpNextBox) ;
+    if(fpNextBox != nullptr)        fpNextBox->SetPreviousBox(fpPreviousBox);
 }
 
 const G4ITBox & G4ITBox::operator=(const G4ITBox &right)
@@ -61,8 +61,8 @@ const G4ITBox & G4ITBox::operator=(const G4ITBox &right)
     fNbIT = right.fNbIT;
     fpFirstIT = right.fpFirstIT;
     fpLastIT = right.fpLastIT;
-    fpPreviousBox = 0;
-    fpNextBox = 0;
+    fpPreviousBox = nullptr;
+    fpNextBox = nullptr;
     return *this;
 }
 
@@ -70,7 +70,7 @@ void G4ITBox::Push( G4IT * aIT )
 {
     if( fNbIT == 0 )
     {
-        aIT->SetPrevious( 0 );
+        aIT->SetPrevious( nullptr );
         fpFirstIT = aIT;
     }
     else
@@ -95,25 +95,25 @@ void G4ITBox::Extract( G4IT * aStackedIT )
 
     }
 
-    if( aStackedIT->GetNext())
+    if( aStackedIT->GetNext() != nullptr)
         aStackedIT->GetNext()->SetPrevious(aStackedIT->GetPrevious());
-    if( aStackedIT->GetPrevious())
+    if( aStackedIT->GetPrevious() != nullptr)
         aStackedIT->GetPrevious()->SetNext(aStackedIT->GetNext());
 
-    aStackedIT->SetNext(0);
-    aStackedIT->SetPrevious(0);
-    aStackedIT->SetITBox(0);
+    aStackedIT->SetNext(nullptr);
+    aStackedIT->SetPrevious(nullptr);
+    aStackedIT->SetITBox(nullptr);
     fNbIT--;
 }
 
 G4IT* G4ITBox::FindIT(const G4Track& track)
 {
-    if( fNbIT == 0 ) return 0;
+    if( fNbIT == 0 ) return nullptr;
 
     G4IT * temp = fpLastIT;
     G4bool find = false;
 
-    while(find == false && temp != 0)
+    while(!find && temp != nullptr)
     {
         if(temp-> GetTrack() == &track)
         {
@@ -128,12 +128,12 @@ G4IT* G4ITBox::FindIT(const G4Track& track)
 
 const G4IT* G4ITBox::FindIT(const G4Track& track) const
 {
-    if( fNbIT == 0 ) return 0;
+    if( fNbIT == 0 ) return nullptr;
 
     const G4IT * temp = fpLastIT;
     G4bool find = false;
 
-    while(find == false && temp != 0)
+    while(!find && temp != nullptr)
     {
         if(temp-> GetTrack() == &track)
         {
@@ -149,7 +149,7 @@ const G4IT* G4ITBox::FindIT(const G4Track& track) const
 void G4ITBox::TransferTo(G4ITBox * aStack)
 {
     G4IT * ITToTransfer = fpFirstIT;
-    while(fNbIT)
+    while(fNbIT != 0)
     {
         Extract(ITToTransfer);
         aStack->Push(ITToTransfer);

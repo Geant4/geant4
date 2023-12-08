@@ -299,7 +299,7 @@ class G4Track
       // Touchable Handle
 
     G4DynamicParticle* fpDynamicParticle = nullptr;
-    G4TrackStatus fTrackStatus = fAlive;
+    mutable G4TrackStatus fTrackStatus = fAlive;
 
     G4double fStepLength = 0.0;
       // Before the end of the AlongStepDoIt loop, this keeps the initial

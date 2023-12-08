@@ -343,7 +343,7 @@ BrennerZaiderRandomizeCosTheta(G4double k)
 
   // ***** Original method
   
-  if (fasterCode == false)
+  if (!fasterCode)
   {
     G4double oneOverMax = 1.
     / (1. / (4. * gamma * gamma)
@@ -373,9 +373,8 @@ BrennerZaiderRandomizeCosTheta(G4double k)
 
   // ***** Alternative method using cumulative probability
 
-  else // if (fasterCode)
-  {
-
+  // if (fasterCode)
+  
    // 
    // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
    // 
@@ -469,7 +468,7 @@ BrennerZaiderRandomizeCosTheta(G4double k)
 
    return cosTheta;
    */
-  }
+ 
  
   //return 0.;
 
@@ -521,7 +520,7 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
   
   // ***** Original method
   
-  if (fasterCode == false)
+  if (!fasterCode)
   {
     G4double n = ScreeningFactor(k, z);
     
@@ -542,65 +541,64 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
   }
   
   // ***** Alternative method using cumulative probability
-  else // if (fasterCode)
-  {
-    
-    //
-    // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
-    //
-    // The cumulative probability (cp) is calculated by integrating
-    // the differential cross-section fomula with cos(theta):
-    //
-    //         n(K) * (1.0 + cos(theta))
-    //  cp = ---------------------------------
-    //         1.0 + 2.0 * n(K) - cos(theta)
-    //
-    // Then, cos(theta) is as follows:
-    //
-    //               cp * (1.0 + 2.0 * n(K)) - n(K)
-    // cos(theta) = --------------------------------
-    //                       n(k) + cp
-    //
-    // where, K is kinetic energy, n(K) is screeing factor, and cp is cumulative probability
-    //
-    
-    G4double n = ScreeningFactor(k, z);
-    G4double cp = G4UniformRand();
-    G4double numerator = cp * (1.0 + 2.0 * n) - n;
-    G4double denominator = n + cp;
-    return numerator / denominator;
-    
-    /*
-     G4double cosTheta = -1;
-     G4double cumul = 0;
-     G4double value = 0;
-     G4double n = ScreeningFactor(k, z);
-     G4double fCosTheta;
-     
-     // Number of integration steps in the -1,1 range
-     G4int iMax=200;
-     
-     G4double random = G4UniformRand();
-     
-     // Cumulate differential cross section
-     for (G4int i=0; i<iMax; i++)
-     {
-     cosTheta = -1 + i*2./(iMax-1);
-     fCosTheta = (1 + 2.*n - cosTheta);
-     if (fCosTheta !=0.) cumul = cumul + 1./(fCosTheta*fCosTheta);
-     }
-     
-     // Select cosTheta
-     for (G4int i=0; i<iMax; i++)
-     {
-     cosTheta = -1 + i*2./(iMax-1);
-     fCosTheta = (1 + 2.*n - cosTheta);
-     if (cumul !=0.) value = value + (1./(fCosTheta*fCosTheta)) / cumul;
-     if (random < value) break;
-     }
-     return cosTheta;
-     */
-  }
+  // if (fasterCode)
+      
+  //
+  // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
+  //
+  // The cumulative probability (cp) is calculated by integrating
+  // the differential cross-section fomula with cos(theta):
+  //
+  //         n(K) * (1.0 + cos(theta))
+  //  cp = ---------------------------------
+  //         1.0 + 2.0 * n(K) - cos(theta)
+  //
+  // Then, cos(theta) is as follows:
+  //
+  //               cp * (1.0 + 2.0 * n(K)) - n(K)
+  // cos(theta) = --------------------------------
+  //                       n(k) + cp
+  //
+  // where, K is kinetic energy, n(K) is screeing factor, and cp is cumulative probability
+  //
+  
+  G4double n = ScreeningFactor(k, z);
+  G4double cp = G4UniformRand();
+  G4double numerator = cp * (1.0 + 2.0 * n) - n;
+  G4double denominator = n + cp;
+  return numerator / denominator;
+  
+  /*
+   G4double cosTheta = -1;
+   G4double cumul = 0;
+   G4double value = 0;
+   G4double n = ScreeningFactor(k, z);
+   G4double fCosTheta;
+   
+   // Number of integration steps in the -1,1 range
+   G4int iMax=200;
+   
+   G4double random = G4UniformRand();
+   
+   // Cumulate differential cross section
+   for (G4int i=0; i<iMax; i++)
+   {
+   cosTheta = -1 + i*2./(iMax-1);
+   fCosTheta = (1 + 2.*n - cosTheta);
+   if (fCosTheta !=0.) cumul = cumul + 1./(fCosTheta*fCosTheta);
+   }
+   
+   // Select cosTheta
+   for (G4int i=0; i<iMax; i++)
+   {
+   cosTheta = -1 + i*2./(iMax-1);
+   fCosTheta = (1 + 2.*n - cosTheta);
+   if (cumul !=0.) value = value + (1./(fCosTheta*fCosTheta)) / cumul;
+   if (random < value) break;
+   }
+   return cosTheta;
+   */
+ 
  
   //return 0.;
 }

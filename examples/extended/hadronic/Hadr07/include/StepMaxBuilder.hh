@@ -42,11 +42,11 @@ class StepMaxBuilder : public G4VPhysicsConstructor
 {
   public:
     StepMaxBuilder(const G4String& name="UserStepMax");
-   ~StepMaxBuilder();
+   ~StepMaxBuilder() override = default;
 
   public:
-    virtual void ConstructParticle() { };
-    virtual void ConstructProcess();
+    void ConstructParticle() override { };
+    void ConstructProcess() override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

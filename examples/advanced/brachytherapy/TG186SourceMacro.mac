@@ -5,6 +5,9 @@
 /run/verbose 0
 /event/verbose 0
 #
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 # Scoring mesh is used to calculate
 #  the energy deposition in the phantom
 /score/create/boxMesh boxMesh_1

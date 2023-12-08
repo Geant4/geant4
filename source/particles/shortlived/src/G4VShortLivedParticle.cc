@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//      GEANT 4 class implementation file 
+//      GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      28 June 1998 H.Kurashige
@@ -35,6 +32,7 @@
 
 #include "G4VShortLivedParticle.hh"
 
+// clang-format off
 G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,  
                G4double         mass,     
                G4double         width,
@@ -55,16 +53,15 @@ G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,
   :G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospinZ,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable, true)
-{
-   
-}
+// clang-format on
+{}
 
-G4bool G4VShortLivedParticle::operator==(const G4VShortLivedParticle &right) const
+G4bool G4VShortLivedParticle::operator==(const G4VShortLivedParticle& right) const
 {
   return (this->GetParticleName() == right.GetParticleName());
 }
 
-G4bool G4VShortLivedParticle::operator!=(const G4VShortLivedParticle &right) const
+G4bool G4VShortLivedParticle::operator!=(const G4VShortLivedParticle& right) const
 {
   return (this->GetParticleName() != right.GetParticleName());
 }

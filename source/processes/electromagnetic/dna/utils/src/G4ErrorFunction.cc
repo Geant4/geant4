@@ -53,12 +53,12 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include <vector>
+#include <cmath>
 
 
-G4ErrorFunction::G4ErrorFunction() {;}
+G4ErrorFunction::G4ErrorFunction() = default;
 
-G4ErrorFunction::~G4ErrorFunction() {;}
+G4ErrorFunction::~G4ErrorFunction() = default;
 
 
 
@@ -577,14 +577,14 @@ G4double G4ErrorFunction::erfcx(G4double x)
         }
         return erfcx_y100(400/(4+x));
     }
-    else
-        return x < -26.7 ? HUGE_VAL : (x < -6.1 ? 2*std::exp(x*x)
-                                       : 2*std::exp(x*x) - erfcx_y100(400/(4-x)));
+    
+    return x < -26.7 ? HUGE_VAL : (x < -6.1 ? 2*std::exp(x*x)
+                                   : 2*std::exp(x*x) - erfcx_y100(400/(4-x)));
 }
 
 
 G4double G4ErrorFunction::erfc(G4double x) {
-    return 1.0 - std::erf(x);
+    return std::erfc(x);
 }
 
 

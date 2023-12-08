@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4TauPlus_h
 #define G4TauPlus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                           TAUPLUS                              ###
-// ######################################################################
 
 class G4TauPlus : public G4ParticleDefinition
 {
- private:
-   static G4TauPlus* theInstance;
-   G4TauPlus(){}
-   ~G4TauPlus() override= default;
+  public:
+    static G4TauPlus* Definition();
+    static G4TauPlus* TauPlusDefinition();
+    static G4TauPlus* TauPlus();
 
- public:
-   static G4TauPlus* Definition();
-   static G4TauPlus* TauPlusDefinition();
-   static G4TauPlus* TauPlus();
+  private:
+    G4TauPlus() {}
+    ~G4TauPlus() override = default;
+
+    static G4TauPlus* theInstance;
 };
 
 #endif
-

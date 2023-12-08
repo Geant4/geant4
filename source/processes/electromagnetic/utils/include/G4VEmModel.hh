@@ -317,10 +317,6 @@ public:
 
   void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
 
-  G4bool LPMFlag() const;
-  
-  void SetLPMFlag(G4bool val);
-
   inline G4ElementData* GetElementData();
 
   inline G4PhysicsTable* GetCrossSectionTable();
@@ -393,6 +389,10 @@ public:
 
   inline void SetLocked(G4bool);
 
+  // obsolete method
+  [[deprecated("Use G4EmParameters::Instance()->SetLPM instead")]]
+  void SetLPMFlag(G4bool);
+
   //  hide assignment operator
   G4VEmModel & operator=(const  G4VEmModel &right) = delete;
   G4VEmModel(const  G4VEmModel&) = delete;
@@ -441,8 +441,8 @@ private:
 
 protected:
 
-  size_t currentCoupleIndex = 0;
-  size_t basedCoupleIndex = 0;
+  std::size_t currentCoupleIndex = 0;
+  std::size_t basedCoupleIndex = 0;
   G4bool lossFlucFlag = true;
 
 private:

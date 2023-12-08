@@ -44,8 +44,8 @@ class SteppingVerbose;
 class SteppingVerbose : public G4SteppingVerbose
 {
  public:
-  SteppingVerbose();
-  virtual ~SteppingVerbose();
+  SteppingVerbose() = default;
+  ~SteppingVerbose() = default;
 
   virtual G4VSteppingVerbose* Clone() { return new SteppingVerbose; }
 

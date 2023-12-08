@@ -623,6 +623,7 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 
   # - Qt UI AND VIS
   if(GEANT4_USE_QT)
+    _g4tc_setenv_command(GEANT4_TC_QT_VERSION ${SHELL_FAMILY} QT_VERSION ${QT_VERSION_MAJOR})
     _g4tc_setenv_command(GEANT4_TC_QTHOME ${SHELL_FAMILY} QTHOME ${G4QTHOME})
     _g4tc_setenv_command(GEANT4_TC_QTLIBPATH ${SHELL_FAMILY} QTLIBPATH ${G4QTLIBPATH})
     _g4tc_setenv_command(GEANT4_TC_G4UI_USE_QT ${SHELL_FAMILY} G4UI_USE_QT 1)

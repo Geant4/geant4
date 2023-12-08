@@ -83,7 +83,7 @@ int main(int argc, char** argv)
   // -- Detector/mass geometry and parallel geometry(ies):
   // -----------------------------------------------------
   // -- Mass geometry (ie : standard geometry):
-  G4VUserDetectorConstruction* detector = new Par01DetectorConstruction();
+  auto detector = new Par01DetectorConstruction();
   // -- Parallel geometry for pion parameterisation
   detector->RegisterParallelWorld(new Par01ParallelWorldForPion("pionGhostWorld"));
   // -- Passed to the run manager:
@@ -95,9 +95,9 @@ int main(int argc, char** argv)
   // -- Create a physics list (note : FTFP_BERT is a G4VModularPhysicsList
   // -- which allows to use the subsequent G4FastSimulationPhysics tool to
   // -- activate the fast simulation):
-  FTFP_BERT* physicsList = new FTFP_BERT;
+  auto  physicsList = new FTFP_BERT;
   // -- Create helper tool, used to activate the fast simulation:
-  G4FastSimulationPhysics* fastSimulationPhysics = new G4FastSimulationPhysics();
+  auto  fastSimulationPhysics = new G4FastSimulationPhysics();
   fastSimulationPhysics->BeVerbose();
   // -- activation of fast simulation for particles having fast simulation models
   // -- attached in the mass geometry:

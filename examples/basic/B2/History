@@ -5,6 +5,29 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-07 I. Hrivnacova (exampleB2-V11-01-03)
+- Fixed and improved setting of G4VisAttribute
+  - Do not create vis attributes with new (causing memory leak)
+  - Use Geant4 predefined colours (for clarity)
+
+## 2023-11-07 I. Hrivnacova (exampleB2-V11-01-02)
+- Removed unsused and unimplemented method declaration
+  PrimaryGeneratorAction::SetRandomFlag
+
+## 2023-11-03 I. Hrivnacova (exampleB2-V11-01-01)
+- Applied auto in main where suitable and not done by clang-tidy
+- Minor formatting changes
+
+## 2023-09-06 John Allison (exampleB2-V11-01-00)
+- For the new flexible run-time graphics system options:
+- B2a and B2b:
+  - main programs:
+    - Use constructor with arguments: new G4VisExecutive(argc, argv).
+  - EventAction.cc, TrackerSD.cc:
+    - Change G4int to std::size_t to eliminate precision loss warnings.
+- vis.mac in B2a/, B2b/ and macros/:
+    - Change "/vis/open OGL 600x600-0+0" to "/vis/open" to allow run-time choices.
+
 ## 2022-05-20 I. Hrivnacova (exampleB2-V11-00-01)
 - Restore the top UI commands directory name ("B2") in B2a::DetectorMessenger
   removed by mistake in exampleB2-V10-07-02

@@ -36,14 +36,14 @@
 
 class G4Run;
 
+namespace B1
+{
+
 /// Run action class
 ///
 /// In EndOfRunAction(), it calculates the dose in the selected volume
 /// from the energy deposit accumulated via stepping and event actions.
 /// The computed dose is then printed on the screen.
-
-namespace B1
-{
 
 class RunAction : public G4UserRunAction
 {

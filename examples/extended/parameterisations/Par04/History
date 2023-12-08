@@ -4,6 +4,19 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-10-25 Dalila Salamani (expar04-V11-01-02)
+- Add CUDA execution provider to run the inference on GPU with ONNXruntime.
+
+## 2023-09-29 Anna Zaborowska (expar04-V11-01-01)
+- Introduce physical readout structure in parallel world
+- Set run manager type from command line
+- ONNX version upgrade after Thomas Madlener fix, verified on 1.14
+
+## 2023-07-12 Ben Morgan (expar04-V11-01-00)
+- Bump tensorflow to 2.9.3
+  - Fixes [GitHub PR 55](https://github.com/Geant4/geant4/pull/55)
+  - Fixes [GitHub PR 60](https://github.com/Geant4/geant4/pull/60)
+
 ## 2022-11-08 D. Salamani (expar04-V11-00-05)
 - Add updated version of the training code (PEP 8 style guide, formatting with YAPF, 
 annotation with types, code upgrade to TF2.9, logic for GPU usage management)

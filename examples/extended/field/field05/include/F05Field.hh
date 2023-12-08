@@ -44,16 +44,16 @@ class F05Field : public G4ElectroMagneticField
 
 public:
 
-  F05Field();
-  virtual ~F05Field();
+  F05Field() = default;
+  ~F05Field() override = default;
 
   /// DoesFieldChangeEnergy() returns true.
-  virtual G4bool DoesFieldChangeEnergy() const { return true; };
+  G4bool DoesFieldChangeEnergy() const override { return true; };
 
   /// GetFieldValue() returns the field value at a given point[].
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
-  virtual void GetFieldValue(const G4double Point[4], G4double* Bfield) const;
+  void GetFieldValue(const G4double Point[4], G4double* Bfield) const override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

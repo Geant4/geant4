@@ -51,7 +51,8 @@ public:
 
 public:
   
-  G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct()  override;
+  void ConstructSDandField() override;
      
   void SetSizeXY   (G4double);
   void SetSizeZ    (G4double);              
@@ -70,6 +71,10 @@ public:
   G4double           GetBoxSizeZ()   {return fBoxSizeZ;};
   G4Material*        GetMaterial()   {return fTargetMaterial;};
      
+private:
+
+  void ConstructMaterials();
+
   void               PrintParameters();
                        
 private:

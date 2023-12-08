@@ -574,6 +574,7 @@ G4double G4UnionSolid::GetCubicVolume()
   {
     G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
                                       fPtrSolidA, fPtrSolidB );
+    intersectVol.SetCubVolStatistics(100000);
     intersection = intersectVol.GetCubicVolume();
   }
 

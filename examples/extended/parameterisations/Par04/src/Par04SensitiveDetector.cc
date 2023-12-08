@@ -67,7 +67,7 @@ Par04SensitiveDetector::Par04SensitiveDetector(G4String aName, G4ThreeVector aNb
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04SensitiveDetector::~Par04SensitiveDetector() {}
+Par04SensitiveDetector::~Par04SensitiveDetector() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,14 +80,6 @@ void Par04SensitiveDetector::Initialize(G4HCofThisEvent* aHCE)
   }
   aHCE->AddHitsCollection(fHitCollectionID, fHitsCollection);
 
-  // fill calorimeter hits with zero energy deposition
-  for(G4int iphi = 0; iphi < fMeshNbOfCells.y(); iphi++)
-    for(G4int irho = 0; irho < fMeshNbOfCells.x(); irho++)
-      for(G4int iz = 0; iz < fMeshNbOfCells.z(); iz++)
-      {
-        Par04Hit* hit = new Par04Hit();
-        fHitsCollection->insert(hit);
-      }
   // reset entrance position
   fEntrancePosition.set(-1, -1, -1);
   fEntranceDirection.set(-1, -1, -1);
@@ -107,6 +99,8 @@ G4bool Par04SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   // Add energy deposit from G4Step
   hit->AddEdep(edep);
+  // Increment the counter
+  hit->AddNdep(1);
 
   // Fill time information from G4Step
   // If it's already filled, choose hit with earliest global time
@@ -136,6 +130,8 @@ G4bool Par04SensitiveDetector::ProcessHits(const G4FastHit* aHit, const G4FastTr
 
   // Add energy deposit from G4FastHit
   hit->AddEdep(edep);
+  // Increment the counter
+  hit->AddNdep(1);
 
   // Fill time information from G4FastTrack
   // If it's already filled, choose hit with earliest global time
@@ -157,7 +153,7 @@ Par04Hit* Par04SensitiveDetector::RetrieveAndSetupHit(G4ThreeVector aGlobalPosit
 {
   if(fEntrancePosition.x() == -1)
   {
-    Par04EventInformation* info = dynamic_cast<Par04EventInformation*>(
+    auto  info = dynamic_cast<Par04EventInformation*>(
       G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetUserInformation());
     if(info == nullptr)
       return nullptr;
@@ -184,23 +180,33 @@ Par04Hit* Par04SensitiveDetector::RetrieveAndSetupHit(G4ThreeVector aGlobalPosit
 
   std::size_t hitID =
     fMeshNbOfCells.x() * fMeshNbOfCells.z() * phiNo + fMeshNbOfCells.z() * rhoNo + zNo;
-
-  if(hitID >= fHitsCollection->entries() || zNo >= fMeshNbOfCells.z() ||
-     rhoNo >= fMeshNbOfCells.x() || zNo < 0)
+  
+  if(zNo >= fMeshNbOfCells.z() || rhoNo >= fMeshNbOfCells.x() || zNo < 0)
   {
     return nullptr;
   }
 
-  Par04Hit* hit = (*fHitsCollection)[hitID];
-
-  if(hit->GetRhoId() < 0)
-  {
-    hit->SetRhoId(rhoNo);
+  auto hit = fHitsMap[hitID].get();
+  if (hit==nullptr) {
+    fHitsMap[hitID] = std::unique_ptr<Par04Hit>(new Par04Hit());
+    hit = fHitsMap[hitID].get();
     hit->SetPhiId(phiNo);
+    hit->SetRhoId(rhoNo);
     hit->SetZid(zNo);
     hit->SetRot(rotMatrixInv);
     hit->SetPos(fEntrancePosition +
                 rotMatrixInv * G4ThreeVector(0, 0, (zNo + 0.5) * fMeshSizeOfCells.z()));
+  
   }
   return hit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Par04SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
+{
+  for(const auto& hits: fHitsMap){
+    fHitsCollection->insert(new Par04Hit(*hits.second.get()));
+  }
+  fHitsMap.clear();
 }

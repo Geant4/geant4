@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -215,10 +215,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.62 s
+total time for build X-ray TR energy loss tables = 0.36 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 1.96 s
+total time for build X-ray TR angle for energy loss tables = 1.36 s
 
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -305,10 +305,10 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.154
 9.283e+04	3.154
 
-total time for build X-ray TR energy loss tables = 0.62 s
+total time for build X-ray TR energy loss tables = 0.36 s
 Build angle for energy distribution according the current radiator
 
-total time for build X-ray TR angle for energy loss tables = 1.96 s
+total time for build X-ray TR angle for energy loss tables = 1.36 s
 
 msc:  for proton  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -632,20 +632,20 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.200000s Real=0.207233s Sys=0.000000s
+  User=0.230000s Real=0.263357s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
- Mean energy deposit in absorber = 0.0469696 +-0.0185724  MeV 
- Total number of XTR gammas = 2677
- Total number of all gammas = 2759
+ Mean energy deposit in absorber = 0.0479535 +-0.0189569  MeV 
+ Total number of XTR gammas = 2664
+ Total number of all gammas = 2755
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1520903769, 1468394322
+ Current couple of seeds = 2144070945, 143970008
 ----------------------------------------
 ... write file : testem10.root - done
 ... close file : testem10.root - done
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.054 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.045 MB
 ============================================================

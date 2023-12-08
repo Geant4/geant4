@@ -4,6 +4,23 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-02 D. Sawkey (OpNovice2-V11-01-04)
+- apply clang-tidy recommendations
+
+## 2023-10-27 D. Sawkey (OpNovice2-V11-01-03)
+- scint_by_particle.mac: use normal verbosity (1)
+
+## 2023-10-19 D. Sawkey (OpNovice2-V11-01-02)
+- scint_by_particle.mac: use particle-specific time constants
+
+## 2023-10-11 Daren Sawkey (OpNovice2-V11-01-01)
+- Apply coding guidelines, especially use of override and variable
+  initialization
+
+## 2023-09-05 D. Sawkey (OpNovice2-V11-01-00)
+- Add command to kill photons on reaching second surface. Provides a way to
+  visualize boundary scattering
+
 ## 2022-11-09 I. Hrivnacova (OpNovice2-V11-00-06)
 - Fixed Doxygen documentation
 

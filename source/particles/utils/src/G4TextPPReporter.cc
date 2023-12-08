@@ -22,92 +22,78 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #include "G4TextPPReporter.hh"
+
+#include "G4DecayTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Tokenizer.hh"
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4DecayTable.hh"  
-#include "G4VDecayChannel.hh"  
-#include "G4Tokenizer.hh"
-#include <iomanip>
-#include <fstream>       
 
-/////////////////////
+#include <fstream>
+#include <iomanip>
+
 void G4TextPPReporter::Print(const G4String& option)
 {
-  SparseOption( option );
+  SparseOption(option);
 
-  for (const auto & i : pList){
-    G4ParticleDefinition* particle  = G4ParticleTable::GetParticleTable()->FindParticle( i->GetParticleName() ); 
+  for (const auto& i : pList) {
+    G4ParticleDefinition* particle =
+      G4ParticleTable::GetParticleTable()->FindParticle(i->GetParticleName());
 
     GeneratePropertyTable(particle);
   }
-}    
-
+}
 
 void G4TextPPReporter::SparseOption(const G4String& option)
 {
-  G4Tokenizer savedToken( option );
-  
+  G4Tokenizer savedToken(option);
+
   // 1st option : base directory
   baseDir = savedToken();
   if (!baseDir.empty()) {
-    if(baseDir.back()!='/') {
+    if (baseDir.back() != '/') {
       baseDir += "/";
     }
   }
 }
 
-
-
-void  G4TextPPReporter::GeneratePropertyTable(const G4ParticleDefinition* particle)
+void G4TextPPReporter::GeneratePropertyTable(const G4ParticleDefinition* particle)
 {
   G4String name = particle->GetParticleName();
-  
+
   //--- open file -----
   G4String fileName = baseDir + name + ".txt";
   // exception
-  if (name == "J/psi") fileName = baseDir +"jpsi.txt";
+  if (name == "J/psi") fileName = baseDir + "jpsi.txt";
 
-  std::ofstream outFile(fileName, std::ios::out );
-  outFile.setf( std::ios:: scientific, std::ios::floatfield );
+  std::ofstream outFile(fileName, std::ios::out);
+  outFile.setf(std::ios::scientific, std::ios::floatfield);
   outFile << std::setprecision(7) << G4endl;
 
   // particle name  encoding
-  outFile << name << " "
-	  <<  particle->GetPDGEncoding()  << G4endl;
+  outFile << name << " " << particle->GetPDGEncoding() << G4endl;
 
   // IJPC
-  outFile << particle->GetPDGiIsospin()       << " "
-	  << particle->GetPDGiSpin()          << " "
-	  << particle->GetPDGiParity()        << " "
-	  << particle->GetPDGiConjugation()   << G4endl;
+  outFile << particle->GetPDGiIsospin() << " " << particle->GetPDGiSpin() << " "
+          << particle->GetPDGiParity() << " " << particle->GetPDGiConjugation() << G4endl;
 
-  // mass, width, charge 
-  outFile <<  particle->GetPDGMass()/GeV      << " "
-	  <<  particle->GetPDGWidth()/GeV     << " " 
-	  <<  particle->GetPDGCharge()/eplus  << G4endl;
+  // mass, width, charge
+  outFile << particle->GetPDGMass() / GeV << " " << particle->GetPDGWidth() / GeV << " "
+          << particle->GetPDGCharge() / eplus << G4endl;
 
   // life time
-  outFile << particle->GetPDGLifeTime()/second << G4endl;
+  outFile << particle->GetPDGLifeTime() / second << G4endl;
 
-// Decay Table  
-  G4DecayTable* dcyTable = particle->GetDecayTable(); 
-  if (dcyTable != nullptr) { 
-    for (G4int i=0; i< dcyTable->entries(); i++){
-      G4VDecayChannel * channel = dcyTable->GetDecayChannel(i);
+  // Decay Table
+  G4DecayTable* dcyTable = particle->GetDecayTable();
+  if (dcyTable != nullptr) {
+    for (G4int i = 0; i < dcyTable->entries(); i++) {
+      G4VDecayChannel* channel = dcyTable->GetDecayChannel(i);
       // column 1  : BR
       outFile << channel->GetBR() << " ";
       // column 2.  : daughters
@@ -115,15 +101,10 @@ void  G4TextPPReporter::GeneratePropertyTable(const G4ParticleDefinition* partic
       // column 3 : Kinematics
       outFile << channel->GetKinematicsName() << " ";
       // daughters
-      for (G4int j=0; j< channel->GetNumberOfDaughters(); j++){
+      for (G4int j = 0; j < channel->GetNumberOfDaughters(); j++) {
         outFile << channel->GetDaughter(j)->GetParticleName() << " ";
       }
       outFile << G4endl;
     }
   }
 }
-
-
-
-
-

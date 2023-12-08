@@ -8,6 +8,7 @@ geant4_add_module(G4hadronic_xsect
     G4BGGPionElasticXS.hh
     G4BGGPionInelasticXS.hh
     G4BarashenkovData.hh
+    G4ChargeExchangeXS.hh
     G4ChipsAntiBaryonElasticXS.hh
     G4ChipsAntiBaryonInelasticXS.hh
     G4ChipsComponentXS.hh
@@ -73,6 +74,7 @@ geant4_add_module(G4hadronic_xsect
     G4BGGNucleonInelasticXS.cc
     G4BGGPionElasticXS.cc
     G4BGGPionInelasticXS.cc
+    G4ChargeExchangeXS.cc
     G4ChipsAntiBaryonElasticXS.cc
     G4ChipsAntiBaryonInelasticXS.cc
     G4ChipsComponentXS.cc

@@ -37,21 +37,19 @@
 #ifndef G4HyperNucleiProperties_hh
 #define G4HyperNucleiProperties_hh 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleTable.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
 class G4HyperNucleiProperties
 {
-
-  public: 
-
+  public:
     G4HyperNucleiProperties() = default;
-   ~G4HyperNucleiProperties() = default;
+    ~G4HyperNucleiProperties() = default;
 
+    // Calculate Mass Excess of nucleus A, Z, L(number of Lambda)
     static G4double GetAtomicMass(G4int A, G4int Z, G4int L);
-      // Calculate Mass Excess of nucleus A, Z, L(number of Lambda)
-  
+
     static G4double GetNuclearMass(G4int A, G4int Z, G4int L);
 };
 

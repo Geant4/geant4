@@ -241,9 +241,14 @@ G4bool G4UIparameter::RangeCheck(const char* newValue)
     case 'L':
       is >> newVal.L;
       break;
+    case 'S':
+      is >> newVal.S;
+      break;
+    case 'B':
+      is >> newVal.C;
+      break;
     default:;
   }
-  // PrintToken();          // Print tokens (consumes all tokens)
   token = Yylex();
   result = Expression();
   if (paramERR == 1) {

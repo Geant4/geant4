@@ -45,36 +45,8 @@
 Run::Run()
   : G4Run()
 {
-  fParticle     = nullptr;
-  fEkin         = -1.;
-  fPolarized    = false;
-  fPolarization = 0.;
-
-  fCerenkovEnergy       = 0.0;
-  fScintEnergy          = 0.0;
-  fWLSAbsorptionEnergy  = 0.0;
-  fWLSEmissionEnergy    = 0.0;
-  fWLS2AbsorptionEnergy = 0.0;
-  fWLS2EmissionEnergy   = 0.0;
-
-  fCerenkovCount       = 0;
-  fScintCount          = 0;
-  fWLSAbsorptionCount  = 0;
-  fWLSEmissionCount    = 0;
-  fWLS2AbsorptionCount = 0;
-  fWLS2EmissionCount   = 0;
-  fRayleighCount       = 0;
-
-  fOpAbsorption      = 0;
-  fOpAbsorptionPrior = 0;
-
-  fTotalSurface = 0;
-
   fBoundaryProcs.assign(43, 0);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-Run::~Run() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy,
@@ -130,7 +102,7 @@ void Run::EndOfRun()
 {
   if(numberOfEvent == 0)
     return;
-  G4double TotNbofEvents = (G4double) numberOfEvent;
+  auto TotNbofEvents = (G4double) numberOfEvent;
 
   G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
   G4int id                       = analysisMan->GetH1Id("Cerenkov spectrum");
@@ -237,7 +209,7 @@ void Run::EndOfRun()
   analysisMan->SetH1XAxisTitle(id, "Angle [deg]");
   analysisMan->SetH1YAxisTitle(id, "Fraction of photons");
 
-  const DetectorConstruction* det =
+  const auto det =
     (const DetectorConstruction*) (G4RunManager::GetRunManager()
                                      ->GetUserDetectorConstruction());
 

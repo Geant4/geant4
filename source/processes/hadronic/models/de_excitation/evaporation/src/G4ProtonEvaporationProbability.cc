@@ -39,9 +39,6 @@ G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2.0) 
 {}
 
-G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 
-{}
-
 G4double 
 G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment) 
 { 
@@ -54,7 +51,7 @@ G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment)
   // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
 
   G4int aZ = fragment.GetZ_asInt()-GetZ();
-  G4double C = (aZ >= 70) ? 0.10 :
+  G4double C = (aZ <= 70) ? 0.10 :
     ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ 
       + 0.98375;
 

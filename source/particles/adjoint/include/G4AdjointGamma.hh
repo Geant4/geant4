@@ -23,51 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Gamma 	    
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
+//      History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Gamma
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
 //
 //-------------------------------------------------------------
 //	Documentation:
-//    Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint 
-//    processes act on adjoint particles when they are  tracked backward in the geometry. 
-//    The use of adjoint particles instead of "normal" particles 
-//    during a reverse simulation is based on an idea of M. Asai   
+//    Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint
+//    processes act on adjoint particles when they are  tracked backward in the geometry.
+//    The use of adjoint particles instead of "normal" particles
+//    during a reverse simulation is based on an idea of M. Asai
 //
 #ifndef G4AdjointGamma_h
 #define G4AdjointGamma_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                           AdjointGAMMA                         ###
-// ######################################################################
 
 class G4AdjointGamma : public G4ParticleDefinition
 {
- private:
-   static G4AdjointGamma* theInstance;
+  public:
+    static G4AdjointGamma* Definition();
+    static G4AdjointGamma* AdjointGammaDefinition();
+    static G4AdjointGamma* AdjointGamma();
 
- private: // hide constructor as private
-   G4AdjointGamma(){}
+  private:
+    G4AdjointGamma() {}
+    ~G4AdjointGamma() override = default;
 
- public:
-   ~G4AdjointGamma() override= default;
-
-   static G4AdjointGamma* Definition();
-   static G4AdjointGamma* AdjointGammaDefinition();
-   static G4AdjointGamma* AdjointGamma();
+    static G4AdjointGamma* theInstance;
 };
 
-
 #endif
-
-

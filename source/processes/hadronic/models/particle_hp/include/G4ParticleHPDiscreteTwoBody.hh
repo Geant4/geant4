@@ -42,54 +42,24 @@
 
 class G4ParticleHPDiscreteTwoBody : public G4VParticleHPEnergyAngular
 {
-  public:
-    G4ParticleHPDiscreteTwoBody()
-    {
-      theCoeff = nullptr;
-      bCheckDiffCoeffRepr = true;
-      if (std::getenv("G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR") != nullptr) bCheckDiffCoeffRepr = false;
-      nEnergy = 0;
-    }
-    ~G4ParticleHPDiscreteTwoBody() override { delete[] theCoeff; }
+public:
+  G4ParticleHPDiscreteTwoBody();
+  ~G4ParticleHPDiscreteTwoBody() override;
 
-    void Init(std::istream& aDataFile) override
-    {
-      aDataFile >> nEnergy;
-      theManager.Init(aDataFile);
-      theCoeff = new G4ParticleHPLegendreTable[nEnergy];
-      for (G4int i = 0; i < nEnergy; i++) {
-        G4double energy;
-        G4int aRep, nCoeff;
-        aDataFile >> energy >> aRep >> nCoeff;
-        //-      G4cout << this << " " << i << " G4ParticleHPDiscreteTwoBody READ DATA " << energy
-        //<< " " << aRep << " " << nCoeff << G4endl;
-        energy *= CLHEP::eV;
-        G4int nPoints = nCoeff;
-        if (aRep > 0) nPoints *= 2;
-        // theCoeff[i].Init(energy, nPoints);
+  void Init(std::istream& aDataFile) override;
 
-        theCoeff[i].Init(energy, nPoints - 1);
-        theCoeff[i].SetRepresentation(aRep);
-        for (G4int ii = 0; ii < nPoints; ii++) {
-          G4double y;
-          aDataFile >> y;
-          theCoeff[i].SetCoeff(ii, y);
-        }
-      }
-    }
+  G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
+  G4double MeanEnergyOfThisInteraction() override { return -1.0; }
 
-    G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) override;
-    G4double MeanEnergyOfThisInteraction() override { return -1; }
+private:
+  G4int nEnergy{0};
+  G4ParticleHPLegendreTable* theCoeff{nullptr};
+  G4bool bCheckDiffCoeffRepr{true};
+  // for example ENDF-VII0_proton/Inelastic/F01/4_9_Beryllium has 0
+  // for energy 7.5E+07 and 12 for energy 1.e+08
 
-  private:
-    G4int nEnergy;
-    G4InterpolationManager theManager;  // knows the interpolation between stores
-    G4ParticleHPLegendreTable* theCoeff;
-
-  private:
-    G4ParticleHPInterpolator theInt;
-
-    G4bool bCheckDiffCoeffRepr;  // for example ENDF-VII0_proton/Inelastic/F01/4_9_Beryllium has 0
-                                 // for energy 7.5E+07 and 12 for energy 1.e+08
+  G4InterpolationManager theManager;  // knows the interpolation between stores
+  G4ParticleHPInterpolator theInt;
 };
+
 #endif

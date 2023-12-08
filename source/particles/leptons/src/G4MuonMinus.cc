@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,36 +33,37 @@
 // ----------------------------------------------------------------------
 
 #include "G4MuonMinus.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4MuonDecayChannel.hh"
 #include "G4DecayTable.hh"
+#include "G4MuonDecayChannel.hh"
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
-// ######################################################################
-// ###                          MUONMINUS                             ###
-// ######################################################################
 G4MuonMinus* G4MuonMinus::theInstance = nullptr;
 
 G4MuonMinus* G4MuonMinus::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "mu-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+
+    // clang-format off
   anInstance = new G4ParticleDefinition(
                  name, 0.1056583715*GeV, 2.99598e-16*MeV,  -1.*eplus, 
 		    1,                0,                0,          
@@ -74,30 +72,31 @@ G4MuonMinus* G4MuonMinus::Definition()
 		false,       2196.98*ns,             nullptr,
                 false,              "mu"
               );
+    // clang-format on
+
     // Bohr Magnetron
-   G4double muB =  -0.5*eplus*hbar_Planck/(anInstance->GetPDGMass()/c_squared) ;
-   
-   anInstance->SetPDGMagneticMoment( muB * 1.0011659209);
+    G4double muB = -0.5 * eplus * hbar_Planck / (anInstance->GetPDGMass() / c_squared);
 
-  //create Decay Table 
-  auto  table = new G4DecayTable();
+    anInstance->SetPDGMagneticMoment(muB * 1.0011659209);
 
-  // create a decay channel
-  G4VDecayChannel* mode = new G4MuonDecayChannel("mu-",1.00);
-  table->Insert(mode);
-  anInstance->SetDecayTable(table);
+    // create Decay Table
+    auto table = new G4DecayTable();
+
+    // create a decay channel
+    G4VDecayChannel* mode = new G4MuonDecayChannel("mu-", 1.00);
+    table->Insert(mode);
+    anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4MuonMinus*>(anInstance);
   return theInstance;
 }
 
-G4MuonMinus*  G4MuonMinus::MuonMinusDefinition()
+G4MuonMinus* G4MuonMinus::MuonMinusDefinition()
 {
   return Definition();
 }
 
-G4MuonMinus*  G4MuonMinus::MuonMinus()
+G4MuonMinus* G4MuonMinus::MuonMinus()
 {
   return Definition();
 }
-

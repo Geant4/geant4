@@ -51,7 +51,7 @@ Par03SensitiveDetector::Par03SensitiveDetector(G4String aName, G4int aNumLayers,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03SensitiveDetector::~Par03SensitiveDetector() {}
+Par03SensitiveDetector::~Par03SensitiveDetector() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,7 +71,7 @@ void Par03SensitiveDetector::Initialize(G4HCofThisEvent* aHCE)
     for(G4int irho = 0; irho < fCellNoRho; irho++)
       for(G4int iz = 0; iz < fCellNoZ; iz++)
       {
-        Par03Hit* hit = new Par03Hit();
+        auto  hit = new Par03Hit();
         fHitsCollection->insert(hit);
       }
 }
@@ -84,7 +84,7 @@ G4bool Par03SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   if(edep == 0.)
     return true;
 
-  G4TouchableHistory* aTouchable =
+  auto  aTouchable =
     (G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable());
 
   auto hit = RetrieveAndSetupHit(aTouchable);

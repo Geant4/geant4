@@ -64,7 +64,7 @@ public:
 
   virtual G4bool IsRunning(){ return false; }
 
-  virtual G4ITModelHandler* GetModelHandler(){ return 0; }
+  virtual G4ITModelHandler* GetModelHandler(){ return nullptr; }
 
   virtual void RegisterModel(G4VITStepModel*, double){;}
 
@@ -92,10 +92,10 @@ public:
   virtual G4double GetGlobalTime() const {return -1;}
 
   virtual void SetUserAction(G4UserTimeStepAction*) {;}
-  virtual G4UserTimeStepAction* GetUserTimeStepAction() const {return 0;}
+  virtual G4UserTimeStepAction* GetUserTimeStepAction() const {return nullptr;}
 
   virtual void SetInteractivity(G4ITTrackingInteractivity*){;}
-  virtual G4ITTrackingInteractivity* GetInteractivity() {return 0;}
+  virtual G4ITTrackingInteractivity* GetInteractivity() {return nullptr;}
 };
 
 #endif /* G4ITTIMESTEPPER_HH_ */

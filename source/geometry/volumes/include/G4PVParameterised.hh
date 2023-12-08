@@ -35,13 +35,13 @@
 // 29.07.95, P.Kent - first non-stub version
 // ----------------------------------------------------------------------
 #ifndef G4PVPARAMETERISED_HH
-#define G4PVPARAMETERISED_HH
+#define G4PVPARAMETERISED_HH 1
 
 #include "G4PVReplica.hh"
 
 class G4PVParameterised : public G4PVReplica
 {
-  public:  // with description
+  public:
 
     G4PVParameterised(const G4String& pName,
                             G4LogicalVolume* pLogical,
@@ -55,8 +55,6 @@ class G4PVParameterised : public G4PVReplica
       // The positioning of the replicas is dominant along the specified axis.
       // pSurfChk if true activates check for overlaps with existing volumes.
  
-  public:  // without description
-
     G4PVParameterised(const G4String& pName,
                             G4LogicalVolume* pLogical,
                             G4VPhysicalVolume* pMother,
@@ -71,8 +69,6 @@ class G4PVParameterised : public G4PVReplica
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
-
-  public:  // with description
 
     ~G4PVParameterised() override;
       // Virtual empty destructor.

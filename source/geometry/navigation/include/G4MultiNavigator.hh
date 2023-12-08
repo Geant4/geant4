@@ -42,7 +42,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Navigator.hh"
 
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHandle.hh"
 
 #include "G4NavigationHistory.hh"
 
@@ -112,7 +112,7 @@ class G4MultiNavigator : public G4Navigator
     // in any geometry from the specified point in the global coordinate
     // system. The geometry must be closed.
 
-  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const override;
+  G4TouchableHandle CreateTouchableHistoryHandle() const override;
     // Returns a reference counted handle to a touchable history.
 
   G4ThreeVector GetLocalExitNormal( G4bool* obtained ) override; // const

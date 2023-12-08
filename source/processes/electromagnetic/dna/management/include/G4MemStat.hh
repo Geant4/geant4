@@ -58,11 +58,10 @@ namespace G4MemStat
 	{
 
         friend std::ostream & operator<<(std::ostream &os, const MemStat& p);
-		double vmz;
-		double mem;
+		double vmz{0};
+		double mem{0};
 
-		MemStat() : vmz(0), mem(0)
-		{;}
+		MemStat()= default;
 		MemStat(const MemStat& right)
 		{
 			vmz = right.vmz;

@@ -13,6 +13,8 @@ This directory contains a set of Geant4-DNA examples.
 
    - \link Exampleicsd icsd \endlink Use of cross section models for DNA materials,
 
+   - \link Examplejetcounter jetcounter \endlink A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
+
    - \link Examplemfp mfp \endlink Simulation of mean free path in liquid water.
 
    - \link ExampleMicrodosimetry  microdosimetry \endlink  Simulation of the track of a 5 MeV proton in liquid water. Geant4 standard EM models are used in the World volume while Geant4-DNA models are used in a Target volume, declared as a Region.
@@ -35,8 +37,6 @@ This directory contains a set of Geant4-DNA examples.
 
    - \link ExampleAuNP AuNP \endlink Simulation calculates absorbed dose around AuNP.
 
-   - \link Examplejetcounter jetcounter \endlink A setup for simulation of a typical experiment with the Jet Counter nanodosemeter
-
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
@@ -52,6 +52,7 @@ Ultra High Dose Rate
    - \link ExamplePdb4dna pdb4dna \endlink  Usage of the Protein Data Bank (PDB) file format to build geometries.
    - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink  Geometrical description of a full simplified cell nucleus.
    - \link Examplednadamage1 dnadamage1  \endlink Damage simulation on a chromatin fiber.
+   - \link Examplednadamage2 dnadamage2  \endlink Scoring of plasmid DNA strand breaks using the IRT method.
    - \link Exampleneuron  neuron \endlink  Irradiation of a realistic neuron cell.
    - \link Examplesmoleculardna  moleculardna \endlink  Damage simulation on DNA geometries.
 

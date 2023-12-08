@@ -38,6 +38,8 @@
 #include "G4MagneticField.hh"
 #include "G4UniformMagField.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4FieldManager;
 class G4ChordFinder;
 class G4Mag_UsualEqRhs;
@@ -80,22 +82,22 @@ protected:
   G4FieldManager*         GetGlobalFieldManager() ;
   G4ThreeVector           GetConstantFieldValue(G4MagneticField* magneticField) const;
 
-  G4FieldManager*         fFieldManager;
-  G4FieldManager*         fLocalFieldManager;
-  G4ChordFinder*          fChordFinder;
-  G4ChordFinder*          fLocalChordFinder;
-  G4Mag_UsualEqRhs*       fEquation;
-  G4Mag_UsualEqRhs*       fLocalEquation;
-  G4MagneticField*        fMagneticField;
-  G4MagneticField*        fLocalMagneticField;
+  G4FieldManager*         fFieldManager = nullptr;
+  G4FieldManager*         fLocalFieldManager = nullptr;
+  G4ChordFinder*          fChordFinder = nullptr;
+  G4ChordFinder*          fLocalChordFinder = nullptr;
+  G4Mag_UsualEqRhs*       fEquation = nullptr;
+  G4Mag_UsualEqRhs*       fLocalEquation = nullptr;
+  G4MagneticField*        fMagneticField = nullptr;
+  G4MagneticField*        fLocalMagneticField = nullptr;
 
-  G4MagIntegratorStepper* fStepper;
-  G4MagIntegratorStepper* fLocalStepper;
-  G4int                   fStepperType;
+  G4MagIntegratorStepper* fStepper = nullptr;
+  G4MagIntegratorStepper* fLocalStepper = nullptr;
+  G4int                   fStepperType = 4;  // ClassicalRK4 is default stepper;
 
-  G4double                fMinStep;
- 
-  F03FieldMessenger*      fFieldMessenger;
+  G4double                fMinStep = 0.25 * CLHEP::mm ; // minimal step of 1 mm is default;
+
+  F03FieldMessenger*      fFieldMessenger = nullptr;
 
 };
 

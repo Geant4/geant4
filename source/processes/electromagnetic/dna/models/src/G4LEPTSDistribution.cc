@@ -27,8 +27,7 @@
 
 
 G4LEPTSDistribution::G4LEPTSDistribution()
-{
-}
+= default;
 
 
 void G4LEPTSDistribution::ReadFile(G4String fileName) {
@@ -45,29 +44,28 @@ void G4LEPTSDistribution::ReadFile(G4String fileName) {
     eF[eB]=0.0;
   }
 
-  if ((fp=fopen(fileName.c_str(), "r"))==NULL){
+  if ((fp=fopen(fileName.c_str(), "r"))==nullptr){
     //G4cout << "Error reading " << fileName << G4endl;
     NoBins = 0;
     bFileFound = false;
     return;
   }
-  else{
-    bFileFound = true;
-    //    G4cout << "Read Distro (" << fileName << ") " << G4endl;
-    out=1;
-    eB=1;
-    while (out==1){
-      out  = fscanf(fp,"%f \n",&float_data1);
-      out2 = fscanf(fp,"%f \n",&float_data2);
-      if (out==1 && out2==1){
-	E[eB]=(G4double)float_data1;
-	f[eB]=(G4double)float_data2;
-	eB++;
-      }
+  
+  bFileFound = true;
+  //    G4cout << "Read Distro (" << fileName << ") " << G4endl;
+  out=1;
+  eB=1;
+  while (out==1){
+    out  = fscanf(fp,"%f \n",&float_data1);
+    out2 = fscanf(fp,"%f \n",&float_data2);
+    if (out==1 && out2==1){
+	    E[eB]=(G4double)float_data1;
+	    f[eB]=(G4double)float_data2;
+	    eB++;
     }
-
-    fclose(fp);
   }
+
+  fclose(fp);
 
   NoBins=eB-1;  //=1272+1 or 9607+1;
 
@@ -121,7 +119,7 @@ G4bool G4LEPTSDistribution::ReadFile( FILE* fp, G4int nData )
       f[eB]=(G4double)float_data2;
       eB++;
     }else{
-      return 1;
+      return true;
     }
   }
     
@@ -150,7 +148,7 @@ G4bool G4LEPTSDistribution::ReadFile( FILE* fp, G4int nData )
   //for (eB=0;eB<=NoBins;eB++)
   //G4cout << "eff " << E[eB] << " " << f[eB] << " " << F[eB] << "\n";
 
-  return 0;
+  return false;
 }
 
 

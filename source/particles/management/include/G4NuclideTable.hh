@@ -36,31 +36,30 @@
 #ifndef G4NuclideTable_hh
 #define G4NuclideTable_hh 1
 
-#include <vector>
-#include <cmath>
-
-#include "globals.hh"
-#include "G4IsotopeProperty.hh"
-#include "G4VIsotopeTable.hh"
-#include "G4Ions.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
 #include "G4DecayTable.hh"
+#include "G4IonTable.hh"
+#include "G4Ions.hh"
+#include "G4IsotopeProperty.hh"
+#include "G4ParticleTable.hh"
+#include "G4VIsotopeTable.hh"
+#include "globals.hh"
+
+#include <cmath>
+#include <vector>
 
 class G4NuclideTableMessenger;
 
 class G4NuclideTable : public G4VIsotopeTable
 {
   public:
-
     using G4IsotopeList = std::vector<G4IsotopeProperty*>;
 
     ~G4NuclideTable() override;
 
-    G4NuclideTable (const G4NuclideTable&) = delete;
-    G4NuclideTable& operator = (const G4NuclideTable&) = delete;
+    G4NuclideTable(const G4NuclideTable&) = delete;
+    G4NuclideTable& operator=(const G4NuclideTable&) = delete;
 
-    static G4NuclideTable* GetInstance(); 
+    static G4NuclideTable* GetInstance();
     static G4NuclideTable* GetNuclideTable();
 
     void GenerateNuclide();
@@ -74,28 +73,26 @@ class G4NuclideTable : public G4VIsotopeTable
     inline void SetLevelTolerance(G4double x);
     inline G4double GetLevelTolerance();
 
-    void AddState(G4int, G4int, G4double, G4double,
-                  G4int ionJ=0, G4double ionMu=0.0);
-    void AddState(G4int, G4int, G4double, G4int, G4double,
-                  G4int ionJ=0, G4double ionMu=0.0);
-    void AddState(G4int, G4int, G4double, G4Ions::G4FloatLevelBase, G4double,
-                  G4int ionJ=0, G4double ionMu=0.0);
+    void AddState(G4int, G4int, G4double, G4double, G4int ionJ = 0, G4double ionMu = 0.0);
+    void AddState(G4int, G4int, G4double, G4int, G4double, G4int ionJ = 0, G4double ionMu = 0.0);
+    void AddState(G4int, G4int, G4double, G4Ions::G4FloatLevelBase, G4double, G4int ionJ = 0,
+                  G4double ionMu = 0.0);
 
     inline std::size_t GetSizeOfIsotopeList();
-  
-    G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) override;
-    G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A,
-            G4int lvl=0) override;
-      // It will replace the pure virtual one in the abstract base class.
-      //   Z: Atomic Number
-      //   A: Atomic Mass
-      //   E: Excitaion energy
-      //   flb: floating level base (enum defined in G4Ions.hh)
-      //    or
-      //   lvl: isomer level
 
-    inline std::size_t entries() const; 
+    // It will replace the pure virtual one in the abstract base class.
+    //   Z: Atomic Number
+    //   A: Atomic Mass
+    //   E: Excitaion energy
+    //   flb: floating level base (enum defined in G4Ions.hh)
+    //    or
+    //   lvl: isomer level
+    G4IsotopeProperty*
+    GetIsotope(G4int Z, G4int A, G4double E,
+               G4Ions::G4FloatLevelBase flb = G4Ions::G4FloatLevelBase::no_Float) override;
+    G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl = 0) override;
+
+    inline std::size_t entries() const;
     inline G4IsotopeProperty* GetIsotopeByIndex(std::size_t idx) const;
 
     // utility methods
@@ -106,34 +103,41 @@ class G4NuclideTable : public G4VIsotopeTable
     static G4double Tolerance();
 
   private:
-
     G4NuclideTable();
 
     G4double StripFloatLevelBase(G4double E, G4int& flbIndex);
     G4Ions::G4FloatLevelBase StripFloatLevelBase(const G4String&);
 
   private:
-
     G4double mean_life_threshold = 0.0;
     G4double minimum_mean_life_threshold = DBL_MAX;
 
     G4IsotopeList* fUserDefinedList = nullptr;
 
-    std::map<G4int, std::multimap<G4double, G4IsotopeProperty*> > map_pre_load_list;
-      // pre_load_list: contains state data for current run defined
-      // by mean_life_threshold
-    std::map<G4int, std::multimap<G4double, G4IsotopeProperty*> > map_full_list;
-      // full_list: keeps all state data during running application
-      // defined by minimum_mean_life_threshold
+    // pre_load_list: contains state data for current run defined
+    // by mean_life_threshold
+    std::map<G4int, std::multimap<G4double, G4IsotopeProperty*>> map_pre_load_list;
 
-    enum { idxZ=0, idxA, idxEnergy, idxLife, idxSpin, idxMu };
-      // Table of Nuclide Property
-      //  0: Z
-      //  1: A 
-      //  2: Energy [keV]
-      //  3: Life Time [ns]
-      //  4: Spin  [h_bar/2]
-      //  5: Magnetic Moment [joule/tesla]
+    // full_list: keeps all state data during running application
+    // defined by minimum_mean_life_threshold
+    std::map<G4int, std::multimap<G4double, G4IsotopeProperty*>> map_full_list;
+
+    // Table of Nuclide Property
+    //  0: Z
+    //  1: A
+    //  2: Energy [keV]
+    //  3: Life Time [ns]
+    //  4: Spin  [h_bar/2]
+    //  5: Magnetic Moment [joule/tesla]
+    enum
+    {
+      idxZ = 0,
+      idxA,
+      idxEnergy,
+      idxLife,
+      idxSpin,
+      idxMu
+    };
 
     G4IsotopeList* fIsotopeList = nullptr;
     G4double flevelTolerance = 0.0;
@@ -144,46 +148,39 @@ class G4NuclideTable : public G4VIsotopeTable
 // Inline methods
 // ------------------------
 
-inline
-G4double G4NuclideTable::GetThresholdOfHalfLife()
+inline G4double G4NuclideTable::GetThresholdOfHalfLife()
 {
-  return mean_life_threshold*0.69314718;
+  return mean_life_threshold * 0.69314718;
 }
 
-inline
-G4double G4NuclideTable::GetMeanLifeThreshold()
+inline G4double G4NuclideTable::GetMeanLifeThreshold()
 {
   return mean_life_threshold;
 }
 
-inline
-void G4NuclideTable::SetLevelTolerance(G4double x)
+inline void G4NuclideTable::SetLevelTolerance(G4double x)
 {
   flevelTolerance = x;
 }
 
-inline
-G4double G4NuclideTable::GetLevelTolerance()
+inline G4double G4NuclideTable::GetLevelTolerance()
 {
   return flevelTolerance;
 }
 
-inline
-std::size_t G4NuclideTable::GetSizeOfIsotopeList()
+inline std::size_t G4NuclideTable::GetSizeOfIsotopeList()
 {
-  return (fIsotopeList != nullptr ? fIsotopeList->size() : static_cast<size_t>(0) );
+  return (fIsotopeList != nullptr ? fIsotopeList->size() : static_cast<size_t>(0));
 }
 
-inline
-std::size_t G4NuclideTable::entries() const
+inline std::size_t G4NuclideTable::entries() const
 {
-  return (fIsotopeList != nullptr ? fIsotopeList->size() : std::size_t(0) );
+  return (fIsotopeList != nullptr ? fIsotopeList->size() : std::size_t(0));
 }
 
-inline
-G4IsotopeProperty* G4NuclideTable::GetIsotopeByIndex(std::size_t idx) const
+inline G4IsotopeProperty* G4NuclideTable::GetIsotopeByIndex(std::size_t idx) const
 {
-  if ((fIsotopeList != nullptr) && idx<fIsotopeList->size() ) return (*fIsotopeList)[idx];
+  if ((fIsotopeList != nullptr) && idx < fIsotopeList->size()) return (*fIsotopeList)[idx];
   return nullptr;
 }
 

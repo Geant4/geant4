@@ -5,6 +5,14 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (exParameterisations-V11-01-01)
+- Updated vis*.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-09-29 Anna Zaborowska (exParameterisations-V11-01-00)
+- Run clang-tidy on Par01, Par02, Par03 and Par04
+
 ## 2021-12-10 Ben Morgan (exParameterisations-V11-00-00)
 - Change to new Markdown History format
 

@@ -48,12 +48,15 @@ G4bool G4RootHnFileManager<HT>::WriteExtra(
 {
   auto result = true;
 
-  // // create a new file
+  // create a new file
   auto rfile = new tools::wroot::file(G4cout, fileName);
-  // TO DO
-  // rfile->add_ziper('Z', toolx::compress_buffer);
-  // rfile->set_compression(fState.GetCompressionLevel());
+
+  // return if creating file failed
   if (rfile == nullptr) return false;
+
+  // add compression
+  rfile->add_ziper('Z', toolx::compress_buffer);
+  rfile->set_compression(fFileManager->GetCompressionLevel());
 
   // no directory supported in this mode
   auto hdirectory = &(rfile->dir());
@@ -65,11 +68,16 @@ G4bool G4RootHnFileManager<HT>::WriteExtra(
   // write file
   unsigned int n;
   result &= rfile->write(n);
+  if ( ! result) {
+    G4Analysis::Warn(
+      "Saving " + G4Analysis::GetHnType<HT>() + " " + htName + " failed",
+      fkClass, "WriteExtra");
+    return false;
+  }
 
   // close file
   rfile->close();
-
-  return result;
+  return true;
 }
 
 //_____________________________________________________________________________

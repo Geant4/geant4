@@ -208,7 +208,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 
   // Conditions to skip pre-compound and perform equilibrium emission 
   if (!isActive || (Z < minZ && A < minA) || 
-      U < fLowLimitExc*A || U > A*fHighLimitExc || 0 <  aFragment.GetNumberOfLambdas()) {
+      U < fLowLimitExc*A || U > A*fHighLimitExc ||
+      0 <  aFragment.GetNumberOfLambdas()) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }
@@ -273,14 +274,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       if(!go_ahead || P1 <= P2+P3 || Z < minZ || A < minA || 
          U <= fLowLimitExc*A || U > A*fHighLimitExc ||
 	 aFragment.GetNumberOfExcitons() <= 0) {
-	//G4cout<<"#4 EquilibriumEmission"<<G4endl; 
+	// G4cout<<"#4 EquilibriumEmission"<<G4endl; 
 	PerformEquilibriumEmission(aFragment,Result);
 	return Result;
       }
       G4double emissionProbability = 
 	theEmission->GetTotalProbability(aFragment);
-      //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
-      // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
+      //G4cout<<"#1 TotalEmissionProbability="<<emissionProbability
+      //<<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
       //J.M.Quesada (May 08) this has already been done in order to decide  
       //                     what to do (preeq-eq) 
       // Sum of all probabilities

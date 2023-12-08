@@ -43,14 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
- : G4UImessenger(),
-   fElFieldSetup(fieldSetup),
-   fFieldDir(0),
-   fStepperCmd(0),
-   fElFieldZCmd(0),
-   fElFieldCmd(0),
-   fMinStepCmd(0),
-   fUpdateCmd(0)
+ : fElFieldSetup(fieldSetup)
 {
   fFieldDir = new G4UIdirectory("/field/");
   fFieldDir->SetGuidance("F02 field tracking control.");
@@ -74,14 +67,14 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
   fElFieldZCmd->SetParameterName("Ez",false,false);
   fElFieldZCmd->SetDefaultUnit("megavolt/m");
   fElFieldZCmd->AvailableForStates(G4State_Idle);
- 
+
   fElFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setField",this);
   fElFieldCmd->SetGuidance("Define uniform Electric field.");
   fElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
   fElFieldCmd->SetParameterName("Ex","Ey","Ez",false,false);
   fElFieldCmd->SetDefaultUnit("megavolt/m");
   fElFieldCmd->AvailableForStates(G4State_Idle);
- 
+
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
   fMinStepCmd->SetParameterName("min step",false,false);

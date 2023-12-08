@@ -65,8 +65,7 @@ G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& scopy )
 }
 
 inline
-G4AssemblyTriplet::~G4AssemblyTriplet()
-= default;
+G4AssemblyTriplet::~G4AssemblyTriplet() = default;
 
 inline
 G4LogicalVolume* G4AssemblyTriplet::GetVolume() const

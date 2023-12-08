@@ -48,25 +48,29 @@ class G4DNAIonElasticModel : public G4VEmModel
 
 public:
 
-  G4DNAIonElasticModel (const G4ParticleDefinition* p = 0,
+  G4DNAIonElasticModel (const G4ParticleDefinition* p = nullptr,
                         const G4String& nam ="DNAIonElasticModel");
 
-  virtual
-  ~G4DNAIonElasticModel ();
+  
+  ~G4DNAIonElasticModel () override;
 
-  virtual void
+  G4DNAIonElasticModel &
+  operator= (const G4DNAIonElasticModel &right) = delete;
+  G4DNAIonElasticModel (const G4DNAIonElasticModel&) = delete;
+
+  void
   Initialise (const G4ParticleDefinition* particuleDefinition,
-              const G4DataVector&);
+              const G4DataVector&) override;
 
-  virtual G4double
+  G4double
   CrossSectionPerVolume (const G4Material* material,
                          const G4ParticleDefinition* p, G4double ekin,
-                         G4double emin, G4double emax);
+                         G4double emin, G4double emax) override;
 
-  virtual void
+  void
   SampleSecondaries (std::vector<G4DynamicParticle*>*,
                      const G4MaterialCutsCouple*, const G4DynamicParticle*,
-                     G4double tmin, G4double maxEnergy);
+                     G4double tmin, G4double maxEnergy) override;
 
   void
   SetKillBelowThreshold (G4double threshold);
@@ -93,7 +97,7 @@ private:
   G4double killBelowEnergy;
   G4double lowEnergyLimit;
   G4double highEnergyLimit;
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
 
   G4double fParticle_Mass;
@@ -124,22 +128,16 @@ private:
   LinLinInterpolate (G4double e1, G4double e2, G4double e, G4double xs1,
                      G4double xs2);
 
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  using TriDimensionMap = std::map<G4double, std::map<G4double, G4double>>;
   TriDimensionMap fDiffCrossSectionData;
 
   std::vector<G4double> eTdummyVec;
 
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  using VecMap = std::map<G4double, std::vector<G4double>>;
   VecMap eVecm;
 
   G4double
   RandomizeThetaCM (G4double k, G4ParticleDefinition * aParticleDefinition);
-
-  //
-
-  G4DNAIonElasticModel &
-  operator= (const G4DNAIonElasticModel &right);
-  G4DNAIonElasticModel (const G4DNAIonElasticModel&);
 
 };
 

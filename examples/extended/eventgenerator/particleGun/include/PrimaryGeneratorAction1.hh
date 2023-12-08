@@ -46,13 +46,13 @@ class PrimaryGeneratorAction1
 {
   public:
     PrimaryGeneratorAction1(G4ParticleGun*);    
-   ~PrimaryGeneratorAction1();
+   ~PrimaryGeneratorAction1() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*  fParticleGun;
+    G4ParticleGun*  fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

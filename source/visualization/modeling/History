@@ -6,6 +6,12 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-07-01 John Allison (modeling-V11-01-06)
+- G4PhysicalVolumeModel: Introduce touchable count.
+  - std::map<G4int,G4int>& GetNumberOfTouchables():
+    - Returns number of touchables by depth of geometry tree.
+    - Used in G4VViewer when deciding whether to expand scene tree.
+
 ## 2023-05-30 John Allison (modeling-V11-01-05)
 - G4PhysicalVolumeModel.cc: Fix Coverity warnings.
 

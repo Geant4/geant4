@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4VFastSimulationModel.hh
@@ -38,12 +38,11 @@
 //
 //---------------------------------------------------------------
 
-
 #ifndef G4VFastSimulationModel_h
 #define G4VFastSimulationModel_h
 
-#include "G4FastTrack.hh"
 #include "G4FastStep.hh"
+#include "G4FastTrack.hh"
 
 //-------------------------------------------
 //
@@ -52,109 +51,98 @@
 //-------------------------------------------
 
 // Class Description:
-//   This is the abstract class for the implementation of parameterisations. 
-//   You have to inherit from it to implement your concrete parameterisation 
+//   This is the abstract class for the implementation of parameterisations.
+//   You have to inherit from it to implement your concrete parameterisation
 //   model.
 //
 
- class G4VFastSimulationModel 
+class G4VFastSimulationModel
 {
- public: // With description
+  public:
+    // aName identifies the parameterisation model.
+    G4VFastSimulationModel(const G4String& aName);
 
-  G4VFastSimulationModel(const G4String& aName);
-  // aName identifies the parameterisation model.
+    // This constructor allows you to get a quick "getting started".
+    // In addition to the model name, this constructor accepts a G4LogicalVolume
+    // pointer. This volume will automatically becomes the envelope, and the
+    // needed G4FastSimulationManager object is constructed if necessary giving
+    // it the G4LogicalVolume pointer and the boolean value. If it already
+    // exists, the model is simply added to this manager. However the
+    // G4VFastSimulationModel object will not keep track of the envelope given
+    // in the constructor.
+    // The boolean argument is there for optimization purpose: if you know that
+    // the G4LogicalVolume envelope is placed only once you can turn this
+    // boolean value to "true" (an automated mechanism is foreseen here.)
+    G4VFastSimulationModel(const G4String& aName, G4Envelope*, G4bool IsUnique = FALSE);
 
-  G4VFastSimulationModel(const G4String& aName, G4Envelope*, 
-			 G4bool IsUnique=FALSE);
-  // This constructor allows you to get a quick "getting started".
-  // In addition to the model name, this constructor accepts a G4LogicalVolume 
-  // pointer. This volume will automatically becomes the envelope, and the 
-  // needed G4FastSimulationManager object is constructed if necessary giving 
-  // it the G4LogicalVolume pointer and the boolean value. If it already 
-  // exists, the model is simply added to this manager. However the 
-  // G4VFastSimulationModel object will not keep track of the envelope given 
-  // in the constructor.
-  // The boolean argument is there for optimization purpose: if you know that 
-  // the G4LogicalVolume envelope is placed only once you can turn this 
-  // boolean value to "true" (an automated mechanism is foreseen here.)
+    virtual ~G4VFastSimulationModel() = default;
 
-public: // Without description
-  virtual ~G4VFastSimulationModel() {};
+    // In your implementation, you have to return "true" when your model is
+    // applicable to the G4ParticleDefinition passed to this method. The
+    // G4ParticleDefinition provides all intrisic particle informations (mass,
+    // charge, spin, name ...).
+    virtual G4bool IsApplicable(const G4ParticleDefinition&) = 0;
 
-public: // With description
+    // You have to return "true" when the dynamics conditions to trigger your
+    // parameterisation are fulfiled. The G4FastTrack provides you access to
+    // the current G4Track, gives simple access to envelope related features
+    // (G4LogicalVolume, G4VSolid, G4AffineTransform references between the
+    // global and the envelope local coordinates systems) and simple access to
+    // the position, momentum expressed in the envelope coordinate system.
+    // Using those quantities and the G4VSolid methods, you can for example
+    // easily check how far you are from the envelope boundary.
+    virtual G4bool ModelTrigger(const G4FastTrack&) = 0;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&) = 0;
-  // In your implementation, you have to return "true" when your model is 
-  // applicable to the G4ParticleDefinition passed to this method. The 
-  // G4ParticleDefinition provides all intrisic particle informations (mass, 
-  // charge, spin, name ...).
+    // Your parameterisation properly said. The G4FastTrack reference provides
+    // input informations. The final state of the particles after parameterisation
+    // has to be returned through the G4FastStep reference. This final state is
+    // described has "requests" the tracking will apply after your
+    // parameterisation has been invoked.
+    virtual void DoIt(const G4FastTrack&, G4FastStep&) = 0;
 
-  virtual G4bool ModelTrigger(const G4FastTrack &) = 0;
-  // You have to return "true" when the dynamics conditions to trigger your
-  // parameterisation are fulfiled. The G4FastTrack provides you access to 
-  // the current G4Track, gives simple access to envelope related features 
-  // (G4LogicalVolume, G4VSolid, G4AffineTransform references between the 
-  // global and the envelope local coordinates systems) and simple access to 
-  // the position, momentum expressed in the envelope coordinate system. 
-  // Using those quantities and the G4VSolid methods, you can for example 
-  // easily check how far you are from the envelope boundary. 
+    // ---------------------------
+    // -- Idem for AtRest methods:
+    // ---------------------------
+    // -- A default dummy implementation is provided.
 
-  virtual void DoIt(const G4FastTrack&, G4FastStep&) = 0;
-  // Your parameterisation properly said. The G4FastTrack reference provides 
-  // input informations. The final state of the particles after parameterisation
-  // has to be returned through the G4FastStep reference. This final state is 
-  // described has "requests" the tracking will apply after your 
-  // parameterisation has been invoked.
+    // You have to return "true" when the dynamics conditions to trigger your
+    // parameterisation are fulfiled. The G4FastTrack provides you access to
+    // the current G4Track, gives simple access to envelope related features
+    // (G4LogicalVolume, G4VSolid, G4AffineTransform references between the
+    // global and the envelope local coordinates systems) and simple access to
+    // the position, momentum expressed in the envelope coordinate system.
+    // Using those quantities and the G4VSolid methods, you can for example
+    // easily check how far you are from the envelope boundary.
+    virtual G4bool AtRestModelTrigger(const G4FastTrack&) { return false; }
 
-  // ---------------------------
-  // -- Idem for AtRest methods:
-  // ---------------------------
-  // -- A default dummy implementation is provided.
+    // Your parameterisation properly said. The G4FastTrack reference provides
+    // input informations. The final state of the particles after parameterisation
+    // has to be returned through the G4FastStep reference. This final state is
+    // described has "requests" the tracking will apply after your
+    // parameterisation has been invoked.
+    virtual void AtRestDoIt(const G4FastTrack&, G4FastStep&) {}
 
-  virtual 
-  G4bool AtRestModelTrigger(const G4FastTrack&) {return false;}
-  // You have to return "true" when the dynamics conditions to trigger your
-  // parameterisation are fulfiled. The G4FastTrack provides you access to 
-  // the current G4Track, gives simple access to envelope related features 
-  // (G4LogicalVolume, G4VSolid, G4AffineTransform references between the 
-  // global and the envelope local coordinates systems) and simple access to 
-  // the position, momentum expressed in the envelope coordinate system. 
-  // Using those quantities and the G4VSolid methods, you can for example 
-  // easily check how far you are from the envelope boundary. 
+    // Complete processing of any buffered or offloaded tracks at end of tracking
+    virtual void Flush() {}
 
-  virtual 
-  void   AtRestDoIt  (const G4FastTrack&, G4FastStep&) {}
-  // Your parameterisation properly said. The G4FastTrack reference provides 
-  // input informations. The final state of the particles after parameterisation
-  // has to be returned through the G4FastStep reference. This final state is 
-  // described has "requests" the tracking will apply after your 
-  // parameterisation has been invoked.
-  
+    // Useful public methods :
+    const G4String GetName() const;
+    G4bool operator==(const G4VFastSimulationModel&) const;
 
-  virtual
-  void Flush(){}
-  
-public: // Without description
-
-  // Useful public methods :
-  const G4String GetName() const;
-  G4bool operator == ( const G4VFastSimulationModel&) const;
-
-private:
-  //-------------
-  // Model Name:
-  //-------------
-  G4String theModelName;
+  private:
+    //-------------
+    // Model Name:
+    //-------------
+    G4String theModelName;
 };
 
-inline const G4String G4VFastSimulationModel::GetName() const 
+inline const G4String G4VFastSimulationModel::GetName() const
 {
   return theModelName;
 }
 
-inline G4bool 
-G4VFastSimulationModel::operator == (const G4VFastSimulationModel& fsm) const
+inline G4bool G4VFastSimulationModel::operator==(const G4VFastSimulationModel& fsm) const
 {
-  return (this==&fsm) ? true : false;
+  return this == &fsm;
 }
 #endif

@@ -217,13 +217,13 @@ void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
   std::size_t nelm = mat->GetNumberOfElements();
   for (std::size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
-    G4double Z = elm->GetZ();
-    G4double w = Z*Z*theAtomNumDensityVector[i];
-    curRatio += w/nist->GetAtomicMassAmu(G4int(Z));
-    curChargeSq = Z*Z*w;
+    G4int Z = elm->GetZasInt();
+    G4double w = theAtomNumDensityVector[i];
+    curRatio += w/nist->GetAtomicMassAmu(Z);
+    curChargeSq += (Z*Z)*w;
     norm += w;
   }
-  curRatio *= proton_mass_c2/norm;
+  curRatio *= (CLHEP::proton_mass_c2/norm);
   curChargeSq /= norm;
 
   // store results

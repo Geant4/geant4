@@ -26,27 +26,22 @@
 /// \file particles/include/G4PhononLong.hh
 /// \brief Definition of the G4PhononLong class
 //
-//
 #ifndef G4PhononLong_h
 #define G4PhononLong_h 1
 
 #include "G4ParticleDefinition.hh"
 
+class G4PhononLong : public G4ParticleDefinition
+{
+  public:
+    static G4PhononLong* Definition();
+    static G4PhononLong* PhononDefinition();
 
-class G4PhononLong : public G4ParticleDefinition {
-private:
-  static G4PhononLong* theInstance;
+  private:
+    G4PhononLong() {}
+    ~G4PhononLong() override = default;
 
-private:
-  G4PhononLong() {;}
-
-public:
-  ~G4PhononLong() override {;}
-
-  static G4PhononLong* Definition();
-  static G4PhononLong* PhononDefinition();
-
+    static G4PhononLong* theInstance;
 };
 
 #endif
-

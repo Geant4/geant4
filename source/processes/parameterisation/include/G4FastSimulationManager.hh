@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4FastSimulationManager.hh
@@ -38,27 +38,24 @@
 //
 //---------------------------------------------------------------
 
-
 #ifndef G4FastSimulationManager_h
 #define G4FastSimulationManager_h 1
 
-#include "globals.hh"
-
-#include "G4LogicalVolume.hh"
-#include "G4Region.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4VParticleChange.hh"
-#include "G4FastTrack.hh"
+#include "G4FastSimulationVector.hh"
 #include "G4FastStep.hh"
-#include "G4VFastSimulationModel.hh"
+#include "G4FastTrack.hh"
+#include "G4LogicalVolume.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4Region.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
-#include "G4FastSimulationVector.hh"
-
+#include "G4VFastSimulationModel.hh"
+#include "G4VParticleChange.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4ios.hh"
+#include "globals.hh"
 
 //-------------------------------------------
 //
@@ -73,132 +70,117 @@
 // at tracking time.
 //
 
-
 class G4FastSimulationManager
 {
-public:  // with description
-  //------------------------
-  // Constructor/Destructor
-  //------------------------
-  // Only one Constructor. By default the envelope can
-  // be placed n-Times. 
-  // If the user is sure that it is placed just one time,
-  // the IsUnique flag should be set TRUE to avoid the
-  // G4AffineTransform re-calculations each time we reach
-  // the envelope.
+  public:  // with description
+    //------------------------
+    // Constructor/Destructor
+    //------------------------
+    // Only one Constructor. By default the envelope can
+    // be placed n-Times.
+    // If the user is sure that it is placed just one time,
+    // the IsUnique flag should be set TRUE to avoid the
+    // G4AffineTransform re-calculations each time we reach
+    // the envelope.
 
-  G4FastSimulationManager(G4Envelope *anEnvelope,
-			  G4bool        IsUnique = FALSE);
-  // This is the only constructor. In this constructor you specify 
-  // the envelope by giving the G4Region (typedef-ed as G4Envelope)
-  // pointer. The G4FastSimulationManager object will bind itself to
-  // this envelope and will notify this G4Region to become an envelope.
-  // If you know that this region is used for only one logical volume,
-  // you can turn the IsUnique boolean to "true" to allow some optimization. 
-  //
-  // Note that if you choose to use the G4VFastSimulationModel(const G4String&,
-  // G4Region*, G4bool) constructor for you model, the G4FastSimulationManager
-  // will be constructed using the given G4Region* and G4bool values of the
-  // model constructor.
-  //
+    G4FastSimulationManager(G4Envelope* anEnvelope, G4bool IsUnique = FALSE);
+    // This is the only constructor. In this constructor you specify
+    // the envelope by giving the G4Region (typedef-ed as G4Envelope)
+    // pointer. The G4FastSimulationManager object will bind itself to
+    // this envelope and will notify this G4Region to become an envelope.
+    // If you know that this region is used for only one logical volume,
+    // you can turn the IsUnique boolean to "true" to allow some optimization.
+    //
+    // Note that if you choose to use the G4VFastSimulationModel(const G4String&,
+    // G4Region*, G4bool) constructor for you model, the G4FastSimulationManager
+    // will be constructed using the given G4Region* and G4bool values of the
+    // model constructor.
+    //
 
-public:  // without description
-  ~G4FastSimulationManager();
+    // Destructor
+    ~G4FastSimulationManager();
 
+    // Add a model to the Model List.
+    void AddFastSimulationModel(G4VFastSimulationModel*);
 
-public:  // with description
-  // Methods to add/remove models to/from the Model 
-  // List.
-  //
-  void AddFastSimulationModel(G4VFastSimulationModel*);
-  // Add a model to the Model List.
+    // Remove a model from the Model List.
+    void RemoveFastSimulationModel(G4VFastSimulationModel*);
 
-  void RemoveFastSimulationModel(G4VFastSimulationModel*);
-  // Remove a model from the Model List.
+    // Activate a model in the Model List.
+    G4bool ActivateFastSimulationModel(const G4String&);
 
-  // Methods to activate/inactivate models from the Model 
-  // List.
+    // Inactivate a model in the Model List.
+    G4bool InActivateFastSimulationModel(const G4String&);
 
-  G4bool ActivateFastSimulationModel(const G4String&);
-  // Activate a model in the Model List.
+    // Methods for print/control commands
+    void ListTitle() const;
+    void ListModels() const;
+    void ListModels(const G4ParticleDefinition*) const;
+    void ListModels(const G4String& aName) const;
+    const G4Envelope* GetEnvelope() const;
 
-  G4bool InActivateFastSimulationModel(const G4String&);
-  // Inactivate a model in the Model List.
+    G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
+                                                   const G4VFastSimulationModel* previousFound,
+                                                   G4bool& foundPrevious) const;
 
-public:  // without description  
-  // Methods for print/control commands
-  void ListTitle() const;
-  void ListModels() const;
-  void ListModels(const G4ParticleDefinition*) const;
-  void ListModels(const G4String& aName) const;
-  const G4Envelope* GetEnvelope() const;
+    const std::vector<G4VFastSimulationModel*>& GetFastSimulationModelList() const
+    {
+      return ModelList;
+    }
 
-  G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
-						 const G4VFastSimulationModel* previousFound,
-						 bool &foundPrevious) const;
+    void FlushModels();
 
-  const std::vector<G4VFastSimulationModel*>& GetFastSimulationModelList() const
-  {return ModelList;}
+    //----------------------------------------------
+    // Interface methods for the
+    // G4FastSimulationManagerProcess process.
+    //----------------------------------------------
+    // Trigger
+    G4bool PostStepGetFastSimulationManagerTrigger(const G4Track&, const G4Navigator* a = nullptr);
+    // DoIt
+    G4VParticleChange* InvokePostStepDoIt();
 
-  void FlushModels();
+    // AtRest methods:
+    G4bool AtRestGetFastSimulationManagerTrigger(const G4Track&, const G4Navigator* a = nullptr);
+    G4VParticleChange* InvokeAtRestDoIt();
 
-  //----------------------------------------------
-  // Interface methods for the 
-  // G4FastSimulationManagerProcess process.
-  //----------------------------------------------
-  // Trigger
-  G4bool PostStepGetFastSimulationManagerTrigger(const G4Track &,
-						 const G4Navigator* a = 0);
-  // DoIt
-  G4VParticleChange* InvokePostStepDoIt();
+    // For management
+    G4bool operator==(const G4FastSimulationManager&) const;
 
-  // AtRest methods:
-  G4bool AtRestGetFastSimulationManagerTrigger(const G4Track &,
-					       const G4Navigator* a = 0);
-  G4VParticleChange*  InvokeAtRestDoIt();
+  private:
+    // Private members :
+    G4FastTrack fFastTrack;
+    G4FastStep fFastStep;
+    G4VFastSimulationModel* fTriggedFastSimulationModel{nullptr};
+    G4FastSimulationVector<G4VFastSimulationModel> ModelList;
+    G4FastSimulationVector<G4VFastSimulationModel> fInactivatedModels;
 
-  // For management
-  G4bool operator == ( const G4FastSimulationManager&) const;
+    G4ParticleDefinition* fLastCrossedParticle{nullptr};
+    G4FastSimulationVector<G4VFastSimulationModel> fApplicableModelList;
 
-private:
-  // Private members :
-  G4FastTrack fFastTrack;
-  G4FastStep  fFastStep;
-  G4VFastSimulationModel* fTriggedFastSimulationModel;
-  G4FastSimulationVector <G4VFastSimulationModel> ModelList;
-  G4FastSimulationVector <G4VFastSimulationModel> fInactivatedModels;
-
-  G4ParticleDefinition* fLastCrossedParticle;
-  G4FastSimulationVector <G4VFastSimulationModel> fApplicableModelList;
-
-  // -- *** depracating, to be dropped @ next major release:
-  G4FastSimulationVector <G4Transform3D> GhostPlacements;
+    // -- *** depracating, to be dropped @ next major release:
+    G4FastSimulationVector<G4Transform3D> GhostPlacements;
 };
 
-inline void 
-G4FastSimulationManager::AddFastSimulationModel(G4VFastSimulationModel* fsm)
+inline void G4FastSimulationManager::AddFastSimulationModel(G4VFastSimulationModel* fsm)
 {
   ModelList.push_back(fsm);
   // forces the fApplicableModelList to be rebuild
-  fLastCrossedParticle = 0;
+  fLastCrossedParticle = nullptr;
 }
 
-inline void 
-G4FastSimulationManager::RemoveFastSimulationModel(G4VFastSimulationModel* fsm)
+inline void G4FastSimulationManager::RemoveFastSimulationModel(G4VFastSimulationModel* fsm)
 {
-  if(!ModelList.remove(fsm)) fInactivatedModels.remove(fsm);
+  if (ModelList.remove(fsm) == nullptr) fInactivatedModels.remove(fsm);
   // forces the fApplicableModelList to be rebuild
-  fLastCrossedParticle = 0;
+  fLastCrossedParticle = nullptr;
 }
 
-inline G4bool 
-G4FastSimulationManager::operator == (const G4FastSimulationManager& fsm) const
+inline G4bool G4FastSimulationManager::operator==(const G4FastSimulationManager& fsm) const
 {
-  return (this==&fsm) ? true : false;
+  return this == &fsm;
 }
 
-inline const G4Envelope* 
-G4FastSimulationManager::GetEnvelope() const
+inline const G4Envelope* G4FastSimulationManager::GetEnvelope() const
 {
   return fFastTrack.GetEnvelope();
 }

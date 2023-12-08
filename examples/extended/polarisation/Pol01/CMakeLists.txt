@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(Pol01)
 
 #----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ target_link_libraries(Pol01 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(Pol01_SCRIPTS
-    heprep2.mac histo.mac histos.mac pol01.in pol01.out vis.mac
+    histos.mac pol01.in pol01.out vis.mac plotResults.C
   )
 
 foreach(_script ${Pol01_SCRIPTS})
