@@ -1,0 +1,16 @@
+/run/initialize
+/vis/open
+/vis/viewer/set/viewpointVector 1 1 1
+/vis/drawVolume
+/vis/viewer/set/autoRefresh false
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/add/scale 10 cm
+/vis/scene/add/axes
+/vis/scene/add/eventID
+/vis/set/colour red
+/vis/scene/add/frame   # Simple frame around the view
+/vis/set/lineWidth 2
+
