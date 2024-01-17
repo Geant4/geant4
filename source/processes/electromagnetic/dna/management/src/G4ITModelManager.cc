@@ -39,9 +39,8 @@
 
 
 G4ITModelManager::G4ITModelManager()
-    : fIsInitialized(false)
-{
-}
+     
+= default;
 
 G4ITModelManager::~G4ITModelManager() = default;
 

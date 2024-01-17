@@ -38,17 +38,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F01SteppingVerbose::F01SteppingVerbose()
- : G4SteppingVerbose()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01SteppingVerbose::~F01SteppingVerbose()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F01SteppingVerbose::StepInfo()
 {
   CopyState();
@@ -88,13 +77,13 @@ void F01SteppingVerbose::StepInfo()
            << std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")   << " "
            << std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
 
-    if( fTrack->GetNextVolume() != 0 ) {
+    if( fTrack->GetNextVolume() != nullptr ) {
       G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << std::setw(10) << "OutOfWorld";
     }
 
-    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
+    if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != nullptr){
       G4cout << "  "
              << std::setw(10)
              << fStep->GetPostStepPoint()->GetProcessDefinedStep()

@@ -148,7 +148,7 @@
  
    Execute Hadr07 in 'batch' mode from macro files :
 \verbatim
- 	% Hadr07   run1.mac
+ 	% Hadr07   neutron.mac
 \endverbatim
  		
    Execute Hadr07 in 'interactive mode' with visualization :
@@ -162,6 +162,7 @@
 \endverbatim
 	
  Macros provided in this example:
+  - neutron.mac: neutron (14.1 MeV) in 30 cm of Li7 
   - Na22.mac: multilayers. Radioactive source
   - alpha.mac: alpha (400 MeV). Limit the step size from histo 10
   - ionC12.mac: C12 (2.4 GeV). Limit the step size from histo 10

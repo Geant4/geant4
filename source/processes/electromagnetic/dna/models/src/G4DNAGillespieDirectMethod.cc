@@ -33,6 +33,7 @@
 #include "G4DNAScavengerMaterial.hh"
 #include "G4Scheduler.hh"
 #include "G4DNAMolecularReactionTable.hh"
+#include "G4ChemEquilibrium.hh"
 
 G4DNAGillespieDirectMethod::G4DNAGillespieDirectMethod()
   : fMolecularReactions(G4DNAMolecularReactionTable::Instance())
@@ -158,7 +159,21 @@ void G4DNAGillespieDirectMethod::Initialize()
   // for Scavenger
   fpScavengerMaterial = dynamic_cast<G4DNAScavengerMaterial*>(
     G4Scheduler::Instance()->GetScavengerMaterial());
+  fEquilibriumProcesses.emplace(
+    std::make_pair(6, std::make_unique<G4ChemEquilibrium>(6, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  fEquilibriumProcesses.emplace(
+    std::make_pair(7, std::make_unique<G4ChemEquilibrium>(7, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  fEquilibriumProcesses.emplace(
+    std::make_pair(8, std::make_unique<G4ChemEquilibrium>(8, 10 * CLHEP::us)));//reactionType6 and 10 * us
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->Initialize();
+    it.second->SetVerbose(fVerbose);
+  }
+}
 
+void G4DNAGillespieDirectMethod::CreateEvents()
+{
   auto begin = fpMesh->begin();
   auto end   = fpMesh->end();
   for(; begin != end; begin++)
@@ -251,6 +266,10 @@ G4double G4DNAGillespieDirectMethod::Reaction(const Voxel& voxel)
 
   for(const auto& it : dataList)
   {
+    if(!IsEquilibrium(it->GetReactionType()))
+    {
+      continue;
+    }
     auto propensity = PropensityFunction(voxel, it);
     if(propensity == 0)
     {
@@ -311,10 +330,7 @@ G4double G4DNAGillespieDirectMethod::ComputeNumberInNode(
     const auto& it   = node.find(type);
     return (it != node.end()) ? (it->second) : 0;
   }
-  else
-  {
-    return 0;
-  }
+  return 0;
 }
 
 G4bool G4DNAGillespieDirectMethod::FindScavenging(const Voxel& voxel,
@@ -341,14 +357,47 @@ G4bool G4DNAGillespieDirectMethod::FindScavenging(const Voxel& voxel,
   {
     return false;
   }
-  else
+
+  G4double numberInDouble = volumeOfNode * std::floor(totalNumber) /
+                            fpMesh->GetBoundingBox().Volume();
+  auto numberInInterg = (int64_t) (std::floor(numberInDouble));
+  G4double change     = numberInDouble - numberInInterg;
+  G4UniformRand() > change ? numberOfScavenger = numberInInterg
+                               : numberOfScavenger = numberInInterg + 1;
+  return true;
+}
+
+G4bool G4DNAGillespieDirectMethod::IsEquilibrium(const G4int& reactionType) const
+{
+  auto reaction = fEquilibriumProcesses.find(reactionType);
+  if(reaction == fEquilibriumProcesses.end())
   {
-    G4double numberInDouble = volumeOfNode * std::floor(totalNumber) /
-                              fpMesh->GetBoundingBox().Volume();
-    auto numberInInterg = (int64_t) (std::floor(numberInDouble));
-    G4double change     = numberInDouble - numberInInterg;
-    G4UniformRand() > change ? numberOfScavenger = numberInInterg
-                                 : numberOfScavenger = numberInInterg + 1;
     return true;
+  }else
+  {
+    return (reaction->second->GetEquilibriumStatus());
+  }
+
+}
+
+G4bool G4DNAGillespieDirectMethod::SetEquilibrium(const G4DNAMolecularReactionData* pReaction)
+{
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->SetGlobalTime(fTimeStep);
+    it.second->SetEquilibrium(pReaction);
+    if(it.second->IsStatusChanged()) return true;
+  }
+  return false;
+}
+
+void G4DNAGillespieDirectMethod::ResetEquilibrium()
+{
+  for(auto& it : fEquilibriumProcesses)
+  {
+    it.second->Reset();
   }
 }
+
+
+

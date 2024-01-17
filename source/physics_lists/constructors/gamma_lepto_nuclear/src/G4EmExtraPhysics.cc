@@ -54,12 +54,6 @@
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
-#include "G4AntiNeutrinoE.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoMu.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoTau.hh"
-#include "G4NeutrinoTau.hh"
 
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
@@ -92,34 +86,6 @@
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
 
-#include "G4NeutrinoElectronProcess.hh"
-#include "G4NeutrinoElectronTotXsc.hh"
-#include "G4NeutrinoElectronCcModel.hh"
-#include "G4NeutrinoElectronNcModel.hh"
-
-#include "G4MuNeutrinoNucleusProcess.hh"
-#include "G4TauNeutrinoNucleusProcess.hh"
-#include "G4ElNeutrinoNucleusProcess.hh"
-
-#include "G4MuNeutrinoNucleusTotXsc.hh"
-#include "G4TauNeutrinoNucleusTotXsc.hh"
-#include "G4ElNeutrinoNucleusTotXsc.hh"
-
-#include "G4NuMuNucleusCcModel.hh"
-#include "G4NuMuNucleusNcModel.hh"
-#include "G4ANuMuNucleusCcModel.hh"
-#include "G4ANuMuNucleusNcModel.hh"
-
-#include "G4NuTauNucleusCcModel.hh"
-#include "G4NuTauNucleusNcModel.hh"
-#include "G4ANuTauNucleusCcModel.hh"
-#include "G4ANuTauNucleusNcModel.hh"
-
-#include "G4NuElNucleusCcModel.hh"
-#include "G4NuElNucleusNcModel.hh"
-#include "G4ANuElNucleusCcModel.hh"
-#include "G4ANuElNucleusNcModel.hh"
-
 #include "G4GammaGeneralProcess.hh"
 #include "G4LossTableManager.hh"
 #include "G4PhotoNuclearCrossSection.hh"
@@ -144,7 +110,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
 {
   theMessenger = new G4EmMessenger(this);
   SetPhysicsType(bEmExtra);
-  if(verbose > 1) G4cout << "### G4EmExtraPhysics" << G4endl;
+  if (verbose > 1) G4cout << "### G4EmExtraPhysics" << G4endl;
 }
 
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String&)
@@ -154,7 +120,6 @@ G4EmExtraPhysics::G4EmExtraPhysics(const G4String&)
 G4EmExtraPhysics::~G4EmExtraPhysics()
 {
   delete theMessenger;
-  theMessenger = nullptr;
 }
 
 void G4EmExtraPhysics::Synch(G4bool val)
@@ -165,7 +130,7 @@ void G4EmExtraPhysics::Synch(G4bool val)
 void G4EmExtraPhysics::SynchAll(G4bool val)
 {
   synActivatedForAll = val;
-  if(synActivatedForAll) { synActivated = true; }
+  if (synActivatedForAll) { synActivated = true; }
 }
 
 void G4EmExtraPhysics::GammaNuclear(G4bool val)
@@ -177,7 +142,7 @@ void G4EmExtraPhysics::LENDGammaNuclear(G4bool val)
 {
   gLENDActivated = val;
   // LEND cannot be used with low-energy model
-  if(val) { fGNLowEnergyLimit = 0.0; }
+  if (val) { fGNLowEnergyLimit = 0.0; }
 }
 
 void G4EmExtraPhysics::ElectroNuclear(G4bool val)
@@ -225,53 +190,22 @@ void G4EmExtraPhysics::PositronToHadronsFactor(G4double val)
   if(val > 0.0) phadFactor = val;
 }
 
-////////////////////////////////////////////////////
-
-void G4EmExtraPhysics::NeutrinoActivated(G4bool val)
-{
-  fNuActivated = val;
-}
-
-void G4EmExtraPhysics::NuETotXscActivated(G4bool val)
-{
-  fNuETotXscActivated = val;
-}
-
 void G4EmExtraPhysics::SetUseGammaNuclearXS(G4bool val)
 {
   fUseGammaNuclearXS = val;
 }
 
-void G4EmExtraPhysics::SetNuEleCcBias(G4double bf)
-{
-  if(bf > 0.0) fNuEleCcBias = bf;
-}
-
-void G4EmExtraPhysics::SetNuEleNcBias(G4double bf)
-{
-  if(bf > 0.0) fNuEleNcBias = bf;
-}
-
-void G4EmExtraPhysics::SetNuNucleusBias(G4double bf)
-{
-  if(bf > 0.0) fNuNucleusBias = bf;
-}
-
 void G4EmExtraPhysics::GammaNuclearLEModelLimit(G4double val)
 {
-  if(val <= CLHEP::MeV) { 
+  // lowenergy model should not be applied at high energy
+  // no sense set this low limit below 1 MeV
+  if (val <= CLHEP::MeV) { 
     fGNLowEnergyLimit = 0.0;
 
-    // lowenergy model should not be applied at high energy
-  } else if(val <= CLHEP::GeV) {
+  } else if (val <= CLHEP::GeV) {
     fGNLowEnergyLimit = val;
     gLENDActivated = false;
   }
-}
-
-void G4EmExtraPhysics::SetNuDetectorName(const G4String& dn)
-{
-  fNuDetectorName = dn;
 }
 
 /////////////////////////////////////////////////
@@ -283,13 +217,6 @@ void G4EmExtraPhysics::ConstructParticle()
   G4Positron::Positron();
   G4MuonPlus::MuonPlus();
   G4MuonMinus::MuonMinus();
-
-  G4AntiNeutrinoE::AntiNeutrinoE();
-  G4NeutrinoE::NeutrinoE();
-  G4AntiNeutrinoMu::AntiNeutrinoMu();
-  G4NeutrinoMu::NeutrinoMu();
-  G4AntiNeutrinoTau::AntiNeutrinoTau();
-  G4NeutrinoTau::NeutrinoTau();
 }
 
 void G4EmExtraPhysics::ConstructProcess()
@@ -303,32 +230,32 @@ void G4EmExtraPhysics::ConstructProcess()
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   G4LossTableManager* emManager = G4LossTableManager::Instance();
 
-  if(gnActivated) { ConstructGammaElectroNuclear(); }
+  if (gnActivated) { ConstructGammaElectroNuclear(); }
 
-  if(munActivated) {
+  if (munActivated) {
     G4MuonNuclearProcess* muNucProcess = new G4MuonNuclearProcess();
     G4MuonVDNuclearModel* muNucModel = new G4MuonVDNuclearModel();
     muNucProcess->RegisterMe(muNucModel);
     ph->RegisterProcess( muNucProcess, muonplus);
     ph->RegisterProcess( muNucProcess, muonminus);
   }
-  if(gmumuActivated) {
+  if (gmumuActivated) {
     G4GammaConversionToMuons* theGammaToMuMu = new G4GammaConversionToMuons();
     theGammaToMuMu->SetCrossSecFactor(gmumuFactor);
     G4GammaGeneralProcess* sp = 
-      static_cast<G4GammaGeneralProcess*>(emManager->GetGammaGeneralProcess());
-    if(nullptr != sp) {
+      dynamic_cast<G4GammaGeneralProcess*>(emManager->GetGammaGeneralProcess());
+    if (nullptr != sp) {
       sp->AddMMProcess(theGammaToMuMu);
     } else {
       ph->RegisterProcess(theGammaToMuMu, gamma);
     }
   }  
-  if(mmumuActivated) {
+  if (mmumuActivated) {
     auto proc = new G4MuonToMuonPairProduction();
     ph->RegisterProcess(proc, muonplus);
     ph->RegisterProcess(proc, muonminus);
   }
-  if(pmumuActivated) {
+  if (pmumuActivated) {
     G4AnnihiToMuPair* thePosiToMuMu = new G4AnnihiToMuPair();
     thePosiToMuMu->SetCrossSecFactor(pmumuFactor);
     ph->RegisterProcess(thePosiToMuMu, positron);
@@ -336,16 +263,16 @@ void G4EmExtraPhysics::ConstructProcess()
     thePosiToTauTau->SetCrossSecFactor(pmumuFactor);
     ph->RegisterProcess(thePosiToTauTau, positron);
   }  
-  if(phadActivated) {
+  if (phadActivated) {
     G4eeToHadrons* thePosiToHadrons = new G4eeToHadrons();
     thePosiToHadrons->SetCrossSecFactor(phadFactor);
     ph->RegisterProcess(thePosiToHadrons, positron);
   }  
-  if(synActivated) {
+  if (synActivated) {
     G4SynchrotronRadiation* theSynchRad = new G4SynchrotronRadiation();
     ph->RegisterProcess( theSynchRad, electron);
     ph->RegisterProcess( theSynchRad, positron);
-    if(synActivatedForAll) {
+    if (synActivatedForAll) {
       ph->RegisterProcess( theSynchRad, muonplus);
       ph->RegisterProcess( theSynchRad, muonminus);
 
@@ -356,151 +283,41 @@ void G4EmExtraPhysics::ConstructProcess()
       ph->RegisterProcess( theSynchRad, G4GenericIon::GenericIon());
     }
   }
-  if( fNuActivated )
-  {
-    G4ParticleDefinition* anuelectron = G4AntiNeutrinoE::AntiNeutrinoE();
-    G4ParticleDefinition* nuelectron  = G4NeutrinoE::NeutrinoE(); 
-    G4ParticleDefinition* anumuon     = G4AntiNeutrinoMu::AntiNeutrinoMu();
-    G4ParticleDefinition* numuon      = G4NeutrinoMu::NeutrinoMu();
-    G4ParticleDefinition* anutau      = G4AntiNeutrinoTau::AntiNeutrinoTau();
-    G4ParticleDefinition* nutau       = G4NeutrinoTau::NeutrinoTau();
-
-    G4NeutrinoElectronProcess* theNuEleProcess = 
-      new G4NeutrinoElectronProcess(fNuDetectorName);
-    G4NeutrinoElectronTotXsc* theNuEleTotXsc = new G4NeutrinoElectronTotXsc();
-
-    if(fNuETotXscActivated)
-    {
-      G4double bftot = std::max(fNuEleCcBias,fNuEleNcBias);
-      theNuEleProcess->SetBiasingFactor(bftot);
-    }
-    else
-    {
-      theNuEleProcess->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
-    }
-    theNuEleProcess->AddDataSet(theNuEleTotXsc);
-
-    G4NeutrinoElectronCcModel* ccModel = new G4NeutrinoElectronCcModel();
-    G4NeutrinoElectronNcModel* ncModel = new G4NeutrinoElectronNcModel();
-    theNuEleProcess->RegisterMe(ccModel);
-    theNuEleProcess->RegisterMe(ncModel);
-
-    ph->RegisterProcess(theNuEleProcess, anuelectron);
-    ph->RegisterProcess(theNuEleProcess, nuelectron);
-    ph->RegisterProcess(theNuEleProcess, anumuon);
-    ph->RegisterProcess(theNuEleProcess, numuon);
-    ph->RegisterProcess(theNuEleProcess, anutau);
-    ph->RegisterProcess(theNuEleProcess, nutau);
-
-    // nu_mu nucleus interactions
-
-    G4MuNeutrinoNucleusProcess* theNuMuNucleusProcess = new G4MuNeutrinoNucleusProcess(fNuDetectorName);
-    G4MuNeutrinoNucleusTotXsc* theNuMuNucleusTotXsc = new G4MuNeutrinoNucleusTotXsc();
-    
-    if(fNuETotXscActivated)
-    {
-      theNuMuNucleusProcess->SetBiasingFactor(fNuNucleusBias);
-    }
-    theNuMuNucleusProcess->AddDataSet(theNuMuNucleusTotXsc);
-
-    G4NuMuNucleusCcModel* numunuclcc = new G4NuMuNucleusCcModel();
-    G4NuMuNucleusNcModel* numunuclnc = new G4NuMuNucleusNcModel();
-    G4ANuMuNucleusCcModel* anumunuclcc = new G4ANuMuNucleusCcModel();
-    G4ANuMuNucleusNcModel* anumunuclnc = new G4ANuMuNucleusNcModel();
-    
-    theNuMuNucleusProcess->RegisterMe(numunuclcc);
-    theNuMuNucleusProcess->RegisterMe(numunuclnc);
-    theNuMuNucleusProcess->RegisterMe(anumunuclcc);
-    theNuMuNucleusProcess->RegisterMe(anumunuclnc);
-
-    ph->RegisterProcess(theNuMuNucleusProcess, anumuon);
-    ph->RegisterProcess(theNuMuNucleusProcess, numuon);    
-
-    // nu_tau nucleus interactions
-
-    G4TauNeutrinoNucleusProcess* theNuTauNucleusProcess = new G4TauNeutrinoNucleusProcess(fNuDetectorName);
-    G4TauNeutrinoNucleusTotXsc* theNuTauNucleusTotXsc = new G4TauNeutrinoNucleusTotXsc();
-    
-    if(fNuETotXscActivated)
-    {
-      theNuTauNucleusProcess->SetBiasingFactor(fNuNucleusBias);
-    }
-    theNuTauNucleusProcess->AddDataSet(theNuTauNucleusTotXsc);
-
-    G4NuTauNucleusCcModel* nutaunuclcc = new G4NuTauNucleusCcModel();
-    G4NuTauNucleusNcModel* nutaunuclnc = new G4NuTauNucleusNcModel();
-    G4ANuTauNucleusCcModel* anutaunuclcc = new G4ANuTauNucleusCcModel();
-    G4ANuTauNucleusNcModel* anutaunuclnc = new G4ANuTauNucleusNcModel();
-    
-    theNuTauNucleusProcess->RegisterMe(nutaunuclcc);
-    theNuTauNucleusProcess->RegisterMe(nutaunuclnc);
-    theNuTauNucleusProcess->RegisterMe(anutaunuclcc);
-    theNuTauNucleusProcess->RegisterMe(anutaunuclnc);
-
-    ph->RegisterProcess(theNuTauNucleusProcess, anutau);
-    ph->RegisterProcess(theNuTauNucleusProcess, nutau);    
-
-    // nu_e nucleus interactions
-
-    G4ElNeutrinoNucleusProcess* theNuElNucleusProcess = new G4ElNeutrinoNucleusProcess(fNuDetectorName);
-    G4ElNeutrinoNucleusTotXsc* theNuElNucleusTotXsc = new G4ElNeutrinoNucleusTotXsc();
-    
-    if(fNuETotXscActivated)
-    {
-      theNuElNucleusProcess->SetBiasingFactor(fNuNucleusBias);
-    }
-    theNuElNucleusProcess->AddDataSet(theNuElNucleusTotXsc);
-
-    G4NuElNucleusCcModel* nuelnuclcc = new G4NuElNucleusCcModel();
-    G4NuElNucleusNcModel* nuelnuclnc = new G4NuElNucleusNcModel();
-    G4ANuElNucleusCcModel* anuelnuclcc = new G4ANuElNucleusCcModel();
-    G4ANuElNucleusNcModel* anuelnuclnc = new G4ANuElNucleusNcModel();
-    
-    theNuElNucleusProcess->RegisterMe(nuelnuclcc);
-    theNuElNucleusProcess->RegisterMe(nuelnuclnc);
-    theNuElNucleusProcess->RegisterMe(anuelnuclcc);
-    theNuElNucleusProcess->RegisterMe(anuelnuclnc);
-
-    ph->RegisterProcess(theNuElNucleusProcess, anuelectron);
-    ph->RegisterProcess(theNuElNucleusProcess, nuelectron);    
-  }
 }
 
 void G4EmExtraPhysics::ConstructGammaElectroNuclear()
 {
+  G4HadronicParameters* param = G4HadronicParameters::Instance();
   G4LossTableManager* emManager  = G4LossTableManager::Instance();
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  G4HadronInelasticProcess* gnuc = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Gamma() );
+  G4HadronInelasticProcess* gnuc =
+    new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Gamma() );
   auto xsreg = G4CrossSectionDataSetRegistry::Instance();
   G4VCrossSectionDataSet* xs = nullptr;
-  if(fUseGammaNuclearXS) {
+  if (fUseGammaNuclearXS) {
     xs = xsreg->GetCrossSectionDataSet("GammaNuclearXS");
-    if(nullptr == xs) xs = new G4GammaNuclearXS();
+    if (nullptr == xs) xs = new G4GammaNuclearXS();
   } else {
     xs = xsreg->GetCrossSectionDataSet("PhotoNuclearXS");
-    if(nullptr == xs) xs = new G4PhotoNuclearCrossSection(); 
+    if (nullptr == xs) xs = new G4PhotoNuclearCrossSection(); 
   }
   gnuc->AddDataSet(xs);
 
   G4QGSModel< G4GammaParticipants >* theStringModel = 
     new G4QGSModel< G4GammaParticipants >;
-  G4QGSMFragmentation* theFrag = new G4QGSMFragmentation();
-  G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay(theFrag);
+  auto theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation());
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  G4GeneratorPrecompoundInterface* theCascade = 
-    new G4GeneratorPrecompoundInterface;
-
-  G4TheoFSGenerator* theModel = new G4TheoFSGenerator();
+  auto theCascade = new G4GeneratorPrecompoundInterface();
+  auto theModel = new G4TheoFSGenerator();
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
 
-  G4HadronicParameters* param = G4HadronicParameters::Instance();
+  // Bertini cascade for moderate energies
+  auto cascade = new G4CascadeInterface();
 
-  G4CascadeInterface* cascade = new G4CascadeInterface;
-
-  // added low-energy model LEND disabled
+  // added low-energy gamma nuclear model LEND disabled
   if (fGNLowEnergyLimit > 0.0) { 
     G4LowEGammaNuclearModel* lemod = new G4LowEGammaNuclearModel();
     lemod->SetMaxEnergy(fGNLowEnergyLimit);
@@ -513,39 +330,26 @@ void G4EmExtraPhysics::ConstructGammaElectroNuclear()
   theModel->SetMaxEnergy(param->GetMaxEnergy());
   gnuc->RegisterMe(theModel);
   
-  G4GammaGeneralProcess* gproc = 
-    (G4GammaGeneralProcess*)emManager->GetGammaGeneralProcess();
-  if(gproc != nullptr) {
+  auto gproc =
+    dynamic_cast<G4GammaGeneralProcess*>(emManager->GetGammaGeneralProcess());
+
+  // LEND may be activated if the general process is not activated
+  if (gproc != nullptr) {
     gproc->AddHadProcess(gnuc);
   } else {
-    // LEND may be activated if the general process is not activated
     ph->RegisterProcess(gnuc, G4Gamma::Gamma());
-    if(gLENDActivated) { ConstructLENDGammaNuclear(cascade, gnuc); }
+    if (gLENDActivated) { ConstructLENDGammaNuclear(cascade, gnuc); }
   }
 
-  if(eActivated) {
-    G4ElectronNuclearProcess* enuc = new G4ElectronNuclearProcess;
-    G4PositronNuclearProcess* pnuc = new G4PositronNuclearProcess;
-    G4ElectroVDNuclearModel* eModel = new G4ElectroVDNuclearModel;
+  if (eActivated) {
+    auto enuc = new G4ElectronNuclearProcess();
+    auto pnuc = new G4PositronNuclearProcess();
+    auto eModel = new G4ElectroVDNuclearModel();
 
     enuc->RegisterMe(eModel);
     pnuc->RegisterMe(eModel);
-
-    G4GammaGeneralProcess* eproc = 
-      (G4GammaGeneralProcess*)emManager->GetElectronGeneralProcess();
-    if(eproc != nullptr) {
-      eproc->AddHadProcess(enuc);
-    } else {
-      ph->RegisterProcess(enuc, G4Electron::Electron());
-    }
-  
-    G4GammaGeneralProcess* pproc = 
-      (G4GammaGeneralProcess*)emManager->GetPositronGeneralProcess();
-    if(pproc != nullptr) {
-      pproc->AddHadProcess(pnuc);
-    } else {
-      ph->RegisterProcess(pnuc, G4Positron::Positron());
-    }
+    ph->RegisterProcess(enuc, G4Electron::Electron());
+    ph->RegisterProcess(pnuc, G4Positron::Positron());
   }
 }
 
@@ -561,12 +365,10 @@ void G4EmExtraPhysics::ConstructLENDGammaNuclear(
   }
    
   cascade->SetMinEnergy(19.9*MeV);
-  G4LENDorBERTModel* theGammaReactionLowE = 
-    new G4LENDorBERTModel( G4Gamma::Gamma() );
-  theGammaReactionLowE->DumpLENDTargetInfo(true);
-  G4LENDCombinedCrossSection* theGammaCrossSectionLowE = 
-    new G4LENDCombinedCrossSection( G4Gamma::Gamma() );
-  theGammaReactionLowE->SetMaxEnergy(20*MeV);
-  gnuc->RegisterMe(theGammaReactionLowE);
-  gnuc->AddDataSet(theGammaCrossSectionLowE);   
+  auto theLowE = new G4LENDorBERTModel( G4Gamma::Gamma() );
+  theLowE->DumpLENDTargetInfo(true);
+  theLowE->SetMaxEnergy(20*MeV);
+  gnuc->RegisterMe(theLowE);
+  auto theXSLowE = new G4LENDCombinedCrossSection( G4Gamma::Gamma() );
+  gnuc->AddDataSet(theXSLowE);   
 }

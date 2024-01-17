@@ -57,18 +57,16 @@ class G4VDNAMesh
       {
         return x < rhs.x;
       }
-      else if(y != rhs.y)
+      if(y != rhs.y)
       {
         return y < rhs.y;
       }
-      else if(z != rhs.z)
+      if(z != rhs.z)
       {
         return z < rhs.z;
       }
-      else
-      {
-        return false;
-      }
+      
+      return false;
     }
     friend std::ostream& operator<<(std::ostream& s, const Index& rhs);
     G4int x = 0;

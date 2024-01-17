@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4JPsi_h
 #define G4JPsi_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                               JPsi                             ###
-// ######################################################################
 
 class G4JPsi : public G4ParticleDefinition
 {
- private:
-   static G4JPsi* theInstance;
-   G4JPsi(){}
-   ~G4JPsi() override= default;
+  public:
+    static G4JPsi* Definition();
+    static G4JPsi* JPsiDefinition();
+    static G4JPsi* JPsi();
 
- public:
-   static G4JPsi* Definition();
-   static G4JPsi* JPsiDefinition();
-   static G4JPsi* JPsi();
+  private:
+    G4JPsi() {}
+    ~G4JPsi() override = default;
+
+    static G4JPsi* theInstance;
 };
 
 #endif
-

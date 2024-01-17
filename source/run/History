@@ -6,6 +6,24 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-17 I. Hrivnacova (run-V11-01-10)
+- Do not call G4ParticleTable::WorkerG4ParticleTable() in
+  G4WorkerRunManager constructor as this function
+  is called already from G4ParticleTable::GetParticleTable()
+  which is called beforehand by other Geant4 classes.
+  Duplicate call is causing memory leak at exit.
+
+## 2023-10-20 Makoto Asai (run-V11-01-08, -09)
+- Reverting G4RunManager and G4Run back to run-V11-01-05.
+
+## 2023-08-28 Makoto Asai (run-V11-01-06, -07)
+- Introducing sub-event in Event category. Co-working with event-V11-01-02, -03
+  and global-V11-02-16.
+
+## 2023-07-12 Alberto Ribon (run-V11-01-05)
+- G4PhysicsListHelper : removed the unused code related to reading from the
+  file OrderingParameterTable (which has been deleted).
+
 ## 2023-06-02 Ben Morgan (run-V11-01-04)
 - Apply core and optional clang-tidy fixes, plus clang-format and tidying:
   - Removal of obsolete comments/dead blocks

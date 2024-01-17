@@ -42,14 +42,14 @@ class LXeScintSD : public G4VSensitiveDetector
 {
  public:
   LXeScintSD(G4String name);
-  ~LXeScintSD();
+  ~LXeScintSD() override = default;
 
   void Initialize(G4HCofThisEvent*) override;
   G4bool ProcessHits(G4Step* aStep, G4TouchableHistory*) override;
 
  private:
-  LXeScintHitsCollection* fScintCollection;
-  G4int fHitsCID;
+  LXeScintHitsCollection* fScintCollection = nullptr;
+  G4int fHitsCID = -1;
 };
 
 #endif

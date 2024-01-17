@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-07-05 I. Hrivnacova (fieldex02-V11-01-00)
+- Clang-tidy, new coding guidelines
+- Clean-up trailing white-spaces
+
 ## 2021-12-10 Ben Morgan (fieldex02-V11-00-00)
 - Change to new Markdown History format
 
@@ -18,9 +22,9 @@ July 27, 2018 I.Hrivnacova - fieldex02-V10-04-02
 - Macro review and code clean-up:
   - Removed EventAction, RunAction, RunActionMessenger
     used only for storing random numbers, already available in kernel
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac
-  - Added test for commands defined in the example at the end 
+  - Added test for commands defined in the example at the end
     of field02.in macro
   - Improved visualization of geometry
   - Added "beamOn 10" button in gui.mac
@@ -59,7 +63,7 @@ July 01, 2015 - I. Hrivnacova - fieldex02-V10-02-00
 - Replaced F02PhysicsList with FTFP_BERT with G4StepLimiterPhysics
 
 September 01, 2015 - I. Hrivnacova - fieldex02-V10-01-02
-- Removed F02EventActionMessenger class, now obsolete, and 
+- Removed F02EventActionMessenger class, now obsolete, and
   replaced /event/printModulo commands in macros with /run/printProgress
 - Code cleanup
 
@@ -84,7 +88,7 @@ November 26, 2013 - I.Hrivnacova - fieldex02-V09-06-05
 - Fixed ConstructSDandField():
   Moved setting the SD to logical volume outside the test
 - Do not test (fAbsorberThickness > 0.) in ConstructCalorimeter()
-  as setting 0 is not allowed in set command  
+  as setting 0 is not allowed in set command
 
 November 25, 2013 - I.Hrivnacova - fieldex02-V09-06-04
 - Put back cleaning volumes and solid stores in ConstructGeometry()
@@ -93,12 +97,12 @@ November 22, 2013 - P.Gumplinger - fieldex02-V09-06-03
 - add gui.mac back in and avoid long line
 
 November 21, 2013 - I.Hrivnacova - fieldex02-V09-06-02
-- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
+- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild
   when geometry changes
 - Remove DetectorConstruction::Update and corresponding UI command that
   is not needed anymore
-- Set "ToBeBroadcasted == false" for UI commands that modify detector 
-  since these should be executed only by master     
+- Set "ToBeBroadcasted == false" for UI commands that modify detector
+  since these should be executed only by master
 - Fixed main (do not call gui.mac which does not exist)
 - Code cleanup in F02ElectricFieldSetup.cc
 
@@ -195,7 +199,7 @@ Nov 12th, 2003 - J.Apostolakis (fieldex-V05-02-01)
 ------------------------------
 - Revised to work with new field tags (field-V05-02-04 and later)
    * creation of chord finder for electric field must be explicit
-- Created helper class F02ElectricFieldSetup, using nearly all of 
+- Created helper class F02ElectricFieldSetup, using nearly all of
   F02ElectroMagneticField, but not being a field.
 - Changed other parts to use this class.
 

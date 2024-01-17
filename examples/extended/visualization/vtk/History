@@ -1,0 +1,17 @@
+# Category exam-ext-vis-vtk History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-11-14 I. Hrivnacova (exam-ext-vis-vtk-V11-01-02)
+- Fixes for Doxygen:
+  Move class description comments after namespace
+
+## 2023-11-07 Stewart Boogert (exam-ext-vis-vtk-V11-01-01)
+- Matching Doxygen and README files
+
+## 2023-09-27 Stewart Boogert (exam-ext-vis-vtk-V11-01-00)
+- Start of vtk specific example demonstrating new features only available in VTK viewer

@@ -45,15 +45,15 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(DetectorConstruction*, EventAction*);
-   ~SteppingAction() override;
+   ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step*) override;
     
     G4double BirksAttenuation(const G4Step*);
     
   private:
-    DetectorConstruction* fDetector;
-    EventAction*          fEventAct;
+    DetectorConstruction* fDetector = nullptr;
+    EventAction*          fEventAct = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

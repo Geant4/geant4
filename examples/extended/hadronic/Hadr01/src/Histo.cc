@@ -142,7 +142,7 @@ void Histo::Save()
     G4cout << "### Histo::Save: Histograms and Ntuples are saved" << G4endl;
   }
   if(fManager->CloseFile() && fVerbose > 0) {
-    G4cout << "                 File is closed" << G4endl;
+    G4cout << "Histo::Save: File is closed" << G4endl;
   }
   fManager->Clear();
 } 

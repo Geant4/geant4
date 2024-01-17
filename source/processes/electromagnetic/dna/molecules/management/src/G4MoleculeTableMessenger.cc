@@ -35,8 +35,8 @@
 //------------------------------------------------------------------------------
 
 G4MoleculeTableMessenger::G4MoleculeTableMessenger()
-  : G4UImessenger()
-  , fpPrintTable(new G4UIcmdWithoutParameter("/chem/PrintSpeciesTable", this))
+  : 
+   fpPrintTable(new G4UIcmdWithoutParameter("/chem/PrintSpeciesTable", this))
   , fpSpecies(new G4UIcmdWithAString("/chem/species", this))
 {}
 
@@ -132,7 +132,7 @@ void G4MoleculeTableMessenger::SetNewValue(G4UIcommand* command,
         }
 
         auto usedName = molConf->GetUserID();
-        if(usedName != "")
+        if(!usedName.empty())
         {
           molConf->PrintState();
           G4ExceptionDescription description;

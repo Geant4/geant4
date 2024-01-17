@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4AntiNeutron_h
 #define G4AntiNeutron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          ANTINEUTRON                           ###
-// ######################################################################
 
 class G4AntiNeutron : public G4ParticleDefinition
 {
- private:
-   static G4AntiNeutron* theInstance;
-   G4AntiNeutron(){}
-   ~G4AntiNeutron() override= default;
+  public:
+    static G4AntiNeutron* Definition();
+    static G4AntiNeutron* AntiNeutronDefinition();
+    static G4AntiNeutron* AntiNeutron();
 
- public:
-   static G4AntiNeutron* Definition();
-   static G4AntiNeutron* AntiNeutronDefinition();
-   static G4AntiNeutron* AntiNeutron();
+  private:
+    G4AntiNeutron() {}
+    ~G4AntiNeutron() override = default;
+
+    static G4AntiNeutron* theInstance;
 };
 
 #endif

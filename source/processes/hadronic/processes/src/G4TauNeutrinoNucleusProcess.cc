@@ -60,7 +60,7 @@
 
 
 G4TauNeutrinoNucleusProcess::G4TauNeutrinoNucleusProcess(const G4String& anEnvelopeName, const G4String& pName)
-  : G4HadronicProcess( pName, fHadronInelastic )
+  : G4HadronicProcess( pName, fNuNucleus )
 {
   lowestEnergy = 1.*keV;
   fEnvelopeName = anEnvelopeName;
@@ -103,18 +103,13 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
   //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   G4String rName = aTrack.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
-  G4double totxsc(0.);
+  G4double totxsc =
+    GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
+						    aTrack.GetMaterial());
 
-  if( rName == fEnvelopeName && fNuNuclTotXscBias > 1.)    
+  if( rName == fEnvelopeName )
   {
-      totxsc = fNuNuclTotXscBias*
-	GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
-						    aTrack.GetMaterial());
-  }
-  else
-  {
-      totxsc = GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
-						    aTrack.GetMaterial());
+    totxsc *= fNuNuclTotXscBias;
   }
   G4double res = (totxsc>0.0) ? 1.0/totxsc : DBL_MAX;
   //G4cout << "         xsection= " << totxsc << G4endl;
@@ -236,7 +231,7 @@ G4TauNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& st
   const G4Element* elm =  GetCrossSectionDataStore()->SampleZandA(dynParticle, material,
                                                     *targNucleus);
   G4int ZZ = elm->GetZasInt();
-  fXsc = fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
+  fTotXsc->GetElementCrossSection(dynParticle, ZZ, material);
   G4double ccTotRatio = fTotXsc->GetCcTotRatio();
 
   if( G4UniformRand() < ccTotRatio )  // Cc-model
@@ -258,8 +253,8 @@ G4TauNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& st
   else  // Nc-model                            
   {
 
-    if (pName == "nu_tau" )    hadi = (GetHadronicInteractionList())[1]; 
-    else                      hadi = (GetHadronicInteractionList())[3];
+    if (pName == "nu_tau" ) hadi = (GetHadronicInteractionList())[1]; 
+    else                    hadi = (GetHadronicInteractionList())[3];
 
     size_t idx = track.GetMaterialCutsCouple()->GetIndex();
 
@@ -391,16 +386,6 @@ G4TauNeutrinoNucleusProcess::PostStepDoIt(const G4Track& track, const G4Step& st
     result->Clear();
   }
   return theTotalResult;
-}
-
-void 
-G4TauNeutrinoNucleusProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
-{
-  if(!isInitialised) {
-    isInitialised = true;
-    // if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
-  }
-  G4HadronicProcess::PreparePhysicsTable(part);
 }
 
 void 

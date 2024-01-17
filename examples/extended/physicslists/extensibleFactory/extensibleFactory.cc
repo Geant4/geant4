@@ -142,7 +142,7 @@ int main(int argc,char** argv)
   G4String macro;
   G4String session;
   G4String physListName;
-  char*    physListNameEnv = 0;
+  char*    physListNameEnv = nullptr;
   G4String gdmlFileName;
 #ifdef G4MULTITHREADED
   G4int nofThreads = 0;
@@ -175,7 +175,7 @@ int main(int argc,char** argv)
 
   // Detect interactive mode (if no arguments) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( ! macro.size() ) {
     ui = new G4UIExecutive(argc, argv, session);
   }
@@ -273,7 +273,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physList);
 
   // set user action classes
-  ActionInitialization* actinit =
+  auto  actinit =
     new ActionInitialization("extensibleFactory");
   runManager->SetUserInitialization(actinit);
 

@@ -58,7 +58,11 @@ void G4GaussXTRadiator::ProcessDescription(std::ostream& out) const
 }
 
 ///////////////////////////////////////////////////////////////////////////
-G4double G4GaussXTRadiator::SpectralXTRdEdx(G4double energy)
+//
+// The Fabian-Strujinsky (FS) algorithm for integration over XTR angle, 
+// resolution is about 0.5 mrad
+
+G4double G4GaussXTRadiator::SpectralXTRdEdxFS(G4double energy)
 {
   G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC, theta2, theta2k;
   G4int k, kMax, kMin;

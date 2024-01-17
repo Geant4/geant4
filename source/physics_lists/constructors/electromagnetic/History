@@ -6,6 +6,27 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-09 Hoang Tran (phys-ctor-em-V11-01-13)
+- Correct subtype process of G4LowECapture in G4EmDNABuilder .
+
+## 2023-11-04 Hoang Tran (phys-ctor-em-V11-01-12)
+- Correct G4EmDNABuilder for proton constructors.
+
+## 2023-11-03 Jonas Hahnfeld (phys-ctor-em-V11-01-11)
+- `G4EmStandardPhysicsSS`: Remove unused includes.
+
+## 2023-10-23 Jonas Hahnfeld (phys-ctor-em-V11-01-10)
+- `G4EmStandardPhysicsSS`: Allow to use `G4TransportationWithMsc`.
+
+## 2023-10-11 Vladimir Ivanchenko (phys-ctor-em-V11-01-09)
+- G4EmDNABuilder - for DNA Opt4 and Opt6 restored configuration of Geant4 11.1.2
+    for protons in order to have under control results of various tests.
+
+## 2023-07-19 Vladimir Ivanchenko (phys-ctor-em-V11-01-08)
+- G4EmDNABuilder - for Opt2, 4, 6 use for protons and ions 
+    G4DNARuddIonisationExtendedModel from zero to 100 MeV; ion capture
+    limit is set to 0.1 keV.
+
 ## 2023-04-06 Hoang Tran (phys-ctor-em-V11-01-07)
 - Introduced G4ChemDissociationChannels and G4ChemDissociationChannels_option1
 

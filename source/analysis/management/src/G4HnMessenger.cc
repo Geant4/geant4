@@ -28,16 +28,20 @@
 
 #include "G4HnMessenger.hh"
 #include "G4HnManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 
+using namespace G4Analysis;
+
 //_____________________________________________________________________________
 G4HnMessenger::G4HnMessenger(G4HnManager& manager)
   : fManager(manager),
-    fHnType(manager.GetHnType())
+    fHnType(manager.GetHnType()),
+    fHnDimension(std::stoi(manager.GetHnType().substr(1,1)))
 {
   SetHnAsciiCmd();
   SetHnActivationCmd();
@@ -46,6 +50,11 @@ G4HnMessenger::G4HnMessenger(G4HnManager& manager)
   SetHnPlottingToAllCmd();
   SetHnFileNameCmd();
   SetHnFileNameToAllCmd();
+
+  auto maxDim = (fHnDimension < kMaxDim) ? fHnDimension + 1 : kMaxDim;
+  for (unsigned int idim = 0; idim < maxDim; ++idim) {
+    fSetAxisLogCmd.push_back(CreateSetAxisLogCommand(idim));
+  }
 }
 
 //_____________________________________________________________________________
@@ -154,6 +163,30 @@ void G4HnMessenger::SetHnFileNameToAllCmd()
    fSetFileNameAllCmd->SetParameterName("FileName", false);
 }
 
+//_____________________________________________________________________________
+std::unique_ptr<G4UIcommand>
+G4HnMessenger::CreateSetAxisLogCommand(unsigned int idim)
+{
+  G4String xyz{"XYZ"};
+  auto axis = xyz.substr(idim, 1);
+
+  G4String commandName = "set" + axis + "axisLog";
+  G4String guidance =  "Activate " + axis + "-axis  log scale for plotting of the ";
+
+  auto command = CreateCommand<G4UIcommand>(commandName, guidance);
+  command->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Add Id parameter
+  AddIdParameter(*command);
+
+  auto parAxisLog = new G4UIparameter("axis", 'b', false);
+  guidance = GetObjectType() + " " + axis + "-axis log scale";
+  parAxisLog->SetGuidance(guidance.c_str());
+  command->SetParameter(parAxisLog);
+
+  return command;
+}
+
 //
 // public methods
 //
@@ -212,5 +245,14 @@ void G4HnMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   if ( command == fSetFileNameCmd.get() ) {
     fManager.SetFileName(id, parameters[counter++]);
     return;
+  }
+
+  auto maxDim = (fHnDimension < kMaxDim) ? fHnDimension + 1 : kMaxDim;
+  for (unsigned int idim = 0; idim < maxDim; ++idim) {
+    if ( command == fSetAxisLogCmd[idim].get() ) {
+      auto axisLog = G4UIcommand::ConvertToBool(parameters[counter++]);
+      fManager.SetAxisIsLog(idim, id, axisLog);
+      return;
+    }
   }
 }

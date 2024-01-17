@@ -22,61 +22,52 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #include "G4VParticlePropertyReporter.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
-////////////////////////////
 G4VParticlePropertyReporter::G4VParticlePropertyReporter()
 {
-  pPropertyTable =   G4ParticlePropertyTable::GetParticlePropertyTable();
+  pPropertyTable = G4ParticlePropertyTable::GetParticlePropertyTable();
 }
 
-/////////////////////////////
 G4VParticlePropertyReporter::~G4VParticlePropertyReporter()
 {
   pList.clear();
   pPropertyTable->Clear();
-}    
+}
 
-///////////////////////////
 G4bool G4VParticlePropertyReporter::FillList(G4String name)
 {
   G4ParticlePropertyData* pData = pPropertyTable->GetParticleProperty(name);
   G4bool result = false;
   if (pData != nullptr) {
-    //the particle exists
+    // the particle exists
     pList.push_back(pData);
     result = true;
-  } else {
+  }
+  else {
     // pointer to the particle table
     G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
     G4ParticleTable::G4PTblDicIterator* theParticleIterator;
     theParticleIterator = theParticleTable->GetIterator();
-    
-    // loop over all particles in G4ParticleTable 
+
+    // loop over all particles in G4ParticleTable
     theParticleIterator->reset();
-    while( (*theParticleIterator)() ){ // Loop checking, 09.08.2015, K.Kurashige
+    while ((*theParticleIterator)()) {  // Loop checking, 09.08.2015, K.Kurashige
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4String type = particle->GetParticleType();
-      pData =pPropertyTable->GetParticleProperty(particle);
-      if ( name == "all" ) {
-	pList.push_back(pData);
+      pData = pPropertyTable->GetParticleProperty(particle);
+      if (name == "all") {
+        pList.push_back(pData);
         result = true;
-      } else if ( name == type ) {
-	pList.push_back(pData);
+      }
+      else if (name == type) {
+        pList.push_back(pData);
         result = true;
-      } 
+      }
     }
   }
   return result;
@@ -86,11 +77,3 @@ void G4VParticlePropertyReporter::Clear()
 {
   pList.clear();
 }
-
-
-
-
-
-
-
-

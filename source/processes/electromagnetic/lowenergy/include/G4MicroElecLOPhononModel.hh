@@ -25,9 +25,9 @@
 //
 //
 // G4MicroElecLOPhononModel.hh, 
-//                   	    	2020/05/20 P. Caron, C. Inguimbert are with ONERA [b] 
-//				       	   Q. Gibaru is with CEA [a], ONERA [b] and CNES [c]
-//				           M. Raine and D. Lambert are with CEA [a]
+//               2020/05/20 P. Caron, C. Inguimbert are with ONERA [b] 
+//                          Q. Gibaru is with CEA [a], ONERA [b] and CNES [c]
+//                          M. Raine and D. Lambert are with CEA [a]
 //
 // A part of this work has been funded by the French space agency(CNES[c])
 // [a] CEA, DAM, DIF - 91297 ARPAJON, France
@@ -36,14 +36,12 @@
 //
 // Based on the following publications
 //
-//	- Q.Gibaru, C.Inguimbert, P.Caron, M.Raine, D.Lambert, J.Puech, 
-//	      Geant4 physics processes for microdosimetry and secondary electron emission simulation : 
-//	      Extension of MicroElec to very low energies and new materials
-//	      NIM B, 2020, in review.
+// - Q.Gibaru, C.Inguimbert, P.Caron, M.Raine, D.Lambert, J.Puech, 
+//   Geant4 physics processes for microdosimetry and secondary electron emission simulation : 
+//   Extension of MicroElec to very low energies and new materials
+//   NIM B, 2020, in review.
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+////////////////////////////////////////////////////////////////////////
 #ifndef G4MICROELECLOPHONONMODEL_HH 
 #define G4MICROELECLOPHONONMODEL_HH 1 
 
@@ -58,35 +56,40 @@
 
 class G4MicroElecLOPhononModel : public G4VEmModel
 {
-public:
-  explicit G4MicroElecLOPhononModel(const G4ParticleDefinition*p = nullptr,
-		  const G4String& nam = "G4MicroElecLOPhononModel");
-  ~G4MicroElecLOPhononModel() override;
-  
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
-  G4double CrossSectionPerVolume(const G4Material* material,
-				 const G4ParticleDefinition* p,
-				 G4double ekin,
-				 G4double emin,
-				 G4double emax) override;
+  public:
 
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double tmin,
-			 G4double maxEnergy) override;
+    explicit G4MicroElecLOPhononModel(const G4ParticleDefinition* p = nullptr,
+                                      const G4String& nam = "G4MicroElecLOPhononModel");
+    ~G4MicroElecLOPhononModel() override = default;
 
-  G4MicroElecLOPhononModel & operator=(const  G4MicroElecLOPhononModel &right) = delete;
-  G4MicroElecLOPhononModel(const  G4MicroElecLOPhononModel&) = delete;
-  
-protected:
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
-  
-private:  
-  G4double phononEnergy = 0.;
-  G4bool Interband = false;
-  G4bool isInitialised = false;
-  G4bool absor = false;
+    void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+    G4double CrossSectionPerVolume(const G4Material* material,
+                                   const G4ParticleDefinition* p,
+                                   G4double ekin,
+                                   G4double emin = 0.0,
+                                   G4double emax= DBL_MAX) override;
+
+    void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                           const G4MaterialCutsCouple*,
+                           const G4DynamicParticle*,
+                           G4double tmin = 0.0,
+                           G4double maxEnergy = DBL_MAX) override;
+
+    G4MicroElecLOPhononModel& operator=(const G4MicroElecLOPhononModel&) = delete;
+    G4MicroElecLOPhononModel(const G4MicroElecLOPhononModel&) = delete;
+
+  protected:
+
+    G4ParticleChangeForGamma* fParticleChangeForGamma;
+
+  private:
+
+    G4double phononEnergy = 0.;
+    G4bool Interband = false;
+    G4bool isInitialised = false;
+    G4bool absor = false;
+    G4double Eprim = 0;
+    G4double signe = -1;				 			  
 };
 
 #endif 

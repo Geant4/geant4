@@ -6,7 +6,7 @@
 
  Example AnaEx03 demonstrates usage of analysis commands for file management
  (new since Geant4 11.1), in particular writing histograms and ntuples in a file
- multiple times.
+ multiple times, and commands for histogram deleting (new since Geant4 11.2).
 
  It uses the same scenario (detector description, primary generator
  and physics) as \link ExampleAnaEx01 AnaEx01 \endlink and \link ExampleAnaEx02 AnaEx02 \endlink.
@@ -48,6 +48,14 @@
 
  The file names then need not to be provided with the file extension and the same macro
  can be used with different output types.
+
+ To demonstrate UI commands for deleting of selected histograms:
+\verbatim
+/analysis/h1/delete id [keepSetting]
+\endverbatim
+ two H1 histograms, id: 1 and 3, are deleted in AnaEx03.in macro before starting Run 2,
+ and new histograms are then created before starting Run3. New histograms are created at
+ id's liberated with previous deleting, 1 and 3.
 
  It should be notes that using UI commands for writing histograms and ntuples in a file
  multiple times is not necessary, the same can be achieved by calls to G4AnalysisManager

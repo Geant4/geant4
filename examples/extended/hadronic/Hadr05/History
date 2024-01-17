@@ -4,10 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
-## 2023-01-03 mma (exhadr05-V11-01-00)
+## 2023-06-30 Michel Maire (exhadr05-V11-01-01)
+- revision of all headers
+
+## 2023-01-03 Michel Maire (exhadr05-V11-01-00)
 - compute and plot Edep, Eleak, Etotal=Edep+Eleak
 
-## 2022-04-01 mma (exhadr05-V11-00-02)
+## 2022-04-01 Michel Maire (exhadr05-V11-00-02)
 - PhysicsList: add G4NuclideTable::SetThresholdOfHalfLife(1ns*log2)
 
 ## 2022-01-18 Jonas Hahnfeld (exhadr05-V11-00-01)

@@ -35,15 +35,14 @@
 #include "G4THnManager.hh"
 #include "globals.hh"
 
-#include "G4THnToolsManager.hh"  // TO DO: make forward declaration if possible
-
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/histo/h3d"
 #include "tools/histo/p1d"
 #include "tools/histo/p2d"
 
-class G4P2ToolsManager;
+template <unsigned int DIM, typename HT>
+class G4THnToolsManager;
 
 namespace tools {
 namespace histo {
@@ -91,11 +90,11 @@ class G4ToolsAnalysisReader : public  G4VAnalysisReader
     static constexpr std::string_view fkClass { "G4ToolsAnalysisReader" };
 
     // Data members
-    G4THnToolsManager<1, tools::histo::h1d>* fH1Manager { nullptr };
-    G4THnToolsManager<2, tools::histo::h2d>* fH2Manager { nullptr };
-    G4THnToolsManager<3, tools::histo::h3d>* fH3Manager { nullptr };
-    G4THnToolsManager<2, tools::histo::p1d>* fP1Manager { nullptr };
-    G4THnToolsManager<3, tools::histo::p2d>* fP2Manager { nullptr };
+    G4THnToolsManager<kDim1, tools::histo::h1d>* fH1Manager { nullptr };
+    G4THnToolsManager<kDim2, tools::histo::h2d>* fH2Manager { nullptr };
+    G4THnToolsManager<kDim3, tools::histo::h3d>* fH3Manager { nullptr };
+    G4THnToolsManager<kDim2, tools::histo::p1d>* fP1Manager { nullptr };
+    G4THnToolsManager<kDim3, tools::histo::p2d>* fP2Manager { nullptr };
  };
 
 #include "G4ToolsAnalysisReader.icc"

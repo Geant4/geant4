@@ -77,17 +77,21 @@
      The threshold for producing secondaries can be changed.
      eg: /run/particle/setCut 100 micrometer
          /run/initialize
-	 
+
      To visualize the GammaConversionToMuons :
         /control/execute run01.mac
         /control/execute vis.mac
         /run/beamOn
-		 
+
      To visualize the AnnihiToMuPair :
         /control/execute run11.mac
         /control/execute vis.mac
         /run/beamOn
-		  	
+
+     Other macros:
+     - run02.mac: the final state of the GammaConversionToMuons
+     - run12.mac: test on carbon target with biasing of cross section
+
  6- HOW TO START ?
  
      - execute Test  in 'batch' mode from macro files
@@ -116,10 +120,14 @@
 	
  8- HISTOGRAMS
  
-  Testem6 produces 6 histograms which illustrate the final state of 
-  the GammaConversionToMuons process. See their definitions in RunAction.cc   
+  Testem6 produces 6 histograms, h1 - h6, which illustrate
+  the final state of the GammaConversionToMuons. The histograms are produced
+  with run02.mac and can be displayed with the ROOT macro plotHisto.C.
+
+  The remaining histograms h7 - h16 show various cross sections and h17 the ratio
+  of eeToHadr/eeToMu, see their definitions in RunAction.cc
 	
   By default the histograms are saved as testem6.root
 
   The format of the histogram file can be : root (default), xml, csv,
-  by selecting g4nnn.hh in RunAction.hh   
+  by selecting the analysis manager default file type in RunAction.cc

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4AntiNeutrinoE_h
 #define G4AntiNeutrinoE_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                       ANTI NEUTRINO E                          ###
-// ######################################################################
 
 class G4AntiNeutrinoE : public G4ParticleDefinition
 {
- private:
-   static G4AntiNeutrinoE* theInstance;
-   G4AntiNeutrinoE(){}
-   ~G4AntiNeutrinoE() override= default;
+  public:
+    static G4AntiNeutrinoE* Definition();
+    static G4AntiNeutrinoE* AntiNeutrinoEDefinition();
+    static G4AntiNeutrinoE* AntiNeutrinoE();
 
- public:
-   static G4AntiNeutrinoE* Definition();
-   static G4AntiNeutrinoE* AntiNeutrinoEDefinition();
-   static G4AntiNeutrinoE* AntiNeutrinoE();
+  private:
+    G4AntiNeutrinoE() {}
+    ~G4AntiNeutrinoE() override = default;
+
+    static G4AntiNeutrinoE* theInstance;
 };
 
 #endif
-

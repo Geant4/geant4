@@ -94,7 +94,7 @@ public:
   // for stable isotopes life time is -1
   inline G4double LifeTime(const std::size_t i) const;
 
-  inline G4int SpinTwo(const std::size_t i) const;
+  inline G4int TwoSpinParity(const std::size_t i) const;
 
   inline G4int Parity(const std::size_t i) const;
 
@@ -188,9 +188,9 @@ inline G4double G4LevelManager::LifeTime(const std::size_t i) const
   return (fLevels[i]) ? fLevels[i]->GetTimeGamma() : 0.0;
 }
    
-inline G4int G4LevelManager::SpinTwo(const std::size_t i) const
+inline G4int G4LevelManager::TwoSpinParity(const std::size_t i) const
 {
-  return std::abs(fSpin[i]%100000 - 100); 
+  return fSpin[i]%100000 - 100; 
 }
 
 inline G4int G4LevelManager::Parity(const std::size_t i) const

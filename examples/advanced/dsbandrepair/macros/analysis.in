@@ -1,0 +1,47 @@
+############################################## Macro file for Analysis ##############################################
+#
+#============================================   PARAMETERS FOR DAMAGES   ============================================  
+#" **Note: "#" is used for comments. Thereby, remove the "#" at the beginning of folowing commands to use them.
+#/ana/cellNucleusName Fibroblast            # Optional;  
+#/ana/ouputName  Output0.dat                #Set name for output file, default is Output.dat
+#/ana/thresholdFordirectSBSelection 17.5    # eV; Threshold for selecting direct damages; default value is 17.5 eV
+#/ana/probForIndirectSBSelection 40         # %; Propability for selecting indirect damages; default value is 40 %
+#/ana/skipIndirectDamages                   # Use it if users want to skip analyzing indirect damages 
+
+#
+#=======================================  PARAMETERS FOR CLASSIFYING DAMAGES  ======================================= 
+#
+## **Note: For classifying damages, repair models (TLK, LEMIV..), user can load damages from an existing SDD file.
+#/ana/loadDamagesFromSDD SDDformat_Output.dat   #load damages from existing SDD file. It'll skip analyzing root files.
+#/ana/BpForDSB  10                          # The minimum distance between two clusters, default value is 10 
+#/ana/unitOfNormalization 2                 #unit type for normization: 1: [Gy-1 * Gbp-1]; 2 : [Gy-1]; default is 1
+
+#
+#============================================  PARAMETERS FOR TLK MODEL  ============================================ 
+#
+/ana/TLK/used                   true    #flag to enable/disable TLK model. Enabled if: true
+/ana/TLK/lambda1                3.0     #λ1 and λ2 are respectively simple DSB and complex repair probability
+/ana/TLK/lambda2                0.03    #λ1 and λ2 are respectively simple DSB and complex repair probability
+/ana/TLK/beta1                  0.01    #β1 and β2 are respectively simple DSB and complex misrepair probability
+/ana/TLK/beta2                  0.06    #β1 and β2 are respectively simple DSB and complex misrepair probability
+/ana/TLK/eta                    0.0002  # h-1;a binary misrepair probability ; 0.0011 for DNAFabric fibroblast
+#/ana/TLK/eta                    0.0011  # h-1;a binary misrepair probability; 0.0011 for DNAFabric fibroblast
+/ana/TLK/doseMax                6.0     #Compute SF up to doseMax Gy and with step deltaDose
+/ana/TLK/deltaDose              0.25    #Compute SF up to doseMax Gy and with step deltaDose
+
+#
+#============================================  PARAMETERS FOR LEMIV MODEL  ============================================ 
+#
+/ana/LEMIV/used                 true   #flag to enable/disable LEMIV model. Enabled if: true
+#/ana/LEMIV/loopLength           2E6     #length of the loop in bp, default 2Mbp
+/ana/LEMIV/Funrej               0       #Funrej is the fraction of DSBs that are not repaired even for late times
+/ana/LEMIV/Tfast                0.24    #constant time in h-1
+/ana/LEMIV/Tslow                2.81    #constant time in h-1
+/ana/LEMIV/timeMax              25      # compute fraction of unrejoined DSB up to timeMax h at deltaT step
+/ana/LEMIV/deltaTime            0.25    # compute fraction of unrejoined DSB up to timeMax h at deltaT step
+#
+#============================================  PARAMETERS FOR BELOV MODEL  ============================================ 
+# **Note: The implementation of BELOV model in dsbandrepair is still in development
+/ana/BELOV/used                 false    #flag to enable/disable BELOV model. Enabled if: true
+/ana/BELOV/Nirrep               0.035   #Nirrep fraction, if it's not be set, fraction of complex DSB will be used
+/ana/BELOV/Dz                   1.0     #Dz

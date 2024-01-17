@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,9 +53,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
- fAbsorMaterial(0), fLAbsor(0), fContainMaterial(0), fLContain(0),
- fWorldMaterial(0), fPWorld(0), fDetectorMessenger(0)
 {
   fAbsorRadius = 15*mm;
   fAbsorLength = 60*mm;

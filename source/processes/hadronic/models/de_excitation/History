@@ -6,6 +6,53 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-15 Vladimir Ivanchenko (hadr-deex-V11-01-11)
+- G4FermiChannels - fixed memory leak at exit
+
+## 2023-11-09 Vladimir Ivanchenko (hadr-deex-V11-01-10)
+- G4PhotonEvaporation - return back to only gamma transitions for the
+    case of nuclear level without information (restoring to 11.2beta)
+
+## 2023-11-07 Vladimir Ivanchenko (hadr-deex-V11-01-09)
+- G4LevelReader, G4PhotonEvaporation - completed fix of problem reports #2566 
+    for the case if data on internal conversion (IC) are not available, if IC
+    is disabled, it is assumed that all IC transitions are performed from the
+    K-shell, which means that independently on IC flag the probability of 
+    gamma transition is unchanged.
+
+## 2023-10-30 Vladimir Ivanchenko (hadr-deex-V11-01-08)
+- G4PhotonEvaporation - attempt to fix problem reports #2566 and #1986, which
+    is achieved by substitution of gamma transition by internal conversion if 
+    there is no data on transitions from the given level.
+
+## 2023-10-25 Jonas Hahnfeld (hadr-deex-V11-01-07)
+- G4GEMProbability - technical improvements to perform more effective computations
+    whithout change of physics.
+
+## 2023-08-16 Gabriele Cosmo (hadr-deex-V11-01-06)
+- Fixed compilation warning for implicit type conversion on macOS/XCode 14.1
+  in G4FermiFragmentsPoolVI::DumpFragment().
+
+## 2023-07-12 Vladimir Ivanchenko (hadr-deex-V11-01-05)
+- G4KalbachCrossSection - dynamic choice of peak position on inverse
+    cross section as a function of A
+- clean-up evaporation and utils subdirectories
+- removed unused files
+
+## 2023-07-05 Vladimir Ivanchenko (hadr-deex-V11-01-04)
+- G4LevelManager, G4PhotonEvaporation - improved method names
+- G4LevelReader - set life time of stable levels to DBL_MAX instead of -1;
+    left undefined spin 99 and do not set it to zero
+- G4ExcitationHandler - instantiate FermiBreakUp, MultiFragmentation, and
+    PhotonEvaporation in constructor; class format
+- fermi_breakup model has been reviewed and updated in view of #2263, 
+  few obsolete classes are removed, G4FermiBreakUpUtil is added
+- G4VEvaporation, G4Evaporation, G4VEvaporationFactory, G4EvaporationFactory,
+    G4EvaporationGEMFactory, G4EvaporationGEMFactoryVI,
+    G4EvaporationDefaultGEMFactory - class format with more accurate 
+    instantiation/destruction of components
+
+
 ## 2023-04-21 Vladimir Ivanchenko (hadr-deex-V11-01-03)
 - G4LevelManager - added extra public access method allowing users to check 
     level energies and other parameters

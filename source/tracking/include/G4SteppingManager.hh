@@ -52,7 +52,6 @@
 #include "G4StepPoint.hh"  // Include from 'tracking'
 #include "G4StepStatus.hh"  // Include from 'tracking'
 #include "G4TouchableHandle.hh"  // Include from 'geometry'
-#include "G4TouchableHistoryHandle.hh"  // Include from 'geometry'
 #include "G4Track.hh"  // Include from 'tracking'
 #include "G4TrackStatus.hh"  // Include from 'tracking'
 #include "G4TrackVector.hh"  // Include from 'tracking'

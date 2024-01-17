@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -48,6 +48,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -538,9 +542,12 @@ At time :  21.207 ns  Reaction : e_aq^-1 (-75) + H3O^1 (-193) -> H^0 (-232)
 At time :  26.258 ns  Reaction : OH^-1 (-221) + H3O^1 (-131) -> No product
 At time :  30.425 ns  Reaction : OH^0 (-124) + H^0 (-223) -> No product
 At time :  32.989 ns  Reaction : e_aq^-1 (-90) + OH^0 (-118) -> OH^-1 (-233)
-At time :  35.664 ns  Reaction : e_aq^-1 (-86) + H3O^1 (-167) -> H^0 (-234)
+At time :  35.665 ns  Reaction : e_aq^-1 (-86) + H3O^1 (-167) -> H^0 (-234)
 At time :  40.406 ns  Reaction : OH^-1 (-229) + H3O^1 (-119) -> No product
-At time :   61.89 ns  Reaction : H^0 (-188) + OH^0 (-110) -> No product
+At time :  60.646 ns  Reaction : e_aq^-1 (-37) + OH^0 (-128) -> OH^-1 (-235)
+At time :  68.603 ns  Reaction : OH^-1 (-227) + H3O^1 (-147) -> No product
+At time :  80.029 ns  Reaction : H^0 (-188) + OH^0 (-136) -> No product
+At time :  88.824 ns  Reaction : H^0 (-198) + OH^0 (-110) -> No product
 *** G4Scheduler ends at time : 100 ns 
 ___________________________________
 Seed used :1

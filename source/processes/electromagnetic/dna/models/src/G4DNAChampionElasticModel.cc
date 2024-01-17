@@ -41,7 +41,7 @@ using namespace std;
 
 G4DNAChampionElasticModel::
 G4DNAChampionElasticModel(const G4ParticleDefinition*, const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+    G4VEmModel(nam) 
 {
   SetLowEnergyLimit(7.4 * eV);
   SetHighEnergyLimit(1. * MeV);
@@ -66,9 +66,9 @@ G4DNAChampionElasticModel(const G4ParticleDefinition*, const G4String& nam) :
   }
 #endif
   
-  fParticleChangeForGamma = 0;
-  fpMolWaterDensity = 0;
-  fpData = 0;
+  fParticleChangeForGamma = nullptr;
+  fpMolWaterDensity = nullptr;
+  fpData = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -76,7 +76,7 @@ G4DNAChampionElasticModel(const G4ParticleDefinition*, const G4String& nam) :
 G4DNAChampionElasticModel::~G4DNAChampionElasticModel()
 {
   // For total cross section
-  if(fpData) delete fpData;
+  delete fpData;
 
   // For final state
   eVecm.clear();
@@ -139,7 +139,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* particle,
 
   const char *path = G4FindDataDir("G4LEDATA");
 
-  if (!path)
+  if (path == nullptr)
   {
     G4Exception("G4ChampionElasticModel::Initialise",
                 "em0006",
@@ -328,19 +328,19 @@ G4double G4DNAChampionElasticModel::Theta(G4double k,
   G4double xs21 = 0;
   G4double xs22 = 0;
 
-  std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
+  auto t2 = std::upper_bound(eTdummyVec.begin(),
                                                         eTdummyVec.end(), k);
-  std::vector<G4double>::iterator t1 = t2 - 1;
+  auto t1 = t2 - 1;
 
-  std::vector<G4double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
+  auto e12 = std::upper_bound(eVecm[(*t1)].begin(),
                                                          eVecm[(*t1)].end(),
                                                          integrDiff);
-  std::vector<G4double>::iterator e11 = e12 - 1;
+  auto e11 = e12 - 1;
 
-  std::vector<G4double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
+  auto e22 = std::upper_bound(eVecm[(*t2)].begin(),
                                                          eVecm[(*t2)].end(),
                                                          integrDiff);
-  std::vector<G4double>::iterator e21 = e22 - 1;
+  auto e21 = e22 - 1;
 
   valueT1 = *t1;
   valueT2 = *t2;

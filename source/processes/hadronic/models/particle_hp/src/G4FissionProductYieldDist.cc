@@ -1041,7 +1041,7 @@ G4String G4FissionProductYieldDist::MakeIsotopeName(G4int Isotope,
     }
   }
   // Add the name of the element and the extension
-  IsotopeName << "_" << ElementNames_->theString[Z - 1];
+  IsotopeName << "_" << ElementNames_->GetName(Z - 1);
 
   G4FFG_DATA_FUNCTIONLEAVE__
   return IsotopeName.str();

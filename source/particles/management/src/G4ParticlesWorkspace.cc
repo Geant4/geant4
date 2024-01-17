@@ -32,7 +32,7 @@
 
 namespace
 {
-  G4ParticlesWorkspace::pool_type thePool;
+G4ParticlesWorkspace::pool_type thePool;
 }
 
 G4ParticlesWorkspace::pool_type* G4ParticlesWorkspace::GetPool()
@@ -40,25 +40,20 @@ G4ParticlesWorkspace::pool_type* G4ParticlesWorkspace::GetPool()
   return &thePool;
 }
 
-G4ParticlesWorkspace::G4ParticlesWorkspace(G4bool verbose)
-  : fVerbose(verbose)
+G4ParticlesWorkspace::G4ParticlesWorkspace(G4bool verbose) : fVerbose(verbose)
 {
-  fpPDefSIM = 
-    &const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager());
+  fpPDefSIM = &const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager());
 
   // Copy information from master in this thread.
   InitialiseWorkspace();
 
   // Capture its address of ParticleDefinition split-class in this thread
-  fpPDefOffset = fpPDefSIM->GetOffset();   
+  fpPDefOffset = fpPDefSIM->GetOffset();
 }
-
-
 
 void G4ParticlesWorkspace::UseWorkspace()
 {
-  if( fVerbose )
-  { 
+  if (fVerbose) {
     G4cout << "G4ParticlesWorkspace::UseWorkspace: "
            << "Copying particles-definition Split-Class - Start " << G4endl;
   }
@@ -72,15 +67,11 @@ void G4ParticlesWorkspace::ReleaseWorkspace()
   fpPDefSIM->UseWorkArea(nullptr);
 }
 
-void G4ParticlesWorkspace::InitialiseParticles()
-{
-}
+void G4ParticlesWorkspace::InitialiseParticles() {}
 
-void
-G4ParticlesWorkspace::InitialiseWorkspace()
+void G4ParticlesWorkspace::InitialiseWorkspace()
 {
-  if( fVerbose )
-  { 
+  if (fVerbose) {
     G4cout << "G4ParticlesWorkspace::InitialiseWorkspace: "
            << "Copying particles-definition Split-Class - Start " << G4endl;
   }
@@ -92,9 +83,8 @@ G4ParticlesWorkspace::InitialiseWorkspace()
 
   // Additional initialization if needed - beyond copying memory
   InitialiseParticles();
-  
-  if( fVerbose )
-  {
+
+  if (fVerbose) {
     G4cout << "G4ParticlesWorkspace::CreateAndUseWorkspace: "
            << "Copying particles-definition Split-Class - Done!" << G4endl;
   }

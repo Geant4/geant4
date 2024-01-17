@@ -53,11 +53,6 @@ DetectorConstruction::DetectorConstruction()
   : G4VUserDetectorConstruction()
   , fDetectorMessenger(nullptr)
 {
-  fExpHall_x = fExpHall_y = fExpHall_z = 10.0 * m;
-  fTank_x = fTank_y = fTank_z = 1.0 * m;
-
-  fTank = nullptr;
-
   fTankMPT    = new G4MaterialPropertiesTable();
   fWorldMPT   = new G4MaterialPropertiesTable();
   fSurfaceMPT = new G4MaterialPropertiesTable();
@@ -67,9 +62,6 @@ DetectorConstruction::DetectorConstruction()
   fSurface->SetFinish(ground);
   fSurface->SetModel(unified);
   fSurface->SetMaterialPropertiesTable(fSurfaceMPT);
-
-  fTank_LV  = nullptr;
-  fWorld_LV = nullptr;
 
   fTankMaterial  = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
@@ -98,27 +90,28 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // ------------- Volumes --------------
   // The experimental Hall
-  G4Box* world_box = new G4Box("World", fExpHall_x, fExpHall_y, fExpHall_z);
+  auto world_box = new G4Box("World", fExpHall_x, fExpHall_y, fExpHall_z);
 
-  fWorld_LV = new G4LogicalVolume(world_box, fWorldMaterial, "World", 0, 0, 0);
+  fWorld_LV = new G4LogicalVolume(world_box, fWorldMaterial, "World");
 
   G4VPhysicalVolume* world_PV =
-    new G4PVPlacement(0, G4ThreeVector(), fWorld_LV, "World", 0, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), fWorld_LV, "World", nullptr,
+                      false, 0);
 
   // The tank
-  G4Box* tank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
+  auto tank_box = new G4Box("Tank", fTank_x, fTank_y, fTank_z);
 
-  fTank_LV = new G4LogicalVolume(tank_box, fTankMaterial, "Tank", 0, 0, 0);
+  fTank_LV = new G4LogicalVolume(tank_box, fTankMaterial, "Tank");
 
-  fTank = new G4PVPlacement(0, G4ThreeVector(), fTank_LV, "Tank", fWorld_LV,
-                            false, 0);
+  fTank = new G4PVPlacement(nullptr, G4ThreeVector(), fTank_LV, "Tank",
+                            fWorld_LV, false, 0);
 
   // ------------- Surface --------------
 
-  G4LogicalBorderSurface* surface =
+  auto surface =
     new G4LogicalBorderSurface("Surface", fTank, world_PV, fSurface);
 
-  G4OpticalSurface* opticalSurface = dynamic_cast<G4OpticalSurface*>(
+  auto opticalSurface = dynamic_cast<G4OpticalSurface*>(
     surface->GetSurface(fTank, world_PV)->GetSurfaceProperty());
   G4cout << "******  opticalSurface->DumpInfo:" << G4endl;
   if(opticalSurface)

@@ -37,6 +37,7 @@
 class G4DNAMolecularReactionData;
 class G4DNAScavengerMaterial;
 class G4MolecularConfiguration;
+class G4ChemEquilibrium;
 class G4DNAGillespieDirectMethod
 {
  public:
@@ -55,7 +56,15 @@ class G4DNAGillespieDirectMethod
   void SetTimeStep(const G4double& stepTime);
   void Initialize();
   void CreateEvent(const Index& index);
+  void CreateEvents();
   void SetEventSet(G4DNAEventSet*);
+  inline void SetVerbose(const G4int& verbose)
+  {
+      fVerbose = verbose;
+  }
+  G4bool SetEquilibrium(const G4DNAMolecularReactionData* pReaction);
+  void ResetEquilibrium();
+
 
  private:
   G4double Reaction(const Voxel& voxel);
@@ -71,5 +80,8 @@ class G4DNAGillespieDirectMethod
   std::map<G4double /*Propensity*/, JumpingData> fJumpingDataMap;
   G4bool FindScavenging(const Voxel& voxel, MolType, G4double&);
   G4DNAScavengerMaterial* fpScavengerMaterial = nullptr;
+  std::map<G4int,std::unique_ptr<G4ChemEquilibrium>> fEquilibriumProcesses;
+  G4bool IsEquilibrium(const G4int& reactionType) const;
+
 };
 #endif

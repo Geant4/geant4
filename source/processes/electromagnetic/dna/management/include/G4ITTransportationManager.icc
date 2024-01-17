@@ -90,7 +90,7 @@ inline
 std::vector<G4ITNavigator*>::iterator
 G4ITTransportationManager::GetActiveNavigatorsIterator()
 {
-   std::vector<G4ITNavigator*>::iterator iterator
+   auto iterator
      = std::vector<G4ITNavigator*>::iterator(fActiveNavigators.begin());
    return iterator;
 }
@@ -115,7 +115,7 @@ inline
 std::vector<G4VPhysicalVolume*>::iterator
 G4ITTransportationManager::GetWorldsIterator()
 {
-   std::vector<G4VPhysicalVolume*>::iterator iterator
+   auto iterator
      = std::vector<G4VPhysicalVolume*>::iterator(fWorlds.begin());
    return iterator;
 }

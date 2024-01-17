@@ -6,6 +6,41 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-14 Ben Morgan (emdna-V11-01-25)
+- Use G4FindDataDir to access data libraries in place of raw `getenv`.
+
+## 2023-11-11 Hoang Tran (emdna-V11-01-24)
+- correct fastercode section for dna opt6
+
+## 2023-10-12 Hoang Tran (emdna-V11-01-23)
+- correct scavenger counter for oxygen
+
+## 2023-10-11 Hoang Tran (emdna-V11-01-22)
+- Fixed the K shell bug in G4DNARuddIonisationExtendedModel.cc
+
+## 2023-10-10 Hoang Tran (emdna-V11-01-21)
+- improved equilibrium processes, introduced G4ChemEquilibrium
+
+## 2023-09-04 Gabriele Cosmo (emdna-V11-01-20)
+- In navigation classes, removed references to G4TouchableHistoryHandle,
+  which is now deprecated.
+
+## 2023-08-31 Gabriele Cosmo (emdna-V11-01-19)
+- Removed references to unused G4GRSSolid and G4GRSVolume in navigator classes.
+
+## 2023-08-29 (emdna-V11-01-18)
+- Fix minor/obvious Coverity issues
+
+## 2023-07-21 Ben Morgan (emdna-V11-01-17)
+- Apply core clang-tidy fixes plus those for
+  - Cons/destructor modernization
+  - Readability and logic for conditionals/booleans
+
+## 2023-07-12 Ben Morgan (emdna-V11-01-16)
+- Apply patch from [GitHub PR 58](https://github.com/Geant4/geant4/pull/58)
+  - Use std::erfc to avoid precision loss
+  - Remove unused header
+
 ## 2023-06-10 Hoang Tran (emdna-V11-01-15)
 - minor correction for DNA material in option6
 

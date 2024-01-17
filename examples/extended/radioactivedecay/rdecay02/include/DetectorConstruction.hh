@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 // 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,11 +47,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+   ~DetectorConstruction() override;
 
   public:
   
-    virtual G4VPhysicalVolume* Construct();
+    G4VPhysicalVolume* Construct() override;
     
     void SetTargetLength (G4double value);
     void SetTargetRadius (G4double value);
@@ -78,22 +77,22 @@ class DetectorConstruction : public G4VUserDetectorConstruction
                        
   private:
   
-    G4double           fTargetLength; 
-    G4double           fTargetRadius;
-    G4Material*        fTargetMater;
-    G4LogicalVolume*   fLogicTarget;
+    G4double           fTargetLength = 0.; 
+    G4double           fTargetRadius = 0.;
+    G4Material*        fTargetMater  = nullptr;
+    G4LogicalVolume*   fLogicTarget  = nullptr;
                  
-    G4double           fDetectorLength;
-    G4double           fDetectorThickness;
-    G4Material*        fDetectorMater;
-    G4LogicalVolume*   fLogicDetector;
+    G4double           fDetectorLength    = 0.;
+    G4double           fDetectorThickness = 0.;
+    G4Material*        fDetectorMater = nullptr;
+    G4LogicalVolume*   fLogicDetector = nullptr;
                
-    G4double           fWorldLength;
-    G4double           fWorldRadius;
-    G4Material*        fWorldMater;     
-    G4VPhysicalVolume* fPhysiWorld;
+    G4double           fWorldLength = 0.;
+    G4double           fWorldRadius = 0.;
+    G4Material*        fWorldMater  = nullptr;     
+    G4VPhysicalVolume* fPhysiWorld  = nullptr;
                 
-    DetectorMessenger* fDetectorMessenger;
+    DetectorMessenger* fDetectorMessenger = nullptr;
 
   private:
     

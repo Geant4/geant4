@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,38 +33,37 @@
 // ----------------------------------------------------------------------
 
 #include "G4XiMinus.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                           XiMinus                              ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4XiMinus* G4XiMinus::theInstance = nullptr;
 
 G4XiMinus* G4XiMinus::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "xi-";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
     anInstance = new G4ParticleDefinition(
                  name,    1.32171*GeV,  4.02e-12*MeV,    -1*eplus,
                     1,              +1,             0,
@@ -75,21 +71,23 @@ G4XiMinus* G4XiMinus::Definition()
              "baryon",               0,            +1,        3312,
                 false,       0.1639*ns,          nullptr,
                 false,       "xi");
+    // clang-format on
 
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( -0.6507 * mN);
- 
-    //create Decay Table
-    auto  table = new G4DecayTable();
-    
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(-0.6507 * mN);
+
+    // create Decay Table
+    auto table = new G4DecayTable();
+
     // create decay channels
-    auto  mode = new G4VDecayChannel*[1];
+    auto mode = new G4VDecayChannel*[1];
     // xi- -> lambda + pi-
-    mode[0] = new G4PhaseSpaceDecayChannel("xi-",1.000,2,"lambda","pi-");
-    
-    for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-    delete [] mode;
+    mode[0] = new G4PhaseSpaceDecayChannel("xi-", 1.000, 2, "lambda", "pi-");
+
+    for (G4int index = 0; index < 1; index++)
+      table->Insert(mode[index]);
+    delete[] mode;
 
     anInstance->SetDecayTable(table);
   }
@@ -97,13 +95,12 @@ G4XiMinus* G4XiMinus::Definition()
   return theInstance;
 }
 
-G4XiMinus*  G4XiMinus::XiMinusDefinition()
+G4XiMinus* G4XiMinus::XiMinusDefinition()
 {
   return Definition();
 }
 
-G4XiMinus*  G4XiMinus::XiMinus()
+G4XiMinus* G4XiMinus::XiMinus()
 {
   return Definition();
 }
-

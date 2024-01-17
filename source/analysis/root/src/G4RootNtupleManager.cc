@@ -89,14 +89,13 @@ void G4RootNtupleManager::CreateTNtupleFromBooking(
 
     auto basketSize = fFileManager->GetBasketSize();
     ntupleDescription->GetNtuple()->set_basket_size(basketSize);
-
     ntupleDescription->SetIsNtupleOwner(false);
            // ntuple object is deleted automatically when closing a file
-    fNtupleVector.push_back(ntupleDescription->GetNtuple());
   }
   else {
     // Merging activated
     for ( const auto& manager : fMainNtupleManagers ) {
+      manager->SetFirstId(fFirstId);
       manager->CreateNtuple(ntupleDescription);
     }
   }
@@ -133,6 +132,18 @@ void G4RootNtupleManager::Clear()
   for ( const auto& manager : fMainNtupleManagers ) {
     manager->ClearData();
   }
+}
+
+//_____________________________________________________________________________
+G4bool G4RootNtupleManager::Delete(G4int id)
+{
+  auto result = G4TNtupleManager<tools::wroot::ntuple, G4RootFile> ::Delete(id);
+
+  for ( const auto& manager : fMainNtupleManagers ) {
+    result &= manager->Delete(id);
+  }
+
+  return result;
 }
 
 //_____________________________________________________________________________

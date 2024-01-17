@@ -70,8 +70,10 @@
 #include "G4ModifiedTsai.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
+#include "G4Pow.hh"
 #include "G4EmParameters.hh"
 #include "G4AutoLock.hh"
+#include <thread>
 
 const G4int G4eBremsstrahlungRelModel::gMaxZet = 120;
 
@@ -116,6 +118,8 @@ G4eBremsstrahlungRelModel::LPMFuncs  G4eBremsstrahlungRelModel::gLPMFuncs;
 // special data structure per element i.e. per Z
 std::vector<G4eBremsstrahlungRelModel::ElementData*> G4eBremsstrahlungRelModel::gElementData;
 
+static std::once_flag applyOnce;
+
 namespace
 {
   G4Mutex theBremRelMutex = G4MUTEX_INITIALIZER;
@@ -127,7 +131,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 {
   fGammaParticle       = G4Gamma::Gamma();
   //
-  fLowestKinEnergy     = 1.0*MeV;
+  fLowestKinEnergy     = 1.0*CLHEP::MeV;
   SetLowEnergyLimit(fLowestKinEnergy);
   //
   fLPMEnergyThreshold  = 1.e+39;
@@ -141,12 +145,12 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
 G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
 {
-  if (fIsFirstInstance) {
+  if (fIsInitializer) {
     // clear ElementData container
     for (auto const & ptr : gElementData) { delete ptr; }
     gElementData.clear();
     // clear LPMFunctions (if any)
-    if (fUseLPM) {
+    if (gLPMFuncs.fIsInitialized) {
       gLPMFuncs.fLPMFuncG.clear();
       gLPMFuncs.fLPMFuncPhi.clear();
       gLPMFuncs.fIsInitialized = false;
@@ -165,18 +169,17 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
   fCurrentIZ = 0;
 
   // init static element data and precompute LPM functions only once
+  std::call_once(applyOnce, [this]() { fIsInitializer = true; });
+
   // for all treads and derived classes
-  if (gElementData.empty()) {
+  if (fIsInitializer || gElementData.empty()) {
     G4AutoLock l(&theBremRelMutex);
     if (gElementData.empty()) {
-      fIsFirstInstance = true;
       gElementData.resize(gMaxZet+1, nullptr);
     }
-    l.unlock();
-  }
-  if (fIsFirstInstance) {
     InitialiseElementData();
-    if (fUseLPM) { InitLPMFunctions(); }
+    InitLPMFunctions();
+    l.unlock();
   }
 
   // element selectors are initialized in the master thread
@@ -383,11 +386,11 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double tmin)
 {
   G4double xSection = 0.0;
   const G4double alphaMin = G4Log(tmin/fPrimaryTotalEnergy);
-  const G4double alphaMax = G4Log(fPrimaryKinEnergy/fPrimaryTotalEnergy);
-  const G4int    nSub     = (G4int)(0.45*(alphaMax-alphaMin))+4;
-  const G4double delta    = (alphaMax-alphaMin)/((G4double)nSub);
+  const G4double alphaMax = G4Log(fPrimaryKinEnergy/tmin);
+  const G4int nSub = std::max((G4int)(0.45*alphaMax), 0) + 4;
+  const G4double delta = alphaMax/((G4double)nSub);
   // set minimum value of the first sub-inteval
-  G4double alpha_i        = alphaMin;
+  G4double alpha_i = alphaMin;
   for (G4int l = 0; l < nSub; ++l) {
     for (G4int igl = 0; igl < 8; ++igl) {
       // compute the emitted photon energy k
@@ -550,7 +553,6 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
                                              G4double maxEnergy)
 {
   const G4double kineticEnergy    = dp->GetKineticEnergy();
-//  const G4double logKineticEnergy = dp->GetLogKineticEnergy();
   if (kineticEnergy < LowEnergyLimit()) {
     return;
   }
@@ -650,8 +652,8 @@ void G4eBremsstrahlungRelModel::InitialiseElementData()
         Fel   = G4Log(184.15) -    elemData->fLogZ/3.;
         Finel = G4Log(1194)   - 2.*elemData->fLogZ/3.;
       }
-      const G4double z23       = std::pow(zet,2./3.);
-      const G4double z13       = std::pow(zet,1./3.);
+      const G4double z13 = G4Pow::GetInstance()->Z13(izet);
+      const G4double z23 = z13*z13;
       elemData->fZFactor1      = (Fel-fc)+Finel/zet;
       elemData->fZFactor11     = (Fel-fc); // used only for the triplet
       elemData->fZFactor2      = (1.+1./zet)/12.;

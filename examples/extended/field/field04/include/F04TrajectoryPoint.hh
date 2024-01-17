@@ -55,7 +55,7 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
     F04TrajectoryPoint(const G4Track* aTrack);
     F04TrajectoryPoint(const G4Step* aStep);
     F04TrajectoryPoint(const F04TrajectoryPoint &right);
-    virtual ~F04TrajectoryPoint();
+    ~F04TrajectoryPoint() override = default;
 
 // Operators
 
@@ -73,8 +73,8 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 // Get method for HEPRep style attributes
 
-   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual std::vector<G4AttValue>* CreateAttValues() const;
+   const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+   std::vector<G4AttValue>* CreateAttValues() const override;
 
 //---------
   private:
@@ -82,9 +82,9 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 // Member data
 
-    G4double      fTime;
+    G4double      fTime = 0;
     G4ThreeVector fMomentum;
-    G4StepStatus  fStepStatus;
+    G4StepStatus  fStepStatus = fUndefined;
     G4String      fVolumeName;
 
 };

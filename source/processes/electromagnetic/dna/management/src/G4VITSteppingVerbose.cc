@@ -37,31 +37,31 @@
 
 G4VITSteppingVerbose::G4VITSteppingVerbose()
 {
-  fpStepProcessor = 0;
-  fpState = 0;
-  fpProcessGeneralInfo = 0;
+  fpStepProcessor = nullptr;
+  fpState = nullptr;
+  fpProcessGeneralInfo = nullptr;
 
   PhysicalStep = -1;
   fStepStatus = fUndefined;
 
-  fParticleChange = 0;
-  fTrack = 0;
-  fSecondary = 0;
-  fStep = 0;
-  fPreStepPoint = 0;
-  fPostStepPoint = 0;
+  fParticleChange = nullptr;
+  fTrack = nullptr;
+  fSecondary = nullptr;
+  fStep = nullptr;
+  fPreStepPoint = nullptr;
+  fPostStepPoint = nullptr;
 
-  fCurrentVolume = 0;
+  fCurrentVolume = nullptr;
   //  fSensitive = fpStepProcessor->GetfSensitive();
-  fCurrentProcess = 0;
+  fCurrentProcess = nullptr;
 
-  fAtRestDoItVector = 0;
-  fAlongStepDoItVector = 0;
-  fPostStepDoItVector = 0;
+  fAtRestDoItVector = nullptr;
+  fAlongStepDoItVector = nullptr;
+  fPostStepDoItVector = nullptr;
 
-  fAtRestGetPhysIntVector = 0;
-  fAlongStepGetPhysIntVector = 0;
-  fPostStepGetPhysIntVector = 0;
+  fAtRestGetPhysIntVector = nullptr;
+  fAlongStepGetPhysIntVector = nullptr;
+  fPostStepGetPhysIntVector = nullptr;
 
   MAXofAtRestLoops = 0;
   MAXofAlongStepLoops = 0;
@@ -79,12 +79,12 @@ G4VITSteppingVerbose::G4VITSteppingVerbose()
   fVerboseLevel = 0;
   fpVerboseUI = new G4UIcmdWithAnInteger("/chem/tracking/verbose", this);
 
-  fSelectedAtRestDoItVector = 0;
-  fSelectedPostStepDoItVector = 0;
+  fSelectedAtRestDoItVector = nullptr;
+  fSelectedPostStepDoItVector = nullptr;
 
   fPreviousStepSize = 0.;
 
-  fTouchableHandle = 0;
+  fTouchableHandle = nullptr;
 
   //  StepControlFlag = fpStepProcessor->GetStepControlFlag();
 
@@ -98,7 +98,7 @@ G4VITSteppingVerbose::G4VITSteppingVerbose()
 
 G4VITSteppingVerbose::~G4VITSteppingVerbose()
 {
-  if(fpVerboseUI) delete fpVerboseUI;
+  delete fpVerboseUI;
 }
 
 //______________________________________________________________________________
@@ -106,7 +106,7 @@ G4VITSteppingVerbose::~G4VITSteppingVerbose()
 void G4VITSteppingVerbose::CopyState()
 {
 
-  if(fpState) *fpState = *(fpStepProcessor->GetProcessorState());
+  if(fpState != nullptr) *fpState = *(fpStepProcessor->GetProcessorState());
   else
   {
     fpState = new G4ITStepProcessorState(*fpStepProcessor->GetProcessorState());
@@ -222,7 +222,7 @@ void G4VITSteppingVerbose::TrackBanner(G4Track* track, const G4String& message)
   G4cout << "*******************************************************"
          << "**************************************************"
          << G4endl;
-  if(message != "")
+  if(!message.empty())
   {
     G4cout << message;
   }

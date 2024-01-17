@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementatBoson file 
-//
+//	GEANT 4 class implementatBoson file
 
 #include "G4BosonConstructor.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 // Bosons
 #include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
 #include "G4Gamma.hh"
+#include "G4Geantino.hh"
 #include "G4OpticalPhoton.hh"
 
 void G4BosonConstructor::ConstructParticle()
@@ -52,4 +46,3 @@ void G4BosonConstructor::ConstructParticle()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
-

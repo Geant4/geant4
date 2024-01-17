@@ -123,5 +123,7 @@ class G4DNAEventScheduler : public IEventScheduler
   std::map<G4double /*time*/, MapCounter> fCounterMap;
   std::set<G4double> fTimeToRecord;
   std::set<G4double>::iterator fLastRecoredTime;
+  void ResetEventSet();
+  void LastRegisterForCounter();
 };
 #endif

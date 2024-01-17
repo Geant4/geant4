@@ -39,7 +39,7 @@
 #include "G4Track.hh"
 #include "G4Types.hh"
 
-G4ThreadLocal G4VITTrackHolder* G4VITTrackHolder::fInstance(0);
+G4ThreadLocal G4VITTrackHolder* G4VITTrackHolder::fInstance(nullptr);
 
 G4VITTrackHolder::G4VITTrackHolder()
 {
@@ -48,12 +48,12 @@ G4VITTrackHolder::G4VITTrackHolder()
 
 G4VITTrackHolder::~G4VITTrackHolder()
 {
-  fInstance = 0;
+  fInstance = nullptr;
 }
 
 G4VITTrackHolder* G4VITTrackHolder::Instance()
 {
-  if (fInstance == 0) fInstance = new G4ITTrackHolder();
+  if (fInstance == nullptr) fInstance = new G4ITTrackHolder();
   return fInstance;
 }
 

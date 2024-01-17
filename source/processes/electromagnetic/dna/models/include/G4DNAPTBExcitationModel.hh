@@ -67,6 +67,11 @@ class G4DNAPTBExcitationModel : public G4VDNAModel
    */
   ~G4DNAPTBExcitationModel() override = default;
 
+  // copy constructor and hide assignment operator
+  G4DNAPTBExcitationModel(const G4DNAPTBExcitationModel&) = delete;  // prevent copy-construction
+  G4DNAPTBExcitationModel& operator=(
+    const G4DNAPTBExcitationModel& right) = delete;  // prevent assignement
+
   /*!
    * \brief Initialise
    * Set the materials for which the model can be used and defined the energy limits
@@ -112,11 +117,6 @@ class G4DNAPTBExcitationModel : public G4VDNAModel
   G4DNAPTBIonisationStructure ptbIonisationStructure;
 
   MapMeanEnergy fTableMeanEnergyPTB;  ///< map: [materialName]=energyValue
-
-  // copy constructor and hide assignment operator
-  G4DNAPTBExcitationModel(const G4DNAPTBExcitationModel&) = delete;  // prevent copy-construction
-  G4DNAPTBExcitationModel& operator=(
-    const G4DNAPTBExcitationModel& right) = delete;  // prevent assignement
 
   G4Material* fpGuanine_PU = nullptr;
   G4Material* fpTHF = nullptr;

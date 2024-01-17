@@ -25,6 +25,7 @@
 //
 // class G4PVPlacement Implementation
 //
+// 24.07.95 P.Kent, First non-stub version.
 // ----------------------------------------------------------------------
 
 #include "G4PVPlacement.hh"
@@ -113,7 +114,6 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix* pRot,
   if (pMotherLogical != nullptr) { pMotherLogical->AddDaughter(this); }
   if ((pSurfChk) && ((pMotherLogical) != nullptr)) { CheckOverlaps(); }
 }
-
 
 // ----------------------------------------------------------------------
 // Constructor

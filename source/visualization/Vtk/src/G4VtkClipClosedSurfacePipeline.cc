@@ -40,10 +40,10 @@
 #include <vtkClipClosedSurface.h>
 
 G4VtkClipClosedSurfacePipeline::G4VtkClipClosedSurfacePipeline(
-  G4String nameIn, const G4VtkVisContext& vc, vtkSmartPointer<vtkPolyDataAlgorithm> filter,
+  G4String nameIn, const G4VtkVisContext& vcIn, vtkSmartPointer<vtkPolyDataAlgorithm> filter,
   G4bool useVcColour)
-  : G4VVtkPipeline(nameIn, G4String("G4VtkClipClosedSurfacePipeline"), vc, true,
-                   vc.fViewer->renderer)
+  : G4VVtkPipeline(nameIn, G4String("G4VtkClipClosedSurfacePipeline"), vcIn, true,
+                   vcIn.fViewer->renderer)
 {
   // create implicit function for clipping
   plane = vtkSmartPointer<vtkPlane>::New();

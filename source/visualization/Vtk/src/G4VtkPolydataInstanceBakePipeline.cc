@@ -55,8 +55,8 @@ std::size_t G4VtkPolydataInstanceBakePipeline::MakeHash(const G4Polyhedron& poly
 }
 
 G4VtkPolydataInstanceBakePipeline::G4VtkPolydataInstanceBakePipeline(G4String nameIn,
-                                                                     const G4VtkVisContext& vc)
-  : G4VtkPolydataInstancePipeline(nameIn, vc)
+                                                                     const G4VtkVisContext& vcIn)
+  : G4VtkPolydataInstancePipeline(nameIn, vcIn)
 {
   iVert = 0;
   iFace = 0;
@@ -86,10 +86,10 @@ void G4VtkPolydataInstanceBakePipeline::addInstance(G4double dx, G4double dy, G4
                                                     G4double r10, G4double r11, G4double r12,
                                                     G4double r20, G4double r21, G4double r22,
                                                     G4double r, G4double g, G4double b, G4double a,
-                                                    const G4String& name)
+                                                    const G4String& nameIn)
 {
   G4VtkPolydataInstancePipeline::addInstance(dx, dy, dz, r00, r01, r02, r10, r11, r12, r20, r21,
-                                             r22, r, g, b, a, name);
+                                             r22, r, g, b, a, nameIn);
 
   vtkIdType vStart;
   vtkIdType vEnd;

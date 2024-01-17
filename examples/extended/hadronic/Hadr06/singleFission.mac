@@ -8,6 +8,9 @@
 #
 /run/initialize
 #
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 /process/inactivate nCapture
 /process/had/particle_hp/produce_fission_fragment true
 #

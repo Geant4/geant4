@@ -49,12 +49,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeSteppingAction::LXeSteppingAction(LXeEventAction* ea)
-  : fOneStepPrimaries(false)
-  , fEventAction(ea)
+  : fEventAction(ea)
 {
   fSteppingMessenger = new LXeSteppingMessenger(this);
-
-  fExpectedNextStatus = Undefined;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +69,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
   if(theTrack->GetCurrentStepNumber() == 1)
     fExpectedNextStatus = Undefined;
 
-  LXeUserTrackInformation* trackInformation =
+  auto trackInformation =
     static_cast<LXeUserTrackInformation*>(theTrack->GetUserInformation());
 
   G4StepPoint* thePrePoint    = theStep->GetPreStepPoint();
@@ -111,21 +108,21 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
     {
       if(!secondaries->empty()) 
       {
-	for(auto & tr : *secondaries)
-	{
-	  const G4VProcess* creator = tr->GetCreatorProcess();
-	  if(nullptr != creator)
-	  {
-	    G4int type = creator->GetProcessSubType();
-	    // 12 - photoeffect
-	    // 13 - Compton scattering
-	    // 14 - gamma conversion
-	    if(type >= 12 && type <= 14)
+        for(auto & tr : *secondaries)
+        {
+          const G4VProcess* creator = tr->GetCreatorProcess();
+          if(nullptr != creator)
+          {
+            G4int type = creator->GetProcessSubType();
+            // 12 - photoeffect
+            // 13 - Compton scattering
+            // 14 - gamma conversion
+            if(type >= 12 && type <= 14)
             {
-	      fEventAction->SetConvPos(tr->GetPosition());
-	    }
-	  }
-	}
+              fEventAction->SetConvPos(tr->GetPosition());
+            }
+          }
+        }
       }
     }
     if(fOneStepPrimaries && thePrePV->GetName() == "scintillator")
@@ -167,20 +164,20 @@ void LXeSteppingAction::UserSteppingAction(const G4Step* theStep)
         if(boundaryStatus != StepTooSmall)
         {
           G4cout << "LXeSteppingAction::UserSteppingAction(): "
-		 << "trackID=" << theTrack->GetTrackID() 
-		 << " parentID=" << theTrack->GetParentID()
-		 << " " << part->GetParticleName()
-		 << " E(MeV)=" << theTrack->GetKineticEnergy()
-		 << "n/ at " << theTrack->GetPosition()
-		 << " prePV: " << thePrePV->GetName()
-		 << " postPV: " << thePostPV->GetName()
-		 << G4endl;
+                 << "trackID=" << theTrack->GetTrackID()
+                 << " parentID=" << theTrack->GetParentID()
+                 << " " << part->GetParticleName()
+                 << " E(MeV)=" << theTrack->GetKineticEnergy()
+                 << "n/ at " << theTrack->GetPosition()
+                 << " prePV: " << thePrePV->GetName()
+                 << " postPV: " << thePostPV->GetName()
+                 << G4endl;
           G4ExceptionDescription ed;
           ed << "LXeSteppingAction: "
              << "No reallocation step after reflection!"
-	     << "Something is wrong with the surface normal or geometry";
+             << "Something is wrong with the surface normal or geometry";
           G4Exception("LXeSteppingAction:", "LXeExpl01", JustWarning, ed, "");
-	  return;
+          return;
         }
       }
       fExpectedNextStatus = Undefined;

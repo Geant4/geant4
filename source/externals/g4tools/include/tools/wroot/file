@@ -278,6 +278,12 @@ public:
       key::std_string_record_size(m_path) +
       key::std_string_record_size(m_title);
     uint32 nbytes = namelen + m_root_directory.record_size();
+
+    //TUUID version 1:
+    nbytes += sizeof(unsigned int);
+    nbytes += 2*sizeof(unsigned short);
+    nbytes += 8*sizeof(unsigned char);
+
     wroot::key key(m_out,*this,0,m_path,m_title,"TFile",nbytes); // It does a (*this).set_END().
 
     // m_nbytes_name = start point of directory info from key head.
@@ -297,7 +303,12 @@ public:
     wbuf wb(m_out,byte_swap(),key.eob(),pos);
     if(!wb.write(m_path)) return;
     if(!wb.write(m_title)) return;
-    if(!m_root_directory.to_buffer(wb)) return;}
+    if(!m_root_directory.to_buffer(wb)) return;
+    //TUUID version 1:
+    if(!wb.write((unsigned int)0)) return;
+    if(!wb.write((unsigned short)0)) return;
+    if(!wb.write((unsigned short)0)) return;
+   {for(size_t count=0;count<8;count++) if(!wb.write((unsigned char)0)) return;}}
 
     if(m_verbose) {
       m_out << "tools::wroot::file::file :"

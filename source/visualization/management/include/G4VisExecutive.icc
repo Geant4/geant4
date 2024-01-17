@@ -123,6 +123,15 @@
 
 #ifdef G4VIS_USE_VTK
 #include "G4Vtk.hh" // no_geant4_module_check
+#include "G4VtkOffscreen.hh" // no_geant4_module_check
+#undef G4VIS_USE_TOOLSSG_X11_GLES
+#undef G4VIS_USE_TOOLSSG_XT_GLES
+#undef G4VIS_USE_TOOLSSG_QT_GLES
+#undef G4VIS_USE_TOOLSSG_WINDOWS_GLES
+#undef G4VIS_USE_OPENGLQT
+#undef G4VIS_USE_OPENGLXM
+#undef G4VIS_USE_OPENGLX
+#undef G4VIS_USE_OPENGLWIN32
 #endif
 
 #ifdef G4VIS_USE_VTK_QT
@@ -132,6 +141,13 @@
 #if defined (G4VIS_USE_OPENGLQT) || (G4VIS_USE_TOOLSSG_QT_GLES)
 #include <QtGlobal>
 #endif
+
+#include "G4UImanager.hh"
+#include "G4UIsession.hh"
+#include "G4UIbatch.hh"
+
+#include <cstdlib>
+#include <sstream>
 
 // The inline keyword prevents the compiler making an external
 // reference even though they cannot actually be inlined since they
@@ -143,9 +159,157 @@
 // G4VisManager.
 
 inline
+G4VisExecutive::G4VisExecutive(int argc, char** argv, const G4String& system,
+                               const G4String& verbosityString):
+G4VisManager(verbosityString),
+fSelected(false)
+{
+  if (!fSelected) SetDefaultsByArgument(system);
+  if (!fSelected) SetDefaultsByEnvironment();
+  if (!fSelected) SetDefaultsByFile(argc, argv);
+  if (!fSelected) SetDefaultsByBatch();
+  if (!fSelected) SetDefaultsByBuildFlags();
+}
+
+inline
 G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
-G4VisManager(verbosityString)
-{}
+G4VisManager(verbosityString),
+fSelected(false)
+{
+  if (!fSelected) SetDefaultsByEnvironment();
+  if (!fSelected) SetDefaultsByBatch();
+  if (!fSelected) SetDefaultsByBuildFlags();
+}
+
+inline
+void G4VisExecutive::SetDefaultsByArgument(const G4String& system)
+{
+  // 1st priority: selection by G4VisExecuitive argument
+  if (!system.empty()) {
+    fDefaultGraphicsSystemName = system;
+    fDefaultGraphicsSystemBasis = "G4VisExecuitive argument";
+    fSelected = true;
+  }
+}
+
+inline
+void G4VisExecutive::SetDefaultsByEnvironment()
+{
+  // 2nd priority: by environment variable
+  if (auto g4env = std::getenv("G4VIS_DEFAULT_DRIVER")) {
+    G4String graphicsSystem, windowSizeHint;
+    std::istringstream iss(g4env);
+    iss >> graphicsSystem >> windowSizeHint;
+    if (!graphicsSystem.empty()) {
+      fDefaultGraphicsSystemName = graphicsSystem;
+      fDefaultGraphicsSystemBasis = "environment G4VIS_DEFAULT_DRIVER";
+      fSelected = true;
+    }
+    if (!windowSizeHint.empty()) {
+      fDefaultXGeometryString = windowSizeHint;
+      fDefaultXGeometryStringBasis  = "environment G4VIS_DEFAULT_DRIVER";
+    }
+  }
+}
+
+inline
+void G4VisExecutive::SetDefaultsByFile(int argc, char** argv)
+{
+  // 3rd priority: in $HOME/.g4session
+
+  // Find ~/.g4session - simply return if it does not exist
+  const char* home = std::getenv("HOME");
+  if (home == nullptr) return;
+  G4String homedir = home;
+#ifndef WIN32
+  G4String filename = homedir + "/.g4session";
+#else
+  G4String filename = homedir + "\\.g4session";
+#endif
+  std::ifstream g4session(filename);
+  if (g4session.fail()) return;
+
+  // Find app name
+  if (argc < 1) return;
+  G4String appInput = argv[0];
+  G4String appName = "";
+  size_t islash = appInput.find_last_of("/\\");
+  if (islash == G4String::npos) appName = appInput;
+  else appName = appInput.substr(islash + 1, appInput.size() - islash - 1);
+
+  // Scan ~/.g4session
+  G4String line;
+  // First line is the user-chosen default: session, graphics system, windo wize hint
+  G4String applicableSession, applicableGraphicsSystem, applicableWindowSizeHint;
+  std::getline(g4session,line);
+  auto hash = line.find_first_of('#'); line = line.substr(0,hash);
+  std::istringstream iss(line);
+  iss >> applicableSession >> applicableGraphicsSystem >> applicableWindowSizeHint;
+  // Read subsequent lines
+  while (g4session.good()) {
+    G4String app, session, graphicsSystem, windowSizeHint;
+    std::getline(g4session,line);
+    hash = line.find_first_of('#'); line = line.substr(0,hash);
+    std::istringstream iss1(line);
+    iss1 >> app >> session >> graphicsSystem >> windowSizeHint;
+    if (app == appName) {
+      if (!session.empty())        applicableSession        = session;  // See G4UIExecutive
+      if (!graphicsSystem.empty()) applicableGraphicsSystem = graphicsSystem;
+      if (!windowSizeHint.empty()) applicableWindowSizeHint = windowSizeHint;
+    }
+  }
+
+  if (!applicableGraphicsSystem.empty()) {
+    fDefaultGraphicsSystemName = applicableGraphicsSystem;
+    fDefaultGraphicsSystemBasis = "~/.g4session";
+    fSelected = true;
+  }
+  if (!applicableWindowSizeHint.empty()) {
+    fDefaultXGeometryString = applicableWindowSizeHint;
+    fDefaultXGeometryStringBasis = "~/.g4session";
+  }
+}
+
+inline
+void G4VisExecutive::SetDefaultsByBatch()
+{
+  // 4th, special case for batch session
+  G4UIsession* session = G4UImanager::GetUIpointer()->GetBaseSession();
+  if (session == nullptr                   // Usual case - pure batch
+  || dynamic_cast<G4UIbatch*>(session)) {  // From a macro from batch
+    // Choose an offscreen or file-writing system
+    fDefaultGraphicsSystemName = "TSG_OFFSCREEN";
+    fDefaultGraphicsSystemBasis = "batch session";
+    fSelected = true;
+  }
+}
+
+inline
+void G4VisExecutive::SetDefaultsByBuildFlags()
+{
+  // 5th, by cpp flags
+#if defined G4VIS_USE_OPENGLQT || G4VIS_USE_OPENGLXM ||\
+            G4VIS_USE_OPENGLX  || G4VIS_USE_OPENGLWIN32
+  fDefaultGraphicsSystemName = "OGL";
+#elif defined G4VIS_USE_OI || G4VIS_USE_OIX
+  fDefaultGraphicsSystemName = "OI";
+#elif defined G4VIS_USE_TOOLSSG_QT_GLES || G4VIS_USE_TOOLSSG_X11_GLES ||\
+              G4VIS_USE_TOOLSSG_XT_GLES || G4VIS_USE_TOOLSSG_WINDOWS_GLES
+  fDefaultGraphicsSystemName = "TSG";
+#elif defined G4VIS_USE_VTK || G4VIS_USE_VTK_QT
+  fDefaultGraphicsSystemName = "Vtk";
+#elif defined G4VIS_USE_TOOLSSG_QT_ZB || G4VIS_USE_TOOLSSG_X11_ZB ||\
+              G4VIS_USE_TOOLSSG_XT_ZB || G4VIS_USE_TOOLSSG_WINDOWS_ZB
+  fDefaultGraphicsSystemName = "TSG";
+#elif defined G4VIS_USE_QT3D
+  fDefaultGraphicsSystemName = "Qt3D";
+#else
+  // Choose a graphics system not needing external packages or libraries
+  fDefaultGraphicsSystemName = "TSG_OFFSCREEN";
+#endif
+  fDefaultGraphicsSystemBasis = "build flags";
+  fSelected = true;
+}
 
 inline void
 G4VisExecutive::RegisterGraphicsSystems () {
@@ -158,7 +322,6 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML2File);
   RegisterGraphicsSystem (new G4GMocrenFile);
   RegisterGraphicsSystem (new G4ToolsSGOffscreen);
-
   G4VGraphicsSystem* tsg_offscreen = new G4ToolsSGOffscreen;
   RegisterGraphicsSystem(tsg_offscreen);
   tsg_offscreen->AddNickname("TSG_FILE");
@@ -320,8 +483,10 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
 #  if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  G4cout << "  Qt6: Asking ToolsSG to stand in for OpenGL" << G4endl;
-  tsg_qt_gles->AddNickname("OGL");
+  if (fVerbosity >= startup) {
+    G4cout << "  Qt6: Asking ToolsSG to stand in for OpenGL" << G4endl;
+    tsg_qt_gles->AddNickname("OGL");
+  }
 #  endif
 #elif defined(G4VIS_USE_TOOLSSG_XT_GLES)
   tsg_xt_gles->AddNickname("TSG");
@@ -329,11 +494,26 @@ G4VisExecutive::RegisterGraphicsSystems () {
   tsg_x11_gles->AddNickname("TSG");
 #elif defined(G4VIS_USE_TOOLSSG_WINDOWS_GLES)
   tsg_windows_gles->AddNickname("TSG");
+#else
+#ifdef G4VIS_USE_TOOLSSG_QT_ZB
+  tsg_qt_zb->AddNickname("TSG");
+#elif G4VIS_USE_TOOLSSG_WINDOWS_ZB
+  tsg_windows_zb->AddNickname("TSG");
+#else
+  tsg_offscreen->AddNickname("TSG");
+#endif
 #endif
 
 #ifdef G4VIS_USE_VTK
+  if (fVerbosity >= startup) {
+    G4cout
+    << "  VTK: OpenGL-based drivers suppressed because of compatibility issues."
+    << G4endl;
+  }
   G4Vtk* vtkN = new G4Vtk();
+  G4VtkOffscreen* vtkOS = new G4VtkOffscreen();
   RegisterGraphicsSystem(vtkN);
+  RegisterGraphicsSystem(vtkOS);
 #  ifdef G4VIS_USE_VTK_QT
   vtkN->AddNickname("VTKQt_FALLBACK");
 #  endif

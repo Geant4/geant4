@@ -41,7 +41,7 @@ template<class OBJECT>
   OBJECT*
   G4FastList_iterator<OBJECT>::operator*()
   {
-    if (fpNode == 0) return 0;
+    if (fpNode == nullptr) return nullptr;
     return fpNode->GetObject();
   }
 
@@ -49,7 +49,7 @@ template<class OBJECT>
   OBJECT*
   G4FastList_iterator<OBJECT>::operator->()
   {
-    if (fpNode == 0) return 0;
+    if (fpNode == nullptr) return nullptr;
     return fpNode->GetObject();
   }
 
@@ -74,7 +74,7 @@ template<class OBJECT>
 
 template<class OBJECT>
   G4FastListNode<OBJECT>::G4FastListNode(OBJECT* track) :
-      fpObject(track), fpPrevious(0), fpNext(0)
+      fpObject(track), fpPrevious(nullptr), fpNext(nullptr)
   {
     fAttachedToList = false;
   }
@@ -93,7 +93,7 @@ template<class OBJECT>
   {
     if(fpObject)
     {
-      fpObject->SetListNode(0);
+      fpObject->SetListNode(nullptr);
     }
   }
 
@@ -108,7 +108,7 @@ template<class OBJECT>
     fBoundary.SetPrevious(&fBoundary);
     fBoundary.SetNext(&fBoundary);
     fBoundary.fAttachedToList = true;
-    fpNodeInManyLists = 0;
+    fpNodeInManyLists = nullptr;
   }
 
 // should not be used
@@ -145,13 +145,13 @@ template<class OBJECT>
         OBJECT* __obj = __stackedTrack->GetObject();
 
         delete __stackedTrack;
-        __stackedTrack = 0;
+        __stackedTrack = nullptr;
 
         if (__obj)
         {
           //////////////
           DeleteObject(__obj);
-          __obj = 0;
+          __obj = nullptr;
           //////////////
         }
         __stackedTrack = __nextStackedTrack;
@@ -159,8 +159,8 @@ template<class OBJECT>
     }
     fNbObjects = 0;
 
-    typename WatcherSet::iterator it = fWatchers.begin();
-    typename WatcherSet::iterator _end = fWatchers.end();
+    auto it = fWatchers.begin();
+    auto _end = fWatchers.end();
 
     for (; it != _end; it++)
     {
@@ -171,7 +171,7 @@ template<class OBJECT>
     if (fpNodeInManyLists)
     {
       delete fpNodeInManyLists;
-      fpNodeInManyLists = 0;
+      fpNodeInManyLists = nullptr;
     }
   }
 
@@ -233,7 +233,7 @@ template<class OBJECT>
   {
     G4FastListNode<OBJECT>* __node = GetNode(__obj);
 
-    if (__node != 0)
+    if (__node != nullptr)
     {
       // Suggestion move the node to this list
       if (__node->fAttachedToList)
@@ -325,8 +325,8 @@ template<class OBJECT>
 
     if(fWatchers.empty() == false)
     {
-      typename WatcherSet::iterator it = fWatchers.begin();
-      typename WatcherSet::iterator _end = fWatchers.end();
+      auto it = fWatchers.begin();
+      auto _end = fWatchers.end();
 
       for (; it != _end; it++)
       {
@@ -350,8 +350,8 @@ template<class OBJECT>
     {
       __next_node->fpPrevious = __prev_node;
     }
-    fpNext = 0;
-    fpPrevious = 0;
+    fpNext = nullptr;
+    fpPrevious = nullptr;
   }
 
 template<class OBJECT>
@@ -361,8 +361,8 @@ template<class OBJECT>
 
     fNbObjects--;
 
-    typename WatcherSet::iterator it = fWatchers.begin();
-    typename WatcherSet::iterator _end = fWatchers.end();
+    auto it = fWatchers.begin();
+    auto _end = fWatchers.end();
 
     for (; it != _end; it++)
     {
@@ -455,7 +455,7 @@ template<class OBJECT>
     G4FastListNode<OBJECT>* __next_node = EraseListNode(__obj);
     //////////////////
     DeleteObject(__obj);
-    __obj = 0;
+    __obj = nullptr;
     //////////////////
     iterator __next(__next_node);
     return __next;
@@ -526,8 +526,8 @@ template<class OBJECT>
 
       if(__destination->fWatchers.empty()==false)
       {
-        typename WatcherSet::iterator it = __destination->fWatchers.begin();
-        typename WatcherSet::iterator _end = __destination->fWatchers.end();
+        auto it = __destination->fWatchers.begin();
+        auto _end = __destination->fWatchers.end();
 
 //        G4cout << "G4FastList<OBJECT>::transferTo --- Watcher size = "
 //               << __destination->fWatchers.size()
@@ -555,8 +555,8 @@ template<class OBJECT>
     {
       if(__destination->fWatchers.empty()==false)
       {
-        typename WatcherSet::iterator it = __destination->fWatchers.begin();
-        typename WatcherSet::iterator _end = __destination->fWatchers.end();
+        auto it = __destination->fWatchers.begin();
+        auto _end = __destination->fWatchers.end();
 
         for (; it != _end; it++)
         {
@@ -594,14 +594,14 @@ template<class OBJECT>
   {
     G4FastListNode<OBJECT>* __node = GetNode(__obj);
     // TODO : complete the exception
-    if (__node == 0)
+    if (__node == nullptr)
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "The object ";
       exceptionDescription << " was not connected to any trackList ";
       G4Exception("G4FastList<OBJECT>::Unflag", "G4FastList003",
                   FatalErrorInArgument, exceptionDescription);
-      return 0;
+      return nullptr;
     }
     return __node;
   }
@@ -635,8 +635,8 @@ template<class OBJECT>
   G4FastList<OBJECT>*
   G4FastList<OBJECT>::GetList(G4FastListNode<OBJECT>* __node)
   {
-    if (__node == 0) return 0;
-    if (__node->fListRef == nullptr) return 0;
+    if (__node == nullptr) return nullptr;
+    if (__node->fListRef == nullptr) return nullptr;
 
     return __node->fListRef->fpList;
   }

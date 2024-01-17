@@ -55,9 +55,9 @@ void G4DNAModelInterface::Initialise(const G4ParticleDefinition* particle, const
   fpParticleChangeForGamma = GetParticleChangeForGamma();
 
   // Loop on all the registered models to initialise them
-  for (std::size_t i = 0, ie = fRegisteredModels.size(); i < ie; ++i) {
-    fRegisteredModels.at(i)->SetParticleChange(fpParticleChangeForGamma);
-    fRegisteredModels.at(i)->Initialise(particle, cuts);
+  for (auto & fRegisteredModel : fRegisteredModels) {
+    fRegisteredModel->SetParticleChange(fpParticleChangeForGamma);
+    fRegisteredModel->Initialise(particle, cuts);
   }
   // used to retrieve the model corresponding to the current material/particle couple
   BuildMaterialParticleModelTable(particle);
@@ -334,7 +334,7 @@ void G4DNAModelInterface::BuildMaterialParticleModelTable(const G4ParticleDefini
       for (const auto& itComp : componentMap) {
         G4Material* component = itComp.first;
         // Check that the component is not itself a composite
-        if (component->GetMatComponents().size() != 0) {
+        if (!component->GetMatComponents().empty()) {
           std::ostringstream oss;
           oss << "Material " << mat->GetName() << " is a composite and its component";
           oss << " " << component->GetName();
@@ -364,10 +364,8 @@ void G4DNAModelInterface::BuildMaterialMolPerVolTable()
   G4MaterialTable* materialTable = G4Material::GetMaterialTable();
 
   // Loop on all the materials inside the "materialTable"
-  for (std::size_t i = 0, ie = materialTable->size(); i < ie; i++) {
+  for (auto currentMaterial : *materialTable) {
     // Current material
-    auto currentMaterial = materialTable->at(i);
-
     // Current material name
     const std::size_t & currentMatID = currentMaterial->GetIndex();
 

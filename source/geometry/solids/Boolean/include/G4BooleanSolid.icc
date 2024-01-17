@@ -30,7 +30,7 @@
 inline
 G4int G4BooleanSolid::GetCubVolStatistics() const
 {
-  return fStatistics;
+  return fCubVolStatistics;
 }
 
 inline
@@ -42,21 +42,21 @@ G4double G4BooleanSolid::GetCubVolEpsilon() const
 inline
 void G4BooleanSolid::SetCubVolStatistics(G4int st)
 {
-  fCubicVolume = -1.;
-  fStatistics = st;
+  if (st != fCubVolStatistics) { fCubicVolume = -1.; }
+  fCubVolStatistics = st;
 }
 
 inline    
 void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
 {
-  fCubicVolume = -1.;
+  if (ep != fCubVolEpsilon) { fCubicVolume = -1.; }
   fCubVolEpsilon = ep;
 }
 
 inline
 G4int G4BooleanSolid::GetAreaStatistics() const
 {
-  return fStatistics;
+  return fAreaStatistics;
 }
 
 inline
@@ -68,14 +68,14 @@ G4double G4BooleanSolid::GetAreaAccuracy() const
 inline
 void G4BooleanSolid::SetAreaStatistics(G4int st)
 {
-  fSurfaceArea = -1.;
-  fStatistics = st;
+  if (st != fAreaStatistics) { fSurfaceArea = -1.; }
+  fAreaStatistics = st;
 }
 
 inline    
 void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 {
-  fSurfaceArea = -1.;
+  if (ep != fAreaAccuracy) { fSurfaceArea = -1.; }
   fAreaAccuracy = ep;
 }
 
@@ -84,7 +84,7 @@ G4double G4BooleanSolid::GetSurfaceArea()
 {
   if(fSurfaceArea < 0.)
   {
-    fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy);
+    fSurfaceArea = EstimateSurfaceArea(fAreaStatistics, fAreaAccuracy);
   }
   return fSurfaceArea;
 }

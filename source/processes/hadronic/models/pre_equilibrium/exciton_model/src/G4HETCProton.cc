@@ -32,18 +32,16 @@
 
 #include "G4HETCProton.hh"
 #include "G4Proton.hh"
+#include "G4CoulombBarrier.hh"
 
 G4HETCProton::G4HETCProton() 
-  : G4HETCChargedFragment(G4Proton::Proton(), &theProtonCoulombBarrier)
-{}
-
-G4HETCProton::~G4HETCProton() 
+  : G4HETCChargedFragment(G4Proton::Proton(), new G4CoulombBarrier(1, 1))
 {}
 
 G4double G4HETCProton::GetAlpha() const
 {
   G4double C = 0.0;
-  if (theResZ >= 70) 
+  if (theResZ <= 70) 
     {
       C = 0.10;
     } 
@@ -55,18 +53,13 @@ G4double G4HETCProton::GetAlpha() const
   return 1.0 + C;
 }
   
-G4double G4HETCProton::GetBeta() const
-{
-  return -theCoulombBarrier;
-}
-  
 G4double G4HETCProton::GetSpinFactor() const
 {
   // 2s+1
   return 2.0;
 }
 
-G4double G4HETCProton::K(const G4Fragment & aFragment)
+G4double G4HETCProton::K(const G4Fragment& aFragment) const
 {
   // Number of protons in emitted fragment
   G4int Pa = theZ;

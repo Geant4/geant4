@@ -31,11 +31,11 @@ G4LEPTSPositroniumModel::G4LEPTSPositroniumModel(const G4String& modelName)
   : G4VLEPTSModel( modelName )
 {
   theXSType = XSPositronium;
+  fParticleChangeForGamma = nullptr;
 } 
 
 
-G4LEPTSPositroniumModel::~G4LEPTSPositroniumModel() {
-}
+G4LEPTSPositroniumModel::~G4LEPTSPositroniumModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

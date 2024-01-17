@@ -23,17 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementatLepton file 
+//	GEANT 4 class implementatLepton file
 //
 #ifndef G4LeptonConstructor_h
 #define G4LeptonConstructor_h 1
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 class G4LeptonConstructor
 {

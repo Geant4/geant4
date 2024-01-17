@@ -61,7 +61,7 @@ class G4Hydrogen : public G4MoleculeDefinition
 private:
     static /*G4ThreadLocal*/ G4Hydrogen* theInstance;
     G4Hydrogen() {}
-    virtual ~G4Hydrogen() {}
+    ~G4Hydrogen() override = default;
 
 public:
     static G4Hydrogen* Definition();

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,29 +35,20 @@
 #ifndef G4ChargedGeantino_h
 #define G4ChargedGeantino_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ChargedGeantino                        ###
-// ######################################################################
 
 class G4ChargedGeantino : public G4ParticleDefinition
 {
- private:
-   static G4ChargedGeantino* theInstance;
+  public:
+    static G4ChargedGeantino* Definition();
+    static G4ChargedGeantino* ChargedGeantinoDefinition();
+    static G4ChargedGeantino* ChargedGeantino();
 
- private:
-  G4ChargedGeantino(){}
+  private:
+    G4ChargedGeantino() {}
+    ~G4ChargedGeantino() override = default;
 
- public:
-   ~G4ChargedGeantino() override= default;
- 
-   static G4ChargedGeantino* Definition();
-   static G4ChargedGeantino* ChargedGeantinoDefinition();
-   static G4ChargedGeantino* ChargedGeantino();
-
+    static G4ChargedGeantino* theInstance;
 };
 
 #endif

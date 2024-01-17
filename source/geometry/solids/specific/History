@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-07-10 Evgueni Tcherniaev (geom-specific-V11-01-06)
+- Fixed bounding box calculation in G4VTwistedFaceted::BoundingLimits().
+
 ## 2023-06-16 Stephan Hageboeck (geom-specific-V11-01-05)
 - Fix an uninitialised value in G4VCSGfaceted::SurfaceNormal().
 

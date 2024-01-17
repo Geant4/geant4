@@ -54,8 +54,8 @@ namespace G4INCL {
       G4double piNToEtaN(Particle const * const p1, Particle const * const p2);
       G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
       G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
-		   	G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
-		   	G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+	  G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
+	  G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
       G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
       G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);
       G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
@@ -78,38 +78,53 @@ namespace G4INCL {
       G4double NNToNSK2pi(Particle const * const p1, Particle const * const p2);
       G4double NNToNNKKb(Particle const * const p1, Particle const * const p2);
       G4double NNToMissingStrangeness(Particle const * const p1, Particle const * const p2);
-		G4double NDeltaToNLK(Particle const * const p1, Particle const * const p2);
-		G4double NDeltaToNSK(Particle const * const p1, Particle const * const p2);
-		G4double NDeltaToDeltaLK(Particle const * const p1, Particle const * const p2);
-		G4double NDeltaToDeltaSK(Particle const * const p1, Particle const * const p2);
-		G4double NDeltaToNNKKb(Particle const * const p1, Particle const * const p2);
+	  G4double NDeltaToNLK(Particle const * const p1, Particle const * const p2);
+	  G4double NDeltaToNSK(Particle const * const p1, Particle const * const p2);
+	  G4double NDeltaToDeltaLK(Particle const * const p1, Particle const * const p2);
+      G4double NDeltaToDeltaSK(Particle const * const p1, Particle const * const p2);
+	  G4double NDeltaToNNKKb(Particle const * const p1, Particle const * const p2);
       G4double NpiToLK(Particle const * const p1, Particle const * const p2);
       G4double NpiToSK(Particle const * const p1, Particle const * const p2);
-		G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
-		G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
-		G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
+	  G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
+	  G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
+	  G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
       G4double NpiToLKpi(Particle const * const p1, Particle const * const p2);
       G4double NpiToSKpi(Particle const * const p1, Particle const * const p2);
       G4double NpiToLK2pi(Particle const * const p1, Particle const * const p2);
       G4double NpiToSK2pi(Particle const * const p1, Particle const * const p2);
       G4double NpiToNKKb(Particle const * const p1, Particle const * const p2);
       G4double NpiToMissingStrangeness(Particle const * const p1, Particle const * const p2);
-         G4double NLToNS(Particle const * const p1, Particle const * const p2);
-         G4double NSToNL(Particle const * const p1, Particle const * const p2);
-         G4double NSToNS(Particle const * const p1, Particle const * const p2);
+      G4double NLToNS(Particle const * const p1, Particle const * const p2);
+      G4double NSToNL(Particle const * const p1, Particle const * const p2);
+      G4double NSToNS(Particle const * const p1, Particle const * const p2);
       G4double NKToNK(Particle const * const p1, Particle const * const p2);
       G4double NKToNKpi(Particle const * const p1, Particle const * const p2);
       G4double NKToNK2pi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToNKb(Particle const * const p1, Particle const * const p2);
-         G4double NKbToSpi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToLpi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToS2pi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToL2pi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
-         G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToNKb(Particle const * const p1, Particle const * const p2);
+      G4double NKbToSpi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToLpi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToS2pi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToL2pi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
+      G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
       G4double NYelastic(Particle const * const p1, Particle const * const p2);
       G4double NKbelastic(Particle const * const p1, Particle const * const p2);
       G4double NKelastic(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief antiparticle cross sections
+      /// \brief Nucleon-AntiNucleon to Baryon-AntiBaryon cross sections
+      G4double NNbarElastic(Particle const* const p1, Particle const* const p2);
+      G4double NNbarCEX(Particle const* const p1, Particle const* const p2);
+
+      G4double NNbarToLLbar(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-AntiNucleon to Nucleon-AntiNucleon + pions cross sections
+      G4double NNbarToNNbarpi(Particle const* const p1, Particle const* const p2);
+      G4double NNbarToNNbar2pi(Particle const* const p1, Particle const* const p2);
+      G4double NNbarToNNbar3pi(Particle const* const p1, Particle const* const p2);
+     
+      /// \brief Nucleon-AntiNucleon total annihilation cross sections
+      G4double NNbarToAnnihilation(Particle const* const p1, Particle const* const p2);     
       
       /** \brief Calculate the slope of the NN DDXS.
        *

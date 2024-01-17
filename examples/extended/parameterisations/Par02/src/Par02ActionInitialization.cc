@@ -53,7 +53,7 @@ Par02ActionInitialization::Par02ActionInitialization( const G4String aOutName ) 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02ActionInitialization::~Par02ActionInitialization() {}
+Par02ActionInitialization::~Par02ActionInitialization() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

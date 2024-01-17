@@ -39,8 +39,8 @@
 class WLSRun : public G4Run
 {
  public:
-  WLSRun();
-  ~WLSRun();
+  WLSRun() = default;
+  ~WLSRun() override = default;
 
   void AddTIR(G4int n)
   {
@@ -119,30 +119,30 @@ class WLSRun : public G4Run
   void Merge(const G4Run*) override;
 
  private:
-  G4double fNTIR;
-  G4double fNTIR2;
-  G4double fNExiting;
-  G4double fNExiting2;
-  G4double fEscapedEnd;
-  G4double fEscapedEnd2;
-  G4double fEscapedMid;
-  G4double fEscapedMid2;
-  G4double fBounce;
-  G4double fBounce2;
-  G4double fWLSBounce;
-  G4double fWLSBounce2;
-  G4double fClad1Bounce;
-  G4double fClad1Bounce2;
-  G4double fClad2Bounce;
-  G4double fClad2Bounce2;
-  G4double fReflected;
-  G4double fReflected2;
-  G4double fEscaped;
-  G4double fEscaped2;
-  G4double fMirror;
-  G4double fMirror2;
-  G4double fDetectorHits;
-  G4double fDetectorHits2;
+  G4double fNTIR = 0.;
+  G4double fNTIR2 = 0.;
+  G4double fNExiting = 0.;
+  G4double fNExiting2 = 0.;
+  G4double fEscapedEnd = 0.;
+  G4double fEscapedEnd2 = 0.;
+  G4double fEscapedMid = 0.;
+  G4double fEscapedMid2 = 0.;
+  G4double fBounce = 0.;
+  G4double fBounce2 = 0.;
+  G4double fWLSBounce = 0.;
+  G4double fWLSBounce2 = 0.;
+  G4double fClad1Bounce = 0.;
+  G4double fClad1Bounce2 = 0.;
+  G4double fClad2Bounce = 0.;
+  G4double fClad2Bounce2 = 0.;
+  G4double fReflected = 0.;
+  G4double fReflected2 = 0.;
+  G4double fEscaped = 0.;
+  G4double fEscaped2 = 0.;
+  G4double fMirror = 0.;
+  G4double fMirror2 = 0.;
+  G4double fDetectorHits = 0.;
+  G4double fDetectorHits2 = 0.;
 };
 
 #endif

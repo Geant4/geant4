@@ -110,9 +110,12 @@ G4bool G4ExceptionHandler::Notify(const char* originOfException, const char* exc
       }
       abortionForCoreDump = false;
       break;
-    default:
+    case JustWarning:
       G4cout << ws_banner << message.str() << "*** This is just a warning message. ***" << we_banner
              << G4endl;
+      abortionForCoreDump = false;
+      break;
+    default:
       abortionForCoreDump = false;
       break;
   }

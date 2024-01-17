@@ -43,6 +43,10 @@ public:
   explicit G4DNADingfelderChargeIncreaseModel(const G4ParticleDefinition* p = nullptr,
 		          const G4String& nam = "DNADingfelderChargeIncreaseModel");
   ~G4DNADingfelderChargeIncreaseModel() override = default;
+
+  G4DNADingfelderChargeIncreaseModel & operator=(const  G4DNADingfelderChargeIncreaseModel &right)= delete;
+  G4DNADingfelderChargeIncreaseModel(const  G4DNADingfelderChargeIncreaseModel&) = delete;
+ 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
   G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
@@ -96,8 +100,6 @@ private:
   G4int NumberOfFinalStates(G4ParticleDefinition* particleDefinition, G4int finalStateIndex);
   G4ParticleDefinition* OutgoingParticleDefinition(G4ParticleDefinition* particleDefinition, G4int finalStateIndex);
   G4double IncomingParticleBindingEnergyConstant(G4ParticleDefinition* particleDefinition, G4int finalStateIndex);
-  G4DNADingfelderChargeIncreaseModel & operator=(const  G4DNADingfelderChargeIncreaseModel &right)= delete;
-  G4DNADingfelderChargeIncreaseModel(const  G4DNADingfelderChargeIncreaseModel&) = delete;
   // Reusable particle definitions
   G4ParticleDefinition* hydrogenDef = nullptr;
   G4ParticleDefinition* alphaPlusPlusDef = nullptr;

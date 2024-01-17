@@ -47,15 +47,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(EventAction* EA)
-:G4UserTrackingAction(),
- fEvent(EA),fTrackMessenger(0),
- fFullChain(true)
+TrackingAction::TrackingAction(EventAction* event)
+:fEvent(event)
  
 {
-  fTrackMessenger = new TrackingMessenger(this);   
-  
-  fTimeWindow1 = fTimeWindow2 = 0.;
+  fTrackMessenger = new TrackingMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +119,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
                       tr->SetTrackStatus(fStopButAlive);}
       else if (ID>1) tr->SetTrackStatus(fStopAndKill);
     //
-    fTime_birth = track->GetGlobalTime();
+    fTimeBirth = track->GetGlobalTime();
   }
   
   //example of saving random number seed of this fEvent, under condition
@@ -150,7 +146,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
   if (ID == 1) run->PrimaryTiming(time);        //time of life of primary ion
-  fTime_end = time;
+  fTimeEnd = time;
       
   //energy and momentum balance (from secondaries)
   //
@@ -188,7 +184,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     G4double weight = track->GetWeight();
     analysis->FillH1(8,time,weight);
 ////    analysis->FillH1(8,time);    
-    fTime_end = DBL_MAX;
+    fTimeEnd = DBL_MAX;
   }
   
   //count activity in time window
@@ -197,9 +193,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   
   G4String name   = track->GetDefinition()->GetParticleName();
   G4bool life1(false), life2(false), decay(false);
-  if ((fTime_birth <= fTimeWindow1)&&(fTime_end > fTimeWindow1)) life1 = true;
-  if ((fTime_birth <= fTimeWindow2)&&(fTime_end > fTimeWindow2)) life2 = true;
-  if ((fTime_end   >  fTimeWindow1)&&(fTime_end < fTimeWindow2)) decay = true;
+  if ((fTimeBirth <= fTimeWindow1)&&(fTimeEnd > fTimeWindow1)) life1 = true;
+  if ((fTimeBirth <= fTimeWindow2)&&(fTimeEnd > fTimeWindow2)) life2 = true;
+  if ((fTimeEnd   >  fTimeWindow1)&&(fTimeEnd < fTimeWindow2)) decay = true;
   if (life1||life2||decay) run->CountInTimeWindow(name,life1,life2,decay);
 }
 

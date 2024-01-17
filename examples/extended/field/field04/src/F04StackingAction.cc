@@ -36,16 +36,6 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F04StackingAction::F04StackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F04StackingAction::~F04StackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4ClassificationOfNewTrack
       F04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {

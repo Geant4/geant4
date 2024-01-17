@@ -29,42 +29,31 @@
 //
 
 #include "F04ElementField.hh"
-
 #include "F04GlobalField.hh"
 
+#include "G4TouchableHandle.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4Navigator* F04ElementField::fNavigator = 0;
+G4ThreadLocal G4Navigator* F04ElementField::fNavigator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04ElementField::F04ElementField(G4ThreeVector c, G4LogicalVolume* lv)
+ : fVolume(lv),
+   fCenter(c)
 {
-  fCenter = c;
-
-  fMinX = fMinY = fMinZ = -DBL_MAX;
-  fMaxX = fMaxY = fMaxZ =  DBL_MAX;
-
   F04GlobalField::GetObject()->AddElementField(this);
 
-  fColor = "1,1,1";
-
   fUserLimits = new G4UserLimits();
-
-  fVolume = lv;
-  fVolume->SetVisAttributes(GetVisAttribute(fColor));
-
-  fMaxStep = 1*mm;
-
   fUserLimits->SetMaxAllowedStep(fMaxStep);
-
   fUserLimits->SetUserMaxTrackLength(500.*m);
   fUserLimits->SetUserMaxTime(10*ms);
   fUserLimits->SetUserMinEkine(0.1*MeV);
 //  fUserLimits->SetUserMinRange(1*mm);
 
+  fVolume->SetVisAttributes(GetVisAttribute(fColor));
   fVolume->SetUserLimits(fUserLimits);
 }
 
@@ -75,17 +64,15 @@ void F04ElementField::Construct()
   G4Navigator* theNavigator =
                     G4TransportationManager::GetTransportationManager()->
                                                  GetNavigatorForTracking();
-
   if (!fNavigator) {
      fNavigator = new G4Navigator();
      if ( theNavigator->GetWorldVolume() )
                fNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
    }
 
-  fNavigator->LocateGlobalPointAndSetup(fCenter,0,false);
+  fNavigator->LocateGlobalPointAndSetup(fCenter,nullptr,false);
 
-  G4TouchableHistoryHandle touchable = fNavigator->
-                                         CreateTouchableHistoryHandle();
+  G4TouchableHandle touchable = fNavigator->CreateTouchableHistoryHandle();
 
   G4int depth = touchable->GetHistoryDepth();
   for (G4int i = 0; i<depth; ++i) {
@@ -101,11 +88,11 @@ void F04ElementField::Construct()
 
   G4ThreeVector globalPosition;
   local[3] = 0.0;
-  for (int i=0; i<2; ++i) {
+  for (G4int i=0; i<2; ++i) {
       local[0] = (i==0 ? -1.0 : 1.0) * GetWidth()/2.;
-      for (int j=0; j<2; ++j) {
+      for (G4int j=0; j<2; ++j) {
           local[1] = (j==0 ? -1.0 : 1.0) * GetHeight()/2.;
-          for (int k=0; k<2; ++k) {
+          for (G4int k=0; k<2; ++k) {
               local[2] = (k==0 ? -1.0 : 1.0) * GetLength()/2.;
               G4ThreeVector localPosition(local[0],local[1],local[2]);
               globalPosition =
@@ -123,7 +110,7 @@ void F04ElementField::Construct()
 
 G4VisAttributes* F04ElementField::GetVisAttribute(G4String color)
 {
-   G4VisAttributes* p = NULL;
+   G4VisAttributes* p = nullptr;
    if(color.size() > 0 &&
      (isdigit(color.c_str()[0]) || color.c_str()[0] == '.')) {
         G4double red=0.0, green=0.0, blue=0.0;

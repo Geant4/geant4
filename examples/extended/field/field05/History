@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-07-05 I. Hrivnacova (fieldex05-V11-01-00)
+- Clang-tidy, new coding guidelines
+- Clean-up trailing white-spaces
+
 ## 2022-11-16 John Apostolakis (fieldex05-V11-00-01)
 - Corrected assignement of epsMax=0.001 .  Also epsMin is dimensionless!
 
@@ -16,7 +20,7 @@ be used as a substitute for writing good git commit messages!
 
 July 27, 2018 I.Hrivnacova - fieldex05-V10-04-02
 - Macro review and code clean-up:
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac
   - Added "beamOn 10" button in gui.mac
   - Updated README files

@@ -45,7 +45,7 @@ class G4VtkClipOpenPipeline : public G4VVtkPipeline
                           vtkSmartPointer<vtkPolyDataAlgorithm> filter, G4bool useVcColour = false);
     ~G4VtkClipOpenPipeline() override = default;
 
-    void SetPlane(G4Plane3D& plane);
+    void SetPlane(const G4Plane3D& plane);
     void SetPlane(G4double x, G4double y, G4double z, G4double nx, G4double ny, G4double nz);
     void TransformPlane(G4double dx, G4double dy, G4double dz, G4double r00, G4double r01,
                         G4double r02, G4double r10, G4double r11, G4double r12, G4double r20,

@@ -95,11 +95,14 @@ using ComponentMap = std::map<const G4Material*, G4double, CompareMaterial>;
 class G4DNAMolecularMaterial: public G4VStateDependent
 {
 public:
+  G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right) = delete;
+  G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&) = delete;
+ 
   static G4DNAMolecularMaterial* Instance();
   void Initialize();
   void Clear();
 
-  virtual G4bool Notify(G4ApplicationState requestedState);
+  G4bool Notify(G4ApplicationState requestedState) override;
   
   //----------------------------------------------------------------------------
 
@@ -221,9 +224,7 @@ public:
 protected:
   static G4DNAMolecularMaterial* fInstance;
   G4DNAMolecularMaterial();
-  G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
-  G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);
-  virtual ~G4DNAMolecularMaterial();
+  ~G4DNAMolecularMaterial() override;
   void Create();
   void InitializeNumMolPerVol();
   void InitializeDensity();

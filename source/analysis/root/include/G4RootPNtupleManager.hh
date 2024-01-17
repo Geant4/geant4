@@ -125,6 +125,9 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     virtual G4bool Reset();
     void Clear() final;
 
+    // Method to delete selected ntuple
+    G4bool Delete(G4int id) final;
+
     // Activation option
     //
     void SetActivation(G4bool activation) final;
@@ -135,14 +138,8 @@ class G4RootPNtupleManager : public G4BaseNtupleManager
     void SetNewCycle(G4bool value) final;
     G4bool GetNewCycle() const final;
 
-    // Access methods
-    G4int GetNofNtuples() const final;
-
     // Set methods
     void SetNtupleRowWise(G4bool rowWise, G4bool rowMode);
-
-    // List ntuples
-    G4bool List(std::ostream& output, G4bool onlyIfActive = true) final;
 
   private:
     G4RootPNtupleDescription*

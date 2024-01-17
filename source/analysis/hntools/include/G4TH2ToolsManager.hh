@@ -35,28 +35,28 @@
 
 //_____________________________________________________________________________
 template <>
-tools::histo::h2d* G4THnToolsManager<2, tools::histo::h2d>::CreateToolsHT(
+tools::histo::h2d* G4THnToolsManager<kDim2, tools::histo::h2d>::CreateToolsHT(
   const G4String& title,
-  const std::array<G4HnDimension, 2>& bins,
-  const std::array<G4HnDimensionInformation, 2>& hnInfo);
+  const std::array<G4HnDimension, kDim2>& bins,
+  const std::array<G4HnDimensionInformation, kDim2>& hnInfo);
 
 //_____________________________________________________________________________
 template <>
-void G4THnToolsManager<2, tools::histo::h2d>::ConfigureToolsHT(
+void G4THnToolsManager<kDim2, tools::histo::h2d>::ConfigureToolsHT(
   tools::histo::h2d* ht,
-  const std::array<G4HnDimension, 2>& bins,
-  const std::array<G4HnDimensionInformation, 2>& hnInfo);
+  const std::array<G4HnDimension, kDim2>& bins,
+  const std::array<G4HnDimensionInformation, kDim2>& hnInfo);
 
 //_____________________________________________________________________________
 template <>
-G4bool G4THnToolsManager<2, tools::histo::h2d>::FillHT(
+G4bool G4THnToolsManager<kDim2, tools::histo::h2d>::FillHT(
   tools::histo::h2d* ht, const G4HnInformation& hnInformation, 
-  std::array<G4double, 2>& value, G4double weight);
+  std::array<G4double, kDim2>& value, G4double weight);
 
 
 //_____________________________________________________________________________
 template <>
-G4bool G4THnToolsManager<2, tools::histo::h2d>::WriteOnAscii(
+G4bool G4THnToolsManager<kDim2, tools::histo::h2d>::WriteOnAscii(
   std::ofstream& output);
 
 #endif

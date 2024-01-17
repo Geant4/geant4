@@ -73,13 +73,13 @@ int main(int argc,char** argv)
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
   G4VSteppingVerbose::SetInstance(new F03SteppingVerbose);
-  G4RunManager * runManager = new G4RunManager;
+  auto  runManager = new G4RunManager;
 #endif
 
   // Set mandatory initialization classes
   //
   // Detector construction
-  F03DetectorConstruction* detector = new F03DetectorConstruction();
+  auto  detector = new F03DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
   G4VModularPhysicsList* physicsList = new FTFP_BERT;

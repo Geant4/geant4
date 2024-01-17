@@ -243,10 +243,17 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     return pParticleChange;
 
   G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-  G4double beta = (pPreStepPoint->GetBeta() + pPostStepPoint->GetBeta()) * 0.5;
+
+  G4double beta1 = pPreStepPoint->GetBeta();
+  G4double beta2 = pPostStepPoint->GetBeta();
+  G4double beta = (beta1 + beta2) * 0.5;
 
   G4double MeanNumberOfPhotons =
     GetAverageNumberOfPhotons(charge, beta, aMaterial, Rindex);
+  G4double MeanNumberOfPhotons1 =
+    GetAverageNumberOfPhotons(charge, beta1, aMaterial, Rindex);
+  G4double MeanNumberOfPhotons2 =
+    GetAverageNumberOfPhotons(charge, beta2, aMaterial, Rindex);
 
   if(MeanNumberOfPhotons <= 0.0)
   {
@@ -255,11 +262,13 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
     return pParticleChange;
   }
 
-  G4double step_length = aStep.GetStepLength();
-  MeanNumberOfPhotons  = MeanNumberOfPhotons * step_length;
-  fNumPhotons          = (G4int) G4Poisson(MeanNumberOfPhotons);
+  MeanNumberOfPhotons *= aStep.GetStepLength();
+  fNumPhotons         = (G4int) G4Poisson(MeanNumberOfPhotons);
 
-  if(fNumPhotons <= 0 || !fStackingFlag)
+  // third condition added to prevent infinite loop in do-while below,
+  // see bugzilla 2555
+  if(fNumPhotons <= 0 || !fStackingFlag ||
+     std::max(MeanNumberOfPhotons1, MeanNumberOfPhotons2) < 1e-15)
   {
     // return unchanged particle and no secondaries
     aParticleChange.SetNumberOfSecondaries(0);
@@ -285,14 +294,6 @@ G4VParticleChange* G4Cerenkov::PostStepDoIt(const G4Track& aTrack,
 
   G4double maxCos  = BetaInverse / nMax;
   G4double maxSin2 = (1.0 - maxCos) * (1.0 + maxCos);
-
-  G4double beta1 = pPreStepPoint->GetBeta();
-  G4double beta2 = pPostStepPoint->GetBeta();
-
-  G4double MeanNumberOfPhotons1 =
-    GetAverageNumberOfPhotons(charge, beta1, aMaterial, Rindex);
-  G4double MeanNumberOfPhotons2 =
-    GetAverageNumberOfPhotons(charge, beta2, aMaterial, Rindex);
 
   for(G4int i = 0; i < fNumPhotons; ++i)
   {

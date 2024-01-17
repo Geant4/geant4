@@ -40,14 +40,11 @@
 //
 
 #include "G4PreCompoundDeuteron.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4CoulombBarrier.hh"
 #include "G4Deuteron.hh"
 
 G4PreCompoundDeuteron::G4PreCompoundDeuteron()
-  : G4PreCompoundIon(G4Deuteron::Deuteron(), &theDeuteronCoulombBarrier)
-{}
-
-G4PreCompoundDeuteron::~G4PreCompoundDeuteron()
+  : G4PreCompoundIon(G4Deuteron::Deuteron(), new G4CoulombBarrier(2, 1))
 {}
  
 G4double G4PreCompoundDeuteron::FactorialFactor(G4int N, G4int P) const
@@ -64,7 +61,7 @@ G4double G4PreCompoundDeuteron::GetRj(G4int nParticles, G4int nCharged) const
 {
   G4double rj = 0.0;
   if(nCharged >=1 && (nParticles-nCharged) >=1) {
-    G4double denominator = (nParticles*(nParticles-1));
+    G4double denominator = (G4double)(nParticles*(nParticles-1));
     rj = 2*nCharged*(nParticles-nCharged)/denominator; 
   }
   return rj;

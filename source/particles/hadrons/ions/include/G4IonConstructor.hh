@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 #ifndef G4IonConstructor_h
 #define G4IonConstructor_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 class G4IonConstructor
 {
-  //This class is a utility class for construction 
+    // This class is a utility class for construction
   public:
     static void ConstructParticle();
 

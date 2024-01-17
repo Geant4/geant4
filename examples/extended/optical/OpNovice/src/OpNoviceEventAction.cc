@@ -36,19 +36,6 @@
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceEventAction::OpNoviceEventAction()
-  : G4UserEventAction()
-{
-  fRayleigh   = 0;
-  fAbsorption = 0;
-  fMie        = 0;
-  fBoundary   = 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceEventAction::~OpNoviceEventAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNoviceEventAction::BeginOfEventAction(const G4Event*)
 {
   fRayleigh   = 0;
@@ -60,7 +47,7 @@ void OpNoviceEventAction::BeginOfEventAction(const G4Event*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void OpNoviceEventAction::EndOfEventAction(const G4Event*)
 {
-  OpNoviceRun* run = static_cast<OpNoviceRun*>(
+  auto run = static_cast<OpNoviceRun*>(
     G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddRayleigh(fRayleigh);
   run->AddAbsorption(fAbsorption);

@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-10 I. Hrivnacova (BlineTracer-V11-01-01)
+- Coding guidelines: document macro in README
+
+## 2023-07-05 I. Hrivnacova (BlineTracer-V11-01-00)
+- Clang-tidy, new coding guidelines, agreed separators in .cc
+- Clean-up trailing white-spaces
+
 ## 2021-12-10 Ben Morgan (BlineTracer-V11-00-00)
 - Change to new Markdown History format
 

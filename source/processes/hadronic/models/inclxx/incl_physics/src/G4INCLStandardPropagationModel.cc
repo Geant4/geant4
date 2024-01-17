@@ -380,8 +380,8 @@ namespace G4INCL {
         hasLocalEnergy = ((theLocalEnergyType == FirstCollisionLocalEnergy &&
               theNucleus->getStore()->getBook().getAcceptedCollisions()==0) ||
             theLocalEnergyType == AlwaysLocalEnergy);
-      const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isMeson());
-      const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isMeson());
+      const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isMeson() && !p1->isAntiNucleon());
+      const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isMeson() && !p2->isAntiNucleon());
 
       if(p1HasLocalEnergy) {
         backupParticle1 = *p1;
@@ -391,7 +391,7 @@ namespace G4INCL {
           return NULL;
         }
         KinematicsUtils::transformToLocalEnergyFrame(theNucleus, p1);
-      }
+      } 
       if(p2HasLocalEnergy) {
         backupParticle2 = *p2;
         p2->propagate(t - currentTime);

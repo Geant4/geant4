@@ -37,6 +37,7 @@ http://geant4-dna.org
 
     This example shows how to simulate physics, physico-chemistry and
     chemistry processes in DNA geometries.
+    Please find its documentation in https://natl.github.io/molecular-docs/
 
     To build the example:
     mkdir build
@@ -61,15 +62,14 @@ http://geant4-dna.org
       long straight DNA segments in a 100×30×30 nm placement volume
     - human_cell.mac : to model a fibroblast cell geometry. This mac file, may be used
       to produce data that may be used with the repair model, to produce results published
-      in https://arxiv.org/abs/2210.01564
+      in https://doi.org/10.1002/pro6.1186
     - ecoli.mac : to demonstrate a simple model where the bacterial DNA follows a
       large scale fractal ‘Hilbert curve’ geometry
+    - more geometry information can be found in https://natl.github.io/molecular-docs/
 
-    For the details, please see documentations:
-    - To construct DNA geometry models:
+    For the details, please see documentation to construct DNA geometry models:
       http://natl.github.io/fractaldna/
-    - To simulate radiation-induced DNA damage with these geometries
-      and define damage parameters:https://geant4-dna.github.io/molecular-docs/
+
 
     Macro commands can be used to control the geometry parameters
 
@@ -154,7 +154,7 @@ http://geant4-dna.org
     DNA damage model to relate energy depositions close to DNA,
     and chemical reactions with DNA to actual DNA damage
 
-    The following macro commands is used to control the damage parameters
+    The following macro commands can be used to control the damage parameters
 
     # Direct damage Threshold
     /dnadamage/directDamageLower 17.5 eV
@@ -228,6 +228,7 @@ http://geant4-dna.org
     This simple phase space file only provides 20 electrons with an energy of
     45 keV on a randomly shaped surface based on the cylinders.mac macro file.
 
+An alternative example for DNA damage calculation can be found in /examples/advanced/dsbandrepair
 
 Reference
 [1] https://spitfire.estec.esa.int/trac/GRAS/wiki/GRAS/GRAS-05-02/UserGuideTwoStage

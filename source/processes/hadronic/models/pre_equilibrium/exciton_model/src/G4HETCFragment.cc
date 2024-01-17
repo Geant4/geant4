@@ -35,42 +35,36 @@
 #include "G4NuclearLevelData.hh"
 #include "G4PhysicalConstants.hh"
 
-G4HETCFragment::
-G4HETCFragment(const G4ParticleDefinition* part,
-	       G4VCoulombBarrier* aCoulombBarrier)
+G4HETCFragment::G4HETCFragment(const G4ParticleDefinition* part,
+	                       G4VCoulombBarrier* aCoulombBarrier)
   : G4VPreCompoundFragment(part, aCoulombBarrier)
 {
   G4double r0 = theParameters->GetR0();
   r2norm = r0*r0/(CLHEP::pi*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
 }
 
-G4HETCFragment::~G4HETCFragment()
-{}
-
-G4double G4HETCFragment::
-CalcEmissionProbability(const G4Fragment & aFragment)
+G4double G4HETCFragment::CalcEmissionProbability(const G4Fragment& fp)
 {
-  if (GetEnergyThreshold() <= 0.0) 
-    {
-      theEmissionProbability = 0.0;
-      return 0.0;
-    }    
+  if (GetEnergyThreshold() <= 0.0) {
+    theEmissionProbability = 0.0;
+    return 0.0;
+  }    
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
-  theEmissionProbability = 
-    IntegrateEmissionProbability(theCoulombBarrier,theMaxKinEnergy,aFragment);
+  theEmissionProbability =
+    IntegrateEmissionProbability(theCoulombBarrier, theMaxKinEnergy, fp);
     
   return theEmissionProbability;
 }
 
-G4double G4HETCFragment::
-IntegrateEmissionProbability(G4double & Low, G4double & Up,
-			     const G4Fragment & aFragment)
+G4double 
+G4HETCFragment::IntegrateEmissionProbability(G4double Low, G4double Up,
+                                             const G4Fragment& frag)
 {    
-  G4double U = aFragment.GetExcitationEnergy();
+  G4double U = frag.GetExcitationEnergy();
 
-  G4int P  = aFragment.GetNumberOfParticles();
-  G4int H  = aFragment.GetNumberOfHoles();
+  G4int P  = frag.GetNumberOfParticles();
+  G4int H  = frag.GetNumberOfHoles();
   G4int N  = P + H;
   G4int Pb = P - theA;
   G4int Nb = Pb + H;
@@ -87,18 +81,17 @@ IntegrateEmissionProbability(G4double & Low, G4double & Up,
   G4int Pf = P;
   G4int Hf = H;
   G4int Nf = N-1;
-  for (G4int i = 1; i < theA; ++i)
-    {
-      Pf *= (P-i);
-      Hf *= (H-i);
-      Nf *= (N-1-i);
-    }
+  for (G4int i = 1; i < theA; ++i) {
+    Pf *= (P-i);
+    Hf *= (H-i);
+    Nf *= (N-1-i);
+  }
 
   G4double X = std::max(Up - Ab + GetBeta(),0.0);
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
   G4double Probability = r2norm*GetSpinFactor()*theReducedMass*GetAlpha() 
-    *g4calc->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
+    *g4calc->Z23(theResA)*Pf*Hf*Nf*K(frag)*(X/Nb - Y/(Nb+1))
     *U*g4calc->powN(gb*Y,Nb)/g4calc->powN(ga*U,N);
 
   return Probability;

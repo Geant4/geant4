@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,27 +35,20 @@
 #ifndef G4AntiDeuteron_h
 #define G4AntiDeuteron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                          AntiDEUTERON                          ###
-// ######################################################################
 
 class G4AntiDeuteron : public G4Ions
 {
- private:
-   static G4AntiDeuteron* theInstance;
-   G4AntiDeuteron(){}
-   ~G4AntiDeuteron() override= default;
+  public:
+    static G4AntiDeuteron* Definition();
+    static G4AntiDeuteron* AntiDeuteronDefinition();
+    static G4AntiDeuteron* AntiDeuteron();
 
- public:
-   static G4AntiDeuteron* Definition();
-   static G4AntiDeuteron* AntiDeuteronDefinition();
-   static G4AntiDeuteron* AntiDeuteron();
+  private:
+    G4AntiDeuteron() {}
+    ~G4AntiDeuteron() override = default;
+
+    static G4AntiDeuteron* theInstance;
 };
 
 #endif
-

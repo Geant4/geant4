@@ -50,7 +50,6 @@
 
 class G4Step;
 class G4TouchableHistory;
-class G4HCofThisEvent;
 class HistoManager;
 
 class CheckVolumeSD : public G4VSensitiveDetector
@@ -58,13 +57,9 @@ class CheckVolumeSD : public G4VSensitiveDetector
 public: // Without description
 
   CheckVolumeSD(const G4String&);
-  virtual ~CheckVolumeSD();
+  ~CheckVolumeSD() override = default;
 
-  virtual void Initialize(G4HCofThisEvent*);
-  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void PrintAll();
+  G4bool ProcessHits(G4Step*, G4TouchableHistory*) override;
 
 private:
 

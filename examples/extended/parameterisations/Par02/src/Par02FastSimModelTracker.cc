@@ -71,7 +71,7 @@ Par02FastSimModelTracker::Par02FastSimModelTracker( G4String aModelName ) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02FastSimModelTracker::~Par02FastSimModelTracker() {}
+Par02FastSimModelTracker::~Par02FastSimModelTracker() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,7 +123,7 @@ void Par02FastSimModelTracker::DoIt( const G4FastTrack& aFastTrack,
   // Consider only primary tracks (do nothing else for secondary charged particles)
   G4ThreeVector Porg = aFastTrack.GetPrimaryTrack()->GetMomentum();
   if ( ! aFastTrack.GetPrimaryTrack()->GetParentID() ) {
-    Par02EventInformation* info = (Par02EventInformation*) 
+    auto  info = (Par02EventInformation*) 
                             G4EventManager::GetEventManager()->GetUserInformation();
     if ( info->GetDoSmearing() ) {
       // Smearing according to the tracking detector resolution

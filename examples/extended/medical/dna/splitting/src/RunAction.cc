@@ -68,12 +68,7 @@ RunAction::RunAction() : G4UserRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    analysisManager->CloseFile();
-
-    delete G4AnalysisManager::Instance();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,5 +83,5 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->Write();
+    analysisManager->CloseFile();
 }
-

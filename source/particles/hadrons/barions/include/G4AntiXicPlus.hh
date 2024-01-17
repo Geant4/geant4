@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4AntiXicPlus_h
 #define G4AntiXicPlus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                      AntiXicPlus                               ###
-// ######################################################################
 
 class G4AntiXicPlus : public G4ParticleDefinition
 {
- private:
-   static G4AntiXicPlus* theInstance;
-   G4AntiXicPlus(){}
-   ~G4AntiXicPlus() override= default;
+  public:
+    static G4AntiXicPlus* Definition();
+    static G4AntiXicPlus* AntiXicPlusDefinition();
+    static G4AntiXicPlus* AntiXicPlus();
 
- public:
-   static G4AntiXicPlus* Definition();
-   static G4AntiXicPlus* AntiXicPlusDefinition();
-   static G4AntiXicPlus* AntiXicPlus();
+  private:
+    G4AntiXicPlus() {}
+    ~G4AntiXicPlus() override = default;
+
+    static G4AntiXicPlus* theInstance;
 };
 
 #endif

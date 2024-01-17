@@ -66,13 +66,7 @@ inline void G4GenericAnalysisManager::SetBasketEntries(
 }
 
 //_____________________________________________________________________________
-inline void G4GenericAnalysisManager::SetDefaultFileType(const G4String& value)
-{
-  fFileManager->SetDefaultFileType(value);
-}
-
-//_____________________________________________________________________________
-inline G4String G4GenericAnalysisManager::GetDefaultFileType() const
+inline G4String G4GenericAnalysisManager::GetDefaultFileTypeImpl() const
 {
   return fFileManager->GetDefaultFileType();
 }

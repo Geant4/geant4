@@ -34,6 +34,7 @@
 #include "G4VFastSimSensitiveDetector.hh"  // for G4VFastSimSensitiveDetector
 #include "G4VSensitiveDetector.hh"         // for G4VSensitiveDetector
 #include "Par04Hit.hh"                     // for Par04Hit (ptr only), Par04...
+#include <unordered_map>
 class G4FastHit;
 class G4FastTrack;
 class G4HCofThisEvent;
@@ -73,10 +74,14 @@ class Par04SensitiveDetector
   /// It is invoked from ProcessHits() methods, and sets basic hit properties
   /// (position, etc.), common for hit from fast and full simulation.
   Par04Hit* RetrieveAndSetupHit(G4ThreeVector aPosition);
+  /// Rewrite hits map to a vector
+  virtual void EndOfEvent(G4HCofThisEvent* aHC) final;
 
  private:
   /// Collection of hits
   Par04HitsCollection* fHitsCollection = nullptr;
+  /// Map of hits to be used in runtime
+  std::unordered_map<G4int, std::unique_ptr<Par04Hit>> fHitsMap;
   /// ID of collection of hits
   G4int fHitCollectionID = -1;
   /// Number of mesh readout cells in cylindrical coordinates

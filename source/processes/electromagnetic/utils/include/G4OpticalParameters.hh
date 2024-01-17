@@ -146,8 +146,6 @@ class G4OpticalParameters
   G4bool GetScintStackPhotons() const;
   void   SetScintVerboseLevel(G4int);
   G4int  GetScintVerboseLevel() const;
-  void   SetScintEnhancedTimeConstants(G4bool);
-  G4bool GetScintEnhancedTimeConstants() const;
 
   // WLS
   void     SetWLSTimeProfile(const G4String&);

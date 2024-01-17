@@ -35,6 +35,7 @@
 #include "G4VFastSimulationModel.hh"  // for G4VFastSimulationModel
 class G4FastSimHitMaker;
 class G4FastStep;
+class G4FastHit;
 class G4FastTrack;
 class G4ParticleDefinition;
 class G4Region;
@@ -71,6 +72,7 @@ class Par04MLFastSimModel : public G4VFastSimulationModel
   /// Inference model that is NN aware
   /// Helper class for creation of hits within the sensitive detector
   std::unique_ptr<G4FastSimHitMaker> fHitMaker;
+  std::unique_ptr<G4FastSimHitMaker> fParallelHitMaker;
   /// Vector of energy values
   std::vector<G4double> fEnergies;
   /// Vector of positions corresponding to energy values (const for one NN

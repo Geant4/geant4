@@ -6,9 +6,10 @@
 /mydet/StepFile mbb
 /run/initialize
 
-# Create a scene handler for a specific graphics system
-/vis/open OGL 600x600-0+0
-#/vis/open VRML2FILE
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 
 # draw scene
 /vis/viewer/zoom 5

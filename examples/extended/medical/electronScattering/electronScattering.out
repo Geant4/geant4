@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -23,7 +23,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 ***** Table : Nb of materials = 11 *****
 
  Material:      Air    density:  1.205 mg/cm3  RadL: 303.867 m    Nucl.Int.Length: 709.970 m  
-                       Imean:  85.668 eV   temperature: 293.00 K  pressure:   1.00 atm
+                       Imean:  85.669 eV   temperature: 293.00 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -70,7 +70,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
-                       Imean:  74.266 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  75.967 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -115,7 +115,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Graphite    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.768 cm 
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -734,7 +734,7 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.350000s Real=4.766457s Sys=0.000000s
+  User=5.280000s Real=5.978968s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -745,7 +745,7 @@ Run Summary
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2215701445837976919, 1458847374902633039, 1429309978918088675, 1642496266206064189, 1005913263449279956, 954997538393060599, 1923761761660519853, 2041196414220365936, 2244436746023793715, 215544480384986594, 1577841992627660697, 322958090280930416, 1394674509977637313, 1967471378242174245, 799327522893107932, 1347160189742920256, 318898547317430040} counter= 13sumtot= 2107950418155384815
+N=17 V[N]={2257242503873020095, 628869286368302269, 2289772525283243120, 956442635782341490, 50006246100082475, 804585892210352772, 1527675181402632864, 2075635601043676052, 1819135588531740544, 205031515653103039, 1161668611963119063, 1230339060596497480, 1583870394723795905, 1923049263067396648, 2272921602656347580, 613170207461522483, 1554008751734275705} counter= 4sumtot= 2200837785528204025
 ---------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -760,10 +760,10 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 10
+Total navigation history collections cleaned: 11
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00288 MB
 Pool ID '16G4SmartVoxelNode', size : 0.000961 MB
@@ -775,7 +775,7 @@ Pool ID '7G4Track', size : 0.00577 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.03 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

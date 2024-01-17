@@ -1,8 +1,8 @@
 #
-# macro file pixe3d.mac
+# to generate macro file pixe3d.mac
 #
 /control/verbose 1
-/run/verbose 1
+#/run/verbose 1
 #/tracking/verbose 2
 #
 #/tomography/det/setPhantomType 1

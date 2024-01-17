@@ -48,11 +48,11 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
 
     F04PrimaryGeneratorAction(F04DetectorConstruction*);
-    virtual ~F04PrimaryGeneratorAction();
+    ~F04PrimaryGeneratorAction() override;
 
   public:
 
-    virtual void GeneratePrimaries(G4Event*);
+    void GeneratePrimaries(G4Event*) override;
 
     void SetRndmFlag(G4String val) { fRndmFlag = val;}
 
@@ -62,21 +62,22 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
 
-    F04DetectorConstruction*   fDetector;    // pointer to the geometry
+    F04DetectorConstruction*   fDetector = nullptr;    // pointer to the geometry
 
-    G4ParticleGun*             fParticleGun; // pointer a to G4 service class
- 
-    F04PrimaryGeneratorMessenger* fGunMessenger; // messenger of this class
+    G4ParticleGun*             fParticleGun = nullptr; // pointer a to G4 service class
 
-    G4String fRndmFlag;                      // flag for random impact point
+    F04PrimaryGeneratorMessenger* fGunMessenger = nullptr; // messenger of this class
 
-    G4bool fFirst;
+    G4String fRndmFlag ="off";   // flag for random impact point
+
+    G4bool fFirst = false;
 
     G4AffineTransform fGlobal2local;
 
-    G4double fXvertex, fYvertex, fZvertex;
-
-    G4bool fVertexdefined;
+    G4double fXvertex = 0.;
+    G4double fYvertex = 0.;
+    G4double fZvertex = 0.;
+    G4bool fVertexDefined = false;
 
 };
 

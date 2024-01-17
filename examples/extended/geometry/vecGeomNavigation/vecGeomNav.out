@@ -18,7 +18,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -47,71 +47,68 @@ Enabled Check mode in G4Navigator G4ChordFinder: stepperDriverId: 2
 
  *** SETTING MAGNETIC FIELD in Z direction : fieldValue = 2 tesla *** 
 
-*** Conversion of G4 -> VecGeom finished (0.00759464 s) ***
-*** Closing VecGeom geometry finished (0.00174486 s) ***
-*** Setup of syncing lookup structure finished (3.1382e-05 s) ***
+*** Conversion of G4 -> VecGeom finished (0.00960912 s) ***
+*** Closing VecGeom geometry finished (0.000645577 s) ***
+*** Setup of syncing lookup structure finished (3.0406e-05 s) ***
 TG4VecGeomNavigator created and registered to G4TransportationManager
  Setting up safety voxels for Svt_log with 340 daughters 
 Uncontained capacity for Svt_log: 8.83002e+07 units
-Uncontained capacity for Svt_log: 8.83002e+07 units
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
+VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
+
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
 8.86155e+07 uncontained = 8.83002e+07
 
 VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-Uncontained capacity for Svt_log: 8.83002e+07 units
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-Uncontained capacity for Svt_log: 8.83002e+07 units
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.86155e+07 uncontained = 8.83002e+07
-8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
-8.86155e+07 uncontained = 8.83002e+07
-
-VolUtil: FillUncontPts: Volume <Svt_log  capacities: total =  8.86155e+07 uncontained = 8.83002e+07
- FillUncontained:  trials 3812920 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764768
- FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
- FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
- FillUncontained:  trials 3816105 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76413
- FillUncontained:  trials 3812878 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764777
- FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
- FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
- FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
- FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
  FillUncontained:  trials 3813828 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764586
- FillUncontained:  trials 3815805 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76419
+ FillUncontained:  trials 3812878 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764777
+ FillUncontained:  trials 3816619 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764027
+ FillUncontained:  trials 3812920 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764768
+ FillUncontained:  trials 3816009 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764149
+ FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
+ FillUncontained:  trials 3815734 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764204
+ FillUncontained:  trials 3813403 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764671
  FillUncontained:  trials 3814646 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764422
  FillUncontained:  trials 3813880 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764576
+ FillUncontained:  trials 3815805 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76419
+ FillUncontained:  trials 3815698 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764211
  FillUncontained:  trials 3815201 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764311
+ FillUncontained:  trials 3816105 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76413
  FillUncontained:  trials 3812862 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.76478
- FillUncontained:  trials 3814909 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764369
-Sampling points and keys took 22.8374s 
-Generating unique keys took 4.92178 s 
+ FillUncontained:  trials 3815710 for num points = 2916000 ( out of 2916000 requested -  success ratio = 0.764209
+Sampling points and keys took 32.0052s 
+Generating unique keys took 5.14066 s 
  We have 38052 sorted unique keys fraction 0.815586 estimated volume 9.56369e+07
-Generating safeties took 7.42806s 
+Generating safeties took 11.304s 
  done 
 Setting up locate voxels for Svt_log with 340 daughters 
-Generating unique keys took 1.1982e-05s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.0100539s 
+Generating unique keys took 1.7825e-05s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.0131383s 
  Setting up safety voxels for Dch_log with 40 daughters 
 Uncontained capacity for Dch_log: 8.26239e+08 units
 
@@ -125,16 +122,15 @@ VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncont
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  
-VolUtil: FillUncontPts: Volume <
-VolUtil: FillUncontPts: Volume <
-VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  Dch_log  capacities: total =  9.40122e+09 uncontained = 9.40122e+099.40122e+098.26239e+08 uncontained =  uncontained = 
+9.40122e+09 uncontained = 8.26239e+08
+9.40122e+09 uncontained = 9.40122e+098.26239e+08 uncontained = 
 8.26239e+08
-8.26239e+08
 9.40122e+09 uncontained = 8.26239e+08
 9.40122e+09 uncontained = 8.26239e+08
 
@@ -143,34 +139,35 @@ VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncont
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
 
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-Dch_log  capacities: total =  
+
 VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
-9.40122e+09 uncontained = 8.26239e+08
- FillUncontained:  trials 1717129 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628957
- FillUncontained:  trials 1715903 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629406
- FillUncontained:  trials 1723139 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626763
- FillUncontained:  trials 1716959 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629019
- FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
- FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
+
+VolUtil: FillUncontPts: Volume <Dch_log  capacities: total =  9.40122e+09 uncontained = 8.26239e+08
  FillUncontained:  trials 1713048 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630455
- FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
- FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
- FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
- FillUncontained:  trials 1707491 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0632507
- FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
- FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
- FillUncontained:  trials 1722816 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626881
  FillUncontained:  trials 1713400 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0630326
+ FillUncontained:  trials 1711116 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0631167
+ FillUncontained:  trials 1713741 for num points = 108000 ( out of 108000 requested -  success ratio = 0.06302
+ FillUncontained:  trials 1705957 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0633076
+ FillUncontained:  trials 1717826 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628702
+ FillUncontained:  trials 1723139 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626763
+ FillUncontained:  trials 1722816 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0626881
  FillUncontained:  trials 1721713 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0627282
-Sampling points and keys took 0.832318s 
-Generating unique keys took 0.120416 s 
+ FillUncontained:  trials 1717021 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628996
+ FillUncontained:  trials 1716959 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629019
+ FillUncontained:  trials 1717129 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0628957
+ FillUncontained:  trials 1714682 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629854
+ FillUncontained:  trials 1721362 for num points = 108000 ( out of 108000 requested -  success ratio = 0.062741
+ FillUncontained:  trials 1715903 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0629406
+ FillUncontained:  trials 1707491 for num points = 108000 ( out of 108000 requested -  success ratio = 0.0632507
+Sampling points and keys took 1.36725s 
+Generating unique keys took 0.133507 s 
  We have 768 sorted unique keys fraction 0.444444 estimated volume 5.91992e+09
-Generating safeties took 0.0271052s 
+Generating safeties took 0.0299073s 
  done 
 Setting up locate voxels for Dch_log with 40 daughters 
-Generating unique keys took 6.829e-06s 
- Calculating locate candidates ... in parallel Generating locate voxels took 0.00547864s 
-*** Setup of VecGeom navigators finished (36.2183 s) ***
+Generating unique keys took 7.861e-06s 
+ Calculating locate candidates ... in parallel Generating locate voxels took 0.0125307s 
+*** Setup of VecGeom navigators finished (50.0389 s) ***
 3
 
  hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
@@ -621,384 +618,243 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
   Process: nKiller
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for B-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: B-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for D-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: D-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-------------------------------------------------------------------------
                            Hadronic Processes for anti_hypertriton
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: anti_lambdaInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_neutron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_proton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e+
-
   Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e-
-
   Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for gamma
-
   Process: photonNuclear
         Model:               GammaNPreco: 0 eV  ---> 200 MeV
         Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon+
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: lambdaInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu+
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu-
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
   Process: muMinusCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi+
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi-
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for proton
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for sigma-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: sigma-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
-================================================================
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
@@ -3002,7 +2858,7 @@ Step#    X (mm)    Y (mm)    Z (mm)    Ek (MeV) dE (MeV) Step(mm)    Track(mm) S
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.014481s Sys=0.010000s
+  User=0.010000s Real=0.046373s Sys=0.010000s
 /tracking/verbose 0
 /run/beamOn 10
 
@@ -3052,7 +2908,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.050000s Real=0.056886s Sys=0.000000s
+  User=0.060000s Real=0.065620s Sys=0.000000s
 
  ================================================================= 
  Final random number = 0.56769521327478

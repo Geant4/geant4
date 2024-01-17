@@ -39,5 +39,3 @@
 using G4ParticleMomentum = G4ThreeVector;
 
 #endif
-
-

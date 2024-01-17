@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-10-09 Ben Morgan (exbasic-V11-01-00)
+- Bump CMake range to 3.16...3.27 in line with main toolkit
+
 ## 2022-11-04  I. Hrivnacova (exbasic-V11-00-02)
 - Fixed Doxygen file descriptions:
   since removing class prefixes the filenames must be provided with a path

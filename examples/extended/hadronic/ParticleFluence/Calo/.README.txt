@@ -61,12 +61,13 @@ make
 To run it:
 
 \verbatim
-./Calo atlasHec.g4
+./Calo atlasHec.in
 \endverbatim
 
 which shoots 50 GeV pion- on a simplified ATLAS HEC hadronic calorimeter,
 in one run of 100 events, and print out some information on the particle
 fluence at the end of the run.
-Other macros exist for other types of simplified hadronic calorimeters.
+Other macros exist for other types of simplified hadronic calorimeters:
+atlasEcal.in, atlasFcal.in, atlasTileCal.in, cmsEcal.in, lhcbEcal.in .
 
 */

@@ -23,69 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 // **********************************************************************
-//  New impelemenataion as an utility class  M.Asai, 26 July 2004
+//  New impelemenataion as an utility class       M.Asai, 26 July 2004
+//  Updated width and lifetime following PDG 2023 S.Okada, 5 November 2023
 // ----------------------------------------------------------------------
 
 #include "G4LambdacPlus.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4ParticleTable.hh"
-
-#include "G4PhaseSpaceDecayChannel.hh"
-#include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                      LambdacPlus                               ###
-// ######################################################################
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4LambdacPlus* G4LambdacPlus::theInstance = nullptr;
 
 G4LambdacPlus* G4LambdacPlus::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "lambda_c+";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
-                 name,     2.28646*GeV,   3.30e-9*MeV,   +1.*eplus,
+                 name,     2.28646*GeV,   3.27e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            +1,        4122,
-                false,     0.200e-3*ns,          nullptr,
+                false,    0.2015e-3*ns,       nullptr,
                 false,       "lambda_c");
+    // clang-format on
   }
   theInstance = static_cast<G4LambdacPlus*>(anInstance);
   return theInstance;
 }
 
-G4LambdacPlus*  G4LambdacPlus::LambdacPlusDefinition()
-{ 
+G4LambdacPlus* G4LambdacPlus::LambdacPlusDefinition()
+{
   return Definition();
 }
 
-G4LambdacPlus*  G4LambdacPlus::LambdacPlus()
-{ 
+G4LambdacPlus* G4LambdacPlus::LambdacPlus()
+{
   return Definition();
 }
-

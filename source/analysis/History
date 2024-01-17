@@ -6,6 +6,82 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-03 Ben Morgan (analysis-V11-01-10)
+- Use "G4" prefixed version of EXPAT/ZLIB CMake variables
+
+## 2023-09-20  I. Hrivnacova (analysis-V11-01-09)
+- Updated GetNofNtuples implementation to take into account
+  new 'onlyIfExists' parameter:
+  - Moved 'GetNofNtuples' and 'List' functions in G4NtupleBookingManager
+    where the info about deleted ntuples (fFeeeIds) is available
+
+## 2023-08-29  I. Hrivnacova (analysis-V11-01-08)
+- Adding new G4AnalysisManager functions for deleting selected
+  ntuples:
+    G4bool  DeleteNtuple(G4int id, G4bool clear = false);
+  and UI commands:
+    /analysis/ntuple/delete id [keepSetting]
+- Added GetNtuple() functions in G4GenericAnalysisManager:
+    tools::ntuple_booking* GetNtuple(...) const
+  that, in difference from output specific managers, return
+  ntuple_booking, that is common to all output types
+- Added UI commands for creating ntuple:
+  /analysis/ntuple/create name title
+  /analysis/ntuple/create[I|F|D|S]Column name
+  /analysis/ntuple/finish
+- Changed verbosity level for "merge" information from 1 to 2
+
+## 2023-08-29  I. Hrivnacova (analysis-V11-01-07)
+- Fixed Coverity in G4RootHnFileManager 
+
+## 2023-08-14  I. Hrivnacova (analysis-V11-01-06)
+- Updates & fixes in files handling:
+  - Moved Set/GetDefaultFileType methods and UI command in
+    G4VAnalysisManager and G4AnalysisMessenger
+    (from G4GenericAnalysisManager/Messenger)
+    - This allows to support omitting file extension also when
+      setting file names to histograms/profiles
+  - Removed G4GenericAnalysisMessenger
+  - Added clearing of file data in 'DeleteEmptyFiles'
+    - this prevent from deleting non-empty files created/filled in previous
+      runs but not used in new runs
+  - Supressed warning from 'CreateTFile' when file is already
+    existing
+
+## 2023-08-02  I. Hrivnacova (analysis-V11-01-05)
+- Adding new G4AnalysisManager functions for deleting selected
+  histograms/profiles:
+    G4bool  Delete[Hn|Pn](G4int id, G4bool clear = false);
+  and UI commands:
+    /analysis/[hn|pn]/delete id [keepSetting]
+
+## 2023-07-21 I. Hrivnacova (analysis-V11-01-04)
+- Fixed implementation of set commands per dimension:
+   /analysis/hn|pn/setX|Y|Z
+  (Addressing a problem report in Geant4 forum.)
+
+## 2023-07-20 I. Hrivnacova (analysis-V11-01-03)
+- Moved kDimN constants from G4VAnalysisManger in G4AnalysisUtilities
+  and replaced all hard-wired literals '1', '2' and '3' with these
+
+## 2023-07-19 I. Hrivnacova (analysis-V11-01-02)
+- Addressed "TO DO" comments left in the code, improvements & a fix:
+  - Moved 'CompressionLevel' data/functions members from G4AnalysisManagerState
+    to G4BaseFileManager to make it available in helper classes
+    which do not have access to state
+    - Compression level (default 1) is now used also when writing a Root histogram
+      in an extra file and writing Hdf5 ntuples
+  - Postpone creating G4HnMessenger after G4THnMessenger to get
+    better command ordering in the 'help' tree
+  - Moved setAxisLog command from G4THnMessenger to G4HnMessenger
+    as it applies to function defined in its associated class
+  - Moved 'kMaxDim' constant from G4THnMessenger in G4AnalysisUtilities
+    as needed also at other places
+  - Fix: Do not create 'setAxis*'' commands for idim = 4
+  - Added warnings about failure in *HnFileManager::WriteExtra where 
+    missing
+  - Use forward declarations for templated classes where suitable
+
 ## 2023-06-09 I. Hrivnacova (analysis-V11-01-01)
 - Fixed creating histograms with user defined bins
   - bug report #2541

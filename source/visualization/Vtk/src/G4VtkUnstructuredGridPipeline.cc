@@ -25,13 +25,25 @@
 
 #include "vtkPoints.h"
 #include "vtkCellArray.h"
+#include "vtkCharArray.h"
 #include "vtkUnstructuredGrid.h"
 #include "vtkDataSetMapper.h"
+#include "vtkUnstructuredGridVolumeMapper.h"
+#include "vtkUnstructuredGridVolumeRayCastMapper.h"
+#include "vtkUnstructuredGridVolumeZSweepMapper.h"
+#include "vtkOpenGLProjectedTetrahedraMapper.h"
 #include "vtkActor.h"
+#include "vtkColorTransferFunction.h"
+#include "vtkPiecewiseFunction.h"
+#include "vtkLookupTable.h"
+#include "vtkVolumeProperty.h"
+#include "vtkVolume.h"
 #include "vtkNew.h"
 #include "vtkTetra.h"
 #include "vtkVoxel.h"
-#include "vtkStaticCleanUnstructuredGrid.h"
+// #include "vtkCleanUnstructuredGrid.h"
+#include "vtkDataSetTriangleFilter.h"
+#include "vtkClipDataSet.h"
 
 #include "G4VtkUnstructuredGridPipeline.hh"
 #include "G4VtkVisContext.hh"
@@ -48,32 +60,78 @@
 #include "G4Tet.hh"
 #include "G4Material.hh"
 
-G4VtkUnstructuredGridPipeline::G4VtkUnstructuredGridPipeline(G4String nameIn, const G4VtkVisContext& vc) :
-  G4VVtkPipeline(nameIn, "G4VtkUnstructuredPipeline", vc, false, vc.fViewer->renderer) {
+G4VtkUnstructuredGridPipeline::G4VtkUnstructuredGridPipeline(G4String nameIn, const G4VtkVisContext& vcIn) :
+  G4VVtkPipeline(nameIn, "G4VtkUnstructuredPipeline", vcIn, false, vcIn.fViewer->renderer) {
 
   points      = vtkSmartPointer<vtkPoints>::New();
-  pointValues = vtkSmartPointer<vtkDoubleArray>::New();
-  cellValues  = vtkSmartPointer<vtkDoubleArray>::New();
 
-  cellValues->SetNumberOfComponents(4);
-  cellValues->SetName("Colors");
+  pointColourValues = vtkSmartPointer<vtkDoubleArray>::New();
+  cellColourValues  = vtkSmartPointer<vtkDoubleArray>::New();
+  pointColourValues->SetNumberOfComponents(4);
+  cellColourValues->SetNumberOfComponents(4);
+
+  pointColourIndices = vtkSmartPointer<vtkDoubleArray>::New();
+  cellColourIndices  = vtkSmartPointer<vtkDoubleArray>::New();
+  pointColourIndices->SetNumberOfComponents(1);
+  cellColourIndices->SetNumberOfComponents(1);
+
+  colourLUT = vtkSmartPointer<vtkDiscretizableColorTransferFunction>::New();
+  colourLUT->DiscretizeOn();
 
   unstructuredGrid = vtkSmartPointer<vtkUnstructuredGrid>::New();
   unstructuredGrid->SetPoints(points);
-  unstructuredGrid->GetCellData()->SetScalars(cellValues);
+  unstructuredGrid->GetPointData()->SetScalars(pointColourValues);
+  unstructuredGrid->GetCellData()->SetScalars(cellColourValues);
 
+  // clean filter
+#if 0
+  clean = vtkSmartPointer<vtkStaticCleanUnstructuredGrid>::New();
+  clean->SetInputData(unstructuredGrid);
+  clean->ToleranceIsAbsoluteOff();
+  clean->SetTolerance(1e-6);
+#endif
+
+  // Clip filter
+  clip = vtkSmartPointer<vtkClipDataSet>::New();
+  vtkNew<vtkPlane> plane;
+  clip->SetClipFunction(plane);
+  clip->SetInputData(unstructuredGrid);
+
+  // Triangle filter
+  auto tri = vtkSmartPointer<vtkDataSetTriangleFilter>::New();
+  tri->SetInputData(unstructuredGrid);
+
+  // create dataset mapper
   mapper = vtkSmartPointer<vtkDataSetMapper>::New();
   mapper->SetScalarModeToUseCellData();
   mapper->SetColorModeToDirectScalars();
   mapper->SetInputData(unstructuredGrid);
+  //mapper->SetInputConnection(clip->GetOutputPort());
+  //mapper->SetInputConnection(tri->GetOutputPort());
+
+  // create volume mapper
+  volumeMapper = vtkSmartPointer<vtkUnstructuredGridVolumeRayCastMapper>::New();
+  volumeMapper->SetScalarModeToUseCellData();
+  volumeMapper->SetInputConnection(tri->GetOutputPort());
+
+  // create volume properties
+  auto volumeProp = vtkSmartPointer<vtkVolumeProperty>::New();
+  volumeProp->SetColor(colourLUT);
 
   // create actor
   actor = vtkSmartPointer<vtkActor>::New();
   actor->SetMapper(mapper);
   actor->SetVisibility(1);
 
+  // create volume
+  volume = vtkSmartPointer<vtkVolume>::New();
+  volume->SetMapper(volumeMapper);
+  //volume->SetProperty(volumeProp);
+  volume->SetVisibility(1);
+
   // add to renderer
   vc.fViewer->renderer->AddActor(actor);
+  //vc.fViewer->renderer->AddVolume(volume);
 }
 
 void G4VtkUnstructuredGridPipeline::PseudoSceneForTetCells::AddSolid(const G4VSolid& solid) {
@@ -85,29 +143,67 @@ void G4VtkUnstructuredGridPipeline::PseudoSceneForTetCells::AddSolid(const G4VSo
       const auto& colour = pVisAtts->GetColour();
 
       G4ThreeVector p0, p1, p2, p3;
-      tet.GetVertices(p0, p1,p2, p3);
+      tet.GetVertices(p0, p1, p2, p3);
 
-      fpPoints->InsertNextPoint(p0.x(),p0.y(),p0.z());
-      fpPoints->InsertNextPoint(p1.x(),p1.y(),p1.z());
-      fpPoints->InsertNextPoint(p2.x(),p2.y(),p2.z());
-      fpPoints->InsertNextPoint(p3.x(),p3.y(),p3.z());
+      G4int idx[4] = {-1, -1, -1, -1};
 
-      vtkNew<vtkTetra> tetra;
-      tetra->GetPointIds()->SetId(0, 4*iCell);
-      tetra->GetPointIds()->SetId(1, 4*iCell+1);
-      tetra->GetPointIds()->SetId(2, 4*iCell+2);
-      tetra->GetPointIds()->SetId(3, 4*iCell+3);
+      if (iCell > 0 && iCell < 100000000) {
+#if 0
+        G4ThreeVector pts[4] = {p0, p1, p2, p3};
+        for (G4int i = 0; i < 4; i++) {
+          auto h = MakeHash(pts[i]);
+          if (fpPointMap.find(h) == fpPointMap.end()) {
+            fpPointMap.insert(std::make_pair(h, iPoint));
+            fpPoints->InsertNextPoint(pts[i].x(), pts[i].y(), pts[i].z());
+            fpPointVector.push_back(pts[i]);
+            idx[i] = iPoint;
+            iPoint++;
+          }
+          else {
+            idx[i] = fpPointMap[h];
+          }
+        }
+#endif
 
-      fpGrid->InsertNextCell(tetra->GetCellType(), tetra->GetPointIds());
+#if 1
+        fpPoints->InsertNextPoint(p0.x(), p0.y(), p0.z());
+        fpPoints->InsertNextPoint(p1.x(), p1.y(), p1.z());
+        fpPoints->InsertNextPoint(p2.x(), p2.y(), p2.z());
+        fpPoints->InsertNextPoint(p3.x(), p3.y(), p3.z());
+        iPoint += 4;
 
-      double cols[] = {colour.GetRed(),
-                       colour.GetGreen(),
-                       colour.GetBlue(),
-                       colour.GetAlpha()};
-      fpCellValues->InsertNextTuple(cols);
+        idx[0] = 4 * iCellAdd;
+        idx[1] = 4 * iCellAdd + 1;
+        idx[2] = 4 * iCellAdd + 2;
+        idx[3] = 4 * iCellAdd + 3;
+#endif
 
+        vtkNew<vtkTetra> tetra;
+        tetra->GetPointIds()->SetId(0, idx[0]);
+        tetra->GetPointIds()->SetId(1, idx[1]);
+        tetra->GetPointIds()->SetId(2, idx[2]);
+        tetra->GetPointIds()->SetId(3, idx[3]);
+
+        fpGrid->InsertNextCell(tetra->GetCellType(), tetra->GetPointIds());
+
+        auto hash = MakeHash(colour);
+        unsigned short int iColour = 0;
+        if (fpColourMap.find(hash) == fpColourMap.end()) {
+          iColour = fpColourMap.size();
+          fpColourMap.insert(std::make_pair(hash,iColour));
+          double c[4] = {colour.GetRed(), colour.GetGreen(), colour.GetBlue(), colour.GetAlpha()};
+          fpColourLUT->SetIndexedColorRGBA(iColour,c);
+        }
+        else {
+          iColour = fpColourMap[hash];
+        }
+
+        fpCellColourValues->InsertNextTuple4(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), colour.GetAlpha());
+        fpCellColourIndices->InsertNextTuple1(iColour);
+
+        iCellAdd++;
+      }
       iCell++;
-
     }
     catch (const std::bad_cast&) {
       G4ExceptionDescription ed;
@@ -126,13 +222,13 @@ void G4VtkUnstructuredGridPipeline::PseudoSceneForCubicalCells::AddSolid(const G
 
       fpPoints->InsertNextPoint(position.x()-box.GetXHalfLength(),position.y()-box.GetYHalfLength(),position.z()-box.GetZHalfLength());
       fpPoints->InsertNextPoint(position.x()-box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()-box.GetZHalfLength());
-      fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()-box.GetZHalfLength());
       fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()-box.GetYHalfLength(),position.z()-box.GetZHalfLength());
+      fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()-box.GetZHalfLength());
 
       fpPoints->InsertNextPoint(position.x()-box.GetXHalfLength(),position.y()-box.GetYHalfLength(),position.z()+box.GetZHalfLength());
       fpPoints->InsertNextPoint(position.x()-box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()+box.GetZHalfLength());
-      fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()+box.GetZHalfLength());
       fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()-box.GetYHalfLength(),position.z()+box.GetZHalfLength());
+      fpPoints->InsertNextPoint(position.x()+box.GetXHalfLength(),position.y()+box.GetYHalfLength(),position.z()+box.GetZHalfLength());
 
       vtkNew<vtkVoxel> voxel;
       voxel->GetPointIds()->SetId(0, 8*iCell);
@@ -150,7 +246,9 @@ void G4VtkUnstructuredGridPipeline::PseudoSceneForCubicalCells::AddSolid(const G
                        colour.GetGreen(),
                        colour.GetBlue(),
                        colour.GetAlpha()};
-      fpCellValues->InsertNextTuple(cols);
+      fpCellColourValues->InsertNextTuple(cols);
+      //fpCellColourIndices->InsertNextTuple1(iColour);
+
 
       iCell++;
 
@@ -181,19 +279,26 @@ void G4VtkUnstructuredGridPipeline::SetUnstructuredGridData(const G4Mesh &mesh) 
 
   // Graphics scene
   if(mesh.GetMeshType() == G4Mesh::tetrahedron) {
-    PseudoSceneForTetCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points, cellValues,
-                                       unstructuredGrid);
+    PseudoSceneForTetCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points,
+                                       pointColourValues, cellColourValues,
+                                       pointColourIndices, cellColourIndices,
+                                       colourLUT, unstructuredGrid);
     tmpPVModel.DescribeYourselfTo(pseudoScene);
-
+    //G4cout << pseudoScene.GetNumberOfPoints() << " " << pseudoScene.GetNumberOfCells() << " " << pseudoScene.GetNumberOfAddedCells() << G4endl;
+    //pseudoScene.DumpColourMap();
   }
   else if(mesh.GetMeshType() == G4Mesh::nested3DRectangular) {
-    PseudoSceneForCubicalCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points, cellValues,
-                                           unstructuredGrid);
+    PseudoSceneForCubicalCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points,
+                                           pointColourValues, cellColourValues,
+                                           pointColourIndices, cellColourIndices,
+                                           colourLUT, unstructuredGrid);
     tmpPVModel.DescribeYourselfTo(pseudoScene);
   }
   else if(mesh.GetMeshType() == G4Mesh::rectangle) {
-    PseudoSceneForCubicalCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points, cellValues,
-                                           unstructuredGrid);
+    PseudoSceneForCubicalCells pseudoScene(&tmpPVModel, mesh.GetMeshDepth(), points,
+                                           pointColourValues, cellColourValues,
+                                           pointColourIndices, cellColourIndices,
+                                           colourLUT, unstructuredGrid);
     tmpPVModel.DescribeYourselfTo(pseudoScene);
   }
 

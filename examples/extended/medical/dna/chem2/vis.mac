@@ -2,27 +2,15 @@
 # of the B1 example when running in interactive mode
 #
 
-# Use these open statements to open selected visualization
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
-# Use this open statement to create an OpenGL view:
-#/vis/open OGL 800x600-0+0 #600x600-0+0
-# This is enough for a 2.5 keV electron
-/vis/ogl/flushAt NthPrimitive 1000000
-#
-# Use this open statement to create an OpenInventor view:
-#/vis/open OI
-#
-# Use this open statement to create a .prim file suitable for
-# viewing in DAWN:
-#/vis/open DAWNFILE
-#
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-#/vis/open HepRepFile
-#
-# Use this open statement to create a .wrl file suitable for
-# viewing in a VRML viewer:
-#/vis/open VRML2FILE
+## To create an OpenGL viewer:
+##/vis/open OGL 800x600-0+0 #600x600-0+0
+## This is enough for a 2.5 keV electron
+#/vis/ogl/flushAt NthPrimitive 1000000
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

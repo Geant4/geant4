@@ -25,13 +25,13 @@
 //
 // AMR Simplification /4
 // read Diff XSection & Interpolate
-#include <string.h>
-#include <stdio.h>
-#include <string>
+#include "globals.hh"
 
 #include <cmath>
-#include "globals.hh"
+#include <cstdio>
+#include <cstring>
 #include <iostream> 
+#include <string>
 using namespace std;
 #include "CLHEP/Units/PhysicalConstants.h"
 
@@ -56,7 +56,7 @@ void G4LEPTSDiffXS::readDXS( ) {
   FILE   *fp;
   float data, data2;
 
-  if ((fp=fopen(fileName.c_str(), "r"))==NULL){
+  if ((fp=fopen(fileName.c_str(), "r"))==nullptr){
     //G4cout << "Error reading " << fileName << G4endl;
     NumEn = 0;
     bFileFound = false;
@@ -69,8 +69,8 @@ void G4LEPTSDiffXS::readDXS( ) {
 
   //NumAng = 181;
   (void) fscanf(fp, "%d %d %s", &NumAng, &NumEn, DXSTypeName);
-  if( !strcmp(DXSTypeName, "KTC") )     DXSType = 2;  // read DXS & calculate KT
-  else if( !strcmp(DXSTypeName, "KT") ) DXSType = 1;  // read DXS & KT
+  if( strcmp(DXSTypeName, "KTC") == 0 )     DXSType = 2;  // read DXS & calculate KT
+  else if( strcmp(DXSTypeName, "KT") == 0 ) DXSType = 1;  // read DXS & KT
   else                                  DXSType = 0;
 
   //  if( verboseLevel >= 1 ) G4cout << "Read DXS   (" << fileName  <<  ")\t NEg " << NumEn << " NAng " << NumAng

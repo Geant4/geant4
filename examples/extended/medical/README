@@ -50,6 +50,8 @@ GammaTherapy
 
 This example demonstrates a gamma therapy application.
 
+radiobiology
+------------
 
-     
-
+An application realized for dosimetric and radiobiological applications of proton
+and ion beams.

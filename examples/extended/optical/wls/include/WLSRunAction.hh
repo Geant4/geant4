@@ -37,21 +37,20 @@
 #include "G4UserRunAction.hh"
 
 class WLSRun;
-
 class G4Run;
 
 class WLSRunAction : public G4UserRunAction
 {
  public:
   WLSRunAction();
-  ~WLSRunAction();
+  ~WLSRunAction() override = default;
 
   void BeginOfRunAction(const G4Run*) override;
   void EndOfRunAction(const G4Run*) override;
   G4Run* GenerateRun() override;
 
  private:
-  WLSRun* fRun;
+  WLSRun* fRun = nullptr;
 };
 
 #endif

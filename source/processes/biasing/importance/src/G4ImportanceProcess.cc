@@ -204,6 +204,10 @@ G4ImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 {
   fParticleChange->Initialize(aTrack);
 
+  if(aTrack.GetNextVolume() == nullptr) {
+    return fParticleChange;
+  }
+  
   if(fParaflag) {
     fOldGhostTouchable = fGhostPostStepPoint->GetTouchableHandle();
     //xbug?    fOnBoundary = false;

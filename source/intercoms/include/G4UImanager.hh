@@ -177,6 +177,8 @@ class G4UImanager : public G4VStateDependent
     inline G4UIcommandTree* GetTree() const { return treeTop; }
     inline G4UIsession* GetSession() const { return session; }
     inline G4UIsession* GetG4UIWindow() const { return g4UIWindow; }
+    // Find base session in a hierarchy of sessions
+    G4UIsession* GetBaseSession() const;
 
     // These methods define the active (G)UI session
     inline void SetSession(G4UIsession* const value) { session = value; }

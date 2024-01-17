@@ -68,11 +68,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList(),
- fHadronElastic(nullptr), fHadronInelastic(nullptr),
- fIonElastic(nullptr), fIonInelastic(nullptr),
- fGammaNuclear(nullptr), fElectromagnetic(nullptr),
- fDecay(nullptr), fRadioactiveDecay(nullptr)
 {
   G4int verb = 0;
   SetVerboseLevel(verb);
@@ -131,11 +126,6 @@ PhysicsList::PhysicsList()
   ////fRadioactiveDecay = new G4RadioactiveDecayPhysics();  
   RegisterPhysics(fRadioactiveDecay);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

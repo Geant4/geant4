@@ -225,7 +225,7 @@ private:
     std::unique_ptr<G4UIcmdWithoutParameter> fpInitChem;
 
     static G4DNAChemistryManager* fgInstance;
-    G4bool fActiveChemistry;
+    G4bool fActiveChemistry{false};
 
     struct ThreadLocalData{
         ThreadLocalData();
@@ -236,20 +236,20 @@ private:
 
     static G4ThreadLocal ThreadLocalData* fpThreadData;
 
-    G4bool fMasterInitialized;
-    G4bool fForceThreadReinitialization;
+    G4bool fMasterInitialized{false};
+    G4bool fForceThreadReinitialization{false};
 
     std::unique_ptr<G4DNAWaterExcitationStructure> fpExcitationLevel;
     std::unique_ptr<G4DNAWaterIonisationStructure> fpIonisationLevel;
 
     std::unique_ptr<G4VUserChemistryList> fpUserChemistryList;
-    G4bool fOwnChemistryList;
-    G4bool fUseInStandalone;
-    G4bool fPhysicsTableBuilt;
-    G4bool fSkipReactions;
+    G4bool fOwnChemistryList{false};
+    G4bool fUseInStandalone{false};
+    G4bool fPhysicsTableBuilt{false};
+    G4bool fSkipReactions{false};
 
-    G4bool fGeometryClosed;
+    G4bool fGeometryClosed{false};
 
-    G4int fVerbose;
-    G4bool fResetCounterWhenRunEnds;
+    G4int fVerbose{0};
+    G4bool fResetCounterWhenRunEnds{true};
 };

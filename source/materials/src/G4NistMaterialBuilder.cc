@@ -178,7 +178,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
     // Check gas parameters:
     // defaults may be changed via AddGas() method
     G4double t = NTP_Temperature;
-    G4double p = STP_Pressure;
+    G4double p = CLHEP::STP_Pressure;
     if (kStateGas == states[i]) {
       size_t nn = idxGas.size();
       if (nn > 0) {
@@ -709,7 +709,7 @@ void G4NistMaterialBuilder::NistSimpleMaterials()
 {
   // density in g/cm3, mean ionisation potential in eV
   // clang-format off
-  AddMaterial("G4_WATER", 1.0,0, 78., 2);
+  AddMaterial("G4_WATER", 1.0, 0, 78., 2, kStateLiquid);
   AddElementByAtomCount("H" ,  2);
   AddElementByAtomCount("O" ,  1);
   chFormulas[nMaterials-1] = "H_2O";
@@ -719,7 +719,7 @@ void G4NistMaterialBuilder::NistSimpleMaterials()
   AddMaterial("G4_Li",  0.534     ,  3,  40. );
   AddMaterial("G4_Be",  1.848     ,  4,  63.7);
   AddMaterial("G4_B" ,  2.37      ,  5,  76. );
-  AddMaterial("G4_C" ,  2.        ,  6,  78. );
+  AddMaterial("G4_C" ,  2.        ,  6,  81. );
   AddMaterial("G4_N" ,  1.16520e-3,  7,  82. , 1, kStateGas);
   AddMaterial("G4_O" ,  1.33151e-3,  8,  95. , 1, kStateGas);
   AddMaterial("G4_F" ,  1.58029e-3,  9, 115. , 1, kStateGas);
@@ -828,7 +828,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 9, 0.017422);
   AddElementByWeightFraction(20, 0.018378);
 
-  AddMaterial("G4_ACETONE", 0.7899, 0, 64.2, 3);
+  AddMaterial("G4_ACETONE", 0.7899, 0, 64.2, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  3);
   AddElementByAtomCount("H" ,  6);
   AddElementByAtomCount("O" ,  1);
@@ -909,7 +909,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("S" ,  1);
   AddElementByAtomCount("O" ,  4);
 
-  AddMaterial("G4_BENZENE", 0.87865, 0, 63.4, 2);
+  AddMaterial("G4_BENZENE", 0.87865, 0, 63.4, 2, kStateLiquid);
   AddElementByAtomCount("C" ,  6);
   AddElementByAtomCount("H" ,  6);
 
@@ -922,7 +922,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("Ge",  3);
   AddElementByAtomCount("O" , 12);
 
-  AddMaterial("G4_BLOOD_ICRP", 1.06, 0, 75.2, 10);
+  AddMaterial("G4_BLOOD_ICRP", 1.06, 0, 75.2, 10, kStateLiquid);
   AddElementByWeightFraction( 1, 0.102);
   AddElementByWeightFraction( 6, 0.110);
   AddElementByWeightFraction( 7, 0.033);
@@ -979,7 +979,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("C" ,  4);
   AddElementByAtomCount("H" , 10);
 
-  AddMaterial("G4_N-BUTYL_ALCOHOL", 0.8098, 0, 59.9, 3);
+  AddMaterial("G4_N-BUTYL_ALCOHOL", 0.8098, 0, 59.9, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  4);
   AddElementByAtomCount("H" , 10);
   AddElementByAtomCount("O" ,  1);
@@ -1100,23 +1100,23 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("O" ,  1);
   AddElementByAtomCount("Cl",  2);
 
-  AddMaterial("G4_1,2-DICHLOROETHANE", 1.2351, 0, 111.9, 3);
+  AddMaterial("G4_1,2-DICHLOROETHANE", 1.2351, 0, 111.9, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("H" ,  4);
   AddElementByAtomCount("Cl",  2);
 
-  AddMaterial("G4_DIETHYL_ETHER", 0.71378, 0, 60., 3);
+  AddMaterial("G4_DIETHYL_ETHER", 0.71378, 0, 60., 3, kStateLiquid);
   AddElementByAtomCount("C" ,  4);
   AddElementByAtomCount("H" , 10);
   AddElementByAtomCount("O" ,  1);
 
-  AddMaterial("G4_N,N-DIMETHYL_FORMAMIDE", 0.9487, 0, 66.6, 4);
+  AddMaterial("G4_N,N-DIMETHYL_FORMAMIDE", 0.9487, 0, 66.6, 4, kStateLiquid);
   AddElementByAtomCount("C" ,  3);
   AddElementByAtomCount("H" ,  7);
   AddElementByAtomCount("N" ,  1);
   AddElementByAtomCount("O" ,  1);
 
-  AddMaterial("G4_DIMETHYL_SULFOXIDE", 1.1014, 0, 98.6, 4);
+  AddMaterial("G4_DIMETHYL_SULFOXIDE", 1.1014, 0, 98.6, 4, kStateLiquid);
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("H" ,  6);
   AddElementByAtomCount("O" ,  1);
@@ -1126,7 +1126,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("H" ,  6);
 
-  AddMaterial("G4_ETHYL_ALCOHOL", 0.7893, 0, 62.9, 3);
+  AddMaterial("G4_ETHYL_ALCOHOL", 0.7893, 0, 62.9, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("H" ,  6);
   AddElementByAtomCount("O" ,  1);
@@ -1171,27 +1171,27 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 3.4e-05 );
   AddElementByWeightFraction(26, 5.4e-05 );
 
-  AddMaterial("G4_FREON-12", 1.12, 0, 143., 3);
+  AddMaterial("G4_FREON-12", 1.12, 0, 143., 3, kStateLiquid);
   AddElementByWeightFraction( 6, 0.099335);
   AddElementByWeightFraction( 9, 0.314247);
   AddElementByWeightFraction(17, 0.586418);
 
-  AddMaterial("G4_FREON-12B2", 1.8, 0, 284.9, 3);
+  AddMaterial("G4_FREON-12B2", 1.8, 0, 284.9, 3, kStateLiquid);
   AddElementByWeightFraction( 6, 0.057245);
   AddElementByWeightFraction( 9, 0.181096);
   AddElementByWeightFraction(35, 0.761659);
 
-  AddMaterial("G4_FREON-13", 0.95, 0, 126.6, 3);
+  AddMaterial("G4_FREON-13", 0.95, 0, 126.6, 3, kStateLiquid);
   AddElementByWeightFraction( 6, 0.114983);
   AddElementByWeightFraction( 9, 0.545622);
   AddElementByWeightFraction(17, 0.339396);
 
-  AddMaterial("G4_FREON-13B1", 1.5, 0, 210.5, 3);
+  AddMaterial("G4_FREON-13B1", 1.5, 0, 210.5, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  1);
   AddElementByAtomCount("F" ,  3);
   AddElementByAtomCount("Br",  1);
 
-  AddMaterial("G4_FREON-13I1", 1.8, 0, 293.5, 3);
+  AddMaterial("G4_FREON-13I1", 1.8, 0, 293.5, 3, kStateLiquid);
   AddElementByWeightFraction( 6, 0.061309);
   AddElementByWeightFraction( 9, 0.290924);
   AddElementByWeightFraction(53, 0.647767);
@@ -1364,7 +1364,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByAtomCount("C" ,  1);
   AddElementByAtomCount("H" ,  4);
 
-  AddMaterial("G4_METHANOL", 0.7914, 0, 67.6, 3);
+  AddMaterial("G4_METHANOL", 0.7914, 0, 67.6, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  1);
   AddElementByAtomCount("H" ,  4);
   AddElementByAtomCount("O" ,  1);
@@ -1456,7 +1456,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByWeightFraction( 7, 0.076417);
   AddElementByWeightFraction( 8, 0.087289);
 
-  AddMaterial("G4_OCTANE", 0.7026, 0, 54.7, 2);
+  AddMaterial("G4_OCTANE", 0.7026, 0, 54.7, 2, kStateLiquid);
   AddElementByAtomCount("C" ,  8);
   AddElementByAtomCount("H" , 18);
 
@@ -1464,7 +1464,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByAtomCount("C" , 25);
   AddElementByAtomCount("H" , 52);
 
-  AddMaterial("G4_N-PENTANE", 0.6262, 0, 53.6, 2);
+  AddMaterial("G4_N-PENTANE", 0.6262, 0, 53.6, 2, kStateLiquid);
   AddElementByAtomCount("C" ,  5);
   AddElementByAtomCount("H" , 12);
 
@@ -1556,7 +1556,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByAtomCount("H" ,  6);
   AddElementByAtomCount("O" ,  2);
 
-  AddMaterial("G4_POLYVINYL_ALCOHOL", 1.3, 0, 69.7, 3);
+  AddMaterial("G4_POLYVINYL_ALCOHOL", 1.3, 0, 69.7, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("H" ,  4);
   AddElementByAtomCount("O" ,  1);
@@ -1605,11 +1605,11 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByAtomCount("C" ,  3);
   AddElementByAtomCount("H" ,  8);
 
-  AddMaterial("G4_lPROPANE", 0.43, 0, 52., 2);
+  AddMaterial("G4_lPROPANE", 0.43, 0, 52., 2, kStateLiquid);
   AddElementByAtomCount("C" ,  3);
   AddElementByAtomCount("H" ,  8);
 
-  AddMaterial("G4_N-PROPYL_ALCOHOL", 0.8035, 0, 61.1, 3);
+  AddMaterial("G4_N-PROPYL_ALCOHOL", 0.8035, 0, 61.1, 3, kStateLiquid);
   AddElementByAtomCount("C" ,  3);
   AddElementByAtomCount("H" ,  8);
   AddElementByAtomCount("O" ,  1);
@@ -1812,7 +1812,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByAtomCount("C" ,  8);
   AddElementByAtomCount("H" , 10);
 
-  AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
+  AddMaterial("G4_GRAPHITE", 2.21, 6, 81.);
   chFormulas[nMaterials-1] = "Graphite";
 
   nNIST = nMaterials;
@@ -1839,7 +1839,7 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   AddMaterial("G4_Galactic", density, 1, 21.8, 1, kStateGas);
   AddGas("G4_Galactic",2.73*kelvin, 3.e-18*hep_pascal);
 
-  AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 78.);
+  AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 81.);
   chFormulas[nMaterials-1] = "Graphite";
 
   // LUCITE is equal to plustiglass

@@ -46,18 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal
-G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DetectorConstruction::DetectorConstruction()
- : G4VUserDetectorConstruction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DetectorConstruction::~DetectorConstruction()
-{}
+G4GlobalMagFieldMessenger* DetectorConstruction::fMagFieldMessenger = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,13 +76,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double worldHxyz = 2.*m;
 
   // world volume
-  G4Box* worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz);
+  auto  worldS = new G4Box("World", worldHxyz, worldHxyz, worldHxyz);
 
-  G4LogicalVolume* worldLV = new G4LogicalVolume(worldS, air, "World");
+  auto  worldLV = new G4LogicalVolume(worldS, air, "World");
 
   G4VPhysicalVolume* worldPV
     = new G4PVPlacement(
-            0, G4ThreeVector(), worldLV, "World", 0, false, 0, checkOverlaps);
+            nullptr, G4ThreeVector(), worldLV, "World", nullptr, false, 0, checkOverlaps);
 
   //
   // Box
@@ -104,15 +93,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double boxHz = 10.*cm;
 
   // box volume
-  G4Box* boxS = new G4Box("World", boxHxy, boxHxy, boxHz);
+  auto  boxS = new G4Box("World", boxHxy, boxHxy, boxHz);
 
-  G4LogicalVolume* boxLV = new G4LogicalVolume(boxS, csi, "Box");
+  auto  boxLV = new G4LogicalVolume(boxS, csi, "Box");
 
   // The box position
   G4double posz = 0.*m;
 
   new G4PVPlacement(
-        0, G4ThreeVector(0, 0, posz),
+        nullptr, G4ThreeVector(0, 0, posz),
         boxLV, "Box", worldLV, false, 0, checkOverlaps);
 
   //
@@ -123,15 +112,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double screenHz = 1.*mm;
 
   // Screen volume
-  G4Box* screenS = new G4Box("World", screenHxy, screenHxy, screenHz);
+  auto  screenS = new G4Box("World", screenHxy, screenHxy, screenHz);
 
-  G4LogicalVolume* screenLV = new G4LogicalVolume(screenS, air, "Screen");
+  auto  screenLV = new G4LogicalVolume(screenS, air, "Screen");
 
   // The screen position
   posz += boxHz + screenHz;
 
   new G4PVPlacement(
-        0, G4ThreeVector(0, 0, posz),
+        nullptr, G4ThreeVector(0, 0, posz),
         screenLV, "Screen", worldLV, false, 0, checkOverlaps);
 
   //

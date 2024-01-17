@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4FastSimulationVector.hh
@@ -41,25 +41,24 @@
 #ifndef G4FastSimulationVector_h
 #define G4FastSimulationVector_h 1
 
-#include <vector>
 #include "G4Types.hh"
+
+#include <vector>
 
 template<class T>
 class G4FastSimulationVector : public std::vector<T*>
 {
-  typedef std::vector<T*> std_pvector;
-  typedef typename std_pvector::iterator iterator;
-  typedef typename std_pvector::const_iterator const_iterator;
+    using std_pvector = std::vector<T*>;
+    using iterator = typename std_pvector::iterator;
+    using const_iterator = typename std_pvector::const_iterator;
 
-public:
+  public:
+    G4FastSimulationVector() = default;
 
-  G4FastSimulationVector(){};
-  //  G4FastSimulationVector(const G4FastSimulationVector<T>&){};
-
-  virtual ~G4FastSimulationVector(){};
-  T* remove (const T*);	
-  T* removeAt (G4int);
-  void clearAndDestroy ();
+    virtual ~G4FastSimulationVector() = default;
+    T* remove(const T*);
+    T* removeAt(G4int);
+    void clearAndDestroy();
 };
 
 #include "G4FastSimulationVector.icc"

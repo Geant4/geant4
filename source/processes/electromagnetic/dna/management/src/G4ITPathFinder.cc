@@ -73,7 +73,7 @@
 
 // Initialise the static instance of the singleton
 //
-G4ThreadLocal G4ITPathFinder* G4ITPathFinder::fpPathFinder=0;
+G4ThreadLocal G4ITPathFinder* G4ITPathFinder::fpPathFinder=nullptr;
 
 // ----------------------------------------------------------------------------
 // GetInstance()
@@ -82,7 +82,7 @@ G4ThreadLocal G4ITPathFinder* G4ITPathFinder::fpPathFinder=0;
 //
 G4ITPathFinder* G4ITPathFinder::GetInstance()
 {
-   if( ! fpPathFinder )
+   if( fpPathFinder == nullptr )
    {
      fpPathFinder = new G4ITPathFinder;
    }
@@ -92,8 +92,7 @@ G4ITPathFinder* G4ITPathFinder::GetInstance()
 // ----------------------------------------------------------------------------
 // Constructor
 //
-G4ITPathFinder::G4ITPathFinder():
-    fVerboseLevel(0)
+G4ITPathFinder::G4ITPathFinder()
 {
    fpMultiNavigator= new G4ITMultiNavigator();
 
@@ -103,9 +102,9 @@ G4ITPathFinder::G4ITPathFinder():
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    fNoActiveNavigators= 0; 
-   for( G4int num=0; num< G4ITNavigator::fMaxNav; ++num )
+   for(auto & num : fpNavigator)
    {
-      fpNavigator[num] =  0;   
+      num =  nullptr;   
    }
 }
 
@@ -115,7 +114,7 @@ G4ITPathFinder::G4ITPathFinder():
 G4ITPathFinder::~G4ITPathFinder()
 {
    delete fpMultiNavigator;
-   if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
+   if (fpPathFinder != nullptr)  { delete fpPathFinder; fpPathFinder=nullptr; }
 }
 
 // ----------------------------------------------------------------------------
@@ -398,7 +397,7 @@ G4ITPathFinder::PrepareNewTrack( const G4ThreeVector& position,
      fLimitTruth[num] = false;
      fLimitedStep[num] = kDoNot;
      fCurrentStepSize[num] = 0.0;
-     fLocatedVolume[num] = 0;
+     fLocatedVolume[num] = nullptr;
   }
   fNoGeometriesLimiting= 0;  // At start of track, no process limited step
 
@@ -465,7 +464,7 @@ G4ITPathFinder::Locate( const   G4ThreeVector& position,
 {
   // Locate the point in each geometry
 
-  std::vector<G4ITNavigator*>::iterator pNavIter=
+  auto pNavIter=
      fpTransportManager->GetActiveNavigatorsIterator(); 
 
   G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
@@ -541,7 +540,7 @@ void G4ITPathFinder::ReLocate( const G4ThreeVector& position )
 {
   // Locate the point in each geometry
 
-  std::vector<G4ITNavigator*>::iterator pNavIter=
+  auto pNavIter=
     fpTransportManager->GetActiveNavigatorsIterator(); 
 
 #ifdef G4DEBUG_PATHFINDER
@@ -744,7 +743,7 @@ G4double  G4ITPathFinder::ComputeSafety( const G4ThreeVector& position )
 
    for( G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
-      G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
+      G4double safety = (*pNavigatorIter)->ComputeSafety( position,1.0 );
       if( safety < minSafety ) { minSafety = safety; } 
       fNewSafetyComputed[num]= safety;
    } 
@@ -780,7 +779,7 @@ G4ITPathFinder::CreateTouchableHandle( G4int navId ) const
   touchHist= GetNavigator(navId) -> CreateTouchableHistory(); 
 
   G4VPhysicalVolume* locatedVolume= fLocatedVolume[navId]; 
-  if( locatedVolume == 0 )
+  if( locatedVolume == nullptr )
   {
      // Workaround to ensure that the touchable is fixed !! // TODO: fix
 
@@ -1119,10 +1118,10 @@ void G4ITPathFinder::PrintLimited()
 
     G4ITNavigator *pNav= GetNavigator( num );
     G4String  WorldName( "Not-Set" ); 
-    if (pNav)
+    if (pNav != nullptr)
     {
        G4VPhysicalVolume *pWorld= pNav->GetWorldVolume(); 
-       if( pWorld )
+       if( pWorld != nullptr )
        {
            WorldName = pWorld->GetName(); 
        }
@@ -1167,7 +1166,7 @@ G4ITPathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      G4double minSafety= kInfinity, safety; 
      for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
      {
-        safety= fpNavigator[numNav]->ComputeSafety( startPoint, false );
+        safety= fpNavigator[numNav]->ComputeSafety( startPoint, 0.0 );
         fPreSafetyValues[numNav]= safety; 
         fCurrentPreStepSafety[numNav]= safety; 
         minSafety = std::min( safety, minSafety ); 

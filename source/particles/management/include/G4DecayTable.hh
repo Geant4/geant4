@@ -35,17 +35,16 @@
 #ifndef G4DecayTable_hh
 #define G4DecayTable_hh 1
 
-#include <vector>
-
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
+#include "G4ios.hh"
+#include "globals.hh"
 
-class G4DecayTable 
+#include <vector>
+
+class G4DecayTable
 {
   public:
-
     using G4VDecayChannelVector = std::vector<G4VDecayChannel*>;
 
     G4DecayTable();
@@ -54,28 +53,27 @@ class G4DecayTable
     G4DecayTable(const G4DecayTable&) = delete;
     G4DecayTable& operator=(const G4DecayTable&) = delete;
 
-    inline G4bool operator==(const G4DecayTable &right) const;
-    inline G4bool operator!=(const G4DecayTable &right) const;
-      // Equality operators
+    // Equality operators
+    inline G4bool operator==(const G4DecayTable& right) const;
+    inline G4bool operator!=(const G4DecayTable& right) const;
 
-    void  Insert( G4VDecayChannel* aChannel);
-      // Insert a decay channel at proper position 
-      // (i.e. sorted by using branching ratio ) 
+    // Insert a decay channel at proper position
+    // (i.e. sorted by using branching ratio )
+    void Insert(G4VDecayChannel* aChannel);
 
+    // Returns number of decay channels inside
     inline G4int entries() const;
-      // Returns number of decay channels inside
 
-    G4VDecayChannel* SelectADecayChannel(G4double parentMass= -1.);
-      // A decay channel is selected at random according to the branching ratio
-  
+    // A decay channel is selected at random according to the branching ratio
+    G4VDecayChannel* SelectADecayChannel(G4double parentMass = -1.);
+
+    // Get index-th decay channel
     inline G4VDecayChannel* GetDecayChannel(G4int index) const;
     inline G4VDecayChannel* operator[](G4int index);
-      // Get index-th decay channel
- 
+
     void DumpInfo() const;
 
- private:
-
+  private:
     G4ParticleDefinition* parent = nullptr;
     G4VDecayChannelVector* channels = nullptr;
 };
@@ -84,36 +82,30 @@ class G4DecayTable
 // Inline methods
 // ------------------------
 
-inline
-G4bool G4DecayTable::operator==(const G4DecayTable& right) const
+inline G4bool G4DecayTable::operator==(const G4DecayTable& right) const
 {
   return (this == &right);
 }
 
-inline
-G4bool G4DecayTable::operator!=(const G4DecayTable& right) const
+inline G4bool G4DecayTable::operator!=(const G4DecayTable& right) const
 {
   return (this != &right);
 }
 
-inline     
-G4int G4DecayTable::entries() const
+inline G4int G4DecayTable::entries() const
 {
   return G4int(channels->size());
 }
 
-inline     
-G4VDecayChannel* G4DecayTable::operator[](G4int index)
+inline G4VDecayChannel* G4DecayTable::operator[](G4int index)
 {
   return (*channels)[index];
 }
 
-inline     
- G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
+inline G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
 {
   G4VDecayChannel* selectedChannel = nullptr;
-  if ( (index>=0) && (index<G4int(channels->size())) )
-  {
+  if ((index >= 0) && (index < G4int(channels->size()))) {
     selectedChannel = (*channels)[index];
   }
   return selectedChannel;

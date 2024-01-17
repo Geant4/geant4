@@ -6,11 +6,39 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-20 Vladimir Ivanchenko (particles-V11-01-10)
+- G4IonTable - fixed run time memory leak by change of signature of GetIonName(..)
+  methods - now they return G4String instead of a reference to a string, code
+  of all these methods is simplified, TLS is not involved anymore, no change
+  is expected in any application
+
+## 2023-11-06 Shogo Okada (particles-V11-01-09)
+- Scanned all mesons and baryons, including their resonances, in Geant4 to
+  compare their particle properties with PDG-2023. Then, updated mass and decay
+  width (lifetime) for particles below with relative error above 1 % against
+  PDG-2023.
+  - Mesons:  G4AntiBsMesonZero, G4BsMesonZero, G4EtaPrime
+  - Baryons: G4AntiLambdacPlus, G4AntiOmegacZero, G4AntiSigmabMinus,
+             G4AntiSigmabPlus,  G4AntiSigmacPlus, G4AntiXicPlus, G4AntiXicZero,
+             G4LambdacPlus, G4OmegacZero, G4SigmabMinus, G4SigmabPlus,
+             G4SigmacPlus, G4XicPlus, G4XicZero,
+  - Resonances: G4ExcitedDeltaConstructor, G4ExcitedLambdaConstructor,
+                G4ExcitedMesonConstructor, G4ExcitedNucleonConstructor,
+                G4ExcitedSigmaConstructor, G4ExcitedXiConstructor,
+                mesons and baryons implemened in G4ShortLivedConstructor
+
+## 2023-07-14 Ben Morgan (particles-V11-01-08)
+- Remove unused headers suggested by include-what-you-use
+
+## 2023-07-10 Ben Morgan (particles-V11-01-07)
+- Apply clang-format, excepting tabular data/constructors.
+- Remove extraneous/duplictae comments.
+
 ## 2023-06-13 Ben Morgan (particles-V11-01-06)
 - Apply core/recommended clang-tidy fixes
 
 ## 2023-06-10 Vladimir Ivanchenko (particles-V11-01-05)
-- G4IonTable - attempt to fix non-reproducibility for HP physics and isometers 
+- G4IonTable - attempt to fix non-reproducibility for HP physics and isometers
     with floating levels
 
 ## 2023-05-25 Vladimir Ivanchenko (particles-V11-01-04)
@@ -35,7 +63,7 @@ It must **not** be used as a substitute for writing good git commit messages!
   Thanks to Francesco Mazzaschi of ALICE for reporting it.
 
 ## 2023-01-11 Alberto Ribon (particles-V11-01-01)
-- G4AntiNeutron : set the "PDG stable" flag to "false", as for G4Neutron 
+- G4AntiNeutron : set the "PDG stable" flag to "false", as for G4Neutron
   (this has no practical consequences, i.e. anti_neutron decays regardless
   of this flag, but it is confusing).
 
@@ -61,10 +89,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2022-10-24 Dennis Wright (particles-V11-00-11)
 - G4NuclideTableMessenger: add command /particle/manage/nuclide/min_meanlife
-  corresponding to G4NuclideTable::SetMeanLifeThreshold().  Default minimum 
+  corresponding to G4NuclideTable::SetMeanLifeThreshold().  Default minimum
   mean life is 1.0 ns.
   In /particle/nuclideTable/min_halflife change default minumum halflife
-  to 0.693 
+  to 0.693
 
 ## 2022-10-24 Dennis Wright (particles-V11-00-10)
 - G4NuclideTable::entries() const :
@@ -72,7 +100,7 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 ## 2022-10-10 Dennis Wright (particles-V11-00-09)
 - Use nuclide mean-life instead of half-life in G4NuclideTable in order to be
-  consistent with ENSDFSTATE data, which use mean-life.  Provide two new 
+  consistent with ENSDFSTATE data, which use mean-life.  Provide two new
   methods, SetMeanLifeThreshold and GetMeanLifeThreshold() so that the lifetimes
   can be accessed as either half-life or mean-life.
 
@@ -81,13 +109,13 @@ It must **not** be used as a substitute for writing good git commit messages!
   but never used in G4MuonRadiativeDecayChannelWithSpin.
 
 ## 2022-09-27 Dennis Wright (particles-V11-00-07)
-- Changed halflife threshold for nuclide creation to be consistent with 
+- Changed halflife threshold for nuclide creation to be consistent with
   lifetimes in nuclear deexcitation code; in management/src/G4NuclideTable.cc
-  ctor, change threshold_of_halflife from 1000 ns to 1 ns 
+  ctor, change threshold_of_halflife from 1000 ns to 1 ns
 
 ## 2022-08-08 Alberto Ribon (particles-V11-00-06)
 Fixed three bugs regarding the transportation of hypernuclei and anti-hypernuclei:
--  G4Ion : set (forgotten) isGeneralIon to false for hypernuclei and 
+-  G4Ion : set (forgotten) isGeneralIon to false for hypernuclei and
    anti-hypernuclei (otherwise they would get the same processes as GenericIon).
 -  G4DoubleHyperDoubleNeutron, G4AntiDoubleHyperDoubleNeutron : added (forgotten)
    call to SetDecayTable (otherwise the decay table would not be defined for
@@ -109,7 +137,7 @@ Fixed three bugs regarding the transportation of hypernuclei and anti-hypernucle
 ## 2022-01-28 Ben Morgan (particles-V11-00-02)
 - Replace `geant4_global_library_target` with direct file inclusion and
   call to `geant4_add_category` to define library build from source modules.
-  
+
 ## 2021-12-15 Ben Morgan (particles-V11-00-01)
 - Minor code formatting.
 

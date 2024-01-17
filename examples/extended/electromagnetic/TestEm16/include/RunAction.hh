@@ -47,16 +47,16 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction();
-   ~RunAction();
+    ~RunAction() override = default;
 
   public:
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    G4Run* GenerateRun() override;
+    void BeginOfRunAction(const G4Run*) override;
+    void EndOfRunAction(const G4Run*) override;
 
   private:
-    Run*          fRun;   
-    HistoManager* fHistoManager;
+    Run* fRun = nullptr;
+    HistoManager* fHistoManager = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

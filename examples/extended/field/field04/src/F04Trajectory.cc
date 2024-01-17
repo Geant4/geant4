@@ -44,14 +44,12 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4ThreadLocal G4Allocator<F04Trajectory>* F04TrajectoryAllocator=0;
+G4ThreadLocal G4Allocator<F04Trajectory>* F04TrajectoryAllocator=nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04Trajectory::F04Trajectory()
-    : fpPointsContainer(0), fTrackID(0), fParentID(0),
-      fPDGCharge(0.0), fPDGEncoding(0), fParticleName(""),
-      fInitialMomentum(G4ThreeVector()) {;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,7 +80,7 @@ F04Trajectory::F04Trajectory(F04Trajectory & right) : G4VTrajectory()
     fpPointsContainer = new TrajectoryPointContainer();
 
     for(size_t i=0;i<right.fpPointsContainer->size();++i) {
-        F04TrajectoryPoint* rightPoint
+        auto  rightPoint
             = (F04TrajectoryPoint*)((*(right.fpPointsContainer))[i]);
         fpPointsContainer->push_back(new F04TrajectoryPoint(*rightPoint));
     }
@@ -129,7 +127,7 @@ void F04Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
     if(!secondTrajectory) return;
 
-    F04Trajectory* second = (F04Trajectory*)secondTrajectory;
+    auto  second = (F04Trajectory*)secondTrajectory;
     G4int ent = second->GetPointEntries();
     // initial point of the second trajectory should not be merged
     for(G4int i=1; i<ent; ++i) {
@@ -185,7 +183,7 @@ const std::map<G4String,G4AttDef>* F04Trajectory::GetAttDefs() const
 
 std::vector<G4AttValue>* F04Trajectory::CreateAttValues() const
 {
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  auto  values = new std::vector<G4AttValue>;
 
   values->push_back
     (G4AttValue("ID",G4UIcommand::ConvertToString(fTrackID),""));

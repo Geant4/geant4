@@ -61,7 +61,7 @@ using namespace std;
 G4DNARelativisticIonisationModel::G4DNARelativisticIonisationModel(
                 const G4ParticleDefinition*,
                 const G4String& nam) :
-G4VEmModel(nam), isInitialised(false),statCode(false),fasterCode(true)
+G4VEmModel(nam), fasterCode(true)
 {
   fHighEnergyLimit        = 0;
   fLowEnergyLimit         = 0;
@@ -69,10 +69,10 @@ G4VEmModel(nam), isInitialised(false),statCode(false),fasterCode(true)
   verboseLevel = 0;
 
   SetDeexcitationFlag(true);
-  fAtomDeexcitation       = 0;
-  fMaterialDensity        = 0;
-  fParticleDefinition     = 0;
-  fParticleChangeForGamma = 0;
+  fAtomDeexcitation       = nullptr;
+  fMaterialDensity        = nullptr;
+  fParticleDefinition     = nullptr;
+  fParticleChangeForGamma = nullptr;
 
   if (verboseLevel > 0)
   {
@@ -83,9 +83,7 @@ G4VEmModel(nam), isInitialised(false),statCode(false),fasterCode(true)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNARelativisticIonisationModel::~G4DNARelativisticIonisationModel()
-{
-  // Cross section
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -101,7 +99,7 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
   }
 
 
-  if(fParticleDefinition != 0 && fParticleDefinition != particle)
+  if(fParticleDefinition != nullptr && fParticleDefinition != particle)
   {
     G4Exception("G4DNARelativisticIonisationModel::Initialise","em0001",
         FatalException,"Model already initialized for another particle type.");
@@ -117,7 +115,7 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
     std::ostringstream eFullFileNameZ;
 
     const char *path = G4FindDataDir("G4LEDATA");
-    if (!path)
+    if (path == nullptr)
     {
       G4Exception("G4DNARelativisticIonisationModel::Initialise","em0006",
         FatalException,"G4LEDATA environment variable not set.");
@@ -127,7 +125,7 @@ void G4DNARelativisticIonisationModel::Initialise(const G4ParticleDefinition* pa
 
     G4ProductionCutsTable *coupletable 
                   = G4ProductionCutsTable::GetProductionCutsTable();
-    G4int Ncouple = (G4int)coupletable ->GetTableSize();
+    auto  Ncouple = (G4int)coupletable ->GetTableSize();
     for(G4int i=0; i<Ncouple; ++i)
     {
       const G4MaterialCutsCouple* couple   
@@ -313,8 +311,8 @@ void G4DNARelativisticIonisationModel::SampleSecondaries(
     G4int NumSecParticlesInit =0;
     G4int NumSecParticlesFinal=0;
 
-    if(fAtomDeexcitation){
-      G4AtomicShellEnumerator as = G4AtomicShellEnumerator(level);
+    if(fAtomDeexcitation != nullptr){
+      auto  as = G4AtomicShellEnumerator(level);
       const G4AtomicShell *shell = fAtomDeexcitation->GetAtomicShell(z,as);
       NumSecParticlesInit  = (G4int)fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect,shell,z,0,0);
@@ -360,7 +358,7 @@ void G4DNARelativisticIonisationModel::SampleSecondaries(
       }
       else{
         delete (*fvect)[iparticle];
-        (*fvect)[iparticle]=0;
+        (*fvect)[iparticle]=nullptr;
       }
     }
     if(restEproduction < 0.0){
@@ -384,7 +382,7 @@ void G4DNARelativisticIonisationModel::SampleSecondaries(
     }
     
     if(ejectedE>0){
-      G4DynamicParticle* ejectedelectron 
+      auto  ejectedelectron 
              = new G4DynamicParticle(G4Electron::Electron(),ejectedDir,ejectedE);
       fvect->push_back(ejectedelectron);
     }
@@ -402,10 +400,10 @@ void G4DNARelativisticIonisationModel::LoadAtomicStates(
     << G4endl;
   }
   const char *datadir =  path;
-  if(!datadir)
+  if(datadir == nullptr)
   {
      datadir = G4FindDataDir("G4LEDATA");
-     if(!datadir)
+     if(datadir == nullptr)
      {
        G4Exception("G4DNARelativisticIonisationModel::LoadAtomicStates()",
             "em0002",FatalException,"Enviroment variable G4LEDATA not defined");
@@ -468,13 +466,12 @@ G4double G4DNARelativisticIonisationModel::GetTotalCrossSection(
   G4double value=0;
   G4int  z = material->GetZ();
   if(z!=79){ return 0.;}
-  else {
-    std::size_t N=iState[z].size();
-    for(G4int i=0; i<(G4int)N; ++i){
-      value = value+GetPartialCrossSection(material,i,particle,kineticEnergy);
-    }
-    return value;
+  
+  std::size_t N=iState[z].size();
+  for(G4int i=0; i<(G4int)N; ++i){
+    value = value+GetPartialCrossSection(material,i,particle,kineticEnergy);
   }
+  return value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -572,8 +569,8 @@ G4int G4DNARelativisticIonisationModel::RandomSelect(
   G4double value = 0.;
   G4int z = material->GetZ();
   std::size_t numberOfShell = iShell[z].size();
-  auto valuesBuffer = new G4double[numberOfShell];
-  const G4int n = (G4int)iShell[z].size();
+  std::vector<G4double> valuesBuffer(numberOfShell, 0.0);
+  const auto  n = (G4int)iShell[z].size();
   G4int i(n);
 
   while (i > 0)
@@ -595,13 +592,10 @@ G4int G4DNARelativisticIonisationModel::RandomSelect(
 
     if (valuesBuffer[i] > value)
     {
-      delete[] valuesBuffer;
       return i;
     }
     value -= valuesBuffer[i];
   }
-
-  if (valuesBuffer) delete[] valuesBuffer;
 
   return 9999;
 }
@@ -651,22 +645,22 @@ G4double  G4DNARelativisticIonisationModel::GetEjectedElectronEnergy(
     {
       if((eVecEZ[z].at(0)<=energy)&&(energy<eVecEZ[z].back()))
       {
-        std::vector<G4double>::iterator k2 
+        auto k2 
                 = std::upper_bound(eVecEZ[z].begin(),eVecEZ[z].end(), energy);
-        std::vector<G4double>::iterator k1 = k2-1;
+        auto k1 = k2-1;
 
         if (     random < eProbaShellMapZ[z][ishell][(*k1)].back()
               && random < eProbaShellMapZ[z][ishell][(*k2)].back() )
         {
-          std::vector<G4double>::iterator xs12 =
+          auto xs12 =
              std::upper_bound(eProbaShellMapZ[z][ishell][(*k1)].begin(),
                               eProbaShellMapZ[z][ishell][(*k1)].end(), random);
-          std::vector<G4double>::iterator xs11 = xs12-1;
+          auto xs11 = xs12-1;
 
-          std::vector<G4double>::iterator xs22 =
+          auto xs22 =
              std::upper_bound(eProbaShellMapZ[z][ishell][(*k2)].begin(),
                               eProbaShellMapZ[z][ishell][(*k2)].end(), random);
-          std::vector<G4double>::iterator xs21 = xs22-1;
+          auto xs21 = xs22-1;
 
           valueE1  =*k1;
           valueE2  =*k2;

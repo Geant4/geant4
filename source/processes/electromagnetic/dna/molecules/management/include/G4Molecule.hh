@@ -101,10 +101,10 @@ class G4Molecule : public G4IT
 public:
     // With Description
 
-    ITDef(G4Molecule)
+    ITDef(G4Molecule) // NOLINT because it's a macro
 
         //From G4VUserTrackInformation
-        void Print() const;
+        void Print() const override;
 
     //  new/delete operators are overloded to use G4Allocator
     inline void *operator new(size_t);
@@ -127,7 +127,7 @@ public:
         return GetMoleculeID();
     }
 
-    virtual G4ITType GetITSubType() const
+    G4ITType GetITSubType() const override
     {
         return GetMoleculeID();
     }
@@ -154,13 +154,13 @@ public:
 
     G4Molecule(const G4MolecularConfiguration*);
 
-    virtual ~G4Molecule();
+    ~G4Molecule() override;
 
     //-------- Methods -------------------------------
     //Get from static definition
     /** Returns the name of the molecule
      */
-    const G4String& GetName() const;
+    const G4String& GetName() const override;
 
     /** Returns the formated name of the molecule
      */
@@ -302,7 +302,7 @@ extern G4DLLIMPORT G4Allocator<G4Molecule>*& aMoleculeAllocator();
 inline void * G4Molecule::operator new(size_t)
 //////////////////////////
 {
-    if (!aMoleculeAllocator())
+    if (aMoleculeAllocator() == nullptr)
     {
         aMoleculeAllocator() = new G4Allocator<G4Molecule>;
     }

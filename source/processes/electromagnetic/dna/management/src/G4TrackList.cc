@@ -48,14 +48,14 @@ G4FastListNode<G4Track>* G4FastList<G4Track>::__GetNode(G4Track* __track)
   G4IT* __IT = GetIT(__track);
   G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
   // TODO : complete the exception
-  if (__trackListNode == 0)
+  if (__trackListNode == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "This track " << GetIT(__track)->GetName();
     exceptionDescription << " was not connected to any trackList ";
     G4Exception("G4FastList<OBJECT>::Unflag", "G4TrackList003", FatalErrorInArgument,
         exceptionDescription);
-    return 0;
+    return nullptr;
   }
   return __trackListNode;
 }
@@ -64,12 +64,12 @@ G4FastListNode<G4Track>* G4FastList<G4Track>::__GetNode(G4Track* __track)
 template<>
 void G4FastList<G4Track>::DeleteObject(G4Track* __track)
 {
-  if (!G4AllocatorList::GetAllocatorListIfExist()) return;
+  if (G4AllocatorList::GetAllocatorListIfExist() == nullptr) return;
 
-  G4Step* __step = const_cast<G4Step*>(__track->GetStep());
-  if (__step)
+  auto  __step = const_cast<G4Step*>(__track->GetStep());
+  if (__step != nullptr)
   {
-    if (__step->GetfSecondary())
+    if (__step->GetfSecondary() != nullptr)
       __step->DeleteSecondaryVector();
     delete __step;
   }
@@ -80,9 +80,9 @@ void G4FastList<G4Track>::DeleteObject(G4Track* __track)
 template<>
   void G4FastListNode<G4Track>::DetachYourSelf()
   {
-    if(fpObject)
+    if(fpObject != nullptr)
     {
-      GetIT(fpObject)->SetListNode(0);
+      GetIT(fpObject)->SetListNode(nullptr);
     }
   }
 
@@ -101,7 +101,7 @@ G4FastListNode<G4Track>* G4FastList<G4Track>::Flag(G4Track* __track)
   G4IT* __iTrack = GetIT(__track);
   G4FastListNode<G4Track>* __trackListNode = __iTrack->GetListNode();
 
-  if (__trackListNode != 0)
+  if (__trackListNode != nullptr)
   {
     // Suggestion move the node to this list
     if (__trackListNode->fAttachedToList)
@@ -164,9 +164,9 @@ G4FastListNode<G4Track>* G4FastList<G4Track>::GetNode(G4Track* __track)
   G4IT* __IT = GetIT(__track);
   G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
   // TODO : complete the exception
-  if (__trackListNode == 0)
+  if (__trackListNode == nullptr)
   {
-    return 0;
+    return nullptr;
   }
   return __trackListNode;
 }
@@ -178,8 +178,8 @@ G4FastList<G4Track>* G4FastList<G4Track>::GetList(G4Track* __track)
   G4IT* __IT = GetIT(__track);
   G4FastListNode<G4Track>* __trackListNode = __IT->GetListNode();
 
-  if(__trackListNode == 0) return 0;
-  if(__trackListNode->fListRef == nullptr) return 0;
+  if(__trackListNode == nullptr) return nullptr;
+  if(__trackListNode->fListRef == nullptr) return nullptr;
 
   return __trackListNode->fListRef->fpList;
 }

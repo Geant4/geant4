@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,34 +35,20 @@
 #ifndef G4Lambda_h
 #define G4Lambda_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          Lambda                                ###
-// ######################################################################
 
 class G4Lambda : public G4ParticleDefinition
 {
- private:
-   static G4Lambda* theInstance;
-   G4Lambda(){}
-   ~G4Lambda() override= default;
+  public:
+    static G4Lambda* Definition();
+    static G4Lambda* LambdaDefinition();
+    static G4Lambda* Lambda();
 
- public:
-   static G4Lambda* Definition();
-   static G4Lambda* LambdaDefinition();
-   static G4Lambda* Lambda();
+  private:
+    G4Lambda() {}
+    ~G4Lambda() override = default;
+
+    static G4Lambda* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

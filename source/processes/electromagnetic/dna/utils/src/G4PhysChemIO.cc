@@ -95,7 +95,7 @@ void FormattedText::AddEmptyLineInOutputFile()
 
 void FormattedText::CloseFile()
 {
-  if (fFileInitialized == false) return;
+  if (!fFileInitialized) return;
   
   if (fOfstream.is_open())
   {
@@ -144,7 +144,7 @@ void FormattedText::CreateSolvatedElectron(const G4Track* theIncomingTrack,
   << setw(22)
   << (theIncomingTrack->GetPosition().z()) / nanometer;
   
-  if (finalPosition != 0)
+  if (finalPosition != nullptr)
   {
     fOfstream << setw(14) << (finalPosition->x()) / nanometer << setw(14)
     << (finalPosition->y()) / nanometer << setw(14)
@@ -170,7 +170,7 @@ fpAnalysisManager(analysisManager)
 
 G4Analysis::~G4Analysis()
 {
-  fpAnalysisManager = 0;
+  fpAnalysisManager = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -290,7 +290,7 @@ void G4Analysis::CreateSolvatedElectron(const G4Track* electronTrack,
   fpAnalysisManager->FillNtupleDColumn(fNtupleID,6, parentPos.y() *i_nm);
   fpAnalysisManager->FillNtupleDColumn(fNtupleID,7, parentPos.z() *i_nm);
   
-  if (finalPosition != 0)
+  if (finalPosition != nullptr)
   {
     fpAnalysisManager->FillNtupleDColumn(fNtupleID,8, finalPosition->x()*i_nm);
     fpAnalysisManager->FillNtupleDColumn(fNtupleID,9, finalPosition->y()*i_nm);

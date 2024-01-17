@@ -38,11 +38,11 @@ class RadioactiveDecayPhysics : public G4VPhysicsConstructor
 {
   public: 
     RadioactiveDecayPhysics(const G4String& name = "radioactiveDecay");
-   ~RadioactiveDecayPhysics() override;
+   ~RadioactiveDecayPhysics() override = default;
 
   public:
     void ConstructParticle() override;
-    void ConstructProcess() override;
+    void ConstructProcess()  override;
 
 };
 

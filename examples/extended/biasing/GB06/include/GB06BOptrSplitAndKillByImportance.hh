@@ -30,7 +30,7 @@
 //
 // GB06BOptrSplitAndKillByImportance
 //
-// Class Description: §§§§
+// Class Description:
 //        A G4VBiasingOperator concrete implementation example to
 //    illustrate how to bias physics processes cross-section for
 //    one particle type.

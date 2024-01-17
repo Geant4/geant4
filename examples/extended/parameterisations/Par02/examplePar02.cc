@@ -66,11 +66,11 @@ int main( int argc, char** argv ) {
   runManager->SetNumberOfThreads(4);
 
   // Detector/mass geometry:
-  G4VUserDetectorConstruction* detector = new Par02DetectorConstruction();
+  auto detector = new Par02DetectorConstruction();
   runManager->SetUserInitialization( detector );
 
   // PhysicsList (including G4FastSimulationManagerProcess)
-  G4VUserPhysicsList* physicsList = new Par02PhysicsList;
+  auto physicsList = new Par02PhysicsList;
   runManager->SetUserInitialization( physicsList );
 
   //-------------------------------

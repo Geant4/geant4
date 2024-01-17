@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04EventAction::F04EventAction(F04RunAction* runAction)
- : fRunaction(runAction), fVerboseLevel(0)
+ : fRunaction(runAction)
 {
   fEventMessenger = new F04EventActionMessenger(this);
 }

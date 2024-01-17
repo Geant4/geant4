@@ -54,7 +54,7 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-  auto* runManager =
+  auto runManager =
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Mandatory user initialization classes
@@ -70,7 +70,7 @@ int main(int argc,char** argv)
   // Visualization manager construction
   auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  // auto visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager

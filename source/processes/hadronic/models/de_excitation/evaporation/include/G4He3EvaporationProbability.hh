@@ -41,23 +41,21 @@ class G4He3EvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  explicit G4He3EvaporationProbability();
+  G4He3EvaporationProbability();
 
-  ~G4He3EvaporationProbability() override;
+  ~G4He3EvaporationProbability() override = default;
+
+  G4He3EvaporationProbability(const G4He3EvaporationProbability &right) = delete;
+  const G4He3EvaporationProbability & operator=
+  (const G4He3EvaporationProbability &right) = delete;
+  G4bool operator==(const G4He3EvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4He3EvaporationProbability &right) const = delete;
 
 protected:
 
   G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
   G4double CalcBetaParam(const G4Fragment & fragment) override;
-
-private:  
-
-  G4He3EvaporationProbability(const G4He3EvaporationProbability &right);
-  const G4He3EvaporationProbability & operator=
-  (const G4He3EvaporationProbability &right);
-  G4bool operator==(const G4He3EvaporationProbability &right) const;
-  G4bool operator!=(const G4He3EvaporationProbability &right) const;
 };
 
 

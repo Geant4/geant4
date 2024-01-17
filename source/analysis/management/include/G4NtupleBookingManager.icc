@@ -66,15 +66,16 @@ G4int G4NtupleBookingManager::CreateNtupleTColumn(
 }
 
 //_____________________________________________________________________________
-inline G4int G4NtupleBookingManager::GetNofNtupleBookings() const
+inline G4int G4NtupleBookingManager::GetNofNtuples(G4bool onlyIfExist) const
 {
-  return G4int(fNtupleBookingVector.size());
+  return (onlyIfExist) ? G4int(fNtupleBookingVector.size() - fFreeIds.size())
+                       : G4int(fNtupleBookingVector.size());
 }
 
 //_____________________________________________________________________________
 inline G4int  G4NtupleBookingManager::GetCurrentNtupleId() const
 {
-  return  GetNofNtupleBookings() + fFirstId - 1;
+  return fCurrentNtupleId;
 }
 
 //

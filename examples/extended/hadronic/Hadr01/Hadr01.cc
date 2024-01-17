@@ -47,14 +47,13 @@
 
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
-#include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "PhysicsListMessenger.hh"
+#include "G4HadronicParameters.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -79,28 +78,37 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = nullptr;
-  PhysicsListMessenger* mess = nullptr;
   G4String physName = "";
 
   //Physics List name defined via 3nd argument
-  if (argc==3) { physName = argv[2]; }
+  if (argc >= 3) { physName = argv[2]; }
 
   // Physics List name defined via environment variable
   if("" == physName) {
     char* path = std::getenv("PHYSLIST");
-    if (path) { physName = G4String(path); }
+    if (nullptr != path) { physName = G4String(path); }
   }
 
-  //reference PhysicsList via its name
+  G4cout << "PhysicsList: " << physName << G4endl;
+
+  // reference PhysicsList via its name
   if ("" != physName && factory.IsReferencePhysList(physName)) {
     phys = factory.GetReferencePhysList(physName);
-
-    // instantiated messenger
-    mess = new PhysicsListMessenger();
   }
 
-  //local Physics List
-  if(!phys) { phys = new PhysicsList(); }
+  // local Physics List
+  if (nullptr == phys) { phys = new PhysicsList(); }
+
+  // optional change of overlap cascade/string
+  if (argc >= 5) {
+    auto param = G4HadronicParameters::Instance();
+    G4double e1 = CLHEP::GeV*std::strtod(argv[3], 0);
+    G4double e2 = CLHEP::GeV*std::strtod(argv[4], 0);
+    G4cout << "### Bertini/FTFP limits: e1(GeV)=" << e1/CLHEP::GeV 
+           << "  e2(GeV)=" << e2/CLHEP::GeV << G4endl;
+    param->SetMinEnergyTransitionFTF_Cascade(e1);
+    param->SetMaxEnergyTransitionFTF_Cascade(e2);
+  }
 
   // define physics
   runManager->SetUserInitialization(phys);
@@ -131,7 +139,6 @@ int main(int argc,char** argv) {
   }
 
   //job termination
-  delete mess;
   delete visManager;
   delete runManager;
 }

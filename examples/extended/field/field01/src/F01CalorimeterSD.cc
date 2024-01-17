@@ -48,7 +48,6 @@
 F01CalorimeterSD::F01CalorimeterSD(G4String name,
                                    F01DetectorConstruction* det)
 : G4VSensitiveDetector(name),
-  fCalCollection(0),
   fDetector(det),
   fHitID(new G4int[500])
 {
@@ -82,7 +81,7 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
   if ((edep == 0.) && (stepl == 0.) ) return false;
 
-  G4TouchableHistory* theTouchable
+  auto  theTouchable
     = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
 
   G4VPhysicalVolume* physVol = theTouchable->GetVolume();
@@ -90,7 +89,7 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   G4int number = 0;
   if (fHitID[number]==-1)
     {
-      F01CalorHit* calHit = new F01CalorHit();
+      auto  calHit = new F01CalorHit();
       if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       fHitID[number] = fCalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
@@ -101,7 +100,7 @@ G4bool F01CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
       if (physVol == fDetector->GetAbsorber())
          (*fCalCollection)[fHitID[number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to F01: " << number << G4endl; 
+        G4cout << " Energy added to F01: " << number << G4endl;
     }
   return true;
 }

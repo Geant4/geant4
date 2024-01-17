@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-16 Makoto Asai (intercoms-V11-01-08)
+- Add G4UImessenger::LtoS().
+  - Missed when StoL() was introduced.
+
+## 2023-08-11 John Allison (intercoms-V11-01-07)
+- Add G4UImanager::GetBaseSession().
+  -  Find base session in a hierarchy of sessions.
+
+## 2023-07-20 Ben Morgan (intercoms-V11-01-06)
+- Make range check setup consistent between parameters/commands
+
 ## 2023-05-03 Gabriele Cosmo (intercoms-V11-01-05)
 - Fixed compilation warning on gcc-13.1 for array subscript outside array
   bounds in G4ProfilerMessenger::SetNewValue().

@@ -112,6 +112,9 @@ if(GEANT4_USE_INVENTOR_QT)
   geant4_module_compile_definitions(G4OpenInventor PUBLIC G4VIS_USE_OIQT)
 
   geant4_module_link_libraries(G4OpenInventor PUBLIC SoQt::SoQt OpenGL::GL Qt${QT_VERSION_MAJOR}::OpenGL Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Widgets)
+
+  geant4_set_module_property(G4OpenInventor PROPERTY AUTOMOC ON)
+
 endif()
 
 # - WIN32 Only (Win32) sources

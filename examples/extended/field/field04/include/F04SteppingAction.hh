@@ -33,8 +33,6 @@
 
 #include "G4UserSteppingAction.hh"
 
-class F04SteppingActionMessenger;
-
 class G4LogicalVolume;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,16 +41,15 @@ class F04SteppingAction : public G4UserSteppingAction
 {
   public:
 
-    F04SteppingAction();
-    virtual ~F04SteppingAction();
+    F04SteppingAction() = default;
+    ~F04SteppingAction() override = default;
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*) override;
 
   private:
 
-    F04SteppingActionMessenger*    fSteppingMessenger;
-    G4LogicalVolume* fTargetVolume;
-    G4LogicalVolume* fTestPlaneVolume;
+    G4LogicalVolume* fTargetVolume = nullptr;
+    G4LogicalVolume* fTestPlaneVolume = nullptr;
 };
 
 #endif

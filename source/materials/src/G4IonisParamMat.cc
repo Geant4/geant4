@@ -51,7 +51,7 @@ G4DensityEffectData* G4IonisParamMat::fDensityData = nullptr;
 
 namespace
 {
-G4Mutex ionisMutex = G4MUTEX_INITIALIZER;
+  G4Mutex ionisMutex = G4MUTEX_INITIALIZER;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -117,7 +117,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   // compute mean excitation energy and shell correction vector
   fTaul = (*(fMaterial->GetElementVector()))[0]->GetIonisation()->GetTaul();
 
-  size_t nElements = fMaterial->GetNumberOfElements();
+  std::size_t nElements = fMaterial->GetNumberOfElements();
   const G4ElementVector* elmVector = fMaterial->GetElementVector();
   const G4double* nAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
 
@@ -131,7 +131,7 @@ void G4IonisParamMat::ComputeMeanParameters()
     // Compute average
   }
   else {
-    for (size_t i = 0; i < nElements; ++i) {
+    for (std::size_t i = 0; i < nElements; ++i) {
       const G4Element* elm = (*elmVector)[i];
       fLogMeanExcEnergy +=
         nAtomsPerVolume[i] * elm->GetZ() * G4Log(elm->GetIonisation()->GetMeanExcitationEnergy());
@@ -145,7 +145,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   for (G4int j = 0; j <= 2; ++j) {
     fShellCorrectionVector[j] = 0.;
 
-    for (size_t k = 0; k < nElements; ++k) {
+    for (std::size_t k = 0; k < nElements; ++k) {
       fShellCorrectionVector[j] +=
         nAtomsPerVolume[k] * (((*elmVector)[k])->GetIonisation()->GetShellCorrectionVector())[j];
     }
@@ -155,7 +155,9 @@ void G4IonisParamMat::ComputeMeanParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4DensityEffectData* G4IonisParamMat::GetDensityEffectData() { return fDensityData; }
+G4DensityEffectData* G4IonisParamMat::GetDensityEffectData() {
+  return fDensityData;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -163,13 +165,6 @@ void G4IonisParamMat::ComputeDensityEffectParameters()
 {
   G4State State = fMaterial->GetState();
   G4double density = fMaterial->GetDensity();
-  if (nullptr == fDensityData) {
-    G4AutoLock l(&ionisMutex);
-    if (nullptr == fDensityData) {
-      fDensityData = new G4DensityEffectData();
-    }
-    l.unlock();
-  }
 
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
@@ -385,8 +380,8 @@ void G4IonisParamMat::ComputeFluctModel()
   // compute parameters for the energy loss fluctuation model
   // needs an 'effective Z'
   G4double Zeff = 0.;
-  for (size_t i = 0; i < fMaterial->GetNumberOfElements(); ++i) {
-    Zeff += (fMaterial->GetFractionVector())[i] * ((*(fMaterial->GetElementVector()))[i]->GetZ());
+  for (std::size_t i = 0; i < fMaterial->GetNumberOfElements(); ++i) {
+    Zeff += (fMaterial->GetFractionVector())[i] * (*(fMaterial->GetElementVector()))[i]->GetZ();
   }
   fF2fluct = (Zeff > 2.) ? 2. / Zeff : 0.0;
 
@@ -489,9 +484,7 @@ void G4IonisParamMat::SetDensityEffectParameters(
 
 void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&ionisMutex);
-#endif
+  G4AutoLock l(&ionisMutex);
   const G4IonisParamMat* ipm = bmat->GetIonisation();
   fCdensity = ipm->GetCdensity();
   fMdensity = ipm->GetMdensity();
@@ -504,9 +497,7 @@ void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
   fCdensity += corr;
   fX0density += corr / twoln10;
   fX1density += corr / twoln10;
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&ionisMutex);
-#endif
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -516,7 +507,7 @@ void G4IonisParamMat::ComputeDensityEffectOnFly(G4bool val)
   if (val) {
     if (nullptr == fDensityEffectCalc) {
       G4int n = 0;
-      for (size_t i = 0; i < fMaterial->GetNumberOfElements(); ++i) {
+      for (std::size_t i = 0; i < fMaterial->GetNumberOfElements(); ++i) {
         const G4int Z = fMaterial->GetElement((G4int)i)->GetZasInt();
         n += G4AtomicShells::GetNumberOfShells(Z);
       }
@@ -606,9 +597,9 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4Material* mat) const
     };
     // clang-format on
 
-    for (size_t i = 0; i < numberOfMolecula; i++) {
+    for (std::size_t i = 0; i < numberOfMolecula; ++i) {
       if (chFormula == name[i]) {
-        res = meanExcitation[i] * eV;
+        res = meanExcitation[i] * CLHEP::eV;
         break;
       }
     }

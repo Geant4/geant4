@@ -282,7 +282,6 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
     ENERGY_ACRYLIC.push_back(h_Planck*c_light/lambda);  // Convert from wavelength to energy ;
 //  G4cout << ENERGY_ACRYLIC[i]/eV << " " << lambda/nm << " " << RINDEX_ACRYLIC[i] << G4endl ;
-
   }
 
   auto MPT_Acrylic = new G4MaterialPropertiesTable();
@@ -300,7 +299,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
     700.0
   } ;
 
-  std::vector<G4double> ABS   // Transmission (in %) of  3mm thick PMMA
+  std::vector<G4double> T   // Transmission (in %) of 3mm thick PMMA
   {
     0.0000000,
     0.0000000,  5.295952,  9.657321, 19.937695, 29.283491,
@@ -312,29 +311,36 @@ void UltraDetectorConstruction::ConstructTableMaterials()
   } ;
 
 
-  MPT_Acrylic->AddProperty("ABSLENGTH", new G4MaterialPropertyVector()) ;
-  for(size_t i=0;i<ABS.size(); ++i){
+  auto abslengthMPV = new G4MaterialPropertyVector();
+  for(size_t i=0;i<T.size(); ++i){
     auto energy    = h_Planck*c_light/(LAMBDAABS[i]*nm) ;
     auto abslength = 0.0;
 
-    if (ABS[i] <= 0.0) {
+    if (T[i] <= 0.0) {
       abslength = 1.0/kInfinity ;
     }
     else {
-      abslength = -3.0*mm/(G4Log(ABS[i]/100.0)) ;
+      abslength = -3.0*mm/(G4Log(T[i]/100.0)) ;
     }
 
-    MPT_Acrylic->AddEntry("ABSLENGTH", energy, abslength);
+    abslengthMPV->InsertValues(energy,abslength);
 
+    // MPT_Acrylic->AddEntry("ABSLENGTH", energy, abslength);
   }
 
+  MPT_Acrylic->AddProperty("ABSLENGTH", abslengthMPV);
   Acrylic->SetMaterialPropertiesTable(MPT_Acrylic);
-
 
 //////////////////////////////////////////////////////////////////
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl ;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
+  for (const auto& mat : *(G4Material::GetMaterialTable())) {
+    if (mat->GetMaterialPropertiesTable()) {
+      G4cout << "Material properties  for " << mat->GetName()<< " : " << G4endl;
+      mat->GetMaterialPropertiesTable()->DumpTable();
+    }
+  }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

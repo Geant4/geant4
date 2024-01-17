@@ -34,61 +34,59 @@
 #ifndef G4DecayProducts_hh
 #define G4DecayProducts_hh 1
 
-#include  <vector>
-
+#include "G4DynamicParticle.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4DynamicParticle.hh"
+
+#include <vector>
 
 class G4DecayProducts
 {
   public:
-
+    // Constructors
     G4DecayProducts();
     G4DecayProducts(const G4DynamicParticle& aParticle);
-      // Constructors
 
+    // Copy constructor and assignment operator
+    // Deep copy: for G4DynamicParticle pointer
     G4DecayProducts(const G4DecayProducts& right);
-    G4DecayProducts & operator=(const G4DecayProducts& right);
-      // Copy constructor and assignment operator 
-      // Deep copy: for G4DynamicParticle pointer
+    G4DecayProducts& operator=(const G4DecayProducts& right);
 
+    // Destructor
     ~G4DecayProducts();
-      // Destructor
 
+    // Equality operators
     inline G4bool operator==(const G4DecayProducts& right) const;
     inline G4bool operator!=(const G4DecayProducts& right) const;
-      // Equality operators
 
+    // Set-get methods for the parent particle; theParentPaticle is used
+    // to get information of parent particle when decay products are filled.
+    // New G4DynamicParticle object is created in set methods
     inline const G4DynamicParticle* GetParentParticle() const;
-    void SetParentParticle(const G4DynamicParticle &aParticle);
-      // Set-get methods for the parent particle; theParentPaticle is used
-      // to get information of parent particle when decay products are filled.
-      // New G4DynamicParticle object is created in set methods
+    void SetParentParticle(const G4DynamicParticle& aParticle);
 
+    // Boost all products
     void Boost(G4double totalEnergy, const G4ThreeVector& momentumDirection);
     void Boost(G4double betax, G4double betay, G4double betaz);
-      // Boost all products
- 
+
+    // Push/pop methods for decay products pointer
     G4DynamicParticle* PopProducts();
     G4int PushProducts(G4DynamicParticle* aParticle);
-      // Push/pop methods for decay products pointer
 
     G4DynamicParticle* operator[](G4int anIndex) const;
 
     inline G4int entries() const { return numberOfProducts; }
 
-    G4bool IsChecked() const; 
-      // Check energy/momentum of products 
-   
+    // Check energy/momentum of products
+    G4bool IsChecked() const;
+
     void DumpInfo() const;
 
     using G4DecayProductVector = std::vector<G4DynamicParticle*>;
 
   private:
-
-    G4int                 numberOfProducts = 0;
-    G4DynamicParticle*    theParentParticle = nullptr;
+    G4int numberOfProducts = 0;
+    G4DynamicParticle* theParentParticle = nullptr;
     G4DecayProductVector* theProductVector = nullptr;
 };
 
@@ -96,20 +94,17 @@ class G4DecayProducts
 // Inline methods
 // ------------------------
 
-inline 
-G4bool G4DecayProducts::operator==(const G4DecayProducts& right) const
+inline G4bool G4DecayProducts::operator==(const G4DecayProducts& right) const
 {
-  return (this == (G4DecayProducts *) &right);
+  return (this == (G4DecayProducts*)&right);
 }
 
-inline 
-G4bool G4DecayProducts::operator!=(const G4DecayProducts& right) const
+inline G4bool G4DecayProducts::operator!=(const G4DecayProducts& right) const
 {
-  return (this != (G4DecayProducts *) &right);
+  return (this != (G4DecayProducts*)&right);
 }
 
-inline
-const G4DynamicParticle* G4DecayProducts::GetParentParticle() const
+inline const G4DynamicParticle* G4DecayProducts::GetParentParticle() const
 {
   return theParentParticle;
 }

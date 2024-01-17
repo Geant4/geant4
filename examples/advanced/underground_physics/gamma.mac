@@ -22,6 +22,9 @@
 /dmx/savePmt  0
 /dmx/saveHits 1
 #
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 # gun: particle
 /dmx/gun/verbose 0
 /dmx/gun/particle gamma

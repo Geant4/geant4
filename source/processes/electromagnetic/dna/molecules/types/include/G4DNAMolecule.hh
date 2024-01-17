@@ -37,7 +37,7 @@ class G4DamagedDeoxyribose : public G4MoleculeDefinition
     private:
         static G4DamagedDeoxyribose* fgInstance;
         G4DamagedDeoxyribose() {}
-        ~G4DamagedDeoxyribose() {}
+        ~G4DamagedDeoxyribose() override = default;
 
     public:
         static G4DamagedDeoxyribose* Definition();
@@ -50,7 +50,7 @@ class G4DamagedAdenine : public G4MoleculeDefinition
     private:
         static G4DamagedAdenine* fgInstance;
         G4DamagedAdenine() {}
-        ~G4DamagedAdenine() {}
+        ~G4DamagedAdenine() override = default;
 
     public:
         static G4DamagedAdenine* Definition();
@@ -63,7 +63,7 @@ class G4DamagedGuanine : public G4MoleculeDefinition
     private:
         static G4DamagedGuanine* fgInstance;
         G4DamagedGuanine() {}
-        ~G4DamagedGuanine() {}
+        ~G4DamagedGuanine() override = default;
 
     public:
         static G4DamagedGuanine* Definition();
@@ -76,7 +76,7 @@ class G4DamagedThymine : public G4MoleculeDefinition
  private:
      static G4DamagedThymine* fgInstance;
      G4DamagedThymine() {}
-     ~G4DamagedThymine() {}
+     ~G4DamagedThymine() override = default;
 
  public:
      static G4DamagedThymine* Definition();
@@ -89,7 +89,7 @@ class G4DamagedCytosine : public G4MoleculeDefinition
     private:
         static G4DamagedCytosine* fgInstance;
         G4DamagedCytosine() {}
-        ~G4DamagedCytosine() {}
+        ~G4DamagedCytosine() override = default;
 
     public:
         static G4DamagedCytosine* Definition();
@@ -102,7 +102,7 @@ class G4Deoxyribose : public G4MoleculeDefinition
     private:
         static G4Deoxyribose* fgInstance;
         G4Deoxyribose() {}
-        ~G4Deoxyribose() {}
+        ~G4Deoxyribose() override = default;
 
     public:
         static G4Deoxyribose* Definition();
@@ -115,7 +115,7 @@ class G4Phosphate : public G4MoleculeDefinition
     private:
         static G4Phosphate* fgInstance;
         G4Phosphate() {}
-        ~G4Phosphate() {}
+        ~G4Phosphate() override = default;
 
  public:
      static G4Phosphate* Definition();
@@ -128,7 +128,7 @@ class G4Adenine : public G4MoleculeDefinition
  private:
      static G4Adenine* fgInstance;
      G4Adenine() {}
-     ~G4Adenine() {}
+     ~G4Adenine() override = default;
 
  public:
      static G4Adenine* Definition();
@@ -141,7 +141,7 @@ class G4Guanine : public G4MoleculeDefinition
  private:
      static G4Guanine* fgInstance;
      G4Guanine() {}
-     ~G4Guanine() {}
+     ~G4Guanine() override = default;
 
  public:
      static G4Guanine* Definition();
@@ -154,7 +154,7 @@ class G4Thymine : public G4MoleculeDefinition
  private:
      static G4Thymine* fgInstance;
      G4Thymine() {}
-     ~G4Thymine() {}
+     ~G4Thymine() override = default;
 
  public:
      static G4Thymine* Definition();
@@ -167,7 +167,7 @@ class G4Cytosine : public G4MoleculeDefinition
 private:
     static G4Cytosine* fgInstance;
     G4Cytosine() {}
-    ~G4Cytosine() {}
+    ~G4Cytosine() override = default;
 
 public:
     static G4Cytosine* Definition();
@@ -180,7 +180,7 @@ class G4ModifiedHistone : public G4MoleculeDefinition
 private:
     static G4ModifiedHistone* fgInstance;
     G4ModifiedHistone() {}
-    ~G4ModifiedHistone() {}
+    ~G4ModifiedHistone() override = default;
 
 public:
     static G4ModifiedHistone* Definition();
@@ -193,7 +193,7 @@ class G4Histone : public G4MoleculeDefinition
 private:
     static G4Histone* fgInstance;
     G4Histone() {}
-    ~G4Histone() {}
+    ~G4Histone() override = default;
 
 public:
     static G4Histone* Definition();

@@ -31,70 +31,57 @@
 #ifndef G4ParticleTableIterator_hh
 #define G4ParticleTableIterator_hh 1
 
-#include <map>
 #include "G4ParticleDefinition.hh"
 
-template < class K, class V > class G4ParticleTableIterator
+#include <map>
+
+template<class K, class V>
+class G4ParticleTableIterator
 {
   public:
+    using Map = std::map<K, V, std::less<K>>;
 
-    using Map = std::map<K, V, std::less<K> >;
-
-    G4ParticleTableIterator( Map &adict )
-      : it(adict.begin()), mydict(&adict)
-    {
-    }
+    G4ParticleTableIterator(Map& adict) : it(adict.begin()), mydict(&adict) {}
 
     G4bool operator++()
     {
-      if(!defined) return false;
+      if (!defined) return false;
       ++it;
-      return static_cast<bool>(it!=mydict->end());
+      return static_cast<bool>(it != mydict->end());
     }
-      
+
     G4bool operator()()
     {
-      if(!defined)
-      {
-        defined=true;
-        it=mydict->begin();
+      if (!defined) {
+        defined = true;
+        it = mydict->begin();
       }
-      else
-      {
+      else {
         ++it;
       }
-      if(it==mydict->end()) return false;
-      if(skipIons)
-      {
-        while((static_cast<G4ParticleDefinition*>
-              ((*it).second))->IsGeneralIon())
-        {                           // Loop checking, 09.08.2015, K.Kurashige
+      if (it == mydict->end()) return false;
+      if (skipIons) {
+        while ((static_cast<G4ParticleDefinition*>((*it).second))->IsGeneralIon())
+        {  // Loop checking, 09.08.2015, K.Kurashige
           ++it;
-          if(it==mydict->end()) return false;
+          if (it == mydict->end()) return false;
         }
       }
       return true;
     }
 
-    void reset (G4bool ifSkipIon = true)
+    void reset(G4bool ifSkipIon = true)
     {
-      defined=false;
+      defined = false;
       skipIons = ifSkipIon;
     }
 
-    K* key() const
-    {
-      return &((*it).first);
-    }
+    K* key() const { return &((*it).first); }
 
-    V value() const
-    {
-      return (*it).second;
-    }
+    V value() const { return (*it).second; }
 
   private:
-
-    typename Map::iterator it;  
+    typename Map::iterator it;
     Map* mydict = nullptr;
     G4bool defined = false;
     G4bool skipIons = true;

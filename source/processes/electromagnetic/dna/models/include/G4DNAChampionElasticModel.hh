@@ -42,25 +42,28 @@ class G4DNAChampionElasticModel : public G4VEmModel
 
 public:
 
-  G4DNAChampionElasticModel(const G4ParticleDefinition* p = 0,
+  G4DNAChampionElasticModel(const G4ParticleDefinition* p = nullptr,
                             const G4String& nam = "DNAChampionElasticModel");
 
-  virtual ~G4DNAChampionElasticModel();
+  ~G4DNAChampionElasticModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector&);
+  G4DNAChampionElasticModel & operator=(const G4DNAChampionElasticModel &right) = delete;
+  G4DNAChampionElasticModel(const G4DNAChampionElasticModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
 
   void SetKillBelowThreshold(G4double threshold);
 
@@ -79,9 +82,9 @@ public:
 
 private:
   // Cross section
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  using VecMap = std::map<G4double, std::vector<G4double>>;
   VecMap eVecm;
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  using TriDimensionMap = std::map<G4double, std::map<G4double, G4double>>;
   TriDimensionMap eDiffCrossSectionData;
   std::vector<G4double> eTdummyVec;
 
@@ -96,7 +99,7 @@ protected:
 
 private:
   G4int verboseLevel;
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   
   // Final state
 
@@ -140,10 +143,6 @@ private:
 
   G4double RandomizeCosTheta(G4double k);
 
-  //
-
-  G4DNAChampionElasticModel & operator=(const G4DNAChampionElasticModel &right);
-  G4DNAChampionElasticModel(const G4DNAChampionElasticModel&);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -13,6 +13,9 @@
 
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 /random/setSeeds 123 2004
 /process/list
 

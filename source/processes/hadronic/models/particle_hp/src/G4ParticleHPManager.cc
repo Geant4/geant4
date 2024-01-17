@@ -28,25 +28,65 @@
 //
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 //
 #include "G4ParticleHPManager.hh"
 
 #include "G4Exception.hh"
 #include "G4HadronicException.hh"
 #include "G4ParticleHPMessenger.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4HadronicParameters.hh"
 #include "G4ParticleHPThreadLocalManager.hh"
 #include "G4SystemOfUnits.hh"
 
 #include <zlib.h>
-
 #include <fstream>
 
 G4ParticleHPManager* G4ParticleHPManager::instance = nullptr;
 
 G4ParticleHPManager::G4ParticleHPManager()
-  : theMinEnergyDBRC(0.1 * CLHEP::eV), theMaxEnergyDBRC(210. * CLHEP::eV)
+  : theMinEnergyDBRC(0.1 * CLHEP::eV),
+    theMaxEnergyDBRC(210. * CLHEP::eV),
+    theMaxEnergyDoppler(30. * CLHEP::keV)
 {
   messenger = new G4ParticleHPMessenger(this);
+  verboseLevel = G4HadronicParameters::Instance()->GetVerboseLevel();
+  char* ss = std::getenv("NeutronHPNames");
+  if (nullptr != ss) { CHECK_HP_NAMES = true; }
+  ss = std::getenv("G4PHP_DO_NOT_CHECK_DIFF_COEFF_REPR");
+  if (nullptr != ss) { PHP_CHECK = false; }
+  ss = std::getenv("G4PHP_MULTIPLICITY_METHOD");
+  if (nullptr != ss && "BetweenInts" == G4String(ss)) { PHP_USE_POISSON = false; }
+  ss = std::getenv("G4ParticleHPDebug");
+  if (nullptr != ss) { DEBUG = true; }
+
+  // identify and check data path once - it should exist
+  const char* nch = G4FindDataDir("G4NEUTRONHPDATA");
+  if (nullptr == nch) {
+    G4Exception("G4ParticleHPManager::G4ParticleHPManager()","hadhp01",
+                FatalException, "G4NEUTRONXSDATA is not defined - check path");
+  } else {
+    fDataPath[0] = G4String(nch);
+  }
+  // path may be defined by two environment variables
+  // it is not mandatory to access PHP data - path may be not defined
+  const char* ttp = G4FindDataDir("G4PARTICLEHPDATA");
+  G4String tendl = (nullptr == ttp) ? "" : G4String(ttp);
+  const char* ssp = G4FindDataDir("G4PROTONHPDATA");
+  fDataPath[1] = (nullptr == ssp) ? tendl + "/Proton" : G4String(ssp);
+
+  ssp = G4FindDataDir("G4DEUTERONHPDATA");
+  fDataPath[2] = (nullptr == ssp) ? tendl + "/Deuteron" : G4String(ssp);
+
+  ssp = G4FindDataDir("G4TRITONHPDATA");
+  fDataPath[3] = (nullptr == ssp) ? tendl + "/Triton" : G4String(ssp);
+
+  ssp = G4FindDataDir("G4HE3HPDATA");
+  fDataPath[4] = (nullptr == ssp) ? tendl + "/He3" : G4String(ssp);
+
+  ssp = G4FindDataDir("G4ALPHAHPDATA");
+  fDataPath[5] = (nullptr == ssp) ? tendl + "/Alpha" : G4String(ssp);
 }
 
 G4ParticleHPManager::~G4ParticleHPManager()
@@ -61,6 +101,31 @@ G4ParticleHPManager* G4ParticleHPManager::GetInstance()
     instance = &manager;
   }
   return instance;
+}
+
+G4int G4ParticleHPManager::GetPHPIndex(const G4ParticleDefinition* part) const {
+  G4int pdg = part->GetPDGEncoding();
+  G4int idx;
+  if (pdg == 2112) { idx = 0; }
+  else if (pdg == 2212) { idx = 1; }
+  else if (pdg == 1000010020) { idx = 2; }
+  else if (pdg == 1000010030) { idx = 3; }
+  else if (pdg == 1000020030) { idx = 4; }
+  else if (pdg == 1000020040) { idx = 5; }
+  else {
+    idx = 0;
+    G4ExceptionDescription ed;
+    ed << "Particle " << part->GetParticleName()
+       << " cannot be handled by the ParticleHP sub-library";
+    G4Exception("G4ParticleHPManager::G4ParticleHPManager()","hadhp01",
+                FatalException, ed, "");
+  }
+  return idx;
+}
+
+const G4String&
+G4ParticleHPManager::GetParticleHPPath(const G4ParticleDefinition* part) const {
+  return fDataPath[GetPHPIndex(part)];
 }
 
 void G4ParticleHPManager::OpenReactionWhiteBoard()
@@ -78,7 +143,7 @@ void G4ParticleHPManager::CloseReactionWhiteBoard()
   G4ParticleHPThreadLocalManager::GetInstance()->CloseReactionWhiteBoard();
 }
 
-void G4ParticleHPManager::GetDataStream(G4String filename, std::istringstream& iss)
+void G4ParticleHPManager::GetDataStream(const G4String& filename, std::istringstream& iss)
 {
   G4String* data = nullptr;
   G4String compfilename(filename);
@@ -104,7 +169,7 @@ void G4ParticleHPManager::GetDataStream(G4String filename, std::istringstream& i
       uncompdata = new Bytef[complen];
     }
     delete[] compdata;
-    //                                 Now "complen" has uncomplessed size
+    // Now "complen" has uncomplessed size
     data = new G4String((char*)uncompdata, (G4long)complen);
     delete[] uncompdata;
   }
@@ -147,7 +212,7 @@ void G4ParticleHPManager::GetDataStream(G4String filename, std::istringstream& i
   delete data;
 }
 
-void G4ParticleHPManager::GetDataStream2(G4String filename, std::istringstream& iss)
+void G4ParticleHPManager::GetDataStream2(const G4String& filename, std::istringstream& iss)
 {
   // Checking existance of data file
 
@@ -182,7 +247,7 @@ void G4ParticleHPManager::SetVerboseLevel(G4int newValue)
   verboseLevel = newValue;
 }
 
-void G4ParticleHPManager::register_data_file(G4String filename, G4String source)
+void G4ParticleHPManager::register_data_file(const G4String& filename, const G4String& source)
 {
   mDataEvaluation.insert(std::pair<G4String, G4String>(filename, source));
 }
@@ -196,47 +261,25 @@ void G4ParticleHPManager::DumpDataSource()
   G4cout << G4endl;
 }
 
-G4PhysicsTable* G4ParticleHPManager::GetInelasticCrossSections(const G4ParticleDefinition* particle)
-{
-  if (theInelasticCrossSections.end() != theInelasticCrossSections.find(particle))
-    return theInelasticCrossSections.find(particle)->second;
-  return nullptr;
-}
-
-void G4ParticleHPManager::RegisterInelasticCrossSections(const G4ParticleDefinition* particle,
-                                                         G4PhysicsTable* val)
-{
-  theInelasticCrossSections.insert(
-    std::pair<const G4ParticleDefinition*, G4PhysicsTable*>(particle, val));
-}
-
-std::vector<G4ParticleHPChannelList*>*
-G4ParticleHPManager::GetInelasticFinalStates(const G4ParticleDefinition* particle)
-{
-  if (theInelasticFSs.end() != theInelasticFSs.find(particle))
-    return theInelasticFSs.find(particle)->second;
-  return nullptr;
-}
-
-void G4ParticleHPManager::RegisterInelasticFinalStates(const G4ParticleDefinition* particle,
-                                                       std::vector<G4ParticleHPChannelList*>* val)
-{
-  theInelasticFSs.insert(
-    std::pair<const G4ParticleDefinition*, std::vector<G4ParticleHPChannelList*>*>(particle, val));
-}
-
 void G4ParticleHPManager::DumpSetting()
 {
-  G4cout << G4endl << "=======================================================" << G4endl
+  if(isPrinted) { return; }
+  G4cout << G4endl
+         << "=======================================================" << G4endl
          << "======       ParticleHP Physics Parameters     ========" << G4endl
          << "=======================================================" << G4endl
-         << " UseOnlyPhotoEvaporation ? " << USE_ONLY_PHOTONEVAPORATION << G4endl
-         << " SkipMissingIsotopes ?     " << SKIP_MISSING_ISOTOPES << G4endl
-         << " NeglectDoppler ?          " << NEGLECT_DOPPLER << G4endl
-         << " DoNotAdjustFinalState ?   " << DO_NOT_ADJUST_FINAL_STATE << G4endl
-         << " ProduceFissionFragments ? " << PRODUCE_FISSION_FRAGMENTS << G4endl
-         << " UseWendtFissionModel ?    " << USE_WENDT_FISSION_MODEL << G4endl
-         << " UseNRESP71Model ?         " << USE_NRESP71_MODEL << G4endl
-         << " UseDBRC ?                 " << USE_DBRC << G4endl
+         << " Use only photo-evaporation      " << USE_ONLY_PHOTONEVAPORATION << G4endl
+         << " Skip missing isotopes           " << SKIP_MISSING_ISOTOPES << G4endl
+         << " Neglect Doppler                 " << NEGLECT_DOPPLER << G4endl
+         << " Do not adjust final state       " << DO_NOT_ADJUST_FINAL_STATE << G4endl
+         << " Produce fission fragments       " << PRODUCE_FISSION_FRAGMENTS << G4endl
+         << " Use WendtFissionModel           " << USE_WENDT_FISSION_MODEL << G4endl
+         << " Use NRESP71Model                " << USE_NRESP71_MODEL << G4endl
+         << " Use DBRC                        " << USE_DBRC << G4endl
+         << " PHP use Poisson                 " << PHP_USE_POISSON << G4endl
+         << " PHP check                       " << PHP_CHECK << G4endl
+         << " CHECK HP NAMES                  " << CHECK_HP_NAMES << G4endl
+         << " Enable DEBUG                    " << DEBUG << G4endl
          << "=======================================================" << G4endl << G4endl;
+  isPrinted = true;
 }

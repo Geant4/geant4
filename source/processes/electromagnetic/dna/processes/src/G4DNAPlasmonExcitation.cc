@@ -39,8 +39,7 @@
 using namespace std;
 
 G4DNAPlasmonExcitation::G4DNAPlasmonExcitation(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-  isInitialised(false)
+  G4ProcessType type):G4VEmProcess (processName, type)
 {
   //SetProcessSubType(fLowEnergyChargeDecrease); //dousatsu temp
 }
@@ -48,7 +47,7 @@ G4DNAPlasmonExcitation::G4DNAPlasmonExcitation(const G4String& processName,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4DNAPlasmonExcitation::~G4DNAPlasmonExcitation()
-{}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,7 +69,7 @@ void G4DNAPlasmonExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-" )
     { 
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNAQuinnPlasmonExcitationModel);
         EmModel()->SetLowEnergyLimit (10*eV);

@@ -5,13 +5,17 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-07-04 Hrivnacova (exTransforms-V11-01-00)
+- Clang-tidy fixes, new coding guidelines
+- Clean-up trailing whitespaces
+
 ## 2021-12-10 Ben Morgan (exTransforms-V11-00-00)
 - Change to new Markdown History format
 
 ---
 
 # History entries prior to 11.0
-     
+
 04-06-21 I. Hrivnacova (exTransforms-V10-07-02)
 - added cleaning of the reflection factory
 
@@ -19,11 +23,11 @@ be used as a substitute for writing good git commit messages!
 - transforms.cc : initialize visualization only in interactive mode
 - PlaceWithReflections : permute z-positions
 - DetectorMessenger : AvailableForStates(G4State_PreInit,G4State_Idle)
-- new macros : rotations.mac  reflections.mac 
+- new macros : rotations.mac  reflections.mac
 
 20-04-21 mma (exTransforms-V10-07-00)
 - transforms.cc : use G4SteppingVerboseWithUnits
-	 
+
 01-10-18 mma, I. Hrivnacova (exTransforms-V10-04-02)
 - DetectorConstruction::PlaceWithAxialRotations : use rotate(angle, axis)
 - Added descriptions for placement methods in README
@@ -51,16 +55,16 @@ be used as a substitute for writing good git commit messages!
 
 08-06-13 mma (exTransforms-V09-06-04)
 - Cosmetic in SteppingAction.
-     
+
 24/03/2013 mma (exTransforms-V09-06-03)
  - polish coding conventions
-      
+
 17/03/2013 mma (exTransforms-V09-06-02)
  - G4 coding conventions
- 
-28/02/13 I. Hrivnacova (exTransforms-V09-06-01) 
+
+28/02/13 I. Hrivnacova (exTransforms-V09-06-01)
 - When building materials with NistManager
-  do not set fromIsotopes argument (which was set to false), 
+  do not set fromIsotopes argument (which was set to false),
   as since 9.6 all materials have to be built from isotopes.
   (Thanks to V. Ivantchenko for pointing at this.)
 
@@ -72,15 +76,15 @@ be used as a substitute for writing good git commit messages!
 
 04/09/2012 I. Hrivnacova (exTransforms-V09-05-02)
 - Updated CMakeLists.txt:
-  adding visualization, copying macros, install target and comment lines 
-- Minor fixes in .README  
-     
+  adding visualization, copying macros, install target and comment lines
+- Minor fixes in .README
+
 25/06/2012 mma (exTransforms-V09-05-01)
  - update readme and .readme
-      
+
 12/03/2012 mma (exTransforms-V09-05-00)
  - simplified version, limited to geometry functionalities
- 
+
 15/11/2011 I. Hrivnacova (exTransforms-V09-04-00)
  First version of Transforms examples implemented by M.Maire;
- the reflection option added by I. Hrivnacova. 
+ the reflection option added by I. Hrivnacova.

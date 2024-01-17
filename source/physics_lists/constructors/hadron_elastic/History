@@ -6,6 +6,31 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-31 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-06)
+- G4ChargeExchangePhysics, G4ChargeExchangeMessenger - added UI commands
+
+## 2023-10-25 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-05)
+- G4ChargeExchangePhysics -  added Set method for the factor multiplying
+    the cross section (NA64 request). 
+
+## 2023-10-23 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-04)
+- G4ChargeExchangePhysics - added low energy limit to cross section of the
+    charge exchange process allowing use of it on top of any physics without
+    any cross section correction
+
+## 2023-10-15 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-03)
+- G4HadronElasticPhysics, G4HadronElasticPhysicsXS, G4HadronElasticPhysicsHP, 
+  G4HadronElasticPhysicsPHP - more accurate instantiation of models, cross
+    sections, and the neutron general process
+- G4HadronElasticPhysicsVI - used alternative HP model and cross section
+
+## 2023-08-25 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-02)
+- G4ChargeExchangePhysics - do not use G4PhysicsListHelper, because 
+    charge exchange process is an addition to the main hadron process 
+
+## 2023-07-21 Vladimir Ivanchenko (phys-ctor-helastic-V11-01-01)
+- G4ChargeExchangePhysics - updated constructor according to a new conception
+
 ## 2023-04-13 Alberto Ribon (phys-ctor-helastic-V11-01-00)
 - Created new class G4HadronElasticPhysicsHPT, which inherits from
   G4HadronElasticPhysicsHP and activates the special treatment of elastic

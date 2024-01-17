@@ -62,7 +62,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList()
 {
   G4int verb = 1;
   SetVerboseLevel(verb);
@@ -115,11 +114,6 @@ PhysicsList::PhysicsList()
   // Step Max
   RegisterPhysics(new StepMaxBuilder());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

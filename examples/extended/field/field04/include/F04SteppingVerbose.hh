@@ -38,10 +38,10 @@ class F04SteppingVerbose : public G4SteppingVerbose
   public:
 
     F04SteppingVerbose();
-    virtual ~F04SteppingVerbose();
+    ~F04SteppingVerbose() override = default;
 
-    virtual void StepInfo();
-    virtual void TrackingStarted();
+    void StepInfo() override;
+    void TrackingStarted() override;
 };
 
 #endif

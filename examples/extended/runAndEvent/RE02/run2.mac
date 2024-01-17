@@ -9,14 +9,10 @@
 #/event/verbose 0
 #/tracking/verbose 1
 # 
-# 
-#/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
-#/vis/open OGL
-#/vis/open DAWNFILE
-#/vis/open VRML2FILE
+## Open a viewer
+#/vis/open
+## This opens the default viewer - see examples/basic/B1/vis.mac for a
+## more comprehensive overview of options. Also the documentation.
 #
 # viewer settings
 #/vis/viewer/set/viewpointThetaPhi 90 180 deg

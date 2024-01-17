@@ -125,7 +125,7 @@ void G4LevelManager::StreamInfo(std::ostream& out) const
     if(fLevels[i]) {
 	out << std::setw(8) << fLevels[i]->GetTimeGamma()
 	    << std::setw(4) << fLevels[i]->NumberOfTransitions()
-	    << std::setw(4) << SpinTwo(i)
+	    << std::setw(4) << std::abs(TwoSpinParity(i))
 	    << std::setw(4) << Parity(i)
 	    << std::setw(4) << FloatingLevel(i);
     }

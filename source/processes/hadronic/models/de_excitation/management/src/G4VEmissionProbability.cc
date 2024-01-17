@@ -82,12 +82,11 @@ G4double G4VEmissionProbability::IntegrateProbability(G4double elow,
   emax = ehigh;
   eCoulomb = cb;
 
-  const G4double edeltamin = 0.2*CLHEP::MeV;
+  const G4double edeltamin = 0.1*CLHEP::MeV;
   const G4double edeltamax = 2*CLHEP::MeV;
-  G4double edelta = std::max(std::min(elimit, edeltamax), edeltamin);
+  G4double edelta = std::min(std::min(elimit, edeltamax), edeltamin);
   G4double xbin = (emax - emin)/edelta + 1.0;
-  G4int ibin = xbin;
-  if(ibin < 4) ibin = 4;
+  G4int ibin = std::max((G4int)xbin, 4);
 
   // providing smart binning 
   G4int nbin = ibin*5;

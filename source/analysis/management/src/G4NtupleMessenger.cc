@@ -34,6 +34,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
 using namespace G4Analysis;
 using std::to_string;
@@ -45,6 +46,10 @@ G4NtupleMessenger::G4NtupleMessenger(G4VAnalysisManager* manager)
   fNtupleDir = std::make_unique<G4UIdirectory>("/analysis/ntuple/");
   fNtupleDir->SetGuidance("ntuple control");
 
+  CreateCmd();
+  CreateColumnCmds();
+  FinishCmd();
+  DeleteCmd();
   SetActivationCmd();
   SetActivationToAllCmd();
   SetFileNameCmd();
@@ -70,10 +75,64 @@ void G4NtupleMessenger::AddIdParameter(G4UIcommand& command)
 }
 
 //_____________________________________________________________________________
+void G4NtupleMessenger::CreateCmd()
+{
+  fCreateCmd = CreateCommand<G4UIcommand>("create", "Create ntuple");
+
+  auto ntName = new G4UIparameter("name", 's', false);
+  ntName->SetGuidance("Ntuple name");
+  fCreateCmd->SetParameter(ntName);
+
+  auto ntTitle = new G4UIparameter("title", 's', false);
+  ntTitle->SetGuidance("Ntuple title");
+  fCreateCmd->SetParameter(ntTitle);
+}
+
+//_____________________________________________________________________________
+void G4NtupleMessenger::CreateColumnCmds()
+{
+  std::vector<char> colTypes = {'I', 'F', 'D', 'S'};
+
+  for (auto colType : colTypes ) {
+    G4String name = "createColumn";
+    G4String guidance = "Create  ntuple column";
+    name.insert(6, 1, colType);
+    guidance.insert(7, 1, colType);
+    auto cmd = CreateCommand<G4UIcmdWithAString>(name, guidance);
+    fCreateColumnCmds[colType] = std::move(cmd);
+  }
+}
+
+//_____________________________________________________________________________
+void G4NtupleMessenger::FinishCmd()
+{
+  fFinishCmd = CreateCommand<G4UIcmdWithoutParameter>(
+    "finish", "Finish creating ntuple");
+}
+
+//_____________________________________________________________________________
+void G4NtupleMessenger::DeleteCmd()
+{
+  fDeleteCmd = CreateCommand<G4UIcommand>(
+    "delete", "Delete ntuple with given id");
+
+  // Add Id parameter
+  AddIdParameter(*fDeleteCmd);
+
+  auto parKeepSetting = new G4UIparameter("keepSetting", 'b', true);
+  G4String guidance =
+    "If set true, activation, file name, etc. options will be kept\n"
+    "and applied when a new object with the same id is created.";
+  parKeepSetting->SetGuidance(guidance.c_str());
+  parKeepSetting->SetDefaultValue("false");
+  fDeleteCmd->SetParameter(parKeepSetting);
+}
+
+//_____________________________________________________________________________
 void G4NtupleMessenger::SetActivationCmd()
 {
   fSetActivationCmd = CreateCommand<G4UIcommand>(
-    "setActivation", "Set activation for the ntuple");
+    "setActivation", "Set activation for the ntuple with given id");
 
   AddIdParameter(*fSetActivationCmd);
 
@@ -95,7 +154,7 @@ void G4NtupleMessenger::SetActivationToAllCmd()
 void G4NtupleMessenger::SetFileNameCmd()
 {
   fSetFileNameCmd = CreateCommand<G4UIcommand>(
-    "setFileName", "Set file name for the ntuple");
+    "setFileName", "Set file name for the ntuple with given id");
 
   AddIdParameter(*fSetFileNameCmd);
 
@@ -158,7 +217,53 @@ void G4NtupleMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   }
 
   auto counter = 0;
+
+  // commands without Id parameter
+
+  if ( command == fCreateCmd.get() ) {
+    auto name = parameters[counter++];
+    auto title = parameters[counter++];
+    fTmpNtupleId = fManager->CreateNtuple(name, title);
+    return;
+  }
+
+  for (const auto& [colType, checkCommand] : fCreateColumnCmds) {
+    if ( command == checkCommand.get() ) {
+      auto name = parameters[counter++];
+      switch (colType) {
+        case 'I':
+          fManager->CreateNtupleIColumn(fTmpNtupleId, name);
+          return;
+        case 'F':
+          fManager->CreateNtupleFColumn(fTmpNtupleId, name);
+          return;
+        case 'D':
+          fManager->CreateNtupleDColumn(fTmpNtupleId, name);
+          return;
+        case 'S':
+          fManager->CreateNtupleSColumn(fTmpNtupleId, name);
+          return;
+        default:
+          return;
+      }
+    }
+  }
+
+  if ( command == fFinishCmd.get() ) {
+    fManager->FinishNtuple(fTmpNtupleId);
+    fTmpNtupleId = G4Analysis::kInvalidId;
+    return;
+  }
+
+  // commands with Id parameter
+
   auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
+
+  if ( command == fDeleteCmd.get() ) {
+    auto keepSetting = G4UIcommand::ConvertToBool(parameters[counter++]);
+    fManager->DeleteNtuple(id, keepSetting);
+    return;
+  }
 
   if ( command == fSetActivationCmd.get() ) {
     fManager->SetNtupleActivation(id, G4UIcommand::ConvertToBool(parameters[counter++]));

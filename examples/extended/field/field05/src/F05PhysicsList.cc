@@ -35,15 +35,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList() 
+F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList()
 {
     RegisterPhysics(new G4SpinDecayPhysics());
     RegisterPhysics(new G4StepLimiterPhysics());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F05PhysicsList::~F05PhysicsList() {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

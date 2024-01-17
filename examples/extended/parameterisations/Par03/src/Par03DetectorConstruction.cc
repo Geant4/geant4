@@ -58,7 +58,7 @@ Par03DetectorConstruction::Par03DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03DetectorConstruction::~Par03DetectorConstruction() {}
+Par03DetectorConstruction::~Par03DetectorConstruction() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

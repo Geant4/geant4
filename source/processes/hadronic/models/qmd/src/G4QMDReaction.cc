@@ -77,13 +77,7 @@ G4QMDReaction::G4QMDReaction()
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
-   excitationHandler = new G4ExcitationHandler;
-   excitationHandler->SetDeexChannelsType( fCombined );
-   //fEvaporation - 8 default channels
-   //fCombined    - 8 default + 60 GEM
-   //fGEM         - 2 default + 66 GEM
-   evaporation = new G4Evaporation;
-   excitationHandler->SetEvaporation( evaporation );
+   excitationHandler = new G4ExcitationHandler();
    setEvaporationCh();
 
    coulomb_collision_gamma_proj = 0.0;
@@ -104,7 +98,6 @@ G4QMDReaction::G4QMDReaction()
 
 G4QMDReaction::~G4QMDReaction()
 {
-   delete evaporation; 
    delete excitationHandler;
    delete collision;
    delete meanField;
@@ -837,16 +830,13 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
 
 }
 
-
-
 void G4QMDReaction::setEvaporationCh()
 {
-
-   if ( gem == true ) 
-      evaporation->SetGEMChannel();
-   else
-      evaporation->SetDefaultChannel();
-
+  //fEvaporation - 8 default channels
+  //fCombined    - 8 default + 60 GEM
+  //fGEM         - 2 default + 66 GEM
+  G4DeexChannelType ctype = gem ? fGEM : fCombined;
+  excitationHandler->SetDeexChannelsType(ctype);
 }
 
 void G4QMDReaction::ModelDescription(std::ostream& outFile) const

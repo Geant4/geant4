@@ -257,12 +257,57 @@ namespace G4INCL {
           theA = 1;
           theZ = -1;
           theS = -1;
-          break;
+          break;         
         case antiProton:
           theA = -1;
           theZ = -1;
           theS = 0;
-          break;          
+          break;         
+        case XiMinus:
+          theA = 1;
+          theZ = -1;
+          theS = -2;
+          break;
+        case XiZero:
+          theA = 1;
+          theZ = 0;
+          theS = -2;
+          break;      
+        case antiNeutron:
+          theA = -1;
+          theZ = 0;
+          theS = 0;
+          break;
+        case antiLambda:
+          theA = -1;
+          theZ = 0;
+          theS = 1;
+          break;
+        case antiSigmaMinus:
+          theA = -1;
+          theZ = 1;
+          theS = 1;
+          break;
+        case antiSigmaPlus:
+          theA = -1;
+          theZ = -1;
+          theS = 1;
+          break;
+        case antiSigmaZero:
+          theA = -1;
+          theZ = 0;
+          theS = 1;
+          break;
+        case antiXiMinus:
+          theA = -1;
+          theZ = 1;
+          theS = 2;
+          break;
+        case antiXiZero:
+          theA = -1;
+          theZ = 0;
+          theS = 2;
+          break;         
         case KPlus:
           theA = 0;
           theZ = 1;
@@ -298,7 +343,7 @@ namespace G4INCL {
           theA = 0;
           theZ = 0;
           theS = 0;
-          break;
+          break;       
         case UnknownParticle:
           theA = 0;
           theZ = 0;
@@ -377,10 +422,10 @@ namespace G4INCL {
           theType==DeltaZero || theType==DeltaMinus); }
     
     /** \brief Is this a Sigma? */
-    G4bool isSigma() const { return (theType == SigmaPlus || theType == SigmaZero || theType == SigmaMinus); }
+    G4bool isSigma() const { return (theType == SigmaPlus || theType == SigmaZero || theType == SigmaMinus); }     
     
     /** \brief Is this a Kaon? */
-    G4bool isKaon() const { return (theType == KPlus || theType == KZero); }
+    G4bool isKaon() const { return (theType == KPlus || theType == KZero); } 
     
     /** \brief Is this an antiKaon? */
     G4bool isAntiKaon() const { return (theType == KZeroBar || theType == KMinus); }
@@ -392,7 +437,7 @@ namespace G4INCL {
     G4bool isNucleonorLambda() const { return (isNucleon() || isLambda()); }
     
     /** \brief Is this an Hyperon? */
-    G4bool isHyperon() const { return (isLambda() || isSigma()); }
+    G4bool isHyperon() const { return (isLambda() || isSigma() ); } //|| isXi()
     
     /** \brief Is this a Meson? */
     G4bool isMeson() const { return (isPion() || isKaon() || isAntiKaon() || isEta() || isEtaPrime() || isOmega()); }
@@ -402,9 +447,30 @@ namespace G4INCL {
     
     /** \brief Is this a Strange? */
     G4bool isStrange() const { return (isKaon() || isAntiKaon() || isHyperon()); }
-        
+    
+    /** \brief Is this a Xi? */
+    G4bool isXi() const { return (theType == XiZero || theType == XiMinus); } 
+    
     /** \brief Is this an antinucleon? */
-    G4bool isAntiNucleon() const { return (theType == G4INCL::antiProton ); } //|| theType == G4INCL::antiNeutron
+    G4bool isAntiNucleon() const { return (theType == antiProton || theType == antiNeutron); } 
+     
+    /** \brief Is this an antiSigma? */
+    G4bool isAntiSigma() const { return (theType == antiSigmaPlus || theType == antiSigmaZero || theType == antiSigmaMinus); }     
+    
+    /** \brief Is this an antiXi? */
+    G4bool isAntiXi() const { return (theType == antiXiZero || theType == antiXiMinus); } 
+    
+    /** \brief Is this an antiLambda? */
+    G4bool isAntiLambda() const { return (theType == antiLambda); }
+    
+    /** \brief Is this an antiHyperon? */
+    G4bool isAntiHyperon() const { return (isAntiLambda() || isAntiSigma() || isAntiXi()); }
+    
+    /** \brief Is this an antiBaryon? */
+    G4bool isAntiBaryon() const { return (isAntiNucleon() || isAntiHyperon()); }
+    
+    /** \brief Is this an antiNucleon or an antiLambda? */
+    G4bool isAntiNucleonorAntiLambda() const { return (isAntiNucleon() || isAntiLambda()); }
 
     /** \brief Returns the baryon number. */
     G4int getA() const { return theA; }
@@ -478,8 +544,17 @@ namespace G4INCL {
         case Lambda:
         case SigmaPlus:
         case SigmaZero:
-        case SigmaMinus:
-        case antiProton:
+        case SigmaMinus:       
+        case antiProton: 
+        case XiZero:
+        case XiMinus:
+        case antiNeutron:
+        case antiLambda:
+        case antiSigmaPlus:
+        case antiSigmaZero:
+        case antiSigmaMinus:
+        case antiXiZero:
+        case antiXiMinus:     
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -489,7 +564,7 @@ namespace G4INCL {
         case Eta:
         case Omega:
         case EtaPrime:
-        case Photon:
+        case Photon:                       
           return ParticleTable::getINCLMass(theType);
           break;
 
@@ -522,8 +597,17 @@ namespace G4INCL {
         case Lambda:
         case SigmaPlus:
         case SigmaZero:
-        case SigmaMinus:
-        case antiProton:
+        case SigmaMinus:       
+        case antiProton:      
+        case XiZero:
+        case XiMinus:  
+        case antiNeutron:
+        case antiLambda:
+        case antiSigmaPlus:
+        case antiSigmaZero:
+        case antiSigmaMinus:
+        case antiXiZero:
+        case antiXiMinus:  
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -533,7 +617,7 @@ namespace G4INCL {
         case Eta:
         case Omega:
         case EtaPrime:
-        case Photon:
+        case Photon:  
           return ParticleTable::getTableParticleMass(theType);
           break;
 
@@ -566,8 +650,17 @@ namespace G4INCL {
         case Lambda:
         case SigmaPlus:
         case SigmaZero:
-        case SigmaMinus:
-        case antiProton:
+        case SigmaMinus:       
+        case antiProton: 
+        case XiZero:
+        case XiMinus: 
+        case antiNeutron:
+        case antiLambda:
+        case antiSigmaPlus:
+        case antiSigmaZero:
+        case antiSigmaMinus:
+        case antiXiZero:
+        case antiXiMinus:    
         case KPlus:
         case KZero:
         case KZeroBar:
@@ -577,7 +670,7 @@ namespace G4INCL {
         case Eta:
         case Omega:
         case EtaPrime:
-        case Photon:
+        case Photon:    
           return ParticleTable::getRealMass(theType);
           break;
 
@@ -644,7 +737,6 @@ namespace G4INCL {
       return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
     }
 
-//D
     G4double getEmissionPbarQvalueCorrection(const G4int AParent, const G4int ZParent, const G4bool Victim) const {
       G4int SParent = 0;
       G4int SDaughter = 0;
@@ -658,7 +750,6 @@ namespace G4INCL {
         ZDaughter = ZParent;
       }
       
-
       G4double theQValue; //same procedure as for normal case
       
       const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
@@ -672,7 +763,6 @@ namespace G4INCL {
 
       return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
     }
-//D
 
     /**\brief Computes correction on the transfer Q-value
      *

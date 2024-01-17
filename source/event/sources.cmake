@@ -29,6 +29,8 @@ geant4_add_module(G4event
     G4StackManager.hh
     G4StackedTrack.hh
     G4StackingMessenger.hh
+    G4SubEvent.hh
+    G4SubEventTrackStack.hh
     G4TrackStack.hh
     G4TrajectoryContainer.hh
     G4UserEventAction.hh
@@ -62,6 +64,8 @@ geant4_add_module(G4event
     G4StackChecker.cc
     G4StackManager.cc
     G4StackingMessenger.cc
+    G4SubEvent.cc
+    G4SubEventTrackStack.cc
     G4TrackStack.cc
     G4TrajectoryContainer.cc
     G4UserEventAction.cc

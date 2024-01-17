@@ -125,8 +125,8 @@
    One can control the name of the histograms file with the command:
    /analysis/setFileName  name  (default fanocavity2)
    
-   It is possible to choose the format of the histogram file :
-   root(default), xml, hbook.  See HistoManager.hh
+   It is possible to choose the format of the histogram file : root (default),
+   hdf5, xml, csv, by changing the default file type in HistoManager.cc
    
    It is also possible to print selected histograms on an ascii file:
    /analysis/h1/setAscii id

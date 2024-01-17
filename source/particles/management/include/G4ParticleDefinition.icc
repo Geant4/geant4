@@ -29,29 +29,26 @@
 //          M.Asai, 29 January 1996 - First implementation
 // --------------------------------------------------------------------
 
-inline 
-G4int G4ParticleDefinition::GetInstanceID() const
-{ 
-  return g4particleDefinitionInstanceID; 
+inline G4int G4ParticleDefinition::GetInstanceID() const
+{
+  return g4particleDefinitionInstanceID;
 }
 
-inline
-G4bool G4ParticleDefinition::GetPDGStable() const
+inline G4bool G4ParticleDefinition::GetPDGStable() const
 {
-  if(IsGeneralIon())
-  { return (GetIonLifeTime()<0.); }
-  
+  if (IsGeneralIon()) {
+    return (GetIonLifeTime() < 0.);
+  }
+
   return thePDGStable;
 }
 
-inline
-G4double G4ParticleDefinition::GetPDGLifeTime() const
+inline G4double G4ParticleDefinition::GetPDGLifeTime() const
 {
   return thePDGLifeTime;
 }
 
-inline 
-G4double G4ParticleDefinition::GetIonLifeTime() const
+inline G4double G4ParticleDefinition::GetIonLifeTime() const
 {
   //-- No longer needed to access to G4IonTable.
   //-- Method GetIonLifeTime() itself is kept for compatibility
@@ -59,190 +56,159 @@ G4double G4ParticleDefinition::GetIonLifeTime() const
   return thePDGLifeTime;
 }
 
-inline 
-G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
-{ 
-  return theParticleTable; 
+inline G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
+{
+  return theParticleTable;
 }
 
-inline
-G4DecayTable* G4ParticleDefinition::GetDecayTable() const
-{ 
-  return theDecayTable; 
+inline G4DecayTable* G4ParticleDefinition::GetDecayTable() const
+{
+  return theDecayTable;
 }
 
-inline
-void G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable) 
-{ 
-  theDecayTable = aDecayTable; 
+inline void G4ParticleDefinition::SetDecayTable(G4DecayTable* aDecayTable)
+{
+  theDecayTable = aDecayTable;
 }
 
-inline 
-void G4ParticleDefinition::SetVerboseLevel(G4int value)
+inline void G4ParticleDefinition::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
 }
 
-inline 
-G4int G4ParticleDefinition::GetVerboseLevel() const
+inline G4int G4ParticleDefinition::GetVerboseLevel() const
 {
   return verboseLevel;
 }
 
-inline
-G4ProcessManager* G4ParticleDefinition::GetMasterProcessManager() const
+inline G4ProcessManager* G4ParticleDefinition::GetMasterProcessManager() const
 {
   return theProcessManagerShadow;
 }
 
-inline
-void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
+inline void G4ParticleDefinition::SetMasterProcessManager(G4ProcessManager* aNewPM)
 {
   theProcessManagerShadow = aNewPM;
 }
 
-inline
-G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const 
-{
-  G4int content = 0; 
-  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
-  {
-    content = theQuarkContent[flavor-1];
-  }
-  else
-  {
-#ifdef G4VERBOSE
-    if (verboseLevel >0)
-    {
-      std::ostringstream message;
-      message << "Invalid Quark Flavor: " << flavor;
-      G4Exception("G4ParticleDefinition::GetQuarkContent()",
-                  "InvalidFlavor", JustWarning, message);
-    }
-#endif
-  }
-  return content;  
-}
-
-inline
-G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const 
+inline G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const
 {
   G4int content = 0;
-  if ((flavor>0) && (flavor<=NumberOfQuarkFlavor))
-  {
-    content = theAntiQuarkContent[flavor-1];
+  if ((flavor > 0) && (flavor <= NumberOfQuarkFlavor)) {
+    content = theQuarkContent[flavor - 1];
   }
-  else
-  {
+  else {
 #ifdef G4VERBOSE
-    if (verboseLevel >0)
-    {
+    if (verboseLevel > 0) {
       std::ostringstream message;
       message << "Invalid Quark Flavor: " << flavor;
-      G4Exception("G4ParticleDefinition::GetAntiQuarkContent()",
-                  "InvalidFlavor", JustWarning, message);
+      G4Exception("G4ParticleDefinition::GetQuarkContent()", "InvalidFlavor", JustWarning, message);
     }
 #endif
-  }  
+  }
   return content;
 }
 
-inline 
-void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
+inline G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const
+{
+  G4int content = 0;
+  if ((flavor > 0) && (flavor <= NumberOfQuarkFlavor)) {
+    content = theAntiQuarkContent[flavor - 1];
+  }
+  else {
+#ifdef G4VERBOSE
+    if (verboseLevel > 0) {
+      std::ostringstream message;
+      message << "Invalid Quark Flavor: " << flavor;
+      G4Exception("G4ParticleDefinition::GetAntiQuarkContent()", "InvalidFlavor", JustWarning,
+                  message);
+    }
+#endif
+  }
+  return content;
+}
+
+inline void G4ParticleDefinition::SetParticleSubType(const G4String& subtype)
 {
   theParticleSubType = subtype;
 }
- 
-inline 
-void G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
-{ 
-  theAntiPDGEncoding = aEncoding; 
+
+inline void G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
+{
+  theAntiPDGEncoding = aEncoding;
 }
 
-inline 
-G4bool G4ParticleDefinition::GetApplyCutsFlag() const
+inline G4bool G4ParticleDefinition::GetApplyCutsFlag() const
 {
   return fApplyCutsFlag;
 }
 
-inline
-void G4ParticleDefinition::SetAtomicNumber(G4int i)
+inline void G4ParticleDefinition::SetAtomicNumber(G4int i)
 {
   theAtomicNumber = i;
 }
 
-inline
-G4int G4ParticleDefinition::GetAtomicNumber() const
+inline G4int G4ParticleDefinition::GetAtomicNumber() const
 {
   return theAtomicNumber;
 }
 
-inline
-void G4ParticleDefinition::SetAtomicMass(G4int i)
+inline void G4ParticleDefinition::SetAtomicMass(G4int i)
 {
   theAtomicMass = i;
 }
 
-inline
-G4int G4ParticleDefinition::GetAtomicMass() const
+inline G4int G4ParticleDefinition::GetAtomicMass() const
 {
   return theAtomicMass;
 }
 
-inline 
-void  G4ParticleDefinition::SetPDGMagneticMoment(G4double magneticMoment)
+inline void G4ParticleDefinition::SetPDGMagneticMoment(G4double magneticMoment)
 {
   thePDGMagneticMoment = magneticMoment;
 }
 
-inline      
-G4bool G4ParticleDefinition::IsGeneralIon() const
+inline G4bool G4ParticleDefinition::IsGeneralIon() const
 {
   return isGeneralIon;
 }
 
-inline
-G4bool G4ParticleDefinition::IsMuonicAtom() const
+inline G4bool G4ParticleDefinition::IsMuonicAtom() const
 {
   return isMuonicAtom;
 }
 
-inline
-G4int G4ParticleDefinition::GetParticleDefinitionID() const
+inline G4int G4ParticleDefinition::GetParticleDefinitionID() const
 {
-  return g4particleDefinitionInstanceID; 
+  return g4particleDefinitionInstanceID;
 }
 
-inline
-G4bool G4ParticleDefinition::IsHypernucleus() const
+inline G4bool G4ParticleDefinition::IsHypernucleus() const
 {
   return GetNumberOfLambdasInHypernucleus() > 0;
 }
 
-inline
-G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
+inline G4int G4ParticleDefinition::GetNumberOfLambdasInHypernucleus() const
 {
   G4int numberOfLambdas = 0;
   // PDG code of hypernuclei: 10LZZZAAAI
-  if ( thePDGEncoding > 0  &&  thePDGEncoding/1000000000 != 0 ) {
-    numberOfLambdas = (thePDGEncoding/10000000)%100;
+  if (thePDGEncoding > 0 && thePDGEncoding / 1000000000 != 0) {
+    numberOfLambdas = (thePDGEncoding / 10000000) % 100;
   }
   return numberOfLambdas;
 }
 
-inline
-G4bool G4ParticleDefinition::IsAntiHypernucleus() const
+inline G4bool G4ParticleDefinition::IsAntiHypernucleus() const
 {
   return GetNumberOfAntiLambdasInAntiHypernucleus() > 0;
 }
 
-inline
-G4int G4ParticleDefinition::GetNumberOfAntiLambdasInAntiHypernucleus() const
+inline G4int G4ParticleDefinition::GetNumberOfAntiLambdasInAntiHypernucleus() const
 {
   G4int numberOfAntiLambdas = 0;
   // PDG code of anti-hypernuclei: -10LZZZAAAI
-  if ( thePDGEncoding < 0   &&  thePDGEncoding/1000000000 != 0 ) {
-    numberOfAntiLambdas = (std::abs(thePDGEncoding)/10000000)%100;
+  if (thePDGEncoding < 0 && thePDGEncoding / 1000000000 != 0) {
+    numberOfAntiLambdas = (std::abs(thePDGEncoding) / 10000000) % 100;
   }
   return numberOfAntiLambdas;
 }

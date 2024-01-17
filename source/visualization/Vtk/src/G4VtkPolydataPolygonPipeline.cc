@@ -41,9 +41,9 @@ std::size_t G4VtkPolydataPolygonPipeline::MakeHash(const G4VisAttributes* pVA)
 }
 
 G4VtkPolydataPolygonPipeline::G4VtkPolydataPolygonPipeline(G4String nameIn,
-                                                           const G4VtkVisContext& vc,
+                                                           const G4VtkVisContext& vcIn,
                                                            const G4VisAttributes* pVisAttributes)
-  : G4VtkPolydataPipeline(nameIn, vc)
+  : G4VtkPolydataPipeline(nameIn, vcIn)
 {
   // Set pipeline type
   SetTypeName(G4String("G4VtkPolydataSpherePipeline"));

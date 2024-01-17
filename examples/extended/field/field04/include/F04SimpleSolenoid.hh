@@ -48,16 +48,16 @@ class F04SimpleSolenoid : public F04ElementField
     F04SimpleSolenoid(G4double, G4double, G4LogicalVolume*, G4ThreeVector);
 
     ///  Destructor.
-    virtual ~F04SimpleSolenoid() {}
+    ~F04SimpleSolenoid() override = default;
 
     ///  GetLength() returns the length of the solenoid
-    virtual G4double GetLength() { return fFieldLength; }
+    G4double GetLength() override { return fFieldLength; }
 
     ///  GetWidth() returns the solenoid diameter
-    virtual G4double GetWidth() { return fFieldRadius*2.0; }
+    G4double GetWidth() override { return fFieldRadius*2.0; }
 
     ///  GetHeight() returns the solenoid diameter
-    virtual G4double GetHeight() { return fFieldRadius*2.0; }
+    G4double GetHeight() override { return fFieldRadius*2.0; }
 
     /// SetFringeZ(G4double) sets the solenoid fringe field z-length
     void SetFringeZ(G4double z) { fFringeZ = z; }
@@ -73,16 +73,16 @@ class F04SimpleSolenoid : public F04ElementField
 
     ///  AddFieldValue() adds the field for this solenoid into field[].
     ///  point[] is in global coordinates.
-    virtual void AddFieldValue(const G4double point[4], G4double field[6]) const;
+    void AddFieldValue(const G4double point[4], G4double field[6]) const override;
 
   private:
 
-    G4double fBfield;
+    G4double fBfield = 0.;
 
-    G4double fFringeZ;
+    G4double fFringeZ = 0.;
 
-    G4double fFieldLength;
-    G4double fFieldRadius;
+    G4double fFieldLength = 0.;
+    G4double fFieldRadius = 0.;
 
 };
 

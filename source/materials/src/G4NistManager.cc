@@ -43,7 +43,6 @@
 // http://physics.nist.gov/PhysRefData/Compositions/index.html
 
 #include "G4NistManager.hh"
-
 #include "G4AutoLock.hh"
 #include "G4Isotope.hh"
 #include "G4NistMessenger.hh"
@@ -60,10 +59,12 @@ G4Mutex nistManagerMutex = G4MUTEX_INITIALIZER;
 G4NistManager* G4NistManager::Instance()
 {
   if (instance == nullptr) {
+    G4AutoLock l(&nistManagerMutex);
     if (instance == nullptr) {
       static G4NistManager manager;
       instance = &manager;
     }
+    l.unlock();
   }
   return instance;
 }
@@ -73,27 +74,12 @@ G4NistManager* G4NistManager::Instance()
 G4NistManager::~G4NistManager()
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  size_t nmat = theMaterialTable->size();
-  size_t i;
-  for (i = 0; i < nmat; i++) {
-    if ((*theMaterialTable)[i] != nullptr) {
-      delete (*theMaterialTable)[i];
-    }
-  }
+  for (auto const & mat : *theMaterialTable) { delete mat; }
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nelm = theElementTable->size();
-  for (i = 0; i < nelm; i++) {
-    if ((*theElementTable)[i] != nullptr) {
-      delete (*theElementTable)[i];
-    }
-  }
+  for (auto const & elm : *theElementTable) { delete elm; }
   const G4IsotopeTable* theIsotopeTable = G4Isotope::GetIsotopeTable();
-  size_t niso = theIsotopeTable->size();
-  for (i = 0; i < niso; i++) {
-    if ((*theIsotopeTable)[i] != nullptr) {
-      delete (*theIsotopeTable)[i];
-    }
-  }
+  for (auto const & iso : *theIsotopeTable) { delete iso; }
+
   delete messenger;
   delete matBuilder;
   delete elmBuilder;
@@ -151,10 +137,7 @@ void G4NistManager::PrintElement(const G4String& symbol) const
 
 void G4NistManager::PrintG4Element(const G4String& name) const
 {
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nelm = theElementTable->size();
-  for (size_t i = 0; i < nelm; i++) {
-    G4Element* elm = (*theElementTable)[i];
+  for (auto const & elm : *G4Element::GetElementTable()) {
     if (name == elm->GetName() || "all" == name) {
       G4cout << *elm << G4endl;
     }
@@ -165,10 +148,7 @@ void G4NistManager::PrintG4Element(const G4String& name) const
 
 void G4NistManager::PrintG4Material(const G4String& name) const
 {
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  size_t nmat = theMaterialTable->size();
-  for (size_t i = 0; i < nmat; i++) {
-    G4Material* mat = (*theMaterialTable)[i];
+  for (auto const & mat : *G4Material::GetMaterialTable()) {
     if (name == mat->GetName() || "all" == name) {
       G4cout << *mat << G4endl;
     }

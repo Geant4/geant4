@@ -45,14 +45,14 @@ class WLSSteppingActionMessenger : public G4UImessenger
 {
  public:
   WLSSteppingActionMessenger(WLSSteppingAction*);
-  ~WLSSteppingActionMessenger();
+  ~WLSSteppingActionMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  WLSSteppingAction* fSteppingAction;
-  G4UIdirectory* fSteppingDir;
-  G4UIcmdWithAnInteger* fSetBounceLimitCmd;
+  WLSSteppingAction* fSteppingAction = nullptr;
+  G4UIdirectory* fSteppingDir = nullptr;
+  G4UIcmdWithAnInteger* fSetBounceLimitCmd = nullptr;
 };
 
 #endif

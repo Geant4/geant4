@@ -50,6 +50,7 @@
 #include "G4INCLFinalState.hh"
 #include "G4INCLInteractionAvatar.hh"
 #include "G4INCLAllocationPool.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
 
@@ -89,11 +90,11 @@ namespace G4INCL {
     static G4ThreadLocal G4double cutNN;
     static G4ThreadLocal G4double cutNNSquared;
     static G4ThreadLocal G4double bias;
+
     G4double theCrossSection;
     G4bool isParticle1Spectator;
     G4bool isParticle2Spectator;
     G4bool isElastic;
-    
     G4bool isStrangeProduction;
 
     INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar)

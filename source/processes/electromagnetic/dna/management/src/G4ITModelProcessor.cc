@@ -216,7 +216,7 @@ fVerbose
             G4int nbSecondaries = pChanges->GetNumberOfSecondaries();
             const std::vector<G4Track*>* productsVector = pChanges->GetfSecondary();
 
-            if (fpUserTimeStepAction)
+            if (fpUserTimeStepAction != nullptr)
             {
                 fpUserTimeStepAction->UserReactionAction(*pTrackA,
                                                          *pTrackB,
@@ -224,7 +224,7 @@ fVerbose
             }
 
 #ifdef G4VERBOSE
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << "At time : " << std::setw(7) << G4BestUnit(fGlobalTime, "Time")
                        << " Reaction : " << GetIT(pTrackA)->GetName() << " ("
@@ -238,7 +238,7 @@ fVerbose
                 for (int i = 0; i < nbSecondaries; ++i)
                 {
 #ifdef G4VERBOSE
-                    if (fVerbose && i != 0)
+                    if ((fVerbose != 0) && i != 0)
                     {
                         G4cout << " + ";
                     }
@@ -271,7 +271,7 @@ fVerbose
                     }
 
 #ifdef G4VERBOSE
-                    if (fVerbose)
+                    if (fVerbose != 0)
                     {
                         G4cout << GetIT(secondary)->GetName() << " ("
                                << secondary->GetTrackID() << ")";
@@ -282,14 +282,14 @@ fVerbose
             else
             {
 #ifdef G4VERBOSE
-                if (fVerbose)
+                if (fVerbose != 0)
                 {
                     G4cout << "No product";
                 }
 #endif
             }
 #ifdef G4VERBOSE
-            if (fVerbose)
+            if (fVerbose != 0)
             {
                 G4cout << G4endl;
             }

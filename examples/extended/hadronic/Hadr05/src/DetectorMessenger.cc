@@ -45,14 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(nullptr),
- fDetDir(nullptr),
- fSizeYZCmd(nullptr),
- fNbLayersCmd(nullptr),
- fNbAbsorCmd(nullptr),
- fAbsorCmd(nullptr),
- fIsotopeCmd(nullptr)
+:fDetector(Det)
 { 
   fTestemDir = new G4UIdirectory("/testhadr/");
   fTestemDir->SetGuidance("UI commands specific to this example");

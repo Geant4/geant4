@@ -67,6 +67,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
     "list", "List all/activate analysis objects.", "OnlyIfActive", true);
   fListCmd->SetDefaultValue(true);
 
+  fSetDefaultFileTypeCmd = CreateCommand<G4UIcmdWithAString>(
+    "setDefaultFileType", "Set default output file type", "DefaultFileType", false);
+#ifdef TOOLS_USE_HDF5
+  fSetDefaultFileTypeCmd->SetCandidates("csv hdf5 root xml");
+#else
+  fSetDefaultFileTypeCmd->SetCandidates("csv root xml");
+#endif
+
   fSetActivationCmd = CreateCommand<G4UIcmdWithABool>(
     "setActivation",
     "Set activation. \n"
@@ -147,6 +155,11 @@ void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 
   if ( command == fListCmd.get() ) {
     fManager->List(fListCmd->GetNewBoolValue(newValues));
+    return;
+  }
+
+  if ( command == fSetDefaultFileTypeCmd.get() ) {
+    fManager->SetDefaultFileType(newValues);
     return;
   }
 

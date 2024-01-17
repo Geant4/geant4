@@ -49,7 +49,7 @@ Par04DefineMeshModel::Par04DefineMeshModel(G4String aModelName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04DefineMeshModel::~Par04DefineMeshModel() {}
+Par04DefineMeshModel::~Par04DefineMeshModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,7 +62,7 @@ G4bool Par04DefineMeshModel::IsApplicable(const G4ParticleDefinition&)
 
 G4bool Par04DefineMeshModel::ModelTrigger(const G4FastTrack&)
 {
-  Par04EventInformation* info = dynamic_cast<Par04EventInformation*>(
+  auto  info = dynamic_cast<Par04EventInformation*>(
     G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetUserInformation());
   // check if particle direction and position were already set for this event
   if(info != nullptr)
@@ -75,7 +75,7 @@ G4bool Par04DefineMeshModel::ModelTrigger(const G4FastTrack&)
 
 void Par04DefineMeshModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep&)
 {
-  Par04EventInformation* info = dynamic_cast<Par04EventInformation*>(
+  auto  info = dynamic_cast<Par04EventInformation*>(
     G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetUserInformation());
   if(info == nullptr)
   {

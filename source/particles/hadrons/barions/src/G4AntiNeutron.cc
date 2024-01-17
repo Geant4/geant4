@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -37,39 +34,38 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiNeutron.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4NeutronBetaDecayChannel.hh"
 #include "G4DecayTable.hh"
+#include "G4NeutronBetaDecayChannel.hh"
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
-// ######################################################################
-// ###                          ANTI NEUTRON                          ###
-// ######################################################################
 G4AntiNeutron* G4AntiNeutron::theInstance = nullptr;
 
 G4AntiNeutron* G4AntiNeutron::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr) 
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-   // use constants in CLHEP
-  // static const double  neutron_mass_c2 = 939.56563 * MeV;
-
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // use constants in CLHEP
+    // static const double  neutron_mass_c2 = 939.56563 * MeV;
+    // clang-format off
   anInstance = new G4ParticleDefinition(
                  name, neutron_mass_c2, 7.478e-28*GeV,         0.0, 
 		    1,              +1,             0,          
@@ -78,29 +74,28 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		false,    880.2*second,          nullptr,
 	        false,       "nucleon",          2112
               );
+    // clang-format on
+
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 1.9130427 * mN);
-    //create Decay Table 
-    auto  table = new G4DecayTable();
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(1.9130427 * mN);
+    // create Decay Table
+    auto table = new G4DecayTable();
     // create a decay channel
-    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("anti_neutron",1.00);
+    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("anti_neutron", 1.00);
     table->Insert(mode);
     anInstance->SetDecayTable(table);
- 
   }
   theInstance = static_cast<G4AntiNeutron*>(anInstance);
   return theInstance;
 }
 
-G4AntiNeutron*  G4AntiNeutron::AntiNeutronDefinition()
+G4AntiNeutron* G4AntiNeutron::AntiNeutronDefinition()
 {
   return Definition();
 }
 
-G4AntiNeutron*  G4AntiNeutron::AntiNeutron()
+G4AntiNeutron* G4AntiNeutron::AntiNeutron()
 {
   return Definition();
 }
-
-

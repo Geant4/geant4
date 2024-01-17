@@ -43,7 +43,7 @@
 
 G4ITTrackingManager::G4ITTrackingManager()
 {
-  fpTrackingInteractivity = 0;
+  fpTrackingInteractivity = nullptr;
 }
 //___________________________________________________
 //void G4ITTrackingManager::Initialize()
@@ -53,12 +53,12 @@ G4ITTrackingManager::G4ITTrackingManager()
 //___________________________________________________
 G4ITTrackingManager::~G4ITTrackingManager()
 {
-  if (fpTrackingInteractivity) delete fpTrackingInteractivity;
+  delete fpTrackingInteractivity;
 }
 //___________________________________________________
 void G4ITTrackingManager::StartTracking(G4Track* track)
 {
-  if (fpTrackingInteractivity)
+  if (fpTrackingInteractivity != nullptr)
   {
     fpTrackingInteractivity->StartTracking(track);
 #ifdef G4VERBOSE
@@ -72,13 +72,13 @@ void G4ITTrackingManager::StartTracking(G4Track* track)
 //___________________________________________________
 void G4ITTrackingManager::AppendStep(G4Track* track, G4Step* step)
 {
-  if (fpTrackingInteractivity) fpTrackingInteractivity->AppendStep(track, step);
+  if (fpTrackingInteractivity != nullptr) fpTrackingInteractivity->AppendStep(track, step);
 }
 
 //___________________________________________________
 void G4ITTrackingManager::SetInteractivity(G4ITTrackingInteractivity* iteractivity)
 {
-  if (fpTrackingInteractivity && fpTrackingInteractivity != iteractivity)
+  if ((fpTrackingInteractivity != nullptr) && fpTrackingInteractivity != iteractivity)
   {
     delete fpTrackingInteractivity;
   }
@@ -88,7 +88,7 @@ void G4ITTrackingManager::SetInteractivity(G4ITTrackingInteractivity* iteractivi
 //___________________________________________________
 void G4ITTrackingManager::EndTracking(G4Track* track)
 {
-  if (fpTrackingInteractivity)
+  if (fpTrackingInteractivity != nullptr)
   {
     fpTrackingInteractivity->EndTracking(track);
 #ifdef G4VERBOSE
@@ -101,7 +101,7 @@ void G4ITTrackingManager::EndTracking(G4Track* track)
 
 void G4ITTrackingManager::EndTrackingWOKill(G4Track* track)
 {
-  if (fpTrackingInteractivity)
+  if (fpTrackingInteractivity != nullptr)
   {
     fpTrackingInteractivity->EndTracking(track);
 #ifdef G4VERBOSE

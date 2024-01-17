@@ -74,7 +74,9 @@ public:
    */
   virtual ~G4DNAPTBAugerModel();
    
-
+  G4DNAPTBAugerModel(G4DNAPTBAugerModel &) = delete;  // prevent copy-construction
+  G4DNAPTBAugerModel & operator=(const G4DNAPTBAugerModel &right) = delete;  // prevent assignement
+ 
   /*!
    * \brief Initialise
    * Set the verbose value
@@ -128,10 +130,7 @@ private:
    */
   G4int DetermineIonisedAtom(G4int atomId, const G4String &materialName, G4double bindingEnergy);
 
-  // copy constructor and hide assignment operator
-  G4DNAPTBAugerModel(G4DNAPTBAugerModel &);  // prevent copy-construction
-  G4DNAPTBAugerModel & operator=(const G4DNAPTBAugerModel &right);  // prevent assignement
- 
+
 };
 
 #endif

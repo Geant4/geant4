@@ -64,7 +64,7 @@ G4DNAPTBExcitationModel::G4DNAPTBExcitationModel(const G4String& applyToMaterial
   if (fpPU != nullptr) {
     fTableMeanEnergyPTB[fpPU->GetIndex()] = 7.61 * eV;
   }
-  if (fpTMP) {
+  if (fpTMP != nullptr) {
     fTableMeanEnergyPTB[fpTMP->GetIndex()] = 8.01 * eV;
   }
 

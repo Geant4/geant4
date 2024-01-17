@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-09 H. Tran (molecularDNA-V11-01-08)
+- Added info in .README.txt and README files
+
+## 2023-11-07 I. Hrivnacova (molecularDNA-V11-01-07)
+- Fixed formatting in .README.txt
+
+## 2023-09-13 I. Hrivnacova (molecularDNA-V11-01-06)
+- Removed unused public data member
+  PrimaryGeneratorSourceGRASCSV::nLineCounter
+
+## 2023-08-28 Hoang Tran (molecularDNA-V11-01-05)
+- add the geometry files for HTB177 and MCF-7 cell lines.
+
 ## 2023-05-31 Hoang Tran (molecularDNA-V11-01-04)
 - restore the correction of the material bug
 

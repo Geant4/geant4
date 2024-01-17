@@ -39,7 +39,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
-:G4UserRunAction(), fHistoManager(0)
 {
  fHistoManager = new HistoManager();  
 }

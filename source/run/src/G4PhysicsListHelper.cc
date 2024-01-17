@@ -255,34 +255,7 @@ void G4PhysicsListHelper::AddTransportation()
 // --------------------------------------------------------------------
 void G4PhysicsListHelper::ReadOrdingParameterTable()
 {
-  G4bool readInFile = false;
   std::ifstream fIn;
-
-  if (std::getenv("G4ORDPARAMTABLE") != nullptr) {
-    ordParamFileName = std::getenv("G4ORDPARAMTABLE");
-#ifdef G4VERBOSE
-    if (verboseLevel > 1) {
-      G4cout << "G4PhysicsListHelper::ReadOrdingParameterTable  :" << ordParamFileName
-             << " is assigned to Ordering Parameter Table " << G4endl;
-    }
-#endif
-    // open input file //
-    fIn.open(ordParamFileName, std::ios::in);
-    // check if the file has been opened successfully
-    if (!fIn) {
-#ifdef G4VERBOSE
-      if (verboseLevel > 0) {
-        G4cout << "G4PhysicsListHelper::ReadOrdingParameterTable  "
-               << " Can not open file " << ordParamFileName << G4endl;
-      }
-#endif
-      G4Exception("G4PhysicsListHelper::ReadOrdingParameterTable", "Run0105", JustWarning,
-                  "Fail to open ordering parameter table ");
-    }
-    else {
-      readInFile = true;
-    }
-  }
 
   // create OrdParamTable
   if (theTable != nullptr) {
@@ -294,22 +267,7 @@ void G4PhysicsListHelper::ReadOrdingParameterTable()
   theTable = new G4OrdParamTable();
   sizeOfTable = 0;
 
-  if (readInFile) {
-    // read in the file and fill the table
-    while (!fIn.eof()) {
-      G4PhysicsListOrderingParameter tmp;
-      G4int flag;
-      fIn >> tmp.processTypeName >> tmp.processType >> tmp.processSubType >> tmp.ordering[0]
-        >> tmp.ordering[1] >> tmp.ordering[2] >> flag;
-      tmp.isDuplicable = (flag != 0);
-      theTable->push_back(tmp);
-      ++sizeOfTable;
-    }
-    fIn.close();
-  }
-  else {
-    ReadInDefaultOrderingParameter();
-  }
+  ReadInDefaultOrderingParameter();
 
   if (sizeOfTable == 0) {
 #ifdef G4VERBOSE

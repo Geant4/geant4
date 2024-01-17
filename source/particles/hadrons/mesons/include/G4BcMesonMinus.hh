@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -37,25 +34,20 @@
 #ifndef G4BcMesonMinus_h
 #define G4BcMesonMinus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                        BcMesonMinus                             ###
-// ######################################################################
 
 class G4BcMesonMinus : public G4ParticleDefinition
 {
- private:
-   static G4BcMesonMinus* theInstance;
-   G4BcMesonMinus(){}
-   ~G4BcMesonMinus() override= default;
+  public:
+    static G4BcMesonMinus* Definition();
+    static G4BcMesonMinus* BcMesonMinusDefinition();
+    static G4BcMesonMinus* BcMesonMinus();
 
- public:
-   static G4BcMesonMinus* Definition();
-   static G4BcMesonMinus* BcMesonMinusDefinition();
-   static G4BcMesonMinus* BcMesonMinus();
+  private:
+    G4BcMesonMinus() {}
+    ~G4BcMesonMinus() override = default;
+
+    static G4BcMesonMinus* theInstance;
 };
 
 #endif

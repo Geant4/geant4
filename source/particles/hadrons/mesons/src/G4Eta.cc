@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -35,41 +32,40 @@
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
-//      Update mass (PDG2006)              Oct. 11 2006 H.Kurashige 
+//      Update mass (PDG2006)              Oct. 11 2006 H.Kurashige
 //
 
 #include "G4Eta.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                         ETA                                    ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4Eta* G4Eta::theInstance = nullptr;
 
 G4Eta* G4Eta::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "eta";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,    0.547862*GeV,      1.31*keV,         0.0,
                     0,              -1,            +1,
@@ -77,36 +73,38 @@ G4Eta* G4Eta::Definition()
               "meson",               0,             0,         221,
                 false,          0.0*ns,          nullptr,
                 false,           "eta",           221);
- //create Decay Table
-  auto  table = new G4DecayTable();
+    // clang-format on
 
- // create decay channels
-  auto  mode = new G4VDecayChannel*[4];
-  // eta -> gamma + gamma
-  mode[0] = new G4PhaseSpaceDecayChannel("eta",0.3942,2,"gamma","gamma");
-  // eta -> pi0 + pi0 + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("eta",0.3256,3,"pi0","pi0","pi0");
-  // eta -> pi0 + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("eta",0.226,3,"pi0","pi+","pi-");
-  // eta -> gamma + pi+ + pi-
-  mode[3] = new G4PhaseSpaceDecayChannel("eta",0.0468,3,"gamma","pi+","pi-");
+    // create Decay Table
+    auto table = new G4DecayTable();
 
-  for (G4int index=0; index <4; index++ ) table->Insert(mode[index]);
-  delete [] mode;
+    // create decay channels
+    auto mode = new G4VDecayChannel*[4];
+    // eta -> gamma + gamma
+    mode[0] = new G4PhaseSpaceDecayChannel("eta", 0.3942, 2, "gamma", "gamma");
+    // eta -> pi0 + pi0 + pi0
+    mode[1] = new G4PhaseSpaceDecayChannel("eta", 0.3256, 3, "pi0", "pi0", "pi0");
+    // eta -> pi0 + pi+ + pi-
+    mode[2] = new G4PhaseSpaceDecayChannel("eta", 0.226, 3, "pi0", "pi+", "pi-");
+    // eta -> gamma + pi+ + pi-
+    mode[3] = new G4PhaseSpaceDecayChannel("eta", 0.0468, 3, "gamma", "pi+", "pi-");
 
-   anInstance->SetDecayTable(table);
+    for (G4int index = 0; index < 4; index++)
+      table->Insert(mode[index]);
+    delete[] mode;
+
+    anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4Eta*>(anInstance);
   return theInstance;
 }
 
-G4Eta*  G4Eta::EtaDefinition()
+G4Eta* G4Eta::EtaDefinition()
 {
   return Definition();
 }
 
-G4Eta*  G4Eta::Eta()
+G4Eta* G4Eta::Eta()
 {
   return Definition();
 }
-

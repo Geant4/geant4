@@ -23,6 +23,9 @@
 #
 /run/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking.
 # Suggested values of cut and step

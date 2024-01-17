@@ -58,11 +58,6 @@ RadioactiveDecayPhysics::RadioactiveDecayPhysics(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RadioactiveDecayPhysics::~RadioactiveDecayPhysics()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void RadioactiveDecayPhysics::ConstructParticle()
 {
   G4GenericIon::GenericIon();

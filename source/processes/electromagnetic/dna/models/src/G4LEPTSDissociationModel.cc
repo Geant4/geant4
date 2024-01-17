@@ -31,12 +31,12 @@ G4LEPTSDissociationModel::G4LEPTSDissociationModel(const G4String&  modelName)
   : G4VLEPTSModel( modelName )
 {
   theXSType = XSDissociation;
+  fParticleChangeForGamma = nullptr;
 } // constructor
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4LEPTSDissociationModel::~G4LEPTSDissociationModel() {
-}
+G4LEPTSDissociationModel::~G4LEPTSDissociationModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

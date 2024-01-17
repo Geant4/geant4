@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-/// \file ActionInitialization.hh
+/// \file electromagnetic/TestEm16/include/ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
-
+//
+//
 #ifndef ActionInitialization_h
 #define ActionInitialization_h 1
 
@@ -41,7 +41,7 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(DetectorConstruction*);
-   ~ActionInitialization() override;
+    ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
@@ -51,5 +51,3 @@ class ActionInitialization : public G4VUserActionInitialization
 };
 
 #endif
-
-    

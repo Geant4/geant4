@@ -38,8 +38,6 @@ G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator = nullptr;
 
 WLSPhotonDetHit::WLSPhotonDetHit()
 {
-  fArrivalTime = 0.;
-  fEnergy = 0.;
   fPosArrive   = G4ThreeVector(0., 0., 0.);
   fPosExit     = G4ThreeVector(0., 0., 0.);
 }
@@ -54,10 +52,6 @@ WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit, G4ThreeVector pArrive,
   fArrivalTime = pTime;
   fEnergy      = pEnergy;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSPhotonDetHit::~WLSPhotonDetHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

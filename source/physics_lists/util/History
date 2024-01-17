@@ -6,6 +6,8 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-15 Vladimir Ivanchenko (phys-util-V11-01-01)
+- G4HadProcesses - more accurate implementation for the neutron genelal process
 
 ## 2022-12-30 Vladimir Ivanchenko (phys-util-V11-01-00)
 - G4HadProcesses - avoid double instantiation of capture cross section

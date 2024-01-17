@@ -40,20 +40,21 @@ class G4HETCFragment : public G4VPreCompoundFragment
 {
 public:  
 
-  G4HETCFragment(const G4ParticleDefinition*,
-		 G4VCoulombBarrier * aCoulombBarrier);
+  G4HETCFragment(const G4ParticleDefinition*, G4VCoulombBarrier* p = nullptr);
   
-  virtual ~G4HETCFragment();
+  ~G4HETCFragment() override = default;
 
-  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+  G4double CalcEmissionProbability(const G4Fragment& aFragment) override;
+
+  G4HETCFragment(const G4HETCFragment &right) = delete;
+  const G4HETCFragment& operator = (const G4HETCFragment &right) = delete;  
+  G4bool operator==(const G4HETCFragment &right) const = delete;
+  G4bool operator!=(const G4HETCFragment &right) const = delete;
 
 protected:
 
-  virtual G4double K(const G4Fragment & aFragment) = 0;
-    
+  virtual G4double K(const G4Fragment& aFragment) const = 0;
   virtual G4double GetSpinFactor() const = 0;
-  virtual G4double GetAlpha() const = 0;
-  virtual G4double GetBeta() const = 0;
 
   inline G4double BetaRand(G4int N, G4int L) const;
   
@@ -61,16 +62,8 @@ private:
 
   // This method performs integration for probability function over 
   // fragment kinetic energy
-  G4double IntegrateEmissionProbability(G4double & Low, 
-					G4double & Up, 
-					const G4Fragment & aFragment);	
-
-  G4HETCFragment();
-  G4HETCFragment(const G4HETCFragment &right);
-  const G4HETCFragment& 
-  operator= (const G4HETCFragment &right);  
-  G4bool operator==(const G4HETCFragment &right) const;
-  G4bool operator!=(const G4HETCFragment &right) const;
+  G4double IntegrateEmissionProbability(G4double Low, G4double Up, 
+					const G4Fragment&);	
 
   G4double r2norm;
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4AssemblyStore
+// G4AssemblyStore
 //
 // Class description:
 //
@@ -36,15 +36,9 @@
 // their destruction. The underlying container initially has a capacity of 20.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for std::vector<T>
-//
-// Member data:
-//
-// static G4AssemblyStore*
-//   - Pointer to the single G4AssemblyStore
+// instead of inheritance for std::vector<T>.
 
-// History:
-// 9.10.18 G.Cosmo Initial version
+// 9.10.2018 G.Cosmo - Initial version
 // --------------------------------------------------------------------
 #ifndef G4ASSEMBLYSTORE_HH
 #define G4ASSEMBLYSTORE_HH
@@ -58,7 +52,7 @@ class G4AssemblyVolume;
 
 class G4AssemblyStore : public std::vector<G4AssemblyVolume*>
 {
-  public:  // with description
+  public:
 
     static void Register(G4AssemblyVolume* pAssembly);
       // Add the assembly to the collection.

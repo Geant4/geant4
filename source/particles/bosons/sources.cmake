@@ -23,4 +23,4 @@ geant4_add_module(G4bosons
 	  G4PhononTransSlow.cc
     G4UnknownParticle.cc)
 
-geant4_module_link_libraries(G4bosons PUBLIC G4partman G4globman)
+geant4_module_link_libraries(G4bosons PUBLIC G4partman PRIVATE G4globman)

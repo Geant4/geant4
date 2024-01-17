@@ -52,9 +52,9 @@ class HistoMessenger: public G4UImessenger
 public:
 
   HistoMessenger(Histo* );
-  virtual ~HistoMessenger();
+  ~HistoMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand* ,G4String );
+  void SetNewValue(G4UIcommand* ,G4String ) override;
 
 private:
 

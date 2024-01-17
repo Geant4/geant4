@@ -28,6 +28,8 @@
 
 #include "G4UserRunAction.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4ParticleDefinition;
 class G4Transportation;
 class G4CoupledTransportation;
@@ -38,13 +40,13 @@ class F01RunAction: public G4UserRunAction {
 
 public:
 
-  F01RunAction();
-  virtual ~F01RunAction();
-      
-  virtual void BeginOfRunAction( const G4Run* aRun );    
-  virtual void EndOfRunAction( const G4Run* aRun );    
+  F01RunAction()  = default;
+  ~F01RunAction() override = default;
 
-  // Helper method to change the Transportation's 'looper' parameters 
+  void BeginOfRunAction( const G4Run* aRun ) override;
+  void EndOfRunAction( const G4Run* aRun ) override;
+
+  // Helper method to change the Transportation's 'looper' parameters
   void ChangeLooperParameters(const G4ParticleDefinition* particleDef );
 
   // Helper method to find the Transportation process for a particle type
@@ -59,13 +61,16 @@ public:
   G4int    GetNumberOfTrials() { return fNumberOfTrials; }
   G4double GetWarningEnergy()  { return fWarningEnergy; }
   G4double GetImportantEnergy() { return fImportantEnergy; }
-   
+
 private:
 
   // Values for initialising 'loopers' parameters of Transport process
-  G4int    fNumberOfTrials  =  0;    // Default will not overwrite
-  G4double fWarningEnergy   = -1.0;  // Default values - non operational
-  G4double fImportantEnergy = -1.0;  // Default - will not overwrite
+  G4int    fNumberOfTrials  =  15;  // Arbitrary
+  G4double fWarningEnergy   =  1.0 * CLHEP::kiloelectronvolt;  // Arbitrary
+  G4double fImportantEnergy = 10.0 * CLHEP::kiloelectronvolt;  // Arbitrary
+    // Applications should determine these thresholds according to
+    //  - physics requirements, and
+    //  - the computing cost of continuing integration for looping tracks
 
   G4int    fVerboseLevel = 0;
 };

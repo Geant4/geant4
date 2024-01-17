@@ -109,7 +109,7 @@ inline G4double G4ITTransportation::GetSumEnergyKilled() const
 
 inline void G4ITTransportation::ResetKilledStatistics(G4int report)
 {
-  if( report ) {
+  if( report != 0 ) {
     G4cout << " G4ITTransportation: Statistics for looping particles " << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
     G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;

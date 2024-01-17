@@ -106,6 +106,11 @@ G4HadronicProcess::~G4HadronicProcess()
   delete theTotalResult;
   delete theCrossSectionDataStore;
   if(isMaster) {
+    if (fXSpeaks != nullptr) {
+      for (auto const& e : *fXSpeaks ) {
+        delete e;
+      }
+    }
     delete fXSpeaks;
     delete theEnergyOfCrossSectionMax;
   }
@@ -220,6 +225,11 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
       delete theEnergyOfCrossSectionMax;
       theEnergyOfCrossSectionMax = nullptr;
       if(fXSType == fHadTwoPeaks) {
+        if (fXSpeaks != nullptr) {
+          for (auto const& e : *fXSpeaks ) {
+            delete e;
+          }
+        }
 	delete fXSpeaks;
 	fXSpeaks =
 	  G4HadXSHelper::FillPeaksStructure(this, &p, minKinEnergy, tmax);
@@ -436,6 +446,8 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   // with equal, 50% probability, keeping their dynamical masses (and
   // the other kinematical properties). 
   // When this happens - very rarely - a "JustWarning" exception is thrown.
+  // Because Fluka-Cern produces kaon0 and anti_kaon0, we reduce the number
+  // of warnings to max 1 per thread.
   G4int nSec = (G4int)result->GetNumberOfSecondaries();
   if ( nSec > 0 ) {
     for ( G4int i = 0; i < nSec; ++i ) {
@@ -444,10 +456,10 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       if ( part == G4KaonZero::Definition() || 
            part == G4AntiKaonZero::Definition() ) {
         G4ParticleDefinition* newPart;
-        if( G4UniformRand() > 0.5 ) { newPart = G4KaonZeroShort::Definition(); }
+        if ( G4UniformRand() > 0.5 ) { newPart = G4KaonZeroShort::Definition(); }
         else { newPart = G4KaonZeroLong::Definition(); }
         dynamicParticle->SetDefinition( newPart );
-	if(nKaonWarn < 5) {
+	if ( nKaonWarn < 1 ) {
 	  ++nKaonWarn;
 	  G4ExceptionDescription ed;
 	  ed << " Hadronic model " << theInteraction->GetModelName() << G4endl;

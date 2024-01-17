@@ -46,9 +46,9 @@ using namespace std;
 
 G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4ParticleDefinition*,
                                                    const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam)
 {
-    fpMolWaterDensity = 0;
+    fpMolWaterDensity = nullptr;
 
     verboseLevel= 0;
     // Verbosity scale:
@@ -62,7 +62,7 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
     {
       G4cout << "Emfietzoglou excitation model is constructed " << G4endl;
     }
-    fParticleChangeForGamma = 0;
+    fParticleChangeForGamma = nullptr;
 
     SetLowEnergyLimit(8.*eV);
     SetHighEnergyLimit(10.*keV);
@@ -111,7 +111,7 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* pa
 
     // Cross section
 
-    G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    auto  tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
     tableE->LoadData(fileElectron);
 
     tableData[electron] = tableE;
@@ -165,7 +165,7 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
       if (pos != tableData.end())
       {
         G4DNACrossSectionDataSet* table = pos->second;
-        if (table != 0) sigma = table->FindValue(ekin);
+        if (table != nullptr) sigma = table->FindValue(ekin);
       }
       else
       {
@@ -239,10 +239,10 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
     {
         G4DNACrossSectionDataSet* table = pos->second;
 
-        if (table != 0)
+        if (table != nullptr)
         {
-            G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
-            const G4int n = (G4int)table->NumberOfComponents();
+            auto  valuesBuffer = new G4double[table->NumberOfComponents()];
+            const auto  n = (G4int)table->NumberOfComponents();
             G4int i(n);
             G4double value = 0.;
 
@@ -279,7 +279,7 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
                 value -= valuesBuffer[i];
             }
 
-            if (valuesBuffer) delete[] valuesBuffer;
+            delete[] valuesBuffer;
 
         }
     }

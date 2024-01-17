@@ -5,6 +5,10 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-09 I. Hrivnacova (exampleRE07-V11-01-00)
+- Coding guidelines - document macros in README files
+- Added separators in EmStandardPhysicsTrackingManager.cc
+
 ## 2022-09-14 Jonas Hahnfeld (exampleRE07-V11-00-01)
 - Run `clang-format`
 - Rename static class member `fMasterTrackingManager`

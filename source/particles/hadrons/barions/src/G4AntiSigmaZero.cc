@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,38 +33,36 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiSigmaZero.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                       AntiSigmaZero                            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VDecayChannel.hh"
 
 G4AntiSigmaZero* G4AntiSigmaZero::theInstance = nullptr;
 
 G4AntiSigmaZero* G4AntiSigmaZero::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_sigma0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr) 
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity   
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+
+    // clang-format off
     anInstance = new G4ParticleDefinition(
                  name,    1.192642*GeV,    8.9e-3*MeV,          0.0,
                     1,              +1,             0,
@@ -75,32 +70,33 @@ G4AntiSigmaZero* G4AntiSigmaZero::Definition()
              "baryon",               0,            -1,        -3212,
                 false,      7.4e-11*ns,          nullptr,
                 false,       "sigma");
- 
+    // clang-format on
+
     // Life time is given from width
-    anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
-   
-    //create Decay Table 
-    auto  table = new G4DecayTable();
-    
+    anInstance->SetPDGLifeTime(hbar_Planck / (anInstance->GetPDGWidth()));
+
+    // create Decay Table
+    auto table = new G4DecayTable();
+
     // create decay channels
     // anti_sigma0 -> anti_lambda + gamma
-    G4VDecayChannel* mode  = new G4PhaseSpaceDecayChannel("anti_sigma0",1.000,2,"anti_lambda","gamma");
-    
-    table->Insert(mode); 
-    
+    G4VDecayChannel* mode =
+      new G4PhaseSpaceDecayChannel("anti_sigma0", 1.000, 2, "anti_lambda", "gamma");
+
+    table->Insert(mode);
+
     anInstance->SetDecayTable(table);
   }
   theInstance = static_cast<G4AntiSigmaZero*>(anInstance);
   return theInstance;
 }
 
-G4AntiSigmaZero*  G4AntiSigmaZero::AntiSigmaZeroDefinition()
+G4AntiSigmaZero* G4AntiSigmaZero::AntiSigmaZeroDefinition()
 {
   return Definition();
 }
 
-G4AntiSigmaZero*  G4AntiSigmaZero::AntiSigmaZero()
+G4AntiSigmaZero* G4AntiSigmaZero::AntiSigmaZero()
 {
   return Definition();
 }
-

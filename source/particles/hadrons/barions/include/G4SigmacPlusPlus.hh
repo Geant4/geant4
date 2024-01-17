@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4SigmacPlusPlus_h
 #define G4SigmacPlusPlus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                     SigmacPlusPlus                             ###
-// ######################################################################
 
 class G4SigmacPlusPlus : public G4ParticleDefinition
 {
- private:
-   static G4SigmacPlusPlus* theInstance;
-   G4SigmacPlusPlus(){}
-   ~G4SigmacPlusPlus() override= default;
+  public:
+    static G4SigmacPlusPlus* Definition();
+    static G4SigmacPlusPlus* SigmacPlusPlusDefinition();
+    static G4SigmacPlusPlus* SigmacPlusPlus();
 
- public:
-   static G4SigmacPlusPlus* Definition();
-   static G4SigmacPlusPlus* SigmacPlusPlusDefinition();
-   static G4SigmacPlusPlus* SigmacPlusPlus();
+  private:
+    G4SigmacPlusPlus() {}
+    ~G4SigmacPlusPlus() override = default;
+
+    static G4SigmacPlusPlus* theInstance;
 };
 
 #endif

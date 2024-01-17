@@ -36,30 +36,27 @@
 #ifndef G4NeutronEvaporationProbability_h
 #define G4NeutronEvaporationProbability_h 1
 
-
 #include "G4EvaporationProbability.hh"
 
 class G4NeutronEvaporationProbability : public G4EvaporationProbability
 {
 public:
  
-  explicit G4NeutronEvaporationProbability();
+  G4NeutronEvaporationProbability();
 		
-  ~G4NeutronEvaporationProbability() override;
+  ~G4NeutronEvaporationProbability() override = default;
+
+  G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right) = delete;
+  const G4NeutronEvaporationProbability & operator=
+  (const G4NeutronEvaporationProbability &right) = delete;
+  G4bool operator==(const G4NeutronEvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4NeutronEvaporationProbability &right) const = delete;
 
 protected:
 
-  G4double CalcAlphaParam(const G4Fragment & fragment) override;
+  G4double CalcAlphaParam(const G4Fragment& fragment) override;
  
-  G4double CalcBetaParam(const G4Fragment & fragment) override;
-
-private:  
-  
-  G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right);
-  const G4NeutronEvaporationProbability & operator=
-  (const G4NeutronEvaporationProbability &right);
-  G4bool operator==(const G4NeutronEvaporationProbability &right) const;
-  G4bool operator!=(const G4NeutronEvaporationProbability &right) const;
+  G4double CalcBetaParam(const G4Fragment& fragment) override;
 };
 
 

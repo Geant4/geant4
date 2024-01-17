@@ -45,26 +45,9 @@ G4VGraphicsSystem (name,
 
 G4bool G4OpenGLXm::IsUISessionCompatible () const
 {
-  G4bool isCompatible = false;
-  G4UImanager* ui = G4UImanager::GetUIpointer();
-  G4UIsession* session = ui->GetSession();
-
-  // If session is a batch session, it may be:
-  // a) this is a batch job (the user has not instantiated any UI session);
-  // b) we are currently processing a UI command, in which case the UI
-  //    manager creates a temporary batch session and to find out if there is
-  //    a genuine UI session that the user has instantiated we must drill
-  //    down through previous sessions to a possible non-batch session.
-  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
-    session = batch->GetPreviousSession();
-  }
-
   // Xm windows are not appropriate in a batch session.
-  if (session) {
-    // If non-zero, this is the originating non-batch session
-    // The user has instantiated a UI session...
-    isCompatible = true;
-  }
-
-  return isCompatible;
+  G4UIsession* baseSession = G4UImanager::GetUIpointer()->GetBaseSession();
+  if (baseSession == nullptr  // Pure batch session
+      || dynamic_cast<G4UIbatch*>(baseSession) != nullptr) return false;
+  return true;
 }

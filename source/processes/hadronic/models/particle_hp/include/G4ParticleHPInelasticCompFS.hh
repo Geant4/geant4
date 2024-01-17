@@ -30,10 +30,13 @@
 //  incident charged particles (now isotropic emission in the CMS).
 //  Also restrict nresp use below 20 MeV (for future developments).
 //  Add photon emission when no data available.
+//
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 
 #ifndef G4ParticleHPInelasticCompFS_h
 #define G4ParticleHPInelasticCompFS_h 1
 
+#include "G4ParticleHPFinalState.hh"
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
 #include "G4NRESP71M03.hh"
@@ -42,97 +45,67 @@
 #include "G4ParticleHPDeExGammas.hh"
 #include "G4ParticleHPEnAngCorrelation.hh"
 #include "G4ParticleHPEnergyDistribution.hh"
-#include "G4ParticleHPFinalState.hh"
 #include "G4ParticleHPPhotonDist.hh"
 #include "globals.hh"
 
 class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 {
-  public:
-    G4ParticleHPInelasticCompFS()
-    {
-      QI.resize(51);
-      LR.resize(51);
-      for (G4int i = 0; i < 51; i++) {
-        hasXsec = true;
-        theXsection[i] = nullptr;
-        theEnergyDistribution[i] = nullptr;
-        theAngularDistribution[i] = nullptr;
-        theEnergyAngData[i] = nullptr;
-        theFinalStatePhotons[i] = nullptr;
-        QI[i] = 0.0;
-        LR[i] = 0;
-      }
-    }
+public:
+  G4ParticleHPInelasticCompFS();
+  ~G4ParticleHPInelasticCompFS() override;
 
-    ~G4ParticleHPInelasticCompFS() override
-    {
-      for (G4int i = 0; i < 51; i++) {
-        if (theXsection[i] != nullptr) delete theXsection[i];
-        if (theEnergyDistribution[i] != nullptr) delete theEnergyDistribution[i];
-        if (theAngularDistribution[i] != nullptr) delete theAngularDistribution[i];
-        if (theEnergyAngData[i] != nullptr) delete theEnergyAngData[i];
-        if (theFinalStatePhotons[i] != nullptr) delete theFinalStatePhotons[i];
-      }
-    }
+  void Init(G4double A, G4double Z, G4int M, G4String& dirName,
+            G4String& aSFType, G4ParticleDefinition*) override;
 
-    void Init(G4double A, G4double Z, G4int M, G4String& dirName, G4String& aSFType,
-              G4ParticleDefinition*) override;
+  void InitGammas(G4double AR, G4double ZR);
 
-    void InitGammas(G4double AR, G4double ZR);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override = 0;
 
-    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override = 0;
+  G4ParticleHPFinalState* New() override = 0;
 
-    G4ParticleHPFinalState* New() override = 0;
+  G4double GetXsec(G4double anEnergy) override
+  {
+    return std::max(0., theXsection[50]->GetY(anEnergy));
+  }
 
-    G4double GetXsec(G4double anEnergy) override
-    {
-      return std::max(0., theXsection[50]->GetY(anEnergy));
-    }
+  G4ParticleHPVector* GetXsec() override { return theXsection[50]; }
 
-    G4ParticleHPVector* GetXsec() override { return theXsection[50]; }
+  G4int SelectExitChannel(G4double eKinetic);
 
-    G4int SelectExitChannel(G4double eKinetic);
+  void CompositeApply(const G4HadProjectile& theTrack,
+                      G4ParticleDefinition* aHadron);
 
-    void CompositeApply(const G4HadProjectile& theTrack, G4ParticleDefinition* aHadron);
+  void InitDistributionInitialState(G4ReactionProduct& anIncidentPart,
+				    G4ReactionProduct& aTarget, G4int it);
 
-    inline void InitDistributionInitialState(G4ReactionProduct& anIncidentPart,
-                                             G4ReactionProduct& aTarget, G4int it)
-    {
-      if (theAngularDistribution[it] != nullptr) {
-        theAngularDistribution[it]->SetTarget(aTarget);
-        theAngularDistribution[it]->SetProjectileRP(anIncidentPart);
-      }
+  G4ParticleHPInelasticCompFS(G4ParticleHPInelasticCompFS&) = delete;
+  G4ParticleHPInelasticCompFS& operator=
+  (const G4ParticleHPInelasticCompFS &right) = delete;
 
-      if (theEnergyAngData[it] != nullptr) {
-        theEnergyAngData[it]->SetTarget(aTarget);
-        theEnergyAngData[it]->SetProjectileRP(anIncidentPart);
-      }
-    }
+private:
 
-  protected:
-    G4ParticleHPVector* theXsection[51];
-    G4ParticleHPEnergyDistribution* theEnergyDistribution[51];
-    G4ParticleHPAngular* theAngularDistribution[51];
-    G4ParticleHPEnAngCorrelation* theEnergyAngData[51];
+  void two_body_reaction(G4ReactionProduct* proj, G4ReactionProduct* targ,
+			 G4ReactionProduct* product, G4double exEnergy);
 
-    G4ParticleHPPhotonDist* theFinalStatePhotons[51];
+  G4bool use_nresp71_model(const G4ParticleDefinition*, const G4int itt,
+			   const G4ReactionProduct& theTarget,
+                           G4ReactionProduct& boosted);
 
-    G4ParticleHPDeExGammas theGammas;
-    G4String gammaPath;
+  G4NRESP71M03 nresp71_model;
 
-  protected:
-    std::vector<G4double> QI;
-    std::vector<G4int> LR;
+protected:
 
-  private:
-    //                    (projectile, target, hadron, mu of hadron)
-    void two_body_reaction(G4ReactionProduct* proj, G4ReactionProduct* targ,
-                           G4ReactionProduct* product, G4double resExcitationEnergy);
+  G4ParticleHPVector* theXsection[51];
+  G4ParticleHPEnergyDistribution* theEnergyDistribution[51];
+  G4ParticleHPAngular* theAngularDistribution[51];
+  G4ParticleHPEnAngCorrelation* theEnergyAngData[51];
+  G4ParticleHPPhotonDist* theFinalStatePhotons[51];
 
-    G4NRESP71M03 nresp71_model;
-    G4bool use_nresp71_model(const G4ParticleDefinition* aDefinition, const G4int it,
-                             const G4ReactionProduct& theTarget, G4ReactionProduct& boosted);
+  std::vector<G4double> QI;
+  std::vector<G4int> LR;
+
+  G4ParticleHPDeExGammas theGammas;
+  G4String gammaPath;
 };
 
 #endif

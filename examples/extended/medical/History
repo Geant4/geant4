@@ -4,6 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-15 I. Hrivnacova (exMedical-V11-01-02)
+- Updated vis*.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+  - Keep previous driver opening, if different from OGL or includes extra setting,
+    in commented lines
+
+## 2023-11-14 I. Hrivnacova (exMedical-V11-01-01)
+- Added new radiobiology example in the top README and CMake files
+
 ## 2023-01-09 Ben Morgan (exMedical-V11-01-00)
 - Use PROJECT_ scoped _SOURCE/BINARY_DIR variables in place of CMAKE_ 
   scope version to ease use of Geant4 as a CMake subproject. 

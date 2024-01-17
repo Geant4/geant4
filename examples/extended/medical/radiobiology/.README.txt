@@ -1,0 +1,101 @@
+///\file "medical/radiobiology/.README.txt"
+///\brief Example radiobiology README page
+
+/*! \page Exampleradiobiology Example radiobiology
+
+\author L Pandola, D Chiappara, GAP Cirrone, G Petringa, A Sciuto, S Fattori; - INFN LNS (Italy) \n
+ 
+Radiobiology is an application realized for dosimetric and radiobiological applications of proton and ion beams. 
+Specific tools were built to evaluate primaries and secondary energy spectra and a set of classes, dedicated to 
+the computation of biological, as LET (Linear Energy Transfer), RBE (Relative Biological Effectiveness), Survival 
+Fraction, and physical (as dose and fluence) quantities were implemented.
+
+\section radiobiology_s1 1- GEOMETRY DEFINITION
+ 
+The physical and dosimetric quantities are calculated in the water tank by scoring every quantity in each of the 
+slices, representing a customizable (in terms of dimensions and materials) volume that can be voxelized depending 
+on the user's needs.
+
+In the proposed example, the “default” water tank represents a phantom typically used in the clinical hadrontherapy 
+practice, to reconstruct the dose profile distributions in water.
+The phantom has a standard dimension of 4 x 4 x 4 cm and was sectioned into 0.2 x 40 x 40 mm slices (See Figure 1). 
+The voxel dimensions can be user defined and can vary from 1um to 1 mm
+The source is positioned on one of the faces of the box
+
+The default macro uses the default geometry configuration mentioned above with a simple run of 100k protons with a 
+Gaussian energy distribution with a mean of 62 MeV and a standard deviation of 0.65 MeV
+The visualize.mac just creates a teest geometry and opens visualization
+
+\section radiobiology_s2 2- PHYSICS LIST
+
+In Radiobiology it is possible to activate three physics lists that are those already recommended for medical physics
+applications and that cover all the physics processes needed for a correct simulation in this field.
+
+The electromagnetic interactions are modeled using the G4EmStandardPhysics_option4 constructor, which uses a 
+condensed history algorithm based on the Beth-Bloch energy loss formula. This physics constructor was created for 
+applications requiring high accuracy in electron, hadron, and ion tracking. It contains the most accurate standard 
+and low-energy models and is recommended for simulations focused on medical physics applications.
+The hadronic interactions are simulated using models implemented in the QGSP BIC and QGSP BIC HP constructors, 
+which employ Geant4 native preequilibrium and de-excitation models as low energy stages of the Binary Cascade model 
+for protons, neutrons, and ions. The QGSP BIC HP constructor uses, in addition, the high precision neutron package 
+(ParticleHP) to transport neutrons and light-charged particles with energies from 20 MeV down to thermal energy.
+
+Production cuts for secondary generation are an important element in any MC simulation. It has a significant impact 
+on energy deposition, particularly when small quantities are examined. The production cut in Geant4 is a distance 
+(given in units of length), and secondary particles (electrons, positrons, gammas, and secondary protons) are only 
+monitored if their expected range in that medium is greater than the imposed cut. Otherwise, secondary energy is 
+not tracked and is deposited in the secondary production position. The cut for this example is achieved through 
+the standard Geant4 implementation.
+\verbatim
+ /run/setCutForAGivenParticle e- 0.1 mm
+ /run/setCutForAGivenParticle e+ 0.1 mm
+ /run/setCutForAGivenParticle proton 0.1 mm
+\endverbatim
+
+\section radiobiology_s3 3- LET CALCULATION
+
+Radiobiology simulates and calculates the averaged LET-dose and LET-track fully accounting for the contribution of 
+secondary particles generated in the target fragmentation 
+Dependencies as respect to the transport parameters adopted during the Monte Carlo simulations as the production cut 
+of secondaries particles, voxel size and the maximum steps length are minimized in the LET calculation.
+At run time, data needed to calculate LET are collected. At the end of simulation, LET mean values are calculated 
+and stored into a file.
+
+The Let.out file will be produced at the end of a run, where you can
+find the dose and track average LET for each tracked particles (both primary and
+secondary ones) and the total mean LET.
+
+The file is structured as follows:
+     - The first three columns contain the voxel indexes (first index "i" refers to the beam direction);
+     - The fourth and fifth columns contain respectively total mean dose LET (LDT) and total mean track LET (LTT)
+     - The rest of columns contain LET Dose and Track for each single ion (whose name is in the top row of the file).
+
+\section radiobiology_s4 4- RBE and Survival calculation
+
+A method was developed to assess the biological damages produced by proton and ion beams in terms of survival 
+fraction curves, i.e of the number of cells able to survive after the irradiation at different dose. The approach 
+is based on the combined use of Monte Carlo Geant4 simulations (to calculate the doses deposited and the energy 
+spectra of particles interacting with cells) and of the Survival analytical code (Manganaro L, Russo G, et al. 
+Survival: a simulation toolkit introducing a modular approach for radiobiological evaluations in ion beam therapy. 
+Phys. Med. Biol. 2018;63(8). 08–01).
+The Monte Carlo simulations permit the calculation of the Edep and Ekin distributions that, coupled with the 
+radiobiological response model, allow the final and calculation of a survival curve.
+The kinetic energy and the LET value of any primary ion and of the secondaries generated in each slice of the 
+simulated water phantom are retrieved at each simulation step. The corresponding values of αi and βi, for each 
+specific ion i with a kinetic energy Ei and a released dose Di, are then calculated by direct linear interpolation 
+of the Look-up-tables provided by the Survival analytical code.
+(G.Petringa et al., Physica Medica 58 (2019) 72–80)
+
+The AlphaAndBeta.out and RBE.out files are produced at the end of the run.
+AlphaAndBeta.out contains the average alpha (first column) and beta (second column) parameters calculated for each 
+slice (third column).
+
+RBE.out contains the following quantities:
+    - Dose (Gy): the physical dose;
+    - ln(S): the natural log of the Survival Fraction;
+    - Survival Fraction;
+    - DoseB (Gy): the biological dose;
+    - RBE: relative biological effectiveness;
+    - depth (slice): n. of the slice;
+ */
+

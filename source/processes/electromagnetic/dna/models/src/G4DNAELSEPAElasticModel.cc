@@ -47,20 +47,20 @@ using namespace std;
 
 G4DNAELSEPAElasticModel::G4DNAELSEPAElasticModel(const G4ParticleDefinition*,
 const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
   verboseLevel = 0;
 
   G4ProductionCutsTable* theCoupleTable =
   G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+  auto  numOfCouples = (G4int)theCoupleTable->GetTableSize();
 
   for(G4int i=0; i<numOfCouples; ++i)
   {
     const G4MaterialCutsCouple* couple =
          theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
-    G4int nelm = (G4int)material->GetNumberOfElements();
+    auto  nelm = (G4int)material->GetNumberOfElements();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
     if(nelm==1)
@@ -100,8 +100,8 @@ G4VEmModel(nam), isInitialised(false)
   }
 
 
-  fParticleChangeForGamma = 0;
-  fpMolDensity = 0;
+  fParticleChangeForGamma = nullptr;
+  fpMolDensity = nullptr;
 
   fpData_Au=nullptr;
   fpData_H2O=nullptr;
@@ -129,8 +129,8 @@ G4DNAELSEPAElasticModel::~G4DNAELSEPAElasticModel()
   //  delete table;
   //}
 
-  if(fpData_Au) delete fpData_Au;
-  if(fpData_H2O) delete fpData_H2O;
+  delete fpData_Au;
+  delete fpData_H2O;
 
   //eEdummyVecZ.clear();
   //eCumZ.clear();
@@ -163,7 +163,7 @@ const G4DataVector& )
  
   G4ProductionCutsTable* theCoupleTable =
   G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = (G4int)theCoupleTable->GetTableSize();
+  auto  numOfCouples = (G4int)theCoupleTable->GetTableSize();
   
   // UNIT OF TCS
   G4double scaleFactor = 1.*cm*cm;
@@ -182,7 +182,7 @@ const G4DataVector& )
     const G4Material* material = couple->GetMaterial();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
-    G4int nelm = (G4int)material->GetNumberOfElements();
+    auto  nelm = (G4int)material->GetNumberOfElements();
     if (nelm==1){// Protection: only for single element
       G4int Z =  G4lrint((*theElementVector)[0]->GetZ());
       if (Z!=79)// Protection: only for GOLD
@@ -213,7 +213,7 @@ const G4DataVector& )
       
         std::ostringstream eFullFileNameZ;
 	const char *path = G4FindDataDir("G4LEDATA");
-        if (!path)
+        if (path == nullptr)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0002",
             FatalException,"G4LEDATA environment variable not set.");
@@ -307,7 +307,7 @@ const G4DataVector& )
         std::ostringstream eFullFileNameZ;
 
 	const char *path = G4FindDataDir("G4LEDATA");
-        if (!path)
+        if (path == nullptr)
         {
           G4Exception("G4DNAELSEPAElasticModel::Initialise","em0004",
             FatalException,"G4LEDATA environment variable not set.");
@@ -378,7 +378,7 @@ const G4DataVector& )
 
 
   fParticleChangeForGamma = GetParticleChangeForGamma();
-  fpMolDensity = 0;
+  fpMolDensity = nullptr;
 
   isInitialised = true;
 }
@@ -628,7 +628,7 @@ G4double G4DNAELSEPAElasticModel::Theta(G4int Z,
                           eEdummyVec_Au.end(), k);
   }
 
-  std::vector<G4double>::iterator e1 = e2 - 1;
+  auto e1 = e2 - 1;
 
   //std::vector<G4double>::iterator cum12 
   //           = std::upper_bound(eCumZ[Z][(*e1)].begin(),
@@ -642,7 +642,7 @@ G4double G4DNAELSEPAElasticModel::Theta(G4int Z,
                                eCum_Au[(*e1)].end(),integrDiff);
   }
   
-  std::vector<G4double>::iterator cum11 = cum12 - 1;
+  auto cum11 = cum12 - 1;
 
   //std::vector<G4double>::iterator cum22 
   //           = std::upper_bound(eCumZ[Z][(*e2)].begin(),
@@ -656,7 +656,7 @@ G4double G4DNAELSEPAElasticModel::Theta(G4int Z,
                               eCum_Au[(*e2)].end(),integrDiff);
   }
   
-  std::vector<G4double>::iterator cum21 = cum22 - 1;
+  auto cum21 = cum22 - 1;
 
   valueE1  = *e1;
   valueE2  = *e2;

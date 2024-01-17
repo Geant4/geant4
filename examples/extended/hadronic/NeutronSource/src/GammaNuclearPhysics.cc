@@ -53,11 +53,6 @@ GammaNuclearPhysics::GammaNuclearPhysics(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GammaNuclearPhysics::~GammaNuclearPhysics()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void GammaNuclearPhysics::ConstructProcess()
 {
    G4HadronInelasticProcess* process = new G4HadronInelasticProcess( "photonNuclear", G4Gamma::Definition() );

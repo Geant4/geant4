@@ -43,6 +43,8 @@ class G4BaseFileManager
     G4BaseFileManager() = delete;
     virtual ~G4BaseFileManager() = default;
 
+    void SetCompressionLevel(G4int level);
+      // Set the compression level
     virtual G4bool SetFileName(const G4String& fileName);
       // Set the base file name (without extension)
     virtual G4String GetFileType() const;
@@ -56,6 +58,8 @@ class G4BaseFileManager
       // For handling multiple files
       // Save file name in a vector if not yet present
 
+    G4int    GetCompressionLevel() const;
+      // Return the compression level
     G4String GetFileName() const;
       // Return the base file name (without extension)
     G4String GetFullFileName(const G4String& baseFileName = "",
@@ -103,11 +107,18 @@ class G4BaseFileManager
                  const G4String& objectName = "",
                  G4bool success = true) const;
 
+    // Clear data
+    void ClearData();
+
     // Data members
     const G4AnalysisManagerState& fState;
+    G4int fCompressionLevel { 1 };
     G4String fFileName;  // to be changed in fDefaultFileName
     std::vector<G4String> fFileNames;
 };
+
+inline void G4BaseFileManager::SetCompressionLevel(G4int level)
+{ fCompressionLevel = level; }
 
 inline G4bool G4BaseFileManager::SetFileName(const G4String& fileName) {
   // CHECK if still needed in this base class
@@ -118,6 +129,9 @@ inline G4bool G4BaseFileManager::SetFileName(const G4String& fileName) {
 inline G4bool G4BaseFileManager::HasCycles() const {
   return false;
 }
+
+inline G4int G4BaseFileManager::GetCompressionLevel() const
+{ return fCompressionLevel; }
 
 inline G4String G4BaseFileManager::GetFileName() const {
   return fFileName;
@@ -132,6 +146,10 @@ inline void G4BaseFileManager::Message(
   const G4String& objectName, G4bool success) const
 {
   fState.Message(level, action, objectType, objectName, success);
+}
+
+inline void G4BaseFileManager::ClearData() {
+  fFileNames.clear();
 }
 
 #endif

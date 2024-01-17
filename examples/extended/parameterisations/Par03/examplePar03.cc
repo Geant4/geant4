@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 
   if(useInteractiveMode)
   {
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    auto  ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;

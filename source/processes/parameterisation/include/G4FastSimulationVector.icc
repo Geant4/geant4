@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 //---------------------------------------------------------------
 //
 //  G4FastSimulationVector.hh
@@ -38,41 +38,38 @@
 //
 //---------------------------------------------------------------
 
-template<class T> 
-T* G4FastSimulationVector<T>::remove (const T* a)
-{
-  for (iterator it = std_pvector::begin();it<std_pvector::end(); it++)
-    {
-      if (**it==*a) 
-	{
-	  T* tmp=*it;
-	  std_pvector::erase(it);
-	  return tmp;
-	} 
-    }
-  return 0;
-}
-
 template<class T>
-T* G4FastSimulationVector<T>::removeAt (G4int i)
+T* G4FastSimulationVector<T>::remove(const T* a)
 {
-  iterator it=std_pvector::begin();
-  int j;
-  for(j=0;j<i;j++) it++;
-  if(it!=std_pvector::end())
-    {
-      T* tmp = std_pvector::operator[](i);
+  for (auto it = std_pvector::begin(); it < std_pvector::end(); ++it) {
+    if (**it == *a) {
+      T* tmp = *it;
       std_pvector::erase(it);
       return tmp;
     }
-  else
-    return 0;
+  }
+  return nullptr;
 }
 
 template<class T>
-void G4FastSimulationVector<T>::clearAndDestroy ()
+T* G4FastSimulationVector<T>::removeAt(G4int i)
 {
-  for (iterator it = std_pvector::begin();it<std_pvector::end(); it++)
-    if(*it) delete *it;
+  auto it = std_pvector::begin();
+  int j;
+  for (j = 0; j < i; ++j)
+    ++it;
+  if (it != std_pvector::end()) {
+    T* tmp = std_pvector::operator[](i);
+    std_pvector::erase(it);
+    return tmp;
+  }
+  return nullptr;
+}
+
+template<class T>
+void G4FastSimulationVector<T>::clearAndDestroy()
+{
+  for (auto it = std_pvector::begin(); it < std_pvector::end(); ++it)
+    if (*it) delete *it;
   std_pvector::clear();
 }

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -41,26 +38,20 @@
 #ifndef G4GenericMuonicAtom_h
 #define G4GenericMuonicAtom_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4MuonicAtom.hh"
-
-// ######################################################################
-// ###                          GenericMuonicAtom                     ###
-// ######################################################################
 
 class G4GenericMuonicAtom : public G4MuonicAtom
 {
- private:
-   static G4GenericMuonicAtom* theInstance;
-   G4GenericMuonicAtom(){}
-   ~G4GenericMuonicAtom() override= default;
+  public:
+    static G4GenericMuonicAtom* Definition();
+    static G4GenericMuonicAtom* GenericMuonicAtomDefinition();
+    static G4GenericMuonicAtom* GenericMuonicAtom();
 
- public:
-   static G4GenericMuonicAtom* Definition();
-   static G4GenericMuonicAtom* GenericMuonicAtomDefinition();
-   static G4GenericMuonicAtom* GenericMuonicAtom();
+  private:
+    G4GenericMuonicAtom() {}
+    ~G4GenericMuonicAtom() override = default;
+
+    static G4GenericMuonicAtom* theInstance;
 };
 
 #endif

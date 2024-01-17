@@ -76,8 +76,7 @@ OpNoviceDetectorMessenger::~OpNoviceDetectorMessenger()
 void OpNoviceDetectorMessenger::SetNewValue(G4UIcommand* command,
                                             G4String newValue)
 {
-  OpNoviceDetectorConstruction* dc1 =
-    dynamic_cast<OpNoviceDetectorConstruction*>(fOpNoviceDetCon);
+  auto dc1 = dynamic_cast<OpNoviceDetectorConstruction*>(fOpNoviceDetCon);
   if(dc1 != nullptr)
   {
     if(command == fVerboseCmd)
@@ -89,8 +88,7 @@ void OpNoviceDetectorMessenger::SetNewValue(G4UIcommand* command,
   }
   else
   {
-    OpNoviceGDMLDetectorConstruction* dc2 =
-      dynamic_cast<OpNoviceGDMLDetectorConstruction*>(fOpNoviceDetCon);
+    auto dc2 = dynamic_cast<OpNoviceGDMLDetectorConstruction*>(fOpNoviceDetCon);
     if(command == fVerboseCmd)
       dc2->SetVerbose(fVerboseCmd->GetNewBoolValue(newValue));
     if(command == fDumpGdmlCmd)

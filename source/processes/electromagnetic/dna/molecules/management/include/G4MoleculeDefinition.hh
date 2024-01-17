@@ -87,7 +87,7 @@ public:
                        G4String aType = "",
                        G4FakeParticleID ID = G4FakeParticleID::Create());
 
-  virtual ~G4MoleculeDefinition();
+  ~G4MoleculeDefinition() override;
 
   G4MoleculeDefinition(const G4MoleculeDefinition&) = delete;
   G4MoleculeDefinition& operator=(const G4MoleculeDefinition&) = delete;
@@ -260,7 +260,7 @@ inline const G4String& G4MoleculeDefinition::GetType() const
 
 inline G4int G4MoleculeDefinition::GetNbElectrons() const
 {
-  if (fElectronOccupancy)
+  if (fElectronOccupancy != nullptr)
   {
     return fElectronOccupancy->GetTotalOccupancy();
   }
@@ -271,7 +271,7 @@ inline G4int G4MoleculeDefinition::GetNbElectrons() const
 
 inline G4int G4MoleculeDefinition::GetNbMolecularShells() const
 {
-  if (fElectronOccupancy)
+  if (fElectronOccupancy != nullptr)
   {
     return fElectronOccupancy->GetSizeOfOrbit();
   }

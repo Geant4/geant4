@@ -67,7 +67,7 @@ Par02FastSimModelEMCal::Par02FastSimModelEMCal( G4String aModelName ) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02FastSimModelEMCal::~Par02FastSimModelEMCal() {}
+Par02FastSimModelEMCal::~Par02FastSimModelEMCal() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -99,7 +99,7 @@ void Par02FastSimModelEMCal::DoIt( const G4FastTrack& aFastTrack,
   // Consider only primary tracks (do nothing else for secondary e-, e+, gammas)
   G4ThreeVector Pos = aFastTrack.GetPrimaryTrack()->GetPosition();
   if ( ! aFastTrack.GetPrimaryTrack()->GetParentID() ) {
-    Par02EventInformation* info = (Par02EventInformation*) 
+    auto  info = (Par02EventInformation*) 
                             G4EventManager::GetEventManager()->GetUserInformation();
     if ( info->GetDoSmearing() ) {
       // Smearing according to the electromagnetic calorimeter resolution

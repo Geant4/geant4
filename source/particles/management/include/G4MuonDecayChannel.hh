@@ -36,28 +36,25 @@
 #ifndef G4MuonDecayChannel_hh
 #define G4MuonDecayChannel_hh 1
 
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VDecayChannel.hh"
 
 class G4MuonDecayChannel : public G4VDecayChannel
 {
   public:
-
-    G4MuonDecayChannel(const G4String& parentName,
-                             G4double  BR);
+    // Constructor & destructor
+    G4MuonDecayChannel(const G4String& parentName, G4double BR);
     ~G4MuonDecayChannel() override = default;
-      // Constructor & destructor
 
-    G4DecayProducts* DecayIt(G4double) override;     
+    G4DecayProducts* DecayIt(G4double) override;
 
   protected:
-
     G4MuonDecayChannel() = default;
 
+    // Copy constructor and assignment operator
     G4MuonDecayChannel(const G4MuonDecayChannel&) = default;
     G4MuonDecayChannel& operator=(const G4MuonDecayChannel&);
-      // Copy constructor and assignment operator
 };
 
 #endif

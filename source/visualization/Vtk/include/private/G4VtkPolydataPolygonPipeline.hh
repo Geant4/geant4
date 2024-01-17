@@ -42,7 +42,6 @@ class G4VtkPolydataPolygonPipeline : public G4VtkPolydataPipeline
     static std::size_t MakeHash(const G4VisAttributes* va);
 
   protected:
-    G4VisAttributes* pVisAttributes;
 };
 
 #endif  // GEANT4_G4POLYDATAPOLYGONPIPELINE_HH

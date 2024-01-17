@@ -64,21 +64,8 @@ G4bool LXeDetectorConstruction::fSphereOn = true;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeDetectorConstruction::LXeDetectorConstruction()
-  : fLXe_mt(nullptr)
-  , fMPTPStyrene(nullptr)
 {
-  fExperimentalHall_box  = nullptr;
-  fExperimentalHall_log  = nullptr;
-  fExperimentalHall_phys = nullptr;
-
-  fLXe = fAl = fAir = fVacuum = fGlass = nullptr;
-  fPstyrene = fPMMA = fPethylene1 = fPethylene2 = nullptr;
-
-  fN = fO = fC = fH = nullptr;
-
-  fSaveThreshold = 0;
   SetDefaults();
-
   DefineMaterials();
   fDetectorMessenger = new LXeDetectorMessenger(this);
 }
@@ -87,10 +74,7 @@ LXeDetectorConstruction::LXeDetectorConstruction()
 
 LXeDetectorConstruction::~LXeDetectorConstruction()
 {
-  if(fMainVolume)
-  {
-    delete fMainVolume;
-  }
+  delete fMainVolume;
   delete fLXe_mt;
   delete fDetectorMessenger;
   delete fMPTPStyrene;
@@ -179,12 +163,12 @@ void LXeDetectorConstruction::DefineMaterials()
   fLXe->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
 
   std::vector<G4double> glass_AbsLength = { 420. * cm, 420. * cm, 420. * cm };
-  G4MaterialPropertiesTable* glass_mt   = new G4MaterialPropertiesTable();
+  auto glass_mt = new G4MaterialPropertiesTable();
   glass_mt->AddProperty("ABSLENGTH", lxe_Energy, glass_AbsLength);
   glass_mt->AddProperty("RINDEX", "Fused Silica");
   fGlass->SetMaterialPropertiesTable(glass_mt);
 
-  G4MaterialPropertiesTable* vacuum_mt = new G4MaterialPropertiesTable();
+  auto vacuum_mt = new G4MaterialPropertiesTable();
   vacuum_mt->AddProperty("RINDEX", "Air");
   fVacuum->SetMaterialPropertiesTable(vacuum_mt);
   fAir->SetMaterialPropertiesTable(vacuum_mt);  // Give air the same rindex
@@ -209,7 +193,7 @@ void LXeDetectorConstruction::DefineMaterials()
 
   std::vector<G4double> AbsFiber    = { 9.0 * m, 9.0 * m, 0.1 * mm, 0.1 * mm };
   std::vector<G4double> EmissionFib = { 1.0, 1.0, 0.0, 0.0 };
-  G4MaterialPropertiesTable* fiberProperty = new G4MaterialPropertiesTable();
+  auto fiberProperty = new G4MaterialPropertiesTable();
   fiberProperty->AddProperty("RINDEX", "PMMA");
   fiberProperty->AddProperty("WLSABSLENGTH", wls_Energy, AbsFiber);
   fiberProperty->AddProperty("WLSCOMPONENT", wls_Energy, EmissionFib);
@@ -217,13 +201,13 @@ void LXeDetectorConstruction::DefineMaterials()
   fPMMA->SetMaterialPropertiesTable(fiberProperty);
 
   std::vector<G4double> RefractiveIndexClad1 = { 1.49, 1.49, 1.49, 1.49 };
-  G4MaterialPropertiesTable* clad1Property   = new G4MaterialPropertiesTable();
+  auto clad1Property = new G4MaterialPropertiesTable();
   clad1Property->AddProperty("RINDEX", wls_Energy, RefractiveIndexClad1);
   clad1Property->AddProperty("ABSLENGTH", wls_Energy, AbsFiber);
   fPethylene1->SetMaterialPropertiesTable(clad1Property);
 
   std::vector<G4double> RefractiveIndexClad2 = { 1.42, 1.42, 1.42, 1.42 };
-  G4MaterialPropertiesTable* clad2Property   = new G4MaterialPropertiesTable();
+  auto clad2Property = new G4MaterialPropertiesTable();
   clad2Property->AddProperty("RINDEX", wls_Energy, RefractiveIndexClad2);
   clad2Property->AddProperty("ABSLENGTH", wls_Energy, AbsFiber);
   fPethylene2->SetMaterialPropertiesTable(clad2Property);
@@ -242,28 +226,28 @@ G4VPhysicalVolume* LXeDetectorConstruction::Construct()
   fExperimentalHall_box =
     new G4Box("expHall_box", expHall_x, expHall_y, expHall_z);
   fExperimentalHall_log =
-    new G4LogicalVolume(fExperimentalHall_box, fVacuum, "expHall_log", 0, 0, 0);
-  fExperimentalHall_phys = new G4PVPlacement(
-    0, G4ThreeVector(), fExperimentalHall_log, "expHall", 0, false, 0);
+    new G4LogicalVolume(fExperimentalHall_box, fVacuum, "expHall_log");
+  fExperimentalHall_phys = new G4PVPlacement(nullptr,
+      G4ThreeVector(), fExperimentalHall_log, "expHall", nullptr, false, 0);
 
   fExperimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   // Place the main volume
   if(fMainVolumeOn)
   {
-    fMainVolume = new LXeMainVolume(0, G4ThreeVector(), fExperimentalHall_log,
-                                    false, 0, this);
+    fMainVolume = new LXeMainVolume(nullptr, G4ThreeVector(),
+                                    fExperimentalHall_log, false, 0, this);
   }
 
   // Place the WLS slab
   if(fWLSslab)
   {
     G4VPhysicalVolume* slab = new LXeWLSSlab(
-      0, G4ThreeVector(0., 0., -fScint_z / 2. - fSlab_z - 1. * cm),
+      nullptr, G4ThreeVector(0., 0., -fScint_z / 2. - fSlab_z - 1. * cm),
       fExperimentalHall_log, false, 0, this);
 
     // Surface properties for the WLS slab
-    G4OpticalSurface* scintWrap = new G4OpticalSurface("ScintWrap");
+    auto scintWrap = new G4OpticalSurface("ScintWrap");
 
     new G4LogicalBorderSurface("ScintWrap", slab, fExperimentalHall_phys,
                                scintWrap);
@@ -276,8 +260,7 @@ G4VPhysicalVolume* LXeDetectorConstruction::Construct()
     std::vector<G4double> reflectivity = { 1.0, 1.0 };
     std::vector<G4double> efficiency   = { 0.0, 0.0 };
 
-    G4MaterialPropertiesTable* scintWrapProperty =
-      new G4MaterialPropertiesTable();
+    auto scintWrapProperty = new G4MaterialPropertiesTable();
 
     scintWrapProperty->AddProperty("REFLECTIVITY", pp, reflectivity);
     scintWrapProperty->AddProperty("EFFICIENCY", pp, efficiency);
@@ -301,7 +284,7 @@ void LXeDetectorConstruction::ConstructSDandField()
   {
     // Created here so it exists as pmts are being placed
     G4cout << "Construction /LXeDet/pmtSD" << G4endl;
-    LXePMTSD* pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
+    auto pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
     fPmt_SD.Put(pmt_SD);
 
     pmt_SD->InitPMTs();
@@ -328,7 +311,7 @@ void LXeDetectorConstruction::ConstructSDandField()
   if(!fScint_SD.Get())
   {
     G4cout << "Construction /LXeDet/scintSD" << G4endl;
-    LXeScintSD* scint_SD = new LXeScintSD("/LXeDet/scintSD");
+    auto scint_SD = new LXeScintSD("/LXeDet/scintSD");
     fScint_SD.Put(scint_SD);
   }
   G4SDManager::GetSDMpointer()->AddNewDetector(fScint_SD.Get());

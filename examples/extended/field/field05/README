@@ -22,10 +22,10 @@
      The required electric field to cancel the g-2 precession is,
      E=a*B*light_c*gamma**2*beta.
 
-     In case of gamma=5 and B=0.24 Tesla, the required electric field is 
+     In case of gamma=5 and B=0.24 Tesla, the required electric field is
      E=2 MV/m.
 
-     "Spin-frozen" happens when spin rotation cycle and muon rotation cycle 
+     "Spin-frozen" happens when spin rotation cycle and muon rotation cycle
      are same. In this case, both cycles should be 149.5 nsec.
 
      See also:
@@ -39,7 +39,7 @@
 **************
 
  1 - main()
-  
+
     See field05.cc.
 
  2- GEOMETRY DEFINITION

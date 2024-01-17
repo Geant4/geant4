@@ -23,55 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron 	   
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
+//      History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
 //
 //-------------------------------------------------------------
 //	Documentation:
-//   Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint 
-//   processes act on adjoint particles when they are  tracked backward in the geometry. 
-//   The use of adjoint particles instead of "normal" particles 
-//   during a reverse simulation is based on an idea of M. Asai   
+//   Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint
+//   processes act on adjoint particles when they are  tracked backward in the geometry.
+//   The use of adjoint particles instead of "normal" particles
+//   during a reverse simulation is based on an idea of M. Asai
 //
 #ifndef G4AdjointElectron_h
 #define G4AdjointElectron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ADJOINT ELECTRON                       ###
-// ######################################################################
 
 class G4AdjointElectron : public G4ParticleDefinition
 {
- private:
-   static G4AdjointElectron* theInstance;
-   G4AdjointElectron(){}
-   ~G4AdjointElectron() override= default;
+  public:
+    static G4AdjointElectron* Definition();
+    static G4AdjointElectron* AdjointElectronDefinition();
+    static G4AdjointElectron* AdjointElectron();
 
- public:
-   static G4AdjointElectron* Definition();
-   static G4AdjointElectron* AdjointElectronDefinition();
-   static G4AdjointElectron* AdjointElectron();
+  private:
+    G4AdjointElectron() {}
+    ~G4AdjointElectron() override = default;
+
+    static G4AdjointElectron* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

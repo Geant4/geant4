@@ -61,7 +61,7 @@ int main(int argc,char** argv)
 
   // Construct the default run manager
   //
-  auto* runManager =
+  auto runManager =
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   // Set mandatory initialization classes
@@ -76,13 +76,13 @@ int main(int argc,char** argv)
 
   // Initialize visualization
   //
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  // auto visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Activate score ntuple writer
   // The verbose level can be also set via UI commands

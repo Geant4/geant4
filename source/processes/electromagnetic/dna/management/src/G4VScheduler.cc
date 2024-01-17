@@ -42,7 +42,7 @@ G4VScheduler::G4VScheduler()
 
 G4VScheduler::~G4VScheduler()
 {
-  fpInstance = 0;
+  fpInstance = nullptr;
 }
 
 G4VScheduler* G4VScheduler::Instance()

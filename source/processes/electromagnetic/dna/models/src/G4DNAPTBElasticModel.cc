@@ -218,7 +218,7 @@ void G4DNAPTBElasticModel::ReadDiffCSFile(const std::size_t& materialName,
   // get the path of the G4LEDATA data folder
   const char* path = G4FindDataDir("G4LEDATA");
   // if it is not found then quit and print error message
-  if (!path) {
+  if (path == nullptr) {
     G4Exception("G4DNAPTBElasticModel::ReadAllDiffCSFiles", "em0006", FatalException,
                 "G4LEDATA environment variable not set.");
     return;
@@ -255,7 +255,7 @@ void G4DNAPTBElasticModel::ReadDiffCSFile(const std::size_t& materialName,
       continue;
     }
     // check if line is empty
-    else if (line.empty()) {
+    if (line.empty()) {
       // skip the line by beginning a new while loop.
       continue;
     }

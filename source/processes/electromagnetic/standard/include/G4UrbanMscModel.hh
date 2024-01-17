@@ -179,7 +179,7 @@ private:
   G4double rndmarray[2];
 
   struct mscData {
-    G4double Z23, sqrtZ;
+    G4double Z23, sqrtZ, factmin;
     G4double coeffth1, coeffth2;
     G4double coeffc1, coeffc2, coeffc3, coeffc4;
     G4double stepmina, stepminb;
@@ -233,8 +233,8 @@ inline G4double G4UrbanMscModel::SimpleScattering()
 {
   // 'large angle scattering'
   // 2 model functions with correct xmean and x2mean
-  G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
-  G4double prob = (a+2.)*xmeanth/a;
+  const G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
+  const G4double prob = (a+2.)*xmeanth/a;
 
   // sampling
   rndmEngineMod->flatArray(2, rndmarray);
@@ -248,8 +248,9 @@ inline G4double G4UrbanMscModel::ComputeStepmin()
 {
   // define stepmin using estimation of the ratio 
   // of lambda_elastic/lambda_transport
-  G4double rat = currentKinEnergy*invmev;
-  return lambda0*1.e-3/(2.e-3+rat*(msc[idx]->stepmina+msc[idx]->stepminb*rat));
+  const G4double rat = currentKinEnergy*invmev;
+  return lambda0*msc[idx]->factmin/
+    (0.002 + rat*(msc[idx]->stepmina + msc[idx]->stepminb*rat));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

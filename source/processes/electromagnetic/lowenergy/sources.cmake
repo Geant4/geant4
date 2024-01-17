@@ -69,6 +69,7 @@ geant4_add_module(G4emlowenergy
     G4LowEPPolarizedComptonModel.hh
     G4LowEWentzelVIModel.hh
     G4MIData.hh
+	G4MicroElecCapture.hh
     G4MicroElecCrossSectionDataSet.hh
     G4MicroElecElastic.hh
     G4MicroElecElasticModel.hh
@@ -187,7 +188,8 @@ geant4_add_module(G4emlowenergy
     G4LowEPPolarizedComptonModel.cc
     G4LowEWentzelVIModel.cc
     G4MIData.cc
-    G4MicroElecCrossSectionDataSet.cc
+    G4MicroElecCapture.cc
+	G4MicroElecCrossSectionDataSet.cc
     G4MicroElecElastic.cc
     G4MicroElecElasticModel.cc
     G4MicroElecInelastic.cc

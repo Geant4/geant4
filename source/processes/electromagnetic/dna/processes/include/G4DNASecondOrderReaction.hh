@@ -56,59 +56,59 @@ class G4DNASecondOrderReaction : public G4VITProcess
 public:
     G4DNASecondOrderReaction(const G4String& aName =  "DNASecondOrderReaction",
                              G4ProcessType type = fDecay);
-    virtual ~G4DNASecondOrderReaction();
+    ~G4DNASecondOrderReaction() override;
 
     G4IT_ADD_CLONE(G4VITProcess,G4DNASecondOrderReaction)
 
     G4DNASecondOrderReaction(const G4DNASecondOrderReaction&);
     G4DNASecondOrderReaction& operator=(const G4DNASecondOrderReaction&);
-    void StartTracking(G4Track*);
+    void StartTracking(G4Track*) override;
 
     void SetReaction(const G4MolecularConfiguration*, const G4Material*, double /*reactionRate*/);
 
 public :
-   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-   virtual G4double PostStepGetPhysicalInteractionLength(
+   void BuildPhysicsTable(const G4ParticleDefinition&) override;
+   G4double PostStepGetPhysicalInteractionLength(
                            const G4Track& track,
                G4double   previousStepSize,
                G4ForceCondition* condition
-              );
+              ) override;
 
-   virtual G4VParticleChange* PostStepDoIt(
+   G4VParticleChange* PostStepDoIt(
                const G4Track& ,
                const G4Step&
-              );
+              ) override;
 
-   virtual G4double AtRestGetPhysicalInteractionLength(
+   G4double AtRestGetPhysicalInteractionLength(
                            const G4Track& ,
                G4ForceCondition*
-              ){ return -1.0; }
+              ) override{ return -1.0; }
 
-   virtual G4VParticleChange* AtRestDoIt(
+   G4VParticleChange* AtRestDoIt(
                const G4Track& ,
                const G4Step&
-              ){return 0;}
+              ) override{return nullptr;}
 
    //  no operation in  AlongStepDoIt
-   virtual G4double AlongStepGetPhysicalInteractionLength(
+   G4double AlongStepGetPhysicalInteractionLength(
                            const G4Track&,
                G4double  ,
                G4double  ,
                G4double& ,
                            G4GPILSelection*
-                          ){ return -1.0; }
+                          ) override{ return -1.0; }
 
    //  no operation in  AlongStepDoIt
-   virtual G4VParticleChange* AlongStepDoIt(
+   G4VParticleChange* AlongStepDoIt(
                const G4Track& ,
                const G4Step&
-                          ) {return 0;}
+                          ) override {return nullptr;}
 
 protected:
     struct SecondOrderReactionState : public G4ProcessState
     {
         SecondOrderReactionState();
-        virtual ~SecondOrderReactionState(){;}
+        ~SecondOrderReactionState() override= default;
         G4double fPreviousTimeAtPreStepPoint;
         G4bool fIsInGoodMaterial;
     };

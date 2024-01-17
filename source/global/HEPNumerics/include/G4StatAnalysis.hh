@@ -48,6 +48,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <optional>
 
 #include "globals.hh"
 #include "tls.hh"
@@ -115,15 +116,15 @@ class G4StatAnalysis
   // Timing (member functions)
   inline G4double GetCpuTime() const;
   // Timing (static functions)
-  static tms*& GetCpuClock()
+  static tms* GetCpuClock()
   {
-    G4ThreadLocalStatic tms* _instance = nullptr;
-    if(!_instance)
+    G4ThreadLocalStatic std::optional<tms> _instance(std::nullopt);
+    if(_instance == std::nullopt)
     {
-      _instance = new tms;
-      times(_instance);
+      _instance = tms();
+      times(&_instance.value());
     }
-    return _instance;
+    return &_instance.value();
   }
   // Note: this above implementation was implemented in such a way as to
   // conserve memory by eliminated every instance from requiring their own
@@ -133,7 +134,7 @@ class G4StatAnalysis
   // manually invoke in some situations
   static void ResetCpuClock()
   {
-    tms*& _clock = GetCpuClock();
+    tms* _clock = GetCpuClock();
     times(_clock);
   }
 

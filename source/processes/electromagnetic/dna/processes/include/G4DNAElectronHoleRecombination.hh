@@ -37,7 +37,7 @@ class G4DNAElectronHoleRecombination : public G4VITRestDiscreteProcess
 {
 public:
     G4DNAElectronHoleRecombination();
-    virtual ~G4DNAElectronHoleRecombination();
+    ~G4DNAElectronHoleRecombination() override;
     void Create();
 
     void StartTracking(G4Track*) override;

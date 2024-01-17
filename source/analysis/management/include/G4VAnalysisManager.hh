@@ -38,6 +38,7 @@
 #define G4VAnalysisManager_h 1
 
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -60,6 +61,10 @@ class hmpi;
 }
 }
 
+using G4Analysis::kDim1;
+using G4Analysis::kDim2;
+using G4Analysis::kDim3;
+
 class G4VAnalysisManager
 {
   friend class G4AnalysisMessenger;
@@ -76,6 +81,10 @@ class G4VAnalysisManager
     G4bool Merge(tools::histo::hmpi* hmpi);
     G4bool Plot();
     G4bool IsOpenFile() const;
+
+    // Method for handling default file type
+    void SetDefaultFileType(const G4String& value);
+    G4String GetDefaultFileType() const;
 
     // Methods for handling files and directories names
     G4bool SetFileName(const G4String& fileName);
@@ -405,12 +414,12 @@ class G4VAnalysisManager
     G4int GetFirstNtupleId() const;
     G4int GetFirstNtupleColumnId() const;
 
-    G4int GetNofH1s() const;
-    G4int GetNofH2s() const;
-    G4int GetNofH3s() const;
-    G4int GetNofP1s() const;
-    G4int GetNofP2s() const;
-    G4int GetNofNtuples() const;
+    G4int GetNofH1s(G4bool onlyIfExist = false) const;
+    G4int GetNofH2s(G4bool onlyIfExist = false) const;
+    G4int GetNofH3s(G4bool onlyIfExist = false) const;
+    G4int GetNofP1s(G4bool onlyIfExist = false) const;
+    G4int GetNofP2s(G4bool onlyIfExist = false) const;
+    G4int GetNofNtuples(G4bool onlyIfExist = false) const;
 
     // Access methods via names
     G4int GetH1Id(const G4String& name, G4bool warn = true) const;
@@ -631,6 +640,15 @@ class G4VAnalysisManager
     G4bool   GetP2YAxisIsLog(G4int id) const;
     G4bool   GetP2ZAxisIsLog(G4int id) const;
 
+    // New methods for deleting selected objects
+    //
+    G4bool  DeleteH1(G4int id, G4bool keepSetting = false);
+    G4bool  DeleteH2(G4int id, G4bool keepSetting = false);
+    G4bool  DeleteH3(G4int id, G4bool keepSetting = false);
+    G4bool  DeleteP1(G4int id, G4bool keepSetting = false);
+    G4bool  DeleteP2(G4int id, G4bool keepSetting = false);
+    G4bool  DeleteNtuple(G4int id, G4bool clear = false);
+
     // Verbosity
     void  SetVerboseLevel(G4int verboseLevel);
     G4int GetVerboseLevel() const;
@@ -653,6 +671,10 @@ class G4VAnalysisManager
     virtual G4bool PlotImpl() = 0;
     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi) = 0;
     virtual G4bool IsOpenFileImpl() const = 0;
+    // Set default output type (backward compatibility)
+    // this type will be used for file names without extension
+    virtual void SetDefaultFileTypeImpl(const G4String& value);
+    virtual G4String GetDefaultFileTypeImpl() const;
 
     // Methods
     void Message(G4int level,
@@ -662,11 +684,11 @@ class G4VAnalysisManager
                  G4bool success = true) const;
 
     // Methods
-    void SetH1Manager(G4VTBaseHnManager<1>* h1Manager);
-    void SetH2Manager(G4VTBaseHnManager<2>* h2Manager);
-    void SetH3Manager(G4VTBaseHnManager<3>* h3Manager);
-    void SetP1Manager(G4VTBaseHnManager<2>* p1Manager);
-    void SetP2Manager(G4VTBaseHnManager<3>* p2Manager);
+    void SetH1Manager(G4VTBaseHnManager<kDim1>* h1Manager);
+    void SetH2Manager(G4VTBaseHnManager<kDim2>* h2Manager);
+    void SetH3Manager(G4VTBaseHnManager<kDim3>* h3Manager);
+    void SetP1Manager(G4VTBaseHnManager<kDim2>* p1Manager);
+    void SetP2Manager(G4VTBaseHnManager<kDim3>* p2Manager);
     void SetNtupleManager(std::shared_ptr<G4VNtupleManager> ntupleManager);
     void SetNtupleFileManager(std::shared_ptr<G4VNtupleFileManager> ntupleFileManager);
     void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
@@ -676,11 +698,6 @@ class G4VAnalysisManager
 
     // File manager access
     virtual std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName);
-
-    // Static data members
-    static constexpr unsigned int kDim1 { 1 };
-    static constexpr unsigned int kDim2 { 2 };
-    static constexpr unsigned int kDim3 { 3 };
 
     // Data members
     G4AnalysisManagerState fState;

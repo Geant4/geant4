@@ -32,11 +32,7 @@
 #include "G4Molecule.hh"
 #include "G4Exp.hh"
 
-G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel()
-    : G4VDNAReactionModel()
-    , fpReactionData(nullptr)
-{
-}
+G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel() = default;
 
 G4DNASmoluchowskiReactionModel::~G4DNASmoluchowskiReactionModel() = default;
 
@@ -87,14 +83,14 @@ G4bool G4DNASmoluchowskiReactionModel::FindReaction(const G4Track& __trackA,
         }
     }
 
-    if (do_break == false)
+    if (!do_break)
     {
         // The loop was not break
         // => r^2 < R^2
         __separationDistance = std::sqrt(postStepSeparation);
         return true;
     }
-    else if (__alongStepReaction == true)
+    if (__alongStepReaction)
     {
         //Along step check and the loop has break
 

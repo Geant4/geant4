@@ -50,8 +50,14 @@
 //
 //  JustWarning
 //   Just display messages.
+//
+//  IgnoreTheIssue
+//   No message generated.
+//
 
 // Author: M.Asai, 19 August 2002
+// 05 September 2023 : IgnoreTheIssue added
+//
 // --------------------------------------------------------------------
 #ifndef G4ExceptionSeverity_hh
 #define G4ExceptionSeverity_hh 1
@@ -62,6 +68,7 @@ enum G4ExceptionSeverity
   FatalErrorInArgument,
   RunMustBeAborted,
   EventMustBeAborted,
-  JustWarning
+  JustWarning,
+  IgnoreTheIssue
 };
 #endif

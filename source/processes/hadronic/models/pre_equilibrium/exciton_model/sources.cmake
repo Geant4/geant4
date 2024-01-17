@@ -9,7 +9,6 @@ geant4_add_module(G4had_preequ_exciton
     G4HETCDeuteron.hh
     G4HETCEmissionFactory.hh
     G4HETCFragment.hh
-    G4HETCFragment.icc
     G4HETCHe3.hh
     G4HETCNeutron.hh
     G4HETCProton.hh
@@ -32,7 +31,6 @@ geant4_add_module(G4had_preequ_exciton
     G4PreCompoundTriton.hh
     G4VPreCompoundEmissionFactory.hh
     G4VPreCompoundFragment.hh
-    G4VPreCompoundFragment.icc
     G4VPreCompoundTransitions.hh
   SOURCES
     G4GNASHTransitions.cc
@@ -69,7 +67,6 @@ geant4_module_link_libraries(G4had_preequ_exciton
   PUBLIC
     G4globman
     G4hadronic_deex_handler
-    G4hadronic_deex_util
     G4hadronic_mgt
     G4hadronic_util
     G4hepgeometry
@@ -78,5 +75,6 @@ geant4_module_link_libraries(G4had_preequ_exciton
   PRIVATE
     G4baryons
     G4hadronic_deex_management
+    G4hadronic_deex_util
     G4ions
     G4procman)

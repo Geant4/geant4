@@ -55,7 +55,7 @@
 //     ....
 
 #include "QBBC.hh"
-typedef   QBBC MySpecialPhysList;
+using MySpecialPhysList = QBBC;
 
 #endif
 

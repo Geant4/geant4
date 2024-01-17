@@ -50,7 +50,7 @@ namespace G4INCL {
   ParticleEntryAvatar::ParticleEntryAvatar(G4double time,
 					   G4INCL::Nucleus *nucleus,
 					   G4INCL::Particle *particle,
-                                           EntryType EType)
+             EntryType EType)
     :IAvatar(time), theNucleus(nucleus), theParticle(particle), theEType(EType)
   {
     setType(ParticleEntryAvatarType);

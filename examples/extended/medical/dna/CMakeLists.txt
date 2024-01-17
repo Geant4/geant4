@@ -1,6 +1,6 @@
 #---Adding all dna examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 
 ## chem4/plot requires ROOT built with GUI
 #option(BUILD_CHEM4_PLOT "Build chem4/plot" OFF)
@@ -17,8 +17,10 @@ add_subdirectory(chem5)
 add_subdirectory(chem6)
 add_subdirectory(clustering)
 add_subdirectory(dnadamage1)
+add_subdirectory(dnadamage2)
 add_subdirectory(dnaphysics)
 add_subdirectory(icsd)
+add_subdirectory(jetcounter)
 add_subdirectory(mfp)
 add_subdirectory(microdosimetry)
 add_subdirectory(microprox)
@@ -35,4 +37,5 @@ add_subdirectory(svalue)
 add_subdirectory(wholeNuclearDNA)
 add_subdirectory(wvalue)
 add_subdirectory(AuNP)
-add_subdirectory(jetcounter)
+add_subdirectory(UHDR)
+

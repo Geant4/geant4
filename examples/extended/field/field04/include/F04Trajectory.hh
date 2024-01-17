@@ -44,7 +44,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4TrajectoryPoint.hh"
 
-typedef std::vector<G4VTrajectoryPoint*> TrajectoryPointContainer;
+using TrajectoryPointContainer = std::vector<G4VTrajectoryPoint *>;
 
 class F04Trajectory : public G4VTrajectory
 {
@@ -58,7 +58,7 @@ class F04Trajectory : public G4VTrajectory
      F04Trajectory();
      F04Trajectory(const G4Track* aTrack);
      F04Trajectory(F04Trajectory&);
-     virtual ~F04Trajectory();
+     ~F04Trajectory() override;
 
 // Operators
 
@@ -69,28 +69,28 @@ class F04Trajectory : public G4VTrajectory
 
 // Get/Set functions
 
-     inline G4int GetTrackID() const { return fTrackID; }
-     inline G4int GetParentID() const { return fParentID; }
-     inline G4String GetParticleName() const { return fParticleName; }
-     inline G4double GetCharge() const { return fPDGCharge; }
-     inline G4int GetPDGEncoding() const { return fPDGEncoding; }
-     inline G4ThreeVector GetInitialMomentum() const {return fInitialMomentum;}
+     inline G4int GetTrackID() const override { return fTrackID; }
+     inline G4int GetParentID() const override { return fParentID; }
+     inline G4String GetParticleName() const override { return fParticleName; }
+     inline G4double GetCharge() const override { return fPDGCharge; }
+     inline G4int GetPDGEncoding() const override { return fPDGEncoding; }
+     inline G4ThreeVector GetInitialMomentum() const override {return fInitialMomentum;}
 
 // Other member functions
 
-     virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-     virtual void AppendStep(const G4Step* aStep);
-     virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
+     void ShowTrajectory(std::ostream& os=G4cout) const override;
+     void AppendStep(const G4Step* aStep) override;
+     void MergeTrajectory(G4VTrajectory* secondTrajectory) override;
 
      G4ParticleDefinition* GetParticleDefinition();
 
-     virtual int GetPointEntries() const
+     int GetPointEntries() const override
      { return fpPointsContainer->size(); }
-     virtual G4VTrajectoryPoint* GetPoint(G4int i) const
+     G4VTrajectoryPoint* GetPoint(G4int i) const override
      { return (*fpPointsContainer)[i]; }
 
-    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-    virtual std::vector<G4AttValue>* CreateAttValues() const;
+    const std::map<G4String,G4AttDef>* GetAttDefs() const override;
+    std::vector<G4AttValue>* CreateAttValues() const override;
 
 //---------
    private:
@@ -98,12 +98,12 @@ class F04Trajectory : public G4VTrajectory
 
 // Member data
 
-     TrajectoryPointContainer* fpPointsContainer;
+     TrajectoryPointContainer* fpPointsContainer = nullptr;
 
-     G4int         fTrackID;
-     G4int         fParentID;
-     G4double      fPDGCharge;
-     G4int         fPDGEncoding;
+     G4int         fTrackID = 0;
+     G4int         fParentID = 0;
+     G4double      fPDGCharge = 0.;
+     G4int         fPDGEncoding = 0;
      G4String      fParticleName;
      G4ThreeVector fInitialMomentum;
 

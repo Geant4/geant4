@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,27 +35,20 @@
 #ifndef G4Proton_h
 #define G4Proton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                          PROTON                                ###
-// ######################################################################
 
 class G4Proton : public G4Ions
 {
- private:
-   static G4Proton* theInstance;
-   G4Proton(){}
-   ~G4Proton() override= default;
+  public:
+    static G4Proton* Definition();
+    static G4Proton* ProtonDefinition();
+    static G4Proton* Proton();
 
- public:
-   static G4Proton* Definition();
-   static G4Proton* ProtonDefinition();
-   static G4Proton* Proton();
+  private:
+    G4Proton() {}
+    ~G4Proton() override = default;
+
+    static G4Proton* theInstance;
 };
-
 
 #endif

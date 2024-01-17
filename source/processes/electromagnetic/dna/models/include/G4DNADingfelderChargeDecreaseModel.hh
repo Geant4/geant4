@@ -41,10 +41,13 @@ class G4DNADingfelderChargeDecreaseModel : public G4VEmModel
 
 public:
 
-  G4DNADingfelderChargeDecreaseModel(const G4ParticleDefinition* p = 0, 
+  G4DNADingfelderChargeDecreaseModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "DNADingfelderChargeDecreaseModel");
 
   ~G4DNADingfelderChargeDecreaseModel() override = default;
+
+  G4DNADingfelderChargeDecreaseModel & operator=(const  G4DNADingfelderChargeDecreaseModel &right) = delete;
+  G4DNADingfelderChargeDecreaseModel(const  G4DNADingfelderChargeDecreaseModel&) = delete;
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
@@ -76,7 +79,7 @@ private:
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
   
   // Partial cross section
@@ -109,11 +112,6 @@ private:
    
   G4double OutgoingParticleBindingEnergyConstant(G4ParticleDefinition* particleDefinition, G4int finalStateIndex);
   
-  //
-   
-  G4DNADingfelderChargeDecreaseModel & operator=(const  G4DNADingfelderChargeDecreaseModel &right);
-  G4DNADingfelderChargeDecreaseModel(const  G4DNADingfelderChargeDecreaseModel&);
-
   // Reusable particle definitions
   G4ParticleDefinition* protonDef = nullptr;
   G4ParticleDefinition* alphaPlusPlusDef = nullptr;

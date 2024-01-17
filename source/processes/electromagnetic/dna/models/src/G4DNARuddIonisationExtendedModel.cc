@@ -93,7 +93,7 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 G4DNARuddIonisationExtendedModel::~G4DNARuddIonisationExtendedModel()
 {  
   if(isFirst) {
-    for(G4int i=0; i<RUDDZMAX; ++i) { delete xsdata[i]; }
+    for(auto & i : xsdata) { delete i; }
   }
 }
 
@@ -337,7 +337,7 @@ G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticl
 
   // SI: only atomic deexcitation from K shell is considered
   if(fAtomDeexcitation != nullptr && shell == 4) {
-    auto as = G4AtomicShellEnumerator(shell);
+    auto as = G4AtomicShellEnumerator(0);
     auto ashell = fAtomDeexcitation->GetAtomicShell(Z, as);
     fAtomDeexcitation->GenerateParticles(fvect, ashell, Z, 0, 0);
 
@@ -371,7 +371,7 @@ G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticl
   }
 
   // delta-electron
-  G4DynamicParticle* dp = new G4DynamicParticle(G4Electron::Electron(), deltaDir, esec);
+  auto  dp = new G4DynamicParticle(G4Electron::Electron(), deltaDir, esec);
   fvect->push_back(dp);
 
   // create radical
@@ -423,7 +423,7 @@ G4double G4DNARuddIonisationExtendedModel::SampleElectronEnergy(G4double kine,
   G4double emax = 2.0*CLHEP::electron_mass_c2*tau*(tau + 2.0);
   // compute cumulative probability function
   G4double step = 1*CLHEP::eV;
-  G4int nn = (G4int)(emax/step);
+  auto  nn = (G4int)(emax/step);
   nn = std::max(nn, 10);
   step = emax/(G4double)nn;
 

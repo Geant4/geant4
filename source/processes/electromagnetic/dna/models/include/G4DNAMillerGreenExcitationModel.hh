@@ -45,29 +45,33 @@ class G4DNAMillerGreenExcitationModel : public G4VEmModel
 
 public:
 
-  G4DNAMillerGreenExcitationModel(const G4ParticleDefinition* p = 0, 
+  G4DNAMillerGreenExcitationModel(const G4ParticleDefinition* p = nullptr, 
 		          const G4String& nam = "DNAMillerGreenExcitationModel");
 
-  virtual ~G4DNAMillerGreenExcitationModel();
+  ~G4DNAMillerGreenExcitationModel() override;
+   
+  G4DNAMillerGreenExcitationModel & operator=(const  G4DNAMillerGreenExcitationModel &right) = delete;
+  G4DNAMillerGreenExcitationModel(const  G4DNAMillerGreenExcitationModel&) = delete;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double emin,
-					   G4double emax);
+					   G4double emax) override;
 
-  virtual G4double GetPartialCrossSection(const G4Material*,
+  G4double GetPartialCrossSection(const G4Material*,
                                           G4int /*level*/,
                                           const G4ParticleDefinition*,
-                                          G4double /*kineticEnergy*/);
+                                          G4double /*kineticEnergy*/) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SelectStationary(G4bool input); 
 
@@ -85,7 +89,7 @@ private:
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
   
   // Cross section
@@ -127,10 +131,6 @@ private:
   G4double sCoefficient[3][4];
 
   //
-   
-  G4DNAMillerGreenExcitationModel & operator=(const  G4DNAMillerGreenExcitationModel &right);
-  G4DNAMillerGreenExcitationModel(const  G4DNAMillerGreenExcitationModel&);
-
   // Reusable particle definitions
   G4ParticleDefinition* protonDef = nullptr;
   G4ParticleDefinition* hydrogenDef = nullptr;

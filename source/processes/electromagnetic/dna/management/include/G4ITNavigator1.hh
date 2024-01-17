@@ -63,10 +63,7 @@
 #include "G4RotationMatrix.hh"
 
 #include "G4LogicalVolume.hh"             // Used in inline methods
-#include "G4GRSVolume.hh"                 //    "         "
-#include "G4GRSSolid.hh"                  //    "         "
 #include "G4TouchableHandle.hh"           //    "         "
-#include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
 #include "G4NormalNavigation.hh"
@@ -82,9 +79,9 @@ class G4VPhysicalVolume;
 
 struct G4ITNavigatorState_Lock1
 {
-    virtual ~G4ITNavigatorState_Lock1(){;}
+    virtual ~G4ITNavigatorState_Lock1()= default;
 protected:
-    G4ITNavigatorState_Lock1(){;}
+    G4ITNavigatorState_Lock1(){}
 };
 
 class G4ITNavigator1
@@ -101,6 +98,9 @@ public:
 
   virtual ~G4ITNavigator1();
     // Destructor. No actions.
+
+  G4ITNavigator1(const G4ITNavigator1&) = delete;
+  G4ITNavigator1& operator=(const G4ITNavigator1&) = delete;
 
   // !>
     G4ITNavigatorState_Lock1* GetNavigatorState();
@@ -147,7 +147,7 @@ public:
 
   virtual
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                             const G4ThreeVector* direction=0,
+                                             const G4ThreeVector* direction=nullptr,
                                              const G4bool pRelativeSearch=true,
                                              const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
@@ -223,13 +223,11 @@ public:
     // Set the world (`topmost') volume. This must be positioned at
     // origin (0,0,0) and unrotated.
 
-  inline G4GRSVolume* CreateGRSVolume() const;
-  inline G4GRSSolid* CreateGRSSolid() const; 
   inline G4TouchableHistory* CreateTouchableHistory() const;
   inline G4TouchableHistory* CreateTouchableHistory(const G4NavigationHistory*) const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
-  virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
+  virtual G4TouchableHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
   virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
@@ -354,10 +352,6 @@ public:
 
  private:
 
-  G4ITNavigator1(const G4ITNavigator1&);
-  G4ITNavigator1& operator=(const G4ITNavigator1&);
-    // Private copy-constructor and assignment operator.
-
   void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
                             G4double moveLenSq) const;
     // Log and checks for steps larger than the tolerance
@@ -385,7 +379,7 @@ public:
     // A similar memory whether the Step exited current "mother" volume
     // completely, not entering daughter.
 
-  G4bool fWasLimitedByGeometry;
+  G4bool fWasLimitedByGeometry{false};
     // Set true if last Step was limited by geometry.
 
   G4ThreeVector fStepEndPoint;
@@ -395,7 +389,7 @@ public:
     // Position of the end-point of the last call to ComputeStep 
     // in last Local coordinates.
 
-  G4int  fVerbose;
+  G4int  fVerbose{0};
     // Verbose(ness) level  [if > 0, printout can occur].
 
  private:
@@ -472,7 +466,7 @@ public:
   struct G4SaveNavigatorState : public G4ITNavigatorState_Lock1
   { 
      G4SaveNavigatorState();
-     virtual ~G4SaveNavigatorState(){;}
+     ~G4SaveNavigatorState() override= default;
      G4ThreeVector sExitNormal;  
      G4bool sValidExitNormal;    
      G4bool sEntering, sExiting;
@@ -501,15 +495,15 @@ public:
 
   // Tracking Invariants
   //
-  G4VPhysicalVolume  *fTopPhysical;
+  G4VPhysicalVolume  *fTopPhysical{nullptr};
     // A link to the topmost physical volume in the detector.
     // Must be positioned at the origin and unrotated.
 
   // Utility information
   //
-  G4bool fCheck;
+  G4bool fCheck{false};
     // Check-mode flag  [if true, more strict checks are performed].
-  G4bool fPushed, fWarnPush;
+  G4bool fPushed{false}, fWarnPush{true};
     // Push flags  [if true, means a stuck particle has been pushed].
 
   // Helpers/Utility classes

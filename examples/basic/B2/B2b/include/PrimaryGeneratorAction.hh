@@ -56,9 +56,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
 
-    // Set methods
-    void SetRandomFlag(G4bool );
-
   private:
     G4ParticleGun* fParticleGun = nullptr; // G4 particle gun
 };

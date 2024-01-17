@@ -31,6 +31,7 @@
 using G4Analysis::kX;
 using G4Analysis::kY;
 using G4Analysis::kZ;
+using G4Analysis::kMaxDim;
 using G4Analysis::CheckDimensions;
 using G4Analysis::GetHnType;
 using G4Analysis::IsProfile;
@@ -38,7 +39,7 @@ using G4Analysis::Warn;
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
-const std::array<std::string, 3> G4THnToolsManager<DIM, HT>::fkKeyAxisTitle =
+const std::array<std::string, kMaxDim> G4THnToolsManager<DIM, HT>::fkKeyAxisTitle =
 { "axis_x.title", "axis_y.title", "axis_z.title" };
 
 //_____________________________________________________________________________
@@ -47,6 +48,7 @@ G4THnToolsManager<DIM, HT>::G4THnToolsManager(const G4AnalysisManagerState& stat
   : G4THnManager<HT>(state)
 {
   fMessenger = std::make_unique<G4THnMessenger<DIM, HT>>(this);
+  GetHnManager()->CreateMessenger();
 }
 
 //_____________________________________________________________________________
@@ -61,10 +63,10 @@ void G4THnToolsManager<DIM, HT>::UpdateInformation(G4HnInformation* hnInformatio
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
-G4HnInformation* G4THnToolsManager<DIM, HT>::AddInformation(const G4String& name,
+G4HnInformation* G4THnToolsManager<DIM, HT>::CreateInformation(const G4String& name,
   const std::array<G4HnDimensionInformation, DIM>& hnInfo)
 {
-  auto hnInformation = GetHnManager()->AddHnInformation(name, DIM);
+  auto hnInformation = new G4HnInformation(name, DIM);
   for (unsigned int idim = 0; idim < DIM; ++idim) {  
     hnInformation->AddDimension(hnInfo[idim]);
   }
@@ -117,10 +119,10 @@ G4int G4THnToolsManager<DIM, HT>::Create(
   // Add annotation
   AddAnnotation(ht, hnInfo);
 
-  // Save hn information
-  auto info = AddInformation(name, hnInfo);
+  // Create Hn information
+  auto info = CreateInformation(name, hnInfo);
 
-  // Register histogram
+  // Register histogram & info
   auto id = RegisterT(name, ht, info);
 
   Message(G4Analysis::kVL2, "create", GetHnType<HT>(), name);
@@ -175,7 +177,12 @@ G4bool G4THnToolsManager<DIM, HT>::Fill(G4int id,
   std::array<G4double, DIM> value, G4double weight)
 {
   auto [ht, info] = GetTHnInFunction(id, "Fill"+ GetHnType<HT>(), true, false);
-  if (ht == nullptr) return false;
+
+  if (ht == nullptr) {
+    Warn("Failed to fill " + GetHnType<HT>() + " id " + std::to_string(id) +
+      ". Histogram does not exist.", fkClass, "Fill");
+    return false;
+  }
 
   if ( G4THnManager<HT>::fState.GetIsActivation() && ( ! info->GetActivation() ) ) {
     return false;
@@ -209,6 +216,12 @@ G4int  G4THnToolsManager<DIM, HT>::GetId(const G4String& name, G4bool warn) cons
   return GetTId(name, warn);
 }
 
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4int  G4THnToolsManager<DIM, HT>::GetNofHns(G4bool onlyIfExist) const
+{
+  return G4THnManager<HT>::GetNofHns(onlyIfExist);
+}
 
 //_____________________________________________________________________________
 template <unsigned int DIM, typename HT>
@@ -315,6 +328,20 @@ template <unsigned int DIM, typename HT>
 G4bool G4THnToolsManager<DIM, HT>::List(std::ostream& output, G4bool onlyIfActive)
 {
   return G4THnManager<HT>::List(output, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+template <unsigned int DIM, typename HT>
+G4bool G4THnToolsManager<DIM, HT>::Delete(G4int id, G4bool keepSetting)
+{
+  G4String message =  " id " + to_string(id);
+  Message(G4Analysis::kVL4, "delete", GetHnType<HT>(), message);
+
+  auto result = G4THnManager<HT>::DeleteT(id, keepSetting);
+
+  Message(G4Analysis::kVL2, "delete", GetHnType<HT>(), message, result);
+
+  return result;
 }
 
 //_____________________________________________________________________________

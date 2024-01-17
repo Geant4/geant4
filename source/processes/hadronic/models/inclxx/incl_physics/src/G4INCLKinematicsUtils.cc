@@ -42,8 +42,36 @@ namespace G4INCL {
 
   namespace KinematicsUtils {
 
+  G4double fiveParFit (const G4double a, const G4double b, const G4double c, const G4double d, const G4double e, const G4double x){
+    return a+b*std::pow(x, c)+d*std::log(x)+e*std::log(x)*std::log(x);
+  }
+
+  G4double compute_xs(const std::vector<G4double> coefficients, const G4double pLab){
+      G4double sigma = 0.;
+      G4double Ethreshold = 0.0;
+      if(coefficients.size() == 6){
+          Ethreshold = coefficients[5];
+          if(Ethreshold >= 5){ //there are no Ethreshold even close to 5 GeV.
+              if(pLab > Ethreshold){ // E is E cutoff, not threshold, we use it when sigma should be zero.
+                  return 0.;
+              }
+          }
+          else{
+              if(pLab < Ethreshold){
+                  return 0.;
+              }
+          }
+      }
+
+      sigma = fiveParFit(coefficients[0],coefficients[1],coefficients[2],coefficients[3],coefficients[4], pLab);
+      if(sigma < 0.){
+          return 0.;
+      };
+      return sigma;
+  }
+
   void transformToLocalEnergyFrame(Nucleus const * const n, Particle * const p) {
-// assert(!p->isMeson() && !p->isPhoton()); // No local energy for mesons //D nor for photons!
+// assert(!p->isMeson() && !p->isPhoton() && !p->isAntiNucleon()); // No local energy for mesons //D nor for photons!
     const G4double localEnergy = getLocalEnergy(n, p);
     const G4double localTotalEnergy = p->getEnergy() - localEnergy;
     p->setEnergy(localTotalEnergy);
@@ -51,8 +79,7 @@ namespace G4INCL {
   }
 
   G4double getLocalEnergy(Nucleus const * const n, Particle * const p) {
-// assert(!p->isMeson() && !p->isPhoton()); // No local energy for mesons //D photons are bad too!
-    
+// assert(!p->isMeson() && !p->isPhoton() && !p->isAntiNucleon()); // No local energy for mesons //D photons are bad too!
     G4double vloc = 0.0;
     const G4double r = p->getPosition().mag();
     const G4double mass = p->getMass();
@@ -74,7 +101,7 @@ namespace G4INCL {
     } else {
       const G4double tf0 = p->getPotentialEnergy() - n->getPotential()->getSeparationEnergy(p);
       if(tf0<0.0) return 0.0;
-      pfl0 = std::sqrt(tf0*(tf0 + 2.0*mass));
+      pfl0 = std::sqrt(tf0*(tf0 + 2.0*mass));    
     }
     const G4double pReflection = p->getReflectionMomentum()/pfl0;
     const G4double reflectionRadius = n->getDensity()->getMaxRFromP(p->getType(), pReflection);

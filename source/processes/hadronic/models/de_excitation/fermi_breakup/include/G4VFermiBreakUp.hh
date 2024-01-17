@@ -29,6 +29,7 @@
 //
 // Modifications:
 // 01.04.2011 General cleanup by V.Ivanchenko
+// 01.07.2023 General cleanup by V.Ivanchenko
 
 #ifndef G4VFermiBreakUp_h
 #define G4VFermiBreakUp_h 1
@@ -40,14 +41,14 @@ class G4VFermiBreakUp
 {
 public:
 
-  explicit G4VFermiBreakUp() : verbose(0) {};
-  virtual ~G4VFermiBreakUp() {};
+  G4VFermiBreakUp() {};
+  virtual ~G4VFermiBreakUp() = default;
 
   virtual void Initialise() = 0;
 
   // check if the Fermi Break Up model can be used 
   // mass is an effective mass of a fragment
-  virtual G4bool IsApplicable(G4int Z, G4int A, G4double mass) const = 0;
+  virtual G4bool IsApplicable(G4int Z, G4int A, G4double eexc) const = 0;
 
   // vector of products is added to the provided vector
   // if no decay channel is found out for the primary fragment 
@@ -56,18 +57,16 @@ public:
   virtual void BreakFragment(G4FragmentVector* results, 
 			     G4Fragment* theNucleus) = 0;
 
-  inline void SetVerbose(G4int val) { verbose = val; }
+  G4VFermiBreakUp(const G4VFermiBreakUp &right) = delete;
+  const G4VFermiBreakUp & operator=(const G4VFermiBreakUp &right) = delete;
+  G4bool operator==(const G4VFermiBreakUp &right) const = delete;
+  G4bool operator!=(const G4VFermiBreakUp &right) const = delete;
+
+  void SetVerbose(G4int val) { verbose = val; }
 
 protected:
 
-  G4int verbose;
-
-private:
-
-  G4VFermiBreakUp(const G4VFermiBreakUp &right);  
-  const G4VFermiBreakUp & operator=(const G4VFermiBreakUp &right);
-  G4bool operator==(const G4VFermiBreakUp &right) const;
-  G4bool operator!=(const G4VFermiBreakUp &right) const;
+  G4int verbose{0};
 };
 
 #endif

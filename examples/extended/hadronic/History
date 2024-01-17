@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-15 I. Hrivnacova (exHadronic-V11-01-01)
+- Updated vis.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
 ## 2022-05-09 G. Hugo (exHadronic-V11-01-00)
 - Add a G4-FLUKA interface and two G4 hadronic examples, 
 providing access to FLUKA hadron-nucleus inelastic physics.

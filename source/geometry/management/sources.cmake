@@ -29,6 +29,13 @@ geant4_add_module(G4geometrymng
     G4LogicalVolume.hh
     G4LogicalVolume.icc
     G4LogicalVolumeStore.hh
+    G4NavigationHistory.hh
+    G4NavigationHistory.icc
+    G4NavigationHistoryPool.hh
+    G4NavigationLevel.hh
+    G4NavigationLevel.icc
+    G4NavigationLevelRep.hh
+    G4NavigationLevelRep.icc
     G4PhysicalVolumeStore.hh
     G4ReflectedSolid.hh
     G4Region.hh
@@ -45,18 +52,20 @@ geant4_add_module(G4geometrymng
     G4SmartVoxelStat.hh
     G4SolidStore.hh
     G4TouchableHandle.hh
+    G4TouchableHistory.hh
+    G4TouchableHistory.icc
+    G4TouchableHistoryHandle.hh
     G4UAdapter.hh
     G4VCurvedTrajectoryFilter.hh
     G4VNestedParameterisation.hh
     G4VPVDivisionFactory.hh
-    G4VPVParameterisation.hh
     G4VPhysicalVolume.hh
     G4VPhysicalVolume.icc
+    G4VPVParameterisation.hh
     G4VSolid.hh
     G4VSolid.icc
     G4VStoreNotifier.hh
     G4VTouchable.hh
-    G4VTouchable.icc
     G4VUserRegionInformation.hh
     G4VVolumeMaterialScanner.hh
     G4VoxelLimits.hh
@@ -79,6 +88,10 @@ geant4_add_module(G4geometrymng
     G4LogicalSurface.cc
     G4LogicalVolume.cc
     G4LogicalVolumeStore.cc
+    G4NavigationHistory.cc
+    G4NavigationHistoryPool.cc
+    G4NavigationLevel.cc
+    G4NavigationLevelRep.cc
     G4PhysicalVolumeStore.cc
     G4ReflectedSolid.cc
     G4Region.cc
@@ -88,13 +101,13 @@ geant4_add_module(G4geometrymng
     G4SmartVoxelProxy.cc
     G4SmartVoxelStat.cc
     G4SolidStore.cc
+    G4TouchableHistory.cc
     G4VCurvedTrajectoryFilter.cc
     G4VNestedParameterisation.cc
     G4VPVDivisionFactory.cc
     G4VPVParameterisation.cc
     G4VPhysicalVolume.cc
     G4VSolid.cc
-    G4VTouchable.cc
     G4VoxelLimits.cc)
 
 # - Add path to generated header

@@ -6,6 +6,53 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-18 I. Hrivnacova (hadr-cross-V11-01-16)
+- G4PhotoNuclearCrossSection - fix memory leaks
+
+## 2023-10-25 Vladimir Ivanchenko (hadr-cross-V11-01-15)
+- G4ChargeExchangeXS - added Set method for the factor multiplying the cross
+    section (NA64 request). 
+
+## 2023-10-23 Vladimir Ivanchenko (hadr-cross-V11-01-14)
+- G4ChargeExchangeXS - added parameterisation of cross section of eta_prime,
+    omega(982), and f2(1270) mesons by V. Lyubovitsly (NA64 CERN);
+    optimized usage of G4Pow and avoid recomputation of the same values;
+    added low energy limit, below which cross section is set to zero.
+
+## 2023-10-07 Vladimir Ivanchenko (hadr-cross-V11-01-13)
+- G4ParticleInelasticXS - make upper energy limit for light ions the same as
+    in FTFP_BERT
+
+## 2023-09-14 Vladimir Ivanchenko (hadr-cross-V11-01-12)
+- G4NeutronCaptureXS, G4NeutronInelasticXS, G4ParticleInelasticXS - use 
+    GetComponentByID(...) instead of GetComponentByIndex(...) allowing to reduce
+    memory for isotope data 
+- G4GammaNuclearXS - removed debug printout
+- G4IsotopeList - extended arrays to be applicable both for G4PARTICLEXSDATA
+    and G4PARTICLEHPDATA
+
+## 2023-09-08 Vladimir Ivanchenko (hadr-cross-V11-01-11)
+- G4ChargeExchangeXS - (Tim Lok Chau) fixed units
+
+## 2023-09-04 Vladimir Ivanchenko (hadr-cross-V11-01-10)
+- G4NeutronCaptureXS, G4NeutronInelasticXS, G4GammaNuclearXS,
+  G4ParticleInelasticXS - use std <thread> method to initialize static data 
+
+## 2023-08-14 Michel Maire (hadr-cross-V11-01-09)
+- G4CrossSectionDataStore::DumpPhysicsTable(): fix a printing problem
+
+## 2023-08-09 Tim Lok Chau (hadr-cross-V11-01-08)
+- G4ChargeExchangeXS - Fill out the content of implementing the charge exchange process
+
+## 2023-07-21 Vladimir Ivanchenko (hadr-cross-V11-01-07)
+- G4ChargeExchangeXS - new cross section class for charge exchange process
+
+## 2023-07-17 Vladimir Ivanchenko (hadr-cross-V11-01-06)
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS, G4GammaNuclearXS,
+  G4ParticleInelasticXS - use the same approach to fill static data, do not
+    unlock initialisation inside BuildPhycsTable(..) method until initialisation
+    is done, minor code formatting
+
 ## 2023-05-24 Vladimir Ivanchenko (hadr-cross-V11-01-05)
 - G4GammaNuclearXS - more accurate usage of cache to fix the nightly problems;
     simplified GetIsoCrosssection(..) and SelectIsotope(..) methods

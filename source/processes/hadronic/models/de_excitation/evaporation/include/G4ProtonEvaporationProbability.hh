@@ -42,24 +42,21 @@ class G4ProtonEvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  explicit G4ProtonEvaporationProbability();
+  G4ProtonEvaporationProbability();
 
-  ~G4ProtonEvaporationProbability() override;
+  ~G4ProtonEvaporationProbability() override = default;
+
+  G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &right) = delete;
+  const G4ProtonEvaporationProbability & operator=
+  (const G4ProtonEvaporationProbability &right) = delete;
+  G4bool operator==(const G4ProtonEvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4ProtonEvaporationProbability &right) const = delete;
 
 protected:
 
   G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
   G4double CalcBetaParam(const G4Fragment & fragment) override;
- 
-private:  
-
-  G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &right);
-  const G4ProtonEvaporationProbability & operator=
-  (const G4ProtonEvaporationProbability &right);
-  G4bool operator==(const G4ProtonEvaporationProbability &right) const;
-  G4bool operator!=(const G4ProtonEvaporationProbability &right) const;
-
 };
 
 #endif

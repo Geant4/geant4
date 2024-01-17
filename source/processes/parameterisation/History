@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-21 I. Hrivnacova (param-V11-01-04)
+- In G4GlobalFastSimulationManager: 
+  use G4ThreadLocalSingleton to avoid undeleted static object at exit
+
+## 2023-10-18 Ben Morgan (param-V11-01-03)
+- Apply standard and extended clang-tidy fixes
+- Mark empty/obsolete functions as deprecated
+
+## 2023-10-16 Ben Morgan (param-V11-01-02)
+- Apply standard clang-format-ing.
+- Normal order accessors and docstrings.
+
+## 2023-09-04 Gabriele Cosmo (param-V11-01-01)
+- In G4FastTrack, removed references to G4TouchableHistoryHandle,
+  which is now deprecated.
+
 ## 2023-03-23 Anna Zaborowska (param-V11-01-00)
 - Added missing virtual destructor to G4VFastSimSensitiveDetector
 

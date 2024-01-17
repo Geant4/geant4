@@ -41,13 +41,13 @@ class LXeSteppingMessenger : public G4UImessenger
 {
  public:
   LXeSteppingMessenger(LXeSteppingAction*);
-  ~LXeSteppingMessenger();
+  ~LXeSteppingMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  LXeSteppingAction* fStepping;
-  G4UIcmdWithABool* fOneStepPrimariesCmd;
+  LXeSteppingAction* fStepping = nullptr;
+  G4UIcmdWithABool* fOneStepPrimariesCmd = nullptr;
 };
 
 #endif

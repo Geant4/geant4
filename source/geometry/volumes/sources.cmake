@@ -12,48 +12,26 @@ geant4_add_module(G4volumes
     G4AssemblyVolume.icc
     G4EnhancedVecAllocator.hh
     G4GeometryWorkspace.hh
-    G4GRSSolid.hh
-    G4GRSSolid.icc
-    G4GRSSolidHandle.hh
-    G4GRSVolume.hh
-    G4GRSVolume.icc
-    G4GRSVolumeHandle.hh
     G4LogicalBorderSurface.hh
     G4LogicalBorderSurface.icc
     G4LogicalSkinSurface.hh
     G4LogicalSkinSurface.icc
-    G4NavigationHistory.hh
-    G4NavigationHistory.icc
-    G4NavigationHistoryPool.hh
-    G4NavigationLevel.hh
-    G4NavigationLevel.icc
-    G4NavigationLevelRep.hh
-    G4NavigationLevelRep.icc
     G4PVParameterised.hh
     G4PVPlacement.hh
     G4PVReplica.hh
     G4ReflectionFactory.hh
-    G4TouchableHistory.hh
-    G4TouchableHistory.icc
-    G4TouchableHistoryHandle.hh
-	  G4VExternalPhysicalVolume.hh
+    G4VExternalPhysicalVolume.hh
   SOURCES
     G4AssemblyStore.cc
     G4AssemblyVolume.cc
     G4GeometryWorkspace.cc
-    G4GRSSolid.cc
-    G4GRSVolume.cc
     G4LogicalBorderSurface.cc
     G4LogicalSkinSurface.cc
-    G4NavigationHistory.cc
-    G4NavigationHistoryPool.cc
-    G4NavigationLevel.cc
-    G4NavigationLevelRep.cc
     G4PVParameterised.cc
     G4PVPlacement.cc
     G4PVReplica.cc
     G4ReflectionFactory.cc
-    G4TouchableHistory.cc
-  	G4VExternalPhysicalVolume.cc)
+    G4VExternalPhysicalVolume.cc)
 
-geant4_module_link_libraries(G4volumes PUBLIC G4globman G4hepgeometry G4geometrymng)
+geant4_module_link_libraries(G4volumes
+  PUBLIC G4globman G4hepgeometry G4geometrymng)

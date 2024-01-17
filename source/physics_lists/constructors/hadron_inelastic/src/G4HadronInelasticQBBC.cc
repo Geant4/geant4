@@ -31,6 +31,7 @@
 // Author: 2 October 2009 V. Ivanchenko
 //
 // Modified:
+// 12.10.2023 V.Ivanchenko added usage of the neutron general process
 //
 //----------------------------------------------------------------------------
 //

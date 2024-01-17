@@ -34,9 +34,6 @@
 G4EvaporationGEMFactoryVI::G4EvaporationGEMFactoryVI(G4VEvaporationChannel* ptr)
   : G4VEvaporationFactory(ptr)
 {} 
-  
-G4EvaporationGEMFactoryVI::~G4EvaporationGEMFactoryVI() 
-{}
                  
 std::vector<G4VEvaporationChannel*>* G4EvaporationGEMFactoryVI::GetChannel()
 {

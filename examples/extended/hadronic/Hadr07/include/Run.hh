@@ -49,7 +49,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction* detector);
-   ~Run();
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
@@ -79,14 +79,16 @@ private:
   };
   
   private:
-    DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin; 
+    DetectorConstruction*  fDetector = nullptr;
+    G4ParticleDefinition*  fParticle = nullptr;
+    G4double  fEkin = 0.; 
 
-    G4int      fStatus[3];
+    G4int      fStatus[3] = {0, 0, 0};
     
     G4double   fEdeposit[kMaxAbsor], fEmin[kMaxAbsor], fEmax[kMaxAbsor];
-    G4double   fTotEdep[3], fEleak[3], fEtotal[3];
+    G4double   fTotEdep[3] = {0.,0.,0.};
+    G4double   fEleak[3]   = {0.,0.,0.};
+    G4double   fEtotal[3]  = {0.,0.,0.};
    
     std::map<G4String,G4int>        fProcCounter;
     std::map<G4String,ParticleData> fParticleDataMap[kMaxAbsor];

@@ -35,16 +35,18 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4DNAWaterExcitationStructure.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
-#include "G4TransportationManager.hh"
+#include "G4DNAWaterExcitationStructure.hh"
 #include "G4ITNavigator.hh"
 #include "G4Navigator.hh"
+#include "G4NistManager.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4TransportationManager.hh"
+
+#include <memory>
 
 //#define MODEL_VERBOSE
 
@@ -54,24 +56,21 @@ template<typename MODEL>
 G4TDNAOneStepThermalizationModel<MODEL>::
 G4TDNAOneStepThermalizationModel(const G4ParticleDefinition*,
                                  const G4String& nam) :
-G4VEmModel(nam), fIsInitialised(false)
+G4VEmModel(nam) 
 {
   fVerboseLevel = 0;
   SetLowEnergyLimit(0.);
   G4DNAWaterExcitationStructure exStructure;
   SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
-  fpParticleChangeForGamma = 0;
-  fpWaterDensity = 0;
+  fpParticleChangeForGamma = nullptr;
+  fpWaterDensity = nullptr;
 }
 
 //------------------------------------------------------------------------------
 
 template<typename MODEL>
 G4TDNAOneStepThermalizationModel<MODEL>::~G4TDNAOneStepThermalizationModel()
-{
-    //    if(fpNavigator && fpNavigator->GetNavigatorState())
-    //      delete fpNavigator->GetNavigatorState();
-}
+= default;
 
 //------------------------------------------------------------------------------
 template<typename MODEL>
@@ -105,11 +104,11 @@ Initialise(const G4ParticleDefinition* particleDefinition,
   G4TransportationManager::GetTransportationManager()->
   GetNavigatorForTracking();
   
-  fpNavigator.reset(new G4Navigator());
+  fpNavigator = std::make_unique<G4Navigator>();
   
-  if(navigator){ // add these checks for testing mode
+  if(navigator != nullptr){ // add these checks for testing mode
     auto world=navigator->GetWorldVolume();
-    if(world){
+    if(world != nullptr){
       fpNavigator->SetWorldVolume(world);
       //fNavigator->NewNavigatorState();
     }

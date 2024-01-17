@@ -39,7 +39,7 @@ Par04EventInformation::Par04EventInformation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04EventInformation::~Par04EventInformation() {}
+Par04EventInformation::~Par04EventInformation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -78,6 +78,7 @@
 #include "G4Exp.hh"
 #include "G4Material.hh"
 #include "G4String.hh"
+								  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -348,6 +349,18 @@ G4double G4MicroElecElasticModel_new::CrossSectionPerVolume(const G4Material* ma
     return AcousticCrossSectionPerVolume(ekin, kbz, rho, cs, Aac, Eac, prefactor);
   }
   
+else if (currentMaterialName == "ALUMINUM_OXIDE" && ekin < 20 * eV) {
+	 acousticModelEnabled = true;
+
+	 //Values for Al2O3
+	 G4double kbz = 8871930614.247564,
+		 rho = 3.97 * 1000, // [g/cm3] * 1000
+		 cs = 233329.07733059773, //Sound speed
+		 Aac = 2.9912494342262614e-19, //A screening parameter
+		 Eac = 2.1622471654789847e-18, //C deformation potential
+		 prefactor = 1;
+	 return AcousticCrossSectionPerVolume(ekin, kbz, rho, cs, Aac, Eac, prefactor);
+ }
   //Elastic
   else {
     acousticModelEnabled = false;
@@ -395,6 +408,11 @@ G4double G4MicroElecElasticModel_new::CrossSectionPerVolume(const G4Material* ma
 	G4cout << " - Cross section per Si atom (cm^2)=" << sigma / cm / cm << G4endl;
 	G4cout << " - Cross section per Si atom (cm^-1)=" << sigma*density / (1. / cm) << G4endl;
       }
+
+    // Hsing-YinChangaAndrewAlvaradoaTreyWeberaJaimeMarianab Monte Carlo modeling of low-energy electron-induced secondary electron emission yields in micro-architected boron nitride surfaces - ScienceDirect, (n.d.). https://www.sciencedirect.com/science/article/pii/S0168583X19304069 (accessed April 1, 2022).
+    if (currentMaterialName == "BORON_NITRIDE") {
+        sigma = sigma * tanh(0.5 * pow(ekin / 5.2e-6, 2));
+    }
     return sigma*density;   
   }
 }

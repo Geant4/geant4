@@ -46,18 +46,17 @@ class WLSPrimaryGeneratorMessenger : public G4UImessenger
 {
  public:
   WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction*);
-  ~WLSPrimaryGeneratorMessenger();
+  ~WLSPrimaryGeneratorMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  WLSPrimaryGeneratorAction* fAction;
+  WLSPrimaryGeneratorAction* fAction = nullptr;
 
-  G4UIdirectory* fGunDir;
+  G4UIdirectory* fGunDir = nullptr;
 
-  G4UIcmdWithADoubleAndUnit* fSetPolarizationCmd;
-  G4UIcmdWithADoubleAndUnit* fSetDecayTimeConstantCmd;
-  // G4UIcmdWithABool*            fSetUseSampledEnergyCmd;
+  G4UIcmdWithADoubleAndUnit* fSetPolarizationCmd = nullptr;
+  G4UIcmdWithADoubleAndUnit* fSetDecayTimeConstantCmd = nullptr;
 };
 
 #endif

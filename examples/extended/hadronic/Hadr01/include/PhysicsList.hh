@@ -57,10 +57,10 @@ class PhysicsList: public G4VModularPhysicsList
 public:
 
   PhysicsList();
-  virtual ~PhysicsList();
+  ~PhysicsList() override;
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();    
+  void ConstructParticle() override;
+  void ConstructProcess() override;
 
   void AddPhysicsList(const G4String& name);
   void List();
@@ -71,13 +71,12 @@ private:
   void SetBuilderList1(G4bool flagHP = false);
   void SetBuilderList2();
 
-  G4VPhysicsConstructor*  fEmPhysicsList;
-  G4VPhysicsConstructor*  fParticleList;
-  std::vector<G4VPhysicsConstructor*>  fHadronPhys;
-    
+  G4VPhysicsConstructor* fEmPhysicsList;
+  G4VPhysicsConstructor* fParticleList;
+  std::vector<G4VPhysicsConstructor*> fHadronPhys;
+
   PhysicsListMessenger* fMessenger;
   G4PhysListFactoryMessenger* fFactMessenger;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

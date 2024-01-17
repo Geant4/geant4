@@ -4,9 +4,16 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-10 I. Hrivnacova (fieldex01-V11-01-01)
+- Coding guidelines: split long lines
+
+## 2023-07-05 I. Hrivnacova (fieldex01-V11-01-00)
+- Clang-tidy, new coding guidelines
+- Clean-up trailing white-spaces
+
 ## 2022-11-05 J. Apostolakis (fieldex01-V11-00-03)
 - field01.cc: Demonstrate using G4TransporationParameters to set looper values for Transportation.
-- F01FieldSetup:  
+- F01FieldSetup:
   * Show how to control Epsilon Min/Max
   * Boris method is now available only by modifying the source code (search for 'Boris')
 
@@ -29,7 +36,7 @@ Nov  28, 2019 I. Hrivnacova   - fieldex01-V10-05-00
 - Fixed formatting in .README.txt
 
 Dec   4, 2018 J.Apostolakis   - fieldex01-V10-04-06
-- Corrections to use arguments of methods in F01RunAction. 
+- Corrections to use arguments of methods in F01RunAction.
   Fixes compilation warnings.
 - Added information to README, .README.txt about new choice of
    FSAL drivers and choices to control killing of particles looping
@@ -58,9 +65,9 @@ July 27, 2018 I.Hrivnacova - fieldex01-V10-04-02,03
 - Macro review and code clean-up:
   - Removed EventAction, RunAction, RunActionMessenger
     used only for storing random numbers, already available in kernel
-  - Separated other than visualization settings from vis.mac in a 
+  - Separated other than visualization settings from vis.mac in a
     new init_vis.mac
-  - Added test for commands defined in the example at the end 
+  - Added test for commands defined in the example at the end
     of field01.in macro
   - Improved visualization of geometry
   - Added "beamOn 10" button in gui.mac
@@ -97,10 +104,10 @@ July 1, 2016 - I. Hrivnacova - fieldex01-V10-02-01
 - Propagated last update of README in .README.txt and fixed text format
 
 June 8, 2016 - J. Apostolakis - fieldex01-V10-02-00
-- Added option to use new Runge Kutta Steppers 
+- Added option to use new Runge Kutta Steppers
 
 September 01, 2015 - I. Hrivnacova - fieldex01-V10-01-02
-- Removed F01EventActionMessenger classes, now obsolete, and 
+- Removed F01EventActionMessenger classes, now obsolete, and
   replaced /event/printModulo commands in macros with /run/printProgress
 - Code cleanup
 
@@ -129,7 +136,7 @@ November 26, 2013 - I.Hrivnacova - fieldex01-V09-06-07
 - Fixed ConstructSDandField():
   Moved setting the SD to logical volume outside the test
 - Do not test (fAbsorberThickness > 0.) in ConstructCalorimeter()
-  as setting 0 is not allowed in set command  
+  as setting 0 is not allowed in set command
 
 November 25, 2013 - I.Hrivnacova - fieldex01-V09-06-06
 - Put back cleaning volumes and solid stores in ConstructGeometry()
@@ -138,12 +145,12 @@ November 22, 2013 - P.Gumplinger - fieldex01-V09-06-05
 - add gui.mac and avoid long line
 
 November 21, 2013 - I.Hrivnacova - fieldex01-V09-06-04
-- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
+- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild
   when geometry changes
 - Remove DetectorConstruction::Update and corresponding UI command that
   is not needed anymore
-- Set "ToBeBroadcasted == false" for UI commands that modify detector 
-  since these should be executed only by master     
+- Set "ToBeBroadcasted == false" for UI commands that modify detector
+  since these should be executed only by master
 - Fixed main (do not call gui.mac which does not exist)
 - Code cleanup in F01FieldSetup.*
 
@@ -236,8 +243,8 @@ Dec  1st, 2003 John Apostolakis (fieldex01-V05-02-01)
 
 Nov 25th, 2003 John Apostolakis (fieldex01-V05-02-00)
 -----------------------------------------------------
-- Renamed F01ElectroMagneticField into F01FieldSetup (as it is a creator, 
-   not a field). 
+- Renamed F01ElectroMagneticField into F01FieldSetup (as it is a creator,
+   not a field).
 - FieldSetup is now called in Detector Construction, not main.
 
 Nov 25th, 2003 Gabriele Cosmo

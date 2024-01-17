@@ -62,12 +62,12 @@ class G4AnalysisManagerState
 
     // get methods
     G4String GetType() const;
+    G4String GetFileType() const;
     G4bool   GetIsMaster() const;
     G4int    GetThreadId() const;
     G4bool   GetIsActivation() const;
     G4int    GetVerboseLevel() const;
     G4bool   IsVerbose(G4int verboseLevel) const;
-    G4int    GetCompressionLevel() const;
     G4int    GetCycle() const;
 
   private:
@@ -75,7 +75,6 @@ class G4AnalysisManagerState
     // (hidden from all clients except for G4VAnalysisManager friend)
     void SetIsActivation(G4bool isActivation);
     void SetVerboseLevel(G4int verboseLevel);
-    void SetCompressionLevel(G4int level);
 
     // Static data members
     static constexpr std::string_view fkClass { "G4AnalysisManagerState" };
@@ -86,7 +85,6 @@ class G4AnalysisManagerState
     G4int    fThreadId { G4Threading::SEQUENTIAL_ID };
     G4bool   fIsActivation { false };
     G4int    fVerboseLevel { 0 };
-    G4int    fCompressionLevel { 1 };
     G4int    fCycle { 0 };
     G4AnalysisVerbose fVerbose;
 };
@@ -96,9 +94,6 @@ class G4AnalysisManagerState
 inline void G4AnalysisManagerState::SetIsActivation(G4bool isActivation)
 { fIsActivation = isActivation; }
 
-inline void G4AnalysisManagerState::SetCompressionLevel(G4int level)
-{ fCompressionLevel = level; }
-
 inline void G4AnalysisManagerState::IncrementCycle()
 { ++fCycle; }
 
@@ -107,6 +102,9 @@ inline void G4AnalysisManagerState::ResetCycle()
 
 inline G4String G4AnalysisManagerState::GetType() const
 { return fType; }
+
+inline G4String G4AnalysisManagerState::GetFileType() const
+{ return G4StrUtil::to_lower_copy(fType); }
 
 inline G4bool  G4AnalysisManagerState::GetIsMaster() const
 { return fIsMaster; }
@@ -122,9 +120,6 @@ inline G4int   G4AnalysisManagerState::GetVerboseLevel() const
 
 inline G4bool  G4AnalysisManagerState::IsVerbose(G4int verboseLevel) const
 { return fVerboseLevel == verboseLevel; }
-
-inline G4int  G4AnalysisManagerState::GetCompressionLevel() const
-{ return fCompressionLevel; }
 
 inline G4int G4AnalysisManagerState::GetCycle() const
 { return fCycle; }

@@ -1,14 +1,8 @@
 #
-# Create a scene handler/viewer for a specific graphics system
-#    The compound command "/vis/open <vis-driver-name>"
-#    is equivalent to the following set of commands:
-#
-#    /vis/sceneHandler/create
-#    /vis/viewer/create
-#
-# Create a scene handler and a viewer for the OGLIXm driver
-#
-/vis/open OGL 600x600-0+0
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
 # Create an empty scene and add the detector geometry to it
 /vis/drawVolume

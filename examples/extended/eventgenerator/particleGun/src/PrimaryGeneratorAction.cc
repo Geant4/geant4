@@ -48,15 +48,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0),
-   fAction0(0),
-   fAction1(0),
-   fAction2(0),
-   fAction3(0),
-   fAction4(0),
-   fSelectedAction(0),
-   fGunMessenger(0)
 {
   // default particle kinematic
   //

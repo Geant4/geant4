@@ -33,9 +33,6 @@
 #define G4THnMessenger_h 1
 
 #include "G4UImessenger.hh"
-// #include "G4THnToolsManager.hh"
-    // to avoid include recursion this messenger header is included in G4THnToolsManager.hh
-    // after the G4THnToolsManager class definition
 #include "globals.hh"
 
 #include <memory>
@@ -48,6 +45,9 @@ class G4UIdirectory;
 class G4UIcommand;
 struct G4HnDimension;
 struct G4HnDimensionInformation;
+
+template <unsigned int DIM, typename HT>
+class G4THnToolsManager;
 
 template <unsigned int DIM, typename HT>
 class G4THnMessenger : public G4UImessenger
@@ -76,10 +76,10 @@ class G4THnMessenger : public G4UImessenger
     void CreateDirectory() const;
     void CreateCmd();
     void SetCmd();
+    void DeleteCmd();
     std::unique_ptr<G4UIcommand> CreateSetBinsCommand(unsigned int ibin);
     void CreateSetTitleCommand();
     std::unique_ptr<G4UIcommand> CreateSetAxisCommand(unsigned int ibin);
-    std::unique_ptr<G4UIcommand> CreateSetAxisLogCommand(unsigned int ibin);
     void CreateListCommand();
     void CreateGetCommand();
     void CreateGetVectorCommand();
@@ -95,18 +95,17 @@ class G4THnMessenger : public G4UImessenger
            std::array<G4HnDimensionInformation, DIM>& info) const;
 
     // constants
-    static constexpr unsigned int kMaxDim{3};
     static constexpr std::string_view fkClass { "G4THnMessenger" };
 
     // Data members
-    G4THnToolsManager<DIM,HT>* fManager { nullptr }; ///< TO DO Associated class  
+    G4THnToolsManager<DIM,HT>* fManager { nullptr }; ///< Associated class
 
     std::unique_ptr<G4UIcommand>  fCreateCmd;
     std::unique_ptr<G4UIcommand>  fSetCmd;
+    std::unique_ptr<G4UIcommand>  fDeleteCmd;
     std::array<std::unique_ptr<G4UIcommand>, DIM>  fSetDimensionCmd;
     std::unique_ptr<G4UIcommand>  fSetTitleCmd;
     std::array<std::unique_ptr<G4UIcommand>, DIM+1> fSetAxisCmd;
-    std::array<std::unique_ptr<G4UIcommand>, DIM+1> fSetAxisLogCmd;
     std::unique_ptr<G4UIcommand>  fListCmd;
     std::unique_ptr<G4UIcommand>  fGetTCmd;
     std::unique_ptr<G4UIcommand>  fGetTVectorCmd;

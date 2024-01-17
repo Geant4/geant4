@@ -49,7 +49,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double Emin, G4double Emax,
   : G4PhysicsVector(spline)
 {
   numberOfNodes = Nbin + 1;
-  if(Nbin < 2 || Emin >= Emax || Emin <= 0.0)
+  if (Nbin < 2 || Emin >= Emax || Emin <= 0.0)
   {
     G4ExceptionDescription ed;
     ed << "G4PhysicsLogVector with wrong parameters: theNbin= " << Nbin
@@ -57,7 +57,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double Emin, G4double Emax,
     G4Exception("G4PhysicsLogVector::G4PhysicsLogVector()", "glob03",
                 FatalException, ed, "Nbins should be > 1 and Emax > Emin > 0");
   }
-  if(numberOfNodes < 3)
+  if (numberOfNodes < 3)
   {
     numberOfNodes = 3;
   }
@@ -69,7 +69,7 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double Emin, G4double Emax,
   binVector[numberOfNodes - 1] = Emax;
   Initialise();
 
-  for(std::size_t i = 1; i <= idxmax; ++i)
+  for (std::size_t i = 1; i <= idxmax; ++i)
   {
     binVector[i] = edgeMin*G4Exp(i / invdBin);
   }
@@ -80,7 +80,7 @@ void G4PhysicsLogVector::Initialise()
 {
   idxmax  = numberOfNodes - 2;
   edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes - 1];
+  edgeMax = binVector[idxmax + 1];
   invdBin = (idxmax + 1) / G4Log(edgeMax/edgeMin);
   logemin = G4Log(edgeMin);
 }

@@ -107,8 +107,8 @@ namespace G4INCL {
     rngType = RanecuType;
     autosaveFrequency = 10000;
     maxNumberMultipions = -1;
-    crossSectionsString = "strangeness";
-    crossSectionsType = StrangenessCrossSections;
+    crossSectionsString = "antiparticles";
+    crossSectionsType = AntiparticlesCrossSections;
     hadronizationTime = 0.;
 #ifdef INCL_ROOT_USE
     conciseROOTTree = false;
@@ -116,7 +116,7 @@ namespace G4INCL {
     inverseKinematics = false;
     decayTimeThreshold = 1.e-20;
     bias = 1.;
-    atrestThreshold = 200.;     //D
+    atrestThreshold = 200.;
   }
 
   std::string Config::summary() {

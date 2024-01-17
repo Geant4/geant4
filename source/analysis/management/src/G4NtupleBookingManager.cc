@@ -98,23 +98,37 @@ G4int G4NtupleBookingManager::CreateNtuple(
 
   Message(kVL4, "create", "ntuple booking", name);
 
-  // Create ntuple description
-  auto index = fNtupleBookingVector.size();
-  auto ntupleBooking = new G4NtupleBooking();
-  fNtupleBookingVector.push_back(ntupleBooking);
+  G4int index = 0;
+  G4NtupleBooking* ntupleBooking = nullptr;
+  if (fFreeIds.empty()) {
+    index = (G4int)fNtupleBookingVector.size();
+    ntupleBooking = new G4NtupleBooking();
+    fNtupleBookingVector.push_back(ntupleBooking);
+    ntupleBooking->fNtupleId = G4int(index + fFirstId);
+  }
+  else {
+    // Get the first freed Id
+    index = *(fFreeIds.begin()) - GetFirstId();
+    ntupleBooking = fNtupleBookingVector[index];
+    ntupleBooking->fNtupleBooking = tools::ntuple_booking();
+    ntupleBooking->Reset();
+
+    // Remove the id from the set
+    fFreeIds.erase(fFreeIds.begin());
+  }
 
   // Save name & title in ntuple booking
   ntupleBooking->fNtupleBooking.set_name(name);
   ntupleBooking->fNtupleBooking.set_title(title);
-  ntupleBooking->fNtupleId = G4int(index + fFirstId);
 
-  // Create ntuple
+  // Update related data
   fLockFirstId = true;
+  fCurrentNtupleId = ntupleBooking->fNtupleId;
 
   Message(kVL2, "create", "ntuple booking",
     name +  " ntupleId " + to_string(ntupleBooking->fNtupleId));
 
-  return ntupleBooking->fNtupleId;
+  return fCurrentNtupleId;
 }
 
 //_____________________________________________________________________________
@@ -298,6 +312,89 @@ void G4NtupleBookingManager::ClearData()
   Message(G4Analysis::kVL2, "clear", "ntupleBookings");
 }
 
+//_____________________________________________________________________________
+G4bool G4NtupleBookingManager::Delete(G4int id, G4bool keepSetting)
+{
+  Message(kVL4, "delete", "ntuple booking ntupleId " + to_string(id));
+
+  auto ntupleBooking = GetNtupleBookingInFunction(id, "Delete", true);
+
+  if (ntupleBooking == nullptr) return false;
+
+  // Update ntuple booking
+  ntupleBooking->SetDeleted(true, keepSetting);
+
+  // Register freed Id
+  fFreeIds.insert(id);
+
+  Message(G4Analysis::kVL2, "delete", "ntuple booking ntupleId " + to_string(id));
+
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4NtupleBookingManager::List(std::ostream& output, G4bool onlyIfActive)
+{
+  // Save current output stream formatting
+  std::ios_base::fmtflags outputFlags(output.flags() );
+
+  // Define optimal field widths
+  size_t maxNameLength = 0;
+  size_t maxTitleLength = 0;
+  // size_t maxEntries = 0;
+  size_t nofActive = 0;
+  for (auto g4NtupleBooking : fNtupleBookingVector) {
+    const auto& ntupleBooking = g4NtupleBooking->fNtupleBooking;
+    if (ntupleBooking.name().length() > maxNameLength) {
+      maxNameLength = ntupleBooking.name().length();
+    }
+    if (ntupleBooking.title().length() > maxTitleLength) {
+      maxTitleLength = ntupleBooking.title().length();
+    }
+    // if (ntuple->entries() > maxEntries) {
+    //   maxEntries = ntuple->entries();
+    // }
+    if (g4NtupleBooking->fActivation) {
+      ++nofActive;
+    }
+  }
+  size_t maxIdWidth = std::to_string(fNtupleBookingVector.size() + GetFirstId()).length();
+  // update strings width for added double quotas
+  maxNameLength += 2;
+  maxTitleLength += 2;
+
+  // List general info
+  output << "Ntuple: " << nofActive << " active ";
+  if (! onlyIfActive) {
+     output << " of " << GetNofNtuples(true) << " defined ";
+  }
+  output << G4endl;
+
+  // List objects
+  G4int counter = 0;
+  for (auto g4NtupleBooking : fNtupleBookingVector) {
+    const auto& ntupleBooking = g4NtupleBooking->fNtupleBooking;
+
+    // skip inactivated objcets
+    if (fState.GetIsActivation() && onlyIfActive && (! g4NtupleBooking->fActivation)) continue;
+
+    // print selected info
+    output << "   id: " << std::setw((G4int)maxIdWidth) << GetFirstId() + counter++
+      << " name: \"" << std::setw((G4int)maxNameLength) << std::left << ntupleBooking.name() + "\""
+      << " title: \"" << std::setw((G4int)maxTitleLength) << std::left << ntupleBooking.title() + "\"";
+      // << " entries: " << std::setw((G4int)maxEntriesWidth) << ntuple->entries();
+    if (! onlyIfActive) {
+      output << " active: " << std::boolalpha << g4NtupleBooking->fActivation;
+    }
+    output  << G4endl;
+  }
+
+  // Restore the output stream formatting
+  output.flags(outputFlags);
+
+  return output.good();
+}
+
 //
 // public methods
 //
@@ -331,4 +428,25 @@ void G4NtupleBookingManager::SetFileType(const G4String& fileType)
     // Save the info in ntuple description
     ntupleBooking->fFileName = ntupleFileName;
   }
+}
+
+//_____________________________________________________________________________
+tools::ntuple_booking* G4NtupleBookingManager::GetNtuple(
+  G4bool warn, G4bool onlyIfActive) const
+{
+  return GetNtuple(fFirstId, warn, onlyIfActive);
+}
+
+//_____________________________________________________________________________
+tools::ntuple_booking* G4NtupleBookingManager::GetNtuple(
+  G4int ntupleId, G4bool warn, G4bool onlyIfActive) const
+{
+  auto g4Booking = GetNtupleBookingInFunction(ntupleId, "GetNtuple", warn);
+
+  if (g4Booking == nullptr) return nullptr;
+
+  if ( ( g4Booking->GetDeleted() ) ||
+       ( onlyIfActive && (! g4Booking->fActivation) ) ) return nullptr;
+
+  return &(g4Booking->fNtupleBooking);
 }

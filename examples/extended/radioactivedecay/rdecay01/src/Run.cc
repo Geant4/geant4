@@ -40,23 +40,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run()
-: G4Run(),
-  fParticle(0), fEkin(0.),
-  fDecayCount(0), fTimeCount(0), fPrimaryTime(0.),
-  fTimeWindow1(0.), fTimeWindow2(0.)
-{
-  fEkinTot[0] = fPbalance[0] = fEventTime[0] = fEvisEvent[0] = 0. ;
-  fEkinTot[1] = fPbalance[1] = fEventTime[1] = fEvisEvent[1] = DBL_MAX;
-  fEkinTot[2] = fPbalance[2] = fEventTime[2] = fEvisEvent[2] = 0. ;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 { 
   fParticle = particle;

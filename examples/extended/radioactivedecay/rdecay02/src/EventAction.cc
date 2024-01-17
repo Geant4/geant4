@@ -27,7 +27,6 @@
 /// \brief Implementation of the EventAction class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,21 +37,7 @@
 
 #include "G4Event.hh"
 #include "G4RunManager.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::EventAction()
-:G4UserEventAction(),
- fEdep1(0.), fEdep2(0.), fWeight1(0.), fWeight2(0.),
- fTime0(-1*s)
-{ } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

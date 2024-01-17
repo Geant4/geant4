@@ -401,7 +401,7 @@ class G4RunManager
     // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
     inline void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
     {
-      eventManager->SetNumberOfAdditionalWaitingStacks(iAdd);
+      eventManager->GetStackManager()->SetNumberOfAdditionalWaitingStacks(iAdd);
     }
 
     inline const G4String& GetVersionString() const { return kernel->GetVersionString(); }

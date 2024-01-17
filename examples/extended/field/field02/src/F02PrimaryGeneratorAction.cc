@@ -47,22 +47,14 @@
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
- G4ParticleDefinition* F02PrimaryGeneratorAction::fgPrimaryParticle = 0;
+
+ G4ParticleDefinition* F02PrimaryGeneratorAction::fgPrimaryParticle = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PrimaryGeneratorAction::F02PrimaryGeneratorAction(
                                             F02DetectorConstruction* det)
-  : G4VUserPrimaryGeneratorAction(),
-    fParticleGun(0),
-    fDetector(det),
-    fGunMessenger(0),
-    fRndmFlag("off"),
-    fXVertex(0.),
-    fYVertex(0.),
-    fZVertex(0.),
-    fVertexDefined(false)
+  : fDetector(det)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);

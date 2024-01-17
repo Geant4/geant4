@@ -36,8 +36,7 @@
 using namespace std;
 
 G4DNAVibExcitation::G4DNAVibExcitation(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
-    isInitialised(false)
+  G4ProcessType type):G4VEmProcess (processName, type)
 {
   SetProcessSubType(fLowEnergyVibrationalExcitation);
 }

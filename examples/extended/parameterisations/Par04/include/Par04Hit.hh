@@ -88,6 +88,12 @@ class Par04Hit : public G4VHit
   inline void AddEdep(G4double aEdep) { fEdep += aEdep; }
   /// Get energy
   inline G4double GetEdep() const { return fEdep; }
+  /// Set number of deposits per hit/cell
+  inline void SetNdep(G4int aNdep) { fNdep = aNdep; }
+  /// Add number of deposits to previous value, by defualt increment
+  inline void AddNdep(G4int aNdep = 1) { fNdep += aNdep; }
+  /// Get number of deposits per hit/cell
+  inline G4int GetNdep() const { return fNdep; }
   /// Set Z id of the cell in the readout segmentation
   inline void SetZid(G4int aZ) { fZId = aZ; }
   /// Get Z id of the cell in the readout segmentation
@@ -116,6 +122,8 @@ class Par04Hit : public G4VHit
  public:
   /// Energy deposit
   G4double fEdep = 0;
+  /// Counter of deposits in a hit/cell
+  G4int fNdep = 0;
   /// Z ID of readout cell
   G4int fZId = -1;
   /// Rho ID of readout cell

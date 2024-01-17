@@ -412,6 +412,10 @@ public: // With description
   G4int                        GetMaxEventQueueSize        () const;
   G4bool                       GetWaitOnEventQueueFull     () const;
 #endif
+  const G4String&              GetDefaultGraphicsSystemName() const;
+  const G4String&              GetDefaultXGeometryString   () const;
+  const G4String&              GetDefaultGraphicsSystemBasis() const;
+  const G4String&              GetDefaultXGeometryStringBasis() const;
 
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem*);
   void              SetCurrentScene             (G4Scene*);
@@ -438,6 +442,10 @@ public: // With description
   void              SetMaxEventQueueSize        (G4int);
   void              SetWaitOnEventQueueFull     (G4bool);
 #endif
+  void              SetDefaultGraphicsSystemName(const G4String&);
+  void              SetDefaultXGeometryString   (const G4String&);
+  void              SetDefaultGraphicsSystemBasis(const G4String&);
+  void              SetDefaultXGeometryStringBasis(const G4String&);
 
   /////////////////////////////////////////////////////////////////////
   // Utility functions.
@@ -477,10 +485,18 @@ protected:
   void RegisterMessengers              ();   // Command messengers.
 
   const G4int           fVerbose;
+  // No longer used. Use fVerbosity and access functions instead.
   // fVerbose is kept for backwards compatibility for some user
   // examples.  (It is used in the derived user vis managers to print
   // available graphics systems.)  It is initialised to 1 in the
   // constructor and cannot be changed.
+
+  static Verbosity      fVerbosity;
+
+  G4String              fDefaultGraphicsSystemName;
+  G4String              fDefaultXGeometryString;
+  G4String              fDefaultGraphicsSystemBasis;
+  G4String              fDefaultXGeometryStringBasis;
 
 private:
 
@@ -515,7 +531,6 @@ private:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  static Verbosity            fVerbosity;
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.

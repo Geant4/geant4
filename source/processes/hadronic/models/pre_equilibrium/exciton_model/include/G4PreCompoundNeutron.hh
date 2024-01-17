@@ -36,7 +36,6 @@
 #define G4PreCompoundNeutron_h 1
 
 #include "G4PreCompoundNucleon.hh"
-#include "G4NeutronCoulombBarrier.hh"
 
 class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
@@ -44,7 +43,7 @@ public:
 
   G4PreCompoundNeutron();
 
-  virtual ~G4PreCompoundNeutron();
+  ~G4PreCompoundNeutron() override = default;
 
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right) = delete;
   const G4PreCompoundNeutron& 
@@ -59,10 +58,6 @@ protected:
   G4double GetAlpha() const override;
 
   G4double GetBeta() const override;
-
-private:
-
-  G4NeutronCoulombBarrier theNeutronCoulombBarrier;
 };
  
 #endif

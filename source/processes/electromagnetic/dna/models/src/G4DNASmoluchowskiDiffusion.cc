@@ -60,8 +60,7 @@ G4DNASmoluchowskiDiffusion::G4DNASmoluchowskiDiffusion(double epsilon) :  fEpsil
 }
 
 G4DNASmoluchowskiDiffusion::~G4DNASmoluchowskiDiffusion()
-{
-}
+= default;
 //#endif
 
 // --> G4DNASmoluchowskiDiffusion -- DEVELOPMENT TEST

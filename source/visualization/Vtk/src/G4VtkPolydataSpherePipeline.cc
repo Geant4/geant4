@@ -39,9 +39,9 @@ std::size_t G4VtkPolydataSpherePipeline::MakeHash(const G4VisAttributes* pVA)
   return std::hash<G4VisAttributes>{}(*pVA);
 }
 
-G4VtkPolydataSpherePipeline::G4VtkPolydataSpherePipeline(G4String nameIn, const G4VtkVisContext& vc,
+G4VtkPolydataSpherePipeline::G4VtkPolydataSpherePipeline(G4String nameIn, const G4VtkVisContext& vcIn,
                                                          const G4VisAttributes* pVisAttributes)
-  : G4VtkPolydataPipeline(nameIn, vc)
+  : G4VtkPolydataPipeline(nameIn, vcIn)
 {
   // Set pipeline type
   SetTypeName(G4String("G4VtkPolydataSpherePipeline"));
@@ -65,7 +65,7 @@ G4VtkPolydataSpherePipeline::G4VtkPolydataSpherePipeline(G4String nameIn, const 
   GetActor()->SetVisibility(1);
 
   GetActor()->GetProperty()->SetRenderPointsAsSpheres(true);
-  GetActor()->GetProperty()->SetPointSize(vc.fSize * 5);
+  GetActor()->GetProperty()->SetPointSize(vc.fSize * 2);
 
   vc.fViewer->renderer->AddActor(GetActor());
 }

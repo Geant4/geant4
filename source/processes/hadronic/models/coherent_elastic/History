@@ -6,6 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-23 Vladimir Ivanchenko (hadr-cohe-V11-01-04)
+- G4ChargeExchange - address interface change in G4ChargeExchangeXS
+
+## 2023-08-29 Vladimir Ivanchenko (hadr-cohe-V11-01-03)
+- G4ChargeExchange - fixed Coverity warning on dead code
+
+## 2023-08-25 Tim Lok Chau (hadr-cohe-V11-01-02)
+- G4ChargeExchange - fixed parameter for SampleT(..) method
+
+## 2023-08-09 Tim Lok Chau (hadr-cohe-V11-01-01)
+- G4ChargeExchange - update input parameters for method  
+  SampleSecondaryType(..)
+
+## 2023-07-21 Vladimir Ivanchenko (hadr-cohe-V11-01-00)
+- G4ChargeExchange - updated according to new conception
+
 ## 2022-11-26 Gabriele Cosmo (hadr-cohe-V11-00-05)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

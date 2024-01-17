@@ -21,6 +21,7 @@ geant4_add_module(G4xrays
     G4XTRGammaRadModel.hh
     G4XTRRegularRadModel.hh
     G4XTRTransparentRegRadModel.hh
+    G4XrayReflection.hh
   SOURCES
     G4Cerenkov.cc
     G4ForwardXrayTR.cc
@@ -38,8 +39,8 @@ geant4_add_module(G4xrays
     G4VXTRenergyLoss.cc
     G4XTRGammaRadModel.cc
     G4XTRRegularRadModel.cc
-    G4XTRTransparentRegRadModel.cc)
-
+    G4XTRTransparentRegRadModel.cc
+    G4XrayReflection.cc)
 geant4_module_link_libraries(G4xrays
   PUBLIC
     G4bosons

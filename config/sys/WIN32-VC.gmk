@@ -41,22 +41,35 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   ifndef QTHOME
     QTHOME   := /Qt
   endif
-  ifndef QTFLAGS            # Qt5
+  ifndef QT_VERSION
+    QT_VERSION := 5
+  endif
+  ifndef QTFLAGS
     QTFLAGS  := -I$(QTHOME)/include
     QTFLAGS  += -I$(QTHOME)/include/QtCore
     QTFLAGS  += -I$(QTHOME)/include/QtGui
     QTFLAGS  += -I$(QTHOME)/include/QtWidgets
     QTFLAGS  += -I$(QTHOME)/include/QtOpenGL
+    ifeq ($(QT_VERSION),6)
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGLWidgets
+    endif
   endif
   ifndef QTMOC
     QTMOC    := $(QTHOME)/bin/moc
   endif
-  ifndef QTLIBS              # Qt5
-    QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib
-  ifndef GLQTLIBS
-    GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5OpenGL.lib
+  ifeq ($(QT_VERSION),5)       # Qt5
+    ifndef QTLIBS
+      QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib
+    ifndef GLQTLIBS
+      GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5OpenGL.lib
+    endif
+  else                         # Qt6
+    ifndef QTLIBS
+      QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib
+    ifndef GLQTLIBS
+      GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib Qt6OpenGL.lib Qt6OpenGLWidgets.lib
+    endif
   endif
-
 #
 # Building DLLs
 # -------------

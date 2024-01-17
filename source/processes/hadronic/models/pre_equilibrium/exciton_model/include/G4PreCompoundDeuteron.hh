@@ -36,7 +36,6 @@
 #define G4PreCompoundDeuteron_h 1
 
 #include "G4PreCompoundIon.hh"
-#include "G4DeuteronCoulombBarrier.hh"
 
 class G4PreCompoundDeuteron : public G4PreCompoundIon
 {
@@ -44,7 +43,7 @@ public:
 
   G4PreCompoundDeuteron();
 
-  virtual ~G4PreCompoundDeuteron();
+  ~G4PreCompoundDeuteron() override = default;
 
   G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right) = delete;
   const G4PreCompoundDeuteron& 
@@ -61,10 +60,6 @@ protected:
   G4double CoalescenceFactor(G4int A) const override;
 
   G4double GetAlpha() const override;
-
-private:
-
-  G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
 };
 
 #endif

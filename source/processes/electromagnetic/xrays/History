@@ -6,6 +6,38 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-04 Vladimir Grichine (xrays-V11-01-09)
+- G4GaussXTRadiator - bug fixed by renaming virtual function to prevent
+  clash between base and inhereted classes, new name SpectralXTRdEdxFS
+
+## 2023-11-04 Vladimir Ivanchenko (xrays-V11-01-08)
+- G4XrayReflectivity - fixed Coverity warning
+
+## 2023-11-02 Daren Sawkey (xrays-V11-01-07)
+- G4Scintillation: address Coverity warning of possible nullptr dereference
+
+## 2023-10-27 Daren Sawkey (xrays-V11-01-06)
+- G4Scintillation: verbosity of 0 silences run-time warnings
+
+## 2023-10-20 H. Burkhardt (xrays-V11-01-05)
+- improved SaveHenkeDataAsMaterialProperty
+
+## 2023-10-19 Daren Sawkey (xrays-V11-01-04)
+- G4Scintillation: allow different decay time constants for different
+  particles, with particle-dependent scintillation. Improve an error message
+
+## 2023-10-16 H. Burkhardt (xrays-V11-01-03)
+- use XRayReflection_data from G4EMLOW
+
+## 2023-09-19 H. Burkhardt (xrays-V11-01-02)
+- G4XrayReflection SetSurfaceRoughness fSurfaceRoughness in src not inline
+
+## 2023-09-19 H. Burkhardt (xrays-V11-01-01)
+- First implementation of new process XrayReflection
+
+## 2023-08-11 Daren Sawkey (xrays-V11-01-00)
+- Add protection against infinite loops. Addressing bug 2555.
+
 ## 2022-11-23 Gabriele Cosmo (xrays-V11-00-07)
 - Fixed more compilation warnings for implicit type conversions.
 

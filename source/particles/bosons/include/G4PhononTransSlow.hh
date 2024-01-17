@@ -26,26 +26,22 @@
 /// \file particles/phonons/include/G4PhononTransSlow.hh
 /// \brief Definition of the G4PhononTransSlow class
 //
-//
-
 #ifndef G4PhononTransSlow_h
 #define G4PhononTransSlow_h 1
 
 #include "G4ParticleDefinition.hh"
 
-class G4PhononTransSlow : public G4ParticleDefinition {
-private:
-  static G4PhononTransSlow* theInstance;
+class G4PhononTransSlow : public G4ParticleDefinition
+{
+  public:
+    static G4PhononTransSlow* Definition();
+    static G4PhononTransSlow* PhononDefinition();
 
-private:
-  G4PhononTransSlow() {;}
+  private:
+    G4PhononTransSlow() {}
+    ~G4PhononTransSlow() override = default;
 
-public:
-  ~G4PhononTransSlow () override {;}
-  
-  static G4PhononTransSlow* Definition();
-  static G4PhononTransSlow* PhononDefinition();
+    static G4PhononTransSlow* theInstance;
 };
 
 #endif
-

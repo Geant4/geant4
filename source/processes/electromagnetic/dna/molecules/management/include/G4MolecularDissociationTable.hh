@@ -65,8 +65,7 @@ class G4MolecularConfiguration;
 
 namespace G4DNA
 {
-typedef std::map<const G4MolecularConfiguration*,
-    std::vector<const G4MolecularDissociationChannel*> > ChannelMap;
+using ChannelMap = std::map<const G4MolecularConfiguration *, std::vector<const G4MolecularDissociationChannel *>>;
 }
 //______________________________________________________________________________
 

@@ -37,8 +37,8 @@
 class LXeTrackingAction : public G4UserTrackingAction
 {
  public:
-  LXeTrackingAction();
-  ~LXeTrackingAction(){};
+  LXeTrackingAction() = default;
+  ~LXeTrackingAction() = default;
 
   void PreUserTrackingAction(const G4Track*) override;
   void PostUserTrackingAction(const G4Track*) override;

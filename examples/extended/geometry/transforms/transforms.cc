@@ -57,9 +57,9 @@ int main(int argc,char** argv) {
   //use G4SteppingVerboseWithUnits
   G4int precision = 4;
   G4SteppingVerbose::UseBestUnit(precision);
-  
+
   //construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  auto runManager = new G4RunManager;
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction);
@@ -74,21 +74,21 @@ int main(int argc,char** argv) {
   //initialize visualization
   G4VisManager* visManager = nullptr;
 
-  //get the pointer to the User Interface manager 
+  //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)  {
-   //interactive mode
-   visManager = new G4VisExecutive;
-   visManager->Initialize();
-   ///UImanager->ApplyCommand("/control/execute vis.mac");
-   ui->SessionStart();
-   delete ui;
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    ///UImanager->ApplyCommand("/control/execute vis.mac");
+    ui->SessionStart();
+    delete ui;
   } else  {
-   //batch mode  
-   G4String command = "/control/execute ";
-   G4String fileName = argv[1];
-   UImanager->ApplyCommand(command+fileName);
+    //batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
   }
 
   //job termination

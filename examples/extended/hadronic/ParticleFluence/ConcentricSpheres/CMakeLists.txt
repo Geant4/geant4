@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(ConcentricSpheres)
 
 #----------------------------------------------------------------------------
@@ -39,10 +39,10 @@ target_link_libraries(ConcentricSpheres ${Geant4_LIBRARIES} )
 # directly there.
 #
 set(SCRIPTS
-  all_together.g4
-  lar_pb_fe.g4
-  sci_pbwo4_cu.g4
-  si_w_w.g4
+  all_together.in
+  lar_pb_fe.in
+  sci_pbwo4_cu.in
+  si_w_w.in
   )
 
 foreach(_script ${SCRIPTS})

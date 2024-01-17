@@ -66,9 +66,9 @@ class G4SchedulerMessenger : public G4UImessenger
 {
  public:
   explicit G4SchedulerMessenger(G4Scheduler* runMgr);
-  ~G4SchedulerMessenger();
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);
+  ~G4SchedulerMessenger() override;
+  void SetNewValue(G4UIcommand* command, G4String newValues) override;
+  G4String GetCurrentValue(G4UIcommand* command) override;
 
  private:
   G4Scheduler* fScheduler;

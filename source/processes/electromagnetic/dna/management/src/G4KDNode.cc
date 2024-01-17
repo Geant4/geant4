@@ -63,7 +63,7 @@ void InactiveNode(G4KDNode_Base* node)
 
 void Free(G4KDNode_Base*& node)
 {
-  if(node) delete node;
+  delete node;
   node = nullptr;
 }
 
@@ -71,16 +71,14 @@ void Free(G4KDNode_Base*& node)
 G4KDNode_Base::G4KDNode_Base(G4KDTree* tree,
 		G4KDNode_Base* parent):
     						fTree(tree),
-    						fLeft(0), fRight(0), fParent(parent)
+    						 fParent(parent)
 {
   fSide = 0;
-  fAxis = fParent == 0? 0 : fParent->fAxis +1 < fTree->fDim? fParent->fAxis+1:0;
+  fAxis = fParent == nullptr? 0 : fParent->fAxis +1 < fTree->fDim? fParent->fAxis+1:0;
 }
 
 // Copy constructor should not be used
-G4KDNode_Base::G4KDNode_Base(const G4KDNode_Base& ):
-    						fTree(0),
-    						fLeft(0), fRight(0), fParent(0)
+G4KDNode_Base::G4KDNode_Base(const G4KDNode_Base& )
 {
   fSide = 0;
   fAxis = 0;
@@ -100,8 +98,7 @@ G4KDNode_Base& G4KDNode_Base::operator=(const G4KDNode_Base& right)
 }
 
 G4KDNode_Base::~G4KDNode_Base()
-{
-}
+= default;
 
 void G4KDNode_Base::InactiveNode()
 {
@@ -110,10 +107,8 @@ void G4KDNode_Base::InactiveNode()
 
 G4int G4KDNode_Base::GetDim() const
 {
-	if(fTree)
-          return (G4int)fTree->GetDim();
-	else
-          return -1;
+	if(fTree != nullptr) return (G4int)fTree->GetDim();
+	return -1;
 }
 
 G4int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
@@ -136,8 +131,8 @@ G4int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
 		newNode->fSide = -1 ;
 	}
 
-	newNode->fRight = 0;
-	newNode->fLeft = 0;
+	newNode->fRight = nullptr;
+	newNode->fLeft = nullptr;
 
 	return 0 ;
 }
@@ -145,32 +140,32 @@ G4int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
 
 void G4KDNode_Base::PullSubTree()
 {
-	if(fParent)
+	if(fParent != nullptr)
 	{
 		if(fSide == -1)
 		{
-			fParent->fLeft = 0;
+			fParent->fLeft = nullptr;
 		}
 		else
-			fParent->fRight = 0;
+			fParent->fRight = nullptr;
 	}
-	if(fLeft) fLeft -> PullSubTree();
-	if(fRight) fRight-> PullSubTree();
+	if(fLeft != nullptr) fLeft -> PullSubTree();
+	if(fRight != nullptr) fRight-> PullSubTree();
 
-	fParent  = 0 ;
-	fRight   = 0 ;
-	fLeft    = 0 ;
-	fTree    = 0 ;
+	fParent  = nullptr ;
+	fRight   = nullptr ;
+	fLeft    = nullptr ;
+	fTree    = nullptr ;
 }
 
 void G4KDNode_Base::RetrieveNodeList(std::list<G4KDNode_Base *>& output)
 {
 	output.push_back(this);
 
-	if(fLeft)
+	if(fLeft != nullptr)
 		fLeft->RetrieveNodeList(output);
 
-	if(fRight)
+	if(fRight != nullptr)
 		fRight->RetrieveNodeList(output);
 }
 
@@ -185,11 +180,11 @@ void G4KDNode_Base::Print(std::ostream& out, int level) const
 	out << level;
 
 	// Print children
-	if(fLeft)
+	if(fLeft != nullptr)
 	{
 		fLeft->Print(out, level + 1);
 	}
-	if(fRight)
+	if(fRight != nullptr)
 	{
 		fRight->Print(out, level + 1);
 	}

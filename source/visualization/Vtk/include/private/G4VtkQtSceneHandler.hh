@@ -41,6 +41,7 @@ class G4VtkQtSceneHandler : public G4VtkSceneHandler
 
     ////////////////////////////////////////////////////////////////
     // Implementation of pure virtual functions...
+    using G4VtkSceneHandler::AddPrimitive;
     void AddPrimitive(const G4Polyline&) override;
     void AddPrimitive(const G4Text&) override;
     void AddPrimitive(const G4Circle&) override;

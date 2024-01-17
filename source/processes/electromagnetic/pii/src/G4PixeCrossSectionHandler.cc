@@ -55,6 +55,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 
 G4PixeCrossSectionHandler::G4PixeCrossSectionHandler()
@@ -548,26 +549,27 @@ G4int G4PixeCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   G4double random = G4UniformRand() * totCrossSection;
   G4double partialSum = 0.;
 
-  G4IDataSet* dataSet = 0;
-  std::map<G4int,G4IDataSet*,std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
+  G4IDataSet* dataSet = nullptr;
+  auto pos = dataMap.find(Z);
   // The following is a workaround for STL ObjectSpace implementation,
   // which does not support the standard and does not accept
   // the syntax pos->first or pos->second
   // if (pos != dataMap.end()) dataSet = pos->second;
   if (pos != dataMap.end()) dataSet = (*pos).second;
 
-  G4int nShells = (G4int)dataSet->NumberOfComponents();
-  for (G4int i=0; i<nShells; ++i)
+  if (dataSet != nullptr) {
+    G4int nShells = (G4int)dataSet->NumberOfComponents();
+    for (G4int i=0; i<nShells; ++i)
     {
       const G4IDataSet* shellDataSet = dataSet->GetComponent(i);
       if (shellDataSet != 0)
-	{
-	  G4double value = shellDataSet->FindValue(e);
-	  partialSum += value;
-	  if (random <= partialSum) return i;
-	}
+	    {
+	      G4double value = shellDataSet->FindValue(e);
+	      partialSum += value;
+	      if (random <= partialSum) return i;
+	    }
     }
+  }
   // It should never get here
   return shell;
 }
@@ -639,7 +641,7 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
   //std::size_t numOfCouples = theCoupleTable->GetTableSize();
 
   std::size_t nOfBins = energyVector.size();
-  const G4IInterpolator* interpolationAlgo = CreateInterpolation();
+  const auto interpolationAlgo = std::unique_ptr<G4IInterpolator>(CreateInterpolation());
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)

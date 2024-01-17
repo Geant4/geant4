@@ -22,18 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-#include <fstream>
-#include <iomanip>
 
 #include "G4AdjointIons.hh"
+
+#include "G4DecayTable.hh"
 #include "G4SystemOfUnits.hh"
 
- // ######################################################################
-// ###                           ADJOINT Ions                          ###
-// #######################################################################
-
+// clang-format off
 G4AdjointIons::G4AdjointIons(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -51,21 +46,16 @@ G4AdjointIons::G4AdjointIons(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable,
            shortlived, subType, anti_encoding)
+// clang-format on
 {
   // initialize excitation energy/level
-   theExcitationEnergy = excitation;
+  theExcitationEnergy = excitation;
 
-   SetAtomicNumber( G4int(-GetPDGCharge()/eplus) );
-   SetAtomicMass( GetBaryonNumber() );
-
-   //G4cout << "G4AdjointIons::" << GetParticleName() << G4endl; 
+  SetAtomicNumber(G4int(-GetPDGCharge() / eplus));
+  SetAtomicMass(GetBaryonNumber());
 }
-
 
 G4AdjointIons* G4AdjointIons::IonsDefinition()
 {
   return this;
 }
-
-
-

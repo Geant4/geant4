@@ -35,3 +35,8 @@ Follow these commands,
     > make install
 
 Replace mpicxx with your MPI-compiler wrapper.
+
+How to run
+----------
+
+    > mpiexec -n # ./exMPI01 [run.mac]

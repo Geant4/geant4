@@ -57,7 +57,7 @@
 #include "G4memory.hh"
 
 //typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
-typedef G4shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
+using G4TrackVectorHandle = std::shared_ptr<std::vector<G4Track *>>;
 
 /**
   * Before stepping all tracks G4Scheduler calls all the G4VITModel

@@ -23,21 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParallelWorldScoringProcess
 //
+// Class description:
 //
+// This process takes a parallel world and limits a step
+// on the boundaries of volumes in the parallel world.
+// It invokes sensitive detectors assigned in the parallel world.
 //
-//---------------------------------------------------------------
-//
-//  G4ParallelWorldScoringProcess.hh
-//
-//  Description:
-//    This procss takes a parallel world and limits a step
-//   on the boundaries of volumes in the parallel world.
-//    It invokes sensitive detectors assigned in the parallel
-//   world.
-//
-//---------------------------------------------------------------
-
+// Author: M.Asai (SLAC), 2010.
+//---------------------------------------------------------------------
 #ifndef G4ParallelWorldScoringProcess_h
 #define G4ParallelWorldScoringProcess_h 1
 
@@ -50,24 +45,13 @@ class G4Step;
 class G4Navigator;
 class G4TransportationManager;
 class G4PathFinder;
-class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
 class G4ParticleDefinition;
-//------------------------------------------
-//
-//        G4ParallelWorldScoringProcess class
-//
-//------------------------------------------
-
-// Class Description:
 
 class G4ParallelWorldScoringProcess : public G4VProcess
 {
-  public:  // with description
-    //------------------------
-    // Constructor/Destructor
-    //------------------------
+  public:
 
     G4ParallelWorldScoringProcess(const G4String& processName = "ParaWorldScore",
                                   G4ProcessType theType = fParameterisation);
@@ -113,7 +97,10 @@ class G4ParallelWorldScoringProcess : public G4VProcess
 
     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
+    void Verbose(const G4Step&) const;
+
   private:
+
     void CopyStep(const G4Step& step);
 
     G4Step* fGhostStep;
@@ -138,16 +125,6 @@ class G4ParallelWorldScoringProcess : public G4VProcess
     G4FieldTrack fFieldTrack;
     G4double fGhostSafety;
     G4bool fOnBoundary;
-
-    // ******************************************************
-    // ******************************************************
-    //
-    //  For TESTS:
-    //
-    // ******************************************************
-    // ******************************************************
-  public:
-    void Verbose(const G4Step&) const;
 };
 
 #endif

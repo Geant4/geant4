@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -49,6 +49,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -274,7 +278,8 @@ OpBoundary is created
 OpWLS is created 
 OpWLS2 is created 
 ### Birks coefficients used in run time
-   G4_WATER     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  85.0756 effCharge= 62.0606
+   G4_WATER     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  640.135 effCharge= 22
+/opnovice2/stepping/killOnSecondSurface true
 #
 /gun/particle opticalphoton
 /gun/energy 3 eV
@@ -787,384 +792,243 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
   Process: nKiller
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for B-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: B-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for D-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: D-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-------------------------------------------------------------------------
                            Hadronic Processes for anti_hypertriton
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: anti_lambdaInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_neutron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_proton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e+
-
   Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e-
-
   Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for gamma
-
   Process: photonNuclear
         Model:               GammaNPreco: 0 eV  ---> 200 MeV
         Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon+
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: lambdaInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu+
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu-
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
   Process: muMinusCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi+
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi-
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for proton
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for sigma-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: sigma-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
-================================================================
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
@@ -1226,7 +1090,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.190000s Real=0.199533s Sys=0.000000s
+  User=0.150000s Real=0.150539s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1242,44 +1106,48 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0088
+Average number of OpAbsorption per event: 0.0024
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        8
-Total # of surface events:       9992
+OpAbsorption before surface:        6
+Total # of surface events:       9994
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1030
-  Fresnel refraction:             746
-  Lambertian reflection:         5038
-  Lobe reflection:                703
-  Spike reflection:               709
-  Backscattering:                 740
-  Absorption:                     933
-  Detection:                       93
- Sum:                            9992
+  Transmission:                   934
+  Fresnel refraction:             760
+  Lambertian reflection:         5125
+  Lobe reflection:                717
+  Spike reflection:               723
+  Backscattering:                 717
+  Absorption:                     909
+  Detection:                      109
+ Sum:                            9994
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.720988 rms = 0.226951
- Y momentum dir of backward-going photons: mean = 0.0346578 rms = 0.490875
- Z momentum dir of backward-going photons: mean = -0.0078835 rms = 0.431797
- X momentum dir of forward-going photons: mean = 0.860211 rms = 0.0612268
- Y momentum dir of forward-going photons: mean = 0.496349 rms = 0.0847609
- Z momentum dir of forward-going photons: mean = -0.00136924 rms = 0.0523376
- X momentum dir of Fresnel-refracted photons: mean = 0.807506 rms = 0.0643027
- Y momentum dir of Fresnel-refracted photons: mean = 0.57524 rms = 0.0798274
- Z momentum dir of Fresnel-refracted photons: mean = -0.00325975 rms = 0.0807162
+ X momentum dir of backward-going photons: mean = -0.718713 rms = 0.227075
+ Y momentum dir of backward-going photons: mean = 0.0468752 rms = 0.495499
+ Z momentum dir of backward-going photons: mean = 0.000772204 rms = 0.429151
+ X momentum dir of forward-going photons: mean = 0.856056 rms = 0.0630571
+ Y momentum dir of forward-going photons: mean = 0.502684 rms = 0.0863708
+ Z momentum dir of forward-going photons: mean = -0.00121438 rms = 0.0551406
+ X momentum dir of Fresnel-refracted photons: mean = 0.804036 rms = 0.0628867
+ Y momentum dir of Fresnel-refracted photons: mean = 0.580689 rms = 0.0747771
+ Z momentum dir of Fresnel-refracted photons: mean = -0.00270678 rms = 0.0822985
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 # restore default
 #/opnovice2/surfaceSigmaAlpha 0.0
 #
@@ -1315,7 +1183,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.110000s Real=0.115249s Sys=0.000000s
+  User=0.070000s Real=0.069986s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1331,41 +1199,45 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0084
+Average number of OpAbsorption per event: 0.0025
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        8
-Total # of surface events:       9992
+OpAbsorption before surface:        3
+Total # of surface events:       9997
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   958
-  Fresnel refraction:             816
-  Fresnel reflection:            7214
-  Absorption:                     894
-  Detection:                      110
- Sum:                            9992
+  Transmission:                  1046
+  Fresnel refraction:             783
+  Fresnel reflection:            7225
+  Absorption:                     862
+  Detection:                       81
+ Sum:                            9997
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.1934e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.19609e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.69981e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.862264 rms = 0.0391375
- Y momentum dir of forward-going photons: mean = 0.500552 rms = 0.0664648
+ X momentum dir of forward-going photons: mean = 0.864767 rms = 0.0388554
+ Y momentum dir of forward-going photons: mean = 0.496301 rms = 0.0659858
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 4.71216e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 8.84707e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 6.32203e-08
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.36523e-08
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.01
 The MPT for the surface is now: 
 0: RINDEX
@@ -1422,7 +1294,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.126858s Sys=0.000000s
+  User=0.070000s Real=0.086562s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1438,41 +1310,45 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0091
+Average number of OpAbsorption per event: 0.0028
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1013
-  Fresnel refraction:             801
-  Lambertian reflection:         7201
-  Absorption:                     884
-  Detection:                       95
- Sum:                            9994
+  Transmission:                   968
+  Fresnel refraction:             851
+  Lambertian reflection:         7189
+  Absorption:                     877
+  Detection:                      107
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.670658 rms = 0.232053
- Y momentum dir of backward-going photons: mean = -0.00486638 rms = 0.500942
- Z momentum dir of backward-going photons: mean = 0.00525044 rms = 0.495354
- X momentum dir of forward-going photons: mean = 0.86371 rms = 0.0389944
- Y momentum dir of forward-going photons: mean = 0.498096 rms = 0.0662218
+ X momentum dir of backward-going photons: mean = -0.665526 rms = 0.235466
+ Y momentum dir of backward-going photons: mean = 0.00239262 rms = 0.500192
+ Z momentum dir of backward-going photons: mean = -0.004687 rms = 0.501409
+ X momentum dir of forward-going photons: mean = 0.861646 rms = 0.0391821
+ Y momentum dir of forward-going photons: mean = 0.5016 rms = 0.0665407
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.47504e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.12506e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 1.82501e-08
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 8.22944e-08
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 # restore default
 /opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.0
 The MPT for the surface is now: 
@@ -1535,7 +1411,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.145386s Sys=0.000000s
+  User=0.060000s Real=0.158025s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1551,30 +1427,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0091
+Average number of OpAbsorption per event: 0.0031
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       10
-Total # of surface events:       9990
+OpAbsorption before surface:       11
+Total # of surface events:       9989
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1080
-  Spike reflection:              7938
-  Absorption:                     876
-  Detection:                       96
- Sum:                            9990
+  Transmission:                   968
+  Spike reflection:              8011
+  Absorption:                     932
+  Detection:                       78
+ Sum:                            9989
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34394e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.71929e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35705e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.80051e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.65679e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75998e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.21255e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1582,9 +1458,13 @@ Surface events by process:
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish groundfrontpainted
 /run/geometryModified
 /run/initialize
@@ -1615,7 +1495,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.148025s Sys=0.000000s
+  User=0.070000s Real=0.070775s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1631,30 +1511,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0089
+Average number of OpAbsorption per event: 0.0019
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:        7
+Total # of surface events:       9993
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   947
-  Lambertian reflection:         8039
-  Absorption:                     909
-  Detection:                       96
- Sum:                            9991
+  Transmission:                  1040
+  Lambertian reflection:         7911
+  Absorption:                     956
+  Detection:                       86
+ Sum:                            9993
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.666296 rms = 0.232659
- Y momentum dir of backward-going photons: mean = -0.00214743 rms = 0.500117
- Z momentum dir of backward-going photons: mean = 0.000440326 rms = 0.501795
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75049e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.1617e-08
+ X momentum dir of backward-going photons: mean = -0.667673 rms = 0.236716
+ Y momentum dir of backward-going photons: mean = 0.00034159 rms = 0.497246
+ Z momentum dir of backward-going photons: mean = 0.00195691 rms = 0.500919
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.51129e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1662,9 +1542,13 @@ Surface events by process:
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish polishedbackpainted
 /run/geometryModified
 /run/initialize
@@ -1695,7 +1579,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.720000s Real=0.727760s Sys=0.000000s
+  User=0.120000s Real=0.257213s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1711,44 +1595,48 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.018
+Average number of OpAbsorption per event: 0.0033
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:       15
+Total # of surface events:       9985
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   392
-  Fresnel refraction:             277
-  Lambertian reflection:         6285
-  Lobe reflection:                942
-  Spike reflection:               867
-  Backscattering:                 854
-  Absorption:                     338
+  Transmission:                   418
+  Fresnel refraction:             276
+  Lambertian reflection:         6218
+  Lobe reflection:                881
+  Spike reflection:               899
+  Backscattering:                 935
+  Absorption:                     325
   Detection:                       33
- Sum:                            9988
+ Sum:                            9985
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.723433 rms = 0.226173
- Y momentum dir of backward-going photons: mean = 0.0427161 rms = 0.487412
- Z momentum dir of backward-going photons: mean = 0.00275586 rms = 0.431378
- X momentum dir of forward-going photons: mean = 0.750192 rms = 0.224457
- Y momentum dir of forward-going photons: mean = 0.16505 rms = 0.4472
- Z momentum dir of forward-going photons: mean = 0.000906528 rms = 0.399501
- X momentum dir of Fresnel-refracted photons: mean = -0.753612 rms = 0.232061
- Y momentum dir of Fresnel-refracted photons: mean = 0.122198 rms = 0.451181
- Z momentum dir of Fresnel-refracted photons: mean = -0.0280522 rms = 0.398663
+ X momentum dir of backward-going photons: mean = -0.724482 rms = 0.226596
+ Y momentum dir of backward-going photons: mean = 0.0410654 rms = 0.492108
+ Z momentum dir of backward-going photons: mean = -0.00572817 rms = 0.424135
+ X momentum dir of forward-going photons: mean = 0.738204 rms = 0.23476
+ Y momentum dir of forward-going photons: mean = 0.118046 rms = 0.457018
+ Z momentum dir of forward-going photons: mean = -0.0421986 rms = 0.418762
+ X momentum dir of Fresnel-refracted photons: mean = -0.772655 rms = 0.210369
+ Y momentum dir of Fresnel-refracted photons: mean = 0.130137 rms = 0.451622
+ Z momentum dir of Fresnel-refracted photons: mean = 0.0127116 rms = 0.371065
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish groundbackpainted
 /run/geometryModified
 /run/initialize
@@ -1779,7 +1667,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.710000s Real=0.721864s Sys=0.000000s
+  User=0.120000s Real=0.130403s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1795,44 +1683,48 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.018
+Average number of OpAbsorption per event: 0.0022
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:       12
+Total # of surface events:       9988
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   368
-  Fresnel refraction:             228
-  Lambertian reflection:         6265
-  Lobe reflection:                916
-  Spike reflection:               909
-  Backscattering:                 911
-  Absorption:                     349
-  Detection:                       45
- Sum:                            9991
+  Transmission:                   372
+  Fresnel refraction:             236
+  Lambertian reflection:         6300
+  Lobe reflection:                918
+  Spike reflection:               885
+  Backscattering:                 890
+  Absorption:                     343
+  Detection:                       44
+ Sum:                            9988
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.725695 rms = 0.225527
- Y momentum dir of backward-going photons: mean = 0.0473025 rms = 0.483795
- Z momentum dir of backward-going photons: mean = 0.000246226 rms = 0.43152
- X momentum dir of forward-going photons: mean = 0.70093 rms = 0.243467
- Y momentum dir of forward-going photons: mean = 0.0957969 rms = 0.486993
- Z momentum dir of forward-going photons: mean = 0.0366591 rms = 0.449153
- X momentum dir of Fresnel-refracted photons: mean = -0.67226 rms = 0.249608
- Y momentum dir of Fresnel-refracted photons: mean = 0.0115693 rms = 0.50363
- Z momentum dir of Fresnel-refracted photons: mean = -0.0425384 rms = 0.479766
+ X momentum dir of backward-going photons: mean = -0.725772 rms = 0.224848
+ Y momentum dir of backward-going photons: mean = 0.0444837 rms = 0.485951
+ Z momentum dir of backward-going photons: mean = -0.00338832 rms = 0.429604
+ X momentum dir of forward-going photons: mean = 0.727341 rms = 0.237219
+ Y momentum dir of forward-going photons: mean = 0.0727391 rms = 0.461781
+ Z momentum dir of forward-going photons: mean = -0.00214693 rms = 0.442905
+ X momentum dir of Fresnel-refracted photons: mean = -0.675078 rms = 0.253912
+ Y momentum dir of Fresnel-refracted photons: mean = -0.00509466 rms = 0.479507
+ Z momentum dir of Fresnel-refracted photons: mean = 0.0387011 rms = 0.498346
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ dielectric_metal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -1868,7 +1760,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.180000s Real=0.180966s Sys=0.000000s
+  User=0.110000s Real=0.144645s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1884,30 +1776,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0081
+Average number of OpAbsorption per event: 0.0024
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        8
-Total # of surface events:       9992
+OpAbsorption before surface:       14
+Total # of surface events:       9986
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   975
-  Spike reflection:              8024
-  Absorption:                     892
-  Detection:                      101
- Sum:                            9992
+  Transmission:                   959
+  Spike reflection:              7992
+  Absorption:                     926
+  Detection:                      109
+ Sum:                            9986
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35967e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35356e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75998e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.27987e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.17869e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1915,9 +1807,13 @@ Surface events by process:
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish ground
 /run/geometryModified
 /run/initialize
@@ -1948,7 +1844,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.149649s Sys=0.000000s
+  User=0.080000s Real=0.089538s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1964,33 +1860,33 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0094
+Average number of OpAbsorption per event: 0.0028
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:       10
+Total # of surface events:       9990
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1048
-  Lambertian reflection:         5619
-  Lobe reflection:                763
-  Spike reflection:               758
-  Backscattering:                 822
-  Absorption:                     873
-  Detection:                      111
- Sum:                            9994
+  Transmission:                  1038
+  Lambertian reflection:         5529
+  Lobe reflection:                825
+  Spike reflection:               811
+  Backscattering:                 775
+  Absorption:                     917
+  Detection:                       95
+ Sum:                            9990
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.71706 rms = 0.229153
- Y momentum dir of backward-going photons: mean = 0.0278294 rms = 0.494429
- Z momentum dir of backward-going photons: mean = -0.000614049 rms = 0.433681
+ X momentum dir of backward-going photons: mean = -0.722361 rms = 0.225844
+ Y momentum dir of backward-going photons: mean = 0.0434055 rms = 0.486472
+ Z momentum dir of backward-going photons: mean = 0.00111381 rms = 0.434338
  X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.56007e-08
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.51129e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1998,9 +1894,13 @@ Surface events by process:
 
 ... write file : unified.root - done
 ... close file : unified.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 ###############################################################################
 ################################# GLISUR ######################################
 ###############################################################################
@@ -2042,7 +1942,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.110000s Real=0.124101s Sys=0.000000s
+  User=0.070000s Real=0.149359s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2058,41 +1958,45 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0097
+Average number of OpAbsorption per event: 0.0032
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   980
-  Fresnel refraction:             795
-  Fresnel reflection:            7219
-  Absorption:                     910
-  Detection:                       90
- Sum:                            9994
+  Transmission:                   999
+  Fresnel refraction:             760
+  Fresnel reflection:            7299
+  Absorption:                     852
+  Detection:                       82
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.1943e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.69981e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.21219e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.70389e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.863213 rms = 0.0390496
- Y momentum dir of forward-going photons: mean = 0.498939 rms = 0.0663156
+ X momentum dir of forward-going photons: mean = 0.864456 rms = 0.0388993
+ Y momentum dir of forward-going photons: mean = 0.496829 rms = 0.0660604
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.77119e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.24593e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 7.14635e-08
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.39482e-08
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.01
 The MPT for the surface is now: 
 0: RINDEX
@@ -2149,7 +2053,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.162528s Sys=0.000000s
+  User=0.080000s Real=0.092377s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2165,41 +2069,45 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0096
+Average number of OpAbsorption per event: 0.0032
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:       12
+Total # of surface events:       9988
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   967
-  Fresnel refraction:             787
-  Lambertian reflection:         7205
-  Absorption:                     915
-  Detection:                      117
- Sum:                            9991
+  Transmission:                   983
+  Fresnel refraction:             792
+  Lambertian reflection:         7250
+  Absorption:                     861
+  Detection:                      102
+ Sum:                            9988
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.665679 rms = 0.237039
- Y momentum dir of backward-going photons: mean = 0.00323197 rms = 0.499428
- Z momentum dir of backward-going photons: mean = 0.00393247 rms = 0.501227
- X momentum dir of forward-going photons: mean = 0.86315 rms = 0.0390561
- Y momentum dir of forward-going photons: mean = 0.499046 rms = 0.0663267
+ X momentum dir of backward-going photons: mean = -0.664396 rms = 0.235779
+ Y momentum dir of backward-going photons: mean = 0.000419988 rms = 0.505821
+ Z momentum dir of backward-going photons: mean = -0.00475194 rms = 0.4971
+ X momentum dir of forward-going photons: mean = 0.863346 rms = 0.0390355
+ Y momentum dir of forward-going photons: mean = 0.498714 rms = 0.0662916
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 6.14391e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.36523e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.86659e-08
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.2759e-08
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceConstProperty SURFACEROUGHNESS 0.0
 The MPT for the surface is now: 
 0: RINDEX
@@ -2261,10 +2169,21 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : OpBoun06
+      issued by : G4OpBoundaryProcess
+G4OpBoundaryProcess: Opticalphoton step length: 1.24319e-09 mm.
+This is larger than the threshold 1e-09 mm to set status StepTooSmall.
+Boundary scattering may be incorrect. 
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.134122s Sys=0.000000s
+  User=0.080000s Real=0.148977s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2280,42 +2199,46 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0099
+Average number of OpAbsorption per event: 0.0034
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:       11
+Total # of surface events:       9989
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   980
-  Fresnel refraction:             676
-  Fresnel reflection:            5804
-  Total internal reflection:     1523
-  Absorption:                     900
-  Detection:                      108
- Sum:                            9991
+  Transmission:                   976
+  Fresnel refraction:             659
+  Fresnel reflection:            5859
+  Total internal reflection:     1546
+  Absorption:                     859
+  Detection:                       90
+ Sum:                            9989
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.57387 rms = 0.280293
- Y momentum dir of backward-going photons: mean = 0.318401 rms = 0.489987
- Z momentum dir of backward-going photons: mean = -0.00339989 rms = 0.50063
- X momentum dir of forward-going photons: mean = 0.856952 rms = 0.0912705
- Y momentum dir of forward-going photons: mean = 0.486358 rms = 0.0981361
- Z momentum dir of forward-going photons: mean = -0.000985291 rms = 0.105483
- X momentum dir of Fresnel-refracted photons: mean = 0.802852 rms = 0.106683
- Y momentum dir of Fresnel-refracted photons: mean = 0.554123 rms = 0.116838
- Z momentum dir of Fresnel-refracted photons: mean = -0.00293762 rms = 0.152759
+ X momentum dir of backward-going photons: mean = -0.567482 rms = 0.28111
+ Y momentum dir of backward-going photons: mean = 0.318986 rms = 0.498415
+ Z momentum dir of backward-going photons: mean = 0.00687657 rms = 0.498723
+ X momentum dir of forward-going photons: mean = 0.85959 rms = 0.0838588
+ Y momentum dir of forward-going photons: mean = 0.484965 rms = 0.0939651
+ Z momentum dir of forward-going photons: mean = 0.0017035 rms = 0.100249
+ X momentum dir of Fresnel-refracted photons: mean = 0.806129 rms = 0.0988686
+ Y momentum dir of Fresnel-refracted photons: mean = 0.552408 rms = 0.115575
+ Z momentum dir of Fresnel-refracted photons: mean = 0.00412516 rms = 0.147827
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 # restore default
 /opnovice2/surfacePolish 1.0
 /run/geometryModified
@@ -2353,7 +2276,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.131780s Sys=0.000000s
+  User=0.060000s Real=0.068389s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2369,30 +2292,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0098
+Average number of OpAbsorption per event: 0.0025
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:       10
+Total # of surface events:       9990
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   955
-  Spike reflection:              8008
-  Absorption:                     929
-  Detection:                       99
- Sum:                            9991
+  Transmission:                  1020
+  Spike reflection:              7964
+  Absorption:                     886
+  Detection:                      120
+ Sum:                            9990
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35618e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34919e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.1617e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78192e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.44582e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2400,9 +2323,13 @@ Surface events by process:
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish polishedbackpainted
 /run/geometryModified
 /run/initialize
@@ -2433,7 +2360,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.330000s Real=0.332749s Sys=0.000000s
+  User=0.070000s Real=0.109848s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2449,41 +2376,45 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.02
+Average number of OpAbsorption per event: 0.0021
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:        4
+Total # of surface events:       9996
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   368
-  Fresnel refraction:             273
-  Fresnel reflection:            8997
-  Absorption:                     315
-  Detection:                       41
- Sum:                            9994
+  Transmission:                   380
+  Fresnel refraction:             292
+  Fresnel reflection:            8942
+  Absorption:                     337
+  Detection:                       45
+ Sum:                            9996
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34744e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.74652e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.39189e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.74573e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.912889 rms = 1.10007e-07
- Y momentum dir of forward-going photons: mean = 0.408207 rms = 4.7707e-08
+ X momentum dir of forward-going photons: mean = 0.912889 rms = 1.1051e-07
+ Y momentum dir of forward-going photons: mean = 0.408207 rms = 4.7997e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = -0.898384 rms = 4.94216e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.43921 rms = 4.18163e-08
+ X momentum dir of Fresnel-refracted photons: mean = -0.898384 rms = 3.65002e-08
+ Y momentum dir of Fresnel-refracted photons: mean = 0.43921 rms = 4.3444e-08
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish groundfrontpainted
 /run/geometryModified
 /run/initialize
@@ -2514,7 +2445,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.140000s Real=0.142294s Sys=0.000000s
+  User=0.070000s Real=0.103027s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2530,30 +2461,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0086
+Average number of OpAbsorption per event: 0.0031
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        7
-Total # of surface events:       9993
+OpAbsorption before surface:        6
+Total # of surface events:       9994
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   951
-  Lambertian reflection:         8077
-  Absorption:                     869
-  Detection:                       96
- Sum:                            9993
+  Transmission:                  1034
+  Lambertian reflection:         8029
+  Absorption:                     851
+  Detection:                       80
+ Sum:                            9994
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.668927 rms = 0.233197
- Y momentum dir of backward-going photons: mean = 0.00455305 rms = 0.499985
- Z momentum dir of backward-going photons: mean = 0.0006191 rms = 0.498146
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.14468e-08
+ X momentum dir of backward-going photons: mean = -0.665866 rms = 0.235735
+ Y momentum dir of backward-going photons: mean = 0.00334398 rms = 0.499813
+ Z momentum dir of backward-going photons: mean = -0.0063113 rms = 0.501186
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.49497e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2561,9 +2492,13 @@ Surface events by process:
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish groundbackpainted
 /run/geometryModified
 /opnovice2/surfacePolish 0.2
@@ -2594,21 +2529,10 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : OpBoun06
-      issued by : G4OpBoundaryProcess
-G4OpBoundaryProcess: Opticalphoton step length: 2.43136e-09 mm.
-This is larger than the threshold 1e-09 mm to set status StepTooSmall.
-Boundary scattering may be incorrect. 
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.340000s Real=0.340382s Sys=0.000000s
+  User=0.090000s Real=0.201449s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2624,7 +2548,7 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.016
+Average number of OpAbsorption per event: 0.0025
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
@@ -2633,32 +2557,36 @@ Total # of surface events:       9988
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   432
-  Fresnel refraction:             288
-  Fresnel reflection:            8806
-  Absorption:                     403
-  Detection:                       59
+  Transmission:                   448
+  Fresnel refraction:             280
+  Fresnel reflection:            8851
+  Absorption:                     368
+  Detection:                       41
  Sum:                            9988
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.581268 rms = 0.276491
- Y momentum dir of backward-going photons: mean = 0.28925 rms = 0.499641
- Z momentum dir of backward-going photons: mean = -0.00241224 rms = 0.502363
- X momentum dir of forward-going photons: mean = 0.628043 rms = 0.302429
- Y momentum dir of forward-going photons: mean = 0.140535 rms = 0.502935
- Z momentum dir of forward-going photons: mean = 0.00998157 rms = 0.491228
- X momentum dir of Fresnel-refracted photons: mean = -0.637031 rms = 0.269848
- Y momentum dir of Fresnel-refracted photons: mean = -0.0229246 rms = 0.511249
- Z momentum dir of Fresnel-refracted photons: mean = 0.00207596 rms = 0.50938
+ X momentum dir of backward-going photons: mean = -0.5787 rms = 0.277189
+ Y momentum dir of backward-going photons: mean = 0.291968 rms = 0.501763
+ Z momentum dir of backward-going photons: mean = 0.000161926 rms = 0.501259
+ X momentum dir of forward-going photons: mean = 0.635705 rms = 0.290007
+ Y momentum dir of forward-going photons: mean = 0.100331 rms = 0.557468
+ Z momentum dir of forward-going photons: mean = -0.0265975 rms = 0.436155
+ X momentum dir of Fresnel-refracted photons: mean = -0.613482 rms = 0.278753
+ Y momentum dir of Fresnel-refracted photons: mean = -0.0657021 rms = 0.51511
+ Z momentum dir of Fresnel-refracted photons: mean = -0.0384944 rms = 0.524213
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfacePolish 1.0
 /run/geometryModified
 Surface polish set to: 1
@@ -2697,7 +2625,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.130461s Sys=0.000000s
+  User=0.070000s Real=0.096346s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2713,30 +2641,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0097
+Average number of OpAbsorption per event: 0.0018
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       13
-Total # of surface events:       9987
+OpAbsorption before surface:        3
+Total # of surface events:       9997
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1009
-  Spike reflection:              7926
-  Absorption:                     951
-  Detection:                      101
- Sum:                            9987
+  Transmission:                  1043
+  Spike reflection:              7937
+  Absorption:                     920
+  Detection:                       97
+ Sum:                            9997
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34132e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34394e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.71929e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.41289e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.52758e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2744,9 +2672,13 @@ Surface events by process:
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish ground
 /run/geometryModified
 /run/initialize
@@ -2777,10 +2709,21 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : OpBoun06
+      issued by : G4OpBoundaryProcess
+G4OpBoundaryProcess: Opticalphoton step length: 4.1758e-09 mm.
+This is larger than the threshold 1e-09 mm to set status StepTooSmall.
+Boundary scattering may be incorrect. 
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.210000s Real=0.221350s Sys=0.000000s
+  User=0.070000s Real=0.108096s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2796,30 +2739,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0079
+Average number of OpAbsorption per event: 0.0027
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:        9
+Total # of surface events:       9991
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1011
-  Lobe reflection:               8008
-  Absorption:                     870
-  Detection:                       99
- Sum:                            9988
+  Transmission:                   998
+  Lobe reflection:               7996
+  Absorption:                     902
+  Detection:                       95
+ Sum:                            9991
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.571993 rms = 0.278865
- Y momentum dir of backward-going photons: mean = 0.314963 rms = 0.495714
- Z momentum dir of backward-going photons: mean = 0.00860356 rms = 0.50005
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.39638e-08
+ X momentum dir of backward-going photons: mean = -0.579214 rms = 0.275843
+ Y momentum dir of backward-going photons: mean = 0.3073 rms = 0.491893
+ Z momentum dir of backward-going photons: mean = -0.000913265 rms = 0.502024
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.76941e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.34665e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2827,9 +2770,13 @@ Surface events by process:
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfacePolish 1.0
 /run/geometryModified
 Surface polish set to: 1
@@ -2875,7 +2822,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.020000s Real=1.030566s Sys=0.000000s
+  User=0.070000s Real=0.093537s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2891,27 +2838,27 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.043
+Average number of OpAbsorption per event: 0.0024
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:        5
+Total # of surface events:       9995
 Unaccounted for:                    0
 
 Surface events by process:
-  Lobe reflection:               9573
-  Absorption:                     377
-  Detection:                       38
- Sum:                            9988
+  Lobe reflection:               9575
+  Absorption:                     380
+  Detection:                       40
+ Sum:                            9995
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.776235 rms = 0.205994
- Y momentum dir of backward-going photons: mean = 0.2101 rms = 0.427686
- Z momentum dir of backward-going photons: mean = 0.00550741 rms = 0.357685
+ X momentum dir of backward-going photons: mean = -0.775707 rms = 0.207112
+ Y momentum dir of backward-going photons: mean = 0.205271 rms = 0.432973
+ Z momentum dir of backward-going photons: mean = 0.00382865 rms = 0.354635
  X momentum dir of forward-going photons: mean = 0 rms = 0
  Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
@@ -2921,9 +2868,13 @@ Surface events by process:
 
 ... write file : davis_roughTeflon.root - done
 ... close file : davis_roughTeflon.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 /opnovice2/surfaceFinish Detector_LUT
 G4OpticalSurface: data file /cvmfs/geant4.cern.ch/share/data/RealSurface2.2/Detector_LUT.z successfully read in.
 LUT DAVIS - data file: Detector_LUT.z read in! 
@@ -2958,7 +2909,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.042137s Sys=0.000000s
+  User=0.040000s Real=0.042901s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2983,18 +2934,18 @@ Total # of surface events:       9991
 Unaccounted for:                    0
 
 Surface events by process:
-  Lobe reflection:                109
-  Absorption:                    8928
-  Detection:                      954
+  Lobe reflection:                 88
+  Absorption:                    8878
+  Detection:                     1025
  Sum:                            9991
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.906337 rms = 0.00228861
- Y momentum dir of backward-going photons: mean = 0.422492 rms = 0.00492185
- Z momentum dir of backward-going photons: mean = 0.000449425 rms = 0.00491918
+ X momentum dir of backward-going photons: mean = -0.906254 rms = 0.00220898
+ Y momentum dir of backward-going photons: mean = 0.422681 rms = 0.00475342
+ Z momentum dir of backward-going photons: mean = -0.000597642 rms = 0.00415842
  X momentum dir of forward-going photons: mean = 0 rms = 0
  Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
@@ -3004,9 +2955,13 @@ Surface events by process:
 
 ... write file : davis_detector.root - done
 ... close file : davis_detector.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 ###############################################################################
 ################################# LUT (LBNL) ##################################
 ###############################################################################
@@ -3046,7 +3001,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.070000s Real=0.069663s Sys=0.000000s
+  User=0.020000s Real=0.026198s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -3062,30 +3017,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.009
+Average number of OpAbsorption per event: 0.002
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+03
-OpAbsorption before surface:        1
-Total # of surface events:        999
+OpAbsorption before surface:        0
+Total # of surface events:       1000
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                    93
-  Absorption:                      93
-  Detection:                        7
-  Polished Lumirror Air reflection:      806
- Sum:                             999
+  Transmission:                   112
+  Absorption:                      84
+  Detection:                       10
+  Polished Lumirror Air reflection:      794
+ Sum:                            1000
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.932707 rms = 0.0389432
- Y momentum dir of backward-going photons: mean = 0.138195 rms = 0.266115
- Z momentum dir of backward-going photons: mean = 0.0163755 rms = 0.195854
- X momentum dir of forward-going photons: mean = 0.898384 rms = 2.78775e-08
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 7.45058e-09
+ X momentum dir of backward-going photons: mean = -0.933435 rms = 0.0386909
+ Y momentum dir of backward-going photons: mean = 0.128883 rms = 0.259903
+ Z momentum dir of backward-going photons: mean = -0.00405043 rms = 0.207426
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 4.08085e-08
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.17804e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -3093,9 +3048,13 @@ Surface events by process:
 
 ... write file : lbnl_polishedLumirrorAir.root - done
 ... close file : lbnl_polishedLumirrorAir.root - done
-There are 27 h1 histograms
-List them with "/analysis/list".
-View them with "/vis/plot" or "/vis/reviewPlots".
+There are histograms that can be viewed with visualization:
+  27 h1 histograms(s)
+  List them with "/analysis/list".
+  View them immediately with "/vis/plot" or "/vis/reviewPlots".
+  But...there are no entries. To make your histograms available for
+  plotting in this UI session, use CloseFile(false) in your
+  EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

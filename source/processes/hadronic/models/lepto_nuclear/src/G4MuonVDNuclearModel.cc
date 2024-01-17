@@ -70,7 +70,7 @@ const G4double G4MuonVDNuclearModel::tdat[] = {
 G4ElementData* G4MuonVDNuclearModel::fElementData = nullptr;             
 
 G4MuonVDNuclearModel::G4MuonVDNuclearModel()
-  : G4HadronicInteraction("G4MuonVDNuclearModel"),isMaster(false)
+  : G4HadronicInteraction("G4MuonVDNuclearModel")
 {
   muNucXS = (G4KokoulinMuonNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4KokoulinMuonNuclearXS::Default_Name());
@@ -79,10 +79,9 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
   SetMaxEnergy(1*CLHEP::PeV);
   CutFixed = 0.2*CLHEP::GeV;
 
-  if(!fElementData && G4Threading::IsMasterThread()) { 
-    fElementData = new G4ElementData();
-    MakeSamplingTable(); 
-    isMaster = true;
+  if (nullptr == fElementData) { 
+    fElementData = new G4ElementData(93);
+    MakeSamplingTable();
   }
                     
   // reuse existing pre-compound model
@@ -91,7 +90,7 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
   G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
-  if(!pre) { pre = new G4PreCompoundModel(); }
+  if(nullptr == pre) { pre = new G4PreCompoundModel(); }
   precoInterface->SetDeExcitation(pre);
 
   // Build FTFP model
@@ -114,11 +113,6 @@ G4MuonVDNuclearModel::~G4MuonVDNuclearModel()
 {
   delete theFragmentation;
   delete theStringDecay;
-
-  if(isMaster) { 
-    delete fElementData;
-    fElementData = nullptr;
-  } 
 }
   
 G4HadFinalState*

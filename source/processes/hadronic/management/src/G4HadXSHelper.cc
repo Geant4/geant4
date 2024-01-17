@@ -195,6 +195,9 @@ G4HadXSHelper::FillPeaksStructure(G4HadronicProcess* p,
   }
   // case of no 1st peak in all vectors
   if(!isDeep) {
+    for (auto& x : *ptr) {
+      delete x;
+    }
     delete ptr;
     ptr = nullptr;
   }

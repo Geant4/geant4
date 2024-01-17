@@ -40,10 +40,10 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   public:
     ActionInitialization(const G4String& fileName);
-    virtual ~ActionInitialization();
+    ~ActionInitialization() override = default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 
   private:
     G4String fFileName;

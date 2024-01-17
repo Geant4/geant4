@@ -47,7 +47,6 @@ G4DNAScavengerProcess::G4DNAScavengerProcess(const G4String& aName,
                                              G4ProcessType type)
   : G4VITProcess(aName, type)
   , fpBoundingBox(&box)
-  , fpScavengerMaterial(nullptr)
 {
   pParticleChange     = &fParticleChange;
   enableAtRestDoIt    = false;
@@ -75,7 +74,6 @@ G4DNAScavengerProcess::~G4DNAScavengerProcess()
 }
 
 G4DNAScavengerProcess::G4DNAScavengerProcessState::G4DNAScavengerProcessState()
-  : G4ProcessState()
 {
   fPreviousTimeAtPreStepPoint = -1;
   fIsInGoodMaterial           = false;

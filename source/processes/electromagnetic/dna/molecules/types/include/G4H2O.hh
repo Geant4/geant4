@@ -61,7 +61,7 @@ class G4H2O : public G4MoleculeDefinition
 private:
     static /*G4ThreadLocal*/ G4H2O* fgpInstance;
     G4H2O() {}
-    virtual ~G4H2O() {}
+    ~G4H2O() override = default;
 
 public:
     static G4H2O* Definition();

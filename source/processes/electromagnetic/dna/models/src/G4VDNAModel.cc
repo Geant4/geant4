@@ -75,9 +75,9 @@ void G4VDNAModel::LoadCrossSectionData(const G4ParticleDefinition* particleName)
 
   // iterate on each material contained into the fStringOfMaterials variable (through
   // applyToMatVect)
-  for (unsigned int i = 0; i < applyToMatVect.size(); ++i) {
-    auto pMat = G4Material::GetMaterial(applyToMatVect[i], false);
-    if (applyToMatVect[i] != "all" && pMat == nullptr) {
+  for (const auto & i : applyToMatVect) {
+    auto pMat = G4Material::GetMaterial(i, false);
+    if (i != "all" && pMat == nullptr) {
       continue;
     }
 
@@ -91,7 +91,7 @@ void G4VDNAModel::LoadCrossSectionData(const G4ParticleDefinition* particleName)
     // applyToMatVect[i] == "all" implies applyToMatVect.size()=1 and we want to iterate on all
     // registered materials
     for (std::size_t j = 0; j < fModelMaterials.size(); ++j) {
-      if (applyToMatVect[i] == "all" || pMat->GetIndex() == fModelMaterials[j]) {
+      if (i == "all" || pMat->GetIndex() == fModelMaterials[j]) {
         isMatFound = true;
         materialID = fModelMaterials[j];
         pParticle = fModelParticles[j];
@@ -101,7 +101,7 @@ void G4VDNAModel::LoadCrossSectionData(const G4ParticleDefinition* particleName)
 
         ReadAndSaveCSFile(materialID, pParticle, fileElectron, scaleFactor);
 
-        if (fileDiffElectron != "")
+        if (!fileDiffElectron.empty())
           ReadDiffCSFile(materialID, pParticle, fileDiffElectron, scaleFactor);
       }
     }
@@ -109,7 +109,7 @@ void G4VDNAModel::LoadCrossSectionData(const G4ParticleDefinition* particleName)
     // check if we found a correspondance, if not: fatal error
     if (!isMatFound) {
       std::ostringstream oss;
-      oss << applyToMatVect[i]
+      oss << i
           << " material was not found. It means the material specified in the UserPhysicsList is "
              "not a model material for ";
       oss << particleName;
@@ -141,7 +141,7 @@ std::vector<G4String> G4VDNAModel::BuildApplyToMatVect(const G4String& materials
   std::vector<G4String> materialVect;
 
   // if we don't find any "/" then it means we only have one "material" (could be the "all" option)
-  if (materials.find("/") == std::string::npos) {
+  if (materials.find('/') == std::string::npos) {
     // we add the material to the output vector
     materialVect.push_back(materials);
   }
@@ -149,15 +149,15 @@ std::vector<G4String> G4VDNAModel::BuildApplyToMatVect(const G4String& materials
   else {
     G4String materialsNonIdentified = materials;
 
-    while (materialsNonIdentified.find_first_of("/") != std::string::npos) {
+    while (materialsNonIdentified.find_first_of('/') != std::string::npos) {
       // we select the first material and stop at the "/" caracter
-      G4String mat = materialsNonIdentified.substr(0, materialsNonIdentified.find_first_of("/"));
+      G4String mat = materialsNonIdentified.substr(0, materialsNonIdentified.find_first_of('/'));
       materialVect.push_back(mat);
 
       // we remove the previous material from the materialsNonIdentified string
       materialsNonIdentified = materialsNonIdentified.substr(
-        materialsNonIdentified.find_first_of("/") + 1,
-        materialsNonIdentified.size() - materialsNonIdentified.find_first_of("/"));
+        materialsNonIdentified.find_first_of('/') + 1,
+        materialsNonIdentified.size() - materialsNonIdentified.find_first_of('/'));
     }
 
     // we don't find "/" anymore, it means we only have one material string left

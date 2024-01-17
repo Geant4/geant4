@@ -59,8 +59,8 @@ public:
   virtual ~G4GEMProbability();
 
   // not used for evaporation
-  virtual G4double EmissionProbability(const G4Fragment& fragment,
-				       G4double maxKineticEnergy);
+  G4double EmissionProbability(const G4Fragment& fragment,
+                               G4double maxKineticEnergy) override;
 
   void Dump() const;
 
@@ -76,16 +76,23 @@ public:
         
 private:
     
+  G4double ComputeInitialLevelDensity(const G4Fragment & fragment) const;
+
+  void PrecomputeResidualQuantities(const G4Fragment & fragment, G4double &Ux,
+                                    G4double &UxSqrt, G4double &UxLog) const;
+
   G4double CalcProbability(const G4Fragment & fragment, 
 			   G4double MaximalKineticEnergy,
-			   G4double V);
+			   G4double V, G4double spin,
+			   G4double InitialLevelDensity,
+			   G4double Ux, G4double UxSqrt, G4double UxLog) const;
 
   inline G4double CCoeficient(G4int) const;
 
-  inline G4double I0(G4double t);
-  inline G4double I1(G4double t, G4double tx);
-  inline G4double I2(G4double s0, G4double sx);
-  G4double I3(G4double s0, G4double sx);
+  inline G4double I0(G4double t) const;
+  inline G4double I1(G4double t, G4double tx) const;
+  inline G4double I2(G4double s0, G4double sx) const;
+  G4double I3(G4double s0, G4double sx) const;
 
   // Copy constructor
   G4GEMProbability();
@@ -190,18 +197,18 @@ G4GEMProbability::CalcBetaParam(const G4Fragment & fragment) const
   return res;
 }
 
-inline G4double G4GEMProbability::I0(G4double t)
+inline G4double G4GEMProbability::I0(G4double t) const
 {
   return G4Exp(t) - 1.0;
 }
 
-inline G4double G4GEMProbability::I1(G4double t, G4double tx)
+inline G4double G4GEMProbability::I1(G4double t, G4double tx) const
 {
   return (t - tx + 1.0)*G4Exp(tx) - t - 1.0;
 }
 
 
-inline G4double G4GEMProbability::I2(G4double s0, G4double sx)
+inline G4double G4GEMProbability::I2(G4double s0, G4double sx) const
 {
   G4double S = 1.0/std::sqrt(s0);
   G4double Sx = 1.0/std::sqrt(sx);

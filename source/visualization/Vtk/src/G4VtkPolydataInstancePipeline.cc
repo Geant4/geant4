@@ -29,8 +29,8 @@
 #include "vtkPoints.h"
 
 G4VtkPolydataInstancePipeline::G4VtkPolydataInstancePipeline(G4String nameIn,
-                                                             const G4VtkVisContext& vc)
-  : G4VtkPolydataPipeline(nameIn, vc)
+                                                             const G4VtkVisContext& vcIn)
+  : G4VtkPolydataPipeline(nameIn, vcIn)
 {
   // Set pipeline type
   SetTypeName(G4String("G4VtkPolydataInstancePipeline"));
@@ -49,22 +49,22 @@ G4VtkPolydataInstancePipeline::G4VtkPolydataInstancePipeline(G4String nameIn,
 void G4VtkPolydataInstancePipeline::addInstance(G4double dx, G4double dy, G4double dz, G4double r00,
                                                 G4double r01, G4double r02, G4double r10,
                                                 G4double r11, G4double r12, G4double r20,
-                                                G4double r21, G4double r22, const G4String& name)
+                                                G4double r21, G4double r22, const G4String& nameIn)
 {
   // add the instance without colour or alpha
-  addInstance(dx, dy, dz, r00, r01, r02, r10, r11, r12, r20, r21, r22, 0, 0, 0, 0, name);
+  addInstance(dx, dy, dz, r00, r01, r02, r10, r11, r12, r20, r21, r22, 0, 0, 0, 0, nameIn);
 }
 
 void G4VtkPolydataInstancePipeline::addInstance(G4double dx, G4double dy, G4double dz, G4double r00,
                                                 G4double r01, G4double r02, G4double r10,
                                                 G4double r11, G4double r12, G4double r20,
                                                 G4double r21, G4double r22, G4double r, G4double g,
-                                                G4double b, G4double a, const G4String& name)
+                                                G4double b, G4double a, const G4String& nameIn)
 {
   instanceColour->InsertNextTuple4(r, g, b, a);
   auto idp = instancePosition->InsertNextPoint(dx, dy, dz);
   instanceTransform->InsertNextTuple9(r00, r01, r02, r10, r11, r12, r20, r21, r22);
-  instanceMap[name] = idp;
+  instanceMap[nameIn] = idp;
 }
 
 void G4VtkPolydataInstancePipeline::removeInstance(const G4String& /*name*/)

@@ -52,25 +52,25 @@ class F03DetectorMessenger: public G4UImessenger
   public:
 
     F03DetectorMessenger(F03DetectorConstruction* );
-    virtual ~F03DetectorMessenger();
+    ~F03DetectorMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
 
-    F03DetectorConstruction*   fDetector;
+    F03DetectorConstruction*   fDetector = nullptr;
 
-    G4UIdirectory*             fDetDir;
+    G4UIdirectory*             fDetDir = nullptr;
 
-    G4UIcmdWithAString*        fAbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsRadCmd;
+    G4UIcmdWithAString*        fAbsMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fAbsRadCmd = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fAbsZposCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsZposCmd = nullptr;
 
-    G4UIcmdWithAString*        fWorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldZCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldRCmd;
+    G4UIcmdWithAString*        fWorldMaterCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldZCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fWorldRCmd = nullptr;
 };
 
 #endif

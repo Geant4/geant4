@@ -84,23 +84,23 @@ Par04DetectorMessenger::Par04DetectorMessenger(Par04DetectorConstruction* aDetec
   fAbsorCmd->SetGuidance("  material name");
   fAbsorCmd->SetGuidance("  thickness (with unit) : t>0");
   fAbsorCmd->SetGuidance("  if sensitive : true/false.");
-  G4UIparameter* absNbPrm = new G4UIparameter("AbsorNb", 'i', false);
+  auto  absNbPrm = new G4UIparameter("AbsorNb", 'i', false);
   absNbPrm->SetGuidance("absor number : from 0 to 1");
   absNbPrm->SetParameterRange("AbsorNb>-1&AbsoNb<2");
   fAbsorCmd->SetParameter(absNbPrm);
-  G4UIparameter* matPrm = new G4UIparameter("material", 's', false);
+  auto  matPrm = new G4UIparameter("material", 's', false);
   matPrm->SetGuidance("material name");
   fAbsorCmd->SetParameter(matPrm);
-  G4UIparameter* thickPrm = new G4UIparameter("thickness", 'd', false);
+  auto  thickPrm = new G4UIparameter("thickness", 'd', false);
   thickPrm->SetGuidance("thickness of absorber");
   thickPrm->SetParameterRange("thickness>0.");
   fAbsorCmd->SetParameter(thickPrm);
-  G4UIparameter* unitPrm = new G4UIparameter("unit", 's', false);
+  auto  unitPrm = new G4UIparameter("unit", 's', false);
   unitPrm->SetGuidance("unit of thickness");
   G4String unitList = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
   unitPrm->SetParameterCandidates(unitList);
   fAbsorCmd->SetParameter(unitPrm);
-  G4UIparameter* sensitivePrm = new G4UIparameter("sensitive", 'b', false);
+  auto  sensitivePrm = new G4UIparameter("sensitive", 'b', false);
   sensitivePrm->SetGuidance("if absorber is sensitive (registers energy deposits)");
   fAbsorCmd->SetParameter(sensitivePrm);
 

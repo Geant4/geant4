@@ -6,6 +6,78 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-04 Vladimir Ivanchenko (hadr-hpp-V11-01-24)
+- G4ParticleHPManager - set default upper limit on Doppler broading
+    30 keV instead of 100 keV
+- G4ParticleHPInelasticXS - set upper limit of x-section 30 MeV
+    instead of 20 MeV
+- G4CrossSectionHP - removed not needed G4Exception
+
+## 2023-11-03 Ben Morgan (hadr-hpp-V11-01-23)
+- Use "G4" prefixed version of EXPAT/ZLIB CMake variables
+
+## 2023-10-24 Guilherme Amadio (hadr-hpp-V11-01-22)
+- Fix compilation when G4VERBOSE is not defined
+
+## 2023-10-20 Vladimir Ivanchenko (hadr-hpp-V11-01-21)
+- G4NeutronHPCaptureXS, G4NeutronHPElasticXS, G4NeutronHPInelasticXS,
+  G4NeutronHPFissionXS - improved comments to the code and description text
+- G4ParticleHPInelasticXS - fixed constructor
+
+## 2023-10-15 Vladimir Ivanchenko (hadr-hpp-V11-01-20)
+- G4NeutronHPInelasticVI, G4NeutronHPElasticVI - alternative model classes
+- G4NeutronHPCaptureXS, G4NeutronHPElasticXS, G4NeutronHPInelasticXS,
+  G4NeutronHPFissionXS, G4CrossSectionHP, G4NeutronFissionVI,
+  G4NeutronRadCaptureHP - updated models/cross sections for 
+    physics list QGSP_BERT_HP, which includes these models and cross sections
+
+## 2023-10-12 Gabriele Cosmo (hadr-hpp-V11-01-19)
+- In G4CrossSectionHP, fixed compilation warnings for implicit type conversions
+  on macOS/XCode
+
+## 2023-10-02 Vladimir Ivanchenko (hadr-hpp-V11-01-18)
+- G4CrossSectionHP - removed debug printout
+- G4NeutronRadCaptureHP - new model using G4PhotonEvaporation
+- G4NeutronFissionVI - new model using G4CompetativeFission
+
+## 2023-09-23 Vladimir Ivanchenko (hadr-hpp-V11-01-17)
+- G4NeutronHPCaptureXS, G4NeutronHPElasticXS, G4NeutronHPInelasticXS,
+  G4NeutronHPFissionXS, G4ParticleHPInelasticXS, G4CrossSectionHP - new cross
+    section classes
+
+## 2023-08-16 Vladimir Ivanchenko (hadr-hpp-V11-01-16)
+- G4ParticleHPManager - added data member and Get/Set method for 
+    maximum energy above which no Doppler broading is applied
+- G4ParticleHPInelastic - improved info printout
+
+## 2023-07-18 Vladimir Ivanchenko (hadr-hpp-V11-01-15)
+- G4ParticleHPContAngularPar - fixed Coverity warning
+
+## 2023-07-13 Vladimir Ivanchenko (hadr-hpp-V11-01-14)
+- Use G4ParticleHPManager for directory names and various flags;
+  constinue code clean-up
+
+## 2023-07-06 Vladimir Ivanchenko (hadr-hpp-V11-01-13)
+- G4ParticleHPManager - check all environment variables once, provided new
+    methods to access path to data
+- G4ParticleHPContAngularPar, G4ParticleHPContEnergyAngular,
+  G4ParticleHPEnAngCorrelation, G4ParticleHPNames, G4ParticleHPProduct -
+    use new interfaces to G4ParticleHPManager, moved constructors, destrictors, 
+    and some other methods to source; removed unused commented lines
+
+## 2023-07-06 Vladimir Ivanchenko (hadr-hpp-V11-01-12)
+- source.cmake - use alphabetical order both for headers and for source files
+- classes for capture are renamed from G4ParticleHP to G4NeutronHP, because
+  capture process exists only for neutrons; removed old commented lines
+  in modified files
+
+## 2023-07-05 Gabriele Cosmo (hadr-hpp-V11-01-11)
+- G4ParticleHPEnAngCorrelation: minor code cleanup
+
+## 2023-06-30 Vladimir Ivanchenko (hadr-hpp-V11-01-10)
+- G4ParticleHPEnAngCorrelation - fixed Coverity report
+- removed unused G4NeutronHP*.hh headers for elastic and inelastic
+
 ## 2023-06-17 Vladimir Ivanchenko (hadr-hpp-V11-01-09)
 - G4ParticleHPEnergyDistribution, G4ParticleHPContAngularPar,
   G4ParticleHPEnAngCorrelation - fixed old Coverity reports

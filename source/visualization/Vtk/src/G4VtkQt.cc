@@ -56,19 +56,7 @@ G4VViewer* G4VtkQt::CreateViewer(G4VSceneHandler& scene, const G4String& name)
 
 G4bool G4VtkQt::IsUISessionCompatible() const
 {
-  G4UImanager* ui = G4UImanager::GetUIpointer();
-  G4UIsession* session = ui->GetSession();
-
-  // If session is a batch session, it may be:
-  // a) this is a batch job (the user has not instantiated any UI session);
-  // b) we are currently processing a UI command, in which case the UI
-  //    manager creates a temporary batch session and to find out if there is
-  //    a genuine UI session that the user has instantiated we must drill
-  //    down through previous sessions to a possible non-batch session.
-  while (auto batch = dynamic_cast<G4UIbatch*>(session)) {
-    session = batch->GetPreviousSession();
-  }
-
-  // Qt windows are only appropriate in a Qt session.
-  return dynamic_cast<G4UIQt*>(session) != nullptr;
+  // Qt windows require a Qt session.
+  G4UIsession* baseSession = G4UImanager::GetUIpointer()->GetBaseSession();
+  return dynamic_cast<G4UIQt*>(baseSession) != nullptr;
 }

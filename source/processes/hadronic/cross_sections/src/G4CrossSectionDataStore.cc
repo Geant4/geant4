@@ -319,11 +319,11 @@ G4CrossSectionDataStore::DumpPhysicsTable(const G4ParticleDefinition& part)
     G4cout
       << "     Cr_sctns: " << std::setw(25) << dataSetList[i]->GetName() << ": "
       << G4BestUnit(e1, "Energy") << " ---> "
-      <<  G4BestUnit(e2, "Energy") << "\n";
+      << G4BestUnit(e2, "Energy") << "\n";
     if (dataSetList[i]->GetName() == "G4CrossSectionPairGG") {
       dataSetList[i]->DumpPhysicsTable(part);
+      G4cout << G4endl;      
     }
-    G4cout << G4endl;
   }
 }
 

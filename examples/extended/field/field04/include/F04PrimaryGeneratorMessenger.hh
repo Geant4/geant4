@@ -44,18 +44,18 @@ class F04PrimaryGeneratorMessenger : public G4UImessenger
   public:
 
     F04PrimaryGeneratorMessenger(F04PrimaryGeneratorAction*);
-    virtual ~F04PrimaryGeneratorMessenger();
+    ~F04PrimaryGeneratorMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String) override;
 
   private:
 
-    F04PrimaryGeneratorAction* fAction;
+    F04PrimaryGeneratorAction* fAction = nullptr;
 
-    G4UIcmdWithAString*        fRndmCmd;
-    G4UIcmdWithADoubleAndUnit* fSetXvertexCmd;
-    G4UIcmdWithADoubleAndUnit* fSetYvertexCmd;
-    G4UIcmdWithADoubleAndUnit* fSetZvertexCmd;
+    G4UIcmdWithAString*        fRndmCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetXvertexCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetYvertexCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fSetZvertexCmd = nullptr;
 };
 
 #endif

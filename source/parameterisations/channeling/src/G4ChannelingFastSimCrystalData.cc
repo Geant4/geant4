@@ -129,7 +129,8 @@ void G4ChannelingFastSimCrystalData::SetMaterialProperties(const G4Material *cry
     fVmax2=2.*fVmax;
 
     //read the on-zero minimal potential inside the crystal,
-    //necessary for angle recalculation for entrance/exit through the crystal lateral surface
+    //necessary for angle recalculation for entrance/exit through
+    //the crystal lateral surface
     vfilein >> fVMinCrystal;
     fVMinCrystal*=eV;
 
@@ -316,6 +317,9 @@ G4ThreeVector G4ChannelingFastSimCrystalData::CoordinatesFromBoxToLattice
        x = x0*fCosMiscutAngle - z0*fSinMiscutAngle;
        y = y0;
        z = x0*fSinMiscutAngle + z0*fCosMiscutAngle;
+
+       //for crystalline undulator
+       if(fCU){x-=GetCUx(z);}
    }
 
    //calculation of coordinates within a channel (periodic cell)
@@ -358,6 +362,9 @@ G4ThreeVector G4ChannelingFastSimCrystalData::CoordinatesFromLatticeToBox(
    }
    else
    {
+       //for crystalline undulator
+       if(fCU){x+=GetCUx(z);}
+
        //for straight crystal
        x0 = x*fCosMiscutAngle + z*fSinMiscutAngle;
        y0 = y;

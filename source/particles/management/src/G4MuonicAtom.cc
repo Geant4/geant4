@@ -32,6 +32,7 @@
 
 #include "G4MuonicAtom.hh"
 
+// clang-format off
 G4MuonicAtom::G4MuonicAtom(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -55,6 +56,7 @@ G4MuonicAtom::G4MuonicAtom(
        baseIon(baseion),
        fDIOLifeTime(DIOLifeTime),
        fNCLifeTime(NCLifeTime)
+// clang-format on
 {
   // member is private in base, so we need to go through the public
   // interface

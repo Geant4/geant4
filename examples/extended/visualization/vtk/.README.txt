@@ -1,0 +1,102 @@
+///\file "visualization/vtk/.README.txt"
+///\brief Example vtk README page
+
+/*! \page Examplevtk Example vtk
+
+This example demonstrates VTK visualisation driver. The code is based on
+the basic/B1 example, although the geometry has been modified. The physical
+example is a concerete dump, so a cuboid with a cylindrical hole removed.
+
+VTK is a graphical pipeline (https://book.vtk.org/en/latest/VTKBook/04Chapter4.html#pipeline-design-and-implementation)
+based renderer.
+
+VTK has some visualisation commands which are not applicable to all viewers,
+which currently include cutters, clippers and geometry overlays. The VTK commands
+are in vtk.mac and you can explore apply different VTK only commands.
+
+ A- VISUALISATION
+ ================
+
+This example is really for demonstration of VTK and so the easiest way to start with
+
+\verbatim
+% G4VIS_DEFAULT_DRIVER=VtkQt ./exampleVtk
+\endverbatim
+
+or
+
+\verbatim
+% G4UI_USE_TCSH=1 G4VIS_DEFAULT_DRIVER=VtkNative ./exampleVtk
+\endverbatim
+
+The event loop for the UI can be blocked by the VtkNative window. So if input events
+are captured by VTK, then the easiest way to exit from the viewer is to hit the 'q' button,
+then you are returned to the shell UI. To restart interaction then issue the command
+
+\verbatim
+Idle> /vis/vtk/startInteractor
+\endverbatim
+
+ B- USER INTERFACES
+ ==================
+
+VTK can be used in conjunction with all UI systems. If a shell UI is used event loop for the UI can be blocked
+by the VtkNative window. So if input events are captured by VTK, then the easiest way to
+exit from the viewer is to hit the 'q' button, then you are returned to the shell UI.
+To restart interaction then issue the command
+
+\verbatim
+Idle> /vis/vtk/startInteractor
+\endverbatim
+
+ C- HOW TO RUN
+ =============
+
+Starting with VTK
+
+\verbatim
+% G4VIS_DEFAULT_DRIVER=VtkQt ./exampleVtk
+\endverbatim
+
+Executing VTK specific commands
+
+\verbatim
+Idle> /control/execute vtk.mac
+\endverbatim
+
+There are various pipelines and the state of the pipelines can be
+displayed by issuing this command
+
+\verbatim
+/vis/vtk/printDebug
+\endverbatim
+
+Pipelines can be switched during operation. This is performed by calling
+
+\verbatim
+/vis/vtk/set/polyhedronPipeline (append/tensor/bake/separate)
+\endverbatim
+
+and then a subsequent
+
+\verbatim
+/vis/viewer/flush
+\endverbatim
+
+There is significantly different performance between these pipelines. Append, tensor
+and bake are all designed for large models and high performance. Separate creates
+a pipeline for each polyhedron, each pipeline will ultimately end with a draw call.
+In general with modern pipelined shaders draw calls should be kept to a minimum.
+
+For debugging the VTK viewer it is possible to place a head up display (HUD) which
+gives key information on the viewer performance. The HUD is enabled by issuing
+
+\verbatim
+/vis/vtk/set/hud 1
+\endverbatim
+
+
+Stewart Boogert
+7th November 2023
+
+*/

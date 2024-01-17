@@ -33,13 +33,12 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-/// Event action class
-///
-
 namespace B1
 {
 
 class RunAction;
+
+/// Event action class
 
 class EventAction : public G4UserEventAction
 {

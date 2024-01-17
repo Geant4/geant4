@@ -31,6 +31,10 @@
 
 /run/initialize
 
+# If you use radioactive decay, then uncomment the following UI command,
+# in order to set a very high time threshold to allow all decays to happen
+#/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 /run/setCut 0.1 mm
 
 # To change the number of threads in multi-threading mode

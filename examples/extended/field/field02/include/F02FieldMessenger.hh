@@ -50,20 +50,20 @@ class F02FieldMessenger: public G4UImessenger
 {
   public:
     F02FieldMessenger(F02ElectricFieldSetup* );
-    virtual ~F02FieldMessenger();
+    ~F02FieldMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
 
-    F02ElectricFieldSetup*     fElFieldSetup;
+    F02ElectricFieldSetup*     fElFieldSetup = nullptr;
 
-    G4UIdirectory*             fFieldDir;
-    G4UIcmdWithAnInteger*      fStepperCmd;
-    G4UIcmdWithADoubleAndUnit* fElFieldZCmd;
-    G4UIcmdWith3VectorAndUnit* fElFieldCmd;
-    G4UIcmdWithADoubleAndUnit* fMinStepCmd;
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIdirectory*             fFieldDir = nullptr;
+    G4UIcmdWithAnInteger*      fStepperCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fElFieldZCmd = nullptr;
+    G4UIcmdWith3VectorAndUnit* fElFieldCmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMinStepCmd = nullptr;
+    G4UIcmdWithoutParameter*   fUpdateCmd = nullptr;
 };
 
 #endif

@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 //
 // G4BlineTracer
@@ -36,7 +36,7 @@
 // Class description:
 //
 // Defines a tool to trace and visualise magnetic field lines
-// To use this tool in a Geant4 application the user should  
+// To use this tool in a Geant4 application the user should
 // create an instance of this class in the code as a run action.
 // It will only work if a G4MagneticField field object is declared.
 
@@ -52,6 +52,8 @@
 #include "G4Types.hh"
 #include "G4UserRunAction.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4VUserPrimaryGeneratorAction;
 class G4MagneticField;
 class G4FieldManager;
@@ -63,15 +65,15 @@ class G4BlineEventAction;
 class G4BlinePrimaryGeneratorAction;
 class G4BlineEquation;
 
-class G4BlineTracer : public G4UserRunAction 
+class G4BlineTracer : public G4UserRunAction
 {
    public:  // with description
-  
+
      G4BlineTracer();
-     virtual ~G4BlineTracer();
-  
-     virtual void BeginOfRunAction(const G4Run* aRun);
-     virtual void EndOfRunAction(const G4Run* aRun);
+     ~G4BlineTracer() override;
+
+     void BeginOfRunAction(const G4Run* aRun) override;
+     void EndOfRunAction(const G4Run* aRun) override;
 
      void ComputeBlines(G4int nlines);
 
@@ -86,13 +88,13 @@ class G4BlineTracer : public G4UserRunAction
 
    private:
 
-     G4BlineTracerMessenger* fMessenger;
-     G4BlineSteppingAction* fSteppingAction;
-     G4BlineEventAction* fEventAction;
-     G4BlinePrimaryGeneratorAction* fPrimaryGeneratorAction;
-     G4double fMaxTrackingStep;
-     G4bool fWas_ResetChordFinders_already_called;
- 
+     G4BlineTracerMessenger* fMessenger = nullptr;
+     G4BlineSteppingAction* fSteppingAction = nullptr;
+     G4BlineEventAction* fEventAction = nullptr;
+     G4BlinePrimaryGeneratorAction* fPrimaryGeneratorAction = nullptr;
+     G4double fMaxTrackingStep = 1000. * CLHEP::m;
+     G4bool fWas_ResetChordFinders_already_called = false;
+
      //G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
        // User defined primary generator action
 

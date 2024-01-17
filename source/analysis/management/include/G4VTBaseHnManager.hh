@@ -79,6 +79,7 @@ class G4VTBaseHnManager
 
     // Access methods
     virtual G4int  GetId(const G4String& name, G4bool warn = true) const = 0;
+    virtual G4int  GetNofHns(G4bool onlyExisting) const = 0;
 
     // Access to bins parameters
     virtual G4int    GetNbins(unsigned int idim, G4int id) const = 0;
@@ -97,6 +98,9 @@ class G4VTBaseHnManager
     // Methods to list/print histograms
     virtual G4bool WriteOnAscii(std::ofstream& output) = 0;
     virtual G4bool List(std::ostream& output, G4bool onlyIfActive = true) = 0;
+
+    // Methods to delete selected histograms
+    virtual G4bool Delete(G4int id, G4bool keepSetting) = 0;
 
     virtual std::shared_ptr<G4HnManager> GetHnManager() = 0;
     virtual const std::shared_ptr<G4HnManager> GetHnManager() const = 0;

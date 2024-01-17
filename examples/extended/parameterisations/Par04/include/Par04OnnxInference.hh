@@ -47,7 +47,12 @@
 class Par04OnnxInference : public Par04InferenceInterface
 {
  public:
-  Par04OnnxInference(G4String, G4int, G4int, G4int);
+  Par04OnnxInference(G4String, G4int, G4int, G4int,
+                  G4int, // For Execution Provider Runtime Flags (for now only CUDA)
+                  std::vector<const char *> &cuda_keys,
+                  std::vector<const char *> &cuda_values,     
+                  G4String, G4String);
+
   Par04OnnxInference();
 
   /// Run inference

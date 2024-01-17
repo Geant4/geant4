@@ -111,7 +111,10 @@ class G4Scintillation : public G4VRestDiscreteProcess
                                                const G4Step& aStep,
                                                G4double& yield1,
                                                G4double& yield2,
-                                               G4double& yield3);
+                                               G4double& yield3,
+                                               G4double& timeconstant1,
+                                               G4double& timeconstant2,
+                                               G4double& timeconstant3);
   // allow multiple time constants with scint by particle type
   // Returns the number of scintillation photons calculated when
   // scintillation depends on the particle type and energy
@@ -211,6 +214,7 @@ class G4Scintillation : public G4VRestDiscreteProcess
   G4double sample_time(G4double tau1, G4double tau2);
 
   G4int secID = -1;  // creator modelID
+  G4int fNumEnergyWarnings = 0;
 
 };
 

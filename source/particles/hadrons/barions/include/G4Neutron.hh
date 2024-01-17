@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,26 +35,20 @@
 #ifndef G4Neutron_h
 #define G4Neutron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
-
-// ######################################################################
-// ###                         NEUTRON                                ###
-// ######################################################################
 
 class G4Neutron : public G4Ions
 {
- private:
-   static G4Neutron* theInstance;
-   G4Neutron(){}
-   ~G4Neutron() override= default;
+  public:
+    static G4Neutron* Definition();
+    static G4Neutron* NeutronDefinition();
+    static G4Neutron* Neutron();
 
- public:
-   static G4Neutron* Definition();
-   static G4Neutron* NeutronDefinition();
-   static G4Neutron* Neutron();
+  private:
+    G4Neutron() {}
+    ~G4Neutron() override = default;
+
+    static G4Neutron* theInstance;
 };
 
 #endif

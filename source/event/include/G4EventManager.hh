@@ -38,7 +38,7 @@
 #include "G4StackManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4PrimaryTransformer.hh"
-class G4Event;
+#include "G4Event.hh"
 class G4UserEventAction;
 class G4UserStackingAction;
 class G4UserTrackingAction;
@@ -122,9 +122,6 @@ class G4EventManager
       // which should belong to the other managers will be sent to the 
       // corresponding managers.
 
-    void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
-      { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
-
     void KeepTheCurrentEvent();
       // If the current event exists, it is kept undeleted until
       // the end of the current run
@@ -157,6 +154,19 @@ class G4EventManager
     inline void StoreRandomNumberStatusToG4Event(G4int vl)
       { storetRandomNumberStatusToG4Event = vl; }
 
+    inline void UseSubEventParallelism()
+      { subEventPara = true; }
+    G4SubEvent* PopSubEvent(G4int ty);
+      // If this method is invoked by the G4RunManager while an event is still 
+      // in process. Null is returned if the sub-event does not have enough tracks.
+      // This method is Mutex-protected.
+
+    void TerminateSubEvent(const G4SubEvent* se,const G4Event* evt);
+      // G4Event "evt" contains the results made by the worker thread.
+      // The ownership of "evt" remains to the worker thread and it will be
+      // deleted after this method. All necessary information in "evt" must
+      // be copied into the corresponding master G4Event object.
+
   private:
 
     void DoProcessing(G4Event* anEvent);
@@ -176,6 +186,7 @@ class G4EventManager
     G4PrimaryTransformer* transformer = nullptr;
     G4bool tracking = false;
     G4bool abortRequested = false;
+    G4bool subEventPara = false;
 
     G4EvManMessenger* theMessenger = nullptr;
 

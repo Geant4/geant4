@@ -52,7 +52,6 @@ G4DNAIndependentReactionTimeStepper::Utils::Utils(const G4Track& trackA,
 }
 
 G4DNAIndependentReactionTimeStepper::G4DNAIndependentReactionTimeStepper()
-  : G4VITTimeStepComputer()
 {
   fReactionSet->SortByTime();
 }
@@ -117,7 +116,7 @@ G4double G4DNAIndependentReactionTimeStepper::CalculateStep(
     return DBL_MAX;
   }
 
-  G4int nbReactives = (G4int)pReactantList->size();
+  auto  nbReactives = (G4int)pReactantList->size();
 
   if(nbReactives == 0)
   {

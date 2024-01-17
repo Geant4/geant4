@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4AntiNeutrinoTau_h
 #define G4AntiNeutrinoTau_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                       ANTI NEUTRINO TAU                        ###
-// ######################################################################
 
 class G4AntiNeutrinoTau : public G4ParticleDefinition
 {
- private:
-   static G4AntiNeutrinoTau* theInstance;
-   G4AntiNeutrinoTau(){}
-   ~G4AntiNeutrinoTau() override= default;
+  public:
+    static G4AntiNeutrinoTau* Definition();
+    static G4AntiNeutrinoTau* AntiNeutrinoTauDefinition();
+    static G4AntiNeutrinoTau* AntiNeutrinoTau();
 
- public:
-   static G4AntiNeutrinoTau* Definition();
-   static G4AntiNeutrinoTau* AntiNeutrinoTauDefinition();
-   static G4AntiNeutrinoTau* AntiNeutrinoTau();
+  private:
+    G4AntiNeutrinoTau() {}
+    ~G4AntiNeutrinoTau() override = default;
+
+    static G4AntiNeutrinoTau* theInstance;
 };
 
 #endif

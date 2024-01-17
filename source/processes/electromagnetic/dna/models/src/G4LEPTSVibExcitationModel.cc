@@ -31,11 +31,11 @@ G4LEPTSVibExcitationModel::G4LEPTSVibExcitationModel(const G4String& modelName)
   : G4VLEPTSModel( modelName )
 {
   theXSType = XSVibration;
+  fParticleChangeForGamma = nullptr;
 } 
 
 
-G4LEPTSVibExcitationModel::~G4LEPTSVibExcitationModel() {
-}
+G4LEPTSVibExcitationModel::~G4LEPTSVibExcitationModel() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

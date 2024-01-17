@@ -45,15 +45,15 @@ class LXeWLSSlab : public G4PVPlacement
  private:
   void CopyValues();
 
-  LXeDetectorConstruction* fConstructor;
+  LXeDetectorConstruction* fConstructor = nullptr;
 
   static G4LogicalVolume* fScintSlab_log;
 
-  G4int fNfibers;
-  G4double fScint_x;
-  G4double fScint_y;
-  G4double fScint_z;
-  G4double fSlab_z;
+  G4int fNfibers = 0;
+  G4double fScint_x = 0.;
+  G4double fScint_y = 0.;
+  G4double fScint_z = 0.;
+  G4double fSlab_z = 0.;
 };
 
 #endif

@@ -37,28 +37,26 @@
 //
 //---------------------------------------------------------------
 
-
 #include "G4VFastSimulationModel.hh"
+
 #include "G4FastSimulationManager.hh"
 
 // ----------------------
 // -- Simple constructor:
 // ----------------------
-G4VFastSimulationModel::G4VFastSimulationModel(const G4String& aName)
- : theModelName(aName) {}
+G4VFastSimulationModel::G4VFastSimulationModel(const G4String& aName) : theModelName(aName) {}
 
 // ----------------------------------------------------------------------------------------------
 // -- Constructor with automatic G4FastSimulationManager constructed if needed fo given envelope:
 // ----------------------------------------------------------------------------------------------
-G4VFastSimulationModel::G4VFastSimulationModel(const G4String&      aName,
-					       G4Envelope*     anEnvelope,
-					       G4bool            IsUnique) 
- : theModelName(aName)
+G4VFastSimulationModel::G4VFastSimulationModel(const G4String& aName, G4Envelope* anEnvelope,
+                                               G4bool IsUnique)
+  : theModelName(aName)
 {
   // Retrieves the Fast Simulation Manager ou creates one if needed.
   G4FastSimulationManager* theFastSimulationManager;
-  if ((theFastSimulationManager = anEnvelope->GetFastSimulationManager()) == 0) 
-    theFastSimulationManager = new G4FastSimulationManager(anEnvelope,IsUnique);
+  if ((theFastSimulationManager = anEnvelope->GetFastSimulationManager()) == nullptr)
+    theFastSimulationManager = new G4FastSimulationManager(anEnvelope, IsUnique);
   // adds this model to the Fast Simulation Manager.
   theFastSimulationManager->AddFastSimulationModel(this);
 }

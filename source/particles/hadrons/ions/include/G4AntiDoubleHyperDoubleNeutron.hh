@@ -30,24 +30,20 @@
 #ifndef G4AntiDoubleHyperDoubleNeutron_h
 #define G4AntiDoubleHyperDoubleNeutron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ######################################################################
-// ###                   ANTI  DOUBLEHYPERDOUBLENEUTRON               ###
-// ######################################################################
-
-class G4AntiDoubleHyperDoubleNeutron : public G4Ions {
+class G4AntiDoubleHyperDoubleNeutron : public G4Ions
+{
   public:
     static G4AntiDoubleHyperDoubleNeutron* Definition();
     static G4AntiDoubleHyperDoubleNeutron* AntiDoubleHyperDoubleNeutronDefinition();
     static G4AntiDoubleHyperDoubleNeutron* AntiDoubleHyperDoubleNeutron();
+
   private:
-    static G4AntiDoubleHyperDoubleNeutron* theInstance;
-    G4AntiDoubleHyperDoubleNeutron()  {}
+    G4AntiDoubleHyperDoubleNeutron() {}
     ~G4AntiDoubleHyperDoubleNeutron() override = default;
+
+    static G4AntiDoubleHyperDoubleNeutron* theInstance;
 };
 
 #endif

@@ -6,6 +6,27 @@ be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-14 Alex Howard (event-V11-01-07)
+- The ListSource command for the G4GeneralParticleSource fails to list the
+  correct energy of the sources since they need to be accessed as a
+  monoenergetic source distribution, rather than the particle energy.
+
+## 2023-11-06 Ben Morgan (event-V11-01-06)
+- Fix Coverity 104909: avoid use of subevent pointer after deletion.
+
+## 2023-10-25 Vladimir Ivanchenko (event-V11-01-05)
+- G4EventManager - fixed warning seen in the continues build, when G4VERBOSE
+  is not defined
+
+## 2023-09-28 Ben Morgan (event-V11-01-04)
+- Fix Coverity issues 104905, 104908, requiring return after fatal G4Exception.
+- Apply core clang-tidy fixes
+
+## 2023-08-28 Makoto Asai (event-V11-01-02, 03)
+- Introducing G4SubEvent and related classes.
+- Co-working with run-V11-01-06, -07 and global-V11-02-16.
+- Addressing to the new track status fSuspendAndWait in track-V11-01-01.
+
 ## 2023-06-07 Makoto Asai (event-V11-01-01)
 - Adding SetParticleWeight() method to G4ParticleGun.
 - Fix incorrect information of maximum number of tracks.

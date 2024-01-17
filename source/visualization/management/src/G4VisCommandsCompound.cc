@@ -340,7 +340,7 @@ G4VisCommandOpen::G4VisCommandOpen() {
   parameter->SetGuidance
     ("integer (pixels) for square window placed by window manager or"
      " X-Windows-type geometry string, e.g. 600x600-100+100");
-  parameter->SetDefaultValue("none");
+  parameter->SetCurrentAsDefault(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -350,15 +350,24 @@ G4VisCommandOpen::~G4VisCommandOpen() {
 
 G4String G4VisCommandOpen::GetCurrentValue(G4UIcommand*)
 {
-  G4String graphicsSystemName;
+  G4String graphicsSystemName, windowSizeHint;
   auto graphicsSystem = fpVisManager->GetCurrentGraphicsSystem();
   if (graphicsSystem) {
-    graphicsSystemName = graphicsSystem->GetName ();
+    // Take name and hint from latest graphics system and viewer
+    graphicsSystemName = graphicsSystem->GetName();
+    auto viewer = fpVisManager->GetCurrentViewer();
+    if (viewer) {
+      windowSizeHint = viewer->GetViewParameters().GetXGeometryString();
+    }
+    else {  // Viewer not yet created?
+      windowSizeHint = fpVisManager->GetDefaultXGeometryString();
+    }
   }
-  else {
-    graphicsSystemName = "none";
+  else {  // No graphics system yet - must be first time
+    graphicsSystemName = fpVisManager->GetDefaultGraphicsSystemName();
+    windowSizeHint = fpVisManager->GetDefaultXGeometryString();
   }
-  return graphicsSystemName;
+  return graphicsSystemName + ' ' + windowSizeHint;
 }
 
 void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue)
@@ -370,25 +379,24 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue)
 
   auto errorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
   if (errorCode) {
-    G4ExceptionDescription ed;
-    ed << "sub-command \"/vis/sceneHandler/create\" failed.";
-    command->CommandFailed(errorCode,ed);
+    G4warn << "sub-command \"/vis/sceneHandler/create\" failed." << G4endl;
     goto finish;
   }
+
   errorCode = UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
   if (errorCode) {
-    G4ExceptionDescription ed;
-    ed << "sub-command \"/vis/viewer/create\" failed.";
-    command->CommandFailed(errorCode,ed);
+    G4warn << "sub-command \"/vis/viewer/create\" failed." << G4endl;
     goto finish;
   }
 
 finish:
   if (errorCode) {
-    G4ExceptionDescription ed;
-    ed << "Invoked command has failed - see above. Available graphics systems are:\n ";
-    fpVisManager->PrintAvailableGraphicsSystems(G4VisManager::warnings,ed);
-    command->CommandFailed(errorCode,ed);
+    fpVisManager->PrintAvailableGraphicsSystems(G4VisManager::warnings,G4warn);
+    if (errorCode != JustWarning) {
+      G4ExceptionDescription ed;
+      ed << "Invoked command has failed - see above.";
+      command->CommandFailed(errorCode,ed);
+    }
   }
 }
 

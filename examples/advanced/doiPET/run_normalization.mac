@@ -19,6 +19,9 @@
 /run/initialize
 /run/verbose 2
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 /gps/particle ion
 /gps/ion 9 18 0 0 # F-18
 #/gps/particle e+

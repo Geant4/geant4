@@ -46,9 +46,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
   PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  ~PrimaryGeneratorAction() override;
 
-  virtual void GeneratePrimaries(G4Event*);
+  void GeneratePrimaries(G4Event*) override;
 
   G4ParticleGun* GetParticleGun() { return fParticleGun; };
 
@@ -59,11 +59,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4double GetPolarization() { return fPolarization; }
 
  private:
-  G4ParticleGun* fParticleGun;
-  PrimaryGeneratorMessenger* fGunMessenger;
-  G4bool fRandomDirection;
-  G4bool fPolarized;
-  G4double fPolarization;
+  G4ParticleGun* fParticleGun = nullptr;
+  PrimaryGeneratorMessenger* fGunMessenger = nullptr;
+  G4bool fRandomDirection = false;
+  G4bool fPolarized = false;
+  G4double fPolarization = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

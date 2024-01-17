@@ -43,10 +43,6 @@ LXeHistoManager::LXeHistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeHistoManager::~LXeHistoManager() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeHistoManager::Book()
 {
   // Create or get analysis manager

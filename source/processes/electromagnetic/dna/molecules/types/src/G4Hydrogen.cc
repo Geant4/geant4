@@ -40,16 +40,16 @@
 // ######################################################################
 // ###                         Hydrogen                               ###
 // ######################################################################
-G4Hydrogen* G4Hydrogen::theInstance = 0;
+G4Hydrogen* G4Hydrogen::theInstance = nullptr;
 
 G4Hydrogen* G4Hydrogen::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "H";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     // create molecule
     //

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+  <define>
+    <position name="myBox_Vol_1intoppos" x="0" y="-50" z="0" unit="cm"/>
+  </define>
+  <materials>
+    <material name="Vacuum" Z="7">
+      <D unit="g/cm3" value="9.9999999999999995e-07"/>
+      <atom unit="g/mole" value="14.01"/>
+    </material>
+    <material name="Cu" Z="29">
+      <D unit="g/cm3" value="8.9600000000000009"/>
+      <atom unit="g/mole" value="63.545999999999999"/>
+    </material>
+  </materials>
+  <solids>
+    <box name="top_Solid" x="110.00000000000001" y="110.00000000000001" z="110.00000000000001" lunit="cm"/>
+    <box name="myBox_Solid" x="100" y="100" z="100" lunit="cm"/>
+  </solids>
+  <structure>
+    <volume name="myBox_Vol">
+      <materialref ref="Cu"/>
+      <solidref ref="myBox_Solid"/>
+    </volume>
+    <volume name="top">
+      <materialref ref="Vacuum"/>
+      <solidref ref="top_Solid"/>
+      <physvol name="myBox_Vol_1" copynumber="1">
+        <volumeref ref="myBox_Vol"/>
+        <positionref ref="myBox_Vol_1intoppos"/>
+      </physvol>
+    </volume>
+  </structure>
+  <setup name="default" version="1.0">
+    <world ref="top"/>
+  </setup>
+</gdml>

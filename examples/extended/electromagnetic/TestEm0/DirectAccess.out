@@ -92,17 +92,17 @@
 
  Energy 	 ionization 	 bremsstra 	 pair_prod 		 ionization 	 bremsstra 	 pair_prod
 
- 1.01 GeV	457.217 mbarn 	694.657 mubarn	685.688 mubarn	 	25.7582 cm 	169.539 m  	171.756 m  
- 11.01 GeV	675.132 mbarn 	2.02862 mbarn 	26.2282 mbarn 	 	17.4442 cm 	58.0548 m  	4.49025 m  
- 21.01 GeV	684.489 mbarn 	2.41403 mbarn 	46.3852 mbarn 	 	17.2057 cm 	48.786 m  	2.53898 m  
- 31.01 GeV	688.689 mbarn 	2.63939 mbarn 	62.3763 mbarn 	 	17.1008 cm 	44.6205 m  	1.88808 m  
- 41.01 GeV	691.358 mbarn 	2.79745 mbarn 	75.7828 mbarn 	 	17.0348 cm 	42.0994 m  	1.55406 m  
- 51.01 GeV	693.309 mbarn 	2.91866 mbarn 	87.4123 mbarn 	 	16.9868 cm 	40.3511 m  	1.34731 m  
- 61.01 GeV	694.846 mbarn 	3.01671 mbarn 	97.7334 mbarn 	 	16.9492 cm 	39.0396 m  	1.20502 m  
- 71.01 GeV	696.113 mbarn 	3.09883 mbarn 	107.045 mbarn 	 	16.9184 cm 	38.0051 m  	1.10021 m  
- 81.01 GeV	697.191 mbarn 	3.16935 mbarn 	115.548 mbarn 	 	16.8922 cm 	37.1594 m  	1.01924 m  
- 91.01 GeV	698.129 mbarn 	3.23108 mbarn 	123.39 mbarn 	 	16.8695 cm 	36.4495 m  	95.446 cm 
- 101.01 GeV	698.96 mbarn 	3.28584 mbarn 	130.678 mbarn 	 	16.8495 cm 	35.8421 m  	90.1234 cm 
+ 1.01 GeV	457.217 mbarn 	694.657 mubarn	685.684 mubarn	 	25.7582 cm 	169.539 m  	171.757 m  
+ 11.01 GeV	675.132 mbarn 	2.02862 mbarn 	26.2249 mbarn 	 	17.4442 cm 	58.0548 m  	4.49081 m  
+ 21.01 GeV	684.489 mbarn 	2.41403 mbarn 	46.3873 mbarn 	 	17.2057 cm 	48.786 m  	2.53886 m  
+ 31.01 GeV	688.689 mbarn 	2.63939 mbarn 	62.3844 mbarn 	 	17.1008 cm 	44.6205 m  	1.88783 m  
+ 41.01 GeV	691.358 mbarn 	2.79745 mbarn 	75.7925 mbarn 	 	17.0348 cm 	42.0994 m  	1.55386 m  
+ 51.01 GeV	693.309 mbarn 	2.91866 mbarn 	87.4207 mbarn 	 	16.9868 cm 	40.3511 m  	1.34718 m  
+ 61.01 GeV	694.846 mbarn 	3.01671 mbarn 	97.7392 mbarn 	 	16.9492 cm 	39.0396 m  	1.20495 m  
+ 71.01 GeV	696.113 mbarn 	3.09883 mbarn 	107.047 mbarn 	 	16.9184 cm 	38.0051 m  	1.10018 m  
+ 81.01 GeV	697.191 mbarn 	3.16935 mbarn 	115.549 mbarn 	 	16.8922 cm 	37.1594 m  	1.01923 m  
+ 91.01 GeV	698.129 mbarn 	3.23108 mbarn 	123.388 mbarn 	 	16.8695 cm 	36.4495 m  	95.4477 cm 
+ 101.01 GeV	698.96 mbarn 	3.28584 mbarn 	130.673 mbarn 	 	16.8495 cm 	35.8421 m  	90.1263 cm 
 
  ####muon: StoppingPower for G4_Fe	Energy cut = 10 MeV
 

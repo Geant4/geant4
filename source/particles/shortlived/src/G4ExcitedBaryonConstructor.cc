@@ -23,46 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
 
-
 #include "G4ExcitedBaryonConstructor.hh"
 
-#include "G4SystemOfUnits.hh"
+#include "G4ExcitedBaryons.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4PhaseSpaceDecayChannel.hh"
-#include "G4VDecayChannel.hh"
-#include "G4DecayTable.hh"
+#include "G4SystemOfUnits.hh"
 
-
-G4ExcitedBaryonConstructor::G4ExcitedBaryonConstructor(G4int nStates,
-						       G4int isoSpin)
-    :    NumberOfStates(nStates), iIsoSpin(isoSpin), type("baryon") 
-{
-}
+G4ExcitedBaryonConstructor::G4ExcitedBaryonConstructor(G4int nStates, G4int isoSpin)
+  : NumberOfStates(nStates), iIsoSpin(isoSpin), type("baryon")
+{}
 
 void G4ExcitedBaryonConstructor::Construct(G4int idx)
 {
-  if (idx < 0 ) {
-    for (G4int state=0; state< NumberOfStates; state +=1) {
-       ConstructParticle(state);
-       ConstructAntiParticle(state);
-     }
-  } else if (idx < NumberOfStates) {
+  if (idx < 0) {
+    for (G4int state = 0; state < NumberOfStates; state += 1) {
+      ConstructParticle(state);
+      ConstructAntiParticle(state);
+    }
+  }
+  else if (idx < NumberOfStates) {
     ConstructParticle(idx);
     ConstructAntiParticle(idx);
-  } else {
+  }
+  else {
 #ifdef G4VERBOSE
-    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>1) {
+    if (G4ParticleTable::GetParticleTable()->GetVerboseLevel() > 1) {
       G4cerr << "G4ExcitedBaryonConstructor::Construct()";
       G4cerr << "   illegal index os state = " << idx << G4endl;
     }
@@ -70,12 +63,9 @@ void G4ExcitedBaryonConstructor::Construct(G4int idx)
   }
 }
 
-
-#include "G4ExcitedBaryons.hh"
-
 void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
 {
-  if (!Exist(idx) ) return;
+  if (!Exist(idx)) return;
 
   //    Construct Resonace particles as dynamic object
   //    Arguments for constructor are as follows
@@ -83,15 +73,15 @@ void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
   //             2*spin           parity  C-conjugation
   //          2*Isospin       2*Isospin3       G-parity
   //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  
-  
+  //             stable         lifetime    decay table
+
   G4String name;
   G4ParticleDefinition* particle;
-  
-  for (G4int iIso3 = -1*iIsoSpin; iIso3 <= iIsoSpin; iIso3 +=2) {
-    name= GetName(iIso3, idx);
 
+  for (G4int iIso3 = -1 * iIsoSpin; iIso3 <= iIsoSpin; iIso3 += 2) {
+    name = GetName(iIso3, idx);
+
+    // clang-format off
     particle = new G4ExcitedBaryons(            
 	         name, GetMass(idx,iIso3), GetWidth(idx,iIso3), GetCharge(iIso3), 
 	GetiSpin(idx), GetiParity(idx),  iConjugation,       
@@ -99,14 +89,16 @@ void G4ExcitedBaryonConstructor::ConstructParticle(G4int idx)
                  type,    leptonNumber,  baryonNumber, GetEncoding( iIso3,idx),
                 false,             0.0,   nullptr
 				    );
+    // clang-format on
+
     ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));
-    particle->SetDecayTable(CreateDecayTable( name, iIso3, idx, false));
+    particle->SetDecayTable(CreateDecayTable(name, iIso3, idx, false));
   }
 }
 
 void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 {
-  if (!Exist(idx) ) return;
+  if (!Exist(idx)) return;
 
   //    Construct Resonace particles as dynamic object
   //    Arguments for constructor are as follows
@@ -114,16 +106,16 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
   //             2*spin           parity  C-conjugation
   //          2*Isospin       2*Isospin3       G-parity
   //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table 
-  
-  
+  //             stable         lifetime    decay table
+
   G4String name;
   G4ParticleDefinition* particle;
-  
-  for (G4int iIso3 = -1*iIsoSpin; iIso3 <= iIsoSpin; iIso3 +=2) {
+
+  for (G4int iIso3 = -1 * iIsoSpin; iIso3 <= iIsoSpin; iIso3 += 2) {
     name = GetName(iIso3, idx);
     name = "anti_" + name;
 
+    // clang-format off
     particle = new G4ExcitedBaryons(            
 	name, GetMass(idx,iIso3), GetWidth(idx,iIso3), -1.0*GetCharge(iIso3), 
 	GetiSpin(idx), GetiParity(idx),  iConjugation,       
@@ -133,37 +125,40 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 				                   -1*GetEncoding( iIso3,idx),
                 false,         0.0,   nullptr
 				    );
+    // clang-format on
 
     ((G4ExcitedBaryons*)(particle))->SetMultipletName(GetMultipletName(idx));
-    particle->SetDecayTable(CreateDecayTable( name, iIso3, idx, true));
+    particle->SetDecayTable(CreateDecayTable(name, iIso3, idx, true));
   }
-   
 }
 
-G4double  G4ExcitedBaryonConstructor::GetCharge(G4int iIsoSpin3)
+G4double G4ExcitedBaryonConstructor::GetCharge(G4int iIsoSpin3)
 {
   G4double charge = 0.0;
+  // clang-format off
   static const G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.
   };
-  
-  for (G4int idx=0; idx<3; idx+=1){
-    charge += quark_charge[GetQuarkContents(idx, iIsoSpin3)]*eplus;
+  // clang-format on
+
+  for (G4int idx = 0; idx < 3; idx += 1) {
+    charge += quark_charge[GetQuarkContents(idx, iIsoSpin3)] * eplus;
   }
   return charge;
 }
 
-G4int     G4ExcitedBaryonConstructor::GetEncoding(G4int iIsoSpin3, G4int idxState)
+G4int G4ExcitedBaryonConstructor::GetEncoding(G4int iIsoSpin3, G4int idxState)
 {
   G4int encoding = GetEncodingOffset(idxState);
-  encoding += 1000*GetQuarkContents(0, iIsoSpin3);
-  encoding +=  100*GetQuarkContents(1, iIsoSpin3);
-  encoding +=   10*GetQuarkContents(2, iIsoSpin3);
-  if (GetiSpin(idxState) <9) {
-    encoding += GetiSpin(idxState) +1;
-  } else {
-    encoding += (GetiSpin(idxState) +1)*10000000;
+  encoding += 1000 * GetQuarkContents(0, iIsoSpin3);
+  encoding += 100 * GetQuarkContents(1, iIsoSpin3);
+  encoding += 10 * GetQuarkContents(2, iIsoSpin3);
+  if (GetiSpin(idxState) < 9) {
+    encoding += GetiSpin(idxState) + 1;
+  }
+  else {
+    encoding += (GetiSpin(idxState) + 1) * 10000000;
   }
   return encoding;
 }

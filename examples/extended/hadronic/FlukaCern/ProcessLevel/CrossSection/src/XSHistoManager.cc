@@ -247,14 +247,15 @@ void XSHistoManager::Book() {
   fXSProfileIndex.insert(std::make_pair(fElasticPerVolumeXSIndex, 
                                         elasticPerVolumeXSProfileIndex));
 
-  const G4int inelasticPerVolumeXSProfileIndex = fAnalysisManager->CreateH1("InelasticPerVolumeXS", 
-                                                                        "Inelastic XS per volume", 
-                                                                        fNumBins, 
-                                                                        fMinKineticEnergy,
-                                                                        fMaxKineticEnergy,
-                                                                        fRootEnergyUnit,
-                                                                        fFunctionName,
-                                                                        fBinSchemeName);
+  const G4int inelasticPerVolumeXSProfileIndex =
+    fAnalysisManager->CreateH1("InelasticPerVolumeXS",
+                               "Inelastic XS per volume",
+                               fNumBins,
+                               fMinKineticEnergy,
+                               fMaxKineticEnergy,
+                               fRootEnergyUnit,
+                               fFunctionName,
+                               fBinSchemeName);
   fXSProfileIndex.insert(std::make_pair(fInelasticPerVolumeXSIndex, 
                                         inelasticPerVolumeXSProfileIndex));
 }
@@ -274,7 +275,8 @@ void XSHistoManager::EndOfRun() {
         // Fill XS profiles.
         const G4double logMinKineticEnergy = std::log10(fMinKineticEnergy);
         const G4double logMaxKineticEnergy = std::log10(fMaxKineticEnergy);
-        const G4double deltaLogKineticEnergy = (logMaxKineticEnergy - logMinKineticEnergy) / fNumBins;
+        const G4double deltaLogKineticEnergy =
+          (logMaxKineticEnergy - logMinKineticEnergy) / fNumBins;
 
         G4double logKineticEnergy = logMinKineticEnergy - deltaLogKineticEnergy/2.;
         

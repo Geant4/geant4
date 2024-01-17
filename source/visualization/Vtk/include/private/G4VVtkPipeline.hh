@@ -49,14 +49,14 @@ inline void hash_combine(std::size_t& seed, const T& v, Rest... rest)
 template<>
 struct hash<G4String>
 {
-    std::size_t operator()(const G4String& string) const
+    std::size_t operator()(const G4String& strng) const
     {
       using std::hash;
       using std::size_t;
 
       std::size_t h = 0;
 
-      for (char const& c : string) {
+      for (char const& c : strng) {
         std::hash_combine(h, c);
       }
 

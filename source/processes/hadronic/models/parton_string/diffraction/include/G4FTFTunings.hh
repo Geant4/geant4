@@ -162,8 +162,9 @@ class G4FTFTunings {
       "default",        // 0th tuning: default set
       "baryon-tune2022-v0",    // 1st tuning: Julia Yarba's presentation on 20-Jul-2022
       "pion-tune2022-v0",      // 2nd tuning: Julia Yarba's presentations on 26-Sept-2022 and 19-Oct-2022
-      "combined-tune2022-v0",  // 3rd tuning: combo of the 1st and 2nd tuning 
-      "fourth-dummy",   // 4th tuning: dummy
+      "combined-tune2022-v0",  // 3rd tuning: combination of the 1st and 2nd tuning 
+      "energy-resolution-tune2023-v0",  // 4th tuning: overcome too optimistic (i.e. narrow) pion shower
+                                        // energy resolutions in ATLAS calorimeters w.r.t. test-beam data
       "fifth-dummy",    // 5th tuning: dummy
       "sixth-dummy",    // 6th tuning: dummy
       "seventh-dummy",  // 7th tuning: dummy

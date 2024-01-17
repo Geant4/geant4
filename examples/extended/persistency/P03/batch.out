@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -21,65 +21,6 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 <<< Geant4 Physics List simulation engine: G4GenericPhysicsList
 
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Registered graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN)
-  TOOLSSG_OFFSCREEN (TSG_OFFSCREEN, TSG_FILE)
-  OpenGLImmediateQt (OGLIQt, OGLI)
-  OpenGLStoredQt (OGLSQt, OGL, OGLS)
-  OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-  OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-  OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-  OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-  RayTracerX (RayTracerX)
-  Qt3D (Qt3D)
-  TOOLSSG_X11_GLES (TSG_X11_GLES, TSGX11, TSG_XT_GLES_FALLBACK)
-  TOOLSSG_XT_GLES (TSG_XT_GLES, TSGXt, TSG_QT_GLES_FALLBACK)
-  TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
-  TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
-  TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByAttribute
-  drawByCharge
-  drawByOriginVolume
-  drawByParticleID
-  drawByEncounteredVolume
-
-Registered models:
-  None
-
-Registered filter factories:
-  attributeFilter
-  chargeFilter
-  originVolumeFilter
-  particleFilter
-  encounteredVolumeFilter
-
-Registered filters:
-  None
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-"/vis/list" to see available colours.
 /geometry/textInput/verbose 0
 /run/initialize
 userDetector->Construct() start.
@@ -87,48 +28,6 @@ world is registered to the default region.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
-/vis/open ATree
-/vis/sceneHandler/create ATree
-/vis/viewer/create ! ! none
-Issue /vis/viewer/refresh or flush to see effect.
-/vis/viewer/set/autoRefresh false
-/vis/verbose errors
-Visualization verbosity changed to errors (2)
-/vis/drawVolume
-/vis/scene/create
-/vis/scene/add/volume world -1 -1 none m 0 0 0 0 0 0
-/vis/sceneHandler/attach
-/vis/scene/add/trajectories smooth
-/tracking/storeTrajectory 2
-Attributes available for modeling and filtering with
-  "/vis/modeling/trajectories/create/drawByAttribute" and
-  "/vis/filtering/trajectories/create/attributeFilter" commands:
-G4TrajectoriesModel:
-  Event ID (EventID): G4int
-  Run ID (RunID): G4int
-G4SmoothTrajectory:
-  Charge (Ch): unit: e+ (G4double)
-  Track ID (ID): G4int
-  Initial kinetic energy (IKE): G4BestUnit (G4double)
-  Initial momentum magnitude (IMag): G4BestUnit (G4double)
-  Initial momentum (IMom): G4BestUnit (G4ThreeVector)
-  No. of points (NTP): G4int
-  PDG Encoding (PDG): G4int
-  Parent ID (PID): G4int
-  Particle Name (PN): G4String
-G4SmoothTrajectoryPoint:
-  Auxiliary Point Position (Aux): G4BestUnit (G4ThreeVector)
-  Step Position (Pos): G4BestUnit (G4ThreeVector)
-/vis/scene/notifyHandlers
-/vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/scene/notifyHandlers scene-0
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
-/vis/scene/notifyHandlers scene-0
-/vis/scene/endOfEventAction accumulate
-/vis/viewer/set/autoRefresh true
-/vis/verbose warnings
-Visualization verbosity changed to warnings (3)
 /gun/particle gamma
 /gun/energy 10 MeV
 /tracking/verbose 0
@@ -611,17 +510,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-/vis/scene/notifyHandlers scene-0
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.010000s Real=0.000742s Sys=0.000000s
-10 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review one by one.
-  To see accumulated, "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild".
-Graphics systems deleted.
-Visualization Manager deleting...
+  User=0.000000s Real=0.000713s Sys=0.000000s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -643,15 +536,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
-Pool ID '17G4PrimaryParticle', size : 0.00192 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '7G4Track', size : 0.00192 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '18G4SmoothTrajectory', size : 0.00192 MB
-Pool ID '23G4SmoothTrajectoryPoint', size : 0.00385 MB
-Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.024 MB
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.016 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -45,8 +45,8 @@ class G4ParticleDefinition;
 class Run : public G4Run
 {
   public:
-    Run();
-   ~Run();
+    Run() = default;
+   ~Run() override = default;
 
   public:
     void ParticleCount(G4String, G4double, G4double);
@@ -61,7 +61,7 @@ class Run : public G4Run
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void EndOfRun(); 
 
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
 
   private:    
     struct ParticleData {
@@ -79,16 +79,16 @@ class Run : public G4Run
     };
      
   private: 
-    G4ParticleDefinition*  fParticle;
-    G4double  fEkin;
+    G4ParticleDefinition*  fParticle = nullptr;
+    G4double  fEkin = 0.;
              
     std::map<G4String,ParticleData>  fParticleDataMap;    
-    G4int    fDecayCount, fTimeCount;
-    G4double fEkinTot[3];
-    G4double fPbalance[3];
-    G4double fEventTime[3];
-    G4double fPrimaryTime;
-    G4double fEvisEvent[3];
+    G4int    fDecayCount   = 0, fTimeCount = 0;
+    G4double fEkinTot[3]   = {0.,DBL_MAX,0.};
+    G4double fPbalance[3]  = {0.,DBL_MAX,0.};
+    G4double fEventTime[3] = {0.,DBL_MAX,0.};
+    G4double fPrimaryTime  = 0.;
+    G4double fEvisEvent[3] = {0.,DBL_MAX,0.};
 
 private:    
   struct ActivityData {
@@ -102,7 +102,7 @@ private:
   };
   
   std::map<G4String,ActivityData>  fActivityMap;
-  G4double fTimeWindow1, fTimeWindow2;
+  G4double fTimeWindow1 = 0., fTimeWindow2 = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

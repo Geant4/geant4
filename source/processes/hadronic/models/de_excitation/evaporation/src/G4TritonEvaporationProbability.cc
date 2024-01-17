@@ -39,11 +39,8 @@ G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,2.0) 
 {}
 
-G4TritonEvaporationProbability::~G4TritonEvaporationProbability()
-{}
-
-G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment& fragment) 
-{ 
+G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment& fr)
+{
   // Data comes from 
   // Dostrovsky, Fraenkel and Friedlander
   // Physical Review, vol 116, num. 3 1959
@@ -53,15 +50,15 @@ G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment& fragme
   // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
   // C for triton is equal to C for protons divided by 3
 
-  G4int aZ = fragment.GetZ_asInt()-GetZ();
-  G4double C = (aZ >= 70) ? 0.10 :
+  G4int aZ = fr.GetZ_asInt()-GetZ();
+  G4double C = (aZ <= 70) ? 0.10 :
     ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
      - 0.66612e-01)*aZ + 0.98375;
 
   return 1.0 + C/3.0;
 }
 	
-G4double G4TritonEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
+G4double G4TritonEvaporationProbability::CalcBetaParam(const G4Fragment& )
 { 
   return 0.0; 
 }

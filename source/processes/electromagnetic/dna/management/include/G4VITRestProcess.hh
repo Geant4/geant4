@@ -68,41 +68,41 @@ public:
   G4VITRestProcess(const G4String&, G4ProcessType aType = fNotDefined);
   G4VITRestProcess(const G4VITRestProcess&);
 
-  virtual ~G4VITRestProcess();
+  ~G4VITRestProcess() override;
 
 public:
   //  with description
-  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& track,
-                                                      G4ForceCondition* condition);
+  G4double AtRestGetPhysicalInteractionLength(const G4Track& track,
+                                                      G4ForceCondition* condition) override;
 
-  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override;
 
   //  no operation in  PostStepDoIt and  AlongStepDoIt
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
                                                          G4double,
                                                          G4double,
                                                          G4double&,
-                                                         G4GPILSelection*)
+                                                         G4GPILSelection*) override
   {
     return -1.0;
   }
 
-  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track&,
+  G4double PostStepGetPhysicalInteractionLength(const G4Track&,
                                                         G4double,
-                                                        G4ForceCondition*)
+                                                        G4ForceCondition*) override
   {
     return -1.0;
   }
 
   //  no operation in  PostStepDoIt and  AlongStepDoIt
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&)
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override
   {
-    return 0;
+    return nullptr;
   }
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&)
+  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override
   {
-    return 0;
+    return nullptr;
   }
 
 protected:

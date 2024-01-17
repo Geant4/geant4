@@ -234,19 +234,19 @@ size_t G4DNAPTBIonisationStructure::ReplaceMaterial(const size_t& materialID)
   if (fpBackbone_THF != nullptr && materialID == fpBackbone_THF->GetIndex()) {
     return fpTHF->GetIndex();
   }
-  else if (fpBackbone_TMP != nullptr && materialID == fpBackbone_TMP->GetIndex()) {
+  if (fpBackbone_TMP != nullptr && materialID == fpBackbone_TMP->GetIndex()) {
     return fpTMP->GetIndex();
   }
-  else if (fpAdenine_PU != nullptr && materialID == fpAdenine_PU->GetIndex()) {
+  if (fpAdenine_PU != nullptr && materialID == fpAdenine_PU->GetIndex()) {
     return fpPU->GetIndex();
   }
-  else if (fpGuanine_PU != nullptr && materialID == fpGuanine_PU->GetIndex()) {
+  if (fpGuanine_PU != nullptr && materialID == fpGuanine_PU->GetIndex()) {
     return fpPU->GetIndex();
   }
-  else if (fpThymine_PY != nullptr && materialID == fpThymine_PY->GetIndex()) {
+  if (fpThymine_PY != nullptr && materialID == fpThymine_PY->GetIndex()) {
     return fpPY->GetIndex();
   }
-  else if (fpCytosine_PY != nullptr && materialID == fpCytosine_PY->GetIndex()) {
+  if (fpCytosine_PY != nullptr && materialID == fpCytosine_PY->GetIndex()) {
     return fpPY->GetIndex();
   }
   return materialID;

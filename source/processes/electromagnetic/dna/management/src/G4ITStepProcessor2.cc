@@ -51,7 +51,6 @@
 #include "G4ITTrackHolder.hh"
 #include "G4ITReaction.hh"
 
-#include "G4TrackingInformation.hh"
 
 //#define DEBUG_MEM 1
 
@@ -118,7 +117,7 @@ void G4ITStepProcessor::DoIt(double timeStep)
 // on the given time step.
 
 {
-  if(fpVerbose) fpVerbose->DoItStarted();
+  if(fpVerbose != nullptr) fpVerbose->DoItStarted();
 
   G4TrackManyList* mainList = fpTrackContainer->GetMainList();
   G4TrackManyList::iterator it = mainList->end();
@@ -133,7 +132,7 @@ void G4ITStepProcessor::DoIt(double timeStep)
 //      G4cout << "i = " << i << G4endl;
 
     G4Track* track = *it;
-    if (!track)
+    if (track == nullptr)
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "No track was pop back the main track list.";
@@ -191,7 +190,7 @@ void G4ITStepProcessor::DoIt(double timeStep)
 
 void G4ITStepProcessor::ExtractDoItData()
 {
-  if (!fpTrack)
+  if (fpTrack == nullptr)
   {
     CleanProcessor();
     return;
@@ -219,11 +218,11 @@ void G4ITStepProcessor::ExtractDoItData()
 
     case fKillTrackAndSecondaries:
       G4ITReactionSet::Instance()->RemoveReactionSet(fpTrack);
-      if (fpSecondary)
+      if (fpSecondary != nullptr)
       {
-        for (std::size_t i = 0; i < fpSecondary->size(); ++i)
+        for (auto & i : *fpSecondary)
         {
-          delete (*fpSecondary)[i];
+          delete i;
         }
         fpSecondary->clear();
       }
@@ -240,7 +239,7 @@ void G4ITStepProcessor::ExtractDoItData()
 
 void G4ITStepProcessor::PushSecondaries()
 {
-  if (!fpSecondary || fpSecondary->empty())
+  if ((fpSecondary == nullptr) || fpSecondary->empty())
   {
     // DEBUG
     //      G4cout << "NO SECONDARIES !!! " << G4endl;
@@ -250,7 +249,7 @@ void G4ITStepProcessor::PushSecondaries()
   // DEBUG
   //    G4cout << "There are secondaries : "<< secondaries -> size() << G4endl ;
 
-  G4TrackVector::iterator secondaries_i = fpSecondary->begin();
+  auto secondaries_i = fpSecondary->begin();
 
   for (; secondaries_i != fpSecondary->end(); ++secondaries_i)
   {
@@ -280,7 +279,7 @@ void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
   G4cout << "\t\t\t >> || MEM || After CleanProcessor " << track->GetTrackID() << ", diff is : " << mem_diff << G4endl;
 #endif
 
-  if(track == 0) return; // maybe put an exception here
+  if(track == nullptr) return; // maybe put an exception here
   fTimeStep = timeStep;
   SetTrack(track);
   DoStepping();
@@ -303,10 +302,10 @@ void G4ITStepProcessor::DoStepping()
 #endif
 
 #ifdef G4VERBOSE
-    if(fpVerbose) fpVerbose->PreStepVerbose(fpTrack);
+    if(fpVerbose != nullptr) fpVerbose->PreStepVerbose(fpTrack);
 #endif
 
-  if(!fpProcessInfo)
+  if(fpProcessInfo == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "No process info found for particle :"
@@ -345,7 +344,7 @@ void G4ITStepProcessor::DoStepping()
   //--------
 #ifdef G4VERBOSE
   // !!!!! Verbose
-  if(fpVerbose) fpVerbose->NewStep();
+  if(fpVerbose != nullptr) fpVerbose->NewStep();
 #endif
 
   //---------------------------------
@@ -369,7 +368,7 @@ void G4ITStepProcessor::DoStepping()
   if(fpTrack->GetTrackStatus() == fStopButAlive)
   {
     if(fpProcessInfo->MAXofAtRestLoops > 0 && fpProcessInfo->fpAtRestDoItVector
-        != 0) // second condition to make coverity happy
+        != nullptr) // second condition to make coverity happy
     {
       //-----------------
       // AtRestStepDoIt
@@ -380,7 +379,7 @@ void G4ITStepProcessor::DoStepping()
 
 #ifdef G4VERBOSE
             // !!!!! Verbose
-      if(fpVerbose) fpVerbose->AtRestDoItInvoked();
+      if(fpVerbose != nullptr) fpVerbose->AtRestDoItInvoked();
 #endif
 
     }
@@ -389,7 +388,7 @@ void G4ITStepProcessor::DoStepping()
   }
   else // if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
   {
-    if(fpITrack == 0)
+    if(fpITrack == nullptr)
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << " !!! TrackID : " << fpTrack->GetTrackID()
@@ -404,7 +403,7 @@ void G4ITStepProcessor::DoStepping()
       return; // to make coverity happy
     }
 
-    if(fpITrack->GetTrackingInfo()->IsLeadingStep() == false)
+    if(!fpITrack->GetTrackingInfo()->IsLeadingStep())
     {
       // In case the track has NOT the minimum step length
       // Given the final step time, the transportation
@@ -440,7 +439,7 @@ void G4ITStepProcessor::DoStepping()
 
 #ifdef G4VERBOSE
     // !!!!! Verbose
-    if(fpVerbose) fpVerbose->AlongStepDoItAllDone();
+    if(fpVerbose != nullptr) fpVerbose->AlongStepDoItAllDone();
 #endif
 
     // Update track by taking into account all changes by AlongStepDoIt
@@ -466,7 +465,7 @@ void G4ITStepProcessor::DoStepping()
 #endif
 #ifdef G4VERBOSE
     // !!!!! Verbose
-    if(fpVerbose) fpVerbose->StepInfoForLeadingTrack();
+    if(fpVerbose != nullptr) fpVerbose->StepInfoForLeadingTrack();
 #endif
     }
     else
@@ -484,7 +483,7 @@ void G4ITStepProcessor::DoStepping()
 
 #ifdef G4VERBOSE
     // !!!!! Verbose
-    if(fpVerbose) fpVerbose->PostStepDoItAllDone();
+    if(fpVerbose != nullptr) fpVerbose->PostStepDoItAllDone();
 #endif
   }
 
@@ -510,7 +509,7 @@ void G4ITStepProcessor::DoStepping()
 //#endif
 
 #ifdef G4VERBOSE
-    if(fpVerbose) fpVerbose->PostStepVerbose(fpTrack);
+    if(fpVerbose != nullptr) fpVerbose->PostStepVerbose(fpTrack);
 #endif
 
 //    G4cout << " G4ITStepProcessor::DoStepping  -- " <<fpTrack->GetTrackID() << " tps = " << fpTrack->GetGlobalTime() << G4endl;
@@ -648,7 +647,7 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
   {
     fpCurrentProcess =
         (G4VITProcess*) (*fpProcessInfo->fpAlongStepDoItVector)[(G4int)ci];
-    if(fpCurrentProcess == 0) continue;
+    if(fpCurrentProcess == nullptr) continue;
     // NULL means the process is inactivated by a user on fly.
 
     fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess
@@ -669,7 +668,7 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
 
 #ifdef G4VERBOSE
     // !!!!! Verbose
-    if(fpVerbose) fpVerbose->AlongStepDoItOneByOne();
+    if(fpVerbose != nullptr) fpVerbose->AlongStepDoItOneByOne();
 #endif
 
     // Now Store the secondaries from ParticleChange to SecondaryList
@@ -774,7 +773,7 @@ void G4ITStepProcessor::InvokePSDIP(std::size_t np)
 
 #ifdef G4VERBOSE
   // !!!!! Verbose
-  if(fpVerbose) fpVerbose->PostStepDoItOneByOne();
+  if(fpVerbose != nullptr) fpVerbose->PostStepDoItOneByOne();
 #endif
 
   // Update G4Track according to ParticleChange after each PostStepDoIt
@@ -806,7 +805,7 @@ void G4ITStepProcessor::FindTransportationStep()
   fpTransportation = fpProcessInfo->fpTransportation;
   // dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
 
-  if(!fpTrack)
+  if(fpTrack == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "No G4ITStepProcessor::fpTrack found";
@@ -817,7 +816,7 @@ void G4ITStepProcessor::FindTransportationStep()
     return;
 
   }
-  if(!fpITrack)
+  if(fpITrack == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "No G4ITStepProcessor::fITrack";
@@ -827,7 +826,7 @@ void G4ITStepProcessor::FindTransportationStep()
                 exceptionDescription);
     return;
   }
-  if(!(fpITrack->GetTrack()))
+  if((fpITrack->GetTrack()) == nullptr)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "No G4ITStepProcessor::fITrack->GetTrack()";
@@ -838,7 +837,7 @@ void G4ITStepProcessor::FindTransportationStep()
     return;
   }
 
-  if(fpTransportation)
+  if(fpTransportation != nullptr)
   {
     fpTransportation->SetProcessState(fpTrackingInfo->GetProcessState(fpTransportation
         ->GetProcessID()));

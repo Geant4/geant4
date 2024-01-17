@@ -46,8 +46,7 @@ LXeWLSFiber::LXeWLSFiber(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
                          G4int pCopyNo, LXeDetectorConstruction* c)
   : G4PVPlacement(pRot, tlate,
                   new G4LogicalVolume(new G4Box("temp", 1., 1., 1.),
-                                      G4Material::GetMaterial("Vacuum"), "temp",
-                                      0, 0, 0),
+                                    G4Material::GetMaterial("Vacuum"), "temp"),
                   "Cladding2", pMotherLogical, pMany, pCopyNo)
   , fConstructor(c)
 {
@@ -55,31 +54,31 @@ LXeWLSFiber::LXeWLSFiber(G4RotationMatrix* pRot, const G4ThreeVector& tlate,
 
   // The Fiber
   //
-  G4Tubs* fiber_tube = new G4Tubs("Fiber", fFiber_rmin, fFiber_rmax, fFiber_z,
-                                  fFiber_sphi, fFiber_ephi);
+  auto fiber_tube = new G4Tubs("Fiber", fFiber_rmin, fFiber_rmax, fFiber_z,
+                               fFiber_sphi, fFiber_ephi);
 
-  G4LogicalVolume* fiber_log = new G4LogicalVolume(
-    fiber_tube, G4Material::GetMaterial("PMMA"), "Fiber", 0, 0, 0);
+  auto fiber_log = new G4LogicalVolume(
+    fiber_tube, G4Material::GetMaterial("PMMA"), "Fiber");
 
   // Cladding (first layer)
   //
-  G4Tubs* clad1_tube = new G4Tubs("Cladding1", fClad1_rmin, fClad1_rmax,
-                                  fClad1_z, fClad1_sphi, fClad1_ephi);
+  auto clad1_tube = new G4Tubs("Cladding1", fClad1_rmin, fClad1_rmax,
+                               fClad1_z, fClad1_sphi, fClad1_ephi);
 
-  G4LogicalVolume* clad1_log = new G4LogicalVolume(
-    clad1_tube, G4Material::GetMaterial("Pethylene1"), "Cladding1", 0, 0, 0);
+  auto clad1_log = new G4LogicalVolume(
+    clad1_tube, G4Material::GetMaterial("Pethylene1"), "Cladding1");
 
   // Cladding (second layer)
   //
-  G4Tubs* clad2_tube = new G4Tubs("Cladding2", fClad2_rmin, fClad2_rmax,
-                                  fClad2_z, fClad2_sphi, fClad2_ephi);
+  auto clad2_tube = new G4Tubs("Cladding2", fClad2_rmin, fClad2_rmax,
+                               fClad2_z, fClad2_sphi, fClad2_ephi);
 
   fClad2_log = new G4LogicalVolume(
-    clad2_tube, G4Material::GetMaterial("Pethylene2"), "Cladding2", 0, 0, 0);
+    clad2_tube, G4Material::GetMaterial("Pethylene2"), "Cladding2");
 
-  new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), fiber_log, "Fiber", clad1_log,
-                    false, 0);
-  new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), clad1_log, "Cladding1",
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), fiber_log, "Fiber",
+                    clad1_log, false, 0);
+  new G4PVPlacement(nullptr, G4ThreeVector(0., 0., 0.), clad1_log, "Cladding1",
                     fClad2_log, false, 0);
 
   SetLogicalVolume(fClad2_log);

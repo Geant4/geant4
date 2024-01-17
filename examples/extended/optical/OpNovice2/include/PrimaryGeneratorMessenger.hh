@@ -50,15 +50,15 @@ class PrimaryGeneratorMessenger : public G4UImessenger
 {
  public:
   PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-  virtual ~PrimaryGeneratorMessenger();
+  ~PrimaryGeneratorMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  PrimaryGeneratorAction* fPrimaryAction;
-  G4UIdirectory* fGunDir;
-  G4UIcmdWithADoubleAndUnit* fPolarCmd;
-  G4UIcmdWithABool* fRandomDirectionCmd;
+  PrimaryGeneratorAction* fPrimaryAction = nullptr;
+  G4UIdirectory* fGunDir = nullptr;
+  G4UIcmdWithADoubleAndUnit* fPolarCmd = nullptr;
+  G4UIcmdWithABool* fRandomDirectionCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

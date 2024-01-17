@@ -2,10 +2,7 @@
 ///\file "medical/dna/UHDR/.README.txt"
 ///\brief Example (UHDR) Ultra High Dose Rate README page
 
-/*! \page UHDR Example
-			    
-
-/*! \page ExampleUHDR Example scavenger
+/*! \page ExampleUHDR Example UHDR
 
 \ This example is provided by the Geant4-DNA collaboration
   (http://geant4-dna.org).
@@ -33,21 +30,22 @@ make
 \endverbatim
 
 In batch mode, the macro beam.in can be used as follows:
- \verbatim
- ./UHRD beam.in
- \endverbatim
+\verbatim
+./UHRD beam.in
+\endverbatim
  or
- \verbatim
- ./UHRD beam.in 123
- \endverbatim
-# 123 is the user's seed number
+\verbatim
+./UHRD beam.in 123
+   # 123 is the user's seed number
+\endverbatim
 
 \section UHDR_s1 GEOMETRY DEFINITION
 
 
- The world volume is a simple water box 3.2 x 3.2 x 3.2 um3 for 0.01Gy of cut-off
- absorbed dose and 1.6 x 1.6 x 1.6 um3 for 1 Gy.
- This example is only limited at these geometries for these geometries.
+ The world volume is a simple water box 3.2 x 3.2 x 3.2 um3 for 0.01 Gy of cut-off
+ absorbed dose and 1.6 x 1.6 x 1.6 um3 for 1 Gy. This example is limited to these geometries.
+ The choice of simulation volume is a compromise between a sufficient number of chemical species a
+ nd an achievable computation time.
 
  Two parameters define the geometry :
  - the material of the box for the physical stage is water.
@@ -84,16 +82,18 @@ The actual dose is calculated based on the real energy deposited in the volume.
 
 \section UHDR_s5 DETECTOR RESPONSE : Scorer
 
-     There is one G4MultiFunctionalDetector object which computes the
-     energy deposition and the number of species along time in order to
-     extract the G-value:
-     (Number of species X) / (100 eV of deposited energy).
+There is one G4MultiFunctionalDetector object which computes the
+energy deposition and the number of species along time in order to
+extract the G-value:
+(Number of species X) / (100 eV of deposited energy).
 
-     These two macro commands can be used to control the scoring time:
-       /scorer/species/addTimeToRecord 1 ps
-       # user can select time bin to score G values.
-       /scorer/species/nOfTimeBins
-       # or user can automatically select time bin logarithmically.
+These two macro commands can be used to control the scoring time:
+\verbatim
+/scorer/species/addTimeToRecord 1 ps
+   # user can select time bin to score G values.
+/scorer/species/nOfTimeBins
+   # or user can automatically select time bin logarithmically.
+\endverbatim
 
 \section UHDR_s6 PULSE ACTION
 
@@ -107,7 +107,7 @@ G-value
 
 The user macro file is: beam.in
 
-\section UHDR_s9 - REACTION BUILDER
+\section UHDR_s9 REACTION BUILDER
 
  Reaction lists are collected by builders for specific applications.
  ChemNO2_NO3ScavengerBuilder is to build the reaction list with NO2-/NO3-.
@@ -115,7 +115,7 @@ The user macro file is: beam.in
  ChemOxygenWaterBuilder is to build the reaction list with ROS.
  ChemFrickeReactionBuilder is to build the reaction list of Fricke Dosimeter.
 
-\section SCAVENGER_s11 PLOT
+\section UHDR_s10 PLOT
 
 The information about all the molecular species is scored in a ROOT
 (https://root.cern) ntuple file Dose_xxx.root (xxx is seed number).
@@ -133,8 +133,12 @@ root plot_time.C > scorer.txt
 \endverbatim
 
 The results show the molecular species (G values) as a function of
-time (ns). Please correct the dose in the TTree *tree = (TTree *) dir->Get("0.010000");
+time (ns). Please correct the dose in the
+\verbatim
+TTree *tree = (TTree *) dir->Get("0.010000");
+\endverbatim
 
-
-
+Funding: FNS Synergia grant MAGIC-FNS CRSII5_186369.
+Contact: H. Tran (tran@cenbg.in2p3.fr)
+CNRS, lp2i, UMR 5797, Université de Bordeaux, F-33170 Gradignan, France
 */

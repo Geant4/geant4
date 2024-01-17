@@ -36,18 +36,15 @@
 #include "G4UserTimeStepAction.hh"
 
 G4UserTimeStepAction::G4UserTimeStepAction()
-{;}
+= default;
 
 G4UserTimeStepAction::~G4UserTimeStepAction()
-{;}
+= default;
 
-G4UserTimeStepAction::G4UserTimeStepAction(const G4UserTimeStepAction& /*other*/){;}
+G4UserTimeStepAction::G4UserTimeStepAction(const G4UserTimeStepAction& /*other*/)= default;
 
 G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction& /*rhs*/)
-{
-//    if (this == &rhs) return *this;
-    return *this;
-}
+= default;
 
 void G4UserTimeStepAction::SetMinimumTimeSteps(std::map<double, double>* timeSteps)
 {

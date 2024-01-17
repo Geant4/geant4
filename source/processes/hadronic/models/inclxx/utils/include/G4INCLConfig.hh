@@ -215,18 +215,17 @@ namespace G4INCL {
 
     /// \brief Set the INCLXX datafile path
     void setINCLXXDataFilePath(std::string const &path) { INCLXXDataFilePath=path; }
+    
+    /// \brief Set the ABLAXX datafile path
+#ifdef INCL_DEEXCITATION_ABLAXX
+    void setABLAXXDataFilePath(std::string const &path) { ablaxxDataFilePath=path; }
+#endif    
 
     std::string const &getINCLXXDataFilePath() const {
       return INCLXXDataFilePath;
     }
 
 #ifdef INCL_DEEXCITATION_ABLAXX
-    std::string const &getABLAv3pCxxDataFilePath() const {
-      return ablav3pCxxDataFilePath;
-    }
-#endif
-
-#ifdef INCL_DEEXCITATION_ABLACXX
     std::string const &getABLAXXDataFilePath() const {
       return ablaxxDataFilePath;
     }
@@ -364,6 +363,10 @@ namespace G4INCL {
 #endif
 
     G4bool getInverseKinematics() const { return inverseKinematics; }
+    
+    G4bool getsrcPairConfig() const { return srcPairCorrelations; }
+    
+    G4float getsrcPairDist() const { return srcPairDistance; }
 
     /// \brief Get the decay time threshold time
     G4double getDecayTimeThreshold() const { return decayTimeThreshold; }
@@ -426,9 +429,6 @@ namespace G4INCL {
     std::string deExcitationString;
     DeExcitationType deExcitationType;
 #ifdef INCL_DEEXCITATION_ABLAXX
-    std::string ablav3pCxxDataFilePath;
-#endif
-#ifdef INCL_DEEXCITATION_ABLACXX
     std::string ablaxxDataFilePath;
 #endif
 #ifdef INCL_DEEXCITATION_ABLA07
@@ -459,6 +459,8 @@ namespace G4INCL {
     G4double fermiMomentum;
 
     G4double cutNN;
+
+    G4bool ann;
     
     G4double bias;
 
@@ -504,6 +506,10 @@ namespace G4INCL {
 #endif
 
     G4bool inverseKinematics;
+    
+    G4bool srcPairCorrelations;
+    
+    G4float srcPairDistance;
 
     G4double decayTimeThreshold;
 

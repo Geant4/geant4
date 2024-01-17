@@ -28,7 +28,7 @@
 /// \brief Implementation of the F04GlobalField class
 //
 
-#include <time.h>
+#include <ctime>
 
 #include "Randomize.hh"
 #include "G4TransportationManager.hh"
@@ -47,32 +47,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal F04GlobalField* F04GlobalField::fObject = 0;
+G4ThreadLocal F04GlobalField* F04GlobalField::fObject = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04GlobalField::F04GlobalField(F04DetectorConstruction* det) 
-  : G4ElectroMagneticField(),   //  old  : G4MagneticField(),
-    fMinStep(0.01*mm), fDeltaChord(3.0*mm),
-    fDeltaOneStep(0.01*mm), fDeltaIntersection(0.1*mm),
-    // fEpsMin(2.5e-7), fEpsMax(0.001),  // These are pure numbers -- relative values
-    // fEquation(0), fFieldManager(0),
-    // fFieldPropagator(0), fStepper(0), fChordFinder(0),
-    fDetectorConstruction(det)
+F04GlobalField::F04GlobalField(F04DetectorConstruction* det)
+  : fDetectorConstruction(det)
 {
   fFieldMessenger = new F04FieldMessenger(this,det);
 
   fFields = new FieldList();
 
-  fStepperType = 4 ;       // ClassicalRK4 is default stepper
-
   //  set object
-
   fObject = this;
-  fFirst = true;
-
-  fNfp = 0;
-  fFp = NULL;
 
   ConstructField();
 }
@@ -87,9 +74,9 @@ F04GlobalField::~F04GlobalField()
 
   delete fFieldMessenger;
 
-  if (fEquation)        delete fEquation;
-  if (fStepper)         delete fStepper;
-  if (fChordFinder)     delete fChordFinder;
+  delete fEquation;
+  delete fStepper;
+  delete fChordFinder;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -158,7 +145,7 @@ void F04GlobalField::ConstructField()
   G4ThreeVector captureMgntCenter =
                                  fDetectorConstruction->GetCaptureMgntCenter();
 
-  F04FocusSolenoid* focusSolenoid =
+  auto  focusSolenoid =
            new F04FocusSolenoid(B1, B2, l, logicCaptureMgnt,captureMgntCenter);
   focusSolenoid -> SetHalf(true);
 
@@ -169,7 +156,7 @@ void F04GlobalField::ConstructField()
   G4ThreeVector transferMgntCenter =
                                 fDetectorConstruction->GetTransferMgntCenter();
 
-  F04SimpleSolenoid* simpleSolenoid =
+  auto  simpleSolenoid =
              new F04SimpleSolenoid(B, l, logicTransferMgnt,transferMgntCenter);
 
   simpleSolenoid->SetColor("1,0,1");
@@ -200,14 +187,14 @@ F04GlobalField* F04GlobalField::GetObject(F04DetectorConstruction* det)
 F04GlobalField* F04GlobalField::GetObject()
 {
   if (fObject) return fObject;
-  return NULL;
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04GlobalField::SetStepper()
 {
-  if(fStepper) delete fStepper;
+  delete fStepper;
 
   switch ( fStepperType )
   {
@@ -241,7 +228,7 @@ void F04GlobalField::SetStepper()
       fStepper = new G4CashKarpRKF45( fEquation, 12 ); // with spin tracking
       G4cout << "G4CashKarpRKF45 is called" << G4endl;
       break;
-    default: fStepper = 0;
+    default: fStepper = nullptr;
   }
 }
 
@@ -258,7 +245,7 @@ G4FieldManager* F04GlobalField::GetGlobalFieldManager()
 void F04GlobalField::GetFieldValue(const G4double* point, G4double* field) const
 {
   // NOTE: this routine dominates the CPU time for tracking.
-  // Using the simple array fFp[] instead of fields[] 
+  // Using the simple array fFp[] instead of fields[]
   // directly sped it up
 
   field[0] = field[1] = field[2] = field[3] = field[4] = field[5] = 0.0;
@@ -290,10 +277,10 @@ void F04GlobalField::Clear()
      }
   }
 
-  if (fFp) { delete [] fFp; }
+  delete [] fFp;
   fFirst = true;
   fNfp = 0;
-  fFp = NULL;
+  fFp = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

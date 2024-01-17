@@ -197,7 +197,7 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
       else  // ions
       {
         G4int iz = partDef->GetAtomicNumber();
-        G4int iq = static_cast<G4int>(primaryParticle->GetCharge()/eplus);
+        auto  iq = static_cast<G4int>(primaryParticle->GetCharge()/eplus);
         G4int n_e = iz - iq;
         if (n_e>0) DP->AddElectron(0,n_e);  
       }
@@ -227,7 +227,7 @@ GenerateSingleTrack( G4PrimaryParticle* primaryParticle,
 
     // Create G4Track object
     //
-    G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
+    auto  track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
 
     // Set trackID and let primary particle know it
     //

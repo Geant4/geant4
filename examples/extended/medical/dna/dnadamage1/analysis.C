@@ -11,5 +11,5 @@
 
 {
     gROOT->ProcessLine(".L molecule.C");
-    gROOT->ProcessLine(".x plot.C");
+    gROOT->ProcessLine(".x scandamages.C");
 }

@@ -158,7 +158,7 @@
  /analysis/setFileName  name  (default testem5)
 
  It is possible to choose the format of the histogram file : root (default),
- hbook, xml, csv, by using namespace in HistoManager.hh
+ hdf5, xml, csv, by changing the default file type in HistoManager.cc
 
  It is also possible to print selected histograms on an ascii file:
  /analysis/h1/setAscii id
@@ -186,10 +186,10 @@
 	
  9- HOW TO START ?
  
- - execute TestEm5 in 'batch' mode from macro files e.g.
+ - Execute TestEm5 in 'batch' mode from macro files e.g.
  	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
 		
- - execute TestEm5 in 'interactive' mode with visualization e.g.
+ - Execute TestEm5 in 'interactive' mode with visualization e.g.
  	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
 	Then type your commands, for instance :
 	Idle> control/execute vis.mac
@@ -232,14 +232,15 @@
    The cross sections are available for protons with energy < 5 MeV 
    and alpha particles with energy < 10 MeV/nucleon. 
       (S. Bakr et al. (2021) NIM B, 507:1119), 
-      (S. Bakr et al (2018), NIMB B, 436: 285-291). 
+      (S. Bakr et al (2018), NIMB B, 436: 285-291)
  - posi.mac: to test PhysListEm19DStandard for positron
  - shen1.mac: Angle distribution of  high energy (50-200 GeV/c) protons
       transmitted through different targets.
       (G. Shen et al. Phys.Rev. D20 (1979) page 1584.)
  - shen2.mac: proton 175 GeV/c, transmitted through 8.004 mm Al
       (G. Shen et al. Phys.Rev. D20 (1979) page 1584.)
- - stepMax.cc: to test the command /testem/stepMax
+ - stepMax.mac: to test the command /testem/stepMax
+ - subcut.mac: to test the control sub-cutoff production
  - tavora.mac: Back scattering of  35 keV electrons in Silver.
       (L.M. Tavora et al. J.Phys.D: Appl. Phys. 33 (2000) page 2497,
        Fig. 7)

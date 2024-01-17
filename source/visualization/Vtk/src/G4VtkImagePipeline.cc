@@ -39,6 +39,7 @@
 #include "vtkImageReader2Factory.h"
 #include "vtkMatrix4x4.h"
 #include "vtkSmartPointer.h"
+#include "vtkImageFlip.h"
 
 G4VtkImagePipeline::G4VtkImagePipeline(const G4String& nameIn, const G4VtkVisContext& vcIn)
   : G4VVtkPipeline(nameIn, "G4VtkImagePipeline", vcIn, false, vcIn.fViewer->renderer)
@@ -66,6 +67,7 @@ G4VtkImagePipeline::G4VtkImagePipeline(const G4String& nameIn, const G4VtkVisCon
                                1.};
   transform->DeepCopy(transformArray);
   actor->SetUserMatrix(transform);
+  actor->GetProperty()->SetOpacity(vc.alpha);
 
   vc.fViewer->renderer->AddActor(GetActor());
 }
@@ -78,7 +80,11 @@ void G4VtkImagePipeline::SetImage(const G4String& fileName)
   imageReader->SetFileName(fileName.c_str());
   imageReader->Update();
 
-  actor->GetMapper()->SetInputConnection(imageReader->GetOutputPort());
+  vtkNew<vtkImageFlip> flip;
+  flip->SetInputConnection(imageReader->GetOutputPort());
+  flip->SetFilteredAxis(1);
+
+  actor->GetMapper()->SetInputConnection(flip->GetOutputPort());
   AddFilter(imageReader);
 }
 

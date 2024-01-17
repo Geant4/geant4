@@ -6,6 +6,64 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-06 John Allison (interfaces-V11-01-31)
+- Requires visman-V11-01-31.
+- G4UIQt::SceneTreeItemClicked:
+  - Use text to identify text models.
+    - Allows one to distinguish multiple text models.
+
+## 2023-11-04 John Allison (interfaces-V11-01-30)
+- G4UIQt::SceneTreeItemClicked:
+  - Use PV name to identify PV model in scene tree.
+    - This allows multiple PV models in the scene and each to be separately
+      identified.
+  - Avoid setting daughtersInvisible flag if there are no daughters.
+
+## 2023-10-19 John Allison (interfaces-V11-01-29)
+- G4UIQt::BuildPVQTree:
+  - Reduce tooltip for a touchable to a simple two-lines:
+    - PVPath, e.g., "World 0 Envelope 0 Shape1 0"
+    - "To see properties, right-click/dump."  
+
+## 2023-10-17 John Allison (interfaces-V11-01-28)
+- G4UIQt::NewSceneTreeItemTreeWidget::ActWithoutParameter:
+  - Special case for right-click "dump":
+    - Pop up message window that may be suppressed.
+    - Message the first 1000 characters but suggest a full dump
+      to session output if desired, or close.
+      - The full dump is too much for a QMessageBox.
+
+## 2023-10-09 John Allison (interfaces-V11-01-27)
+- G4UIQt::SceneTreeItemClicked:
+  - Make daughters invisible when volume checked invisible.
+    - Pop up a window of explanation: "This action makes this volume and all
+      descendants invisible. To see descendants, right-click and select
+      daughtersInvisible/false and check visibility of descendants individually."
+    - This pop-up uses QMessageBox. In my opinion it's a little clumsy. I would
+      have preferred a more tailored window more closely associated with the
+      the scene tree item, so if any knows a better way...      
+
+## 2023-10-03 John Allison (interfaces-V11-01-26)
+- G4UIQt::CreateCommandWidget:
+  - Fix typo - "green" should be "blue".
+
+## 2023-09-05 Ben Morgan (interfaces-V11-01-25)
+- Set AUTOMOC property on module when Qt used.
+
+## 2023-09-03 John Allison (interfaces-V11-01-24)
+- G4UIQt.cc: Fix bug in SceneTreeItemClicked when invoking /vis/scene/activateModel.
+  - The description may have spaces - use substring up to first space.
+
+## 2023-07-03 Ben Morgan (interfaces-V11-01-23)
+- Fix Coverity reports 23063, 104864.
+- Workaround changes in QEvent globalPos/globalPosition for Qt5 and 6.
+
+## 2023-07-01 John Allison (interfaces-V11-01-22)
+- G4UIQt: Choose sub-set of commands suitable for the pop-up menu.
+
+## 2023-07-01 John Allison (interfaces-V11-01-21)
+- G4UIQt: Implement right-click pop-up menu for touchables in new scene tree.
+
 ## 2023-06-07 John Allison (interfaces-V11-01-20)
 - Rework double-click using QTreeWidget::itemDoubleClicked.
   - Was using QWidget::mouseDoubleClickEvent (I had not noticed the above - much better).

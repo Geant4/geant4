@@ -13,6 +13,8 @@
 /run/initialize
 /run/verbose 2
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 #### the activity distribution of the hot source to the background (BG) is 4:1. The activity distribution ratio is done by considering the volume of the phantoms
 

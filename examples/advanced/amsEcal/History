@@ -5,6 +5,11 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (amsEcal-V11-01-00)
+- Updated vis.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
 ## 2022-09-09 Susanna Guatelli (amsEcal-V11-00-02)
 - Ranecu engine removed. Default engine used now
 

@@ -82,14 +82,7 @@ G4bool G4DNARPWBAIonisationModel::InEnergyLimit(const G4double& k)
     G4Exception("G4DNARPWBAIonisationModel::InEnergyLimit", "em0102",
                 FatalException, "lowEnergyLimit == highEnergyLimit");
   }
-  if(k >= lowEnergyLimit && k <= highEnergyLimit)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return k >= lowEnergyLimit && k <= highEnergyLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -598,7 +591,7 @@ G4int G4DNARPWBAIonisationModel::RandomSelect(G4double k)
   else
   {
     auto valuesBuffer = new G4double[fpTotalCrossSection->NumberOfComponents()];
-    const G4int n = (G4int)fpTotalCrossSection->NumberOfComponents();
+    const auto  n = (G4int)fpTotalCrossSection->NumberOfComponents();
     G4int i(n);
     G4double value = 0.;
     while(i > 0)

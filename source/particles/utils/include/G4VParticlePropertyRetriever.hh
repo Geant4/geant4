@@ -22,65 +22,47 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-//
-// 
-// ---------------------------------------------------------------
+
 #ifndef G4VParticlePropertyRetriever_h
 #define G4VParticlePropertyRetriever_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <vector>
-
 #include "G4ParticlePropertyData.hh"
 #include "G4ParticlePropertyTable.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+
+#include <vector>
 
 class G4VParticlePropertyRetriever
 {
- public:
-  //constructors
-  G4VParticlePropertyRetriever();
-  
-  //destructor
-  virtual ~G4VParticlePropertyRetriever();
-  
- public:
-  // equality operators
-  G4bool operator==(const G4VParticlePropertyRetriever &right) const
-  {   return (this == &right);    }
-  
-  G4bool operator!=(const G4VParticlePropertyRetriever &right) const
-  {   return (this != &right);    }
-  
- public:
-  virtual void Retrieve(const G4String& option) = 0;
-  // print out particle properties in the list
+  public:
+    // constructors
+    G4VParticlePropertyRetriever();
 
- protected:
-  G4ParticlePropertyTable*  pPropertyTable;
+    // destructor
+    virtual ~G4VParticlePropertyRetriever();
 
+    // equality operators
+    G4bool operator==(const G4VParticlePropertyRetriever& right) const { return (this == &right); }
+
+    G4bool operator!=(const G4VParticlePropertyRetriever& right) const { return (this != &right); }
+
+    // print out particle properties in the list
+    virtual void Retrieve(const G4String& option) = 0;
+
+  protected:
+    G4ParticlePropertyTable* pPropertyTable;
 };
 
-inline
- G4VParticlePropertyRetriever::G4VParticlePropertyRetriever()
+inline G4VParticlePropertyRetriever::G4VParticlePropertyRetriever()
 {
-  pPropertyTable =   G4ParticlePropertyTable::GetParticlePropertyTable();
+  pPropertyTable = G4ParticlePropertyTable::GetParticlePropertyTable();
 }
 
 /////////////////////////////
-inline
- G4VParticlePropertyRetriever::~G4VParticlePropertyRetriever()
+inline G4VParticlePropertyRetriever::~G4VParticlePropertyRetriever()
 {
   pPropertyTable->Clear();
-}    
-
+}
 
 #endif
-

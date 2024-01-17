@@ -22,38 +22,36 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-#include "G4AdjointTriton.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                      ADJOINT TRITON            		      ###
-// ######################################################################
+#include "G4AdjointTriton.hh"
+
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
 
 G4AdjointTriton* G4AdjointTriton::theInstance = nullptr;
 
 G4AdjointTriton* G4AdjointTriton::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "adj_triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast<G4AdjointIons*>(pTable->FindParticle(name));
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  //             excitation 
+  auto anInstance = static_cast<G4AdjointIons*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    //             excitation
+    // clang-format off
     anInstance = new G4AdjointIons(
                  name,   2.80925*GeV,       0.0*MeV,  -1.0*eplus,
                     1,              +1,             0,
@@ -63,27 +61,25 @@ G4AdjointTriton* G4AdjointTriton::Definition()
 		false,           "static",          0,
                   0.0
               );
- 
-    // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.97896248 * mN);
+    // clang-format on
 
-   }
-  //No Anti particle registered
+    // Magnetic Moment
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(2.97896248 * mN);
+  }
+  // No Anti particle registered
   anInstance->SetAntiPDGEncoding(0);
 
   theInstance = static_cast<G4AdjointTriton*>(anInstance);
   return theInstance;
 }
 
-G4AdjointTriton*  G4AdjointTriton::TritonDefinition()
+G4AdjointTriton* G4AdjointTriton::TritonDefinition()
 {
   return Definition();
 }
 
-G4AdjointTriton*  G4AdjointTriton::Triton()
+G4AdjointTriton* G4AdjointTriton::Triton()
 {
   return Definition();
 }
-
-

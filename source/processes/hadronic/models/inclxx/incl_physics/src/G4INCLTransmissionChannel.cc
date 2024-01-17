@@ -120,6 +120,7 @@ namespace G4INCL {
     initialEnergy += theParticle->getTableMass() - theParticle->getMass()
       + theParticle->getEmissionQValueCorrection(AParent,ZParent,SParent);
     particleLeaves();
+    
     fs->setTotalEnergyBeforeInteraction(initialEnergy);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
   }

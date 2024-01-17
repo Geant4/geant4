@@ -51,6 +51,7 @@
 //
 // Implementation of e+e- pair production by muons
 // A.G. Bogdanov et al., IEEE Trans. Nuc. Sci., Vol.53, No.2, 2006
+// Base class for all pair production models for muons and hadrons.
 //
 // -------------------------------------------------------------------
 //
@@ -158,17 +159,25 @@ protected:
   G4double ymin = -5.0;
   G4double dy = 0.005;
 
-  G4int    currentZ = 0;
-  G4int    nYBinPerDecade = 4;
-  size_t   nbiny = 1000;
-  size_t   nbine = 0;
+  G4int currentZ = 0;
+  G4int nYBinPerDecade = 4;
+  std::size_t nbiny = 1000;
+  std::size_t nbine = 0;
 
   G4bool fTableToFile = false;
+
+  // static members
+  static const G4int NZDATPAIR = 5;
+  static const G4int NINTPAIR = 8;
+  static const G4int ZDATPAIR[NZDATPAIR];
+  static const G4double xgi[NINTPAIR];
+  static const G4double wgi[NINTPAIR];
 
 private:
 
   G4ParticleDefinition* theElectron;
   G4ParticleDefinition* thePositron;
+  G4String dataName{""};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -72,8 +72,7 @@ void HodoscopeHit::Draw()
   G4VisAttributes attribs;
   auto pVA = fPLogV->GetVisAttributes();
   if (pVA) attribs = *pVA;
-  G4Colour colour(0.,1.,1.);
-  attribs.SetColour(colour);
+  attribs.SetColour(G4Colour::Cyan());
   attribs.SetForceSolid(true);
   visManager->Draw(*fPLogV,attribs,trans);
 }

@@ -5,6 +5,11 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (exam-ext-vis-persp-V11-01-02)
+- Updated vis.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
 ## 2023-03-28 John Allison (exam-ext-vis-persp-V11-01-01)
 - PerspectiveVisAction.hh:
   - Remove unnecessary forward class declarations.

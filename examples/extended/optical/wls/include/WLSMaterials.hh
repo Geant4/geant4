@@ -53,15 +53,15 @@ class WLSMaterials
 
   static WLSMaterials* fInstance;
 
-  G4NistManager* fNistMan;
+  G4NistManager* fNistMan = nullptr;
 
-  G4Material* fAir;
-  G4Material* fPMMA;
-  G4Material* fPethylene;
-  G4Material* fFPethylene;
-  G4Material* fPolystyrene;
-  G4Material* fSilicone;
-  G4Material* fCoating;
+  G4Material* fAir = nullptr;
+  G4Material* fPMMA = nullptr;
+  G4Material* fPethylene = nullptr;
+  G4Material* fFPethylene = nullptr;
+  G4Material* fPolystyrene = nullptr;
+  G4Material* fSilicone = nullptr;
+  G4Material* fCoating = nullptr;
 };
 
 #endif /*WLSMaterials_h*/

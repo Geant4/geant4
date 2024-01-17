@@ -28,13 +28,14 @@
 // Author: P.Kent, 1996
 //
 // --------------------------------------------------------------------
-#include <ostream>
-
 #include "G4VoxelNavigation.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelSafety.hh"
 
 #include "G4AuxiliaryNavServices.hh"
+
+#include <cassert>
+#include <ostream>
 
 // ********************************************************************
 // Constructor
@@ -759,6 +760,17 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     ourSafety = voxelSafety;
   }
   return ourSafety;
+}
+
+void G4VoxelNavigation::RelocateWithinVolume( G4VPhysicalVolume*  motherPhysical,
+                                              const G4ThreeVector& localPoint )
+{
+  auto motherLogical = motherPhysical->GetLogicalVolume();
+
+  assert(motherLogical != nullptr);
+
+  if ( auto pVoxelHeader = motherLogical->GetVoxelHeader() )
+    VoxelLocate( pVoxelHeader, localPoint );
 }
 
 // ********************************************************************

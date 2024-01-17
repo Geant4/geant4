@@ -164,6 +164,7 @@ void G4EmParameters::Initialise()
   nbinsPerDecade = 7;
   verbose = 1;
   workerVerbose = 0;
+  nForFreeVector = 2;
   tripletConv = 0;
 
   fTransportationWithMsc = G4TransportationWithMscType::fDisabled;
@@ -996,6 +997,17 @@ void G4EmParameters::SetWorkerVerbose(G4int val)
 G4int G4EmParameters::WorkerVerbose() const 
 {
   return workerVerbose;
+}
+
+void G4EmParameters::SetNumberForFreeVector(G4int val)
+{
+  if(IsLocked()) { return; }
+  nForFreeVector = val;
+}
+
+G4int G4EmParameters::NumberForFreeVector() const 
+{
+  return nForFreeVector;
 }
 
 void G4EmParameters::SetTransportationWithMsc(G4TransportationWithMscType val)

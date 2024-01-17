@@ -454,6 +454,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   << " range= " <<currentRange<< " lambda= "<<lambda0
             <<G4endl;
   */
+  // extreme small step
+  if(tPathLength < tlimitminfix) {
+    latDisplasment = false;
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
+  }
+
   presafety = (stepStatus == fGeomBoundary) ? sp->GetSafety()
               : ComputeSafety(sp->GetPosition(), tPathLength);
   
@@ -1046,123 +1052,42 @@ void G4UrbanMscModel::SampleDisplacement(G4double, G4double phi)
    
 void G4UrbanMscModel::SampleDisplacementNew(G4double, G4double phi)
 {
-  // best sampling based on single scattering results
-  G4double rmax = 
+  // simple and fast sampling
+  // based on single scattering results
+  // u = (r/rmax)**2 : distribution from ss simulations
+  const G4double eps = 1.e-3;
+  const G4double rmax =
     std::sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-  G4double r(0.0);
-  G4double u(0.0);
-  static const G4double reps = 5.e-3;
-
+  
   if(rmax > 0.)
   {
-    static const G4double umax = 0.855;
-    static const G4double wlow = 0.750;
+    const G4double x0 = 0.73 ;
+    const G4double alpha = G4Log(7.33)/x0 ;
+    const G4double a1 = 1.-x0 ;
+    const G4double a2 = 1.-G4Exp(-alpha*x0) ;
+    const G4double a3 = G4Exp(alpha*x0)-1. ;
+    const G4double w1 = 2.*a2/(alpha*a1+2.*a2) ;
 
-    static const G4double  ralpha = 6.83e+0;          
-    static const G4double  ra1 =-4.16179e+1;       
-    static const G4double  ra2 = 1.12548e+2;       
-    static const G4double  ra3 =-8.66665e+1;        
-    static const G4double  ralpha1 = 0.751*ralpha;        
-    static const G4double  ralpha2 =ralpha-ralpha1;        
-    static const G4double  rwa1 = G4Exp(ralpha1*reps);
-    static const G4double  rwa2 = G4Exp(ralpha1*umax)-rwa1;
-    static const G4double  rejamax = 1.16456;
-
-    static const G4double  rbeta = 2.18e+1; 
-    static const G4double  rb0 = 4.81382e+2;
-    static const G4double  rb1 =-1.12842e+4;
-    static const G4double  rb2 = 4.57745e+4;
-    static const G4double  rbeta1 = 0.732*rbeta;
-    static const G4double  rbeta2 = rbeta-rbeta1;
-    static const G4double  rwb1 = G4Exp(-rbeta1*umax);
-    static const G4double  rwb2 = rwb1-G4Exp(-rbeta1*(1.-reps));
-    static const G4double  rejbmax = 1.62651;
-
-    G4int count = 0;
-    G4double uc,rej;
-
-    if(rndmEngineMod->flat() < wlow)
+    G4double r, sqx;
+    if (rmax/currentRange < eps)
     {
-      do {
-	   rndmEngineMod->flatArray(2, rndmarray);
-           u = G4Log(rwa1+rwa2*rndmarray[0])/ralpha1;
-           uc = umax-u;
-           rej = G4Exp(-ralpha2*uc)*
-                (1.+ralpha*uc+ra1*uc*uc+ra2*uc*uc*uc+ra3*uc*uc*uc*uc);
-         } while (rejamax*rndmarray[1] > rej && ++count < 1000);
+      r = 0.73*rmax ;
+      sqx = 1.;
     }
     else
     {
-      do {
-	   rndmEngineMod->flatArray(2, rndmarray);
-           u = -G4Log(rwb1-rwb2*rndmarray[0])/rbeta1;
-           uc = u-umax;
-           rej = G4Exp(-rbeta2*uc)*
-                (1.+rbeta*uc+rb0*uc*uc+rb1*uc*uc*uc+rb2*uc*uc*uc*uc);
-         } while (rejbmax*rndmarray[1] > rej && ++count < 1000);
+      rndmEngineMod->flatArray(2,rndmarray);
+      const G4double x = (rndmarray[0] < w1) ? G4Log(1. + a3*rndmarray[1])/alpha :
+        1. - a1*std::sqrt(1.-rndmarray[1]);
+
+      sqx = std::sqrt(x);
+      r = sqx*rmax;  
     }
-    r = rmax*u;
-  }
-                               
-  if(r > 0.)
-  {
-    // sample Phi using lateral correlation
-    // and r/rmax - (Phi-phi) correlation
-    // v = Phi-phi = acos(latcorr/(r*sth))
-    // from SS simulation f(v)*g(v)               
-    // f(v) ~ exp(-a1*v) normalized distribution
-    // g(v) rejection function (0 < g(v) <= 1)
-    G4double v, rej;
-                          
-    static const G4double peps = 1.e-4;
-    static const G4double palpha[10] = {2.300e+0,2.490e+0,2.610e+0,2.820e+0,2.710e+0,
-                                        2.750e+0,2.910e+0,3.400e+0,4.150e+0,5.400e+0};
-    static const G4double palpha1[10]= {4.600e-2,1.245e-1,2.610e-1,2.820e-1,2.710e-1,
-                                        6.875e-1,1.019e+0,1.360e+0,1.660e+0,2.430e+0};
-    static const G4double pejmax[10] = {3.513,1.968,1.479,1.239,1.116,
-                                        1.081,1.064,1.073,1.103,1.158};
-
-    static const G4double pa1[10] = { 3.218e+0, 2.412e+0, 2.715e+0, 2.787e+0, 2.541e+0,
-                                      2.508e+0, 2.600e+0, 3.231e+0, 4.588e+0, 6.584e+0};
-    static const G4double pa2[10] = {-5.528e-1, 2.523e+0, 1.738e+0, 2.082e+0, 1.423e+0,
-                                      4.682e-1,-6.883e-1,-2.147e+0,-5.127e+0,-1.054e+1};
-    static const G4double pa3[10] = { 3.618e+0, 2.032e+0, 2.341e+0, 2.172e+0, 7.205e-1,
-                                      4.655e-1, 6.318e-1, 1.255e+0, 2.425e+0, 4.938e+0};
-    static const G4double pa4[10] = { 2.437e+0, 9.450e-1, 4.349e-1, 2.221e-1, 1.130e-1,
-                                      5.405e-2, 2.245e-2, 7.370e-3, 1.456e-3, 1.508e-4};
-    static const G4double pw1[10] = {G4Exp(-palpha1[0]*peps),G4Exp(-palpha1[1]*peps),
-                                     G4Exp(-palpha1[2]*peps),G4Exp(-palpha1[3]*peps),
-                                     G4Exp(-palpha1[4]*peps),G4Exp(-palpha1[5]*peps),
-                                     G4Exp(-palpha1[6]*peps),G4Exp(-palpha1[7]*peps),
-                                     G4Exp(-palpha1[8]*peps),G4Exp(-palpha1[9]*peps)};
-    static const G4double pw2[10] = {pw1[0]-G4Exp(-palpha1[0]*(CLHEP::pi-peps)),
-                                     pw1[1]-G4Exp(-palpha1[1]*(CLHEP::pi-peps)),
-                                     pw1[2]-G4Exp(-palpha1[2]*(CLHEP::pi-peps)),
-                                     pw1[3]-G4Exp(-palpha1[3]*(CLHEP::pi-peps)),
-                                     pw1[4]-G4Exp(-palpha1[4]*(CLHEP::pi-peps)),
-                                     pw1[5]-G4Exp(-palpha1[5]*(CLHEP::pi-peps)),
-                                     pw1[6]-G4Exp(-palpha1[6]*(CLHEP::pi-peps)),
-                                     pw1[7]-G4Exp(-palpha1[7]*(CLHEP::pi-peps)),
-                                     pw1[8]-G4Exp(-palpha1[8]*(CLHEP::pi-peps)),
-                                     pw1[9]-G4Exp(-palpha1[9]*(CLHEP::pi-peps))};
-
-    G4int iphi = (G4int)(u*10.);
-    if(iphi < 0)      { iphi = 0; }
-    else if(iphi > 9) { iphi = 9; }
-    G4int count = 0;
-
-    do {
-      rndmEngineMod->flatArray(2, rndmarray);
-      v = -G4Log(pw1[iphi]-pw2[iphi]*rndmarray[0])/palpha1[iphi];
-      rej = (G4Exp(-palpha[iphi]*v)*
-            (1+pa1[iphi]*v+pa2[iphi]*v*v+pa3[iphi]*v*v*v)+pa4[iphi])/
-            G4Exp(-pw1[iphi]*v);
-    }
-    // Loop checking, 5-March-2018, Vladimir Ivanchenko
-    while (pejmax[iphi]*rndmarray[1] > rej && ++count < 1000);
-
-    G4double Phi = (rndmEngineMod->flat() < 0.5) ? phi+v : phi-v;
-    fDisplacement.set(r*std::cos(Phi),r*std::sin(Phi),0.0);
+    // Gaussian distribution for Phi-phi=psi 
+    const G4double sigma = 0.1+0.9*sqx;  
+    const G4double psi = G4RandGauss::shoot(0.,sigma);
+    const G4double Phi = phi+psi;  
+    fDisplacement.set(r*std::cos(Phi), r*std::sin(Phi), 0.0);
   }
 }
 
@@ -1182,7 +1107,10 @@ void G4UrbanMscModel::InitialiseModelCache()
     // new couple
     msc[j] = new mscData();
     G4double Zeff = aCouple->GetMaterial()->GetIonisation()->GetZeffective();
-    msc[j]->sqrtZ = std::sqrt(Zeff);
+    G4double sqrz = std::sqrt(Zeff);
+    msc[j]->sqrtZ = sqrz;
+    // parameterisation of step limitation
+    msc[j]->factmin = dispAlg96 ? 0.001 : 0.001/(1.+0.028*sqrz); 
     G4double lnZ = G4Log(Zeff);
     // correction in theta0 formula
     G4double w = G4Exp(lnZ/6.);

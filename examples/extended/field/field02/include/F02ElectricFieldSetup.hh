@@ -38,6 +38,8 @@
 #include "G4ElectricField.hh"
 #include "G4UniformElectricField.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 class G4FieldManager;
 class G4ChordFinder;
 class G4EquationOfMotion;
@@ -62,7 +64,7 @@ public:
 
   virtual ~F02ElectricFieldSetup();
 
-   // Methods to set parameters or select 
+   // Methods to set parameters or select
   void SetStepperType( G4int i) { fStepperType = i ; CreateStepper(); }
 
   void SetMinStep(G4double s) { fMinStep = s ; }
@@ -73,10 +75,10 @@ public:
    // Set/Get Field strength in Geant4 units
 
   void UpdateIntegrator();
-   // Prepare all the classes required for tracking - from stepper 
+   // Prepare all the classes required for tracking - from stepper
    //    to Chord-Finder
    //   NOTE:  field and equation must have been created before calling this.
-   
+
 protected:
 
   // Find the global Field Manager
@@ -87,26 +89,21 @@ protected:
    // Implementation method - should not be exposed
 
 private:
-  G4double                fMinStep;
-  G4bool                  fVerbose;
+  G4double                fMinStep = 0.010 * CLHEP::mm;
 
-  G4FieldManager*         fFieldManager;
+  G4FieldManager*         fFieldManager = nullptr;
+  G4ChordFinder*          fChordFinder = nullptr;
+  G4EqMagElectricField*   fEquation = nullptr;
+  G4ElectricField*        fEMfield = nullptr;
 
-  G4ChordFinder*          fChordFinder;
-
-  G4EqMagElectricField*   fEquation;
-
-  G4ElectricField*        fEMfield;
- 
   G4ThreeVector           fElFieldValue;
 
-  G4MagIntegratorStepper* fStepper;
-  G4MagInt_Driver*        fIntgrDriver;
+  G4MagIntegratorStepper* fStepper = nullptr;
+  G4MagInt_Driver*        fIntgrDriver = nullptr;
 
-  G4int                   fStepperType;
+  G4int                   fStepperType = 4;  // ClassicalRK4 -- the default stepper;
 
-   
-  F02FieldMessenger*      fFieldMessenger;
+  F02FieldMessenger*      fFieldMessenger = nullptr;
 
 };
 

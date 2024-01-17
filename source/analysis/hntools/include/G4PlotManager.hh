@@ -102,8 +102,10 @@ inline G4bool G4PlotManager::PlotAndWrite(
     G4String name = info->GetName();
     // skip plotting if not selected for plotting or
     // if activation is enabled and HT is inactivated
+    // or HT is delted
     if ( ( ! plotting ) ||
-         ( fState.GetIsActivation() && ( ! activation ) ) ) continue;
+         ( fState.GetIsActivation() && ( ! activation ) ) ||
+         ( info->GetDeleted() ) ) continue;
 
     // plot this object
     fViewer->plot(*ht);

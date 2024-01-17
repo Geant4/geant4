@@ -33,22 +33,16 @@
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIdirectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),
- fTrackdir(0),
- fMaterCmd(0),
- fSizeCmd(0),
- fMaxStepCmd(0),
- fMaxStepLength(0)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
+  : G4UImessenger(), fDetector(Det)
 {
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -56,32 +50,36 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fDetDir = new G4UIdirectory("/testem/det/");
   fDetDir->SetGuidance("detector construction commands");
 
-  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat", this);
   fMaterCmd->SetGuidance("Select material of the box.");
-  fMaterCmd->SetParameterName("choice",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd->SetParameterName("choice", false);
+  fMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
+  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize", this);
   fSizeCmd->SetGuidance("Set size of the box");
-  fSizeCmd->SetParameterName("Size",false);
+  fSizeCmd->SetParameterName("Size", false);
   fSizeCmd->SetRange("Size>0.");
   fSizeCmd->SetUnitCategory("Length");
-  fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  fMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
+  fGeomFileCmd = new G4UIcmdWithAString("/testem/det/GeomFile", this);
+  fGeomFileCmd->SetGuidance("Give sgml input file name like Box.gdml");
+  fGeomFileCmd->SetParameterName("choice", false);
+  fGeomFileCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax", this);
   fMaxStepCmd->SetGuidance("Set max allowed step size");
-  fMaxStepCmd->SetParameterName("Size",false);
+  fMaxStepCmd->SetParameterName("Size", false);
   fMaxStepCmd->SetRange("Size>0.");
   fMaxStepCmd->SetUnitCategory("Length");
   fMaxStepCmd->AvailableForStates(G4State_Idle);
 
   fTrackdir = new G4UIdirectory("/testem/tracking/");
   fTrackdir->SetGuidance("step length");
-  fMaxStepLength = 
-        new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
+  fMaxStepLength = new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength", this);
   fMaxStepLength->SetGuidance("Set the maximum length of tracking step");
   fMaxStepLength->SetGuidance("when integrating magnetic field line.");
-  fMaxStepLength->SetParameterName("Size",false);
+  fMaxStepLength->SetParameterName("Size", false);
   fMaxStepLength->SetRange("Size>0.");
   fMaxStepLength->SetUnitCategory("Length");
   fMaxStepLength->AvailableForStates(G4State_Idle);
@@ -89,32 +87,27 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  delete fMaterCmd;
-  delete fSizeCmd;
-  delete fMaxStepCmd;
-  delete fMaxStepLength;
-  delete fDetDir;
-  delete fTestemDir;
-  delete fTrackdir;
-}
+  if (command == fMaterCmd) {
+    fDetector->SetMaterial(newValue);
+  }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  if (command == fSizeCmd) {
+    fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));
+  }
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{
-  if( command == fMaterCmd )
-   { fDetector->SetMaterial(newValue);}
+  if (command == fMaxStepCmd) {
+    fDetector->SetMaxStepSize(fMaxStepCmd->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fSizeCmd )
-   { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
+  if (command == fMaxStepLength) {
+    fDetector->SetMaxStepLength(fMaxStepLength->GetNewDoubleValue(newValue));
+  }
 
-  if( command == fMaxStepCmd )
-   { fDetector->SetMaxStepSize(fMaxStepCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fMaxStepLength )
-   { fDetector->SetMaxStepLength(fMaxStepLength->GetNewDoubleValue(newValue));}
+  if (command == fGeomFileCmd) {
+    fDetector->SetGeomFileName(newValue);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

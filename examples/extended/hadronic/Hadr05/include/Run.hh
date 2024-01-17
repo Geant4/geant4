@@ -49,7 +49,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run() override;
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
@@ -62,19 +62,19 @@ class Run : public G4Run
     void EndOfRun();
      
   private:
-    DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fParticle;
-    G4double               fEkin;
+    DetectorConstruction*  fDetector = nullptr;
+    G4ParticleDefinition*  fParticle = nullptr;
+    G4double               fEkin = 0.;
                            
     G4double fSumEAbs [kMaxAbsor], fSum2EAbs [kMaxAbsor]; 
     G4double fSumLAbs [kMaxAbsor], fSum2LAbs [kMaxAbsor];
     
-    G4double fEdepTot, fEdepTot2;
+    G4double fEdepTot = 0., fEdepTot2 = 0.;
     
-    G4double fEnergyLeak[2];
-    G4double fEleakTot, fEleakTot2;
+    G4double fEnergyLeak[2] = {0., 0.};
+    G4double fEleakTot = 0., fEleakTot2 = 0.;
     
-    G4double fEtotal, fEtotal2;
+    G4double fEtotal = 0., fEtotal2 = 0.;
     
     std::map<G4String,G4int> fProcCounter;            
     std::vector<G4double>    fEnergyFlow;

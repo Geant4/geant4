@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// class G4Navigator Inline implementation
+// G4Navigator class Inline implementation
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 // ********************************************************************
 // GetCurrentLocalCoordinate
@@ -213,36 +213,6 @@ inline
 G4RotationMatrix G4Navigator::NetRotation() const
 {
   return fHistory.GetTopTransform().InverseNetRotation();
-}
-
-// ********************************************************************
-// CreateGRSVolume
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSVolume* G4Navigator::CreateGRSVolume() const
-{
-  const G4AffineTransform& tf = fHistory.GetTopTransform();
-  return new G4GRSVolume(fHistory.GetTopVolume(),
-                         tf.InverseNetRotation(),
-                         tf.InverseNetTranslation());
-}
-
-// ********************************************************************
-// CreateGRSSolid
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSSolid* G4Navigator::CreateGRSSolid() const
-{
-  const G4AffineTransform& tf = fHistory.GetTopTransform();
-  return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-                        tf.InverseNetRotation(),
-                        tf.InverseNetTranslation());
 }
 
 // ********************************************************************
@@ -478,12 +448,9 @@ G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 // ********************************************************************
 //
 inline
-G4VoxelNavigation& G4Navigator::GetVoxelNavigator() {
-#ifdef ALTERNATIVE_VOXEL_NAV
-      return *fpvoxelNav;
-#else
-      return fvoxelNav;
-#endif      
+G4VoxelNavigation& G4Navigator::GetVoxelNavigator()
+{
+  return *fpvoxelNav;
 }
 
 // ********************************************************************
@@ -505,16 +472,6 @@ G4VExternalNavigation* G4Navigator::GetExternalNavigation() const
   return fpExternalNav;
 } 
 
-// ********************************************************************
-// SetExternalNavigation
-// ********************************************************************
-//
-inline
-void G4Navigator::SetExternalNavigation(G4VExternalNavigation* externalNav)
-{
-  fpExternalNav = externalNav;
-}
-   
 // ********************************************************************
 // Clone
 // ********************************************************************

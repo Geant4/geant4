@@ -4,6 +4,25 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-21 Alex Howard (DMX-V11-01-03)
+- Fixed Bug #2503 and related to #2338 also removed redundant alpha_low.mac macro
+- Moved EM model Set methods in DMXPhysicsList to G4EmParameters
+
+## 2023-11-18 I. Hrivnacova (DMX-V11-01-02)
+- Updated initInter.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-11-16 Alex Howard (DMX-V11-01-01)
+- Fixed Bug #2338 (updated analysis, ambe_spectrum.mac)
+
+## 2023-11-10 Alberto Ribon (DMX-V11-01-00)
+- In all macro files, introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+
 ## 2022-09-09 Susanna Guatelli (DMX-V11-00-01)
 - Ranecu Engine removed. Default one now used
 

@@ -11,6 +11,9 @@
 #
 /run/initialize
 #
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
 /process/list
 #
 # rdm is applied only to the target volume

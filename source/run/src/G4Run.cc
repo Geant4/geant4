@@ -45,11 +45,12 @@ G4Run::G4Run()
 G4Run::~G4Run()
 {
   // Objects made by local thread should not be deleted by the master thread
-  G4RunManager::RMType rmType = G4RunManager::GetRunManager()->GetRunManagerType();
-  if (rmType != G4RunManager::masterRM) {
-    for (const auto& itr : *eventVector) {
-      delete itr;
-    }
+  G4RunManager::RMType rmType =
+    G4RunManager::GetRunManager()->GetRunManagerType();
+  if(rmType != G4RunManager::masterRM)
+  {
+    for(auto& itr : *eventVector)
+    { delete itr; }
   }
   delete eventVector;
 }
@@ -64,9 +65,8 @@ void G4Run::RecordEvent(const G4Event*)
 void G4Run::Merge(const G4Run* right)
 {
   numberOfEvent += right->numberOfEvent;
-  for (const auto& itr : *right->eventVector) {
-    eventVector->push_back(itr);
-  }
+  for(auto& itr : *(right->eventVector))
+  { eventVector->push_back(itr); }
 }
 
 // --------------------------------------------------------------------
@@ -74,3 +74,11 @@ void G4Run::StoreEvent(G4Event* evt)
 {
   eventVector->push_back(evt);
 }
+
+// --------------------------------------------------------------------
+void G4Run::MergeSubEvent(G4Event* /*masterEv*/, const G4Event* /*subEv*/)
+{
+ // trajectories are merged here.......
+ ;
+}
+

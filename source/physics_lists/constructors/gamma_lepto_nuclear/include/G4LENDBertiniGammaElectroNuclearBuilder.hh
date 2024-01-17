@@ -28,20 +28,19 @@
 
 #include "G4BertiniElectroNuclearBuilder.hh"
 
-//A. Dotti (June2013): No need to change this class for MT
-// Since each thread owns its own instance (created by G4EmExtraPhysics)
-
 class G4LENDBertiniGammaElectroNuclearBuilder
-:public G4BertiniElectroNuclearBuilder
+  : public G4BertiniElectroNuclearBuilder
 {
-  using base = G4BertiniElectroNuclearBuilder;
-  public: 
-    G4LENDBertiniGammaElectroNuclearBuilder(G4bool eNucl);
-    virtual ~G4LENDBertiniGammaElectroNuclearBuilder();
+public: 
+  explicit G4LENDBertiniGammaElectroNuclearBuilder(G4bool eNucl);
+  ~G4LENDBertiniGammaElectroNuclearBuilder() override = default;
 
-  public: 
-    virtual void Build();
+  void Build() override;
 
+  G4LENDBertiniGammaElectroNuclearBuilder& operator=
+  (const G4LENDBertiniGammaElectroNuclearBuilder& right) = delete;
+  G4LENDBertiniGammaElectroNuclearBuilder(const G4LENDBertiniGammaElectroNuclearBuilder&) = delete;
 };
+
 #endif
 

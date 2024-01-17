@@ -1,7 +1,8 @@
 #
-# (Edit the next line(s) to choose another graphic system)
-#
-/vis/open OGL
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
 # draw all worlds
 /vis/drawVolume worlds

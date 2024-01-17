@@ -189,10 +189,10 @@ namespace G4INCL {
 						fi=(2.0*pi)*Random::shoot();		
 						
 						ThreeVector mom_nucleon1(
-																														pn*std::sin(teta)*std::cos(fi),
-																														pn*std::sin(teta)*std::sin(fi),
-																														pn*std::cos(teta)
-																														);
+						   pn*std::sin(teta)*std::cos(fi),
+						   pn*std::sin(teta)*std::sin(fi),
+						   pn*std::cos(teta)
+						);
 						
 						mom_nucleon = -mom_nucleon1	;
 					

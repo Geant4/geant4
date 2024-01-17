@@ -44,6 +44,7 @@
 #include "G4INCLCrossSectionsTruncatedMultiPions.hh"
 #include "G4INCLCrossSectionsMultiPionsAndResonances.hh"
 #include "G4INCLCrossSectionsStrangeness.hh"
+#include "G4INCLCrossSectionsAntiparticles.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -287,7 +288,31 @@ namespace G4INCL {
     G4double NKbToLpi(Particle const * const p1, Particle const * const p2) {
       return theCrossSections->NKbToLpi(p1,p2);
     }
-
+       
+    G4double NNbarElastic(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarElastic(p1,p2);
+    }
+    G4double NNbarCEX(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarCEX(p1,p2);
+    }
+    G4double NNbarToLLbar(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarToLLbar(p1,p2);
+    }
+      
+    G4double NNbarToNNbarpi(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarToNNbarpi(p1,p2);
+    }
+    G4double NNbarToNNbar2pi(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarToNNbar2pi(p1,p2);
+    }
+    G4double NNbarToNNbar3pi(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarToNNbar3pi(p1,p2);
+    }
+     
+    G4double NNbarToAnnihilation(Particle const* const p1, Particle const* const p2){
+      return theCrossSections->NNbarToAnnihilation(p1,p2);
+    }
+    
     G4double NKbToS2pi(Particle const * const p1, Particle const * const p2) {
       return theCrossSections->NKbToS2pi(p1,p2);
     }
@@ -483,6 +508,8 @@ namespace G4INCL {
 			  setCrossSections(new CrossSectionsMultiPionsAndResonances);
 			else if(crossSections == StrangenessCrossSections)
 			  setCrossSections(new CrossSectionsStrangeness);
+      else if(crossSections == AntiparticlesCrossSections)
+        setCrossSections(new CrossSectionsAntiparticles);
 	  }
   }
 }

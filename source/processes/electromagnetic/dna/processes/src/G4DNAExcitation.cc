@@ -42,7 +42,7 @@ using namespace std;
 
 G4DNAExcitation::G4DNAExcitation(const G4String& processName,
                                  G4ProcessType type) :
-    G4VEmProcess(processName, type), isInitialised(false)
+    G4VEmProcess(processName, type) 
 {
   SetProcessSubType(fLowEnergyExcitation);
 }
@@ -81,7 +81,7 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
       // Born model
       if(nullptr == EmModel(0))
       {
-        G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
+        auto  born = new G4DNABornExcitationModel();
         SetEmModel(born);
         born->SetLowEnergyLimit(9 * eV);
         born->SetHighEnergyLimit(1 * MeV);
@@ -92,7 +92,7 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(nullptr == EmModel(0))
       {
-        G4LEPTSExcitationModel* lepts = new G4LEPTSExcitationModel();
+        auto  lepts = new G4LEPTSExcitationModel();
         SetEmModel(lepts);
         lepts->SetLowEnergyLimit(1 * eV);
         lepts->SetHighEnergyLimit(1 * MeV);
@@ -103,13 +103,13 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(nullptr == EmModel(0))
       {
-        G4DNAMillerGreenExcitationModel* miller =
+        auto  miller =
             new G4DNAMillerGreenExcitationModel();
         SetEmModel(miller);
         miller->SetLowEnergyLimit(10 * eV);
         miller->SetHighEnergyLimit(500 * keV);
 
-        G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
+        auto  born = new G4DNABornExcitationModel();
         SetEmModel(born);
         born->SetLowEnergyLimit(500 * keV);
         born->SetHighEnergyLimit(100 * MeV);
@@ -122,7 +122,7 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(nullptr == EmModel(0))
       {
-        G4DNAMillerGreenExcitationModel* miller =
+        auto  miller =
             new G4DNAMillerGreenExcitationModel;
         SetEmModel(miller);
         miller->SetLowEnergyLimit(10 * eV);
@@ -134,7 +134,7 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(nullptr == EmModel(0))
       {
-        G4DNAMillerGreenExcitationModel* miller =
+        auto  miller =
             new G4DNAMillerGreenExcitationModel;
         SetEmModel(miller);
         miller->SetLowEnergyLimit(1 * keV);

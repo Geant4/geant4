@@ -36,7 +36,7 @@
 class G4DNAUeharaScreenedRutherfordElasticModel : public G4VEmModel
 {
 public:
-  G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition* p = 0, 
+  G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition* p = nullptr, 
               const G4String& nam = "DNAUeharaScreenedRutherfordElasticModel");
 
   ~G4DNAUeharaScreenedRutherfordElasticModel() override = default;

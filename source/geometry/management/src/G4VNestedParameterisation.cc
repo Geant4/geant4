@@ -32,7 +32,6 @@
 
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VTouchable.hh"
 
 // --------------------------------------------------------------------
 G4VSolid* G4VNestedParameterisation::ComputeSolid(const G4int, 

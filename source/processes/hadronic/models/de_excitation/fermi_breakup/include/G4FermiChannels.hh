@@ -36,86 +36,40 @@
 #include "G4FermiPair.hh"
 #include <vector>
 
-class G4FermiChannels 
+class G4FermiChannels
 {
 public:
 
-  explicit G4FermiChannels(size_t nmax, G4double ex, G4double gmass) 
-    : nch(0), excitation(ex), ground_mass(gmass) 
-  { fvect.reserve(nmax); cum_prob.reserve(nmax); };
+  explicit G4FermiChannels(const G4FermiFragment* ptr) : frag(ptr) {}
+  ~G4FermiChannels() { for (auto const & p : fvect) { delete p; } }
 
-  inline size_t GetNumberOfChannels() const;
-  inline const std::vector<const G4FermiPair*>& GetChannels() const;
-  inline const G4FermiPair* GetPair(size_t idx) const;
-  inline const G4FermiPair* SamplePair(G4double rand) const;
+  G4int GetZ() const { return frag->GetZ(); }
+  const G4FermiFragment* GetFragment() const { return frag; }
 
-  inline void AddChannel(const G4FermiPair*);
-  inline std::vector<G4double>& GetProbabilities();
+  std::size_t NumberPairs() const { return nch; }
+  const std::vector<G4FermiPair*>& GetChannels() const { return fvect; }
+  const G4FermiPair* GetPair(std::size_t idx) const {
+    return (idx < nch) ? fvect[idx] : nullptr;
+  }
 
-  inline G4double GetExcitation() const;
-  inline G4double GetMass() const;
+  void AddChannel(G4FermiPair* ptr) {
+    fvect.push_back(ptr);
+    ++nch;
+  }
+
+  G4double GetExcitation() const { return frag->GetExcitationEnergy(); }
+  G4double GetMass() const { return frag->GetTotalEnergy(); }
+
+  inline const G4FermiChannels& operator=(const G4FermiChannels&) = delete;
+  inline G4FermiChannels(const G4FermiChannels &) = delete;
+  inline G4bool operator==(const G4FermiChannels &) = delete;
+  inline G4bool operator!=(const G4FermiChannels &) = delete;
 
 private:
 
-  inline const G4FermiChannels& operator=(const G4FermiChannels&);
-  inline G4FermiChannels(const G4FermiChannels &);
-  inline G4bool operator==(const G4FermiChannels &);
-  inline G4bool operator!=(const G4FermiChannels &);
-
-  size_t nch;
-  G4double excitation;
-  G4double ground_mass;
-  std::vector<const G4FermiPair*> fvect;
-  std::vector<G4double> cum_prob;
-
+  const G4FermiFragment* frag;
+  std::size_t nch{0};
+  std::vector<G4FermiPair*> fvect;
 };
 
-inline size_t G4FermiChannels::GetNumberOfChannels() const
-{
-  return nch;
-}
-
-inline const std::vector<const G4FermiPair*>& G4FermiChannels::GetChannels() const
-{
-  return fvect;
-}
-
-inline const G4FermiPair* G4FermiChannels::GetPair(size_t idx) const
-{
-  return (idx < nch) ? fvect[idx] : nullptr;
-}
-
-inline const G4FermiPair* G4FermiChannels::SamplePair(G4double rand) const
-{
-  const G4FermiPair* ptr = nullptr;
-  for(size_t i=0; i<nch; ++i) { 
-    if(rand <= cum_prob[i]) { ptr = fvect[i]; break; }
-  }
-  return ptr;
-}
-
-inline void G4FermiChannels::AddChannel(const G4FermiPair* ptr)
-{
-  fvect.push_back(ptr);
-  cum_prob.push_back(1.0);
-  ++nch;
-}
-
-inline std::vector<G4double>& G4FermiChannels::GetProbabilities()
-{
-  return cum_prob;
-}
-
-inline G4double G4FermiChannels::GetExcitation() const
-{
-  return excitation;
-}
-
-inline G4double G4FermiChannels::GetMass() const
-{
-  return excitation + ground_mass;
-}
-
 #endif
-
-

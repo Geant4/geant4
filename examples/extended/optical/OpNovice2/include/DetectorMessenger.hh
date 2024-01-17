@@ -51,33 +51,32 @@ class DetectorMessenger : public G4UImessenger
 {
  public:
   DetectorMessenger(DetectorConstruction*);
-  ~DetectorMessenger();
+  ~DetectorMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  DetectorConstruction* fDetector;
-
-  G4UIdirectory* fOpticalDir;
+  DetectorConstruction* fDetector = nullptr;
+  G4UIdirectory* fOpticalDir = nullptr;
 
   // the surface
-  G4UIcmdWithAString* fSurfaceTypeCmd;
-  G4UIcmdWithAString* fSurfaceFinishCmd;
-  G4UIcmdWithAString* fSurfaceModelCmd;
-  G4UIcmdWithADouble* fSurfaceSigmaAlphaCmd;
-  G4UIcmdWithADouble* fSurfacePolishCmd;
-  G4UIcmdWithAString* fSurfaceMatPropVectorCmd;
-  G4UIcmdWithAString* fSurfaceMatPropConstCmd;
+  G4UIcmdWithAString* fSurfaceTypeCmd = nullptr;
+  G4UIcmdWithAString* fSurfaceFinishCmd = nullptr;
+  G4UIcmdWithAString* fSurfaceModelCmd = nullptr;
+  G4UIcmdWithADouble* fSurfaceSigmaAlphaCmd = nullptr;
+  G4UIcmdWithADouble* fSurfacePolishCmd = nullptr;
+  G4UIcmdWithAString* fSurfaceMatPropVectorCmd = nullptr;
+  G4UIcmdWithAString* fSurfaceMatPropConstCmd = nullptr;
 
   // the box
-  G4UIcmdWithAString* fTankMatPropVectorCmd;
-  G4UIcmdWithAString* fTankMatPropConstCmd;
-  G4UIcmdWithAString* fTankMaterialCmd;
+  G4UIcmdWithAString* fTankMatPropVectorCmd = nullptr;
+  G4UIcmdWithAString* fTankMatPropConstCmd = nullptr;
+  G4UIcmdWithAString* fTankMaterialCmd = nullptr;
 
   // the world
-  G4UIcmdWithAString* fWorldMatPropVectorCmd;
-  G4UIcmdWithAString* fWorldMatPropConstCmd;
-  G4UIcmdWithAString* fWorldMaterialCmd;
+  G4UIcmdWithAString* fWorldMatPropVectorCmd = nullptr;
+  G4UIcmdWithAString* fWorldMatPropConstCmd = nullptr;
+  G4UIcmdWithAString* fWorldMaterialCmd = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

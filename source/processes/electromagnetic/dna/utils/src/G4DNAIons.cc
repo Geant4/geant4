@@ -73,8 +73,7 @@ G4DNAIons::G4DNAIons(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAIons::~G4DNAIons()
-{
-}
+= default;
 
 
 

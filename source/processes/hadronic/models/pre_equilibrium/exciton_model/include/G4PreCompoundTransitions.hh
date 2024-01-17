@@ -53,7 +53,7 @@ public:
 
   G4PreCompoundTransitions();
 
-  virtual ~G4PreCompoundTransitions();
+  ~G4PreCompoundTransitions() override = default;
 
   G4double CalculateProbability(const G4Fragment & aFragment) override;
   
@@ -68,7 +68,7 @@ public:
 private:
 
   const G4ParticleDefinition* proton;
-  G4NuclearLevelData* fNuclData;  
+  G4NuclearLevelData* fNuclData;
 
   G4double FermiEnergy;
   G4double r0;  // Nuclear radius

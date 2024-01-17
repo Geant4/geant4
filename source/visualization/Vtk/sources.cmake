@@ -3,11 +3,13 @@
 geant4_add_module(G4visVtk
   PUBLIC_HEADERS
     G4Vtk.hh
+    G4VtkOffscreen.hh
   PRIVATE_HEADERS
     G4VtkUtility.hh
     G4VtkMessenger.hh
     G4VtkSceneHandler.hh
     G4VtkViewer.hh
+    G4VtkOffscreenViewer.hh
     G4VtkInteractorStyle.hh
     G4VtkStore.hh
     G4VtkVisContext.hh
@@ -15,7 +17,6 @@ geant4_add_module(G4visVtk
     G4VtkCutterPipeline.hh
     G4VtkClipClosedSurfacePipeline.hh
     G4VtkClipOpenPipeline.hh
-    #G4VtkClipperClosedPipeline.hh
     G4VtkImagePipeline.hh
     G4VtkPolydataPipeline.hh
     G4VtkPolydataInstancePipeline.hh
@@ -35,16 +36,17 @@ geant4_add_module(G4visVtk
 
   SOURCES
     G4Vtk.cc
+    G4VtkOffscreen.cc
     G4VtkUtility.cc
     G4VtkMessenger.cc
     G4VtkSceneHandler.cc
     G4VtkViewer.cc
+    G4VtkOffscreenViewer.cc
     G4VtkInteractorStyle.cc
     G4VtkStore.cc
     G4VtkCutterPipeline.cc
     G4VtkClipClosedSurfacePipeline.cc
     G4VtkClipOpenPipeline.cc
-    #G4VtkClipperClosedPipeline.cc
     G4VtkImagePipeline.cc
     G4VtkPolydataPipeline.cc
     G4VtkPolydataInstancePipeline.cc
@@ -70,9 +72,11 @@ geant4_module_link_libraries(G4visVtk
     G4geometrymng
     G4globman
     G4graphics_reps
+    G4hepgeometry
     G4intercoms
     G4materials
     G4modeling
+    G4specsolids
     ${VTK_LIBRARIES})
 
 # - VTK-Qt if Qt enabled

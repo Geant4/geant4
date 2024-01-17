@@ -31,9 +31,8 @@
 #include "G4MoleculeCounter.hh"
 #include "G4DNAScavengerMaterial.hh"
 #include "G4Scheduler.hh"
-G4DNAUpdateSystemModel::G4DNAUpdateSystemModel()
-  : G4VUpdateSystemModel()
-{}
+
+G4DNAUpdateSystemModel::G4DNAUpdateSystemModel() = default;
 
 void G4DNAUpdateSystemModel::SetMesh(G4DNAMesh* pMesh) { fpMesh = pMesh; }
 void G4DNAUpdateSystemModel::KillMolecule(const Index& index, MolType type)

@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -45,6 +45,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -408,19 +412,22 @@ nb event 160000
 nb event 165000
 nb event 170000
 nb event 175000
-1%  Precision reached!
+nb event 180000
+nb event 185000
+nb event 190000
+nb event 195000
  Run terminated.
 Run Summary
-  Run Aborted after 175200 events processed.
-  User=61.180000s Real=72.553937s Sys=0.170000s
+  Number of events processed : 200000
+  User=73.170000s Real=93.467761s Sys=0.060000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.0016474
-error[MeV] = 1.64738e-05
+normalised edep [MeV] = 0.00163827
+error[MeV] = 1.70862e-05
 
 ----> Histogram Tree is saved in adjoint_sim.
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 1
-Dynamic pools deleted: 13 / Total memory freed: 28 MB
+Dynamic pools deleted: 13 / Total memory freed: 32 MB
 ============================================================

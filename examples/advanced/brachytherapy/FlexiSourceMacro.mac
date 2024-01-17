@@ -3,6 +3,8 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 #### Define the geometry of the Flexi source
 /source/switch Flexi
 ###### Generation of primary field

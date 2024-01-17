@@ -38,6 +38,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
+#include "G4RunManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -58,29 +59,42 @@ DetectorConstruction::DetectorConstruction()
   fBoxSizeXY = 50*mm;
   fBoxSizeZ = 5*mm;
   fWorldSize = 1.*m;
-  SetTargetMaterial("G4_Fe");  
-  SetWorldMaterial("G4_Galactic");  
+  ConstructMaterials();
   fMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ 
+{
   delete fMessenger;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ConstructMaterials()
+{
+  auto nistManager = G4NistManager::Instance();
+
+  fTargetMaterial = nistManager->FindOrBuildMaterial("G4_Fe");
+  if(fTargetMaterial == nullptr) {
+    G4cerr << "### ERROR - Material: <"
+	  << "G4_Fe" << "> not found" << G4endl;
+  }
+
+  fWorldMaterial = nistManager->FindOrBuildMaterial("G4_Galactic");
+  if(fWorldMaterial == nullptr) {
+    G4cerr << "### ERROR -  Material: <"
+	  << "G4_Galactic" << "> not found" << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4LogicalVolume* lBox;
+
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Cleanup old geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-  
-  G4PolarizationManager::GetInstance()->Clean();
+  // G4PolarizationManager::GetInstance()->Clean();
 
   // World
   //
@@ -88,7 +102,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   sWorld = new G4Box("World",                            //name
                    fWorldSize/2,fWorldSize/2,fWorldSize/2); //dimensions
 
-  G4LogicalVolume*                                                                 
+  G4LogicalVolume*
   lWorld = new G4LogicalVolume(sWorld,                   //shape
                                fWorldMaterial,           //material
                               "World");                  //name
@@ -100,14 +114,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                              0,                          //mother volume
                              false,                      //no boolean operation
                              0);                         //copy number
-                                                      
+
   // Box
-  //                           
+  //
   G4Box*
   sBox = new G4Box("Container",                           //its name
                    fBoxSizeXY/2.,fBoxSizeXY/2.,fBoxSizeZ/2.);//its dimensions
-                   
-  G4LogicalVolume*
+
+  //G4LogicalVolume*
   lBox = new G4LogicalVolume(sBox,                        //its shape
                              fTargetMaterial,             //its material
                              "theBox");                   //its name
@@ -120,15 +134,20 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                            false,                         //no boolean operation
                            0);                            //copy number
 
-  // register logical Volume in PolarizationManager with zero polarization
-  G4PolarizationManager * polMgr = G4PolarizationManager::GetInstance();
-  polMgr->SetVolumePolarization(lBox,G4ThreeVector(0.,0.,0.));
-                           
   PrintParameters();
-  
+
   //always return the root volume
   //
   return fWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ConstructSDandField()
+{
+  // register logical Volume in PolarizationManager with zero polarization
+  G4PolarizationManager * polMgr = G4PolarizationManager::GetInstance();
+  polMgr->SetVolumePolarization(lBox,G4ThreeVector(0.,0.,0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,11 +170,12 @@ void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
   if (mat != fTargetMaterial) {
     if(mat) {
       fTargetMaterial = mat;
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
       UpdateGeometry();
     } else {
       G4cout << "### Warning!  Target material: <"
-           << materialChoice << "> not found" << G4endl;  
-    }     
+           << materialChoice << "> not found" << G4endl;
+    }
   }
 }
 
@@ -169,11 +189,12 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
   if (mat != fWorldMaterial) {
     if(mat) {
       fWorldMaterial = mat;
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
       UpdateGeometry();
     } else {
       G4cout << "### Warning! World material: <"
-           << materialChoice << "> not found" << G4endl;  
-    }     
+           << materialChoice << "> not found" << G4endl;
+    }
   }
 }
 
@@ -181,14 +202,14 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
 void DetectorConstruction::SetSizeXY(G4double value)
 {
-  fBoxSizeXY = value; 
+  fBoxSizeXY = value;
   if (fWorldSize<fBoxSizeXY) fWorldSize = 1.2*fBoxSizeXY;
   UpdateGeometry();
 }
 
 void DetectorConstruction::SetSizeZ(G4double value)
 {
-  fBoxSizeZ = value; 
+  fBoxSizeZ = value;
   if (fWorldSize<fBoxSizeZ) fWorldSize = 1.2*fBoxSizeZ;
   UpdateGeometry();
 }
@@ -199,8 +220,9 @@ void DetectorConstruction::SetSizeZ(G4double value)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  if (fWorld) 
-    G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+  // if (fWorld)
+  //   G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

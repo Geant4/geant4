@@ -71,9 +71,9 @@ geometry information. It has to get by itself geometry information that, in the
 case of information of the mass geometry, are provided in the G4StepPoint objects
 (pre step point, post step point) of the G4Step. Here, in the
 DistanceToApplyOperation(...), which is called at the beginning of the step, it
-gets a "snapshot" of the geometry state keeping a G4TouchableHistoryHandle. Then
+gets a "snapshot" of the geometry state keeping a G4TouchableHandle. Then
 in the GenerateBiasingFinalState, which is called at the end of the step, it gets
-the new geometry state, with an other G4TouchableHistoryHandle. For a step that
+the new geometry state, with an other G4TouchableHandle. For a step that
 ends on the boundary, this last touchable history will logically point to the
 next volume. In this case, the biasing is applied, and the importances are
 obtained from the replica numbers taken from the two touchable histories, and

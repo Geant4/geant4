@@ -90,7 +90,7 @@ namespace G4INCL {
       virtual G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
       virtual G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
 			
-			   /// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
+			/// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
       virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);			
       virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);	  
 			
@@ -99,17 +99,17 @@ namespace G4INCL {
       virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
       virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
 	  
-	     /// \brief Cross section for Eta production - NN entrance channel
+	    /// \brief Cross section for Eta production - NN entrance channel
       virtual G4double NNToNNEta(Particle const * const particle1, Particle const * const particle2);
 			
-		   	/// \brief Cross section for Eta production  (exclusive) - NN entrance channel
-		   	virtual G4double NNToNNEtaExclu(Particle const * const particle1, Particle const * const particle2);
+		  /// \brief Cross section for Eta production  (exclusive) - NN entrance channel
+		  virtual G4double NNToNNEtaExclu(Particle const * const particle1, Particle const * const particle2);
 	  
-		   	/// \brief Cross section for X pion production - NNEta Channel
-			   virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+		  /// \brief Cross section for X pion production - NNEta Channel
+			virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
 	  
-		   	/// \brief Cross section for N-Delta-Eta production - NNEta Channel
-		   	virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);			
+		  /// \brief Cross section for N-Delta-Eta production - NNEta Channel
+		  virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);			
 	  
       /// \brief Cross section for Eta production - NN entrance channel
       virtual G4double NNToNNOmega(Particle const * const particle1, Particle const * const particle2);
@@ -151,9 +151,9 @@ namespace G4INCL {
       /// \brief Nucleon-Pion to Stange particles cross sections
       virtual G4double NpiToLK(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToSK(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
-		virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
+		  virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToLKpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToSKpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NpiToLK2pi(Particle const * const p1, Particle const * const p2);
@@ -180,7 +180,21 @@ namespace G4INCL {
       virtual G4double NKbToL2pi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
       virtual G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief antiparticle cross sections
+      /// \brief Nucleon-AntiNucleon to Baryon-AntiBaryon cross sections
+      virtual G4double NNbarElastic(Particle const* const p1, Particle const* const p2);
+      virtual G4double NNbarCEX(Particle const* const p1, Particle const* const p2);
 
+      virtual G4double NNbarToLLbar(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-AntiNucleon to Nucleon-AntiNucleon + pions cross sections
+      virtual G4double NNbarToNNbarpi(Particle const* const p1, Particle const* const p2);
+      virtual G4double NNbarToNNbar2pi(Particle const* const p1, Particle const* const p2);
+      virtual G4double NNbarToNNbar3pi(Particle const* const p1, Particle const* const p2);
+     
+      /// \brief Nucleon-AntiNucleon total annihilation cross sections
+      virtual G4double NNbarToAnnihilation(Particle const* const p1, Particle const* const p2);
 
     protected:
       /// \brief Maximum number of outgoing pions in NN collisions

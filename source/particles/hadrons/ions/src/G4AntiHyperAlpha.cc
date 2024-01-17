@@ -28,27 +28,26 @@
 //----------------------------------------------------------------------------
 
 #include "G4AntiHyperAlpha.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                   ANTI  HYPERALPHA                             ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4AntiHyperAlpha* G4AntiHyperAlpha::theInstance = nullptr;
 
-
-G4AntiHyperAlpha* G4AntiHyperAlpha::Definition() {
-  if ( theInstance != nullptr ) return theInstance;
+G4AntiHyperAlpha* G4AntiHyperAlpha::Definition()
+{
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_hyperalpha";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
-  if ( anInstance == nullptr ) {
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
     // create particle
     //
     //    Arguments for constructor are as follows
@@ -58,7 +57,9 @@ G4AntiHyperAlpha* G4AntiHyperAlpha::Definition() {
     //                            type    lepton number   baryon number   PDG encoding
     //                          stable         lifetime     decay table
     //                      shortlived          subType   anti_encoding
-    //                      excitation 
+    //                      excitation
+
+    // clang-format off
     anInstance = new G4Ions(      name,     3921.87*MeV, 2.501e-12*MeV,   -2.0*eplus,
                                      0,              +1,             0,
                                      0,               0,             0,
@@ -66,15 +67,17 @@ G4AntiHyperAlpha* G4AntiHyperAlpha::Definition() {
                                  false,       0.2631*ns,       nullptr,
 		                 false,        "static",    1010020040, 
 		                   0.0,                0                             );
-    // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2.0/(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.97896248 * mN );
+    // clang-format on
 
-    // create Decay Table 
-    auto  table = new G4DecayTable;
+    // Magnetic Moment
+    G4double mN = eplus * hbar_Planck / 2.0 / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(2.97896248 * mN);
+
+    // create Decay Table
+    auto table = new G4DecayTable;
     // create decay channels
-    /*   
-    // The decay "mode[1]" produces the secondary "anti_Li4" which is not existing 
+    /*
+    // The decay "mode[1]" produces the secondary "anti_Li4" which is not existing
     // in Geant4: we therefore skip it for the time being (similarly for hyperalpha,
     // to keep the symmetry between particle and anti-particle).
     const G4double half_br_lambda_to_p_pim = 0.5*0.639;
@@ -94,31 +97,32 @@ G4AntiHyperAlpha* G4AntiHyperAlpha::Definition() {
     */
     // Replacement decay for the time being
     const G4double br_lambda_to_p_pim = 0.639;
-    const G4double half_br_lambda_to_n_piz = 0.5*0.358;
-    auto  mode = new G4VDecayChannel*[3];
+    const G4double half_br_lambda_to_n_piz = 0.5 * 0.358;
+    auto mode = new G4VDecayChannel*[3];
     // anti_lambda -> anti_proton + pi+ , with 0% probability of capturing the anti_proton
-    mode[0] = new G4PhaseSpaceDecayChannel( "anti_hyperalpha", br_lambda_to_p_pim, 3,
-                                            "anti_He3", "anti_proton", "pi+" );
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_hyperalpha", br_lambda_to_p_pim, 3, "anti_He3",
+                                           "anti_proton", "pi+");
     // anti_lambda -> anti_neutron + pi0 , with 50% probability of capturing the anti_neutron
-    mode[1] = new G4PhaseSpaceDecayChannel( "anti_hyperalpha", half_br_lambda_to_n_piz, 3,
-                                            "anti_He3", "anti_neutron", "pi0" );
-    mode[2] = new G4PhaseSpaceDecayChannel( "anti_hyperalpha", half_br_lambda_to_n_piz, 2,
-                                            "anti_alpha", "pi0" );
-    for ( G4int index = 0; index < 3; ++index ) table->Insert( mode[index] );
+    mode[1] = new G4PhaseSpaceDecayChannel("anti_hyperalpha", half_br_lambda_to_n_piz, 3,
+                                           "anti_He3", "anti_neutron", "pi0");
+    mode[2] = new G4PhaseSpaceDecayChannel("anti_hyperalpha", half_br_lambda_to_n_piz, 2,
+                                           "anti_alpha", "pi0");
+    for (G4int index = 0; index < 3; ++index)
+      table->Insert(mode[index]);
     //---
-    delete [] mode;
-    anInstance->SetDecayTable( table );        
+    delete[] mode;
+    anInstance->SetDecayTable(table);
   }
-  theInstance = static_cast< G4AntiHyperAlpha* >( anInstance );
+  theInstance = static_cast<G4AntiHyperAlpha*>(anInstance);
   return theInstance;
 }
 
-
-G4AntiHyperAlpha* G4AntiHyperAlpha::AntiHyperAlphaDefinition() {
+G4AntiHyperAlpha* G4AntiHyperAlpha::AntiHyperAlphaDefinition()
+{
   return Definition();
 }
 
-
-G4AntiHyperAlpha* G4AntiHyperAlpha::AntiHyperAlpha() {
+G4AntiHyperAlpha* G4AntiHyperAlpha::AntiHyperAlpha()
+{
   return Definition();
 }

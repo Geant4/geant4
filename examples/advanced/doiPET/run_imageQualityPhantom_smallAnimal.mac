@@ -13,6 +13,8 @@
 /run/initialize
 /run/verbose 2
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 #### The activity strength of all hot regions is the same. Only volume consideration is used to calculate the intensity
 

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,33 +35,20 @@
 #ifndef G4AntiKaonZero_h
 #define G4AntiKaonZero_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                       ANTI KAONZERO                            ###
-// ######################################################################
 
 class G4AntiKaonZero : public G4ParticleDefinition
 {
- private:
-   static G4AntiKaonZero* theInstance;
-   G4AntiKaonZero(){}
-   ~G4AntiKaonZero() override= default;
+  public:
+    static G4AntiKaonZero* Definition();
+    static G4AntiKaonZero* AntiKaonZeroDefinition();
+    static G4AntiKaonZero* AntiKaonZero();
 
- public:
-   static G4AntiKaonZero* Definition();
-   static G4AntiKaonZero* AntiKaonZeroDefinition();
-   static G4AntiKaonZero* AntiKaonZero();
+  private:
+    G4AntiKaonZero() {}
+    ~G4AntiKaonZero() override = default;
+
+    static G4AntiKaonZero* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-

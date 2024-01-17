@@ -44,9 +44,8 @@ class LXeEventAction : public G4UserEventAction
 {
  public:
   LXeEventAction(const LXeDetectorConstruction*);
-  ~LXeEventAction();
+  ~LXeEventAction() override;
 
- public:
   void BeginOfEventAction(const G4Event*) override;
   void EndOfEventAction(const G4Event*) override;
 
@@ -98,37 +97,37 @@ class LXeEventAction : public G4UserEventAction
   G4int GetPMTSAboveThreshold() { return fPMTsAboveThreshold; }
 
  private:
-  LXeEventMessenger* fEventMessenger;
-  const LXeDetectorConstruction* fDetector;
+  LXeEventMessenger* fEventMessenger = nullptr;
+  const LXeDetectorConstruction* fDetector = nullptr;
 
-  G4int fScintCollID;
-  G4int fPMTCollID;
+  G4int fScintCollID = -1;
+  G4int fPMTCollID = -1;
 
-  G4int fVerbose;
+  G4int fVerbose = 0;
 
-  G4int fPMTThreshold;
+  G4int fPMTThreshold = 1;
 
-  G4bool fForcedrawphotons;
-  G4bool fForcenophotons;
+  G4bool fForcedrawphotons = false;
+  G4bool fForcenophotons = false;
 
-  G4int fHitCount;
-  G4int fPhotonCount_Scint;
-  G4int fPhotonCount_Ceren;
-  G4int fAbsorptionCount;
-  G4int fBoundaryAbsorptionCount;
+  G4int fHitCount = 0;
+  G4int fPhotonCount_Scint = 0;
+  G4int fPhotonCount_Ceren = 0;
+  G4int fAbsorptionCount = 0;
+  G4int fBoundaryAbsorptionCount = 0;
 
-  G4double fTotE;
+  G4double fTotE = 0.;
 
   // These only have meaning if totE > 0
   // If totE = 0 then these won't be set by EndOfEventAction
   G4ThreeVector fEWeightPos;
   G4ThreeVector fReconPos;  // Also relies on hitCount>0
   G4ThreeVector fConvPos;   // true (initial) converstion position
-  G4bool fConvPosSet;
+  G4bool fConvPosSet = false;
   G4ThreeVector fPosMax;
-  G4double fEdepMax;
+  G4double fEdepMax = 0.;
 
-  G4int fPMTsAboveThreshold;
+  G4int fPMTsAboveThreshold = 0;
 };
 
 #endif

@@ -100,8 +100,8 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
     virtual G4bool Reset() final;
     virtual void Clear() final;
 
-    // Reset
-    virtual G4bool Reset(G4bool deleteNtuple) final;
+    // Method to delete selected ntuple
+    G4bool Delete(G4int id) final;
 
     // Activation option
     //
@@ -115,9 +115,6 @@ class G4RootMpiPNtupleManager : public G4BaseNtupleManager
 
     // Access methods
     virtual G4int GetNofNtuples() const final;
-
-    // List ntuples
-    G4bool List(std::ostream& output, G4bool onlyIfActive = true) final;
 
   private:
     G4RootMpiPNtupleDescription*  

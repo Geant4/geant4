@@ -25,66 +25,79 @@
 //
 //
 //
-// 
+//
 // John Allison  30th December 1996
 
-inline void G4VViewer::Initialise () {}
+inline void G4VViewer::Initialise() {}
 
-inline void G4VViewer::ResetView () {
+inline void G4VViewer::ResetView()
+{
   fVP = fDefaultVP;
 }
 
-inline void G4VViewer::RefreshView () {
-  SetView(); ClearView(); DrawView();
+inline void G4VViewer::RefreshView()
+{
+  SetView();
+  ClearView();
+  DrawView();
 }
 
-inline G4int G4VViewer::GetViewId () const {
+inline G4int G4VViewer::GetViewId() const
+{
   return fViewId;
 }
 
-inline const G4String& G4VViewer::GetName () const {
+inline const G4String& G4VViewer::GetName() const
+{
   return fName;
 }
 
-inline const G4String& G4VViewer::GetShortName () const {
+inline const G4String& G4VViewer::GetShortName() const
+{
   return fShortName;
 }
 
-inline G4VSceneHandler* G4VViewer::GetSceneHandler () const {
+inline G4VSceneHandler* G4VViewer::GetSceneHandler() const
+{
   return &fSceneHandler;
 }
 
-inline const G4ViewParameters& G4VViewer::GetViewParameters () const {
+inline const G4ViewParameters& G4VViewer::GetViewParameters() const
+{
   return fVP;
 }
 
-inline const G4ViewParameters& G4VViewer::GetDefaultViewParameters () const {
+inline const G4ViewParameters& G4VViewer::GetDefaultViewParameters() const
+{
   return fDefaultVP;
 }
 
 inline const std::vector<G4ModelingParameters::VisAttributesModifier>*
-  G4VViewer::GetPrivateVisAttributesModifiers() const {
-    return 0;
+G4VViewer::GetPrivateVisAttributesModifiers() const
+{
+  return 0;
 }
 
-inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {
+inline void G4VViewer::SetDefaultViewParameters(const G4ViewParameters& vp)
+{
   fDefaultVP = vp;
 }
 
-inline const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
-(const G4VisAttributes* pVisAttribs) const
+inline const G4VisAttributes*
+G4VViewer::GetApplicableVisAttributes(const G4VisAttributes* pVisAttribs) const
 {
   // If pVisAttribs is zero, pick up the default vis attributes from
   // the view parameters.
-  if (!pVisAttribs)
-  pVisAttribs = GetViewParameters().GetDefaultVisAttributes();
+  if (!pVisAttribs) pVisAttribs = GetViewParameters().GetDefaultVisAttributes();
   return pVisAttribs;
 }
 
-inline void G4VViewer::SetNeedKernelVisit (G4bool need) {
+inline void G4VViewer::SetNeedKernelVisit(G4bool need)
+{
   fNeedKernelVisit = need;
 }
 
-inline G4double G4VViewer::GetKernelVisitElapsedTimeSeconds () const {
+inline G4double G4VViewer::GetKernelVisitElapsedTimeSeconds() const
+{
   return fKernelVisitElapsedTimeSeconds;
 }

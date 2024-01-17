@@ -41,7 +41,11 @@ class G4DNAPolyNucleotideReactionProcess : public G4VITDiscreteProcess
     const G4String& aName = "DNAStaticMoleculeReactionProcess",
     G4int verbosityLevel  = 0);
   ~G4DNAPolyNucleotideReactionProcess() override;
-
+  
+  G4DNAPolyNucleotideReactionProcess(const G4DNAPolyNucleotideReactionProcess&) = delete;
+  G4DNAPolyNucleotideReactionProcess& operator =(
+    const G4DNAPolyNucleotideReactionProcess&) = delete;
+ 
   inline void SetDNADamageReactionModel(G4VDNAHitModel* pModel);
 
   G4bool IsApplicable(const G4ParticleDefinition&) override { return true; }
@@ -62,8 +66,6 @@ class G4DNAPolyNucleotideReactionProcess : public G4VITDiscreteProcess
     return DBL_MAX;
   }
 
-  G4DNAPolyNucleotideReactionProcess& operator =(
-    const G4DNAPolyNucleotideReactionProcess&) = delete;
   inline void SetVerbose(G4int verbose);
 
  protected:
@@ -84,11 +86,10 @@ class G4DNAPolyNucleotideReactionProcess : public G4VITDiscreteProcess
     G4double fSampledMinTimeStep;
     G4double fPreviousTimeAtPreStepPoint;
   };
-  G4bool fHasAlreadyReachedNullTime;
+  G4bool fHasAlreadyReachedNullTime{false};
   G4int fVerbose;
   G4double fRCutOff;
-  G4VDNAHitModel* fpDamageModel;
-  G4DNAPolyNucleotideReactionProcess(const G4DNAPolyNucleotideReactionProcess&);
+  G4VDNAHitModel* fpDamageModel{nullptr};
 };
 inline void G4DNAPolyNucleotideReactionProcess::SetVerbose(G4int verbose)
 {

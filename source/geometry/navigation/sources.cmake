@@ -32,6 +32,7 @@ geant4_add_module(G4navigation
     G4RegularNavigationHelper.hh
     G4ReplicaNavigation.hh
     G4ReplicaNavigation.icc
+    G4SafetyCalculator.hh
     G4SafetyHelper.hh
     G4SimpleLocator.hh
     G4TransportationManager.hh
@@ -39,6 +40,7 @@ geant4_add_module(G4navigation
     G4VExternalNavigation.hh
     G4VIntersectionLocator.hh
     G4VIntersectionLocator.icc
+    G4VNavigation.hh
     G4VoxelNavigation.hh
     G4VoxelNavigation.icc
     G4VoxelSafety.hh
@@ -65,6 +67,7 @@ geant4_add_module(G4navigation
     G4RegularNavigation.cc
     G4RegularNavigationHelper.cc
     G4ReplicaNavigation.cc
+    G4SafetyCalculator.cc
     G4SafetyHelper.cc
     G4SimpleLocator.cc
     G4TransportationManager.cc
@@ -74,5 +77,5 @@ geant4_add_module(G4navigation
     G4VoxelSafety.cc)
 
 geant4_module_link_libraries(G4navigation
-  PUBLIC G4geometrymng G4magneticfield G4volumes G4graphics_reps G4globman G4intercoms G4hepgeometry
-  PRIVATE G4materials)
+  PUBLIC G4geometrymng G4magneticfield G4graphics_reps G4globman G4intercoms G4hepgeometry
+  PRIVATE G4volumes G4materials)

@@ -35,7 +35,7 @@
  * Minimal hit containing energy and position, for use in the fast simulation
  * classes.
  * Hits of G4FastHit type can be created in user implementation of fast
- * simulation model and then deposited in the detector using G4FastSimHitMaker 
+ * simulation model and then deposited in the detector using G4FastSimHitMaker
  * helper class. The helper will locate the sensitive volume and check if it
  * inherits from both base classes:
  * - G4VSensitiveDetector: for processing of detailed/non-fast simulation hits;
@@ -46,28 +46,27 @@
 
 class G4FastHit
 {
- public:
-  G4FastHit();
-  G4FastHit(const G4ThreeVector& aPosition, G4double aEnergy);
-  G4FastHit(const G4ThreeVector& aPosition, G4double aEnergy, G4bool aDebug);
-  virtual ~G4FastHit(){};
+  public:
+    G4FastHit() = default;
+    G4FastHit(const G4ThreeVector& aPosition, G4double aEnergy)
+      : fEnergy(aEnergy), fPosition(aPosition)
+    {}
+    virtual ~G4FastHit() = default;
 
-  /// Set energy
-  inline void SetEnergy(const G4double& aEnergy) { fEnergy = aEnergy; }
-  /// Get energy
-  inline G4double GetEnergy() const { return fEnergy; }
-  /// Set position
-  inline void SetPosition(const G4ThreeVector& aPosition)
-  {
-    fPosition = aPosition;
-  }
-  /// Get position
-  inline G4ThreeVector GetPosition() const { return fPosition; }
- private:
-  /// energy
-  G4double fEnergy = 0;
-  /// position
-  G4ThreeVector fPosition = G4ThreeVector();
+    /// Set energy
+    inline void SetEnergy(const G4double& aEnergy) { fEnergy = aEnergy; }
+    /// Get energy
+    inline G4double GetEnergy() const { return fEnergy; }
+    /// Set position
+    inline void SetPosition(const G4ThreeVector& aPosition) { fPosition = aPosition; }
+    /// Get position
+    inline G4ThreeVector GetPosition() const { return fPosition; }
+
+  private:
+    /// energy
+    G4double fEnergy = 0;
+    /// position
+    G4ThreeVector fPosition = G4ThreeVector();
 };
 
 #endif /* G4FASTHIT_HH */

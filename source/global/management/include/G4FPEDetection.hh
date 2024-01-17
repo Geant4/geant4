@@ -256,7 +256,44 @@ static inline int fedisableexcept(unsigned int excepts)
   return (fesetenv(&fenv) ? -1 : old_excepts);
 }
 
-#  endif          /* PPC or INTEL enabling */
+#  elif(defined(__arm) || defined(__arm64) || defined(__aarch64__))  // Apple Silicon
+
+#    define FE_EXCEPT_SHIFT 22  // shift flags right to get masks
+#    define FM_ALL_EXCEPT FE_ALL_EXCEPT >> FE_EXCEPT_SHIFT
+
+static inline int feenableexcept(unsigned int excepts)
+{
+  static fenv_t fenv;
+  unsigned int new_excepts = (excepts & FE_ALL_EXCEPT) >> FE_EXCEPT_SHIFT,
+               old_excepts;  // all previous masks
+
+  if(fegetenv(&fenv))
+  {
+    return -1;
+  }
+  old_excepts = (fenv.__fpcr & FM_ALL_EXCEPT) << FE_EXCEPT_SHIFT;
+  fenv.__fpcr = (fenv.__fpcr & ~new_excepts) | new_excepts;
+
+  return (fesetenv(&fenv) ? -1 : old_excepts);
+}
+
+static inline int fedisableexcept(unsigned int excepts)
+{
+  static fenv_t fenv;
+  unsigned int still_on = ~((excepts & FE_ALL_EXCEPT) >> FE_EXCEPT_SHIFT),
+               old_excepts;  // previous masks
+
+  if(fegetenv(&fenv))
+  {
+    return -1;
+  }
+  old_excepts = (fenv.__fpcr & FM_ALL_EXCEPT) << FE_EXCEPT_SHIFT;
+  fenv.__fpcr = fenv.__fpcr | still_on;
+
+  return (fesetenv(&fenv) ? -1 : old_excepts);
+}
+
+#  endif          /* PPC or INTEL or Apple Silicon enabling */
 
 static void TerminationSignalHandler(int sig, siginfo_t* sinfo,
                                      void* /* context */)

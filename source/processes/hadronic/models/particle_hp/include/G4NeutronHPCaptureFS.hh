@@ -23,10 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko July-2023 converted back
+//
 #ifndef G4NeutronHPCaptureFS_h
-#define G4NeutronHPCaptureFS_h
+#define G4NeutronHPCaptureFS_h 1
 
-#include "G4ParticleHPCaptureFS.hh"
-using G4NeutronHPCaptureFS = G4ParticleHPCaptureFS;
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
+#include "G4ParticleHPEnAngCorrelation.hh"
+#include "G4ParticleHPFinalState.hh"
+#include "G4ParticleHPNames.hh"
+#include "G4ParticleHPPhotonDist.hh"
+#include "G4ReactionProductVector.hh"
+#include "globals.hh"
 
+class G4NeutronHPCaptureFS : public G4ParticleHPFinalState
+{
+  public:
+    G4NeutronHPCaptureFS();
+    ~G4NeutronHPCaptureFS() override = default;
+
+    void Init(G4double A, G4double Z, G4int M, G4String& dirName,
+              G4String& aFSType, G4ParticleDefinition*) override;
+    G4HadFinalState* ApplyYourself(const G4HadProjectile& theTrack) override;
+    G4ParticleHPFinalState* New() override
+    {
+      auto theNew = new G4NeutronHPCaptureFS;
+      return theNew;
+    }
+
+    G4NeutronHPCaptureFS(G4NeutronHPCaptureFS&) = delete;
+    G4NeutronHPCaptureFS& operator=
+    (const G4NeutronHPCaptureFS &right) = delete;
+
+  private:
+    G4double targetMass;
+    G4bool hasExactMF6;
+
+    G4ParticleHPPhotonDist theFinalStatePhotons;
+    G4ParticleHPEnAngCorrelation theMF6FinalState;
+    G4ParticleHPNames theNames;
+};
 #endif

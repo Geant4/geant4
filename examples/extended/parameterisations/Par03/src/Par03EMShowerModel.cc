@@ -51,7 +51,7 @@ Par03EMShowerModel::Par03EMShowerModel(G4String aModelName)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03EMShowerModel::~Par03EMShowerModel() {}
+Par03EMShowerModel::~Par03EMShowerModel() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,11 +97,11 @@ void Par03EMShowerModel::DoIt(const G4FastTrack& aFastTrack,
 {
   // Remove particle from further processing by G4
   aFastStep.KillPrimaryTrack();
-  aFastStep.SetPrimaryTrackPathLength(0.0);
+  aFastStep.ProposePrimaryTrackPathLength(0.0);
   G4double energy = aFastTrack.GetPrimaryTrack()->GetKineticEnergy();
   // No need to create any deposit, it will be handled by this model (and
   // G4FastSimHitMaker that will call the sensitive detector)
-  aFastStep.SetTotalEnergyDeposited(0);
+  aFastStep.ProposeTotalEnergyDeposited(0);
   auto particlePosition  = aFastTrack.GetPrimaryTrackLocalPosition();
   auto particleDirection = aFastTrack.GetPrimaryTrackLocalDirection();
 

@@ -45,7 +45,9 @@
 # drawing slices
 #
 # new scene and viewer
-/vis/open OGL
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 /vis/drawVolume world
 /vis/viewer/copyViewFrom viewer-0
 /score/colorMap/setMinMax ! 0. 800.

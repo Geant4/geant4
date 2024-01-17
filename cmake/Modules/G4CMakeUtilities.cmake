@@ -221,6 +221,21 @@ function(geant4_export_package_variables _file)
       get_property(__var_value CACHE ${__var} PROPERTY VALUE)
       get_property(__var_type CACHE ${__var} PROPERTY TYPE)
       get_property(__var_help CACHE ${__var} PROPERTY HELPSTRING)
+      # Variable may not be in cache, only local (canonical case being EXPAT_LIBRARY since CMake 3.27)
+      # We still need to account for these because they may be required to be in the CACHE at least set in
+      # earlier versions.
+      # 1. Variable may not be in cache, only local (canonical case being EXPAT_LIBRARY since CMake 3.27)
+      #    We still need to account for these because they may be required to be in the CACHE at least set in
+      #    earlier versions.
+      # 2. Depending on CMake version, variable may be in cache but unitialized, here we want the local value
+      if(((NOT __var_value) AND (NOT __var_type) AND (NOT __var_help)) OR (__var_type STREQUAL "UNINITIALIZED"))
+        set(__var_value ${${__var}})
+        # TODO: set type based on whether it looks like a bool or path, but PATH almost invariably what we save
+        # Only important in cmake GUI and if value needs to be changed, which we don't if package cache is used
+        set(__var_type PATH)
+        set(__var_help "no documentation, not a cache value")
+      endif()
+
       list(APPEND __local_build_setting "geant4_set_and_check_package_variable(${__var} \"${__var_value}\" ${__var_type} \"${__var_help}\")")
     endforeach()
 

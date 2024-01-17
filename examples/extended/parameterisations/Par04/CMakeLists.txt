@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 
 # must be set before project(...) call; version module is needed before
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -45,10 +45,17 @@ endif()
 # ONNX
 if(INFERENCE_LIB)
   find_package(OnnxRuntime QUIET)
+  find_package(CUDA QUIET)
    if(OnnxRuntime_FOUND)
        message("ONNX Runtime inference library found.")
    	   add_definitions(-DUSE_INFERENCE)
    	   add_definitions(-DUSE_INFERENCE_ONNX)
+      if(CUDA_FOUND)
+        message("Cuda found.")
+        add_definitions(-DUSE_CUDA)
+      else()
+        message("Cuda not found!")
+      endif()
    else()
       message("ONNX Runtime not found!")
    endif()
@@ -90,6 +97,12 @@ endif()
 if(OnnxRuntime_FOUND)
    target_include_directories(examplePar04 PUBLIC ${OnnxRuntime_INCLUDE_DIR})
    target_link_libraries(examplePar04 ${OnnxRuntime_LIBRARY})
+    # Cuda_FOUND
+    if(CUDA_FOUND)
+      target_include_directories(examplePar04 PUBLIC ${CUDA_INCLUDE_DIRS})
+      include_directories(${CUDA_INCLUDE_DIRS})
+      target_link_libraries(examplePar04 ${CUDA_LIBRARIES})     
+    endif()
    # Depend on data for runtime
    add_dependencies(examplePar04 examplePar04onnxdata)
 endif()
@@ -108,7 +121,7 @@ endif()
 # relies on these scripts being in the current working directory.
 #
 set(Par04_SCRIPTS
-    examplePar04.mac vis.mac
+    examplePar04.mac vis.mac common_settings.mac
   )
 if(lwtnn_FOUND)
   set(Par04_SCRIPTS ${Par04_SCRIPTS} examplePar04_lwtnn.mac vis_lwtnn.mac)

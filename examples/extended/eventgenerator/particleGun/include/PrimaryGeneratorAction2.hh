@@ -47,7 +47,7 @@ class PrimaryGeneratorAction2
 {
   public:
     PrimaryGeneratorAction2(G4ParticleGun*);    
-   ~PrimaryGeneratorAction2();
+   ~PrimaryGeneratorAction2() = default;
 
   public:
    void GeneratePrimaries(G4Event*);
@@ -57,14 +57,14 @@ class PrimaryGeneratorAction2
     G4double InverseCumul();            
     
   private:    
-    G4ParticleGun*         fParticleGun;
+    G4ParticleGun*         fParticleGun = nullptr;
  
-    G4int                  fNPoints;    //nb of points
-    std::vector<G4double>  fX;          //abscisses X
-    std::vector<G4double>  fY;          //values of Y(X)
-    std::vector<G4double>  fSlp;        //slopes
-    std::vector<G4double>  fYC;         //cumulative function of Y
-    G4double               fYmax;       //max(Y)
+    G4int                  fNPoints = 0; //nb of points
+    std::vector<G4double>  fX;           //abscisses X
+    std::vector<G4double>  fY;           //values of Y(X)
+    std::vector<G4double>  fSlp;         //slopes
+    std::vector<G4double>  fYC;          //cumulative function of Y
+    G4double               fYmax = 0.;   //max(Y)
 
   private:
     void InitFunction();                        

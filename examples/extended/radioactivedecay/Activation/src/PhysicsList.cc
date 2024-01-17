@@ -59,7 +59,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList()
 {
   G4int verb = 1;
   SetVerboseLevel(verb);
@@ -103,11 +102,6 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new RadioactiveDecayPhysics());
   ////RegisterPhysics(new G4RadioactiveDecayPhysics());  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

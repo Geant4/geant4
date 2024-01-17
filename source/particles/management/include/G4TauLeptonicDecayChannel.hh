@@ -31,37 +31,32 @@
 // This version assumes the pure V-A coupling and gives incorrect
 // energy spectrum for neutrinos without tau polarization.
 
-// Author: H.Kurashige, 30 May 1997 
+// Author: H.Kurashige, 30 May 1997
 // --------------------------------------------------------------------
 #ifndef G4TauLeptonicDecayChannel_hh
 #define G4TauLeptonicDecayChannel_hh 1
 
+#include "G4VDecayChannel.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VDecayChannel.hh"
 
 class G4TauLeptonicDecayChannel : public G4VDecayChannel
 {
   public:
-
-    G4TauLeptonicDecayChannel(const G4String& theParentName,
-                                    G4double  theBR,
+    G4TauLeptonicDecayChannel(const G4String& theParentName, G4double theBR,
                               const G4String& theLeptonName);
     ~G4TauLeptonicDecayChannel() override = default;
 
-    G4DecayProducts* DecayIt(G4double) override;   
+    G4DecayProducts* DecayIt(G4double) override;
 
   protected:
-
     G4TauLeptonicDecayChannel() = default;
 
     G4TauLeptonicDecayChannel(const G4TauLeptonicDecayChannel&) = default;
     G4TauLeptonicDecayChannel& operator=(const G4TauLeptonicDecayChannel&);
 
   private:
-
-    static G4double spectrum(G4double momentum, G4double energy,
-                             G4double mtau, G4double ml);
-};  
+    static G4double spectrum(G4double momentum, G4double energy, G4double mtau, G4double ml);
+};
 
 #endif

@@ -39,5 +39,5 @@ geant4_add_module(G4detector
     G4MultiSensitiveDetector.cc)
 
 geant4_module_link_libraries(G4detector
-  PUBLIC G4track G4hits G4geometrymng G4volumes G4intercoms G4globman
+  PUBLIC G4track G4hits G4geometrymng G4intercoms G4globman
   PRIVATE G4navigation)

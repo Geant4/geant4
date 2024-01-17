@@ -1154,8 +1154,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector& globalPoint,
 G4double
 G4ReplicaNavigation::ComputeSafety(const G4ThreeVector& globalPoint,
                                    const G4ThreeVector& localPoint,
-                                         G4NavigationHistory& history,
-                                   const G4double )
+                                   const G4NavigationHistory& history,
+                                   const G4double ) const
 {
   G4VPhysicalVolume *repPhysical, *motherPhysical;
   G4VPhysicalVolume *samplePhysical, *blockedExitedVol = nullptr;

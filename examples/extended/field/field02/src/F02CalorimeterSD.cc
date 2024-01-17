@@ -48,7 +48,6 @@
 F02CalorimeterSD::F02CalorimeterSD(G4String name,
                                    F02DetectorConstruction* det)
 : G4VSensitiveDetector(name),
-  fCalCollection(0),
   fDetector(det),
   fHitID(new G4int[500])
 {
@@ -67,7 +66,7 @@ F02CalorimeterSD::~F02CalorimeterSD()
 void F02CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   fCalCollection = new F02CalorHitsCollection
-                       (SensitiveDetectorName,collectionName[0]); 
+                       (SensitiveDetectorName,collectionName[0]);
   for (G4int j=0;j<1; j++) {fHitID[j] = -1;};
 }
 
@@ -82,7 +81,7 @@ G4bool F02CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
   if ((edep == 0.) && (stepl == 0.) ) return false;
 
-  G4TouchableHistory* theTouchable
+  auto  theTouchable
     = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
 
   G4VPhysicalVolume* physVol = theTouchable->GetVolume();
@@ -90,7 +89,7 @@ G4bool F02CalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
   G4int number = 0;
   if (fHitID[number]==-1)
     {
-      F02CalorHit* calHit = new F02CalorHit();
+      auto  calHit = new F02CalorHit();
       if (physVol == fDetector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       fHitID[number] = fCalCollection->insert(calHit) - 1;
       if (verboseLevel>0)

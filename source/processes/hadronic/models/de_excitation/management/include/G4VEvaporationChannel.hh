@@ -50,7 +50,7 @@ class G4VEvaporationChannel
 {
 public:
 
-  explicit G4VEvaporationChannel(const G4String & aName = "");
+  G4VEvaporationChannel(const G4String & aName = "");
   virtual ~G4VEvaporationChannel() = default;
 
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
@@ -90,9 +90,9 @@ public:
   virtual void RDMForced(G4bool);
 
   // for cross section selection
-  inline void SetOPTxs(G4int opt);
+  inline void SetOPTxs(G4int);
   // for superimposed Coulomb Barrier for inverse cross sections 	
-  inline void UseSICB(G4bool use);
+  inline void UseSICB(G4bool);
 
   G4VEvaporationChannel(const G4VEvaporationChannel & right) = delete;
   const G4VEvaporationChannel & operator= 
@@ -102,8 +102,8 @@ public:
 
 protected:
 
-  G4int OPTxs;
-  G4bool useSICB;
+  G4int OPTxs{3};
+  G4bool useSICB{true};
 };
 
 inline G4FragmentVector* 

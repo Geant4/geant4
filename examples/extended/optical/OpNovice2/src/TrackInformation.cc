@@ -60,7 +60,7 @@ TrackInformation::TrackInformation(const TrackInformation* aTrackInfo)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TrackInformation::~TrackInformation() {}
+TrackInformation::~TrackInformation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TrackInformation& TrackInformation::operator=(

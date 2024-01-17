@@ -90,27 +90,30 @@ class G4Scheduler :
     public G4VStateDependent
 {
 protected:
-  virtual ~G4Scheduler();
+  ~G4Scheduler() override;
 
 public:
+  G4Scheduler(const G4Scheduler&) = delete;
+  G4Scheduler& operator=(const G4Scheduler&) = delete;
+
   static G4Scheduler* Instance();
   /** DeleteInstance should be used instead
    * of the destructor
    */
   static void DeleteInstance();
-  virtual G4bool Notify(G4ApplicationState requestedState);
+  G4bool Notify(G4ApplicationState requestedState) override;
 
-  virtual void RegisterModel(G4VITStepModel*, G4double);
+  void RegisterModel(G4VITStepModel*, G4double) override;
 
-  void Initialize();
+  void Initialize() override;
   void ForceReinitialization();
   inline G4bool IsInitialized();
-  inline G4bool IsRunning(){return fRunning;}
-  void Reset();
-  void Process();
+  inline G4bool IsRunning() override{return fRunning;}
+  void Reset() override;
+  void Process() override;
   void ClearList();
 
-  inline void SetGun(G4ITGun*);
+  inline void SetGun(G4ITGun*) override;
   inline G4ITGun* GetGun();
 
   inline void Stop();
@@ -122,33 +125,33 @@ public:
   // is called in case one would like to access some track information
   void EndTracking();
 
-  void SetEndTime(const G4double);
+  void SetEndTime(const G4double) override;
 
   /* Two tracks below the time tolerance are supposed to be
    * in the same time slice
    */
-  inline void SetTimeTolerance(G4double);
-  inline G4double GetTimeTolerance() const;
+  inline void SetTimeTolerance(G4double) override;
+  inline G4double GetTimeTolerance() const override;
 
-  inline void SetMaxZeroTimeAllowed(G4int);
-  inline G4int GetMaxZeroTimeAllowed() const;
+  inline void SetMaxZeroTimeAllowed(G4int) override;
+  inline G4int GetMaxZeroTimeAllowed() const override;
 
-  inline G4ITModelHandler* GetModelHandler();
+  inline G4ITModelHandler* GetModelHandler() override;
 
-  inline void SetTimeSteps(std::map<G4double, G4double>*);
-  inline void AddTimeStep(G4double, G4double);
-  inline void SetDefaultTimeStep(G4double);
-  G4double GetLimitingTimeStep() const;
-  inline G4int GetNbSteps() const;
-  inline void SetMaxNbSteps(G4int);
-  inline G4int GetMaxNbSteps() const;
-  inline G4double GetStartTime() const;
-  inline G4double GetEndTime() const;
-  virtual inline G4double GetTimeStep() const;
-  inline G4double GetPreviousTimeStep() const;
-  inline G4double GetGlobalTime() const;
-  inline void SetUserAction(G4UserTimeStepAction*);
-  inline G4UserTimeStepAction* GetUserTimeStepAction() const;
+  inline void SetTimeSteps(std::map<G4double, G4double>*) override;
+  inline void AddTimeStep(G4double, G4double) override;
+  inline void SetDefaultTimeStep(G4double) override;
+  G4double GetLimitingTimeStep() const override;
+  inline G4int GetNbSteps() const override;
+  inline void SetMaxNbSteps(G4int) override;
+  inline G4int GetMaxNbSteps() const override;
+  inline G4double GetStartTime() const override;
+  inline G4double GetEndTime() const override;
+  inline G4double GetTimeStep() const override;
+  inline G4double GetPreviousTimeStep() const override;
+  inline G4double GetGlobalTime() const override;
+  inline void SetUserAction(G4UserTimeStepAction*) override;
+  inline G4UserTimeStepAction* GetUserTimeStepAction() const override;
 
   // To use with transportation only, no reactions
   inline void UseDefaultTimeSteps(G4bool);
@@ -161,14 +164,14 @@ public:
    * 3 : (2) + step info for individual tracks
    * 4 : (2) + trackList processing info + pushed and killed track info
    */
-  inline void SetVerbose(G4int);
+  inline void SetVerbose(G4int) override;
   
   inline G4int GetVerbose() const;
 
   inline void WhyDoYouStop();
 
-  void SetInteractivity(G4ITTrackingInteractivity*);
-  inline G4ITTrackingInteractivity* GetInteractivity();
+  void SetInteractivity(G4ITTrackingInteractivity*) override;
+  inline G4ITTrackingInteractivity* GetInteractivity() override;
 
   virtual size_t GetNTracks();
 
@@ -215,8 +218,6 @@ protected:
 private:
   G4Scheduler();
   void Create();
-  G4Scheduler(const G4Scheduler&);
-  G4Scheduler& operator=(const G4Scheduler&);
 
   G4SchedulerMessenger* fpMessenger;
 
@@ -317,7 +318,7 @@ void G4Scheduler::SetTimeSteps(std::map<G4double, G4double>* steps)
 
 inline void G4Scheduler::AddTimeStep(G4double startingTime, G4double timeStep)
 {
-  if (fpUserTimeSteps == 0)
+  if (fpUserTimeSteps == nullptr)
   {
     fpUserTimeSteps = new std::map<G4double, G4double>();
     fUsePreDefinedTimeSteps = true;
@@ -450,7 +451,7 @@ inline void G4Scheduler::UseDefaultTimeSteps(G4bool flag)
 
 inline G4bool G4Scheduler::AreDefaultTimeStepsUsed()
 {
-  return (fUseDefaultTimeSteps == false && fUsePreDefinedTimeSteps == false);
+  return (!fUseDefaultTimeSteps && !fUsePreDefinedTimeSteps);
 }
 
 inline void G4Scheduler::ResetScavenger(bool value)

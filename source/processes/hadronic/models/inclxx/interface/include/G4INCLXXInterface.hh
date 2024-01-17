@@ -171,6 +171,7 @@ private:
 
   G4HadronicInteraction *theBackupModel;
   G4HadronicInteraction *theBackupModelNucleon;
+  G4HadronicInteraction *theBackupModelAntiIonExceptAntiProton;
 
   G4INCLXXInterfaceStore * const theInterfaceStore;
   G4INCLXXVInterfaceTally * theTally;

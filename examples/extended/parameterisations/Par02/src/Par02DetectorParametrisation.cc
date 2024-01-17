@@ -33,11 +33,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02DetectorParametrisation::Par02DetectorParametrisation() {}
+Par02DetectorParametrisation::Par02DetectorParametrisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02DetectorParametrisation::~Par02DetectorParametrisation() {}
+Par02DetectorParametrisation::~Par02DetectorParametrisation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

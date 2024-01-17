@@ -228,27 +228,27 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
   //--------- Visualization attributes -------------------------------
   WorldLog->SetVisAttributes(G4VisAttributes::GetInvisible());
 
-  G4VisAttributes * driftchamberTubeVisAtt
+  auto  driftchamberTubeVisAtt
     = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
   driftchamberTubeVisAtt->SetForceWireframe(true);
   driftChamberLog->SetVisAttributes(driftchamberTubeVisAtt);
   
-  G4VisAttributes * calorimeterBoxVisAtt
+  auto  calorimeterBoxVisAtt
     = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
   calorimeterBoxVisAtt->SetForceWireframe(true);
   calorimeterLog->SetVisAttributes(calorimeterBoxVisAtt);
   
-  G4VisAttributes * crystalVisAtt
+  auto  crystalVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
   crystalVisAtt->SetForceWireframe(true);
   fCrystalLog->SetVisAttributes(crystalVisAtt);
 
-  G4VisAttributes * hadCaloBoxVisAtt
+  auto  hadCaloBoxVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
   hadCaloBoxVisAtt->SetForceWireframe(true);
   hadCaloLog->SetVisAttributes(hadCaloBoxVisAtt);
   
-  G4VisAttributes * towerVisAtt
+  auto  towerVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
   towerVisAtt->SetForceWireframe(true);
   fTowerLog->SetVisAttributes(towerVisAtt);

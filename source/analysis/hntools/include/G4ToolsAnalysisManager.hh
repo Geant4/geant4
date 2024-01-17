@@ -39,8 +39,6 @@
 #include "G4TP2ToolsManager.hh"
 #include "globals.hh"
 
-#include "G4THnToolsManager.hh"  // make forward declaration if possible
-
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/histo/h3d"
@@ -50,6 +48,9 @@
 #include <string_view>
 
 class G4PlotManager;
+
+template <unsigned int DIM, typename HT>
+class G4THnToolsManager;
 
 namespace tools {
 namespace histo {

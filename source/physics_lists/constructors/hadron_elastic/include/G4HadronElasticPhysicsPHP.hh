@@ -29,7 +29,8 @@
 //
 // Author: 2013, P. Arce
 //
-// Modified:
+// Modified: 12.10.2023 V.Ivanchenko use this class to define alternative
+//                                   HP physics
 //
 //----------------------------------------------------------------------------
 //
@@ -45,7 +46,7 @@ public:
 
   explicit G4HadronElasticPhysicsPHP(G4int ver = 1); 
 
-  virtual ~G4HadronElasticPhysicsPHP();
+  ~G4HadronElasticPhysicsPHP() override = default;
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and

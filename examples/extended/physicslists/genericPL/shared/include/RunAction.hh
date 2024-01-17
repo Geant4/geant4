@@ -56,10 +56,10 @@ class RunAction : public G4UserRunAction
 {
   public:
     RunAction(const G4String& fileName);
-    virtual ~RunAction();
+    ~RunAction() override = default;
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    void BeginOfRunAction(const G4Run*) override;
+    void   EndOfRunAction(const G4Run*) override;
 
   private:
     G4String fFileName;

@@ -27,11 +27,11 @@
 /// \file exampleB1.cc
 /// \brief Main program of the B1 example
 
-#include "B1DetectorConstruction.hh"
-#include "B1ConActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 
 #include "G4RunManagerFactory.hh"
-
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "QBBC.hh"
 
@@ -40,29 +40,35 @@
 
 #include "Randomize.hh"
 
+using namespace B1;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
   // Instantiate G4UIExecutive if there are no arguments (interactive mode)
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
-  //
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // Optionally: choose a different Random engine...
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
+
+  //use G4SteppingVerboseWithUnits
+  G4int precision = 4;
+  G4SteppingVerbose::UseBestUnit(precision);
 
   // Construct the default run manager
   //
-  auto* runManager = G4RunManagerFactory::CreateRunManager();
+  auto* runManager =
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
   runManager->SetNumberOfThreads(8);
 
   // Set mandatory initialization classes
   //
   // Detector construction
-  runManager->SetUserInitialization(new B1DetectorConstruction());
+  runManager->SetUserInitialization(new DetectorConstruction());
 
   // Physics list
   G4VModularPhysicsList* physicsList = new QBBC;
@@ -70,11 +76,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physicsList);
 
   // User action initialization
-  runManager->SetUserInitialization(new B1ConActionInitialization());
-
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
+  runManager->SetUserInitialization(new B1Con::ActionInitialization());
 
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
@@ -105,8 +107,6 @@ int main(int argc,char** argv)
 
   delete visManager;
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

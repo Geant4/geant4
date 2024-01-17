@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,33 +35,20 @@
 #ifndef G4MuonPlus_h
 #define G4MuonPlus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         MUONPLUS                               ###
-// ######################################################################
 
 class G4MuonPlus : public G4ParticleDefinition
 {
- private:
-   static G4MuonPlus* theInstance;
-   G4MuonPlus(){}
-   ~G4MuonPlus() override= default;
+  public:
+    static G4MuonPlus* Definition();
+    static G4MuonPlus* MuonPlusDefinition();
+    static G4MuonPlus* MuonPlus();
 
- public:
-   static G4MuonPlus* Definition();
-   static G4MuonPlus* MuonPlusDefinition();
-   static G4MuonPlus* MuonPlus();
+  private:
+    G4MuonPlus() {}
+    ~G4MuonPlus() override = default;
+
+    static G4MuonPlus* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-

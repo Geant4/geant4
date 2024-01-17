@@ -978,10 +978,16 @@ void DicomDetectorConstruction::ConstructSDandField()
   G4MultiFunctionalDetector* MFDet = 
     new G4MultiFunctionalDetector(concreteSDname);
   G4SDManager::GetSDMpointer()->AddNewDetector( MFDet );
-  //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
-  G4VPrimitiveScorer* dosedep = 
-    new G4PSDoseDeposit3D("DoseDeposit", fNoVoxelsX, fNoVoxelsY, fNoVoxelsZ);
-  MFDet->RegisterPrimitive(dosedep);
+  char* nest = std::getenv( "DICOM_NESTED_PARAM" );
+  if( nest && G4String(nest) == "1" ) {
+    G4VPrimitiveScorer* dosedep = 
+      new G4PSDoseDeposit3D("DoseDeposit", fNoVoxelsZ, fNoVoxelsY, fNoVoxelsX, 0, 2, 1); // nested param replica indexing
+    // - the last 3 arguments correspond to the replica depth for Z, Y and X respectively
+    MFDet->RegisterPrimitive(dosedep);
+  } else {
+    G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit"); // regular geometry
+    MFDet->RegisterPrimitive(dosedep);
+  }
   
   for(auto ite = fScorers.cbegin(); ite != fScorers.cend(); ++ite)
   {

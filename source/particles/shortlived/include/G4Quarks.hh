@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -33,21 +30,16 @@
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
 
-
 #ifndef G4Quarks_h
 #define G4Quarks_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4VShortLivedParticle.hh"
-
-// ######################################################################
-// ###                          Quarks                                ###
-// ######################################################################
+#include "globals.hh"
 
 class G4Quarks : public G4VShortLivedParticle
 {
- public:
+  public:
+    // clang-format off
    G4Quarks(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -59,24 +51,8 @@ class G4Quarks : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-        ~G4Quarks() override = default;
+    // clang-format on
+    ~G4Quarks() override = default;
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -46,12 +46,7 @@ public:
 
   explicit G4HadronElasticPhysicsXS(G4int ver = 1); 
 
-  virtual ~G4HadronElasticPhysicsXS();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  void ConstructProcess() final;
+  ~G4HadronElasticPhysicsXS() override = default;
 
   G4HadronElasticPhysicsXS(G4HadronElasticPhysicsXS &) = delete;
   G4HadronElasticPhysicsXS & operator=(const G4HadronElasticPhysicsXS &right) = delete;

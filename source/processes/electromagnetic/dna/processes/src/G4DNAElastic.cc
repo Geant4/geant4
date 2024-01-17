@@ -35,7 +35,7 @@
 using namespace std;
 
 G4DNAElastic::G4DNAElastic(const G4String& processName, G4ProcessType type) :
-    G4VEmProcess(processName, type), isInitialised(false)
+    G4VEmProcess(processName, type)
 {
   SetProcessSubType(fLowEnergyElastic);
 }
@@ -43,8 +43,7 @@ G4DNAElastic::G4DNAElastic(const G4String& processName, G4ProcessType type) :
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNAElastic::~G4DNAElastic()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,7 +73,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNAScreenedRutherfordElasticModel);
         EmModel()->SetLowEnergyLimit(0 * eV);
@@ -85,7 +84,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition* p)
 
     else if(name == "proton" || name == "hydrogen")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNAIonElasticModel);
         EmModel()->SetLowEnergyLimit(0 * eV);
@@ -97,7 +96,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition* p)
     // "alpha" must be explicitly used, not alpha++
     else if(name == "helium" || name == "alpha" || name == "alpha+")
     {
-      if(!EmModel())
+      if(EmModel() == nullptr)
       {
         SetEmModel(new G4DNAIonElasticModel);
         EmModel()->SetLowEnergyLimit(0 * eV);

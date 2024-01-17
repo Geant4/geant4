@@ -43,7 +43,7 @@ using G4AnalysisManager = G4RootAnalysisManager;
 #include "G4MPIscorerMerger.hh"
 #include "G4MPIhistoMerger.hh"  
 #include "G4MPIntupleMerger.hh"
-#include "G4filesystem.hh"
+#include "G4Filesystem.hh"
 #include "Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -237,6 +237,7 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
 
   //Save g4analysis objects to a file
   Analysis* myana = Analysis::GetAnalysis();
+  myana->OpenFile("dose-rank0.root");
   myana-> Save();
   myana-> Close();
 

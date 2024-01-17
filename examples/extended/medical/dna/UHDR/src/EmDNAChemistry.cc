@@ -89,13 +89,14 @@ EmDNAChemistry::~EmDNAChemistry() = default;
 void EmDNAChemistry::ConstructMolecule() {
 
   G4ChemDissociationChannels_option1::ConstructMolecule();
+  auto table = G4MoleculeTable::Instance();
 
-  auto H3OpB = G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
+  auto H3OpB = table->GetConfiguration("H3Op(B)");
   H3OpB->SetDiffusionCoefficient(9.46e-9 * (m2 / s));
 
-  auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
+  auto OHm = table->GetConfiguration("OHm(B)");
   OHm->SetDiffusionCoefficient(5.3e-9 * (m2 / s));
-  G4MoleculeTable::Instance()->CreateConfiguration("H2O", G4H2O::Definition());
+  table->CreateConfiguration("H2O", G4H2O::Definition());
 
   auto G4NO2 = new G4MoleculeDefinition("NO_2",/*mass*/ 30,
       /*D*/ 0 * (m * m / s),
@@ -109,28 +110,25 @@ void EmDNAChemistry::ConstructMolecule() {
       /*electronL*/0,
       /*radius*/0.17 * nm);//should be corrected
 
-  G4MoleculeTable::Instance()->CreateConfiguration("NO2", G4NO2);
-  G4MoleculeTable::Instance()->CreateConfiguration("NO2m",
-                                                   G4NO2,
-                                                   -1, // charge
-                                                   0 * (m2 / s));
-  G4MoleculeTable::Instance()->
-      CreateConfiguration("NO2mm",
-                          G4NO2,
-                          -2, // charge
-                          0 * (m2 / s));
+  table->CreateConfiguration("NO2", G4NO2);
+  table->CreateConfiguration("NO2m",
+                             G4NO2,
+                             -1, // charge
+                             0 * (m2 / s));
+  table->CreateConfiguration("NO2mm",
+                             G4NO2,
+                             -2, // charge
+                             0 * (m2 / s));
 
-  G4MoleculeTable::Instance()->
-      CreateConfiguration("NO3m",
-                          G4NO3,
-                          -1, // charge
-                          0 * (m2 / s));
+  table->CreateConfiguration("NO3m",
+                             G4NO3,
+                             -1, // charge
+                             0 * (m2 / s));
 
-  G4MoleculeTable::Instance()->
-      CreateConfiguration("NO3mm",
-                          G4NO3,
-                          -2, // charge
-                          0 * (m2 / s));
+  table->CreateConfiguration("NO3mm",
+                             G4NO3,
+                             -2, // charge
+                             0 * (m2 / s));
 
   //FrickeDosimeter
   auto G4Fe = new G4MoleculeDefinition("Fe",
@@ -140,17 +138,17 @@ void EmDNAChemistry::ConstructMolecule() {
       /*electronL*/ 0,
       /*radius*/ 0.35 * nm); // can be adjusted
 
-  G4MoleculeTable::Instance()->CreateConfiguration("Fe0",G4Fe);
+  table->CreateConfiguration("Fe0", G4Fe);
 
-  G4MoleculeTable::Instance()->CreateConfiguration("Feppp",
-                                                   G4Fe,
-                                                   3, // charge
-                                                   4.86e-10 * (m2 /s));//Michael Spiro* and Andrew M. Creeth
+  table->CreateConfiguration("Feppp",
+                             G4Fe,
+                             3, // charge
+                             4.86e-10 * (m2 / s));//Michael Spiro* and Andrew M. Creeth
 
-  G4MoleculeTable::Instance()->CreateConfiguration("Fepp",
-                                                   G4Fe,
-                                                   2, // charge
-                                                   5.78e-10 * (m2/s));
+  table->CreateConfiguration("Fepp",
+                             G4Fe,
+                             2, // charge
+                             5.78e-10 * (m2 / s));
   //HSO4-
   auto G4HSO4 = new G4MoleculeDefinition("HSO4",
       /*mass*/ 55.84 * g / Avogadro * c_squared,
@@ -158,10 +156,10 @@ void EmDNAChemistry::ConstructMolecule() {
       /*charge*/ 0,
       /*electronL*/ 0,
       /*radius*/ 0.35 * nm); // can be adjusted
-  G4MoleculeTable::Instance()->CreateConfiguration("HSO4m",
-                                                   G4HSO4,
-                                                   -1, // charge
-                                                   0 * (m2/s));
+  table->CreateConfiguration("HSO4m",
+                             G4HSO4,
+                             -1, // charge
+                             0 * (m2 / s));
 
   //SO4-
   auto G4SO4 = new G4MoleculeDefinition("SO4",
@@ -170,10 +168,10 @@ void EmDNAChemistry::ConstructMolecule() {
       /*charge*/ 0,
       /*electronL*/ 0,
       /*radius*/ 0.35 * nm); // can be adjusted
-  G4MoleculeTable::Instance()->CreateConfiguration("SO4m",
-                                                   G4SO4,
-                                                   -1, // charge
-                                                   0 * (m2/s));
+  table->CreateConfiguration("SO4m",
+                             G4SO4,
+                             -1, // charge
+                             0 * (m2 / s));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,40 +192,35 @@ void EmDNAChemistry::ConstructReactionTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EmDNAChemistry::ConstructProcess() {
-  auto O2 = G4MoleculeTable::Instance()->GetConfiguration("O2");
-  auto O2m = G4MoleculeTable::Instance()->GetConfiguration("O2m");
-  auto HO2 = G4MoleculeTable::Instance()->GetConfiguration("HO2");
+  auto table = G4MoleculeTable::Instance();
+  auto O2 = table->GetConfiguration("O2");
+  auto O2m = table->GetConfiguration("O2m");
+  auto HO2 = table->GetConfiguration("HO2");
 
-  auto e_aq = G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-  auto OH = G4MoleculeTable::Instance()->GetConfiguration("OH");
-  auto OHm = G4MoleculeTable::Instance()->GetConfiguration("OHm");
+  auto e_aq = table->GetConfiguration("e_aq");
+  auto OH = table->GetConfiguration("OH");
+  auto OHm = table->GetConfiguration("OHm");
 
-  auto NO2 = G4MoleculeTable::Instance()->GetConfiguration("NO2");
-  auto NO2m = G4MoleculeTable::Instance()->GetConfiguration("NO2m");
-  auto NO2mm = G4MoleculeTable::Instance()->GetConfiguration("NO2mm");
-  auto NO3m = G4MoleculeTable::Instance()->GetConfiguration("NO3m");
-  auto NO3mm = G4MoleculeTable::Instance()->GetConfiguration("NO3mm");
+  auto NO2 = table->GetConfiguration("NO2");
+  auto NO2m = table->GetConfiguration("NO2m");
+  auto NO2mm = table->GetConfiguration("NO2mm");
+  auto NO3m = table->GetConfiguration("NO3m");
+  auto NO3mm = table->GetConfiguration("NO3mm");
 
-  auto H2O2 = G4MoleculeTable::Instance()->GetConfiguration("H2O2");
-  auto H = G4MoleculeTable::Instance()->GetConfiguration("H");
+  auto H2O2 = table->GetConfiguration("H2O2");
+  auto H = table->GetConfiguration("H");
 
-  G4MolecularConfiguration *H3OpB =
-      G4MoleculeTable::Instance()->GetConfiguration("H3Op(B)");
-  G4MolecularConfiguration *OHmB =
-      G4MoleculeTable::Instance()->GetConfiguration("OHm(B)");
-  G4MolecularConfiguration *HO2m =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2m");
-  G4MolecularConfiguration *Om =
-      G4MoleculeTable::Instance()->GetConfiguration("Om");
-  G4MolecularConfiguration *O3m =
-      G4MoleculeTable::Instance()->GetConfiguration("O3m");
-  G4MolecularConfiguration *H3Op =
-      G4MoleculeTable::Instance()->GetConfiguration("H3Op");
+  auto *H3OpB = table->GetConfiguration("H3Op(B)");
+  auto *OHmB = table->GetConfiguration("OHm(B)");
+  auto *HO2m = table->GetConfiguration("HO2m");
+  auto *Om = table->GetConfiguration("Om");
+  auto *O3m = table->GetConfiguration("O3m");
+  auto *H3Op = table->GetConfiguration("H3Op");
 
   fpChemistryWorld->ConstructChemistryComponents();
   auto confinedBox = fpChemistryWorld->GetChemistryBoundary();
 
-  G4PhysicsListHelper *ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  auto *ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   //===============================================================
   // Extend vibrational to low energy
@@ -238,7 +231,7 @@ void EmDNAChemistry::ConstructProcess() {
       "e-_G4DNAVibExcitation", "e-");
 
   if (process) {
-    auto vibExcitation = (G4DNAVibExcitation *)process;
+    auto vibExcitation = (G4DNAVibExcitation *) process;
     G4VEmModel *model = vibExcitation->EmModel();
     auto sancheExcitationMod =
         dynamic_cast<G4DNASancheExcitationModel *>(model);
@@ -261,13 +254,13 @@ void EmDNAChemistry::ConstructProcess() {
   //===============================================================
   // Define processes for molecules
   //
-  G4MoleculeTable *theMoleculeTable = G4MoleculeTable::Instance();
-  G4MoleculeDefinitionIterator iterator =
+  auto *theMoleculeTable = G4MoleculeTable::Instance();
+  auto iterator =
       theMoleculeTable->GetDefintionIterator();
   iterator.reset();
 
   while (iterator()) {
-    G4MoleculeDefinition *moleculeDef = iterator.value();
+    auto *moleculeDef = iterator.value();
 
     if (moleculeDef != G4H2O::Definition()) {
       auto brown = new G4DNABrownianTransportation("BrowianTransportation");

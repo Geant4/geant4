@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
@@ -35,167 +32,169 @@
 #ifndef G4ExcitedDeltaConstructor_h
 #define G4ExcitedDeltaConstructor_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ExcitedBaryonConstructor.hh"
+#include "globals.hh"
 
-class G4ExcitedDeltaConstructor: public G4ExcitedBaryonConstructor
+class G4ExcitedDeltaConstructor : public G4ExcitedBaryonConstructor
 {
-  //This class is a utility class for construction 
-  //short lived particles
+    // This class is a utility class for construction
+    // short lived particles
+  public:
+    enum
+    {
+      NStates = 9
+    };
+
+    enum
+    {
+      NumberOfDecayModes = 5
+    };
 
   public:
     G4ExcitedDeltaConstructor();
-     ~G4ExcitedDeltaConstructor() override = default;
+    ~G4ExcitedDeltaConstructor() override = default;
 
   protected:
-     G4int    GetEncoding(G4int iIsoSpin3, G4int idxState) override;
+    G4int GetEncoding(G4int iIsoSpin3, G4int idxState) override;
 
-  protected:  
-     G4bool   Exist( G4int ) override{return true;}
+    G4bool Exist(G4int) override { return true; }
 
-     G4int    GetQuarkContents(G4int, G4int) override;
-     G4String GetName(G4int iIso3, G4int iState) override;
-     G4String GetMultipletName(G4int iState) override;
+    G4int GetQuarkContents(G4int, G4int) override;
+    G4String GetName(G4int iIso3, G4int iState) override;
+    G4String GetMultipletName(G4int iState) override;
 
-     G4double GetMass( G4int state, G4int iso) override;
-     G4double GetWidth( G4int state, G4int iso) override;
-     G4int    GetiSpin(G4int iState) override;
-     G4int    GetiParity(G4int iState) override;
-     G4int    GetEncodingOffset(G4int iState) override;
+    G4double GetMass(G4int state, G4int iso) override;
+    G4double GetWidth(G4int state, G4int iso) override;
+    G4int GetiSpin(G4int iState) override;
+    G4int GetiParity(G4int iState) override;
+    G4int GetEncodingOffset(G4int iState) override;
 
-     G4DecayTable* CreateDecayTable(const G4String& name,
-					    G4int iIso3, G4int iState,
-					    G4bool fAnti = false) override;
-  private:
-    G4DecayTable* AddNGammaMode( G4DecayTable* table, const G4String& name,
-				    G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddNPiMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddNRhoMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddDeltaPiMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-    G4DecayTable* AddNStarPiMode( G4DecayTable* table, const G4String& name,
-				     G4double br, G4int iIso3, G4bool fAnti);
-
-  public:
-    enum     { NStates = 9  };
-  private:
-    enum     { DeltaIsoSpin = 3 };
+    G4DecayTable* CreateDecayTable(const G4String& name, G4int iIso3, G4int iState,
+                                   G4bool fAnti = false) override;
 
   private:
-    static const char* name[ NStates ];
-    static const G4double mass[ NStates ];
-    static const G4double width[ NStates ];
-    static const G4int    iSpin[ NStates ];
-    static const G4int    iParity[ NStates ];
-    static const G4int    encodingOffset[ NStates ];
+    G4DecayTable* AddNGammaMode(G4DecayTable* table, const G4String& name, G4double br, G4int iIso3,
+                                G4bool fAnti);
+    G4DecayTable* AddNPiMode(G4DecayTable* table, const G4String& name, G4double br, G4int iIso3,
+                             G4bool fAnti);
+    G4DecayTable* AddNRhoMode(G4DecayTable* table, const G4String& name, G4double br, G4int iIso3,
+                              G4bool fAnti);
+    G4DecayTable* AddDeltaPiMode(G4DecayTable* table, const G4String& name, G4double br,
+                                 G4int iIso3, G4bool fAnti);
+    G4DecayTable* AddNStarPiMode(G4DecayTable* table, const G4String& name, G4double br,
+                                 G4int iIso3, G4bool fAnti);
 
-  public:
-    enum     { NumberOfDecayModes = 5};
   private:
-    enum     { NGamma=0, NPi=1, NRho=2, DeltaPi=3, NStarPi=4 };
-  private:
-    static const G4double bRatio[ NStates ][ NumberOfDecayModes];
+    enum
+    {
+      DeltaIsoSpin = 3
+    };
+
+    static const char* name[NStates];
+    static const G4double mass[NStates];
+    static const G4double width[NStates];
+    static const G4int iSpin[NStates];
+    static const G4int iParity[NStates];
+    static const G4int encodingOffset[NStates];
+
+    enum
+    {
+      NGamma = 0,
+      NPi = 1,
+      NRho = 2,
+      DeltaPi = 3,
+      NStarPi = 4
+    };
+
+    static const G4double bRatio[NStates][NumberOfDecayModes];
 };
 
-inline
- G4double G4ExcitedDeltaConstructor::GetMass(G4int iState, G4int)
-{ 
-  return mass[iState]; 
+inline G4double G4ExcitedDeltaConstructor::GetMass(G4int iState, G4int)
+{
+  return mass[iState];
 }
 
-inline
- G4double G4ExcitedDeltaConstructor::GetWidth(G4int iState, G4int)
+inline G4double G4ExcitedDeltaConstructor::GetWidth(G4int iState, G4int)
 {
   return width[iState];
 }
 
-inline
- G4int    G4ExcitedDeltaConstructor::GetiSpin(G4int iState)
+inline G4int G4ExcitedDeltaConstructor::GetiSpin(G4int iState)
 {
   return iSpin[iState];
 }
 
-inline
- G4int    G4ExcitedDeltaConstructor::GetiParity(G4int iState)
+inline G4int G4ExcitedDeltaConstructor::GetiParity(G4int iState)
 {
   return iParity[iState];
 }
 
-inline
- G4int    G4ExcitedDeltaConstructor::GetEncodingOffset(G4int iState)
+inline G4int G4ExcitedDeltaConstructor::GetEncodingOffset(G4int iState)
 {
   return encodingOffset[iState];
 }
 
-inline
- G4int  G4ExcitedDeltaConstructor::GetQuarkContents(G4int iQ, G4int iIso3)
+inline G4int G4ExcitedDeltaConstructor::GetQuarkContents(G4int iQ, G4int iIso3)
 {
   // Quark contents
   //    iIso3 = +3 : uuu
   //    iIso3 = +1 : uud
   //    iIso3 = -1 : udd
   //    iIso3 = -3 : ddd
-  G4int quark=0;
-  if ( iQ == 0 ){
-    if ( iIso3 == -3 ){
-    // d-quark
-      quark = 1;
-    } else {
-    // u-quark
-      quark = 2;
-    }
-  } else if ( iQ == 2 ){
-    if ( iIso3 == +3 ){
-    // u-quark
-      quark = 2;
-    } else {
-    // d-quark
+  G4int quark = 0;
+  if (iQ == 0) {
+    if (iIso3 == -3) {
+      // d-quark
       quark = 1;
     }
-  } else {
-    if (( iIso3 == -1 )||( iIso3 == -3 )) {
-    // d-quark
+    else {
+      // u-quark
+      quark = 2;
+    }
+  }
+  else if (iQ == 2) {
+    if (iIso3 == +3) {
+      // u-quark
+      quark = 2;
+    }
+    else {
+      // d-quark
       quark = 1;
-    } else {
-    // u-quark
+    }
+  }
+  else {
+    if ((iIso3 == -1) || (iIso3 == -3)) {
+      // d-quark
+      quark = 1;
+    }
+    else {
+      // u-quark
       quark = 2;
     }
   }
   return quark;
 }
 
-inline 
- G4String G4ExcitedDeltaConstructor::GetMultipletName(G4int iState)
+inline G4String G4ExcitedDeltaConstructor::GetMultipletName(G4int iState)
 {
   return name[iState];
 }
 
-inline 
- G4String G4ExcitedDeltaConstructor::GetName(G4int iIso3, G4int iState)
+inline G4String G4ExcitedDeltaConstructor::GetName(G4int iIso3, G4int iState)
 {
   G4String particle = name[iState];
-  if ( iIso3 == -3 ){
+  if (iIso3 == -3) {
     particle += "-";
-  } else if ( iIso3 == -1 ){
+  }
+  else if (iIso3 == -1) {
     particle += "0";
-  } else if ( iIso3 == +1 ){
+  }
+  else if (iIso3 == +1) {
     particle += "+";
-  } else {
+  }
+  else {
     particle += "++";
   }
   return particle;
 }
 #endif
-
-
-
-
-
-
-
-
-
-

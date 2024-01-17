@@ -31,22 +31,16 @@
 
 void ChemOxygenWaterBuilder::OxygenScavengerReaction
     (G4DNAMolecularReactionTable *pReactionTable) {
+  auto table = G4MoleculeTable::Instance();
   //-----------------------------------
   // Get the molecular configuration
-  G4MolecularConfiguration *e_aq =
-      G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-  G4MolecularConfiguration *H =
-      G4MoleculeTable::Instance()->GetConfiguration("H");
-  G4MolecularConfiguration *HO2 =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2");
-  G4MolecularConfiguration *Om =
-      G4MoleculeTable::Instance()->GetConfiguration("Om");
-  G4MolecularConfiguration *O2 =
-      G4MoleculeTable::Instance()->GetConfiguration("O2");
-  G4MolecularConfiguration *O2m =
-      G4MoleculeTable::Instance()->GetConfiguration("O2m");
-  G4MolecularConfiguration *O3m =
-      G4MoleculeTable::Instance()->GetConfiguration("O3m");
+  auto *e_aq = table->GetConfiguration("e_aq");
+  auto *H = table->GetConfiguration("H");
+  auto *HO2 = table->GetConfiguration("HO2");
+  auto *Om = table->GetConfiguration("Om");
+  auto *O2 = table->GetConfiguration("O2");
+  auto *O2m = table->GetConfiguration("O2m");
+  auto *O3m = table->GetConfiguration("O3m");
 
   G4DNAMolecularReactionData *reactionData = nullptr;
   // Oxygen concentration
@@ -74,33 +68,21 @@ void ChemOxygenWaterBuilder::SecondOrderReactionExtended(
     G4DNAMolecularReactionTable *pReactionTable) {
   //-----------------------------------
   // Get the molecular configuration
-  G4MolecularConfiguration *OH =
-      G4MoleculeTable::Instance()->GetConfiguration("OH");
-  G4MolecularConfiguration *OHm =
-      G4MoleculeTable::Instance()->GetConfiguration("OHm");
-  G4MolecularConfiguration *e_aq =
-      G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-  G4MolecularConfiguration *H2 =
-      G4MoleculeTable::Instance()->GetConfiguration("H2");
-  G4MolecularConfiguration *H3Op =
-      G4MoleculeTable::Instance()->GetConfiguration("H3Op");
-  G4MolecularConfiguration *H =
-      G4MoleculeTable::Instance()->GetConfiguration("H");
-  G4MolecularConfiguration *H2O2 =
-      G4MoleculeTable::Instance()->GetConfiguration("H2O2");
+  auto table = G4MoleculeTable::Instance();
+  auto *OH = table->GetConfiguration("OH");
+  auto *OHm = table->GetConfiguration("OHm");
+  auto *e_aq = table->GetConfiguration("e_aq");
+  auto *H2 = table->GetConfiguration("H2");
+  auto *H3Op = table->GetConfiguration("H3Op");
+  auto *H = table->GetConfiguration("H");
+  auto *H2O2 = table->GetConfiguration("H2O2");
 
-  G4MolecularConfiguration *HO2 =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2");
-  G4MolecularConfiguration *HO2m =
-      G4MoleculeTable::Instance()->GetConfiguration("HO2m");
-  G4MolecularConfiguration *Om =
-      G4MoleculeTable::Instance()->GetConfiguration("Om");
-  G4MolecularConfiguration *O2 =
-      G4MoleculeTable::Instance()->GetConfiguration("O2");
-  G4MolecularConfiguration *O2m =
-      G4MoleculeTable::Instance()->GetConfiguration("O2m");
-  G4MolecularConfiguration *O3m =
-      G4MoleculeTable::Instance()->GetConfiguration("O3m");
+  auto *HO2 = table->GetConfiguration("HO2");
+  auto *HO2m = table->GetConfiguration("HO2m");
+  auto *Om = table->GetConfiguration("Om");
+  auto *O2 = table->GetConfiguration("O2");
+  auto *O2m = table->GetConfiguration("O2m");
+  auto *O3m = table->GetConfiguration("O3m");
 
   // second order
   G4DNAMolecularReactionData *reactionData = nullptr;

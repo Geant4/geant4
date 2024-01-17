@@ -140,9 +140,9 @@ geant4_module_link_libraries(G4emdna-man
     G4navigation
     G4procman
     G4track
-    G4volumes
   PRIVATE
     G4cuts
     G4emutils
     G4materials
-    G4partman)
+    G4partman
+    G4volumes)

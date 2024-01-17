@@ -6,6 +6,67 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-16 Alberto Ribon (radioactive_decay-V11-01-09)
+- G4RadioactiveDecay, G4Radioactivation : added an extra parameter in the
+  constructor of these classes, to be able to set, directly at the level
+  of class constructor, the threshold for the time beyond which radioactive
+  decays are ignored. This is meant for custom physics lists.
+  Moreover, the constructor of these classes have been modified to offer
+  also a C++ interface - via the singleton G4HadronicParameters - to set 
+  the same time threshold for radioactive decays. This is meant for 
+  reference physics lists.
+  Note that, in the unlikely and weird scenario that two time thresholds
+  are specified - one via G4HadronicParameters, and one via the constructor
+  parameter - the larger of the two is considered, to be conservative.
+  In all cases, an eventual time threshold specified via UI command
+  (i.e. /process/had/rdm/thresholdForVeryLongDecayTime value)
+  prevails on everything else.
+
+## 2023-11-07 Alberto Ribon (radioactive_decay-V11-01-08)
+- G4RadioactiveDecay : changed default threshold for the time beyond which
+  radioactive decays are ignored - from twice the age of the Universe to
+  1 year.
+  ( Reminder: this threshold can be changed via the UI command,
+    e.g. to set it to 1000 years:
+    /process/had/rdm/thresholdForVeryLongDecayTime 1000.0 year
+  )
+
+## 2023-10-05 Vladimir Ivantchenko (radioactive_decay-V11-01-07)
+- G4RadioactiveDecay - removed debug printout
+
+## 2023-09-28 Vladimir Ivantchenko (radioactive_decay-V11-01-06)
+- G4Radioactivation - fixed another Coverity report
+
+## 2023-08-29 Vladimir Ivantchenko (radioactive_decay-V11-01-05)
+- G4Radioactivation - fixed Coverity reports
+
+## 2023-08-23 Vladimir Ivantchenko (radioactive_decay-V11-01-04)
+- G4RadioactiveDecay - only one table of radioactive decay channels,
+    removed not needed ifdef for MULTITHREADED; removed lock from
+    class constructor, added use only lock in the method LoadDecayTable(..)
+    after the check if the table is already downloaded, added explicit
+    unlock in this method; removed counter of instances of the class;
+    all virtual methods maked override and implementations are moved to
+    the source; DecayIt(..) method is declaired virtual, removed unused 
+    methods; use reference instead of values in method signatures for
+    complex objects; added G4ITDecay object local for each thread to perform 
+    sampling of radioactive decays with a possibility to sample correlated
+    gamma emission
+- G4Radioactivation - all virtual methods marked as
+    override and implementations are moved to the source; DecayIt(..)
+    is marked as override; removed methods GetDecayTable1, AtRestDoIt,
+    PostStepDoIt instead base class method are used.
+- G4BetaMinusDecay, G4BetaPlusDecay, G4BetaSpectrumSampler - implemented
+    thread safe sampling method
+- G4NuclearDecay - implement virtual method IsOKWithParentMass which
+    alwys return 'true', make access methods 'const' where possible
+- G4ITDecay - added method SetupDecay, which allows this class to be used
+    inside local thread
+
+## 2023-07-16 Vladimir Ivantchenko (radioactive_decay-V11-01-03)
+- G4RadioactiveDecay - fixed initialisation printout: correct place
+    for triton printout;
+
 ## 2023-06-17 Vladimir Ivantchenko (radioactive_decay-V11-01-02)
 - G4RadioactiveDecay, G4BetaSpectrumSampler - fixed Coverity reports on
     non-initialized class members

@@ -57,7 +57,6 @@ void G4CsvNtupleManager::CreateTNtupleFromBooking(
   ntupleDescription->SetNtuple(
     new tools::wcsv::ntuple(
           *(ntupleDescription->GetFile()), G4cerr, ntupleDescription->GetNtupleBooking()));
-  fNtupleVector.push_back(ntupleDescription->GetNtuple());
  }
 
 //_____________________________________________________________________________

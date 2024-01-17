@@ -56,7 +56,7 @@ Par04Hit::Par04Hit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par04Hit::~Par04Hit() {}
+Par04Hit::~Par04Hit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,6 +64,7 @@ Par04Hit::Par04Hit(const Par04Hit& aRight)
   : G4VHit()
 {
   fEdep   = aRight.fEdep;
+  fNdep   = aRight.fNdep;
   fZId    = aRight.fZId;
   fRhoId  = aRight.fRhoId;
   fPhiId  = aRight.fPhiId;
@@ -79,6 +80,7 @@ Par04Hit::Par04Hit(const Par04Hit& aRight)
 const Par04Hit& Par04Hit::operator=(const Par04Hit& aRight)
 {
   fEdep   = aRight.fEdep;
+  fNdep   = aRight.fNdep;
   fZId    = aRight.fZId;
   fRhoId  = aRight.fRhoId;
   fPhiId  = aRight.fPhiId;
@@ -108,6 +110,9 @@ void Par04Hit::Draw()
   // Hits can be filtered out in visualisation
   if(!pVVisManager->FilterHit(*this))
     return;
+  // Do not plot hits from parallel world
+  if(fType >= 2)
+    return;
   // Do not draw empty hits
   if(fEdep <= 0)
     return;
@@ -127,7 +132,6 @@ void Par04Hit::Draw()
     // Set transparency depending on the energy
     // Arbitrary formula
     G4double alpha = 2 * std::log10(fEdep + 1);
-    G4cout << "alpha = " << alpha << G4endl;
     G4Colour colour(colR, colG, colB, alpha);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
@@ -168,7 +172,7 @@ std::vector<G4AttValue>* Par04Hit::CreateAttValues() const
 
 void Par04Hit::Print()
 {
-  std::cout << "\tHit " << fEdep / MeV << " MeV at " << fPos / cm << " cm rotation " << fRot
-            << " (R,phi,z)= (" << fRhoId << ", " << fPhiId << ", " << fZId << "), " << fTime << " ns"
-            << std::endl;
+  std::cout << "\tHit " << fEdep / MeV << " MeV from " << fNdep << " deposits at " << fPos / cm
+            << " cm rotation " << fRot << " (R,phi,z)= (" << fRhoId << ", " << fPhiId
+            << ", " << fZId << "), " << fTime << " ns" << std::endl;
 }

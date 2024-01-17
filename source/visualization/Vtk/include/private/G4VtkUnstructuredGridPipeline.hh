@@ -26,16 +26,27 @@
 #ifndef G4VTKUNSTRUCTUREDGRIDPIPELINE_HH
 #define G4VTKUNSTRUCTUREDGRIDPIPELINE_HH
 
+#include <map>
+#include <vector>
+
 #include "G4VVtkPipeline.hh"
 #include "G4PseudoScene.hh"
 
 #include "vtkSmartPointer.h"
 #include "vtkPoints.h"
+#include "vtkCharArray.h"
+#include "vtkDoubleArray.h"
 #include "vtkUnstructuredGrid.h"
 #include "vtkStaticCleanUnstructuredGrid.h"
+#include "vtkLookupTable.h"
+#include "vtkDiscretizableColorTransferFunction.h"
 
-class vtkDoubleArray;
+class vtkClipDataSet;
 class vtkDataSetMapper;
+class vtkUnstructuredGridVolumeMapper;
+class vtkUnstructuredGridVolumeRayCastMapper;
+class vtkUnstructuredGridVolumeZSweepMapper;
+class vtkOpenGLProjectedTetrahedraMapper;
 class vtkActor;
 
 class G4Mesh;
@@ -46,6 +57,11 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
     G4VtkUnstructuredGridPipeline(G4String name, const G4VtkVisContext& vc);
 
     ~G4VtkUnstructuredGridPipeline() = default;
+
+    void AddFilter(vtkSmartPointer<vtkUnstructuredGridAlgorithm> f) { filters.push_back(f); }
+    vtkSmartPointer<vtkUnstructuredGridAlgorithm> GetFilter(G4int iFilter) { return filters[iFilter]; }
+    std::size_t GetNumberOfFilters() { return filters.size(); }
+    vtkSmartPointer<vtkUnstructuredGridAlgorithm> GetFinalFilter() { return filters[filters.size() - 1]; }
 
     void Modified() {};
     void Clear() {};
@@ -62,11 +78,27 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
         PseudoSceneVtkBase(G4PhysicalVolumeModel* pvModel,  // input
                            G4int depth,
                            vtkPoints *points,
-                           vtkDoubleArray *cellValues,
-                           vtkUnstructuredGrid *unstructuredGrid)                     // input...the following are outputs by reference
-          : fpPVModel(pvModel), fDepth(depth), fpPoints(points),
-            fpGrid(unstructuredGrid), fpCellValues(cellValues)
+                           vtkDoubleArray *pointColourValues,
+                           vtkDoubleArray *cellColourValues,
+                           vtkDoubleArray *pointColourIndices,
+                           vtkDoubleArray *cellColourIndices,
+                           vtkDiscretizableColorTransferFunction *colourLUT,
+                           vtkUnstructuredGrid *unstructuredGrid)  // input...the following are outputs by reference
+          : fpPVModel(pvModel), fDepth(depth), fpPoints(points), fpGrid(unstructuredGrid),
+            fpPointColourValues(pointColourValues), fpCellColourValues(cellColourValues),
+            fpPointColourIndices(pointColourIndices), fpCellColourIndices(cellColourIndices),
+            fpColourLUT(colourLUT)
         {}
+
+        G4int GetNumberOfPoints() {return iPoint;}
+        G4int GetNumberOfCells() {return iCell;}
+        G4int GetNumberOfAddedCells() {return iCellAdd;}
+        void DumpColourMap() {
+          for(auto i : fpColourMap) {
+            G4cout << i.first << " " << i.second << G4endl;
+          }
+        }
+
       protected:
         using G4PseudoScene::AddSolid;  // except for...
         void AddSolid(const G4VSolid& /*solid*/) override {};
@@ -78,17 +110,31 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
         G4int fDepth;
         vtkSmartPointer<vtkPoints> fpPoints;
         vtkSmartPointer<vtkUnstructuredGrid> fpGrid;
-        vtkSmartPointer<vtkDoubleArray> fpCellValues;
+        vtkSmartPointer<vtkDoubleArray> fpPointColourValues;
+        vtkSmartPointer<vtkDoubleArray> fpCellColourValues;
+        vtkSmartPointer<vtkDoubleArray> fpPointColourIndices;
+        vtkSmartPointer<vtkDoubleArray> fpCellColourIndices;
+        std::map<std::size_t,double> fpColourMap;
+        vtkSmartPointer<vtkDiscretizableColorTransferFunction> fpColourLUT;
+        std::vector<G4ThreeVector> fpPointVector;
+        std::map<std::size_t, std::size_t> fpPointMap;
+        G4int iPoint = 0;
         G4int iCell = 0;
+        G4int iCellAdd = 0;
     };
     class PseudoSceneForTetCells: public PseudoSceneVtkBase {
       public:
         PseudoSceneForTetCells(G4PhysicalVolumeModel* pvModel,  // input
                                G4int depth,
                                vtkPoints *points,
-                               vtkDoubleArray *cellValues,
+                               vtkDoubleArray *pointColourValues,
+                               vtkDoubleArray *cellColourValues,
+                               vtkDoubleArray *pointColourIndices,
+                               vtkDoubleArray *cellColourIndices,
+                               vtkDiscretizableColorTransferFunction *colourLUT,
                                vtkUnstructuredGrid *unstructuredGrid)                     // input...the following are outputs by reference
-          : PseudoSceneVtkBase(pvModel,depth,points,cellValues,unstructuredGrid)
+          : PseudoSceneVtkBase(pvModel,depth,points,pointColourValues,cellColourValues,
+                               pointColourIndices, cellColourIndices, colourLUT, unstructuredGrid)
         {}
       private:
         using G4PseudoScene::AddSolid;  // except for...
@@ -98,11 +144,16 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
     class PseudoSceneForCubicalCells: public PseudoSceneVtkBase {
       public:
         PseudoSceneForCubicalCells(G4PhysicalVolumeModel* pvModel,  // input
-                                    G4int depth,
-                                    vtkPoints *points,
-                                    vtkDoubleArray *cellValues,
-                                    vtkUnstructuredGrid *unstructuredGrid)                     // input...the following are outputs by reference
-          : PseudoSceneVtkBase(pvModel,depth,points,cellValues,unstructuredGrid)
+                                   G4int depth,
+                                   vtkPoints *points,
+                                   vtkDoubleArray *pointColourValues,
+                                   vtkDoubleArray *cellColourValues,
+                                   vtkDoubleArray *pointColourIndices,
+                                   vtkDoubleArray *cellColourIndices,
+                                   vtkDiscretizableColorTransferFunction *colourLUT,
+                                   vtkUnstructuredGrid *unstructuredGrid)                     // input...the following are outputs by reference
+          : PseudoSceneVtkBase(pvModel,depth,points,pointColourValues,cellColourValues,
+                               pointColourIndices,cellColourIndices,colourLUT, unstructuredGrid)
         {}
       private:
         using G4PseudoScene::AddSolid;  // except for...
@@ -112,12 +163,21 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
 
   private:
     vtkSmartPointer<vtkPoints> points;
-    vtkSmartPointer<vtkDoubleArray> pointValues;
-    vtkSmartPointer<vtkDoubleArray> cellValues;
+    vtkSmartPointer<vtkDoubleArray> pointColourValues;
+    vtkSmartPointer<vtkDoubleArray> cellColourValues;
+    vtkSmartPointer<vtkDoubleArray> pointColourIndices;
+    vtkSmartPointer<vtkDoubleArray> cellColourIndices;
+    vtkSmartPointer<vtkDiscretizableColorTransferFunction> colourLUT;
+
     vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid;
-    vtkSmartPointer<vtkStaticCleanUnstructuredGrid> cleanUnstructuredGrid;
+    std::vector<vtkSmartPointer<vtkUnstructuredGridAlgorithm>> filters;  // derived types can store filters in this vector
+    vtkSmartPointer<vtkStaticCleanUnstructuredGrid> clean;
+    vtkSmartPointer<vtkClipDataSet> clip;
     vtkSmartPointer<vtkDataSetMapper> mapper;
+    vtkSmartPointer<vtkUnstructuredGridVolumeRayCastMapper> volumeMapper;
     vtkSmartPointer<vtkActor> actor;
+    vtkSmartPointer<vtkVolume> volume;
 };
+
 
 #endif  // G4VTKUNSTRUCTUREDGRIDPIPELINE_HH

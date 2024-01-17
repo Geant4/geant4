@@ -407,6 +407,7 @@ G4IonICRU73Data::RetrieveVector(std::ostringstream& ost, G4bool warn)
                   FatalException, ed, "Check G4LEDATA");
     } else {
       if(fSpline) { fVector->FillSecondDerivatives(); }
+      fVector->EnableLogBinSearch(G4EmParameters::Instance()->NumberForFreeVector());
       v = new G4PhysicsLogVector(fEmin, fEmax, fNbins, fSpline);
       for(G4int i=0; i<=fNbins; ++i) {
         G4double e = v->Energy(i);

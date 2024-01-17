@@ -52,7 +52,7 @@ const G4int NDENSELEM = 98;
 class G4DensityEffectData
 {
  public:
-  explicit G4DensityEffectData();
+  G4DensityEffectData();
 
   ~G4DensityEffectData() = default;
 

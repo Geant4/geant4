@@ -72,6 +72,9 @@ class Par04RunAction : public G4UserRunAction
   Par04DetectorConstruction* fDetector;
   /// Pointer to event action to save hits
   Par04EventAction* fEventAction;
+  /// Timer measurement
+  std::chrono::steady_clock::time_point fChronoStart;
+  std::chrono::steady_clock::time_point fChronoEnd;
 };
 
 #endif /* PAR04RUNACTION_HH */

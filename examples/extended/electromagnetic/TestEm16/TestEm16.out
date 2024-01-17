@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,7 +31,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.388 cm 
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -194,6 +194,8 @@ Rayl:  for gamma SubType=11 BuildTable=1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh : Emin=    0 eV  Emax=  100 TeV  CullenGenerator
 
+XrayReflection: Gamma specular reflection for energies > 30 eV.
+
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=84 100 eV  - 100 TeV
@@ -332,18 +334,18 @@ G4SynchrotronRadiation::GetRandomEnergySR :
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.170000s Real=0.169063s Sys=0.000000s
+  User=0.180000s Real=0.212258s Sys=0.000000s
 Summary for synchrotron radiation :
-  Number of photons = 65086
-  Emean             = 20.39 +/- 0.1444 keV
-  E_rms             = 36.83 keV
-  Energy Max / Mean = 27.54
-  MeanFreePath      = 16.07 cm 
+  Number of photons = 64566
+  Emean             = 20.42 +/- 0.1465 keV
+  E_rms             = 37.22 keV
+  Energy Max / Mean = 35.69
+  MeanFreePath      = 16.2 cm 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={1402135844460474226, 1250051493877681105, 260032901618238037, 1959548330058272173, 333697207877744815, 2195090962095573257, 757497238491870347, 1983172992205346680, 333986983656040467, 1332034388201043752, 1148533830487492631, 1572133571051143919, 269618836299041414, 1500430236492907451, 1379717044319899969, 489791943798559179, 1807394300704501137} counter= 13sumtot= 1528124031986278951
+N=17 V[N]={2257445806913462277, 632527905652818191, 631474175170306566, 1914435244802913599, 1306329175570610787, 762881766574265544, 719637845945592025, 1589777450882882221, 1702736512761014061, 890200915960239409, 384368303897083373, 453040775896457888, 307076404477827112, 1945929717505046236, 544360434503550427, 215256680747272403, 182941379877301700} counter= 3sumtot= 299519432642786162
 ---------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

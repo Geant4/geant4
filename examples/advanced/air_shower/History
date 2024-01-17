@@ -4,6 +4,14 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-15 I. Hrivnacova (air_shower-V11-01-01)
+- Updated OpenVis.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-11-09 Bernardo Tome (air_shower-V11-01-00)
+- Address the warning message regarding the size of the material property vector
+
 ## 2022-02-22 Daren Sawkey (air_shower-V11-00-01)
 - All material properties in order of increasing energy
 

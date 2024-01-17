@@ -317,16 +317,16 @@ protected:
 
    // For storing the view point
    struct viewPtData {
-	  char* viewPtName;
-	  int viewportMapping;
-	  SbVec3f position;
-	  SbRotation orientation;
-	  float	aspectRatio;
-	  float nearDistance;
-	  float	farDistance;
-	  float	focalDistance;
-	  CameraType camType;
-	  float	height;
+	  char* viewPtName{nullptr};
+	  int viewportMapping{0};
+	  SbVec3f position{0.0, 0.0, 0.0} ;
+	  SbRotation orientation{};
+	  float	aspectRatio{0.0};
+	  float nearDistance{0.0};
+	  float	farDistance{0.0};
+	  float	focalDistance{0.0};
+	  CameraType camType{PERSPECTIVE};
+	  float	height{0.0};
    };
 
    struct sceneElement {

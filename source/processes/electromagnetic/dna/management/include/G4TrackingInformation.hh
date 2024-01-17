@@ -58,10 +58,10 @@
 
 class G4ITStepProcessor;
 
-typedef std::vector<G4int> G4SelectedAtRestDoItVector;
-typedef std::vector<G4int> G4SelectedAlongStepDoItVector;
-typedef std::vector<G4int> G4SelectedPostStepDoItVector;
-typedef std::vector<G4int> G4SelectedPostStepAtTimeDoItVector;
+using  G4SelectedAtRestDoItVector = std::vector<G4int>;
+using  G4SelectedAlongStepDoItVector = std::vector<G4int>;
+using  G4SelectedPostStepDoItVector = std::vector<G4int>;
+using  G4SelectedPostStepAtTimeDoItVector = std::vector<G4int>;
 
 class G4Trajectory_Lock;
 class G4Track;
@@ -167,7 +167,7 @@ protected:
   //-------------
   friend class G4ITStepProcessor;
   //_______________________________________________________
-  G4bool fStepLeader;
+  G4bool fStepLeader{false};
   //_______________________________________________________
   G4Trajectory_Lock* fpTrajectory_Lock;
 
@@ -191,7 +191,7 @@ protected:
   std::vector<G4shared_ptr<G4ProcessState_Lock> > fProcessState;
 
   //_______________________________________________________
-  G4ITStepProcessorState_Lock* fpStepProcessorState;
+  G4ITStepProcessorState_Lock* fpStepProcessorState{nullptr};
 
   //_______________________________________________________
   /** Copy constructor

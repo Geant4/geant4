@@ -68,6 +68,11 @@ class G4DNAPTBElasticModel : public G4VDNAModel
    */
   ~G4DNAPTBElasticModel() override = default;
 
+  // copy constructor and hide assignment operator
+  G4DNAPTBElasticModel(G4DNAPTBElasticModel&) = delete;  // prevent copy-construction
+  G4DNAPTBElasticModel& operator=(
+    const G4DNAPTBElasticModel& right) = delete;  // prevent assignement
+
   /*!
    * \brief Initialise
    * Mandatory method for every model class. The material/particle for which the model
@@ -216,10 +221,6 @@ class G4DNAPTBElasticModel : public G4VDNAModel
    */
   G4double RandomizeCosTheta(const G4double& k, const std::size_t& materialName);
 
-  // copy constructor and hide assignment operator
-  G4DNAPTBElasticModel(G4DNAPTBElasticModel&) = delete;  // prevent copy-construction
-  G4DNAPTBElasticModel& operator=(
-    const G4DNAPTBElasticModel& right) = delete;  // prevent assignement
 };
 
 #endif

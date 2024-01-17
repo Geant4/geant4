@@ -30,24 +30,20 @@
 #ifndef G4DoubleHyperH4_h
 #define G4DoubleHyperH4_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ###############################################################
-// ###                      DOUBLEHYPERH4                      ###
-// ###############################################################
-
-class G4DoubleHyperH4 : public G4Ions {
+class G4DoubleHyperH4 : public G4Ions
+{
   public:
     static G4DoubleHyperH4* Definition();
     static G4DoubleHyperH4* DoubleHyperH4Definition();
     static G4DoubleHyperH4* DoubleHyperH4();
+
   private:
-    static G4DoubleHyperH4* theInstance;
-    G4DoubleHyperH4()  {}
+    G4DoubleHyperH4() {}
     ~G4DoubleHyperH4() override = default;
+
+    static G4DoubleHyperH4* theInstance;
 };
 
 #endif

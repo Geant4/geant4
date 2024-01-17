@@ -68,9 +68,15 @@ void EventAction::EndOfEventAction(const G4Event*)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   analysisManager->FillH1(0, fEnergyAbs);
-  analysisManager->FillH1(1, fEnergyGap);
+  if (analysisManager->GetH1(1) != nullptr) {
+    // histogram may not exist for all runs
+    analysisManager->FillH1(1, fEnergyGap);
+  }
   analysisManager->FillH1(2, fTrackLAbs);
-  analysisManager->FillH1(3, fTrackLGap);
+  if (analysisManager->GetH1(3) != nullptr) {
+    // histogram may not exist for all runs
+    analysisManager->FillH1(3, fTrackLGap);
+  }
 
   //fill ntuple
   //

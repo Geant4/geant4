@@ -43,7 +43,7 @@
 
 void F04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  F04UserTrackInformation* trackInformation = new F04UserTrackInformation();
+  auto trackInformation = new F04UserTrackInformation();
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);
 
@@ -59,9 +59,8 @@ void F04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
 void F04TrackingAction::PostUserTrackingAction(const G4Track* aTrack){
 
-  F04UserTrackInformation*
-    trackInformation = (F04UserTrackInformation*)aTrack->GetUserInformation();
- 
+  auto trackInformation = (F04UserTrackInformation*)aTrack->GetUserInformation();
+
   if ( aTrack->GetDefinition()==G4MuonPlus::MuonPlusDefinition() ||
        aTrack->GetDefinition()==G4PionPlus::PionPlusDefinition() ) {
     if (trackInformation->GetTrackStatusFlag() == reverse) {

@@ -51,7 +51,6 @@
 // 1. S.M. Seltzer and M.J. Berger Nucl. Instr. Meth. B12 (1985) 95
 // 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data
 //    Tables 35 (1986) 345
-// Cross section computation in the base class G4eBremsstrahlungRelModel
 
 // -------------------------------------------------------------------
 //
@@ -59,13 +58,15 @@
 #ifndef G4SeltzerBergerModel_h
 #define G4SeltzerBergerModel_h 1
 
+#include "G4VEmModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "globals.hh"
 
 class G4Physics2DVector;
 class G4SBBremTable;
+class G4ParticleChangeForLoss;
 
-class G4SeltzerBergerModel : public G4eBremsstrahlungRelModel
+class G4SeltzerBergerModel : public G4VEmModel
 {
 
 public:
@@ -77,6 +78,21 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
+  void InitialiseLocal(const G4ParticleDefinition*,
+                       G4VEmModel* masterModel) override;
+
+  G4double ComputeDEDXPerVolume(const G4Material*,
+                                const G4ParticleDefinition*,
+                                G4double ekin,
+                                G4double cutEnergy) override;
+
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                      G4double ekin,
+                                      G4double zet,
+                                      G4double,
+                                      G4double cutEnergy,
+                                      G4double maxEnergy = DBL_MAX) override;
+
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                          const G4MaterialCutsCouple*,
                          const G4DynamicParticle*,
@@ -86,6 +102,10 @@ public:
   void SetupForMaterial(const G4ParticleDefinition*,
                         const G4Material*, G4double) override;
 
+  G4double MinPrimaryEnergy(const G4Material*,
+                            const G4ParticleDefinition*,
+                            G4double cutEnergy) override;
+
   inline void SetBicubicInterpolationFlag(G4bool val) 
   { fIsUseBicubicInterpolation = val; };
 
@@ -93,33 +113,58 @@ public:
   G4SeltzerBergerModel & operator=(const G4SeltzerBergerModel &right) = delete;
   G4SeltzerBergerModel(const G4SeltzerBergerModel&) = delete;
 
-protected:
-
-  G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
-
 private:
 
+  void SetParticle(const G4ParticleDefinition* p);
+
   void ReadData(G4int Z);
+
+  G4double ComputeBremLoss(G4double cutEnergy);
+
+  G4double ComputeXSectionPerAtom(G4double cutEnergy);
+
+  G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
   G4double SampleEnergyTransfer(const G4double kineticEnergy, 
                                 const G4double logKineticEnergy, 
                                 const G4double cut,
                                 const G4double emax);
 
-  static constexpr G4int    gMaxZet       = 101;
-  static constexpr G4double gExpNumLimit  = -12.;
-  static G4double           gYLimitData[gMaxZet];
+protected:
+
+  G4ParticleChangeForLoss* fParticleChange{nullptr};
+
+private:
+
+  static constexpr G4int gMaxZet{101};
+  static constexpr G4double gExpNumLimit{-12.};
+  static G4double gYLimitData[gMaxZet];
   static G4Physics2DVector* gSBDCSData[gMaxZet];
-  static G4SBBremTable*     gSBSamplingTable;
+  static G4SBBremTable* gSBSamplingTable;
+  static const G4double gBremFactor;
+  static const G4double gMigdalConstant;
 
-  G4bool                    fIsUseBicubicInterpolation;
-  G4bool                    fIsUseSamplingTables;
+  G4bool fIsUseBicubicInterpolation{false};
+  G4bool fIsUseSamplingTables{true};
+  G4bool fIsElectron{true};
+  G4bool fIsScatOffElectron{false};
+  G4bool isInitializer{false};
+  //
+  G4int fCurrentIZ{0};
+  G4int fNumWarnings{0};
 
-  G4int                     fNumWarnings;
+  const G4ParticleDefinition* fPrimaryParticle{nullptr};
+  G4ParticleDefinition* fGammaParticle;
 
-  size_t                    fIndx;
-  size_t                    fIndy;
-  G4bool isFirstInstance{false};
+  // cash
+  G4double fPrimaryKinEnergy{0.};
+  G4double fPrimaryTotalEnergy{0.};
+  G4double fDensityFactor{0.};
+  G4double fDensityCorr{0.};
+  G4double fLowestKinEnergy;
+
+  std::size_t fIndx{0};
+  std::size_t fIndy{0};
 };
 
 #endif

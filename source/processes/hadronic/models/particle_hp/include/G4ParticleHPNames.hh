@@ -25,53 +25,42 @@
 //
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko, July-2023 Basic revision of particle HP classes
 //
 #ifndef G4ParticleHPNames_h
 #define G4ParticleHPNames_h 1
 
-#include "G4ios.hh"
-
-#include <fstream>
-// #include <strstream>
-#include "G4ParticleHPDataUsed.hh"
 #include "globals.hh"
+#include "G4ParticleHPDataUsed.hh"
 
-#include <stdlib.h>
+class G4ParticleHPManager;
 
 class G4ParticleHPNames
 {
   public:
-    G4ParticleHPNames() { theMaxOffSet = 5; }
-    G4ParticleHPNames(G4int maxOffSet) { theMaxOffSet = maxOffSet; }
+    explicit G4ParticleHPNames(G4int maxOffSet = 5);
     ~G4ParticleHPNames() = default;
 
-    // G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool &
-    // active);
-    G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool& active)
+    G4ParticleHPDataUsed GetName(G4int A, G4int Z, const G4String& base,
+                                 const G4String& rest, G4bool& active)
     {
-      G4int M = 0;
-      return GetName(A, Z, M, base, rest, active);
-    };
-    G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest,
-                                 G4bool& active);
+      return GetName(A, Z, 0, base, rest, active);
+    }
+    G4ParticleHPDataUsed GetName(G4int A, G4int Z, G4int M,
+                                 const G4String& base, const G4String& rest, G4bool& active);
     G4String GetName(G4int i);
+
+    G4String itoa(G4int current);
+
     void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
 
-  public:
+    G4ParticleHPNames(G4ParticleHPNames&) = delete;
+    G4ParticleHPNames& operator=(const G4ParticleHPNames &right) = delete;
+
+  private:
+    G4ParticleHPManager* fManager;
     static const G4String theString[100];
     G4int theMaxOffSet;
-    G4String itoa(int current)
-    {
-      const char theDigits[11] = "0123456789";
-      G4String result;
-      int digit;
-      do {
-        digit = current - 10 * (current / 10);
-        result = theDigits[digit] + result;
-        current /= 10;
-      } while (current != 0);  // Loop checking, 11.05.2015, T. Koi
-      return result;
-    }
 };
 
 #endif

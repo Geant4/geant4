@@ -35,13 +35,14 @@
 #ifndef G4VEXTERNALNAVIGATION_HH
 #define G4VEXTERNALNAVIGATION_HH
 
-#include "G4NavigationHistory.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VSolid.hh"
+#include "G4NavigationHistory.hh"
 #include "G4ThreeVector.hh"
+#include "G4VNavigation.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VSolid.hh"
 
-class G4VExternalNavigation
+class G4VExternalNavigation : public G4VNavigation
 {
   public:  // with description
 
@@ -50,45 +51,6 @@ class G4VExternalNavigation
    
     virtual ~G4VExternalNavigation();
       // Destructor
-   
-    virtual G4bool LevelLocate( G4NavigationHistory& history,
-                                const G4VPhysicalVolume* blockedVol,
-                                const G4int blockedNum,
-                                const G4ThreeVector& globalPoint,
-                                const G4ThreeVector* globalDirection,
-                                const G4bool pLocatedOnEdge,
-                                G4ThreeVector& localPoint) = 0;
-      // Search positioned volumes in mother at current top level of history
-      // for volume containing globalPoint. Do not test the blocked volume.
-      // If a containing volume is found, `stack' the new volume and return
-      // true, else return false (the point lying in the mother but not any
-      // of the daughters). localPoint = global point in local system on entry,
-      // point in new system on exit.
-
-    virtual G4double ComputeStep( const G4ThreeVector& localPoint,
-                                  const G4ThreeVector& localDirection,
-                                  const G4double currentProposedStepLength,
-                                  G4double& newSafety,
-                                  G4NavigationHistory& history,
-                                  G4bool& validExitNormal,
-                                  G4ThreeVector& exitNormal,
-                                  G4bool& exiting,
-                                  G4bool& entering,
-                                  G4VPhysicalVolume** pBlockedPhysical,
-                                  G4int& blockedReplicaNo ) = 0;
-     // Compute the length of a step to the next boundary.
-     // Ignore the (input) pBlockedPhysical volume (with replica/parameterisation
-     //   number 'blockedReplica')
-     // Identify the next candidate volume (if a daughter of current volume),
-     //   and return it in pBlockedPhysical, blockedReplicaNo
-     // In/Out  Navigation history: to be update for volume of next intersection.
-     // In/out 'newsafety' is the known isotropic safety of the initial point:
-     //     an earlier (likely crude) estimate on input,
-     //     to be updated with new estimate for the same (start) point.
-   
-    virtual G4double ComputeSafety( const G4ThreeVector& globalpoint,
-                                    const G4NavigationHistory& history,
-                                    const G4double pMaxLength = DBL_MAX ) = 0;
 
     virtual G4VExternalNavigation* Clone() = 0;
 
@@ -105,20 +67,6 @@ class G4VExternalNavigation
      //   Update any relevant internal state to take account that
      //      - the location has been moved to 'localPoint'
      //      - it remains in the current (mother) physical volume 'motherPhysical'
-   
-    inline G4int GetVerboseLevel() const { return fVerbose; }
-    inline void  SetVerboseLevel(G4int level) { fVerbose = level; }
-      // Get/Set verbosity level.
-
-    inline void  CheckMode(G4bool mode) { fCheck = mode; }
-      // Run navigation in "check-mode", therefore using additional
-      // verifications and more strict correctness conditions.
-      // Should be effective only with G4VERBOSE set.
-
-  protected:
-
-    G4bool fCheck = false;
-    G4int fVerbose = 0;
 };
 
 #endif

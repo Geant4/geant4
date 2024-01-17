@@ -47,17 +47,17 @@ class F02CalorimeterSD : public G4VSensitiveDetector
   public:
 
       F02CalorimeterSD(G4String, F02DetectorConstruction* );
-      virtual ~F02CalorimeterSD();
+      ~F02CalorimeterSD() override;
 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
+      void Initialize(G4HCofThisEvent*) override;
+      G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
+      void EndOfEvent(G4HCofThisEvent*) override;
 
   private:
 
-      F02CalorHitsCollection*  fCalCollection;
-      F02DetectorConstruction* fDetector;
-      G4int*                   fHitID;
+      F02CalorHitsCollection*  fCalCollection = nullptr;
+      F02DetectorConstruction* fDetector = nullptr;
+      G4int*                   fHitID = nullptr;
 };
 
 #endif

@@ -56,6 +56,9 @@ using MaterialParticleModelTable =
    */
   ~G4DNAModelInterface() override = default;
 
+  G4DNAModelInterface(const G4DNAModelInterface&) = delete;  // prevent copy-construction
+  G4DNAModelInterface& operator=(const G4DNAModelInterface& right) = delete;  // prevent assignement
+ 
   /*!
    * \brief Initialise
    * Initialise method to call all the initialise methods of the registered models
@@ -140,9 +143,6 @@ using MaterialParticleModelTable =
   G4double GetNumMolPerVolUnitForComponentInComposite(
     const G4Material* component, const G4Material* composite);
 
-  // copy constructor and hide assignment operator
-  G4DNAModelInterface(const G4DNAModelInterface&) = delete;  // prevent copy-construction
-  G4DNAModelInterface& operator=(const G4DNAModelInterface& right) = delete;  // prevent assignement
   const G4String fName;  ///< name of the interaction
   G4ParticleChangeForGamma* fpParticleChangeForGamma = nullptr;
   std::vector<G4VEmModel*> fRegisteredModels;  ///< vector containing all the registered models

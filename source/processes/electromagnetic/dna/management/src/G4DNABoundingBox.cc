@@ -154,7 +154,7 @@ G4bool G4DNABoundingBox::overlap(const G4DNABoundingBox& other,
     *out = other;
     return true;
   }
-  else if(other.contains(*this))
+  if(other.contains(*this))
   {
     *out = *this;
     return true;
@@ -199,9 +199,9 @@ G4bool G4DNABoundingBox::overlap(const G4ThreeVector& query,
   {
     return false;  //
   }
-  G4int num_less_extent = (x < this->halfSideLengthInX()) +
-                          (y < this->halfSideLengthInY()) +
-                          (z < this->halfSideLengthInZ());
+  G4int num_less_extent = static_cast<int>(x < this->halfSideLengthInX()) +
+                          static_cast<int>(y < this->halfSideLengthInY()) +
+                          static_cast<int>(z < this->halfSideLengthInZ());
 
   if(num_less_extent > 1)
   {

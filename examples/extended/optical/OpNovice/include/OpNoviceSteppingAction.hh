@@ -38,12 +38,12 @@ class OpNoviceSteppingAction : public G4UserSteppingAction
 {
  public:
   OpNoviceSteppingAction(OpNoviceEventAction*);
-  ~OpNoviceSteppingAction();
+  ~OpNoviceSteppingAction() override = default;
 
   void UserSteppingAction(const G4Step*) override;
 
  private:
-  OpNoviceEventAction* fEventAction;
+  OpNoviceEventAction* fEventAction = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

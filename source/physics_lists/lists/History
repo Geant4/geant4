@@ -4,6 +4,24 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-09 Yoshihide Sato (phys-lists-V11-01-07)
+- Add a option for `Shielding` to use G4LightIonQMDPhysics, 
+  which is the constructor of light ion qmd.
+
+## 2023-11-06 Vladimir Ivantchenko (phys-lists-V11-01-06)
+- G4PhysListFactoryMessenger - added UI commands to enable neutrino and 
+    charge exchange physics
+
+## 2023-10-26 Alberto Ribon (phys-lists-V11-01-05)
+- FTFP_BERT_ATL : use a specific FTF tune meant to overcome the problem of
+  too optimistic (i.e. narrow) pion shower energy resolutions in ATLAS
+  calorimeters with respect to test-beam data.
+
+
+## 2023-10-15 Vladimir Ivantchenko (phys-lists-V11-01-04)
+- QGSP_BERT_HP - use alternative HP models and cross sections
+- QGSP_BERT_AllHP - use default HP elastic builder
+
 ## 2023-05-15 Alberto Ribon (phys-lists-V11-01-03)
 - Use the new class G4StoppingPhysicsWithINCLXX (instead of G4StoppingPhysics)
   in INCLXXPhysicsListHelper : all the INCLXX-based physics lists use INCLXX

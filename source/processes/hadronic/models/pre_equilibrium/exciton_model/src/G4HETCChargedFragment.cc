@@ -37,26 +37,21 @@
 #include "G4NuclearLevelData.hh"
 
 G4HETCChargedFragment::G4HETCChargedFragment(
-  const G4ParticleDefinition* pd, G4VCoulombBarrier * aCoulombBarrier)
+  const G4ParticleDefinition* pd, G4VCoulombBarrier* aCoulombBarrier)
   : G4HETCFragment(pd, aCoulombBarrier)
 {}
 
-G4HETCChargedFragment::~G4HETCChargedFragment()
-{}
-
-G4double G4HETCChargedFragment::
-SampleKineticEnergy(const G4Fragment & aFragment)
+G4double G4HETCChargedFragment::SampleKineticEnergy(const G4Fragment& fr)
 {
-  G4int Pb = aFragment.GetNumberOfParticles();
-  G4int H = aFragment.GetNumberOfHoles();
+  G4int Pb = fr.GetNumberOfParticles();
+  G4int H = fr.GetNumberOfHoles();
 
-  G4double g0 = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,
-                aFragment.GetExcitationEnergy());
+  G4double g0 = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ, theFragA,
+                fr.GetExcitationEnergy());
 
   G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
   G4double Emax = theMaxKinEnergy - Ab;
 
   G4double x = BetaRand(Pb + H, 2);
-  
-  return Emax - (Emax-theCoulombBarrier)*x;
+  return Emax - (Emax - theCoulombBarrier)*x;
 }

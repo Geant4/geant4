@@ -1,0 +1,48 @@
+################################################################################
+# Macro executed by default in radiobiology example
+# Just creates a teest geometry and opens visualization.
+#
+
+################################################################################
+# Set an example geometry
+#
+/detectorGeom/setMat G4_WATER
+/detectorGeom/setSize 9 cm
+/detectorGeom/setSizeX 9 cm
+/detectorGeom/setSizeY 3 cm
+/detectorGeom/setSizeZ 3 cm
+
+################################################################################
+# Set voxel sizes, than change on the transverse direction.
+#
+/voxels/setVoxelSizes 3 3 3 cm
+/voxels/setSizeX 1.5 cm
+/voxels/setSizeY 1 cm
+/voxels/setSizeZ 1 cm
+
+################################################################################
+# Initialize and start visualization
+#
+/run/initialize
+
+################################################################################
+# Change  voxel dimensions after initialization
+#
+/voxels/setSizeX 1.5 cm
+/voxels/setSizeY 1 cm
+/voxels/setSizeZ 1 cm
+/voxels/update
+
+################################################################################
+# Open visualization
+#
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
+## To open OGLSQt driver
+#/vis/open OGLSQt
+/vis/drawVolume
+
+/vis/scene/endOfEventAction accumulate
+/vis/scene/add/trajectories smooth

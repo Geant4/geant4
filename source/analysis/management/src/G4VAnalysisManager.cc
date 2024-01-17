@@ -28,7 +28,6 @@
 
 #include "G4VAnalysisManager.hh"
 #include "G4AnalysisMessenger.hh"
-#include "G4AnalysisUtilities.hh"
 #include "G4HnManager.hh"
 #include "G4VNtupleManager.hh"
 #include "G4VNtupleFileManager.hh"
@@ -176,11 +175,37 @@ G4bool G4VAnalysisManager::ResetFromUI()
 //
 
 //_____________________________________________________________________________
+void G4VAnalysisManager::SetDefaultFileTypeImpl(const G4String& value)
+{
+  if ( (! GetType().empty()) && (GetFileType() != value) ) {
+    // If not generic analysis manager (which does not define FileType)
+    // the file type cannot be different from the analysis manager type
+    Warn("Cannot set default file type " + value +
+      " different than the analysis manager type " + GetType(),
+      fkClass, "SetDefault");
+    return;
+  }
+
+  fH1HnManager->SetDefaultFileType(value);
+  fH2HnManager->SetDefaultFileType(value);
+  fH3HnManager->SetDefaultFileType(value);
+  fP1HnManager->SetDefaultFileType(value);
+  fP2HnManager->SetDefaultFileType(value);
+}
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetDefaultFileTypeImpl() const
+{
+  return GetFileType();
+}
+
+//_____________________________________________________________________________
 void G4VAnalysisManager::SetH1Manager(G4VTBaseHnManager<kDim1>* h1Manager)
 {
   fVH1Manager.reset(h1Manager);
   fH1HnManager = h1Manager->GetHnManager();
   if (fVFileManager != nullptr ) fH1HnManager->SetFileManager(fVFileManager);
+  if (! GetFileType().empty() ) fH1HnManager->SetDefaultFileType(GetFileType());
 }
 
 //_____________________________________________________________________________
@@ -189,6 +214,7 @@ void G4VAnalysisManager::SetH2Manager(G4VTBaseHnManager<kDim2>* h2Manager)
   fVH2Manager.reset(h2Manager);
   fH2HnManager = h2Manager->GetHnManager();
   if (fVFileManager != nullptr ) fH2HnManager->SetFileManager(fVFileManager);
+  if (! GetFileType().empty() ) fH2HnManager->SetDefaultFileType(GetFileType());
 }
 
 //_____________________________________________________________________________
@@ -197,6 +223,7 @@ void G4VAnalysisManager::SetH3Manager(G4VTBaseHnManager<kDim3>* h3Manager)
   fVH3Manager.reset(h3Manager);
   fH3HnManager = h3Manager->GetHnManager();
   if (fVFileManager != nullptr ) fH3HnManager->SetFileManager(fVFileManager);
+  if (! GetFileType().empty() ) fH3HnManager->SetDefaultFileType(GetFileType());
 }
 
 //_____________________________________________________________________________
@@ -205,6 +232,7 @@ void G4VAnalysisManager::SetP1Manager(G4VTBaseHnManager<kDim2>* p1Manager)
   fVP1Manager.reset(p1Manager);
   fP1HnManager = p1Manager->GetHnManager();
   if (fVFileManager != nullptr ) fP1HnManager->SetFileManager(fVFileManager);
+  if (! GetFileType().empty() ) fP1HnManager->SetDefaultFileType(GetFileType());
 }
 
 //_____________________________________________________________________________
@@ -213,6 +241,7 @@ void G4VAnalysisManager::SetP2Manager(G4VTBaseHnManager<kDim3>* p2Manager)
   fVP2Manager.reset(p2Manager);
   fP2HnManager = p2Manager->GetHnManager();
   if (fVFileManager != nullptr ) fP2HnManager->SetFileManager(fVFileManager);
+  if (! GetFileType().empty() ) fP2HnManager->SetDefaultFileType(GetFileType());
 }
 
 //_____________________________________________________________________________
@@ -395,6 +424,18 @@ G4bool G4VAnalysisManager::IsOpenFile() const
 }
 
 //_____________________________________________________________________________
+void G4VAnalysisManager::SetDefaultFileType(const G4String& value)
+{
+  SetDefaultFileTypeImpl(value);
+}
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetDefaultFileType() const
+{
+  return GetDefaultFileTypeImpl();
+}
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFileName(const G4String& fileName)
 {
   return fVFileManager->SetFileName(fileName);
@@ -415,7 +456,7 @@ G4bool G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName)
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetCompressionLevel(G4int level)
 {
-  fState.SetCompressionLevel(level);
+  fVFileManager->SetCompressionLevel(level);
 }
 
 //_____________________________________________________________________________
@@ -439,7 +480,7 @@ G4String G4VAnalysisManager::GetNtupleDirectoryName() const
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::GetCompressionLevel() const
 {
-  return fState.GetCompressionLevel();
+  return fVFileManager->GetCompressionLevel();
 }
 
 //_____________________________________________________________________________
@@ -1210,43 +1251,39 @@ G4int G4VAnalysisManager::GetFirstNtupleColumnId() const
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofH1s() const
+G4int G4VAnalysisManager::GetNofH1s(G4bool onlyIfExist) const
 {
-  return fH1HnManager->GetNofHns();
+  return fVH1Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofH2s() const
+G4int G4VAnalysisManager::GetNofH2s(G4bool onlyIfExist) const
 {
-  return fH2HnManager->GetNofHns();
+  return fVH2Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofH3s() const
+G4int G4VAnalysisManager::GetNofH3s(G4bool onlyIfExist) const
 {
-  return fH3HnManager->GetNofHns();
+  return fVH3Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofP1s() const
+G4int G4VAnalysisManager::GetNofP1s(G4bool onlyIfExist) const
 {
-  return fP1HnManager->GetNofHns();
+  return fVP1Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofP2s() const
+G4int G4VAnalysisManager::GetNofP2s(G4bool onlyIfExist) const
 {
-  return fP2HnManager->GetNofHns();
+  return fVP2Manager->GetNofHns(onlyIfExist);
 }
 
 //_____________________________________________________________________________
-G4int G4VAnalysisManager::GetNofNtuples() const
+G4int G4VAnalysisManager::GetNofNtuples(G4bool onlyIfExist) const
 {
-  if (fVNtupleManager != nullptr) {
-    return fVNtupleManager->GetNofNtuples();
-  }
-
-  return 0;
+  return fNtupleBookingManager->GetNofNtuples(onlyIfExist);
 }
 
 // GetH1Id(), GetH2Id in .icc
@@ -1284,10 +1321,7 @@ G4bool G4VAnalysisManager::ListP2(G4bool onlyIfActive) const
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::ListNtuple(G4bool onlyIfActive) const
 {
-  if (fVNtupleManager != nullptr) {
-    return fVNtupleManager->List(G4cout, onlyIfActive);
-  }
-  return false;
+  return fNtupleBookingManager->List(G4cout, onlyIfActive);
 }
 
 //_____________________________________________________________________________
@@ -1510,6 +1544,48 @@ void  G4VAnalysisManager::SetNtupleFileName(const G4String& fileName)
 // Set activation to all P2 objects
 
   fNtupleBookingManager->SetFileName(fileName);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteH1(G4int id, G4bool keepSetting)
+{
+  return fVH1Manager->Delete(id, keepSetting);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteH2(G4int id, G4bool keepSetting)
+{
+  return fVH2Manager->Delete(id, keepSetting);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteH3(G4int id, G4bool keepSetting)
+{
+  return fVH3Manager->Delete(id, keepSetting);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteP1(G4int id, G4bool keepSetting)
+{
+  return fVP1Manager->Delete(id, keepSetting);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteP2(G4int id, G4bool keepSetting)
+{
+  return fVP2Manager->Delete(id, keepSetting);
+}
+
+//_____________________________________________________________________________
+G4bool  G4VAnalysisManager::DeleteNtuple(G4int id, G4bool keepSetting)
+{
+  auto result = fNtupleBookingManager->Delete(id, keepSetting);
+
+  if (fVNtupleManager != nullptr) {
+    result &= fVNtupleManager->Delete(id);
+  }
+
+  return result;
 }
 
 // Access methods in .icc

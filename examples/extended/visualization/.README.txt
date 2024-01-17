@@ -23,6 +23,10 @@ This example illustrates how to create a "vis action".
 \link Examplemovies movies \endlink
 
 This example illustrates how to create movies.
+
+\link Examplevtk vtk \endlink
+
+This example illustrates how to use the VTK viewer and explanation for developers.
  
 */
 

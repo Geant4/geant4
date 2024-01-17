@@ -41,8 +41,8 @@
 class OpNoviceEventAction : public G4UserEventAction
 {
  public:
-  OpNoviceEventAction();
-  ~OpNoviceEventAction();
+  OpNoviceEventAction() = default;
+  ~OpNoviceEventAction() override = default;
 
   void BeginOfEventAction(const G4Event*) override;
   void EndOfEventAction(const G4Event*) override;
@@ -53,10 +53,10 @@ class OpNoviceEventAction : public G4UserEventAction
   void AddBoundary() { ++fBoundary; }
 
  private:
-  G4int fRayleigh;
-  G4int fAbsorption;
-  G4int fMie;
-  G4int fBoundary;
+  G4int fRayleigh = 0;
+  G4int fAbsorption = 0;
+  G4int fMie = 0;
+  G4int fBoundary = 0;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif

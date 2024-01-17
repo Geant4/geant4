@@ -26,11 +26,11 @@
 // 
 
 #include "G4DNAMolecule.hh"
-#include "G4ParticleTable.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4MoleculeDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DamagedDeoxyribose* G4DamagedDeoxyribose::fgInstance = nullptr;
 
@@ -324,7 +324,7 @@ G4Cytosine* G4Cytosine::Definition()
     return fgInstance;
 }
 
-G4ModifiedHistone* G4ModifiedHistone::fgInstance = 0;
+G4ModifiedHistone* G4ModifiedHistone::fgInstance = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

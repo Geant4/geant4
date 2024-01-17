@@ -47,6 +47,9 @@ namespace G4INCL {
 
   namespace KinematicsUtils {
 
+    G4double fiveParFit(const G4double a, const G4double b, const G4double c, const G4double d, const G4double e, const G4double x);
+    G4double compute_xs(const std::vector<G4double> coefficients, const G4double pLab);
+
     void transformToLocalEnergyFrame(Nucleus const * const n, Particle * const p);
     G4double getLocalEnergy(Nucleus const * const n, Particle * const p);
 

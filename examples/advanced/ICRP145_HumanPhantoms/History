@@ -5,6 +5,12 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+## 2023-11-15 I. Hrivnacova, John Allison (ICRP145Phantoms-V11-01-03)
+- Updated vis.mac and standalone.mac:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+  - Keep previous driver opening with an extra setting in commented lines
+
 ## 2023-04-08 Susanna Guatelli (ICRP145Phantoms-V11-01-02)
 - Code revision in the TETRun class
   

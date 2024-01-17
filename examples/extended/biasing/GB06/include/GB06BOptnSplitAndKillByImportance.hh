@@ -33,7 +33,7 @@
 #include "G4VBiasingOperation.hh"
 #include "G4ParticleChange.hh"
 #include "G4ParticleChangeForNothing.hh"
-#include "G4TouchableHistoryHandle.hh"
+#include "G4TouchableHandle.hh"
 class G4BiasingProcessSharedData;
 #include <map>
 
@@ -99,8 +99,8 @@ public:
 private:
   G4int                                   fParallelWorldIndex;
   const G4BiasingProcessSharedData*        fBiasingSharedData;
-  G4TouchableHistoryHandle           fPreStepTouchableHistory;
-  G4TouchableHistoryHandle          fPostStepTouchableHistory;
+  G4TouchableHandle                  fPreStepTouchableHistory;
+  G4TouchableHandle                 fPostStepTouchableHistory;
   G4ParticleChange                            fParticleChange;
   G4ParticleChangeForNothing             fDummyParticleChange;
   std::map< G4int, G4int >*                    fImportanceMap;

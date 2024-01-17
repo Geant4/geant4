@@ -39,17 +39,6 @@
 #include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-OpNoviceStackingAction::OpNoviceStackingAction()
-  : G4UserStackingAction()
-  , fScintillationCounter(0)
-  , fCerenkovCounter(0)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-OpNoviceStackingAction::~OpNoviceStackingAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4ClassificationOfNewTrack OpNoviceStackingAction::ClassifyNewTrack(
   const G4Track* aTrack)
 {
@@ -74,7 +63,7 @@ void OpNoviceStackingAction::NewStage()
   // G4cout << "Number of Cerenkov photons produced in this event : "
   //       << fCerenkovCounter << G4endl;
 
-  OpNoviceRun* run = static_cast<OpNoviceRun*>(
+  auto run = static_cast<OpNoviceRun*>(
     G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   run->AddScintillation((G4double) fScintillationCounter);
   run->AddCerenkov((G4double) fCerenkovCounter);

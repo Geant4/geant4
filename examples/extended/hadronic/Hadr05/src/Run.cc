@@ -46,9 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), 
-  fParticle(nullptr), fEkin(0.)
+: fDetector(det)
 {
   //initialize energy deposited per absorber
   //
@@ -75,11 +73,6 @@ Run::Run(DetectorConstruction* det)
   fEnergyFlow.resize(nbPlanes);
   for (G4int k=0; k<nbPlanes; k++) {fEnergyFlow[k] = 0.; }  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

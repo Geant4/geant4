@@ -55,11 +55,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
- :G4VUserDetectorConstruction(),
-  fWorldMaterial(nullptr),fSolidWorld(nullptr),fLogicWorld(nullptr),
-  fPhysiWorld(nullptr),fSolidCalor(nullptr),fLogicCalor(nullptr),
-  fPhysiCalor(nullptr),fSolidLayer(nullptr),fLogicLayer(nullptr),
-  fPhysiLayer(nullptr)
 {
   for(G4int i=0; i<kMaxAbsor; ++i) { 
     fAbsorMaterial[i] = nullptr; 

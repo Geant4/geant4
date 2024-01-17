@@ -61,13 +61,12 @@ namespace B2b
 class ChamberParameterisation : public G4VPVParameterisation
 {
   public:
-
     ChamberParameterisation(G4int    noChambers,
-                              G4double startZ,
-                              G4double spacing,
-                              G4double widthChamber,
-                              G4double lengthInitial,
-                              G4double lengthFinal );
+                            G4double startZ,
+                            G4double spacing,
+                            G4double widthChamber,
+                            G4double lengthInitial,
+                            G4double lengthFinal );
 
     ~ChamberParameterisation() override = default;
 
@@ -78,7 +77,6 @@ class ChamberParameterisation : public G4VPVParameterisation
                             const G4VPhysicalVolume* physVol) const override;
 
   private:  // Dummy declarations to get rid of warnings ...
-
     void ComputeDimensions (G4Box&,const G4int,
                             const G4VPhysicalVolume*) const override {}
     void ComputeDimensions (G4Trd&,const G4int,
@@ -105,7 +103,6 @@ class ChamberParameterisation : public G4VPVParameterisation
                             const G4VPhysicalVolume*) const override {}
 
   private:
-
     G4int    fNoChambers;
     G4double fStartZ;
     G4double fHalfWidth;        //  The half-width of each tracker chamber

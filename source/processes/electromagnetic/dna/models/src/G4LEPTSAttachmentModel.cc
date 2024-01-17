@@ -30,12 +30,11 @@ G4LEPTSAttachmentModel::G4LEPTSAttachmentModel(const G4String& modelName)
   : G4VLEPTSModel( modelName )
 {
   theXSType = XSAttachment;
-
+  fParticleChangeForGamma = nullptr;
 } // constructor
 
 
-G4LEPTSAttachmentModel::~G4LEPTSAttachmentModel() {
-}
+G4LEPTSAttachmentModel::~G4LEPTSAttachmentModel() = default;
 
 
 

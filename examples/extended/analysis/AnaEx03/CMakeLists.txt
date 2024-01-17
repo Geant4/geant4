@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(AnaEx03)
 
 #----------------------------------------------------------------------------
@@ -45,8 +45,8 @@ target_link_libraries(AnaEx03 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(AnaEx03_FILES
-    AnaEx03.in AnaEx03-csv.in AnaEx03-hdf5.in AnaEx03-root.in AnaEx03-xml.in init_vis.mac vis.mac
-    histo ntuple)
+    AnaEx03.in AnaEx03-csv.in AnaEx03-hdf5.in AnaEx03-root.in AnaEx03-xml.in init_vis.mac
+    vis.mac plotter.mac histo ntuple)
 
 foreach(_file ${AnaEx03_FILES})
   file(COPY ${PROJECT_SOURCE_DIR}/${_file} DESTINATION ${PROJECT_BINARY_DIR})

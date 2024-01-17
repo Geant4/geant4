@@ -54,17 +54,20 @@ class G4VtkMessenger : public G4UImessenger
     G4UIcommand* fpCommandExport;
     G4UIcommand* fpCommandExportCutter;
     G4UIcommand* fpCommandDebugPrint;
+    G4UIcommand* fpCommandInteractorStart;
 
     G4UIdirectory* fpDirectorySet;
     G4UIcommand* fpCommandPolyhedronPipeline;
     G4UIcmdWithABool* fpCommandWarnings;
     G4UIcmdWithABool* fpCommandHUD;
+    G4UIcmdWithABool* fpCameraOrientation;
     G4UIcommand* fpCommandClipper;
     G4UIcommand* fpCommandCutter;
     G4UIcommand* fpCommandShadow;
 
     G4UIdirectory* fpDirectoryAdd;
     G4UIcommand* fpCommandImageOverlay;
+    G4UIcommand* fpCommandGeometryOverlay;
 };
 
 #endif

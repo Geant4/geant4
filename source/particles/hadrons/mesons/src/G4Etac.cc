@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -37,37 +34,32 @@
 //
 
 #include "G4Etac.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4ParticleTable.hh"
-
-#include "G4PhaseSpaceDecayChannel.hh"
-#include "G4DecayTable.hh"
-
-// ######################################################################
-// ###                         ETA                                    ###
-// ######################################################################
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Etac* G4Etac::theInstance = nullptr;
 
 G4Etac* G4Etac::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "etac";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,      2.9834*GeV,      31.8*MeV,         0.0,
                     0,              -1,            +1,
@@ -75,18 +67,18 @@ G4Etac* G4Etac::Definition()
               "meson",               0,             0,         441,
                 false,          0.0*ns,          nullptr,
                 false,          "etac",           441);
+    // clang-format on
   }
   theInstance = static_cast<G4Etac*>(anInstance);
   return theInstance;
 }
 
-G4Etac*  G4Etac::EtacDefinition()
+G4Etac* G4Etac::EtacDefinition()
 {
   return Definition();
 }
 
-G4Etac*  G4Etac::Etac()
+G4Etac* G4Etac::Etac()
 {
   return Definition();
 }
-

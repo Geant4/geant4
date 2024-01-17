@@ -77,9 +77,9 @@ using G4ReflectedVolumesMap = std::map<G4LogicalVolume*, G4LogicalVolume*,
                                        std::less<G4LogicalVolume*> >;
 class G4ReflectionFactory 
 {
-    using LogicalVolumesMapIterator = G4ReflectedVolumesMap::const_iterator;
+  using LogicalVolumesMapIterator = G4ReflectedVolumesMap::const_iterator;
 
-  public:  // with description
+  public:
   
     virtual ~G4ReflectionFactory();
       // Virtual destructor.
@@ -188,11 +188,11 @@ class G4ReflectionFactory
 
   private:  
 
-    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV, G4bool surfCheck = false);
+    G4LogicalVolume* ReflectLV(G4LogicalVolume* LV, G4bool surfCheck = false);
       // Gets/creates the reflected solid and logical volume
       // and copies + transforms LV daughters.
 
-    G4LogicalVolume*   CreateReflectedLV(G4LogicalVolume* LV);
+    G4LogicalVolume* CreateReflectedLV(G4LogicalVolume* LV);
       // Creates the reflected solid and logical volume
       // and add the logical volumes pair in the maps.
 

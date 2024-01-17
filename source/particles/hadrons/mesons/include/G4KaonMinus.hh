@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4KaonMinus_h
 #define G4KaonMinus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                        KAONMINUS                               ###
-// ######################################################################
 
 class G4KaonMinus : public G4ParticleDefinition
 {
- private:
-   static G4KaonMinus* theInstance;
-   G4KaonMinus(){}
-   ~G4KaonMinus() override= default;
+  public:
+    static G4KaonMinus* Definition();
+    static G4KaonMinus* KaonMinusDefinition();
+    static G4KaonMinus* KaonMinus();
 
- public:
-   static G4KaonMinus* Definition();
-   static G4KaonMinus* KaonMinusDefinition();
-   static G4KaonMinus* KaonMinus();
+  private:
+    G4KaonMinus() {}
+    ~G4KaonMinus() override = default;
+
+    static G4KaonMinus* theInstance;
 };
 
 #endif

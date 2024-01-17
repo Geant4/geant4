@@ -49,7 +49,7 @@ class G4O3 : public G4MoleculeDefinition
 private:
     static /*G4ThreadLocal*/ G4O3* theInstance;
     G4O3() {}
-    virtual ~G4O3() {}
+    ~G4O3() override = default;
 
 public:
     static G4O3* Definition();

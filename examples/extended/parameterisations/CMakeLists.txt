@@ -1,6 +1,6 @@
 #---Adding all parameterisations examples subdirectories explicitly 
 
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 
 find_package(Geant4)
 include(${Geant4_USE_FILE})

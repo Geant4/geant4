@@ -127,14 +127,16 @@ F01FieldSetup::F01FieldSetup()
 void F01FieldSetup::InitialiseAll()
 {
   fFieldMessenger = new F01FieldMessenger(this);
- 
+
   fEquation = new G4Mag_UsualEqRhs(fMagneticField);
- 
-  fMinStep      = 3.0e-3*mm; // minimal step of 1 um is default ==> accept any error for smaller steps!
-  fDeltaOneStep = 1.0e-5*mm; // Errors of this size in an integration sub-step are acceptable
-                             //   except limited by the relative integration error limits (epsilon_min/max)
-                             //  Notes: - their initial values are set in the header.
-                             //         - both this and the eps min/max can be changed using Set methods.
+
+  fMinStep      = 3.0e-3*mm;
+  // minimal step of 1 um is default ==> accept any error for smallersteps!
+  fDeltaOneStep = 1.0e-5*mm;
+  // Errors of this size in an integration sub-step are acceptable
+  //   except limited by the relative integration error limits (epsilon_min/max)
+  //  Notes: - their initial values are set in the header.
+  //         - both this and the eps min/max can be changed using Set methods.
   fFieldManager = G4TransportationManager::GetTransportationManager()
                     ->GetFieldManager();
 
@@ -144,16 +146,17 @@ void F01FieldSetup::InitialiseAll()
   else
   {
     CreateStepperAndChordFinder();
-    // To try the symplectic method (Boris Scheme/Driver) replace the line above with the one below:
+    // To try the symplectic method (Boris Scheme/Driver) replace the line above
+    // with the one below:
     // CreateAndSetupBorisDriver();
   }
-  
+
   G4cout  << "   4/5. Updating eps_min and eps_max in Field Manager."  << G4endl;
   fFieldManager->SetChordFinder( fChordFinder );
   fFieldManager->SetDetectorField(fMagneticField );
 
-  // For controling the accurancy 
-  fFieldManager -> SetMinimumEpsilonStep( fDesiredEpsilonMin ) ;  
+  // For controling the accurancy
+  fFieldManager -> SetMinimumEpsilonStep( fDesiredEpsilonMin ) ;
   //
   // const G4double increaseFactor = 3.0 ;     // typical rangle  1.0 - 10.0
   //  maxEpsilon must not exceed a ceiling, ideally 0.001 -- above this integration is unreliable
@@ -184,14 +187,14 @@ void F01FieldSetup::InitialiseAll()
      }
   }
   // To demonstrate that it is now possible to change the maximum accepted epsilon
-  
+
   // Note: The values of both epsilon parameters must be between
   //    fMaxAcceptedEpsilon = 0.001
   //   to ensure robustness of integration (adequate accuracy of intermediate results)
   // and (much bigger than)
   //    fMinAcceptedEpsilon ~= 2.2e-13  ( 1000.0 * std::numeric_limits<G4double>::epsilon() )
   // which even the best integration methods would struggle greatly to achieve.
-  
+
   G4cout << " Changed FieldManager epsilon values to  epsilon_min= "
          << fFieldManager -> GetMinimumEpsilonStep()
          <<  " and epsilon_max= "
@@ -214,7 +217,7 @@ void F01FieldSetup::CreateStepperAndChordFinder()
 {
   delete fChordFinder;
   fChordFinder= nullptr;
-   
+
   // Update field
   G4cout << " F01FieldSetup::CreateStepperAndChordFinder() called. " << G4endl
          << "   1. Creating Stepper."  << G4endl;
@@ -236,18 +239,18 @@ void F01FieldSetup::SetStepper()
 {
 // Set stepper according to the stepper type
 
-  if (fStepper) delete fStepper;
+  delete fStepper;
 
   switch ( fStepperType )
   {
      //  The new default in G4 and here ( since G4 10.4 Dec 2017 )
-    case 17:      
+    case 17:
     case 457:
     case 745:
       fStepper = new G4DormandPrince745( fEquation );
       G4cout<<"G4DormandPrince745 Stepper is chosen"<<G4endl;
       break;
-     
+
     case 0:
       fStepper = new G4ExplicitEuler( fEquation );
       G4cout<<"G4ExplicitEuler is chosen."<<G4endl;
@@ -288,16 +291,16 @@ void F01FieldSetup::SetStepper()
       fStepper = new G4RKG3_Stepper( fEquation );
       G4cout<<"G4RKG3_Stepper is chosen"<<G4endl;
       break;
-    case 10: 
-       fStepper = new G4ExactHelixStepper( fEquation );   
+    case 10:
+       fStepper = new G4ExactHelixStepper( fEquation );
        G4cout<<"G4ExactHelixStepper is chosen"<<G4endl;
        break;
-    case 11: 
-       fStepper = new G4HelixMixedStepper( fEquation );  
+    case 11:
+       fStepper = new G4HelixMixedStepper( fEquation );
        G4cout<<"G4HelixMixedStepper is chosen"<<G4endl;
        break;
-    case 12: 
-       fStepper = new G4ConstRK4( fEquation ); 
+    case 12:
+       fStepper = new G4ConstRK4( fEquation );
        G4cout<<"G4ConstRK4 Stepper is chosen"<<G4endl;
        break;
     case 13:
@@ -305,7 +308,7 @@ void F01FieldSetup::SetStepper()
       fStepper = new G4NystromRK4( fEquation );
       G4cout<<" G4NystromRK4 Stepper is chosen"<<G4endl;
       break;
-    case 14:      
+    case 14:
     case 23:
       fStepper = new G4BogackiShampine23( fEquation );
       G4cout<<"G4BogackiShampine23 Stepper is chosen"<<G4endl;
@@ -313,16 +316,16 @@ void F01FieldSetup::SetStepper()
 
       // Other optimised 4/5th order embedded steppers
     case 15:
-    case 45:       
+    case 45:
       fStepper = new G4BogackiShampine45( fEquation );
       G4cout<<"G4BogackiShampine45 Stepper is chosen"<<G4endl;
       break;
 
     // case 145:
-    case kTsitouras45:     
+    case kTsitouras45:
       fStepper = new G4TsitourasRK45( fEquation );
       G4cout<<"G4TsitourasRK45 Stepper is chosen"<<G4endl;
-      break;      
+      break;
 
       // Higher order embedded steppers - for very smooth fields
     case 56:
@@ -339,7 +342,7 @@ void F01FieldSetup::SetStepper()
       // G4cout<<"G4ClassicalRK4 Stepper (default) is chosen"<<G4endl;
       fStepper = new G4DormandPrince745( fEquation );
       G4cout<<"G4DormandPrince745 (default) Stepper is chosen"<<G4endl;
-      break;      
+      break;
   }
 }
 
@@ -356,10 +359,10 @@ F01FieldSetup::CreateFSALStepperAndDriver()
 {
    // using FsalStepperType = G4RK547FEq1;
   const char *methodName= "F01FieldSetup::CreateFSALStepperAndDriver()";
-  if (fStepper) delete fStepper;
+  delete fStepper;
   fStepper = nullptr;
-  
-  G4cout << " F01FieldSetup::CreateFSALStepperAndDriver() called. " << G4endl;   
+
+  G4cout << " F01FieldSetup::CreateFSALStepperAndDriver() called. " << G4endl;
   G4cout << "   1. Creating Stepper."  << G4endl;
   // auto fsalStepper = new FsalStepperType( fEquation );
   G4RK547FEq1* stepper1 = nullptr;
@@ -379,7 +382,7 @@ F01FieldSetup::CreateFSALStepperAndDriver()
        fStepper = stepper1;
        stepper1 = nullptr;
        break;
-     
+
     case   2:
     case 102:
        stepper2= new G4RK547FEq2( fEquation );
@@ -389,13 +392,13 @@ F01FieldSetup::CreateFSALStepperAndDriver()
        fStepper = stepper2;
        stepper2 = nullptr;
        break;
-       
+
     case   3:
     case 103:
-       stepper3 = new G4RK547FEq3( fEquation );       
+       stepper3 = new G4RK547FEq3( fEquation );
        fsalDriver = new G4FSALIntegrationDriver<G4RK547FEq3>( fMinStep, stepper3 );
        G4cout  << " Stepper type '3' is G4RK547FEq3 stepper (in FSAL mode) with FSAL driver. "
-               << G4endl;       
+               << G4endl;
        fStepper = stepper3;
        stepper3 = nullptr;
        break;
@@ -405,7 +408,7 @@ F01FieldSetup::CreateFSALStepperAndDriver()
               << fStepperType << " ) is unknown. " << G4endl
               << " Using value '1' instead - i.e. G4RK547FEq1 stepper. "
               << G4endl;
-       stepper1 = new G4RK547FEq1( fEquation );       
+       stepper1 = new G4RK547FEq1( fEquation );
        fsalDriver = new G4FSALIntegrationDriver<G4RK547FEq1>( fMinStep, stepper1 );
        fStepper = stepper1;
        stepper1 = nullptr;
@@ -413,21 +416,21 @@ F01FieldSetup::CreateFSALStepperAndDriver()
   }
 
   delete stepper1;    stepper1 = nullptr;
-  delete stepper2;    stepper2 = nullptr;              
+  delete stepper2;    stepper2 = nullptr;
   delete stepper3;    stepper3 = nullptr;
-  
+
   if( fsalDriver )
      fStepper = fsalDriver->GetStepper();
-  
+
   return fsalDriver;
 }
 
 void F01FieldSetup::CreateFSALStepperAndChordFinder()
 {
-  // using FsalStepperType = G4DormandPrince745; // eventually ? 
+  // using FsalStepperType = G4DormandPrince745; // eventually ?
   delete fChordFinder;
   fChordFinder= nullptr;
-  
+
   G4cout << " F01FieldSetup::CreateFSALStepperAndChordFinder() called. " << G4endl;
 
   auto FSALdriver= CreateFSALStepperAndDriver();
@@ -454,8 +457,8 @@ void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
   // Set the value of the Global Field
 
-  if (fMagneticField) delete fMagneticField;
- 
+  delete fMagneticField;
+
 #ifdef G4VERBOSE
      G4cout << "Setting Field strength to "
             << fieldVector / gauss  << " Gauss." << G4endl;
@@ -472,7 +475,7 @@ void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 #endif
     // If the new field's value is Zero, signal it as below
     // so that it is not used for propagation.
-    fMagneticField = 0;
+    fMagneticField = nullptr;
   }
 
   // Set this as the field of the global Field Manager
@@ -501,8 +504,8 @@ G4FieldManager* F01FieldSetup::GetGlobalFieldManager()
 void
 F01FieldSetup::CreateAndSetupBorisDriver()
 {
- 
-  G4cout << " F01FieldSetup::CreateAndSetupBorisDriver() called. " << G4endl;   
+
+  G4cout << " F01FieldSetup::CreateAndSetupBorisDriver() called. " << G4endl;
   G4cout << "   1. Creating Scheme (Stepper)."  << G4endl;
   auto borisStepr = new G4BorisScheme(fEquation);
   G4cout << "   2. Creating Driver."  << G4endl;

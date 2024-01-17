@@ -35,30 +35,27 @@
 #ifndef G4AlphaEvaporationProbability_h
 #define G4AlphaEvaporationProbability_h 1
 
-
 #include "G4EvaporationProbability.hh"
 
 class G4AlphaEvaporationProbability : public G4EvaporationProbability
 {
 public:
 
-  explicit G4AlphaEvaporationProbability();
+  G4AlphaEvaporationProbability();
 
-  ~G4AlphaEvaporationProbability() override;
+  ~G4AlphaEvaporationProbability() override = default;
+
+  G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &right) = delete;
+  const G4AlphaEvaporationProbability & operator=
+  (const G4AlphaEvaporationProbability &right) = delete;
+  G4bool operator==(const G4AlphaEvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4AlphaEvaporationProbability &right) const = delete;
 
 protected:
 
   G4double CalcAlphaParam(const G4Fragment & fragment) override;
  
   G4double CalcBetaParam(const G4Fragment & fragment) override;
-
-private:  
-
-  G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &right);
-  const G4AlphaEvaporationProbability & operator=
-  (const G4AlphaEvaporationProbability &right);
-  G4bool operator==(const G4AlphaEvaporationProbability &right) const;
-  G4bool operator!=(const G4AlphaEvaporationProbability &right) const;
 };
 
 #endif

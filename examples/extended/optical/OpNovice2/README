@@ -121,7 +121,7 @@
  /analysis/setFileName  name  (default opnovice2)
 
  It is possible to choose the format of the histogram file : root (default),
- hbook, xml, csv, by using namespace in HistoManager.hh    
+ hdf5, xml, csv, by changing the default file type in HistoManager.cc
  
  It is also possible to print selected histograms on an ascii file:
  /analysis/h1/setAscii id
@@ -131,7 +131,11 @@
 
  Several macros are included.
  - boundary.mac: Set the surface to the various types and configurations of
-               model, type, etc., shoot optical photons, and record statistics
+               model, type, etc., shoot optical photons, and record statistics.
+               This macro uses the command
+               /opnovice2/stepping/killOnSecondSurface,
+               which kills photon tracks incident on a second surface. This can
+               be useful for visualizing surface scattering.
  - coated.mac: To show reflection/refraction from thin film coating
  - electron.mac: Shoot electrons and observe Cerenkov and scintillation radiation
  - fresnel.mac:  Shoot optical photons of fixed polarization and random direction
@@ -141,7 +145,11 @@
                refraction.
  - OpNovice2.mac: Shoot an optical photon inside a box.
  - scint_by_particle.mac: Configure scintillation to have particle-specific
-               yields and yield ratios. Shoot different types of particles.
- - vis.mac:    Configure visualization.
+               yields, yield ratios, and time constants. Shoot different types
+               of particles.
+ - vis.mac:    Configure visualization.  The macro command
+               /opnovice2/stepping/killOnSecondSurface, which kills photon
+               tracks incident on a second surface, may be useful for
+               visualizing surface scattering.
  - wls.mac:    Configure two wavelength-shifting processes, and shoot optical
                photons.

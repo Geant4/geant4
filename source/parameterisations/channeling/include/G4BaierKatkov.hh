@@ -59,7 +59,8 @@ public:
        of the radiation type you are interested in
        CAUTION: do ResetRadIntegral() before the start of a new trajectory
 
-       1) change some model defaults if necessary (SetSinglePhotonRadiationProbabilityLimit,
+       1) change some model defaults if necessary
+         (SetSinglePhotonRadiationProbabilityLimit,
           SetNSmallTrajectorySteps, SetSpectrumEnergyRange)
        2) call DoRadiation at each step of your trajectory
        3) if DoRadiation returns TRUE, this means that a photon is produced (not added
@@ -98,7 +99,8 @@ public:
     const G4ThreeVector& GetParticleNewCoordinateXYZ(){return fNewParticleCoordinateXYZ;}
 
   ///get photon energies (x-value in spectrum)
-  const std::vector<G4double>& GetPhotonEnergyInSpectrum(){return fPhotonEnergyInSpectrum;}
+  const std::vector<G4double>& GetPhotonEnergyInSpectrum()
+  {return fPhotonEnergyInSpectrum;}
   
   ///get fTotalSpectrum after finishing the trajectory part with DoRadiation
   const std::vector<G4double>& GetTotalSpectrum(){return fTotalSpectrum;}
@@ -121,7 +123,12 @@ public:
 
     ///setting the number of photons in sampling of Baier-Katkov Integral
     ///(MC integration by photon energy and angles <=> photon momentum)
-    void SetSamplingPhotonsNumber(G4double nPhotons){fNMCPhotons = nPhotons;}
+    void SetSamplingPhotonsNumber(G4int nPhotons){fNMCPhotons = nPhotons;}
+
+    ///setting the number of radiation angles 1/gamma, defining the width of
+    ///the angular distribution of photon sampling in the Baier-Katkov Integral
+    void SetRadiationAngleFactor(G4double radiationAngleFactor)
+    {fRadiationAngleFactor = radiationAngleFactor;}
 
     ///CAUTION, the bins width is logarithmic
     ///Do not worry if the maximal energy > particle energy.
@@ -141,6 +148,16 @@ public:
     void SetNBinsSpectrum(G4int nbin){SetSpectrumEnergyRange(fMinPhotonEnergy,
                                                              fMaxPhotonEnergy,
                                                              nbin);}
+
+    /// Increase the statistic of virtual photons in a certain energy region
+    /// CAUTION! : don't do it before SetSpectrumEnergyRange or SetMinPhotonEnergy
+    void AddStatisticsInPhotonEnergyRegion(G4double emin, G4double emax,
+                                           G4int timesPhotonStatistics);
+
+    /// Virtual collimator masks the selection of photon angles in fTotalSpectrum
+    /// Virtual collimator doesn't influence on Geant4 simulations.
+    void SetVirtualCollimator(G4double virtualCollimatorAngularDiameter)
+         {fVirtualCollimatorAngularDiameter=virtualCollimatorAngularDiameter;}
 
     /// add the new elements of the trajectory, calculate radiation in a crystal
     /// see complete description in G4BaierKatkov::DoRadiation
@@ -196,14 +213,14 @@ private:
     G4int FindVectorIndex(std::vector<G4double> &myvector, G4double value);
 
     G4double fTotalRadiationProbability = 0.;
-    G4double fSinglePhotonRadiationProbabilityLimit=0.05;//Maximal radiation
+    G4double fSinglePhotonRadiationProbabilityLimit=0.25;//Maximal radiation
                                          //probability to preserve single photon radiation
 
     //number of steps in a trajectory piece before the next call of the radiation integral
-    G4int fNSmallTrajectorySteps=1000;
+    G4int fNSmallTrajectorySteps=10000;
     ///trajectory element No (the first element of the array feeded in RadIntegral)
     G4int fImin0 = 0;
-    ///number of Monte Carlo points of integration on photon angles
+    ///Monte Carlo statistics of photon sampling in Baier-Katkov with 1 trajectory
     G4int fNMCPhotons =150;
     ///the number of bins in photon spectrum
     G4int fNBinsSpectrum = 110;
@@ -217,6 +234,14 @@ private:
                                //(we take bremsstrahlung for photon sampling)
     G4double fLogEdEmin = 1.;   // = log(E/fMinPhotonEnergy), the same as fLogEmaxdEmin
                                // but with the particle energy as the maximal limit
+
+    G4double fVirtualCollimatorAngularDiameter=1.;//default, infinite angle
+    std::vector<G4bool> fInsideVirtualCollimator;
+
+    ///data of the phootn energy range with additional statistics
+    std::vector<G4double> fLogAddRangeEmindEmin;//=G4Log(emin/fMinPhotonEnergy)
+    std::vector<G4double> fLogAddRangeEmaxdEmin;//=G4Log(emax/fMinPhotonEnergy)
+    std::vector<G4int> fTimesPhotonStatistics;
 
     ///number of trajectories
     //(at each of the Baier-Katkov Integral is calculated for the same photons)
@@ -234,6 +259,9 @@ private:
                                            //in sampling, y-plane
     G4double fParamPhotonAngleY=1.e-3*CLHEP::rad; //a parameter radiated photon
                                            //sampling distribution, y-plane
+    G4double fRadiationAngleFactor = 1.; // number of radiation angles 1/gamma:
+                                         // more fRadiationAngleFactor =>
+                                         // higher fParamPhotonAngleX and Y
 
     ///new particle parameters (the parameters at the point of radiation emission)
     G4double fNewParticleEnergy=0;
@@ -277,14 +305,14 @@ private:
     std::vector<G4int> fNPhotonsPerBin; //number of photons per spectrum bin
                                    //(accumulating during total run)
 
-    std::vector<G4double> fSpectrum; //spectrum normalized by the total radiation probability
-                                //of one particle at one call of RadIntegral
+    std::vector<G4double> fSpectrum; //spectrum normalized by the total
+                        //radiation probability of one particle at one call of RadIntegral
 
     std::vector<std::vector<G4double>> fAccumSpectrum; //accumulate Spectrum during
                                              //the part of a trajectory
 
-    std::vector<G4double> fAccumTotalSpectrum; //spectrum normalized by the total radiation
-                                          //probability summed
+    std::vector<G4double> fAccumTotalSpectrum; //spectrum normalized by the total
+                                          //radiation probability summed
                                           //for all the particles (is not divided
                                           //of one particle number fNPhotonsPerBin)
 
@@ -295,8 +323,8 @@ private:
                                      //multiplied by the number of trajectories
                                      //(fItrajectories)
 
-    std::vector<G4double> fImax0; //trajectory element numbers at the end of each small piece
-                            //G4double just for security of some operations
+    std::vector<G4double> fImax0; //trajectory element numbers at the end of each
+                            //small piece; G4double just for security of some operations
     ///total radiation probability along this trajectory
     std::vector<G4double> fTotalRadiationProbabilityAlongTrajectory;
 };

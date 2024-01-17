@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(dicomReader)
 # for shared library
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

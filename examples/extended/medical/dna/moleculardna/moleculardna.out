@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -338,8 +338,14 @@ Auger electron emission enabled                   1
 Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        3.171e+10 y  
+Threshold for very long decay time at rest        1 y  
 ======================================================================
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+-------------------------------------------------------------------------
+                           Hadronic Processes for GenericIon
+  Process: Radioactivation
 
 alpha_G4DNAElastic:  for alpha SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -514,23 +520,6 @@ hIoni:  for pi-  XStype:3  SubType=2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO : Emin=    0 eV  Emax=297.505 keV  deltaVI
           BetheBloch : Emin=297.505 keV Emax=  300 MeV  deltaVI
-======================================================================
-======          Radioactive Decay Physics Parameters           =======
-======================================================================
-min MeanLife (from G4NuclideTable)                1 ns 
-Max life time (from G4DeexPrecoParameters)        1000 ps 
-Internal e- conversion flag                       1
-Stored internal conversion coefficients           1
-Enabled atomic relaxation mode                    1
-Enable correlated gamma emission                  0
-Max 2J for sampling of angular correlations       10
-Atomic de-excitation enabled                      1
-Auger electron emission enabled                   1
-Check EM cuts disabled for atomic de-excitation   1
-Use Bearden atomic level energies                 0
-Use ANSTO fluorescence model                      0
-Threshold for very long decay time at rest        3.171e+10 y  
-======================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <world> world volume
  This region is in the mass world.
@@ -567,21 +556,21 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   84655 kByte
-    Total CPU time elapsed for geometry optimisation: 55 seconds
+    Total CPU time elapsed for geometry optimisation: 49 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.06        27.55         0.09        42138k CellLogical
-      49.79        27.40         0.07        42138k DNAPhysLV
-       0.07         0.04         0.00          380k prism
+      50.64        25.00         0.07        42138k DNAPhysLV
+      49.24        24.31         0.08        42138k CellLogical
+       0.06         0.03         0.00          380k prism
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.78      42137k    311671   314256     703064        27.55    CellLogical
-      49.78      42137k    311671   314256     703064        27.40    DNAPhysLV
-       0.45        379k      1273     3780      14482         0.04    prism
+      49.78      42137k    311671   314256     703064        25.00    DNAPhysLV
+      49.78      42137k    311671   314256     703064        24.31    CellLogical
+       0.45        379k      1273     3780      14482         0.03    prism
 ### Run 0 starts.
 AnalysisManager::Initialize() GetRunID : 0
 ... set ntuple merging row mode : row-wise - done
@@ -597,7 +586,7 @@ DNAIndependentReactionTimeModel will be used ==========================
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.320000s Real=0.317723s Sys=0.000000s
+  User=0.320000s Real=0.636090s Sys=0.010000s
 ... write file : molecular-dna.root - done
 ... close file : molecular-dna.root - done
 G4 kernel has come to Quit state.

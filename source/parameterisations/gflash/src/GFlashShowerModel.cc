@@ -61,6 +61,7 @@ GFlashShowerModel::GFlashShowerModel(G4String modelName,
   FlagParamType           = 0;
   FlagParticleContainment = 1;  
   StepInX0 = 0.1;
+  EnergyStop = 0.0;
   Messenger       = new GFlashShowerModelMessenger(this);
 }
 
@@ -71,6 +72,7 @@ GFlashShowerModel::GFlashShowerModel(G4String modelName)
   FlagParamType           =1;
   FlagParticleContainment = 1;  
   StepInX0 = 0.1; 
+  EnergyStop = 0.0;
   Messenger       = new GFlashShowerModelMessenger(this); 
 }
 
@@ -193,8 +195,8 @@ GFlashShowerModel::ElectronDoIt(const G4FastTrack& fastTrack,
   // std::cout<<"--- ElectronDoit --- "<<std::endl;
   
   fastStep.KillPrimaryTrack();
-  fastStep.SetPrimaryTrackPathLength(0.0);
-  fastStep.SetTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->
+  fastStep.ProposePrimaryTrackPathLength(0.0);
+  fastStep.ProposeTotalEnergyDeposited(fastTrack.GetPrimaryTrack()->
                                    GetKineticEnergy());
   
   //-----------------------------

@@ -86,18 +86,15 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
 {
   if (!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 
-  if (gElementData.empty()) {
+  if (isFirstInstance || gElementData.empty()) {
     G4AutoLock l(&theBetheHMutex);
     if (gElementData.empty()) {
       isFirstInstance = true;
       gElementData.resize(gMaxZet+1, nullptr);
     }
-    l.unlock();
-  }
-
-  // static data should be initialised only in the one instance
-  if(isFirstInstance) {
+    // static data should be initialised only in the one instance
     InitialiseElementData();
+    l.unlock();
   }
   // element selectors should be initialised in the master thread
   if(IsMaster()) {

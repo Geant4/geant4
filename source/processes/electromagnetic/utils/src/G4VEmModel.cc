@@ -97,10 +97,6 @@ G4VEmModel::~G4VEmModel()
     delete xSectionTable;
     xSectionTable = nullptr; 
   }
-  if(isMaster && fElementData != nullptr) {
-    delete fElementData;
-    fElementData = nullptr;
-  }
   fEmManager->DeRegister(this);
 }
 
@@ -141,6 +137,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
 {
   if(highLimit <= lowLimit) { return; }
   G4EmUtility::InitialiseElementSelectors(this,part,cuts,lowLimit,highLimit);
+  localElmSelectors = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -409,16 +406,17 @@ void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
   localTable = isLocal;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                                                     
-G4bool G4VEmModel::LPMFlag() const
-{
-  return G4EmParameters::Instance()->LPM();
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                                                     
-void G4VEmModel::SetLPMFlag(G4bool val)
+void G4VEmModel::SetLPMFlag(G4bool)
 {
-  G4EmParameters::Instance()->SetLPM(val);
+  if (G4EmParameters::Instance()->Verbose() > 0) {
+    G4ExceptionDescription ed;
+    ed << "The obsolete method SetLPMFlag(..) of the model class " << GetName() 
+       << " is called. Please, use G4EmParameters::Instance()->SetLPM(..)"
+       << " instead";
+    G4Exception("G4VEmModel::SetLPMFlag", "em0001", JustWarning, ed);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

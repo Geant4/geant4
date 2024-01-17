@@ -1,0 +1,230 @@
+# Example exp_microdosimetry History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2023-11-15 I. Hrivnacova (exp_microdosimetry-V11-01-03)
+- Updated vis.mac: changed "/vis/open XYZ [600x600-0+0]" to "/vis/open"
+  to allow run-time choices and simplified comments.
+
+## 2023-11-12 Alberto Ribon (exp_microdosimetry-V11-01-02)
+- run.mac : introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+
+## 2023-11-09 G. Milluzzo (exp_microdosimetry-V11-01-01)
+- Renaming the radioprotection example in exp_microdosimetry
+
+## 2022-11-16 F. Romano, J.Magini, G.Parisi, G. Milluzzo (radioprotection-V11-00-02)
+-  Updating the READMEfile.
+   
+## 2022-11-09 Francesco Romano (radioprotection-V11-00-01)
+-  Added the diamondTelescope detector. Messengers modified accordingly.
+   Added python scripts to analyze the spectra files and calculate microdosimetric
+   Quantities.
+
+---
+
+# History entries prior to 11.0
+
+28.10.2021,  S.Guatelli tag radioprotection-V10-07-04
+             Added the Bridge silicon microdosimeter and a
+             macro to perform microdosimetric calculations.
+             The ROOT macros run with ROOT version 6. 
+             
+07.10.2021,  I. Hrivnacova tag radioprotection-V10-07-03
+             Migration to new G4AnalysisManager.hh header.
+
+19.07.2021,  I. Hrivnacova tag radioprotection-V10-07-02
+             Updated for changes in the analysis category:
+             removed deleting of the analysis manager,
+             as this is now done by the Geant4 kernel.
+
+24.05.2021,  B. Morgan (radioprotection-V10-07-01)
+- Bump required CMake version range to 3.12...3.20, matching core Geant4
+
+11.02.2021 - S. Guatelli tag radioprotection-V10-07-00
+             Dependence to G4EmProcessOptions removed.
+             SetCuts method removed from the local PhysicsList as it is
+             not thread-safe.
+
+17.11.2020 - S. Guatelli tag radioprotection-V10-06-02
+             Migration to G4RunManagerFactory
+
+02.11.2020 - F. Romano and J. Magini tag radioprotection-V10-06-01
+           - radioprotection.cc :
+	     added new parameter to DetectorConstruction constructor
+	     added instance of DetectorManager
+           - DetectorConstruction.hh :
+	     defined private methods to construct a specific type of detector ("Silicon", "Diamond", and "MicroDiamond")
+	     added detectorType private string to store the name of the one in use
+	     added a variable to the constructor
+	     added declaration for DetectorMessenger class
+	   - DetectorConstruction.cc :
+	     modifed the constructor to store the detector type
+	     rewrote Construct so that it calls the specific method of the selected detector type
+	     moved the previous diamond detector geometry to ConstructDiamondDetector, and added new possible
+       geometries (silicon and microdiamond) from scratch via the other two methods
+   	   - DetectorMessenger.hh :
+	     created the file in order to switch detector type
+	   - DetectorMessenger.cc :
+	     created the file in order to switch detector type
+	   - geometry.mac :
+	     create the macro in order to select a specific detector at runtime (by default, all options are commented out)
+	   - vis.mac :
+	     added a line to execute geometry.mac before launching the GUI (at which point it wouldn't be possible to change 		     the geometry anymore)
+	   - run.mac:
+             added a line to execute geometry.mac
+	   - CMakeLists.txt :
+	     added geometry.mac to the list of files to be copied to the build directory
+
+02.11.2020 - B.Morgan tag radioprotection-V10-06-00
+             Support same CMake version range as core Geant4
+
+30.10.2019 - S. Guatelli tag radioprotection-V10-05-01
+             using namespace std removed
+
+31.01.2019 - I.Hrivnacova tag radioprotection-V10-05-00
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+19.11.2016 - A. Dotti   tag radioprotection-V10-02-01
+	    Explicit set of SD to manager
+
+28.10.2016 - G. Folger  tag radioprotection-V10-02-00
+            Remove direct use of theParticleIterator, use GetParticleTableIterator().
+             fix required by clang39 on Linux and MAC
+
+06.03.2015 - A. Dotti. tag radioprotection-V10-01-00
+             removing unnecessary GPS in master
+
+13.10.2014 - S. Guatelli. tag radioprotection-V10-00-01
+             compilation warning with CLANG deleted (Run Action)
+
+09.10.2014 - S. Guatelli. tag radioprotection-V10-00-00
+             compilation errors and warning on cdash deleted
+
+08.11.2013 - S. Guatelli. tag radioprotection-V09-06-03
+             MT mode + analysis working
+
+20.09.2013 - S. Guatelli. tag radioprotection-V09-06-02
+             REMSIM example dismissed as it is out of date.
+             Replaced with characterisation of novel diamond detector for
+             radiation protection, using microdosimetric approach.
+
+04.02.2013 - G.Folger; tag radioprotection-V09-06-01
+           RemSimPhysicsList.cc: Update for renamed physics builders
+	   GNUmakefile: correct G4INSTALL
+
+14.12.2012 A. Ribon, tag radioprotection-V09-06-00
+           Removed use of obsolete G4HadronQElasticPhysics.
+
+28.11.2012 G. Cosmo, tag radioprotection-V09-05-03
+           Fixed cases of variable shadowing.
+
+25.10.2012 L. Pandola, tag radioprotection-V09-05-02
+	   Replace CMakeLists.txt to deal with UI/VIS
+
+12.10.2012 G. Cosmo, tag radioprotection-V09-05-01
+           Explicit inclusion of units and constants headers.
+
+08.12.2011 P. Mato. tag radioprotection-V09-05-00
+           Added CMakeLists.txt file
+
+31.10.2011 L. Pandola. Migrated G4Exceptions to the new scheme
+	   tag radioprotection-V09-04-02
+
+23.09.2011 S. Guatelli. Scoring mesh introduced.
+           G4Analysis component subtitutes AIDA/PI analysis
+           tag radioprotection-V09-04-01
+
+21.09.2011 S. Guatelli. Update of the physics list,
+           tag radioprotection-V09-04-00
+
+18.11.2010 J.Allison, tag radioprotection-V09-03-03
+           Introduce G4UIExecutive.
+
+09.11.2010 M.Asai, tag radioprotection-V09-03-02
+           Fix AIDA file option
+
+06.06.2010 J. Perl, tag radioprotection-V09-03-01
+	   Remove unused variable in EventAction
+
+03.06.2010 J. Perl, tag radioprotection-V09-03-00
+	   Update vis usage
+
+16.11.2009 S. Guatelli, tag radioprotection-V09-02-04
+	   analysis output format is changed to xml
+
+12.11.2009 S. Guatelli, tag radioprotection-V09-02-01
+	   Physics List updated
+
+08.04.2009 G.A.P.Cirrone, tag radioprotection-V09-02-00
+           GNUmakefile updated
+
+6 March 2009 Guy Barrand (in agreement with G.Cosmo)
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
+06.06.2007 MGP tag radioprotection-V08-03-00
+           Minor documentation update
+
+15th November 2006 Susanna Guatelli (radioprotection-V08-01-00)
+- The hadronic physics lists are more clear.
+
+31th May 2006 Susanna Guatelli(radioprotection-V08-00-01)
+- Added histograms
+- Added comments
+
+15th March 2006 Susanna Guatelli(radioprotection-V08-00-00)
+- Pion absorption at rest introduced in  RemSimHadronicBinary.cc
+- Added more histograms
+- Primary particle generator can handle spectra
+
+7th December 2005 Susanna Guatelli (radioprotection-V07-01-04)
+- Macros updated
+- Comment deleted from remsim.cc
+
+2nd December 2005 Susanna Guatelli (radioprotection-V07-01-03)
+- Ions updated
+- General Particle source introduced
+- Macros updated
+- README updated
+
+23th November 2005 Susanna Guatelli (radioprotection-V07-01-02)
+- Ions introduced
+
+23th November 2005 Susanna Guatelli (radioprotection-V07-01-01)
+- Deleted warning due to standard C++ libraries concerning reading
+external files
+- Added Eta and EtaPrime as particles
+
+8th September 2005  Susanna Guatelli  (radioprotection-V07-01-00)
+- Deleted bug. The bug appears at the end of the execution of the simulation.
+  The bug consists in a segmentation fault appearing after the delete
+  of the run manager. The bug appeared with platform slc3.
+  It is due to a bug in G4hLowEnergyIonisation.
+
+30th May 2005  Susanna Guatelli  (radioprotection-V07-00-05)
+- Code review, analysis with AIDA 3.2.1 and PI 1.3.3
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+11.2004 - Binary cascade approach added
+
+11.2004 - Option to define the format of the output file hbook or xml
+
+11.2004 - Add histograms
+
+05.2004 - Design iteration with Decorator Design pattern
+
+01.2004 - S.Guatelli
+          First implementation
+

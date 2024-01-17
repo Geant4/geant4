@@ -198,7 +198,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if(trackA<=1 && nucleusA<=1 && (trackZ>=0 || trackA==0)) {
     return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
   }
-
+ 
   // For systems heavier than theMaxProjMassINCL, use another model (typically
   // BIC)
   const G4int theMaxProjMassINCL = theInterfaceStore->GetMaxProjMassINCL();
@@ -328,9 +328,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     theINCLModel = G4INCLXXInterfaceStore::GetInstance()->GetINCLModel();
 
     const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy,
-								   theTargetNucleus->GetA_asInt(),
-								   theTargetNucleus->GetZ_asInt(),
-								   -theTargetNucleus->GetL());  // Strangeness has opposite sign
+                   theTargetNucleus->GetA_asInt(),
+                   theTargetNucleus->GetZ_asInt(),
+                   -theTargetNucleus->GetL());  // Strangeness has opposite sign
     //    eventIsOK = !eventInfo.transparent && nTries < maxTries;                              // of the number of Lambdas 
     eventIsOK = !eventInfo.transparent;
     if(eventIsOK) {
@@ -344,18 +344,17 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       G4LorentzVector fourMomentumOut;
 
       for(G4int i = 0; i < eventInfo.nParticles; ++i) {
-	G4int A = eventInfo.A[i];
+        G4int A = eventInfo.A[i];
         G4int Z = eventInfo.Z[i];
-	G4int S = eventInfo.S[i];  // Strangeness
+        G4int S = eventInfo.S[i];  // Strangeness
         G4int PDGCode = eventInfo.PDGCode[i];
-	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << " S = " << S << G4endl;
-	G4double kinE = eventInfo.EKin[i];
-	G4double px = eventInfo.px[i];
-	G4double py = eventInfo.py[i];
-	G4double pz = eventInfo.pz[i];
-	G4DynamicParticle *p = toG4Particle(A, Z, S, PDGCode, kinE, px, py, pz);
-	if(p != 0) {
-	  G4LorentzVector momentum = p->Get4Momentum();
+        G4double kinE = eventInfo.EKin[i];
+        G4double px = eventInfo.px[i];
+        G4double py = eventInfo.py[i];
+        G4double pz = eventInfo.pz[i];
+        G4DynamicParticle *p = toG4Particle(A, Z, S, PDGCode, kinE, px, py, pz);
+        if(p != 0) {
+          G4LorentzVector momentum = p->Get4Momentum();
 
           // Apply the toLabFrame rotation
           momentum *= toLabFrame;
@@ -365,68 +364,67 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
             momentum.setVect(-momentum.vect());
           }
 
-	  // Set the four-momentum of the reaction products
-	  p->Set4Momentum(momentum);
+    // Set the four-momentum of the reaction products
+          p->Set4Momentum(momentum);
           fourMomentumOut += momentum;
 
-	  // Propagate the particle's parent resonance information
-	  G4HadSecondary secondary(p, 1.0, secID);
-	  G4ParticleDefinition* parentResonanceDef = nullptr;
-	  if ( eventInfo.parentResonancePDGCode[i] != 0 ) {
-	    parentResonanceDef = G4ParticleTable::GetParticleTable()->FindParticle(eventInfo.parentResonancePDGCode[i]);
-	  }
-	  secondary.SetParentResonanceDef(parentResonanceDef);
-	  secondary.SetParentResonanceID(eventInfo.parentResonanceID[i]);
-	  
-	  theResult.AddSecondary(secondary);
+    // Propagate the particle's parent resonance information
+          G4HadSecondary secondary(p, 1.0, secID);
+          G4ParticleDefinition* parentResonanceDef = nullptr;
+          if ( eventInfo.parentResonancePDGCode[i] != 0 ) {
+            parentResonanceDef = G4ParticleTable::GetParticleTable()->FindParticle(eventInfo.parentResonancePDGCode[i]);
+          }
+          secondary.SetParentResonanceDef(parentResonanceDef);
+          secondary.SetParentResonanceID(eventInfo.parentResonanceID[i]);
+    
+          theResult.AddSecondary(secondary);
 
-	} else {
-	  G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";
+        } else {
+          G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";
           theInterfaceStore->EmitWarning(message);
-	}
+        }
       }
 
       for(G4int i = 0; i < eventInfo.nRemnants; ++i) {
-	const G4int A = eventInfo.ARem[i];
-	const G4int Z = eventInfo.ZRem[i];
-	const G4int S = eventInfo.SRem[i];
-	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << " S= " << S << G4endl;
+        const G4int A = eventInfo.ARem[i];
+        const G4int Z = eventInfo.ZRem[i];
+        const G4int S = eventInfo.SRem[i];
         // Check that the remnant is a physical bound state: if not, resample the collision.
         if(( Z == 0  &&  S == 0  &&  A > 1 ) ||                 // No bound states for nn, nnn, nnnn, ...
            ( Z == 0  &&  S != 0  &&  A < 4 ) ||                 // No bound states for nl, ll, nnl, nll, lll
            ( Z != 0  &&  S != 0  &&  A == Z + std::abs(S) )) {  // No bound states for pl, ppl, pll, ...
-	  std::stringstream ss;
-	  ss << "unphysical residual fragment : Z=" << Z << "  S=" << S << "  A=" << A 
+          std::stringstream ss;
+          ss << "unphysical residual fragment : Z=" << Z << "  S=" << S << "  A=" << A 
              << "  skipping it and resampling the collision";
-	  theInterfaceStore->EmitWarning(ss.str());
-	  eventIsOK = false;
+          theInterfaceStore->EmitWarning(ss.str());
+          eventIsOK = false;
           continue;
-	}
-	const G4double kinE = eventInfo.EKinRem[i];
-	const G4double px = eventInfo.pxRem[i];
-	const G4double py = eventInfo.pyRem[i];
-	const G4double pz = eventInfo.pzRem[i];
+        }
+        const G4double kinE = eventInfo.EKinRem[i];
+        const G4double px = eventInfo.pxRem[i];
+        const G4double py = eventInfo.pyRem[i];
+        const G4double pz = eventInfo.pzRem[i];
         G4ThreeVector spin(
             eventInfo.jxRem[i]*hbar_Planck,
             eventInfo.jyRem[i]*hbar_Planck,
             eventInfo.jzRem[i]*hbar_Planck
             );
-	const G4double excitationE = eventInfo.EStarRem[i];
-	G4double nuclearMass = excitationE;
-	if ( S == 0 ) {
-	  nuclearMass += G4NucleiProperties::GetNuclearMass(A, Z);
-	} else {
-	  // Assumed that the opposite of the strangeness of the remnant gives the number of Lambdas inside it
-	  nuclearMass += G4HyperNucleiProperties::GetNuclearMass(A, Z, std::abs(S));
-	}
+        const G4double excitationE = eventInfo.EStarRem[i];
+        G4double nuclearMass = excitationE;
+        if ( S == 0 ) {
+          nuclearMass += G4NucleiProperties::GetNuclearMass(A, Z);
+        } else {
+    // Assumed that the opposite of the strangeness of the remnant gives the number of Lambdas inside it
+          nuclearMass += G4HyperNucleiProperties::GetNuclearMass(A, Z, std::abs(S));
+        }
         const G4double scaling = remnant4MomentumScaling(nuclearMass, kinE, px, py, pz);
-	G4LorentzVector fourMomentum(scaling * px, scaling * py, scaling * pz,
-				     nuclearMass + kinE);
-	if(std::abs(scaling - 1.0) > 0.01) {
+        G4LorentzVector fourMomentum(scaling * px, scaling * py, scaling * pz,
+             nuclearMass + kinE);
+        if(std::abs(scaling - 1.0) > 0.01) {
           std::stringstream ss;
           ss << "momentum scaling = " << scaling
              << "\n                Lorentz vector = " << fourMomentum
-	     << ")\n                A = " << A << ", Z = " << Z << ", S = " << S
+             << ")\n                A = " << A << ", Z = " << Z << ", S = " << S
              << "\n                E* = " << excitationE << ", nuclearMass = " << nuclearMass
              << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
              << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
@@ -434,7 +432,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
              << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
              << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
           theInterfaceStore->EmitWarning(ss.str());
-	}
+        }
 
         // Apply the toLabFrame rotation
         fourMomentum *= toLabFrame;
@@ -446,13 +444,13 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         }
 
         fourMomentumOut += fourMomentum;
-	G4Fragment remnant(A, Z, std::abs(S), fourMomentum);  // Assumed that -strangeness gives the number of Lambdas
+        G4Fragment remnant(A, Z, std::abs(S), fourMomentum);  // Assumed that -strangeness gives the number of Lambdas
         remnant.SetAngularMomentum(spin);
-	remnant.SetCreatorModelID(secID);
+        remnant.SetCreatorModelID(secID);
         if(dumpRemnantInfo) {
           G4cerr << "G4INCLXX_DUMP_REMNANT: " << remnant << "  spin: " << spin << G4endl;
         }
-	remnants.push_back(remnant);
+        remnants.push_back(remnant);
       }
 
       // Give up is the event is not ok (e.g. unphysical residual)
@@ -524,21 +522,21 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   if(theDeExcitation != 0) {
     for(std::list<G4Fragment>::iterator i = remnants.begin();
-	i != remnants.end(); ++i) {
+  i != remnants.end(); ++i) {
       G4ReactionProductVector *deExcitationResult = theDeExcitation->DeExcite((*i));
 
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
-	  fragment != deExcitationResult->end(); ++fragment) {
-	const G4ParticleDefinition *def = (*fragment)->GetDefinition();
-	if(def != 0) {
-	  G4DynamicParticle *theFragment = new G4DynamicParticle(def, (*fragment)->GetMomentum());
-	  theResult.AddSecondary(theFragment, (*fragment)->GetCreatorModelID());
-	}
+    fragment != deExcitationResult->end(); ++fragment) {
+  const G4ParticleDefinition *def = (*fragment)->GetDefinition();
+  if(def != 0) {
+    G4DynamicParticle *theFragment = new G4DynamicParticle(def, (*fragment)->GetMomentum());
+    theResult.AddSecondary(theFragment, (*fragment)->GetCreatorModelID());
+  }
       }
 
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
-	  fragment != deExcitationResult->end(); ++fragment) {
-	delete (*fragment);
+    fragment != deExcitationResult->end(); ++fragment) {
+  delete (*fragment);
       }
       deExcitationResult->clear();
       delete deExcitationResult;
@@ -636,7 +634,7 @@ G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z
 }
 
 G4DynamicParticle *G4INCLXXInterface::toG4Particle(G4int A, G4int Z, G4int S, G4int PDGCode,
-						   G4double kinE, G4double px,
+               G4double kinE, G4double px,
                                                    G4double py, G4double pz) const {
   const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z, S, PDGCode);
   if(def == 0) { // Check if we have a valid particle definition
@@ -650,9 +648,9 @@ G4DynamicParticle *G4INCLXXInterface::toG4Particle(G4int A, G4int Z, G4int S, G4
 }
 
 G4double G4INCLXXInterface::remnant4MomentumScaling(G4double mass,
-						  G4double kineticE,
-						  G4double px, G4double py,
-						  G4double pz) const {
+              G4double kineticE,
+              G4double px, G4double py,
+              G4double pz) const {
   const G4double p2 = px*px + py*py + pz*pz;
   if(p2 > 0.0) {
     const G4double pnew2 = kineticE*kineticE + 2.0*kineticE*mass;

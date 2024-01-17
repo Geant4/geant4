@@ -1929,6 +1929,25 @@ HepPolyhedron::createPolyhedron(G4int Nnodes, G4int Nfaces,
   return 0;
 }
 
+G4Point3D HepPolyhedron::vertexUnweightedMean() const {
+  /***********************************************************************
+   *                                                                     *
+   * Name: vertexUnweightedMean                        Date:    23.10.23 *
+   * Author: S. Boogert (Manchester)                   Revised:          *
+   *                                                                     *
+   * Function: Calculate the unweighted mean of all the vertices         *
+   * in the polyhedron. Not to be confused with the polyhedron centre or *
+   * centre of mass                                                      *
+   ***********************************************************************/
+
+  auto centre = G4Point3D();
+  for(int i=1;i<=nvert;i++) {
+    centre += pV[i];
+  }
+  centre = centre/nvert;
+  return centre;
+}
+
 HepPolyhedronTrd2::HepPolyhedronTrd2(G4double Dx1, G4double Dx2,
                                      G4double Dy1, G4double Dy2,
                                      G4double Dz)

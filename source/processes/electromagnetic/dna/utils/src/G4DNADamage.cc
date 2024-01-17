@@ -33,7 +33,7 @@ G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
                                    const G4Molecule* molecule,
                                    const G4ThreeVector& position,
                                    G4double time) :
-    G4VDNAHit(), fpMolecule(molecule)
+     fpMolecule(molecule)
 {
   fBaseName = baseName;
   fPosition = position;
@@ -42,7 +42,7 @@ G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
 
 G4DNAIndirectHit::~G4DNAIndirectHit()
 {
-  if (fpMolecule != nullptr) delete fpMolecule;
+  delete fpMolecule;
   fpMolecule = nullptr;
 }
 
@@ -69,25 +69,25 @@ G4DNADamage::G4DNADamage()
 
 G4DNADamage::~G4DNADamage()
 {
-  for (G4int i = 0; i < (G4int) fIndirectHits.size(); ++i)
+  for (auto & fIndirectHit : fIndirectHits)
   {
-    if (fIndirectHits[i]) delete fIndirectHits[i];
+    delete fIndirectHit;
   }
   fIndirectHits.clear();
 }
 
 void G4DNADamage::DeleteInstance()
 {
-  if (fpInstance) delete fpInstance;
+  delete fpInstance;
   fpInstance = nullptr;
 }
 
 void G4DNADamage::Reset()
 {
   fNIndirectDamage = 0;
-  for (G4int i = 0; i < (G4int) fIndirectHits.size(); ++i)
+  for (auto & fIndirectHit : fIndirectHits)
   {
-    if (fIndirectHits[i]) delete fIndirectHits[i];
+    delete fIndirectHit;
   }
   fIndirectHits.clear();
 }

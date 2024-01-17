@@ -40,7 +40,6 @@
 class G4VPhysicalVolume;
 class G4Material;
 class G4VSensitiveDetector;
-class G4VisAttributes;
 class G4GenericMessenger;
 
 namespace B5
@@ -67,10 +66,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
     void DefineCommands();
 
-    G4GenericMessenger* fMessenger;
-
     static G4ThreadLocal MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;
+
+    G4GenericMessenger* fMessenger = nullptr;
 
     G4LogicalVolume* fHodoscope1Logical = nullptr;
     G4LogicalVolume* fHodoscope2Logical = nullptr;
@@ -79,8 +78,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4LogicalVolume* fCellLogical = nullptr;
     G4LogicalVolume* fHadCalScintiLogical = nullptr;
     G4LogicalVolume* fMagneticLogical = nullptr;
-
-    std::vector<G4VisAttributes*> fVisAttributes;
 
     G4double fArmAngle = 30.*CLHEP::deg;
     G4RotationMatrix* fArmRotation = nullptr;

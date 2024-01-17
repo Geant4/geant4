@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -39,33 +36,20 @@
 #ifndef G4Etac_h
 #define G4Etac_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ETAC                                   ###
-// ######################################################################
 
 class G4Etac : public G4ParticleDefinition
 {
- private:
-   static G4Etac* theInstance;
-   G4Etac(){}
-   ~G4Etac() override= default;
+  public:
+    static G4Etac* Definition();
+    static G4Etac* EtacDefinition();
+    static G4Etac* Etac();
 
- public:
-   static G4Etac* Definition();
-   static G4Etac* EtacDefinition();
-   static G4Etac* Etac();
+  private:
+    G4Etac() {}
+    ~G4Etac() override = default;
+
+    static G4Etac* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-

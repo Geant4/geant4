@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02Output* Par02Output::fPar02Output = 0;
+Par02Output* Par02Output::fPar02Output = nullptr;
 G4ThreadLocal G4int Par02Output::fCurrentNtupleId = 0;
 G4ThreadLocal G4int Par02Output::fCurrentID = 0;
 
@@ -50,8 +50,7 @@ Par02Output::Par02Output() : fFileNameWithRunNo( false ) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02Output::~Par02Output() {
-}
+Par02Output::~Par02Output() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

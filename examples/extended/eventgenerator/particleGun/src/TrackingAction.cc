@@ -45,7 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(PrimaryGeneratorAction* prim)
-:G4UserTrackingAction(), fPrimary(prim)
+:fPrimary(prim)
 { 
  // parameters for generator action #3
   fNewUz = fPrimary->GetAction3()->GetNewUz();

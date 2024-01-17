@@ -18,23 +18,39 @@
 /opnovice2/boxConstProperty RESOLUTIONSCALE 1
 #/opnovice2/boxProperty SCINTILLATIONYIELD     5000.
 /opnovice2/boxProperty PROTONSCINTILLATIONYIELD   0 50 10  5000
-/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD1 0.2
-/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD2 0.8
+/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD1 0.3
+/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD2 0.5
+/opnovice2/boxConstProperty PROTONSCINTILLATIONYIELD3 0.2
+/opnovice2/boxConstProperty PROTONSCINTILLATIONTIMECONSTANT1 50
+/opnovice2/boxConstProperty PROTONSCINTILLATIONTIMECONSTANT2 200
+/opnovice2/boxConstProperty PROTONSCINTILLATIONTIMECONSTANT3 500
 /opnovice2/boxProperty DEUTERONSCINTILLATIONYIELD 0 50 10  5000
 /opnovice2/boxConstProperty DEUTERONSCINTILLATIONYIELD1 0.6
 /opnovice2/boxConstProperty DEUTERONSCINTILLATIONYIELD2 0.4
+# if time constants aren't specified for a particle, SCINTILLATIONTIMECONSTANTs
+# will be used for that particle
+#/opnovice2/boxConstProperty DEUTERONSCINTILLATIONTIMECONSTANT1 50
+#/opnovice2/boxConstProperty DEUTERONSCINTILLATIONTIMECONSTANT2 100
 /opnovice2/boxProperty TRITONSCINTILLATIONYIELD   0 50 10  5000
 /opnovice2/boxConstProperty TRITONSCINTILLATIONYIELD1 0.5
 /opnovice2/boxConstProperty TRITONSCINTILLATIONYIELD2 0.5
+/opnovice2/boxConstProperty TRITONSCINTILLATIONTIMECONSTANT1 100
+/opnovice2/boxConstProperty TRITONSCINTILLATIONTIMECONSTANT2 500
 /opnovice2/boxProperty ALPHASCINTILLATIONYIELD    0 50 10  50000
 /opnovice2/boxConstProperty ALPHASCINTILLATIONYIELD1 0.7
 /opnovice2/boxConstProperty ALPHASCINTILLATIONYIELD2 0.3
+/opnovice2/boxConstProperty ALPHASCINTILLATIONTIMECONSTANT1 30
+/opnovice2/boxConstProperty ALPHASCINTILLATIONTIMECONSTANT2 60
 /opnovice2/boxProperty IONSCINTILLATIONYIELD      0 50 10  5000
-/opnovice2/boxConstProperty IONSCINTILLATIONYIELD1 0.7
-/opnovice2/boxConstProperty IONSCINTILLATIONYIELD2 0.3
+/opnovice2/boxConstProperty IONSCINTILLATIONYIELD1 1.0
+/opnovice2/boxConstProperty IONSCINTILLATIONYIELD2 0.0
+/opnovice2/boxConstProperty IONSCINTILLATIONTIMECONSTANT1 20
+/opnovice2/boxConstProperty IONSCINTILLATIONTIMECONSTANT2 100
 /opnovice2/boxProperty ELECTRONSCINTILLATIONYIELD 0 5000 10  500000
-/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD1 0.8
-/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD2 0.2
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD1 0.5
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONYIELD2 0.5
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONTIMECONSTANT1 50
+/opnovice2/boxConstProperty ELECTRONSCINTILLATIONTIMECONSTANT2 500
 
 /opnovice2/worldProperty RINDEX    0.000002 1.01 0.000008 1.01
 /opnovice2/worldProperty ABSLENGTH 0.000002 100  0.000005 100  0.000008 100
@@ -59,9 +75,7 @@
 
 /run/initialize
 
-/process/optical/scintillation/verbose 0
-
-/analysis/setFileName scint_by_particle
+/analysis/setFileName scint_by_particle_e
 /analysis/h1/set      2  100 0 10  # eV
 /analysis/h1/set      3  400 0 200 # ns
 
@@ -70,18 +84,22 @@
 /gun/energy 1 MeV
 /gun/position -1 0 0 m
 /gun/direction 1 0 0
-#
+
 /run/beamOn 100
 
 /gun/particle proton
+/analysis/setFileName scint_by_particle_p
 /run/beamOn 100
 
 /gun/particle alpha
+/analysis/setFileName scint_by_particle_a
 /run/beamOn 100
 
 /gun/particle deuteron
+/analysis/setFileName scint_by_particle_d
 /run/beamOn 100
 
 /gun/particle ion
+/analysis/setFileName scint_by_particle_i
 /gun/ion 6 12 6
 /run/beamOn 100

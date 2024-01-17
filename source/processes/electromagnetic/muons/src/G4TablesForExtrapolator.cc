@@ -333,8 +333,6 @@ void G4TablesForExtrapolator::ComputeElectronDEDX(
     }
     if(splineFlag) { aVector->FillSecondDerivatives(); }
   }
-  delete ioni;
-  delete brem;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -344,8 +342,8 @@ G4TablesForExtrapolator::ComputeMuonDEDX(const G4ParticleDefinition* part,
 					 G4PhysicsTable* table)
 {
   G4BetheBlochModel* ioni = new G4BetheBlochModel();
-  G4MuPairProductionModel* pair = new G4MuPairProductionModel();
-  G4MuBremsstrahlungModel* brem = new G4MuBremsstrahlungModel();
+  G4MuPairProductionModel* pair = new G4MuPairProductionModel(part);
+  G4MuBremsstrahlungModel* brem = new G4MuBremsstrahlungModel(part);
   ioni->Initialise(part, cuts);
   pair->Initialise(part, cuts);
   brem->Initialise(part, cuts);
@@ -390,7 +388,6 @@ G4TablesForExtrapolator::ComputeMuonDEDX(const G4ParticleDefinition* part,
     }
     if(splineFlag) { aVector->FillSecondDerivatives(); }
   }
-  delete ioni;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -436,7 +433,6 @@ G4TablesForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* part,
     }
     if(splineFlag) { aVector->FillSecondDerivatives(); }
   }
-  delete ioni;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -481,7 +477,6 @@ G4TablesForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* part,
     }
     if(splineFlag) { aVector->FillSecondDerivatives(); }
   }
-  delete msc;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

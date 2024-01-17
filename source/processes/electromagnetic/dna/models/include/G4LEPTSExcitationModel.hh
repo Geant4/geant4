@@ -32,25 +32,25 @@ class G4LEPTSExcitationModel : public G4VLEPTSModel
 { 
 public:
   G4LEPTSExcitationModel(const G4String& modelName ="G4LEPTSExcitationModel");
-  ~G4LEPTSExcitationModel();
+  ~G4LEPTSExcitationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, 
-                          const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
-  virtual std::map<G4int,std::vector<G4double> > ReadIXS(G4String, const G4Material* aMaterial);
+  std::map<G4int,std::vector<G4double> > ReadIXS(G4String, const G4Material* aMaterial) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin = 0.0,
-                                 G4double tmax = DBL_MAX);
+                                 G4double tmax = DBL_MAX) override;
 
  // main method to compute cross section per Volume
-  virtual G4double CrossSectionPerVolume(const G4Material*,
+  G4double CrossSectionPerVolume(const G4Material*,
                                          const G4ParticleDefinition*,
                                          G4double kineticEnergy,
                                          G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
+                                         G4double maxEnergy = DBL_MAX) override;
 
 private:
   G4ParticleChangeForGamma* fParticleChangeForGamma;

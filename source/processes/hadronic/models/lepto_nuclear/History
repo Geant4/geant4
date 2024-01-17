@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-09-04 Vladimir Ivanchenko (hadr-lepnuc-V11-01-00)
+- G4ElectroVDNuclearModel : updated initialisation of data tables
+
 ## 2022-10-30 Vladimir Grichine(hadr-lepnuc-V11-00-06)
 - G4(A)NuTauMucleusNc(Cc)Models added for (anti)_nu_tau final state 
 

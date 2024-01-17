@@ -37,6 +37,7 @@
 #include "G4HnInformation.hh"
 #include "globals.hh"
 
+#include <set>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -51,10 +52,13 @@ class G4HnManager : public G4BaseAnalysisManager
     G4HnManager() = delete;
     ~G4HnManager() override;
 
+    void CreateMessenger();
+
     // Methods to manipulate additional information
+    void AddHnInformation(G4HnInformation* info);
+    void AddHnInformation(G4HnInformation* info, G4int index);
 
-    G4HnInformation* AddHnInformation(const G4String& name, G4int nofDimensions);
-
+    void SetHnDeleted(G4HnInformation* info, G4bool keepSetting);
     void ClearData();
 
     // Access methofd
@@ -68,7 +72,6 @@ class G4HnManager : public G4BaseAnalysisManager
                           G4bool warn = true) const;
 
     const std::vector<G4HnInformation*>& GetHnVector() const;
-    G4int GetNofHns() const;
     G4int GetNofActiveHns() const;
     G4String GetHnType() const;
 
@@ -115,6 +118,7 @@ class G4HnManager : public G4BaseAnalysisManager
     G4String GetFileName(G4int id) const;
 
     void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
+    void SetDefaultFileType(const G4String& fileType);
 
   private:
     // Methods
@@ -127,6 +131,7 @@ class G4HnManager : public G4BaseAnalysisManager
 
     // Data members
     G4String  fHnType;
+    G4String  fDefaultFileType;
     G4int     fNofActiveObjects { 0 };
     G4int     fNofAsciiObjects { 0 };
     G4int     fNofPlottingObjects { 0 };
@@ -134,14 +139,12 @@ class G4HnManager : public G4BaseAnalysisManager
 
     // Additional histograms/ntuple properties not included in tools
     std::vector<G4HnInformation*> fHnVector;
+    std::set<G4int> fFreeIds;
     std::shared_ptr<G4VFileManager> fFileManager { nullptr };
 
     // Messenger
     std::unique_ptr<G4HnMessenger> fMessenger;
 };
-
-inline G4int G4HnManager::GetNofHns() const
-{ return G4int(fHnVector.size()); }
 
 inline G4int G4HnManager::GetNofActiveHns() const
 { return fNofActiveObjects; }
@@ -157,5 +160,9 @@ inline void G4HnManager::SetFileManager(std::shared_ptr<G4VFileManager> fileMana
   fFileManager = std::move(fileManager);
 }
 
-#endif
+inline void G4HnManager::SetDefaultFileType(const G4String& fileType)
+{
+  fDefaultFileType = fileType;
+}
 
+#endif

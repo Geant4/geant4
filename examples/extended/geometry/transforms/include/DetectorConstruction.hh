@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 
@@ -40,9 +40,9 @@ class G4VPhysicalVolume;
 
 /// Detector construction class to demonstrate various ways of placement
 ///
-/// The geometry setup consists of two trapezoid volumes which are placed 
-/// in a world so that their axial symmetry axis is in given theta and phi 
-/// polar angles. The various ways of placement are implemented in the 
+/// The geometry setup consists of two trapezoid volumes which are placed
+/// in a world so that their axial symmetry axis is in given theta and phi
+/// polar angles. The various ways of placement are implemented in the
 /// DetectorConstruction class in the following private functions:
 ///  - PlaceWithDirectMatrix()
 ///  - PlaceWithInverseMatrix()
@@ -51,10 +51,10 @@ class G4VPhysicalVolume;
 ///  - PlaceWithReflections()
 ///
 /// which are then called from the Construct() function.
-/// All method defines exactly same geometry except for the placement 
-/// with reflection where trapezoids are placed with their symmetry axis 
-/// in parallel with z-axis in order to make easier to check reflection 
-/// visually. 
+/// All method defines exactly same geometry except for the placement
+/// with reflection where trapezoids are placed with their symmetry axis
+/// in parallel with z-axis in order to make easier to check reflection
+/// visually.
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -65,19 +65,19 @@ class DetectorConstruction : public G4VUserDetectorConstruction
       kWithAxialRotations,
       kWithEulerAngles,
       kWithReflections
-    };  
+    };
 
   public:
     DetectorConstruction();
-   ~DetectorConstruction();
+   ~DetectorConstruction() override;
 
   public:
-    // methods from base class 
-    virtual G4VPhysicalVolume* Construct();
-    
+    // methods from base class
+    G4VPhysicalVolume* Construct() override;
+
     // set methods
     void SetMethod(EMethod method);
-                       
+
   private:
     // methods
     void PlaceWithDirectMatrix();
@@ -87,10 +87,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void PlaceWithReflections();
 
     // data members
-    DetectorMessenger* fMessenger;
-    EMethod  fMethod;
-    G4LogicalVolume* fWorldVolume;
-    G4LogicalVolume* fTrdVolume;
+    DetectorMessenger* fMessenger = nullptr;
+    EMethod  fMethod = kWithDirectMatrix;
+    G4LogicalVolume* fWorldVolume = nullptr;
+    G4LogicalVolume* fTrdVolume = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

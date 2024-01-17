@@ -32,17 +32,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F06ActionInitialization::F06ActionInitialization()
- : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F06ActionInitialization::~F06ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F06ActionInitialization::BuildForMaster() const
 {
 }
@@ -52,6 +41,6 @@ void F06ActionInitialization::BuildForMaster() const
 void F06ActionInitialization::Build() const
 {
   SetUserAction(new F06PrimaryGeneratorAction);
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

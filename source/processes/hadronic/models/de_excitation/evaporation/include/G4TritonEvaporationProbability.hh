@@ -36,9 +36,7 @@
 #ifndef G4TritonEvaporationProbability_h
 #define G4TritonEvaporationProbability_h 1
 
-
 #include "G4EvaporationProbability.hh"
-#include "G4TritonCoulombBarrier.hh"
 
 class G4TritonEvaporationProbability : public G4EvaporationProbability
 {
@@ -46,21 +44,19 @@ public:
 
   G4TritonEvaporationProbability();
 
-  virtual ~G4TritonEvaporationProbability();
+  ~G4TritonEvaporationProbability() override = default;
+
+  G4TritonEvaporationProbability(const G4TritonEvaporationProbability &right) = delete;
+  const G4TritonEvaporationProbability& operator=
+  (const G4TritonEvaporationProbability &right) = delete;
+  G4bool operator==(const G4TritonEvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4TritonEvaporationProbability &right) const = delete;
 
 protected:
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment);
+  G4double CalcAlphaParam(const G4Fragment& fragment) override;
  
-  virtual G4double CalcBetaParam(const G4Fragment & fragment);
-
-private:  
-
-  G4TritonEvaporationProbability(const G4TritonEvaporationProbability &right);
-
-  const G4TritonEvaporationProbability & operator=(const G4TritonEvaporationProbability &right);
-  G4bool operator==(const G4TritonEvaporationProbability &right) const;
-  G4bool operator!=(const G4TritonEvaporationProbability &right) const;
+  G4double CalcBetaParam(const G4Fragment& fragment) override;
 
 };
 

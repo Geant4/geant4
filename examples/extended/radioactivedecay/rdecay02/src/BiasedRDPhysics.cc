@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "BiasedRDPhysics.hh"
 
@@ -43,6 +46,7 @@
 
 G4_DECLARE_PHYSCONSTR_FACTORY(BiasedRDPhysics);
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 BiasedRDPhysics::BiasedRDPhysics(G4int)
  : G4VPhysicsConstructor("G4Radioactivation")
@@ -54,13 +58,13 @@ BiasedRDPhysics::BiasedRDPhysics(G4int)
                        /std::log(2.));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 BiasedRDPhysics::BiasedRDPhysics(const G4String&)
  : BiasedRDPhysics(0)
-{}
+{ }
 
-
-BiasedRDPhysics::~BiasedRDPhysics()
-{}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void BiasedRDPhysics::ConstructParticle()
@@ -68,6 +72,7 @@ void BiasedRDPhysics::ConstructParticle()
   G4GenericIon::GenericIon();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void BiasedRDPhysics::ConstructProcess()
 {
@@ -83,4 +88,6 @@ void BiasedRDPhysics::ConstructProcess()
   G4PhysicsListHelper::GetPhysicsListHelper()->
     RegisterProcess(new G4Radioactivation(), G4GenericIon::GenericIon());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

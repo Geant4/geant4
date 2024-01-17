@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,33 +35,20 @@
 #ifndef G4Eta_h
 #define G4Eta_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ETA                                    ###
-// ######################################################################
 
 class G4Eta : public G4ParticleDefinition
 {
- private:
-   static G4Eta* theInstance;
-   G4Eta(){}
-   ~G4Eta() override= default;
+  public:
+    static G4Eta* Definition();
+    static G4Eta* EtaDefinition();
+    static G4Eta* Eta();
 
- public:
-   static G4Eta* Definition();
-   static G4Eta* EtaDefinition();
-   static G4Eta* Eta();
+  private:
+    G4Eta() {}
+    ~G4Eta() override = default;
+
+    static G4Eta* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-

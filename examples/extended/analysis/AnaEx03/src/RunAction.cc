@@ -34,6 +34,7 @@
 #include "RunAction.hh"
 
 #include "G4AnalysisManager.hh"
+#include "G4GenericMessenger.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
@@ -89,6 +90,8 @@ RunAction::RunAction()
   analysisManager->CreateNtupleDColumn("Labs"); // column Id = 0
   analysisManager->CreateNtupleDColumn("Lgap"); // column Id = 1
   analysisManager->FinishNtuple();
+
+  DefineCommands();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,9 +108,7 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* /*run*/)
-{
-  PrintStatistic();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -117,9 +118,11 @@ void RunAction::PrintStatistic()
 
   G4cout << "\n ----> print histograms statistic \n" << G4endl;
   for ( G4int i=0; i<analysisManager->GetNofH1s(); ++i ) {
-    G4String name = analysisManager->GetH1Name(i);
     auto h1 = analysisManager->GetH1(i);
+    // skip if histogram was deleted
+    if (h1 == nullptr) continue;
 
+    G4String name = analysisManager->GetH1Name(i);
     G4String unitCategory;
     if (name[0U] == 'E' ) { unitCategory = "Energy"; }
     if (name[0U] == 'L' ) { unitCategory = "Length"; }
@@ -134,3 +137,22 @@ void RunAction::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::DefineCommands()
+{
+  // Define /AnaEx03/runAction command directory using generic messenger class
+  fMessenger
+    = new G4GenericMessenger(this,
+                             "/AnaEx03/runAction/",
+                             "Run action commands");
+
+  // printStatistic command
+  auto& printStatisticCmd
+    = fMessenger->DeclareMethod("printStatistic",
+                                &RunAction::PrintStatistic,
+                                "Print statistic at the end of Run.");
+  printStatisticCmd.SetToBeBroadcasted(false);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

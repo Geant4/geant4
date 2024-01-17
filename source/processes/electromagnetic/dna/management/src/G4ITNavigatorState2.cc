@@ -35,8 +35,7 @@
 
 // !>
 
-G4ITNavigator2 ::G4NavigatorState::G4NavigatorState() :
-    G4ITNavigatorState_Lock2()
+G4ITNavigator2 ::G4NavigatorState::G4NavigatorState()    
 {
   ResetState();
 }
@@ -71,15 +70,14 @@ void G4ITNavigator2::G4NavigatorState::ResetState()
   fStepEndPoint = G4ThreeVector(kInfinity, kInfinity, kInfinity);
   fLastStepEndPointLocal = G4ThreeVector(kInfinity, kInfinity, kInfinity);
 
-  fBlockedPhysicalVolume = 0;
+  fBlockedPhysicalVolume = nullptr;
   fBlockedReplicaNo = -1;
 
   fLastLocatedPointLocal = G4ThreeVector(kInfinity, -kInfinity, 0.0);
   fLocatedOutsideWorld = false;
 }
 
-G4ITNavigator2 ::G4NavigatorState::G4NavigatorState(const G4NavigatorState& rhs) :
-    G4ITNavigatorState_Lock2()
+G4ITNavigator2 ::G4NavigatorState::G4NavigatorState(const G4NavigatorState& rhs)    
 {
   fExitNormal = rhs.fExitNormal;
   fValidExitNormal = rhs.fValidExitNormal;
@@ -149,7 +147,7 @@ G4ITNavigator2 ::G4SaveNavigatorState::G4SaveNavigatorState()
   sWasLimitedByGeometry = false;
   sEntering = false;
   sExiting = false;
-  sLastStepWasZero = false;
+  sLastStepWasZero = 0;
   sEnteredDaughter = false;
   sExitedMother = false;
 
@@ -164,7 +162,7 @@ G4ITNavigator2 ::G4SaveNavigatorState::G4SaveNavigatorState()
 //  sPushed = false;
 //  sNumberZeroSteps = 0;
 
-  spBlockedPhysicalVolume = 0;
+  spBlockedPhysicalVolume = nullptr;
   sBlockedReplicaNo = -1;
 
   sLastLocatedPointLocal = G4ThreeVector(kInfinity, -kInfinity, 0.0);
@@ -181,7 +179,7 @@ G4ITNavigator2 ::G4SaveNavigatorState::G4SaveNavigatorState(G4NavigatorState* rh
   spBlockedPhysicalVolume = rhs->fBlockedPhysicalVolume;
   sBlockedReplicaNo = rhs->fBlockedReplicaNo;
 
-  sLastStepWasZero = rhs->fLastStepWasZero;
+  sLastStepWasZero = static_cast<G4int>(rhs->fLastStepWasZero);
 
   sPreviousSftOrigin = rhs->fPreviousSftOrigin;
   sPreviousSafety = rhs->fPreviousSafety;
@@ -210,7 +208,7 @@ G4ITNavigator2::G4NavigatorState& G4ITNavigator2::G4NavigatorState::operator=(co
   fBlockedReplicaNo = rhs.sBlockedReplicaNo;
 //	fCalculatedExitNormal = rhs.sCalculatedExitNormal;
 
-  fLastStepWasZero = rhs.sLastStepWasZero;
+  fLastStepWasZero = (rhs.sLastStepWasZero != 0);
 //	fLastTriedStepComputation =rhs.sLastTriedStepComputation;
 //	fChangedGrandMotherRefFrame = rhs.sChangedGrandMotherRefFrame;
 

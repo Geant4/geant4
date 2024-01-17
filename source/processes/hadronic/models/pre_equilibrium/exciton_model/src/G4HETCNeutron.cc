@@ -37,10 +37,7 @@
 #include "G4NuclearLevelData.hh"
 
 G4HETCNeutron::G4HETCNeutron() 
-  : G4HETCFragment(G4Neutron::Neutron(), &theNeutronCoulombBarrier)
-{}
-
-G4HETCNeutron::~G4HETCNeutron() 
+  : G4HETCFragment(G4Neutron::Neutron())
 {}
 
 G4double G4HETCNeutron::GetAlpha() const
@@ -50,7 +47,7 @@ G4double G4HETCNeutron::GetAlpha() const
   
 G4double G4HETCNeutron::GetBeta() const
 {
-  return (2.12/(theResA13*theResA13)-0.05)*MeV/GetAlpha();
+  return (2.12/(theResA13*theResA13)-0.05)/GetAlpha(); // in MeV
 }
 
 G4double G4HETCNeutron::GetSpinFactor() const
@@ -59,7 +56,7 @@ G4double G4HETCNeutron::GetSpinFactor() const
   return 2.0;
 }
   
-G4double G4HETCNeutron::K(const G4Fragment & aFragment)
+G4double G4HETCNeutron::K(const G4Fragment& aFragment) const
 {
   // Number of protons in emitted fragment
   G4int Pa = theZ;
@@ -71,36 +68,24 @@ G4double G4HETCNeutron::K(const G4Fragment & aFragment)
   G4int P = aFragment.GetNumberOfParticles();
   G4int H = aFragment.GetNumberOfHoles();
   
-  G4double result = 0.0;
-  if (P > 0)
-    {
-      result = (H + Na/(1.0-r))/P;
-    }
-  
-  return std::max(0.0,result);
+  G4double result = (P > 0) ? (H + Na/(1.0 - r))/P : 0.0;
+  return result;
 }
 
-G4double G4HETCNeutron::SampleKineticEnergy(const G4Fragment & aFragment)
+G4double G4HETCNeutron::SampleKineticEnergy(const G4Fragment& frag)
 {
-  G4int H = aFragment.GetNumberOfHoles();
-  G4int Pb = aFragment.GetNumberOfParticles();
+  G4int H = frag.GetNumberOfHoles();
+  G4int Pb = frag.GetNumberOfParticles();
   G4int Nb = Pb + H;
-  G4double U = aFragment.GetExcitationEnergy();
-  G4double g0 = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,U);
+  G4double U = frag.GetExcitationEnergy();
+  G4double g0 = 
+    (6.0/CLHEP::pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,U);
   
-  G4double Ab = std::max(0.0,G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
+  G4double Ab = std::max(0.0, (G4double)(Pb*Pb+H*H+Pb-3*H)/(4.0*g0));
   G4double Emax = theMaxKinEnergy - Ab;
   
   G4double cut = GetBeta() / (GetBeta()+Emax/G4double(Nb+1));
-  G4double x(0.0);
-  if (G4UniformRand() <= cut)
-    {
-      x = BetaRand(Nb,1);
-    }
-  else 
-    {
-      x = BetaRand(Nb,2);
-    }
+  G4double x = (G4UniformRand() <= cut) ? BetaRand(Nb,1) : BetaRand(Nb,2);
 
   return Emax * (1.0 - x);
 }

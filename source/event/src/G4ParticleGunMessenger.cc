@@ -44,7 +44,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"
-#include "G4IonTable.hh"
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun* fPtclGun)
   : fParticleGun(fPtclGun)

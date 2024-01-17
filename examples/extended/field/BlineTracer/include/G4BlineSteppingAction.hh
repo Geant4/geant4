@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 //
 // G4BlineSteppingAction
@@ -54,12 +54,12 @@ class G4BlineSteppingAction : public G4UserSteppingAction
   public:  // with description
 
     G4BlineSteppingAction(G4BlineTracer* aBlineTool);
-    virtual ~G4BlineSteppingAction();
-    virtual void UserSteppingAction(const G4Step*);
-    
+    ~G4BlineSteppingAction() override = default;
+    void UserSteppingAction(const G4Step*) override;
+
   private:
 
-    G4BlineTracer* fBlineTool;
+    G4BlineTracer* fBlineTool = nullptr;
 };
 
 #endif

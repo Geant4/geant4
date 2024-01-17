@@ -28,27 +28,26 @@
 //----------------------------------------------------------------------------
 
 #include "G4AntiHyperHe5.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4PhaseSpaceDecayChannel.hh"
 #include "G4DecayTable.hh"
-
-// ##################################################################
-// ###                   ANTI  HYPERHE5                           ###
-// ##################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
 G4AntiHyperHe5* G4AntiHyperHe5::theInstance = nullptr;
 
-
-G4AntiHyperHe5* G4AntiHyperHe5::Definition() {
-  if ( theInstance != nullptr ) return theInstance;
+G4AntiHyperHe5* G4AntiHyperHe5::Definition()
+{
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_hyperHe5";
   // search in particle table
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast< G4Ions* >( pTable->FindParticle( name ) );
-  if ( anInstance == nullptr ) {
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
     // create particle
     //
     //    Arguments for constructor are as follows
@@ -58,7 +57,9 @@ G4AntiHyperHe5* G4AntiHyperHe5::Definition() {
     //                            type    lepton number   baryon number   PDG encoding
     //                          stable         lifetime     decay table
     //                      shortlived          subType   anti_encoding
-    //                      excitation 
+    //                      excitation
+
+    // clang-format off
     anInstance = new G4Ions(      name,     4840.00*MeV, 2.501e-12*MeV,   -2.0*eplus,
                                      3,              +1,             0,
                                      0,               0,             0,
@@ -66,12 +67,14 @@ G4AntiHyperHe5* G4AntiHyperHe5::Definition() {
                                  false,       0.2631*ns,       nullptr,
 		                 false,        "static",    1010020050, 
 		                   0.0,                0                             );
+    // clang-format on
+
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2.0/(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.97896248 * mN );
+    G4double mN = eplus * hbar_Planck / 2.0 / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(2.97896248 * mN);
 
     // create Decay Table
-    auto  table = new G4DecayTable;
+    auto table = new G4DecayTable;
     // create decay channels
     /*
     // The decays "mode[1]" and "mode[3]" produce the secondaries "anti_Li5" and "anti_He5",
@@ -92,31 +95,32 @@ G4AntiHyperHe5* G4AntiHyperHe5::Definition() {
                                             "anti_He5", "pi0" );
     for ( G4int index = 0; index < 4; ++index ) table->Insert( mode[index] );
     */
-    // Replacement decay for the time being    
+    // Replacement decay for the time being
     const G4double br_lambda_to_p_pim = 0.639;
     const G4double br_lambda_to_n_piz = 0.358;
-    auto  mode = new G4VDecayChannel*[2];
+    auto mode = new G4VDecayChannel*[2];
     // anti_lambda -> anti_proton + pi+ , with 0% probability of capturing the anti_proton
-    mode[0] = new G4PhaseSpaceDecayChannel( "anti_hyperHe5", br_lambda_to_p_pim, 3,
-                                            "anti_alpha", "anti_proton", "pi+" );
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_hyperHe5", br_lambda_to_p_pim, 3, "anti_alpha",
+                                           "anti_proton", "pi+");
     // anti_lambda -> anti_neutron + pi0 , with 0% probability of capturing the anti_neutron
-    mode[1] = new G4PhaseSpaceDecayChannel( "anti_hyperHe5", br_lambda_to_n_piz, 3,
-                                            "anti_alpha", "anti_neutron", "pi0" );
-    for ( G4int index = 0; index < 2; ++index ) table->Insert( mode[index] );    
+    mode[1] = new G4PhaseSpaceDecayChannel("anti_hyperHe5", br_lambda_to_n_piz, 3, "anti_alpha",
+                                           "anti_neutron", "pi0");
+    for (G4int index = 0; index < 2; ++index)
+      table->Insert(mode[index]);
     //---
-    delete [] mode;
-    anInstance->SetDecayTable( table );
+    delete[] mode;
+    anInstance->SetDecayTable(table);
   }
-  theInstance = static_cast< G4AntiHyperHe5* >( anInstance );
+  theInstance = static_cast<G4AntiHyperHe5*>(anInstance);
   return theInstance;
 }
 
-
-G4AntiHyperHe5* G4AntiHyperHe5::AntiHyperHe5Definition() {
+G4AntiHyperHe5* G4AntiHyperHe5::AntiHyperHe5Definition()
+{
   return Definition();
 }
 
-
-G4AntiHyperHe5* G4AntiHyperHe5::AntiHyperHe5() {
+G4AntiHyperHe5* G4AntiHyperHe5::AntiHyperHe5()
+{
   return Definition();
 }

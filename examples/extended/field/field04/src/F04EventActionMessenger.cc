@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04EventActionMessenger::F04EventActionMessenger(F04EventAction* eventAction)
-     :fEventAction(eventAction)
+ : fEventAction(eventAction)
 {
   fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
   fSetVerboseCmd->SetGuidance("Set verbose level ." );

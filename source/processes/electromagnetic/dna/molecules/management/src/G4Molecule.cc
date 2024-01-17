@@ -119,11 +119,7 @@ G4Molecule& G4Molecule::operator=(const G4Molecule& right)
 
 G4bool G4Molecule::operator==(const G4Molecule& right) const
 {
-    if (fpMolecularConfiguration == right.fpMolecularConfiguration)
-    {
-        return true;
-    }
-    return false;
+    return fpMolecularConfiguration == right.fpMolecularConfiguration;
 }
 
 //______________________________________________________________________________
@@ -148,7 +144,6 @@ G4bool G4Molecule::operator<(const G4Molecule& right) const
 
 G4Molecule::G4Molecule()
     : G4VUserTrackInformation("G4Molecule")
-    , G4IT()
 {
     fpMolecularConfiguration = nullptr;
 }
@@ -177,7 +172,6 @@ G4Molecule::~G4Molecule()
  */
 G4Molecule::G4Molecule(G4MoleculeDefinition* pMoleculeDefinition)
     : G4VUserTrackInformation("G4Molecule")
-    , G4IT()
 {
     fpMolecularConfiguration = G4MolecularConfiguration::GetOrCreateMolecularConfiguration(pMoleculeDefinition);
 }
@@ -199,9 +193,8 @@ G4Molecule::G4Molecule(G4MoleculeDefinition* pMoleculeDefinition,
                        G4int OrbitalToFree,
                        G4int OrbitalToFill)
    : G4VUserTrackInformation("G4Molecule")
-   , G4IT()
 {
-    if (pMoleculeDefinition->GetGroundStateElectronOccupancy())
+    if (pMoleculeDefinition->GetGroundStateElectronOccupancy() != nullptr)
     {
         G4ElectronOccupancy dynElectronOccupancy(*pMoleculeDefinition->GetGroundStateElectronOccupancy());
 
@@ -244,9 +237,8 @@ G4Molecule::G4Molecule(G4MoleculeDefinition* pMoleculeDefinition,
                        G4int level,
                        G4bool excitation)
     : G4VUserTrackInformation("G4Molecule")
-    , G4IT()
 {
-    if (pMoleculeDefinition->GetGroundStateElectronOccupancy())
+    if (pMoleculeDefinition->GetGroundStateElectronOccupancy() != nullptr)
     {
         G4ElectronOccupancy dynElectronOccupancy(*pMoleculeDefinition->GetGroundStateElectronOccupancy());
 
@@ -390,7 +382,7 @@ G4Track* G4Molecule::BuildTrack(G4double globalTime,
     G4ThreeVector MomentumDirection(xMomentum, yMomentum, zMomentum);
     G4double KineticEnergy = GetKineticEnergy();
 
-    G4DynamicParticle* dynamicParticle = new G4DynamicParticle(
+    auto  dynamicParticle = new G4DynamicParticle(
         fpMolecularConfiguration->GetDefinition(), MomentumDirection,
         KineticEnergy);
 

@@ -30,24 +30,20 @@
 #ifndef G4AntiHyperAlpha_h
 #define G4AntiHyperAlpha_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Ions.hh"
 
-// ######################################################################
-// ###                   ANTI  HYPERALPHA                             ###
-// ######################################################################
-
-class G4AntiHyperAlpha : public G4Ions {
+class G4AntiHyperAlpha : public G4Ions
+{
   public:
     static G4AntiHyperAlpha* Definition();
     static G4AntiHyperAlpha* AntiHyperAlphaDefinition();
     static G4AntiHyperAlpha* AntiHyperAlpha();
+
   private:
-    static G4AntiHyperAlpha* theInstance;
-    G4AntiHyperAlpha()  {}
+    G4AntiHyperAlpha() {}
     ~G4AntiHyperAlpha() override = default;
+
+    static G4AntiHyperAlpha* theInstance;
 };
 
 #endif

@@ -255,7 +255,7 @@ class G4NistManager
   G4ICRU90StoppingData* GetICRU90StoppingData();
 
  private:
-  explicit G4NistManager();
+  G4NistManager();
 
   static G4NistManager* instance;
 

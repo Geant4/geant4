@@ -46,22 +46,8 @@ G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeTrajectory::LXeTrajectory()
-  : G4Trajectory()
-  , fWls(false)
-  , fDrawit(false)
-  , fForceNoDraw(false)
-  , fForceDraw(false)
-{
-  fParticleDefinition = nullptr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 LXeTrajectory::LXeTrajectory(const G4Track* aTrack)
   : G4Trajectory(aTrack)
-  , fWls(false)
-  , fDrawit(false)
 {
   fParticleDefinition = aTrack->GetDefinition();
 }
@@ -75,10 +61,6 @@ LXeTrajectory::LXeTrajectory(LXeTrajectory& right)
 {
   fParticleDefinition = right.fParticleDefinition;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeTrajectory::~LXeTrajectory() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

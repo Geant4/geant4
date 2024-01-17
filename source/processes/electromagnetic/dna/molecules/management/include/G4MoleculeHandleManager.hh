@@ -53,7 +53,7 @@
 
 class G4Molecule;
 
-typedef G4shared_ptr<const G4Molecule> G4MoleculeHandle;
+using G4MoleculeHandle = std::shared_ptr<const G4Molecule>;
 
 class G4MoleculeHandleManager
 {
@@ -73,8 +73,7 @@ private:
     G4bool operator()(const G4Molecule* mol1, const G4Molecule* mol2) const;
   };
 
-  typedef std::map<const G4Molecule*, G4MoleculeHandle,
-      G4MoleculeHandleManager::CompMoleculePointer> MoleculeHandleMap;
+  using MoleculeHandleMap = std::map<const G4Molecule *, G4MoleculeHandle, G4MoleculeHandleManager::CompMoleculePointer>;
   MoleculeHandleMap fMoleculeHandle;
 };
 

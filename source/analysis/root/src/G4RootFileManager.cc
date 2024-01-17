@@ -118,7 +118,7 @@ G4RootFileManager::CreateFileImpl(const G4String& fileName)
   // create file
   std::shared_ptr<wroot::file> file = std::make_shared<wroot::file>(G4cout, fileName);
   file->add_ziper('Z',toolx::compress_buffer);
-  file->set_compression(fState.GetCompressionLevel());
+  file->set_compression(GetCompressionLevel());
 
   if ( ! file->is_open() ) {
     Warn("Cannot create file " + fileName, fkClass, "CreateFileImpl");

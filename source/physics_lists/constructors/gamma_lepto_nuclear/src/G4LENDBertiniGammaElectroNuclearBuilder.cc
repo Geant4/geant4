@@ -45,47 +45,31 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 
 G4LENDBertiniGammaElectroNuclearBuilder::G4LENDBertiniGammaElectroNuclearBuilder(G4bool eNucl) : 
 G4BertiniElectroNuclearBuilder( eNucl )
-{
-}
-
-G4LENDBertiniGammaElectroNuclearBuilder::~G4LENDBertiniGammaElectroNuclearBuilder() 
-{
-/*
-  DHW 13 Jan 2020 - fix double deletion error; these deletes are already done in the base class dtor
-                    (Coverity bugs 101609 and 101727) 
-  if ( wasActivated ) {
-     delete theFragmentation;
-     delete theStringDecay;
-  }
-*/   
-}
+{}
 
 void G4LENDBertiniGammaElectroNuclearBuilder::Build()
 {
-   //G4cout << "G4LENDBertiniGammaElectroNuclearBuilder::Build()" << G4endl;
+  //G4cout << "G4LENDBertiniGammaElectroNuclearBuilder::Build()" << G4endl;
 
-   base::Build();
+  G4BertiniElectroNuclearBuilder::Build();
 
-   if ( !G4FindDataDir("G4LENDDATA") ) {
-      G4String message = "\n Skipping activation of Low Energy Nuclear Data (LEND) model for gamma nuclear interactions.\n The LEND model needs data files and they are available from ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz.\n Please set the environment variable G4LENDDATA to point to the directory named v1.3 extracted from the archive file.\n"; 
-      G4Exception( "G4LENDBertiniGammaElectroNuclearBuilder::Build()"
+  if ( !G4FindDataDir("G4LENDDATA") ) {
+    G4String message = "\n Skipping activation of Low Energy Nuclear Data (LEND) model for gamma nuclear interactions.\n The LEND model needs data files and they are available from ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz.\n Please set the environment variable G4LENDDATA to point to the directory named v1.3 extracted from the archive file.\n"; 
+    G4Exception( "G4LENDBertiniGammaElectroNuclearBuilder::Build()"
                  , "G4LENDBertiniGammaElectroNuclearBuilder001"
                  , JustWarning , message);
-      return;
-   }
+    return;
+  }
    
-   theGammaReaction->SetMinEnergy(20*MeV);
-   G4LENDorBERTModel* theGammaReactionLowE = new G4LENDorBERTModel( G4Gamma::Gamma() );
-   theGammaReactionLowE->DumpLENDTargetInfo(true);
-   G4LENDCombinedCrossSection* theGammaCrossSectionLowE = new G4LENDCombinedCrossSection( G4Gamma::Gamma() );
-   theGammaReactionLowE->SetMaxEnergy(20*MeV);
-   thePhotoNuclearProcess->RegisterMe(theGammaReactionLowE);
-   thePhotoNuclearProcess->AddDataSet(theGammaCrossSectionLowE);
-   
+  theGammaReaction->SetMinEnergy(20*MeV);
+  G4LENDorBERTModel* theGammaReactionLowE = new G4LENDorBERTModel( G4Gamma::Gamma() );
+  theGammaReactionLowE->DumpLENDTargetInfo(true);
+  G4LENDCombinedCrossSection* theGammaCrossSectionLowE = new G4LENDCombinedCrossSection( G4Gamma::Gamma() );
+  theGammaReactionLowE->SetMaxEnergy(20*MeV);
+  thePhotoNuclearProcess->RegisterMe(theGammaReactionLowE);
+  thePhotoNuclearProcess->AddDataSet(theGammaCrossSectionLowE); 
 }

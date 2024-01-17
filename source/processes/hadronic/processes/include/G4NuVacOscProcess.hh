@@ -27,11 +27,12 @@
 //
 // Geant4 muon neutrino nucleus scattering Process -- header file
 // 
-// Created  from G4HadronElasticProcess 1.3.19 V. Grichine
+// Created  from G4HadronElasticProcess 01.03.19 V. Grichine
 //  
 // Modified:
 //
-// 5.4.23 V.Grichine first implementation
+// 05.04.23 V.Grichine first implementation
+// 06.11.23 V.Ivantchenko - make inheritence from G4VDiscreteProcess
 
 // Class Description
 // General process for neutrino nucleus 2->X scattering  
@@ -41,16 +42,16 @@
 #define G4NuVacOscProcess_h 1
  
 #include "globals.hh"
-#include "G4HadronicProcess.hh"
+#include "G4VDiscreteProcess.hh"
 
 class G4ParticleDefinition;
 
-class G4NuVacOscProcess : public G4HadronicProcess
+class G4NuVacOscProcess : public G4VDiscreteProcess
 {
 public:
 
   G4NuVacOscProcess(const G4String& anEnvelopeName,
-                    const G4String& procName = "nu-vacuum-oscillation");
+                    const G4String& procName = "nuVacOscillation");
 
   ~G4NuVacOscProcess() override = default;
 

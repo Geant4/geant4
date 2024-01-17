@@ -47,8 +47,8 @@
 #include "G4ITTrackHolder.hh"
 
 G4DNAMolecularReaction::G4DNAMolecularReaction()
-    : G4VITReactionProcess()
-    , fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
+    : 
+     fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
     , fpReactionModel(nullptr)
 {
 }
@@ -94,7 +94,7 @@ std::unique_ptr<G4ITReactionChange> G4DNAMolecularReaction::MakeReaction(const G
 
     const G4int nbProducts = pReactionData->GetNbProducts();
 
-    if (nbProducts)
+    if (nbProducts != 0)
     {
         const G4double D1 = pMoleculeA->GetDiffusionCoefficient();
         const G4double D2 = pMoleculeB->GetDiffusionCoefficient();

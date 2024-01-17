@@ -37,29 +37,31 @@
 
 #include "G4DNAChemistryManager.hh"
 
-#include "G4Scheduler.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Molecule.hh"
-#include "G4VITTrackHolder.hh"
-#include "G4H2O.hh"
+#include "G4AutoLock.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4DNAWaterIonisationStructure.hh"
 #include "G4Electron_aq.hh"
-#include "G4MolecularConfiguration.hh"
-#include "G4VMoleculeCounter.hh"
-#include "G4VUserChemistryList.hh"
-#include "G4AutoLock.hh"
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4GeometryManager.hh"
-#include "G4StateManager.hh"
+#include "G4H2O.hh"
+#include "G4MolecularConfiguration.hh"
+#include "G4Molecule.hh"
 #include "G4MoleculeFinder.hh"
 #include "G4MoleculeTable.hh"
 #include "G4PhysChemIO.hh"
+#include "G4Scheduler.hh"
+#include "G4StateManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4VITTrackHolder.hh"
+#include "G4VMoleculeCounter.hh"
+#include "G4VUserChemistryList.hh"
 #include "G4VUserPulseInfo.hh"
+
+#include <memory>
 
 G4DNAChemistryManager* G4DNAChemistryManager::fgInstance = nullptr;
 
@@ -99,27 +101,17 @@ void G4DNAChemistryManager::SetPhysChemIO(std::unique_ptr<G4VPhysChemIO> pPhysCh
  */
 //------------------------------------------------------------------------------
 G4DNAChemistryManager::G4DNAChemistryManager()
-        : G4UImessenger()
-        , G4VStateDependent()
-        , fpChemDNADirectory(new G4UIdirectory("/chem/"))
+        : 
+         fpChemDNADirectory(new G4UIdirectory("/chem/"))
         , fpActivateChem(new G4UIcmdWithABool("/chem/activate", this))
         , fpRunChem(new G4UIcmdWithAnInteger("/chem/run", this))
         , fpSkipReactionsFromChemList(new G4UIcmdWithoutParameter("/chem/skipReactionsFromChemList", this))
         , fpScaleForNewTemperature(new G4UIcmdWithADoubleAndUnit("/chem/temperature", this))
         , fpInitChem(new G4UIcmdWithoutParameter("/chem/init", this))
-        , fActiveChemistry(false)
-        , fMasterInitialized(false)
-        , fForceThreadReinitialization(false)
-        , fpExcitationLevel(nullptr)
+        , 
+         fpExcitationLevel(nullptr)
         , fpIonisationLevel(nullptr)
         , fpUserChemistryList(nullptr)
-        , fOwnChemistryList(false)
-        , fUseInStandalone(false)
-        , fPhysicsTableBuilt(false)
-        , fSkipReactions(false)
-        , fGeometryClosed(false)
-        , fVerbose(0)
-        , fResetCounterWhenRunEnds(true)
 {
     fpRunChem->SetParameterName("Number of runs to execute for the chemistry module"
                                 "(this works when used in standalone", true, true);
@@ -223,7 +215,7 @@ G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
 {
     if (requestedState == G4State_Quit)
     {
-        if (fVerbose)
+        if (fVerbose != 0)
         {
             G4cout << "G4DNAChemistryManager::Notify ---> received G4State_Quit"
                    << G4endl;
@@ -281,11 +273,11 @@ G4String G4DNAChemistryManager::GetCurrentValue(G4UIcommand* pCommand)
     {
         return G4UIcmdWithABool::ConvertToString(fActiveChemistry);
     }
-    else if (pCommand == fpScaleForNewTemperature.get())
+    if (pCommand == fpScaleForNewTemperature.get())
     {
         return fpScaleForNewTemperature->ConvertToStringWithBestUnit(G4MolecularConfiguration::GetGlobalTemperature());
     }
-    else if (pCommand == fpSkipReactionsFromChemList.get())
+    if (pCommand == fpSkipReactionsFromChemList.get())
     {
         return G4UIcmdWithABool::ConvertToString(fSkipReactions);
     }
@@ -375,23 +367,19 @@ void G4DNAChemistryManager::Initialize()
         //==========================================================================
         // ON MASTER THREAD
         //==========================================================================
-        else
-        {
-            InitializeMaster();
-            InitializeThreadSharedData();
-            return;
-        }
+        
+        InitializeMaster();
+        InitializeThreadSharedData();
+        return;
     }
     //===========================================================================
     // IS NOT IN MT MODE
     //===========================================================================
-    else
-    {
-        InitializeMaster();
-        InitializeThreadSharedData();
-        // In this case: InitializeThread is called when Run() is called
-        return;
-    }
+    
+    InitializeMaster();
+    InitializeThreadSharedData();
+    // In this case: InitializeThread is called when Run() is called
+    return;
 }
 
 //------------------------------------------------------------------------------
@@ -403,7 +391,7 @@ void G4DNAChemistryManager::InitializeMaster()
         return;
     }
 
-    if (fVerbose)
+    if (fVerbose != 0)
     {
         G4cout << "G4DNAChemistryManager::InitializeMaster() is called" << G4endl;
     }
@@ -442,7 +430,7 @@ void G4DNAChemistryManager::HandleStandaloneInitialization()
         return;
     }
 
-    if (fVerbose)
+    if (fVerbose != 0)
     {
         G4cout << "G4DNAChemistryManager: Build the physics tables for "
                   "molecule definition only."
@@ -453,7 +441,7 @@ void G4DNAChemistryManager::HandleStandaloneInitialization()
 
     if (!fGeometryClosed)
     {
-        if (fVerbose)
+        if (fVerbose != 0)
         {
             G4cout << "G4DNAChemistryManager: Close geometry" << G4endl;
         }
@@ -488,7 +476,7 @@ void G4DNAChemistryManager::InitializeThread()
         fpUserChemistryList->ConstructTimeStepModel(G4DNAMolecularReactionTable::GetReactionTable());
     }
 
-    if (fVerbose)
+    if (fVerbose != 0)
     {
         G4cout << "G4DNAChemistryManager::InitializeThread() is called"
                << G4endl;
@@ -507,7 +495,7 @@ void G4DNAChemistryManager::InitializeThread()
 
 void G4DNAChemistryManager::InitializeFile()
 {
-    if (fVerbose)
+    if (fVerbose != 0)
     {
         G4cout << "G4DNAChemistryManager::InitializeFile() is called"
                << G4endl;
@@ -523,7 +511,7 @@ void G4DNAChemistryManager::InitializeFile()
 
 G4bool G4DNAChemistryManager::IsActivated()
 {
-    return fgInstance ? fgInstance->IsChemistryActivated() : false;
+    return fgInstance != nullptr ? fgInstance->IsChemistryActivated() : false;
 }
 
 //------------------------------------------------------------------------------
@@ -545,7 +533,7 @@ void G4DNAChemistryManager::SetChemistryActivation(G4bool flag)
 void G4DNAChemistryManager::WriteInto(const G4String& output,
                                       std::ios_base::openmode mode)
 {
-    if (fVerbose)
+    if (fVerbose != 0)
     {
         G4cout << "G4DNAChemistryManager: Write chemical stage into "
                << output.data() << G4endl;
@@ -553,7 +541,7 @@ void G4DNAChemistryManager::WriteInto(const G4String& output,
 
     if (!fpThreadData->fpPhysChemIO)
     {
-        fpThreadData->fpPhysChemIO.reset(new G4PhysChemIO::FormattedText());
+        fpThreadData->fpPhysChemIO = std::make_unique<G4PhysChemIO::FormattedText>();
     }
 
     fpThreadData->fpPhysChemIO->WriteInto(output, mode);
@@ -586,7 +574,7 @@ G4DNAWaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
 {
     if (!fpExcitationLevel)
     {
-        fpExcitationLevel.reset(new G4DNAWaterExcitationStructure);
+        fpExcitationLevel = std::make_unique<G4DNAWaterExcitationStructure>();
     }
     return fpExcitationLevel.get();
 }
@@ -597,7 +585,7 @@ G4DNAWaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
 {
     if (!fpIonisationLevel)
     {
-        fpIonisationLevel.reset(new G4DNAWaterIonisationStructure);
+        fpIonisationLevel = std::make_unique<G4DNAWaterIonisationStructure>();
     }
     return fpIonisationLevel.get();
 }
@@ -633,7 +621,7 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
 
     if (fActiveChemistry)
     {
-        G4Molecule* pH2OMolecule = new G4Molecule(G4H2O::Definition());
+        auto  pH2OMolecule = new G4Molecule(G4H2O::Definition());
 
         switch (modification)
         {
@@ -693,9 +681,9 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* pIncomingTrack
             }
         }
 
-        PushMolecule(std::unique_ptr<G4Molecule>(new G4Molecule(G4Electron_aq::Definition())),
+        PushMolecule(std::make_unique<G4Molecule>(G4Electron_aq::Definition()),
                      picosecond + delayedTime,
-                     pFinalPosition ? *pFinalPosition : pIncomingTrack->GetPosition(),
+                     pFinalPosition != nullptr ? *pFinalPosition : pIncomingTrack->GetPosition(),
                      pIncomingTrack->GetTrackID());
     }
 }

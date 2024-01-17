@@ -34,22 +34,7 @@
 
 #include "F01CalorHit.hh"
 
-G4ThreadLocal G4Allocator<F01CalorHit>* F01CalorHitAllocator=0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::F01CalorHit()
- : G4VHit(),
-   fEdepAbs(0.),
-   fTrackLengthAbs(0.),
-   fEdepGap(0.),
-   fTrackLengthGap(0.)
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::~F01CalorHit()
-{;}
+G4ThreadLocal G4Allocator<F01CalorHit>* F01CalorHitAllocator=nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,6 +65,6 @@ G4bool F01CalorHit::operator==(const F01CalorHit& right) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F01CalorHit::Print()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

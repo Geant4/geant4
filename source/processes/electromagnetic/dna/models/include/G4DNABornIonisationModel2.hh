@@ -49,29 +49,32 @@ class G4DNABornIonisationModel2 : public G4VEmModel
 
 public:
 
-  G4DNABornIonisationModel2(const G4ParticleDefinition* p = 0,
+  G4DNABornIonisationModel2(const G4ParticleDefinition* p = nullptr,
 		           const G4String& nam = "DNABornIonisationModel");
 
-  virtual ~G4DNABornIonisationModel2();
+  ~G4DNABornIonisationModel2() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()));
+  G4DNABornIonisationModel2 & operator=(const  G4DNABornIonisationModel2 &right) = delete;
+  G4DNABornIonisationModel2(const  G4DNABornIonisationModel2&) = delete;
 
-  virtual G4double CrossSectionPerVolume(  const G4Material* material,
+  void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector())) override;
+
+  G4double CrossSectionPerVolume(  const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double emin,
-					   G4double emax);
+					   G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				
-  virtual G4double GetPartialCrossSection(const G4Material*,
+  G4double GetPartialCrossSection(const G4Material*,
                                           G4int /*level*/,
                                           const G4ParticleDefinition*,
-                                          G4double /*kineticEnergy*/);
+                                          G4double /*kineticEnergy*/) override;
 
   G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
@@ -104,7 +107,7 @@ private:
 
   const G4ParticleDefinition* fParticleDef;
 
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
   
   // Cross section
@@ -134,14 +137,14 @@ private:
 			     G4double t, 
 			     G4double e);
 
-  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
+  using TriDimensionMap = std::map<G4double, std::map<G4double, G4double>>;
   
   TriDimensionMap fDiffCrossSectionData[6];
   TriDimensionMap fNrjTransfData[6]; // for cumulated dcs
   
   std::vector<G4double> fTdummyVec;
 
-  typedef std::map<G4double, std::vector<G4double> > VecMap;
+  using VecMap = std::map<G4double, std::vector<G4double>>;
   
   VecMap fVecm;
   VecMap fProbaShellMap[6]; // for cumulated dcs
@@ -149,11 +152,6 @@ private:
   // Partial cross section
   
   G4int RandomSelect(G4double energy);
-
-  //
-   
-  G4DNABornIonisationModel2 & operator=(const  G4DNABornIonisationModel2 &right);
-  G4DNABornIonisationModel2(const  G4DNABornIonisationModel2&);
 
 };
 

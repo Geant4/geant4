@@ -51,7 +51,12 @@
 \verbatim
   /run/beamOn
 \endverbatim
-     
+
+\subsection FissionFragment_sub4_s1                                      BATCH
+     Use the macro batch.in :
+\verbatim
+  ./FissionFragment batch.in
+\endverbatim
  
 \section FissionFragment_s2                                             GEOMETRY
 	

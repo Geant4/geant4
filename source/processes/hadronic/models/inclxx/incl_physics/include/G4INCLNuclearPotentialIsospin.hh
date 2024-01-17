@@ -65,6 +65,7 @@ namespace G4INCL {
         G4double vProton, vNeutron;
         G4double vDeltaPlusPlus, vDeltaPlus, vDeltaZero, vDeltaMinus;
         G4double vSigmaPlus, vSigmaZero, vSigmaMinus, vLambda;
+        G4double vantiProton;
 
         void initialize();
 

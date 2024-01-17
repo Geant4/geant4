@@ -33,30 +33,30 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class PhysicsListMessenger : public G4UImessenger
 {
-public:
+  public:
+    PhysicsListMessenger(PhysicsList*);
+    ~PhysicsListMessenger() override = default;
 
-  PhysicsListMessenger(PhysicsList*);
- ~PhysicsListMessenger();
+    void SetNewValue(G4UIcommand*, G4String) override;
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  private:
+    PhysicsList* fPhysList;
 
-private:
-
-  PhysicsList*        fPhysList;
-
-  G4UIdirectory*      fPhysDir;
-  G4UIcmdWithABool*   fSRTypeCmd;
+    G4UIdirectory* fPhysDir;
+    G4UIcmdWithABool* fSRTypeCmd;
+    G4UIcmdWithADoubleAndUnit* fXrayReflectionRoughnessCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

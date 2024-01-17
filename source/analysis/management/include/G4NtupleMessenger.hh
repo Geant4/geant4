@@ -34,9 +34,11 @@
 #ifndef G4NtupleMessenger_h
 #define G4NtupleMessenger_h 1
 
+#include "G4AnalysisUtilities.hh"
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+#include <map>
 #include <memory>
 #include <string_view>
 
@@ -61,6 +63,10 @@ class G4NtupleMessenger : public G4UImessenger
     std::unique_ptr<CMD> CreateCommand(G4String name, G4String guidance);
     void AddIdParameter(G4UIcommand& command);
 
+    void CreateCmd();
+    void CreateColumnCmds();
+    void FinishCmd();
+    void DeleteCmd();
     void SetActivationCmd();
     void SetActivationToAllCmd();
     void SetFileNameCmd();
@@ -74,11 +80,16 @@ class G4NtupleMessenger : public G4UImessenger
     G4VAnalysisManager*  fManager { nullptr }; ///< Associated class
 
     std::unique_ptr<G4UIdirectory>      fNtupleDir;
+    std::unique_ptr<G4UIcommand>        fCreateCmd;
+    std::map<char, std::unique_ptr<G4UIcommand>> fCreateColumnCmds;
+    std::unique_ptr<G4UIcommand>        fFinishCmd;
+    std::unique_ptr<G4UIcommand>        fDeleteCmd;
     std::unique_ptr<G4UIcommand>        fSetActivationCmd;
     std::unique_ptr<G4UIcmdWithABool>   fSetActivationAllCmd;
     std::unique_ptr<G4UIcommand>        fSetFileNameCmd;
     std::unique_ptr<G4UIcmdWithAString> fSetFileNameAllCmd;
     std::unique_ptr<G4UIcommand>        fListCmd;
+    G4int fTmpNtupleId { G4Analysis::kInvalidId };
 };
 
 //_____________________________________________________________________________

@@ -11,7 +11,7 @@ This integration is in development. Supporting Placement volumes -- other
 volumes would be handled by existing Geant4 navigation.
 
 The example loads a GDML file for the geometry, and can execute a batch
-file (first) or run interactive commands or both.
+file (vecgeomNav.in) or run interactive commands or both.
 
 # Installation / Configuration
 

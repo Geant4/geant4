@@ -34,19 +34,19 @@ unsigned int G4AssemblyVolume::GetImprintsCount() const
 }
 
 inline 
-void         G4AssemblyVolume::SetImprintsCount( unsigned int value )
+void G4AssemblyVolume::SetImprintsCount( unsigned int value )
 {
   fImprintsCounter = value;
 }
 
 inline 
-void         G4AssemblyVolume::ImprintsCountPlus()
+void G4AssemblyVolume::ImprintsCountPlus()
 {
   ++fImprintsCounter;
 }
 
 inline 
-void         G4AssemblyVolume::ImprintsCountMinus()
+void G4AssemblyVolume::ImprintsCountMinus()
 {
   --fImprintsCounter;
 }
@@ -58,7 +58,7 @@ unsigned int G4AssemblyVolume::GetAssemblyID() const
 }
 
 inline 
-void         G4AssemblyVolume::SetAssemblyID( unsigned int value )
+void G4AssemblyVolume::SetAssemblyID( unsigned int value )
 {
   fAssemblyID = value;
 }

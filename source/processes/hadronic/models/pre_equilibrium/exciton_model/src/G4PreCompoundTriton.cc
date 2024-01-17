@@ -41,14 +41,11 @@
 //
  
 #include "G4PreCompoundTriton.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Triton.hh"
+#include "G4CoulombBarrier.hh"
 
 G4PreCompoundTriton::G4PreCompoundTriton()
-  : G4PreCompoundIon(G4Triton::Triton(), &theTritonCoulombBarrier)
-{}
-
-G4PreCompoundTriton::~G4PreCompoundTriton()
+  : G4PreCompoundIon(G4Triton::Triton(), new G4CoulombBarrier(3, 1))
 {}
 
 G4double G4PreCompoundTriton::FactorialFactor(G4int N, const G4int P) const
@@ -65,7 +62,7 @@ G4double G4PreCompoundTriton::GetRj(G4int nParticles, G4int nCharged) const
 {
   G4double rj = 0.0;
   if(nCharged >= 1 && (nParticles-nCharged) >= 2) {
-    G4double denominator = (nParticles*(nParticles-1)*(nParticles-2));
+    G4double denominator = (G4double)(nParticles*(nParticles-1)*(nParticles-2));
     rj = (3*nCharged*(nParticles-nCharged)*(nParticles-nCharged-1))
       /denominator; 
   }
@@ -75,7 +72,7 @@ G4double G4PreCompoundTriton::GetRj(G4int nParticles, G4int nCharged) const
 G4double G4PreCompoundTriton::GetAlpha() const
 {
   G4double C = 0.0;
-  if (theFragZ >= 70) 
+  if (theFragZ <= 70)
     {
       C = 0.10;
     } 

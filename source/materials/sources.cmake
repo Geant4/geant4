@@ -8,13 +8,14 @@ geant4_add_module(G4materials
 		G4AtomicShells_XDB_EADL.hh
 		G4CrystalAtomBase.hh
 		G4CrystalBravaisLattices.h
-		G4CrystalLatticeSystems.h
 		G4CrystalExtension.hh
+		G4CrystalLatticeSystems.h
 		G4CrystalUnitCell.hh
 		G4DensityEffectCalculator.hh
 		G4DensityEffectData.hh
-		G4ElementData.hh
 		G4Element.hh
+		G4ElementData.hh
+		G4ElementDataRegistry.hh
 		G4ElementTable.hh
 		G4ElementVector.hh
 		G4ExtDEDXTable.hh
@@ -28,12 +29,12 @@ geant4_add_module(G4materials
 		G4LatticeLogical.hh
 		G4LatticePhysical.hh
 		G4Material.hh
-    G4MaterialPropertiesIndex.hh
+                G4MaterialPropertiesIndex.hh
 		G4MaterialPropertiesTable.hh
 		G4MaterialPropertyVector.hh
 		G4MaterialTable.hh
-    G4MicroElecMaterialStructure.hh
-    G4MicroElecSiStructure.hh
+                G4MicroElecMaterialStructure.hh
+                G4MicroElecSiStructure.hh
 		G4NistElementBuilder.hh
 		G4NistManager.hh
 		G4NistMaterialBuilder.hh
@@ -48,7 +49,7 @@ geant4_add_module(G4materials
 		G4VIonDEDXTable.hh
 		G4VMaterialExtension.hh
   SOURCES
-	  G4AtomicFormFactor.cc
+                G4AtomicFormFactor.cc
 		G4AtomicShells.cc
 		G4AtomicShells_XDB_EADL.cc
 		G4CrystalExtension.cc
@@ -57,6 +58,7 @@ geant4_add_module(G4materials
 		G4DensityEffectData.cc
 		G4Element.cc
 		G4ElementData.cc
+		G4ElementDataRegistry.cc
 		G4ExtDEDXTable.cc
 		G4ExtendedMaterial.cc
 		G4ICRU90StoppingData.cc
@@ -68,8 +70,8 @@ geant4_add_module(G4materials
 		G4LatticePhysical.cc
 		G4Material.cc
 		G4MaterialPropertiesTable.cc
-    G4MicroElecMaterialStructure.cc
-    G4MicroElecSiStructure.cc
+                G4MicroElecMaterialStructure.cc
+                G4MicroElecSiStructure.cc
 		G4NistElementBuilder.cc
 		G4NistManager.cc
 		G4NistMaterialBuilder.cc
@@ -82,8 +84,8 @@ geant4_add_module(G4materials
 
 geant4_module_link_libraries(G4materials
   PUBLIC
-	  G4globman
-		G4intercoms
+          G4globman
+          G4intercoms
   PRIVATE
-    ${ZLIB_LIBRARIES})
+    ${G4ZLIB_LIBRARIES})
 

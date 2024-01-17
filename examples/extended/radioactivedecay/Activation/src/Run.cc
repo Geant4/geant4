@@ -55,16 +55,7 @@ G4int Run::fgIonId = kMaxHisto1;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(),
-  fDetector(det), fParticle(nullptr), fEkin(0.)
-{
-  fEnergyDeposit = fEnergyDeposit2 = 0.;
-  fEnergyFlow    = fEnergyFlow2    = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
+: fDetector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

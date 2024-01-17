@@ -5,6 +5,21 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-11-15 I. Hrivnacova (exam-ext-vis-movies-V11-01-02)
+- Updated vis.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
+## 2023-11-07 I. Hrivnacova (exam-ext-vis-movies-V11-01-01)
+- Fixed formatting in .README.txt
+
+## 2023-10-20 John Allison (exam-ext-vis-movies-V11-01-00)
+- vis.mac: Remove defunct command /vis/ogl/set/displayListLimit.
+  - This command no longer operates. There is now no display list limit.
+    (The only limit is available memory.)
+  - The command is deprecated and, anyway, causes a crash if the app is built
+    without an OpenGL driver.
+
 ## 2022-11-04  I. Hrivnacova (exam-ext-vis-movies-V11-00-01)
 - Fixed Doxygen file descriptions (mostly missing)
 - Fixed formatting in .README.txt

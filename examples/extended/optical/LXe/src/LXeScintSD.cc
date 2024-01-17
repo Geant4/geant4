@@ -47,15 +47,9 @@
 
 LXeScintSD::LXeScintSD(G4String name)
   : G4VSensitiveDetector(name)
-  , fHitsCID(-1)
 {
-  fScintCollection = nullptr;
   collectionName.insert("scintCollection");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeScintSD::~LXeScintSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,7 +74,7 @@ G4bool LXeScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     return false;  // No edep so don't count as hit
 
   G4StepPoint* thePrePoint = aStep->GetPreStepPoint();
-  G4TouchableHistory* theTouchable =
+  auto theTouchable =
     (G4TouchableHistory*) (aStep->GetPreStepPoint()->GetTouchable());
   G4VPhysicalVolume* thePrePV = theTouchable->GetVolume();
 
@@ -90,7 +84,7 @@ G4bool LXeScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4ThreeVector pos = thePrePoint->GetPosition() + thePostPoint->GetPosition();
   pos /= 2.;
 
-  LXeScintHit* scintHit = new LXeScintHit(thePrePV);
+  auto scintHit = new LXeScintHit(thePrePV);
 
   scintHit->SetEdep(edep);
   scintHit->SetPos(pos);

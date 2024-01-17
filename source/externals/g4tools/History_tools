@@ -1,3 +1,14 @@
+6.3.0:
+- tools/wroot/file: in the constructor, for the streaming of the root directory, take into account the streaming of what would be
+  the fUUID (a TUUID in ROOT) field of the TDirectory version 4. This permits to fix the "G4AnalysisManager creates ROOT files
+  that are not updateable" issue described in bugzilla problem 2570.
+- tools/version: pass to 6.3.0.
+
+6.2.1:
+- toolx/Xt/session: quiet Coverity CID=104821: in copy constructor, initialise m_app_owner(false).
+- toolx/Xt/zb_viewer: Fixed compilation warning for implicit type conversions on macOS/XCode 14.1.
+- tools/version: pass to 6.2.1.
+
 6.2.0:
 - toolx/Qt: zb_viewer, pixwin, session, s2q: have a Qt viewer for the tools/zbuffer rendering.
 - toolx/Xt: zb_viewer, ImageArea, session: have a Xt viewer for the tools/zbuffer rendering.

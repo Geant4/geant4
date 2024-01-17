@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4OmegaMinus_h
 #define G4OmegaMinus_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          OmegaMinus                            ###
-// ######################################################################
 
 class G4OmegaMinus : public G4ParticleDefinition
 {
- private:
-   static G4OmegaMinus* theInstance;
-   G4OmegaMinus(){}
-   ~G4OmegaMinus() override= default;
+  public:
+    static G4OmegaMinus* Definition();
+    static G4OmegaMinus* OmegaMinusDefinition();
+    static G4OmegaMinus* OmegaMinus();
 
- public:
-   static G4OmegaMinus* Definition();
-   static G4OmegaMinus* OmegaMinusDefinition();
-   static G4OmegaMinus* OmegaMinus();
+  private:
+    G4OmegaMinus() {}
+    ~G4OmegaMinus() override = default;
+
+    static G4OmegaMinus* theInstance;
 };
 
 #endif

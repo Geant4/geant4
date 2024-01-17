@@ -47,6 +47,9 @@
 #include "G4INCLLogger.hh"
 #include "G4INCLConfig.hh"
 #include "G4INCLRootFinder.hh"
+#ifndef INCLXX_IN_GEANT4_MODE
+ #include "G4INCLGeant4Compat.hh"
+#endif
 
 
 namespace G4INCL {

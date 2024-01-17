@@ -28,14 +28,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4DNADissociation::G4DNADissociation(const G4String& processName) :
-    G4VEmProcess(processName), isInitialised(false)
+    G4VEmProcess(processName) 
 {
 } // constructor
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4DNADissociation::~G4DNADissociation()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool G4DNADissociation::IsApplicable(const G4ParticleDefinition& particleDef)
@@ -51,7 +50,7 @@ void G4DNADissociation::InitialiseProcess(const G4ParticleDefinition*)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    if(!EmModel())
+    if(EmModel() == nullptr)
     {
       SetEmModel(new G4LEPTSDissociationModel);
       EmModel()->SetLowEnergyLimit(0.1 * CLHEP::eV);

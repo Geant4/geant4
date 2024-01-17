@@ -25,7 +25,8 @@
 // 
 // Class G4AssemblyVolume - implementation
 //
-// ----------------------------------------------------------------------
+// Author: Radovan Chytracek, CERN - November 2000
+// --------------------------------------------------------------------
 
 #include "G4AssemblyVolume.hh"
 #include "G4AssemblyStore.hh"
@@ -40,6 +41,7 @@
 
 G4ThreadLocal unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
+// --------------------------------------------------------------------
 // Default constructor
 //
 G4AssemblyVolume::G4AssemblyVolume()
@@ -63,6 +65,7 @@ G4AssemblyVolume::G4AssemblyVolume()
   }
 }
 
+// --------------------------------------------------------------------
 // Composing constructor
 //
 G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
@@ -89,6 +92,7 @@ G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
   }
 }
 
+// --------------------------------------------------------------------
 // Destructor
 //
 G4AssemblyVolume::~G4AssemblyVolume()
@@ -112,6 +116,7 @@ G4AssemblyVolume::~G4AssemblyVolume()
   G4AssemblyStore::GetInstance()->DeRegister(this);
 }
 
+// --------------------------------------------------------------------
 // Add and place the given volume according to the specified
 // translation and rotation.
 //
@@ -134,6 +139,7 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
   fTriplets.push_back( toAdd );
 }
 
+// --------------------------------------------------------------------
 // Add and place the given volume according to the specified transformation
 //
 void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
@@ -156,6 +162,7 @@ void G4AssemblyVolume::AddPlacedVolume( G4LogicalVolume*  pVolume,
   fTriplets.push_back( toAdd );
 }
 
+// --------------------------------------------------------------------
 // Add and place the given assembly volume according to the specified
 // translation and rotation.
 //
@@ -171,6 +178,7 @@ void G4AssemblyVolume::AddPlacedAssembly( G4AssemblyVolume* pAssembly,
   fTriplets.push_back( toAdd );
 }
 
+// --------------------------------------------------------------------
 // Add and place the given assembly volume according to the specified 
 // transformation
 //
@@ -195,6 +203,7 @@ void G4AssemblyVolume::AddPlacedAssembly( G4AssemblyVolume* pAssembly,
   fTriplets.push_back( toAdd );
 }
 
+// --------------------------------------------------------------------
 // Create an instance of an assembly volume inside of the specified
 // mother volume. This works analogically to making stamp imprints.
 // This method makes use of the Geant4 affine transformation class.
@@ -330,6 +339,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
   }  
 }    
 
+// --------------------------------------------------------------------
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4ThreeVector&    translationInMother,
                                     G4RotationMatrix* pRotationInMother,
@@ -357,6 +367,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   MakeImprint(this, pMotherLV, transform, copyNumBase, surfCheck);
 }
 
+// --------------------------------------------------------------------
 void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
                                     G4Transform3D&    transformation,
                                     G4int copyNumBase,
@@ -371,21 +382,25 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   MakeImprint(this, pMotherLV, transformation, copyNumBase, surfCheck);
 }
 
+// --------------------------------------------------------------------
 unsigned int G4AssemblyVolume::GetInstanceCount() const
 {
   return G4AssemblyVolume::fsInstanceCounter;
 }
 
+// --------------------------------------------------------------------
 void G4AssemblyVolume::SetInstanceCount( unsigned int value )
 {
   G4AssemblyVolume::fsInstanceCounter = value;
 }
 
+// --------------------------------------------------------------------
 void G4AssemblyVolume::InstanceCountPlus()
 {
   G4AssemblyVolume::fsInstanceCounter++;
 }
 
+// --------------------------------------------------------------------
 void G4AssemblyVolume::InstanceCountMinus()
 {
   G4AssemblyVolume::fsInstanceCounter--;

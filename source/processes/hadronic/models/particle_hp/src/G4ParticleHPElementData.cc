@@ -27,9 +27,10 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
-// 02-08-06 Modified Harmonise to reslove cross section trouble at high-end. T. KOI
+// T.Koi 02-08-06 Modified Harmonise to resolve x-section trouble at high-end.
 //
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko July-2023 converted back capture
 //
 #include "G4ParticleHPElementData.hh"
 
@@ -53,33 +54,19 @@ G4ParticleHPElementData::~G4ParticleHPElementData()
   delete[] theIsotopeWiseData;
 }
 
-void G4ParticleHPElementData::Init(G4Element* theElement, G4ParticleDefinition* projectile,
+void G4ParticleHPElementData::Init(G4Element* theElement,
+                                   G4ParticleDefinition* projectile,
                                    const char* dataDirVariable)
 {
-  auto count = (G4int)theElement->GetNumberOfIsotopes();
-  if (count == 0) count += theStableOnes.GetNumberOfIsotopes((G4int)theElement->GetZ());
-  theIsotopeWiseData = new G4ParticleHPIsoData[count];
-  // filename = ein data-set je isotope.
-  count = 0;
   auto nIso = (G4int)theElement->GetNumberOfIsotopes();
-  auto Z = (G4int)theElement->GetZ();
+  auto Z = theElement->GetZasInt();
+  theIsotopeWiseData = new G4ParticleHPIsoData[nIso];
 
-  if (nIso != 0) {
-    for (G4int i1 = 0; i1 < nIso; ++i1) {
-      G4int A = theElement->GetIsotope(i1)->GetN();
-      G4int M = theElement->GetIsotope(i1)->Getm();
-      G4double frac = theElement->GetRelativeAbundanceVector()[i1] / CLHEP::perCent;
-      // UpdateData(A, Z, count++, frac);
-      UpdateData(A, Z, M, count++, frac, projectile, dataDirVariable);
-    }
-  }
-  else {
-    G4int first = theStableOnes.GetFirstIsotope(Z);
-    for (G4int i1 = 0; i1 < theStableOnes.GetNumberOfIsotopes((G4int)theElement->GetZ()); ++i1) {
-      G4int A = theStableOnes.GetIsotopeNucleonCount(first + i1);
-      G4double frac = theStableOnes.GetAbundance(first + i1);
-      UpdateData(A, Z, count++, frac, projectile, dataDirVariable);
-    }
+  for (G4int i1 = 0; i1 < nIso; ++i1) {
+    G4int A = theElement->GetIsotope(i1)->GetN();
+    G4int M = theElement->GetIsotope(i1)->Getm();
+    G4double frac = theElement->GetRelativeAbundanceVector()[i1] / CLHEP::perCent;
+    UpdateData(A, Z, M, i1, frac, projectile, dataDirVariable);
   }
   theElasticData->ThinOut(precision);
   if (projectile == G4Neutron::Neutron()) theInelasticData->ThinOut(precision);
@@ -88,12 +75,12 @@ void G4ParticleHPElementData::Init(G4Element* theElement, G4ParticleDefinition* 
   theFissionData->ThinOut(precision);
 }
 
-void G4ParticleHPElementData::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance,
+void G4ParticleHPElementData::UpdateData(G4int A, G4int Z, G4int M, G4int index,
+                                         G4double abundance,
                                          G4ParticleDefinition* projectile,
                                          const char* dataDirVariable)
 {
   // Reads in the Data, using G4ParticleHPIsoData[], and its Init
-  // theIsotopeWiseData[index].Init(A, Z, abundance);
   theIsotopeWiseData[index].Init(A, Z, M, abundance, projectile, dataDirVariable);
 
   theBuffer = theIsotopeWiseData[index].MakeElasticData();
@@ -166,43 +153,41 @@ void G4ParticleHPElementData::Harmonise(G4ParticleHPVector*& theStore, G4Particl
   theStore = theMerge;
 }
 
-G4ParticleHPVector* G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
-                                                               G4ParticleDefinition* projectile,
-                                                               G4ParticleHPFissionData* theSet,
-                                                               char* dataDirVariable)
+G4ParticleHPVector*
+G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
+                                           G4ParticleDefinition* projectile,
+                                           G4ParticleHPFissionData* theSet,
+                                           char* dataDirVariable)
 {
-  if (projectile != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
   Init(theElement, projectile, dataDirVariable);
   return GetData(theSet);
 }
-G4ParticleHPVector* G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
-                                                               G4ParticleDefinition* projectile,
-                                                               G4ParticleHPCaptureData* theSet,
-                                                               char* dataDirVariable)
+
+G4ParticleHPVector*
+G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
+                                           G4ParticleDefinition* projectile,
+                                           G4NeutronHPCaptureData* theSet,
+                                           char* dataDirVariable)
 {
-  if (projectile != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
   Init(theElement, projectile, dataDirVariable);
   return GetData(theSet);
 }
-G4ParticleHPVector* G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
-                                                               G4ParticleDefinition* projectile,
-                                                               G4ParticleHPElasticData* theSet,
-                                                               char* dataDirVariable)
+
+G4ParticleHPVector*
+G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
+                                           G4ParticleDefinition* projectile,
+                                           G4ParticleHPElasticData* theSet,
+                                           char* dataDirVariable)
 {
-  if (projectile != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
   Init(theElement, projectile, dataDirVariable);
   return GetData(theSet);
 }
-G4ParticleHPVector* G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
-                                                               G4ParticleDefinition* projectile,
-                                                               G4ParticleHPInelasticData* theSet,
-                                                               char* dataDirVariable)
+G4ParticleHPVector*
+G4ParticleHPElementData::MakePhysicsVector(G4Element* theElement,
+                                           G4ParticleDefinition* projectile,
+                                           G4ParticleHPInelasticData* theSet,
+                                           char* dataDirVariable)
 {
-  if (projectile != G4Neutron::Neutron())
-    throw G4HadronicException(__FILE__, __LINE__, "not a neutron");
   Init(theElement, projectile, dataDirVariable);
   return GetData(theSet);
 }

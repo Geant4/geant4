@@ -37,10 +37,10 @@
 #include "vtkProperty.h"
 #include "vtkSmartPointer.h"
 
-G4VtkCutterPipeline::G4VtkCutterPipeline(G4String nameIn, const G4VtkVisContext& vc,
+G4VtkCutterPipeline::G4VtkCutterPipeline(G4String nameIn, const G4VtkVisContext& vcIn,
                                          vtkSmartPointer<vtkPolyDataAlgorithm> filter,
                                          G4bool useVcColour)
-  : G4VVtkPipeline(nameIn, G4String("G4VtkCutterPipeline"), vc, false, vc.fViewer->renderer)
+  : G4VVtkPipeline(nameIn, G4String("G4VtkCutterPipeline"), vcIn, false, vcIn.fViewer->renderer)
 {
   // cutter plane
   plane = vtkSmartPointer<vtkPlane>::New();

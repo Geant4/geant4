@@ -44,6 +44,7 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMaterialManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4EnvironmentUtils.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -87,9 +88,9 @@ void G4DNACPA100ExcitationModel::Initialise(const G4ParticleDefinition* p,
                   FatalException, oss.str().c_str());
     }
 
-    char* path = getenv("G4LEDATA");
+    const char* path = G4FindDataDir("G4LEDATA");
 
-    if (!path) {
+    if (path == nullptr) {
       G4Exception("G4DNACPA100ExcitationModel::Initialise", "em0006", FatalException,
                   "G4LEDATA environment variable not set.");
       return;
@@ -150,9 +151,7 @@ void G4DNACPA100ExcitationModel::Initialise(const G4ParticleDefinition* p,
       G4cout << "G4DNACPA100ExcitationModel::CrossSectionPerVolume:: not good modelData" << G4endl;
       throw;
     }
-    else {
-      fpModelData = dataModel;
-    }
+    fpModelData = dataModel;
   }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;

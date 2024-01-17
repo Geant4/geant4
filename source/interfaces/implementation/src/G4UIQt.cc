@@ -37,6 +37,8 @@
 #include "G4UIcommandStatus.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
 #include "G4SceneTreeItem.hh"
 #include "G4AttCheck.hh"
 
@@ -72,7 +74,6 @@
 #include <qscrollarea.h>
 #include <qstandarditemmodel.h>
 #include <qstringlist.h>
-#include <qtreewidget.h>
 #include <qtabbar.h>
 #include <qtablewidget.h>
 #include <qtabwidget.h>
@@ -80,6 +81,10 @@
 #include <qtoolbar.h>
 #include <qtoolbox.h>
 
+#include <QInputDialog>
+
+#include <set>
+#include <map>
 #include <cstdlib>
 
 #ifndef G4GMAKE
@@ -160,7 +165,8 @@ G4UIQt::G4UIQt(G4int argc, char** argv)
     fDirIcon(nullptr),
     fRunIcon(nullptr),
     fParamIcon(nullptr),
-    fPickTargetIcon(nullptr)
+    fPickTargetIcon(nullptr),
+    fExitIcon(nullptr)
 #ifdef G4MULTITHREADED
     ,
     fThreadsFilterComboBox(nullptr)
@@ -1482,7 +1488,7 @@ void G4UIQt::CreateNewSceneTreeWidget()
   // reduce margins
   vLayout->setContentsMargins(0,0,0,0);
 
-  fNewSceneTreeItemTreeWidget = new QTreeWidget;
+  fNewSceneTreeItemTreeWidget = new NewSceneTreeItemTreeWidget;
   fNewSceneTreeItemTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
   vLayout->addWidget(fNewSceneTreeItemTreeWidget);
 
@@ -1579,7 +1585,8 @@ void G4UIQt::BuildPVQTree(const G4SceneTreeItem& g4stItem, QTreeWidgetItem* qtwI
       "\n  \"/vis/scene/add/volume " << name << "\" to bring into the displayed tree.)";
       newQTWItem->setToolTip(0, oss.str().c_str());
     } else {  // A fully defined touchable
-      oss.str(""); oss << G4AttCheck(g4stChild.GetAttValues(), g4stChild.GetAttDefs());
+      oss.str(""); oss << g4stChild.GetPVPath() <<
+      "\nTo see properties, right-click/dump.";
       newQTWItem->setToolTip(0, oss.str().c_str());
     }
 
@@ -1606,14 +1613,13 @@ void G4UIQt::BuildPVQTree(const G4SceneTreeItem& g4stItem, QTreeWidgetItem* qtwI
 void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
 {
   if (item == nullptr) return;
-
   auto sceneTreeItem = ConvertToG4SceneTreeItem(item);
   if (sceneTreeItem == nullptr) return;
 
   auto uiMan = G4UImanager::GetUIpointer();
 
   // Respond according to type
-  G4String argument = "false";
+  G4String argument = "false", inverse = "true";
   auto newCheckState = item->checkState(0);
   auto oldCheckState
   = sceneTreeItem->GetVisAttributes().IsVisible()? Qt::Checked: Qt::Unchecked;
@@ -1623,13 +1629,28 @@ void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
     case G4SceneTreeItem::root:
       break;  // Do nothing
     case G4SceneTreeItem::model:
-      [[fallthrough]];
-    case G4SceneTreeItem::pvmodel:
-      // Construct and apply activate commands
       // Clicked - but has checkbox actually been clicked?
       if (newCheckState != oldCheckState) {
         if (newCheckState == Qt::Checked) argument = "true";
-        uiMan->ApplyCommand("/vis/scene/activateModel " + sceneTreeItem->GetModelType() + ' ' + argument);
+        G4String modelName, text;
+        std::istringstream iss(sceneTreeItem->GetModelDescription());
+        iss >> modelName >> text;
+        if (modelName.find("Text") != std::string::npos) {
+          // Text model: special case, use text to identify
+          uiMan->ApplyCommand("/vis/scene/activateModel " + text + ' ' + argument);
+        } else {
+          uiMan->ApplyCommand("/vis/scene/activateModel " + modelName + ' ' + argument);
+        }
+      }
+      break;
+    case G4SceneTreeItem::pvmodel:
+      // Clicked - but has checkbox actually been clicked?
+      if (newCheckState != oldCheckState) {
+        if (newCheckState == Qt::Checked) argument = "true";
+        G4String modelName, pvName;
+        std::istringstream iss(sceneTreeItem->GetModelDescription());
+        iss >> modelName >> pvName;
+        uiMan->ApplyCommand("/vis/scene/activateModel " + pvName + ' ' + argument);
       }
       break;
     case G4SceneTreeItem::ghost:
@@ -1638,9 +1659,32 @@ void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
       // Construct and apply touchable commands
       // Clicked - but has checkbox actually been clicked?
       if (newCheckState != oldCheckState) {
-        if (newCheckState == Qt::Checked) argument = "true";
+        if (newCheckState == Qt::Checked) {
+          argument = "true"; inverse = "false";
+        }
         uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
         uiMan->ApplyCommand("/vis/touchable/set/visibility " + argument);
+        // If daughters, set daughtersInvisible too
+        if (sceneTreeItem->GetChildren().size() > 0 ) {
+          uiMan->ApplyCommand("/vis/touchable/set/daughtersInvisible " + inverse);
+        }
+        // If not cancelled and if daughters > 0 and if making invisible
+        static G4bool wanted = true;
+        if (wanted && sceneTreeItem->GetChildren().size() > 0 && argument == "false") {
+          QMessageBox msgBox;
+          msgBox.setText
+          ("This action makes this volume and all descendants invisible."
+           " To see descendants, right-click and select daughtersInvisible/false"
+           " and check visibility of descendants individually.");
+          msgBox.setInformativeText
+          ("To suppress this message click \"Discard\" or \"Don't Save\"");
+          msgBox.setStandardButtons(QMessageBox::Discard | QMessageBox::Ok);
+          msgBox.setDefaultButton(QMessageBox::Ok);
+          auto action = msgBox.exec();
+          if (action == QMessageBox::Discard) {
+            wanted = false;
+          }
+        }
       }
       break;
   }
@@ -1649,10 +1693,8 @@ void G4UIQt::SceneTreeItemClicked(QTreeWidgetItem* item)
 void G4UIQt::SceneTreeItemDoubleClicked(QTreeWidgetItem* item)
 {
   if (item == nullptr) return;
-
   auto sceneTreeItem = ConvertToG4SceneTreeItem(item);
   if (sceneTreeItem == nullptr) return;
-  
   if (sceneTreeItem->GetType() != G4SceneTreeItem::touchable) return;
 
   auto oldQColor = ConvertG4ColourToQColor(sceneTreeItem->GetVisAttributes().GetColour());
@@ -1672,7 +1714,6 @@ void G4UIQt::SceneTreeItemDoubleClicked(QTreeWidgetItem* item)
 void G4UIQt::SceneTreeItemExpanded(QTreeWidgetItem* item)
 {
   if (item == nullptr) return;
-
   auto sceneTreeItem = ConvertToG4SceneTreeItem(item);
   if (sceneTreeItem == nullptr) return;
 
@@ -1685,7 +1726,6 @@ void G4UIQt::SceneTreeItemExpanded(QTreeWidgetItem* item)
 void G4UIQt::SceneTreeItemCollapsed(QTreeWidgetItem* item)
 {
   if (item == nullptr) return;
-
   auto sceneTreeItem = ConvertToG4SceneTreeItem(item);
   if (sceneTreeItem == nullptr) return;
 
@@ -1694,6 +1734,229 @@ void G4UIQt::SceneTreeItemCollapsed(QTreeWidgetItem* item)
     sceneTreeItem->SetExpanded(false);
   }
 }
+
+void G4UIQt::NewSceneTreeItemTreeWidget::mousePressEvent(QMouseEvent* ev)
+{
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  auto currentMousePressPosition = ev->globalPos();
+#else
+  auto currentMousePressPosition = ev->globalPosition().toPoint();
+#endif
+
+  if (ev->button() == Qt::RightButton) {
+    auto item = currentItem();
+    if (item) {
+      auto sceneTreeItem = ConvertToG4SceneTreeItem(item);
+      if (sceneTreeItem) {
+        if (sceneTreeItem->GetType() == G4SceneTreeItem::touchable) {
+
+          // We wish to present actions (and menus) in alphabetical order. I have
+          // not found the required insert methods so we make our own list (map)
+          // and add actions and menus and then creating appropriate qActions.
+          // Using std::map to get alphabetical order. To control the order use
+          // std::list of pairs instead.
+          enum CommandType {withoutParameter, withABool, withAnInteger, withADouble, withAString};
+          static std::map<G4String,CommandType> alphabetical;  // Ensures alphabetical order
+          static G4bool first = true;
+          if (first) {
+            first = false;
+            // Rather than simply take all commands, select those that make sense
+            // in this pop-up menu.
+            // Select from /vis/touchable. These are actions without parameter or for
+            // which it only makes sense to use their default omitable paramater.
+            alphabetical["centreAndZoomInOn"] = withoutParameter;
+            alphabetical["centreOn"] = withoutParameter;
+            alphabetical["dump"] = withoutParameter;
+            alphabetical["extentForField"] = withoutParameter;
+            alphabetical["localAxes"] = withoutParameter;
+            alphabetical["showExtent"] = withoutParameter;
+            alphabetical["twinkle"] = withoutParameter;
+            alphabetical["volumeForField"] = withoutParameter;
+            // Commands from /vis/touchable/set
+            // Actions with a Boolean paramater
+            alphabetical["daughtersInvisible"] = withABool;
+            alphabetical["forceAuxEdgeVisible"] = withABool;
+            alphabetical["forceCloud"] = withABool;
+            alphabetical["forceSolid"] = withABool;
+            alphabetical["forceWireframe"] = withABool;
+            alphabetical["visibility"] = withABool;
+            // Actions with an integer
+            alphabetical["lineSegmentsPerCircle"] = withAnInteger;
+            alphabetical["numberOfCloudPoints"] = withAnInteger;
+            // Actions with a double
+            alphabetical["lineWidth"] = withADouble;
+            // Actions with a string
+            alphabetical["lineStyle"] = withAString;
+          }
+
+          QMenu topMenu;  // Local (temporary) object for this item
+          std::vector<QAction*> actions;  // Temporary container for action pointers
+          std::vector<QMenu*> menus;  // Temporary container for menu pointers
+
+          for (const auto& action : alphabetical) {
+            const auto& af = action.first;  // G4String name of action
+
+            if (action.second == withoutParameter) {
+
+              auto qAction = new QAction(af.c_str(), this);
+              actions.push_back(qAction);  // into temporary container
+              topMenu.addAction(qAction);
+              connect(qAction, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithoutParameter(af, sceneTreeItem);});
+
+            } else if (action.second == withABool) {
+
+              auto menu = new QMenu(af.c_str());
+              menus.push_back(menu);  // into temporary container
+              topMenu.addMenu(menu);
+              auto qActionTrue = new QAction("true", this);
+              actions.push_back(qActionTrue);  // into temporary container
+              menu->addAction(qActionTrue);
+              connect(qActionTrue, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithABool(af, sceneTreeItem, true);});
+              auto qActionFalse = new QAction("false", this);
+              actions.push_back(qActionFalse);  // into temporary container
+              menu->addAction(qActionFalse);
+              connect(qActionFalse, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithABool(af, sceneTreeItem, false);});
+
+            } else if (action.second == withAnInteger) {
+
+              auto qAction = new QAction(af.c_str(), this);
+              actions.push_back(qAction);  // into temporary container
+              topMenu.addAction(qAction);
+              connect(qAction, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithAnInteger(af, sceneTreeItem);});
+
+            } else if (action.second == withADouble) {
+
+              auto qAction = new QAction(af.c_str(), this);
+              actions.push_back(qAction);  // into temporary container
+              topMenu.addAction(qAction);
+              connect(qAction, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithADouble(af, sceneTreeItem);});
+
+            } else if (action.second == withAString) {
+
+              auto qAction = new QAction(af.c_str(), this);
+              actions.push_back(qAction);  // into temporary container
+              topMenu.addAction(qAction);
+              connect(qAction, &QAction::triggered, this,
+                      [this, &af, &sceneTreeItem]{ActWithAString(af, sceneTreeItem);});
+            }
+          }
+
+          topMenu.exec(currentMousePressPosition);
+
+          // Clean up
+          for (auto action : actions) {
+            // No need to disconnect. Qt say, "A signal-slot connection is removed
+            // when either of the objects involved are destroyed."
+            delete action;
+          }
+          for (auto menu : menus) {
+            delete menu;
+          }
+        }
+      }
+    }
+  }
+  
+  // Pass event on up the widget tree for other actions
+  QTreeWidget::mousePressEvent(ev);
+}
+
+void G4UIQt::NewSceneTreeItemTreeWidget::ActWithoutParameter
+ (const G4String& action, G4SceneTreeItem* sceneTreeItem)
+{
+  // Special case: dump
+  if (action == "dump") {
+    static G4bool wanted = true;
+    if (wanted) {
+      QMessageBox msgBox;
+      std::ostringstream oss;
+      oss << G4AttCheck(sceneTreeItem->GetAttValues(), sceneTreeItem->GetAttDefs());
+      // Just the first 1000 characters, otherwise it spreads off screen
+      msgBox.setText((oss.str().substr(0,1000)+"...").c_str());
+      msgBox.setInformativeText
+      ("To suppress this message click \"Discard\" or \"Don't Save\"."
+       "\nTo get a complete dump to session output click \"Ok\","
+       "\nElse click \"Close\".");
+      msgBox.setStandardButtons
+      (QMessageBox::Discard | QMessageBox::Close | QMessageBox::Ok);
+      msgBox.setDefaultButton(QMessageBox::Ok);
+      auto result = msgBox.exec();
+      if (result == QMessageBox::Discard) {
+        wanted = false;
+      } else if (result == QMessageBox::Close) {
+        return;
+      }
+    }
+  }
+  auto uiMan = G4UImanager::GetUIpointer();
+  uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
+  uiMan->ApplyCommand("/vis/touchable/" + action);
+}
+
+void G4UIQt::NewSceneTreeItemTreeWidget::ActWithABool
+ (const G4String& action, G4SceneTreeItem* sceneTreeItem, G4bool whatever)
+{
+  auto uiMan = G4UImanager::GetUIpointer();
+  uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
+  G4String which = whatever? "true": "false";
+  uiMan->ApplyCommand("/vis/touchable/set/" + action + ' ' + which);
+}
+
+void G4UIQt::NewSceneTreeItemTreeWidget::ActWithAnInteger
+(const G4String& action, G4SceneTreeItem* sceneTreeItem)
+{
+  G4bool ok = true;
+  auto newValue = QInputDialog::getInt(this, action.c_str(), action.c_str(),
+                                       0, 0, 999, 1, &ok);
+  if (ok) {
+    auto uiMan = G4UImanager::GetUIpointer();
+    uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
+    uiMan->ApplyCommand("/vis/touchable/set/" + action + ' '
+                        + G4UIcommand::ConvertToString(newValue));
+  }
+}
+
+void G4UIQt::NewSceneTreeItemTreeWidget::ActWithADouble
+ (const G4String& action, G4SceneTreeItem* sceneTreeItem)
+{
+  G4bool ok = true;
+  auto newValue = QInputDialog::getDouble(this, action.c_str(), action.c_str(),
+                                          0, 0, 999, 1, &ok);
+  if (ok) {
+    auto uiMan = G4UImanager::GetUIpointer();
+    uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
+    uiMan->ApplyCommand("/vis/touchable/set/" + action + ' '
+                        + G4UIcommand::ConvertToString(newValue));
+  }
+}
+
+void G4UIQt::NewSceneTreeItemTreeWidget::ActWithAString
+ (const G4String& action, G4SceneTreeItem* sceneTreeItem)
+{
+  auto uiMan = G4UImanager::GetUIpointer();
+  auto command = uiMan->FindCommand("/vis/touchable/set/" + action);
+  if (command) {
+    QStringList qStringList;
+    const auto& candidates = command->GetParameter(0)->GetParameterCandidates();
+    std::istringstream iss(candidates);
+    G4String candidate;
+    while (iss >> candidate) qStringList.append(candidate.c_str());
+    G4bool ok = true;
+    auto chosenValue = QInputDialog::getItem(this, action.c_str(), action.c_str(), qStringList,
+                                             0, false, &ok);
+    if (ok) {
+      uiMan->ApplyCommand("/vis/set/touchable" + sceneTreeItem->GetPVPath());
+      G4String g4ChosenValue = chosenValue.toStdString();
+      uiMan->ApplyCommand("/vis/touchable/set/" + action + ' ' + g4ChosenValue);
+    }
+  }
+}
+
 
 /** Create the History ToolBox Widget
  */
@@ -3191,7 +3454,7 @@ G4bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, G4bo
         else if ((label->text() == "green") && isStillColorParameter) {
           greenDefaultStr = QString((char*)(param->GetDefaultValue()).data());
         }
-        else if ((label->text() == "green") && isStillColorParameter) {
+        else if ((label->text() == "blue") && isStillColorParameter) {
           blueDefaultStr = QString((char*)(param->GetDefaultValue()).data());
         }
       }
@@ -4267,7 +4530,7 @@ void G4UIQt::FilterAllOutputTextArea()
 
   fCoutTBTextArea->clear();
 
-  for (auto out : fG4OutputString) {
+  for (auto& out : fG4OutputString) {
     if (FilterOutput(out, currentThread, filter) != "") {
       // changing color ?
       if (out.fOutputStream != previousOutputStream) {

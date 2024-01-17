@@ -50,7 +50,7 @@
     virtual parent_class* Clone() const { return 0;}
 
 #define G4IT_ADD_CLONE(parent_class, kid_class) \
-    virtual parent_class* Clone() const {\
+    parent_class* Clone() const override {\
         return new kid_class(*this);\
     }
 

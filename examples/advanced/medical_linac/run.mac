@@ -1,0 +1,26 @@
+#### verbosities
+/control/verbose 1
+/material/verbose 0
+/run/verbose 0
+/process/em/verbose 0
+
+/run/numberOfThreads 4
+
+/physics/addPhysics standard_opt3
+
+/run/initialize
+
+/score/create/boxMesh boxMesh_1
+/score/mesh/translate/xyz 0 0 130 mm
+/score/mesh/boxSize 127.5 127.5 127.5 mm  # half dim
+/score/mesh/nBin 51 51 51
+/score/quantity/doseDeposit dDep
+/score/close
+/score/list
+
+#
+#/run/printProgress 100000
+#/run/beamOn 5000000
+
+#/score/drawProjection boxMesh_1 dDep
+#/score/dumpQuantityToFile boxMesh_1 dDep dDep.txt

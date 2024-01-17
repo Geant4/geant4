@@ -13,6 +13,7 @@
 /run/verbose 1
 /tracking/verbose 0
 /hits/verbose 0
+/dmx/printModulo 100
 #
 # draw flags
 /dmx/draw/drawColours custom
@@ -31,90 +32,91 @@
 # radioactive decay module
 /process/had/rdm/verbose 0
 /process/had/rdm/allVolumes
-#
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 #
 # using GPS for ambe_spectrum:
-/gps/type Surface
-/gps/shape Sphere
-/gps/radius 1.0 cm
-/gps/centre 0. 132.0 -302.65 mm
-/gps/angtype iso
-/gps/surfnorm 1
-/gps/mintheta 0.
-/gps/maxtheta 0.30
-/gps/minphi 0.
-/gps/maxphi 6.283185
+/gps/pos/type Surface
+/gps/pos/shape Sphere
+/gps/pos/radius 1.0 cm
+/gps/pos/centre 0. 132.0 -302.65 mm
+/gps/ang/type iso
+/gps/ang/surfnorm 1
+/gps/ang/mintheta 0.
+/gps/ang/maxtheta 0.30
+/gps/ang/minphi 0.
+/gps/ang/maxphi 6.283185
 #
 #
-/gps/energytype Arb
-/gps/histname arb
+/gps/ene/type Arb
+/gps/hist/type arb
 #
 /gps/particle neutron
 #
 # estimated neutron spectrum from Jaime's paper:
 # - first bin is in MeV:
-/gps/histpoint 0.0 10000
-/gps/histpoint 0.2 11000
-/gps/histpoint 0.4 12000
-/gps/histpoint 0.6 13000
-/gps/histpoint 0.8 12000
-/gps/histpoint 1.0 10000
-/gps/histpoint 1.2 9000
-/gps/histpoint 1.4 11000
-/gps/histpoint 1.6 10000
-/gps/histpoint 1.8 11000
-/gps/histpoint 2.0 9000
-/gps/histpoint 2.2 14000
-/gps/histpoint 2.4 11000
-/gps/histpoint 2.6 12000
-/gps/histpoint 2.8 15000
-/gps/histpoint 3.0 17000
-/gps/histpoint 3.2 16000
-/gps/histpoint 3.4 15000
-/gps/histpoint 3.6 16500
-/gps/histpoint 3.8 17000
-/gps/histpoint 4.0 17000
-/gps/histpoint 4.2 14000
-/gps/histpoint 4.4 13500
-/gps/histpoint 4.6 14500
-/gps/histpoint 4.8 14000
-/gps/histpoint 5.0 13500
-/gps/histpoint 5.2 13000
-/gps/histpoint 5.4 12500
-/gps/histpoint 5.6 11000
-/gps/histpoint 5.8 10000
-/gps/histpoint 6.0 9800
-/gps/histpoint 6.2 8000
-/gps/histpoint 6.4 7700
-/gps/histpoint 6.6 7000
-/gps/histpoint 6.8 6800
-/gps/histpoint 7.0 6000
-/gps/histpoint 7.2 5000
-/gps/histpoint 7.4 4000
-/gps/histpoint 7.6 3600
-/gps/histpoint 7.8 3000
-/gps/histpoint 8.0 2000
-/gps/histpoint 8.2 1900
-/gps/histpoint 8.4 1750
-/gps/histpoint 8.6 1800
-/gps/histpoint 8.8 1825
-/gps/histpoint 9.0 1600
-/gps/histpoint 9.2 1400
-/gps/histpoint 9.4 1200
-/gps/histpoint 9.6 1100
-/gps/histpoint 9.8 1000
-/gps/histpoint 10.0 800
+/gps/hist/point 0.0 10000
+/gps/hist/point 0.2 11000
+/gps/hist/point 0.4 12000
+/gps/hist/point 0.6 13000
+/gps/hist/point 0.8 12000
+/gps/hist/point 1.0 10000
+/gps/hist/point 1.2 9000
+/gps/hist/point 1.4 11000
+/gps/hist/point 1.6 10000
+/gps/hist/point 1.8 11000
+/gps/hist/point 2.0 9000
+/gps/hist/point 2.2 14000
+/gps/hist/point 2.4 11000
+/gps/hist/point 2.6 12000
+/gps/hist/point 2.8 15000
+/gps/hist/point 3.0 17000
+/gps/hist/point 3.2 16000
+/gps/hist/point 3.4 15000
+/gps/hist/point 3.6 16500
+/gps/hist/point 3.8 17000
+/gps/hist/point 4.0 17000
+/gps/hist/point 4.2 14000
+/gps/hist/point 4.4 13500
+/gps/hist/point 4.6 14500
+/gps/hist/point 4.8 14000
+/gps/hist/point 5.0 13500
+/gps/hist/point 5.2 13000
+/gps/hist/point 5.4 12500
+/gps/hist/point 5.6 11000
+/gps/hist/point 5.8 10000
+/gps/hist/point 6.0 9800
+/gps/hist/point 6.2 8000
+/gps/hist/point 6.4 7700
+/gps/hist/point 6.6 7000
+/gps/hist/point 6.8 6800
+/gps/hist/point 7.0 6000
+/gps/hist/point 7.2 5000
+/gps/hist/point 7.4 4000
+/gps/hist/point 7.6 3600
+/gps/hist/point 7.8 3000
+/gps/hist/point 8.0 2000
+/gps/hist/point 8.2 1900
+/gps/hist/point 8.4 1750
+/gps/hist/point 8.6 1800
+/gps/hist/point 8.8 1825
+/gps/hist/point 9.0 1600
+/gps/hist/point 9.2 1400
+/gps/hist/point 9.4 1200
+/gps/hist/point 9.6 1100
+/gps/hist/point 9.8 1000
+/gps/hist/point 10.0 800
 #
 #
 #
 #
-/gps/arbint Lin
+/gps/hist/inter Lin
 
 /random/setDirectoryName ./seeds
 /random/setSavingFlag
 
 /dmx/hitsfile ambe_spectrum.out
-/dmx/histogramfile ambe_spectrum.his
+/dmx/histogramfile ambe_spectrum.root
 
 /run/beamOn 1000000
 

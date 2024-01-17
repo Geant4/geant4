@@ -40,8 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:G4UImessenger(),
- fTrackingAction(trackA),fTrackingCmd(0),fTimeWindowCmd(0)
+:fTrackingAction(trackA)
 {
   fTrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
   fTrackingCmd->SetGuidance("allow full decay chain");

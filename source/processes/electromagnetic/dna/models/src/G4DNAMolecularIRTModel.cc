@@ -32,21 +32,23 @@
  *              J. Ramos-Mendez and B. Faddegon
 */
 
-#include <globals.hh>
-#include <G4DNAMolecularReactionTable.hh>
+#include "G4DNAIRT.hh"
+#include "G4DNAIRTMoleculeEncounterStepper.hh"
+
 #include <G4DNAMolecularIRTModel.hh>
+#include <G4DNAMolecularReactionTable.hh>
 #include <G4DNASmoluchowskiReactionModel.hh>
 #include <G4ExceptionSeverity.hh>
 #include <G4Molecule.hh>
 #include <G4ReferenceCast.hh>
+#include <globals.hh>
 
-#include "G4DNAIRT.hh"
-#include "G4DNAIRTMoleculeEncounterStepper.hh"
+#include <memory>
 
 G4DNAMolecularIRTModel::G4DNAMolecularIRTModel(const G4String& name)
     : G4DNAMolecularIRTModel(name,
-                std::unique_ptr<G4DNAIRTMoleculeEncounterStepper>(new G4DNAIRTMoleculeEncounterStepper()),
-                std::unique_ptr<G4DNAIRT>(new G4DNAIRT()))
+                std::make_unique<G4DNAIRTMoleculeEncounterStepper>(),
+                std::make_unique<G4DNAIRT>())
 {
 }
 
@@ -73,7 +75,7 @@ void G4DNAMolecularIRTModel::Initialize()
 
     if(!fpReactionModel)
     {
-        fpReactionModel.reset(new G4DNASmoluchowskiReactionModel());
+        fpReactionModel = std::make_unique<G4DNASmoluchowskiReactionModel>();
     }
 
     fpReactionModel->SetReactionTable((const G4DNAMolecularReactionTable*) fpReactionTable);

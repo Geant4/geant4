@@ -206,7 +206,7 @@ class G4FTFSettingDefaultHDP {
       // but if Y<Ymin, then Pp=max(0.,Atop)
       // for details, see also G4FTFParameters::GetProcProb( ProcN, y )
       //
-      // baryons
+      // Baryons
       /* JVY, Oct. 31, 2017: Per Alberto R. & Vladimir U., keep this group of parameters FIXED */
       /* JVY, June 11, 2020: try to open up... */
       // Process=0 --> Qexchg w/o excitation
@@ -225,7 +225,7 @@ class G4FTFSettingDefaultHDP {
       HDP.SetDefault( "FTF_BARYON_PROC1_A3",   0.0  );
       HDP.SetDefault( "FTF_BARYON_PROC1_ATOP", 0.0  );
       HDP.SetDefault( "FTF_BARYON_PROC1_YMIN", 1.4  );
-      // NOTE: Process #2 & 3 are projectile & target diffraction
+      // Note: Process #2 & 3 are projectile & target diffraction
       //       they have more complex definition of A1 & A2 
       //      (see example below)
       // SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0, 0.93 );  // Projectile diffraction
@@ -256,7 +256,7 @@ class G4FTFSettingDefaultHDP {
       // JVY, Oct. 6, 2017: Per Alberto R., keep these two settings fixed (for now)
       // HDP.SetDefault( "FTF_BARYON_PROB_DISTR_PROJ", 0.3 ); 
       // HDP.SetDefault( "FTF_BARYON_PROB_DISTR_TGT", 0.3 );       
-      // pions
+      // Pions
       // JVY, Aug.8, 2018 --> Feb.14, 2019 --> June 25, 2019: 
       // Parameters of participating hadron (pions) excitation
       /* JVY, June 25, 2019: For now, keep this group of parameters FIXED */
@@ -277,7 +277,7 @@ class G4FTFSettingDefaultHDP {
       HDP.SetDefault( "FTF_PION_PROC1_ATOP", 0.0  );
       HDP.SetDefault( "FTF_PION_PROC1_YMIN", 0.0  );
       /*
-      // NOTE: Process #2 & 3 are projectile & target diffraction
+      // Note: Process #2 & 3 are projectile & target diffraction
       // Process=2 --> Projectile diffraction
       // Q: Would it even make sense to make these configurable ?
       //    The following is hadrcoded:
@@ -301,7 +301,7 @@ class G4FTFSettingDefaultHDP {
       HDP.SetDefault( "FTF_PION_PROC3_ATOP",  0.0  );
       HDP.SetDefault( "FTF_PION_PROC3_YMIN",  2.2  );
       // projectile and/or target diffraction (dissociation) may be switched ON/OFF 
-      // NOTE: Both projectile and target diffraction are turned OFF if
+      // Note: Both projectile and target diffraction are turned OFF if
       // a) Number of Target Nucleons > 10 (NumberOfTargetNucleons > 10)
       //    OR
       // b) Projectile Baryon Number > 10 (AbsProjectileBaryonNumber > 10)
@@ -326,18 +326,18 @@ class G4FTFSettingDefaultHDP {
                                                                   // because it'll be done in the G4FTFParameters::SetProjMinDiffMass
       HDP.SetDefault( "FTF_PION_NONDIFF_M_TGT", 1.16, 1.16, 3.0 );
       HDP.SetDefault( "FTF_PION_AVRG_PT2", 0.3, 0.08, 1.0 );      //  do NOT (*CLHEP::GeV*CLHEP::GeV)      
-      // nuclear destruction 
-      // NOTE: Settings of most of these parameters are the same
+      // Nuclear destruction 
+      // Note: Settings of most of these parameters are the same
       //       for different types of projectile hadron
       //       However, we decided to introduce separate variables
       //       and configuration cards for each type of projectile
-      // baryons
-      // projectile destruction
+      // Baryons
+      // Projectile destruction
       HDP.SetDefault( "FTF_BARYON_NUCDESTR_P1_PROJ", 1.0, 0.0, 1.0 ); // in principle, it should be 1./NBRN - FIXME later !
       HDP.SetDefault( "FTF_BARYON_NUCDESTR_P1_NBRN_PROJ", false );
       // for now, keep fixed p2 & p3 for the proj destruction
       // they're defined explicitly in G4FTFParamCollection ctor
-      // target destruction
+      // Target destruction
       HDP.SetDefault( "FTF_BARYON_NUCDESTR_P1_TGT", 1.0, 0.0, 1.0 );   
       HDP.SetDefault( "FTF_BARYON_NUCDESTR_P1_ADEP_TGT", false );          
       HDP.SetDefault( "FTF_BARYON_NUCDESTR_P2_TGT", 4.0, 2.0, 16.0 );
@@ -354,9 +354,9 @@ class G4FTFSettingDefaultHDP {
       // JVY, Oct. 6, 2017: Per Alberto R., this is just a technical parameter,
       //                    and it should NOT be changed
       // HDP.SetDefault( "FTF_BARYON_NUCDESTR_MAXPT2", 1. * CLHEP::GeV*CLHEP::GeV  ); 	 
-      // mesons - these parameters are common for pions, kaons, etc. (per original code)
-      // NOTE: *NO* projectile destruction for mesons !!!
-      // target destruction
+      // Mesons - these parameters are common for pions, kaons, etc. (per original code)
+      // Note: *NO* projectile destruction for mesons !!!
+      // Target destruction
       HDP.SetDefault( "FTF_MESON_NUCDESTR_P1_TGT", 0.00481, 0.0, 1.0 );    
       HDP.SetDefault( "FTF_MESON_NUCDESTR_P1_ADEP_TGT", true );           
       HDP.SetDefault( "FTF_MESON_NUCDESTR_P2_TGT", 4.0, 2.0, 16.0 );
@@ -380,8 +380,8 @@ G4FTFSettingDefaultHDP FTFDefaultsHDP;
 
 
 G4FTFParamCollection::G4FTFParamCollection() {
-  // zero out everything
-  // parameters of excitation
+  // Zero out everything
+  // Parameters of excitation
   // Proc=0 --> Qexchg w/o excitation
   fProc0A1 = 0.0;
   fProc0B1 = 0.0;
@@ -425,7 +425,7 @@ G4FTFParamCollection::G4FTFParamCollection() {
   fProc4A3 = 0.0;
   fProc4Atop = 0.0;
   fProc4Ymin = 0.0;
-  // parameters of participating baryon excitation
+  // Parameters of participating baryon excitation
   fDeltaProbAtQuarkExchange = 0.0; 
   fProbOfSameQuarkExchange = 0.0;
   fProjMinDiffMass = 0.0;
@@ -435,7 +435,7 @@ G4FTFParamCollection::G4FTFParamCollection() {
   fAveragePt2 = 0.0;
   fProbLogDistrPrD = 0.0;
   fProbLogDistr = 0.0;
-  // parameters of nuclear distruction
+  // Parameters of nuclear distruction
   // COMMONs
   fNuclearProjDestructP1 = 0.0;
   fNuclearProjDestructP1_NBRNDEP = false;
@@ -449,20 +449,20 @@ G4FTFParamCollection::G4FTFParamCollection() {
   fPt2NuclearDestructP2 = 0.0;
   fPt2NuclearDestructP3 = 0.0;
   fPt2NuclearDestructP4 = 0.0;
-  // baryons
+  // Baryons
   fR2ofNuclearDestruct = 0.0;
   fExciEnergyPerWoundedNucleon = 0.0;
   fDofNuclearDestruct = 0.0;
   fMaxPt2ofNuclearDestruct = 0.0;
-  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
+  // Keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
   fNuclearProjDestructP2 = 4.0;
   fNuclearProjDestructP3 = 2.1;  
 }
 
 
 G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj() : G4FTFParamCollection() {
-  // parameters of participating hadron (baryon) excitation
-  // baryons projectile
+  // Parameters of participating hadron (baryon) excitation
+  // Baryons projectile
   // Proc=0 --> Qexchg w/o excitation
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A1",   fProc0A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_B1",   fProc0B1 );
@@ -481,8 +481,8 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj() : G4FTFParamCollection() {
   HDP.DeveloperGet( "FTF_BARYON_PROC1_YMIN", fProc1Ymin ); 
   // Proc=2 & Proc=3 for the case ( AbsProjectileBaryonNumber > 10 ||  NumberOfTargetNucleons > 10 )
   // (diffraction dissociation)
-  // NOTE-1: used to be ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )...
-  // NOTE-2: As of 10.5, both are set to false (via HDP)
+  // Note-1: used to be ( AbsProjectileBaryonNumber > 1 ||  NumberOfTargetNucleons > 1 )...
+  // Note-2: As of 10.5, both are set to false (via HDP)
   HDP.DeveloperGet( "FTF_BARYON_DIFF_DISSO_PROJ", fProjDiffDissociation );
   HDP.DeveloperGet( "FTF_BARYON_DIFF_DISSO_TGT",  fTgtDiffDissociation );
   // Proc=4 --> Qexchg "w/additional multiplier" in excitation 
@@ -507,11 +507,11 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj() : G4FTFParamCollection() {
   // HDP.DeveloperGet( "FTF_BARYON_PROB_DISTR_TGT", fProbLogDistr );
   fProbLogDistrPrD = 0.55; 
   fProbLogDistr    = 0.55;   
-  // nuclear destruction
+  // Nuclear destruction
   // ---> LATER !!! ---> fBaryonMaxNumberOfCollisions = 2.;
   HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_P1_PROJ", fNuclearProjDestructP1 );
   HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_P1_NBRN_PROJ",fNuclearProjDestructP1_NBRNDEP );
-  // keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
+  // Keep the 2 parameters below fixed for now (i.e. do not take them from HDP)
   fNuclearProjDestructP2 = 4.0;
   fNuclearProjDestructP3 = 2.1;
   //
@@ -528,11 +528,11 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj() : G4FTFParamCollection() {
   HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_R2", fR2ofNuclearDestruct );
   HDP.DeveloperGet( "FTF_BARYON_EXCI_E_PER_WNDNUCLN", fExciEnergyPerWoundedNucleon );
   //
-  HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_DISP", fDofNuclearDestruct ); // NOTE: "Dof" means "Dispersion of..."
+  HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_DISP", fDofNuclearDestruct ); // Note: "Dof" means "Dispersion of..."
   // 
-  // NOTE-1: this parameter has changed from 1. to 9. between 10.2 and 10.3.ref07 !!!
+  // Note-1: this parameter has changed from 1. to 9. between 10.2 and 10.3.ref07 !!!
   //         ... then it went back to 1. for the 10.4-candidate... 
-  // NOTE-2: this is a "technical" parameter, it should not be changed; this is why
+  // Note-2: this is a "technical" parameter, it should not be changed; this is why
   //         it is defined explicitly rather than via HDP
   // --> HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_MAXPT2", fMaxPt2ofNuclearDestruct );
   fMaxPt2ofNuclearDestruct = 9.0 * CLHEP::GeV*CLHEP::GeV; 
@@ -540,7 +540,7 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj() : G4FTFParamCollection() {
 
 
 G4FTFParamCollMesonProj::G4FTFParamCollMesonProj() : G4FTFParamCollection() {
-  // nuclear destruction
+  // Nuclear destruction
   // These parameters are common for all mesons
   HDP.DeveloperGet( "FTF_MESON_NUCDESTR_P1_TGT", fNuclearTgtDestructP1 );
   HDP.DeveloperGet( "FTF_MESON_NUCDESTR_P1_ADEP_TGT", fNuclearTgtDestructP1_ADEP );
@@ -554,15 +554,15 @@ G4FTFParamCollMesonProj::G4FTFParamCollMesonProj() : G4FTFParamCollection() {
   //
   HDP.DeveloperGet( "FTF_MESON_NUCDESTR_R2", fR2ofNuclearDestruct );
   HDP.DeveloperGet( "FTF_MESON_EXCI_E_PER_WNDNUCLN", fExciEnergyPerWoundedNucleon );
-  HDP.DeveloperGet( "FTF_MESON_NUCDESTR_DISP", fDofNuclearDestruct ); // NOTE: "Dof" means "Dispersion of..." 
-  // NOTE: it is a "technical" parameter, it should not be changed; 
+  HDP.DeveloperGet( "FTF_MESON_NUCDESTR_DISP", fDofNuclearDestruct ); // Note: "Dof" means "Dispersion of..." 
+  // Note: it is a "technical" parameter, it should not be changed; 
   //       this is why it is defined explicitly rather than via HDP
   fMaxPt2ofNuclearDestruct = 1.0 * CLHEP::GeV*CLHEP::GeV; 
 }
 
 
 G4FTFParamCollPionProj::G4FTFParamCollPionProj() : G4FTFParamCollMesonProj() {
-  // parameters of participating pion excitation (pi+/- or pi0)
+  // Parameters of participating pion excitation (pi+/- or pi0)
   // Proc=0 --> Qexchg w/o excitation
   HDP.DeveloperGet( "FTF_PION_PROC0_A1",   fProc0A1 );
   HDP.DeveloperGet( "FTF_PION_PROC0_B1",   fProc0B1 );
@@ -594,7 +594,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj() : G4FTFParamCollMesonProj() {
   HDP.DeveloperGet( "FTF_PION_PROC2_ATOP", fProc2Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC2_YMIN", fProc2Ymin ); 
   */
-  // keep fixed so far; see note above
+  // Keep fixed so far; see note above
   fProc2A1 =      2.27;
   fProc2B1 =      0.5;
   fProc2A2 = -98052.0;
@@ -611,7 +611,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj() : G4FTFParamCollMesonProj() {
   HDP.DeveloperGet( "FTF_PION_PROC3_A3",   fProc3A3 );
   HDP.DeveloperGet( "FTF_PION_PROC3_ATOP", fProc3Atop ); 
   HDP.DeveloperGet( "FTF_PION_PROC3_YMIN", fProc3Ymin ); 
-  // for Proc2 & Proc3, pprojectile or target diffraction can be turned ON/OFF
+  // For Proc2 & Proc3, pprojectile or target diffraction can be turned ON/OFF
   // if num.baryons >10 (which is strange for projectile which is pion !!!)
   HDP.DeveloperGet( "FTF_PION_DIFF_DISSO_PROJ", fProjDiffDissociation );
   HDP.DeveloperGet( "FTF_PION_DIFF_DISSO_TGT",  fTgtDiffDissociation );
@@ -632,7 +632,7 @@ G4FTFParamCollPionProj::G4FTFParamCollPionProj() : G4FTFParamCollMesonProj() {
   HDP.DeveloperGet( "FTF_PION_AVRG_PT2", fAveragePt2 );
   //
   fProbOfSameQuarkExchange = 0.0; // This does NOT seem to apply to the pion case 
-  // currently keep these two parameters fixed
+  // Currently keep these two parameters fixed
   // thus they're defined here explicitly, rather than via HDP
   fProbLogDistrPrD = 0.55; 
   fProbLogDistr    = 0.55; 
@@ -701,8 +701,8 @@ void G4FTFParamCollection::SetTune1() {
 void G4FTFParamCollBaryonProj::SetTune1() {
   G4FTFParamCollection::SetTune1();
   /*
-  // parameters of participating hadron (baryon) excitation
-  // baryons projectile
+  // Parameters of participating hadron (baryon) excitation
+  // Baryons projectile
   // Proc=0 --> Qexchg w/o excitation
   fProc0A1 = ???;    // FTF_BARYON_PROC0_A1   
   fProc0B1 = ???;    // FTF_BARYON_PROC0_B1
@@ -738,7 +738,7 @@ void G4FTFParamCollBaryonProj::SetTune1() {
   fTgtMinDiffMass = ???;            // FTF_BARYON_DIFF_M_TGT
   fTgtMinNonDiffMass = ???;         // FTF_BARYON_NONDIFF_M_TGT
   fAveragePt2 = ???;                // FTF_BARYON_AVRG_PT2
-  // nuclear destruction
+  // Nuclear destruction
   fNuclearProjDestructP1 = ???;          // FTF_BARYON_NUCDESTR_P1_PROJ
   fNuclearProjDestructP1_NBRNDEP = ???;  // FTF_BARYON_NUCDESTR_P1_NBRN_PROJ
   //
@@ -771,7 +771,7 @@ void G4FTFParamCollBaryonProj::SetTune1() {
 void G4FTFParamCollMesonProj::SetTune1() {
   G4FTFParamCollection::SetTune1();
   /*
-  // nuclear destruction
+  // Nuclear destruction
   fNuclearTgtDestructP1 = ???;         // FTF_MESON_NUCDESTR_P1_TGT 
   fNuclearTgtDestructP1_ADEP = ???;    // FTF_MESON_NUCDESTR_P1_ADEP_TGT
   fNuclearTgtDestructP2 = ???;         // FTF_MESON_NUCDESTR_P2_TGT
@@ -792,7 +792,7 @@ void G4FTFParamCollMesonProj::SetTune1() {
 void G4FTFParamCollPionProj::SetTune1( ) {
   G4FTFParamCollMesonProj::SetTune1();
   /*
-  // parameters of participating pion excitation (pi+/- or pi0)
+  // Parameters of participating pion excitation (pi+/- or pi0)
   // Proc=0 --> Qexchg w/o excitation
   fProc0A1 = ???;    // FTF_PION_PROC0_A1
   fProc0B1 = ???;    // FTF_PION_PROC0_B1
@@ -872,35 +872,24 @@ void G4FTFParamCollBaryonProj::SetTune2() {
 
 
 void G4FTFParamCollMesonProj::SetTune2() {
-
   G4FTFParamCollection::SetTune2();
-
-  // nuclear detsruction
-  //
-  // NOTE: These values are the same for all mesons 
+  // Nuclear destruction
+  // Note: these values are the same for all mesons 
   //       (although bear in mind that they've been obtained for the pion projectile
   //        via fits against experimaental data for the pion beam)
-  //
   fExciEnergyPerWoundedNucleon = 58.1;  // +/- 0.7      // FTF_MESON_EXCI_E_PER_WNDNUCLN 
   fNuclearTgtDestructP1 = 0.001026;     // +/- 0.00003  // FTF_MESON_NUCDESTR_P1_TGT 
   fNuclearTgtDestructP1_ADEP = true;                    // FTF_MESON_NUCDESTR_P1_ADEP_TGT
-  
-  return;
-  
 }
 
 
 void G4FTFParamCollPionProj::SetTune2( ) {
-
   G4FTFParamCollMesonProj::SetTune2();
-
   // Proc=1 --> Qexchg w/excitation
   fProc1A1 = 5.84;       // +/- 0.12     // FTF_PION_PROC1_A1
   fProc1B1 = 0.337;      // +/- 0.006    // FTF_PION_PROC1_B1
   fProc1A2 = -7.57;      // +/- 0.08     // FTF_PION_PROC1_A2
   fProc1B2 = 0.44;       // +/- 0.008    // FTF_PION_PROC1_B2
-
-  return;
 }
 
 //====================================================================
@@ -917,11 +906,8 @@ void G4FTFParamCollection::SetTune3() {
 
 
 void G4FTFParamCollBaryonProj::SetTune3() {
-
   G4FTFParamCollection::SetTune3();
-
   // Values below from Julia Yarba's slides at the hadronic group meeting on 20-Jul-2022
-  //
   fExciEnergyPerWoundedNucleon = 26.1;  // +/- 0.4      // FTF_BARYON_EXCI_E_PER_WNDNUCLN 
   fNuclearTgtDestructP1 = 0.00173;      // +/- 0.00004  // FTF_BARYON_NUCDESTR_P1_TGT
   fNuclearTgtDestructP1_ADEP = true;                    // FTF_BARYON_NUCDESTR_P1_ADEP_TGT
@@ -929,51 +915,38 @@ void G4FTFParamCollBaryonProj::SetTune3() {
   fProc1A2 = -99.3;                     // +/- 0.4      // FTF_BARYON_PROC1_A2
   fProc1B1 = 0.815;                     // +/- 0.007    // FTF_BARYON_PROC1_B1
   fProc1B2 = 1.98;                      // +/- 0.03     // FTF_BARYON_PROC1_B2
-  
-  return;
-  
 }
 
 
 void G4FTFParamCollMesonProj::SetTune3() {
-
   G4FTFParamCollection::SetTune3();
-
-  // nuclear detsruction
-  //
-  // NOTE: These values are the same for all mesons 
+  // Nuclear destruction
+  // Note: These values are the same for all mesons 
   //       (although bear in mind that they've been obtained for the pion projectile
   //        via fits against experimaental data for the pion beam)
   //
   fExciEnergyPerWoundedNucleon = 58.1;  // +/- 0.7      // FTF_MESON_EXCI_E_PER_WNDNUCLN 
   fNuclearTgtDestructP1 = 0.001026;     // +/- 0.00003  // FTF_MESON_NUCDESTR_P1_TGT 
   fNuclearTgtDestructP1_ADEP = true;                    // FTF_MESON_NUCDESTR_P1_ADEP_TGT
-  
-  return;
-  
 }
 
 
 void G4FTFParamCollPionProj::SetTune3( ) {
-
   G4FTFParamCollMesonProj::SetTune3();
-
   // Proc=1 --> Qexchg w/excitation
   fProc1A1 = 5.84;       // +/- 0.12     // FTF_PION_PROC1_A1
   fProc1B1 = 0.337;      // +/- 0.006    // FTF_PION_PROC1_B1
   fProc1A2 = -7.57;      // +/- 0.08     // FTF_PION_PROC1_A2
   fProc1B2 = 0.44;       // +/- 0.008    // FTF_PION_PROC1_B2
-  
-  return;
-  
 }
 
 //====================================================================
 //    4th (alternative) TUNE (i.e. indexTune == 4 )
 //
-//    DUMMY tune: identical to the default set of parameters.
-//                You can replace it with a "real" tune by specifying
-//                only the non-default parameters.
+// Tune meant to overcome the too narrow (i.e. optimistic) pion shower
+// energy resolutions in ATLAS calorimeters with respect to test-beam
+// data.
+//
 //====================================================================
 
 void G4FTFParamCollection::SetTune4() {
@@ -984,19 +957,45 @@ void G4FTFParamCollection::SetTune4() {
 
 void G4FTFParamCollBaryonProj::SetTune4() {
   G4FTFParamCollection::SetTune4();
-  //...
 }
 
 
 void G4FTFParamCollMesonProj::SetTune4() {
   G4FTFParamCollection::SetTune4();
-  //...
+  // Nuclear destruction
+  // Note: these values are the same for all mesons 
+  fExciEnergyPerWoundedNucleon = 50.0;  // FTF_MESON_EXCI_E_PER_WNDNUCLN 
+  fNuclearTgtDestructP1 = 1.0;          // FTF_MESON_NUCDESTR_P1_TGT 
+  fNuclearTgtDestructP1_ADEP = false;   // FTF_MESON_NUCDESTR_P1_ADEP_TGT
 }
 
 
 void G4FTFParamCollPionProj::SetTune4( ) {
   G4FTFParamCollMesonProj::SetTune4();
-  //...
+  // Proc=0 --> Quark exchange without excitation
+  fProc0A1 =    720.0;  // FTF_PION_PROC0_A1
+  fProc0B1 =      2.5;  // FTF_PION_PROC0_B1
+  fProc0A2 =      2.3;  // FTF_PION_PROC0_A2
+  fProc0B2 =      1.0;  // FTF_PION_PROC0_B2
+  fProc0A3 =      0.0;  // FTF_PION_PROC0_A3
+  fProc0Atop =    1.0;  // FTF_PION_PROC0_Atop
+  fProc0Ymin =    2.7;  // FTF_PION_PROC0_Ymin
+  // Proc=1 --> Quark exchange with excitation
+  fProc1A1 =    12.87;  // FTF_PION_PROC1_A1
+  fProc1B1 =     0.5;   // FTF_PION_PROC1_B1
+  fProc1A2 =   -44.91;  // FTF_PION_PROC1_A2
+  fProc1B2 =     1.0;   // FTF_PION_PROC1_B2
+  fProc1A3 =     0.0;   // FTF_PION_PROC1_A3
+  fProc1Atop =   0.0;   // FTF_PION_PROC1_Atop
+  fProc1Ymin =   2.5;   // FTF_PION_PROC1_Ymin
+  // Proc=4 --> Quark exchange with excitation multiplier
+  fProc4A1 =     1.0;   // FTF_PION_PROC4_A1
+  fProc4B1 =     0.0;   // FTF_PION_PROC4_B1
+  fProc4A2 =    -3.49;  // FTF_PION_PROC4_A2
+  fProc4B2 =     0.5;   // FTF_PION_PROC4_B2
+  fProc4A3 =     0.0;   // FTF_PION_PROC4_A3
+  fProc4Atop =   0.0;   // FTF_PION_PROC4_Atop
+  fProc4Ymin =   2.5;   // FTF_PION_PROC4_Ymin
 }
 
 //====================================================================

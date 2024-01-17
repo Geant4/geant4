@@ -1,0 +1,9 @@
+# Example FlukaCern History
+
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top). It must **not**
+be used as a substitute for writing good git commit messages!
+
+
+## 2023-10-23 Ben Morgan (FlukaCern-V11-01-00)
+- Rename FlukaInterface's `Makefile` to `GNUmakefile` to avoid file being ignored in export.

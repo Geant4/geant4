@@ -1563,7 +1563,7 @@ namespace G4INCL {
         //
         return 0.;
     }
-
+    
     G4double CrossSectionsMultiPions::NKbToS2pi(Particle const * const, Particle const * const) {
         //
         //      Nucleon-antiKaon producing Sigma-2pion cross sections
@@ -1591,9 +1591,54 @@ namespace G4INCL {
         //
         return 0.;
     }
+        
+    G4double CrossSectionsMultiPions::NNbarElastic(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon to Nucleon-AntiNucleon cross sections
+        //
+      return 0.;
+    }
 
+    G4double CrossSectionsMultiPions::NNbarCEX(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon charge exchange cross sections
+        //
+      return 0.;
+    }
 
+    G4double CrossSectionsMultiPions::NNbarToLLbar(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon to Lambda-AntiLambda cross sections
+        //
+      return 0.;
+    }
+      
+    G4double CrossSectionsMultiPions::NNbarToNNbarpi(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon to Nucleon-AntiNucleon + 1 pion cross sections
+        //
+      return 0.;
+    }
 
-	
+    G4double CrossSectionsMultiPions::NNbarToNNbar2pi(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon to Nucleon-AntiNucleon + 2 pions cross sections
+        //
+      return 0.;
+    }
+    
+    G4double CrossSectionsMultiPions::NNbarToNNbar3pi(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon to Nucleon-AntiNucleon + 3 pions cross sections
+        //
+      return 0.;
+    }
+     
+    G4double CrossSectionsMultiPions::NNbarToAnnihilation(Particle const* const, Particle const* const){
+        //
+        //     Nucleon-AntiNucleon total annihilation cross sections
+        //
+      return 0.;
+    }
 } // namespace G4INCL
 

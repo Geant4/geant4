@@ -4,6 +4,12 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+
+## 2023-11-15 I. Hrivnacova (electromagnetic-V11-01-01)
+- Updated vis*.mac macros:
+  - Changed "/vis/open XYZ [600x600-0+0]" to "/vis/open" to allow run-time choices
+    and simplified comments.
+
 ## 2022-12-15 Igor Semeniouk (electromagnetic-V11-01-00)
  - README, .README.txt
    - Update TestEm15 short description add GC entry to table

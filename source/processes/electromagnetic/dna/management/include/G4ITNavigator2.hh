@@ -63,10 +63,7 @@
 #include "G4RotationMatrix.hh"
 
 #include "G4LogicalVolume.hh"             // Used in inline methods
-#include "G4GRSVolume.hh"                 //    "         "
-#include "G4GRSSolid.hh"                  //    "         "
 #include "G4TouchableHandle.hh"           //    "         "
-#include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
 #include "G4NormalNavigation.hh"
@@ -83,19 +80,9 @@ class G4VPhysicalVolume;
 
 struct G4ITNavigatorState_Lock2
 {
-  virtual ~G4ITNavigatorState_Lock2()
-  {
-    ;
-  }
+  virtual ~G4ITNavigatorState_Lock2() = default;
 protected:
-  G4ITNavigatorState_Lock2()
-  {
-    ;
-  }
-  G4ITNavigatorState_Lock2(const G4ITNavigatorState_Lock2&)
-  {
-    ;
-  }
+  G4ITNavigatorState_Lock2() = default;
 };
 
 class G4ITNavigator2
@@ -113,6 +100,9 @@ public:
 
   virtual ~G4ITNavigator2();
   // Destructor. No actions.
+
+  G4ITNavigator2(const G4ITNavigator2&) = delete;
+  G4ITNavigator2& operator=(const G4ITNavigator2&) = delete;
 
   // !>
   G4ITNavigatorState_Lock2* GetNavigatorState();
@@ -166,7 +156,7 @@ public:
 
   virtual
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-                                             const G4ThreeVector* direction=0,
+                                             const G4ThreeVector* direction=nullptr,
                                              const G4bool pRelativeSearch=true,
                                              const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
@@ -246,7 +236,7 @@ public:
                                const G4ThreeVector &pDirection,
                                const G4double  CurrentProposedStepLength,
                                      G4double *prDistance,
-                                     G4double *prNewSafety=0) const;
+                                     G4double *prNewSafety=nullptr) const;
     // Trial method for checking potential displacement for MS
     // Check new Globalpoint, to see whether it is in current volume
     // (mother) and not in potential entering daughter.
@@ -263,13 +253,11 @@ public:
     // Set the world (`topmost') volume. This must be positioned at
     // origin (0,0,0) and unrotated.
 
-  inline G4GRSVolume* CreateGRSVolume() const;
-  inline G4GRSSolid* CreateGRSSolid() const;
   inline G4TouchableHistory* CreateTouchableHistory() const;
   inline G4TouchableHistory* CreateTouchableHistory(const G4NavigationHistory*) const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
-  virtual G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
+  virtual G4TouchableHandle CreateTouchableHistoryHandle() const;
     // Returns a reference counted handle to a touchable history.
 
   virtual G4ThreeVector GetLocalExitNormal(G4bool* valid);
@@ -395,10 +383,6 @@ protected:// with description
 
 private:
 
-  G4ITNavigator2(const G4ITNavigator2&);
-  G4ITNavigator2& operator=(const G4ITNavigator2&);
-  // Private copy-constructor and assignment operator.
-
   void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   G4double moveLenSq) const;
   // Log and checks for steps larger than the tolerance
@@ -408,7 +392,7 @@ protected:// without description
   G4double kCarTolerance;
   // Geometrical tolerance for surface thickness of shapes.
 
-  G4int fVerbose;
+  G4int fVerbose{0};
   // Verbose(ness) level  [if > 0, printout can occur].
 
 private:
@@ -432,7 +416,7 @@ public:
   {
     G4NavigatorState();
     G4NavigatorState(const G4NavigatorState&);
-    virtual ~G4NavigatorState()
+    ~G4NavigatorState() override
     { ;}
 
     G4NavigatorState& operator=(const G4NavigatorState& );
@@ -576,16 +560,16 @@ public:
 
   // Tracking Invariants
   //
-  G4VPhysicalVolume *fTopPhysical;
+  G4VPhysicalVolume *fTopPhysical{nullptr};
   // A link to the topmost physical volume in the detector.
   // Must be positioned at the origin and unrotated.
 
   // Utility information
   //
-  G4bool fCheck;
+  G4bool fCheck{false};
   // Check-mode flag  [if true, more strict checks are performed].
 
-  G4bool fWarnPush;
+  G4bool fWarnPush{true};
   // Push flag  [for verbose].
 
   // Helpers/Utility classes

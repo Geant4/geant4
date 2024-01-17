@@ -45,7 +45,9 @@ Par04MLFastSimModel::Par04MLFastSimModel(G4String aModelName, G4Region* aEnvelop
   : G4VFastSimulationModel(aModelName, aEnvelope)
   , fInference(new Par04InferenceSetup)
   , fHitMaker(new G4FastSimHitMaker)
-{}
+  , fParallelHitMaker(new G4FastSimHitMaker) {
+  fParallelHitMaker->SetNameOfWorldWithSD("parallelWorldFastSim");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,7 +55,10 @@ Par04MLFastSimModel::Par04MLFastSimModel(G4String aModelName)
   : G4VFastSimulationModel(aModelName)
   , fInference(new Par04InferenceSetup)
   , fHitMaker(new G4FastSimHitMaker)
-{}
+  , fParallelHitMaker(new G4FastSimHitMaker) {
+  fParallelHitMaker->SetNameOfWorldWithSD("parallelWorldFastSim");
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par04MLFastSimModel::~Par04MLFastSimModel() {}
@@ -98,7 +103,12 @@ void Par04MLFastSimModel::DoIt(const G4FastTrack& aFastTrack, G4FastStep& aFastS
   // and positions
   for(size_t iHit = 0; iHit < fPositions.size(); iHit++)
   {
-    fHitMaker->make(G4FastHit(fPositions[iHit], fEnergies[iHit]), aFastTrack);
+    if (fEnergies[iHit] > 0.0005) {
+      // Place hit in the physical readout of the detector
+      fParallelHitMaker->make(G4FastHit(fPositions[iHit], fEnergies[iHit]), aFastTrack);
+      // Place hit in the virtual grid, for validation purposes
+      fHitMaker->make(G4FastHit(fPositions[iHit], fEnergies[iHit]), aFastTrack);
+    }
   }
 }
 #endif

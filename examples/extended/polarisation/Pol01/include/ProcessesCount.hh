@@ -33,29 +33,32 @@
 #ifndef ProcessesCount_HH
 #define ProcessesCount_HH
 
+#include "G4VAccumulable.hh"
 #include "globals.hh"
-#include <vector>
+
+#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ProcessCount
+class ProcessesCount : public G4VAccumulable
 {
-public:
-    ProcessCount(G4String name) {fName=name; fCounter=0;};
-   ~ProcessCount() {};
-   
-public:
-    G4String  GetName()      {return fName;};
-    G4int     GetCounter()   {return fCounter;};        
-    void      Count()        {fCounter++;};
-    
-private:
-    G4String fName;            // process name
-    G4int    fCounter;         // process counter
+  public:
+    ProcessesCount() = delete;
+    ProcessesCount(const G4String& name);
+    ~ProcessesCount() = default;
+
+    G4int GetCounter(const G4String& procName) { return fProcCounter[procName]; };
+    void Count(const G4String& procName);
+
+    void Print();
+
+    void Merge(const G4VAccumulable&) override;
+    void Reset() override { fProcCounter.clear(); }
+
+  private:
+    std::map<G4String, G4int> fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-typedef std::vector<ProcessCount*> ProcessesCount;
 
 #endif

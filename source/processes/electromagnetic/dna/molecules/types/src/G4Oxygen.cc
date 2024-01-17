@@ -39,17 +39,17 @@
 // ######################################################################
 // ###                         Oxygen                               ###
 // ######################################################################
-G4Oxygen* G4Oxygen::theInstance = 0;
+G4Oxygen* G4Oxygen::theInstance = nullptr;
 
 G4Oxygen* G4Oxygen::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "O";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
 //    G4ParticleDefinition* anInstance = 0;
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     const G4String formatedName = "O";
 

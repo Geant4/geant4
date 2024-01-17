@@ -68,7 +68,7 @@ class G4VITSteppingVerbose : G4UImessenger
 {
 public:
   G4VITSteppingVerbose();
-  virtual ~G4VITSteppingVerbose();
+  ~G4VITSteppingVerbose() override;
 
 public:
 
@@ -116,10 +116,10 @@ public:
 
   //____________________________________________________________________________
 
-  virtual void SetNewValue(G4UIcommand * command,
-                           G4String newValue);
+  void SetNewValue(G4UIcommand * command,
+                           G4String newValue) override;
 
-  virtual G4String GetCurrentValue(G4UIcommand * command);
+  G4String GetCurrentValue(G4UIcommand * command) override;
 
 
   //____________________________________________________________________________
@@ -179,9 +179,9 @@ protected:
 
   G4int fVerboseLevel;
 
-  typedef std::vector<G4int> G4SelectedAtRestDoItVector;
-  typedef std::vector<G4int> G4SelectedAlongStepDoItVector;
-  typedef std::vector<G4int> G4SelectedPostStepDoItVector;
+  using G4SelectedAtRestDoItVector = std::vector<G4int>;
+  using G4SelectedAlongStepDoItVector = std::vector<G4int>;
+  using G4SelectedPostStepDoItVector = std::vector<G4int>;
   G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
   G4SelectedPostStepDoItVector* fSelectedPostStepDoItVector;
 

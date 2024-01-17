@@ -97,9 +97,9 @@
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   SetDefaultCutValue(0.7*CLHEP::mm);
-
   verboseLevel = 1;
 
+  // Messengers
   fMessenger = new PhysicsListMessenger(this);
   fFactMessenger = new G4PhysListFactoryMessenger(this);
 
@@ -117,7 +117,7 @@ PhysicsList::~PhysicsList()
   delete fMessenger;
   delete fParticleList;
   delete fEmPhysicsList;
-  for(size_t i=0; i<fHadronPhys.size(); i++) {
+  for(std::size_t i=0; i<fHadronPhys.size(); ++i) {
     delete fHadronPhys[i];
   }
 }
@@ -136,7 +136,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fParticleList->ConstructProcess();
-  for(size_t i=0; i<fHadronPhys.size(); i++) {
+  for (std::size_t i=0; i<fHadronPhys.size(); ++i) {
     fHadronPhys[i]->ConstructProcess();
   }
 }

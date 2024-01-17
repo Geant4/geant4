@@ -438,3 +438,29 @@ void G4EmBuilder::ConstructElectronMscProcess(G4VMscModel* msc1, G4VMscModel* ms
     ph->RegisterProcess(msc, particle);
   }
 }
+
+void G4EmBuilder::ConstructElectronSSProcess(G4VEmModel* ss, G4ParticleDefinition* particle)
+{
+  G4TransportationWithMscType type = G4EmParameters::Instance()->TransportationWithMsc();
+  G4ProcessManager* procManager = particle->GetProcessManager();
+  auto plist = procManager->GetProcessList();
+  G4int ptype = (0 < plist->size()) ? (*plist)[0]->GetProcessSubType() : 0;
+  if (type != G4TransportationWithMscType::fDisabled && ptype == TRANSPORTATION) {
+    // Remove default G4Transportation and replace with G4TransportationWithMsc.
+    procManager->RemoveProcess(0);
+    G4TransportationWithMsc* transportWithMsc =
+      new G4TransportationWithMsc(G4TransportationWithMsc::ScatteringType::SingleScattering);
+    if (type == G4TransportationWithMscType::fMultipleSteps) {
+      transportWithMsc->SetMultipleSteps(true);
+    }
+    transportWithMsc->AddSSModel(ss);
+    procManager->AddProcess(transportWithMsc, -1, 0, 0);
+  }
+  else {
+    // Register as a separate process.
+    G4CoulombScattering* ssProc = new G4CoulombScattering(false);
+    ssProc->SetEmModel(ss);
+    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    ph->RegisterProcess(ssProc, particle);
+  }
+}

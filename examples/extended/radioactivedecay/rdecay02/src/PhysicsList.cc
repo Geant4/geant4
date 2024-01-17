@@ -26,7 +26,8 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 
@@ -57,9 +58,9 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-:G4VModularPhysicsList()
 {
   G4int verb = 1;
   SetVerboseLevel(verb);
@@ -104,11 +105,6 @@ PhysicsList::PhysicsList()
   gnuc->MuonNuclear(false);
   RegisterPhysics(gnuc);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-PhysicsList::~PhysicsList()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

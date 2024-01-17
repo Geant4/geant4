@@ -40,7 +40,7 @@ Par02PrimaryParticleInformation::Par02PrimaryParticleInformation(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par02PrimaryParticleInformation::~Par02PrimaryParticleInformation() {}
+Par02PrimaryParticleInformation::~Par02PrimaryParticleInformation() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

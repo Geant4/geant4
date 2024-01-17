@@ -536,7 +536,7 @@ G4EmDNABuilder::ConstructDNAIonPhysics(const G4double emaxIonDNA,
   mod->SetHighEnergyLimit(emaxIonDNA);
   theDNAIoni->AddEmModel(-1, mod, reg);
 
-  FindOrBuildCapture(25.0*CLHEP::keV, part);
+  FindOrBuildCapture(0.1*CLHEP::keV, part);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -748,7 +748,7 @@ G4EmDNABuilder::FindOrBuildChargeIncrease(G4ParticleDefinition* part,
 G4LowECapture*
 G4EmDNABuilder::FindOrBuildCapture(const G4double elim, G4ParticleDefinition* part)
 {
-  auto p = G4PhysListUtil::FindProcess(part, 66);
+  auto p = G4PhysListUtil::FindProcess(part, -1);
   G4LowECapture* ptr = dynamic_cast<G4LowECapture*>(p);
   if(nullptr == ptr) { 
     ptr = new G4LowECapture(elim);

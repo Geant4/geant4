@@ -6,9 +6,62 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-13 Ben Morgan (materials-V11-01-14)
+- Use G4FindDataDir to access data libraries in place of raw `getenv`.
+
+## 2023-11-07 Vladimir Ivanchenko (materials-V11-01-13)
+- G4ElementData - fixed memory leak at exit
+- G4NistElementBuilder - minor clean-up
+
+## 2023-11-03 Ben Morgan (materials-V11-01-12)
+- Use "G4" prefixed version of EXPAT/ZLIB CMake variables
+
+## 2023-10-25 Vladimir Ivanchenko (materials-V11-01-11)
+- G4NistMaterialBuilder - changed mean ionisation potential of carbone and
+    graphite from 78 eV (ICRU73 recommendation) to 81 eV (ICRU90 recommendation)
+    to address problem #2568 (Andrew Sutton); define state as kStateLiquid 
+    for several liquids including G4WATER.
+- G4Material - added extra comments to Set methods to address problem #2569;
+    use std::size_t.
+- G4IonisParamMat - use std::size_t
+- G4ICRU90StoppingData - use 'const' inside the code where 
+    possible; use std::size_t; use arrays of energies as G4float.
+
+## 2023-10-13 Daren Sawkey (materials-V11-01-10, 09)
+- G4MaterialPropertiesIndex, G4MaterialPropertiesTable - add material constant
+  properties for G4Scintillation particle-dependent time constants
+
+## 2023-10-13 Daren Sawkey (materials-V11-01-08)
+- G4MaterialPropertiesTable - improve Exception messages; improve building
+  vectors of mat.prop. names; issue warning for mat.prop. vector of length 1
+
+## 2023-09-29 Vladimir Ivanchenko (materials-V11-01-07)
+- G4ElementData - allow index 0 in data structure (before there was 
+    limitation Z > 0), which is useful for pair production model
+
+## 2023-09-19 Vladimir Ivanchenko (materials-V11-01-06)
+- G4ElementData - added G4Physics2Dvector component optional structure;
+    subdivide run time method on two groups: with or without check on
+    input parameters: use std::size_t type.
+- G4NistManager - simplified for-loops, return back AutoLock into access
+    method
+
+## 2023-09-15 Vladimir Ivanchenko (materials-V11-01-05)
+- G4ElementDataRegistry - added extra method GetElementDataByName(..)
+
+## 2023-09-04 Vladimir Ivanchenko (materials-V11-01-04)
+- G4ElementDataRegistry - new key management class for shared data
+- G4ElementData - use G4ElementDataRegistry
+- source.cmake - use alphabetical order of classes and properly format
+
+## 2023-04-04 C. Inguimbert (materials-V11-01-03)
+- G4MicroElecMaterialStructure - modification in the GetLimitEnergy function
+  to account for the changes in the treatment of weakly bound electrons of
+  microelec inelastic model
+
 ## 2023-02-09 Ben Morgan (materials-V11-01-02)
-- Housekeeping: apply standard and extended clang-tidy fixes, normal order access specifiers
-  and docstrings, apply clang-format.
+- Housekeeping: apply standard and extended clang-tidy fixes, normal order
+  access specifiers and docstrings, apply clang-format.
 
 ## 2022-12-12 Ben Morgan (materials-V11-01-01)
 - Remove obsolete GNUmakefile scripts

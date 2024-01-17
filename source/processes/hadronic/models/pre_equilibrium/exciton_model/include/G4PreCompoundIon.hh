@@ -43,9 +43,9 @@ class G4PreCompoundIon : public G4PreCompoundFragment
 public:
 
   G4PreCompoundIon(const G4ParticleDefinition*,
-		   G4VCoulombBarrier * aCoulombBarrier);
+		   G4VCoulombBarrier* aCoulombBarrier);
   
-  virtual ~G4PreCompoundIon();
+  ~G4PreCompoundIon() override = default;
 
   G4PreCompoundIon(const G4PreCompoundIon &right) = delete;
   const G4PreCompoundIon& operator =
@@ -57,8 +57,6 @@ protected:
 
   G4double ProbabilityDistributionFunction(G4double eKin, 
 					   const G4Fragment&) override;
-
-  G4double GetBeta() const override;
 
   virtual G4double GetRj(G4int NumberParticles, G4int NumberCharged) const = 0;
           

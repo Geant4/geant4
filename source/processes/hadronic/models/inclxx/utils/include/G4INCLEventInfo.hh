@@ -67,6 +67,7 @@ namespace G4INCL {
     struct EventInfo {
       EventInfo() :
         nParticles(0),
+        event(0),
         eventBias((Float_t)0.0),
         nRemnants(0),
         projectileType(0),
@@ -81,6 +82,7 @@ namespace G4INCL {
         nCollisions(0),
         stoppingTime((Float_t)0.0),
         EBalance((Float_t)0.0),
+        firstEBalance((Float_t)0.0),
         pLongBalance((Float_t)0.0),
         pTransBalance((Float_t)0.0),
         nCascadeParticles(0),
@@ -91,6 +93,8 @@ namespace G4INCL {
         nucleonAbsorption(false),
         pionAbsorption(false),
         nDecays(0),
+        nSrcCollisions(0),
+        nSrcPairs(0),
         nBlockedCollisions(0),
         nBlockedDecays(0),
         effectiveImpactParameter((Float_t)0.0),
@@ -117,13 +121,13 @@ namespace G4INCL {
         nCollisionAvatars(0),
         nDecayAvatars(0),
         nUnmergedSpectators(0),
-        nEnergyViolationInteraction(0),
-        event(0)
+        nEnergyViolationInteraction(0)
 
       {
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
         std::fill_n(S, maxSizeParticles, 0);
+        std::fill_n(J, maxSizeParticles, 0);
         std::fill_n(PDGCode, maxSizeParticles, 0);
         std::fill_n(ParticleBias, maxSizeParticles, (Float_t)0.0);
         std::fill_n(EKin, maxSizeParticles, (Float_t)0.0);
@@ -166,18 +170,22 @@ namespace G4INCL {
 
       /** \brief Number of particles in the final state */
       Short_t nParticles;
+      /** \brief Sequential number of the event in the event loop */
+      Int_t event;
       /** \brief Particle mass number */
       Short_t A[maxSizeParticles];
       /** \brief Particle charge number */
       Short_t Z[maxSizeParticles];
       /** \brief Particle strangeness number */
       Short_t S[maxSizeParticles];
+      /** \brief Particle angular momemtum */
+      Short_t J[maxSizeParticles];
       /** \brief PDG numbering of the particles */
       Int_t PDGCode[maxSizeParticles];
-      /** \brief Particle weight due to the bias */
-      Float_t ParticleBias[maxSizeParticles];
       /** \brief Event bias */
       Float_t eventBias;
+      /** \brief Particle weight due to the bias */
+      Float_t ParticleBias[maxSizeParticles];
       /** \brief Particle kinetic energy [MeV] */
       Float_t EKin[maxSizeParticles];
       /** \brief Particle momentum, x component [MeV/c] */
@@ -199,8 +207,6 @@ namespace G4INCL {
       Int_t parentResonancePDGCode[maxSizeParticles];
       /** \brief Particle's parent resonance unique ID identifier */
       Int_t parentResonanceID[maxSizeParticles];
-      /** \brief Emission time [fm/c] */
-      Float_t emissionTime[maxSizeParticles];
       /** \brief History of the particle
        *
        * Condensed information about the de-excitation chain of a particle. For
@@ -222,34 +228,6 @@ namespace G4INCL {
       std::vector<std::string> history;
       /** \brief Number of remnants */
       Short_t nRemnants;
-      /** \brief Remnant mass number */
-      Short_t ARem[maxSizeRemnants];
-      /** \brief Remnant charge number */
-      Short_t ZRem[maxSizeRemnants];
-      /** \brief Remnant strangeness number */
-      Short_t SRem[maxSizeRemnants];
-      /** \brief Remnant excitation energy [MeV] */
-      Float_t EStarRem[maxSizeRemnants];
-      /** \brief Remnant spin [\f$\hbar\f$] */
-      Float_t JRem[maxSizeRemnants];
-      /** \brief Remnant kinetic energy [MeV] */
-      Float_t EKinRem[maxSizeRemnants];
-      /** \brief Remnant momentum, x component [MeV/c] */
-      Float_t pxRem[maxSizeRemnants];
-      /** \brief Remnant momentum, y component [MeV/c] */
-      Float_t pyRem[maxSizeRemnants];
-      /** \brief Remnant momentum, z component [MeV/c] */
-      Float_t pzRem[maxSizeRemnants];
-      /** \brief Remnant momentum polar angle [radians] */
-      Float_t thetaRem[maxSizeRemnants];
-      /** \brief Remnant momentum azimuthal angle [radians] */
-      Float_t phiRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, x component [\f$\hbar\f$] */
-      Float_t jxRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, y component [\f$\hbar\f$] */
-      Float_t jyRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, z component [\f$\hbar\f$] */
-      Float_t jzRem[maxSizeRemnants];
       /** \brief Projectile particle type */
       Int_t projectileType;
       /** \brief Mass number of the target nucleus */
@@ -274,6 +252,8 @@ namespace G4INCL {
       Float_t stoppingTime;
       /** \brief Energy-conservation balance [MeV] */
       Float_t EBalance;
+      /** \brief First value for the energy-conservation balance [MeV] */
+      Float_t firstEBalance;
       /** \brief Longitudinal momentum-conservation balance [MeV/c] */
       Float_t pLongBalance;
       /** \brief Transverse momentum-conservation balance [MeV/c] */
@@ -294,6 +274,10 @@ namespace G4INCL {
       Bool_t pionAbsorption;
       /** \brief Number of accepted Delta decays */
       Int_t nDecays;
+      /** \brief Number of accepted SRC collisions */
+      Int_t nSrcCollisions;
+      /** \brief Number of src pairs */
+      Int_t nSrcPairs;
       /** \brief Number of two-body collisions blocked by Pauli or CDPP */
       Int_t nBlockedCollisions;
       /** \brief Number of decays blocked by Pauli or CDPP */
@@ -348,8 +332,36 @@ namespace G4INCL {
       Int_t nUnmergedSpectators;
       /** \brief Number of attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
       Int_t nEnergyViolationInteraction;
-      /** \brief Sequential number of the event in the event loop */
-      Int_t event;
+      /** \brief Emission time [fm/c] */
+      Float_t emissionTime[maxSizeParticles];
+      /** \brief Remnant mass number */
+      Short_t ARem[maxSizeRemnants];
+      /** \brief Remnant charge number */
+      Short_t ZRem[maxSizeRemnants];
+      /** \brief Remnant strangeness number */
+      Short_t SRem[maxSizeRemnants];
+      /** \brief Remnant excitation energy [MeV] */
+      Float_t EStarRem[maxSizeRemnants];
+      /** \brief Remnant spin [\f$\hbar\f$] */
+      Float_t JRem[maxSizeRemnants];
+      /** \brief Remnant kinetic energy [MeV] */
+      Float_t EKinRem[maxSizeRemnants];
+      /** \brief Remnant momentum, x component [MeV/c] */
+      Float_t pxRem[maxSizeRemnants];
+      /** \brief Remnant momentum, y component [MeV/c] */
+      Float_t pyRem[maxSizeRemnants];
+      /** \brief Remnant momentum, z component [MeV/c] */
+      Float_t pzRem[maxSizeRemnants];
+      /** \brief Remnant momentum polar angle [radians] */
+      Float_t thetaRem[maxSizeRemnants];
+      /** \brief Remnant momentum azimuthal angle [radians] */
+      Float_t phiRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, x component [\f$\hbar\f$] */
+      Float_t jxRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, y component [\f$\hbar\f$] */
+      Float_t jyRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, z component [\f$\hbar\f$] */
+      Float_t jzRem[maxSizeRemnants];
       /** \brief Particle kinetic energy, in inverse kinematics [MeV] */
       Float_t EKinPrime[maxSizeParticles];
       /** \brief Particle momentum, z component, in inverse kinematics [MeV/c] */
@@ -360,6 +372,7 @@ namespace G4INCL {
       /** \brief Reset the EventInfo members */
       void reset() {
         nParticles = 0;
+        event = 0;
         eventBias = (Float_t)0.0;
         history.clear();
         nRemnants = 0;
@@ -375,6 +388,7 @@ namespace G4INCL {
         nCollisions = 0;
         stoppingTime = (Float_t)0.0;
         EBalance = (Float_t)0.0;
+        firstEBalance = (Float_t)0.0;
         pLongBalance = (Float_t)0.0;
         pTransBalance = (Float_t)0.0;
         nCascadeParticles = 0;
@@ -385,6 +399,8 @@ namespace G4INCL {
         nucleonAbsorption = false;
         pionAbsorption = false;
         nDecays = 0;
+        nSrcCollisions = 0;
+        nSrcPairs = 0;
         nBlockedCollisions = 0;
         nBlockedDecays = 0;
         effectiveImpactParameter = (Float_t)0.0;
@@ -412,7 +428,6 @@ namespace G4INCL {
         nDecayAvatars = 0;
         nUnmergedSpectators = 0;
         nEnergyViolationInteraction = 0;
-        event = 0;
 
       }
 

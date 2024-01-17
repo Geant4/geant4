@@ -29,7 +29,7 @@
 // Revision:
 // - June 2017, K.L. Genser - added baseion, lifetimes and access functions
 // --------------------------------------------------------------------
-#ifndef G4MuonicAtom_hh 
+#ifndef G4MuonicAtom_hh
 #define G4MuonicAtom_hh 1
 
 #include "G4Ions.hh"
@@ -37,7 +37,7 @@
 class G4MuonicAtom : public G4Ions
 {
   public:
-
+    // clang-format off
     G4MuonicAtom(
                const G4String&     aName,        G4double            mass,
                G4double            width,        G4double            charge,
@@ -55,69 +55,61 @@ class G4MuonicAtom : public G4Ions
                G4double            DIOLifeTime = -1.0,
                G4double            NCLifeTime = -1.0
                );
+    // clang-format on
 
-                         ~G4MuonicAtom() override = default;
-    G4MuonicAtom*                MuonicAtomDefinition();
-    G4MuonicAtom*                MuonicAtom();
-    G4Ions const*                GetBaseIon() const;
-    G4double                     GetDIOLifeTime() const;
-    void                         SetDIOLifeTime(G4double lt);
-    G4double                     GetNCLifeTime() const;
-    void                         SetNCLifeTime(G4double lt);
+    ~G4MuonicAtom() override = default;
+    G4MuonicAtom* MuonicAtomDefinition();
+    G4MuonicAtom* MuonicAtom();
+    G4Ions const* GetBaseIon() const;
+    G4double GetDIOLifeTime() const;
+    void SetDIOLifeTime(G4double lt);
+    G4double GetNCLifeTime() const;
+    void SetNCLifeTime(G4double lt);
 
   protected:
-
-    G4MuonicAtom(){}
+    G4MuonicAtom() {}
 
   private:
-
-    G4Ions const*                baseIon = nullptr;
-    G4double                     fDIOLifeTime = 0.0;
-    G4double                     fNCLifeTime = 0.0; 
+    G4Ions const* baseIon = nullptr;
+    G4double fDIOLifeTime = 0.0;
+    G4double fNCLifeTime = 0.0;
 };
 
 // ------------------------
 // Inline methods
 // ------------------------
 
-inline
-G4MuonicAtom* G4MuonicAtom::MuonicAtomDefinition()
+inline G4MuonicAtom* G4MuonicAtom::MuonicAtomDefinition()
 {
   return this;
 }
 
-inline
-G4MuonicAtom* G4MuonicAtom::MuonicAtom() 
+inline G4MuonicAtom* G4MuonicAtom::MuonicAtom()
 {
   return this;
 }
 
-inline
-G4Ions const* G4MuonicAtom::GetBaseIon() const
+inline G4Ions const* G4MuonicAtom::GetBaseIon() const
 {
   return baseIon;
 }
 
-inline
-G4double G4MuonicAtom::GetDIOLifeTime() const
+inline G4double G4MuonicAtom::GetDIOLifeTime() const
 {
   return fDIOLifeTime;
 }
 
-inline
-void G4MuonicAtom::SetDIOLifeTime(G4double lt)
+inline void G4MuonicAtom::SetDIOLifeTime(G4double lt)
 {
   fDIOLifeTime = lt;
 }
 
-inline
-G4double G4MuonicAtom::GetNCLifeTime() const
+inline G4double G4MuonicAtom::GetNCLifeTime() const
 {
   return fNCLifeTime;
 }
 
-inline
-void G4MuonicAtom::SetNCLifeTime(G4double lt)
+inline void G4MuonicAtom::SetNCLifeTime(G4double lt)
 {
   fNCLifeTime = lt;
 }

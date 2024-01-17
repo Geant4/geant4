@@ -13,7 +13,10 @@
 /testhadr/PrintModulo      10
 #
 /run/setCut                1 mm
-/testhadr/Physics          QBBC
+#/testhadr/Physics          QBBC
+#
+/physics_lists/factory/addNeutrino
+/physics_lists/factory/addChargeExchange
 #
 /run/initialize
 #

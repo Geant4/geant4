@@ -133,7 +133,6 @@ private:
   std::vector<G4String> fNtupleI;
   std::vector<G4String> fNtupleF;
   std::vector<G4String> fNtupleD;
-
 };
 
 #endif

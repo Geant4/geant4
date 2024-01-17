@@ -29,4 +29,4 @@ geant4_add_module(G4xml
 
 # EXPAT is a PUBLIC dependency by virtue of inclusion of tools/raxml
 # (No, it's not obvious!) and exposure of that in G4Xml{RFileManager/AnalysisReader}
-geant4_module_link_libraries(G4xml PUBLIC G4analysismng G4hntools G4globman G4tools ${EXPAT_LIBRARIES})
+geant4_module_link_libraries(G4xml PUBLIC G4analysismng G4hntools G4globman G4tools ${G4EXPAT_LIBRARIES})

@@ -39,14 +39,18 @@
 
 #include <memory>
 #include <string_view>
+#include <vector>
 
 class G4GenericAnalysisManager;
-class G4GenericAnalysisMessenger;
 class G4GenericFileManager;
 class G4HnInformation;
 class G4VNtupleFileManager;
 template <class T>
 class G4ThreadLocalSingleton;
+
+namespace tools {
+class ntuple_bookig;
+}
 
 class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
 {
@@ -73,14 +77,20 @@ class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
     G4bool WriteP1(G4int id, const G4String& fileName);
     G4bool WriteP2(G4int id, const G4String& fileName);
 
-    // Set default output type (backward compatibility)
-    // this type will be used for file names without extension
-    void SetDefaultFileType(const G4String& value);
-    G4String GetDefaultFileType() const;
+
+    // Access methods
+    // In difference from output specific managers, generic manager
+    // provides access only to ntuple_booking
+    tools::ntuple_booking* GetNtuple(G4bool warn = true,
+                              G4bool onlyIfActive = true) const;
+    tools::ntuple_booking* GetNtuple(G4int ntupleId, G4bool warn = true,
+                              G4bool onlyIfActive = true) const;
 
   protected:
     // Virtual methods from base class
     G4bool OpenFileImpl(const G4String& fileName) override;
+    void SetDefaultFileTypeImpl(const G4String& value) override;
+    G4String GetDefaultFileTypeImpl() const override;
     // File manager access
     std::shared_ptr<G4VFileManager> GetFileManager(const G4String& fileName) final;
 
@@ -95,7 +105,6 @@ class G4GenericAnalysisManager : public  G4ToolsAnalysisManager
     static constexpr std::string_view fkClass { "G4GenericAnalysisManager" };
 
     // Data members
-    std::unique_ptr<G4GenericAnalysisMessenger>  fMessenger;
     std::shared_ptr<G4GenericFileManager> fFileManager { nullptr };
     // add G4GenericNtupleManager
     // this class will be analogic to file managers but with ntuples

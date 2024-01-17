@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -18,7 +18,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0xf54450
+ creating G4RunManagerKernel 0x899190
  G4ChordFinder: stepperDriverId: 2
 
 The materials defined are : 
@@ -94,15 +94,15 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1205490G4ErrorPhysicsList:: particle process manager e+ = 0x120a250
-0x1205340G4ErrorPhysicsList:: particle process manager e- = 0x120e700
-0x1204dd0G4ErrorPhysicsList:: particle process manager gamma = 0x120e8b0
-0x1206840G4ErrorPhysicsList:: particle process manager geantino = 0x120eb00
-0x12055e0G4ErrorPhysicsList:: particle process manager mu+ = 0x120ed50
-0x1205990G4ErrorPhysicsList:: particle process manager mu- = 0x120efa0
-0x1205da0G4ErrorPhysicsList:: particle process manager pi+ = 0x120f1f0
-0x12061f0G4ErrorPhysicsList:: particle process manager pi- = 0x120f440
-0x1206610G4ErrorPhysicsList:: particle process manager proton = 0x120f690
+0xb53570G4ErrorPhysicsList:: particle process manager e+ = 0xb57ec0
+0xb533d0G4ErrorPhysicsList:: particle process manager e- = 0xb5c340
+0xb53230G4ErrorPhysicsList:: particle process manager gamma = 0xb5c490
+0xb548f0G4ErrorPhysicsList:: particle process manager geantino = 0xb5c6e0
+0xb53750G4ErrorPhysicsList:: particle process manager mu+ = 0xb5c930
+0xb53aa0G4ErrorPhysicsList:: particle process manager mu- = 0xb5cb80
+0xb53e80G4ErrorPhysicsList:: particle process manager pi+ = 0xb5cdd0
+0xb542a0G4ErrorPhysicsList:: particle process manager pi- = 0xb5d020
+0xb546c0G4ErrorPhysicsList:: particle process manager proton = 0xb5d270
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
  G4ChordFinder: stepperDriverId: 2
@@ -279,7 +279,7 @@ G4TablesForExtrapolator::ComputeTransportXS for e-
     9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
    10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
    11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   12      650     3.15        0  2.06e+04  0.00726  0.00396       650        SOLN Transportation
    13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
    14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
    15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
@@ -308,14 +308,14 @@ G4TablesForExtrapolator::ComputeTransportXS for e-
    38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10134103703911,0)
- Momentum: (22433.70312107119,696.1889753558929,0)
+ Position: (2210,35.10139863744025,0)
+ Momentum: (22433.60210485377,696.187614657504,0)
  Error: 
-  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
-                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
-  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
-  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
-                      0    0.004070098790523185                       0                       0        0.54095727675807 
+  9.873458087747871e-08                       0   3.726996929504522e-08   2.667675513640633e-06                       0 
+                      0   3.518771209654503e-05                       0                       0    0.004070113856853834 
+  3.726996929504522e-08                       0   3.519238636947503e-05    0.004422018358407395                       0 
+  2.667675513640633e-06                       0    0.004422018358407395       0.625876327620946                       0 
+                      0    0.004070113856853834                       0                       0      0.5409589013525661 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -330,7 +330,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
    10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
    11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   12      650     3.15        0  2.06e+04  0.00726  0.00396       650        SOLN Transportation
    13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
    14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
    15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
@@ -359,14 +359,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10134103703911,0)
- Momentum: (22433.70312107119,696.1889753558929,0)
+ Position: (2210,35.10139863744025,0)
+ Momentum: (22433.60210485377,696.187614657504,0)
  Error: 
-  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
-                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
-  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
-  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
-                      0    0.004070098790523185                       0                       0        0.54095727675807 
+  9.873458087747871e-08                       0   3.726996929504522e-08   2.667675513640633e-06                       0 
+                      0   3.518771209654503e-05                       0                       0    0.004070113856853834 
+  3.726996929504522e-08                       0   3.519238636947503e-05    0.004422018358407395                       0 
+  2.667675513640633e-06                       0    0.004422018358407395       0.625876327620946                       0 
+                      0    0.004070113856853834                       0                       0      0.5409589013525661 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -381,7 +381,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
    10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
    11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   12      650     3.15        0  2.06e+04  0.00726  0.00396       650        SOLN Transportation
    13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
    14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
    15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
@@ -410,12 +410,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    38 2.15e+03     33.3        0  2.23e+04   0.0336      100  2.15e+03        MUON G4ErrorStepLengthLimit
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10134103703911,0)
- Momentum: (22433.70312107119,696.1889753558929,0)
+ Position: (2210,35.10139863744025,0)
+ Momentum: (22433.60210485377,696.187614657504,0)
  Error: 
-  9.873297961869803e-08                       0   3.726946525342548e-08   2.667645643729908e-06                       0 
-                      0   3.518754725736791e-05                       0                       0    0.004070098790523185 
-  3.726946525342548e-08                       0   3.519222148196891e-05    0.004422001644952241                       0 
-  2.667645643729908e-06                       0    0.004422001644952241      0.6258743853977757                       0 
-                      0    0.004070098790523185                       0                       0        0.54095727675807 
+  9.873458087747871e-08                       0   3.726996929504522e-08   2.667675513640633e-06                       0 
+                      0   3.518771209654503e-05                       0                       0    0.004070113856853834 
+  3.726996929504522e-08                       0   3.519238636947503e-05    0.004422018358407395                       0 
+  2.667675513640633e-06                       0    0.004422018358407395       0.625876327620946                       0 
+                      0    0.004070113856853834                       0                       0      0.5409589013525661 
 

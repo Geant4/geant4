@@ -31,15 +31,14 @@ G4LEPTSIonisationModel::G4LEPTSIonisationModel(const G4String& modelName)
   : G4VLEPTSModel( modelName )
 {
   SetDeexcitationFlag(true);
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
   theXSType = XSIonisation; 
 
 } // constructor
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4LEPTSIonisationModel::~G4LEPTSIonisationModel() 
-{
-}
+= default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,7 +108,7 @@ void G4LEPTSIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     P3Dir.setZ( G4UniformRand() );
     P3Dir /= P3Dir.mag();
 
-    G4DynamicParticle* e3 = new G4DynamicParticle(G4Electron::Electron(), P3Dir, P3KinEn);
+    auto  e3 = new G4DynamicParticle(G4Electron::Electron(), P3Dir, P3KinEn);
     fvect->push_back(e3);
   }
 
@@ -121,7 +120,7 @@ void G4LEPTSIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     G4ThreeVector P2Momentum = cp0*P0Dir -cp1*P1Dir;
     G4ThreeVector P2Dir = P2Momentum / P2Momentum.mag();
     P2Dir.rotateUz(P0Dir);
-    G4DynamicParticle* e2 = new G4DynamicParticle(G4Electron::Electron(), P2Dir, P2KinEn);
+    auto  e2 = new G4DynamicParticle(G4Electron::Electron(), P2Dir, P2KinEn);
     fvect->push_back(e2);
   }
  

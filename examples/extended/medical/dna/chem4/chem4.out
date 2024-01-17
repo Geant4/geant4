@@ -1,4 +1,4 @@
-Seed used : 1687915050
+Seed used : 1701824359
 Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Forcing G4RunManager type...
 
         ############################################
@@ -12,7 +12,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -53,6 +53,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -587,8 +591,6 @@ H^0 + H^0 -> H_2^0                          1.2e+10                       0.2265
 ------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 Start event 1
- * PrimaryKiller: aborts event 1, energy loss is too large. 
- * Energy loss by primary is: 4.945 keV. Event is aborted if the Eloss is > 2 keV
 Start event 2
 Start event 3
 Start event 4
@@ -599,9 +601,9 @@ Start event 8
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 9218.2 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 11301 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

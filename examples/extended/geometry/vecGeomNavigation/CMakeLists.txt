@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(exampleVecGeomNav)
 
 option(WITH_ROOT "WITH ROOT SUPPORT" OFF)
@@ -83,7 +83,6 @@ endif()
 set(EXVECGEOMNAVIGATION_SCRIPTS
   TestNTST.gdml
   vecgeomNav.in
-  run-ntst.mac
   )
 
 foreach(_script ${EXVECGEOMNAVIGATION_SCRIPTS})

@@ -133,6 +133,7 @@ private:
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      ver2Cmd;
+  G4UIcmdWithAnInteger*      nFreeCmd;
   G4UIcmdWithAnInteger*      tripletCmd;
 
   G4UIcmdWithAString*        transWithMscCmd;

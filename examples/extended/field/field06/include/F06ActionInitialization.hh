@@ -37,11 +37,11 @@
 class F06ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    F06ActionInitialization();
-    virtual ~F06ActionInitialization();
+    F06ActionInitialization() = default;
+    ~F06ActionInitialization() override = default;
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+    void BuildForMaster() const override;
+    void Build() const override;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

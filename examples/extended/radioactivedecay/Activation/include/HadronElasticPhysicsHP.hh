@@ -27,7 +27,6 @@
 /// \brief Definition of the HadronElasticPhysicsHP class
 //
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HadronElasticPhysicsHP_h
@@ -52,8 +51,8 @@ class HadronElasticPhysicsHP : public G4HadronElasticPhysics
   private:
     void DefineCommands();
     
-    G4GenericMessenger*     fMessenger;    
-    G4bool                  fThermal;          
+    G4GenericMessenger*     fMessenger = nullptr;    
+    G4bool                  fThermal = false;          
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -2,25 +2,15 @@
 # of the B1 example when running in interactive mode
 #
 
-# Use these open statements to open selected visualization
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
-# Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
-#
-# Use this open statement to create an OpenInventor view:
-#/vis/open OI
-#
-# Use this open statement to create a .prim file suitable for
-# viewing in DAWN:
-#/vis/open DAWNFILE
-#
-# Use this open statement to create a .heprep file suitable for
-# viewing in HepRApp:
-#/vis/open HepRepFile
-#
-# Use this open statement to create a .wrl file suitable for
-# viewing in a VRML viewer:
-#/vis/open VRML2FILE
+# Use this open statement to create an offscreen file with TSG:
+#/vis/open TSG_OFFSCREEN 1200x1200
+# See the tsg_offscreen.mac file for more commands to change
+# the file format, file name, picture size, etc.
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -100,8 +90,10 @@
 /vis/scene/add/text 6 7 10 cm 18 4 4 Shape2
 #
 # To get nice view
+# Make the "World" box invisible
 /vis/geometry/set/visibility World 0 false
-/vis/geometry/set/visibility Envelope 0 false
+# "Envelope" is transparent blue to represent water
+/vis/geometry/set/colour Envelope 0 0 0 1 .3
 /vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
 /vis/viewer/set/viewpointThetaPhi 120 150

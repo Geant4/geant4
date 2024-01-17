@@ -44,7 +44,7 @@ Par03Hit::Par03Hit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Par03Hit::~Par03Hit() {}
+Par03Hit::~Par03Hit() = default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -68,29 +68,27 @@ const G4int G4GammaNuclearXS::freeVectorException[] = {
 4, 6, 7, 8, 27, 39, 45, 65, 67, 69, 73};
 G4String G4GammaNuclearXS::gDataDirectory = "";
 
-namespace
-{
-  G4Mutex gNuclearXSMutex = G4MUTEX_INITIALIZER;
-}
-
 G4GammaNuclearXS::G4GammaNuclearXS() 
   : G4VCrossSectionDataSet(Default_Name()), gamma(G4Gamma::Gamma())
 {
-  //  verboseLevel = 0;
-  if(verboseLevel > 0) {
-    G4cout  << "G4GammaNuclearXS::G4GammaNuclearXS Initialise for Z < " 
-	    << MAXZGAMMAXS << G4endl;
+  verboseLevel = 0;
+  if (verboseLevel > 0) {
+    G4cout << "G4GammaNuclearXS::G4GammaNuclearXS Initialise for Z < " 
+	   << MAXZGAMMAXS << G4endl;
   }
-  ggXsection = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS");
-  if(ggXsection == nullptr) ggXsection = new G4PhotoNuclearCrossSection();
+  ggXsection =
+    G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet("PhotoNuclearXS");
+  if (ggXsection == nullptr)
+    ggXsection = new G4PhotoNuclearCrossSection();
   SetForAllAtomsAndEnergies(true);
-}
 
-G4GammaNuclearXS::~G4GammaNuclearXS()
-{
-  if(isFirst) { 
-    delete data; 
-    data = nullptr; 
+  // full data set is uploaded once
+  if (nullptr == data) { 
+    data = new G4ElementData(MAXZGAMMAXS);
+    data->SetName("gNuclear");
+    for (G4int Z=1; Z<MAXZGAMMAXS; ++Z) {
+      Initialise(Z);
+    }
   }
 }
 
@@ -100,7 +98,7 @@ void G4GammaNuclearXS::CrossSectionDescription(std::ostream& outFile) const
           << "cross-section for GDR energy region on nuclei using "
 	  << "data from the high precision\n"
           << "IAEA photonuclear database (2019). Then liniear connection\n"
-	  << "implemented with previous CHIPS photonuclear model" << G4endl;
+	  << "implemented with previous CHIPS photonuclear model." << G4endl;
 }
 
 G4bool 
@@ -244,7 +242,7 @@ const G4Isotope* G4GammaNuclearXS::SelectIsotope(
 
 void G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(verboseLevel > 0) {
+  if(verboseLevel > 1) {
     G4cout << "G4GammaNuclearXS::BuildPhysicsTable for " 
 	   << p.GetParticleName() << G4endl;
   }
@@ -257,25 +255,12 @@ void G4GammaNuclearXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     return; 
   }
 
-  if(nullptr == data) { 
-    G4AutoLock l(&gNuclearXSMutex);
-    if(nullptr == data) {
-      isFirst = true;
-      data = new G4ElementData(); 
-      data->SetName("PhotoNuclear");
-      for (G4int Z=1; Z<MAXZGAMMAXS; ++Z) {
-        Initialise(Z);
-      }
-    }
-    l.unlock();
-  }
-
   // prepare isotope selection
   const G4ElementTable* table = G4Element::GetElementTable();
   std::size_t nIso = temp.size();
   for ( auto & elm : *table ) {
     std::size_t n = elm->GetNumberOfIsotopes();
-    if(n > nIso) { nIso = n; }
+    if (n > nIso) { nIso = n; }
   }
   temp.resize(nIso, 0.0);   
 }
@@ -291,19 +276,8 @@ const G4String& G4GammaNuclearXS::FindDirectoryPath()
   return gDataDirectory;
 }
 
-void G4GammaNuclearXS::InitialiseOnFly(G4int Z)
-{
-  if(nullptr == data->GetElementData(Z)) { 
-    G4AutoLock l(&gNuclearXSMutex);
-    Initialise(Z);
-    l.unlock();
-  }
-}
-
 void G4GammaNuclearXS::Initialise(G4int Z)
 {
-  if(nullptr != data->GetElementData(Z)) { return; }
-
   // upload data from file
   std::ostringstream ost;
   ost << FindDirectoryPath() << Z ;
@@ -355,7 +329,8 @@ G4GammaNuclearXS::RetrieveVector(std::ostringstream& ost, G4bool warn, G4int Z)
 	     << " is opened by G4GammaNuclearXS" << G4endl;
     }
     // retrieve data from DB
-    if(std::find(std::begin(freeVectorException), std::end(freeVectorException), Z) == std::end(freeVectorException)) {
+    if(std::find(std::begin(freeVectorException), std::end(freeVectorException), Z)
+       == std::end(freeVectorException)) {
       v = new G4PhysicsLinearVector(false);
     } else {
       v = new G4PhysicsFreeVector(false);

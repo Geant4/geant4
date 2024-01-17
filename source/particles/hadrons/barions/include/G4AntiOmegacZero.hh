@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4AntiOmegacZero_h
 #define G4AntiOmegacZero_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                      AntiOmegacZero                            ###
-// ######################################################################
 
 class G4AntiOmegacZero : public G4ParticleDefinition
 {
- private:
-   static G4AntiOmegacZero* theInstance;
-   G4AntiOmegacZero(){}
-   ~G4AntiOmegacZero() override= default;
+  public:
+    static G4AntiOmegacZero* Definition();
+    static G4AntiOmegacZero* AntiOmegacZeroDefinition();
+    static G4AntiOmegacZero* AntiOmegacZero();
 
- public:
-   static G4AntiOmegacZero* Definition();
-   static G4AntiOmegacZero* AntiOmegacZeroDefinition();
-   static G4AntiOmegacZero* AntiOmegacZero();
+  private:
+    G4AntiOmegacZero() {}
+    ~G4AntiOmegacZero() override = default;
+
+    static G4AntiOmegacZero* theInstance;
 };
 
 #endif

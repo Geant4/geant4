@@ -36,7 +36,6 @@
 #define G4PreCompoundProton_h 1
 
 #include "G4PreCompoundNucleon.hh"
-#include "G4ProtonCoulombBarrier.hh"
 
 class G4PreCompoundProton : public G4PreCompoundNucleon
 {
@@ -44,7 +43,7 @@ public:
 
   G4PreCompoundProton();
 
-  virtual ~G4PreCompoundProton();
+  ~G4PreCompoundProton() override = default;
 
   G4PreCompoundProton(const G4PreCompoundProton &right) = delete;
   const G4PreCompoundProton& 
@@ -57,12 +56,6 @@ protected:
   G4double GetRj(G4int NumberParticles, G4int NumberCharged) const override;
 
   G4double GetAlpha() const override;
-
-  G4double GetBeta() const override;
-
-private:
-
-  G4ProtonCoulombBarrier theProtonCoulombBarrier;
 };
 
 #endif

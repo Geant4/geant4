@@ -37,6 +37,7 @@
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
 #include "G4GeometryCell.hh"
+#include "G4VTouchable.hh"
 
 //class G4VGCellFinder;
 class G4VIStore;
@@ -45,7 +46,6 @@ class G4Step;
 class G4Navigator;
 class G4TransportationManager;
 class G4PathFinder;
-class G4VTouchable;
 
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"

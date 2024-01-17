@@ -43,11 +43,11 @@ G4PhysicsVector::G4PhysicsVector(G4bool val)
 // --------------------------------------------------------------------
 void G4PhysicsVector::Initialise()
 {
-  idxmax = numberOfNodes - 2;
-  if(0 < numberOfNodes)
+  if (1 < numberOfNodes)
   {
+    idxmax = numberOfNodes - 2;
     edgeMin = binVector[0];
-    edgeMax = binVector[numberOfNodes - 1];
+    edgeMax = binVector[idxmax + 1];
   }
 }
 
@@ -55,7 +55,7 @@ void G4PhysicsVector::Initialise()
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii) const
 {
   // Ascii mode
-  if(ascii)
+  if (ascii)
   {
     fOut << *this;
     return true;
@@ -72,7 +72,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii) const
   fOut.write((char*) (&size), sizeof size);
 
   G4double* value = new G4double[2 * size];
-  for(std::size_t i = 0; i < size; ++i)
+  for (std::size_t i = 0; i < size; ++i)
   {
     value[2 * i]     = binVector[i];
     value[2 * i + 1] = dataVector[i];
@@ -92,18 +92,20 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   secDerivative.clear();
 
   // retrieve in ascii mode
-  if(ascii)
+  if (ascii)
   {
     // binning
     fIn >> edgeMin >> edgeMax >> numberOfNodes;
-    if(fIn.fail() || numberOfNodes < 2)
+    if (fIn.fail() || numberOfNodes < 2)
     {
       return false;
     }
     // contents
-    G4int siz = 0;
-    fIn >> siz;
-    if(fIn.fail() || siz != G4int(numberOfNodes))
+    G4int siz0 = 0;
+    fIn >> siz0;
+    if (siz0 < 2) { return false; }
+    std::size_t siz = static_cast<std::size_t>(siz0);
+    if (fIn.fail() || siz != numberOfNodes)
     {
       return false;
     }
@@ -112,12 +114,12 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     dataVector.reserve(siz);
     G4double vBin, vData;
 
-    for(G4int i = 0; i < siz; ++i)
+    for (std::size_t i = 0; i < siz; ++i)
     {
       vBin  = 0.;
       vData = 0.;
       fIn >> vBin >> vData;
-      if(fIn.fail())
+      if (fIn.fail())
       {
         return false;
       }
@@ -140,7 +142,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
   G4double* value = new G4double[2 * size];
   fIn.read((char*) (value), 2 * size * (sizeof(G4double)));
-  if(G4int(fIn.gcount()) != G4int(2 * size * (sizeof(G4double))))
+  if (static_cast<G4int>(fIn.gcount()) != static_cast<G4int>(2 * size * (sizeof(G4double))))
   {
     delete[] value;
     return false;
@@ -148,7 +150,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
   binVector.reserve(size);
   dataVector.reserve(size);
-  for(std::size_t i = 0; i < size; ++i)
+  for (std::size_t i = 0; i < size; ++i)
   {
     binVector.push_back(value[2 * i]);
     dataVector.push_back(value[2 * i + 1]);
@@ -162,7 +164,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 // --------------------------------------------------------------
 void G4PhysicsVector::DumpValues(G4double unitE, G4double unitV) const
 {
-  for(std::size_t i = 0; i < numberOfNodes; ++i)
+  for (std::size_t i = 0; i < numberOfNodes; ++i)
   {
     G4cout << binVector[i] / unitE << "   " << dataVector[i] / unitV 
            << G4endl;
@@ -173,16 +175,16 @@ void G4PhysicsVector::DumpValues(G4double unitE, G4double unitV) const
 std::size_t G4PhysicsVector::FindBin(const G4double energy, 
                                      std::size_t idx) const
 {
-  if(idx + 1 < numberOfNodes && 
-     energy >= binVector[idx] && energy <= binVector[idx])
+  if (idx + 1 < numberOfNodes && 
+      energy >= binVector[idx] && energy <= binVector[idx])
   {
     return idx;
   } 
-  if(energy <= binVector[1])
+  if (energy <= binVector[1])
   {
     return 0;
   }
-  if(energy >= binVector[idxmax])
+  if (energy >= binVector[idxmax])
   {
     return idxmax;
   }
@@ -193,7 +195,7 @@ std::size_t G4PhysicsVector::FindBin(const G4double energy,
 void G4PhysicsVector::ScaleVector(const G4double factorE, 
                                   const G4double factorV)
 {
-  for(std::size_t i = 0; i < numberOfNodes; ++i)
+  for (std::size_t i = 0; i < numberOfNodes; ++i)
   {
     binVector[i] *= factorE;
     dataVector[i] *= factorV;
@@ -206,12 +208,12 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
 					    const G4double dir1,
 					    const G4double dir2)
 {
-  if(!useSpline) { return; }
+  if (!useSpline) { return; }
   // cannot compute derivatives for less than 5 points
   const std::size_t nmin = (stype == G4SplineType::Base) ? 5 : 4;
-  if(nmin > numberOfNodes) 
+  if (nmin > numberOfNodes) 
   {
-    if(0 < verboseLevel)
+    if (0 < verboseLevel)
     { 
       G4cout << "### G4PhysicsVector: spline cannot be used for "
 	     << numberOfNodes << " points - spline disabled" 
@@ -222,13 +224,13 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
     return;
   }
   // check energies of free vector
-  if(type == T_G4PhysicsFreeVector)
+  if (type == T_G4PhysicsFreeVector)
   {
-    for(std::size_t i=0; i<=idxmax; ++i) 
+    for (std::size_t i=0; i<=idxmax; ++i) 
     {
-      if(binVector[i + 1] <= binVector[i])
+      if (binVector[i + 1] <= binVector[i])
       {
-        if(0 < verboseLevel) 
+        if (0 < verboseLevel) 
         {
 	  G4cout << "### G4PhysicsVector: spline cannot be used, because "
 		 << " E[" << i << "]=" << binVector[i]
@@ -246,7 +248,7 @@ void G4PhysicsVector::FillSecondDerivatives(const G4SplineType stype,
   Initialise();
   secDerivative.resize(numberOfNodes);
 
-  if(1 < verboseLevel)
+  if (1 < verboseLevel)
   {
     G4cout << "### G4PhysicsVector:: FillSecondDerivatives N=" 
            << numberOfNodes << G4endl;
@@ -274,7 +276,7 @@ void G4PhysicsVector::ComputeSecDerivative0()
 {
   std::size_t n = numberOfNodes - 1;
 
-  for(std::size_t i = 1; i < n; ++i)
+  for (std::size_t i = 1; i < n; ++i)
   {
     secDerivative[i] = 3.0 *
       ((dataVector[i + 1] - dataVector[i]) / (binVector[i + 1] - binVector[i]) -
@@ -336,7 +338,7 @@ void G4PhysicsVector::ComputeSecDerivative1()
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
 
-  for(std::size_t k = n - 2; k > 1; --k)
+  for (std::size_t k = n - 2; k > 1; --k)
   {
     secDerivative[k] *=
       (secDerivative[k + 1] - u[k] * (binVector[k + 1] - binVector[k - 1]) /
@@ -372,7 +374,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
   // Decomposition loop for tridiagonal algorithm. secDerivative[i]
   // and u[i] are used for temporary storage of the decomposed factors.
 
-  for(std::size_t i = 1; i < n; ++i)
+  for (std::size_t i = 1; i < n; ++i)
   {
     sig =
       (binVector[i] - binVector[i - 1]) / (binVector[i + 1] - binVector[i - 1]);
@@ -397,7 +399,7 @@ void G4PhysicsVector::ComputeSecDerivative2(G4double firstPointDerivative,
   // The back-substitution loop for the triagonal algorithm of solving
   // a linear system of equations.
 
-  for(std::size_t k = n - 1; k > 0; --k)
+  for (std::size_t k = n - 1; k > 0; --k)
   {
     secDerivative[k] *=
       (secDerivative[k + 1] - u[k] * (binVector[k + 1] - binVector[k - 1]) /
@@ -418,7 +420,7 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 
   // contents
   out << pv.dataVector.size() << G4endl;
-  for(std::size_t i = 0; i < pv.dataVector.size(); ++i)
+  for (std::size_t i = 0; i < pv.dataVector.size(); ++i)
   {
     out << pv.binVector[i] << "  " << pv.dataVector[i] << G4endl;
   }
@@ -430,24 +432,24 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 //---------------------------------------------------------------
 G4double G4PhysicsVector::GetEnergy(const G4double val) const
 {
-  if(0 == numberOfNodes)
+  if (0 == numberOfNodes)
   {
     return 0.0;
   }
-  if(1 == numberOfNodes || val <= dataVector[0])
+  if (1 == numberOfNodes || val <= dataVector[0])
   {
     return edgeMin;
   }
-  if(val >= dataVector[numberOfNodes - 1])
+  if (val >= dataVector[numberOfNodes - 1])
   {
     return edgeMax;
   }
   std::size_t bin = std::lower_bound(dataVector.cbegin(), dataVector.cend(), val)
                   - dataVector.cbegin() - 1;
-  if(bin > idxmax) { bin = idxmax; } 
+  if (bin > idxmax) { bin = idxmax; } 
   G4double res = binVector[bin];
   G4double del = dataVector[bin + 1] - dataVector[bin];
-  if(del > 0.0)
+  if (del > 0.0)
   {
     res += (val - dataVector[bin]) * (binVector[bin + 1] - res) / del;
   }

@@ -1005,8 +1005,7 @@ G4Polyhedron* G4MultiUnion::CreatePolyhedron() const
   else
   {
     G4VSolid* solidA = GetSolid(0);
-    auto solidAPolyhedron =
-      dynamic_cast<G4PolyhedronArbitrary*>(solidA->GetPolyhedron());
+    auto solidAPolyhedron =solidA->GetPolyhedron();
 
     const G4Transform3D transform0 = GetTransformation(0);
     G4DisplacedSolid dispSolidA("placedA", solidA, transform0);

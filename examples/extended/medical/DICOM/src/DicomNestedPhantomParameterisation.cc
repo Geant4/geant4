@@ -123,8 +123,7 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
     G4int copyID = ix + fnX*iy + fnX*fnY*iz;
 
     std::size_t matIndex = GetMaterialIndex(copyID);
-    static G4Material* mate = nullptr;
-    mate = fMaterials[matIndex];
+    G4Material* mate = fMaterials[matIndex];
 
     if(G4VVisManager::GetConcreteInstance() && physVol)
     {

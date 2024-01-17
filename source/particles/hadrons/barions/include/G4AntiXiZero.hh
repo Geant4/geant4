@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,36 +35,20 @@
 #ifndef G4AntiXiZero_h
 #define G4AntiXiZero_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          AntiXiZero                            ###
-// ######################################################################
 
 class G4AntiXiZero : public G4ParticleDefinition
 {
- private:
-   static G4AntiXiZero* theInstance;
-   G4AntiXiZero(){}
-   ~G4AntiXiZero() override= default;
+  public:
+    static G4AntiXiZero* Definition();
+    static G4AntiXiZero* AntiXiZeroDefinition();
+    static G4AntiXiZero* AntiXiZero();
 
- public:
-   static G4AntiXiZero* Definition();
-   static G4AntiXiZero* AntiXiZeroDefinition();
-   static G4AntiXiZero* AntiXiZero();
+  private:
+    G4AntiXiZero() {}
+    ~G4AntiXiZero() override = default;
+
+    static G4AntiXiZero* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

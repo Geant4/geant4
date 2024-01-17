@@ -35,9 +35,13 @@
 // G4Event has trajectories, hits collections, and/or digi collections. 
 
 // Author: M.Asai, SLAC
+// Adding sub-event : M.Asai, JLAB
 // --------------------------------------------------------------------
 #ifndef G4Event_hh
 #define G4Event_hh 1
+
+#include <set>
+#include <map>
 
 #include "globals.hh"
 #include "evtdefs.hh"
@@ -50,13 +54,14 @@
 #include "G4Profiler.hh"
 
 class G4VHitsCollection;
+class G4SubEvent;
 
 class G4Event 
 {
   public:
-  using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
+    using ProfilerConfig = G4ProfilerConfig<G4ProfileType::Event>;
 
- public:
+  public:
     G4Event() = default;
     explicit G4Event(G4int evID);
    ~G4Event();
@@ -100,7 +105,7 @@ class G4Event
     inline void KeepTheEvent(G4bool vl=true)
       { keepTheEvent = vl; }
     inline G4bool ToBeKept() const
-      { return keepTheEvent; }
+      { return keepTheEvent || GetNumberOfRemainingSubEvents()>0; }
     inline void KeepForPostProcessing() const
       { ++grips; }
     inline void PostProcessingFinished() const
@@ -228,6 +233,58 @@ class G4Event
     // Flag to keep the event until the end of run
     G4bool keepTheEvent = false;
     mutable G4int grips = 0;
+
+  //========================= for sub-event parallelism
+  // following methods should be used only within the master thread
+
+  public:
+    G4SubEvent* PopSubEvent(G4int);
+      // This method is to be invoked from G4RunManager. 
+      // SpawnSubEvent() is internally invoked.
+    G4int TerminateSubEvent(G4SubEvent*);
+      // This method is to be invoked from G4RunManager once a sub-event is
+      // fully processed by a worker thread.
+
+    G4int StoreSubEvent(G4int,G4SubEvent*);
+      // This method is used by G4EventManager to store all the remeining sub-event 
+      // object at the end of processing the event.
+
+    G4int SpawnSubEvent(G4SubEvent*);
+      // Registering sub-event when it is sent to a worker thread.
+    inline G4int GetNumberOfRemainingSubEvents() const
+      // Number of sub-events that have been sent to worker threads but not yet
+      // completed.
+    {
+      auto  tot = (G4int)fSubEvtVector.size(); 
+      for(auto& sem : fSubEvtStackMap)
+      { tot += (G4int)sem.second->size(); }
+      return tot;
+    }
+
+    void MergeSubEventResults(const G4Event* se);
+
+  private:
+    std::map<G4int,std::set<G4SubEvent*>*> fSubEvtStackMap;
+    std::set<G4SubEvent*> fSubEvtVector;
+
+  // motherEvent pointer is non-null for an event created in the worker
+  // thread of sub-event parallelism.
+  // This object and all the contained objects must be deleted by the
+  // responsible worker thread.
+  private:
+    G4Event* motherEvent = nullptr;
+    G4int subEventType = -1;
+
+  public:
+    void FlagAsSubEvent(G4Event* me, G4int ty)
+    {
+      motherEvent = me;
+      subEventType = ty;
+    }
+    G4Event* GetMotherEvent() const
+    { return motherEvent; }
+    G4int GetSubEventType() const
+    { return subEventType; }
 };
 
 extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();

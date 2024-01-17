@@ -43,11 +43,11 @@ G4VITTimeStepComputer::G4VITTimeStepComputer()
 //    fReactants = 0;
     fReactants.reset();
     fSampledMinTimeStep = 0 ;
-    fpReactionTable      = 0;
+    fpReactionTable      = nullptr;
 }
 
 G4VITTimeStepComputer::~G4VITTimeStepComputer()
-{;}
+= default;
 
 G4VITTimeStepComputer& G4VITTimeStepComputer::operator=(const G4VITTimeStepComputer& rhs)
 {

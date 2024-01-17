@@ -56,7 +56,7 @@ class G4ITSafetyHelper : public G4TrackStateDependent<G4ITSafetyHelper>
 public:
   // with description
   G4ITSafetyHelper();
-  ~G4ITSafetyHelper();
+  ~G4ITSafetyHelper() override;
   //
   // Constructor and destructor
 
@@ -110,11 +110,11 @@ private:
   G4ITNavigator* fpMassNavigator;
   G4int fMassNavigatorId;
 
-  G4bool fUseParallelGeometries;
+  G4bool fUseParallelGeometries{false};
   // Flag whether to use PathFinder or single (mass) Navigator directly
-  G4bool fFirstCall;
+  G4bool fFirstCall{true};
   // Flag of first call
-  G4int fVerbose;
+  G4int fVerbose{0};
   // Whether to print warning in case of move outside safety
 
 public:
@@ -123,16 +123,15 @@ public:
   {
     friend class G4ITSafetyHelper;
     G4ThreeVector fLastSafetyPosition;
-    G4double fLastSafety;
+    G4double fLastSafety{0.0};
 
   public:
     State() :
-    fLastSafetyPosition(0.0,0.0,0.0),
-    fLastSafety(0.0)
+    fLastSafetyPosition(0.0,0.0,0.0)
     {}
 
     virtual ~State()
-    {}
+    = default;
   };
 
   // const G4double  fRecomputeFactor;

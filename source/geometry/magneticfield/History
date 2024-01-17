@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-03 Gabriele Cosmo (field-V11-01-06)
+- Reinstated default DormandPrince745 stepper.
+
+## 2023-10-27 Lucio Santi (field-V11-01-05)
+- Improvements on the QSS Stepper
+  The main QSS integration loop is interrupted when the number of substeps
+  exceeds a predefined threshold (set to 1000 by default).
+
 ## 2023-06-14 Gabriele Cosmo (field-V11-01-04)
 - Applied clang-tidy fixes (readability, modernization, performance, ...).
 

@@ -38,19 +38,19 @@
  class G4DNAGenericIonsManager
  {
   public:
-   static G4DNAGenericIonsManager *      Instance(void);
+                                        ~G4DNAGenericIonsManager() = delete;
+                                         G4DNAGenericIonsManager(const G4DNAGenericIonsManager &) = delete;
+   const G4DNAGenericIonsManager        &operator=(const G4DNAGenericIonsManager &) = delete;
+
+   static G4DNAGenericIonsManager *      Instance();
    G4ParticleDefinition *                GetIon(const G4String & name);
 
   private:
                                          G4DNAGenericIonsManager();
-                                        ~G4DNAGenericIonsManager();
-
-                                         G4DNAGenericIonsManager(const G4DNAGenericIonsManager &);
-   const G4DNAGenericIonsManager        &operator=(const G4DNAGenericIonsManager &);
 
    static G4DNAGenericIonsManager *      theInstance;
    
-   typedef std::map<G4String, G4ParticleDefinition *> IonsMap;
+   using IonsMap = std::map<G4String, G4ParticleDefinition *>;
 
    IonsMap                               map;
  };

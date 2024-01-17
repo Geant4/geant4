@@ -67,8 +67,8 @@ std::size_t G4VtkPolydataPipeline::MakeHash(const G4Polyhedron& polyhedron,
   return hash;
 }
 
-G4VtkPolydataPipeline::G4VtkPolydataPipeline(G4String nameIn, const G4VtkVisContext& vc)
-  : G4VVtkPipeline(nameIn, "G4VtkPolydataPipeline", vc, false, vc.fViewer->renderer)
+G4VtkPolydataPipeline::G4VtkPolydataPipeline(G4String nameIn, const G4VtkVisContext& vcIn)
+  : G4VVtkPipeline(nameIn, "G4VtkPolydataPipeline", vcIn, false, vcIn.fViewer->renderer)
 {
   // Set pipeline type
   SetTypeName(G4String("G4VtkPolydataPipeline"));
@@ -177,6 +177,11 @@ void G4VtkPolydataPipeline::SetPolydata(const G4Polyhedron& polyhedron)
 
   } while (notLastFace);
 }
+
+void G4VtkPolydataPipeline::SetPolydata(vtkPolyData *polydataIn) {
+  polydata->DeepCopy(polydataIn);
+}
+
 
 void G4VtkPolydataPipeline::SetPolydata(const G4Polyline& polyline)
 {

@@ -50,13 +50,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
- : G4UserStackingAction(),
-   fHistoManager(0), fStackMessenger(0), fParticle(0) 
+ : G4UserStackingAction() 
 {
   fStackMessenger = new StackingMessenger(this);
-  fHistoManager   = HistoManager::GetPointer();
-  fKillSecondary  = false;
-  fParticle       = 0; 
+  fHistoManager = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +76,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   const G4ParticleDefinition* part = aTrack->GetDefinition();
 
-  if(fHistoManager->GetVerbose() > 1 ) {
+  if (fHistoManager->GetVerbose() > 1) {
     G4cout << "Track #"
            << aTrack->GetTrackID() << " of " << part->GetParticleName()
            << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
@@ -88,7 +85,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   }
 
   //stack or delete secondaries
-  if(aTrack->GetTrackID() > 1) {  
+  if (aTrack->GetTrackID() > 1) {  
     if (fKillSecondary || fParticle == part) { status = fKill; }
   }
   return status;

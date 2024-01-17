@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-07-04 I. Hrivnacova (extFactory-V11-01-00)
+- Applied clang-tidy, new coding guidelines
+
 ## 2021-12-10 Ben Morgan (extFactory-V11-00-00)
 - Change to new Markdown History format
 

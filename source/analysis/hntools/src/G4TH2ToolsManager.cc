@@ -39,10 +39,10 @@ using namespace G4Analysis;
 
 //_____________________________________________________________________________
 template <>
-tools::histo::h2d* G4THnToolsManager<2, tools::histo::h2d>::CreateToolsHT(
+tools::histo::h2d* G4THnToolsManager<kDim2, tools::histo::h2d>::CreateToolsHT(
   const G4String& title,
-  const std::array<G4HnDimension, 2>& bins,
-  const std::array<G4HnDimensionInformation, 2>& hnInfo)
+  const std::array<G4HnDimension, kDim2>& bins,
+  const std::array<G4HnDimensionInformation, kDim2>& hnInfo)
 {
   // Apply hn information to bins
   auto newXBins(bins[kX]);
@@ -62,10 +62,10 @@ tools::histo::h2d* G4THnToolsManager<2, tools::histo::h2d>::CreateToolsHT(
 
 //_____________________________________________________________________________
 template <>
-void G4THnToolsManager<2, tools::histo::h2d>::ConfigureToolsHT(
+void G4THnToolsManager<kDim2, tools::histo::h2d>::ConfigureToolsHT(
   tools::histo::h2d* ht,
-  const std::array<G4HnDimension, 2>& bins,
-  const std::array<G4HnDimensionInformation, 2>& hnInfo)
+  const std::array<G4HnDimension, kDim2>& bins,
+  const std::array<G4HnDimensionInformation, kDim2>& hnInfo)
 {
   // Apply hn information to bins
   auto newXBins(bins[kX]);
@@ -86,9 +86,9 @@ void G4THnToolsManager<2, tools::histo::h2d>::ConfigureToolsHT(
 
 //_____________________________________________________________________________
 template <>
-G4bool G4THnToolsManager<2, tools::histo::h2d>::FillHT(
+G4bool G4THnToolsManager<kDim2, tools::histo::h2d>::FillHT(
   tools::histo::h2d* ht, const G4HnInformation& hnInformation, 
-  std::array<G4double, 2>& value, G4double weight)
+  std::array<G4double, kDim2>& value, G4double weight)
 {
   auto xInfo = hnInformation.GetHnDimensionInformation(kX);
   auto yInfo = hnInformation.GetHnDimensionInformation(kY);
@@ -105,7 +105,7 @@ G4bool G4THnToolsManager<2, tools::histo::h2d>::FillHT(
 
 //_____________________________________________________________________________
 template <>
-G4bool G4THnToolsManager<2, tools::histo::h2d>::WriteOnAscii(
+G4bool G4THnToolsManager<kDim2, tools::histo::h2d>::WriteOnAscii(
   std::ofstream& output)
 {
 // Write selected objects on ASCII file
@@ -119,8 +119,9 @@ G4bool G4THnToolsManager<2, tools::histo::h2d>::WriteOnAscii(
   auto id = GetHnManager()->GetFirstId();
   for (const auto& [h2, info] : *GetTHnVector()) {
 
-    if ( ! info->GetAscii() ) {
-      // skip writing if activation is enabled and H1 is inactivated
+    if ( (h2 == nullptr) || (! info->GetAscii()) ) {
+      // skip writing
+      // if h2 was deleted or writing ascii is not selected
       id++;
       continue;
     }

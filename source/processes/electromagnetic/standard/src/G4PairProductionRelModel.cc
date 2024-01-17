@@ -124,7 +124,7 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
   fTheElectron(G4Electron::Electron()), fThePositron(G4Positron::Positron()),
   fParticleChange(nullptr) 
 {
-  // gamma energy below which the parametrized atomic x-section is used (80 GeV) 
+  // gamma energy below which the parametrized atomic x-section is used (30 GeV)
   fParametrizedXSectionThreshold = 30.0*CLHEP::GeV;
   // gamma energy below the Coulomb correction is turned off (50 MeV)
   fCoulombCorrectionThreshold    = 50.0*CLHEP::MeV;
@@ -153,21 +153,19 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 {
   if(nullptr == fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 
-  if (gElementData.empty()) {
+  if (isFirstInstance || gElementData.empty()) {
     // init element data and LPM funcs
     G4AutoLock l(&thePairProdRelMutex);
     if (gElementData.empty()) {
       isFirstInstance = true;
       gElementData.resize(gMaxZet+1, nullptr);
     }
-    l.unlock();
-  }
-  // static data should be initialised only in the one instance
-  if(isFirstInstance) {
+    // static data should be initialised only in the one instance
     InitialiseElementData();
     if (fIsUseLPMCorrection) {
       InitLPMFunctions();
     }
+    l.unlock();
   }
   // element selectors should be initialised in the master thread
   if (IsMaster()) {

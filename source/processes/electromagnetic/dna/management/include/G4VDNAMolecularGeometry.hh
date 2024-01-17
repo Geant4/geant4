@@ -41,8 +41,8 @@
 class G4VDNAMolecularGeometry
 {
 public:
-  G4VDNAMolecularGeometry(){};
-  virtual ~G4VDNAMolecularGeometry(){};
+  G4VDNAMolecularGeometry()= default;
+  virtual ~G4VDNAMolecularGeometry()= default;
 
   virtual void FindNearbyMolecules(const G4LogicalVolume*,
                                  const G4ThreeVector&,

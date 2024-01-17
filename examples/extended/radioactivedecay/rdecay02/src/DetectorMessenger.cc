@@ -39,11 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
-:G4UImessenger(), 
- fDetector(Det), fRdecayDir(0), fDetDir(0),
- fTargMatCmd(0), fDetectMatCmd(0), fTargRadiusCmd(0),
- fDetectThicknessCmd(0), fTargLengthCmd(0), fDetectLengthCmd(0) 
+DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
+: fDetector(det)
 { 
   fRdecayDir = new G4UIdirectory("/rdecay02/");
   fRdecayDir->SetGuidance("commands specific to this example");

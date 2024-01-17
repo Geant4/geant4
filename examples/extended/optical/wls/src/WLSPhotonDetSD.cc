@@ -45,15 +45,9 @@
 
 WLSPhotonDetSD::WLSPhotonDetSD(G4String name)
   : G4VSensitiveDetector(name)
-  , fPhotonDetHitCollection(nullptr)
-  , fHCID(-1)
 {
   collectionName.insert("PhotonDetHitCollection");
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSPhotonDetSD::~WLSPhotonDetSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,11 +81,10 @@ G4bool WLSPhotonDetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   // Find out information regarding the hit
   G4StepPoint* thePostPoint = aStep->GetPostStepPoint();
 
-  WLSUserTrackInformation* trackInformation =
+  auto trackInformation =
     (WLSUserTrackInformation*) theTrack->GetUserInformation();
 
-  G4TouchableHistory* theTouchable =
-    (G4TouchableHistory*) (thePostPoint->GetTouchable());
+  auto theTouchable = (G4TouchableHistory*) (thePostPoint->GetTouchable());
 
   G4ThreeVector photonExit   = trackInformation->GetExitPosition();
   G4ThreeVector photonArrive = thePostPoint->GetPosition();

@@ -124,7 +124,8 @@ class Par04DetectorConstruction : public G4VUserDetectorConstruction
   inline void SetMeshSizeOfCells(G4ThreeVector aNb) { fMeshSizeOfCells = aNb; };
   /// Set size of Mesh cells in cylindrical coordinates along one of the axis
   /// @param[in] aIndex index of cylindrical axis (0,1,2) = (r, phi, z)
-  inline void SetMeshSizeOfCells(std::size_t aIndex, G4double aNb) { fMeshSizeOfCells[aIndex] = aNb; };
+  inline void SetMeshSizeOfCells(std::size_t aIndex, G4double aNb)
+  { fMeshSizeOfCells[aIndex] = aNb; };
   /// Get size of Mesh cells in cylindrical coordinates (r, phi, z)
   inline G4ThreeVector GetMeshSizeOfCells() const { return fMeshSizeOfCells; };
 

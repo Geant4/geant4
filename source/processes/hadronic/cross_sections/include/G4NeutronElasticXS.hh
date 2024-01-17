@@ -56,7 +56,7 @@ class G4NeutronElasticXS final : public G4VCrossSectionDataSet
 {
 public: 
 
-  explicit G4NeutronElasticXS();
+  G4NeutronElasticXS();
 
   ~G4NeutronElasticXS() final;
     
@@ -113,12 +113,13 @@ private:
   G4VComponentCrossSection* ggXsection = nullptr;
   const G4ParticleDefinition* neutron;
 
-  G4bool  isMaster = false;
+  G4bool isFirst = false;
 
   static const G4int MAXZEL = 93;
   static G4PhysicsVector* data[MAXZEL];
   static G4double coeff[MAXZEL];
   static G4String gDataDirectory;
+  static G4bool fLock;
 };
 
 inline

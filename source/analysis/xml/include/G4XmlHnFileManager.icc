@@ -51,7 +51,9 @@ G4bool G4XmlHnFileManager<HT>::WriteExtra(
   // write histo
   auto result = tools::waxml::write(hnFile, *ht, path, htName);
   if ( ! result) {
-    // TO DO: give an exception about failure
+    G4Analysis::Warn(
+      "Saving " + G4Analysis::GetHnType<HT>() + " " + htName + " failed",
+      fkClass, "WriteExtra");
     return false;
   }
 

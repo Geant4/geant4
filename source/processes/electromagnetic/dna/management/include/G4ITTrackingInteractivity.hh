@@ -60,7 +60,7 @@ protected:
   int fVerboseLevel;
 
 public:
-  G4ITTrackingInteractivity(G4VITSteppingVerbose* verbose = 0);
+  G4ITTrackingInteractivity(G4VITSteppingVerbose* verbose = nullptr);
 
   virtual ~G4ITTrackingInteractivity()
   {

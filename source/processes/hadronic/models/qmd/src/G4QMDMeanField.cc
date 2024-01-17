@@ -568,8 +568,6 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    }
 
    // identification of the cluster
-
-   std::map < G4int , std::vector < G4int > > cluster_map;
    std::vector < G4bool > is_already_belong_some_cluster;
 
    //         cluster_id   participant_id
@@ -669,11 +667,11 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
                      if ( it->first == target_cluster_id )
                      { 
                        is_assigned_to [ it->second ] = is_assigned_to [ j ]; 
-                       clusters_tmp.insert ( std::multimap<G4int,G4int>::value_type (  is_assigned_to [ j ] , it->second ) );
+                       clusters_tmp.insert(std::multimap<G4int,G4int>::value_type(is_assigned_to[j], it->second));
                      }
                      else
                      {
-                       clusters_tmp.insert ( std::multimap<G4int,G4int>::value_type ( it->first , it->second ) );
+                       clusters_tmp.insert(std::multimap<G4int,G4int>::value_type(it->first, it->second));
                      }
                    }
                    clusters = clusters_tmp;
@@ -698,12 +696,6 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
            {
              ++ichek;
            }
-         }
-
-         if ( cluster_participants.size() > 0 ) 
-         {
-           //                      cluster , participant 
-           cluster_map.insert ( std::pair(i, cluster_participants) );
          }
        }
      } 

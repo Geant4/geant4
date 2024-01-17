@@ -5,6 +5,13 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2023-10-18 LE TUAN ANH (dnadamage1-V11-01-00)
+- Changes in ROOT macros:
+  - Fixed bug: boolean Primaryflag was not updated for new primary
+  - Count direct and indirect SB (strand break)
+  - Introduce clustering algorithm to extract SSB, DSB (simple, complex)
+  - rename plot.C to scandamages.C
+
 ## 2021-12-10 Ben Morgan (dnadamage1-V11-00-00)
 - Change to new Markdown History format
 

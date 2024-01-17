@@ -38,6 +38,7 @@
 
 #include <iomanip>
 
+#include "G4VNavigation.hh"
 #include "G4NavigationHistory.hh"
 
 #include "G4VPhysicalVolume.hh"
@@ -48,7 +49,7 @@
 
 class G4NavigationLogger;
 
-class G4NormalNavigation
+class G4NormalNavigation : public G4VNavigation
 {
   public:  // with description
 
@@ -64,7 +65,7 @@ class G4NormalNavigation
                   const G4ThreeVector &globalPoint,
                   const G4ThreeVector* globalDirection,
                   const G4bool pLocatedOnEdge, 
-                        G4ThreeVector &localPoint);
+                        G4ThreeVector &localPoint) final;
       // Search positioned volumes in mother at current top level of history
       // for volume containing globalPoint. Do not test the blocked volume.
       // If a containing volume is found, `stack' the new volume and return
@@ -82,25 +83,18 @@ class G4NormalNavigation
                                 G4bool &exiting,
                                 G4bool &entering,
                                 G4VPhysicalVolume *(*pBlockedPhysical),
-                                G4int &blockedReplicaNo );
+                                G4int &blockedReplicaNo ) final;
 
     G4double ComputeSafety( const G4ThreeVector &globalpoint,
                             const G4NavigationHistory &history,
-                            const G4double pMaxLength=DBL_MAX );
+                            const G4double pMaxLength=DBL_MAX ) final;
 
-    G4int GetVerboseLevel() const;
-    void  SetVerboseLevel(G4int level);
+    virtual G4int GetVerboseLevel() const final;
+    virtual void  SetVerboseLevel(G4int level) final;
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 
-    inline void  CheckMode(G4bool mode);
-      // Run navigation in "check-mode", therefore using additional
-      // verifications and more strict correctness conditions.
-      // Is effective only with G4VERBOSE set.
-
   private:
-
-    G4bool fCheck = false; 
     G4NavigationLogger* fLogger;
 };
 

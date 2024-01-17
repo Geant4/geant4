@@ -112,12 +112,9 @@ G4EvaporationDefaultGEMFactory::G4EvaporationDefaultGEMFactory(G4VEvaporationCha
   : G4VEvaporationFactory(ptr)
 {}
 
-G4EvaporationDefaultGEMFactory::~G4EvaporationDefaultGEMFactory()
-{}
-
 std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel()
 {
-  std::vector<G4VEvaporationChannel*> * theChannel = 
+  std::vector<G4VEvaporationChannel*>* theChannel = 
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
 

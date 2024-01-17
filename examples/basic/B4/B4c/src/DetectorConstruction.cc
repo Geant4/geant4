@@ -240,11 +240,8 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   //
   // Visualization attributes
   //
-  worldLV->SetVisAttributes (G4VisAttributes::GetInvisible());
-
-  auto simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  simpleBoxVisAtt->SetVisibility(true);
-  calorLV->SetVisAttributes(simpleBoxVisAtt);
+  worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
+  calorLV->SetVisAttributes(G4VisAttributes(G4Colour::White()));
 
   //
   // Always return the physical World

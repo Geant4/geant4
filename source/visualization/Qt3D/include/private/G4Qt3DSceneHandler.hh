@@ -81,7 +81,7 @@ protected:
   Qt3DCore::QEntity* fpQt3DScene;
   Qt3DCore::QEntity* fpTransientObjects;
   Qt3DCore::QEntity* fpPersistentObjects;
-  std::vector<G4Qt3DQEntity*> fpPhysicalVolumeObjects;  // Multiple worlds
+  std::vector<G4Qt3DQEntity*> fpPhysicalVolumeObjects;
 
 };
 

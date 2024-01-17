@@ -54,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 public:
   
   DetectorConstruction();
- ~DetectorConstruction();
+ ~DetectorConstruction() override;
 
 public:
 
@@ -67,8 +67,8 @@ public:
                 
   void SetAbsorSizeYZ   (G4double);          
      
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
      
 public:
 
@@ -87,22 +87,22 @@ public:
    
 private:
 
-  G4int              fNbOfAbsor;
+  G4int              fNbOfAbsor = 0;
   G4Material*        fAbsorMaterial [kMaxAbsor];
   G4double           fAbsorThickness[kMaxAbsor];
   G4double           fXfront[kMaxAbsor];  
 
-  G4double           fAbsorSizeX;
-  G4double           fAbsorSizeYZ;
+  G4double           fAbsorSizeX  = 0.;
+  G4double           fAbsorSizeYZ = 0.;
   
-  G4double           fWorldSizeX;
-  G4double           fWorldSizeYZ;  
-  G4Material*        fDefaultMaterial;  
+  G4double           fWorldSizeX  = 0.;
+  G4double           fWorldSizeYZ = 0.;  
+  G4Material*        fDefaultMaterial = nullptr;  
   
-  G4VPhysicalVolume* fPhysiWorld;
+  G4VPhysicalVolume* fPhysiWorld = nullptr;
 
-  DetectorMessenger* fDetectorMessenger;
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+  DetectorMessenger* fDetectorMessenger = nullptr;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger = nullptr;
 
 private:
 

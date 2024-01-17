@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParallelWorldProcessStore implementation
 //
-//
-//
+// Author: M.Asai (SLAC), 2010.
+//---------------------------------------------------------------------
 
 #include "G4ParallelWorldProcessStore.hh"
 
@@ -35,7 +36,8 @@ G4ThreadLocal G4ParallelWorldProcessStore* G4ParallelWorldProcessStore::fInstanc
 
 G4ParallelWorldProcessStore* G4ParallelWorldProcessStore::GetInstance()
 {
-  if (fInstance == nullptr) {
+  if (fInstance == nullptr)
+  {
     fInstance = new G4ParallelWorldProcessStore();
   }
   return fInstance;
@@ -55,12 +57,14 @@ G4ParallelWorldProcessStore::~G4ParallelWorldProcessStore()
 }
 
 void G4ParallelWorldProcessStore::SetParallelWorld(G4ParallelWorldProcess* proc,
-                                                   G4String parallelWorldName)
+                                                   const G4String& parallelWorldName)
 {
   for (const auto& [process, name] : *fInstance)
   {
-    if(process == proc) {
-      if(name == parallelWorldName) {
+    if(process == proc)
+    {
+      if(name == parallelWorldName)
+      {
         return; // already registered
       }
 
@@ -83,7 +87,7 @@ void G4ParallelWorldProcessStore::UpdateWorlds()
   }
 }
 
-G4ParallelWorldProcess* G4ParallelWorldProcessStore::GetProcess(G4String parallelWorldName)
+G4ParallelWorldProcess* G4ParallelWorldProcessStore::GetProcess(const G4String& parallelWorldName)
 {
   for(const auto& [proc, name] : *fInstance)
   {

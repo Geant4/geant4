@@ -42,16 +42,16 @@ class LXeEventMessenger : public G4UImessenger
 {
  public:
   LXeEventMessenger(LXeEventAction*);
-  ~LXeEventMessenger();
+  ~LXeEventMessenger() override;
 
   void SetNewValue(G4UIcommand*, G4String) override;
 
  private:
-  LXeEventAction* fLXeEvent;
-  G4UIcmdWithAnInteger* fVerboseCmd;
-  G4UIcmdWithAnInteger* fPmtThresholdCmd;
-  G4UIcmdWithABool* fForceDrawPhotonsCmd;
-  G4UIcmdWithABool* fForceDrawNoPhotonsCmd;
+  LXeEventAction* fLXeEvent = nullptr;
+  G4UIcmdWithAnInteger* fVerboseCmd = nullptr;
+  G4UIcmdWithAnInteger* fPmtThresholdCmd = nullptr;
+  G4UIcmdWithABool* fForceDrawPhotonsCmd = nullptr;
+  G4UIcmdWithABool* fForceDrawNoPhotonsCmd = nullptr;
 };
 
 #endif

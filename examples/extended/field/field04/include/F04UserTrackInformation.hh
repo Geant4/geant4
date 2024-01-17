@@ -47,15 +47,15 @@ class F04UserTrackInformation : public G4VUserTrackInformation
 
   public:
 
-    F04UserTrackInformation();
-    virtual ~F04UserTrackInformation();
+    F04UserTrackInformation() = default;
+    ~F04UserTrackInformation() override  = default;
 
     void SetTrackStatusFlag(TrackStatus s){ fStatus = s; }
     TrackStatus GetTrackStatusFlag()const { return fStatus; }
 
   private:
 
-    TrackStatus fStatus;
+    TrackStatus fStatus = undefined;
 
 };
 

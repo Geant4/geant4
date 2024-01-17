@@ -37,7 +37,6 @@
 
 
 #include "G4EvaporationProbability.hh"
-#include "G4DeuteronCoulombBarrier.hh"
 
 class G4DeuteronEvaporationProbability : public G4EvaporationProbability
 {
@@ -45,7 +44,13 @@ public:
 
   explicit G4DeuteronEvaporationProbability();
 
-  ~G4DeuteronEvaporationProbability() override;
+  ~G4DeuteronEvaporationProbability() override = default;
+
+  G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &right) = delete;
+  const G4DeuteronEvaporationProbability & operator=
+  (const G4DeuteronEvaporationProbability &right) = delete;
+  G4bool operator==(const G4DeuteronEvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4DeuteronEvaporationProbability &right) const = delete;
 
 protected:
 
@@ -53,13 +58,6 @@ protected:
  
   G4double CalcBetaParam(const G4Fragment & fragment) override;
 
-private:  
-
-  G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &right);
-  const G4DeuteronEvaporationProbability & operator=
-  (const G4DeuteronEvaporationProbability &right);
-  G4bool operator==(const G4DeuteronEvaporationProbability &right) const;
-  G4bool operator!=(const G4DeuteronEvaporationProbability &right) const;
 };
 
 #endif

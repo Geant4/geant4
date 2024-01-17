@@ -52,26 +52,29 @@ class G4DNAEmfietzoglouExcitationModel : public G4VEmModel
 
 public:
 
-  G4DNAEmfietzoglouExcitationModel(const G4ParticleDefinition* p = 0,
+  G4DNAEmfietzoglouExcitationModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam =
                                        "DNAEmfietzoglouExcitationModel");
 
-  virtual ~G4DNAEmfietzoglouExcitationModel();
+  ~G4DNAEmfietzoglouExcitationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector& = *(new G4DataVector()));
+  G4DNAEmfietzoglouExcitationModel & operator=(const G4DNAEmfietzoglouExcitationModel &right) = delete;
+  G4DNAEmfietzoglouExcitationModel(const G4DNAEmfietzoglouExcitationModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector& = *(new G4DataVector())) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
 
   inline void SelectStationary(G4bool input); 
 
@@ -89,15 +92,15 @@ private:
   std::map<G4String, G4double, std::less<G4String> > lowEnergyLimit;
   std::map<G4String, G4double, std::less<G4String> > highEnergyLimit;
 
-  G4bool isInitialised;
+  G4bool isInitialised{false};
   G4int verboseLevel;
 
   // Cross section
 
-  typedef std::map<G4String, G4String, std::less<G4String> > MapFile;
+  using MapFile = std::map<G4String, G4String, std::less<G4String>>;
   MapFile tableFile;
 
-  typedef std::map<G4String, G4DNACrossSectionDataSet*, std::less<G4String> > MapData;
+  using MapData = std::map<G4String, G4DNACrossSectionDataSet *, std::less<G4String>>;
   MapData tableData;
 
   // Partial cross section
@@ -107,11 +110,6 @@ private:
   // Final state
 
   G4DNAEmfietzoglouWaterExcitationStructure waterStructure;
-
-  //
-
-  G4DNAEmfietzoglouExcitationModel & operator=(const G4DNAEmfietzoglouExcitationModel &right);
-  G4DNAEmfietzoglouExcitationModel(const G4DNAEmfietzoglouExcitationModel&);
 
 };
 

@@ -18,6 +18,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLCoulombNone.hh
     G4INCLCoulombNonRelativistic.hh
     G4INCLCrossSections.hh
+    G4INCLCrossSectionsAntiparticles.hh
     G4INCLCrossSectionsINCL46.hh
     G4INCLCrossSectionsMultiPions.hh
     G4INCLCrossSectionsMultiPionsAndResonances.hh
@@ -67,6 +68,13 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLNKToNKChannel.hh
     G4INCLNKToNKpiChannel.hh
     G4INCLNLToNSChannel.hh
+    G4INCLNNbarCEXChannel.hh
+    G4INCLNNbarElasticChannel.hh
+    G4INCLNNbarToLLbarChannel.hh
+    G4INCLNNbarToNNbarpiChannel.hh
+    G4INCLNNbarToNNbar2piChannel.hh
+    G4INCLNNbarToNNbar3piChannel.hh
+    G4INCLNNbarToAnnihilationChannel.hh
     G4INCLNNEtaToMultiPionsChannel.hh
     G4INCLNNOmegaToMultiPionsChannel.hh
     G4INCLNNToMissingStrangenessChannel.hh
@@ -142,6 +150,7 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLCoulombNone.cc
     G4INCLCoulombNonRelativistic.cc
     G4INCLCrossSections.cc
+    G4INCLCrossSectionsAntiparticles.cc
     G4INCLCrossSectionsINCL46.cc
     G4INCLCrossSectionsMultiPions.cc
     G4INCLCrossSectionsMultiPionsAndResonances.cc
@@ -180,6 +189,13 @@ geant4_add_module(G4hadronic_inclxx_physics
     G4INCLNKToNKChannel.cc
     G4INCLNKToNKpiChannel.cc
     G4INCLNLToNSChannel.cc
+    G4INCLNNbarCEXChannel.cc
+    G4INCLNNbarElasticChannel.cc
+    G4INCLNNbarToLLbarChannel.cc
+    G4INCLNNbarToNNbarpiChannel.cc
+    G4INCLNNbarToNNbar2piChannel.cc
+    G4INCLNNbarToNNbar3piChannel.cc
+    G4INCLNNbarToAnnihilationChannel.cc
     G4INCLNNEtaToMultiPionsChannel.cc
     G4INCLNNOmegaToMultiPionsChannel.cc
     G4INCLNNToMissingStrangenessChannel.cc

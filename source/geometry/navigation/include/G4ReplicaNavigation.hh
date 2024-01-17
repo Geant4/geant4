@@ -107,8 +107,8 @@ class G4ReplicaNavigation
 
     G4double ComputeSafety( const G4ThreeVector& globalPoint,
                             const G4ThreeVector& localPoint,
-                                  G4NavigationHistory& history,
-                            const G4double pProposedMaxLength = DBL_MAX );
+                            const G4NavigationHistory& history,
+                            const G4double pProposedMaxLength = DBL_MAX ) const;
 
     EInside BackLocate( G4NavigationHistory &history,
                   const G4ThreeVector& globalPoint,

@@ -31,18 +31,18 @@
 // related classes and UI.
 //
 // List of Directory and Commands:
-// 
+//
 // G4ParticleMessenger
 //  /particle/   Particle control commands.
-//   Commands : 
-//    select * Select particle 
+//   Commands :
+//    select * Select particle
 //    list * List name of particles.
 //    find * find particle by PDG encoding.
 //    verbose * Set Verbose level of Particle Table
 //
 // G4ParticlePropertyMessenger
 //  /particle/property/   Particle Table control commands.
-//   Commands : 
+//   Commands :
 //     dump * dump particle properties.
 //     stable * Set stable flag.
 //     lifetime * Set life time.
@@ -50,7 +50,7 @@
 //
 // G4DecayTableMessenger
 //  /particle/property/decay/   Decay Table control commands.
-//   Commands : 
+//   Commands :
 //     select * Enter index of decay mode.
 //     dump * Dump decay mode information.
 //     br * Set branching ratio. [0< BR <1.0]
@@ -60,22 +60,21 @@
 #ifndef G4ParticleMessenger_hh
 #define G4ParticleMessenger_hh 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class G4ParticleDefinition;
 class G4ParticleTable;
 class G4ParticlePropertyMessenger;
 
 class G4UIdirectory;
-class G4UIcmdWithAString; 
-class G4UIcmdWithAnInteger; 
-class G4UIcmdWithoutParameter; 
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithoutParameter;
 
 class G4ParticleMessenger : public G4UImessenger
 {
-  public: 
-
+  public:
     G4ParticleMessenger(G4ParticleTable* pTable = nullptr);
     ~G4ParticleMessenger() override;
 
@@ -86,14 +85,13 @@ class G4ParticleMessenger : public G4UImessenger
     G4String GetCurrentValue(G4UIcommand* command) override;
 
   private:
-
-    G4UIdirectory*             thisDirectory = nullptr;
-    G4UIcmdWithAString*        listCmd = nullptr;
-    G4UIcmdWithAString*        selectCmd = nullptr;
-    G4UIcmdWithAnInteger*      findCmd = nullptr;
-    G4UIcmdWithoutParameter*   createAllIonCmd = nullptr;
-    G4UIcmdWithoutParameter*   createAllIsomerCmd = nullptr;
-    G4UIcmdWithAnInteger*      verboseCmd = nullptr;
+    G4UIdirectory* thisDirectory = nullptr;
+    G4UIcmdWithAString* listCmd = nullptr;
+    G4UIcmdWithAString* selectCmd = nullptr;
+    G4UIcmdWithAnInteger* findCmd = nullptr;
+    G4UIcmdWithoutParameter* createAllIonCmd = nullptr;
+    G4UIcmdWithoutParameter* createAllIsomerCmd = nullptr;
+    G4UIcmdWithAnInteger* verboseCmd = nullptr;
 
     G4ParticleTable* theParticleTable = nullptr;
     G4ParticleDefinition* currentParticle = nullptr;

@@ -32,7 +32,7 @@
 #ifndef G4ParticleWithCuts_h
 #define G4ParticleWithCuts_h 1
 
-#include "G4ParticleDefinition.hh" 
+#include "G4ParticleDefinition.hh"
 
 using G4ParticleWithCuts = G4ParticleDefinition;
 

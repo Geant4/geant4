@@ -42,8 +42,8 @@
 //------------------------------------------------------------------------------
 
 G4ReactionTableMessenger::G4ReactionTableMessenger(G4DNAMolecularReactionTable* table)
-  : G4UImessenger()
-  , fpTable(table)
+  : 
+   fpTable(table)
   , fpActivateReactionUI(new G4UIcmdWithoutParameter("/chem/reaction/UI", this))
 {
   fpNewDiffContReaction = new G4UIcmdWithAString("/chem/reaction/new", this);
@@ -55,9 +55,9 @@ G4ReactionTableMessenger::G4ReactionTableMessenger(G4DNAMolecularReactionTable* 
 
 G4ReactionTableMessenger::~G4ReactionTableMessenger()
 {
-  if(fpNewDiffContReaction) delete fpNewDiffContReaction;
-  if(fpAddReaction) delete fpAddReaction;
-  if(fpPrintTable) delete fpPrintTable;
+  delete fpNewDiffContReaction;
+  delete fpAddReaction;
+  delete fpPrintTable;
 }
 
 //------------------------------------------------------------------------------
@@ -114,12 +114,12 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
 //      reactionData->SetProductionRate(dimensionedProductionRate);
 //    }
 
-    while(iss.eof() == false)
+    while(!iss.eof())
     {
       G4String product;
       iss >> product;
 
-      if(product != "")
+      if(!product.empty())
       {
         reactionData->AddProduct(product);
       }
@@ -272,7 +272,7 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
 
     //--------------------------------------------------------------------------
 
-    G4DNAMolecularReactionData* reactionData =
+    auto  reactionData =
                 new G4DNAMolecularReactionData(0,
                                                species1,
                                                species2);
@@ -286,7 +286,7 @@ void G4ReactionTableMessenger::SetNewValue(G4UIcommand* command,
 
       while(marker!="|"
           //&& marker!=""
-          && iss.eof() == false
+          && !iss.eof()
           )
       {
         //G4cout << marker << G4endl;

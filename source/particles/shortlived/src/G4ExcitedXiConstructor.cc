@@ -23,89 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
+//
+//      Update mass and width following PDG 2023
+//        4 nov 2023 S.Okada
 // ---------------------------------------------------------------
-
 
 #include "G4ExcitedXiConstructor.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4PhaseSpaceDecayChannel.hh"
-#include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"
+#include "G4PhaseSpaceDecayChannel.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4VDecayChannel.hh"
 
-G4ExcitedXiConstructor::G4ExcitedXiConstructor():
-    G4ExcitedBaryonConstructor(NStates, XiIsoSpin)
+G4ExcitedXiConstructor::G4ExcitedXiConstructor() : G4ExcitedBaryonConstructor(NStates, XiIsoSpin) {}
+
+G4DecayTable* G4ExcitedXiConstructor::CreateDecayTable(const G4String& parentName, G4int iIso3,
+                                                       G4int iState, G4bool fAnti)
 {
-
-}
-
-G4DecayTable* G4ExcitedXiConstructor::CreateDecayTable(
-                                                 const G4String&  parentName,  
-                                                 G4int iIso3, 
-                                                 G4int iState,
-                                                 G4bool fAnti)
-{
-
   // create decay table
-  auto  decayTable =  new G4DecayTable();
+  auto decayTable = new G4DecayTable();
 
   G4double br;
-  if ( (br=bRatio[iState][XiPi]) >0.0) {
-    AddXiPiMode( decayTable, parentName, br, iIso3, fAnti);
+  if ((br = bRatio[iState][XiPi]) > 0.0) {
+    AddXiPiMode(decayTable, parentName, br, iIso3, fAnti);
   }
 
-  if ( (br=bRatio[iState][XiGamma]) >0.0) {
-    AddXiGammaMode( decayTable, parentName, br, iIso3, fAnti);
+  if ((br = bRatio[iState][XiGamma]) > 0.0) {
+    AddXiGammaMode(decayTable, parentName, br, iIso3, fAnti);
   }
 
-  if ( (br=bRatio[iState][LambdaK]) >0.0) {
-    AddLambdaKMode( decayTable, parentName, br, iIso3, fAnti);
+  if ((br = bRatio[iState][LambdaK]) > 0.0) {
+    AddLambdaKMode(decayTable, parentName, br, iIso3, fAnti);
   }
 
-  if ( (br=bRatio[iState][SigmaK]) >0.0) {
-    AddSigmaKMode( decayTable, parentName, br, iIso3, fAnti);
+  if ((br = bRatio[iState][SigmaK]) > 0.0) {
+    AddSigmaKMode(decayTable, parentName, br, iIso3, fAnti);
   }
 
-  return  decayTable;
+  return decayTable;
 }
 
-G4DecayTable*  G4ExcitedXiConstructor::AddXiGammaMode( 
-                                   G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4bool fAnti)
+G4DecayTable* G4ExcitedXiConstructor::AddXiGammaMode(G4DecayTable* decayTable,
+                                                     const G4String& nameParent, G4double br,
+                                                     G4int iIso3, G4bool fAnti)
 {
   G4VDecayChannel* mode;
-  // 
-  G4String daughterH;  
-  if (iIso3== +1) {
-     daughterH = "xi0";
-   } else if (iIso3==-1) {
-     daughterH = "xi-";
-   }
+  G4String daughterH;
+  if (iIso3 == +1) {
+    daughterH = "xi0";
+  }
+  else if (iIso3 == -1) {
+    daughterH = "xi-";
+  }
   if (fAnti) daughterH = "anti_" + daughterH;
 
   // create decay channel  [parent    BR     #daughters]
-  mode = new G4PhaseSpaceDecayChannel(nameParent, br, 2,
-                                           daughterH,"gamma");
+  mode = new G4PhaseSpaceDecayChannel(nameParent, br, 2, daughterH, "gamma");
   // add decay table
   decayTable->Insert(mode);
 
   return decayTable;
 }
 
-G4DecayTable*  G4ExcitedXiConstructor::AddLambdaKMode( 
-                                    G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4bool fAnti)
-
+G4DecayTable* G4ExcitedXiConstructor::AddLambdaKMode(G4DecayTable* decayTable,
+                                                     const G4String& nameParent, G4double br,
+                                                     G4int iIso3, G4bool fAnti)
 
 {
   G4VDecayChannel* mode;
@@ -114,28 +101,30 @@ G4DecayTable*  G4ExcitedXiConstructor::AddLambdaKMode(
   G4String daughterK;
   G4double r = 0.;
 
-  // ------------ Lambda K- ------------ 
+  // ------------ Lambda K- ------------
   // determine daughters
   if (iIso3 == +1) {
     if (!fAnti) {
       daughterK = "kaon0";
-    } else {
+    }
+    else {
       daughterK = "anti_kaon0";
-    }  
+    }
     r = br;
-  } else if (iIso3 == -1) {
+  }
+  else if (iIso3 == -1) {
     if (!fAnti) {
       daughterK = "kaon-";
-    } else {
+    }
+    else {
       daughterK = "kaon+";
-    }  
+    }
     r = br;
   }
   if (fAnti) lambda = "anti_" + lambda;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        lambda,daughterK);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, lambda, daughterK);
     // add decay table
     decayTable->Insert(mode);
   }
@@ -143,9 +132,9 @@ G4DecayTable*  G4ExcitedXiConstructor::AddLambdaKMode(
   return decayTable;
 }
 
-G4DecayTable*  G4ExcitedXiConstructor::AddSigmaKMode( 
-                                    G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4bool fAnti)
+G4DecayTable* G4ExcitedXiConstructor::AddSigmaKMode(G4DecayTable* decayTable,
+                                                    const G4String& nameParent, G4double br,
+                                                    G4int iIso3, G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -153,48 +142,50 @@ G4DecayTable*  G4ExcitedXiConstructor::AddSigmaKMode(
   G4String daughterK;
   G4double r = 0.;
 
-  // ------------ Sigma K- ------------ 
+  // ------------ Sigma K- ------------
   // determine daughters
-  if (iIso3== +1) {
-    daughterH  = "sigma+";
-    r= br/2.;
-  } else if (iIso3== -1) {
-    daughterH  = "sigma0";
-    r = br/2.;
+  if (iIso3 == +1) {
+    daughterH = "sigma+";
+    r = br / 2.;
+  }
+  else if (iIso3 == -1) {
+    daughterH = "sigma0";
+    r = br / 2.;
   }
   if (!fAnti) {
     daughterK = "kaon-";
-  } else {
+  }
+  else {
     daughterK = "kaon+";
   }
   if (fAnti) daughterH = "anti_" + daughterH;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        daughterH,daughterK);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, daughterH, daughterK);
     // add decay table
     decayTable->Insert(mode);
   }
 
-  // ------------ Sigma K0 ------------ 
+  // ------------ Sigma K0 ------------
   // determine daughters
   if (iIso3 == +1) {
-    daughterH  = "sigma0";
-    r= br/2.;
-  } else if (iIso3 == -1) {
-    daughterH  = "sigma-";
-     r = br/2.;
+    daughterH = "sigma0";
+    r = br / 2.;
+  }
+  else if (iIso3 == -1) {
+    daughterH = "sigma-";
+    r = br / 2.;
   }
   if (!fAnti) {
     daughterK = "anti_kaon0";
-  } else {
+  }
+  else {
     daughterK = "kaon0";
   }
   if (fAnti) daughterH = "anti_" + daughterH;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        daughterH,daughterK);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, daughterH, daughterK);
     // add decay table
     decayTable->Insert(mode);
   }
@@ -202,9 +193,9 @@ G4DecayTable*  G4ExcitedXiConstructor::AddSigmaKMode(
   return decayTable;
 }
 
-G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode( 
-                                    G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4bool fAnti)
+G4DecayTable* G4ExcitedXiConstructor::AddXiPiMode(G4DecayTable* decayTable,
+                                                  const G4String& nameParent, G4double br,
+                                                  G4int iIso3, G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -212,64 +203,66 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
   G4String daughterPi;
   G4double r = 0.;
 
-  // ------------ Xi pi-  ------------ 
+  // ------------ Xi pi-  ------------
   // determine daughters
-  if (iIso3== +1) {
+  if (iIso3 == +1) {
     r = 0.;
-  } else if (iIso3 == -1) {
+  }
+  else if (iIso3 == -1) {
     daughterXi = "xi0";
-    r = br/2.;
+    r = br / 2.;
   }
   if (!fAnti) {
     daughterPi = "pi-";
-  } else {
+  }
+  else {
     daughterPi = "pi+";
   }
   if (fAnti) daughterXi = "anti_" + daughterXi;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        daughterXi,daughterPi);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, daughterXi, daughterPi);
     // add decay table
     decayTable->Insert(mode);
   }
-  // ------------ Xi Pi0 ------------ 
+  // ------------ Xi Pi0 ------------
   // determine daughters
-  if (iIso3== +1) {
+  if (iIso3 == +1) {
     daughterXi = "xi0";
-    r = br/2.;
-  } else if (iIso3 == -1) {
+    r = br / 2.;
+  }
+  else if (iIso3 == -1) {
     daughterXi = "xi-";
-    r = br/2.;
+    r = br / 2.;
   }
   daughterPi = "pi0";
   if (fAnti) daughterXi = "anti_" + daughterXi;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        daughterXi,daughterPi);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, daughterXi, daughterPi);
     // add decay table
     decayTable->Insert(mode);
   }
 
-  // ------------ XI pi + ------------ 
+  // ------------ XI pi + ------------
   // determine daughters
-  if (iIso3== +1) {
+  if (iIso3 == +1) {
     daughterXi = "xi-";
-    r = br/2.;
-  } else if (iIso3==-1) {
+    r = br / 2.;
+  }
+  else if (iIso3 == -1) {
     r = 0.;
   }
   if (!fAnti) {
     daughterPi = "pi+";
-  } else {
+  }
+  else {
     daughterPi = "pi-";
   }
   if (fAnti) daughterXi = "anti_" + daughterXi;
-  if (r>0.) {
+  if (r > 0.) {
     // create decay channel  [parent    BR     #daughters]
-    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2,
-                                        daughterXi,daughterPi);
+    mode = new G4PhaseSpaceDecayChannel(nameParent, r, 2, daughterXi, daughterPi);
     // add decay table
     decayTable->Insert(mode);
   }
@@ -278,10 +271,10 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
 }
 
 G4double G4ExcitedXiConstructor::GetMass(G4int iState, G4int iso3)
-{ 
+{
   G4double fm = mass[iState];
-  if ( iState==0 ) {
-    if (iso3== -1) fm = 1.5350*GeV; // xi-
+  if (iState == 0) {
+    if (iso3 == -1) fm = 1.5350 * GeV;  // xi-
   }
   return fm;
 }
@@ -289,22 +282,24 @@ G4double G4ExcitedXiConstructor::GetMass(G4int iState, G4int iso3)
 G4double G4ExcitedXiConstructor::GetWidth(G4int iState, G4int iso3)
 {
   G4double fw = width[iState];
-  if ( iState==0 ) {
-    if (iso3== -1) fw = 9.9*MeV; // xi-
+  if (iState == 0) {
+    if (iso3 == -1) fw = 9.9 * MeV;  // xi-
   }
   return fw;
 }
+
+// clang-format off
 
 const char* G4ExcitedXiConstructor::name[] = {
    "xi(1530)", "xi(1690)", "xi(1820)", "xi(1950)", "xi(2030)"
 };
 
 const G4double G4ExcitedXiConstructor::mass[] = {
- 1.5318*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV 
+ 1.5318*GeV, 1.690*GeV, 1.823*GeV, 1.950*GeV,  2.025*GeV
 };
 
 const G4double G4ExcitedXiConstructor::width[] = {
-    9.1*MeV,  50.0*MeV,  24.0*MeV,  60.0*MeV,  20.0*MeV
+    9.1*MeV,  20.0*MeV,  24.0*MeV,  60.0*MeV,  20.0*MeV
 };
 
 const G4int G4ExcitedXiConstructor::iSpin[] = {
@@ -320,22 +315,11 @@ const G4int G4ExcitedXiConstructor::encodingOffset[] = {
       0, 20000, 10000, 30000, 10000
 };
 
-const G4double G4ExcitedXiConstructor::bRatio[ G4ExcitedXiConstructor::NStates ][ G4ExcitedXiConstructor::NumberOfDecayModes] = 
+const G4double G4ExcitedXiConstructor::bRatio[ G4ExcitedXiConstructor::NStates ][ G4ExcitedXiConstructor::NumberOfDecayModes] =
 {
-   {  0.98, 0.02,  0.0,  0.0}, 
-   {  0.10,  0.0, 0.70, 0.20}, 
-   {  0.15,  0.0, 0.70, 0.15}, 
-   {  0.25,  0.0, 0.50, 0.25}, 
+   {  0.98, 0.02,  0.0,  0.0},
+   {  0.10,  0.0, 0.70, 0.20},
+   {  0.15,  0.0, 0.70, 0.15},
+   {  0.25,  0.0, 0.50, 0.25},
    {  0.10,  0.0, 0.20, 0.70}
 };
-
-
-
-
-
-
-
-
-
-
-

@@ -33,7 +33,6 @@
 
 #include "globals.hh"
 #include "G4FermiFragment.hh"
-#include "G4Fragment.hh"
 
 class G4FermiPair 
 {
@@ -41,73 +40,38 @@ public:
 
   explicit G4FermiPair(const G4FermiFragment* f1, const G4FermiFragment* f2);
 
-  inline G4int GetA() const;
-  inline G4int GetZ() const;
-  inline G4double GetMass() const;
-  inline G4double GetExcitationEnergy() const;
-  inline G4double GetTotalEnergy() const;
-  inline G4double GetDynamicMinMass(G4double Eex) const;
-  inline const G4FermiFragment* GetFragment1() const;
-  inline const G4FermiFragment* GetFragment2() const;
-  
-private:
+  ~G4FermiPair() = default;
 
+  G4int GetA() const { return totalA; }
+  G4int GetZ() const { return totalZ; }
+  G4double GetMass() const { return mass; } 
+  G4double GetExcitationEnergy() const { return excitEnergy; }
+  G4double GetTotalEnergy() const { return mass + excitEnergy; }
+  const G4FermiFragment* GetFragment1() const { return fragment1; }
+  const G4FermiFragment* GetFragment2() const { return fragment2; }
+
+  G4double GetMinMass(G4double Eex) const;
+
+  void SetProbability(const G4double p) { prob = p; }
+  G4double Probability() const { return prob; }
+  
   inline G4FermiPair(const G4FermiPair &) = delete;
   inline const G4FermiPair & operator=(const G4FermiPair &) = delete;
   inline G4bool operator==(const G4FermiPair &) const = delete;
   inline G4bool operator!=(const G4FermiPair &) const = delete;
   
+private:
+
   G4int totalZ;
   G4int totalA;
 
   G4double mass;
   G4double excitEnergy;
+  G4double prob{1.0};
 
   const G4FermiFragment* fragment1;
   const G4FermiFragment* fragment2;
-
 };
-
-inline G4int G4FermiPair::GetA() const
-{
-  return totalA;
-}
-
-inline G4int G4FermiPair::GetZ() const
-{
-  return totalZ;
-}
-
-inline G4double G4FermiPair::GetMass() const
-{
-  return mass;
-}
-
-inline G4double G4FermiPair::GetExcitationEnergy() const
-{
-  return excitEnergy;
-}
-
-inline G4double G4FermiPair::GetTotalEnergy() const
-{
-  return mass + excitEnergy;
-}
-
-inline const G4FermiFragment* G4FermiPair::GetFragment1() const
-{
-  return fragment1;
-}
-
-inline const G4FermiFragment* G4FermiPair::GetFragment2() const
-{
-  return fragment2;
-}
-
-inline G4double G4FermiPair::GetDynamicMinMass(G4double Eex) const
-{
-  return fragment1->GetTotalEnergy() + fragment2->GetTotalEnergy()
-    + fragment1->GetCoulombBarrier(fragment2->GetA(), fragment2->GetZ(), Eex);
-}
 
 #endif
 

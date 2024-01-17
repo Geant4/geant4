@@ -45,5 +45,9 @@ vtkSmartPointer<vtkMatrix4x4> G4Transform3DToVtkMatrix4x4(const G4Transform3D& g
 vtkSmartPointer<vtkPlane> G4Plane3DToVtkPlane(const G4Plane3D& g4plane);
 G4Plane3D VtkPlaneToG4Plane3D(vtkPlane* vtkPlane);
 void MaxBounds(G4double* maxBound, G4double* boundToCheck);
+std::size_t MakeHash(const G4ThreeVector &v);
+std::size_t MakeHash(const G4Colour &c);
+
+
 
 #endif  // G4VTKUTILITY_HH

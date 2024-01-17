@@ -28,7 +28,7 @@
 // A Logical Surface class for surfaces defined by the boundary
 // of two physical volumes.
 //
-// Author: John Apostolakis (John.Apostolakis@cern.ch), 26-06-1997
+// Author: John Apostolakis, CERN - 26-06-1997
 // --------------------------------------------------------------------
 
 #include "G4LogicalBorderSurface.hh"
@@ -37,10 +37,9 @@
 G4LogicalBorderSurfaceTable*
 G4LogicalBorderSurface::theBorderSurfaceTable = nullptr;
 
-//
+// --------------------------------------------------------------------
 // Constructor
 //
-
 G4LogicalBorderSurface::
 G4LogicalBorderSurface(const G4String& name,
                              G4VPhysicalVolume* vol1, 
@@ -60,32 +59,26 @@ G4LogicalBorderSurface(const G4String& name,
   theBorderSurfaceTable->insert(std::make_pair(std::make_pair(vol1,vol2),this));
 }
 
-//
+// --------------------------------------------------------------------
 // Default destructor
 //
-
 G4LogicalBorderSurface::~G4LogicalBorderSurface() = default;
 
-//
-// Operators
-//
-
+// --------------------------------------------------------------------
 G4bool
 G4LogicalBorderSurface::operator==(const G4LogicalBorderSurface &right) const
 {
   return (this == (G4LogicalBorderSurface *) &right);
 }
 
+// --------------------------------------------------------------------
 G4bool
 G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 {
   return (this != (G4LogicalBorderSurface *) &right);
 }
 
-//
-// Methods
-//
-
+// --------------------------------------------------------------------
 const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
 {
   if (theBorderSurfaceTable == nullptr)
@@ -95,6 +88,7 @@ const G4LogicalBorderSurfaceTable* G4LogicalBorderSurface::GetSurfaceTable()
   return theBorderSurfaceTable;
 }
 
+// --------------------------------------------------------------------
 std::size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
 {
   if (theBorderSurfaceTable != nullptr)
@@ -104,6 +98,7 @@ std::size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
   return 0;
 }
 
+// --------------------------------------------------------------------
 G4LogicalBorderSurface*
 G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
                                    const G4VPhysicalVolume* vol2)
@@ -116,6 +111,7 @@ G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
   return nullptr;
 }
 
+// --------------------------------------------------------------------
 // Dump info for known surfaces
 //
 void G4LogicalBorderSurface::DumpInfo()
@@ -137,6 +133,7 @@ void G4LogicalBorderSurface::DumpInfo()
   G4cout << G4endl;
 }
 
+// --------------------------------------------------------------------
 void G4LogicalBorderSurface::CleanSurfaceTable()
 {
   if (theBorderSurfaceTable != nullptr)

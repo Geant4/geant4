@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,36 +35,20 @@
 #ifndef G4Electron_h
 #define G4Electron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ELECTRON                               ###
-// ######################################################################
 
 class G4Electron : public G4ParticleDefinition
 {
- private:
-   static G4Electron* theInstance;
-   G4Electron(){}
-   ~G4Electron() override= default;
+  public:
+    static G4Electron* Definition();
+    static G4Electron* ElectronDefinition();
+    static G4Electron* Electron();
 
- public:
-   static G4Electron* Definition();
-   static G4Electron* ElectronDefinition();
-   static G4Electron* Electron();
+  private:
+    G4Electron() {}
+    ~G4Electron() override = default;
+
+    static G4Electron* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

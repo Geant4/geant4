@@ -28,7 +28,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4DNARotExcitation::G4DNARotExcitation(const G4String& processName) 
-  : G4VEmProcess( processName ),isInitialised(false)
+  : G4VEmProcess( processName )
 {
   SetBuildTableFlag(false);
 }

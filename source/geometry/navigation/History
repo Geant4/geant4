@@ -6,6 +6,37 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-11-17 Gabriele Cosmo (geomnav-V11-01-08)
+- Fixed "/geometry/test/check_parallel" UI command in G4GeometryMessenger.
+
+## 2023-11-06 Gabriele Cosmo (geomnav-V11-01-07)
+- Fixed uninitialised data in G4SafetyCalculator.
+  Addressing a reported Coverity defect.
+
+## 2023-11-04 Gabriele Cosmo (geomnav-V11-01-06)
+- Some code cleanup in G4Navigator and code formatting.
+
+## 2023-10-30 John Apostolakis (geomnav-V11-01-05)
+- Add new G4SafetyCalculator class, auxiliary to G4Navigator.
+  Use this in G4Navigator in ComputeSafety() to avoid saving/restoring state.
+
+## 2023-10-12 Guilherme Amadio (geomnav-V11-01-04)
+- Add new G4VNavigation common navigation interface.
+- Add RelocateWithinVolume method to G4VoxelNavigation
+  and G4ParameterisedNavigation.
+- Update existing navigators to make use of new common interface.
+
+## 2023-09-04 Gabriele Cosmo (geomnav-V11-01-03)
+- In G4Navigator, use G4TouchableHandle in place of G4TouchableHistoryHandle
+  which is now deprecated. Same in G4MultiNavigator, G4DrawVoxels and
+  G4VIntersectionLocator.
+
+## 2023-08-31 Gabriele Cosmo (geomnav-V11-01-02)
+- Removed references to unused classes G4GRSSolid and G4GRSVolume
+  in G4Navigator.
+- Removed use of forward declarations to G4VTouchable in phantom
+  parameterisation classes.
+
 ## 2023-06-13 Gabriele Cosmo (geomnav-V11-01-01)
 - Applied clang-tidy fixes (readability, modernization, performance, ...).
 

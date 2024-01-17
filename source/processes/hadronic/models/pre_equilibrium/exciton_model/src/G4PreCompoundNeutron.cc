@@ -41,14 +41,10 @@
 // 
 
 #include "G4PreCompoundNeutron.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 
 G4PreCompoundNeutron::G4PreCompoundNeutron()
-  : G4PreCompoundNucleon(G4Neutron::Neutron(), &theNeutronCoulombBarrier)
-{}
-
-G4PreCompoundNeutron::~G4PreCompoundNeutron()
+  : G4PreCompoundNucleon(G4Neutron::Neutron())
 {}
 
 G4double G4PreCompoundNeutron::GetRj(G4int nParticles, G4int nCharged) const
@@ -68,6 +64,6 @@ G4double G4PreCompoundNeutron::GetAlpha() const
 
 G4double G4PreCompoundNeutron::GetBeta() const
 {
-  return (2.12/(theResA13*theResA13)-0.05)*MeV/GetAlpha();
+  return (2.12/(theResA13*theResA13)-0.05)/GetAlpha(); // in MeV
 }
 

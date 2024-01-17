@@ -72,9 +72,9 @@ private:
     G4double Spline1D(G4double xx);
     G4double Spline2D(G4double xx, G4double yy);// cubic spline of 2-variable function
 
-    G4double fDx=0, fDy=0; //channel width and height
-    G4double fStepi=0, fStepj=0; //interpolation steps in x and y, respectively
-    G4double fStepi2=0; //=fStepi*fStepi
+    G4double fDx=0., fDy=0.; //channel width and height
+    G4double fStepi=0., fStepj=0.; //interpolation steps in x and y, respectively
+    G4double fStepi2=0.; //=fStepi*fStepi
     G4int nPointsx=0, nPointsy=0; //number of interpolation nodes in x and y, respectively
 
     std::vector <G4double> fAI;

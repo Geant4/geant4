@@ -47,19 +47,19 @@ class F04RunActionMessenger : public G4UImessenger
   public:
 
     F04RunActionMessenger(F04RunAction* );
-    virtual ~F04RunActionMessenger();
+    ~F04RunActionMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand* ,G4String );
+    void SetNewValue(G4UIcommand* ,G4String ) override;
 
   private:
 
-    F04RunAction*              fRunAction;
+    F04RunAction*              fRunAction = nullptr;
 
-    G4UIdirectory*             fRndmDir;
-    G4UIcmdWithAnInteger*      fRndmSaveCmd;
-    G4UIcmdWithAString*        fRndmReadCmd;
-    G4UIcmdWithABool*          fSetAutoSeedCmd;
- 
+    G4UIdirectory*             fRndmDir = nullptr;
+    G4UIcmdWithAnInteger*      fRndmSaveCmd = nullptr;
+    G4UIcmdWithAString*        fRndmReadCmd = nullptr;
+    G4UIcmdWithABool*          fSetAutoSeedCmd = nullptr;
+
 };
 
 #endif

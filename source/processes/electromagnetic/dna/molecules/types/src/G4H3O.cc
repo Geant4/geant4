@@ -41,16 +41,16 @@
 // ###                         H3O                                    ###
 // ###          oxonium is the usual name for H3O+ (hydronium)        ###
 // ######################################################################
-G4H3O* G4H3O::theInstance = 0;
+G4H3O* G4H3O::theInstance = nullptr;
 
 G4H3O* G4H3O::Definition()
 {
-  if (theInstance != 0) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "H3O";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance == 0)
+  if (anInstance == nullptr)
   {
     const G4String formatedName = "H_{3}O";
 

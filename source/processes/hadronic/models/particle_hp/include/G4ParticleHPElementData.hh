@@ -31,20 +31,21 @@
 // 080520 Delete unnecessary dependencies by T. Koi
 
 // P. Arce, June-2014 Conversion neutron_hp to particle_hp
+// V. Ivanchenko July-2023 converted back capture
 //
 #ifndef G4ParticleHPElementData_h
 #define G4ParticleHPElementData_h 1
+
 #include "G4Material.hh"
 #include "G4Neutron.hh"
 #include "G4Nucleus.hh"
-#include "G4ParticleHPCaptureData.hh"
+#include "G4NeutronHPCaptureData.hh"
 #include "G4ParticleHPElasticData.hh"
 #include "G4ParticleHPFissionData.hh"
 #include "G4ParticleHPInelasticData.hh"
 #include "G4ParticleHPIsoData.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4ReactionProduct.hh"
-#include "G4StableIsotopes.hh"
 #include "globals.hh"
 
 class G4ParticleHPElementData
@@ -54,41 +55,46 @@ class G4ParticleHPElementData
 
     ~G4ParticleHPElementData();
 
-    //  void Init(G4Element * theElement,char* dataDirVariable = "G4NEUTRONHPDATA",
-    //  G4ParticleDefinition* projectile = G4Neutron::Neutron() );
-    void Init(G4Element* theElement, G4ParticleDefinition* projectile, const char* dataDirVariable);
+    void Init(G4Element* theElement, G4ParticleDefinition* projectile,
+              const char* dataDirVariable);
 
-    // void UpdateData(G4int A, G4int Z, G4int index, G4double abundance);
-    //   void UpdateData(G4int A, G4int Z, G4int index, G4double abundance,char* dataDirVariable,
-    //   G4ParticleDefinition* projectile = G4Neutron::Neutron() ) { G4int M=0; UpdateData( A, Z, M,
-    //   index, abundance, projectile, dataDirVariable); };
     void UpdateData(G4int A, G4int Z, G4int index, G4double abundance,
-                    G4ParticleDefinition* projectile, const char* dataDirVariable)
+                    G4ParticleDefinition* projectile,
+                    const char* dataDirVariable)
     {
-      G4int M = 0;
-      UpdateData(A, Z, M, index, abundance, projectile, dataDirVariable);
+      UpdateData(A, Z, 0, index, abundance, projectile, dataDirVariable);
     };
+
     void UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance,
-                    G4ParticleDefinition* projectile, const char* dataDirVariable);
+                    G4ParticleDefinition* projectile,
+                    const char* dataDirVariable);
 
     void Harmonise(G4ParticleHPVector*& theStore, G4ParticleHPVector* theNew);
 
     inline G4ParticleHPVector* GetData(G4ParticleHPFissionData*) { return theFissionData; }
-    inline G4ParticleHPVector* GetData(G4ParticleHPCaptureData*) { return theCaptureData; }
+    inline G4ParticleHPVector* GetData(G4NeutronHPCaptureData*) { return theCaptureData; }
     inline G4ParticleHPVector* GetData(G4ParticleHPElasticData*) { return theElasticData; }
     inline G4ParticleHPVector* GetData(G4ParticleHPInelasticData*) { return theInelasticData; }
 
-    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement, G4ParticleDefinition* projectile,
-                                          G4ParticleHPFissionData* theSet, char* dataDirVariable);
+    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement,
+                                          G4ParticleDefinition* projectile,
+                                          G4ParticleHPFissionData* theSet,
+                                          char* dataDirVariable);
 
-    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement, G4ParticleDefinition* projectile,
-                                          G4ParticleHPCaptureData* theSet, char* dataDirVariable);
+    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement,
+                                          G4ParticleDefinition* projectile,
+                                          G4NeutronHPCaptureData* theSet,
+                                          char* dataDirVariable);
 
-    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement, G4ParticleDefinition* projectile,
-                                          G4ParticleHPElasticData* theSet, char* dataDirVariable);
+    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement,
+                                          G4ParticleDefinition* projectile,
+                                          G4ParticleHPElasticData* theSet,
+                                          char* dataDirVariable);
 
-    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement, G4ParticleDefinition* projectile,
-                                          G4ParticleHPInelasticData* theSet, char* dataDirVariable);
+    G4ParticleHPVector* MakePhysicsVector(G4Element* theElement,
+                                          G4ParticleDefinition* projectile,
+                                          G4ParticleHPInelasticData* theSet,
+                                          char* dataDirVariable);
 
   private:
     G4ParticleHPVector* theFissionData;
@@ -98,10 +104,7 @@ class G4ParticleHPElementData
     G4double precision;
 
     G4ParticleHPVector* theBuffer;
-
     G4ParticleHPIsoData* theIsotopeWiseData;
-
-    G4StableIsotopes theStableOnes;
 
     G4String filename;
 };

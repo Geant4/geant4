@@ -72,21 +72,21 @@ private Q_SLOTS :
 private:
 
    // File menu
-   QAction* FileWritePS;
-   QAction* FileWritePDF;
-   QAction* FileWriteIV;
-   QAction* FileEscape;
+   QAction* FileWritePS{nullptr};
+   QAction* FileWritePDF{nullptr};
+   QAction* FileWriteIV{nullptr};
+   QAction* FileEscape{nullptr};
 
    // Etc menu
-   QAction* EtcEraseDetector;
-   QAction* EtcEraseEvent;
-   QAction* EtcSetSolid;
-   QAction* EtcSetReducedWireframe;
-   QAction* EtcSetFullWireframe;
-   QAction* EtcVisibMInvisibD;
-   QAction* EtcVisibMVisibD;
-   QAction* EtcUpdateScene;
-   QAction* EtcSceneGraphStats;
+   QAction* EtcEraseDetector{nullptr};
+   QAction* EtcEraseEvent{nullptr};
+   QAction* EtcSetSolid{nullptr};
+   QAction* EtcSetReducedWireframe{nullptr};
+   QAction* EtcSetFullWireframe{nullptr};
+   QAction* EtcVisibMInvisibD{nullptr};
+   QAction* EtcVisibMVisibD{nullptr};
+   QAction* EtcUpdateScene{nullptr};
+   QAction* EtcSceneGraphStats{nullptr};
 
 public:
 

@@ -1,9 +1,13 @@
 # Example RE02 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-----------------------------------------------------------------------------
+
+## 2023-09-02 Gabriele Cosmo (exampleRE02-V11-01-00)
+- Removed forward declaration for G4VTouchable.
 
 ## 2022-10-04 Ben Morgan (exampleRE02-V11-00-01)
 - Replace sprintf with std::ostringstream to fix deprecation warnings on macOS 13

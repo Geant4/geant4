@@ -35,7 +35,7 @@
 #include "G4MoleculeDefinition.hh"
 #include "G4MoleculeTableMessenger.hh"
 
-G4MoleculeTable* G4MoleculeTable::fpgMoleculeTable(0);
+G4MoleculeTable* G4MoleculeTable::fpgMoleculeTable(nullptr);
 
 //------------------------------------------------------------------------------
 
@@ -47,14 +47,13 @@ G4MoleculeTable::G4MoleculeTable()
 //------------------------------------------------------------------------------
 
 G4MoleculeTable::~G4MoleculeTable()
-{
-}
+= default;
 
 //------------------------------------------------------------------------------
 
 G4MoleculeTable* G4MoleculeTable::Instance()
 {
-  if (!fpgMoleculeTable) fpgMoleculeTable = new G4MoleculeTable;
+  if (fpgMoleculeTable == nullptr) fpgMoleculeTable = new G4MoleculeTable;
   return fpgMoleculeTable;
 }
 
@@ -81,8 +80,8 @@ G4MoleculeDefinition*
 G4MoleculeTable::GetMoleculeDefinition(const G4String& name,
                                        bool mustExist)
 {
-  MoleculeDefTable::iterator it = fMoleculeDefTable.find(name);
-  G4MoleculeDefinition* definition(0);
+  auto it = fMoleculeDefTable.find(name);
+  G4MoleculeDefinition* definition(nullptr);
   if (it != fMoleculeDefTable.end())
   {
     definition = it->second;
@@ -109,7 +108,7 @@ G4MoleculeTable::GetConfiguration(const G4String& name, bool mustExist)
   G4MolecularConfiguration* species =
       G4MolecularConfiguration::GetMolecularConfiguration(name);
 
-  if(species == 0 && mustExist)
+  if(species == nullptr && mustExist)
   {
     // exception
     G4ExceptionDescription description;
@@ -141,7 +140,7 @@ void G4MoleculeTable::Insert(G4MoleculeDefinition* moleculeDefinition)
 {
 
   const G4String& name = moleculeDefinition->GetName();
-  MoleculeDefTable::iterator it = fMoleculeDefTable.find(name);
+  auto it = fMoleculeDefTable.find(name);
   if (it == fMoleculeDefTable.end())
   {
     fMoleculeDefTable[name] = moleculeDefinition;
@@ -161,7 +160,7 @@ void G4MoleculeTable::Insert(G4MoleculeDefinition* moleculeDefinition)
 
 void G4MoleculeTable::PrepareMolecularConfiguration()
 {
-  MoleculeDefTable::iterator it = fMoleculeDefTable.begin();
+  auto it = fMoleculeDefTable.begin();
 
   for(; it != fMoleculeDefTable.end() ; ++it)
   {

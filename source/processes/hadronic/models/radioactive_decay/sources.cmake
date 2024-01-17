@@ -57,7 +57,6 @@ geant4_add_module(G4hadronic_radioactivedecay
 geant4_module_link_libraries(G4hadronic_radioactivedecay
   PUBLIC
     G4globman
-    G4heprandom
     G4intercoms
     G4partman
     G4procman
@@ -74,6 +73,7 @@ geant4_module_link_libraries(G4hadronic_radioactivedecay
     G4hadronic_mgt
     G4hadronic_util
     G4hepgeometry
+    G4heprandom
     G4ions
     G4leptons
     G4materials)

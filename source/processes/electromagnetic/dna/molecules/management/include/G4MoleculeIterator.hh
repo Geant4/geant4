@@ -52,7 +52,7 @@ template<typename MOLECULE>
 class G4MoleculeIterator
 {
 protected:
-  typedef std::map<G4String, MOLECULE*> MAP;
+  using MAP = std::map<G4String, MOLECULE *>;
   MAP* fMap;
   G4bool fDefined;
   typename MAP::iterator fIt;
@@ -65,9 +65,7 @@ public:
   }
 
   virtual ~G4MoleculeIterator()
-  {
-
-  }
+  = default;
 
   G4MoleculeIterator(const G4MoleculeIterator& right)
   {
@@ -89,14 +87,14 @@ public:
   {
     if (!fDefined) return false;
     fIt++;
-    return fIt != fMap->end() ? true : false;
+    return static_cast<G4bool>(fIt != fMap->end());
   }
 
   G4bool operator++()
   {
     if (!fDefined) return false;
     fIt++;
-    return fIt != fMap->end() ? true : false;
+    return static_cast<G4bool>(fIt != fMap->end());
   }
 
   void reset()
@@ -106,18 +104,16 @@ public:
 
   G4bool operator()()
   {
-    if (fDefined == false)
+    if (!fDefined)
     {
       fDefined = true;
       fIt = fMap->begin();
       return true;
     }
-    else
-    {
-      fIt++;
-    }
-    if (fIt == fMap->end()) return false;
-    return true;
+    
+    fIt++;
+   
+    return static_cast<G4bool>(fIt != fMap->end());
   }
 
   const G4String& Name()

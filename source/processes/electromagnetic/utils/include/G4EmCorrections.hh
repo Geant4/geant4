@@ -53,8 +53,6 @@
 #ifndef G4EmCorrections_h
 #define G4EmCorrections_h 1
 
-#include <CLHEP/Units/PhysicalConstants.h>
-
 #include "globals.hh"
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
@@ -72,68 +70,72 @@ class G4EmCorrections
 
 public:
 
-  explicit G4EmCorrections(G4int verb, G4bool master);
+  explicit G4EmCorrections(G4int verb);
 
   ~G4EmCorrections();
 
   G4double HighOrderCorrections(const G4ParticleDefinition*,
                                 const G4Material*,
-                                G4double kineticEnergy,
-                                G4double cutEnergy);
+                                const G4double kineticEnergy,
+                                const G4double cutEnergy);
 
   G4double IonHighOrderCorrections(const G4ParticleDefinition*,
                                    const G4MaterialCutsCouple*,
-                                   G4double kineticEnergy);
+                                   const G4double kineticEnergy);
 
   G4double ComputeIonCorrections(const G4ParticleDefinition*,
                                  const G4Material*,
-                                 G4double kineticEnergy);
+                                 const G4double kineticEnergy);
 
   G4double IonBarkasCorrection(const G4ParticleDefinition*,
                                const G4Material*,
-                               G4double kineticEnergy);
+                               const G4double kineticEnergy);
 
   G4double Bethe(const G4ParticleDefinition*,
                  const G4Material*,
-                 G4double kineticEnergy);
+                 const G4double kineticEnergy);
 
   G4double SpinCorrection(const G4ParticleDefinition*,
                           const G4Material*,
-                          G4double kineticEnergy);
+                          const G4double kineticEnergy);
 
   G4double KShellCorrection(const G4ParticleDefinition*,
                             const G4Material*,
-                            G4double kineticEnergy);
+                            const G4double kineticEnergy);
 
   G4double LShellCorrection(const G4ParticleDefinition*,
                             const G4Material*,
-                            G4double kineticEnergy);
+                            const G4double kineticEnergy);
 
   G4double ShellCorrection(const G4ParticleDefinition*,
                            const G4Material*,
-                           G4double kineticEnergy);
+                           const G4double kineticEnergy);
 
   G4double ShellCorrectionSTD(const G4ParticleDefinition*,
                               const G4Material*,
-                              G4double kineticEnergy);
+                              const G4double kineticEnergy);
 
   G4double DensityCorrection(const G4ParticleDefinition*,
                              const G4Material*,
-                             G4double kineticEnergy);
+                             const G4double kineticEnergy);
 
   G4double BarkasCorrection(const G4ParticleDefinition*,
                             const G4Material*,
-                            G4double kineticEnergy);
+                            const G4double kineticEnergy,
+                            const G4bool isInitialized = false);
 
   G4double BlochCorrection(const G4ParticleDefinition*,
                            const G4Material*,
-                           G4double kineticEnergy);
+                           const G4double kineticEnergy,
+                           const G4bool isInitialized = false);
 
   G4double MottCorrection(const G4ParticleDefinition*,
                           const G4Material*,
-                          G4double kineticEnergy);
+                          const G4double kineticEnergy,
+                          const G4bool isInitialized = false);
 
-  void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
+  void AddStoppingData(const G4int Z, const G4int A,
+                       const G4String& materialName,
                        G4PhysicsVector* dVector);
 
   void InitialiseForNewRun();
@@ -141,17 +143,17 @@ public:
   // effective charge correction using stopping power data
   G4double EffectiveChargeCorrection(const G4ParticleDefinition*,
                                      const G4Material*,
-                                     G4double kineticEnergy);
+                                     const G4double kineticEnergy);
 
   // effective charge of an ion
   inline G4double GetParticleCharge(const G4ParticleDefinition*,
                                     const G4Material*,
-                                    G4double kineticEnergy);
+                                    const G4double kineticEnergy);
 
   inline
   G4double EffectiveChargeSquareRatio(const G4ParticleDefinition*,
                                       const G4Material*,
-                                      G4double kineticEnergy);
+                                      const G4double kineticEnergy);
 
   // ionisation models for ions
   inline void SetIonisationModels(G4VEmModel* mod1 = nullptr, 
@@ -173,20 +175,22 @@ private:
 
   void SetupKinematics(const G4ParticleDefinition*,
                        const G4Material*,
-                       G4double kineticEnergy);
+                       const G4double kineticEnergy);
 
-  G4double KShell(G4double theta, G4double eta);
+  G4double KShell(const G4double theta, const G4double eta);
 
-  G4double LShell(G4double theta, G4double eta);
+  G4double LShell(const G4double theta, const G4double eta);
 
-  G4int Index(G4double x, const G4double* y, G4int n) const;
+  G4int Index(const G4double x, const G4double* y, const G4int n) const;
 
-  G4double Value(G4double xv, G4double x1, G4double x2, 
-                 G4double y1, G4double y2) const;
+  G4double Value(const G4double xv, const G4double x1, const G4double x2, 
+                 const G4double y1, const G4double y2) const;
 
-  G4double Value2(G4double xv, G4double yv, G4double x1, G4double x2,
-                  G4double y1, G4double y2, G4double z11, G4double z21, 
-		  G4double z12, G4double z22) const;
+  G4double Value2(const G4double xv, const G4double yv,
+                  const G4double x1, const G4double x2,
+                  const G4double y1, const G4double y2,
+                  const G4double z11, const G4double z21, 
+		  const G4double z12, const G4double z22) const;
 
   G4Pow* g4calc;
   G4IonTable* ionTable;
@@ -220,6 +224,7 @@ private:
   G4double eCorrMax;
 
   std::size_t ncouples = 0;
+  std::size_t idxBarkas = 0;
   G4int nK = 20;
   G4int nL = 26;
   G4int nEtaK = 29;
@@ -233,7 +238,7 @@ private:
   G4int currentZ = 0;
 
   G4int verbose;
-  G4bool isMaster;
+  G4bool isInitializer = false;
 
   std::vector<G4int> Zion;
   std::vector<G4int> Aion;
@@ -258,13 +263,14 @@ private:
   static const G4double UL[26];
   static G4double VL[26];
 
+  static G4double sWmaxBarkas;
   static G4PhysicsFreeVector* sBarkasCorr;
   static G4PhysicsFreeVector* sThetaK;
   static G4PhysicsFreeVector* sThetaL;
 };
 
 inline G4int 
-G4EmCorrections::Index(G4double x, const G4double* y, G4int n) const
+G4EmCorrections::Index(const G4double x, const G4double* y, const G4int n) const
 {
   G4int iddd = n-1;
   // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -272,17 +278,18 @@ G4EmCorrections::Index(G4double x, const G4double* y, G4int n) const
   return iddd;
 }
 
-inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2,
-                                       G4double y1, G4double y2) const
+inline G4double G4EmCorrections::Value(const G4double xv, const G4double x1,
+                                       const G4double x2,
+                                       const G4double y1, const G4double y2) const
 {
   return y1 + (y2 - y1)*(xv - x1)/(x2 - x1);
 }
 
-inline G4double G4EmCorrections::Value2(G4double xv, G4double yv, 
-                                        G4double x1, G4double x2,
-                                        G4double y1, G4double y2,
-                                        G4double z11, G4double z21, 
-                                        G4double z12, G4double z22) const
+inline G4double G4EmCorrections::Value2(const G4double xv, const G4double yv, 
+                                        const G4double x1, const G4double x2,
+                                        const G4double y1, const G4double y2,
+                                        const G4double z11, const G4double z21, 
+                                        const G4double z12, const G4double z22) const
 {
   return ( z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
 	   z12*(x2-xv)*(yv-y1) + z21*(xv-x1)*(y2-yv) )
@@ -304,7 +311,7 @@ inline G4int G4EmCorrections::GetNumberOfStoppingVectors() const
 inline G4double 
 G4EmCorrections::GetParticleCharge(const G4ParticleDefinition* p,
                                    const G4Material* mat,
-                                   G4double kineticEnergy)
+                                   const G4double kineticEnergy)
 {
   return effCharge.EffectiveCharge(p,mat,kineticEnergy);
 }
@@ -312,7 +319,7 @@ G4EmCorrections::GetParticleCharge(const G4ParticleDefinition* p,
 inline G4double 
 G4EmCorrections::EffectiveChargeSquareRatio(const G4ParticleDefinition* p,
                                             const G4Material* mat,
-                                            G4double kineticEnergy)
+                                            const G4double kineticEnergy)
 {
   return effCharge.EffectiveChargeSquareRatio(p,mat,kineticEnergy);
 }

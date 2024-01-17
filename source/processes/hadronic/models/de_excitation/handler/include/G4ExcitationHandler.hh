@@ -39,7 +39,7 @@
 // 03 September 2008 by J. M. Quesada for external choice of inverse 
 //    cross section option
 // 06 September 2008 JMQ Also external choices have been added for 
-//    superimposed Coulomb barrier (if useSICBis set true, by default is false)  
+//    superimposed Coulomb barrier (if useSICBis set true, by default is false) 
 // 23 January 2012 by V.Ivanchenko remove obsolete data members; added access
 //    methods to deexcitation components
 //                   
@@ -64,7 +64,7 @@ class G4ExcitationHandler
 {
 public:
 
-  explicit G4ExcitationHandler(); 
+  G4ExcitationHandler(); 
   ~G4ExcitationHandler();
 
   G4ReactionProductVector* BreakItUp(const G4Fragment &theInitialState);
@@ -115,7 +115,7 @@ private:
 
   inline void SortSecondaryFragment(G4Fragment*);
   
-  G4VEvaporation* theEvaporation;  
+  G4VEvaporation* theEvaporation{nullptr};
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
@@ -132,22 +132,22 @@ private:
   const G4ParticleDefinition* theAlpha;
   const G4ParticleDefinition* theLambda;
 
-  G4int icID;
+  G4int icID{0};
 
-  G4int maxZForFermiBreakUp;
-  G4int maxAForFermiBreakUp;
+  G4int maxZForFermiBreakUp{9};
+  G4int maxAForFermiBreakUp{17};
 
-  G4int  fVerbose;
-  G4int  fWarnings;
+  G4int  fVerbose{1};
+  G4int  fWarnings{0};
 
   G4double minEForMultiFrag;
   G4double minExcitation;
   G4double maxExcitation;
   G4double fLambdaMass;
 
-  G4bool isInitialised;
-  G4bool isEvapLocal;
-  G4bool isActive;
+  G4bool isInitialised{false};
+  G4bool isEvapLocal{true};
+  G4bool isActive{true};
 
   // list of fragments to store final result   
   std::vector<G4Fragment*> theResults;

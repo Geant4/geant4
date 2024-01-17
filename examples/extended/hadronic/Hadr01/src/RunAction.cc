@@ -43,6 +43,8 @@
 #include "G4VVisManager.hh"
 #include "G4Timer.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4CascadeChannelTables.hh"
+#include <iosfwd>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,11 +54,6 @@ RunAction::RunAction()
   fTimer = new G4Timer();
   fTimer->Start();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,7 +79,16 @@ void RunAction::EndOfRunAction(const G4Run*)
   fTimer->Stop();
   G4cout << "RunAction::EndOfRunAction:  "  << *fTimer << G4endl;
   G4cout << "RunAction: End of run actions are started" << G4endl;
-  (HistoManager::GetPointer())->EndOfRun();
+  auto man = HistoManager::GetPointer();
+  man->EndOfRun();
+  G4int key = man->PrintBertiniXS();
+  if (0 == key) {
+    G4cout << "RunAction: Print all Bertini cross sections" << G4endl;
+    G4CascadeChannelTables::Print();
+  } else if (0 < key) {
+    G4cout << "RunAction: Print Bertini cross section key=" << key << G4endl;
+    G4CascadeChannelTables::PrintTable(key, G4cout);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

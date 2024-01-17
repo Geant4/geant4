@@ -22,41 +22,37 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-
 
 #include "G4AdjointProton.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                           PROTON                               ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+
 G4AdjointProton* G4AdjointProton::theInstance = nullptr;
 
 G4AdjointProton* G4AdjointProton::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "adj_proton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance =  pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  // use constants in CLHEP
-  //  static const double   proton_mass_c2 = 938.27231 * MeV;
-
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // use constants in CLHEP
+    //  static const double   proton_mass_c2 = 938.27231 * MeV;
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,  proton_mass_c2,       0.0*MeV,       -eplus, 
 		    1,              +1,             0,          
@@ -66,23 +62,22 @@ G4AdjointProton* G4AdjointProton::Definition()
 		false,       "adjoint_ion",             0,
                   0.0 
              );
+    // clang-format on
 
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.792847351 * mN);
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(2.792847351 * mN);
   }
   theInstance = static_cast<G4AdjointProton*>(anInstance);
   return theInstance;
 }
 
-G4AdjointProton*  G4AdjointProton::AdjointProtonDefinition()
+G4AdjointProton* G4AdjointProton::AdjointProtonDefinition()
 {
   return Definition();
 }
 
-G4AdjointProton*  G4AdjointProton::AdjointProton()
+G4AdjointProton* G4AdjointProton::AdjointProton()
 {
   return Definition();
 }
-
-

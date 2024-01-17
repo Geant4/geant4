@@ -47,7 +47,7 @@ class Run : public G4Run
 {
   public:
     Run(DetectorConstruction*);
-   ~Run();
+   ~Run() override = default;
 
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);         
@@ -55,7 +55,7 @@ class Run : public G4Run
     void ParticleCount(G4String, G4double, G4int); 
     void AddEdep (G4double edep1, G4double edep2);
                           
-    virtual void Merge(const G4Run*);
+    void Merge(const G4Run*) override;
     void EndOfRun();
     void WriteActivity(G4int);     
    
@@ -72,12 +72,12 @@ class Run : public G4Run
     };
      
   private:
-    DetectorConstruction* fDetector;
-    G4ParticleDefinition* fParticle;
-    G4double              fEkin;
+    DetectorConstruction* fDetector = nullptr;
+    G4ParticleDefinition* fParticle = nullptr;
+    G4double              fEkin = 0.;
     
-    G4double fEdepTarget, fEdepTarget2;
-    G4double fEdepDetect, fEdepDetect2;    
+    G4double fEdepTarget = 0., fEdepTarget2 = 0.;
+    G4double fEdepDetect = 0., fEdepDetect2 = 0.;    
      
     std::map<G4String,G4int>        fProcCounter1;
     std::map<G4String,G4int>        fProcCounter2;    

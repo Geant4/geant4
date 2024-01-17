@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(splitting)
 
 #----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ target_link_libraries(splitting ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(splitting_SCRIPTS
-    vis.mac run.mac
+    vis.mac run.mac plot.C
   )
 
 foreach(_script ${splitting_SCRIPTS})

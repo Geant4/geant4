@@ -49,11 +49,11 @@ class F03CalorimeterSD : public G4VSensitiveDetector
   public:
 
       F03CalorimeterSD(G4String, F03DetectorConstruction* );
-      virtual ~F03CalorimeterSD();
+      ~F03CalorimeterSD() override;
 
-      virtual void Initialize(G4HCofThisEvent*);
-      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-      virtual void EndOfEvent(G4HCofThisEvent*);
+      void Initialize(G4HCofThisEvent*) override;
+      G4bool ProcessHits(G4Step*,G4TouchableHistory*) override;
+      void EndOfEvent(G4HCofThisEvent*) override;
 
   private:
 

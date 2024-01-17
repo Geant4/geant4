@@ -37,4 +37,4 @@ geant4_add_module(G4root
 
 # Depends on ZLIB PUBLICally because of inclusion of tools/zlib in G4RootHnFileManager.icc
 # (No, it't not obvious!)
-geant4_module_link_libraries(G4root PUBLIC G4analysismng G4hntools G4globman G4tools ${ZLIB_LIBRARIES})
+geant4_module_link_libraries(G4root PUBLIC G4analysismng G4hntools G4globman G4tools ${G4ZLIB_LIBRARIES})

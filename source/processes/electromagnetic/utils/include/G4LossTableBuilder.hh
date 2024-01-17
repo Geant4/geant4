@@ -51,7 +51,6 @@
 #include <vector>
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
-#include "G4Threading.hh"
 
 class G4VEmModel;
 class G4ParticleDefinition;
@@ -103,8 +102,8 @@ public:
 
   inline void SetBaseMaterialActive(G4bool flag);
 
-  G4LossTableBuilder & operator=(const  G4LossTableBuilder &right) = delete;
-  G4LossTableBuilder(const  G4LossTableBuilder&) = delete;
+  G4LossTableBuilder & operator=(const G4LossTableBuilder &right) = delete;
+  G4LossTableBuilder(const G4LossTableBuilder&) = delete;
  
 private:
 
@@ -114,14 +113,11 @@ private:
   G4bool isInitialized = false;
   G4bool baseMatFlag = false;
   G4bool isBaseMatActive = true;
-  G4bool isMaster;
+  G4bool isInitializer = false;
 
   static std::vector<G4double>* theDensityFactor;
   static std::vector<G4int>*    theDensityIdx;
   static std::vector<G4bool>*   theFlag;
-#ifdef G4MULTITHREADED
-  static G4Mutex ltbMutex;
-#endif
 };
 
 inline void G4LossTableBuilder::SetSplineFlag(G4bool flag)

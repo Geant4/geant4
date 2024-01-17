@@ -45,9 +45,6 @@ In the application the phantom is placed on a table.
  
 \section DICOM_s3a Installation OLD:
 
- - A standard Geant4 example GNUmakefile is provided            
- - Compile it with 'make'/'gmake' 
-
  - A standard Geant4 example CMakeLists.txt is provided
  - Configure via cmake with 'cmake -DGeant4_DIR=/path_to_geant4_install/lib/Geant4-x.x.x /path/to/DICOM/source' then make
 
@@ -276,7 +273,7 @@ There are four possible ways in GEANT4 to treat the navigation in regular voxeli
 
 -# The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 -# Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
--# Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
+-# Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit scorer can be used for *regular* navigation and G4PSDoseDeposit3D for *nested* parameterisation (see descriptions below).
 
 Obsolete option:
 -# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
@@ -323,13 +320,21 @@ chosen. It is triggered at the method RegularDicomDetectorConstruction::Construc
 SetScorer(voxel_logic);
 \endverbatim
 
-\section DICOM_s12 Output
+\section DICOM_s12 Calculating dose in phantom voxels for nested parameterisation
+
+For the nested parameterisation the geometry comprises replicas in X and Y which are then parameterised in Z. This means that to get the correct voxel idendification the replica depth has to be taken into account. The G4PSDoseDeposit3D scorers uses a fixed algorithm to calculate the voxel ID, according to the number of voxels in each axes and the associated replica depth.
+\verbatim
+G4PSDoseDeposit3D("DoseDeposit", fNoVoxelsZ, fNoVoxelsY, fNoVoxelsX, 0, 2, 1)
+\endverbatim
+contains the number of voxels at the top (Z) level (0) and then two daughter levels down for the Y-voxels and one depth down for X.
+
+\section DICOM_s13 Output
 dicom.out is produced running the macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
 It is produced, as an example, with a compression value of 32
 
 
-\section DICOM_s13 Partial phantom 
+\section DICOM_s14 Partial phantom 
 It is possible to create a partial phantom, that is the intersection of a phantom with a volume. You may define the volume with the command 
 
 \verbatim
@@ -346,7 +351,7 @@ Alternatively you can intersect the phantom with an existing Geant4 volume with 
 
 The job will create an ASCII file names "phantom.g4pdcm" containing the partial phantom. To read this file all what is needed is to set the enviromental variable DICOM_PARTIAL_PARAM to 1
 
-\section DICOM_s14 Visualisation
+\section DICOM_s15 Visualisation
 
 The Geant4 drivers are not meant for visualizing millions of voxel and visualising the DICOM geometries can be very computationally demanding.
 The users may want to visualise each DICOM slice separately or use higher compression values when visualising a part of DICOM project.

@@ -56,11 +56,11 @@ class G4NeutronInelasticXS final : public G4VCrossSectionDataSet
 {
 public: 
 
-  explicit G4NeutronInelasticXS();
+  G4NeutronInelasticXS();
 
-  ~G4NeutronInelasticXS() final;
+  ~G4NeutronInelasticXS() override = default;
 
-  static const char* Default_Name() {return "G4NeutronInelasticXS";}
+  static const char* Default_Name() { return "G4NeutronInelasticXS"; }
     
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
 			     const G4Material*) final;
@@ -122,7 +122,7 @@ private:
 
   G4double elimit;
 
-  G4bool isMaster = false;
+  G4bool isInitializer{false};
 
   static const G4int MAXZINEL = 93;
   static G4ElementData* data;

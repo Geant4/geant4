@@ -6,6 +6,7 @@
 
 This is a new example and it may contain bugs.
 It was developed by Hoang Tran.
+Damage analysis was developed by Le Tuan Anh.
 If you find a bug, please contact IRSN:
 yann.perrot@irsn.fr or carmen.villagrasa@irsn.fr
 
@@ -13,6 +14,7 @@ yann.perrot@irsn.fr or carmen.villagrasa@irsn.fr
                                                                        
 The dnadamage1 example shows a simple way to simulate dna direct and indirect damages 
 using the Geant4-DNA physics and chemical processes in a molecular DNA geometry. 
+Moreover, a clustering algorithm is introduced to demonstrate how to extract SSB, DSB (simple, complex).
 
 This example is based on the work described in Sc. Rep. 7 (2017)11923 
 and is provided by the Geant4-DNA collaboration.
@@ -77,17 +79,26 @@ This example shows:
 \section dnadamage1_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 This file can be easily analyzed using the provided ROOT macro 
-file analysis.C (and plot.C, molecule.C); The plot.C results in a text file using the SDD format:
+file analysis.C (and scandamges.C, molecule.C); The scandamges.C results in a text file using the SDD format:
  "A new standard DNA damage (SDD) data format" J. Schuemann et al. Published in Rad. Res. 191 (2019) 76-92
 
 To do so :
 - be sure to have ROOT installed on your machine (version 6 series)
 - be sure to be in the directory containing the ROOT files created by dnadamage1
-- copy analysis.C (and plot.C, molecule.C) into this directory
+- copy analysis.C (and scandamges.C, molecule.C) into this directory
 - from there, launch ROOT by typing root
 - under your ROOT session, type in : .X analysis.C to execute the macro file
 - alternatively you can type directly under your session : root -b analysis.C
 
+Results will be obtained:
+- Count numbers of direct and indirect SB (strand break)
+- Count numbers of SSB, DSB (simple, complex)
+- In function scandamges(), users change:
+    - Break-energy to select direct damages (default is 17.5 ev)
+    - probability to select indirect damages (default is 40%)
+    - minium distance between two clusters (default is 10 bp)
+to see how they affect direct/indirect SB, SSB, and DSB.
+- Damages in SDD format
 ---------------------------------------------------------------------------
 
 Contact: ngoc-hoang.tran@irsn.fr, carmen.villagrasa@irsn.fr

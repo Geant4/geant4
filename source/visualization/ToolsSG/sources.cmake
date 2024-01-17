@@ -74,10 +74,10 @@ if(GEANT4_USE_TOOLSSG_QT_GLES)
     PUBLIC_HEADERS 
       G4ToolsSGQtGLES.hh
     PRIVATE_HEADERS
-      G4ToolsSGQtViewer.hh
+      G4ToolsSGQtGLESViewer.hh
     SOURCES
       G4ToolsSGQtGLES.cc
-      G4ToolsSGQtViewer.cc)
+      G4ToolsSGQtGLESViewer.cc)
 
   geant4_module_compile_definitions(G4ToolsSG PUBLIC G4VIS_USE_TOOLSSG_QT_GLES)
 
@@ -92,6 +92,8 @@ if(GEANT4_USE_TOOLSSG_QT_GLES)
   if(QT_VERSION_MAJOR GREATER 5)
     geant4_module_link_libraries(G4ToolsSG PRIVATE Qt${QT_VERSION_MAJOR}::OpenGLWidgets)
   endif()
+
+  geant4_set_module_property(G4ToolsSG PROPERTY AUTOMOC ON)
 
   # Minor hack for MOC-ing. Qt's moc requires visibility of the private headers
   # - Will not affect external consumers and should be minimal impact interanally
@@ -118,6 +120,8 @@ if(GEANT4_USE_TOOLSSG_QT_ZB)
       Qt${QT_VERSION_MAJOR}::Gui
       Qt${QT_VERSION_MAJOR}::Widgets
       G4UIimplementation)
+
+  geant4_set_module_property(G4ToolsSG PROPERTY AUTOMOC ON)
 
   # Minor hack for MOC-ing. Qt's moc requires visibility of the private headers
   # - Will not affect external consumers and should be minimal impact interanally

@@ -38,15 +38,15 @@
 //#include "G4Navigator.hh"
 
 G4TrackingInformation::G4TrackingInformation() :
-    fStepLeader                     (false),
+    
     fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex()) //,0)
 {
     //ctor
-    fpTrajectory_Lock           = 0;
+    fpTrajectory_Lock           = nullptr;
     fRecordedTrackGlobalTime    = -1;
     fRecordedTrackLocalTime     = -1;
-    fpStepProcessorState        = 0;
-    fNavigatorState = 0;
+    fpStepProcessorState        = nullptr;
+    fNavigatorState = nullptr;
 }
 
 G4TrackingInformation::~G4TrackingInformation()
@@ -63,22 +63,20 @@ G4TrackingInformation::~G4TrackingInformation()
     }
     */
     fProcessState.clear();
-    if(fpStepProcessorState) delete fpStepProcessorState;
-    fpStepProcessorState = 0;
-    if(fNavigatorState) delete fNavigatorState;
-    fNavigatorState = 0;
+    delete fpStepProcessorState;
+    fpStepProcessorState = nullptr;
+    delete fNavigatorState;
+    fNavigatorState = nullptr;
 }
 
 // should not be used
-G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/) :
-    fStepLeader                     (false),
-    fpStepProcessorState            (0)
+G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*other*/)    
 {
     //copy ctor
-    fpTrajectory_Lock = 0;
+    fpTrajectory_Lock = nullptr;
     fRecordedTrackGlobalTime = -1;
     fRecordedTrackLocalTime = -1;
-    fNavigatorState = 0;
+    fNavigatorState = nullptr;
 }
 
 // should not be used
@@ -119,7 +117,7 @@ G4shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t 
 
 void G4TrackingInformation::RecordCurrentPositionNTime(G4Track* track)
 {
-    if(track)
+    if(track != nullptr)
     {
         fRecordedTrackPosition = track->GetPosition();
         fRecordedTrackLocalTime = track->GetLocalTime();

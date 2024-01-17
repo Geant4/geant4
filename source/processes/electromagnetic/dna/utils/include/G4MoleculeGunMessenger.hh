@@ -67,9 +67,9 @@ public:
   G4MoleculeShootMessenger(const G4String& name,
                            G4MoleculeGunMessenger*,
                            G4shared_ptr<G4MoleculeShoot>);
-  virtual ~G4MoleculeShootMessenger();
-  virtual void SetNewValue(G4UIcommand * command, G4String newValue);
-  virtual G4String GetCurrentValue(G4UIcommand * command);
+  ~G4MoleculeShootMessenger() override;
+  void SetNewValue(G4UIcommand * command, G4String newValue) override;
+  G4String GetCurrentValue(G4UIcommand * command) override;
 
   inline G4shared_ptr<G4MoleculeShoot>& GetShoot() {
     return fpShoot;
@@ -92,10 +92,10 @@ class G4MoleculeGunMessenger : public G4UImessenger
 
 public:
   G4MoleculeGunMessenger(G4MoleculeGun*);
-  virtual ~G4MoleculeGunMessenger();
+  ~G4MoleculeGunMessenger() override;
 
-  virtual void SetNewValue(G4UIcommand * command, G4String newValue);
-  virtual G4String GetCurrentValue(G4UIcommand * command);
+  void SetNewValue(G4UIcommand * command, G4String newValue) override;
+  G4String GetCurrentValue(G4UIcommand * command) override;
 
   const std::vector<G4MoleculeShootMessenger*>&
     GetShootMessengers() const
@@ -111,7 +111,7 @@ protected:
   G4MoleculeShootMessenger* CreateNewType(const G4String& name)
   {
     G4shared_ptr<G4MoleculeShoot> moleculeShoot(new TG4MoleculeShoot<T>());
-    G4MoleculeShootMessenger* shoot =
+    auto  shoot =
         new G4MoleculeShootMessenger(name,
                                      this,
                                      moleculeShoot);

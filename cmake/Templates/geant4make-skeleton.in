@@ -225,6 +225,7 @@
 #-----------------------------------------------------------------------
 # Qt UI/Vis
 #
+@GEANT4_TC_QT_VERSION@
 @GEANT4_TC_QTHOME@
 @GEANT4_TC_QTLIBPATH@
 @GEANT4_TC_QTLIBS@

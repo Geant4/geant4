@@ -86,7 +86,7 @@ void G4VMoleculeCounter::DeleteInstance()
 
 void G4VMoleculeCounter::InitializeInstance()
 {
-    if (fpInstance)
+    if (fpInstance != nullptr)
     {
         fpInstance->Initialize();
     }

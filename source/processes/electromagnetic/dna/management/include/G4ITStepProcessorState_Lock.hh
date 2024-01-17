@@ -40,7 +40,7 @@ class G4ITStepProcessorState_Lock
   friend class G4TrackingInformation;
 protected:
   inline virtual ~G4ITStepProcessorState_Lock()
-  {;}
+  = default;
 };
 
 #endif /* SOURCE_PROCESSES_ELECTROMAGNETIC_DNA_MANAGEMENT_INCLUDE_G4ITSTEPPROCESSORSTATE_LOCK_HH_ */

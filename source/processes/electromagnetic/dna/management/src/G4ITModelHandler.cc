@@ -33,9 +33,12 @@
 // -------------------------------------------------------------------
 
 #include "G4ITModelHandler.hh"
+
 #include "G4ITModelManager.hh"
 #include "G4VITStepModel.hh"
-#include <assert.h>
+
+#include <cassert>
+#include <memory>
 
 G4ITModelHandler::G4ITModelHandler()
 {
@@ -76,18 +79,18 @@ void G4ITModelHandler::RegisterModel(G4VITStepModel* pModel,
 
     if(!fpModelManager)
     {
-        fpModelManager.reset(new G4ITModelManager());
+        fpModelManager = std::make_unique<G4ITModelManager>();
     }
 
     fpModelManager->SetModel(pModel, startingTime);
 
     //________________________________________________
     // Setup ITStepManager
-    if (pModel->GetTimeStepper())
+    if (pModel->GetTimeStepper() != nullptr)
     {
         fTimeStepComputerFlag = true;
     }
-    if (pModel->GetReactionProcess())
+    if (pModel->GetReactionProcess() != nullptr)
     {
         fReactionProcessFlag = true;
     }

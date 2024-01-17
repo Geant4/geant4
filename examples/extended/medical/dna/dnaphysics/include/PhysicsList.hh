@@ -53,8 +53,11 @@ public:
   void ConstructProcess() override;
 
   void AddPhysics(const G4String&);
+  void SetTrackingCut(G4bool);
 
 private:
+
+  void TrackingCut();
     
   G4VPhysicsConstructor* fEmPhysicsList = nullptr;
   G4VPhysicsConstructor* fDecayPhysicsList = nullptr;
@@ -62,6 +65,9 @@ private:
   G4VPhysicsConstructor* fEmDNAActivator = nullptr;
 
   G4String fEmPhysics = "";
+  G4bool fIsTrackingCutSet = true;
+  G4bool fDNAPL = false;
+
 };
 
 #endif

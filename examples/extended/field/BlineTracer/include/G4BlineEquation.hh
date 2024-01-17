@@ -28,7 +28,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 //
 // G4BlineEquation
@@ -36,7 +36,7 @@
 // Class description:
 //
 // This class defines the equation of motion needed to trace magnetic
-// field lines in the simulation. 
+// field lines in the simulation.
 
 // --------------------------------------------------------------------
 // Author: Laurent Desorgher (desorgher@phim.unibe.ch)
@@ -52,22 +52,22 @@ class G4BlineEquation : public G4Mag_EqRhs
 {
   public:  // with description
 
-    G4BlineEquation( G4MagneticField* MagField );
-    virtual ~G4BlineEquation();
+    G4BlineEquation( G4MagneticField* magField );
+    ~G4BlineEquation() override = default;
       // Constructor and destructor.
 
-    virtual void EvaluateRhsGivenB( const G4double y[],
+    void EvaluateRhsGivenB( const G4double y[],
                             const G4double B[3],
-                                  G4double dydx[] ) const;
-      // Given the value of the magnetic field B, this function 
+                                  G4double dydx[] ) const override;
+      // Given the value of the magnetic field B, this function
       // calculates the value of the derivative dydx.
 
-    void SetBackwardDirectionOfIntegration(G4bool abool);  
+    void SetBackwardDirectionOfIntegration(G4bool abool);
 
   private:
 
-    G4bool fBackward_direction;
-    G4double fDirection;
+    G4bool fBackward_direction = false;
+    G4double fDirection = 1.;
 };
 
-#endif 
+#endif

@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -36,34 +33,33 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiAlpha.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                      ANTI ALPHA                                ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4AntiAlpha* G4AntiAlpha::theInstance = nullptr;
 
 G4AntiAlpha* G4AntiAlpha::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_alpha";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  //             excitation
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    //             excitation
+
+    // clang-format off
    anInstance = new G4Ions(
                  name,    3.727379*GeV,       0.0*MeV,  -2.0*eplus,
                     0,              +1,             0,
@@ -73,21 +69,19 @@ G4AntiAlpha* G4AntiAlpha::Definition()
 		false,        "static",    1000020040,
                   0.0,               0
                );
-
+    // clang-format on
   }
 
   theInstance = static_cast<G4AntiAlpha*>(anInstance);
   return theInstance;
 }
 
-G4AntiAlpha*  G4AntiAlpha::AntiAlphaDefinition()
+G4AntiAlpha* G4AntiAlpha::AntiAlphaDefinition()
 {
   return Definition();
 }
 
-G4AntiAlpha*  G4AntiAlpha::AntiAlpha()
+G4AntiAlpha* G4AntiAlpha::AntiAlpha()
 {
   return Definition();
 }
-
-

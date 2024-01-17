@@ -49,11 +49,7 @@ G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
   else               { index = theA + 1; }
 }
 
-G4PreCompoundFragment::~G4PreCompoundFragment()
-{}
-
-G4double G4PreCompoundFragment::
-CalcEmissionProbability(const G4Fragment & aFragment)
+G4double G4PreCompoundFragment::CalcEmissionProbability(const G4Fragment& fr)
 {
   //G4cout << theCoulombBarrier << "  " << GetMaximalKineticEnergy() << G4endl;
   // If  theCoulombBarrier effect is included in the emission probabilities
@@ -69,11 +65,11 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   }
   
   theEmissionProbability = 
-    IntegrateEmissionProbability(theMinKinEnergy,theMaxKinEnergy,aFragment);
+    IntegrateEmissionProbability(theMinKinEnergy, theMaxKinEnergy, fr);
   /*
   G4cout << "## G4PreCompoundFragment::CalcEmisProb "
-         << "Z= " << aFragment.GetZ_asInt() 
-	 << " A= " << aFragment.GetA_asInt()
+         << "Z= " << fr.GetZ_asInt() 
+	 << " A= " << fr.GetA_asInt()
 	 << " Elow= " << LowerLimit/MeV
 	 << " Eup= " << UpperLimit/MeV
 	 << " prob= " << theEmissionProbability
@@ -82,9 +78,9 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   return theEmissionProbability;
 }
 
-G4double G4PreCompoundFragment::
-IntegrateEmissionProbability(G4double low, G4double up,
-			     const G4Fragment & aFragment)
+G4double 
+G4PreCompoundFragment::IntegrateEmissionProbability(G4double low, G4double up,
+                                                    const G4Fragment& fr)
 {  
   static const G4double den = 1.0/CLHEP::MeV;
   G4double del = (up - low);
@@ -92,14 +88,14 @@ IntegrateEmissionProbability(G4double low, G4double up,
   nbins = std::max(nbins, 4);
   del /= static_cast<G4double>(nbins);
   G4double e = low + 0.5*del;
-  probmax = ProbabilityDistributionFunction(e, aFragment);
+  probmax = ProbabilityDistributionFunction(e, fr);
   //G4cout << "    0. e= " << e << "  y= " << probmax << G4endl;
 
   G4double sum = probmax;
   for (G4int i=1; i<nbins; ++i) {
     e += del;
 
-    G4double y = ProbabilityDistributionFunction(e, aFragment); 
+    G4double y = ProbabilityDistributionFunction(e, fr); 
     probmax = std::max(probmax, y);
     sum += y;
     if(y < sum*0.01) { break; }
@@ -135,7 +131,7 @@ G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
 {
   G4double r0 = theParameters->GetR0()*theResA13;
   // cross section is now given in mb (r0 is in mm) for the sake of consistency
-  //with the rest of the options
+  // with the rest of the options
   return 1.e+25*CLHEP::pi*r0*r0*theResA13*GetAlpha()*(1.0 + GetBeta()/ekin);
 }
 

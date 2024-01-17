@@ -25,7 +25,7 @@
 //
 // G4Event class implementation
 //
-// Author: M.Asai, SLAC
+// Author: M.Asai, SLAC/JLAB
 // --------------------------------------------------------------------
 
 #include "G4Event.hh"
@@ -33,6 +33,7 @@
 #include "G4VHitsCollection.hh"
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
+#include "G4SubEvent.hh"
 
 G4Allocator<G4Event>*& anEventAllocator()
 {
@@ -66,6 +67,44 @@ G4Event::~G4Event()
   delete userInfo;
   delete randomNumberStatus;
   delete randomNumberStatusForProcessing;
+
+  // Following G4Exception are temporally issuing JustWarning to delete 
+  // unprocessed tracks in sub-events. Once sub-event mechanism is completely 
+  // implemented, G4Exception should cause FatalException.
+
+  G4int remainingSE = 0;
+  for(auto& sem : fSubEvtStackMap)
+  {
+    if((sem.second!=nullptr)&&!(sem.second->empty()))
+    {
+      remainingSE += sem.second->size();
+      for(auto& se : *(sem.second))
+      {
+        se->clearAndDestroy();
+      }
+      sem.second->clear();
+    }
+  }
+  if(remainingSE>0)
+  {
+    G4ExceptionDescription ed;
+    ed << "Deleting G4Event (id:" << eventID << ") that still has "
+       << remainingSE << " sub-events un-processed.";
+    G4Exception("G4Event::~G4Event()","SubEvt0001",JustWarning,ed);
+  }
+
+  if(!(fSubEvtVector.empty()))
+  {
+    G4ExceptionDescription ed;
+    ed << "Deleting G4Event (id:" << eventID << ") that has "
+       << fSubEvtVector.size() << " sub-events still processing.";
+    G4Exception("G4Event::~G4Event()","SubEvt0001",JustWarning,ed);
+    for(auto& se : fSubEvtVector)
+    {
+      se->clearAndDestroy();
+      delete se;
+    }
+  }
 }
 
 G4bool G4Event::operator==(const G4Event& right) const
@@ -115,3 +154,94 @@ void G4Event::Draw() const
     }
   }
 }
+
+G4int G4Event::StoreSubEvent(G4int ty,G4SubEvent* se)
+{
+  std::set<G4SubEvent*>* sev = nullptr;
+  auto ses = fSubEvtStackMap.find(ty);
+  if(ses==fSubEvtStackMap.end())
+  { 
+    sev = new std::set<G4SubEvent*>;
+    fSubEvtStackMap[ty] = sev;
+  }
+  else
+  { sev = ses->second; }
+  sev->insert(se);
+  return (G4int)sev->size();
+}
+
+G4SubEvent* G4Event::PopSubEvent(G4int ty)
+{
+  G4SubEvent* se = nullptr;
+  auto ses = fSubEvtStackMap.find(ty);
+  if(ses!=fSubEvtStackMap.end())
+  {
+    auto sev = ses->second;
+    if(!(sev->empty()))
+    {
+      se = sev->extract(sev->begin()).value();
+      SpawnSubEvent(se);
+    }
+  }
+  return se;
+}
+
+G4int G4Event::SpawnSubEvent(G4SubEvent* se)
+{
+  auto ss = fSubEvtVector.find(se);
+  if(ss!=fSubEvtVector.end())
+  {
+    G4ExceptionDescription ed;
+    ed << "Sub-event " << se << " of type " << se->GetSubEventType()
+       << " with " << se->GetNTrack() << " tracks has already spawned.";
+    G4Exception("G4Event::SpawnSubEvent","SubEvent9001",
+                FatalException,ed);
+  }
+  fSubEvtVector.insert(se);
+  return (G4int)fSubEvtVector.size();
+}
+
+void G4Event::MergeSubEventResults(const G4Event* se)
+{
+#ifdef G4_STORE_TRAJECTORY
+  if(se->trajectoryContainer!=nullptr && se->trajectoryContainer->size()>0)
+  {
+    if(trajectoryContainer==nullptr) trajectoryContainer = new G4TrajectoryContainer;
+    for(auto& trj : *(se->trajectoryContainer->GetVector()))
+    { trajectoryContainer->push_back(trj); }
+  }
+#endif
+  // Note:
+  //     - scores are merged directly to the scoring manager
+  //     - hits collections should be merged by the user event action
+}
+
+G4int G4Event::TerminateSubEvent(G4SubEvent* se)
+{
+  auto ss = fSubEvtVector.find(se);
+  if(ss==fSubEvtVector.end())
+  {
+    G4ExceptionDescription ed;
+    ed << "Sub-event " << se << " of type " << se->GetSubEventType()
+       << " with " << se->GetNTrack() << " tracks has never been spawned.";
+    G4Exception("G4Event::TerminateSubEvent","SubEvent9002",
+                FatalException,ed);
+  }
+
+  fSubEvtVector.erase(ss);
+
+  ss = fSubEvtVector.find(se);
+  if(ss!=fSubEvtVector.end())
+  {
+    G4ExceptionDescription ed;
+    ed << "Sub-event " << se << " of type " << se->GetSubEventType()
+       << " with " << se->GetNTrack() << " appears more than once. PANIC!";
+    G4Exception("G4Event::TerminateSubEvent","SubEvent9003",
+                FatalException,ed);
+  }
+
+  se->clearAndDestroy();
+  delete se;
+  return (G4int)fSubEvtVector.size();
+}
+

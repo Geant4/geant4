@@ -23,28 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//	GEANT 4 class implementation file
 //
 
 #include "G4IonConstructor.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 // Nuclei
 #include "G4Alpha.hh"
 #include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
 #include "G4GenericIon.hh"
+#include "G4He3.hh"
+#include "G4Triton.hh"
 // AntiNuclei
 #include "G4AntiAlpha.hh"
 #include "G4AntiDeuteron.hh"
-#include "G4AntiTriton.hh"
 #include "G4AntiHe3.hh"
+#include "G4AntiTriton.hh"
 // Hyper-nuclei
 #include "G4DoubleHyperDoubleNeutron.hh"
 #include "G4DoubleHyperH4.hh"
@@ -59,7 +53,6 @@
 #include "G4AntiHyperH4.hh"
 #include "G4AntiHyperHe5.hh"
 #include "G4AntiHyperTriton.hh"
-
 
 void G4IonConstructor::ConstructParticle()
 {

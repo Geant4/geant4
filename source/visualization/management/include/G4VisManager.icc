@@ -134,6 +134,22 @@ inline G4bool G4VisManager::GetWaitOnEventQueueFull () const {
 
 #endif
 
+inline const G4String& G4VisManager::GetDefaultGraphicsSystemName () const {
+  return fDefaultGraphicsSystemName;
+}
+
+inline const G4String& G4VisManager::GetDefaultXGeometryString () const {
+  return fDefaultXGeometryString;
+}
+
+inline const G4String& G4VisManager::GetDefaultGraphicsSystemBasis () const {
+  return fDefaultGraphicsSystemBasis;
+}
+
+inline const G4String& G4VisManager::GetDefaultXGeometryStringBasis () const {
+  return fDefaultXGeometryStringBasis;
+}
+
 inline G4SceneList& G4VisManager::SetSceneList () {
   return fSceneList;
 }
@@ -203,3 +219,19 @@ inline void G4VisManager::SetWaitOnEventQueueFull (G4bool wait) {
 }
 
 #endif
+
+inline void G4VisManager::SetDefaultGraphicsSystemName (const G4String& name) {
+  fDefaultGraphicsSystemName = name;
+}
+
+inline void G4VisManager::SetDefaultXGeometryString (const G4String& string) {
+  fDefaultXGeometryString = string;
+}
+
+inline void G4VisManager::SetDefaultGraphicsSystemBasis (const G4String& basis) {
+  fDefaultGraphicsSystemBasis = basis;
+}
+
+inline void G4VisManager::SetDefaultXGeometryStringBasis (const G4String& basis) {
+  fDefaultXGeometryStringBasis = basis;
+}

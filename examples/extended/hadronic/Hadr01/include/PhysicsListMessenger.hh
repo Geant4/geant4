@@ -27,8 +27,6 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-//
-//
 /////////////////////////////////////////////////////////////////////////
 //
 // PhysicsListMessenger
@@ -58,8 +56,8 @@ class PhysicsListMessenger: public G4UImessenger
 {
 public:
   
-  PhysicsListMessenger(PhysicsList* p = 0);
-  virtual ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* p = nullptr);
+  ~PhysicsListMessenger() override;
     
   void SetNewValue(G4UIcommand*, G4String) override;
   

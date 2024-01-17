@@ -29,14 +29,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4DNAPositronium::G4DNAPositronium(const G4String& processName) 
-  : G4VEmProcess( processName ),isInitialised(false)
+  : G4VEmProcess( processName )
 {
 } // constructor
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4DNAPositronium::~G4DNAPositronium() {
-}
+G4DNAPositronium::~G4DNAPositronium() = default;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +51,7 @@ void G4DNAPositronium::InitialiseProcess(const G4ParticleDefinition*)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    if(!EmModel()) SetEmModel(new G4LEPTSPositroniumModel);
+    if(EmModel() == nullptr) SetEmModel(new G4LEPTSPositroniumModel);
     EmModel()->SetLowEnergyLimit(0.1*CLHEP::eV);
     EmModel()->SetHighEnergyLimit(15.*CLHEP::MeV);
     AddEmModel(1, EmModel());

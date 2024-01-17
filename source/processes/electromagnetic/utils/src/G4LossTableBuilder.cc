@@ -69,33 +69,23 @@
 std::vector<G4double>* G4LossTableBuilder::theDensityFactor = nullptr;
 std::vector<G4int>*    G4LossTableBuilder::theDensityIdx = nullptr;
 std::vector<G4bool>*   G4LossTableBuilder::theFlag = nullptr;
-#ifdef G4MULTITHREADED
-  G4Mutex G4LossTableBuilder::ltbMutex = G4MUTEX_INITIALIZER;
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LossTableBuilder::G4LossTableBuilder(G4bool master) : isMaster(master) 
+G4LossTableBuilder::G4LossTableBuilder(G4bool master)
 {
   theParameters = G4EmParameters::Instance();
-  if(nullptr == theFlag) {
-#ifdef G4MULTITHREADED
-    G4MUTEXLOCK(&ltbMutex);
-    if(nullptr == theFlag) {
-#endif
-      if(!isMaster) {
-	G4ExceptionDescription ed;
-	ed << "Initialisation called from a worker thread ";
-	G4Exception("G4LossTableBuilder: ", "em0001",
-		    JustWarning, ed);
-      }
-      theDensityFactor = new std::vector<G4double>;
-      theDensityIdx = new std::vector<G4int>;
-      theFlag = new std::vector<G4bool>;
-#ifdef G4MULTITHREADED
+  if (nullptr == theFlag) {
+    if (!master) {
+      G4ExceptionDescription ed;
+      ed << "The table builder is instantiated in a worker thread ";
+      G4Exception("G4LossTableBuilder::G4LossTableBuilder ", "em0001",
+		  JustWarning, ed);
     }
-    G4MUTEXUNLOCK(&ltbMutex);
-#endif
+    theDensityFactor = new std::vector<G4double>;
+    theDensityIdx = new std::vector<G4int>;
+    theFlag = new std::vector<G4bool>;
+    isInitializer = true;
   }
 }
 
@@ -103,7 +93,7 @@ G4LossTableBuilder::G4LossTableBuilder(G4bool master) : isMaster(master)
 
 G4LossTableBuilder::~G4LossTableBuilder() 
 {
-  if(isMaster) {
+  if (isInitializer) {
     delete theDensityFactor;
     delete theDensityIdx;
     delete theFlag;
@@ -131,7 +121,7 @@ const std::vector<G4double>* G4LossTableBuilder::GetDensityFactors() const
 
 G4bool G4LossTableBuilder::GetFlag(std::size_t idx)
 {
-  if(theFlag->empty()) { InitialiseBaseMaterials(); }
+  if (theFlag->empty()) { InitialiseBaseMaterials(); }
   return (idx < theFlag->size()) ? (*theFlag)[idx] : false;
 }
 
@@ -139,7 +129,7 @@ G4bool G4LossTableBuilder::GetFlag(std::size_t idx)
 
 G4bool G4LossTableBuilder::GetBaseMaterialFlag()
 {
-  if(theFlag->empty()) { InitialiseBaseMaterials(); }
+  if (theFlag->empty()) { InitialiseBaseMaterials(); }
   return baseMatFlag;
 }
 
@@ -275,14 +265,15 @@ G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
     std::size_t npoints = pv->GetVectorLength();
       
     delete (*invRangeTable)[i];
-    auto v = new G4PhysicsFreeVector(npoints,splineFlag);
+    auto v = new G4PhysicsFreeVector(npoints, splineFlag);
 
     for (std::size_t j=0; j<npoints; ++j) {
       G4double e  = pv->Energy(j);
       G4double r  = (*pv)[j];
       v->PutValues(j,r,e);
     }
-    if(splineFlag) { v->FillSecondDerivatives(); }
+    if (splineFlag) { v->FillSecondDerivatives(); }
+    v->EnableLogBinSearch(theParameters->NumberForFreeVector());
 
     G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
   }
@@ -294,7 +285,7 @@ G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
 
 void G4LossTableBuilder::InitialiseBaseMaterials(const G4PhysicsTable* table)
 {
-  if(!isMaster) { return; }
+  if(!isInitializer) { return; }
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   std::size_t nCouples = theCoupleTable->GetTableSize();

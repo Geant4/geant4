@@ -57,23 +57,22 @@
 #ifndef G4PDefManager_hh
 #define G4PDefManager_hh
 
-#include <stdlib.h>
-
-#include "globals.hh"
-#include "pwdefs.hh"
 #include "G4AutoLock.hh"
+#include "globals.hh"
+
+#include "pwdefs.hh"
+#include <stdlib.h>
 
 class G4ProcessManager;
 class G4VTrackingManager;
 
 class G4PDefData
 {
-  // G4PDefData is the private data from the object to be split.
-  // Encapsulates the fields of the class G4ParticleDefinition
-  // that may not be read-only.
+    // G4PDefData is the private data from the object to be split.
+    // Encapsulates the fields of the class G4ParticleDefinition
+    // that may not be read-only.
 
   public:
-
     void initialize();
 
     G4ProcessManager* theProcessManager = nullptr;
@@ -83,33 +82,31 @@ class G4PDefData
 class G4PDefManager
 {
   public:
-
     G4PDefManager();
+
+    // Invoked by the master or work thread to create a new subinstance
+    // whenever a new split class instance is created. For each worker
+    // thread, ions are created dynamically.
     G4int CreateSubInstance();
-      // Invoked by the master or work thread to create a new subinstance
-      // whenever a new split class instance is created. For each worker
-      // thread, ions are created dynamically.
 
-
+    // Invoked by each worker thread to grow the subinstance array and
+    // initialize each new subinstance using a particular method defined
+    // by the subclass.
     void NewSubInstances();
-      // Invoked by each worker thread to grow the subinstance array and
-      // initialize each new subinstance using a particular method defined
-      // by the subclass.
 
+    // Invoked by all threads to free the subinstance array.
     void FreeSlave();
-      // Invoked by all threads to free the subinstance array.
 
     G4PDefData* GetOffset();
 
-    void UseWorkArea( G4PDefData* newOffset );
+    void UseWorkArea(G4PDefData* newOffset);
 
     G4PDefData* FreeWorkArea();
 
-    G4PART_DLL static G4int& slavetotalspace(); // thread-local
-    G4PART_DLL static G4PDefData*& offset(); // thread-local
+    G4PART_DLL static G4int& slavetotalspace();  // thread-local
+    G4PART_DLL static G4PDefData*& offset();  // thread-local
 
   private:
-
     G4int totalobj{0};
     G4Mutex mutex;
 };

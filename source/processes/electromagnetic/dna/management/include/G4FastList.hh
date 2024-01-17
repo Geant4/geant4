@@ -79,16 +79,15 @@ template<class OBJECT>
 template < typename T>
 struct type_wrapper
 {
-   typedef T type;
+   using type = T;
 };
 #endif
 
 template<class LIST>
   struct _ListRef
   {
-    typedef type_wrapper<LIST> traits_type;
-    typedef type_wrapper<G4ManyFastLists_iterator<typename LIST::object>>
-            mli_traits_type;
+    using traits_type = type_wrapper<LIST>;
+    using mli_traits_type = type_wrapper<G4ManyFastLists_iterator<typename LIST::object>>;
 
 //#ifdef WIN32
 //    friend typename traits_type::type;
@@ -124,14 +123,14 @@ template<class LIST>
 template<class OBJECT>
   class G4FastListNode
   {
-    typedef type_wrapper<OBJECT> ObjectW;
-    typedef G4FastList<typename ObjectW::type> LIST;
+    using ObjectW = type_wrapper<OBJECT>;
+    using LIST = G4FastList<typename ObjectW::type>;
 //    typedef type_wrapper<LIST> > ListW;
-    typedef type_wrapper<G4FastList<OBJECT> > ListW;
+    using ListW = type_wrapper<G4FastList<OBJECT>>;
 //    typedef type_wrapper<G4ManyFastLists<typename ObjectW::type> > ManyListsW;
-    typedef type_wrapper<G4ManyFastLists<OBJECT> > ManyListsW;
+    using ManyListsW = type_wrapper<G4ManyFastLists<OBJECT>>;
 //    typedef type_wrapper<G4ManyFastLists_iterator<typename ObjectW::type> > ManyListsIteratorW;
-    typedef type_wrapper<G4ManyFastLists_iterator<OBJECT> > ManyListsIteratorW;
+    using ManyListsIteratorW = type_wrapper<G4ManyFastLists_iterator<OBJECT>>;
 
 //#ifdef WIN32
 //    friend typename ListW::type;
@@ -182,7 +181,7 @@ template<class OBJECT>
 
   //protected:
     /** Default constructor */
-    G4FastListNode(OBJECT* track = 0);
+    G4FastListNode(OBJECT* track = nullptr);
 
     void SetNext(G4FastListNode<OBJECT>* node)
     {
@@ -241,7 +240,7 @@ template<class OBJECT>
         eVeryLow
       };
 
-      typedef G4FastList<OBJECT> list;
+      using list = G4FastList<OBJECT>;
 
       Watcher()
       {
@@ -250,8 +249,8 @@ template<class OBJECT>
 
       virtual ~Watcher()
       {
-        typename std::set<G4FastList<OBJECT>*>::iterator it = fWatching.begin();
-        typename std::set<G4FastList<OBJECT>*>::iterator end = fWatching.end();
+        auto it = fWatching.begin();
+        auto end = fWatching.end();
         for(;it!=end;it++)
         {
           (*it)->RemoveWatcher(this);
@@ -285,7 +284,7 @@ template<class OBJECT>
 
       void StopWatching(G4FastList<OBJECT>* fastList, bool removeWatcher = true)
       {
-        typename std::set<G4FastList<OBJECT>*>::iterator it = fWatching.find(fastList);
+        auto it = fWatching.find(fastList);
         if(it == fWatching.end()) return; //TODO: exception?
         fWatching.erase(it);
         if(removeWatcher) fastList->RemoveWatcher(this);
@@ -302,8 +301,8 @@ template<class OBJECT>
     class TWatcher : public Watcher
     {
       public:
-      TWatcher() : Watcher(){;}
-      virtual ~TWatcher(){}
+      TWatcher() : Watcher(){}
+      virtual ~TWatcher()= default;
       virtual G4String GetWatcherName()
       {
         return typeid(WATCHER_TYPE).name();
@@ -311,16 +310,16 @@ template<class OBJECT>
     };
 
   protected:
-    typedef std::set<typename G4FastList<OBJECT>::Watcher*,
-                    sortWatcher<OBJECT>> WatcherSet;
+    using WatcherSet = std::set<typename G4FastList<OBJECT>::Watcher*,
+                    sortWatcher<OBJECT>>;
     WatcherSet   fWatchers;
     G4FastListNode<G4FastList<OBJECT> >* fpNodeInManyLists;
 
   public:
-    typedef OBJECT object;
-    typedef G4FastList_iterator<OBJECT> iterator;
-    typedef G4FastList_const_iterator<OBJECT> const_iterator;
-    typedef G4FastListNode<OBJECT> node;
+    using object = OBJECT;
+    using iterator = G4FastList_iterator<OBJECT>;
+    using const_iterator = G4FastList_const_iterator<OBJECT>;
+    using node = G4FastListNode<OBJECT>;
 
     G4FastList();
     ~G4FastList();
@@ -342,7 +341,7 @@ template<class OBJECT>
 
     void RemoveWatcher(Watcher* watcher)
     {
-      typename WatcherSet::iterator it = fWatchers.find(watcher);
+      auto it = fWatchers.find(watcher);
       if(it == fWatchers.end()) return; //TODO: exception?
       fWatchers.erase(it);
     }
@@ -351,7 +350,7 @@ template<class OBJECT>
     {
 //      if (fNbObjects != 0) return fpFinish->GetObject();
       if (fNbObjects != 0) return fBoundary.GetPrevious()->GetObject();
-      else return 0;
+      return 0;
     }
 
     inline G4int size() const
@@ -457,8 +456,8 @@ template<typename OBJECT>
   struct G4FastList_iterator
   {
 //    friend class G4FastList<OBJECT>;
-    typedef G4FastList_iterator<OBJECT> _Self;
-    typedef G4FastListNode<OBJECT> _Node;
+    using _Self = G4FastList_iterator<OBJECT>;
+    using _Node = G4FastListNode<OBJECT>;
 
     G4FastList_iterator() = default;
 
@@ -544,8 +543,8 @@ template<typename OBJECT>
   struct G4FastList_const_iterator
   {
 //    friend class G4FastList<OBJECT>;
-    typedef G4FastList_const_iterator<OBJECT> _Self;
-    typedef G4FastListNode<OBJECT> _Node;
+    using _Self = G4FastList_const_iterator<OBJECT>;
+    using _Node = G4FastListNode<OBJECT>;
 
     G4FastList_const_iterator() = default;
 
@@ -571,7 +570,7 @@ template<typename OBJECT>
     const OBJECT*
     operator*() const
     {
-      if(fpNode == 0) return 0;
+      if(fpNode == nullptr) return nullptr;
       return fpNode->GetObject();
     }
 

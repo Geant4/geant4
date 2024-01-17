@@ -211,7 +211,7 @@ void F04DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fTgtMaterCmd )
    { fDetector->SetTargetMaterial(newValue);}
- 
+
   if( command == fDgrMaterCmd )
    { fDetector->SetDegraderMaterial(newValue);}
 
@@ -250,13 +250,13 @@ void F04DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fDgrRadCmd )
     fDetector->SetDegraderRadius(fDgrRadCmd->GetNewDoubleValue(newValue));
- 
+
   if( command == fDgrThickCmd )
     fDetector->SetDegraderThickness(fDgrThickCmd->GetNewDoubleValue(newValue));
- 
+
   if( command == fDgrPosCmd )
     fDetector->SetDegraderPos(fDgrPosCmd->GetNewDoubleValue(newValue));
- 
+
   if( command == fWorldZCmd )
     fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));
 

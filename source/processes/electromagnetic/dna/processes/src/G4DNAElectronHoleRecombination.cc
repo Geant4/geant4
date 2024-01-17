@@ -32,18 +32,21 @@
  */
 
 #include "G4DNAElectronHoleRecombination.hh"
+
 #include "G4ChemicalMoleculeFinder.hh"
-#include "G4MoleculeFinder.hh"
-#include "G4Molecule.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4Electron_aq.hh"
-#include "G4H2O.hh"
-#include "G4MolecularConfiguration.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4Electron_aq.hh"
+#include "G4Exp.hh"
+#include "G4H2O.hh"
+#include "G4LowEnergyEmProcessSubType.hh"
+#include "G4MolecularConfiguration.hh"
+#include "G4Molecule.hh"
+#include "G4MoleculeFinder.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VMoleculeCounter.hh"
-#include "G4Exp.hh"
-#include "G4LowEnergyEmProcessSubType.hh"
+
+#include <memory>
 
 static G4double onsager_constant = e_squared / (4. * pi * epsilon0 * k_Boltzmann);
 
@@ -149,7 +152,7 @@ G4DNAElectronHoleRecombination::AtRestDoIt(const G4Track& track,
 void G4DNAElectronHoleRecombination::StartTracking(G4Track* pTrack)
 {
     G4VProcess::StartTracking(pTrack);
-    G4VITProcess::fpState.reset(new State());
+    G4VITProcess::fpState = std::make_shared<State>();
     G4VITProcess::StartTracking(pTrack);
 }
 
@@ -177,7 +180,7 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
         break;
     }
 
-    if (pSelectedReactant)
+    if (pSelectedReactant != nullptr)
     {
         if (G4VMoleculeCounter::Instance()->InUse())
         {
@@ -281,7 +284,7 @@ G4bool G4DNAElectronHoleRecombination::FindReactant(const G4Track& track)
                              e_aq.GetMoleculeID(),
                              10. * onsagerRadius);
 
-        if (results == 0 || results->GetSize() == 0)
+        if (static_cast<int>(results) == 0 || results->GetSize() == 0)
         {
             return false;
         }
@@ -313,12 +316,7 @@ G4bool
 G4DNAElectronHoleRecombination::
 IsApplicable(const G4ParticleDefinition& particle)
 {
-    if (&particle != G4H2O::DefinitionIfExists())
-    {
-        return false;
-    }
-
-    return true;
+    return &particle == G4H2O::DefinitionIfExists();
 }
 
 //______________________________________________________________________________

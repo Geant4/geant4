@@ -88,9 +88,6 @@ int main(int argc,char** argv)
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();
 
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-
   if (!ui)   // batch mode
     {
      G4String command = "/control/execute ";
@@ -99,16 +96,19 @@ int main(int argc,char** argv)
     }
   else           // interactive mode : define visualization and UI terminal
     {
-      UImanager->ApplyCommand("/control/execute run.mac");
-      ui->SessionStart();
-      delete ui;
+     G4VisManager* visManager = new G4VisExecutive;
+     visManager->Initialize();
+
+     UImanager->ApplyCommand("/control/execute run.mac");
+     ui->SessionStart();
+     delete ui;
+     delete visManager;
     }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-  delete visManager;
   delete runManager;
 
   return 0;

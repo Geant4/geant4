@@ -23,9 +23,9 @@
   These classes can be tested with the following programs:
   - testCommon.cc - only instantiates all classes
   - exampleCommonNoVis.cc - Geant4 application without visualization, that can be run
-      both interactively or in batch (with the run.mac macro)
+      both interactively or in batch (with the init.mac or run.mac macro)
   - exampleCommonNoVis.cc - Geant4 application with visualization, that can be run
-      both interactively or in batch (with the run.mac macro)
+      both interactively or in batch (with the init_vis.mac or run.mac macro)
 
   Building examples programs can be disabled with the CMake option: -DEXAMPLES_COMMON=OFF.
 

@@ -82,6 +82,7 @@ class G4VtkSceneHandler : public G4VSceneHandler
     ////////////////////////////////////////////////////////////////
     // Required implementation of pure virtual functions...
 
+    using G4VSceneHandler::AddPrimitive;
     void AddPrimitive(const G4Polyline&) override;
     void AddPrimitive(const G4Text&) override;
     void AddPrimitive(const G4Circle&) override;
@@ -96,7 +97,10 @@ class G4VtkSceneHandler : public G4VSceneHandler
       G4VSceneHandler::AddPrimitive(polymarker);
     }
 
+    using G4VSceneHandler::AddSolid;
     void AddSolid(const G4Box& box) override;
+
+    using G4VSceneHandler::AddCompound;
     void AddCompound(const G4Mesh& mesh) override;
 
     void Modified();

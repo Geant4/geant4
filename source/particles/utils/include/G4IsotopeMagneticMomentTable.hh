@@ -35,93 +35,75 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // HISTORY
-////////////////////////////////////////////////////////////////////////////////// IsomerLevel is added                         30 Apr. 2013  H.Kurashige
+////////////////////////////////////////////////////////////////////////////////// IsomerLevel is
+/// added                         30 Apr. 2013  H.Kurashige
 
-//
-#include "globals.hh"
-#include "G4IsotopeProperty.hh"
-#include "G4VIsotopeTable.hh"
 #include "G4Ions.hh"
+#include "G4IsotopeProperty.hh"
 #include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
-#include "G4DecayTable.hh"
+#include "G4VIsotopeTable.hh"
+#include "globals.hh"
 
 #include <vector>
 
-////////////////////////////////////////////////////////////////////////////////
-//
 class G4IsotopeMagneticMomentTable : public G4VIsotopeTable
 {
-  // class description
-  //   G4IsotopeMagneticMomentTable is the table of pointers to G4IsotopeProperty,
-  //   which has magnetic moment and spin.
-  //   Data File name is given by G4IONMAGNETICMOMENT 
-  //   
-public:
-  //
-  using G4IsotopeList = std::vector<G4IsotopeProperty *>;
-  using G4IsotopeNameList = std::vector<G4String>;
+    // class description
+    //   G4IsotopeMagneticMomentTable is the table of pointers to G4IsotopeProperty,
+    //   which has magnetic moment and spin.
+    //   Data File name is given by G4IONMAGNETICMOMENT
+    //
+  public:
+    using G4IsotopeList = std::vector<G4IsotopeProperty*>;
+    using G4IsotopeNameList = std::vector<G4String>;
 
-public:
-  // constructor
-  //
-  G4IsotopeMagneticMomentTable();
+  public:
+    // constructor
+    G4IsotopeMagneticMomentTable();
 
-protected:
-  // hide copy construictor and assignment operator as protected
-  G4IsotopeMagneticMomentTable(const  G4IsotopeMagneticMomentTable &right);
-  G4IsotopeMagneticMomentTable & operator= (const  G4IsotopeMagneticMomentTable &right);
+    // destructor
+    ~G4IsotopeMagneticMomentTable() override;
 
-public:
-  // destructor
-  ~G4IsotopeMagneticMomentTable() override;
+    // The FindIsotope function will replace the pure virtual one defined in the
+    // abstract base class G4VIstopeTable.  We don't use this fuction in this
+    // implementation, instead we use the next function.
+    virtual G4bool FindIsotope(G4IsotopeProperty* property);
 
-public:
-  // with description
-  //
-  virtual G4bool FindIsotope(G4IsotopeProperty* property);
-  // The FindIsotope function will replace the pure virtual one defined in the
-  // abstract base class G4VIstopeTable.  We don't use this fuction in this
-  // implementation, instead we use the next function.
-  //
-  G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) override;
-  G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0) override;
-  //
-  //   again it will replace the pure virtual one in the abstract base class.
-  //
-  //   Z: Atomic Number
-  //   A: Atomic Mass
-  //   E: Excitaion energy
-  //   flb: floating level base (enum defined in G4Ions.hh)
-  //          -- currently ignored
-  //    or
-  //    G4int  level: isomer level
-  // 
+    //
+    //   again it will replace the pure virtual one in the abstract base class.
+    //
+    //   Z: Atomic Number
+    //   A: Atomic Mass
+    //   E: Excitaion energy
+    //   flb: floating level base (enum defined in G4Ions.hh)
+    //          -- currently ignored
+    //    or
+    //    G4int  level: isomer level
+    //
+    G4IsotopeProperty*
+    GetIsotope(G4int Z, G4int A, G4double E,
+               G4Ions::G4FloatLevelBase flb = G4Ions::G4FloatLevelBase::no_Float) override;
+    G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl = 0) override;
 
-private:
-  G4int GetVerboseLevel() const;
-  // get Verbose Level defined in G4ParticleTable
+  protected:
+    // hide copy construictor and assignment operator as protected
+    G4IsotopeMagneticMomentTable(const G4IsotopeMagneticMomentTable& right);
+    G4IsotopeMagneticMomentTable& operator=(const G4IsotopeMagneticMomentTable& right);
 
-private:
+  private:
+    // get Verbose Level defined in G4ParticleTable
+    G4int GetVerboseLevel() const;
 
-  G4IsotopeList         fIsotopeList;
+  private:
+    G4IsotopeList fIsotopeList;
 
-  static const G4double levelTolerance;
-  static const G4double nuclearMagneton;
+    static const G4double levelTolerance;
+    static const G4double nuclearMagneton;
 };
 
-
-inline 
- G4int G4IsotopeMagneticMomentTable::GetVerboseLevel() const
+inline G4int G4IsotopeMagneticMomentTable::GetVerboseLevel() const
 {
   return G4ParticleTable::GetParticleTable()->GetVerboseLevel();
 }
 
 #endif
-
-
-
-
-
-

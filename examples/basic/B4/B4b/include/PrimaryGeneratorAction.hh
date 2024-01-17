@@ -54,9 +54,6 @@ public:
 
   void GeneratePrimaries(G4Event* event) override;
 
-  // set methods
-  void SetRandomFlag(G4bool value);
-
 private:
   G4ParticleGun* fParticleGun = nullptr; // G4 particle gun
 };

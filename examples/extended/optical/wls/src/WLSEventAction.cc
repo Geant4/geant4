@@ -51,10 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSEventAction::WLSEventAction()
-  : fVerboseLevel(0)
 {
-  fMPPCCollID = 0;
-
   fEventMessenger = new WLSEventActionMessenger(this);
 }
 
@@ -133,7 +130,7 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
            << "  Detector hit:  " << n_hit << G4endl;
   }
 
-  WLSRun* run = static_cast<WLSRun*>(
+  auto run = static_cast<WLSRun*>(
     G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   run->AddTIR(fNTIR);

@@ -41,14 +41,11 @@
 //
 
 #include "G4PreCompoundAlpha.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4CoulombBarrier.hh"
 #include "G4Alpha.hh"
 
 G4PreCompoundAlpha::G4PreCompoundAlpha()
-  : G4PreCompoundIon(G4Alpha::Alpha(), &theAlphaCoulombBarrier)
-{}
-
-G4PreCompoundAlpha::~G4PreCompoundAlpha()
+  : G4PreCompoundIon(G4Alpha::Alpha(), new G4CoulombBarrier(4, 2))
 {}
 
 G4double G4PreCompoundAlpha::FactorialFactor(G4int N, G4int P) const
@@ -88,7 +85,7 @@ G4double G4PreCompoundAlpha::GetRj(G4int nParticles, G4int nCharged) const
 {
   G4double rj = 0.0;
   if(nCharged >=2 && (nParticles-nCharged) >=2 ) {
-    G4double denominator = 
+    G4double denominator = (G4double)
       (nParticles*(nParticles-1))*((nParticles-2)*(nParticles-3));
     rj = (6.0*nCharged*(nCharged-1))*
       ((nParticles-nCharged)*(nParticles-nCharged-1))/denominator;

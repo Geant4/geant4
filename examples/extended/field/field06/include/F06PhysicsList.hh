@@ -41,17 +41,15 @@ class G4VPhysicsConstructor;
 
 class F06PhysicsList: public G4VModularPhysicsList
 {
-public:
+  public:
 
     F06PhysicsList();
-    virtual ~F06PhysicsList();
+    ~F06PhysicsList() override = default;
 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle() override;
+    void ConstructProcess() override;
 
-    void SetCuts();
-
-private:
+    void SetCuts() override;
 
 };
 

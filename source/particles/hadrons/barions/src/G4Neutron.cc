@@ -23,54 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
-//      add neutron life time    Oct 17 2000 
+//      add neutron life time    Oct 17 2000
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
 #include "G4Neutron.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4NeutronBetaDecayChannel.hh"
 #include "G4DecayTable.hh"
+#include "G4NeutronBetaDecayChannel.hh"
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+#include "G4VDecayChannel.hh"
 
-// ######################################################################
-// ###                           NEUTRON                              ###
-// ######################################################################
 G4Neutron* G4Neutron::theInstance = nullptr;
 
 G4Neutron* G4Neutron::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  auto  anInstance =  static_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
-  // use constants in CLHEP
-  // static const double  neutron_mass_c2 = 939.56563 * MeV;
+  auto anInstance = static_cast<G4Ions*>(pTable->FindParticle(name));
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
+    // use constants in CLHEP
+    // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
+    // clang-format off
     anInstance = new G4Ions(
                  name, neutron_mass_c2, 7.478e-28*GeV,         0.0, 
 		    1,              +1,             0,          
@@ -80,28 +77,28 @@ G4Neutron* G4Neutron::Definition()
 		false,       "nucleon",         -2112,
 		 0.0,                0 
               );
+    // clang-format on
+
     // Magnetic Moment
-    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( -1.9130427 * mN);
-    //create Decay Table 
-    auto  table = new G4DecayTable();
+    G4double mN = eplus * hbar_Planck / 2. / (proton_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(-1.9130427 * mN);
+    // create Decay Table
+    auto table = new G4DecayTable();
     // create a decay channel
-    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron", 1.00);
     table->Insert(mode);
     anInstance->SetDecayTable(table);
-    
   }
   theInstance = static_cast<G4Neutron*>(anInstance);
   return theInstance;
 }
 
-G4Neutron*  G4Neutron::NeutronDefinition()
+G4Neutron* G4Neutron::NeutronDefinition()
 {
   return Definition();
 }
 
-G4Neutron*  G4Neutron::Neutron()
+G4Neutron* G4Neutron::Neutron()
 {
   return Definition();
 }
-

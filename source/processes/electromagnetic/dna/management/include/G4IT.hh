@@ -73,7 +73,7 @@ G4IT* GetIT(const G4Track* track);
 G4IT* GetIT(const G4Track& track);
 
 template<class OBJECT> class G4FastListNode;
-typedef G4FastListNode<G4Track> G4TrackListNode;
+using G4TrackListNode = G4FastListNode<G4Track>;
 
 /**
  * G4IT is a interface which allows the inheriting object
@@ -89,12 +89,12 @@ class G4IT : public virtual G4VUserTrackInformation
 public:
   G4IT();
   G4IT(G4Track*);
-  virtual ~G4IT();
+  ~G4IT() override;
 
 //  inline void *operator new(size_t);
 //  inline void operator delete(void *aIT);
 
-  virtual void Print() const
+  void Print() const override
   {
     ;
   }

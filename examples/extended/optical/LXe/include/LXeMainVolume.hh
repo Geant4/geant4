@@ -62,34 +62,34 @@ class LXeMainVolume : public G4PVPlacement
 
   void CopyValues();
 
-  LXeDetectorConstruction* fConstructor;
+  LXeDetectorConstruction* fConstructor = nullptr;
 
-  G4double fScint_x;
-  G4double fScint_y;
-  G4double fScint_z;
-  G4double fD_mtl;
-  G4int fNx;
-  G4int fNy;
-  G4int fNz;
-  G4double fOuterRadius_pmt;
-  G4bool fSphereOn;
-  G4double fRefl;
+  G4double fScint_x = 0.;
+  G4double fScint_y = 0.;
+  G4double fScint_z = 0.;
+  G4double fD_mtl = 0.;
+  G4int fNx = 0;
+  G4int fNy = 0;
+  G4int fNz = 0;
+  G4double fOuterRadius_pmt = 0.;
+  G4bool fSphereOn = false;
+  G4double fRefl = 0.;
 
   // Basic Volumes
   //
-  G4Box* fScint_box;
-  G4Box* fHousing_box;
-  G4Tubs* fPmt;
-  G4Tubs* fPhotocath;
-  G4Sphere* fSphere;
+  G4Box* fScint_box = nullptr;
+  G4Box* fHousing_box = nullptr;
+  G4Tubs* fPmt = nullptr;
+  G4Tubs* fPhotocath = nullptr;
+  G4Sphere* fSphere = nullptr;
 
   // Logical volumes
   //
-  G4LogicalVolume* fScint_log;
-  G4LogicalVolume* fHousing_log;
-  G4LogicalVolume* fPmt_log;
-  G4LogicalVolume* fPhotocath_log;
-  G4LogicalVolume* fSphere_log;
+  G4LogicalVolume* fScint_log = nullptr;
+  G4LogicalVolume* fHousing_log = nullptr;
+  G4LogicalVolume* fPmt_log = nullptr;
+  G4LogicalVolume* fPhotocath_log = nullptr;
+  G4LogicalVolume* fSphere_log = nullptr;
 
   // Sensitive Detectors positions
   std::vector<G4ThreeVector> fPmtPositions;

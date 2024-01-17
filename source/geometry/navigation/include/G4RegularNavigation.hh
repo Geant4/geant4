@@ -41,13 +41,14 @@
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
+#include "G4VNavigation.hh"
 
 class G4NormalNavigation;
 class G4VPhysicalVolume;
 class G4Navigator;
 class G4NavigationHistory;
 
-class G4RegularNavigation
+class G4RegularNavigation : public G4VNavigation
 {
   public:  // with description
   
@@ -60,7 +61,7 @@ class G4RegularNavigation
                        const G4ThreeVector& globalPoint,
                        const G4ThreeVector* globalDirection,
                        const G4bool pLocatedOnEdge, 
-                             G4ThreeVector& localPoint );
+                             G4ThreeVector& localPoint ) final;
       // Locate point using its position with respect to regular
       // parameterisation container volume.
 
@@ -74,7 +75,7 @@ class G4RegularNavigation
                                 G4bool& exiting,
                                 G4bool& entering,
                                 G4VPhysicalVolume *(*pBlockedPhysical),
-                                G4int& blockedReplicaNo );
+                                G4int& blockedReplicaNo ) final;
       // Method never called because to be called the daughter has to be a
       // 'regular' volume. This would only happen if the track is in the
       // mother of voxels volume. But the voxels fill completely their mother,
@@ -100,7 +101,7 @@ class G4RegularNavigation
 
     G4double ComputeSafety( const G4ThreeVector& localPoint,
                             const G4NavigationHistory& history,
-                            const G4double pProposedMaxLength = DBL_MAX );
+                            const G4double pProposedMaxLength = DBL_MAX ) final;
       // Method never called because to be called the daughter has to be a
       // 'regular' volume. This would only happen if the track is in the
       // mother of voxels volume. But the voxels fill completely their mother,
@@ -108,18 +109,11 @@ class G4RegularNavigation
 
   public:  // without description
 
-    // Set and Get methods
-
-    void SetVerboseLevel(G4int level) { fverbose = level; }
-    void CheckMode(G4bool mode) { fcheck = mode; }
     void SetNormalNavigation( G4NormalNavigation* fnormnav )
       { fnormalNav = fnormnav; }
 
   private:
 
-    G4int fverbose = 0;
-    G4bool fcheck = false;
-  
     G4NormalNavigation* fnormalNav = nullptr;
     G4double kCarTolerance;  
     G4double fMinStep;

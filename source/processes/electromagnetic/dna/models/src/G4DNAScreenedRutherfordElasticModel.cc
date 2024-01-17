@@ -41,9 +41,9 @@ using namespace std;
 G4DNAScreenedRutherfordElasticModel::
 G4DNAScreenedRutherfordElasticModel(const G4ParticleDefinition*,
                                     const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
-  fpWaterDensity = 0;
+  fpWaterDensity = nullptr;
 
   lowEnergyLimit = 0 * eV;
   intermediateEnergyLimit = 200 * eV; // Switch between two final state models
@@ -71,7 +71,7 @@ G4VEmModel(nam), isInitialised(false)
            << G4endl;
   }
 #endif
-  fParticleChangeForGamma = 0;
+  fParticleChangeForGamma = nullptr;
 
   // Selection of computation method
   // We do not recommend "true" usage with the current cumul. proba. settings
@@ -81,8 +81,7 @@ G4VEmModel(nam), isInitialised(false)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAScreenedRutherfordElasticModel::~G4DNAScreenedRutherfordElasticModel()
-{
-}
+= default;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -591,9 +590,8 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
   }
 
   // ***** Alternative method using cumulative probability
-  else
-  {
   
+    
    //
    // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
    //
@@ -649,7 +647,7 @@ ScreenedRutherfordRandomizeCosTheta(G4double k,
    }
    return cosTheta;
    */
-  }
+ 
 
   //return 0.;
 }

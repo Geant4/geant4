@@ -38,17 +38,14 @@
 #include "G4PathFinder.hh"
 #include "globals.hh"
 
-G4ITSafetyHelper::G4ITSafetyHelper() :
-    G4TrackStateDependent<G4ITSafetyHelper>(), fUseParallelGeometries(false), // By default, one geometry only
-    fFirstCall(true), fVerbose(0)
-// fRecomputeFactor(0.0)
+G4ITSafetyHelper::G4ITSafetyHelper()
 {
-  fpPathFinder = 0; //  Cannot initialise this yet - a loop results
+  fpPathFinder = nullptr; //  Cannot initialise this yet - a loop results
 
   // Initialization of the Navigator pointer is postponed, and must
   // be undertaken by another class calling InitialiseHelper()
   //
-  fpMassNavigator = 0;
+  fpMassNavigator = nullptr;
   fMassNavigatorId = -1;
 }
 
@@ -61,12 +58,12 @@ void G4ITSafetyHelper::InitialiseNavigator()
 
   fpMassNavigator = pTransportMgr->GetNavigatorForTracking();
 
-  if(fpMassNavigator == 0) abort();
+  if(fpMassNavigator == nullptr) abort();
 
   // Check
   //
   G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume();
-  if (worldPV == 0)
+  if (worldPV == nullptr)
   {
     G4Exception("G4ITSafetyHelper::InitialiseNavigator",
                 "InvalidNavigatorWorld", FatalException,
@@ -87,8 +84,7 @@ void G4ITSafetyHelper::InitialiseHelper()
 }
 
 G4ITSafetyHelper::~G4ITSafetyHelper()
-{
-}
+= default;
 
 G4double G4ITSafetyHelper::CheckNextStep(const G4ThreeVector &position,
                                          const G4ThreeVector &direction,

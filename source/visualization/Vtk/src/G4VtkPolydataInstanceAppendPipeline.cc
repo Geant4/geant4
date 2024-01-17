@@ -66,8 +66,8 @@ std::size_t G4VtkPolydataInstanceAppendPipeline::MakeHash(const G4Polyhedron& po
 }
 
 G4VtkPolydataInstanceAppendPipeline::G4VtkPolydataInstanceAppendPipeline(G4String nameIn,
-                                                                         const G4VtkVisContext& vc)
-  : G4VtkPolydataInstancePipeline(nameIn, vc)
+                                                                         const G4VtkVisContext& vcIn)
+  : G4VtkPolydataInstancePipeline(nameIn, vcIn)
 {
   // Set pipeline type
   SetTypeName(G4String("G4VtkPolydataInstanceAppendPipeline"));
@@ -108,11 +108,11 @@ void G4VtkPolydataInstanceAppendPipeline::addInstance(G4double dx, G4double dy, 
                                                       G4double r10, G4double r11, G4double r12,
                                                       G4double r20, G4double r21, G4double r22,
                                                       G4double r, G4double g, G4double b,
-                                                      G4double a, const G4String& name)
+                                                      G4double a, const G4String& nameIn)
 {
   // Add to base class
   G4VtkPolydataInstancePipeline::addInstance(dx, dy, dz, r00, r01, r02, r10, r11, r12, r20, r21,
-                                             r22, r, g, b, a, name);
+                                             r22, r, g, b, a, nameIn);
 
   // create transform
   auto transform = vtkSmartPointer<vtkGeneralTransform>::New();
@@ -133,14 +133,14 @@ void G4VtkPolydataInstanceAppendPipeline::addInstance(G4double dx, G4double dy, 
   GetFinalFilter()->AddInputConnection(tf->GetOutputPort());
 }
 
-void G4VtkPolydataInstanceAppendPipeline::removeInstance(const G4String& name)
+void G4VtkPolydataInstanceAppendPipeline::removeInstance(const G4String& nameIn)
 {
   // Remove from base class
-  G4VtkPolydataInstancePipeline::removeInstance(name);
+  G4VtkPolydataInstancePipeline::removeInstance(nameIn);
 
   // Remove transform filter from append filter
   appendFilter->RemoveInputConnection(0, transformFilterMap[name]->GetOutputPort());
 
   // Remove from local filter map
-  transformFilterMap.erase(name);
+  transformFilterMap.erase(nameIn);
 }

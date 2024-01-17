@@ -57,6 +57,8 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep)
 {
   theEnergies.clear();
 
+  if (aStep == nullptr) return false;  // it is 0 when called by GmScoringMgr after last event
+
   G4double edep = aStep->GetTotalEnergyDeposit();
 
 #ifdef VERBOSE_ENERSPLIT
@@ -77,8 +79,6 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep)
   }
 
   if (thePhantomParam == nullptr) GetPhantomParam(true);
-
-  if (aStep == nullptr) return false;  // it is 0 when called by GmScoringMgr after last event
 
   //----- Distribute energy deposited in voxels
   std::vector<std::pair<G4int, G4double>> rnsl =

@@ -76,6 +76,12 @@ class G4DNAPTBIonisationModel : public G4VDNAModel
    */
   ~G4DNAPTBIonisationModel() override = default;
 
+  // copy constructor and hide assignment operator
+  G4DNAPTBIonisationModel(const G4DNAPTBIonisationModel&) = delete;  // prevent copy-construction
+  G4DNAPTBIonisationModel& operator=(
+    const G4DNAPTBIonisationModel& right) = delete;  // prevent assignement
+
+
   /*!
    * \brief Initialise
    * Method called once at the beginning of the simulation. It is used to setup the list of the
@@ -192,11 +198,6 @@ class G4DNAPTBIonisationModel : public G4VDNAModel
    * \return the interpolate value
    */
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-
-  // copy constructor and hide assignment operator
-  G4DNAPTBIonisationModel(const G4DNAPTBIonisationModel&) = delete;  // prevent copy-construction
-  G4DNAPTBIonisationModel& operator=(
-    const G4DNAPTBIonisationModel& right) = delete;  // prevent assignement
 
   G4Material* fpGuanine_PU = nullptr;
   G4Material* fpTHF = nullptr;

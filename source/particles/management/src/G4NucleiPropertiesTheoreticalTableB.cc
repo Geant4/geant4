@@ -30,6 +30,7 @@
 
 #include "G4NucleiPropertiesTheoreticalTable.hh"
 
+// clang-format off
 //+-----------------------------+
 //| Table of Atomic Mass Excess |
 //+-----------------------------+

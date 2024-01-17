@@ -67,32 +67,31 @@ std::size_t G4ITReaction::GetHash() const
 }
 
 G4ITReaction::G4ITReaction(G4double time, G4Track* trackA, G4Track* trackB) :
-  G4enable_shared_from_this<G4ITReaction>(),
+  
   fTime(time),
   fReactants(trackA,trackB)
 {
   //if(gAll == 0) gAll = new std::set<G4ITReaction*>();
   //gAll->insert(this);
-  fReactionPerTimeIt = 0;
+  fReactionPerTimeIt = nullptr;
 }
 
 G4ITReaction::~G4ITReaction()
 {
   //gAll->erase(this);
-  if(fReactionPerTimeIt) delete fReactionPerTimeIt;
+  delete fReactionPerTimeIt;
 }
 
 void G4ITReaction::RemoveMe()
 {
   G4ITReactionPtr backMeUp = this->shared_from_this();
-  for(auto it = fReactionPerTrack.begin() ;
-      it != fReactionPerTrack.end() ; ++it)
+  for(auto & it : fReactionPerTrack)
   {
-    it->first->RemoveThisReaction(it->second);
+    it.first->RemoveThisReaction(it.second);
   }
   fReactionPerTrack.clear();
 
-  if(fReactionPerTimeIt)
+  if(fReactionPerTimeIt != nullptr)
   {
    G4ITReactionSet::Instance()->GetReactionsPerTime().erase(*fReactionPerTimeIt);
    delete fReactionPerTimeIt;

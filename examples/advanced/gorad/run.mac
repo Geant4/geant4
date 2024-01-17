@@ -42,6 +42,9 @@
 #######################################################
 /gorad/initialize
 
+# Set a very high time threshold to allow all decays to happen
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+
 #######################################################
 # Selection of primary particle source
 #######################################################

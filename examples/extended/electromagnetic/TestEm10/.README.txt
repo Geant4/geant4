@@ -77,7 +77,7 @@ Idle> /emphyslist/setXTRModel modelName
 \endverbatim
 
   It is possible to choose the format of the histogram file : root (default),
-  hbook, xml, csv, by using namespace in HistoManager.hh 
+  hdf5, xml, csv, by changing the default file type in HistoManager.cc
     
   It is also possible to print selected histograms on an ascii file:
 \verbatim
@@ -89,7 +89,7 @@ Idle> /emphyslist/setXTRModel modelName
  
  - Execute TestEm10 in 'batch' mode from macro files e.g.
 \verbatim
-% TestEm10   run11.mac
+% TestEm10 TestEm10.in [TestEm10.large_N.in]
 \endverbatim
 		
  - Execute TestEm10 in 'interactive' mode with visualization e.g.
@@ -99,5 +99,15 @@ Idle> /emphyslist/setXTRModel modelName
 Idle> type your commands
 ....
 \endverbatim
+
+\section TestEm10_s6 MACROS
+
+- alice06.mac:  ALICE simplified 2006 test beam setup
+- bari05.mac:   setup of Bari INFN group (M. Bridgida et al, NIM A550 (2005) 157-168 (fig. 8))
+- barr90.mac:   NIM A294 (1990) 465-472 (fig. 11) setup
+- harris73.mac: NIM 107 (1973) 413-422 (fig. 3b) setup
+- salice.mac:   ALICE simplified 2006 test beam setup with disabled
+                ionisation and multiple scattering
+- watase86.mac: NIM A248 (1986) 379-388 (fig. 7) setup
 
 */

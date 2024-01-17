@@ -34,30 +34,19 @@
 
 #include "G4ITReactionChange.hh"
 
-G4ITReactionChange::G4ITReactionChange() :
-    fSecondaries(0),
-    fNumberOfSecondaries(0),
-    fKillParents(false),
-    fParticleChangeIsSet(false)
-{
-  //ctor
-}
+G4ITReactionChange::G4ITReactionChange()
+= default;
 
 G4ITReactionChange::~G4ITReactionChange()
 {
   //dtor
   delete fSecondaries;
-  fSecondaries = 0;
+  fSecondaries = nullptr;
 }
 
 // Should not be used
-G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/) :
-    fSecondaries(0),
-    fNumberOfSecondaries(0),
-    fKillParents(false),
-    fParticleChangeIsSet(false)
+G4ITReactionChange::G4ITReactionChange(const G4ITReactionChange& /*other*/)
 {
-  //copy ctor
 }
 
 // should not be used
@@ -77,11 +66,11 @@ void G4ITReactionChange::Initialize(const G4Track& trackA,
   fParticleChange[&trackA] = particleChangeA;
   fParticleChange[&trackB] = particleChangeB;
 
-  if (particleChangeA || particleChangeB)
+  if ((particleChangeA != nullptr) || (particleChangeB != nullptr))
   {
-    G4bool test = particleChangeA && particleChangeB;
+    G4bool test = (particleChangeA != nullptr) && (particleChangeB != nullptr);
 
-    if (test == false)
+    if (!test)
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "If you give for one track a particleChange, ";
@@ -100,14 +89,14 @@ void G4ITReactionChange::Initialize(const G4Track& trackA,
 
   }
 
-  fSecondaries = 0;
+  fSecondaries = nullptr;
   fNumberOfSecondaries = 0;
   fKillParents = false;
 }
 
 void G4ITReactionChange::AddSecondary(G4Track* aTrack)
 {
-  if (fSecondaries == 0) fSecondaries = new std::vector<G4Track*>();
+  if (fSecondaries == nullptr) fSecondaries = new std::vector<G4Track*>();
   fSecondaries->push_back(aTrack);
   fNumberOfSecondaries++;
 }
@@ -120,11 +109,11 @@ void G4ITReactionChange::UpdateStepInfo(G4Step* stepA, G4Step* stepB)
 
 G4VParticleChange* G4ITReactionChange::GetParticleChange(const G4Track* track)
 {
-  std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange
+  auto it = fParticleChange
       .find(track);
 
-  if (it == fParticleChange.end()) return 0;
-  else return it->second;
+  if (it == fParticleChange.end()) return nullptr;
+  return it->second;
 }
 
 const G4Track* G4ITReactionChange::GetTrackA()
@@ -140,7 +129,7 @@ const G4Track* G4ITReactionChange::GetTrackA()
       << "No track A found ! Have you initialized the ReactionChange ?";
   G4Exception("G4ITReactionChange::GetTrackA", "ITReactionChange001",
               FatalErrorInArgument, exceptionDescription);
-  return 0;
+  return nullptr;
 }
 
 const G4Track* G4ITReactionChange::GetTrackB()

@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-27 Daren Sawkey (op-V11-01-00)
+- G4OpBoundaryProcess: verbosity of 0 silences run-time warnings
+
 ## 2022-11-23 Gabriele Cosmo (op-V11-00-08)
 - Fixed compilation warnings for implicit type conversions on macOS/XCode 14.1.
 

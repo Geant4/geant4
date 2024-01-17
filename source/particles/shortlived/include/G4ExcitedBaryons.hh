@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -33,21 +30,16 @@
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
 
-
 #ifndef G4ExcitedBaryons_h
 #define G4ExcitedBaryons_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4VShortLivedParticle.hh"
-
-// ######################################################################
-// ###                          ExcitedBaryons                        ###
-// ######################################################################
+#include "globals.hh"
 
 class G4ExcitedBaryons : public G4VShortLivedParticle
 {
- public:
+  public:
+    // clang-format off
    G4ExcitedBaryons(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -59,20 +51,14 @@ class G4ExcitedBaryons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   ~G4ExcitedBaryons() override = default;
-   void                 SetMultipletName(const G4String& name);
+    // clang-format on
+    ~G4ExcitedBaryons() override = default;
+    void SetMultipletName(const G4String& name);
 };
 
-inline
- void G4ExcitedBaryons::SetMultipletName(const G4String& name)
+inline void G4ExcitedBaryons::SetMultipletName(const G4String& name)
 {
-   SetParticleSubType(name);
+  SetParticleSubType(name);
 }
 
 #endif
-
-
-
-
-
-

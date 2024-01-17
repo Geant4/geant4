@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,30 +35,20 @@
 #ifndef G4OpticalPhoton_h
 #define G4OpticalPhoton_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         OPTICAL PHOTON                         ###
-// ######################################################################
 
 class G4OpticalPhoton : public G4ParticleDefinition
 {
- private:
-   static G4OpticalPhoton* theInstance;
+  public:
+    static G4OpticalPhoton* Definition();
+    static G4OpticalPhoton* OpticalPhotonDefinition();
+    static G4OpticalPhoton* OpticalPhoton();
 
- private:
-  G4OpticalPhoton () {}
+  private:
+    G4OpticalPhoton() {}
+    ~G4OpticalPhoton() override = default;
 
- public:
-   ~G4OpticalPhoton () override= default;
-
-   static G4OpticalPhoton* Definition();
-   static G4OpticalPhoton* OpticalPhotonDefinition();
-   static G4OpticalPhoton* OpticalPhoton();
-
+    static G4OpticalPhoton* theInstance;
 };
 
 #endif
-

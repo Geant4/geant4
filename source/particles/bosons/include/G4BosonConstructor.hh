@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // --------------------------------------------------------------
-//	GEANT 4 class implementatBoson file 
+//	GEANT 4 class implementatBoson file
 //
 #ifndef G4BosonConstructor_h
 #define G4BosonConstructor_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 class G4BosonConstructor
 {
-  //This class is a utility class for constructBoson 
+    // This class is a utility class for constructBoson
   public:
     static void ConstructParticle();
 };

@@ -40,23 +40,25 @@
 
 class G4NucleiProperties;
 
-class G4NucleiPropertiesTheoreticalTable 
+class G4NucleiPropertiesTheoreticalTable
 {
   public:
+    ~G4NucleiPropertiesTheoreticalTable() = default;
 
-    ~G4NucleiPropertiesTheoreticalTable()= default;
+    enum
+    {
+      nEntries = 8979,
+      shortTableSize = 137
+    };
 
-    enum {nEntries = 8979, shortTableSize = 137}; 
+    // All methods are private and can be used only by G4NucleiProperties
+    friend class G4NucleiProperties;
 
-    friend class G4NucleiProperties;  
-      // All methods are private and can be used only by G4NucleiProperties
- 
   private:
-  
-    G4NucleiPropertiesTheoreticalTable(){}
-      // Default constructor 
+    // Default constructor
+    G4NucleiPropertiesTheoreticalTable() {}
 
-    static G4double GetMassExcess(G4int Z, G4int A); 
+    static G4double GetMassExcess(G4int Z, G4int A);
 
     static G4double GetNuclearMass(G4int Z, G4int A);
 
@@ -64,27 +66,26 @@ class G4NucleiPropertiesTheoreticalTable
 
     static G4double GetBindingEnergy(G4int Z, G4int A);
 
+    // Is the nucleus (Z,A) in table?
     static G4bool IsInTable(G4int Z, G4int A);
-      // Is the nucleus (Z,A) in table?
 
     static G4int GetIndex(G4int Z, G4int A);
-  
-    static G4double ElectronicBindingEnergy(G4int Z);
- 
 
+    static G4double ElectronicBindingEnergy(G4int Z);
+
+    // Mass Excess
     static const G4double AtomicMassExcess[nEntries];
-      // Mass Excess
-  
+
+    // Table of Z (number of protons) and A (number of nucleons)
+    //        indexArray[0][ ] --> Z
+    //        indexArray[1][ ] --> A
     static const G4int indexArray[2][nEntries];
-      // Table of Z (number of protons) and A (number of nucleons)
-      //        indexArray[0][ ] --> Z
-      //        indexArray[1][ ] --> A
-  
+
+    // Reduced Table of Z for shorter index search.
+    //         The index in this table coincide with Z-1
+    //         For each Z value shortTable[Z-1] has the index of
+    // the 1st occurrence in the indexArray[][]
     static const G4int shortTable[shortTableSize];
-      // Reduced Table of Z for shorter index search.
-      //         The index in this table coincide with Z-1
-      //         For each Z value shortTable[Z-1] has the index of
-      // the 1st occurrence in the indexArray[][]
 };
 
 #endif

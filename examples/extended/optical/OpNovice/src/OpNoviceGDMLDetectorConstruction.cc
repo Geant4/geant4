@@ -40,9 +40,6 @@ OpNoviceGDMLDetectorConstruction::OpNoviceGDMLDetectorConstruction(
   G4String fname)
   : G4VUserDetectorConstruction()
 {
-  fDumpGdmlFileName = "OpNovice_dump.gdml";
-  fVerbose          = false;
-  fDumpGdml         = false;
   fGdmlFile         = fname;
   // create a messenger for this class
   fDetectorMessenger = new OpNoviceDetectorMessenger(this);
@@ -78,7 +75,7 @@ void OpNoviceGDMLDetectorConstruction::ReadGDML()
   G4VPhysicalVolume* world = fParser->GetWorldVolume();
   // GDML parser makes world invisible. make it visible again.
   G4LogicalVolume* pworldLogical = world->GetLogicalVolume();
-  pworldLogical->SetVisAttributes(0);
+  pworldLogical->SetVisAttributes(nullptr);
   G4cout << world->GetTranslation() << G4endl << G4endl;
   if(fVerbose)
   {

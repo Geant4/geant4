@@ -37,6 +37,9 @@
 #include "globals.hh"
 #include <vector>
 
+#include "G4VComponentCrossSection.hh"
+#include "G4VCrossSectionDataSet.hh"
+
 class G4HadronicBuilder
 {
 private:
@@ -54,6 +57,10 @@ private:
   static void BuildQGSP_FTFP_BERT(const std::vector<G4int>& particleList, 
                                   G4bool bert, G4bool quasiElastic,
                                   const G4String& xsName);
+
+  static void BuildINCLXX(const std::vector<G4int>& particleList, 
+                             G4bool bert, const G4String& xsName);
+
 
 public:
 
@@ -73,6 +80,8 @@ public:
   static void BuildKaonsQGSP_FTFP_BERT(G4bool quasiElastic);
 
   static void BuildAntiLightIonsFTFP();
+
+  static void BuildAntiLightIonsINCLXX();
 
   //static void BuildAntiLightIonsQGSP_FTFP(G4bool quasiElastic);
 

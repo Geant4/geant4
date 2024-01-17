@@ -208,8 +208,7 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
  fMassSpineTot  = 0.0 ;
  fPosSpinecomp   = new G4ThreeVector[nrows];
  fRadSpinecomp   = new G4double[nrows]; 
- G4ThreeVector * PosNeuroncomp= new G4ThreeVector[nrows];
- fRadNeuroncomp  = new G4double[nrows]; 
+ fRadNeuroncomp  = new G4double[nrows];
  fHeightNeuroncomp = new G4double[nrows];
  fDistNeuronsoma = new G4double[nrows];
  fPosNeuroncomp  = new G4ThreeVector[nrows];
@@ -276,18 +275,8 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
    fnNd[fnbDendritecomp]= nNcomp-(fnbSomacomp+fnbAxoncomp)-1;
    fpNd[fnbDendritecomp]= pNcomp-(fnbSomacomp+fnbAxoncomp)-1;    
    // To join two tracing points along the dendritic branches. 
-   // To calculate length, center and rotation angles of each cylinder   
-
-   // Center-position of each cylinder
-   G4double Dendxx= PosDendcomp[fnNd[fnbDendritecomp]].x()+
-                    PosDendcomp[fpNd[fnbDendritecomp]].x();
-   G4double Dendyy= PosDendcomp[fnNd[fnbDendritecomp]].y()+
-                    PosDendcomp[fpNd[fnbDendritecomp]].y();
-   G4double Dendzz= PosDendcomp[fnNd[fnbDendritecomp]].z()+
-                    PosDendcomp[fpNd[fnbDendritecomp]].z();
-   G4ThreeVector translmDend = G4ThreeVector(Dendxx/2. , 
-      Dendyy/2. , Dendzz/2.) ;
-   fPosDendcomp [fnbDendritecomp] = translmDend;   
+   // To calculate length, center and rotation angles of each cylinder
+   fPosDendcomp [fnbDendritecomp] = vDend; //translmDend;
    // delta of position A and position B of cylinder 
    G4double Dendx, Dendy, Dendz;
    //primary dendritic branch should be connect with Soma
@@ -378,7 +367,7 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
   
   // =======================================================================
   // Axon compartments represented as cylinderical solid
-  if (typeNcomp == 2) 
+  if (typeNcomp == 2 || typeNcomp == 7)
   {
    G4ThreeVector vAxon (x ,y ,z); 
    // Position and Radius of compartments
@@ -492,91 +481,7 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
    // RotationMatrix for Ellipsoid solid
    // ....
    fnbSpinecomp++ ;
-  }   
-  
-  // =======================================================================
-  // Neuron- all compartments allocate in ThreeVector
-   fTypeN[nlines] = typeNcomp;  
-   G4ThreeVector vNeuron (x ,y ,z); 
-   // Position and Radius of compartments
-   PosNeuroncomp [nlines] = vNeuron;
-   fRadNeuroncomp [nlines]= radius;  
-   fnNn[nlines]= nNcomp-1;
-   fpNn[nlines]= pNcomp-1;    
-   // To join two tracing points in loaded SWC data file. 
-   // To calculate length, center and rotation angles of each cylinder   
-
-   // Center-position of each cylinder
-   G4double Neuronxx= PosNeuroncomp[fnNn[nlines]].x()+
-                      PosNeuroncomp[fpNn[nlines]].x();
-   G4double Neuronyy= PosNeuroncomp[fnNn[nlines]].y()+
-                      PosNeuroncomp[fpNn[nlines]].y();
-   G4double Neuronzz= PosNeuroncomp[fnNn[nlines]].z()+
-                      PosNeuroncomp[fpNn[nlines]].z();
-   G4ThreeVector translmNeuron = G4ThreeVector(Neuronxx/2. , 
-      Neuronyy/2. , Neuronzz/2.) ;
-   fPosNeuroncomp [nlines] = translmNeuron;   
-   // delta of position A and position B of cylinder 
-   G4double Neuronx, Neurony, Neuronz;
-   //primary point 
-   if (fpNn[nlines] == -2) 
-   {
-    Neuronx= PosNeuroncomp[fnNn[nlines]].x()-
-             fPosNeuroncomp[0].x(); 
-    Neurony= PosNeuroncomp[fnNn[nlines]].y()-
-             fPosNeuroncomp[0].y();
-    Neuronz= PosNeuroncomp[fnNn[nlines]].z()-
-             fPosNeuroncomp[0].z(); 
-   }
-   else
-   {
-    Neuronx= PosNeuroncomp[fnNn[nlines]].x()-
-             PosNeuroncomp[fpNn[nlines]].x();
-    Neurony= PosNeuroncomp[fnNn[nlines]].y()-
-             PosNeuroncomp[fpNn[nlines]].y();
-    Neuronz= PosNeuroncomp[fnNn[nlines]].z()-
-             PosNeuroncomp[fpNn[nlines]].z();
-   }       
-   G4double lengthNeuroncomp = std::sqrt(Neuronx*Neuronx+
-                               Neurony*Neurony+Neuronz*Neuronz);
-   // Height of compartment
-   fHeightNeuroncomp [nlines]= lengthNeuroncomp;
-   // Distance from Soma
-   G4double NeuronDisx= fPosNeuroncomp[0].x()-
-                        fPosNeuroncomp [nlines].x();
-   G4double NeuronDisy= fPosNeuroncomp[0].y()-
-                        fPosNeuroncomp [nlines].y();
-   G4double NeuronDisz= fPosNeuroncomp[0].z()-
-                        fPosNeuroncomp [nlines].z();   
-   fDistNeuronsoma[nlines] = std::sqrt(NeuronDisx*NeuronDisx + 
-      NeuronDisy*NeuronDisy + NeuronDisz*NeuronDisz);
-   /*      
-   //  Cylinder volume and surface area
-   G4double VolNeuroncomp = pi*pow(radius*um,2)*(lengthNeuroncomp*um);
-   fTotVolNeuron = fTotVolNeuron + VolNeuroncomp;
-   G4double SurNeuroncomp = 2.*pi*radius*um*
-                            (radius+lengthNeuroncomp)*um;
-   fTotSurfNeuron = TotSurfNeuron + SurNeuroncomp;
-   fMassNeuroncomp[nlines] = density*VolNeuroncomp; 
-   MassNeuronTot = MassNeuronTot + fMassNeuroncomp[nlines]; */
-   Neuronx=Neuronx/lengthNeuroncomp;
-   Neurony=Neurony/lengthNeuroncomp;
-   Neuronz=Neuronz/lengthNeuroncomp;
-   
-   // Euler angles of each compartment
-   G4ThreeVector directionNeuron = G4ThreeVector(Neuronx,Neurony,Neuronz);
-   G4double theta_eulerNeuron =  directionNeuron.theta();
-   G4double phi_eulerNeuron   =  directionNeuron.phi();
-   G4double psi_eulerNeuron   = 0;
-
-   //Rotation Matrix, Euler constructor build inverse matrix.
-   G4RotationMatrix rotmNeuronInv  = G4RotationMatrix(
-       phi_eulerNeuron+pi/2,
-       theta_eulerNeuron,
-       psi_eulerNeuron);
-   G4RotationMatrix rotmNeuron = rotmNeuronInv.inverse();
-   fRotNeuroncomp [nlines]= rotmNeuron ;   
-
+  }
     nlines++;
             }
         }   
@@ -879,20 +784,6 @@ delete[] fRotNeuroncomp ;
 void NeuronLoadDataFile::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-/*
-// sphere transformation
- G4ThreeVector
-    originSoma(
-      (fPosSomacomp[copyNo].x()-fshiftX) * um,  
-      (fPosSomacomp[copyNo].y()-fshiftY) * um, 
-      (fPosSomacomp[copyNo].z()-fshiftZ) * um 
-   );
-  physVol->SetRotation(0);
-  physVol->SetTranslation(originSoma); 
- */ 
-  
-// cylinder rotation and transformation
-
 // to calculate Euler angles from Rotation Matrix after Inverse!
 //
  G4RotationMatrix rotmNeuron = G4RotationMatrix(fRotNeuroncomp[copyNo]);
@@ -927,25 +818,7 @@ void NeuronLoadDataFile::ComputeTransformation
    );
   physVol->SetTranslation(originNeuron);  
     
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-G4VSolid* NeuronLoadDataFile::ComputeSolid(const G4int copyNo,
-                                               G4VPhysicalVolume* physVol )
-{
- G4VSolid* solid;
- if( typeNcomp[copyNo] == 1 ) 
- {
-   solid = sphereComp ;
- }
- else if( typeNcomp[copyNo] == 3 || typeNcomp[copyNo] == 4 ) 
- {
-   solid = cylinderComp ; 
- }
- return solid; 
 }
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NeuronLoadDataFile::ComputeDimensions
@@ -957,37 +830,5 @@ void NeuronLoadDataFile::ComputeDimensions
  fcylinderComp.SetStartPhiAngle(0.*deg);
  fcylinderComp.SetDeltaPhiAngle(360.*deg); 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/* 
-void NeuronLoadDataFile::ComputeDimensions
-(G4Sphere& sphereComp, const G4int copyNo, const G4VPhysicalVolume*) const
-{ 
- fsphereComp.SetInnerRadius(0);
- fsphereComp.SetOuterRadius(fRadSomacomp[copyNo] * um);
- fsphereComp.SetStartPhiAngle(0.*deg);
- fsphereComp.SetDeltaPhiAngle(360.*deg);
- fsphereComp.SetStartThetaAngle(0.*deg);
- fsphereComp.SetDeltaThetaAngle(180.*deg); 
-}  
-*/
-/*
-#if 1 
-(G4Sphere& somaS, const G4int copyNo, const G4VPhysicalVolume* physVol) const
-#else 
-(G4Tubs& dendritesS, const G4int copyNo, const G4VPhysicalVolume* ) const
-#endif 
-{ 
- G4LogicalVolume* LogicalVolume = physVol->GetLogicalVolume();
- 
- G4PhysicalVolume* somaPV = LogicalVolume->GetDaughter(0);
- G4LogicalVolume* somaLV = somaPV->GetLogicalVolume();
- G4Sphere* somaS = (G4Sphere*)somaLV->GetSolid();
- 
- G4PhysicalVolume* dendritesPV = LogicalVolume->GetDaughter(0);
- G4LogicalVolume* dendritesLV = dendritesPV->GetLogicalVolume(); 
-    G4Tubs* dendritesS = (G4Tubs*)dendritesLV->GetSolid(); 
-}
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

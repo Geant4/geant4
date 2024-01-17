@@ -341,7 +341,7 @@ G4bool G4RootNtupleFileManager::ActionAtWrite()
     result &= fSlaveNtupleManager->Merge();
   }
 
-  Message(kVL1, "merge", ntupleType, "", result);
+  Message(kVL2, "merge", ntupleType, "", result);
 
   return result;
 }

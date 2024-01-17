@@ -135,8 +135,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4int nReplicas,
                                 EAxis pAxis,
                                 G4LogicalVolume* pLogical,
-                                G4LogicalVolume* pMotherLogical
-   )
+                                G4LogicalVolume* pMotherLogical )
   : G4VPhysicalVolume(nullptr, G4ThreeVector(), pName, pLogical, nullptr)
 {
   // Constructor for derived type(s)

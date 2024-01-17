@@ -43,9 +43,9 @@ class F02CalorHit : public G4VHit
 {
   public:
 
-      F02CalorHit();
+      F02CalorHit() = default;
       F02CalorHit(const F02CalorHit&);
-      virtual ~F02CalorHit();
+      ~F02CalorHit() override = default;
 
       const F02CalorHit& operator=(const F02CalorHit&);
       G4bool operator==(const F02CalorHit&) const;
@@ -53,7 +53,7 @@ class F02CalorHit : public G4VHit
       inline void* operator new(size_t);
       inline void  operator delete(void*);
 
-      virtual void Print();
+      void Print() override;
 
   public:
 
@@ -69,14 +69,15 @@ class F02CalorHit : public G4VHit
 
   private:
 
-      G4double fEdepAbs, fTrackLengthAbs;
-      G4double fEdepGap, fTrackLengthGap;
-
+      G4double fEdepAbs = 0.;
+      G4double fTrackLengthAbs = 0.;
+      G4double fEdepGap = 0.;
+      G4double fTrackLengthGap = 0.;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<F02CalorHit> F02CalorHitsCollection;
+using F02CalorHitsCollection = G4THitsCollection<F02CalorHit>;
 
 extern G4ThreadLocal G4Allocator<F02CalorHit>* F02CalorHitAllocator;
 

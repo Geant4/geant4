@@ -37,11 +37,11 @@ class OpNoviceGDMLDetectorConstruction : public G4VUserDetectorConstruction
 {
  public:
   OpNoviceGDMLDetectorConstruction(G4String fname);
-  virtual ~OpNoviceGDMLDetectorConstruction();
+  ~OpNoviceGDMLDetectorConstruction() override;
+  G4VPhysicalVolume* Construct() override;
+  void ConstructSDandField() override;
 
   void ReadGDML();
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
   void UpdateGeometry();
   void SetDumpGdml(G4bool);
   G4bool IsDumpGdml() const;
@@ -54,13 +54,14 @@ class OpNoviceGDMLDetectorConstruction : public G4VUserDetectorConstruction
   OpNoviceGDMLDetectorConstruction& operator=(
     const OpNoviceGDMLDetectorConstruction& right);
   OpNoviceGDMLDetectorConstruction(const OpNoviceGDMLDetectorConstruction&);
-  OpNoviceDetectorMessenger* fDetectorMessenger;
-  G4GDMLParser* fParser;
+
+  OpNoviceDetectorMessenger* fDetectorMessenger = nullptr;
+  G4GDMLParser* fParser = nullptr;
 
   G4String fGdmlFile;
-  G4String fDumpGdmlFileName;
-  G4bool fVerbose;
-  G4bool fDumpGdml;
+  G4String fDumpGdmlFileName = "OpNovice_dump.gdml";
+  G4bool fVerbose = false;
+  G4bool fDumpGdml = false;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #endif

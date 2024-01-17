@@ -53,9 +53,6 @@ G4PreCompoundIon(const G4ParticleDefinition* part,
   fact = 0.75*CLHEP::millibarn/(CLHEP::pi*r0*r0*r0);
 }
 
-G4PreCompoundIon::~G4PreCompoundIon()
-{}
-
 G4double G4PreCompoundIon::
 ProbabilityDistributionFunction(G4double eKin, 
 				const G4Fragment& aFragment)
@@ -96,9 +93,4 @@ ProbabilityDistributionFunction(G4double eKin,
     * g4calc->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
    
   return pA;
-}
-
-G4double G4PreCompoundIon::GetBeta() const
-{
-  return -theCoulombBarrier;
 }

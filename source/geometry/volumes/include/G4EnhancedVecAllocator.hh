@@ -33,9 +33,8 @@
 // Original author: X.Dong (NorthEastern Univ.), November 2009
 // Reviewed implementation: G.Cosmo (CERN), December 2009
 // ------------------------------------------------------------
-
-#ifndef G4EnhancedVecAllocator_h
-#define G4EnhancedVecAllocator_h 1
+#ifndef G4EnhancedVecAllocator_hh
+#define G4EnhancedVecAllocator_hh 1
 
 #include "G4Types.hh"
 

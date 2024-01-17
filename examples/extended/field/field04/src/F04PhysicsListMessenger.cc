@@ -108,7 +108,7 @@ void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command,
        G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
        G4VDecayChannel* fMode =
                      new G4PhaseSpaceDecayChannel("pi+",0.999983,2,"e+","nu_e");
-       G4DecayTable* fTable = new G4DecayTable();
+       auto  fTable = new G4DecayTable();
        fTable->Insert(fMode);
        fMode = new G4PionRadiativeDecayChannel("pi+",0.000017);
        fTable->Insert(fMode);
@@ -119,7 +119,7 @@ void F04PhysicsListMessenger::SetNewValue(G4UIcommand* command,
        G4ParticleDefinition* fParticleDef = fParticleTable->FindParticle("pi+");
        G4VDecayChannel* fMode =
                      new G4PhaseSpaceDecayChannel("pi+",1.000,2,"mu+","nu_mu");
-       G4DecayTable* fTable = new G4DecayTable();
+       auto  fTable = new G4DecayTable();
        fTable->Insert(fMode);
        fParticleDef->SetDecayTable(fTable);
     }

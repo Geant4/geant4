@@ -107,7 +107,14 @@ public:
     G4double GetMiscutAngle(){return fMiscutAngle;}
 
     ///get crystal curvature
-    G4double GetCurv(){return fCurv;}
+    ///for crystalline undulator the curvature is a function, otherwise it's a constant
+    G4double GetCurv(G4double z){return fCU ? -fCUK2*GetCUx(z) : fCurv;}
+
+    ///get crystalline undulator wave function
+    G4double GetCUx(G4double z){return fCUAmplitude*std::cos(fCUK*z+fCUPhase);}
+    ///get crystalline undulator wave 1st derivative function
+    G4double GetCUtetax(G4double z){
+        return fCU ? -fCUAmplitudeK*std::sin(fCUK*z+fCUPhase) : 0;}
 
     ///find and upload crystal lattice input files, calculate all the basic values
     ///(to do only once)
@@ -128,6 +135,19 @@ public:
     ///otherwise geometry routines may be unstable
     void SetMiscutAngle(G4double tetam, const G4LogicalVolume *crystallogic);
 
+    ///set crystalline undulator parameters: amplitude, period and phase
+    /// (default: all 3 value = 0)
+    /// function to use in Detector Construction
+    void SetCrystallineUndulatorParameters(G4double amplitude,
+                                           G4double period,
+                                           G4double phase,
+                                           const G4LogicalVolume *crystallogic);
+
+    ///set crystalline undulator parameters (internal function of the model)
+    ///for convenience we put amplitude, period and phase in a G4ThreeVector
+    void SetCUParameters(const G4ThreeVector &amplitudePeriodPhase,
+                         const G4LogicalVolume *crystallogic);
+
     ///recalculate all the important values
     ///(to do both at the trajectory start and after energy loss)
     void SetParticleProperties(G4double etotal,
@@ -145,8 +165,7 @@ public:
     virtual G4ThreeVector CoordinatesFromLatticeToBox(const G4ThreeVector &pos) = 0;
 
     ///change the channel if necessary, recalculate x o y
-    virtual G4ThreeVector ChannelChange(G4double& x, G4double& y, 
-					G4double& z) = 0;
+    virtual G4ThreeVector ChannelChange(G4double& x, G4double& y, G4double& z) = 0;
 
     ///return correction of the longitudinal coordinate
     /// (along current plane/axis vs "central plane/axis")
@@ -215,6 +234,14 @@ protected:
     //(along current plane/axis vs "central plane/axis"), 1 is default value
     //(for "central plane/axis" or a straight crystal)
 
+    G4bool fCU = false;//flag of crystalline undulator geometry
+                       //(periodically bent crystal)
+    G4double fCUAmplitude=0.; //Amplitude of a crystalline undulator
+    G4double fCUK=0.;    //2*pi/period of a crystalline undulator
+    G4double fCUPhase=0.;//Phase of a crystalline undulator
+    G4double fCUAmplitudeK=0.;//fCUAmplitude*fCUK
+    G4double fCUK2=0.;   //fCUK^2
+
     ///values related to the crystal lattice
     G4int fNelements=1;//number of nuclear elements in a crystal
     G4int iModel=1;// model type (iModel=1 for interplanar potential,
@@ -276,6 +303,10 @@ private:
                                                            //for different logical volumes
 
     std::unordered_map<G4int, G4double> fMapMiscutAngle;//the map fMiscutAngle
+                                                        //for different logical volumes
+
+    std::unordered_map<G4int, G4ThreeVector> fMapCUAmplitudePeriodPhase;//the map of
+                                                        //AmplitudePeriodPhase
                                                         //for different logical volumes
 
     G4double fChannelingStep=0;// simulation step under the channeling conditions =

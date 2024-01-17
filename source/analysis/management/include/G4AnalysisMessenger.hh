@@ -87,6 +87,7 @@ class G4AnalysisMessenger : public G4UImessenger
          // To be investigated
     std::unique_ptr<G4UIcmdWithABool>      fCloseFileCmd;
     std::unique_ptr<G4UIcmdWithABool>      fListCmd;
+    std::unique_ptr<G4UIcmdWithAString>    fSetDefaultFileTypeCmd;
     std::unique_ptr<G4UIcmdWithABool>      fSetActivationCmd;
     std::unique_ptr<G4UIcmdWithAnInteger>  fVerboseCmd;
     std::unique_ptr<G4UIcmdWithAnInteger>  fCompressionCmd;

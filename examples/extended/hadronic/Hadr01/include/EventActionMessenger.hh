@@ -56,13 +56,13 @@ class EventActionMessenger: public G4UImessenger
 public:
 
   EventActionMessenger(EventAction*);
-  virtual ~EventActionMessenger();
+  ~EventActionMessenger() override;
     
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
+  void SetNewValue(G4UIcommand*, G4String) override;
+  
 private:
 
-  EventAction*          fEventAction;   
+  EventAction* fEventAction;   
   G4UIcmdWithAnInteger* fPrintCmd;    
   G4UIcmdWithAnInteger* fCmd;    
 

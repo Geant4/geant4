@@ -37,12 +37,12 @@
 #include <qmap.h>
 #include <qobject.h>
 #include <qtabwidget.h>
+#include <qtreewidget.h>
 
 class QMainWindow;
 class QLineEdit;
 class G4UIsession;
 class QListWidget;
-class QTreeWidget;
 class QTreeWidgetItem;
 class QTextEdit;
 class QTextBrowser;
@@ -277,6 +277,15 @@ public:
   void SceneTreeItemDoubleClicked(QTreeWidgetItem*);
   void SceneTreeItemExpanded(QTreeWidgetItem*);
   void SceneTreeItemCollapsed(QTreeWidgetItem*);
+  // Class for trapping special mouse events on new scene tree
+  struct NewSceneTreeItemTreeWidget: public QTreeWidget {
+    void mousePressEvent(QMouseEvent*) override;
+    void ActWithoutParameter(const G4String& action, G4SceneTreeItem*);
+    void ActWithABool(const G4String& action, G4SceneTreeItem*, G4bool);
+    void ActWithAnInteger(const G4String& action, G4SceneTreeItem*);
+    void ActWithADouble(const G4String& action, G4SceneTreeItem*);
+    void ActWithAString(const G4String& action, G4SceneTreeItem*);
+  };
 
   QString GetCommandList(const G4UIcommand*);
   void updateHelpArea(const G4UIcommand*);
@@ -333,7 +342,7 @@ public:
   G4UIDockWidget* fUIDockWidget;
   QWidget* fSceneTreeWidget;
   QWidget* fNewSceneTreeWidget;
-  QTreeWidget* fNewSceneTreeItemTreeWidget;
+  NewSceneTreeItemTreeWidget* fNewSceneTreeItemTreeWidget;
   QWidget* fViewerPropertiesWidget;
   QWidget* fPickInfosWidget;
   QLineEdit* fHelpLine;
@@ -349,8 +358,6 @@ public:
   QString fStringSeparator;
   G4String fLastErrMessage;
   QString fLastOpenPath;
-  QToolButton* fViewModePopupButton;
-  QToolButton* fSurfaceModePopupButton;
 
   QPixmap* fSearchIcon;
   QPixmap* fClearIcon;

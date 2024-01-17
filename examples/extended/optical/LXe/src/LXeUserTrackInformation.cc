@@ -32,18 +32,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeUserTrackInformation::LXeUserTrackInformation()
-  : fStatus(active)
-  , fReflections(0)
-  , fForcedraw(false)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeUserTrackInformation::~LXeUserTrackInformation() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeUserTrackInformation::AddTrackStatusFlag(int s)
 {
   if(s & active)           // track is now active

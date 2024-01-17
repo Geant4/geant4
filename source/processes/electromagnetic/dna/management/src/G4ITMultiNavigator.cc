@@ -65,22 +65,21 @@ class G4FieldManager;
 // ********************************************************************
 //
 G4ITMultiNavigator::G4ITMultiNavigator()
-  : G4ITNavigator(), fLastMassWorld(0)
 {
   fNoActiveNavigators= 0; 
 
-  for(G4int num=0; num< fMaxNav; ++num )
+  for(auto & num : fpNavigator)
   {
-    fpNavigator[num] =  0;   
+    num =  nullptr;   
   }
 
   pTransportManager= G4ITTransportationManager::GetTransportationManager();
 
   G4ITNavigator* massNav= pTransportManager->GetNavigatorForTracking();
-  if( massNav )
+  if( massNav != nullptr )
   { 
     G4VPhysicalVolume* pWorld= massNav->GetWorldVolume(); 
-    if( pWorld )
+    if( pWorld != nullptr )
     { 
       SetWorldVolume( pWorld ); 
       fLastMassWorld = pWorld; 
@@ -89,8 +88,7 @@ G4ITMultiNavigator::G4ITMultiNavigator()
 }
 
 G4ITMultiNavigator::~G4ITMultiNavigator()
-{
-}
+= default;
 
 G4double G4ITMultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
                                        const G4ThreeVector &pDirection,
@@ -286,7 +284,7 @@ void G4ITMultiNavigator::PrepareNavigators()
      fLimitTruth[num] = false;
      fLimitedStep[num] = kDoNot;
      fCurrentStepSize[num] = 0.0; 
-     fLocatedVolume[num] = 0; 
+     fLocatedVolume[num] = nullptr; 
   }
   fWasLimitedByGeometry = false; 
 
@@ -295,7 +293,7 @@ void G4ITMultiNavigator::PrepareNavigators()
 
   G4VPhysicalVolume* massWorld = GetWorldVolume();
 
-  if( (massWorld != fLastMassWorld) && (massWorld!=0) )
+  if( (massWorld != fLastMassWorld) && (massWorld!=nullptr) )
   { 
      // Pass along change to Mass Navigator
      fpNavigator[0] -> SetWorldVolume( massWorld );
@@ -324,10 +322,10 @@ G4ITMultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
 
   G4ThreeVector direction(0.0, 0.0, 0.0);
   G4bool relative = pRelativeSearch; 
-  std::vector<G4ITNavigator*>::iterator pNavIter
+  auto pNavIter
     = pTransportManager->GetActiveNavigatorsIterator(); 
 
-  if( pDirection ) { direction = *pDirection; }
+  if( pDirection != nullptr ) { direction = *pDirection; }
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
@@ -397,7 +395,7 @@ G4ITMultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
 {
   // Relocate the point in each geometry
 
-  std::vector<G4ITNavigator*>::iterator pNavIter
+  auto pNavIter
     = pTransportManager->GetActiveNavigatorsIterator(); 
 
 #ifdef G4DEBUG_NAVIGATION
@@ -459,8 +457,7 @@ G4double G4ITMultiNavigator::ComputeSafety( const G4ThreeVector& position,
 
 // -----------------------------------------------------------------------
 
-G4TouchableHistoryHandle 
-G4ITMultiNavigator::CreateTouchableHistoryHandle() const
+G4TouchableHandle  G4ITMultiNavigator::CreateTouchableHistoryHandle() const
 {
   G4Exception( "G4ITMultiNavigator::CreateTouchableHistoryHandle()",
                "GeomNav0001", FatalException,  
@@ -470,14 +467,14 @@ G4ITMultiNavigator::CreateTouchableHistoryHandle() const
   touchHist= fpNavigator[0] -> CreateTouchableHistory(); 
 
   G4VPhysicalVolume* locatedVolume= fLocatedVolume[0]; 
-  if( locatedVolume == 0 )
+  if( locatedVolume == nullptr )
   {
     // Workaround to ensure that the touchable is fixed !! // TODO: fix
     //
     touchHist->UpdateYourself( locatedVolume, touchHist->GetHistory() );
   }
     
-  return G4TouchableHistoryHandle(touchHist); 
+  return G4TouchableHandle(touchHist); 
 }
 
 // -----------------------------------------------------------------------
@@ -594,10 +591,10 @@ G4ITMultiNavigator::PrintLimited()
 
     G4ITNavigator *pNav= fpNavigator[ num ];
     G4String  WorldName( "Not-Set" ); 
-    if (pNav)
+    if (pNav != nullptr)
     {
        G4VPhysicalVolume *pWorld= pNav->GetWorldVolume(); 
-       if( pWorld )
+       if( pWorld != nullptr )
        {
            WorldName = pWorld->GetName(); 
        }
@@ -659,10 +656,10 @@ G4ITMultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
 {
    // Reset geometry for all -- and use the touchable for the mass history
 
-   G4VPhysicalVolume* massVolume=0; 
+   G4VPhysicalVolume* massVolume=nullptr; 
    G4ITNavigator* pMassNavigator= fpNavigator[0];
 
-   if( pMassNavigator )
+   if( pMassNavigator != nullptr )
    {
       massVolume= pMassNavigator->ResetHierarchyAndLocate( point, direction,
                                                            MassHistory); 
@@ -674,7 +671,7 @@ G4ITMultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
                   "Cannot reset hierarchy before navigators are initialised.");
    }
 
-   std::vector<G4ITNavigator*>::iterator pNavIter=
+   auto pNavIter=
        pTransportManager->GetActiveNavigatorsIterator(); 
 
    for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
@@ -711,7 +708,7 @@ G4ITMultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
   {
     if( fNoLimitingStep > 1 )
     { 
-      std::vector<G4ITNavigator*>::iterator pNavIter=
+      auto pNavIter=
         pTransportManager->GetActiveNavigatorsIterator(); 
 
       for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )

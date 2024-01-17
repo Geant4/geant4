@@ -223,7 +223,8 @@ void GetInputArguments(int argc, char** argv) {
 
   // check if mandatory Geant4 macro file was provided
   if (parMacroFileName=="" && !parInteractive ) {
-     G4cout << "  *** ERROR : either interactive mode or a Geant4 macro file is required. " << G4endl;
+     G4cerr << "  *** ERROR : either interactive mode or a Geant4 macro file is required. "
+            << G4endl;
      PrintUsage();
      exit(-1);
   }

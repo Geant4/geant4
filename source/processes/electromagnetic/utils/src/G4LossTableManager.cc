@@ -86,7 +86,7 @@ G4ThreadLocal G4LossTableManager* G4LossTableManager::instance = nullptr;
 
 G4LossTableManager* G4LossTableManager::Instance()
 {
-  if(!instance) {
+  if(nullptr == instance) {
     static G4ThreadLocalSingleton<G4LossTableManager> inst;
     instance = inst.Instance();
   }
@@ -140,7 +140,7 @@ G4LossTableManager::G4LossTableManager()
     isMaster = false;
   }
   tableBuilder = new G4LossTableBuilder(isMaster);
-  emCorrections = new G4EmCorrections(verbose, isMaster);
+  emCorrections = new G4EmCorrections(verbose);
 
   std::size_t n = 70;
   loss_vector.reserve(n);

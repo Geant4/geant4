@@ -82,18 +82,18 @@ class vtkGeant4Callback : public vtkCommand
       auto cp = cam->GetPosition();
       auto fp = cam->GetFocalPoint();
       auto ud = cam->GetViewUp();
+      auto ps = cam->GetParallelScale();
+      auto cd = std::sqrt(std::pow(cp[0] - fp[0], 2) + std::pow(cp[1] - fp[1], 2)
+                          + std::pow(cp[2] - fp[2], 2));
 
       fVP->SetCurrentTargetPoint(G4Point3D(fp[0], fp[1], fp[2]));
-      fVP->SetViewpointDirection(
-        (G4Point3D(cp[0], cp[1], cp[2]) - G4Point3D(fp[0], fp[1], fp[2])).unit());
+      fVP->SetViewpointDirection((G4Point3D(cp[0], cp[1], cp[2]) - G4Point3D(fp[0], fp[1], fp[2])).unit());
       fVP->SetUpVector(G4Vector3D(ud[0], ud[1], ud[2]));
 
       if (cam->GetParallelProjection() != 0) {
-        fVP->SetZoomFactor(parallelScale / cam->GetParallelScale());
+        fVP->SetZoomFactor(parallelScale / ps);
       }
       else {
-        auto cd = std::sqrt(std::pow(cp[0] - fp[0], 2) + std::pow(cp[1] - cp[1], 2)
-                            + std::pow(cp[2] - cp[2], 2));
         fVP->SetZoomFactor(cameraDistance / cd);
       }
     }
@@ -127,7 +127,11 @@ class vtkInfoCallback : public vtkCommand
       double* foc = cam->GetFocalPoint();
       double viewAngle = cam->GetViewAngle();
       double distance = cam->GetDistance();
+      double near;
+      double far;
+      cam->GetClippingRange(near,far);
       double parallelScale = cam->GetParallelScale();
+
 
       if (pos == nullptr) return;
 
@@ -145,10 +149,11 @@ class vtkInfoCallback : public vtkCommand
                "camera focal point : %.1f %.1f %.1f \n"
                "view angle         : %.1f\n"
                "distance           : %.1f\n"
+               "clip near/far      : %.1f %.1f\n"
                "parallel scale     : %.1f\n"
                "number actors      : %i\n"
                "fps                : %.1f",
-               pos[0], pos[1], pos[2], foc[0], foc[1], foc[2], viewAngle, distance, parallelScale,
+               pos[0], pos[1], pos[2], foc[0], foc[1], foc[2], viewAngle, distance, near, far, parallelScale,
                nActors, fps);
       if (this->TextActor != nullptr) {
         this->TextActor->SetInput(this->TextBuff);
@@ -219,6 +224,7 @@ class G4VtkViewer : public G4VViewer
     void ExportVRMLScene(G4String);
     void ExportVTPScene(G4String);
     void ExportGLTFScene(G4String);
+    void ExportJSONRenderWindowScene(G4String);
     void ExportVTPCutter(G4String fileName);
     void ExportFormatStore(G4String fileName, G4String store);
 
@@ -251,9 +257,15 @@ class G4VtkViewer : public G4VViewer
                          const G4double imageBottomLeft[2], const G4double worldBottomLeft[2],
                          const G4double imageTopRight[2], const G4double worldTopRight[2],
                          const G4double rot[3], const G4double trans[3]);
-    void Add3DOverlay(const G4String& fileName, const G4double colour[3], const G4double alpha,
-                      const G4double scale[3], const G4double rotation[3],
-                      const G4double translation[3]);
+    void AddGeometryOverlay(const G4String& fileName, const G4double colour[3], const G4double alpha,
+                            const G4String& representation,
+                            const G4double scale[3], const G4double rotation[3],
+                            const G4double translation[3]);
+
+    void Render() {_renderWindow->Render();}
+    void StartInteractor() {
+      G4cout << "StartInteractor" << G4endl;
+      _renderWindow->GetInteractor()->Start();}
 
     void Print();
 
@@ -275,6 +287,9 @@ class G4VtkViewer : public G4VViewer
 
   protected:
     G4bool firstSetView = true;
+    G4bool firstFinishView = true;
+    G4double cameraDistance;
+
     vtkNew<vtkImplicitPlaneRepresentation> cutterPlaneRepresentation;
     vtkNew<vtkImplicitPlaneWidget2> cutterPlaneWidget;
 
@@ -282,6 +297,11 @@ class G4VtkViewer : public G4VViewer
     vtkNew<vtkImplicitPlaneWidget2> clipperPlaneWidget;
 
     vtkNew<vtkCameraOrientationWidget> camOrientWidget;
+
+    bool bCutter = false;
+    bool bClipper = false;
+    bool bHud = false;
+    bool bOrientation = false;
 };
 
 #endif

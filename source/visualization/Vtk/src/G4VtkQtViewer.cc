@@ -75,6 +75,7 @@ G4VtkQtViewer::G4VtkQtViewer(G4VSceneHandler& sceneHandler, const G4String& name
     new G4AutoLock(mWaitForVisSubThreadQtOpenGLContextMoved, std::defer_lock);
 
   G4Qt::getInstance();
+  //this->setFormat(QVTKOpenGLNativeWidget::defaultFormat());
 }
 
 G4VtkQtViewer::~G4VtkQtViewer()
@@ -89,7 +90,6 @@ void G4VtkQtViewer::Initialise()
 
   // Specific GL render window and interactor for Qt
   _renderWindow = vtkGenericOpenGLRenderWindow::New();
-  renderWindowInteractor = vtkRenderWindowInteractor::New();
 
   _renderWindow->AddRenderer(renderer);
   this->setRenderWindow(_renderWindow);
@@ -104,7 +104,8 @@ void G4VtkQtViewer::Initialise()
   // Shadows
   renderer->SetUseShadows(0);
 
-  vtkSmartPointer<G4VtkInteractorStyle> style = vtkSmartPointer<G4VtkInteractorStyle>::New();
+  vtkSmartPointer<G4VtkInteractorStyle> style =
+    vtkSmartPointer<G4VtkInteractorStyle>::New();
   this->interactor()->SetInteractorStyle(style);
 }
 
@@ -113,6 +114,7 @@ void G4VtkQtViewer::CreateMainWindow(QVTKOpenGLNativeWidget* vtkWidget, const QS
   G4UImanager* UI = G4UImanager::GetUIpointer();
   fUiQt = static_cast<G4UIQt*>(UI->GetG4UIWindow());
   fUiQt->AddTabWidget((QWidget*)vtkWidget, name);
+  vtkWidget->setAttribute(Qt::WA_AcceptTouchEvents, false);
   fGLWidget = vtkWidget;
   createSceneTreeWidget();
 }
@@ -221,6 +223,7 @@ void G4VtkQtViewer::FinishView()
   fVtkSceneHandler.Modified();
 
   _renderWindow->Render();
+
   auto qGLW = dynamic_cast<QVTKOpenGLNativeWidget*>(fGLWidget);
   qGLW->interactor()->Initialize();
   qGLW->interactor()->Start();

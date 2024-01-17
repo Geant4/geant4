@@ -32,15 +32,13 @@
 #ifndef G4MuonicAtomHelper_hh
 #define G4MuonicAtomHelper_hh 1
 
-#include "G4MuonicAtom.hh"
 #include "G4Ions.hh"
+#include "G4MuonicAtom.hh"
 
 class G4MuonicAtomHelper
 {
   public:
-
-    static G4MuonicAtom* ConstructMuonicAtom(const G4String& name,
-                                             G4int encoding,
+    static G4MuonicAtom* ConstructMuonicAtom(const G4String& name, G4int encoding,
                                              G4Ions const* baseion);
 
     static G4double GetMuonCaptureRate(G4int Z, G4int A);
@@ -51,9 +49,7 @@ class G4MuonicAtomHelper
 
     static G4double GetKShellEnergy(G4double A);
 
-    static G4double GetLinApprox(G4int N, 
-                                 const G4double* const X, 
-                                 const G4double* const Y, 
+    static G4double GetLinApprox(G4int N, const G4double* const X, const G4double* const Y,
                                  G4double Xuser);
 };
 

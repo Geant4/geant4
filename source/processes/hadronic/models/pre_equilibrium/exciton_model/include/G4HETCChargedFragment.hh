@@ -35,23 +35,17 @@ class G4HETCChargedFragment : public G4HETCFragment
 {
 public:
 
-  G4HETCChargedFragment(const G4ParticleDefinition*,
-			G4VCoulombBarrier * aCoulombBarrier);
+  G4HETCChargedFragment(const G4ParticleDefinition*, G4VCoulombBarrier*);
 
-  virtual ~G4HETCChargedFragment();
+  ~G4HETCChargedFragment() override = default;
 
-  virtual G4double SampleKineticEnergy(const G4Fragment & aFragment);
+  G4double SampleKineticEnergy(const G4Fragment& aFragment) override;
 
-private:
-
-  // operators  
-  G4HETCChargedFragment();
-  G4HETCChargedFragment(const G4HETCChargedFragment &right);
-  const G4HETCChargedFragment & 
-  operator=(const G4HETCChargedFragment &right);
-  G4bool operator==(const G4HETCChargedFragment &right) const; 
-  G4bool operator!=(const G4HETCChargedFragment &right) const;    
-    
+  G4HETCChargedFragment(const G4HETCChargedFragment &right) = delete;
+  const G4HETCChargedFragment&
+  operator=(const G4HETCChargedFragment &right) = delete;
+  G4bool operator==(const G4HETCChargedFragment &right) const = delete; 
+  G4bool operator!=(const G4HETCChargedFragment &right) const = delete;
 };
 
 #endif

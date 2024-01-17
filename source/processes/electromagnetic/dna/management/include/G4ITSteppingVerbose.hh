@@ -45,37 +45,37 @@ class G4ITSteppingVerbose : public G4VITSteppingVerbose
 {
 public:
   G4ITSteppingVerbose();
-  ~G4ITSteppingVerbose();
+  ~G4ITSteppingVerbose() override;
 
   // methods to be invoked in the SteppingManager
-  void NewStep();
-  void StepInfoForLeadingTrack();
+  void NewStep() override;
+  void StepInfoForLeadingTrack() override;
 
-  void AtRestDoItInvoked();
-  void AtRestDoItOneByOne();
+  void AtRestDoItInvoked() override;
+  void AtRestDoItOneByOne() override;
 
-  void AlongStepDoItAllDone();
-  void AlongStepDoItOneByOne();
+  void AlongStepDoItAllDone() override;
+  void AlongStepDoItOneByOne() override;
 
-  void PostStepDoItAllDone();
-  void PostStepDoItOneByOne();
+  void PostStepDoItAllDone() override;
+  void PostStepDoItOneByOne() override;
 
-  void StepInfo();
-  void TrackingStarted(G4Track*);
-  void TrackingEnded(G4Track*);
+  void StepInfo() override;
+  void TrackingStarted(G4Track*) override;
+  void TrackingEnded(G4Track*) override;
 
-  void DoItStarted();
-  void PreStepVerbose(G4Track* track);
-  void PostStepVerbose(G4Track* track);
+  void DoItStarted() override;
+  void PreStepVerbose(G4Track* track) override;
+  void PostStepVerbose(G4Track* track) override;
 
-  void DPSLStarted();
-  void DPSLUserLimit();
-  void DPSLPostStep();
-  void DPSLAlongStep();
+  void DPSLStarted() override;
+  void DPSLUserLimit() override;
+  void DPSLPostStep() override;
+  void DPSLAlongStep() override;
 //  void DPSLAlongStepDoItOneByOne();
 //  void DPSLPostStepDoItOneByOne();
-  void VerboseTrack();
-  void VerboseParticleChange();
+  void VerboseTrack() override;
+  void VerboseParticleChange() override;
   void ShowStep() const;
 //
 

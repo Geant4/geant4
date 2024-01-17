@@ -61,7 +61,6 @@
 //   n=0..nReplicas-1
 
 // 29.07.95 P.Kent           - First non-stub version
-// 26.10.97 J.Apostolakis    - Added constructor that takes mother LV
 // 13.01.13 G.Cosmo, A.Dotti - Modified for thread-safety for MT
 // ----------------------------------------------------------------------
 #ifndef G4PVREPLICA_HH

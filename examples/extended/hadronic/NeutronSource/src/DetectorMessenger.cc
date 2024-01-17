@@ -43,10 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(), 
- fDetector(Det), fTesthadrDir(0), fDetDir(0), fMaterCmd1(0), fMaterCmd2(0),
- fSizeCmd1(0), fSizeCmd2(0), fSizeCmd3(0),
- fIsotopeCmd(0)
+:fDetector(Det)
 { 
   fTesthadrDir = new G4UIdirectory("/testhadr/");
   fTesthadrDir->SetGuidance("commands specific to this example");

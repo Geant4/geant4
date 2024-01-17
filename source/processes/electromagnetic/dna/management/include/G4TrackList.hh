@@ -52,9 +52,9 @@
 #include "G4Track.hh"
 #include "G4IT.hh"
 
-typedef G4FastListNode<G4Track> G4TrackListNode;
-typedef G4FastList<G4Track> G4TrackList;
-typedef G4ManyFastLists<G4Track> G4TrackManyList;
+using G4TrackListNode = G4FastListNode<G4Track>;
+using G4TrackList = G4FastList<G4Track>;
+using G4TrackManyList = G4ManyFastLists<G4Track>;
 
 //! SPECIFIC TO TRACKS
 template<>

@@ -101,13 +101,13 @@ void G4ITNavigator2::SetWorldVolume(G4VPhysicalVolume* pWorld)
                  FatalException, "Volume must be centered on the origin.");
   }
   const G4RotationMatrix* rm = pWorld->GetRotation();
-  if ( rm && (!rm->isIdentity()) )
+  if ( (rm != nullptr) && (!rm->isIdentity()) )
   {
     G4Exception ("G4ITNavigator2::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must not be rotated.");
   }
   fTopPhysical = pWorld;
-  if(fpNavigatorState)
+  if(fpNavigatorState != nullptr)
 	  fpNavigatorState->fHistory.SetFirstEntry(pWorld);
 }
 
@@ -159,21 +159,19 @@ EVolume G4ITNavigator2::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 
 inline std::shared_ptr<G4ITNavigatorState_Lock2> G4ITNavigator2::GetSnapshotOfState()
 {
-  if(fpNavigatorState)
+  if(fpNavigatorState != nullptr)
   {
     std::shared_ptr<G4ITNavigatorState_Lock2>
       snapShot(new G4NavigatorState(*fpNavigatorState));
    return snapShot;
   }
-  else
-  {
-    return std::shared_ptr<G4ITNavigatorState_Lock2>(0);
-  }
+  
+  return std::shared_ptr<G4ITNavigatorState_Lock2>(nullptr);
 }
 
 inline void G4ITNavigator2::ResetFromSnapshot(std::shared_ptr<G4ITNavigatorState_Lock2> snapShot)
 {
-  if(fpNavigatorState && snapShot)
+  if((fpNavigatorState != nullptr) && snapShot)
   {
     *fpNavigatorState = *((G4NavigatorState*) snapShot.get());
   }
@@ -257,38 +255,6 @@ G4RotationMatrix G4ITNavigator2::NetRotation() const
 }
 
 // ********************************************************************
-// CreateGRSVolume
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSVolume* G4ITNavigator2::CreateGRSVolume() const
-{
-    CheckNavigatorStateIsValid();
-    G4AffineTransform tf(fpNavigatorState->fHistory.GetTopTransform().Inverse());
-    return new G4GRSVolume(fpNavigatorState->fHistory.GetTopVolume(),
-                           tf.NetRotation(),
-                           tf.NetTranslation());
-}
-
-// ********************************************************************
-// CreateGRSSolid
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSSolid* G4ITNavigator2::CreateGRSSolid() const
-{
-    CheckNavigatorStateIsValid();
-    G4AffineTransform tf(fpNavigatorState->fHistory.GetTopTransform().Inverse());
-    return new G4GRSSolid(fpNavigatorState->fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-                          tf.NetRotation(),
-                          tf.NetTranslation());
-}
-
-// ********************************************************************
 // CreateTouchableHistory
 //
 // `Touchable' creation method: caller has deletion responsibility
@@ -331,7 +297,7 @@ void G4ITNavigator2::LocateGlobalPointAndUpdateTouchableHandle(
   if( fpNavigatorState->fEnteredDaughter || fpNavigatorState->fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 )
+     if( pPhysVol == nullptr )
      {
        // We want to ensure that the touchable is correct in this case.
        //  The method below should do this and recalculate a lot more ....
@@ -372,7 +338,7 @@ void G4ITNavigator2::LocateGlobalPointAndUpdateTouchable(
                            const G4bool               RelativeSearch )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  pPhysVol = LocateGlobalPointAndSetup( position, nullptr, RelativeSearch);  
   // Will check navigatorState validity
   touchableToUpdate->UpdateYourself( pPhysVol, &fpNavigatorState->fHistory );
 }
@@ -493,7 +459,7 @@ G4int G4ITNavigator2::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 {
     CheckNavigatorStateIsValid();
     G4int severity=0, noZeros= fpNavigatorState->fNumberZeroSteps;
-    if( noZeroSteps) *noZeroSteps = fpNavigatorState->fNumberZeroSteps;
+    if( noZeroSteps != nullptr) *noZeroSteps = fpNavigatorState->fNumberZeroSteps;
 
   if( noZeros >= fAbandonThreshold_NoZeroSteps )
   {

@@ -46,24 +46,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* detector)
-: G4Run(),
-  fDetector(detector),
-  fParticle(0), fEkin(0.)
+: fDetector(detector)
 {
-  for (G4int i=0; i<3; ++i) {
-     fStatus[i] = 0; fTotEdep[i] = fEleak[i] = fEtotal[i] = 0.;
-  }
   fTotEdep[1] = fEleak[1] = fEtotal[1] = joule;
   
   for (G4int i=0; i<kMaxAbsor; ++i) {
     fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
   }  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Run::~Run()
-{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

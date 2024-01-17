@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -38,25 +35,20 @@
 #ifndef G4OmegacZero_h
 #define G4OmegacZero_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                          OmegacZero                            ###
-// ######################################################################
 
 class G4OmegacZero : public G4ParticleDefinition
 {
- private:
-   static G4OmegacZero* theInstance;
-   G4OmegacZero(){}
-   ~G4OmegacZero() override= default;
+  public:
+    static G4OmegacZero* Definition();
+    static G4OmegacZero* OmegacZeroDefinition();
+    static G4OmegacZero* OmegacZero();
 
- public:
-   static G4OmegacZero* Definition();
-   static G4OmegacZero* OmegacZeroDefinition();
-   static G4OmegacZero* OmegacZero();
+  private:
+    G4OmegacZero() {}
+    ~G4OmegacZero() override = default;
+
+    static G4OmegacZero* theInstance;
 };
 
 #endif

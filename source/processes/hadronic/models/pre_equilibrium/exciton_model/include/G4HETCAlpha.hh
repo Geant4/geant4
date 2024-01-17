@@ -35,7 +35,6 @@
 
 #include "G4HETCChargedFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4AlphaCoulombBarrier.hh"
 
 class G4HETCAlpha : public G4HETCChargedFragment
 {
@@ -43,28 +42,18 @@ public:
 
   G4HETCAlpha();
 
-  ~G4HETCAlpha();
+  ~G4HETCAlpha() override = default;
+
+  G4HETCAlpha(const G4HETCAlpha &right) = delete;
+  const G4HETCAlpha & operator=(const G4HETCAlpha &right) = delete;
+  G4bool operator==(const G4HETCAlpha &right) const = delete;
+  G4bool operator!=(const G4HETCAlpha &right) const = delete;
 
 protected:
 
-  virtual G4double GetAlpha() const;
-
-  virtual G4double GetBeta() const;
-
-  virtual G4double GetSpinFactor() const;
-
-  virtual G4double K(const G4Fragment & aFragment);
-
-private:
-
-  // operators  
-  G4HETCAlpha(const G4HETCAlpha &right);
-  const G4HETCAlpha & operator=(const G4HETCAlpha &right);
-  G4bool operator==(const G4HETCAlpha &right) const;
-  G4bool operator!=(const G4HETCAlpha &right) const;
-
-  G4AlphaCoulombBarrier theAlphaCoulombBarrier;
-
+  G4double GetAlpha() const override;
+  G4double GetSpinFactor() const override;
+  G4double K(const G4Fragment& aFragment) const override;
 };
 
 #endif

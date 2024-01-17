@@ -23,55 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Positrony 	   
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
+//      History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Positrony
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
 //
 //-------------------------------------------------------------
 //	Documentation:
-//    Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint 
-//    processes act on adjoint particles when they are  tracked backward in the geometry. 
-//    The use of adjoint particles instead of "normal" particles 
-//    during a reverse simulation is based on an idea of M. Asai   
+//    Adjoint particles are used in Reverse/Adjoint Monte Carlo simulations. New adjoint
+//    processes act on adjoint particles when they are  tracked backward in the geometry.
+//    The use of adjoint particles instead of "normal" particles
+//    during a reverse simulation is based on an idea of M. Asai
 //
 #ifndef G4AdjointPositron_h
 #define G4AdjointPositron_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                         ADJOINT POSITRON                       ###
-// ######################################################################
 
 class G4AdjointPositron : public G4ParticleDefinition
 {
- private:
-   static G4AdjointPositron* theInstance;
-   G4AdjointPositron(){}
-   ~G4AdjointPositron() override= default;
+  public:
+    static G4AdjointPositron* Definition();
+    static G4AdjointPositron* AdjointPositronDefinition();
+    static G4AdjointPositron* AdjointPositron();
 
- public:
-   static G4AdjointPositron* Definition();
-   static G4AdjointPositron* AdjointPositronDefinition();
-   static G4AdjointPositron* AdjointPositron();
+  private:
+    G4AdjointPositron() {}
+    ~G4AdjointPositron() override = default;
+
+    static G4AdjointPositron* theInstance;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

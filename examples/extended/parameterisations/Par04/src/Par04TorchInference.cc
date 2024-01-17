@@ -44,8 +44,9 @@ Par04TorchInference::Par04TorchInference(G4String modelPath)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par04TorchInference::RunInference(std::vector<float> aGenVector, std::vector<G4double>& aEnergies,
-                                          int aSize)
+void Par04TorchInference::RunInference(std::vector<float> aGenVector,
+                                       std::vector<G4double>& aEnergies,
+                                       int aSize)
 {
   // latentSize : size of the latent space
   // 4 is the size of the condition vector
@@ -79,7 +80,8 @@ void Par04TorchInference::RunInference(std::vector<float> aGenVector, std::vecto
 
   at::Tensor  outTensor = fModule.forward( genInput).toTensor().contiguous();
 
-  std::vector<G4double> output( outTensor.data_ptr<float>(), outTensor.data_ptr<float>() + outTensor.numel() );
+  std::vector<G4double> output( outTensor.data_ptr<float>(),
+                                outTensor.data_ptr<float>() + outTensor.numel() );
 
   aEnergies.assign(aSize, 0);
   for(int i = 0; i < aSize; i++) {

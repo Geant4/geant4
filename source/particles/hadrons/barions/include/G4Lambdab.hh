@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -34,31 +31,25 @@
 //
 //      Created                 Hisaya Kurashige, 16 June 1997
 // **********************************************************************
-// 
-
+//
 
 #ifndef G4Lambdab_h
 #define G4Lambdab_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                     Lambdab                                    ###
-// ######################################################################
 
 class G4Lambdab : public G4ParticleDefinition
 {
- private:
-   static G4Lambdab* theInstance;
-   G4Lambdab(){}
-   ~G4Lambdab() override= default;
+  public:
+    static G4Lambdab* Definition();
+    static G4Lambdab* LambdabDefinition();
+    static G4Lambdab* Lambdab();
 
- public:
-   static G4Lambdab* Definition();
-   static G4Lambdab* LambdabDefinition();
-   static G4Lambdab* Lambdab();
+  private:
+    G4Lambdab() {}
+    ~G4Lambdab() override = default;
+
+    static G4Lambdab* theInstance;
 };
 
 #endif

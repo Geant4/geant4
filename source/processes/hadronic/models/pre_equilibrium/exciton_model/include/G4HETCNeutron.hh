@@ -35,7 +35,6 @@
 
 #include "G4HETCFragment.hh"
 #include "G4ReactionProduct.hh"
-#include "G4NeutronCoulombBarrier.hh"
 
 class G4HETCNeutron : public G4HETCFragment
 {
@@ -43,36 +42,24 @@ public:
 
   G4HETCNeutron();
 
-  ~G4HETCNeutron();
+  ~G4HETCNeutron() override = default;
 
-  virtual G4double SampleKineticEnergy(const G4Fragment & aFragment);
+  G4double SampleKineticEnergy(const G4Fragment&) override;
+
+  G4HETCNeutron(const G4HETCNeutron &right) = delete;
+  const G4HETCNeutron & operator=(const G4HETCNeutron &right) = delete;
+  G4bool operator==(const G4HETCNeutron &right) const = delete;
+  G4bool operator!=(const G4HETCNeutron &right) const = delete;
 
 protected:
 
-  virtual G4double GetAlpha() const;
-
-  virtual G4double GetBeta() const;
-
-  virtual G4double GetSpinFactor() const;
-
-  virtual G4double K(const G4Fragment & aFragment);
-
-private:
-
-  // operators  
-  G4HETCNeutron(const G4HETCNeutron &right);
-  const G4HETCNeutron & operator=(const G4HETCNeutron &right);
-  G4bool operator==(const G4HETCNeutron &right) const;
-  G4bool operator!=(const G4HETCNeutron &right) const;
-
-  G4NeutronCoulombBarrier theNeutronCoulombBarrier;
-  
+  G4double GetAlpha() const override;
+  G4double GetBeta() const override;
+  G4double GetSpinFactor() const override;
+  G4double K(const G4Fragment& aFragment) const override;
 };
 
 #endif
- 
-
-
 
 
 

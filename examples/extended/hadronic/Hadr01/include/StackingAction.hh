@@ -57,21 +57,19 @@ class StackingAction : public G4UserStackingAction
 public:
 
   StackingAction();
-  virtual ~StackingAction();
-   
+  ~StackingAction() override;
+ 
   void SetKillStatus(G4bool value);
   void SetKill(const G4String& name);
      
-  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
+  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*) override;
+
 private:
 
-  HistoManager*       fHistoManager;    
-  StackingMessenger*  fStackMessenger;
-  G4bool              fKillSecondary;
-
-  const G4ParticleDefinition* fParticle;
-
+  HistoManager* fHistoManager;    
+  StackingMessenger* fStackMessenger;
+  const G4ParticleDefinition* fParticle{nullptr};
+  G4bool fKillSecondary{false};
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,136 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// class G4TouchableHistory inline implementation
+//
+// Created: Paul Kent, August 1996
+// ----------------------------------------------------------------------
+
+extern G4GEOM_DLL G4Allocator<G4TouchableHistory>*& aTouchableHistoryAllocator();
+
+inline
+void  G4TouchableHistory::UpdateYourself(       G4VPhysicalVolume*   pPhysVol,
+                                          const G4NavigationHistory* pHistory )
+{
+  fhistory = *pHistory;
+  const G4AffineTransform& tf = fhistory.GetTopTransform();
+  if( pPhysVol == nullptr )
+  {
+    // This means that the track has left the World Volume.
+    // Since the Navigation History does not already reflect this,
+    // we must correct this problem here.
+    //
+    fhistory.SetFirstEntry(pPhysVol);
+  }
+  ftlate = tf.InverseNetTranslation();
+  frot = tf.InverseNetRotation();
+}
+
+inline
+G4int G4TouchableHistory::CalculateHistoryIndex( G4int stackDepth ) const
+{ 
+  return G4int(fhistory.GetDepth()-stackDepth); // was -1
+}
+
+inline
+G4VPhysicalVolume* G4TouchableHistory::GetVolume( G4int depth ) const
+{ 
+  return fhistory.GetVolume(CalculateHistoryIndex(depth));
+}
+
+inline
+G4VSolid* G4TouchableHistory::GetSolid( G4int depth ) const
+{ 
+  return fhistory.GetVolume(CalculateHistoryIndex(depth))
+                            ->GetLogicalVolume()->GetSolid();
+}
+
+inline
+G4int G4TouchableHistory::GetReplicaNumber( G4int depth ) const
+{ 
+  return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
+}
+
+inline
+G4int G4TouchableHistory::GetCopyNumber(G4int depth) const
+{
+  return GetReplicaNumber(depth);
+}
+
+inline
+G4int G4TouchableHistory::GetHistoryDepth()  const
+{ 
+  return  G4int(fhistory.GetDepth());
+}
+
+inline
+G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
+{ 
+  auto  maxLevelsMove = G4int(fhistory.GetDepth());
+  G4int minLevelsMove = 0;              // Cannot redescend today!
+                                        // Soon it will be possible
+                                        // by adding a data member here
+                                        //     fCurrentDepth;
+  if( num_levels > maxLevelsMove )
+  {
+    num_levels = maxLevelsMove;
+  }
+  else if( num_levels < minLevelsMove )
+  {
+    num_levels = minLevelsMove;
+  }
+  fhistory.BackLevel( num_levels ); 
+
+  return num_levels;
+}
+
+inline
+const G4NavigationHistory* G4TouchableHistory::GetHistory() const
+{ 
+  return &fhistory;
+}
+
+// There is no provision in case this class is subclassed.
+// If it is subclassed, this will fail and may not give errors!
+//
+inline
+void* G4TouchableHistory::operator new(std::size_t)
+{ 
+  // Once the Navigator calls InitializeAllocator,
+  // the if block below can be removed.
+  //
+  if (aTouchableHistoryAllocator() == nullptr)
+  {
+     aTouchableHistoryAllocator() = new G4Allocator<G4TouchableHistory>;
+  }
+  return (void *) aTouchableHistoryAllocator()->MallocSingle();
+}
+
+inline
+void G4TouchableHistory::operator delete(void* aTH)
+{  
+  aTouchableHistoryAllocator()->FreeSingle((G4TouchableHistory *) aTH);
+}
+

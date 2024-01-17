@@ -49,6 +49,10 @@ enum G4TrackStatus
     // Kill the current track and also associated secondaries
   fSuspend,
     // Suspend the current track
+  fSuspendAndWait,
+    // Suspend the current track and send it to the Waiting stack so that it
+    // won't be resumed until all other tracks in the Urgent stack and their
+    // descendants have been tracked
   fPostponeToNextEvent
     // Postpone the tracking of the current track to the next event
 };

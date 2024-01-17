@@ -144,11 +144,11 @@
  7- HOW TO START ?
  
    Execute Activation in 'batch' mode from macro files :
- 	% ./Activation   run1.mac
+ 	% ./Activation   run.mac
  		
    Execute Activation in 'interactive mode' with visualization :
  	% ./Activation
-  Idle> control/execute vis.mac
+  Idle> control/execute debug.mac
  	....
  	Idle> type your commands
  	....
@@ -157,7 +157,9 @@
  Macros provided in this example:
   - Bi209.mac: neutron (25 meV) on 10 cm of Bi209
   - Co60.mac:  neutron (25 meV) on 1 cm of Cobalt.
+  - run.mac: simplified Co60.mac (no beam time, no histograms)
     
  Macros to be run interactively:
-  - debug.mac: neutron (25 meV) on Cobalt
-  - vis.mac: To activate visualization
+  - vis.mac: To activate visualization 
+  - debug.mac: 1 neutron (25 meV) on Cobalt. Visualization and tracking/verbose
+

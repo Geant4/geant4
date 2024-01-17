@@ -56,6 +56,7 @@
 G4PhysicsVector* G4NeutronElasticXS::data[] = {nullptr};
 G4double G4NeutronElasticXS::coeff[] = {0.0};
 G4String G4NeutronElasticXS::gDataDirectory = "";
+G4bool G4NeutronElasticXS::fLock = true;
 
 namespace
 {
@@ -67,18 +68,20 @@ G4NeutronElasticXS::G4NeutronElasticXS()
    neutron(G4Neutron::Neutron())
 {
   //  verboseLevel = 0;
-  if(verboseLevel > 0){
+  if (verboseLevel > 0){
     G4cout  << "G4NeutronElasticXS::G4NeutronElasticXS Initialise for Z < " 
 	    << MAXZEL << G4endl;
   }
-  ggXsection = G4CrossSectionDataSetRegistry::Instance()->GetComponentCrossSection("Glauber-Gribov");
-  if(ggXsection == nullptr) ggXsection = new G4ComponentGGHadronNucleusXsc();
+  ggXsection = 
+    G4CrossSectionDataSetRegistry::Instance()->GetComponentCrossSection("Glauber-Gribov");
+  if (ggXsection == nullptr)
+    ggXsection = new G4ComponentGGHadronNucleusXsc();
   SetForAllAtomsAndEnergies(true);
 }
 
 G4NeutronElasticXS::~G4NeutronElasticXS()
 {
-  if(isMaster) {
+  if (isFirst) {
     for(G4int i=0; i<MAXZEL; ++i) {
       delete data[i];
       data[i] = nullptr;
@@ -113,7 +116,8 @@ G4double
 G4NeutronElasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
 					   G4int Z, const G4Material*)
 {
-  return ElementCrossSection(aParticle->GetKineticEnergy(), aParticle->GetLogKineticEnergy(), Z);
+  return ElementCrossSection(aParticle->GetKineticEnergy(),
+			     aParticle->GetLogKineticEnergy(), Z);
 }
 
 G4double
@@ -204,18 +208,13 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
-  if(0. == coeff[0]) { 
+  if (fLock || isFirst) { 
     G4AutoLock l(&nElasticXSMutex);
-    if(0. == coeff[0]) { 
-      coeff[0] = 1.0;
-      isMaster = true;
+    if (fLock) { 
+      isFirst = true;
+      fLock = false;
       FindDirectoryPath();
     }
-    l.unlock();
-  }
-
-  // it is possible re-initialisation for the second run
-  if(isMaster) {
 
     // Access to elements
     const G4ElementTable* table = G4Element::GetElementTable();
@@ -223,13 +222,14 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
       G4int Z = std::max( 1, std::min( elm->GetZasInt(), MAXZEL-1) );
       if ( nullptr == data[Z] ) { Initialise(Z); }
     }
+    l.unlock();
   }
 }
 
 const G4String& G4NeutronElasticXS::FindDirectoryPath()
 {
   // build the complete string identifying the file with the data set
-  if(gDataDirectory.empty()) {
+  if (gDataDirectory.empty()) {
     std::ostringstream ost;
     ost << G4HadronicParameters::Instance()->GetDirPARTICLEXS() << "/neutron/el";
     gDataDirectory = ost.str();
@@ -239,11 +239,9 @@ const G4String& G4NeutronElasticXS::FindDirectoryPath()
 
 void G4NeutronElasticXS::InitialiseOnFly(G4int Z)
 {
-  if(nullptr == data[Z]) {
-    G4AutoLock l(&nElasticXSMutex);
-    if(nullptr == data[Z]) { Initialise(Z); }
-    l.unlock();
-  }
+  G4AutoLock l(&nElasticXSMutex);
+  Initialise(Z);
+  l.unlock();
 }
 
 void G4NeutronElasticXS::Initialise(G4int Z)

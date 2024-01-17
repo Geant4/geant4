@@ -47,7 +47,7 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
   OpNovicePrimaryGeneratorAction();
-  ~OpNovicePrimaryGeneratorAction();
+  ~OpNovicePrimaryGeneratorAction() override;
 
   void GeneratePrimaries(G4Event*) override;
 
@@ -57,8 +57,8 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   G4ParticleGun* GetParticleGun() { return fParticleGun; }
 
  private:
-  G4ParticleGun* fParticleGun;
-  OpNovicePrimaryGeneratorMessenger* fGunMessenger;
+  G4ParticleGun* fParticleGun = nullptr;
+  OpNovicePrimaryGeneratorMessenger* fGunMessenger = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

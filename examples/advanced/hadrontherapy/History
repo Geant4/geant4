@@ -4,6 +4,21 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-15 I. Hrivnacova (hadrontherapy-V11-01-01)
+- Updated macros using /vis/open:
+  - Added a commented line for calling 'vis/open' without parameter
+    for opening the default driver
+
+## 2023-11-10 Alberto Ribon (hadrontherapy-V11-01-00)
+- In most macro files, introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+  Note: in batch.mac, the above UI command is commented out
+        because system testing is running with the physics
+        G4EmStandardPhysics_option4, therefore without radioactive decay
+        (hence the command would be undefined).
 
 ## 2022-01-18 Jonas Hahnfeld (hadrontherapy-V11-00-01)
 - Prefer pointer to `const G4Material` if possible

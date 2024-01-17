@@ -46,11 +46,6 @@ ScreenSD::ScreenSD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ScreenSD::~ScreenSD()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void ScreenSD::Initialize(G4HCofThisEvent* /*hce*/)
 {}
 

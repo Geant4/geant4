@@ -44,7 +44,6 @@ class G4VtkPolydataPolylinePipeline : public G4VtkPolydataPipeline
     static std::size_t MakeHash(const G4VisAttributes* va);
 
   protected:
-    G4VisAttributes* pVisAttributes;
 };
 
 #endif  // G4VTKPOLYDATAPOLYLINEPIPELINE_HH

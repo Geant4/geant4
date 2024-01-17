@@ -23,57 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-//
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      History: 
-//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron 	   
-//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige 
+//      History:
+//    1st March 2007 creation by L. Desorgher based on a modification of G4Electron
+//    06  Nov.  2008 modified for Geant4-09-02  by Hisaya Kurashige
 //
 //-------------------------------------------------------------
-// 
 
 #include "G4AdjointElectronFI.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###             ADJOINT ELECTRON FOR FORCED INTERACTION            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
+
 G4AdjointElectronFI* G4AdjointElectronFI::theInstance = nullptr;
 
 G4AdjointElectronFI* G4AdjointElectronFI::Definition()
-{ 
-  
-  if (theInstance !=nullptr) return theInstance;
+{
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "adj_e-_FI";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
-  // use constants in CLHEP
-  //  static const double electron_mass_c2 = 0.51099906 * MeV;
+    // use constants in CLHEP
+    //  static const double electron_mass_c2 = 0.51099906 * MeV;
 
-  // NOTE  : electric charge and magnetic moment is opposite 
-  //         compared with real electron, because adjoint particles
-  //         are used to back-trace
-
+    // NOTE  : electric charge and magnetic moment is opposite
+    //         compared with real electron, because adjoint particles
+    //         are used to back-trace
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,  electron_mass_c2,       0.0*MeV,     1.*eplus, 
 		    1,                 0,             0,          
@@ -82,23 +75,21 @@ G4AdjointElectronFI* G4AdjointElectronFI::Definition()
 	 	  true,             -1.0,          nullptr,
                  false,           "adj_lepton"
               );
-   // Bohr Magnetron
-   G4double muB =  0.5*eplus*hbar_Planck/(electron_mass_c2/c_squared) ;
-   anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
-
+    // clang-format on
+    // Bohr Magnetron
+    G4double muB = 0.5 * eplus * hbar_Planck / (electron_mass_c2 / c_squared);
+    anInstance->SetPDGMagneticMoment(muB * 2. * 1.0011596521859);
   }
   theInstance = static_cast<G4AdjointElectronFI*>(anInstance);
   return theInstance;
 }
 
-G4AdjointElectronFI*  G4AdjointElectronFI::AdjointElectronFIDefinition()
+G4AdjointElectronFI* G4AdjointElectronFI::AdjointElectronFIDefinition()
 {
   return Definition();
 }
 
-G4AdjointElectronFI*  G4AdjointElectronFI::AdjointElectronFI()
+G4AdjointElectronFI* G4AdjointElectronFI::AdjointElectronFI()
 {
   return Definition();
 }
-
-

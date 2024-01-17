@@ -17,7 +17,7 @@ the usage of G4PhysListFactory to build  the concrete physics list.
 Physics List can be defined by its name given by the -p argument of the of the
 run command or by  the PHYSLIST environment variable.
 
-./factory -m my.macro [ -p QGSP_BERT ]
+./factory -m run.mac [ -p QGSP_BERT ]
 
 By default, FTFP_BERT Physics List will be instantiated if
 -p argument is not set and the PHYSLIST environment variable is not defined.

@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-24 Gabriele Cosmo (geomvol-V11-01-02)
+- Minor cleanup and code indentation. No functional changes.
+
+## 2023-08-31 Gabriele Cosmo (geomvol-V11-01-01)
+- Moved to "management" the following classes and translation units:
+  G4NavigationHistory, G4NavigationHistoryPool, G4NavigationLevel and
+  G4NavigationLevelRep.
+- Removed unused classes G4GRSSolid and G4GRSVolume.
+
 ## 2023-05-09 Gabriele Cosmo (geomvol-V11-01-00)
 - Applied clang-tidy fixes (readability, modernization, performance, ...).
 

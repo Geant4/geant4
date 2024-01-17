@@ -40,21 +40,20 @@ class G4VEvaporationFactory
 {
 public:
 
-  explicit G4VEvaporationFactory(G4VEvaporationChannel* ptr);
+  explicit G4VEvaporationFactory(G4VEvaporationChannel* p) : thePhotonEvaporation(p) {};
 
   virtual ~G4VEvaporationFactory() = default;
 
   virtual std::vector<G4VEvaporationChannel*>* GetChannel() = 0;
 
   G4VEvaporationFactory(const G4VEvaporationFactory &) = delete;
-  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory&) = delete;
+  const G4VEvaporationFactory& operator=(const G4VEvaporationFactory&) = delete;
   G4bool operator==(const G4VEvaporationFactory&) const = delete;
   G4bool operator!=(const G4VEvaporationFactory&) const = delete;
 
 protected:
 
   G4VEvaporationChannel* thePhotonEvaporation;
-
 };
 
 #endif

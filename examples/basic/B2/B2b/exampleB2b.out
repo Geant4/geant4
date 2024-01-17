@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -48,6 +48,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -590,384 +594,243 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for neutron
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-
-
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-
-
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-
-
   Process: nKiller
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for B-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: B-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for D-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: D-Inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for GenericIon
-
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_He3
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_alpha
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-------------------------------------------------------------------------
                            Hadronic Processes for anti_hypertriton
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: anti_lambdaInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_neutron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_proton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for anti_triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 25.6 PeV
-
-
   Process: hFritiofCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for deuteron
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e+
-
   Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for e-
-
   Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for gamma
-
   Process: photonNuclear
         Model:               GammaNPreco: 0 eV  ---> 200 MeV
         Model:            BertiniCascade: 199 MeV ---> 6 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            GammaNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon+
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for kaon-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for lambda
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: lambdaInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu+
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for mu-
-
   Process: muonNuclear
         Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-
   Process: muMinusCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi+
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for pi-
-
   Process: hadElastic
         Model:           hElasticGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for proton
-
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:  BarashenkovGlauberGribov: 0 eV  ---> 100 TeV
-
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for sigma-
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: sigma-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
-
-
   Process: hBertiniCaptureAtRest
-
----------------------------------------------------
+-----------------------------------------------------------------------
                            Hadronic Processes for triton
-
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 6 GeV/n
         Model:                      FTFP: 3 GeV/n ---> 100 TeV/n
      Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 25.6 PeV
-
-
-================================================================
 =======================================================================
 ======       Geant4 Native Pre-compound Model Parameters       ========
 =======================================================================
@@ -1013,33 +876,33 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 3
     0 hits stored in this event
 >>> Event: 4
-    32 hits stored in this event
+    0 hits stored in this event
 >>> Event: 5
     0 hits stored in this event
 >>> Event: 6
     0 hits stored in this event
 >>> Event: 7
-    0 hits stored in this event
+    55 hits stored in this event
 >>> Event: 8
     0 hits stored in this event
 >>> Event: 9
-    41 hits stored in this event
+    0 hits stored in this event
 >>> Event: 10
-    63 hits stored in this event
+    0 hits stored in this event
 >>> Event: 11
     0 hits stored in this event
 >>> Event: 12
     0 hits stored in this event
 >>> Event: 13
-    0 hits stored in this event
+    122 hits stored in this event
 >>> Event: 14
     0 hits stored in this event
 >>> Event: 15
-    10 hits stored in this event
+    0 hits stored in this event
 >>> Event: 16
     0 hits stored in this event
 >>> Event: 17
-    0 hits stored in this event
+    72 hits stored in this event
 >>> Event: 18
     0 hits stored in this event
 >>> Event: 19
@@ -1053,11 +916,11 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 23
     0 hits stored in this event
 >>> Event: 24
-    85 hits stored in this event
+    73 hits stored in this event
 >>> Event: 25
     0 hits stored in this event
 >>> Event: 26
-    82 hits stored in this event
+    0 hits stored in this event
 >>> Event: 27
     0 hits stored in this event
 >>> Event: 28
@@ -1073,13 +936,13 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 33
     0 hits stored in this event
 >>> Event: 34
-    73 hits stored in this event
+    0 hits stored in this event
 >>> Event: 35
     0 hits stored in this event
 >>> Event: 36
-    0 hits stored in this event
+    168 hits stored in this event
 >>> Event: 37
-    0 hits stored in this event
+    32 hits stored in this event
 >>> Event: 38
     0 hits stored in this event
 >>> Event: 39
@@ -1089,9 +952,9 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 41
     0 hits stored in this event
 >>> Event: 42
-    0 hits stored in this event
->>> Event: 43
     100 hits stored in this event
+>>> Event: 43
+    0 hits stored in this event
 >>> Event: 44
     0 hits stored in this event
 >>> Event: 45
@@ -1103,13 +966,13 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 48
     0 hits stored in this event
 >>> Event: 49
-    0 hits stored in this event
+    124 hits stored in this event
 >>> Event: 50
-    0 hits stored in this event
+    80 hits stored in this event
 >>> Event: 51
     0 hits stored in this event
 >>> Event: 52
-    12 hits stored in this event
+    0 hits stored in this event
 >>> Event: 53
     0 hits stored in this event
 >>> Event: 54
@@ -1121,21 +984,21 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 57
     0 hits stored in this event
 >>> Event: 58
-    0 hits stored in this event
+    128 hits stored in this event
 >>> Event: 59
-    0 hits stored in this event
+    85 hits stored in this event
 >>> Event: 60
-    0 hits stored in this event
+    9 hits stored in this event
 >>> Event: 61
     0 hits stored in this event
 >>> Event: 62
     0 hits stored in this event
 >>> Event: 63
-    0 hits stored in this event
+    65 hits stored in this event
 >>> Event: 64
     0 hits stored in this event
 >>> Event: 65
-    0 hits stored in this event
+    205 hits stored in this event
 >>> Event: 66
     0 hits stored in this event
 >>> Event: 67
@@ -1143,25 +1006,25 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 68
     0 hits stored in this event
 >>> Event: 69
-    160 hits stored in this event
+    57 hits stored in this event
 >>> Event: 70
     0 hits stored in this event
 >>> Event: 71
-    0 hits stored in this event
+    21 hits stored in this event
 >>> Event: 72
     0 hits stored in this event
 >>> Event: 73
     0 hits stored in this event
 >>> Event: 74
-    170 hits stored in this event
+    0 hits stored in this event
 >>> Event: 75
     0 hits stored in this event
 >>> Event: 76
-    55 hits stored in this event
->>> Event: 77
-    21 hits stored in this event
->>> Event: 78
     0 hits stored in this event
+>>> Event: 77
+    0 hits stored in this event
+>>> Event: 78
+    70 hits stored in this event
 >>> Event: 79
     0 hits stored in this event
 >>> Event: 80
@@ -1173,7 +1036,7 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 83
     0 hits stored in this event
 >>> Event: 84
-    70 hits stored in this event
+    0 hits stored in this event
 >>> Event: 85
     0 hits stored in this event
 >>> Event: 86
@@ -1183,229 +1046,229 @@ See commands in /vis/modeling/trajectories/ for other options.
 >>> Event: 88
     0 hits stored in this event
 >>> Event: 89
-    0 hits stored in this event
+    26 hits stored in this event
 >>> Event: 90
     0 hits stored in this event
 >>> Event: 91
-    0 hits stored in this event
+    97 hits stored in this event
 >>> Event: 92
     0 hits stored in this event
 >>> Event: 93
     0 hits stored in this event
 >>> Event: 94
-    0 hits stored in this event
+    45 hits stored in this event
 >>> Event: 95
-    8 hits stored in this event
+    0 hits stored in this event
 >>> Event: 96
-    7 hits stored in this event
+    0 hits stored in this event
 >>> Event: 97
-    0 hits stored in this event
+    41 hits stored in this event
 >>> Event: 98
-    0 hits stored in this event
+    3 hits stored in this event
 >>> Event: 99
-    0 hits stored in this event
+    169 hits stored in this event
 ### Run 1 starts.
 --> Event 0 starts.
 >>> Event: 0
-    93 hits stored in this event
+    69 hits stored in this event
 >>> Event: 1
-    89 hits stored in this event
+    109 hits stored in this event
 >>> Event: 2
-    123 hits stored in this event
+    69 hits stored in this event
 >>> Event: 3
-    253 hits stored in this event
+    90 hits stored in this event
 >>> Event: 4
-    82 hits stored in this event
+    575 hits stored in this event
 >>> Event: 5
-    105 hits stored in this event
+    118 hits stored in this event
 >>> Event: 6
-    1424 hits stored in this event
+    105 hits stored in this event
 >>> Event: 7
-    2306 hits stored in this event
+    100 hits stored in this event
 >>> Event: 8
-    124 hits stored in this event
+    89 hits stored in this event
 >>> Event: 9
-    124 hits stored in this event
+    472 hits stored in this event
 >>> Event: 10
-    137 hits stored in this event
+    124 hits stored in this event
 >>> Event: 11
-    83 hits stored in this event
+    49 hits stored in this event
 >>> Event: 12
-    131 hits stored in this event
+    123 hits stored in this event
 >>> Event: 13
-    129499 hits stored in this event
+    50 hits stored in this event
 >>> Event: 14
-    51 hits stored in this event
+    68 hits stored in this event
 >>> Event: 15
     92 hits stored in this event
 >>> Event: 16
-    236 hits stored in this event
->>> Event: 17
-    69 hits stored in this event
->>> Event: 18
-    75 hits stored in this event
->>> Event: 19
-    61 hits stored in this event
->>> Event: 20
-    1833 hits stored in this event
->>> Event: 21
-    153 hits stored in this event
->>> Event: 22
-    64 hits stored in this event
->>> Event: 23
-    148 hits stored in this event
->>> Event: 24
-    99 hits stored in this event
->>> Event: 25
-    169 hits stored in this event
->>> Event: 26
-    66 hits stored in this event
->>> Event: 27
-    114 hits stored in this event
->>> Event: 28
-    77 hits stored in this event
->>> Event: 29
-    135 hits stored in this event
->>> Event: 30
-    78 hits stored in this event
->>> Event: 31
-    88 hits stored in this event
->>> Event: 32
-    184 hits stored in this event
->>> Event: 33
-    2286 hits stored in this event
->>> Event: 34
-    125 hits stored in this event
->>> Event: 35
-    121 hits stored in this event
->>> Event: 36
-    96 hits stored in this event
->>> Event: 37
-    93 hits stored in this event
->>> Event: 38
-    171 hits stored in this event
->>> Event: 39
     58 hits stored in this event
->>> Event: 40
-    304 hits stored in this event
->>> Event: 41
-    163 hits stored in this event
->>> Event: 42
-    188 hits stored in this event
->>> Event: 43
-    80 hits stored in this event
->>> Event: 44
-    77 hits stored in this event
->>> Event: 45
-    84 hits stored in this event
->>> Event: 46
-    63 hits stored in this event
->>> Event: 47
-    160 hits stored in this event
->>> Event: 48
-    83 hits stored in this event
->>> Event: 49
-    147 hits stored in this event
->>> Event: 50
-    453 hits stored in this event
->>> Event: 51
-    66 hits stored in this event
->>> Event: 52
-    129 hits stored in this event
->>> Event: 53
-    68 hits stored in this event
->>> Event: 54
-    78 hits stored in this event
->>> Event: 55
-    76 hits stored in this event
->>> Event: 56
-    83 hits stored in this event
->>> Event: 57
-    136 hits stored in this event
->>> Event: 58
-    64 hits stored in this event
->>> Event: 59
-    105 hits stored in this event
->>> Event: 60
-    108 hits stored in this event
->>> Event: 61
-    145 hits stored in this event
->>> Event: 62
-    442 hits stored in this event
->>> Event: 63
-    74 hits stored in this event
->>> Event: 64
-    55 hits stored in this event
->>> Event: 65
-    201 hits stored in this event
->>> Event: 66
-    154 hits stored in this event
->>> Event: 67
-    161 hits stored in this event
->>> Event: 68
-    195 hits stored in this event
->>> Event: 69
+>>> Event: 17
+    166 hits stored in this event
+>>> Event: 18
+    120 hits stored in this event
+>>> Event: 19
     210 hits stored in this event
->>> Event: 70
-    407 hits stored in this event
->>> Event: 71
-    363 hits stored in this event
->>> Event: 72
-    190 hits stored in this event
->>> Event: 73
-    81 hits stored in this event
->>> Event: 74
-    95 hits stored in this event
->>> Event: 75
-    866 hits stored in this event
->>> Event: 76
-    255 hits stored in this event
->>> Event: 77
-    248 hits stored in this event
->>> Event: 78
-    57 hits stored in this event
->>> Event: 79
-    391 hits stored in this event
->>> Event: 80
-    45 hits stored in this event
->>> Event: 81
-    76 hits stored in this event
->>> Event: 82
-    187 hits stored in this event
->>> Event: 83
-    66 hits stored in this event
->>> Event: 84
-    972 hits stored in this event
->>> Event: 85
-    158 hits stored in this event
->>> Event: 86
-    2528 hits stored in this event
->>> Event: 87
+>>> Event: 20
+    178 hits stored in this event
+>>> Event: 21
+    97 hits stored in this event
+>>> Event: 22
+    71 hits stored in this event
+>>> Event: 23
     124 hits stored in this event
->>> Event: 88
-    141 hits stored in this event
->>> Event: 89
-    1201 hits stored in this event
->>> Event: 90
-    133 hits stored in this event
->>> Event: 91
-    1624 hits stored in this event
->>> Event: 92
-    491 hits stored in this event
->>> Event: 93
-    61 hits stored in this event
->>> Event: 94
-    137 hits stored in this event
->>> Event: 95
-    69 hits stored in this event
->>> Event: 96
-    157 hits stored in this event
->>> Event: 97
+>>> Event: 24
+    90 hits stored in this event
+>>> Event: 25
+    4035 hits stored in this event
+>>> Event: 26
+    45 hits stored in this event
+>>> Event: 27
+    160 hits stored in this event
+>>> Event: 28
+    87 hits stored in this event
+>>> Event: 29
+    106 hits stored in this event
+>>> Event: 30
+    153 hits stored in this event
+>>> Event: 31
+    58 hits stored in this event
+>>> Event: 32
+    82 hits stored in this event
+>>> Event: 33
     88 hits stored in this event
+>>> Event: 34
+    62 hits stored in this event
+>>> Event: 35
+    89 hits stored in this event
+>>> Event: 36
+    116 hits stored in this event
+>>> Event: 37
+    69 hits stored in this event
+>>> Event: 38
+    237 hits stored in this event
+>>> Event: 39
+    99 hits stored in this event
+>>> Event: 40
+    80 hits stored in this event
+>>> Event: 41
+    81 hits stored in this event
+>>> Event: 42
+    118 hits stored in this event
+>>> Event: 43
+    73 hits stored in this event
+>>> Event: 44
+    103 hits stored in this event
+>>> Event: 45
+    179 hits stored in this event
+>>> Event: 46
+    90 hits stored in this event
+>>> Event: 47
+    776 hits stored in this event
+>>> Event: 48
+    128 hits stored in this event
+>>> Event: 49
+    82 hits stored in this event
+>>> Event: 50
+    91 hits stored in this event
+>>> Event: 51
+    555 hits stored in this event
+>>> Event: 52
+    221 hits stored in this event
+>>> Event: 53
+    103 hits stored in this event
+>>> Event: 54
+    67 hits stored in this event
+>>> Event: 55
+    113 hits stored in this event
+>>> Event: 56
+    53 hits stored in this event
+>>> Event: 57
+    107 hits stored in this event
+>>> Event: 58
+    74 hits stored in this event
+>>> Event: 59
+    113 hits stored in this event
+>>> Event: 60
+    123 hits stored in this event
+>>> Event: 61
+    98 hits stored in this event
+>>> Event: 62
+    62 hits stored in this event
+>>> Event: 63
+    235 hits stored in this event
+>>> Event: 64
+    108 hits stored in this event
+>>> Event: 65
+    140 hits stored in this event
+>>> Event: 66
+    47 hits stored in this event
+>>> Event: 67
+    96 hits stored in this event
+>>> Event: 68
+    95 hits stored in this event
+>>> Event: 69
+    74 hits stored in this event
+>>> Event: 70
+    137 hits stored in this event
+>>> Event: 71
+    410 hits stored in this event
+>>> Event: 72
+    85 hits stored in this event
+>>> Event: 73
+    136 hits stored in this event
+>>> Event: 74
+    76 hits stored in this event
+>>> Event: 75
+    98 hits stored in this event
+>>> Event: 76
+    46 hits stored in this event
+>>> Event: 77
+    67 hits stored in this event
+>>> Event: 78
+    83 hits stored in this event
+>>> Event: 79
+    69 hits stored in this event
+>>> Event: 80
+    177 hits stored in this event
+>>> Event: 81
+    802 hits stored in this event
+>>> Event: 82
+    870 hits stored in this event
+>>> Event: 83
+    179 hits stored in this event
+>>> Event: 84
+    61 hits stored in this event
+>>> Event: 85
+    183 hits stored in this event
+>>> Event: 86
+    51 hits stored in this event
+>>> Event: 87
+    81 hits stored in this event
+>>> Event: 88
+    283 hits stored in this event
+>>> Event: 89
+    333 hits stored in this event
+>>> Event: 90
+    111 hits stored in this event
+>>> Event: 91
+    106 hits stored in this event
+>>> Event: 92
+    107 hits stored in this event
+>>> Event: 93
+    238 hits stored in this event
+>>> Event: 94
+    251 hits stored in this event
+>>> Event: 95
+    131 hits stored in this event
+>>> Event: 96
+    172 hits stored in this event
+>>> Event: 97
+    135 hits stored in this event
 >>> Event: 98
-    84 hits stored in this event
+    92 hits stored in this event
 >>> Event: 99
-    63 hits stored in this event
+    79 hits stored in this event
 ### Run 2 starts.
 --> Event 0 starts.
 

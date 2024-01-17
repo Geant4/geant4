@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -20,6 +20,8 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 **************************************************************
 
 Physic list : MicroElecPhysics
+Phonon model is constructed 
+Phonon Energy = 0 eV  
 
 ### === G4UAtomicDeexcitation::InitialiseForNewRun()
 MicroElecPhysics::SetCuts:CutLength : 1 um 
@@ -50,6 +52,10 @@ Registered graphics systems are:
   TOOLSSG_XT_ZB (TSG_XT_ZB, TSGXtZB)
   TOOLSSG_QT_GLES (TSG_QT_GLES, TSGQt, TSG)
   TOOLSSG_QT_ZB (TSG_QT_ZB, TSGQtZB)
+Default graphics system is: TSG_OFFSCREEN (based on batch session).
+Default window size hint is: 600x600-0+0 (based on G4VisManager initialisation).
+Note: Parameters specified on the command line will override these defaults.
+      Use "vis/open" without parameters to get these defaults.
 
 Registering model factories...
 
@@ -339,7 +345,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x2817030
+##### Create analysis manager   0x802880
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -351,25 +357,25 @@ Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.4/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.5/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
 MicroElasticModel, Material 2 / 2 : G4_Si
 Si
 Reading TCS file
 Elastic Total Cross file : Elastic/elsepa_elastic_cross_e_Si
 loaddata : Elastic/elsepa_elastic_cross_e_Si
-Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.4/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
+Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.5/microelec/Elastic/elsepa_elastic_cumulated_diffcross_e_Si.dat
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.330000s Real=0.373924s Sys=0.020000s
+  User=0.380000s Real=0.546559s Sys=0.030000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done
 Number and type of particles created outside region "Target" :
-N e- : 1
+N e- : 3
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 6212
+N e- : 3739
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -393,12 +399,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0221 MB
-Pool ID '7G4Track', size : 0.0433 MB
+Pool ID '17G4DynamicParticle', size : 0.024 MB
+Pool ID '7G4Track', size : 0.0481 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.079 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.086 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -4,7 +4,17 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
-## 2022-04-01 mma (NeutronSource-V11-00-01)
+## 2023-11-10 Alberto Ribon (NeutronSource-V11-01-01)
+- In all macro files, introduced the UI command
+  '/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year'
+  to allow all radioactive decays (including the very long ones).
+  This is necessary since G4 11.2, being 1 year the default time
+  threshold above which the decays are ignored.
+
+## 2023-07-12 Michel Maire (NeutronSource-V11-01-00)
+- revision of all headers
+
+## 2022-04-01 Michel Maire (NeutronSource-V11-00-01)
 - PhysicsList: add G4NuclideTable::SetThresholdOfHalfLife(1ns*log2)
 
 ## 2021-12-10 Ben Morgan (NeutronSource-V11-00-00)

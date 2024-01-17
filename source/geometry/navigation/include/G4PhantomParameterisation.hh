@@ -43,9 +43,9 @@
 #include "G4Types.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4AffineTransform.hh"
+#include "G4VTouchable.hh" 
 
 class G4VPhysicalVolume;
-class G4VTouchable; 
 class G4VSolid;
 class G4Material;
 

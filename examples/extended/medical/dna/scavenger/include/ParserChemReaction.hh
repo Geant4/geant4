@@ -33,12 +33,12 @@
 #include <vector>
 #include <array>
 
-/// Parser to read user files defining chemical reactions and
-/// scavengers (reaction with background)
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace scavenger
 {
+
+/// Parser to read user files defining chemical reactions and
+/// scavengers (reaction with background)
 
 class ParserChemReaction {
 public:

@@ -91,6 +91,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   ifndef QTHOME
     QTHOME := /Library/Frameworks
   endif
+  ifndef QT_VERSION
+    QT_VERSION := 5
+  endif
   ifeq ($(QTHOME),/Library/Frameworks)
     ifndef QTMOC
       QTMOC      := /usr/bin/moc
@@ -103,6 +106,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTHOME)/Qt3DCore.framework/Headers
       QTFLAGS   += -I $(QTHOME)/Qt3DExtras.framework/Headers
       QTFLAGS   += -I $(QTHOME)/Qt3DRender.framework/Headers
+      ifeq ($(QT_VERSION),6)
+        QTFLAGS   += -I $(QTHOME)/QtOpenGLWidgets.framework/Headers
+      endif
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBPATH
@@ -129,8 +135,14 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     ifndef GLQTLIBS  
       ifdef QT_AS_FRAMEWORK
         GLQTLIBS  := $(QTLIBPATH) -framework QtCore -framework QtGui -framework QtOpenGL
+        ifeq ($(QT_VERSION),6)
+          GLQTLIBS += -framework QtOpenGLWidgets
+        endif
       else
         GLQTLIBS  := -L$(QTLPATH) -lQtCore -lQtGui -lQtOpenGL
+        ifeq ($(QT_VERSION),6)
+          GLQTLIBS += -lQtOpenGLWidgets
+        endif
       endif   
     endif
   else
@@ -138,7 +150,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTMOC      := $(QTHOME)/bin/moc
     endif
     QTLPATH  := $(QTHOME)/lib
-    ifndef QTFLAGS                          # Qt5
+    ifndef QTFLAGS
       QTFLAGS   := -I $(QTLPATH)/QtCore.framework/Headers 
       QTFLAGS   += -I $(QTLPATH)/QtGui.framework/Headers 
       QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
@@ -147,6 +159,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTLPATH)/Qt3DExtras.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/Qt3DRender.framework/Headers
       QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
+      ifeq ($(QT_VERSION),6)
+        QTFLAGS   += -I $(QTHOME)/QtOpenGLWidgets.framework/Headers
+      endif
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
@@ -161,6 +176,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       GLQTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
       GLQTLIBS    += -framework QtWidgets
       GLQTLIBS    += -framework QtOpenGL
+      ifeq ($(QT_VERSION),6)
+        GLQTLIBS  += -framework QtOpenGLWidgets
+      endif
     endif   
   endif
 

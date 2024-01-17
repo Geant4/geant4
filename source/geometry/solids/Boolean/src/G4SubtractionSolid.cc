@@ -607,8 +607,9 @@ G4double G4SubtractionSolid::GetCubicVolume()
      bminB.x() < bmaxA.x() && bminB.y() < bmaxA.y() && bminB.z() < bmaxA.z();
   if ( canIntersect )
   {
-    G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Union",
+    G4IntersectionSolid intersectVol( "Temporary-Intersection-for-Subtraction",
                                       fPtrSolidA, fPtrSolidB );
+    intersectVol.SetCubVolStatistics(100000);
     intersection = intersectVol.GetCubicVolume();
   }
 

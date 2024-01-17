@@ -1,7 +1,7 @@
 
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(B1Con)
 
 #----------------------------------------------------------------------------
@@ -45,7 +45,6 @@ target_link_libraries(exampleB1Con ${Geant4_LIBRARIES})
 set(EXAMPLEB1_SCRIPTS
   exampleB1Con.in
   exampleB1Con.out
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac

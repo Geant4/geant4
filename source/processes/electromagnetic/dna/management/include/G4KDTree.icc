@@ -68,7 +68,7 @@
 template<typename PointT>
   G4KDNode_Base* G4KDTree::InsertMap(PointT* point)
   {
-    G4KDNode<PointT>* node = new G4KDNode<PointT>(this, point, 0);
+    auto  node = new G4KDNode<PointT>(this, point, 0);
     this->__InsertMap(node);
     return node;
   }
@@ -76,10 +76,10 @@ template<typename PointT>
 template<typename PointT>
   G4KDNode_Base* G4KDTree::Insert(PointT* pos)
   {
-    G4KDNode_Base* node = 0;
+    G4KDNode_Base* node = nullptr;
     if (!fRoot)
     {
-      fRoot = new G4KDNode<PointT>(this, pos, 0);
+      fRoot = new G4KDNode<PointT>(this, pos, nullptr);
       node = fRoot;
       fNbNodes = 0;
       fNbNodes++;
@@ -94,7 +94,7 @@ template<typename PointT>
       }
     }
 
-    if (fRect == 0)
+    if (fRect == nullptr)
     {
       fRect = new HyperRect(fDim);
       fRect->SetMinMax(*pos, *pos);
@@ -110,7 +110,7 @@ template<typename PointT>
 template<typename PointT>
   G4KDNode_Base* G4KDTree::Insert(const PointT& pos)
   {
-    G4KDNode_Base* node = 0;
+    G4KDNode_Base* node = nullptr;
     if (!fRoot)
     {
       fRoot = new G4KDNodeCopy<PointT>(this, pos, 0);
@@ -128,7 +128,7 @@ template<typename PointT>
       }
     }
 
-    if (fRect == 0)
+    if (fRect == nullptr)
     {
       fRect = new HyperRect(fDim);
       fRect->SetMinMax(pos, pos);
@@ -206,8 +206,8 @@ template<typename Position>
   {
     G4int dir = node->GetAxis();
     G4double dummy(0.), dist_sq(-1.);
-    G4KDNode_Base* nearer_subtree(0), *farther_subtree(0);
-    G4double *nearer_hyperrect_coord(0), *farther_hyperrect_coord(0);
+    G4KDNode_Base* nearer_subtree(nullptr), *farther_subtree(nullptr);
+    G4double *nearer_hyperrect_coord(nullptr), *farther_hyperrect_coord(nullptr);
 
     /* Decide whether to go left or right in the tree */
     dummy = pos[dir] - (*node)[dir];
@@ -283,13 +283,13 @@ template<typename Position>
   {
     //    G4cout << "Nearest(pos)" << G4endl ;
 
-    if (!fRect) return 0;
+    if (!fRect) return nullptr;
 
-    G4KDNode_Base *result(0);
+    G4KDNode_Base *result(nullptr);
     G4double dist_sq = DBL_MAX;
 
     /* Duplicate the bounding hyperrectangle, we will work on the copy */
-    HyperRect* newrect = new HyperRect(*fRect);
+    auto  newrect = new HyperRect(*fRect);
 
     /* Our first estimate is the root node */
     /* Search for the nearest neighbour recursively */
@@ -306,10 +306,8 @@ template<typename Position>
       rset->Rewind();
       return rset;
     }
-    else
-    {
-      return 0;
-    }
+    
+    return nullptr;
   }
 
 //__________________________________________________________________
@@ -419,7 +417,7 @@ template<typename Position>
     G4KDTreeResultHandle rset = new G4KDTreeResult(this);
     if ((ret = __NearestInRange(fRoot, pos, range_sq, range, *(rset()), 0)) == -1)
     {
-      rset = 0;
+      rset = nullptr;
       return rset;
     }
     rset->Sort();

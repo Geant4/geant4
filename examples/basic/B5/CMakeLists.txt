@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------
 # Setup the project
-cmake_minimum_required(VERSION 3.16...3.21)
+cmake_minimum_required(VERSION 3.16...3.27)
 project(B5)
 
 #----------------------------------------------------------------------------
@@ -47,12 +47,12 @@ set(B5_SCRIPTS
   icons.mac
   gui.mac
   run.png
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac
   vis.mac
   plotter.mac
+  tsg_offscreen.mac
   )
 
 foreach(_script ${B5_SCRIPTS})

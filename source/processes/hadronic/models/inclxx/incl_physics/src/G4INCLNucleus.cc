@@ -63,16 +63,18 @@
 #include <sstream>
 // #include <cassert>
 #include "G4INCLPbarAtrestEntryChannel.hh"
+#include "G4INCLBinaryCollisionAvatar.hh"
 
 namespace G4INCL {
   
   Nucleus::Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius, 
-                   AnnihilationType AType) //D
+    AnnihilationType AType) //D
     : Cluster(charge,mass,strangess,true),
      theInitialZ(charge), theInitialA(mass), theInitialS(strangess),
      theNpInitial(0), theNnInitial(0), 
      theNpionplusInitial(0), theNpionminusInitial(0), 
      theNkaonplusInitial(0), theNkaonminusInitial(0),
+     theNantiprotonInitial(0),
      initialInternalEnergy(0.),
      incomingAngularMomentum(0.,0.,0.), incomingMomentum(0.,0.,0.),
      initialCenterOfMass(0.,0.,0.),
@@ -122,6 +124,14 @@ namespace G4INCL {
      * are caching them
     delete thePotential;
     delete theDensity;*/
+  }
+
+  AnnihilationType Nucleus::getAType() const {
+    return theAType;
+  }
+
+  void Nucleus::setAType(AnnihilationType type) {
+    theAType = type;
   }
 
   void Nucleus::initializeParticles() {
@@ -229,8 +239,13 @@ namespace G4INCL {
         totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
       else if((*p)->isResonance())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::effectiveNucleonMass;
-      else if((*p)->isHyperon() || (*p)->isAntiNucleon())
+      else if((*p)->isHyperon())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::getRealMass((*p)->getType());
+      else if((*p)->isAntiNucleon())
+        totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() + ParticleTable::getINCLMass(Proton) - ParticleTable::getProtonSeparationEnergy();
+      else if((*p)->isAntiLambda())
+        totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() + ParticleTable::getRealMass((*p)->getType()) - ParticleTable::getSeparationEnergyINCL(Lambda, theA, theZ);
+        //std::cout << ParticleTable::getRealMass((*p)->getType()) << std::endl;}
       else
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy();
     }
@@ -288,8 +303,29 @@ namespace G4INCL {
     const G4double totalEnergy = computeTotalEnergy();
     const G4double separationEnergies = computeSeparationEnergyBalance();
 
-    return totalEnergy - initialInternalEnergy - separationEnergies;
+G4double eSep = 0;
+if (getAType() == AnnihilationType::Def) {
+} else if (getAType()  == AnnihilationType::PType) {
+} else if (getAType()  == AnnihilationType::NType) {
+} else if (getAType()  == AnnihilationType::PTypeInFlight) {
+  eSep = ParticleTable::getProtonSeparationEnergy();
+} else if (getAType()  == AnnihilationType::NTypeInFlight) {
+  eSep = ParticleTable::getNeutronSeparationEnergy();
+} else if (getAType()  == AnnihilationType::NbarPTypeInFlight) {
+  eSep = ParticleTable::getProtonSeparationEnergy();
+} else if (getAType()  == AnnihilationType::NbarNTypeInFlight) {
+  eSep = ParticleTable::getNeutronSeparationEnergy();
+}
+
+  if (eSep > 0. && (totalEnergy - initialInternalEnergy - separationEnergies - eSep) < 0.) {
+     INCL_DEBUG("Negative Excitation Energy due to a Nbar Annihilation process (separation energy of the nucleon annihilated...); E* = " << (totalEnergy - initialInternalEnergy - separationEnergies - eSep) << '\n');
   }
+  
+  return totalEnergy - initialInternalEnergy - separationEnergies - eSep; 
+  
+  }
+
+//thePotential->getSeparationEnergy(Proton)
 
   std::string Nucleus::print()
   {
@@ -1054,9 +1090,15 @@ namespace G4INCL {
       
       eventInfo->ParticleBias[eventInfo->nParticles] = (*i)->getParticleBias();
       
+#ifdef INCLXX_IN_GEANT4_MODE
       eventInfo->A[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getA();
       eventInfo->Z[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getZ();
       eventInfo->S[eventInfo->nParticles] = (G4INCL::Short_t)(*i)->getS();
+#else
+      eventInfo->A[eventInfo->nParticles] = (Short_t)(*i)->getA();
+      eventInfo->Z[eventInfo->nParticles] = (Short_t)(*i)->getZ();
+      eventInfo->S[eventInfo->nParticles] = (Short_t)(*i)->getS();
+#endif 
       eventInfo->emissionTime[eventInfo->nParticles] = (*i)->getEmissionTime();
       eventInfo->EKin[eventInfo->nParticles] = (*i)->getKineticEnergy();
       ThreeVector mom = (*i)->getMomentum();
@@ -1087,9 +1129,15 @@ namespace G4INCL {
 
     // Projectile-like remnant characteristics
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
+#ifdef INCLXX_IN_GEANT4_MODE
       eventInfo->ARem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getA();
       eventInfo->ZRem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getZ();
       eventInfo->SRem[eventInfo->nRemnants] = (G4INCL::Short_t)theProjectileRemnant->getS();
+#else
+      eventInfo->ARem[eventInfo->nRemnants] = (Short_t)theProjectileRemnant->getA();
+      eventInfo->ZRem[eventInfo->nRemnants] = (Short_t)theProjectileRemnant->getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = (Short_t)theProjectileRemnant->getS();
+#endif 
       G4double eStar = theProjectileRemnant->getExcitationEnergy();
       if(std::abs(eStar)<1E-10)
         eStar = 0.0; // blame rounding and set the excitation energy to zero
@@ -1118,9 +1166,15 @@ namespace G4INCL {
 
     // Target-like remnant characteristics
     if(hasRemnant()) {
+#ifdef INCLXX_IN_GEANT4_MODE
       eventInfo->ARem[eventInfo->nRemnants] = (G4INCL::Short_t)getA();
       eventInfo->ZRem[eventInfo->nRemnants] = (G4INCL::Short_t)getZ();
       eventInfo->SRem[eventInfo->nRemnants] = (G4INCL::Short_t)getS();
+#else
+      eventInfo->ARem[eventInfo->nRemnants] = (Short_t)getA();
+      eventInfo->ZRem[eventInfo->nRemnants] = (Short_t)getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = (Short_t)getS();
+#endif 
       eventInfo->EStarRem[eventInfo->nRemnants] = getExcitationEnergy();
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
     INCL_WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << " eventNumber=" << eventInfo->eventNumber << '\n');
@@ -1185,6 +1239,7 @@ namespace G4INCL {
       theBalance.energy -= (*i)->getEnergy(); // Note that outgoing particles should have the real mass
       theBalance.momentum -= (*i)->getMomentum();
     }
+
     // Projectile-like remnant contribution, if present
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
       theBalance.Z -= theProjectileRemnant->getZ();

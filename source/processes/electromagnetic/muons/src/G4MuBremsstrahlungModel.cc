@@ -91,7 +91,17 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
   nist = G4NistManager::Instance();  
 
   SetAngularDistribution(new G4ModifiedMephi());
-  if(nullptr != p) { SetParticle(p); }
+
+  if (nullptr != p) { SetParticle(p); }
+  if (0.0 == fDN[1]) {
+    for (G4int i=1; i<93; ++i) {
+      G4double dn = 1.54*nist->GetA27(i);
+      fDN[i] = dn;
+      if(1 < i) {
+	fDN[i] /= std::pow(dn, 1./G4double(i));
+      }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,15 +144,6 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     fParticleChange = GetParticleChangeForLoss(); 
   }
   if(IsMaster() && p == particle && lowestKinEnergy < HighEnergyLimit()) { 
-    if(0.0 == fDN[1]) {
-      for(G4int i=1; i<93; ++i) {
-        G4double dn = 1.54*nist->GetA27(i);
-        fDN[i] = dn;
-        if(1 < i) {
-          fDN[i] /= std::pow(dn, 1./G4double(i));
-        }
-      }
-    }
     InitialiseElementSelectors(p, cuts); 
   }
 }

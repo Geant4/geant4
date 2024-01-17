@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2023-11-14 I. Hrivnacova (scavenger-V11-01-00)
+- Fixes for Doxygen:
+  Move class description comments after namespace
+
 ## 2022-11-09  I. Hrivnacova (scavenger-V11-00-05)
 - Fixed Doxygen documentation
 

@@ -47,7 +47,7 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
   : G4VUserPrimaryGeneratorAction()
-  , fParticleGun(0)
+  , fParticleGun(nullptr)
 {
   G4int n_particle = 1;
   fParticleGun     = new G4ParticleGun(n_particle);
@@ -55,11 +55,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   // create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);
 
-  fRandomDirection = false;
-  fPolarized       = false;
-  fPolarization    = 0.;
-  // default kinematic
-  //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("e+");
 

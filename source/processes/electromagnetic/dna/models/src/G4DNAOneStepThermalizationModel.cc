@@ -189,10 +189,10 @@ double Terrisol1990::Get3DStdDeviation(double energy){
     //  prevent H2O and secondary electron to be at the spot
     return 1e-3*CLHEP::nanometer;
   }
-  else if(k_eV == 9.){
+  if(k_eV == 9.){
     return gStdDev_T1990[10];
   }
-  else if(k_eV > 9.){
+  if(k_eV > 9.){
     G4ExceptionDescription description;
     description << "Terrisol1990 is not tabulated for energies greater than 9eV";
     G4Exception("Terrisol1990::Get3DStdDeviation",
@@ -261,32 +261,30 @@ G4VEmModel* G4DNASolvationModelFactory::Create(const G4String& penetrationModel)
   {
     return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Terrisol1990>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
-  else if(penetrationModel == "Meesungnoen2002")
+  if(penetrationModel == "Meesungnoen2002")
   {
     return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
-  else if(penetrationModel == "Meesungnoen2002_amorphous")
+  if(penetrationModel == "Meesungnoen2002_amorphous")
   {
 	return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002_amorphous>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
-  else if(penetrationModel == "Kreipl2009")
+  if(penetrationModel == "Kreipl2009")
   {
 	return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Kreipl2009>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
-  else if(penetrationModel == "Ritchie1994")
+  if(penetrationModel == "Ritchie1994")
   {
     return new G4TDNAOneStepThermalizationModel<DNA::Penetration::Ritchie1994>(G4Electron::Definition(), modelNamePrefix + penetrationModel);
   }
-  else
-  {
-    G4ExceptionDescription description;
-    description << penetrationModel + " is not a valid model name.";
-    G4Exception("G4DNASolvationModelFactory::Create",
-                "INVALID_ARGUMENT",
-                FatalErrorInArgument,
-                description,
-                "Options are: Terrisol1990, Meesungnoen2002, Ritchie1994.");
-  }
+  
+  G4ExceptionDescription description;
+  description << penetrationModel + " is not a valid model name.";
+  G4Exception("G4DNASolvationModelFactory::Create",
+              "INVALID_ARGUMENT",
+              FatalErrorInArgument,
+              description,
+              "Options are: Terrisol1990, Meesungnoen2002, Ritchie1994.");
   return nullptr;
 }
 

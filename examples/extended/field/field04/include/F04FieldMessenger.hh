@@ -47,29 +47,29 @@ class F04FieldMessenger: public G4UImessenger
 {
   public:
     F04FieldMessenger(F04GlobalField*, F04DetectorConstruction* );
-    virtual ~F04FieldMessenger();
+    ~F04FieldMessenger() override;
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    void SetNewValue(G4UIcommand*, G4String) override;
+
   private:
 
-    F04GlobalField*            fGlobalField;
- 
-    G4UIdirectory*             fDetDir;
+    F04GlobalField*            fGlobalField = nullptr;
 
-    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
-    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
+    G4UIdirectory*             fDetDir = nullptr;
 
-    G4UIcmdWithAnInteger*      fStepperCMD;
-    G4UIcmdWithADoubleAndUnit* fMinStepCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaChordCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaIntersectionCMD;
-    G4UIcmdWithADoubleAndUnit* fEpsMinCMD;
-    G4UIcmdWithADoubleAndUnit* fEpsMaxCMD;
+    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd = nullptr;
+    G4UIcmdWithADoubleAndUnit* fTransferBCmd = nullptr;
 
-    F04DetectorConstruction*   fDetector;
+    G4UIcmdWithAnInteger*      fStepperCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fMinStepCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDeltaChordCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fDeltaIntersectionCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fEpsMinCMD = nullptr;
+    G4UIcmdWithADoubleAndUnit* fEpsMaxCMD = nullptr;
+
+    F04DetectorConstruction*   fDetector = nullptr;
 };
 
 #endif

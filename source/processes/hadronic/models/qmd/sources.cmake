@@ -11,6 +11,12 @@ geant4_add_module(G4hadronic_qmd
     G4QMDParticipant.hh
     G4QMDReaction.hh
     G4QMDSystem.hh
+    G4LightIonQMDCollision.hh
+    G4LightIonQMDGroundStateNucleus.hh
+    G4LightIonQMDMeanField.hh
+    G4LightIonQMDNucleus.hh
+    G4LightIonQMDParameters.hh
+    G4LightIonQMDReaction.hh
   SOURCES
     G4QMDCollision.cc
     G4QMDGroundStateNucleus.cc
@@ -19,7 +25,13 @@ geant4_add_module(G4hadronic_qmd
     G4QMDParameters.cc
     G4QMDParticipant.cc
     G4QMDReaction.cc
-    G4QMDSystem.cc)
+    G4QMDSystem.cc
+    G4LightIonQMDCollision.cc
+    G4LightIonQMDGroundStateNucleus.cc
+    G4LightIonQMDMeanField.cc
+    G4LightIonQMDNucleus.cc
+    G4LightIonQMDParameters.cc
+    G4LightIonQMDReaction.cc)
 
 geant4_module_link_libraries(G4hadronic_qmd
   PUBLIC

@@ -9,7 +9,7 @@
   for(int i=1; i < 7; ++i)
   {
     c1->cd(i);
-    const char* hname = std::string("h"+std::to_string(i)).c_str(); // h1, h2, .. h6
-    f0.Get(hname)->Draw("HIST");
+    auto hname = std::string("h"+std::to_string(i)); // h1, h2, .. h6
+    f0.Get(hname.c_str())->Draw("HIST");
   }
 }

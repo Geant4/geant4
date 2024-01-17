@@ -48,7 +48,7 @@ using namespace std;
 
 G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
                                                    const G4String& nam) :
-G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam) 
 {
   slaterEffectiveCharge[0] = 0.;
   slaterEffectiveCharge[1] = 0.;
@@ -154,7 +154,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // Cross section
 
-  G4DNACrossSectionDataSet* tableProton = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+  auto  tableProton = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
       eV,
       scaleFactor );
   tableProton->LoadData(fileProton);
@@ -170,7 +170,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // Cross section
 
-  G4DNACrossSectionDataSet* tableHydrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+  auto  tableHydrogen = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
       eV,
       scaleFactor );
   tableHydrogen->LoadData(fileHydrogen);
@@ -187,7 +187,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // Cross section
 
-  G4DNACrossSectionDataSet* tableAlphaPlusPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+  auto  tableAlphaPlusPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
       eV,
       scaleFactor );
   tableAlphaPlusPlus->LoadData(fileAlphaPlusPlus);
@@ -204,7 +204,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // Cross section
 
-  G4DNACrossSectionDataSet* tableAlphaPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+  auto  tableAlphaPlus = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
       eV,
       scaleFactor );
   tableAlphaPlus->LoadData(fileAlphaPlus);
@@ -220,7 +220,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // Cross section
 
-  G4DNACrossSectionDataSet* tableHelium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+  auto  tableHelium = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
       eV,
       scaleFactor );
   tableHelium->LoadData(fileHelium);
@@ -367,7 +367,7 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material* mater
     if (pos != tableData.end())
     {
       G4DNACrossSectionDataSet* table = pos->second;
-      if (table != 0)
+      if (table != nullptr)
       {
         sigma = table->FindValue(k);
       }
@@ -480,7 +480,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
         Z, ionizationShell,
         couple->GetMaterial());
 
-    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
+    auto  dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
     fvect->push_back(dp);
 
     // Ignored for ions on electrons
@@ -513,7 +513,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
 
     // SI: only atomic deexcitation from K shell is considered
-    if(fAtomDeexcitation && ionizationShell == 4)
+    if((fAtomDeexcitation != nullptr) && ionizationShell == 4)
     {
       const G4AtomicShell* shell 
         = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
@@ -536,7 +536,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
  	     //Invalid secondary: not enough energy to create it!
  	     //Keep its energy in the local deposit
              delete (*fvect)[i]; 
-             (*fvect)[i]=0;
+             (*fvect)[i]=nullptr;
           }
 	} 
       }
@@ -987,15 +987,14 @@ G4double G4DNARuddIonisationModel::CorrectionFactor(G4ParticleDefinition* partic
   if (particleDefinition == G4Proton::Proton())
   {
     return (1.);
-  } else if (particleDefinition == hydrogenDef)
+  }
+  if (particleDefinition == hydrogenDef)
   {
     G4double value = (G4Log(k / eV)/gpow->logZ(10) - 4.2) / 0.5;
     // The following values are provided by M. Dingfelder (priv. comm)
     return ((0.6 / (1 + G4Exp(value))) + 0.9);
-  } else
-  {
-    return (1.);
-  }
+  } 
+  return (1.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1019,11 +1018,11 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k,
   {
     G4DNACrossSectionDataSet* table = pos->second;
 
-    if (table != 0)
+    if (table != nullptr)
     {
-      G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
+      auto  valuesBuffer = new G4double[table->NumberOfComponents()];
 
-      const G4int n = (G4int)table->NumberOfComponents();
+      const auto  n = (G4int)table->NumberOfComponents();
       G4int i(n);
       G4double value = 0.;
 
@@ -1050,7 +1049,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k,
         value -= valuesBuffer[i];
       }
 
-      if (valuesBuffer)
+      
         delete[] valuesBuffer;
 
     }
@@ -1103,7 +1102,7 @@ G4double G4DNARuddIonisationModel::PartialCrossSection(const G4Track& track)
     if (pos != tableData.end())
     {
       G4DNACrossSectionDataSet* table = pos->second;
-      if (table != 0)
+      if (table != nullptr)
       {
         sigma = table->FindValue(k);
       }

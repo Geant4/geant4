@@ -137,25 +137,25 @@ template<typename MODEL=DNA::Penetration::Meesungnoen2002>
 class G4TDNAOneStepThermalizationModel : public G4VEmModel
 {
 public:
-  typedef MODEL Model;
-  G4TDNAOneStepThermalizationModel(const G4ParticleDefinition* p = 0,
+  using Model = MODEL;
+  G4TDNAOneStepThermalizationModel(const G4ParticleDefinition* p = nullptr,
                                    const G4String& nam =
                                       "DNAOneStepThermalizationModel");
-  virtual ~G4TDNAOneStepThermalizationModel();
+  ~G4TDNAOneStepThermalizationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
 
   inline void SetVerbose(int flag){
     fVerboseLevel = flag;
@@ -170,7 +170,7 @@ protected:
   const std::vector<G4double>* fpWaterDensity;
 
   G4ParticleChangeForGamma* fpParticleChangeForGamma;
-  G4bool fIsInitialised;
+  G4bool fIsInitialised{false};
   G4int fVerboseLevel;
   std::unique_ptr<G4Navigator> fpNavigator;
 
@@ -182,7 +182,7 @@ private:
 
 #include "G4DNAOneStepThermalizationModel.hpp"
 
-typedef G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002> G4DNAOneStepThermalizationModel;
+using G4DNAOneStepThermalizationModel = G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002>;
 
 // typedef G4TDNAOneStepThermalizationModel<DNA::Penetration::Terrisol1990> G4DNAOneStepThermalizationModel;
 // Note: if you use the above distribution, it would be

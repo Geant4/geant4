@@ -43,8 +43,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
- : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(nullptr)
 {
   G4int nofParticles = 1;
   fParticleGun = new G4ParticleGun(nofParticles);

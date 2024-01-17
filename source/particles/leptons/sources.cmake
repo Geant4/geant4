@@ -31,4 +31,4 @@ geant4_add_module(G4leptons
     G4TauMinus.cc
     G4TauPlus.cc)
 
-geant4_module_link_libraries(G4leptons PUBLIC G4globman G4partman)
+geant4_module_link_libraries(G4leptons PUBLIC G4partman PRIVATE G4globman)

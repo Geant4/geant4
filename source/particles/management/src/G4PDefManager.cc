@@ -56,20 +56,19 @@ G4PDefData*& G4PDefManager::offset()
   return _instance;
 }
 
-G4PDefManager::G4PDefManager() 
+G4PDefManager::G4PDefManager()
 {
   G4MUTEXINIT(mutex);
 }
 
 G4int G4PDefManager::CreateSubInstance()
-  // Invoked by the master or work thread to create a new subinstance
-  // whenever a new split class instance is created. For each worker
-  // thread, ions are created dynamically.
+// Invoked by the master or work thread to create a new subinstance
+// whenever a new split class instance is created. For each worker
+// thread, ions are created dynamically.
 {
   G4AutoLock l(&mutex);
   ++totalobj;
-  if (totalobj > slavetotalspace())
-  {
+  if (totalobj > slavetotalspace()) {
     l.unlock();
     NewSubInstances();
     l.lock();
@@ -78,32 +77,33 @@ G4int G4PDefManager::CreateSubInstance()
 }
 
 void G4PDefManager::NewSubInstances()
-  // Invoked by each worker thread to grow the subinstance array and
-  // initialize each new subinstance using a particular method defined
-  // by the subclass.
+// Invoked by each worker thread to grow the subinstance array and
+// initialize each new subinstance using a particular method defined
+// by the subclass.
 {
   G4AutoLock l(&mutex);
-  if (slavetotalspace()  >= totalobj)  { return; }
+  if (slavetotalspace() >= totalobj) {
+    return;
+  }
   G4int originaltotalspace = slavetotalspace();
   slavetotalspace() = totalobj + 512;
-  offset() = (G4PDefData *) realloc(offset(),
-                                    slavetotalspace() * sizeof(G4PDefData));
-  if (offset() == nullptr)
-  {
-    G4Exception("G4PDefManager::NewSubInstances()",
-                "OutOfMemory", FatalException, "Cannot malloc space!");
+  offset() = (G4PDefData*)realloc(offset(), slavetotalspace() * sizeof(G4PDefData));
+  if (offset() == nullptr) {
+    G4Exception("G4PDefManager::NewSubInstances()", "OutOfMemory", FatalException,
+                "Cannot malloc space!");
   }
 
-  for (G4int i = originaltotalspace; i < slavetotalspace(); ++i)
-  {
+  for (G4int i = originaltotalspace; i < slavetotalspace(); ++i) {
     offset()[i].initialize();
   }
 }
 
+// Invoked by all threads to free the subinstance array.
 void G4PDefManager::FreeSlave()
-  // Invoked by all threads to free the subinstance array.
 {
-  if (offset() == nullptr)  { return; }
+  if (offset() == nullptr) {
+    return;
+  }
   free(offset());
   offset() = nullptr;
 }
@@ -113,21 +113,19 @@ G4PDefData* G4PDefManager::GetOffset()
   return offset();
 }
 
-void G4PDefManager::UseWorkArea( G4PDefData* newOffset )
-  // Use recycled work area, which was created previously.
+// Use recycled work area, which was created previously.
+void G4PDefManager::UseWorkArea(G4PDefData* newOffset)
 {
-  if( (offset() != nullptr) && (offset() != newOffset) )
-  {
-    G4Exception("G4PDefManager::UseWorkspace()",
-                "InvalidCondition", FatalException,
+  if ((offset() != nullptr) && (offset() != newOffset)) {
+    G4Exception("G4PDefManager::UseWorkspace()", "InvalidCondition", FatalException,
                 "Thread already has workspace - cannot use another.");
   }
   offset() = newOffset;
 }
 
+// Detach this thread from this Location
+// The object which calls this method is responsible for it.
 G4PDefData* G4PDefManager::FreeWorkArea()
-  // Detach this thread from this Location
-  // The object which calls this method is responsible for it.
 {
   G4PDefData* offsetRet = offset();
   offset() = nullptr;

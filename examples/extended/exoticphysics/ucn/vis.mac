@@ -8,15 +8,10 @@
 /control/saveHistory
 /run/verbose 2
 #
-# create empty scene
-#
-/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
-#
-# Use this open statement instead for OpenGL in immediate mode.
-/vis/open OGL 600x600-0+0
+# Open a viewer
+/vis/open
+# This opens the default viewer - see examples/basic/B1/vis.mac for a
+# more comprehensive overview of options. Also the documentation.
 #
 # Output an empty detector
 #/vis/viewer/flush

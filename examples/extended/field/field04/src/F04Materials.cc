@@ -54,11 +54,11 @@ F04Materials::~F04Materials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04Materials* F04Materials::fInstance = 0;
+F04Materials* F04Materials::fInstance = nullptr;
 
 F04Materials* F04Materials::GetInstance()
 {
-  if (fInstance == 0)
+  if (fInstance == nullptr)
     {
       fInstance = new F04Materials();
     }
@@ -115,6 +115,6 @@ void F04Materials::CreateMaterials()
   natoms.clear();
 
   G4cout << G4endl << "The materials defined are: " << G4endl << G4endl;
-  
+
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

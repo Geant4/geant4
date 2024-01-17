@@ -59,7 +59,7 @@ public:
 
   explicit G4ParticleInelasticXS(const G4ParticleDefinition*);
 
-  ~G4ParticleInelasticXS() final;
+  ~G4ParticleInelasticXS() override = default;
 
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
 			     const G4Material* mat = nullptr) final;
@@ -105,11 +105,11 @@ public:
 
 private: 
 
-  void Initialise(G4int Z);
+  void Initialise(G4int Z, G4int idx);
 
   void InitialiseOnFly(G4int Z);
 
-  const G4String& FindDirectoryPath();
+  void FindDirectoryPath();
 
   inline const G4PhysicsVector* GetPhysicsVector(G4int Z);
 
@@ -121,8 +121,8 @@ private:
   std::vector<G4double> temp;
   G4double elimit;
 
-  G4int index = 0;
-  G4bool isMaster = false;
+  G4int index{0};
+  G4bool isInitializer{false};
 
   static const G4int MAXZINELP = 93;
   static G4ElementData* data[5];
@@ -134,7 +134,7 @@ inline
 const G4PhysicsVector* G4ParticleInelasticXS::GetPhysicsVector(G4int Z)
 {
   const G4PhysicsVector* pv = data[index]->GetElementData(Z);
-  if(pv == nullptr) { 
+  if (pv == nullptr) { 
     InitialiseOnFly(Z);
     pv = data[index]->GetElementData(Z);
   }

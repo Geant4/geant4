@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
@@ -35,34 +32,32 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiBMesonZero.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
 
-// ######################################################################
-// ###                      AntiBMesonZero                            ###
-// ######################################################################
+#include "G4ParticleTable.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
 
 G4AntiBMesonZero* G4AntiBMesonZero::theInstance = nullptr;
 
 G4AntiBMesonZero* G4AntiBMesonZero::Definition()
 {
-  if (theInstance !=nullptr) return theInstance;
+  if (theInstance != nullptr) return theInstance;
   const G4String name = "anti_B0";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==nullptr)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+  if (anInstance == nullptr) {
+    // create particle
+    //
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding
 
+    // clang-format off
    anInstance = new G4ParticleDefinition(
                  name,     5.27961*GeV,  4.33e-10*MeV,          0.,
                     0,              -1,             0,
@@ -70,18 +65,18 @@ G4AntiBMesonZero* G4AntiBMesonZero::Definition()
               "meson",               0,             0,        -511,
                 false,     1.520e-3*ns,          nullptr,
                 false,       "B");
+    // clang-format on
   }
   theInstance = static_cast<G4AntiBMesonZero*>(anInstance);
   return theInstance;
 }
 
-G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZeroDefinition()
+G4AntiBMesonZero* G4AntiBMesonZero::AntiBMesonZeroDefinition()
 {
   return Definition();
 }
 
-G4AntiBMesonZero*  G4AntiBMesonZero::AntiBMesonZero()
+G4AntiBMesonZero* G4AntiBMesonZero::AntiBMesonZero()
 {
   return Definition();
 }
-

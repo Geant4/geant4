@@ -60,12 +60,12 @@ class G4QMDReaction : public G4HadronicInteraction
 {
   public:
     G4QMDReaction();
-    ~G4QMDReaction();
+    ~G4QMDReaction() override;
 
     std::vector< G4QMDSystem* > GetFinalStates(); 
 
     G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack,
-                                   G4Nucleus & targetNucleus);
+                                   G4Nucleus & targetNucleus) override;
 
     G4ExcitationHandler* GetExcitationHandler() {return excitationHandler;};
 
@@ -76,12 +76,13 @@ class G4QMDReaction : public G4HadronicInteraction
     void SetDT(G4double t) { deltaT = t; };
     void SetEF(G4double x) { envelopF = x; };
 
-    virtual void ModelDescription(std::ostream& outFile) const;
+    void ModelDescription(std::ostream& outFile) const override;
+
+    //copy is unexpected
+    G4QMDReaction(const G4QMDReaction& right) = delete;
+    const G4QMDReaction& operator = (const G4QMDReaction& right) = delete;
 
   private:
-    //copy is unexpected
-    void operator =( const G4QMDReaction& ){};
-    G4QMDReaction( const G4QMDReaction& ):G4HadronicInteraction("QMDModel"){};
 
     void setEvaporationCh();
     void setHighEnergyModel();
@@ -98,7 +99,6 @@ class G4QMDReaction : public G4HadronicInteraction
     G4int maxTime;
     G4double envelopF;
 
-    G4Evaporation* evaporation;
     G4ExcitationHandler* excitationHandler;
 
       //                            b        pd_proj                pd_targ                  z_p     a_p     z_t     a_t      plab       elab

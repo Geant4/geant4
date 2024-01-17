@@ -23,24 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// G4ParallelWorldProcess
 //
+// Class description:
 //
+// This process takes a parallel world and limits a step
+// on the boundaries of volumes in the parallel world.
+// It invokes sensitive detectors assigned in the parallel world.
+// It switches a material (and a region if defined) in the
+// assigned parallel world over the material (and the region)
+// in the mass world.
 //
-//---------------------------------------------------------------
-//
-//  G4ParallelWorldProcess.hh
-//
-//  Description:
-//    This procss takes a parallel world and limits a step
-//   on the boundaries of volumes in the parallel world.
-//    It invokes sensitive detectors assigned in the parallel
-//   world.
-//    It switches a material (and a region if defined) in the
-//   assigned parallel world over the material (and the region)
-//   in the mass world.
-//
-//---------------------------------------------------------------
-
+// Author: M.Asai (SLAC), 2010.
+//---------------------------------------------------------------------
 #ifndef G4ParallelWorldProcess_h
 #define G4ParallelWorldProcess_h 1
 
@@ -55,23 +50,12 @@ class G4StepPoint;
 class G4Navigator;
 class G4TransportationManager;
 class G4PathFinder;
-class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
-//------------------------------------------
-//
-//        G4ParallelWorldProcess class
-//
-//------------------------------------------
-
-// Class Description:
 
 class G4ParallelWorldProcess : public G4VProcess
 {
-  public:  // with description
-    //------------------------
-    // Constructor/Destructor
-    //------------------------
+  public:
 
     G4ParallelWorldProcess(const G4String& processName = "ParaWorld",
                            G4ProcessType theType = fParallel);
@@ -132,10 +116,12 @@ class G4ParallelWorldProcess : public G4VProcess
     static G4int GetHypNavigatorID();
 
   protected:
+
     void CopyStep(const G4Step& step);
     void SwitchMaterial(G4StepPoint*);
 
   protected:
+
     G4Step* fGhostStep;
     G4StepPoint* fGhostPreStepPoint;
     G4StepPoint* fGhostPostStepPoint;
@@ -165,6 +151,7 @@ class G4ParallelWorldProcess : public G4VProcess
     G4bool layeredMaterialFlag{false};
 
   private:
+
     static G4ThreadLocal G4Step* fpHyperStep;
     static G4ThreadLocal G4int nParallelWorlds;
     static G4ThreadLocal G4int fNavIDHyp;

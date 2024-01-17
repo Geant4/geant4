@@ -30,5 +30,4 @@ geant4_module_link_libraries(G4solidstate_channeling
     G4biasing_gen
     G4emutils
     G4heprandom
-    G4partman
-    G4volumes)
+    G4partman)

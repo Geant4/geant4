@@ -420,6 +420,7 @@ void G4VisCommandsTouchable::SetNewValue
       G4AxesModel axesModel(0.,0.,0.,length,transform);
       axesModel.SetGlobalTag("LocalAxesModel");
       axesModel.DescribeYourselfTo(*fpVisManager->GetCurrentSceneHandler());
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     } else {
       G4warn << "Touchable not found." << G4endl;
     }

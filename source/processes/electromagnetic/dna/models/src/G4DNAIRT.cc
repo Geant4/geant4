@@ -48,7 +48,6 @@
 using namespace std;
 
 G4DNAIRT::G4DNAIRT()  :
-G4VITReactionProcess(),
 fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable)),
 fpReactionModel(nullptr),
 fTrackHolder(G4ITTrackHolder::Instance()),
@@ -199,11 +198,11 @@ void G4DNAIRT::Sampling(G4Track* track){
 
         std::vector<G4Track*> spaceBin = spaceBinned[ii][jj][kk];
         for ( int n = 0; n < (int)spaceBinned[ii][jj][kk].size(); n++ ) {
-          if(!spaceBin[n] || track == spaceBin[n]) continue;
+          if((spaceBin[n] == nullptr) || track == spaceBin[n]) continue;
           if(spaceBin[n]->GetTrackStatus() == fStopButAlive) continue;
 
           G4Molecule* molB = G4Molecule::GetMolecule(spaceBin[n]);
-          if(!molB) continue;
+          if(molB == nullptr) continue;
 
           const G4MolecularConfiguration* molConfB = molB->GetMolecularConfiguration();
           if(molConfB->GetDiffusionCoefficient() == 0) continue;
@@ -274,7 +273,7 @@ void G4DNAIRT::Sampling(G4Track* track){
 #ifdef DEBUG
     G4cout<<"scavenged: "<<minTime<<'\t'<<molConfA->GetName()<<it_begin->GetTrackID()<<'\n';
 #endif
-    G4Molecule* fakeMol = new G4Molecule((*fReactionDatas)[index]->GetReactant2());
+    auto  fakeMol = new G4Molecule((*fReactionDatas)[index]->GetReactant2());
     G4Track* fakeTrack = fakeMol->BuildTrack(globalTime,track->GetPosition());
     fTrackHolder->Push(fakeTrack);
     fReactionSet->AddReaction(minTime, track, fakeTrack);
@@ -308,7 +307,7 @@ G4double G4DNAIRT::GetIndependentReactionTime(const G4MolecularConfiguration* mo
 
     return irt;
   }
-  else if ( reactionType == 1 ){
+  if ( reactionType == 1 ){
     G4double sigma = fReactionData->GetReactionRadius();
     G4double kact = fReactionData->GetActivationRateConstant();
     G4double kdif = fReactionData->GetDiffusionRateConstant();
@@ -330,7 +329,7 @@ G4double G4DNAIRT::GetIndependentReactionTime(const G4MolecularConfiguration* mo
 
     if(sigma > r0){
       if(fReactionData->GetProbability() > G4UniformRand()) return 0;
-      else return irt;
+      return irt;
     }
     Winf = sigma / r0 * kobs / kdif;
 
@@ -366,7 +365,7 @@ G4double G4DNAIRT::SamplePDC(G4double a, G4double b) {
   G4double X, U, lambdax;
 
   G4int ntrials = 0;
-  while(1) {
+  while(true) {
 
     // Generate X
     U = G4UniformRand();
@@ -456,7 +455,7 @@ std::unique_ptr<G4ITReactionChange> G4DNAIRT::MakeReaction(const G4Track& trackA
 
   const G4int nbProducts = pReactionData->GetNbProducts();
 
-  if(nbProducts){
+  if(nbProducts != 0){
 
     const G4double sqrD1 = D1 == 0. ? 0. : std::sqrt(D1);
     const G4double sqrD2 = D2 == 0. ? 0. : std::sqrt(D2);

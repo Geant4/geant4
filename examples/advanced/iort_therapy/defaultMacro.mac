@@ -28,6 +28,7 @@
 #
 /vis/scene/create
 /vis/open OGL
+#/vis/open  ## open the default viewer
 /vis/viewer/flush
 #/vis/viewer/set/style solid 
 /vis/viewer/set/auxiliaryEdge true

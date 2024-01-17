@@ -1,0 +1,95 @@
+################################################################################
+# Default macro for radiobiology example.
+# Creates a beam of protons and calculates dose, LET, and RBE.
+# May 2023
+
+
+################################################################################
+# Set of the verboses
+#
+/control/verbose 0
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+/Physics/addPhysics HADRONTHERAPY_1
+/run/numberOfThreads 4
+
+################################################################################
+# Geometry
+#
+/detectorGeom/setMat G4_WATER
+/detectorGeom/setBoxSizes 4 4 4 cm
+
+################################################################################
+# Voxelization procedure
+#
+/voxels/setVoxelSizes 1 40 40 mm
+
+################################################################################
+# Initialisation procedure
+#
+/run/initialize
+
+/run/setCutForAGivenParticle e- 0.1 mm
+/run/setCutForAGivenParticle e+ 0.1 mm
+/run/setCutForAGivenParticle proton 0.1 mm
+
+################################################################################
+# Primary definitions
+#
+/gps/particle proton
+
+/gps/pos/centre -2. 0. 0. cm
+/gps/pos/type Point
+/gps/pos/shape Circle
+/gps/pos/radius 0.2 cm
+
+/gps/direction 1 0 0
+#/gps/ang/type planar
+#/gps/ang/sigma_r 0.005 rad
+
+/gps/ene/type Gauss
+/gps/ene/mono 58. MeV
+/gps/ene/sigma 0.65 MeV
+
+################################################################################
+# Dose
+#
+/dose/reset
+/dose/verbose 1
+/dose/calculate true
+/dose/fileName dose.out
+/dose/print
+
+################################################################################
+# LET
+#
+/LET/reset
+/LET/verbose 1
+/LET/calculate true
+/LET/fileName LET.out
+/LET/print
+
+################################################################################
+# RBE
+#
+/rbe/reset
+/rbe/verbose 1
+/rbe/loadLemTable data/rbe/lem1.csv
+/rbe/calculate true
+
+## U87
+/rbe/cellLine U87
+/rbe/print
+
+################################################################################
+# Start of the run
+#
+/run/printProgress 10000
+/run/beamOn 100000
+
+ 

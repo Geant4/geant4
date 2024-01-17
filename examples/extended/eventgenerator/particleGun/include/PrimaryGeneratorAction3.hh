@@ -47,7 +47,7 @@ class PrimaryGeneratorAction3
 {
   public:
     PrimaryGeneratorAction3(G4ParticleGun* );    
-   ~PrimaryGeneratorAction3();
+   ~PrimaryGeneratorAction3() = default;
 
   public:
     void GeneratePrimaries(G4Event*);
@@ -58,9 +58,9 @@ class PrimaryGeneratorAction3
     
   private:
     G4ThreeVector          fNewUz;   
-    G4double               fAlphaMax;     //max angle
+    G4double               fAlphaMax = 0.;     //max angle
     
-    G4ParticleGun*         fParticleGun;
+    G4ParticleGun*         fParticleGun = nullptr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,8 +35,8 @@
 class OpNoviceActionInitialization : public G4VUserActionInitialization
 {
  public:
-  OpNoviceActionInitialization();
-  ~OpNoviceActionInitialization();
+  OpNoviceActionInitialization() = default;
+  ~OpNoviceActionInitialization() override = default;
 
   void BuildForMaster() const override;
   void Build() const override;

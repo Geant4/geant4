@@ -46,38 +46,42 @@
 class G4DNARelativisticIonisationModel: public G4VEmModel
 {
 public:
-  G4DNARelativisticIonisationModel(const G4ParticleDefinition* p = 0,
+  G4DNARelativisticIonisationModel(const G4ParticleDefinition* p = nullptr,
                            const G4String& nam = "DNARelativisticIonisationModel");
 
-  virtual ~G4DNARelativisticIonisationModel();
+  ~G4DNARelativisticIonisationModel() override;
 
-  virtual void Initialise(const G4ParticleDefinition*,
-                          const G4DataVector& = *(new G4DataVector()));
+  G4DNARelativisticIonisationModel & operator
+          =(const  G4DNARelativisticIonisationModel &right) = delete;
+  G4DNARelativisticIonisationModel(const  G4DNARelativisticIonisationModel&) = delete;
 
-  virtual G4double CrossSectionPerVolume(const G4Material* material,
+  void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector& = *(new G4DataVector())) override;
+
+  G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
                                          G4double ekin,
                                          G4double emin,
-                                         G4double emax);
+                                         G4double emax) override;
 
   virtual G4double GetTotalCrossSection  (const G4Material* material,
                                           const G4ParticleDefinition*,
                                           G4double kineticEnergy);
-  virtual G4double GetPartialCrossSection(const G4Material* material,
+  G4double GetPartialCrossSection(const G4Material* material,
                                           G4int level,
                                           const G4ParticleDefinition*,
-                                          G4double kineticEnergy);
+                                          G4double kineticEnergy) override;
   virtual G4double GetDifferentialCrossSection(const G4Material* material,
                                           const G4ParticleDefinition* particle,
                                           G4double kineticEnergy,
                                           G4double secondaryEnergy,
                                           G4int  level);
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                  const G4MaterialCutsCouple*,
                                  const G4DynamicParticle*,
                                  G4double tmin,
-                                 G4double maxEnergy);
+                                 G4double maxEnergy) override;
   virtual void LoadAtomicStates(G4int z, const char *path);
   inline  void SelectStationary       (G4bool input){statCode = input;};
   inline  void SelectFasterComputation(G4bool input){fasterCode = input;}; 
@@ -98,24 +102,17 @@ private:
 
   std::map <G4int, std::vector<G4double> > eVecEZ;
 
-  typedef std::map <G4int, std::map<G4double, std::vector<G4double> > > 
-          DeauxDimensionVecMapZ;
+  using DeauxDimensionVecMapZ = std::map<G4int, std::map<G4double, std::vector<G4double>>>;
   DeauxDimensionVecMapZ eVecEjeEZ;
 
-  typedef std::map <G4int, std::map<G4int,std::map<G4double, 
-          std::vector<G4double>  > > > TriDimensionVecMapZ;
+  using TriDimensionVecMapZ = std::map<G4int, std::map<G4int, std::map<G4double, std::vector<G4double>>>>;
   TriDimensionVecMapZ eProbaShellMapZ;
 
-  typedef std::map <G4int, std::map<G4int, std::map<G4double,
-          std::map<G4double, G4double> > > > QuadDimensionMapZ;
+  using QuadDimensionMapZ = std::map<G4int, std::map<G4int, std::map<G4double, std::map<G4double, G4double>>>>;
   QuadDimensionMapZ eDiffCrossSectionDataZ;
   QuadDimensionMapZ eEjectedEnergyDataZ;
 
   
-  G4DNARelativisticIonisationModel & operator
-          =(const  G4DNARelativisticIonisationModel &right);
-  G4DNARelativisticIonisationModel(const  G4DNARelativisticIonisationModel&);
-
   G4double     fLowEnergyLimit=0.;
   G4double     fHighEnergyLimit=0.;
 

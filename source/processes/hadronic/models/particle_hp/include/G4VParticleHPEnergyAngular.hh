@@ -58,11 +58,9 @@ class G4VParticleHPEnergyAngular
 
     virtual ~G4VParticleHPEnergyAngular() = default;
 
-  public:
     virtual void Init(std::istream& aDataFile) = 0;
     virtual G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass) = 0;
     virtual G4double MeanEnergyOfThisInteraction() = 0;
-    // returns value cashed in sample
 
     void SetProjectileRP(G4ReactionProduct* aIncidentParticleRP)
     {
@@ -71,9 +69,9 @@ class G4VParticleHPEnergyAngular
 
     void SetTarget(G4ReactionProduct* aTarget) { fCache.Get().theTarget = aTarget; }
 
-    G4ReactionProduct* GetTarget() { return fCache.Get().theTarget; }
+    G4ReactionProduct* GetTarget() const { return fCache.Get().theTarget; }
 
-    G4ReactionProduct* GetProjectileRP() { return fCache.Get().theProjectileRP; }
+    G4ReactionProduct* GetProjectileRP() const { return fCache.Get().theProjectileRP; }
 
     G4ReactionProduct* GetCMS()
     {
@@ -81,12 +79,16 @@ class G4VParticleHPEnergyAngular
       return fCache.Get().theCMS;
     }
 
-    inline void SetQValue(G4double aValue) { theQValue = aValue; }
+    void SetQValue(G4double aValue) { theQValue = aValue; }
 
     virtual void ClearHistories() {}
 
+    G4VParticleHPEnergyAngular(G4VParticleHPEnergyAngular&) = delete;
+    G4VParticleHPEnergyAngular& operator=
+    (const G4VParticleHPEnergyAngular& right) = delete;
+
   protected:
-    inline G4double GetQValue() { return theQValue; }
+    G4double GetQValue() const { return theQValue; }
 
   private:
     G4double theQValue;

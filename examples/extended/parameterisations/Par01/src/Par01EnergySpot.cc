@@ -64,7 +64,7 @@ void Par01EnergySpot::Draw(G4Colour *color)
     {
       G4Polyline polyline;
       G4Colour colour(1.,.5,.5);
-      if (color != 0) colour = *color;
+      if (color != nullptr) colour = *color;
       polyline.SetVisAttributes(colour);
       G4ThreeVector pp(fPoint);
       // Draw a "home made" marker:

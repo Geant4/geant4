@@ -98,7 +98,7 @@ void G4ITNavigator1::SetWorldVolume(G4VPhysicalVolume* pWorld)
                  FatalException, "Volume must be centered on the origin.");
   }
   const G4RotationMatrix* rm = pWorld->GetRotation();
-  if ( rm && (!rm->isIdentity()) )
+  if ( (rm != nullptr) && (!rm->isIdentity()) )
   {
     G4Exception ("G4ITNavigator1::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must not be rotated.");
@@ -227,36 +227,6 @@ G4RotationMatrix G4ITNavigator1::NetRotation() const
 }
 
 // ********************************************************************
-// CreateGRSVolume
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSVolume* G4ITNavigator1::CreateGRSVolume() const
-{
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return new G4GRSVolume(fHistory.GetTopVolume(),
-                         tf.NetRotation(),
-                         tf.NetTranslation());
-}
-
-// ********************************************************************
-// CreateGRSSolid
-//
-// `Touchable' creation method: caller has deletion responsibility
-// ********************************************************************
-//
-inline
-G4GRSSolid* G4ITNavigator1::CreateGRSSolid() const
-{
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-                        tf.NetRotation(),
-                        tf.NetTranslation());
-}
-
-// ********************************************************************
 // CreateTouchableHistory
 //
 // `Touchable' creation method: caller has deletion responsibility
@@ -297,7 +267,7 @@ void G4ITNavigator1::LocateGlobalPointAndUpdateTouchableHandle(
   if( fEnteredDaughter || fExitedMother )
   {
      oldTouchableToUpdate = CreateTouchableHistory();
-     if( pPhysVol == 0 )
+     if( pPhysVol == nullptr )
      {
        // We want to ensure that the touchable is correct in this case.
        //  The method below should do this and recalculate a lot more ....
@@ -337,7 +307,7 @@ void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
                            const G4bool               RelativeSearch )
 {
   G4VPhysicalVolume* pPhysVol;
-  pPhysVol = LocateGlobalPointAndSetup( position, 0, RelativeSearch);  
+  pPhysVol = LocateGlobalPointAndSetup( position, nullptr, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
 }
 
@@ -454,7 +424,7 @@ inline
 G4int G4ITNavigator1::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 {
   G4int severity=0, noZeros= fNumberZeroSteps;
-  if( noZeroSteps) *noZeroSteps = fNumberZeroSteps;
+  if( noZeroSteps != nullptr) *noZeroSteps = fNumberZeroSteps;
 
   if( noZeros >= fAbandonThreshold_NoZeroSteps )
   {

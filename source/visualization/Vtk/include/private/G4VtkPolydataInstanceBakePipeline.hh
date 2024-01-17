@@ -39,7 +39,9 @@ class G4VtkPolydataInstanceBakePipeline : public G4VtkPolydataInstancePipeline
 
     void Print() override;
 
+    using G4VtkPolydataInstancePipeline::SetPolydata;
     void SetPolydata(const G4Polyhedron& polyhedron) override;
+    using G4VtkPolydataInstancePipeline::addInstance;
     void addInstance(G4double dx, G4double dy, G4double dz, G4double r00, G4double r01,
                      G4double r02, G4double r10, G4double r11, G4double r12, G4double r20,
                      G4double r21, G4double r22, G4double r, G4double g, G4double b, G4double a,

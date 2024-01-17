@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -37,26 +34,20 @@
 #ifndef G4Upsilon_h
 #define G4Upsilon_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-
-// ######################################################################
-// ###                            Upsilon                             ###
-// ######################################################################
 
 class G4Upsilon : public G4ParticleDefinition
 {
- private:
-   static G4Upsilon* theInstance;
-   G4Upsilon(){}
-   ~G4Upsilon() override= default;
+  public:
+    static G4Upsilon* Definition();
+    static G4Upsilon* UpsilonDefinition();
+    static G4Upsilon* Upsilon();
 
- public:
-   static G4Upsilon* Definition();
-   static G4Upsilon* UpsilonDefinition();
-   static G4Upsilon* Upsilon();
+  private:
+    G4Upsilon() {}
+    ~G4Upsilon() override = default;
+
+    static G4Upsilon* theInstance;
 };
 
 #endif
-

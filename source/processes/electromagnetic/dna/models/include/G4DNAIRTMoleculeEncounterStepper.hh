@@ -60,13 +60,13 @@ class G4DNAIRTMoleculeEncounterStepper : public G4VITTimeStepComputer
 {
 public:
     G4DNAIRTMoleculeEncounterStepper();
-    virtual ~G4DNAIRTMoleculeEncounterStepper();
+    ~G4DNAIRTMoleculeEncounterStepper() override;
     G4DNAIRTMoleculeEncounterStepper(const G4DNAIRTMoleculeEncounterStepper&) = delete;
     G4DNAIRTMoleculeEncounterStepper& operator=(const G4DNAIRTMoleculeEncounterStepper&) = delete;
 
-    virtual void Prepare();
-    virtual G4double CalculateStep(const G4Track&, const G4double&);
-    virtual G4double CalculateMinTimeStep(G4double, G4double);
+    void Prepare() override;
+    G4double CalculateStep(const G4Track&, const G4double&) override;
+    G4double CalculateMinTimeStep(G4double, G4double) override;
 
     void SetReactionModel(G4VDNAReactionModel*);
     G4VDNAReactionModel* GetReactionModel();
@@ -85,13 +85,13 @@ private:
 #endif
                                G4KDTreeResultHandle&);
 
-    G4bool fHasAlreadyReachedNullTime;
+    G4bool fHasAlreadyReachedNullTime{false};
 
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
-    G4VDNAReactionModel* fReactionModel;
+    G4VDNAReactionModel* fReactionModel{nullptr};
     G4ITReactionSet* fReactionSet;
     G4ITTrackHolder* fpTrackContainer;
-    G4int fVerbose;
+    G4int fVerbose{0};
 
     class Utils
     {

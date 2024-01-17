@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-01-ref-06    (30-June-2023)
+ Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -97,7 +97,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material:   Butane    density:  0.026 mg/cm3  RadL:  17.729 km   Nucl.Int.Length:  25.658 km 
-                       Imean:  51.646 eV   temperature: 293.16 K  pressure:   0.01 atm
+                       Imean:  53.040 eV   temperature: 293.16 K  pressure:   0.01 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -111,7 +111,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Polyprop    density: 900.000 mg/cm3  RadL:  49.764 cm   Nucl.Int.Length:  75.110 cm 
-                       Imean:  54.941 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  56.518 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -188,7 +188,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Cytoplasm2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -232,7 +232,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus1    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -261,7 +261,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -290,7 +290,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
  Material: Nucleus3    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.537 eV   temperature: 293.15 K  pressure:   1.00 atm
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -804,7 +804,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-##### Create analysis manager   0x171ee70
+##### Create analysis manager   0x1dad190
 Using  analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -830,18 +830,16 @@ All Ntuples have been created
 
 -> Event # 8 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30743072210765
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.068346574885928
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.30740330099759
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.068345520137867
 
 -> Event # 9 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.077128076527645
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.076925155692693
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.0070030500712663
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.079541288093519
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.31533845557577
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.062571817397876
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Total number of particles detected by the gas detector : 3
+-> Total number of particles detected by the gas detector : 2
 

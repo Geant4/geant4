@@ -78,6 +78,7 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple,
     void FinishTNtuple(RootNtupleDescription* ntupleDescription, G4bool fromBooking) final;
     G4bool Reset() final;
     void Clear() final;
+    G4bool Delete(G4int id) final;
     virtual G4bool Merge();
 
     // Set functions

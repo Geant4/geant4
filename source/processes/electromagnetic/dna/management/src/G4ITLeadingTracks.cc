@@ -35,30 +35,25 @@
 #include <G4IT.hh>
 
 G4ITLeadingTracks::G4ITLeadingTracks()
-{
-  // TODO Auto-generated constructor stub
-
-}
+= default;
 
 G4ITLeadingTracks::~G4ITLeadingTracks()
-{
-  // TODO Auto-generated destructor stub
-}
+= default;
 
 
 void G4ITLeadingTracks::Reset()
 {
-  if (fLeadingTracks.empty() == false)
+  if (!fLeadingTracks.empty())
   {
-    std::vector<G4Track*>::iterator fLeadingTracks_i = fLeadingTracks.begin();
+    auto fLeadingTracks_i = fLeadingTracks.begin();
 
     while (fLeadingTracks_i != fLeadingTracks.end())
     {
       G4Track* track = *fLeadingTracks_i;
-      if (track)
+      if (track != nullptr)
       {
         G4IT* ITrack = GetIT(track);
-        if (ITrack)
+        if (ITrack != nullptr)
         {
           ITrack->GetTrackingInfo()->SetLeadingStep(false);
         }
@@ -79,11 +74,9 @@ void G4ITLeadingTracks::Push(G4Track* track)
 
 void G4ITLeadingTracks::PrepareLeadingTracks()
 {
-  for(size_t i = 0 ; i < fLeadingTracks.size() ; ++i)
+  for(auto track : fLeadingTracks)
   {
-    G4Track* track = fLeadingTracks[i];
     G4IT* ITrack = GetIT(track);
     ITrack->GetTrackingInfo()->SetLeadingStep(true);
-//    ITrack->GetTrackingInfo()->SetLeadingStep(false);
   }
 }

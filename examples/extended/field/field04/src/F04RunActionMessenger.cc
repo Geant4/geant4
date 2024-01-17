@@ -57,7 +57,7 @@ F04RunActionMessenger::F04RunActionMessenger(F04RunAction* runAction)
   fRndmSaveCmd->SetParameterName("frequency",false);
   fRndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
   fRndmSaveCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
- 
+
   fRndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
   fRndmReadCmd->SetGuidance("get rndm status from an external file.");
   fRndmReadCmd->SetParameterName("fileName",true);

@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-10-20 John Allison (neuron-V11-01-01)
+- vis.mac: Remove defunct command /vis/ogl/set/displayListLimit.
+  - This command no longer operates. There is now no display list limit.
+    (The only limit is available memory.)
+  - The command is deprecated and, anyway, causes a crash if the app is built
+    without an OpenGL driver.
+
+## 2023-10-10 Hoang Tran (neuron-V11-01-00)
+- Fixed the valgrind/memcheck errors in neuron example (by M. Batmunkh).
+
 ## 2022-10-04 Gabriele Cosmo (neuron-V11-00-01)
 - Fixed compilation warning on Intel-icx compiler for set but unused variable
   in Run::EndOfRun().
