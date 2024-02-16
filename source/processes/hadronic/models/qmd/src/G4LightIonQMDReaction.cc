@@ -111,7 +111,7 @@ G4LightIonQMDReaction::G4LightIonQMDReaction()
    coulomb_collision_px_targ = 0.0;
    coulomb_collision_pz_targ = 0.0;
 
-   secID = G4PhysicsModelCatalog::GetModelID( "model_QMDModel" );
+   secID = G4PhysicsModelCatalog::GetModelID( "model_LightIonQMDModel" );
 }
 
 

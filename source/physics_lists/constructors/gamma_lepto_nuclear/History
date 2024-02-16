@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-02-13 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-01-05)
+- G4NeutrinoPhysics - fixed neutrino physics instantiation (problem #2594)
+
 ## 2023-11-10 Vladimir Ivanchenko (phys-ctor-glnuclear-V11-01-04)
 - G4EmMessenger, G4NeutrinoPhysicsMessenger - fixed typos
 

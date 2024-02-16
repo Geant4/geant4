@@ -212,6 +212,15 @@ void G4TaskRunManager::SetNumberOfThreads(G4int n)
 
 //============================================================================//
 
+G4int G4TaskRunManager::GetNumberOfThreads() const
+{
+  // If the ThreadPool isn't initialized, it will return 0 even if we've already
+  // set nworkers
+  return poolInitialized ? PTL::TaskRunManager::GetNumberOfThreads() : nworkers;
+}
+
+//============================================================================//
+
 void G4TaskRunManager::Initialize()
 {
   G4bool firstTime = (threadPool == nullptr);

@@ -1,8 +1,15 @@
 # Example TestEm11 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-01-30 Vladimir Ivanchenko (testem11-V11-01-04)
+- PrimaryGeneratorAction - added tiny shift of position of the
+    particle gun from the world volume boundary. This fix removes
+    a warning due to the new protection in G4ParticleGun
 
 ## 2023-11-12 Alberto Ribon (testem11-V11-01-03)
 - radioactive.mac : introduced the UI command

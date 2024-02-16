@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -899,7 +899,7 @@ Projection_index 0 Slice_index 0 Pixel_index 0
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.000450s Sys=0.000000s
+  User=0.000000s Real=0.000622s Sys=0.000000s
 /gps/direction 1.000000 0.000000 0.000000
 /gps/pos/centre -36.000000 -14.400000 0.000000 um
 /run/beamOn 20
@@ -929,7 +929,7 @@ Projection_index 0 Slice_index 0 Pixel_index 1
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.007432s Sys=0.000000s
+  User=0.010000s Real=0.009401s Sys=0.000000s
 /gps/direction 1.000000 0.000000 0.000000
 /gps/pos/centre -36.000000 0.000000 0.000000 um
 /run/beamOn 20
@@ -959,7 +959,7 @@ Projection_index 0 Slice_index 0 Pixel_index 2
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.030776s Sys=0.000000s
+  User=0.010000s Real=0.009584s Sys=0.000000s
 /gps/direction 1.000000 0.000000 0.000000
 /gps/pos/centre -36.000000 14.400000 0.000000 um
 /run/beamOn 20
@@ -989,7 +989,7 @@ Projection_index 0 Slice_index 0 Pixel_index 3
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007770s Sys=0.000000s
+  User=0.010000s Real=0.009320s Sys=0.000000s
 /gps/direction 1.000000 0.000000 0.000000
 /gps/pos/centre -36.000000 28.800000 0.000000 um
 /run/beamOn 20
@@ -1019,7 +1019,7 @@ Projection_index 0 Slice_index 0 Pixel_index 4
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000124s Sys=0.000000s
+  User=0.000000s Real=0.000212s Sys=0.000000s
 /gps/direction 0.809017 0.587785 0.000000
 /gps/pos/centre -12.196397 -44.459959 0.000000 um
 /run/beamOn 20
@@ -1049,7 +1049,7 @@ Projection_index 1 Slice_index 0 Pixel_index 0
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000113s Sys=0.000000s
+  User=0.000000s Real=0.000189s Sys=0.000000s
 /gps/direction 0.809017 0.587785 0.000000
 /gps/pos/centre -20.660504 -32.810114 0.000000 um
 /run/beamOn 20
@@ -1079,7 +1079,7 @@ Projection_index 1 Slice_index 0 Pixel_index 1
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.005877s Sys=0.000000s
+  User=0.010000s Real=0.007491s Sys=0.000000s
 /gps/direction 0.809017 0.587785 0.000000
 /gps/pos/centre -29.124612 -21.160269 0.000000 um
 /run/beamOn 20
@@ -1109,7 +1109,7 @@ Projection_index 1 Slice_index 0 Pixel_index 2
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.009509s Sys=0.000000s
+  User=0.010000s Real=0.011607s Sys=0.000000s
 /gps/direction 0.809017 0.587785 0.000000
 /gps/pos/centre -37.588719 -9.510424 0.000000 um
 /run/beamOn 20
@@ -1139,7 +1139,7 @@ Projection_index 1 Slice_index 0 Pixel_index 3
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.005619s Sys=0.000000s
+  User=0.010000s Real=0.007064s Sys=0.000000s
 /gps/direction 0.809017 0.587785 0.000000
 /gps/pos/centre -46.052827 2.139420 0.000000 um
 /run/beamOn 20
@@ -1169,7 +1169,7 @@ Projection_index 1 Slice_index 0 Pixel_index 4
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000135s Sys=0.000000s
+  User=0.000000s Real=0.000211s Sys=0.000000s
 /gps/direction 0.309017 0.951057 0.000000
 /gps/pos/centre 16.265816 -43.137724 0.000000 um
 /run/beamOn 20
@@ -1199,7 +1199,7 @@ Projection_index 2 Slice_index 0 Pixel_index 0
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000113s Sys=0.000000s
+  User=0.000000s Real=0.000187s Sys=0.000000s
 /gps/direction 0.309017 0.951057 0.000000
 /gps/pos/centre 2.570602 -38.687879 0.000000 um
 /run/beamOn 20
@@ -1229,7 +1229,7 @@ Projection_index 2 Slice_index 0 Pixel_index 1
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007631s Sys=0.000000s
+  User=0.010000s Real=0.008738s Sys=0.000000s
 /gps/direction 0.309017 0.951057 0.000000
 /gps/pos/centre -11.124612 -34.238035 0.000000 um
 /run/beamOn 20
@@ -1259,7 +1259,7 @@ Projection_index 2 Slice_index 0 Pixel_index 2
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007357s Sys=0.000000s
+  User=0.010000s Real=0.009402s Sys=0.000000s
 /gps/direction 0.309017 0.951057 0.000000
 /gps/pos/centre -24.819826 -29.788190 0.000000 um
 /run/beamOn 20
@@ -1289,7 +1289,7 @@ Projection_index 2 Slice_index 0 Pixel_index 3
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.007056s Sys=0.000000s
+  User=0.010000s Real=0.008923s Sys=0.000000s
 /gps/direction 0.309017 0.951057 0.000000
 /gps/pos/centre -38.515039 -25.338345 0.000000 um
 /run/beamOn 20
@@ -1319,7 +1319,7 @@ Projection_index 2 Slice_index 0 Pixel_index 4
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000124s Sys=0.000000s
+  User=0.000000s Real=0.000192s Sys=0.000000s
 /gps/direction -0.309017 0.951057 0.000000
 /gps/pos/centre 38.515039 -25.338345 0.000000 um
 /run/beamOn 20
@@ -1349,7 +1349,7 @@ Projection_index 3 Slice_index 0 Pixel_index 0
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000116s Sys=0.000000s
+  User=0.000000s Real=0.000188s Sys=0.000000s
 /gps/direction -0.309017 0.951057 0.000000
 /gps/pos/centre 24.819826 -29.788190 0.000000 um
 /run/beamOn 20
@@ -1379,7 +1379,7 @@ Projection_index 3 Slice_index 0 Pixel_index 1
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007018s Sys=0.000000s
+  User=0.010000s Real=0.008859s Sys=0.000000s
 /gps/direction -0.309017 0.951057 0.000000
 /gps/pos/centre 11.124612 -34.238035 0.000000 um
 /run/beamOn 20
@@ -1409,7 +1409,7 @@ Projection_index 3 Slice_index 0 Pixel_index 2
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007757s Sys=0.000000s
+  User=0.010000s Real=0.009838s Sys=0.000000s
 /gps/direction -0.309017 0.951057 0.000000
 /gps/pos/centre -2.570602 -38.687879 0.000000 um
 /run/beamOn 20
@@ -1439,7 +1439,7 @@ Projection_index 3 Slice_index 0 Pixel_index 3
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.007109s Sys=0.000000s
+  User=0.010000s Real=0.008988s Sys=0.000000s
 /gps/direction -0.309017 0.951057 0.000000
 /gps/pos/centre -16.265816 -43.137724 0.000000 um
 /run/beamOn 20
@@ -1469,7 +1469,7 @@ Projection_index 3 Slice_index 0 Pixel_index 4
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000121s Sys=0.000000s
+  User=0.000000s Real=0.000194s Sys=0.000000s
 /gps/direction -0.809017 0.587785 0.000000
 /gps/pos/centre 46.052827 2.139420 0.000000 um
 /run/beamOn 20
@@ -1499,7 +1499,7 @@ Projection_index 4 Slice_index 0 Pixel_index 0
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000114s Sys=0.000000s
+  User=0.000000s Real=0.000208s Sys=0.000000s
 /gps/direction -0.809017 0.587785 0.000000
 /gps/pos/centre 37.588719 -9.510424 0.000000 um
 /run/beamOn 20
@@ -1529,7 +1529,7 @@ Projection_index 4 Slice_index 0 Pixel_index 1
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.005592s Sys=0.000000s
+  User=0.010000s Real=0.007138s Sys=0.000000s
 /gps/direction -0.809017 0.587785 0.000000
 /gps/pos/centre 29.124612 -21.160269 0.000000 um
 /run/beamOn 20
@@ -1559,7 +1559,7 @@ Projection_index 4 Slice_index 0 Pixel_index 2
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.009741s Sys=0.000000s
+  User=0.010000s Real=0.012344s Sys=0.000000s
 /gps/direction -0.809017 0.587785 0.000000
 /gps/pos/centre 20.660504 -32.810114 0.000000 um
 /run/beamOn 20
@@ -1589,7 +1589,7 @@ Projection_index 4 Slice_index 0 Pixel_index 3
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.010000s Real=0.005796s Sys=0.000000s
+  User=0.010000s Real=0.007297s Sys=0.000000s
 /gps/direction -0.809017 0.587785 0.000000
 /gps/pos/centre 12.196397 -44.459959 0.000000 um
 /run/beamOn 20
@@ -1619,7 +1619,7 @@ Projection_index 4 Slice_index 0 Pixel_index 4
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000119s Sys=0.000000s
+  User=0.000000s Real=0.000207s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

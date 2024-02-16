@@ -61,9 +61,8 @@ G4MicroElecLOPhononModel::G4MicroElecLOPhononModel(const G4ParticleDefinition*,
                                                    const G4String& nam) 
   : G4VEmModel(nam),isInitialised(false)
 {
-  fParticleChangeForGamma = GetParticleChangeForGamma();
   G4cout << "Phonon model is constructed " << G4endl
-         << "Phonon Energy = " << phononEnergy / eV << " eV  "<< G4endl;											   															 
+         << "Phonon Energy = " << phononEnergy / eV << " eV  "<< G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -59,7 +59,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
                                  const G4Ions::G4FloatLevelBase& flb,
                                  const G4BetaDecayType& betaType)
  : G4NuclearDecay("beta+ decay", BetaPlus, excitationE, flb),
-   maxEnergy((e0 - 2*eMass)/eMass),
+   maxEnergy(e0/eMass - 2.0),
    estep(maxEnergy/(G4double)(npti - 1))
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
@@ -88,7 +88,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
   CheckAndFillParent();
 
-  // Fill G4MT_daughters with e-, nu and residual nucleus (stored by SetDaughter)  
+  // Fill G4MT_daughters with e+, nu and residual nucleus (stored by SetDaughter)  
   CheckAndFillDaughters();
 }
 
@@ -117,8 +117,9 @@ G4DecayProducts* G4BetaPlusDecay::DecayIt(G4double)
   G4LorentzVector lv(-eMomentum*dir.x(), -eMomentum*dir.y(), -eMomentum*dir.z(),
                      parentMass - eKE - eMass);
 
-  G4double edel =  std::max(lv.e() - resMass, 0.0);
-  if (edel > CLHEP::eV) {
+  G4double edel = std::max(lv.e() - resMass, 0.0);
+  // Free energy should be above zero
+  if (edel > 0.0) {
 
     // centrum of mass system
     G4double M = lv.mag();
@@ -155,17 +156,20 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
                                           const G4int& daughterA,
                                           const G4BetaDecayType& betaType)
 {
+  cdf[0] = 0.0;
+
   // Check for cases in which Q < 2Me (e.g. z67.a162) 
   if (maxEnergy > 0.) {
     G4BetaDecayCorrections corrections(-daughterZ, daughterA);
 
     // Fill array to store cumulative spectrum
-    G4double ex;
+    G4double ex;  // Positron kinetic energy
     G4double p;   // Positron momentum in units of electron mass
     G4double f;   // Spectral shape function
+    G4double f0 = 0.0;
     G4double sum = 0.0;
-    for (G4int i = 0; i < npti; ++i) {
-      ex = (0 == i) ? maxEnergy*1.e-6 : estep*i;
+    for (G4int i = 1; i < npti-1; ++i) {
+      ex = estep*i;
       p = std::sqrt(ex*(ex + 2.));
       f = p*(1. + ex)*(maxEnergy - ex)*(maxEnergy - ex);
 
@@ -174,9 +178,11 @@ G4BetaPlusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 
       // Apply shape factor for forbidden transitions
       f *= corrections.ShapeFactor(betaType, p, maxEnergy - ex);
-      sum += f;
+      sum += f + f0;
       cdf[i] = sum;
+      f0 = f;
     }
+    cdf[npti-1] = sum + f0;
   } else {
     for (G4int i = 0; i < npti; ++i) { cdf[i] = 0.0; }
   }

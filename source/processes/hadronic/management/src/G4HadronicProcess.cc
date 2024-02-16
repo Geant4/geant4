@@ -205,23 +205,28 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
   // check particle for integral method
   if(isMaster || nullptr == masterProcess) {
     G4double charge = p.GetPDGCharge()/eplus;
-    G4bool isLepton = (p.GetLeptonNumber() != 0);
-    G4bool ok = (p.GetAtomicNumber() != 0 || p.GetPDGMass() < GeV);
 
     // select cross section shape
-    if(charge != 0.0 && useIntegralXS && !isLepton && ok) {
+    if(charge != 0.0 && useIntegralXS) {
       G4double tmax = param->GetMaxEnergy();
-      fXSType = (charge > 0.0) ? fHadIncreasing : fHadDecreasing;
       currentParticle = firstParticle;
       // initialisation in the master thread
       G4int pdg = p.GetPDGEncoding();
-      if(std::abs(pdg) == 211) {
+      if (std::abs(pdg) == 211) {
 	fXSType = fHadTwoPeaks;
-      } else if(pdg == 321) {
+      } else if (pdg == 321) {
 	fXSType = fHadOnePeak;
-      } else if(pdg == 2212) {
+      } else if (pdg == -321) {
+	fXSType = fHadDecreasing;
+      } else if (pdg == 2212) {
 	fXSType = fHadTwoPeaks;
+      } else if (pdg == -2212 || pdg == -1000010020 || pdg == -1000010030 ||
+		 pdg == -1000020030 || pdg == -1000020040) {
+	fXSType = fHadDecreasing;
+      } else if (charge > 0.0 || pdg == 11 || pdg == 13) {
+	fXSType = fHadIncreasing;
       }
+      	
       delete theEnergyOfCrossSectionMax;
       theEnergyOfCrossSectionMax = nullptr;
       if(fXSType == fHadTwoPeaks) {
@@ -280,18 +285,8 @@ G4double G4HadronicProcess::PostStepGetPhysicalInteractionLength(
     mfpKinEnergy = DBL_MAX;
     matIdx = (G4int)track.GetMaterial()->GetIndex();
   }
-  /*
-  G4cout << GetProcessName() << " E=" << track.GetKineticEnergy()
-	 << " " << currentParticle->GetParticleName()
-	 << " lastxs=" << theLastCrossSection 
-	 << " lastmfp=" << theMFP << G4endl;
-  */
   UpdateCrossSectionAndMFP(track.GetKineticEnergy());
-  /*
-  G4cout << "          xs=" << theLastCrossSection 
-	 << " mfp=" << theMFP << " nleft=" << theNumberOfInteractionLengthLeft  
-	 << G4endl;
-  */
+
   // zero cross section
   if(theLastCrossSection <= 0.0) { 
     theNumberOfInteractionLengthLeft = -1.0;

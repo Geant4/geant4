@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -861,17 +861,17 @@ Setting was ignored.
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 264.399 MeV       total track length: 19.0898 cm 
-        Gap: total energy: 18.0825 MeV       total track length:  8.6033 cm 
+   Absorber: total energy: 265.781 MeV       total track length:  19.326 cm 
+        Gap: total energy: 21.0561 MeV       total track length: 10.6454 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 264.399 MeV rms = 0 eV 
- EGap : mean = 18.0825 MeV rms = 0 eV 
- LAbs : mean = 19.0898 cm  rms = 0 fm 
- LGap : mean = 8.6033 cm  rms = 0 fm 
+ EAbs : mean = 265.781 MeV rms = 0 eV 
+ EGap : mean = 21.0561 MeV rms = 0 eV 
+ LAbs : mean = 19.326 cm  rms = 0 fm 
+ LGap : mean = 10.6454 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 There are histograms that can be viewed with visualization:
@@ -941,17 +941,17 @@ hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest,         dInela
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 263.928 MeV       total track length: 19.0301 cm 
-        Gap: total energy: 21.7761 MeV       total track length: 10.6206 cm 
+   Absorber: total energy: 273.124 MeV       total track length: 20.1646 cm 
+        Gap: total energy: 16.2656 MeV       total track length: 7.73372 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 263.928 MeV rms = 0 eV 
- EGap : mean = 21.7761 MeV rms = 0 eV 
- LAbs : mean = 19.0301 cm  rms = 0 fm 
- LGap : mean = 10.6206 cm  rms = 0 fm 
+ EAbs : mean = 273.124 MeV rms = 0 eV 
+ EGap : mean = 16.2656 MeV rms = 0 eV 
+ LAbs : mean = 20.1646 cm  rms = 0 fm 
+ LGap : mean = 7.73372 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 There are histograms that can be viewed with visualization:
@@ -967,17 +967,17 @@ There are histograms that can be viewed with visualization:
 ... open analysis file : B4.root - done
 Using 
 --> Event 0 starts.
-   Absorber: total energy: 431.508 MeV       total track length: 31.2315 cm 
-        Gap: total energy: 25.7755 MeV       total track length: 12.7615 cm 
+   Absorber: total energy: 465.716 MeV       total track length: 34.0047 cm 
+        Gap: total energy: 15.1463 MeV       total track length: 7.88173 cm 
 --> End of event: 0
 
 
  ----> print histograms statistic for the entire run 
 
  EAbs : mean = 0 eV  rms = 0 eV 
- EGap : mean = 25.7755 MeV rms = 0 eV 
- LAbs : mean = 31.2315 cm  rms = 0 fm 
- LGap : mean = 12.7615 cm  rms = 0 fm 
+ EGap : mean = 15.1463 MeV rms = 0 eV 
+ LAbs : mean = 34.0047 cm  rms = 0 fm 
+ LGap : mean = 7.88173 cm  rms = 0 fm 
 ... write file : B4.root - done
 ... close file : B4.root - done
 There are histograms that can be viewed with visualization:
@@ -989,4 +989,4 @@ There are histograms that can be viewed with visualization:
   EndOfRunAction and Reset() in your BeginOfRunAction.
 Graphics systems deleted.
 Visualization Manager deleting...
-### deleting chargedFilter 0x1029f40
+### deleting chargedFilter 0x18bbf40

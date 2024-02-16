@@ -46,8 +46,6 @@
 
 class RunAction;
 class PrimaryGeneratorAction;
-//class NeuronHitCompartments;
-//class NeuronLoadDataFile;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,16 +54,12 @@ class SteppingAction : public G4UserSteppingAction
 public:
 
   SteppingAction(RunAction*); 
-  ~SteppingAction();
+  ~SteppingAction() override = default;
   
-  void UserSteppingAction(const G4Step*);
-
-  //NeuronHitCompartments* fpNeuronHits;
+  void UserSteppingAction(const G4Step*) override;
   
 private:
 
-  RunAction*            fRunAction;
-  //NeuronLoadDataFile * fNeuronLoadParamz;  
-
+  RunAction* fRunAction;
 };
 #endif

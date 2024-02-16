@@ -219,11 +219,11 @@ ComputeDDMicroscopicCrossSection(G4double KineticEnergy, G4double,
 
 G4double G4KokoulinMuonNuclearXS::
 GetElementCrossSection(const G4DynamicParticle* aPart,
-		       G4int Z, const G4Material*)
+		       G4int ZZ, const G4Material*)
 {
   //AR-24Apr2018 Switch to treat transuranic elements as uranium  
-  const G4bool isHeavyElementAllowed = true; if ( isHeavyElementAllowed && Z>92 ) Z=92;
-
-  return theCrossSection[Z]->Value(aPart->GetKineticEnergy());
+  G4int Z = std::min(ZZ, 92);
+  return theCrossSection[Z]->LogVectorValue(aPart->GetKineticEnergy(),
+					    aPart->GetLogKineticEnergy());
 }
 

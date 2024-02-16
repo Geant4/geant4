@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -121,12 +121,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -182,7 +182,7 @@ Rayl:  for gamma SubType=11 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -210,7 +210,7 @@ ePairProd:  for e-  XStype:1  SubType=4
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -546,30 +546,30 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=0.740000s Real=0.809802s Sys=0.000000s
+  User=0.780000s Real=0.785315s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 448.476 keV	(13.860 keV-->500.000 keV)
- Energy leakage     = 51.524 keV	(5.048 keV-->486.140 keV)
+ Edep in absorber 1 = 450.260 keV	(18.817 keV-->500.000 keV)
+ Energy leakage     = 49.740 keV	(8.040 keV-->481.183 keV)
  Energy total       = 500.000 keV	(500.000 keV-->500.000 keV)
 
- Track length of primary track = 884.384 um  +- 189.614 um 
+ Track length of primary track = 885.708 um  +- 190.262 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 324.324 um  +- 194.185 um 
+ Projected range               = 324.348 um  +- 193.880 um 
 
- Nb of steps of primary track  = 12.02 +- 2.92	 Step size= 75.905 um  +- 19.096 um 
+ Nb of steps of primary track  = 11.41 +- 2.86	 Step size= 80.444 um  +- 20.879 um 
 
- absorbed = 77.66 %   transmit = 5.93 %   reflected = 16.41 % 
+ absorbed = 78.69 %   transmit = 4.96 %   reflected = 16.34 % 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1986418266, 1501319171
+ Current couple of seeds = 154048955, 2063978683
 ----------------------------------------
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

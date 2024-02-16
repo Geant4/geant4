@@ -251,6 +251,7 @@ G4HadFinalState* G4ParticleHPFissionFS::ApplyYourself(const G4HadProjectile& the
     G4int fragA_M = 0;
     // System is traget rest!
     theFF.GetAFissionFragment(eKinetic, fragA_Z, fragA_A, fragA_M);
+    if (0 == fragA_A) { return theResult.Get(); }
     G4int fragB_Z = (G4int)theBaseZ - fragA_Z;
     G4int fragB_A = (G4int)theBaseA - fragA_A - Prompt;
 

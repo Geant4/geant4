@@ -6,6 +6,17 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-01-29 Vladimir Ivanchenko (hadr-deex-V11-01-12)
+- G4StatMFChannel - fixed compilation warnings at alma9-gcc131 seen in CMSSW 
+    by substitution of C-arrays by std::vector 
+
+## 2024-01-25 Vladimir Ivanchenko
+- G4FermiBreakUpVI, G4FermiFragmentsPoolVI - fixed problem 2584 (production
+    of fake excited isomeres) by moving the check on lifetime limit from the
+    pull (initialized once as a static object) to the Initialise() method of 
+    the model allowing to change this limit in an application, do not consider
+    decay chains with no final state.
+
 ## 2023-11-15 Vladimir Ivanchenko (hadr-deex-V11-01-11)
 - G4FermiChannels - fixed memory leak at exit
 

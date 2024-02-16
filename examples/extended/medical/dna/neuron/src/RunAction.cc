@@ -47,7 +47,6 @@
 #include "G4AnalysisManager.hh"
 #include "G4Threading.hh"
 #include "CommandLineParser.hh"
-//#include "NeuronLoadDataFile.hh"
 #include "Run.hh"
 #include "Randomize.hh"
 #include <iomanip>
@@ -64,23 +63,14 @@ using namespace G4DNAPARSER;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim) 
-: G4UserRunAction(), //fpTrackingAction(0), fInitialized(0),
- fDebug(false),
-fDetector(det),fPrimary(prim),fRun(0) 
-{
-   //CreateHistogram();
-}
+  : G4UserRunAction(),fDetector(det),fPrimary(prim) 
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{  
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
 { 
-  fRun = new Run(fDetector); 
+  if (nullptr == fRun) { fRun = new Run(fDetector); } 
   return fRun;
 }
 
@@ -88,93 +78,20 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 {
+  RunInitManager::Instance()->Initialize();
 
-RunInitManager::Instance()->Initialize();
-
-  // keep run condition
-  if ( fPrimary ) { 
-    G4ParticleDefinition* particle 
-      = fPrimary->GetParticleGun()->GetParticleDefinition();
+  if (nullptr != fPrimary) {
+    G4ParticleDefinition* particle = fPrimary->GetParticleGun()->GetParticleDefinition();
     G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
     fRun->SetPrimary(particle, energy);
   }
-
-/*
-  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetDefaultFileType("root");
-  analysisManager->SetFirstHistoId(1);
-//  if(!analysisManager->IsActive()) {return; }
-
-  G4cout << "Using " << analysisManager->GetType() <<
-      " analysis manager" << G4endl;
-   // Open an output file
-  analysisManager->OpenFile("neuronG4");
-  G4cout << "\n----> Histogram file is opened in neuronG4" <<
-      "." << analysisManager->GetFileType() << G4endl;
-// -----------------------------------------------------
-  //Declare ntuples
-  //
-  // Create 1st ntuple (id = 1)
-  //
-  analysisManager->CreateNtuple("ntuple0", "Soma3D");
-  analysisManager->CreateNtupleDColumn("ind");
-  analysisManager->CreateNtupleDColumn("dist");
-  analysisManager->CreateNtupleDColumn("edep");
-  analysisManager->CreateNtupleDColumn("dose");
-  analysisManager->FinishNtuple();
-  //G4cout << "Ntuple-1 created" << G4endl;
-
-  // Create 2nd ntuple (id = 2)
-  //
-  analysisManager->CreateNtuple("ntuple1", "Dend3D");
-  analysisManager->CreateNtupleDColumn("indD");
-  analysisManager->CreateNtupleDColumn("distD");
-  analysisManager->CreateNtupleDColumn("edepD");
-  analysisManager->CreateNtupleDColumn("doseD");
-  analysisManager->FinishNtuple();
-  //G4cout << "Ntuple-2 created" << G4endl;
-
-  // Create 3rd ntuple (id = 3)
-  //
-  analysisManager->CreateNtuple("ntuple2", "Axon3D");
-  analysisManager->CreateNtupleDColumn("indA");
-  analysisManager->CreateNtupleDColumn("distA");
-  analysisManager->CreateNtupleDColumn("edepA");
-  analysisManager->CreateNtupleDColumn("doseA");
-  analysisManager->FinishNtuple();
-  //G4cout << "Ntuple-3 created" << G4endl;
-
-  // Create 4rd ntuple (id = 4)
-  //
-  analysisManager->CreateNtuple("ntuple3", "Outputs per event");
-  analysisManager->CreateNtupleDColumn("EdepAll");
-  analysisManager->CreateNtupleDColumn("EdepMed");
-  analysisManager->CreateNtupleDColumn("EdepSlice");
-  analysisManager->CreateNtupleDColumn("EdepNeuron");
-  analysisManager->FinishNtuple();
-  //G4cout << "Ntuple-4 created" << G4endl;
-  // ............................
-  G4cout << "All Ntuples have been created " << G4endl;
-*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* /*run*/)
 { 
-
-  if (isMaster) fRun->EndOfRun(); 
-
-// save histogramms
-/*  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
-  //save histograms   
-  analysisManager->Write();
-  analysisManager->CloseFile();  
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
-*/
- 
+  if (isMaster) fRun->EndOfRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,14 +99,11 @@ void RunAction::EndOfRunAction(const G4Run* /*run*/)
 void RunAction::CreateHistogram()
 {
   // Book histograms, ntuple
-
   // Create analysis manager
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);
   if((command = parser->GetCommandIfActive("-out"))==0) return;
-//
-// Declare ntuples
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -203,7 +117,6 @@ void RunAction::WriteHistogram()
   // print histogram statistics
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  // if(!analysisManager->IsActive()) {return; }
 
   // save histograms
   //

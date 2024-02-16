@@ -1,0 +1,108 @@
+# requires clang-format version 13.0+
+---
+AlignAfterOpenBracket: Align
+# Instead ContinuationIndentWidth is used
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+# Aligns \ symbols on the left; other options DontAlign, Left
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments: false
+AllowAllParametersOfDeclarationOnNextLine: true
+# When declaring a function, parameters continue on the same line
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+# while (true) {} allowed
+# if (a) return; is allowed
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: Inline 
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+BraceWrapping:
+    AfterClass:             true
+    AfterControlStatement:  MultiLine
+    AfterEnum:              true
+    AfterFunction:          true
+    AfterNamespace:         true
+    AfterStruct:            true
+    AfterUnion:             true
+    AfterExternBlock:       true
+    BeforeCatch:            true
+    BeforeElse:             true
+    IndentBraces:           false
+    SplitEmptyFunction:     false
+    SplitEmptyRecord:       false
+    SplitEmptyNamespace:    false
+BreakBeforeBraces: Custom
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+BreakInheritanceList: BeforeColon
+BreakConstructorInitializers: BeforeColon
+BreakStringLiterals: true
+ColumnLimit: 100
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+FixNamespaceComments: true
+IncludeBlocks: Regroup
+# Priority is:
+# 1. Geant4 headers in ""
+# 1. Geant4 headers in "" that don't start with 'G4'
+# 2. External package headers with extension in "" or <> (but _should_ be <>)
+# 3. System headers (not exhaustive)
+# Note order of regexes is important as they are matched in order
+IncludeCategories:
+  - Regex:           '^"G4.*\.hh"'
+    Priority:        1
+  - Regex:           '^"(Randomize|globals)\.hh"'
+    Priority:        1
+  - Regex:           '^"[[:alnum:]\/\-_.]+"'
+    Priority:        2
+  - Regex:           '^<[a-z_]+>'
+    Priority:        3
+  - Regex:           '^<[[:alnum:]\/.]+>'
+    Priority:        2
+# Provides an extra indent level for public/protected/private sections
+# without requiring excess indention and use of AccessModifierOffset
+IndentAccessModifiers: true
+IndentCaseLabels: true
+IndentPPDirectives: AfterHash
+IndentWidth: 2
+KeepEmptyLinesAtTheStartOfBlocks: false
+Language: Cpp
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: true
+SortUsingDeclarations: true
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 2
+SpacesInAngles: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: Cpp11
+TabWidth: 2
+UseTab: Never
+...

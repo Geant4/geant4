@@ -25,7 +25,7 @@
 //
 // Implementation for G4UTrap wrapper class
 //
-// 13.09.13 G.Cosmo, CERN/PH
+// 13.09.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 
 #include "G4Trap.hh"
@@ -268,7 +268,7 @@ void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
   SetDx3(pDx3);
   SetDx4(pDx4);
   SetTanAlpha1(std::tan(pAlp1));
-  SetTanAlpha1(std::tan(pAlp2));
+  SetTanAlpha2(std::tan(pAlp2));
   // last two will also reset cached variables
   SetTheta(pTheta);
   SetPhi(pPhi);
@@ -336,13 +336,11 @@ void G4UTrap::GetVertices(G4ThreeVector pt[8]) const
   G4double fDy2     = GetYHalfLength2();
   G4double fDx3     = GetXHalfLength3();
   G4double fDx4     = GetXHalfLength4();
-  G4double phi      = GetPhi();
-  G4double theta    = GetTheta();
   G4double fTalpha1 = GetTanAlpha1();
   G4double fTalpha2 = GetTanAlpha2();
 
-  G4double DzTthetaCphi = fDz*std::tan(theta)*std::cos(phi);
-  G4double DzTthetaSphi = fDz*std::tan(theta)*std::sin(phi);
+  G4double DzTthetaCphi = fDz*GetTanThetaCosPhi();
+  G4double DzTthetaSphi = fDz*GetTanThetaSinPhi();
   G4double Dy1Talpha1   = fDy1*fTalpha1;
   G4double Dy2Talpha2   = fDy2*fTalpha2;
 

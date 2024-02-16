@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -855,10 +855,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 90.5308 MeV rms = 6.08062 MeV
-EGap: mean = 3.64448 MeV rms = 2.14405 MeV
-LAbs: mean = 6.56523 cm  rms = 5.55065 mm 
-LGap: mean = 1.78048 cm  rms = 1.07679 cm 
+EAbs: mean = 86.7754 MeV rms = 6.06128 MeV
+EGap: mean = 6.22737 MeV rms = 4.05788 MeV
+LAbs: mean = 6.36212 cm  rms = 5.45277 mm 
+LGap: mean = 3.22513 cm  rms = 2.15538 cm 
 ### Run 1 start.
 
 ---> Begin of event: 0
@@ -872,8 +872,8 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 177.138 MeV rms = 8.27034 MeV
-LAbs: mean = 12.7777 cm  rms = 6.20274 mm 
+EAbs: mean = 182.084 MeV rms = 6.77419 MeV
+LAbs: mean = 13.0969 cm  rms = 5.39518 mm 
 ### Run 2 start.
 
 ---> Begin of event: 0
@@ -887,10 +887,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 271 MeV rms = 9.43362 MeV
-EGap2: mean = 14.1853 MeV rms = 5.50846 MeV
-LAbs: mean = 19.5342 cm  rms = 7.25439 mm 
-LGap2: mean = 6.9354 cm  rms = 2.73288 cm 
+EAbs: mean = 271.702 MeV rms = 14.4701 MeV
+EGap2: mean = 13.0056 MeV rms = 4.70044 MeV
+LAbs: mean = 19.609 cm  rms = 1.07761 cm 
+LGap2: mean = 6.42871 cm  rms = 2.46679 cm 
 ... close file : e-.xml - done
 ... close file : e-_nt_Ntuple1.xml - done
 ... close file : e-_nt_Ntuple2.xml - done
@@ -911,10 +911,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 226.225 MeV rms = 40.4637 MeV
-EGap2: mean = 19.8776 MeV rms = 6.61033 MeV
-LAbs: mean = 9.41867 cm  rms = 1.57179 cm 
-LGap2: mean = 4.82778 cm  rms = 1.12059 cm 
+EAbs: mean = 197.13 MeV rms = 59.1173 MeV
+EGap2: mean = 20.0031 MeV rms = 11.0171 MeV
+LAbs: mean = 8.42208 cm  rms = 2.68317 cm 
+LGap2: mean = 4.32901 cm  rms = 1.4735 cm 
 ### Run 4 start.
 
 ---> Begin of event: 0
@@ -928,10 +928,10 @@ There are histograms that can be viewed with visualization:
 
  ----> print histograms statistic 
 
-EAbs: mean = 201.148 MeV rms = 55.8478 MeV
-EGap2: mean = 16.2152 MeV rms = 6.89304 MeV
-LAbs: mean = 8.83635 cm  rms = 2.47669 cm 
-LGap2: mean = 4.42853 cm  rms = 1.53221 cm 
+EAbs: mean = 201.326 MeV rms = 52.7717 MeV
+EGap2: mean = 19.8641 MeV rms = 13.0272 MeV
+LAbs: mean = 9.43807 cm  rms = 2.2901 cm 
+LGap2: mean = 4.98845 cm  rms = 1.36532 cm 
 ... close file : proton.xml - done
 ... close file : proton_nt_Ntuple1.xml - done
 ... close file : proton_nt_Ntuple2.xml - done

@@ -596,6 +596,9 @@ void G4PhysicsModelCatalog::Initialize() {
     InsertModel( 26041, "model_hINCLXXCaptureAtRest_NuclearCapture" );
     InsertModel( 26042, "model_hINCLXXCaptureAtRest_DIO" );
 
+    // Class: G4LightIonQMDReaction
+    InsertModel( 23310, "model_LightIonQMDModel" );
+
     // ...
     
     SanityCheck();

@@ -76,6 +76,7 @@ private:
   
   G4double fTolerance{0.0};
   G4double fElim{0.0};
+  G4double fTimeLim{1.0}; // in ns
 
   G4bool isFirst{false};
 

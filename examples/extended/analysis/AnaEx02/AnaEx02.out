@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -862,20 +862,20 @@ See commands in /vis/modeling/trajectories/ for other options.
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 256.274 MeV +- 0 eV 
- mean Energy in Gap      : 50.16 MeV +- 0 eV 
+ mean Energy in Absorber : 281.112 MeV +- 0 eV 
+ mean Energy in Gap      : 74.1401 MeV +- 0 eV 
 
- mean trackLength in Absorber : 63.8594 cm  +- 0 fm 
- mean trackLength in Gap      : 26.1088 cm  +- 0 fm 
+ mean trackLength in Absorber : 69.2721 cm  +- 0 fm 
+ mean trackLength in Gap      : 37.7451 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 256.274 MeV rms = 0 eV 
-EGap: mean = 50.16 MeV rms = 0 eV 
-LAbs: mean = 63.8594 cm  rms = 0 fm 
-LGap: mean = 26.1088 cm  rms = 0 fm 
+EAbs: mean = 281.112 MeV rms = 0 eV 
+EGap: mean = 74.1401 MeV rms = 0 eV 
+LAbs: mean = 69.2721 cm  rms = 0 fm 
+LGap: mean = 37.7451 cm  rms = 0 fm 
 
 ----> Histograms and ntuples are saved
 
@@ -909,20 +909,20 @@ LGap: mean = 26.1088 cm  rms = 0 fm
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 186.376 MeV +- 48.5122 MeV
- mean Energy in Gap      : 45.6396 MeV +- 12.7371 MeV
+ mean Energy in Absorber : 190.633 MeV +- 48.8718 MeV
+ mean Energy in Gap      : 46.5146 MeV +- 13.3975 MeV
 
- mean trackLength in Absorber : 46.0669 cm  +- 12.0216 cm 
- mean trackLength in Gap      : 23.1611 cm  +- 6.5053 cm 
+ mean trackLength in Absorber : 47.0418 cm  +- 12.1398 cm 
+ mean trackLength in Gap      : 23.5952 cm  +- 6.83896 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 186.376 MeV rms = 48.5122 MeV
-EGap: mean = 45.6396 MeV rms = 12.7371 MeV
-LAbs: mean = 46.0669 cm  rms = 12.0216 cm 
-LGap: mean = 23.1611 cm  rms = 6.5053 cm 
+EAbs: mean = 190.633 MeV rms = 48.8718 MeV
+EGap: mean = 46.5146 MeV rms = 13.3975 MeV
+LAbs: mean = 47.0418 cm  rms = 12.1398 cm 
+LGap: mean = 23.5952 cm  rms = 6.83896 cm 
 
 ----> Histograms and ntuples are saved
 

@@ -1,0 +1,21 @@
+# First stage, build Geant4 RPMs from spec file
+FROM centos:7
+
+WORKDIR /root
+
+RUN yum install -y centos-release-scl epel-release gdb rpmdevtools yum-utils \
+ && rpmdev-setuptree
+
+COPY geant4.spec geant4.spec
+
+RUN yum-builddep -y geant4.spec
+RUN spectool -g -R geant4.spec
+RUN rpmbuild -bb geant4.spec
+
+# Second stage, build Geant4 container image
+FROM centos:7
+
+COPY --from=0 /root/rpmbuild/RPMS/* /tmp/
+
+RUN yum install -y epel-release centos-release-scl \
+ && yum install -y /tmp/*.rpm && yum autoremove -y # && rm -rf /tmp/*

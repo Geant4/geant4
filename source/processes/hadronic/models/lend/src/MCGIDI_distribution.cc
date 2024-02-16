@@ -61,7 +61,7 @@ int MCGIDI_distribution_release( statusMessageReporting *smr, MCGIDI_distributio
 int MCGIDI_distribution_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_product *product, MCGIDI_POPs * /*pops*/, ptwXYPoints *norms ) {
 
     char const *nativeData, *gammaEnergy;
-    double gammaEnergy_MeV;
+    double gammaEnergy_MeV{0.0};
     MCGIDI_distribution *distribution = &(product->distribution);
     xDataTOM_element *distributionElement;
     enum MCGIDI_energyType energyType = MCGIDI_energyType_unknown;

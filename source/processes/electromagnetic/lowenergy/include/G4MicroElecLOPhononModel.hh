@@ -78,12 +78,9 @@ class G4MicroElecLOPhononModel : public G4VEmModel
     G4MicroElecLOPhononModel& operator=(const G4MicroElecLOPhononModel&) = delete;
     G4MicroElecLOPhononModel(const G4MicroElecLOPhononModel&) = delete;
 
-  protected:
-
-    G4ParticleChangeForGamma* fParticleChangeForGamma;
-
   private:
 
+    G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
     G4double phononEnergy = 0.;
     G4bool Interband = false;
     G4bool isInitialised = false;

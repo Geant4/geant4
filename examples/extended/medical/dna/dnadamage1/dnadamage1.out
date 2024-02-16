@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -531,12 +531,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      99.31         7.19         0.01         2914k VoxelStraight_logic
+      99.30         7.12         0.00         2914k VoxelStraight_logic
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00       2913k     20884    21735      54614         7.19    VoxelStraight_logic
+     100.00       2913k     20884    21735      54614         7.12    VoxelStraight_logic
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
@@ -760,7 +760,7 @@ ___________________________________
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=120.830000s Real=144.616393s Sys=0.060000s
+  User=137.990000s Real=139.241194s Sys=0.060000s
 
 ----> Histograms are saved
 Graphics systems deleted.

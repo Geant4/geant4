@@ -127,9 +127,6 @@ public:
 
   G4MicroElecInelasticModel_new & operator=(const  G4MicroElecInelasticModel_new &right) = delete;
   G4MicroElecInelasticModel_new(const  G4MicroElecInelasticModel_new&) = delete;
-protected:
-  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
-  
 
 private:
   //
@@ -157,6 +154,8 @@ private:
   //
   // private elements
   //  
+  G4ParticleChangeForGamma* fParticleChangeForGamma = nullptr;
+  
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation* fAtomDeexcitation = nullptr;
   G4Material* nistSi = nullptr;

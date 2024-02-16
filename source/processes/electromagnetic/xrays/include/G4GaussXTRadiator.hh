@@ -53,7 +53,7 @@ class G4GaussXTRadiator : public G4VXTRenergyLoss
   ~G4GaussXTRadiator();
 
   // reimplementation of base class function in analytical way
-  G4double SpectralXTRdEdxFS(G4double energy);
+  G4double SpectralXTRdEdx(G4double energy) override;
 
   G4double GetStackFactor(G4double energy, G4double gamma,
                           G4double varAngle) override;

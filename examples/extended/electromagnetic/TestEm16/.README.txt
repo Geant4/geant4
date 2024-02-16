@@ -1,4 +1,3 @@
-
 ///\file "electromagnetic/TestEm16/.README.txt"
 ///\brief Example TestEm16 README page
 
@@ -23,9 +22,9 @@
 
 \section TestEm16_s2 PHYSICS LIST
 
- The particle list is the one of novice/exampleN03 and
- <a href="../../html_TestEm6/html/ExampleTestEm6.html"> TestEm6 </a>
- with in addition synchrotron radiation.
+ The particle list include EM processes for gamma, e+, e-, mu+, mu-,
+ and protons, for the rest of particles only transportation.
+ Synchrotron radiation is added to all charged particles.
  To make the synchrotron radiation easily visible, a very low
  pressure "vaccuum" and a magnetic field of by default 1 Tesla
  in z-direction is used.
@@ -35,7 +34,7 @@
  The primary kinematic consists of a single particle which hits the
  block perpendicular to the input face. The type of the particle
  and its energy are set in the PrimaryGeneratorAction class, and can
- changed via the G4 build-in commands of G4ParticleGun class (see
+ changed via the G4 build-in commands of ParticleGun class (see
  the macros provided with this example).
  The default is an positron of 10 GeV.
     
@@ -71,7 +70,7 @@
  The threshold for producing secondaries can be changed.
  eg: 
 \verbatim
- /run/particle/setCut 100 micrometer
+ /run/setCut 100 micrometer
  /run/initialize
 \endverbatim
 	
@@ -82,12 +81,12 @@
 		  	
 \section TestEm16_s6- HOW TO START ?
 
- - Execute Test  in 'batch' mode from macro files
+ - execute Test  in 'batch' mode from macro files
 \verbatim
 % TestEm16    run01.mac
 \endverbatim
 
- - Execute Test  in 'interactive mode' with visualization
+ - execute Test  in 'interactive mode' with visualization
 \verbatim
 % TestEm16
 	....
@@ -95,6 +94,17 @@ Idle> type your commands
 	....
 Idle> exit
 \endverbatim
+
+ other Macros provided in this example:
+   - run01_prot.mac
+     Synchrotron radiation of 50 TeV protons in 20 T field
+     relevant for FCC-hh
+   - run02.mac
+     weak field long distance example
+     relevant for space applications
+   - TestReflection.mac
+     specular reflection of X-ray gammas on a block of
+     copper defined by Box_1m_Cu.gdml
 
 \section TestEm16_s7 TRACKING : stepMax and setMaxStepLength
 
@@ -117,8 +127,7 @@ Idle> exit
   (photon spectrum weighted with the photon energy) and a histogram
   of the path length between photon radiation is produced.
 	 
-  The histograms are managed by G4AnalysisManager and its messenger,
-  HistoMessenger.
+  The histograms are managed by G4AnalysisManager and its Messenger.
      	
   The histos can be activated individually with the command :
 \verbatim

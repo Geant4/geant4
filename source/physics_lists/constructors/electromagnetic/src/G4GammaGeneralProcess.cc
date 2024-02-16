@@ -433,7 +433,7 @@ void G4GammaGeneralProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	  val = (sigN + sigM)/sum;
 	  (*(tables[13]))[idx]->PutValue(j, val);
 
-	  val = sigN/sum;
+	  val = sigM/sum;
 	  (*(tables[14]))[idx]->PutValue(j, val);
 	}
 	for(std::size_t k=0; k<nTables; ++k) {

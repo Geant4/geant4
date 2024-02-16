@@ -39,14 +39,8 @@
 #include "G4PhysicsModelCatalog.hh"
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
-#include "G4AutoLock.hh"
 
 G4FermiFragmentsPoolVI* G4FermiBreakUpVI::fPool = nullptr;
-
-namespace
-{
-  G4Mutex theFBUMutex = G4MUTEX_INITIALIZER;
-}
 
 G4FermiBreakUpVI::G4FermiBreakUpVI()
 {
@@ -55,13 +49,9 @@ G4FermiBreakUpVI::G4FermiBreakUpVI()
   secID = G4PhysicsModelCatalog::GetModelID("model_G4FermiBreakUpVI");
   prob.resize(12,0.0);
   if (nullptr == fPool) {
-    G4AutoLock l(&theFBUMutex);
-    if (nullptr == fPool) {
-      fPool = new G4FermiFragmentsPoolVI();
-      fPool->Initialise();
-      isFirst = true;
-    }
-    l.unlock();
+    fPool = new G4FermiFragmentsPoolVI();
+    fPool->Initialise();
+    isFirst = true;
   }
 }
 
@@ -79,6 +69,7 @@ void G4FermiBreakUpVI::Initialise()
     G4NuclearLevelData::GetInstance()->GetParameters();
   fTolerance = param->GetMinExcitation();
   fElim = param->GetFBUEnergyLimit();
+  fTimeLim = param->GetMaxLifeTime();
   if (verbose > 1) {
     G4cout << "### G4FermiBreakUpVI::Initialise(): the pool is initilized=" 
 	   << fPool->IsInitialized() << " fTolerance(eV)=" << fTolerance/CLHEP::eV
@@ -125,8 +116,8 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
     A = frag[i]->GetA();
     excitation = frag[i]->GetExcitationEnergy();
     lv0 = lvect[i];
-    G4bool unstable = IsApplicable(Z, A, excitation);
-    if (unstable) { 
+    G4bool unstable = (IsApplicable(Z, A, excitation) && frag[i]->GetLifeTime() < fTimeLim);
+    if (unstable) {
       mass = frag[i]->GetTotalEnergy();
       if (verbose > 1) {
 	G4cout << "# FermiFrag " << i << ".  Z= " << Z << " A= " << A 

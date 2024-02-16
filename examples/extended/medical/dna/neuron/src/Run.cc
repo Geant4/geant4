@@ -43,7 +43,6 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "G4AnalysisManager.hh"
-//#include "NeuronLoadDataFile.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"  
@@ -53,42 +52,34 @@
 #include "G4H2O.hh"
 #include <G4Scheduler.hh>
 #include "G4MoleculeTable.hh"
-#include <cmath>
 #include "G4EmCalculator.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* det)
-: G4Run(), fDetector(det), 
-  fParticle(0), fEkin(0.), 
-  fLET(0.), fLET2(0.), 
-  fTrackLen(0.),  fTrackLen2(0.)
+: G4Run(), fDetector(det), fParticle(0)
 {
-  //fNeuronLoadParamz = new NeuronLoadDataFile(); 
-
   fSoma3DEdep = new G4double[fDetector->GetnbSomacomp()];
   for (G4int i=0; i<fDetector->GetnbSomacomp(); i++)
   {
-   fSoma3DEdep[i]=0.;
+    fSoma3DEdep[i]=0.;
   }  
   fDend3DEdep = new G4double[fDetector->GetnbDendritecomp()];
   for (G4int i=0; i<fDetector->GetnbDendritecomp(); i++)
   {
-   fDend3DEdep[i]=0.;
+    fDend3DEdep[i]=0.;
   }
   fAxon3DEdep = new G4double[fDetector->GetnbAxoncomp()];
   for (G4int i=0; i<fDetector->GetnbAxoncomp(); i++)
   {
-   fAxon3DEdep[i]=0.;
+    fAxon3DEdep[i]=0.;
   }
 
   fEdepAll =  fEdepAll_err=fEdepMedium= fEdepMedium_err= fEdepSlice=  
   fEdepSlice_err=fEdepSoma=fEdepSoma_err=0. ;
   fEdepDend =  fEdepDend_err=fEdepAxon=  fEdepAxon_err=fEdepNeuron=  
   fEdepNeuron_err =0. ;
-  fEnergyFlow   = fEnergyFlow2    = 0.;  
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,7 +89,7 @@ Run::~Run()
   delete[] fSoma3DEdep;
   delete[] fDend3DEdep;
   delete[] fAxon3DEdep;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -180,13 +171,13 @@ void Run::ParticleCountNeuron(G4String name, G4double Ekin)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void Run::MoleculeCount(G4String, G4double)
 {
 //fMoleculeNumber = G4MoleculeCounter::Instance()
 //                  ->GetNMoleculesAtTime(moleculename, Gtime);
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::MoleculeCountNeuron(G4Molecule* molecule)
@@ -290,9 +281,6 @@ void Run::Merge(const G4Run* run)
     }   
   }
   
-  //map: molecule count
-  //fMoleculeNumber += localRun->fMoleculeNumber;
- 
   std::map<G4String,G4int>::const_iterator itm;
   for ( itm = localRun->fMoleculeNumber.begin();
         itm != localRun->fMoleculeNumber.end(); ++itm ) {
@@ -351,9 +339,9 @@ void Run::EndOfRun()
   // Characteristics of Primary particle 
   G4String Particle = fParticle->GetParticleName(); 
   G4double GunArea ;
-  //GunArea = fParticle->GetGunArea();
+
   G4Material* material = fDetector->GetTargetMaterial();
-  //G4double density     = material->GetDensity();   
+
   //compute track length of primary track
   //
   fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;
@@ -370,17 +358,14 @@ void Run::EndOfRun()
   
   //Stopping Power from input Table.
   G4EmCalculator emCalculator;
-  //G4double dEdxTable = 0., 
   G4double dEdxFull = 0.;
   if (fParticle->GetPDGCharge()!= 0.) { 
-   // dEdxTable = emCalculator.GetDEDX(fEkin,fParticle,material);
-    dEdxFull  = emCalculator.ComputeTotalDEDX(fEkin,fParticle,material);    
+    dEdxFull = emCalculator.ComputeTotalDEDX(fEkin,fParticle,material);    
   }
 
   //Stopping Power from simulation.
   G4double meandEdx  = (EdepTotal/fTrackLen)/(keV/um); 
   G4double meandEdxerr  = (rmst/fTrackLen)/(keV/um); 
-  //G4double stopPower = (meandEdx/density)/(MeV*cm2/g);    
   G4int ncols=0;
   G4float tmp, En;
   G4int Ntrav = 0;
@@ -397,24 +382,24 @@ void Run::EndOfRun()
   // Fluence dose of single paticle track
   G4double FluenceDoseperBeam = 0.160218*(dEdxFull)/(GunArea*std::pow(10,18)) ; 
   
- G4cout << "\n ======= The summary of simulation results 'neuron' ========\n";
- G4cout 
- << "\n  Primary particle               = " << Particle
- << "\n  Kinetic energy of beam         = " << fEkin/MeV<<" A*MeV" 
- << "\n  Particle traversals the neuron = " << Ntrav<<" of "<<numberOfEvent
- << "\n  Full LET of beam as formulas   = " <<dEdxFull/(keV/um) << " keV/um"
- << "\n  Mean LET of beam as simulation = " 
- << meandEdx << " +- "  << meandEdxerr << " keV/um"
- << "\n  Mean track length of beam      = " 
- << fTrackLen/um  << " +- " << rms << " um"  
- << "\n  Particle fluence               = " 
- << numberOfEvent/(GunArea/(cm*cm))<<" particles/cm^2"
- << "\n  Fluence dose (full)            = " 
- << numberOfEvent*FluenceDoseperBeam/(joule/kg)<<" Gy"
- << "\n  Fluence dose ber beam          = " 
- << FluenceDoseperBeam/(joule/kg) <<" Gy" << G4endl;   
+  G4cout << "\n ======= The summary of simulation results 'neuron' ========\n";
+  G4cout 
+    << "\n  Primary particle               = " << Particle
+    << "\n  Kinetic energy of beam         = " << fEkin/MeV<<" A*MeV" 
+    << "\n  Particle traversals the neuron = " << Ntrav<<" of "<<numberOfEvent
+    << "\n  Full LET of beam as formulas   = " <<dEdxFull/(keV/um) << " keV/um"
+    << "\n  Mean LET of beam as simulation = " 
+    << meandEdx << " +- "  << meandEdxerr << " keV/um"
+    << "\n  Mean track length of beam      = " 
+    << fTrackLen/um  << " +- " << rms << " um"  
+    << "\n  Particle fluence               = " 
+    << numberOfEvent/(GunArea/(cm*cm))<<" particles/cm^2"
+    << "\n  Fluence dose (full)            = " 
+    << numberOfEvent*FluenceDoseperBeam/(joule/kg)<<" Gy"
+    << "\n  Fluence dose ber beam          = " 
+    << FluenceDoseperBeam/(joule/kg) <<" Gy" << G4endl;   
  
- if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}
+  if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}
   
   //frequency of processes in all volume
   //
@@ -436,8 +421,8 @@ void Run::EndOfRun()
   G4cout << "\n List of generated particles outside neuron structure:" 
   << G4endl;
      
- std::map<G4String,ParticleData>::iterator itc;               
- for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 
+  std::map<G4String,ParticleData>::iterator itc;           
+  for (itc = fParticleDataMap1.begin(); itc != fParticleDataMap1.end(); itc++) { 
     G4String name = itc->first;
     ParticleData data = itc->second;
     G4int count = data.fCount;
@@ -452,37 +437,28 @@ void Run::EndOfRun()
            << "\t( "  << G4BestUnit(eMin, "Energy")
            << " --> " << G4BestUnit(eMax, "Energy") 
            << ") \tEflow/event = " << G4BestUnit(Eflow, "Energy") 
-     << G4endl;           
- } 
+	   << G4endl;           
+  }
    
   //particles count inside neuron structure
- //
- G4cout << "\n Number of secondary particles inside neuron structure:" 
-        << G4endl;
+  //
+  G4cout << "\n Number of secondary particles inside neuron structure:" 
+	 << G4endl;
   
- std::map<G4String,ParticleData>::iterator itn;               
- for (itn = fParticleDataMap2.begin(); itn != fParticleDataMap2.end(); itn++) { 
+  std::map<G4String,ParticleData>::iterator itn;               
+  for (itn = fParticleDataMap2.begin(); itn != fParticleDataMap2.end(); itn++) { 
     G4String name = itn->first;
     ParticleData data = itn->second;
     G4int count = data.fCount;
-    //G4double eMean = data.fEmean/count;
-    //G4double eMin = data.fEmin;
-    //G4double eMax = data.fEmax;        
-    //-----> secondary particles flux
-    //G4double Eflow = data.fEmean/TotNbofEvents;        
  
     G4cout << "  " << std::setw(13) << name << " : " << std::setw(7) << count
-           //<< "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-           //<< "\t( "  << G4BestUnit(eMin, "Energy")
-           //<< " --> " << G4BestUnit(eMax, "Energy") 
-           //<< ") \tEflow/event = " << G4BestUnit(Eflow, "Energy") 
-     << G4endl;
- }
+	   << G4endl;
+  }
  
   //molecules count inside neuron 
- // Time cut (from 1 ps to 10 ps) in class ITTrackingAction.cc 
- G4cout << "\n Number of molecular products inside neuron structure:" 
-        << "\n    time: 1 ps - 10 ps "<< G4endl;
+  // Time cut (from 1 ps to 10 ps) in class ITTrackingAction.cc 
+  G4cout << "\n Number of molecular products inside neuron structure:" 
+	 << "\n    time: 1 ps - 10 ps "<< G4endl;
   // if (1 ns < time <= 10 ns ) MoleculeCount(molname, time) ;  
   G4int ind = 0;
   std::map<G4String,G4int>::iterator itm;    
@@ -496,245 +472,154 @@ void Run::EndOfRun()
   }
  
   // compute total Energy and Dose deposited for all events
-  //
-  // EdepMedum + EdepSlice + EdepNeuron --> EdepAll
-  // EdepSoma + EdepDend + EdepAxon + EdepSpines --> EdepNeuron
- G4cout << "\n Total energy (MeV) deposition :" << G4endl;
+  G4cout << "\n Total energy (MeV) deposition :" << G4endl;
   
- G4cout << "  " 
- << std::setw(13) << "All volume:  " << std::setw(7) << fEdepAll/MeV<< "\n " 
- << "  " << std::setw(13) << "Bounding slice: " 
- << std::setw(7) << (fEdepSlice+fEdepNeuron)/MeV << "\n " 
- << "  " << std::setw(13) << "Neuron:   " << std::setw(7) 
- << fEdepNeuron/MeV << "\n "  
- << "  " << std::setw(13) << "Soma:   " << std::setw(7) 
- << fEdepSoma/MeV<< "\n " 
- << "  " << std::setw(13) << "Dendrites:  " << std::setw(7) 
- << fEdepDend/MeV << "\n " 
- << "  " << std::setw(13) << "Axon:   " << std::setw(7) 
- << fEdepAxon/MeV  
- << G4endl;
+  G4cout << "  " 
+	 << std::setw(13) << "All volume:  " << std::setw(7) << fEdepAll/MeV<< "\n " 
+	 << "  " << std::setw(13) << "Bounding slice: " 
+	 << std::setw(7) << (fEdepSlice+fEdepNeuron)/MeV << "\n " 
+	 << "  " << std::setw(13) << "Neuron:   " << std::setw(7) 
+	 << fEdepNeuron/MeV << "\n " 
+	 << "  " << std::setw(13) << "Soma:   " << std::setw(7) 
+	 << fEdepSoma/MeV<< "\n "
+	 << "  " << std::setw(13) << "Dendrites:  " << std::setw(7) 
+	 << fEdepDend/MeV << "\n "
+	 << "  " << std::setw(13) << "Axon:   " << std::setw(7) 
+	 << fEdepAxon/MeV  
+	 << G4endl;
    
   // compute mean Energy and Dose deposited in hit compartments
   // 
   //G4AnalysisManager* analys = G4AnalysisManager::Instance();  
- G4int    somaCompHit = 0;
- G4double somaCompEdep = 0.;
- G4double somaCompDose = 0.;
- G4double somaCompEdep2 = 0.;
- G4double somaCompDose2 = 0.;
+  G4int    somaCompHit = 0;
+  G4double somaCompEdep = 0.;
+  G4double somaCompDose = 0.;
+  G4double somaCompEdep2 = 0.;
+  G4double somaCompDose2 = 0.;
   // Remove old outputs  
   remove ("Soma3DEdep.out");
- for (G4int i=0; i<fDetector->GetnbSomacomp(); i++) 
- {  
-  if (fSoma3DEdep[i] > 0.0) 
-  {
-  somaCompHit ++;
-  somaCompEdep += fSoma3DEdep[i] ;
-  //somaCompDose += fSoma3DEdep[i]/fDetector->GetMassSomacomp(i) ;
-  somaCompEdep2 += fSoma3DEdep[i]*fSoma3DEdep[i] ;
-  //somaCompDose2 += (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i))*
-  //   (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i));
- /*G4double distSoma = 0.;
- //Fill ntuple #1
- analys->FillNtupleDColumn(1,0,i+1);
- analys->FillNtupleDColumn(1,1,distSoma);
- analys->FillNtupleDColumn(1,2,fSoma3DEdep[i]/keV);
- analys->FillNtupleDColumn(1,3,(fSoma3DEdep[i]/joule)/
-         (fDetector->GetMassSomacomp(i)/kg));
- analys->AddNtupleRow(1);
- */
+  for (G4int i=0; i<fDetector->GetnbSomacomp(); i++) {
+    if (fSoma3DEdep[i] > 0.0) {
+      somaCompHit++;
+      somaCompEdep += fSoma3DEdep[i];
+      somaCompEdep2 += fSoma3DEdep[i]*fSoma3DEdep[i];
   
-  std::ofstream WriteDataInSoma("Soma3DEdep.out", std::ios::app);
-   // Index of targeted compartments 
-  WriteDataInSoma //<<   i+1            << '\t' << "   " 
-   // position of compartments
-          <<   fDetector->GetPosSomacomp(i).x()<< '\t' << "   " 
-   <<   fDetector->GetPosSomacomp(i).y()<< '\t' << "   " 
-   <<   fDetector->GetPosSomacomp(i).z()<< '\t' << "   " 
-   // Edep in compartments 
-   <<   fSoma3DEdep[i]/keV             << '\t' << "   "  
-   // Dose in compartments
-   //<<   (fSoma3DEdep[i]/joule)/(fDetector->GetMassSomacomp(i)/kg)
-   // Dose in whole structure of Soma  
-   //<<   (fSoma3DEdep[i]/joule)/(fDetector->GetMassTotSo1()/kg)
-   //<< '\t' << "   " 
-   << G4endl;    
+      std::ofstream WriteDataInSoma("Soma3DEdep.out", std::ios::app);
+      // Index of targeted compartments 
+      WriteDataInSoma
+	<< fDetector->GetPosSomacomp(i).x()<< '\t' << "   " 
+	<< fDetector->GetPosSomacomp(i).y()<< '\t' << "   " 
+	<< fDetector->GetPosSomacomp(i).z()<< '\t' << "   " 
+	// Edep in compartments 
+	<< fSoma3DEdep[i]/keV             << '\t' << "   "  
+	<< G4endl;    
+    }
   }
- }
   // compute mean Energy and Dose deposited in compartments; 
   // +- RMS : Root Mean Square  
   G4double rmsEdepS =0.;
   G4double rmsDoseS =0.;
-  if (somaCompHit >0)
-  {
-  somaCompEdep /= somaCompHit; somaCompEdep2 /= somaCompHit;
-  rmsEdepS = somaCompEdep2 - somaCompEdep*somaCompEdep;
-  if (rmsEdepS>0.) rmsEdepS = std::sqrt(rmsEdepS);
-  else            rmsEdepS = 0.;  
-  somaCompDose /= somaCompHit; somaCompDose2 /= somaCompHit;
-  rmsDoseS = somaCompDose2 - somaCompDose*somaCompDose;
-  if (rmsDoseS>0.) rmsDoseS = std::sqrt(rmsDoseS);
-  else            rmsDoseS = 0.;
+  if (somaCompHit >0) {
+    somaCompEdep /= somaCompHit; somaCompEdep2 /= somaCompHit;
+    rmsEdepS = somaCompEdep2 - somaCompEdep*somaCompEdep;
+    if (rmsEdepS>0.) rmsEdepS = std::sqrt(rmsEdepS);
+    else            rmsEdepS = 0.;  
+    somaCompDose /= somaCompHit; somaCompDose2 /= somaCompHit;
+    rmsDoseS = somaCompDose2 - somaCompDose*somaCompDose;
+    if (rmsDoseS>0.) rmsDoseS = std::sqrt(rmsDoseS);
+    else            rmsDoseS = 0.;
   }
   
- G4int   DendCompHit = 0;
- G4double DendCompEdep = 0.;
- G4double DendCompDose = 0.;
- G4double DendCompEdep2 = 0.;
- G4double DendCompDose2 = 0.;
- remove ("Dend3DEdep.out");
- for (G4int i=0; i<fDetector->GetnbDendritecomp(); i++) 
- {  
-  if (fDend3DEdep[i] > 0.0) 
-  {
-  DendCompHit ++;
-  DendCompEdep += fDend3DEdep[i] ;
-  //DendCompDose += fDend3DEdep[i]/fDetector->GetMassDendcomp(i) ;
-  DendCompEdep2 += fDend3DEdep[i]*fDend3DEdep[i] ;
-  //DendCompDose2 += (fDend3DEdep[i]/fDetector->GetMassDendcomp(i))*
-  //   (fDend3DEdep[i]/fDetector->GetMassDendcomp(i)); 
- //Fill ntuple #2
- /*analys->FillNtupleDColumn(2,0,i+1);
- analys->FillNtupleDColumn(2,1,fDetector->GetDistDendsoma(i));
- analys->FillNtupleDColumn(2,2,fDend3DEdep[i]/keV);
- analys->FillNtupleDColumn(2,3,(fDend3DEdep[i]/joule)/
-        (fDetector->GetMassDendcomp(i)/kg));
- analys->AddNtupleRow(2);
- */    
-  
+  G4int   DendCompHit = 0;
+  G4double DendCompEdep = 0.;
+  G4double DendCompDose = 0.;
+  G4double DendCompEdep2 = 0.;
+  G4double DendCompDose2 = 0.;
+  remove ("Dend3DEdep.out");
   std::ofstream WriteDataInDend("Dend3DEdep.out", std::ios::app);
-  WriteDataInDend //<<   i+1            << '\t' << "   " 
-   // position of compartments
-   <<   fDetector->GetPosDendcomp(i).x()<< '\t' << "   " 
-   <<   fDetector->GetPosDendcomp(i).y()<< '\t' << "   " 
-   <<   fDetector->GetPosDendcomp(i).z()<< '\t' << "   " 
-   <<   fDetector->GetDistADendSoma(i)<< '\t' << "   " 
-   <<   fDetector->GetDistBDendSoma(i)<< '\t' << "   " 
-   <<   fDend3DEdep[i]/keV   << '\t' << "   "  
-   //<<   (fDend3DEdep[i]/joule)/(fDetector->GetMassDendcomp(i)/kg)
-   << G4endl;    
+  for (G4int i=0; i<fDetector->GetnbDendritecomp(); i++) {
+    if (fDend3DEdep[i] > 0.0) {
+      DendCompHit ++;
+      DendCompEdep += fDend3DEdep[i] ;
+      DendCompEdep2 += fDend3DEdep[i]*fDend3DEdep[i] ;
+  
+      WriteDataInDend //<<   i+1            << '\t' << "   " 
+	// position of compartments
+	<< fDetector->GetPosDendcomp(i).x()<< '\t' << "   " 
+	<< fDetector->GetPosDendcomp(i).y()<< '\t' << "   " 
+	<< fDetector->GetPosDendcomp(i).z()<< '\t' << "   " 
+	<< fDetector->GetDistADendSoma(i)<< '\t' << "   " 
+	<< fDetector->GetDistBDendSoma(i)<< '\t' << "   " 
+	<< fDend3DEdep[i]/keV   << '\t' << "   "  
+	<< G4endl;    
+    }
   }
- }
   // +- RMS : Root Mean Square  
   G4double rmsEdepD =0.;
   G4double rmsDoseD =0.;
-  if (DendCompHit >0)
-  {
-  DendCompEdep /= DendCompHit; DendCompEdep2 /= DendCompHit;
-  rmsEdepD = DendCompEdep2 - DendCompEdep*DendCompEdep;
-  if (rmsEdepD>0.) rmsEdepD = std::sqrt(rmsEdepD);
-  else            rmsEdepD = 0.;  
-  DendCompDose /= DendCompHit; DendCompDose2 /= DendCompHit;
-  rmsDoseD = DendCompDose2 - DendCompDose*DendCompDose;
-  if (rmsDoseD>0.) rmsDoseD = std::sqrt(rmsDoseD);
-  else            rmsDoseD = 0.;
+  if (DendCompHit >0) {
+    DendCompEdep /= DendCompHit; DendCompEdep2 /= DendCompHit;
+    rmsEdepD = DendCompEdep2 - DendCompEdep*DendCompEdep;
+    if (rmsEdepD>0.) rmsEdepD = std::sqrt(rmsEdepD);
+    else            rmsEdepD = 0.;  
+    DendCompDose /= DendCompHit; DendCompDose2 /= DendCompHit;
+    rmsDoseD = DendCompDose2 - DendCompDose*DendCompDose;
+    if (rmsDoseD>0.) rmsDoseD = std::sqrt(rmsDoseD);
+    else            rmsDoseD = 0.;
   }
   
- G4int   AxonCompHit = 0;
- G4double AxonCompEdep = 0.;
- G4double AxonCompDose = 0.;
- G4double AxonCompEdep2 = 0.;
- G4double AxonCompDose2 = 0.;  
+  G4int   AxonCompHit = 0;
+  G4double AxonCompEdep = 0.;
+  G4double AxonCompDose = 0.;
+  G4double AxonCompEdep2 = 0.;
+  G4double AxonCompDose2 = 0.;  
   remove ("Axon3DEdep.out"); 
- for (G4int i=0; i<fDetector->GetnbAxoncomp(); i++) 
- {   
-  if (fAxon3DEdep[i] > 0.0) 
-  {
-  AxonCompHit ++;
-  AxonCompEdep += fAxon3DEdep[i] ;
-  //AxonCompDose += fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i) ;
-  AxonCompEdep2 += fAxon3DEdep[i]*fAxon3DEdep[i] ;
-  //AxonCompDose2 += (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i))*
-  //   (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i)); 
- //Fill ntuple #3
- /*analys->FillNtupleDColumn(3,0,i+1);
- analys->FillNtupleDColumn(3,1,fDetector->GetDistAxonsoma(i));
- analys->FillNtupleDColumn(3,2,fAxon3DEdep[i]/keV);
- analys->FillNtupleDColumn(3,3,(fAxon3DEdep[i]/joule)/
-         (fDetector->GetMassAxoncomp(i)/kg));
- analys->AddNtupleRow(3);
- */     
- 
   std::ofstream WriteDataInAxon("Axon3DEdep.out", std::ios::app);
-  WriteDataInAxon //<<   i+1            << '\t' << "   " 
-   // position of compartments
-   <<   fDetector->GetPosAxoncomp(i).x()<< '\t' << "   " 
-   <<   fDetector->GetPosAxoncomp(i).y()<< '\t' << "   " 
-   <<   fDetector->GetPosAxoncomp(i).z()<< '\t' << "   " 
-   <<   fDetector->GetDistAxonsoma(i) << '\t' << "   "  
-   <<   fAxon3DEdep[i]/keV             << '\t' << "   " 
-   //<<   (fAxon3DEdep[i]/joule)/(fDetector->GetMassAxoncomp(i)/kg) 
-   << G4endl;    
+  for (G4int i=0; i<fDetector->GetnbAxoncomp(); i++) {   
+    if (fAxon3DEdep[i] > 0.0) {
+      AxonCompHit ++;
+      AxonCompEdep += fAxon3DEdep[i];
+      AxonCompEdep2 += fAxon3DEdep[i]*fAxon3DEdep[i] ;
+ 
+      WriteDataInAxon //<<   i+1            << '\t' << "   " 
+	// position of compartments
+	<< fDetector->GetPosAxoncomp(i).x()<< '\t' << "   " 
+	<< fDetector->GetPosAxoncomp(i).y()<< '\t' << "   " 
+	<< fDetector->GetPosAxoncomp(i).z()<< '\t' << "   " 
+	<< fDetector->GetDistAxonsoma(i) << '\t' << "   "  
+	<< fAxon3DEdep[i]/keV             << '\t' << "   " 
+	<< G4endl;    
+    }
   }
- } 
   // +- RMS : Root Mean Square  
   G4double rmsEdepA =0.;
   G4double rmsDoseA =0.;
-  if (AxonCompHit >0)
-  {
-  AxonCompEdep /= AxonCompHit; AxonCompEdep2 /= AxonCompHit;
-  rmsEdepA = AxonCompEdep2 - AxonCompEdep*AxonCompEdep;
-  if (rmsEdepA>0.) rmsEdepA = std::sqrt(rmsEdepA);
-  else            rmsEdepA = 0.;  
-  AxonCompDose /= AxonCompHit; AxonCompDose2 /= AxonCompHit;
-  rmsDoseA = AxonCompDose2 - AxonCompDose*AxonCompDose;
-  if (rmsDoseA>0.) rmsDoseA = std::sqrt(rmsDoseA);
-  else            rmsDoseA = 0.;
+  if (AxonCompHit >0) {
+    AxonCompEdep /= AxonCompHit; AxonCompEdep2 /= AxonCompHit;
+    rmsEdepA = AxonCompEdep2 - AxonCompEdep*AxonCompEdep;
+    if (rmsEdepA>0.) rmsEdepA = std::sqrt(rmsEdepA);
+    else            rmsEdepA = 0.;  
+    AxonCompDose /= AxonCompHit; AxonCompDose2 /= AxonCompHit;
+    rmsDoseA = AxonCompDose2 - AxonCompDose*AxonCompDose;
+    if (rmsDoseA>0.) rmsDoseA = std::sqrt(rmsDoseA);
+    else            rmsDoseA = 0.;
   }
 
- G4cout << "\n Number of compartments traversed by particle tracks :" 
-        << G4endl;   
- G4cout  << "  " << std::setw(13) << "Soma:  " << std::setw(7) << somaCompHit
-   << " of total: "<< fDetector->GetnbSomacomp() << "\n " 
-   << "  " << std::setw(13) << "Dendrites: " << std::setw(7) << DendCompHit
-   << " of total: "<< fDetector->GetnbDendritecomp() <<  "\n " 
-   << "  " << std::setw(13) << "Axon: " << std::setw(7) << AxonCompHit
-   << " of total: "<< fDetector->GetnbAxoncomp() << "\n "    
-   << G4endl;     
-/*
- G4cout << "\n Mean energy (keV) and dose (Gy) deposition in "
-        << "hitting compartments :" << G4endl;   
- G4cout  
-   << "  " << std::setw(13) << "Soma:  " << std::setw(7)  << somaCompEdep/keV
-   << " +- "<< rmsEdepS/keV << " and "
-   << somaCompDose/(joule/kg)<< " +- "<< rmsDoseS/(joule/kg)<< "\n " 
-   << "  " << std::setw(13) << "Dendrites: " << std::setw(7) 
-   << DendCompEdep/keV
-   << " +- "<< rmsEdepD/keV << " and " 
-   << DendCompDose/(joule/kg)<< " +- "<< rmsDoseD/(joule/kg)<< "\n " 
-   << "  " << std::setw(13) << "Axon: " << std::setw(7) << AxonCompEdep/keV
-   << " +- "<< rmsEdepA/keV << " and "
-   << AxonCompDose/(joule/kg)<< " +- "<< rmsDoseA/(joule/kg)<< "\n "    
-   << G4endl;  */
-  /*  
-  // compute mean Energy and Dose deposited per event
-  // 
-  fEdepNeuron /= TotNbofEvents; fEdepNeuron_err /= TotNbofEvents;
-  G4double rmsEdep = fEdepNeuron_err - fEdepNeuron*fEdepNeuron;
-  if (rmsEdep>0.) rmsEdep = std::sqrt(rmsEdep);
-  else            rmsEdep = 0.;   
-  G4double fDoseNeuron = ((fEdepNeuron/joule)/ (fDetector->
-    GetTotMassNeuron()/kg)); 
-  G4double fDoseNeuron_err = ((fEdepNeuron_err/joule)/ (fDetector->
-    GetTotMassNeuron()/kg)); 
-  G4double rmsDose = fDoseNeuron_err - fDoseNeuron*fDoseNeuron;
-  if (rmsDose>0.) rmsDose = std::sqrt(rmsDose);
-  else            rmsDose = 0.;     
-  G4cout << "\n Mean energy (keV) deposition per event:" 
-         << G4endl;  
-  G4cout 
-  << "  " << std::setw(13) << "Neuron:   " << std::setw(7) << fEdepNeuron/keV
-  << " +- "<< rmsEdep/keV << " and "
-  << std::setw(wid) << fDoseNeuron
-  << " +- "<< rmsDose << "\n "   
-  << G4endl; */
-  G4cout<< "\n Dendritic (or Axon) compartmental energy deposits \n"
-  << " at the distance from Soma have been written into *.out files:" 
-  << "\n Dend3DEdep.out, Axon3DEdep.out, Soma3DEdep.out"
-  << "\n Outputs of energy deposition per event written in data file:" 
-  << "\n OutputPerEvent.out"
-  << "\n " << G4endl; 
+  G4cout << "\n Number of compartments traversed by particle tracks :" 
+	 << G4endl;   
+  G4cout  << "  " << std::setw(13) << "Soma:  " << std::setw(7) << somaCompHit
+	  << " of total: "<< fDetector->GetnbSomacomp() << "\n " 
+	  << "  " << std::setw(13) << "Dendrites: " << std::setw(7) << DendCompHit
+	  << " of total: "<< fDetector->GetnbDendritecomp() <<  "\n " 
+	  << "  " << std::setw(13) << "Axon: " << std::setw(7) << AxonCompHit
+	  << " of total: "<< fDetector->GetnbAxoncomp() << "\n "    
+	  << G4endl;
+  G4cout << "\n Dendritic (or Axon) compartmental energy deposits \n"
+	 << " at the distance from Soma have been written into *.out files:" 
+	 << "\n Dend3DEdep.out, Axon3DEdep.out, Soma3DEdep.out"
+	 << "\n Outputs of energy deposition per event written in data file:" 
+	 << "\n OutputPerEvent.out"
+	 << G4endl; 
  
   //remove all contents in fProcCounter, fCount 
   fProcCounter.clear();

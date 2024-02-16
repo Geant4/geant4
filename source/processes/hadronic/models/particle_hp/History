@@ -6,6 +6,16 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-01-30 Vladimir Ivanchenko (hadr-hpp-V11-01-25)
+- G4ParticleHPFSFissionFS, G4ParticleHPFissionBaseFS - substitute
+    C-arrays with std::vector in order to reduce compilation warnings on gcc
+    with LTO settings.
+
+## 2024-01-26 Vladimir Ivanchenko
+- G4ParticleHPFissionFS, G4ParticleHPFFFissionFS - added extra protections 
+    against cases when fission data are not available for some isotopes 
+    (fixed problem #2590)
+
 ## 2023-11-04 Vladimir Ivanchenko (hadr-hpp-V11-01-24)
 - G4ParticleHPManager - set default upper limit on Doppler broading
     30 keV instead of 100 keV

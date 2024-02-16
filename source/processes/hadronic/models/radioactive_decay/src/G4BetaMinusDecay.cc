@@ -58,7 +58,7 @@ G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
                                    const G4Ions::G4FloatLevelBase& flb,
                                    const G4BetaDecayType& betaType)
  : G4NuclearDecay("beta- decay", BetaMinus, excitationE, flb),
-   maxEnergy(e0),
+   maxEnergy(e0/eMass),
    estep(maxEnergy/(G4double)(npti - 1))
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
@@ -98,7 +98,7 @@ G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
   G4DynamicParticle prim(fPrimaryIon, G4ThreeVector(0,0,1), 0.0);
   G4DecayProducts* products = new G4DecayProducts(prim);
 
-  // Generate positron isotropic in angle, with energy from stored spectrum
+  // Generate electron isotropic in angle, with energy from stored spectrum
   const G4double eKE = eMass*G4BetaSpectrumSampler::shoot(npti, cdf, estep);
 
   G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass));
@@ -111,14 +111,14 @@ G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
 	 << " + " << fNeutrino->GetParticleName() << " Ee(MeV)=" << eKE
          << G4endl;
   */
-  // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
 
   // 4-momentum of residual ion and neutrino
   G4LorentzVector lv(-eMomentum*dir.x(), -eMomentum*dir.y(), -eMomentum*dir.z(),
                      parentMass - eKE - eMass);
 
-  G4double edel =  std::max(lv.e() - resMass, 0.0);
-  if (edel > CLHEP::eV) {
+  G4double edel = std::max(lv.e() - resMass, 0.0);
+  // Free energy should be above zero
+  if (edel > 0.0) {
 
     // centrum of mass system
     G4double M = lv.mag();
@@ -157,16 +157,17 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 {
   cdf[0] = 0.0;
 
-  // Check for cases in which Q < 2Me (e.g. z67.a162) 
+  // Check for cases in which Q < 0
   if (maxEnergy > 0.) {
     G4BetaDecayCorrections corrections(daughterZ, daughterA);
 
     // Fill array to store cumulative spectrum
-    G4double ex;
-    G4double p;   // Positron momentum in units of electron mass
+    G4double ex;  // Kinetic energy normalized on electron mass
+    G4double p;   // Momentum in units of electron mass
     G4double f;   // Spectral shape function
+    G4double f0 = 0.0;
     G4double sum = 0.0;
-    for (G4int i = 1; i < npti; ++i) {
+    for (G4int i = 1; i < npti-1; ++i) {
       ex = estep*i;
       p = std::sqrt(ex*(ex + 2.));
       f = p*(1. + ex)*(maxEnergy - ex)*(maxEnergy - ex);
@@ -176,9 +177,11 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 
       // Apply shape factor for forbidden transitions
       f *= corrections.ShapeFactor(betaType, p, maxEnergy - ex);
-      sum += f;
+      sum += f + f0;
       cdf[i] = sum;
+      f0 = f;
     }
+    cdf[npti-1] = sum + f0;
   } else {
     for (G4int i = 1; i < npti; ++i) { cdf[i] = 0.0; }
   }

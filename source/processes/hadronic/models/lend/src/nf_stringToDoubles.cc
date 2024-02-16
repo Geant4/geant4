@@ -4,16 +4,10 @@
 */
 
 #include <stdlib.h>
+#include <float.h>
 #include <cmath>
 
 #include "nf_utilities.h"
-
-#ifdef WIN32
-  #include <float.h>
-  #define isfinite _finite
-#else
-  #define isfinite std::isfinite
-#endif
 
 #if defined __cplusplus
 namespace GIDI {
@@ -71,7 +65,7 @@ char *nf_floatToShortestString( double value, int significantDigits, int favorEF
 
     if( flags & nf_floatToShortestString_includeSign ) sign = "+";
 
-    if( !isfinite( value ) ) {
+    if( !std::isfinite( value ) ) {
         snprintf( Fmt, sizeof Fmt, "%%%sf", sign );
         snprintf( Str_e, sizeof Str_e, Fmt, value );
         return( strdup( Str_e ) );

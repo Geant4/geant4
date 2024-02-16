@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2612,7 +2612,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=8.970000s Real=11.430050s Sys=0.010000s
+  User=8.150000s Real=8.200353s Sys=0.010000s
 
     Run Summary
 ---------------------------------
@@ -2688,7 +2688,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.130000s Real=0.162750s Sys=0.000000s
+  User=0.130000s Real=0.127331s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2764,7 +2764,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.290000s Real=1.447320s Sys=0.000000s
+  User=1.250000s Real=1.275944s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2840,7 +2840,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.130000s Real=0.155281s Sys=0.000000s
+  User=0.130000s Real=0.125852s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2917,7 +2917,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.140000s Real=0.151160s Sys=0.000000s
+  User=0.130000s Real=0.134998s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2929,7 +2929,7 @@ Material of tank:  G4_BGO
 Average energy of Cerenkov photons created per event: 0 eV.
 Average number of Cerenkov photons created per event: 0
 Average energy of scintillation photons created per event: 2.5e+03 eV.
-Average number of scintillation photons created per event: 4.9e+02
+Average number of scintillation photons created per event: 5e+02
  Average energy per photon: 5.1 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -2938,22 +2938,22 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 4.9e+02
+Average number of OpAbsorption per event: 5e+02
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:    24719
-Total # of surface events:      24525
+OpAbsorption before surface:    24807
+Total # of surface events:      24805
 
 Surface events by process:
  Sum:                               0
- Unaccounted for:               24525
+ Unaccounted for:               24805
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Scintillation spectrum: mean = 5.10029 eV rms = 1.73532 eV.
- Scintillation time: mean = 20.041 ns rms = 20.0694 ns.
+ Scintillation spectrum: mean = 5.09665 eV rms = 1.7264 eV.
+ Scintillation time: mean = 19.9631 ns rms = 19.9305 ns.
 
 ... write file : scint_by_particle_i.root - done
 ... close file : scint_by_particle_i.root - done
