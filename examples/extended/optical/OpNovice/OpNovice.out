@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13682,7 +13682,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0    0.943    -0.64    0.127     0.511        0        0         0        Tank initStep
     1     24.9     85.1     34.5     0.182 1.36e-05     95.4      95.4        Tank compt
     2     23.5     81.4     35.5     0.167 0.000537     4.02      99.4        Tank compt
-    3     23.8
+    3     2
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
@@ -13696,7 +13696,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.620000s Real=1.719459s Sys=0.000000s
+  User=1.460000s Real=1.479346s Sys=0.000000s
 
  ======================== run summary ======================
 Primary particle was: e+ with energy 500 keV.

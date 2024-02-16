@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -283,12 +283,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -367,12 +367,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -429,7 +429,7 @@ Rayl:  for gamma SubType=11 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -456,7 +456,7 @@ ePairProd:  for e-  XStype:1  SubType=4
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -801,19 +801,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   475 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00           69k world_logicalV
+       0.00         0.00         0.00           69k world_logicalV
        0.00         0.00         0.00          406k airBox_logicalV
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       85.51        406k       931     5788       8898         0.00    airBox_logicalV
-      14.49         68k       182      683       3080         0.01    world_logicalV
+      14.49         68k       182      683       3080         0.00    world_logicalV
 ### Run 0 starts.
 ### Begin of Run 0 start.
 
@@ -855,7 +855,7 @@ N=17 V[N]={87900885656017340, 2136126672992718976, 110623987125446578, 176001763
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=116.130000s Real=148.878840s Sys=1.870000s
+  User=121.380000s Real=125.884998s Sys=1.860000s
 
 ### End of Run (1000000 events)
 G4 kernel has come to Quit state.
@@ -871,19 +871,19 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 13
+Total navigation history collections cleaned: 14
 G4RNGHelper object is deleted.
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0183 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0202 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0125 MB
+Pool ID '17G4DynamicParticle', size : 0.0115 MB
 Pool ID '16G4SmartVoxelNode', size : 0.201 MB
 Pool ID '17G4SmartVoxelProxy', size : 0.116 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '19G4ElectronOccupancy', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.025 MB
+Pool ID '7G4Track', size : 0.0231 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 12 of which, static: 0

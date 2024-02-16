@@ -5,6 +5,16 @@ which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
+
+## 2024-01-29 Vladimir Ivanchenko (hadr-lend-V11-01-03)
+- MCGIDI_product, MCGIDI_outputChannel, MCGIDI_distribution - fixed alma9-gcc131
+    compilation warnings seen in CMSSW
+
+## 2023-12-18 Gabriele Cosmo
+- Fixed compilation error on latest Windows VC++ compiler 17.8.3 for use of
+  std::isfinite() in nf_specialFunctions_h and in nf_floatToShortestString().
+  Addressing problem report #2582.
+
 ## 2023-11-03 Ben Morgan (hadr-lend-V11-01-02)
 - Use "G4" prefixed version of EXPAT/ZLIB CMake variables
 

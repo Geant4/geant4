@@ -65,6 +65,7 @@ public:
 
   // Z - atomic number of the projectile
   // e - energy per nucleon, loge = log(e)
+  // if data for a given combination Z/material exist the DEDX > 0. 
   G4double GetDEDX(const G4Material*, const G4int Z,
                    const G4double e, const G4double loge) const;
 
@@ -97,7 +98,6 @@ private:
   G4PhysicsLogVector* fElmData[81][93] = {{nullptr}};
   G4PhysicsFreeVector* fVector = nullptr;
 
-  G4int fNmat = 0;
   G4int fNbins = 0;
   G4int fNbinsPerDecade = 10;
   G4int fVerbose = 0;

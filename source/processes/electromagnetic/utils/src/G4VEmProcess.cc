@@ -335,6 +335,7 @@ void G4VEmProcess::StartTracking(G4Track* track)
   currentParticle = track->GetParticleDefinition();
   theNumberOfInteractionLengthLeft = -1.0;
   mfpKinEnergy = DBL_MAX;
+  preStepLambda = 0.0;
 
   if(isIon) { massRatio = proton_mass_c2/currentParticle->GetPDGMass(); }
 
@@ -359,8 +360,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   DefineMaterial(track.GetMaterialCutsCouple());
-  preStepKinEnergy    = track.GetKineticEnergy();
-  preStepLogKinEnergy = track.GetDynamicParticle()->GetLogKineticEnergy();
+  preStepKinEnergy = track.GetKineticEnergy();
   const G4double scaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(scaledEnergy, currentCoupleIndex);
   /*
@@ -370,6 +370,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   if(!currentModel->IsActive(scaledEnergy)) { 
     theNumberOfInteractionLengthLeft = -1.0;
     currentInteractionLength = DBL_MAX;
+    mfpKinEnergy = DBL_MAX;
+    preStepLambda = 0.0;
     return x; 
   }
  
@@ -384,7 +386,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   }
 
   // compute mean free path
-  ComputeIntegralLambda(preStepKinEnergy, preStepLogKinEnergy);
+
+  ComputeIntegralLambda(preStepKinEnergy, track);
 
   // zero cross section
   if(preStepLambda <= 0.0) { 
@@ -417,15 +420,15 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::ComputeIntegralLambda(G4double e, G4double loge)
+void G4VEmProcess::ComputeIntegralLambda(G4double e, const G4Track& track)
 {
-  if(fXSType == fEmNoIntegral) {
-    preStepLambda = GetCurrentLambda(e, loge);
+  if (fXSType == fEmNoIntegral) {
+    preStepLambda = GetCurrentLambda(e, LogEkin(track));
 
-  } else if(fXSType == fEmIncreasing) {
+  } else if (fXSType == fEmIncreasing) {
     if(e*invLambdaFactor < mfpKinEnergy) {
-      mfpKinEnergy = e;
-      preStepLambda = GetCurrentLambda(e, loge); 
+      preStepLambda = GetCurrentLambda(e, LogEkin(track));
+      mfpKinEnergy = (preStepLambda > 0.0) ? e : 0.0;
     }
 
   } else if(fXSType == fEmDecreasing) {
@@ -439,17 +442,16 @@ void G4VEmProcess::ComputeIntegralLambda(G4double e, G4double loge)
     const G4double epeak = (*theEnergyOfCrossSectionMax)[currentCoupleIndex];
     if(e <= epeak) {
       if(e*invLambdaFactor < mfpKinEnergy) {
-        mfpKinEnergy = e;
-        preStepLambda = GetCurrentLambda(e, loge); 
+        preStepLambda = GetCurrentLambda(e, LogEkin(track));
+        mfpKinEnergy = (preStepLambda > 0.0) ? e : 0.0;
       }
     } else if(e < mfpKinEnergy) { 
       const G4double e1 = std::max(epeak, e*lambdaFactor);
-      preStepLambda = GetCurrentLambda(e1); 
+      preStepLambda = GetCurrentLambda(e1);
       mfpKinEnergy = e1;
     }
-
   } else {
-    preStepLambda = GetCurrentLambda(e, loge); 
+    preStepLambda = GetCurrentLambda(e, LogEkin(track));
   }
 }
 

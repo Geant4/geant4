@@ -43,6 +43,7 @@
 #ifndef NeuronLoadDataFile_H
 #define NeuronLoadDataFile_H 1
 
+#include <vector>
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VSolid.hh"
@@ -50,6 +51,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4SystemOfUnits.hh"
+
 // Geant4 Constructive Solid Geometry (CSG)
 #include "G4VPVParameterisation.hh"
 #include "G4Box.hh"   // bounding volume
@@ -84,203 +86,144 @@ class NeuronLoadDataFile
 //: public G4VPVParameterisation 
 
 { 
-  public:  
-    NeuronLoadDataFile();
-  virtual   
-   ~NeuronLoadDataFile();  
+public:  
+  NeuronLoadDataFile();
+  ~NeuronLoadDataFile() = default;  
 
   void SingleNeuronSWCfile(const G4String& filename);
   void NeuralNetworkDATAfile(const G4String& filename); 
   
-// position, rotation of solids   
-    void ComputeTransformation (const G4int copyNo,
-                                G4VPhysicalVolume* physVol) const;
-// Solid options: sphere or cylinder ...
-   //G4VSolid* ComputeSolid (const G4int copyNo, 
- //   G4VPhysicalVolume* physiVol);
-// and ... for solids!
-    void ComputeDimensions(G4Tubs& cylinderComp, const G4int copyNo,
-                                   const G4VPhysicalVolume*) const ;
-    void ComputeDimensions(G4Sphere& , const G4int ,
-                                   const G4VPhysicalVolume*) const {}         
-    void ComputeDimensions(G4Ellipsoid& , const G4int ,
-                                   const G4VPhysicalVolume*) const {}     
-    void ComputeDimensions(G4Box&, const G4int, 
-                                   const G4VPhysicalVolume*) const {}      
-    void ComputeDimensions(G4Cons&,const G4int, 
-                                   const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Hype &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {} 
-    void ComputeDimensions(G4Trd &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {} 
-    void ComputeDimensions(G4Trap &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {} 
-    void ComputeDimensions(G4Orb &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
-    void ComputeDimensions(G4Torus &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
-    void ComputeDimensions(G4Para &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
-    void ComputeDimensions(G4Polycone &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
-    void ComputeDimensions(G4Polyhedra &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const {}
-           
-  G4double GetwidthB () {return fwidthB;} 
-  G4double GetheightB () {return fheightB;} 
-  G4double GetdepthB () {return fdepthB;} 
-  G4double GetdiagnlLength () {return fdiagnlLength;} 
-  G4double GetshiftX () {return fshiftX;} 
-  G4double GetshiftY () {return fshiftY;} 
-  G4double GetshiftZ () {return fshiftZ;} 
-  G4double GetTypeN (G4int i) {return fTypeN[i];}
-  
-  G4int   GetnbSomacomp()   {return fnbSomacomp;} 
-  G4double  GetMassSomacomp (G4int i) {return fMassSomacomp[i];}
-  G4double GetMassSomaTot () {return fMassSomaTot;} 
-  G4ThreeVector GetPosSomacomp(G4int i) {return fPosSomacomp[i];}
-  G4double GetRadSomacomp(G4int i) {return fRadSomacomp[i];}
-  
-  G4int   GetnbDendritecomp()   {return fnbDendritecomp;} 
-  G4double GetMassDendcomp (G4int i) {return fMassDendcomp[i];}  
-  G4double GetMassDendTot () {return fMassDendTot;} 
-  G4ThreeVector GetPosDendcomp(G4int i) {return fPosDendcomp[i];}
-  G4double GetRadDendcomp(G4int i) {return fRadDendcomp[i];}
-  G4double GetHeightDendcomp(G4int i) {return fHeightDendcomp[i];}
-  G4double  GetDistADendSoma (G4int i) {return fDistADendSoma[i];}
-  G4double  GetDistBDendSoma (G4int i) {return fDistBDendSoma[i];}
-  G4RotationMatrix GetRotDendcomp(G4int i) {return fRotDendcomp[i];}
-  
-  G4int   GetnbAxoncomp()   {return fnbAxoncomp;} 
-  G4double  GetMassAxoncomp (G4int i) {return fMassAxoncomp[i];}
-  G4double GetMassAxonTot () {return fMassAxonTot;} 
-  G4ThreeVector GetPosAxoncomp(G4int i) {return fPosAxoncomp[i];}
-  G4double GetRadAxoncomp(G4int i) {return fRadAxoncomp[i];}
-  G4double GetHeightAxoncomp(G4int i) {return fHeightAxoncomp[i];}
-  G4double  GetDistAxonsoma (G4int i) {return fDistAxonsoma[i];}
-  G4RotationMatrix GetRotAxoncomp(G4int i) {return fRotAxoncomp[i];}
- 
-  G4int   GetnbSpinecomp()   {return fnbSpinecomp;} 
-  G4double  GetMassSpinecomp (G4int i) {return fMassSpinecomp[i];}
-  G4double GetMassSpineTot () {return fMassSpineTot;} 
-  G4ThreeVector GetPosSpinecomp(G4int i) {return fPosSpinecomp[i];}
-  G4double GetRadSpinecomp(G4int i) {return fRadSpinecomp[i];}
-  G4double GetHeightSpinecomp(G4int i) {return fHeightSpinecomp[i];}
-  G4double  GetDistSpinesoma (G4int i) {return fDistSpinesoma[i];}
-  G4RotationMatrix GetRotSpinecomp(G4int i) {return fRotSpinecomp[i];}   
-  
-  G4int   GetnbNeuroncomp()   {return fnbNeuroncomp;} 
+  // position, rotation of solids   
+  void ComputeTransformation (const G4int copyNo,
+			      G4VPhysicalVolume* physVol) const;
 
-  G4double GetTotVolNeuron() {return fTotVolNeuron;}
-  G4double GetTotSurfNeuron () {return fTotSurfNeuron;} 
-  G4double GetTotMassNeuron () {return fTotMassNeuron;}   
-  G4double GetTotVolSlice() {return fTotVolSlice;} 
-  G4double GetTotSurfSlice () {return fTotSurfSlice;} 
-  G4double GetTotMassSlice() {return fTotMassSlice;}  
-  G4double GetTotVolMedium() {return fTotVolMedium;} 
-  G4double GetTotSurfMedium() {return fTotSurfMedium;} 
-  G4double GetTotMassMedium() {return fTotMassMedium;}  
+  void ComputeDimensions(G4Tubs& cylinderComp, const G4int copyNo,
+			 const G4VPhysicalVolume*) const;
+  G4double GetwidthB() const { return fwidthB; } 
+  G4double GetheightB() const { return fheightB; } 
+  G4double GetdepthB() const { return fdepthB; } 
+  G4double GetdiagnlLength() const { return fdiagnlLength;} 
+  G4double GetshiftX() const { return fshiftX; } 
+  G4double GetshiftY() const { return fshiftY; } 
+  G4double GetshiftZ() const { return fshiftZ; }
+  G4double GetTypeN(G4int i) { return fTypeN[i]; }
+  
+  G4int GetnbSomacomp() const { return fnbSomacomp; } 
+  G4double GetMassSomacomp(G4int i) const { return fMassSomacomp[i]; }
+  G4double GetMassSomaTot() { return fMassSomaTot; } 
+  G4ThreeVector GetPosSomacomp(G4int i) const { return fPosSomacomp[i]; }
+  G4double GetRadSomacomp(G4int i) const { return fRadSomacomp[i]; }
+  
+  G4int GetnbDendritecomp() const { return fnbDendritecomp; } 
+  G4double GetMassDendcomp(G4int i) const { return fMassDendcomp[i]; }  
+  G4double GetMassDendTot() { return fMassDendTot; } 
+  G4ThreeVector GetPosDendcomp(G4int i) const { return fPosDendcomp[i]; }
+  G4double GetRadDendcomp(G4int i) const { return fRadDendcomp[i]; }
+  G4double GetHeightDendcomp(G4int i) const { return fHeightDendcomp[i]; }
+  G4double GetDistADendSoma(G4int i) const { return fDistADendSoma[i]; }
+  G4double GetDistBDendSoma(G4int i) const { return fDistBDendSoma[i]; }
+  G4RotationMatrix GetRotDendcomp(G4int i) const { return fRotDendcomp[i]; }
+  
+  G4int GetnbAxoncomp() const { return fnbAxoncomp; } 
+  G4double GetMassAxoncomp (G4int i) const { return fMassAxoncomp[i]; }
+  G4double GetMassAxonTot() const { return fMassAxonTot; } 
+  G4ThreeVector GetPosAxoncomp(G4int i) const { return fPosAxoncomp[i]; }
+  G4double GetRadAxoncomp(G4int i) const { return fRadAxoncomp[i]; }
+  G4double GetHeightAxoncomp(G4int i) const { return fHeightAxoncomp[i]; }
+  G4double GetDistAxonsoma(G4int i) const { return fDistAxonsoma[i]; }
+  G4RotationMatrix GetRotAxoncomp(G4int i) const { return fRotAxoncomp[i]; }
  
-  G4VisAttributes GetSomaColour() {return fSomaColour;}
-  G4VisAttributes GetDendColour() {return fDendColour;}
-  G4VisAttributes GetAxonColour() {return fAxonColour;}
-  G4VisAttributes GetSpineColour() {return fSpineColour;}
-  G4VisAttributes GetNeuronColour() {return fNeuronColour;} 
+  G4int GetnbSpinecomp() const { return fnbSpinecomp; } 
+  G4double GetMassSpinecomp (G4int i) const { return fMassSpinecomp[i]; }
+  G4double GetMassSpineTot() const { return fMassSpineTot; } 
+  G4ThreeVector GetPosSpinecomp(G4int i) const { return fPosSpinecomp[i]; }
+  G4double GetRadSpinecomp(G4int i) const { return fRadSpinecomp[i]; }
+  G4double GetHeightSpinecomp(G4int i) const { return fHeightSpinecomp[i]; }
+  G4double GetDistSpinesoma (G4int i) {return fDistSpinesoma[i];}
+  G4RotationMatrix GetRotSpinecomp(G4int i) const { return fRotSpinecomp[i]; }  
+  
+  G4int GetnbNeuroncomp() const { return fnbNeuroncomp; }
 
-  private:
+  G4double GetTotVolNeuron() const { return fTotVolNeuron; }
+  G4double GetTotSurfNeuron() const { return fTotSurfNeuron; } 
+  G4double GetTotMassNeuron() const { return fTotMassNeuron; } 
+  G4double GetTotVolSlice() const { return fTotVolSlice; } 
+  G4double GetTotSurfSlice() const { return fTotSurfSlice; } 
+  G4double GetTotMassSlice() const { return fTotMassSlice; }  
+  G4double GetTotVolMedium() const { return fTotVolMedium; } 
+  G4double GetTotSurfMedium() const { return fTotSurfMedium; } 
+  G4double GetTotMassMedium() const { return fTotMassMedium; }  
+
+private:
 
   //! NEURON filename
   G4String fNeuronFileNameSWC;  
   G4String fNeuronFileNameDATA;  
 
-  G4int fnbSomacomp; 
-  G4int fnbDendritecomp;
-  G4int fnbAxoncomp;
-  G4int fnbSpinecomp;
-  G4int fnbNeuroncomp;
+  G4int fnbSomacomp{0}; 
+  G4int fnbDendritecomp{0};
+  G4int fnbAxoncomp{0};
+  G4int fnbSpinecomp{0};
+  G4int fnbNeuroncomp{0};
   
-  G4int * fnNn ;
-  G4int * fpNn ;
-  //G4int * ftypeC;
-  G4int * fnNd ;
-  G4int * fpNd ;
-  G4int * fnNa ;
-  G4int * fpNa ;
-  G4int * fTypeN ;
+  std::vector<G4int> fTypeN;
   
-  G4double fshiftX, fshiftY, fshiftZ; // shift in oder to center VOLUME!
-  G4double fwidthB;
-  G4double fheightB;
-  G4double fdepthB;
-  G4double fdiagnlLength;  // diagonal and diameter
-  
-  G4ThreeVector * fPosSomacomp ; 
-  G4double * fRadSomacomp ;
-  G4double * fMassSomacomp ;
-  G4double fMassSomaTot ;
-  
-  G4double * fRadDendcomp ;
-  G4double * fDistADendSoma ;
-  G4double * fDistBDendSoma ;
-  G4double * fHeightDendcomp ;
-  G4double * fMassDendcomp ;
-  G4double fMassDendTot ;
-  G4ThreeVector * fPosDendcomp ; // VOXEL COORDINATES OF DENDRITES
-  G4RotationMatrix * fRotDendcomp ; // RotationMatrix with Inverse
+  // shift in oder to center VOLUME!
+  G4double fshiftX{0.0};
+  G4double fshiftY{0.0};
+  G4double fshiftZ{0.0};
+  G4double fwidthB{0.0};
+  G4double fheightB{0.0};
+  G4double fdepthB{0.0};
+  G4double fdiagnlLength{0.0};  // diagonal and diameter
 
-  G4double * fRadAxoncomp ;
-  G4double * fHeightAxoncomp ;
-  G4double * fDistAxonsoma ;
-  G4double * fMassAxoncomp ;
-  G4double fMassAxonTot ;
-  G4ThreeVector * fPosAxoncomp ;  // VOXEL COORDINATES OF AXON
-  G4RotationMatrix *  fRotAxoncomp ;
+  G4double fMassSomaTot{0.0};
+  G4double fMassDendTot{0.0};
+  G4double fMassAxonTot{0.0};
+  G4double fMassSpineTot{0.0};
 
-  G4double * fRadSpinecomp ;
-  G4double * fHeightSpinecomp ;
-  G4double * fDistSpinesoma ;
-  G4double * fMassSpinecomp ;
-  G4double fMassSpineTot ; 
-  G4ThreeVector * fPosSpinecomp ;  // VOXEL COORDINATES OF SPINE
-  G4RotationMatrix *  fRotSpinecomp ;
+  G4double fTotVolNeuron{0.0};
+  G4double fTotSurfNeuron{0.0};
+  G4double fTotMassNeuron{0.0};
+  G4double fTotVolSlice{0.0};
+  G4double fTotSurfSlice{0.0};
+  G4double fTotMassSlice{0.0};
+  G4double fTotVolMedium{0.0};
+  G4double fTotSurfMedium{0.0};
+  G4double fTotMassMedium{0.0};
+  
+  std::vector<G4ThreeVector> fPosSomacomp; 
+  std::vector<G4double> fRadSomacomp;
+  std::vector<G4double> fMassSomacomp;
+  
+  std::vector<G4double> fRadDendcomp;
+  std::vector<G4double> fDistADendSoma;
+  std::vector<G4double> fDistBDendSoma;
+  std::vector<G4double> fHeightDendcomp;
+  std::vector<G4double> fMassDendcomp;
+  std::vector<G4ThreeVector> fPosDendcomp; // VOXEL COORDINATES OF DENDRITES
+  std::vector<G4RotationMatrix> fRotDendcomp; // RotationMatrix with Inverse
+
+  std::vector<G4double> fRadAxoncomp;
+  std::vector<G4double> fHeightAxoncomp;
+  std::vector<G4double> fDistAxonsoma;
+  std::vector<G4double> fMassAxoncomp;
+  std::vector<G4ThreeVector> fPosAxoncomp;  // VOXEL COORDINATES OF AXON
+  std::vector<G4RotationMatrix> fRotAxoncomp;
+
+  std::vector<G4double> fRadSpinecomp;
+  std::vector<G4double> fHeightSpinecomp;
+  std::vector<G4double> fDistSpinesoma;
+  std::vector<G4double> fMassSpinecomp;
+  std::vector<G4ThreeVector> fPosSpinecomp;  // VOXEL COORDINATES OF SPINE
+  std::vector<G4RotationMatrix> fRotSpinecomp;
  
-  G4double * fRadNeuroncomp ;
-  G4double * fHeightNeuroncomp ;
-  G4double * fDistNeuronsoma ;
-  G4double * fMassNeuroncomp ;
-  //G4double fMassNeuronTot ;
-  G4ThreeVector * fPosNeuroncomp ;  // VOXEL COORDINATES OF Neuron
-  G4RotationMatrix *  fRotNeuroncomp ;
-  
-  G4double fTotVolNeuron ;
-  G4double fTotSurfNeuron ;
-  G4double fTotMassNeuron ;  
-  G4double fTotVolSlice;
-  G4double fTotSurfSlice ;
-  G4double fTotMassSlice; 
-  G4double fTotVolMedium ;
-  G4double fTotSurfMedium ;
-  G4double fTotMassMedium ; 
- 
-  G4VisAttributes * fSomaColour;
-  G4VisAttributes * fDendColour;
-  G4VisAttributes * fAxonColour;
-  G4VisAttributes * fSpineColour;    
-  G4VisAttributes * fNeuronColour;  
-  
-  //G4Sphere* fsphereComp;
-  //G4Tubs* fcylinderConp;
-
-  //NeuronLoadMessenger * fpNeuronMessenger;
-
+  std::vector<G4double> fRadNeuroncomp;
+  std::vector<G4double> fHeightNeuroncomp;
+  std::vector<G4double> fDistNeuronsoma;
+  std::vector<G4double> fMassNeuroncomp;
+  std::vector<G4ThreeVector> fPosNeuroncomp;  // VOXEL COORDINATES OF Neuron
+  std::vector<G4RotationMatrix> fRotNeuroncomp;
 };
 
 #endif

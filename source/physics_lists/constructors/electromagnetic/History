@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-02-07 Vladimir Ivanchenko (phys-ctor-em-V11-01-14)
+- G4EmStandardPhysics_option3 - return back step limit type to
+    fUseDistanceToBoundary and the default RangeFactor 0.04 from 0.03,
+    which will allow to restore more accurate distributions for several
+    tests for medical benchmark
+
+## 2024-02-04 Vladimir Ivanchenko
+- G4GammaGeneralProcess - fixed sampling of muon pair production - problem 2543
+
 ## 2023-11-09 Hoang Tran (phys-ctor-em-V11-01-13)
 - Correct subtype process of G4LowECapture in G4EmDNABuilder .
 

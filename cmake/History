@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-01-29 Ben Morgan (cmake-V11-01-32)
+- Manually check versions of found SoXX packages to workaround their use of
+  the `ExactVersionOnly` version checking strategy in find_package. Geant4
+  only requires a minimum version. 
+
+## 2024-01-26 Ben Morgan (cmake-V11-01-31)
+- Add -F flag for Qt when on macOS and with a framework build of Qt
+  - Addresses [Bugzilla 2589](https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2589)
+
 ## 2023-11-28 Ben Morgan (cmake-V11-01-30)
 - Bump minimum VecGeom version to 1.2.6
 

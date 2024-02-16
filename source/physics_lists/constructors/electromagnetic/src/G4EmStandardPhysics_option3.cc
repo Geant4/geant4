@@ -115,8 +115,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetStepFunctionMuHad(0.2, 50*CLHEP::um);
   param->SetStepFunctionLightIons(0.1, 20*CLHEP::um);
   param->SetStepFunctionIons(0.1, 1*CLHEP::um);
-  param->SetMscStepLimitType(fUseSafetyPlus);
-  param->SetMscRangeFactor(0.03);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetMuHadLateralDisplacement(true);
   param->SetLateralDisplacementAlg96(true);
   param->SetUseICRU90Data(true);

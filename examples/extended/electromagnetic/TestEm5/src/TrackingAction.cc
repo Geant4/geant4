@@ -130,7 +130,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && charged) id = 32;
   else if (reflect  && neutral) id = 42;
 
-  if (id>0) {
+  if (id>0 && std::abs(direction.x()) < 1.0) {
     G4double theta  = std::acos(direction.x());
     if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);
@@ -155,7 +155,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (transmit && neutral) id = 21;
   else if (reflect  && neutral) id = 41;
 
-  if (id>0) {
+  if (id>0 && std::abs(direction.x()) < 1.0) {
     G4double theta  = std::acos(direction.x());
     if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);

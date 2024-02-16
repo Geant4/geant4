@@ -1,0 +1,21 @@
+# First stage, build Geant4 RPMs from spec file
+FROM almalinux:8
+
+WORKDIR /root
+
+RUN dnf install -y dnf-plugins-core epel-release gdb rpmdevtools \
+ && dnf config-manager --set-enabled powertools && rpmdev-setuptree
+
+COPY geant4.spec geant4.spec
+
+RUN dnf builddep -y geant4.spec
+RUN spectool -g -R geant4.spec
+RUN rpmbuild -bb geant4.spec
+
+# Second stage, build Geant4 container image
+FROM almalinux:8
+
+COPY --from=0 /root/rpmbuild/RPMS/* /tmp/
+
+RUN yum install -y epel-release \
+ && yum install -y /tmp/*.rpm && yum autoremove -y # && rm -rf /tmp/*

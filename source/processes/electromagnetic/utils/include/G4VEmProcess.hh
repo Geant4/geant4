@@ -314,7 +314,9 @@ private:
 
   void PrintWarning(G4String tit, G4double val);
 
-  void ComputeIntegralLambda(G4double kinEnergy, G4double logKinEnergy);
+  void ComputeIntegralLambda(G4double kinEnergy, const G4Track&);
+
+  inline G4double LogEkin(const G4Track&);
 
   inline G4double GetLambdaFromTable(G4double kinEnergy);
 
@@ -385,7 +387,6 @@ protected:
 
   G4double mfpKinEnergy = DBL_MAX;
   G4double preStepKinEnergy = 0.0;
-  G4double preStepLogKinEnergy = LOG_EKIN_MIN;
   G4double preStepLambda = 0.0;
 
 private:
@@ -512,6 +513,13 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
   return ((*theLambdaTable)[basedCoupleIndex])->Value(e, idxLambda);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::LogEkin(const G4Track& track)
+{
+  return track.GetDynamicParticle()->GetLogKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -999,7 +999,7 @@ Reading AM_organs.dat
 Reading OrganMasses.dat
 NOrganIDs: 142
 Writing output to ICRP110.out
-Total energy deposited over all Organs within the Phantom is 1.39345e-09 J
-Total absorbed dose over all phantom organs is 3.0775e-09 Gy 
+Total energy deposited over all Organs within the Phantom is 1.49063e-09 J
+Total absorbed dose over all phantom organs is 3.60968e-09 Gy 
 Graphics systems deleted.
 Visualization Manager deleting...

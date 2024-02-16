@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -419,7 +419,7 @@ nb event 195000
  Run terminated.
 Run Summary
   Number of events processed : 200000
-  User=73.170000s Real=93.467761s Sys=0.060000s
+  User=69.390000s Real=87.557870s Sys=0.100000s
 Results of reverse/adjoint simulation!
 normalised edep [MeV] = 0.00163827
 error[MeV] = 1.70862e-05

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -952,17 +952,17 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.480000s Real=4.074838s Sys=0.000000s
+  User=3.420000s Real=3.451284s Sys=0.010000s
 
  ======================== run summary ======================
 The run was 10000 events.
-Number of hits per event:	 13.45 +- 0.09684
-Number of hits per event above threshold:	 12.03 +- 0.08297
+Number of hits per event:	 13.48 +- 0.0967
+Number of hits per event above threshold:	 12.06 +- 0.08283
 Number of scintillation photons per event :	 0 +- 0
-Number of Cerenkov photons per event:	 53.34 +- 0.3445
-Number of absorbed photons per event :	 33.38 +- 0.2212
-Number of photons absorbed at boundary per event:	 6.508 +- 0.04414
-Total energy deposition in scintillator per event:	 6725 +- 40.08 keV.
+Number of Cerenkov photons per event:	 53.44 +- 0.344
+Number of absorbed photons per event :	 33.45 +- 0.221
+Number of photons absorbed at boundary per event:	 6.511 +- 0.04406
+Total energy deposition in scintillator per event:	 6741 +- 40.07 keV.
 
 ... write file : cerenkov.root - done
 ... close file : cerenkov.root - done

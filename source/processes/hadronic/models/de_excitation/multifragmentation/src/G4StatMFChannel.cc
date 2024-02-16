@@ -46,7 +46,11 @@
 G4StatMFChannel::G4StatMFChannel() : 
   _NumOfNeutralFragments(0), 
   _NumOfChargedFragments(0)
-{}
+{
+  Pos.resize(8);
+  Vel.resize(8);
+  Accel.resize(8);
+}
 
 G4StatMFChannel::~G4StatMFChannel() 
 { 
@@ -351,10 +355,11 @@ void G4StatMFChannel::SolveEqOfMotion(G4int anA, G4int anZ, G4double T)
   G4double TimeN = 0.0;
   G4double TimeS = 0.0;
   G4double DeltaTime = 10.0;
-  
-  G4ThreeVector * Pos = new G4ThreeVector[_NumOfChargedFragments];
-  G4ThreeVector * Vel = new G4ThreeVector[_NumOfChargedFragments];
-  G4ThreeVector * Accel = new G4ThreeVector[_NumOfChargedFragments];
+  if (_NumOfChargedFragments > (G4int)Pos.size()) {
+    Pos.resize(_NumOfChargedFragments);
+    Vel.resize(_NumOfChargedFragments);
+    Accel.resize(_NumOfChargedFragments);
+  }
   
   G4int i;
   for (i = 0; i < _NumOfChargedFragments; ++i) 
@@ -412,12 +417,6 @@ void G4StatMFChannel::SolveEqOfMotion(G4int anA, G4int anZ, G4double T)
     {
       _theFragments[i]->SetMomentum((_theFragments[i]->GetNuclearMass()*Eta)*Vel[i]);
     }
-  
-  // garbage collection
-  delete [] Pos;
-  delete [] Vel;
-  delete [] Accel;
-  
   return;
 }
 

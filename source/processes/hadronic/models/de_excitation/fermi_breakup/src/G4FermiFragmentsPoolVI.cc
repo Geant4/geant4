@@ -43,7 +43,7 @@ G4FermiFragmentsPoolVI::G4FermiFragmentsPoolVI()
 
 G4FermiFragmentsPoolVI::~G4FermiFragmentsPoolVI()
 {
-  for (G4int i=1; i<maxA; ++i) {
+  for (G4int i=0; i<maxA; ++i) {
     for (G4int j=0; j<maxZ; ++j) {
       auto ptr = list_c[j][i];
       if (nullptr != ptr) {
@@ -79,6 +79,7 @@ G4FermiFragmentsPoolVI::ClosestChannels(G4int Z, G4int A, G4double etot) const
 
   G4double demax = 1.e+9;
   for (auto const & ch : *chan) {
+    if (ch->NumberPairs() == 0) { continue; }
     G4double de = etot - ch->GetFragment()->GetTotalEnergy();
     // an excitation coincide with a level
     if (std::abs(de) <= fTolerance) {
@@ -111,7 +112,6 @@ void G4FermiFragmentsPoolVI::Initialise()
     G4NuclearLevelData::GetInstance()->GetParameters();
   fTolerance = 2*CLHEP::eV;
   fElim = param->GetFBUEnergyLimit();
-  fTimeLim = param->GetMaxLifeTime();
 
   fragment_pool.reserve(991);
 
@@ -200,8 +200,7 @@ void G4FermiFragmentsPoolVI::Initialise()
 	auto ch = (*chan)[k];
         const G4double e0 = ch->GetMass();
         auto f0 = ch->GetFragment();
-        if (e0 > minE && f0->GetLifeTime() <= fTimeLim &&
-            G4FermiBreakUpUtil::CheckSpinParity(f1, f2, f0)) { 
+        if (e0 > minE && G4FermiBreakUpUtil::CheckSpinParity(f1, f2, f0)) { 
           const G4double cb =
             G4FermiBreakUpUtil::CoulombBarrier(Z1, A1, Z2, A2, ch->GetExcitation());
           if (e0 >= minE + cb) {

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -929,53 +929,54 @@ See commands in /vis/modeling/trajectories/ for other options.
 ... create ntuple T column : edep ntupleId 1 - done
 Number of events = 100
 Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
-Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 3.6574
-Analysis: organ 1 edep: 3.6574
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 2.36397
+Analysis: organ 1 edep: 2.36397
 Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 9.44192
-Analysis: organ 8 edep: 9.44192
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 9.27823
+Analysis: organ 8 edep: 9.27823
 Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftTeste, ID: 13, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLowerLargeIntestine, ID: 14, Energy Deposition (MeV): 0
-Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0
+Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0.432806
+Analysis: organ 15 edep: 0.432806
 Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.605787
-Analysis: organ 19 edep: 0.605787
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 12.1401
-Analysis: organ 25 edep: 12.1401
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 11.4088
+Analysis: organ 25 edep: 11.4088
 Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightScapula, ID: 29, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightTeste, ID: 30, Energy Deposition (MeV): 0
-Energy Total in Run:logicalSkull, ID: 31, Energy Deposition (MeV): 0
+Energy Total in Run:logicalSkull, ID: 31, Energy Deposition (MeV): 0.492809
+Analysis: organ 31 edep: 0.492809
 Energy Total in Run:logicalSmallIntestine, ID: 32, Energy Deposition (MeV): 0
 Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
 Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
-Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 22.5076
-Analysis: organ 37 edep: 22.5076
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 36.2498
+Analysis: organ 37 edep: 36.2498
 Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
-Total Energy deposit in the body is: 48.3528 MeV
+Total Energy deposit in the body is: 60.2264 MeV
 ... write file : human_phantom.root - done
 ... close file : human_phantom.root - done
 ... clear files - done

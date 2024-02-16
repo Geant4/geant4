@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -83,9 +83,9 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
     1       0 fm       0 fm       0 fm       0 eV           0 eV       0 fm       0 fm      World   Radioactivation
 
     :----- List of secondaries ----------------
-   Ni60[2505.753]:  energy = 1.688 eV   time = 1.348 y  
-       anti_nu_e:  energy = 174.7 keV  time = 1.348 y  
-              e-:  energy = 138.9 keV  time = 1.348 y  
+   Ni60[2505.753]:  energy = 3.228 eV   time = 1.348 y  
+       anti_nu_e:  energy = 36.42 keV  time = 1.348 y  
+              e-:  energy = 277.2 keV  time = 1.348 y  
     :------------------------------------------
 
 
@@ -94,29 +94,29 @@ Step#       X          Y          Z         KineE         dEStep    StepLeng   T
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0       0 fm       0 fm       0 fm   138.9 keV          0 eV       0 fm       0 fm      World   initStep
-    1  -105.9 um      -1 cm   2.029 mm   138.9 keV          0 eV    1.02 cm    1.02 cm      World   OutOfWorld
+    0       0 fm       0 fm       0 fm   277.2 keV          0 eV       0 fm       0 fm      World   initStep
+    1  -105.9 um      -1 cm   2.029 mm   277.2 keV          0 eV    1.02 cm    1.02 cm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0       0 fm       0 fm       0 fm   174.7 keV          0 eV       0 fm       0 fm      World   initStep
-    1      -1 cm  -1.283 mm  -8.419 mm   174.7 keV          0 eV   1.313 cm   1.313 cm      World   OutOfWorld
+    0       0 fm       0 fm       0 fm   36.42 keV          0 eV       0 fm       0 fm      World   initStep
+    1      -1 cm  -1.283 mm  -8.419 mm   36.42 keV          0 eV   1.313 cm   1.313 cm      World   OutOfWorld
 
 *********************************************************************************************************
 * G4Track Information:   Particle = Ni60[2505.753],   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#       X          Y          Z         KineE         dEStep    StepLeng   TrakLeng    Volume     Process
-    0       0 fm       0 fm       0 fm   1.688 eV           0 eV       0 fm       0 fm      World   initStep
+    0       0 fm       0 fm       0 fm   3.228 eV           0 eV       0 fm       0 fm      World   initStep
     End of event. Decay chain: Co60 ---> Ni60[2505.753]
 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.001553s Sys=0.000000s
+  User=0.000000s Real=0.002815s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -125,17 +125,17 @@ Run Summary
  Nb of generated particles: 
 
              Co60:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[2505.753]:       1  Emean =  1.688 eV 	( 1.688 eV  --> 1.688 eV )	mean life = 4.761 ps 
-        anti_nu_e:       1  Emean =  174.7 keV	( 174.7 keV --> 174.7 keV)	stable
-               e-:       1  Emean =  138.9 keV	( 138.9 keV --> 138.9 keV)	stable
+   Ni60[2505.753]:       1  Emean =  3.228 eV 	( 3.228 eV  --> 3.228 eV )	mean life = 4.761 ps 
+        anti_nu_e:       1  Emean =  36.42 keV	( 36.42 keV --> 36.42 keV)	stable
+               e-:       1  Emean =  277.2 keV	( 277.2 keV --> 277.2 keV)	stable
 
    Ekin Total (Q single decay): mean =  313.6 keV	( 313.6 keV --> 313.6 keV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  381.8 meV	( 381.8 meV --> 381.8 meV)
+   Momentum balance (excluding gamma desexcitation): mean =  654.5 meV	( 654.5 meV --> 654.5 meV)
 
    Total time of life (full chain): mean =  1.348 y    half-life =  341.1 d     ( 1.348 y   --> 1.348 y  )
 
-   Total visible energy (full chain) : mean =  138.9 keV   ( 138.9 keV --> 138.9 keV)
+   Total visible energy (full chain) : mean =  277.2 keV   ( 277.2 keV --> 277.2 keV)
 
    Activity of Co60 = 2.36e+14 Bq/g   (6379 Ci/g) 
 
@@ -191,7 +191,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.020000s Real=1.346118s Sys=0.000000s
+  User=0.920000s Real=0.929856s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -200,18 +200,18 @@ Run Summary
  Nb of generated particles: 
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
-   Ni60[1332.514]:     118  Emean =  17.02 eV 	( 1.581 eV  --> 31.25 eV )	mean life = 1.06 ps 
-   Ni60[2505.753]:   99882  Emean =  1.095 eV 	( 0.1819 meV --> 3.021 eV )	mean life = 4.761 ps 
-        anti_nu_e:  100000  Emean =  270.1 keV	( 154.6 keV --> 1.479 MeV)	stable
-               e-:  100000  Emean =  44.92 keV	( 1.567 eV  --> 716 keV)	stable
+   Ni60[1332.514]:     118  Emean =  18.86 eV 	( 604.8 meV --> 32.92 eV )	mean life = 1.06 ps 
+   Ni60[2505.753]:   99882  Emean =  1.467 eV 	( 0 eV  --> 3.748 eV )	mean life = 4.761 ps 
+        anti_nu_e:   99999  Emean =  218.2 keV	( 887 eV  --> 1.461 MeV)	stable
+               e-:  100000  Emean =  96.82 keV	( 7.341 eV  --> 1.413 MeV)	stable
 
    Ekin Total (Q single decay): mean =    315 keV	( 313.6 keV --> 1.487 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  590.1 meV	( 0.01286 meV --> 51.28 eV )
+   Momentum balance (excluding gamma desexcitation): mean =   6.99 eV 	( 0.003088 meV --> 647.3 keV)
 
    Total time of life (full chain): mean =  7.608 y    half-life =  5.273 y     ( 9.09 s   --> 76.46 y  )
 
-   Total visible energy (full chain) : mean =  44.92 keV   ( 2.442 eV  --> 716 keV)
+   Total visible energy (full chain) : mean =  96.82 keV   ( 8.207 eV  --> 1.413 MeV)
 
    Activity of Co60 = 4.183e+13 Bq/g   (1131 Ci/g) 
 
@@ -266,7 +266,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.610000s Real=2.967899s Sys=0.000000s
+  User=2.200000s Real=2.216749s Sys=0.000000s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -276,20 +276,20 @@ Run Summary
 
              Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
              Ni60:  100000  Emean =  15.91 eV 	( 15.91 eV  --> 41.74 eV )	stable
-   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 829.2 meV --> 28.95 eV )	mean life = 1.06 ps 
+   Ni60[1332.514]:   99999  Emean =  12.34 eV 	( 1.227 eV  --> 30.74 eV )	mean life = 1.06 ps 
    Ni60[2158.632]:      16  Emean =   1.27 eV 	( 1.079 eV  --> 4.13 eV )
-   Ni60[2505.753]:   99884  Emean =  1.097 eV 	( 1.004 meV --> 3.028 eV )	mean life = 4.761 ps 
-        anti_nu_e:  100000  Emean =  269.9 keV	( 156.5 keV --> 1.486 MeV)	stable
-               e-:  100030  Emean =  45.42 keV	( 112.1 meV --> 1.331 MeV)	stable
+   Ni60[2505.753]:   99884  Emean =   1.47 eV 	( 2.394 meV --> 3.687 eV )	mean life = 4.761 ps 
+        anti_nu_e:  100000  Emean =  217.8 keV	( 3.329 keV --> 1.483 MeV)	stable
+               e-:  100030  Emean =  97.45 keV	( 524.8 meV --> 1.36 MeV)	stable
             gamma:  199869  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
 
    Ekin Total (Q single decay): mean =  940.1 keV	( 313.6 keV --> 2.159 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  962.1 keV	( 0.003215 meV --> 3.118 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =  966.1 keV	( 0.008775 meV --> 3.165 MeV)
 
    Total time of life (full chain): mean =  7.615 y    half-life =  5.278 y     ( 21.88 min --> 91.98 y  )
 
-   Total visible energy (full chain) : mean =  2.549 MeV   ( 1.333 MeV --> 2.663 MeV)
+   Total visible energy (full chain) : mean =  2.602 MeV   ( 1.337 MeV --> 2.816 MeV)
 
    Activity of Co60 = 4.179e+13 Bq/g   (1130 Ci/g) 
 

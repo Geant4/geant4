@@ -1,0 +1,21 @@
+# First stage, build Geant4 RPMs from spec file
+ARG version=latest
+FROM fedora:$version
+
+WORKDIR /root
+
+RUN dnf install -y dnf-plugins-core gdb rpmdevtools \
+ && rpmdev-setuptree
+
+COPY geant4.spec geant4.spec
+
+RUN spectool -g -R geant4.spec
+RUN dnf builddep -y geant4.spec
+RUN rpmbuild -bb geant4.spec
+
+# Second stage, build Geant4 container image
+FROM fedora:$version
+
+COPY --from=0 /root/rpmbuild/RPMS/* /tmp/
+
+RUN yum install -y /tmp/*.rpm && rm -rf /tmp/* && yum autoremove -y

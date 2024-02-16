@@ -6,7 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2022-12-01 John Allison (emutils-V11-01-25)
+## 2023-12-15 V.Ivanchenko (emutils-V11-01-26)
+- G4VEmProcess, G4VEnergyLossProcess - minor CPU optimisation by reduction
+    of number of calls for Log of kinetic energy 
+
+## 2023-12-01 John Allison (emutils-V11-01-25)
 - G4EmParametersMessenger:
   - Fix "/process/eloss/setFluctModel" - change "eloss" to "eLoss".
 

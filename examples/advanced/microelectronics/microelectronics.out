@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -189,13 +189,11 @@ Inelastic/mermin_sigma_inelastic_e-_Si
 loaddata : Inelastic/mermin_sigma_inelastic_e-_Si
 Faster code = true
 Inelastic/cumulated_mermin_sigmadiff_inelastic_e-_Si.dat
-add to material vector
 Material 2 / 2 : G4_Si
 Inelastic/mermin_sigma_inelastic_e-_Si
 loaddata : Inelastic/mermin_sigma_inelastic_e-_Si
 Faster code = true
 Inelastic/cumulated_mermin_sigmadiff_inelastic_e-_Si.dat
-add to material vector
 ****************************
 mermin model loaded !
 Material 1 / 2 : G4_Si
@@ -345,7 +343,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x802880
+##### Create analysis manager   0x10a44b0
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -367,7 +365,7 @@ Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.5/micro
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.380000s Real=0.546559s Sys=0.030000s
+  User=0.340000s Real=0.416159s Sys=0.010000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done

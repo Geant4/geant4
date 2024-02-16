@@ -1,9 +1,14 @@
 # Example B2 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-01-22 Gabriele Cosmo (exampleB2-V11-01-04)
+- Updated PrimaryGeneratorAction::GeneratePrimaries() in all B2 examples to
+  avoid nonsense placing of the initial position on the world boundary.
 
 ## 2023-11-07 I. Hrivnacova (exampleB2-V11-01-03)
 - Fixed and improved setting of G4VisAttribute

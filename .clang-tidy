@@ -1,0 +1,31 @@
+---
+# Minimal set of checks for Geant4
+# - See CODING_GUIDELINES.rst for guidelines and instructions for use
+# - Full list at https://clang.llvm.org/extra/clang-tidy/checks/list.html
+Checks: "-*, \
+modernize-deprecated-headers, \
+modernize-make-shared, \
+modernize-make-unique, \
+modernize-redundant-void-arg, \
+modernize-use-auto, \
+modernize-use-equals-default, \
+modernize-use-nullptr, \
+modernize-use-override, \
+modernize-use-using, \
+performance-faster-string-find, \
+performance-for-range-copy, \
+performance-inefficient-string-concatenation, \
+performance-trivially-destructible, \
+readability-delete-null-pointer, \
+readability-duplicate-include, \
+readability-string-compare"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle: file
+CheckOptions:
+  - key:             modernize-use-auto.RemoveStars
+    value:           'true'
+  - key:             performance-faster-string-find.StringLikeClasses
+    value:           'G4String;::std::basic_string;::std::basic_string_view'
+...

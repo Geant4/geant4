@@ -56,11 +56,12 @@
 
 using namespace std;
 using namespace G4DNAPARSER;
+
 CommandLineParser* parser(0);
 
 void Parse(int& argc, char** argv);
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
 
   // run time in Geant4
@@ -78,10 +79,11 @@ int main(int argc,char** argv)
   Command* commandLine(0);
 
   auto* runManager= G4RunManagerFactory::CreateRunManager();
-  if ((commandLine = parser->GetCommandIfActive("-mt")))
-  {
-    int nThreads = 2;
-    if(commandLine->GetOption() == "NMAX")
+
+  if ((commandLine = parser->GetCommandIfActive("-mt"))) {
+    G4int nThreads = 2;
+    
+    if (commandLine->GetOption() == "NMAX")
     {
      nThreads = G4Threading::G4GetNumberOfCores();
     }
@@ -229,7 +231,7 @@ void Parse(int& argc, char** argv)
   parser->AddCommand("-mt",
                      Command::WithOption,
                      "Launch in MT mode (events computed in parallel)",
-      " NOT RECOMMANDED WITH CHEMISTRY)",
+		     " NOT RECOMMANDED WITH CHEMISTRY)",
                      "2");
 
   parser->AddCommand("-sXY", Command::OptionNotCompulsory,
@@ -265,7 +267,7 @@ void Parse(int& argc, char** argv)
 
   G4String exec;
   G4String path;
-  GetNameAndPathOfExecutable(argv,exec, path);
+  GetNameAndPathOfExecutable(argv, exec, path);
 
   parser->AddCommand("-out",
                      Command::OptionNotCompulsory,
@@ -282,7 +284,6 @@ void Parse(int& argc, char** argv)
     CommandLineParser::DeleteInstance();
     std::exit(0);
   }
-
   ///////////
   // Kill application if wrong argument in command line
   //

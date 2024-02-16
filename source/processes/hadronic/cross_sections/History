@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-12-09 Vladimir Ivanchenko (hadr-cross-V11-01-17)
+- G4KokoulinMuonNuclearXS - use faster interface to G4PhysicsVector
+- G4ElectroNuclearCrossSection - added low-energy limit 100 MeV for x-section
+
 ## 2023-11-18 I. Hrivnacova (hadr-cross-V11-01-16)
 - G4PhotoNuclearCrossSection - fix memory leaks
 

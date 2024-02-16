@@ -61,9 +61,9 @@ int MCGIDI_outputChannel_release( statusMessageReporting *smr, MCGIDI_outputChan
 int MCGIDI_outputChannel_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_POPs *pops, MCGIDI_outputChannel *outputChannel,
         MCGIDI_reaction *reaction, MCGIDI_product *parent ) {
 
-    int n, delayedNeutronIndex = 0;
-    char const *genre, *Q;
-    xDataTOM_element *child;
+    int n{0}, delayedNeutronIndex{0};
+    char const *genre{""}, *Q{""};
+    xDataTOM_element *child{nullptr};
 
     MCGIDI_outputChannel_initialize( smr, outputChannel );
 

@@ -61,6 +61,7 @@ G4_DECLARE_XS_FACTORY(G4ElectroNuclearCrossSection);
 // removing all the static consts and putting them here
 
 // Parametrization of the PhotoNucCS
+static const G4double sLowEnergyLimit = 100.;  // Low-energy limit for the process in MeV
 static const G4double shd=1.0734;              // HE PomShadowing(D)
 static const G4double poc=0.0375;              // HE Pomeron coefficient
 static const G4double pos=16.5;                // HE Pomeron shift
@@ -2254,17 +2255,16 @@ G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) con
     << "all energies.\n";
 }
 
-G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int Z, const G4Material*)
+G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*, G4int, const G4Material*)
 {
-  return (Z>0 && Z<120);
+  return true;
 }
-
 
 G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ, const G4Material*)
 {
-    const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
+    const G4double Energy = aPart->GetKineticEnergy(); // Energy of the electron
 
-    if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
+    if (Energy <= sLowEnergyLimit || ZZ >= 120) return 0.;  // Energy is below the minimum energy of the process
     
     if(ZZ!=lastZ)      // This nucleus was not the last used element
     {

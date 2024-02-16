@@ -131,19 +131,27 @@ G4MicroElecInelasticModel_new::~G4MicroElecInelasticModel_new()
 {
   // Cross section  
   // (0)
-  TCSMap::iterator pos2;
-  for (pos2 = tableTCS.begin(); pos2 != tableTCS.end(); ++pos2) {
-    MapData* tableData = pos2->second;
-    for (auto pos = tableData->begin(); pos != tableData->end(); ++pos)
-      {
-	G4MicroElecCrossSectionDataSet_new* table = pos->second;
-	delete table;
-      }
+  for (auto const& p : tableTCS) {
+    MapData* tableData = p.second;
+    for (auto const& pos : *tableData) { delete pos.second; }
     delete tableData;
   }
   tableTCS.clear();
-    
+
   // (1)
+  for (auto const & obj : eDiffDatatable) {
+    auto ptr = obj.second;
+    ptr->clear();
+    delete ptr;
+  }
+  
+  for (auto const & obj : pDiffDatatable) {
+    auto ptr = obj.second;
+    ptr->clear();
+    delete ptr;
+  }
+
+  // (2)
   for (auto const & obj : eNrjTransStorage) {
     delete obj.second;
   }
@@ -151,71 +159,37 @@ G4MicroElecInelasticModel_new::~G4MicroElecInelasticModel_new()
     delete obj.second;
   }
 
-  // (2)
-  for (auto const & obj : eDiffDatatable) {
-    delete obj.second;
-  }
-  for (auto const & obj : pDiffDatatable) {
-    delete obj.second;
+  // (3)
+  for (auto const& p : eProbaShellStorage) {
+    delete p.second;
   }
 
-  // (3)
-  dataProbaShellMap::iterator iterator_probaShell;
-  
-  for (iterator_probaShell = eProbaShellStorage.begin(); iterator_probaShell != eProbaShellStorage.end(); ++iterator_probaShell) {
-    vector<VecMap>* eProbaShellMap = iterator_probaShell->second;
-    eProbaShellMap->clear();
-    delete eProbaShellMap;
+  for (auto const& p : pProbaShellStorage) {
+    delete p.second;
   }
-  eProbaShellStorage.clear();
-  
-  for (iterator_probaShell = pProbaShellStorage.begin(); iterator_probaShell != pProbaShellStorage.end(); ++iterator_probaShell) {
-    vector<VecMap>* pProbaShellMap = iterator_probaShell->second;
-    pProbaShellMap->clear();
-    delete pProbaShellMap;
-  }
-  pProbaShellStorage.clear();
   
   // (4)
-  TranfEnergyMap::iterator iterator_nrjtransf;
-  for (iterator_nrjtransf = eVecmStorage.begin(); iterator_nrjtransf != eVecmStorage.end(); ++iterator_nrjtransf) {
-    VecMap* eVecm = iterator_nrjtransf->second;
-    eVecm->clear();
-    delete eVecm;
+  for (auto const& p : eIncidentEnergyStorage) {
+    delete p.second;
   }
-  eVecmStorage.clear();
-  for (iterator_nrjtransf = pVecmStorage.begin(); iterator_nrjtransf != pVecmStorage.end(); ++iterator_nrjtransf) {
-    VecMap* pVecm = iterator_nrjtransf->second;
-    pVecm->clear();
-    delete pVecm;
+
+  for (auto const& p : pIncidentEnergyStorage) {
+    delete p.second;
   }
-  pVecmStorage.clear();
-  
+
   // (5)
-  incidentEnergyMap::iterator iterator_energy;
-  for (iterator_energy = eIncidentEnergyStorage.begin(); iterator_energy != eIncidentEnergyStorage.end(); ++iterator_energy) {
-    std::vector<G4double>* eTdummyVec = iterator_energy->second;
-    eTdummyVec->clear();
-    delete eTdummyVec;
+  for (auto const& p : eVecmStorage) {
+    delete p.second;
   }
-  eIncidentEnergyStorage.clear();
-  
-  for (iterator_energy = pIncidentEnergyStorage.begin(); iterator_energy != pIncidentEnergyStorage.end(); ++iterator_energy) {
-    std::vector<G4double>* pTdummyVec = iterator_energy->second;
-    pTdummyVec->clear();
-    delete pTdummyVec;
+
+  for (auto const& p : pVecmStorage) {
+    delete p.second;
   }
-  pIncidentEnergyStorage.clear();
-  
+    
   // (6)
-  MapStructure::iterator iterator_matStructure;
-  for (iterator_matStructure = tableMaterialsStructures.begin(); 
-       iterator_matStructure != tableMaterialsStructures.end(); ++iterator_matStructure) {
-    currentMaterialStructure = iterator_matStructure->second;
-    delete currentMaterialStructure;
+  for (auto const& p : tableMaterialsStructures) {
+    delete p.second;
   }
-  tableMaterialsStructures.clear();
-  currentMaterialStructure = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -304,6 +278,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
       // Octobre 22nd, 2014 - Melanie Raine      
       //Creating vectors of maps for DCS and Cumulated DCS for the current material.
       //Each vector is storing one map for each shell.      
+      G4bool isUsed1 = false;
       vector<TriDimensionMap>* eDiffCrossSectionData = 
 	new vector<TriDimensionMap>; //Storage of [IncidentEnergy, TransfEnergy, DCS values], used in slower code
       vector<TriDimensionMap>* eNrjTransfData = 
@@ -312,7 +287,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
       vector<G4double>* eTdummyVec = new vector<G4double>; //Storage of incident energies for interpolation
       VecMap* eVecm = new VecMap; //Transfered energy map for slower code
       
-      for (int j = 0; j < currentMaterialStructure->NumberOfLevels(); j++) //Filling the map vectors with an empty map for each shell
+      for (G4int j = 0; j < currentMaterialStructure->NumberOfLevels(); ++j) //Filling the map vectors with an empty map for each shell
 	{
 	  eDiffCrossSectionData->push_back(TriDimensionMap());
 	  eNrjTransfData->push_back(TriDimensionMap());
@@ -328,7 +303,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	  if (tDummy != eTdummyVec->back()) eTdummyVec->push_back(tDummy);
 	  
 	  G4double tmp; //probability
-	  for (int j = 0; j < currentMaterialStructure->NumberOfLevels(); j++)
+	  for (G4int j = 0; j < currentMaterialStructure->NumberOfLevels(); ++j)
 	    {
 	      eDiffCrossSection >> tmp;	      
 	      (*eDiffCrossSectionData)[j][tDummy][eDummy] = tmp;
@@ -339,16 +314,17 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 		  (*eProbaShellMap)[j][tDummy].push_back((*eDiffCrossSectionData)[j][tDummy][eDummy]);
 		}
 	      else {  // SI - only if eof is not reached !
-		if (!eDiffCrossSection.eof()) (*eDiffCrossSectionData)[j][tDummy][eDummy] *= scaleFactor;
+		(*eDiffCrossSectionData)[j][tDummy][eDummy] *= scaleFactor;
 		(*eVecm)[tDummy].push_back(eDummy);
 	      }
 	    }
 	}
       //
-      G4cout << "add to material vector" << G4endl;
+      //G4cout << "add to material vector" << G4endl;
       
       //Filing maps for the current material into the master maps
       if (fasterCode) {
+	isUsed1 = true;
 	eNrjTransStorage[mat] = eNrjTransfData;
 	eProbaShellStorage[mat] = eProbaShellMap;
       }
@@ -359,9 +335,13 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
       eIncidentEnergyStorage[mat] = eTdummyVec;
 
       //Cleanup support vectors
-      // delete eProbaShellMap;
-      // delete eDiffCrossSectionData;
-      // delete eNrjTransfData;
+      if (!isUsed1) {
+	delete eProbaShellMap;
+        delete eNrjTransfData;
+      } else {
+        delete eDiffCrossSectionData;
+	delete eVecm;
+      }
     }
     
     // *** PROTON
@@ -403,6 +383,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	//Creating vectors of maps for DCS and Cumulated DCS for the current material.
 	//Each vector is storing one map for each shell.
 	
+	G4bool isUsed1 = false;
 	vector<TriDimensionMap>* pDiffCrossSectionData = 
 	  new vector<TriDimensionMap>; //Storage of [IncidentEnergy, TransfEnergy, DCS values], used in slower code
 	vector<TriDimensionMap>* pNrjTransfData = 
@@ -411,9 +392,9 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	  new vector<VecMap>; //Storage of the vectors containing all cumulated DCS values for an initial energy, by shell
 	vector<G4double>* pTdummyVec = 
 	  new vector<G4double>; //Storage of incident energies for interpolation
-	VecMap* eVecm = new VecMap; //Transfered energy map for slower code
+	VecMap* pVecm = new VecMap; //Transfered energy map for slower code
 
-	for (int j = 0; j < currentMaterialStructure->NumberOfLevels(); ++j) 
+	for (G4int j = 0; j < currentMaterialStructure->NumberOfLevels(); ++j) 
 	  //Filling the map vectors with an empty map for each shell
 	  {
 	    pDiffCrossSectionData->push_back(TriDimensionMap());
@@ -430,7 +411,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 	    if (tDummy != pTdummyVec->back()) pTdummyVec->push_back(tDummy);
 	    
 	    G4double tmp; //probability
-	    for (int j = 0; j < currentMaterialStructure->NumberOfLevels(); j++)
+	    for (G4int j = 0; j < currentMaterialStructure->NumberOfLevels(); j++)
 	      {
 		pDiffCrossSection >> tmp;	
 		(*pDiffCrossSectionData)[j][tDummy][eDummy] = tmp; 
@@ -444,28 +425,32 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
 		    (*pProbaShellMap)[j][tDummy].push_back((*pDiffCrossSectionData)[j][tDummy][eDummy]);
 		  }
 		else {  // SI - only if eof is not reached !
-		  if (!pDiffCrossSection.eof()) (*pDiffCrossSectionData)[j][tDummy][eDummy] *= scaleFactor;
-		  (*eVecm)[tDummy].push_back(eDummy);
+		  (*pDiffCrossSectionData)[j][tDummy][eDummy] *= scaleFactor;
+		  (*pVecm)[tDummy].push_back(eDummy);
 		}
 	      }
 	  }
 	
 	//Filing maps for the current material into the master maps
 	if (fasterCode) {
+	  isUsed1 = true;
 	  pNrjTransStorage[mat] = pNrjTransfData;
 	  pProbaShellStorage[mat] = pProbaShellMap;
 	}
 	else {
 	  pDiffDatatable[mat] = pDiffCrossSectionData;
-	  pVecmStorage[mat] = eVecm;
+	  pVecmStorage[mat] = pVecm;
 	}
 	pIncidentEnergyStorage[mat] = pTdummyVec;
-         
+
 	//Cleanup support vectors
-	//delete pNrjTransfData;
-	//delete eVecm;
-	//delete pDiffCrossSectionData;
-	//delete pProbaShellMap;
+	if (!isUsed1) {
+	  delete pProbaShellMap;
+	  delete pNrjTransfData;
+	} else {
+	  delete pDiffCrossSectionData;
+	  delete pVecm;
+	}
       }
     tableTCS[mat] = tableData;
   } 
@@ -494,7 +479,7 @@ void G4MicroElecInelasticModel_new::Initialise(const G4ParticleDefinition* parti
     }
   
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
-  
+
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -603,8 +588,8 @@ G4double G4MicroElecInelasticModel_new::CrossSectionPerVolume(const G4Material* 
 	G4cout << " - Cross section per Si atom (cm^-1)=" << sigma*density / (1. / cm) << G4endl;
       }
         
-    return (sigma)*density;} 
- 
+    return (sigma)*density;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -745,9 +730,6 @@ void G4MicroElecInelasticModel_new::SampleSecondaries(std::vector<G4DynamicParti
 	  //if (!SEFromFermiLevel && weaklyBound) limitEnergy += currentMaterialStructure->GetEnergyGap();
 	  fParticleChangeForGamma->SetProposedKineticEnergy(ekin - secondaryKinetic-limitEnergy); //Ef = Ei-(Q-El)-El = Ei-Q
 	  fParticleChangeForGamma->ProposeLocalEnergyDeposit(limitEnergy-deexSecEnergy);
-
-
-
 	  
       if (secondaryKinetic>0)
 	{  
@@ -848,7 +830,7 @@ G4double G4MicroElecInelasticModel_new::RandomizeEjectedElectronEnergyFromCumula
 		if(secondaryElectronKineticEnergy <= 0.) {
 			secondaryElectronKineticEnergy = 0.0;
 		}
-	}																									
+	}
 	else {
 		secondaryElectronKineticEnergy = transf - currentMaterialStructure->GetLimitEnergy(shell);
 		// for weaklybound electrons = gap  + average energy in the energy band

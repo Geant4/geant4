@@ -87,6 +87,17 @@
  	Idle> type your commands
  		....
  	Idle> exit
+  
+    other Macros provided in this example:
+      - run01_prot.mac
+        Synchrotron radiation of 50 TeV protons in 20 T field
+        relevant for FCC-hh
+      - run02.mac
+        weak field long distance example
+        relevant for space applications
+      - TestReflection.mac
+        specular reflection of X-ray gammas on a block of
+        copper defined by Box_1m_Cu.gdml
 
  7 - TRACKING : stepMax and setMaxStepLength
 

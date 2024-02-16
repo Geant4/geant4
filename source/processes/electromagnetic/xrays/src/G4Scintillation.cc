@@ -639,21 +639,16 @@ G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
 {
   // tau1: rise time and tau2: decay time
   // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  while(true)
-  {
-    G4double ran1 = G4UniformRand();
-    G4double ran2 = G4UniformRand();
+  G4double t;
 
-    // exponential distribution as envelope function: very efficient
-    G4double d = (tau1 + tau2) / tau2;
-    // make sure the envelope function is
-    // always larger than the bi-exponential
-    G4double t  = -1.0 * tau2 * std::log(1. - ran1);
-    G4double gg = d * single_exp(t, tau2);
-    if(ran2 <= bi_exp(t, tau1, tau2) / gg)
-      return t;
+  do
+  {
+    // The exponential distribution as an envelope function: very efficient
+    t  = -1.0 * tau2 * G4Log(1.0 - G4UniformRand());
   }
-  return -1.0;
+  while (G4UniformRand() > (1.0 - G4Exp(-t/tau1)));
+
+  return t;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

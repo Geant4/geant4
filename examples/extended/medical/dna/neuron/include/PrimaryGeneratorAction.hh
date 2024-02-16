@@ -52,12 +52,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 public:
 
   PrimaryGeneratorAction();    
-  virtual ~PrimaryGeneratorAction();
+  ~PrimaryGeneratorAction() override;
   
-  virtual void GeneratePrimaries(G4Event*);
-//
-  G4ParticleGun* GetParticleGun() {return fpParticleGun;};
-  G4double GetGunArea() {return fGunArea;} ;
+  void GeneratePrimaries(G4Event*) override;
+
+  G4ParticleGun* GetParticleGun() const { return fpParticleGun; }
+  G4double GetGunArea() const { return fGunArea; }
   
 private:
 

@@ -87,8 +87,8 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume* anEnvelope,
   fTheMaxAngle    = 4.e-4;
 
   fTotBin = 50;  //  number of bins in log scale 
-  fBinTR  =  100; //   number of bins in TR vectors
-
+  fBinTR  = 100; //   number of bins in TR vectors
+  fKrange = 229;
   // min/max angle2 in log-vectors
 
   fMinThetaTR = 3.0e-9; 

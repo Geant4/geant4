@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2023-12-21 Yoshihide Sato (global-V11-01-27)
+- G4PhysicsModelCatalog.cc: added the ID for the Light-Ion QMD model.
+
 ## 2023-11-23 Gabriele Cosmo (global-V11-01-26)
 - Updated tag IDs for geant4-11-02-ref-00.
 

@@ -403,8 +403,10 @@ private:
   inline G4double GetLambdaForScaledEnergy(G4double scaledKinE, 
                                            G4double logScaledKinE);
 
+  inline G4double LogScaledEkin(const G4Track& aTrack);
+  
   void ComputeLambdaForScaledEnergy(G4double scaledKinE,
-                                    G4double logScaledKinE);
+                                    const G4Track& aTrack);
 
   G4bool IsRegionForCubcutProcessor(const G4Track& aTrack);
 
@@ -472,9 +474,7 @@ protected:
 
   G4double preStepLambda = 0.0;
   G4double preStepKinEnergy = 0.0;
-  G4double preStepLogKinEnergy = LOG_EKIN_MIN;
   G4double preStepScaledEnergy = 0.0;
-  G4double preStepLogScaledEnergy = LOG_EKIN_MIN;
   G4double mfpKinEnergy = 0.0;
 
   std::size_t currentCoupleIndex = 0;
@@ -581,6 +581,8 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline
 G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e, G4double loge)
@@ -698,6 +700,13 @@ inline G4double
 G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e, G4double loge)
 {
   return fFactor*((*theLambdaTable)[basedCoupleIndex])->LogVectorValue(e, loge);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEnergyLossProcess::LogScaledEkin(const G4Track& track)
+{
+  return track.GetDynamicParticle()->GetLogKineticEnergy() + logMassRatio;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

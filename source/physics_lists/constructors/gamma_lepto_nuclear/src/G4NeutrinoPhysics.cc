@@ -239,7 +239,7 @@ void G4NeutrinoPhysics::ConstructProcess()
   theNuTauNucleusProcess->RegisterMe(anutaunuclnc);
 
   for (G4int i=4; i<=5; ++i) {
-    p[i]->GetProcessManager()->AddDiscreteProcess(theNuMuNucleusProcess);
+    p[i]->GetProcessManager()->AddDiscreteProcess(theNuTauNucleusProcess);
   }
 
   // nu_e nucleus interactions

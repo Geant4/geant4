@@ -60,9 +60,9 @@ void G4GaussXTRadiator::ProcessDescription(std::ostream& out) const
 ///////////////////////////////////////////////////////////////////////////
 //
 // The Fabian-Strujinsky (FS) algorithm for integration over XTR angle, 
-// resolution is about 0.5 mrad
+// resolution is about 0.1-0.5 mrad
 
-G4double G4GaussXTRadiator::SpectralXTRdEdxFS(G4double energy)
+G4double G4GaussXTRadiator::SpectralXTRdEdx(G4double energy)
 {
   G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC, theta2, theta2k;
   G4int k, kMax, kMin;
@@ -82,7 +82,7 @@ G4double G4GaussXTRadiator::SpectralXTRdEdxFS(G4double energy)
   if(cofMin > kMin)
     kMin++;
 
-  kMax = kMin + 49;
+  kMax = kMin + fKrange;
 
   if(verboseLevel > 2)
   {
@@ -130,88 +130,27 @@ G4double G4GaussXTRadiator::GetStackFactor(G4double energy,
                                                     G4double gamma,
                                                     G4double varAngle)
 {
-  G4double result, Qa, Qb, Q, Qn, aZa, bZb, aMa, bMb;
-
-  G4double Ma, Mb, Za, Zb;
-
+  G4double result(0.);
   G4double sa = fPlateThick/fAlphaPlate;
   G4double sb = fGasThick/fAlphaGas;
-
-  Za  = GetPlateFormationZone(energy, gamma, varAngle);
-  
-  aZa = fPlateThick / Za ;
-
-  Zb  =  GetGasFormationZone(energy, gamma, varAngle);
-  
-  bZb = fGasThick / Zb ;
-
-  Ma =  GetPlateLinearPhotoAbs(energy);
-  
-  aMa = fPlateThick * Ma;
-
-  Mb = GetGasLinearPhotoAbs(energy);
-  
-  bMb   = fGasThick * Mb;
-
-  // Gauss fluctuation of gas gaps according to RMS = sb = b/fAlphaGas
- 
-  G4double gre, gim, pre, pim;
-
-  pre = -0.5 * aMa - sa * sa * ( 4./ Za / Za - Ma*Ma )/8.;
-  
-  gre = -0.5 * bMb - sb * sb * ( 4./ Zb / Zb - Mb*Mb )/8.;
-
-  pim = sa * sa * Ma/2./Za - aZa;
-
-  gim = sb * sb * Mb/2./Zb - bZb;
- 
-  Qa    = std::exp(pre);
-  
-  Qb    = std::exp(gre);
-  
-  // Q     = Qa * Qb;
-
-  G4complex Ha( Qa * std::cos(pim), Qa * std::sin(pim) );
-  
-  G4complex Hb( Qb * std::cos(gim), Qb * std::sin(gim) );
-
-  G4double hre, him, hnre, hnim;
-
-  hre  = pre + gre;
-  
-  him  = pim + gim;
-
   G4double nn = G4double(fPlateNumber);
   
-  hnre = nn*hre;
-  
-  hnim = nn*him;
+  G4complex med( 0., 1.);
+  G4complex Z1   = GetPlateComplexFZ( energy, gamma, varAngle);
+  G4complex order1 = -0.5*med*fPlateThick/Z1 - 0.125*sa*sa/Z1/Z1;
 
-  Q  = std::exp(hre);
-  
-  Qn = std::exp(hnre);
-  
-  
-  // G4complex H  = Ha * Hb;
+  G4complex Z2   = GetGasComplexFZ( energy, gamma, varAngle);
+  G4complex order2 = -0.5*med*fGasThick/Z2 - 0.125*sb*sb/Z2/Z2;
 
+  G4complex ordernn = ( order1 + order2 )*nn;
 
-  G4complex H( Q * std::cos(him), Q * std::sin(him) );
-  G4complex Hn( Qn * std::cos(hnim), Qn * std::sin(hnim) );
-  
-  // G4complex Hs = conj(H);
-
-  // G4double sigma, D;
-  
-  // sigma = aMa * fPlateThick + bMb * fGasThick;
-
-  // D = 1.0 / ((1 - Q) * (1 - Q) + 4 * Q * std::sin(0.5 * (aZa + bZb)) * std::sin(0.5 * (aZa + bZb)));
-  
-  // G4complex F1 = ( 1.0 - Ha ) * ( 1.0 - Hb ) * ( 1.0 - Hs ) * G4double(fPlateNumber) * D;
+  G4complex Ha = exp( order1 );
+  G4complex Hb = exp( order2 );
+  G4complex H  = Ha * Hb;
+  G4complex Hn = exp( ordernn );
   
   G4complex F1 = ( 1.0 - Ha ) * ( 1.0 - Hb ) * nn / ( 1. - H );
   
-  // G4complex F2 = ( 1.0 - Ha ) * ( 1.0 - Ha ) * Hb * ( 1.0 - Hs ) * ( 1.0 - Hs ) * (1.0 - std::exp( -0.5 * fPlateNumber * sigma) ) * D * D;
-
   G4complex F2 = ( 1.0 - Ha ) * ( 1.0 - Ha ) * Hb * ( 1. - Hn ) / ( 1. - H ) / ( 1. - H );
   
   G4complex R = (F1 + F2) * OneInterfaceXTRdEdx(energy, gamma, varAngle);

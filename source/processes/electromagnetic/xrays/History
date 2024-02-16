@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-01-10 Soon Yung Jun (xrays-V11-01-10)
+- G4Scintillation::sample_time - refactor the scintillation time sampling
+
+## 2023-12-16 Vladimir Grichine
+- G4GaussXTRadiator, G4VXTRenergyLoss - flexible summation in
+  SpectralXTRdEdx, clean-up in GetStackFactor based on std::complex methods
+
 ## 2023-11-04 Vladimir Grichine (xrays-V11-01-09)
 - G4GaussXTRadiator - bug fixed by renaming virtual function to prevent
   clash between base and inhereted classes, new name SpectralXTRdEdxFS

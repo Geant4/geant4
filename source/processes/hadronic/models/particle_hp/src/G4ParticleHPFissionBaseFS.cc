@@ -108,8 +108,9 @@ G4DynamicParticleVector* G4ParticleHPFissionBaseFS::ApplyYourself(G4int nPrompt)
   G4double eKinetic = boosted.GetKineticEnergy();
 
   // Build neutrons
-  auto theNeutrons = new G4ReactionProduct[nPrompt];
+  std::vector<G4ReactionProduct> theNeutrons;
   for (i = 0; i < nPrompt; i++) {
+    theNeutrons.emplace_back();
     theNeutrons[i].SetDefinition(G4Neutron::Neutron());
   }
 
@@ -132,7 +133,6 @@ G4DynamicParticleVector* G4ParticleHPFissionBaseFS::ApplyYourself(G4int nPrompt)
     it->SetMomentum(theNeutrons[i].GetMomentum());
     aResult->push_back(it);
   }
-  delete[] theNeutrons;
 
   // return the result
   return aResult;

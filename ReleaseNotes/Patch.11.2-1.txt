@@ -1,0 +1,154 @@
+
+                 Geant4 11.2 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                        16 February 2024
+
+List of fixes included in this public patch since the public release 11.2.0:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Added -F flag on macOS with a framework build of Qt.
+        Addressing problem report #2589.
+      o Fixed detection of SoQt/Xt packages, by manually checking versions of
+        found packages. Geant4 only requires a minimum version.
+
+  o Geometry:
+    --------
+    + solids/CSG:
+      o In wrapper G4UTrap, use GetThetaCosPhi() and GetThetaSinPhi() in
+        method GetVertices(); this overcomes a problem with trapezoid reported
+        in CMSSW after migration to VecGeom 1.2.6.
+        Also fixed typo in method SetAllParameters(), setter used in
+        parameterisation of shape dimensions.
+
+  o Global:
+    ------
+    + G4PhysicsModelCatalog: added ID for the Light-Ion QMD model.
+    + Updated date and version for 11.2.1.
+
+  o Physics Lists:
+    -------------
+    + constructors/electromagnetic
+      o G4GammaGeneralProcess: fixed sampling of muon pair production.
+        Addressing problem report #2543.
+      o G4EmStandardPhysics_option3: restore step limit type to use
+        'fUseDistanceToBoundary' and set default RangeFactor from 0.03 to 0.04,
+        fixing inaccuracy in medical benchmarks.
+    + constructors/gamma_lepto_nuclear
+      o G4NeutrinoPhysics: fixed neutrino physics instantiation.
+        Addressing problem report #2594.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna
+      o G4DNABornAngle: fixed numerical problem; added protection for cosTheta;
+        use relativistic formula for maximum energy transfer to delta-electrons.
+    + loweneegy
+      o G4MicroElecInelasticModel_new: fixed Coverity report for memory leak at
+        exit. Minor code cleanup.
+      o G4MicroElecLOPhononModel: minor code cleanup.
+    + standard
+      o G4IonICRU73Data: fix for the case when target material has an element
+        with Z>92; improved debug printouts. In the Lindhard-Sorensen model to
+        compute dEdx the first try is to take it from ICRU73 or ICRU90 data,
+        if this class returns zero, then dEdx is computed from G4GenericIon 
+        and effective charge. Addressing problem report #2586.
+    + utils
+      o G4VEmProcess, G4VEnergyLossProcess: minor CPU optimisation with
+        reduction of number of calls for log() of kinetic energy.
+    + xrays
+      o G4GaussXTRadiator, G4VXTRenergyLoss: flexible summation in SpectralXTRdEdx;
+        clean-up in GetStackFactor() based on std::complex methods.
+      o In G4Scintillation::sample_time(), refactored the scintillation time
+        sampling.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections
+      o G4KokoulinMuonNuclearXS: use faster interface to G4PhysicsVector.
+      o G4ElectroNuclearCrossSection: added low-energy limit of 100 MeV for
+        cross-section.
+    + management
+      o G4HadronicProcess: explicitly define cross-section type per particle
+        type, this might provide some CPU speedup.
+    + models/de_excitation
+      o G4FermiBreakUpVI, G4FermiFragmentsPoolVI: fix in production of fake
+        excited isomeres, by moving the check on lifetime limit to the Initialise()
+        method of the model, allowing to change this limit in an application;
+        do not consider decay chains with no final state.
+        Addressing problem report #2584.
+      o G4StatMFChannel: replaced use of C-arrays with std::vector, clearing
+        compilation warnings on gcc compiler when LTO settings are enabled.
+    + models/lend
+      o Fixed compilation error on recent Windows VC++ compiler 17.8.3 for use
+        of std::isfinite(). Addressing problem report #2582.
+      o Fixed compilation warnings on gcc compiler when LTO settings are
+        enabled.
+    + models/particle_hp
+      o G4ParticleHPFissionFS, G4ParticleHPFFFissionFS: added extra protections
+        against cases when fission data are not available for some isotopes.
+        Addressing problem #2590.
+      o G4ParticleHPFSFissionFS, G4ParticleHPFissionBaseFS: replaced use of
+        C-arrays with std::vector, clearing compilation warnings on gcc
+        compiler when LTO settings are enabled.
+    + qmd
+      o Fixed model ID (model_LightIonQMDModel) in G4LightIonQMDReaction.
+    + radioactive_decay
+      o G4Radioactivation: added DBL_EPSILON check on transition energy for
+        metastables to prevent creation of zero energy levels which have no
+        decay products.
+      o G4BetaPlusDecay, G4BetaMinusDecay: fixed sampling algorithm.
+        Addressing problem report #2588.
+
+  o Run:
+    ---
+    + Correctly report number of threads from G4TaskRunManager.
+
+  o Tracking:
+    --------
+    + G4TrackingMessenger: fixed Coverity report for memory leak at exit,
+      by moving static thread-local variable to become class member, as
+      G4TrackingManager and its messenger are thread-local by nature.
+
+  o Examples:
+    --------
+    + basic/B2
+      o Updated PrimaryGeneratorAction::GeneratePrimaries() in B2a and B2b
+        examples to avoid placing of the initial position on the world
+        boundary. Updated READMEs.
+    + extended/electromagnetic/TestEm1
+      o Updated initial gun position in PrimaryGeneratorAction to not lay on
+        the world volume surface.
+    + extended/electromagnetic/TestEm5
+      o Updated initial gun position in PrimaryGeneratorAction to not lay on
+        the world volume surface.
+      o In TrackingAction, added a protection against potential wrong argument
+        to std::acos(), rarely happening for very high energy projectile
+        particles.
+    + extended/electromagnetic/TestEm11
+      o Updated initial gun position in PrimaryGeneratorAction to not lay on
+        the world volume surface.
+    + extended/electromagnetic/TestEm16
+      o Updated READMEs to document all macros.
+    + extended/medical/dna/neuron
+      o Cleanup to reduce number of Valgrind warnings; applied coding style
+        recommendations; removed commented lines, removed unused methods;
+        substituted C-arrays with vectors; improved algorithm of reading of
+        data file.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.2 series.
+  o  Technical notes distributed for release 11.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.2.1 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

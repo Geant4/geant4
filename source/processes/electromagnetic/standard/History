@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-01-23 V.Ivanchenko (emstand-V11-01-25)
+- G4IonICRU73Data - fixed bug #2586 for the case if target material has
+    an element with Z>92, improve debug printouts. In the Lindhard-Sorensen 
+    model to compute dEdx the first try is to take it from ICRU73 or ICRU90 
+    data, if this class return 0.0, then dEdx is computed from G4GenericIon 
+    and effective charge.
+
 ## 2023-11-03 Ben Morgan (emstand-V11-01-24)
 - Use "G4" prefixed version of EXPAT/ZLIB CMake variables
 

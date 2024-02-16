@@ -43,7 +43,6 @@
 #include "G4SystemOfUnits.hh"
 //
 #include "CommandLineParser.hh"
-#include "G4ParticleTable.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
@@ -55,6 +54,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4Proton.hh"
 
 using namespace G4DNAPARSER ;
 
@@ -66,13 +66,12 @@ G4VUserPrimaryGeneratorAction()
   G4int n_particle = 1;
   fpParticleGun  = new G4ParticleGun(n_particle);
   //
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
+  G4ParticleDefinition* particle = G4Proton::Proton();
   fpParticleGun->SetParticleDefinition(particle);
   // default gun parameters
   fpParticleGun->SetParticleEnergy(10.*MeV);   
   fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fpParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.*um));
+  fpParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +85,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-   
   // Initial kinetic energy of particles beam as Gaussion distribution! 
   
   // G4double Ekin = 10.*MeV;
@@ -109,92 +107,67 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   = G4LogicalVolumeStore::GetInstance()->GetVolume("BoundingSlice");  
   G4Orb* mediumSphere  = 0;
   G4Box* boundingSlice = 0;  
-  if ( mediumLV && boundingLV)
-  {
-   mediumSphere = dynamic_cast< G4Orb*>(mediumLV->GetSolid());
-   boundingSlice = dynamic_cast< G4Box*>(boundingLV->GetSolid());
+  if ( mediumLV && boundingLV) {
+    mediumSphere = dynamic_cast< G4Orb*>(mediumLV->GetSolid());
+    boundingSlice = dynamic_cast< G4Box*>(boundingLV->GetSolid());
   } 
-  if ( mediumSphere && boundingSlice)
-  {
+  if ( mediumSphere && boundingSlice) {
     mediumRadius   = mediumSphere->GetRadius();
     boundingXHalfLength = boundingSlice->GetXHalfLength(); 
     boundingYHalfLength = boundingSlice->GetYHalfLength(); 
     boundingZHalfLength = boundingSlice->GetZHalfLength();
  
-  /// a) Partilces directed to "square" on the XY plane of bounding slice 
-  ///   (or YZ, XZ) 
+    /// a) Partilces directed to "square" on the XY plane of bounding slice 
+    ///   (or YZ, XZ) 
  
-    if ( CommandLineParser::GetParser()->GetCommandIfActive("-sXY"))
-     {
-   //G4cerr << " Initial beam position uniformly spread on a square! " 
-   //      << G4endl;
-    // INITIAL BEAM DIVERGENCE
-    fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.)); 
-    // // INITIAL BEAM POSITION
-    fpParticleGun->SetParticlePosition(G4ThreeVector(
-    CLHEP::RandFlat::shoot(-boundingXHalfLength,boundingXHalfLength),
-    CLHEP::RandFlat::shoot(-boundingYHalfLength,boundingYHalfLength),
-    -mediumRadius));
-   // Surface area of a square 
-    // fGunArea = 4*boundingXHalfLength*boundingYHalfLength ;
-    //G4cerr << " Particle Fluence Area on a Square (um2) =  " 
-    //       <<fGunArea / (um*um)<< G4endl;
-     }
+    if ( CommandLineParser::GetParser()->GetCommandIfActive("-sXY")) {
+      // INITIAL BEAM DIVERGENCE
+      fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.)); 
+      // // INITIAL BEAM POSITION
+      fpParticleGun->SetParticlePosition(G4ThreeVector(
+	CLHEP::RandFlat::shoot(-boundingXHalfLength,boundingXHalfLength),
+        CLHEP::RandFlat::shoot(-boundingYHalfLength,boundingYHalfLength),
+        -mediumRadius));
+    }
 
-  /// b) Partilces directed to "disk" on the XY plane of 
-  ///    bounding slice (or YZ, XZ) 
+    /// b) Partilces directed to "disk" on the XY plane of 
+    ///    bounding slice (or YZ, XZ) 
 
-    else if ( CommandLineParser::GetParser()->GetCommandIfActive("-dXY"))
-     {
-    //G4cerr << " Initial beam position uniformly spread on a disk! " 
-    //       << G4endl;
-    fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.)); 
-    G4double x0,y0,z0;
-    x0 = 100.*mm;
-    y0 = 100.*mm;
-    z0 = -mediumRadius; // mediumRadius;
-    while (! (std::sqrt(x0*x0+y0*y0)<= mediumRadius) )
-    {
-     x0 = CLHEP::RandFlat::shoot(-mediumRadius,mediumRadius);
-     y0 = CLHEP::RandFlat::shoot(-mediumRadius,mediumRadius); 
-    }  
-    fpParticleGun->SetParticlePosition(G4ThreeVector(x0, y0,z0));     
-   // Surface area of a disk 
-   // fGunArea = pi*mediumRadius*mediumRadius ;
-   // G4cerr << " Particle Fluence Area on a Disk (um2) =  " 
-   //        <<fGunArea / (um*um)<< G4endl;
-
-     } 
+    else if ( CommandLineParser::GetParser()->GetCommandIfActive("-dXY")) {
+      fpParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.)); 
+      G4double x0,y0,z0;
+      x0 = 100.*mm;
+      y0 = 100.*mm;
+      z0 = -mediumRadius; // mediumRadius;
+      while (! (std::sqrt(x0*x0+y0*y0)<= mediumRadius) ) {
+	x0 = CLHEP::RandFlat::shoot(-mediumRadius,mediumRadius);
+	y0 = CLHEP::RandFlat::shoot(-mediumRadius,mediumRadius); 
+      }
+      fpParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));     
+    } 
  
-  /// c) Partilces directed towards the bounding slice (default option!) 
-   // Select a starting position on a sphere including the 
-   // target volume and neuron morphology
-   else 
-   {
-   //G4cerr << " Initial beam position uniformly spread on a sphere! "<< G4endl;
-    G4double cosTheta = 2.*G4UniformRand()-1;
-    G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-    G4double phi = twopi*G4UniformRand();
-    G4ThreeVector positionStart(mediumRadius*sinTheta*std::cos(phi),
-        mediumRadius*sinTheta*std::sin(phi),
-        mediumRadius*cosTheta);  
-    fpParticleGun->SetParticlePosition(positionStart); 
-    // To compute the direction, select a point inside the target volume
-    G4ThreeVector positionDir(
-        boundingXHalfLength*(2.*G4UniformRand()-1),
-        boundingYHalfLength*(2.*G4UniformRand()-1),
-        boundingZHalfLength*(2.*G4UniformRand()-1));
-    fpParticleGun->SetParticleMomentumDirection(
+    /// c) Partilces directed towards the bounding slice (default option!) 
+    // Select a starting position on a sphere including the 
+    // target volume and neuron morphology
+    else {
+      G4double cosTheta = 2.*G4UniformRand()-1;
+      G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
+      G4double phi = twopi*G4UniformRand();
+      G4ThreeVector positionStart(mediumRadius*sinTheta*std::cos(phi),
+				  mediumRadius*sinTheta*std::sin(phi),
+				  mediumRadius*cosTheta);
+      fpParticleGun->SetParticlePosition(positionStart);
+      // To compute the direction, select a point inside the target volume
+      G4ThreeVector positionDir(boundingXHalfLength*(2.*G4UniformRand()-1),
+				boundingYHalfLength*(2.*G4UniformRand()-1),
+				boundingZHalfLength*(2.*G4UniformRand()-1));
+      fpParticleGun->SetParticleMomentumDirection(
         (positionDir-positionStart).unit());
-   // Surface area of sphere 
-    fGunArea = 4.*pi*mediumRadius*mediumRadius ;
-   //  G4cerr << " Particle Fluence Area on sphere (um2) =  " 
-   //         <<fGunArea / (um*um)<< G4endl; 
- }
-  
+      // Surface area of sphere 
+      fGunArea = 4.*pi*mediumRadius*mediumRadius ;
+    }
   }
-  else
-  {
+  else {
     G4cerr << "Bounding slice volume not found!" << G4endl;
     G4cerr << "Default particle kinematic used" << G4endl;
   }  

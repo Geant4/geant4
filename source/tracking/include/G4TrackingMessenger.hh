@@ -47,6 +47,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 class G4TrackingManager;
 class G4SteppingManager;
+class G4IdentityTrajectoryFilter;
 
 class G4TrackingMessenger : public G4UImessenger
 {
@@ -59,9 +60,9 @@ class G4TrackingMessenger : public G4UImessenger
  private:
   G4TrackingManager* trackingManager = nullptr;
   G4SteppingManager* steppingManager = nullptr;
+  G4IdentityTrajectoryFilter* auxiliaryPointsFilter = nullptr;
 
   // commands
-
   G4UIdirectory* TrackingDirectory = nullptr;
   G4UIcmdWithoutParameter* AbortCmd = nullptr;
   G4UIcmdWithoutParameter* ResumeCmd = nullptr;

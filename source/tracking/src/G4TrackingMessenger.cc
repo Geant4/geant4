@@ -105,6 +105,7 @@ G4TrackingMessenger::~G4TrackingMessenger()
   delete ResumeCmd;
   delete StoreTrajectoryCmd;
   delete VerboseCmd;
+  delete auxiliaryPointsFilter;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,13 +125,13 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4UImanager::GetUIpointer()->ApplyCommand("/control/exit");
   }
 
-  static G4ThreadLocal G4IdentityTrajectoryFilter* auxiliaryPointsFilter = nullptr;
-  if (auxiliaryPointsFilter == nullptr) {
-    auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
-  }
   if (command == StoreTrajectoryCmd) {
     G4int trajType = StoreTrajectoryCmd->ConvertToInt(newValues);
     if (trajType == 2 || trajType == 4) {
+
+      if (nullptr == auxiliaryPointsFilter) {
+	auxiliaryPointsFilter = new G4IdentityTrajectoryFilter;
+      }
       G4TransportationManager::GetTransportationManager()
         ->GetPropagatorInField()
         ->SetTrajectoryFilter(auxiliaryPointsFilter);

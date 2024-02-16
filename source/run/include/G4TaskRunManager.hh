@@ -101,7 +101,7 @@ class G4TaskRunManager : public G4MTRunManager, public PTL::TaskRunManager
     inline G4int GetNumberOfEventsPerTask() const { return numberOfEventsPerTask; }
 
     void SetNumberOfThreads(G4int n) override;
-    G4int GetNumberOfThreads() const override { return PTL::TaskRunManager::GetNumberOfThreads(); }
+    G4int GetNumberOfThreads() const override;
     size_t GetNumberActiveThreads() const override
     {
       return PTL::TaskRunManager::GetNumberActiveThreads();

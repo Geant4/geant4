@@ -130,16 +130,19 @@ G4IonICRU73Data::~G4IonICRU73Data()
 G4double G4IonICRU73Data::GetDEDX(const G4Material* mat, const G4int Z,
                                   const G4double e, const G4double loge) const
 {
+  // if data does not exist the result is zero
+  if (Z > ZPROJMAX) { return 0.0; }
+
   G4PhysicsLogVector* v = nullptr;
-  G4int Z2 = std::min(Z, ZPROJMAX);
-  if(1 == mat->GetNumberOfElements()) {
-    G4int Z1 = std::min((*(mat->GetElementVector()))[0]->GetZasInt(), ZTARGMAX);
-    v = fElmData[Z2][Z1];
-  } else {
+  if (1 == mat->GetNumberOfElements()) {
+    G4int Z1 = (*(mat->GetElementVector()))[0]->GetZasInt();
+    if(Z1 > ZTARGMAX) { return 0.0; }
+    v = fElmData[Z][Z1];
+  }
+  else {
     G4int idx = fMatIndex[mat->GetIndex()];
-    if(idx < fNmat) {
-      v = (*(fMatData[Z2]))[idx];
-    }
+    if (idx < 0) { return 0.0; }
+    v = (*(fMatData[Z]))[idx];
   }
   if(nullptr == v) { return 0.0; }
   G4double res = (e > fEmin) ? v->LogVectorValue(e, loge) 
@@ -158,9 +161,13 @@ void G4IonICRU73Data::Initialise()
     fDataDirectory = ost.str();
   }
 
-  std::size_t nmat = G4Material::GetNumberOfMaterials();
+  const std::size_t nmat = G4Material::GetNumberOfMaterials();
+
+  // do nothing if for a new run list of materials is not changed
   if(nmat == fMatIndex.size()) { return; }
  
+  // look over all materials and recompute all materials
+  // do not recompute element data if exist
   if(1 < fVerbose) {
     G4cout << "### G4IonICRU73Data::Initialise() for " << nmat
            << " materials" << G4endl;
@@ -173,55 +180,64 @@ void G4IonICRU73Data::Initialise()
   auto mtable = G4Material::GetMaterialTable();
 
   for(G4int i=0; i<(G4int)nmat; ++i) {
-    fNmat = i;
     const G4Material* mat = (*mtable)[i];
+    const G4String matname = mat->GetName(); 
     G4int idx = (G4int)mat->GetIndex();
     if(1 < fVerbose) {
-      G4cout << i << ".  material:" << mat->GetName() 
+      G4cout << i << ".  material: " << matname 
              << "  idx=" << idx << "  matIdx=" << fMatIndex[idx] 
-	     << "  fNmat=" << fNmat << G4endl;
+             << G4endl;
     }
     if(fMatIndex[idx] == -1) {
-      fMatIndex[idx] = i;
-      G4String matname = mat->GetName();
       G4bool isOK = false; 
-      if(1 == mat->GetNumberOfElements()) {
-        ReadElementData(mat, useICRU90);
-        isOK = true;
-        if(1 < fVerbose) {
-          G4cout << "Material from single element fNmat=" << fNmat << G4endl;
-        }
-      }
-      if(!isOK && useICRU90) {
+
+      // for material in ICRU90 
+      if(useICRU90) {
         for(G4int j=0; j<3; ++j) {
           if(matname == namesICRU90[j]) {
             ReadMaterialData(mat, densityCoef[j], true);
             isOK = true;
             if(1 < fVerbose) {
-              G4cout << "ICRU90 material" << G4endl;
+              G4cout << "ICRU90 material " << matname << G4endl;
             }
             break;
           }
         }
       }
+      // for material in ICRU73
       if(!isOK) {
         for(G4int j=0; j<31; ++j) {
           if(matname == namesICRU73[j]) {
             ReadMaterialData(mat, 1.0, false);
             isOK = true;
             if(1 < fVerbose) {
-              G4cout << "ICRU73 material" << G4endl;
+              G4cout << "ICRU73 material " << matname << G4endl;
             }
             break;
           }
         }
       }
+      // dEdx is combined from element stopping power
+      // Target element Z <= ZTARGMAX
       if(!isOK) {
-        ReadElementData(mat, useICRU90);
-        if(1 < fVerbose) {
-          G4cout << "Read element data" << G4endl;
-        }
+	const std::size_t nelm = mat->GetNumberOfElements();
+	auto elmv = mat->GetElementVector();
+	G4bool isOut = false;
+        for (std::size_t j=0; j<nelm; ++j) {
+          if ((*elmv)[j]->GetZasInt() > ZTARGMAX) {
+	    isOut = true;
+	    break;
+	  }
+	}
+	if (!isOut) {
+	  ReadElementData(mat, useICRU90);
+	  isOK = true;
+	  if(1 < fVerbose) {
+	    G4cout << "Data via elements for " << matname << G4endl;
+	  }
+	}
       }
+      if(isOK) { fMatIndex[idx] = i; }
     }
     if(1 < fVerbose) {
       G4cout << "     matData: " << fMatData[i] << G4endl;
@@ -235,7 +251,8 @@ void G4IonICRU73Data::ReadMaterialData(const G4Material* mat,
                                        const G4double coeff, 
                                        const G4bool useICRU90)
 {
-  G4String name = mat->GetName();
+  const G4String name = mat->GetName();
+  const G4int idx = (G4int)mat->GetIndex();
   for(G4int Z=3; Z<=ZPROJMAX; ++Z) {
     std::ostringstream ost;
     ost << fDataDirectory << "icru";
@@ -262,7 +279,7 @@ void G4IonICRU73Data::ReadMaterialData(const G4Material* mat,
 	}
       }
     }
-    if(nullptr == (*(fMatData[Z1]))[fNmat]) {
+    if(nullptr == (*(fMatData[Z1]))[idx]) {
       ost << "/z" << Z1 << "_" << name << ".dat"; 
       G4PhysicsLogVector* v = RetrieveVector(ost, false);
       if(nullptr != v) {
@@ -274,14 +291,14 @@ void G4IonICRU73Data::ReadMaterialData(const G4Material* mat,
 		 << " and projectile Z=" << Z1 << G4endl;
 	  G4cout << *v << G4endl;
 	}
-	(*(fMatData[Z1]))[fNmat] = v;
+	(*(fMatData[Z1]))[idx] = v;
       }
     }
     if(Z != Z1) {
-      auto v2 = (*(fMatData[Z1]))[fNmat];
+      auto v2 = (*(fMatData[Z1]))[idx];
       if(nullptr != v2) {
 	auto v1 = new G4PhysicsLogVector(*v2);
-	(*(fMatData[Z]))[fNmat] = v1;
+	(*(fMatData[Z]))[idx] = v1;
 	v1->ScaleVector(1.0, scale);
       }
     }
@@ -295,7 +312,11 @@ void G4IonICRU73Data::ReadElementData(const G4Material* mat, G4bool useICRU90)
   const G4ElementVector* elmv = mat->GetElementVector();
   const G4double* dens = mat->GetFractionVector();
   const G4int nelm = (G4int)mat->GetNumberOfElements();
-  for(G4int Z=3; Z<ZPROJMAX; ++Z) {
+  for(G4int Z=3; Z<=ZPROJMAX; ++Z) {
+    if (1 < fVerbose) {
+      G4cout << "ReadElementData for " << mat->GetName() << " Z=" << Z 
+	     << " Nelm=" << nelm << G4endl;
+    }
     G4PhysicsLogVector* v = nullptr; 
     if(1 == nelm) {
       v = FindOrBuildElementData(Z, (*elmv)[0]->GetZasInt(), useICRU90);
@@ -311,7 +332,7 @@ void G4IonICRU73Data::ReadElementData(const G4Material* mat, G4bool useICRU90)
         v->PutValue(i, dedx);
       }
       if(fSpline) { v->FillSecondDerivatives(); }
-      (*(fMatData[Z]))[fNmat] = v;
+      (*(fMatData[Z]))[(G4int)mat->GetIndex()] = v;
     }
     // scale data for correct units
     if(nullptr != v) {

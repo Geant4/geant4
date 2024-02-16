@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -170,12 +170,12 @@ Read data from file for e+e- pair production by mu 0
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
 =======================================================================
-Type of msc step limit algorithm for e+-           2
+Type of msc step limit algorithm for e+-           3
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     1
 Urban msc model lateral displacement alg96         1
-Range factor for msc step limit for e+-            0.03
+Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Safety factor for msc step limit for e+-           0.6
@@ -232,7 +232,7 @@ Rayl:  for gamma SubType=11 BuildTable=1
 msc:  for e-  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e-  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -259,7 +259,7 @@ ePairProd:  for e-  XStype:1  SubType=4
 msc:  for e+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc : Emin=    0 eV  Emax=  100 TeV Nbins=240 100 eV  - 100 TeV
-          StepLim=SafetyPlus Rfact=0.03 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
+          StepLim=DistanceToBoundary Rfact=0.04 Gfact=2.5 Sfact=0.6 DispFlag:1 Skin=1 Llim=1 mm
 
 eIoni:  for e+  XStype:3  SubType=2
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -596,7 +596,7 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.870000s Real=14.605915s Sys=0.190000s
+  User=9.240000s Real=9.555099s Sys=0.180000s
 /score/dumpQuantityToFile boxMesh_1 dose dose.out
 Graphics systems deleted.
 Visualization Manager deleting...

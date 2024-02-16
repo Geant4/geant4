@@ -46,23 +46,16 @@
 #include "RunAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
-
 #include "G4AnalysisManager.hh"
 #include "Run.hh"
 #include "G4RunManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 EventAction::EventAction(RunAction* run)
 :fRunAction(run)
 {
- remove ("OutputPerEvent.out");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-EventAction::~EventAction()
-{
- 
+  remove ("OutputPerEvent.out");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,39 +78,18 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {  
- //Get Postion and Momentum of primary
- // beam index of per track
- G4int evtNb = evt->GetEventID();
- // const G4ThreeVector& pos = evt->GetPrimaryVertex()->GetPosition();
- // const G4ThreeVector& mom = evt->GetPrimaryVertex()
- //                               ->GetPrimary()->GetMomentum();
+  //Get Postion and Momentum of primary
+  // beam index of per track
+  G4int evtNb = evt->GetEventID();
 
- Run* run = static_cast<Run*>(
-            G4RunManager::GetRunManager()->GetNonConstCurrentRun());
- run->AddEdepALL(fRunAction->GetEdepALL()); 
- run->AddEdepMedium(fRunAction->GetEdepMedium()); 
- run->AddEdepSlice(fRunAction->GetEdepSlice()); 
- run->AddEdepNeuron(fRunAction->GetEdepNeuron()); 
- run->AddEdepSoma(fRunAction->GetEdepSoma()); 
- run->AddEdepDend(fRunAction->GetEdepDend()); 
- run->AddEdepAxon(fRunAction->GetEdepAxon()); 
-   // to calculate LET
-   /*
-   if (fRunAction->GetEdepALL() > 0.) 
-   {   
-   G4double LET = fRunAction->GetEdepALL()
-       / ftrackLength() ;  
-   run->AddPrimaryLET(LET);
-   }   
-   */
-/*    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    analysisManager->FillNtupleDColumn(4,0,fRunAction->GetEdepALL()/keV );
-    analysisManager->FillNtupleDColumn(4,1,fRunAction->GetEdepMedium()/keV );
-    analysisManager->FillNtupleDColumn(4,2,
-           (fRunAction->GetEdepSlice()+fRunAction->GetEdepNeuron())/keV);
-    analysisManager->FillNtupleDColumn(4,3,fRunAction->GetEdepNeuron()/keV );
-    analysisManager->AddNtupleRow(4);
-*/
+  Run* run = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->AddEdepALL(fRunAction->GetEdepALL()); 
+  run->AddEdepMedium(fRunAction->GetEdepMedium()); 
+  run->AddEdepSlice(fRunAction->GetEdepSlice()); 
+  run->AddEdepNeuron(fRunAction->GetEdepNeuron()); 
+  run->AddEdepSoma(fRunAction->GetEdepSoma()); 
+  run->AddEdepDend(fRunAction->GetEdepDend()); 
+  run->AddEdepAxon(fRunAction->GetEdepAxon()); 
   std::ofstream OutputEdep("OutputPerEvent.out", std::ios::app);
   OutputEdep<<   evtNb+1          << '\t' << "   "  // event number
         // edep in all volume
@@ -130,17 +102,5 @@ void EventAction::EndOfEventAction(const G4Event* evt)
    <<   fRunAction->GetEdepSoma()/keV         << '\t' << "   " 
    <<   fRunAction->GetEdepDend()/keV         << '\t' << "   " 
    <<   fRunAction->GetEdepAxon()/keV         << '\t' << "   " 
-   << G4endl;  
- 
- /*
- if (fRunAction->GetEdepNeuron() > 0.)
- {
- std::ofstream WriteDataInNeurN("0-Neur-EventN.out", std::ios::app);
- WriteDataInNeurN <<   evtNb+1          << '\t' << "   " // 
-   <<   pos.x()/um          << '\t' << "   "  
-   <<   pos.y()/um          << '\t' << "   "  
-   <<   pos.z()/um          << '\t' << "   " 
    << G4endl; 
- }  
-   */
 }

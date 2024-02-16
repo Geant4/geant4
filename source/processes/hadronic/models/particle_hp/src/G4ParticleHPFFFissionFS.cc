@@ -164,8 +164,11 @@ void G4ParticleHPFFFissionFS::GetAFissionFragment(G4double energy, G4int& fragZ,
   G4double rand = G4UniformRand();
   // G4cout << rand << G4endl;
 
-  std::map<G4double, std::map<G4int, G4double>*>* mEnergyFSPData =
-    FissionProductYieldData.find(454)->second;
+  auto ptr = FissionProductYieldData.find(454);
+  if (ptr == FissionProductYieldData.end())
+    return;
+
+  auto mEnergyFSPData = ptr->second;
 
   // It is not clear that the treatment of the scheme 2 on two-dimensional interpolation.
   // So, here just use the closest energy point array of yield data.

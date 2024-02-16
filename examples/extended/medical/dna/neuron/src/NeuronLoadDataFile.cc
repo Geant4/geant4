@@ -41,7 +41,6 @@
 /// \brief Implementation of the NeuronLoadDataFile class
 
 #include "NeuronLoadDataFile.hh"
-//#include "NeuronLoadMessenger.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
@@ -55,16 +54,8 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
-#include <cmath>
 #include <sstream>
-#include <string>
-#include <stdlib.h>
-//define if the program is running with Geant4
-#define GEANT4
-#ifdef GEANT4
-//Specific to Geant4, globals.hh is used for G4cout
 #include "globals.hh"
-#endif
 #include "CommandLineParser.hh"
 #include "G4UImanager.hh"
 
@@ -75,46 +66,35 @@ using namespace G4DNAPARSER;
   
 NeuronLoadDataFile::NeuronLoadDataFile()
 {
-  //CommandLineParser* parser = CommandLineParser::GetParser();
-  Command* commandLine(0);
+  Command* commandLine(nullptr);
  
-   // 1. Load single neuron morphology and obtain parameters.
-   // Default SWC file name of neuron
-   fNeuronFileNameSWC = G4String("GranuleCell-Nr2.CNG.swc");  
+  // 1. Load single neuron morphology and obtain parameters.
+  // Default SWC file name of neuron
+  fNeuronFileNameSWC = "GranuleCell-Nr2.CNG.swc";  
 
-   // 2. Load neural network and obtain parameters.
-   // Default prepared data filename of neural network with single/multi-layer.
-   // Small network of 10 pyramidal neurons with single layer
-   fNeuronFileNameDATA = G4String("NeuralNETWORK.dat"); 
+  // 2. Load neural network and obtain parameters.
+  // Default prepared data filename of neural network with single/multi-layer.
+  // Small network of 10 pyramidal neurons with single layer
+  fNeuronFileNameDATA = "NeuralNETWORK.dat"; 
 
-   // Load/change SWC or DAT as "CommandLineParser" class
-   if((commandLine=CommandLineParser::GetParser()->GetCommandIfActive("-swc")))
-     {
-       fNeuronFileNameSWC = G4String(commandLine->GetOption());
-       SingleNeuronSWCfile(fNeuronFileNameSWC);  
-     }
-   //if (CommandLineParser::GetParser()->GetCommandIfActive("-network"))
-   //  {
-   //     NeuralNetworkDATAfile(fNeuronFileNameDATA); 
-   //  }
-   if ((commandLine =CommandLineParser::GetParser()->
-                     GetCommandIfActive("-network")))
-     {
-       fNeuronFileNameDATA = G4String(commandLine->GetOption());
-       NeuralNetworkDATAfile(fNeuronFileNameDATA); 
-     }
-   else 
-     {     
-       SingleNeuronSWCfile(fNeuronFileNameSWC);  
-     }  
-
+  // Load/change SWC or DAT as "CommandLineParser" class
+  if((commandLine=CommandLineParser::GetParser()->GetCommandIfActive("-swc"))) {
+    fNeuronFileNameSWC = G4String(commandLine->GetOption());
+  }
+  if ((commandLine = CommandLineParser::GetParser()->GetCommandIfActive("-network"))) {
+    auto ss = G4String(commandLine->GetOption());
+    if ("" != ss) { fNeuronFileNameDATA = ss; }
+    NeuralNetworkDATAfile(fNeuronFileNameDATA); 
+  }
+  else {
+    SingleNeuronSWCfile(fNeuronFileNameSWC);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
+void NeuronLoadDataFile::SingleNeuronSWCfile(const G4String& filename)
 {
-
   // -----------
   // 12 November 2012 - code created
   // -------------------------------------------------------------------
@@ -130,385 +110,269 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
   G4String sLine = "";
   std::ifstream infile;
   infile.open(filename.c_str());
-  if (!infile)
-  {
-#ifdef GEANT4
-    G4cout<<"\n NeuronLoadDataFile::SingleNeuronSWCfile >> datafile "
-          <<filename<<" not found !!!!"<<G4endl;
-    exit(0);
-#endif   
-  }
-  else 
-  {    
-#ifdef G4VERBOSE 
-  G4cout<<"\n NeuronLoadDataFile::SingleNeuronSWCfile >>  opening filename:  "
-        << "\n" <<'\t'<<'\t'<<'\t'<<'\t'<<'\t'<<"' "<<filename 
-        << " ' \n"<< G4endl;
-#endif
-
- G4int nrows,nlines;
- nrows=0; nlines=0;
- while (getline(infile, sLine))
- {
-  fnNn = new G4int[nrows];
-  fpNn = new G4int[nrows];  
-  fnNd = new G4int[nrows];
-  fpNd = new G4int[nrows]; 
-  fnNa = new G4int[nrows];
-  fpNa = new G4int[nrows];   
-  nrows++;
- }
- infile.close();
- //G4cout <<  " number of tracing points: "<< nrows <<G4endl;  
- infile.open(filename.c_str());
- 
- fnbSomacomp = 0 ;     // total number of compartment into Soma 
- fnbDendritecomp = 0 ; // total number of compartment into Dendrites
- fnbAxoncomp = 0 ;     // total number of compartment into Axon
- fnbSpinecomp = 0 ;    // total number of compartment into Spines 
- G4double TotVolSoma, TotVolDend, TotVolAxon, TotVolSpine;
- TotVolSoma=TotVolDend=TotVolAxon=TotVolSpine=0.;
- G4double TotSurfSoma, TotSurfDend, TotSurfAxon, TotSurfSpine;
- TotSurfSoma=TotSurfDend=TotSurfAxon=TotSurfSpine=0.;
- G4int nNcomp;    // current index of neuronal compartment
- G4int typeNcomp; // type of neuron structures: soma, axon, dendrite, etc. 
- G4double x,y,z;  // cartesian coordinates of each compartment in micrometer
- G4double radius; // radius of each compartment in micrometer
- G4int pNcomp;    // linked compartment, indicates branch points of dendrites  
- G4double minX,minY,minZ;
- G4double maxX,maxY,maxZ; 
- G4double maxRad = -1e+09;
- minX=minY=minZ=1e+09;
- maxX=maxY=maxZ=-1e+09;
- G4double density = 1.0 * (g/cm3) ; // water medium 
- G4double Piconst = (4.0/3.0)*pi ; 
-
- fMassSomacomp  = new G4double[nrows];
- fMassSomaTot   = 0.0 ;
- fPosSomacomp   = new G4ThreeVector[nrows];
- fRadSomacomp   = new G4double[nrows]; 
- G4ThreeVector * PosDendcomp= new G4ThreeVector[nrows];
- fRadDendcomp   = new G4double[nrows]; 
- fHeightDendcomp= new G4double[nrows];
- fMassDendcomp  = new G4double[nrows];
- fMassDendTot   = 0.0 ;
- fDistADendSoma = new G4double[nrows];
- fDistBDendSoma = new G4double[nrows];
- fPosDendcomp   = new G4ThreeVector[nrows];
- fRotDendcomp   = new G4RotationMatrix[nrows];
- G4ThreeVector * PosAxoncomp= new G4ThreeVector[nrows];
- fRadAxoncomp   = new G4double[nrows]; 
- fHeightAxoncomp= new G4double[nrows];
- fMassAxoncomp  = new G4double[nrows];
- fMassAxonTot   = 0.0 ;
- fDistAxonsoma  = new G4double[nrows];
- fPosAxoncomp   = new G4ThreeVector[nrows];
- fRotAxoncomp   = new G4RotationMatrix[nrows]; 
- fMassSpinecomp = new G4double[nrows];
- fMassSpineTot  = 0.0 ;
- fPosSpinecomp   = new G4ThreeVector[nrows];
- fRadSpinecomp   = new G4double[nrows]; 
- fRadNeuroncomp  = new G4double[nrows];
- fHeightNeuroncomp = new G4double[nrows];
- fDistNeuronsoma = new G4double[nrows];
- fPosNeuroncomp  = new G4ThreeVector[nrows];
- fRotNeuroncomp  = new G4RotationMatrix[nrows];
- fPosNeuroncomp  = new G4ThreeVector[nrows];
- fRadNeuroncomp  = new G4double[nrows]; 
- fTypeN          = new G4int[nrows];
- 
- // to read datafile containing numbers, alphabets and symbols..,
- while (getline(infile, sLine))
-  {
-  std::istringstream form(sLine);
-  G4String token;
-  while (getline(form, token, ':'))
-  {
-   std::istringstream found(token);
-   while (found >> nNcomp >> typeNcomp >> x >> y >> z >> radius >> pNcomp)
-   { 
-   // =======================================================================
-   // to find the largest and the smallest values of compartment positions
-   // for parameters of bounding slice, sphere medium and shift of neuron.
-   if (minX > x) minX = x;
-   if (minY > y) minY = y;
-   if (minZ > z) minZ = z;
-   if (maxX < x) maxX = x;
-   if (maxY < y) maxY = y;
-   if (maxZ < z) maxZ = z; 
-   // max diameter of compartments 
-   if (maxRad < radius) maxRad = radius; 
-  
-   // =======================================================================
-   // Soma compartments represented as Sphere or Ellipsoid solid
-   if (typeNcomp == 1) 
-   {   
-   //  Sphere volume and surface area
-   G4double VolSomacomp = Piconst*pow(radius*um,3.) ;
-   TotVolSoma = TotVolSoma + VolSomacomp;
-   G4double SurSomacomp = 3.*Piconst*pow(radius*um,2.) ;
-   TotSurfSoma = TotSurfSoma + SurSomacomp;
-   // OR    
-   //  Ellipsoid volume and Approximate formula of surface area   
-   //G4double VolSomacomp = Piconst*(Ra*um)*(Rb*um)*(Rc*um);   
-   //G4double SurSomacomp = 3.*Piconst*pow((pow(Ra,1.6075)*pow(Rb,1.6075)+
-   //pow(Ra,1.6075)*pow(Rc,1.6075)+pow(Rb,1.6075)*pow(Rc,1.6075))/3.,0.622084);
-   fMassSomacomp[fnbSomacomp] = density*VolSomacomp;
-   fMassSomaTot = fMassSomaTot + fMassSomacomp[fnbSomacomp];  
-   G4ThreeVector vSoma (x ,y ,z); 
-   fPosSomacomp [fnbSomacomp] = vSoma; 
-   fRadSomacomp [fnbSomacomp]= radius; 
-   // no rotate
-   // OR 
-   // RotationMatrix for Ellipsoid solid
-   // ....
-   fnbSomacomp++ ;
+  if (!infile.is_open()) {
+    G4ExceptionDescription ed;
+    ed << "Datafile " << filename << " is not opened!";
+    G4Exception("NeuronLoadDataFile::SingleNeuronSWCfile()","dna014",
+		FatalException, ed, "Check file path");
+    return;
   } 
-  // =======================================================================
-  // Apical and basal dendritic compartments represented as cylinderical solid
-  if (typeNcomp == 3 || typeNcomp == 4) 
-  {
-   G4ThreeVector vDend (x ,y ,z); 
-   // Position and Radius of compartments
-   PosDendcomp [fnbDendritecomp] = vDend;
-   fRadDendcomp [fnbDendritecomp]= radius;
-   fnNd[fnbDendritecomp]= nNcomp-(fnbSomacomp+fnbAxoncomp)-1;
-   fpNd[fnbDendritecomp]= pNcomp-(fnbSomacomp+fnbAxoncomp)-1;    
-   // To join two tracing points along the dendritic branches. 
-   // To calculate length, center and rotation angles of each cylinder
-   fPosDendcomp [fnbDendritecomp] = vDend; //translmDend;
-   // delta of position A and position B of cylinder 
-   G4double Dendx, Dendy, Dendz;
-   //primary dendritic branch should be connect with Soma
-   if (fpNd[fnbDendritecomp] == -fnbSomacomp) 
-   {
-    Dendx= PosDendcomp[fnNd[fnbDendritecomp]].x()-
-    (fPosSomacomp[0].x()+fRadSomacomp[0]);
-    Dendy= PosDendcomp[fnNd[fnbDendritecomp]].y()-
-    (fPosSomacomp[0].y()+fRadSomacomp[0]);
-    Dendz= PosDendcomp[fnNd[fnbDendritecomp]].z()-
-    (fPosSomacomp[0].z()+fRadSomacomp[0]); 
-   }
-   else
-   {
-    Dendx= PosDendcomp[fnNd[fnbDendritecomp]].x()-
-           PosDendcomp[fpNd[fnbDendritecomp]].x();
-    Dendy= PosDendcomp[fnNd[fnbDendritecomp]].y()-
-           PosDendcomp[fpNd[fnbDendritecomp]].y();
-    Dendz= PosDendcomp[fnNd[fnbDendritecomp]].z()-
-           PosDendcomp[fpNd[fnbDendritecomp]].z();
-   }       
-   G4double lengthDendcomp = std::sqrt(Dendx*Dendx+Dendy*Dendy+Dendz*Dendz);
-   // Height of compartment
-   fHeightDendcomp [fnbDendritecomp]= lengthDendcomp;   
-    
-   // Distance from Soma
-   G4double DendDisx= fPosSomacomp[0].x()-
-                      fPosDendcomp [fnbDendritecomp].x();
-   G4double DendDisy= fPosSomacomp[0].y()-
-                      fPosDendcomp [fnbDendritecomp].y();
-   G4double DendDisz= fPosSomacomp[0].z()-
-                      fPosDendcomp [fnbDendritecomp].z();  
-   if (typeNcomp == 3) fDistADendSoma[fnbDendritecomp] = 
-      std::sqrt(DendDisx*DendDisx + DendDisy*DendDisy + DendDisz*DendDisz);
-   if (typeNcomp == 4) fDistBDendSoma[fnbDendritecomp] = 
-      std::sqrt(DendDisx*DendDisx + DendDisy*DendDisy + DendDisz*DendDisz);
-   
-   //  Cylinder volume and surface area
-   G4double VolDendcomp = pi*pow(radius*um,2)*(lengthDendcomp*um);
-   TotVolDend = TotVolDend + VolDendcomp;
-   G4double SurDendcomp = 2.*pi*radius*um*(radius+lengthDendcomp)*um;
-   TotSurfDend = TotSurfDend + SurDendcomp;
-   fMassDendcomp[fnbDendritecomp] = density*VolDendcomp; 
-   fMassDendTot = fMassDendTot + fMassDendcomp[fnbDendritecomp];   
-   
-   Dendx=Dendx/lengthDendcomp;
-   Dendy=Dendy/lengthDendcomp;
-   Dendz=Dendz/lengthDendcomp;
-   
-   // Euler angles of each compartment
-   G4ThreeVector directionDend = G4ThreeVector(Dendx,Dendy,Dendz);
-   G4double theta_eulerDend =  directionDend.theta();
-   G4double phi_eulerDend   =  directionDend.phi();
-   G4double psi_eulerDend   = 0;
-
-   //Rotation Matrix, Euler constructor build inverse matrix.
-   G4RotationMatrix rotmDendInv  = G4RotationMatrix(
-      phi_eulerDend+pi/2,
-      theta_eulerDend,
-      psi_eulerDend);
-   G4RotationMatrix rotmDend = rotmDendInv.inverse();
-   /*
-   // To convert from Rotation Matrix after inverse to Euler angles 
-   G4double cosX = std::sqrt (rotmDend.xx()*rotmDend.xx() + 
-                   rotmDend.yx()*rotmDend.yx()) ; 
-   G4double euX, euY, euZ;
-   if (cosX > 16*FLT_EPSILON)
-    {
-    euX = std::atan2 (rotmDend.zy(),rotmDend.zz());
-    euY = std::atan2 (-rotmDend.zx(),cosX);
-    euZ = std::atan2 (rotmDend.yx(),rotmDend.xx());
-    }
-   else
-    {
-    euX = std::atan2 (-rotmDend.yz(),rotmDend.yy());
-    euY = std::atan2 (-rotmDend.zx(),cosX);
-    euZ = 0. ;
-    }
-   G4RotationMatrix * rot = new G4RotationMatrix();
-   rot->rotateX(euX);
-   rot->rotateY(euY);
-   rot->rotateZ(euZ);
-   */
-   fRotDendcomp [fnbDendritecomp]= rotmDend ;
-   
-   fnbDendritecomp++ ; 
+  G4int nrows,nlines;
+  nrows=0; nlines=0;
+  for(;;) {
+    getline(infile, sLine);
+    if (infile.eof()) { break; }
+    ++nrows;
   }
+  infile.close();
   
-  // =======================================================================
-  // Axon compartments represented as cylinderical solid
-  if (typeNcomp == 2 || typeNcomp == 7)
-  {
-   G4ThreeVector vAxon (x ,y ,z); 
-   // Position and Radius of compartments
-   PosAxoncomp [fnbAxoncomp] = vAxon;
-   fRadAxoncomp [fnbAxoncomp]= radius;
-   fnNa[fnbAxoncomp]= nNcomp-(fnbSomacomp+fnbDendritecomp)-1;
-   fpNa[fnbAxoncomp]= pNcomp-(fnbSomacomp+fnbDendritecomp)-1;    
-   // To join two tracing points in loaded SWC data file. 
-   // To calculate length, center and rotation angles of each cylinder   
+  G4cout << "NeuronLoadDataFile::SingleNeuronSWCfile: number of strings="<< nrows 
+	 << " in file " << filename << G4endl;  
+  
+  infile.open(filename.c_str());
+ 
+  G4double TotVolSoma, TotVolDend, TotVolAxon, TotVolSpine;
+  TotVolSoma=TotVolDend=TotVolAxon=TotVolSpine=0.;
+  G4double TotSurfSoma, TotSurfDend, TotSurfAxon, TotSurfSpine;
+  TotSurfSoma=TotSurfDend=TotSurfAxon=TotSurfSpine=0.;
+  G4int nNcomp;    // current index of neuronal compartment
+  G4int typeNcomp; // type of neuron structures: soma, axon, dendrite, etc. 
+  G4double x,y,z;  // cartesian coordinates of each compartment in micrometer
+  G4double radius; // radius of each compartment in micrometer
+  G4int pNcomp;    // linked compartment, indicates branch points of dendrites  
+  G4double minX,minY,minZ;
+  G4double maxX,maxY,maxZ; 
+  G4double maxRad = -1e+09;
+  minX=minY=minZ=1e+09;
+  maxX=maxY=maxZ=-1e+09;
+  G4double density = 1.0 * (g/cm3) ; // water medium 
+  G4double Piconst = (4.0/3.0)*pi ; 
 
-   // Center-position of each cylinder
-   G4double Axonxx= PosAxoncomp[fnNa[fnbAxoncomp]].x()+
-                    PosAxoncomp[fpNa[fnbAxoncomp]].x();
-   G4double Axonyy= PosAxoncomp[fnNa[fnbAxoncomp]].y()+
-                    PosAxoncomp[fpNa[fnbAxoncomp]].y();
-   G4double Axonzz= PosAxoncomp[fnNa[fnbAxoncomp]].z()+
-                    PosAxoncomp[fpNa[fnbAxoncomp]].z();
-   G4ThreeVector translmAxon = G4ThreeVector(Axonxx/2. , 
-                               Axonyy/2. , Axonzz/2.) ;
-   fPosAxoncomp [fnbAxoncomp] = translmAxon;   
-   // delta of position A and position B of cylinder 
-   G4double Axonx, Axony, Axonz;
-   //primary axon point should be connect with Soma
-   if (fpNa[fnbAxoncomp] == -(fnbSomacomp+fnbDendritecomp)) 
-   {
-    Axonx= PosAxoncomp[fnNa[fnbAxoncomp]].x()-
-                      (fPosSomacomp[0].x()+fRadSomacomp[0]); 
-    Axony= PosAxoncomp[fnNa[fnbAxoncomp]].y()-
-                      (fPosSomacomp[0].y()+fRadSomacomp[0]);
-    Axonz= PosAxoncomp[fnNa[fnbAxoncomp]].z()-
-                      (fPosSomacomp[0].z()+fRadSomacomp[0]); 
-   }
-   else
-   {
-    Axonx= PosAxoncomp[fnNa[fnbAxoncomp]].x()-
-                      PosAxoncomp[fpNa[fnbAxoncomp]].x();
-    Axony= PosAxoncomp[fnNa[fnbAxoncomp]].y()-
-                      PosAxoncomp[fpNa[fnbAxoncomp]].y();
-    Axonz= PosAxoncomp[fnNa[fnbAxoncomp]].z()-
-                      PosAxoncomp[fpNa[fnbAxoncomp]].z();
-   }       
-   G4double lengthAxoncomp = std::sqrt(Axonx*Axonx+Axony*Axony+Axonz*Axonz);
-   // Height of compartment
-   fHeightAxoncomp [fnbAxoncomp]= lengthAxoncomp;
+  fMassSomacomp.resize(nrows, 0);
+  fPosSomacomp.resize(nrows);
+  fRadSomacomp.resize(nrows, 0); 
+  std::vector<G4ThreeVector> PosDendcomp(nrows);
+  fRadDendcomp.resize(nrows, 0);
+  fHeightDendcomp.resize(nrows, 0);
+  fMassDendcomp.resize(nrows, 0);
+  fDistADendSoma.resize(nrows, 0);
+  fDistBDendSoma.resize(nrows, 0);
+  fPosDendcomp.resize(nrows);
+  fRotDendcomp.resize(nrows);
+  std::vector<G4ThreeVector> PosAxoncomp(nrows);
+  fRadAxoncomp.resize(nrows, 0);
+  fHeightAxoncomp.resize(nrows, 0);
+  fMassAxoncomp.resize(nrows, 0);
+  fDistAxonsoma.resize(nrows, 0);
+  fPosAxoncomp.resize(nrows);
+  fRotAxoncomp.resize(nrows);
+  fMassSpinecomp.resize(nrows, 0);
+  fPosSpinecomp.resize(nrows);
+  fRadSpinecomp.resize(nrows, 0); 
+  fRadNeuroncomp.resize(nrows, 0);
+  fHeightNeuroncomp.resize(nrows, 0);
+  fDistNeuronsoma.resize(nrows, 0);
+  fPosNeuroncomp.resize(nrows);
+  fRotNeuroncomp.resize(nrows);
+  fPosNeuroncomp.resize(nrows);
+  fRadNeuroncomp.resize(nrows, 0); 
+  fTypeN.resize(nrows, 0);
+  G4ThreeVector base;
+ 
+  // to read datafile containing numbers, alphabets and symbols..,
+  for (;;) {
+    getline(infile, sLine);
+    if (infile.eof()) { break; }
+    if ("#" == sLine.substr(0, 1)) { continue; };
+
+    std::istringstream form(sLine);
+    form >> nNcomp >> typeNcomp >> x >> y >> z >> radius >> pNcomp;
+    /*
+	G4cout << "NeuronLoadDataFile::SingleNeuronSWCfile: typeNcomp="
+	       << typeNcomp << " nNcomp=" << nNcomp << " pNcomp=" << pNcomp << " N1="
+	       << fnbSomacomp << " N2=" << fnbAxoncomp << " N3=" << fnbDendritecomp << G4endl;
+    */
+    // =======================================================================
+    // to find the largest and the smallest values of compartment positions
+    // for parameters of bounding slice, sphere medium and shift of neuron.
+    if (minX > x) minX = x;
+    if (minY > y) minY = y;
+    if (minZ > z) minZ = z;
+    if (maxX < x) maxX = x;
+    if (maxY < y) maxY = y;
+    if (maxZ < z) maxZ = z; 
+    // max diameter of compartments 
+    if (maxRad < radius) maxRad = radius; 
+  
+    // =======================================================================
+    // Soma compartments represented as Sphere or Ellipsoid solid
+    if (typeNcomp == 1) { 
+      //  Sphere volume and surface area
+      G4double VolSomacomp = Piconst*pow(radius*um, 3);
+      TotVolSoma = TotVolSoma + VolSomacomp;
+      G4double SurSomacomp = 3.*Piconst*pow(radius*um, 2);
+      TotSurfSoma = TotSurfSoma + SurSomacomp;
+      fMassSomacomp[fnbSomacomp] = density*VolSomacomp;
+      fMassSomaTot = fMassSomaTot + fMassSomacomp[fnbSomacomp];  
+      G4ThreeVector vSoma(x, y, z); 
+      fPosSomacomp[fnbSomacomp] = vSoma; 
+      fRadSomacomp[fnbSomacomp] = radius;
+      if (0 == fnbSomacomp) {
+	base = G4ThreeVector(fRadSomacomp[0], fRadSomacomp[0], fRadSomacomp[0]);
+      }
+      ++fnbSomacomp;
+    }
+
+    // =======================================================================
+    // Apical and basal dendritic compartments represented as cylinderical solid
+    if (typeNcomp == 3 || typeNcomp == 4) {
+      G4ThreeVector vDend(x, y, z);
+      // Position and Radius of compartments
+      PosDendcomp[fnbDendritecomp] = vDend;
+      fRadDendcomp[fnbDendritecomp] = radius;
+      // To join two tracing points along the dendritic branches. 
+      // To calculate length, center and rotation angles of each cylinder
+      fPosDendcomp[fnbDendritecomp] = vDend; //translmDend;
+      // delta of position A and position B of cylinder 
+      G4ThreeVector dend;
+      //primary dendritic branch should be connect with Soma
+      if (0 == fnbDendritecomp) {
+	dend = PosDendcomp[fnbDendritecomp] - fPosSomacomp[0] - base;
+      }
+      else {
+	dend = PosDendcomp[fnbDendritecomp] - PosDendcomp[fnbDendritecomp - 1];
+      }
+      // Height of compartment
+      G4double lengthDendcomp = dend.mag();
+      fHeightDendcomp[fnbDendritecomp] = lengthDendcomp;
+
+      // Distance from Soma
+      G4ThreeVector dendDis = fPosSomacomp[0] - fPosDendcomp[fnbDendritecomp];
+      if (typeNcomp == 3) fDistADendSoma[fnbDendritecomp] = dendDis.mag();
+      if (typeNcomp == 4) fDistBDendSoma[fnbDendritecomp] = dendDis.mag();
    
-   // Distance from Soma
-   G4double AxonDisx= fPosSomacomp[0].x()-
-                      fPosAxoncomp [fnbAxoncomp].x();
-   G4double AxonDisy= fPosSomacomp[0].y()-
-                      fPosAxoncomp [fnbAxoncomp].y();
-   G4double AxonDisz= fPosSomacomp[0].z()-
-                      fPosAxoncomp [fnbAxoncomp].z();   
-   fDistAxonsoma[fnbAxoncomp] = std::sqrt(AxonDisx*AxonDisx + 
-                               AxonDisy*AxonDisy + AxonDisz*AxonDisz);
+      //  Cylinder volume and surface area
+      G4double VolDendcomp = pi*pow(radius*um,2)*(lengthDendcomp*um);
+      TotVolDend = TotVolDend + VolDendcomp;
+      G4double SurDendcomp = 2.*pi*radius*um*(radius+lengthDendcomp)*um;
+      TotSurfDend = TotSurfDend + SurDendcomp;
+      fMassDendcomp[fnbDendritecomp] = density*VolDendcomp; 
+      fMassDendTot = fMassDendTot + fMassDendcomp[fnbDendritecomp];   
+   
+      dend = dend.unit();
+   
+      // Euler angles of each compartment
+      G4double theta_eulerDend = dend.theta();
+      G4double phi_eulerDend = dend.phi();
+      G4double psi_eulerDend = 0;
+
+      //Rotation Matrix, Euler constructor build inverse matrix.
+      G4RotationMatrix rotmDendInv  = G4RotationMatrix(phi_eulerDend+pi/2,
+						       theta_eulerDend,
+						       psi_eulerDend);
+      fRotDendcomp[fnbDendritecomp] = rotmDendInv.inverse();
+      ++fnbDendritecomp;
+    }
+  
+    // =======================================================================
+    // Axon compartments represented as cylinderical solid
+    if (typeNcomp == 2 || typeNcomp == 7) {
+      G4ThreeVector vAxon(x, y, z); 
+      // Position and Radius of compartments
+      PosAxoncomp[fnbAxoncomp] = vAxon;
+      fRadAxoncomp[fnbAxoncomp] = radius;
+      // To join two tracing points in loaded SWC data file. 
+      // To calculate length, center and rotation angles of each cylinder   
+
+      // delta of position A and position B of cylinder 
+      G4ThreeVector Axon;
+      //primary axon point should be connect with Soma
+      if (0 == fnbAxoncomp) {
+	Axon = PosAxoncomp[fnbAxoncomp] - fPosSomacomp[0] - base; 
+      }
+      else {
+	Axon = PosAxoncomp[fnbAxoncomp] - PosAxoncomp[fnbAxoncomp - 1];
+      }
+      G4double lengthAxoncomp = Axon.mag();
+      // Height of compartment
+      fHeightAxoncomp[fnbAxoncomp] = lengthAxoncomp;
+   
+      // Distance from Soma
+      G4ThreeVector AxonDis = fPosSomacomp[0] - fPosAxoncomp[fnbAxoncomp];
+      fDistAxonsoma[fnbAxoncomp] = AxonDis.mag();
          
-   //  Cylinder volume and surface area
-   G4double VolAxoncomp = pi*pow(radius*um,2)*(lengthAxoncomp*um);
-   TotVolAxon = TotVolAxon + VolAxoncomp;
-   G4double SurAxoncomp = 2.*pi*radius*um*(radius+lengthAxoncomp)*um;
-   TotSurfAxon = TotSurfAxon + SurAxoncomp;
-   fMassAxoncomp[fnbAxoncomp] = density*VolAxoncomp; 
-   fMassAxonTot = fMassAxonTot + fMassAxoncomp[fnbAxoncomp];
-   Axonx=Axonx/lengthAxoncomp;
-   Axony=Axony/lengthAxoncomp;
-   Axonz=Axonz/lengthAxoncomp;
+      //  Cylinder volume and surface area
+      G4double VolAxoncomp = pi*pow(radius*um, 2)*(lengthAxoncomp*um);
+      TotVolAxon = TotVolAxon + VolAxoncomp;
+      G4double SurAxoncomp = 2.*pi*radius*um*(radius+lengthAxoncomp)*um;
+      TotSurfAxon = TotSurfAxon + SurAxoncomp;
+      fMassAxoncomp[fnbAxoncomp] = density*VolAxoncomp; 
+      fMassAxonTot += fMassAxoncomp[fnbAxoncomp];
+      Axon = Axon.unit();
    
-   // Euler angles of each compartment
-   G4ThreeVector directionAxon = G4ThreeVector(Axonx,Axony,Axonz);
-   G4double theta_eulerAxon =  directionAxon.theta();
-   G4double phi_eulerAxon   =  directionAxon.phi();
-   G4double psi_eulerAxon   = 0;
+      // Euler angles of each compartment
+      G4double theta_eulerAxon = Axon.theta();
+      G4double phi_eulerAxon = Axon.phi();
+      G4double psi_eulerAxon = 0;
 
-   //Rotation Matrix, Euler constructor build inverse matrix.
-   G4RotationMatrix rotmAxonInv  = G4RotationMatrix(
-       phi_eulerAxon+pi/2,
-       theta_eulerAxon,
-       psi_eulerAxon);
-   G4RotationMatrix rotmAxon = rotmAxonInv.inverse();
-   fRotAxoncomp [fnbAxoncomp]= rotmAxon ;
-   
-   fnbAxoncomp++ ; 
-  } 
+      //Rotation Matrix, Euler constructor build inverse matrix.
+      G4RotationMatrix rotmAxonInv = G4RotationMatrix(phi_eulerAxon+pi/2,
+						      theta_eulerAxon,
+						      psi_eulerAxon);
+      G4RotationMatrix rotmAxon = rotmAxonInv.inverse();
+      fRotAxoncomp[fnbAxoncomp] = rotmAxon;
+      ++fnbAxoncomp;
+    }
+    // =======================================================================
+    // checking additional types
+    if (typeNcomp != 1 && typeNcomp != 2 && typeNcomp != 3 && typeNcomp != 4) {
+      G4cout <<  " Additional types:-->  "<< typeNcomp <<G4endl;
+    }
+  
+    // If tracing points including spines, user can be define spine morphology
+    // including stubby, mushroom, thin, long thin, filopodia and 
+    // branched with heads and necks!
+  
+    if (typeNcomp == 5) {
+      //  Sphere volume and surface area
+      G4double VolSpinecomp = Piconst*pow(radius*um,3.) ;
+      TotVolSpine = TotVolSpine + VolSpinecomp;
+      G4double SurSpinecomp = 3.*Piconst*pow(radius*um,2.) ;
+      TotSurfSpine = TotSurfSpine + SurSpinecomp;
+      fMassSpinecomp[fnbSpinecomp] = density*VolSpinecomp;
+      fMassSpineTot = fMassSpineTot + fMassSpinecomp[fnbSpinecomp];
+      // OR    
+      //  Ellipsoid volume and Approximate formula of surface area   
+      // ...
+      G4ThreeVector vSpine (x, y, z); 
+      fPosSpinecomp[fnbSpinecomp] = vSpine; 
+      fRadSpinecomp[fnbSpinecomp] = radius; 
+      ++fnbSpinecomp;
+    }
+    ++nlines;
+  }
+  infile.close();
   // =======================================================================
-  // checking additional types
-  if (typeNcomp != 1 && typeNcomp != 2 && typeNcomp != 3 && typeNcomp != 4)
-  {
-   G4cout <<  " Additional types:-->  "<< typeNcomp <<G4endl;
-  }
-  
-  // If tracing points including spines, user can be define spine morphology
-  // including stubby, mushroom, thin, long thin, filopodia and 
-  // branched with heads and necks!
-  
-  if (typeNcomp == 5) 
-  {   
-   //  Sphere volume and surface area
-   G4double VolSpinecomp = Piconst*pow(radius*um,3.) ;
-   TotVolSpine = TotVolSpine + VolSpinecomp;
-   G4double SurSpinecomp = 3.*Piconst*pow(radius*um,2.) ;
-   TotSurfSpine = TotSurfSpine + SurSpinecomp;
-   fMassSpinecomp[fnbSpinecomp] = density*VolSpinecomp;
-   fMassSpineTot = fMassSpineTot + fMassSpinecomp[fnbSpinecomp];
-   // OR    
-   //  Ellipsoid volume and Approximate formula of surface area   
-   // ...
-   G4ThreeVector vSpine (x ,y ,z); 
-   fPosSpinecomp [fnbSpinecomp] = vSpine; 
-   fRadSpinecomp [fnbSpinecomp] = radius; 
-   // no rotate
-   // OR 
-   // RotationMatrix for Ellipsoid solid
-   // ....
-   fnbSpinecomp++ ;
-  }
-    nlines++;
-            }
-        }   
-    }  
-    infile.close();
- // =======================================================================
 
- fnbNeuroncomp = nlines ;
- G4cout <<  " Total number of compartments into Neuron : "
-        <<  fnbNeuroncomp<<G4endl; 
- G4cout << "\n"<<G4endl;  
+  fnbNeuroncomp = nlines;
+  G4cout <<  " Total number of compartments into Neuron : "
+	 << fnbNeuroncomp << G4endl; 
+  G4cout << G4endl;
   
- // to calculate SHIFT value for neuron translation
+  // to calculate SHIFT value for neuron translation
   fshiftX = (minX + maxX)/2. ;
   fshiftY = (minY + maxY)/2. ;
   fshiftZ = (minZ + maxZ)/2. ;
   
- // width, height, depth of bounding slice volume
- //maxRad = 0.0 ;
+  // width, height, depth of bounding slice volume
   fwidthB  = std::fabs(minX - maxX) + maxRad;
   fheightB = std::fabs(minY - maxY) + maxRad;
   fdepthB  = std::fabs(minZ - maxZ) + maxRad;
 
- // diagonal length of bounding slice, that give diameter of sphere
- // for particle direction and fluence! 
+  // diagonal length of bounding slice, that give diameter of sphere
+  // for particle direction and fluence! 
   fdiagnlLength = std::sqrt(fwidthB*fwidthB + fheightB*fheightB 
-                 + fdepthB*fdepthB);
+			    + fdepthB*fdepthB);
 
   fTotVolNeuron = TotVolSoma+TotVolDend+TotVolAxon;
   fTotSurfNeuron = TotSurfSoma+TotSurfDend+TotSurfAxon;
@@ -516,228 +380,164 @@ void NeuronLoadDataFile::SingleNeuronSWCfile (const G4String& filename)
  
   fTotVolSlice  = fwidthB*um*fheightB*um*fdepthB*um;
   fTotSurfSlice = 2*(fwidthB*um*fheightB*um+fheightB*um*fdepthB*um+
-                     fwidthB*um*fdepthB*um);
+		     fwidthB*um*fdepthB*um);
   fTotMassSlice = 1.0 * (g/cm3) *fTotVolSlice;  
 
   fTotVolMedium  = Piconst*pow(fdiagnlLength*um/2.,3.) ;
   fTotSurfMedium = 3.*Piconst*pow(fdiagnlLength*um/2.,2);
-  fTotMassMedium = 1.0 * (g/cm3) *fTotVolMedium; 
- 
-    // Soma in Violet with opacity  
-    fSomaColour = new G4VisAttributes;
-    fSomaColour->SetColour(G4Colour(G4Colour(0.85,0.44,0.84))); // ,1.0
-    fSomaColour->SetForceSolid(true); // true
-    fSomaColour->SetVisibility(true);
-  
-    // Dendrites in Dark-Blue  
-    fDendColour = new G4VisAttributes;
-    fDendColour->SetColour(G4Colour(G4Colour(0.0, 0.0, 0.5)));
-    fDendColour->SetForceSolid(true);
-    //fDendColour->SetVisibility(true);
-
-    // Axon in Maroon  
-    fAxonColour = new G4VisAttributes;
-    fAxonColour->SetColour(G4Colour(G4Colour(0.5, 0.0, 0.0))); 
-    fAxonColour->SetForceSolid(true);
-    fAxonColour->SetVisibility(true);
-
-    // Spines in Dark-Green   
-    fSpineColour = new G4VisAttributes;
-    fSpineColour->SetColour(G4Colour(G4Colour(0.0 , 100/255. , 0.0)));
-    fSpineColour->SetForceSolid(true);
-    fSpineColour->SetVisibility(true);    
-
-    // Whole neuron in semitransparent navy blue   
-    fNeuronColour = new G4VisAttributes;
-    fNeuronColour->SetColour(G4Colour(G4Colour(0.0,0.4,0.8,0.5)));
-    fNeuronColour->SetForceSolid(true);
-    fNeuronColour->SetVisibility(true); 
-  
-   }   
+  fTotMassMedium = 1.0 * (g/cm3) *fTotVolMedium;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Load prepared data file of neural network with single and multiple layers
-
-void NeuronLoadDataFile::NeuralNetworkDATAfile  
-       (const G4String& filename)
+void NeuronLoadDataFile::NeuralNetworkDATAfile(const G4String& filename)
 { 
-   
   G4String sLine = "";
   std::ifstream infile;
   infile.open(filename.c_str());
-  if (!infile)
-  {
-#ifdef GEANT4 
-  G4cout<<" \n NeuronLoadDataFile::NeuralNetworkDATAfile >> datafile "
-        <<filename<<" not found !!!!"<<G4endl;
-        exit(0);
-#endif
+  if (!infile.is_open()) {
+    G4ExceptionDescription ed;
+    ed << "Datafile " << filename << " is not opened!";
+    G4Exception("NeuronLoadDataFile::NeuralNetworkDATAfile()","dna014",
+		FatalException, ed, "Check file path");
+    return;
   }
-  else 
-  {    
-#ifdef G4VERBOSE 
-  G4cout<< " NeuronLoadDataFile::NeuralNetworkDATAfile >>  opening filename: "
-        << "\n" <<'\t'<<'\t'<<'\t'<<'\t'<<'\t'<<"' "<<filename 
-        << " ' \n"<< G4endl;
-#endif
+  G4cout << "NeuronLoadDataFile::NeuralNetworkDATAfile: opened " 
+	 << filename << G4endl;  
 
- G4int nlines, nbSoma, nbDendrite;
- nlines=0;
- fnbSomacomp = 0 ;  // total number of compartment into Soma 
- fnbDendritecomp = 0 ; // total number of compartment into Dendrites
- fnbAxoncomp = 0 ;  // total number of compartment into Axon
- fnbSpinecomp = 0 ; // total number of compartment into Spines 
- G4double TotVolSoma, TotVolDend, TotVolAxon;
- TotVolSoma=TotVolDend=TotVolAxon=0.;
- G4double TotSurfSoma, TotSurfDend, TotSurfAxon;
- TotSurfSoma=TotSurfDend=TotSurfAxon=0.;
- //G4int nNmorph;  // current index of neuronal morphology
- G4int typeNcomp;   // types of structure: soma, axon, apical dendrite, etc. 
- G4double x1,y1,z1,x2,y2,z2; // cartesian coordinates of each compartment 
- G4double radius; // radius of each compartment in micrometer
- G4double height; // height of each compartment in micrometer 
- //G4double minX,minY,minZ;    //minimum 
- //G4double maxX,maxY,maxZ;    //maximum 
- G4double maxRad = -1e+09;
- //minX=minY=minZ=1e+09;
- //maxX=maxY=maxZ=-1e+09;
- G4double density = 1.0 * (g/cm3) ; // water medium
- G4double Piconst = (4.0/3.0)*pi ;
+  G4int nlines, nbSoma, nbDendrite;
+  nlines = 0;
+  fnbSomacomp = 0 ;  // total number of compartment into Soma 
+  fnbDendritecomp = 0 ; // total number of compartment into Dendrites
+  fnbAxoncomp = 0 ;  // total number of compartment into Axon
+  fnbSpinecomp = 0 ; // total number of compartment into Spines 
+  G4double TotVolSoma, TotVolDend, TotVolAxon;
+  TotVolSoma=TotVolDend=TotVolAxon=0.;
+  G4double TotSurfSoma, TotSurfDend, TotSurfAxon;
+  TotSurfSoma=TotSurfDend=TotSurfAxon=0.;
+  G4int typeNcomp;   // types of structure: soma, axon, apical dendrite, etc. 
+  G4double x1,y1,z1,x2,y2,z2; // cartesian coordinates of each compartment 
+  G4double radius; // radius of each compartment in micrometer
+  G4double height; // height of each compartment in micrometer 
+  G4double maxRad = -1e+09;
+  G4double density = 1.0 * (g/cm3) ; // water medium
+  G4double Piconst = (4.0/3.0)*pi ;
  
- while (getline(infile, sLine))
- {
-   std::istringstream form(sLine);
-        if (nlines == 0) {
- // to read total number of compartments
- form >> fnbNeuroncomp >> nbSoma >> nbDendrite ; 
-       fMassSomacomp  = new G4double[nbSoma];
- fMassSomaTot   = 0.0 ;
- fPosSomacomp   = new G4ThreeVector[nbSoma];
- fRadSomacomp   = new G4double[nbSoma]; 
- fRadDendcomp   = new G4double[nbDendrite]; 
- fHeightDendcomp = new G4double[nbDendrite];
- fMassDendcomp  = new G4double[nbDendrite];
- fMassDendTot   = 0.0 ;
- fDistADendSoma = new G4double[nbDendrite];
- fDistBDendSoma = new G4double[nbDendrite];
- fPosDendcomp   = new G4ThreeVector[nbDendrite];
- fRotDendcomp = new G4RotationMatrix[nbDendrite];
-   }
-   // =======================================================================
-   // Soma compartments represented as Sphere or Ellipsoid solid
-     if (nlines > 0 && nlines <= nbSoma) // Total number of Soma compartments
-  {  
-     form >> typeNcomp >> x1 >> y1 >> z1 >> radius ;
-     if (typeNcomp !=1) break;
+  for (;;) {
+    getline(infile, sLine);
+    if (infile.eof()) { break; }
+    std::istringstream form(sLine);
+    if (nlines == 0) {
+      // to read total number of compartments
+      form >> fnbNeuroncomp >> nbSoma >> nbDendrite ; 
+      fMassSomacomp.resize(nbSoma, 0);
+      fPosSomacomp.resize(nbSoma);
+      fRadSomacomp.resize(nbSoma, 0); 
+      fRadDendcomp.resize(nbDendrite, 0); 
+      fHeightDendcomp.resize(nbDendrite, 0);
+      fMassDendcomp.resize(nbDendrite, 0);
+      fDistADendSoma.resize(nbDendrite, 0);
+      fDistBDendSoma.resize(nbDendrite, 0);
+      fPosDendcomp.resize(nbDendrite);
+      fRotDendcomp.resize(nbDendrite);
+    }
+    // =======================================================================
+    // Soma compartments represented as Sphere or Ellipsoid solid
+    if (nlines > 0 && nlines <= nbSoma) {
+      form >> typeNcomp >> x1 >> y1 >> z1 >> radius ;
+      if (typeNcomp !=1) break;
       // max diameter of compartments 
       if (maxRad < radius) maxRad = radius;  
-   //  Sphere volume and surface area
-   G4double VolSomacomp = Piconst*pow(radius*um,3.) ;
-   TotVolSoma = TotVolSoma + VolSomacomp;
-   G4double SurSomacomp = 3.*Piconst*pow(radius*um,2.) ;
-   TotSurfSoma = TotSurfSoma + SurSomacomp;
-   fMassSomacomp[fnbSomacomp] = density*VolSomacomp;
-   fMassSomaTot = fMassSomaTot + fMassSomacomp[fnbSomacomp];
-   // OR    
-   //  Ellipsoid volume and Approximate formula of surface area   
-   //G4double VolSomacomp = Piconst*(Ra*um)*(Rb*um)*(Rc*um);   
-   //G4double SurSomacomp = 3.*Piconst*pow((pow(Ra,1.6075)*pow(Rb,1.6075)+
-   //pow(Ra,1.6075)*pow(Rc,1.6075)+pow(Rb,1.6075)*pow(Rc,1.6075))/3.,0.622084);
+      //  Sphere volume and surface area
+      G4double VolSomacomp = Piconst*pow(radius*um,3.) ;
+      TotVolSoma = TotVolSoma + VolSomacomp;
+      G4double SurSomacomp = 3.*Piconst*pow(radius*um,2.) ;
+      TotSurfSoma = TotSurfSoma + SurSomacomp;
+      fMassSomacomp[fnbSomacomp] = density*VolSomacomp;
+      fMassSomaTot = fMassSomaTot + fMassSomacomp[fnbSomacomp];
    
-   G4ThreeVector vSoma (x1 ,y1 ,z1); 
-   fPosSomacomp [fnbSomacomp] = vSoma; 
-   fRadSomacomp [fnbSomacomp]= radius; 
+      G4ThreeVector vSoma (x1 ,y1 ,z1); 
+      fPosSomacomp[fnbSomacomp] = vSoma; 
+      fRadSomacomp[fnbSomacomp]= radius; 
+      ++fnbSomacomp; 
+    }
+    // =======================================================================
+    // Apical and basal dendritic compartments represented as cylinderical solid    
+    if (nlines > nbSoma && nlines <= fnbNeuroncomp) {
+      form >> typeNcomp >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> radius >> height;
+      if (typeNcomp != 3 ) break;   // || typeNcomp != 4
+   
+      // To calculate length, center and rotation angles of each cylinder  
+      // Center-position of each cylinder
+      G4double Dendxx= x1 + x2;
+      G4double Dendyy= y1 + y2;
+      G4double Dendzz= z1 + z2;
+      G4ThreeVector translmDend = G4ThreeVector(Dendxx/2. , 
+						Dendyy/2. , Dendzz/2.) ;
+      fPosDendcomp [fnbDendritecomp] = translmDend;
+      fRadDendcomp [fnbDendritecomp]= radius;
+      G4double lengthDendcomp = height;
+      // Height of compartment
+      fHeightDendcomp [fnbDendritecomp]= lengthDendcomp;
+      // Distance from Soma
+   
+      //  Cylinder volume and surface area
+      G4double VolDendcomp = pi*pow(radius*um,2)*(lengthDendcomp*um);
+      TotVolDend = TotVolDend + VolDendcomp;
+      G4double SurDendcomp = 2.*pi*radius*um*(radius+lengthDendcomp)*um;
+      TotSurfDend = TotSurfDend + SurDendcomp;
+      fMassDendcomp[fnbDendritecomp] = density*VolDendcomp; 
+      fMassDendTot = fMassDendTot + fMassDendcomp[fnbDendritecomp]; 
+   
+      G4double Dendx= x1 - x2;
+      G4double Dendy= y1 - y2;
+      G4double Dendz= z1 - z2; 
+      Dendx=Dendx/lengthDendcomp;
+      Dendy=Dendy/lengthDendcomp;
+      Dendz=Dendz/lengthDendcomp;
+   
+      // Euler angles of each compartment
+      G4ThreeVector directionDend = G4ThreeVector(Dendx,Dendy,Dendz);
+      G4double theta_eulerDend = directionDend.theta();
+      G4double phi_eulerDend = directionDend.phi();
+      G4double psi_eulerDend = 0;
 
-   // RotationMatrix for Ellipsoid solid
-   // ....
-   fnbSomacomp++ ; 
+      //Rotation Matrix, Euler constructor build inverse matrix.
+      G4RotationMatrix rotmDendInv = G4RotationMatrix(phi_eulerDend+pi/2,
+						      theta_eulerDend,
+						      psi_eulerDend);
+      G4RotationMatrix rotmDend = rotmDendInv.inverse();
+      
+      fRotDendcomp[fnbDendritecomp] = rotmDend;
+      ++fnbDendritecomp;
+    }
+    ++nlines;
   }
-  // =======================================================================
-  // Apical and basal dendritic compartments represented as cylinderical solid    
-  if (nlines > nbSoma && nlines <= fnbNeuroncomp) 
-   {
-    form >> typeNcomp >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> radius >> height;
-    if (typeNcomp != 3 ) break;   // || typeNcomp != 4
-   
-   // To calculate length, center and rotation angles of each cylinder  
-   // Center-position of each cylinder
-   G4double Dendxx= x1 + x2;
-   G4double Dendyy= y1 + y2;
-   G4double Dendzz= z1 + z2;
-   G4ThreeVector translmDend = G4ThreeVector(Dendxx/2. , 
-      Dendyy/2. , Dendzz/2.) ;
-   fPosDendcomp [fnbDendritecomp] = translmDend;  
-   fRadDendcomp [fnbDendritecomp]= radius;       
-   G4double lengthDendcomp = height;
-   // Height of compartment
-   fHeightDendcomp [fnbDendritecomp]= lengthDendcomp;
-   // Distance from Soma
-   
-   //  Cylinder volume and surface area
-   G4double VolDendcomp = pi*pow(radius*um,2)*(lengthDendcomp*um);
-   TotVolDend = TotVolDend + VolDendcomp;
-   G4double SurDendcomp = 2.*pi*radius*um*(radius+lengthDendcomp)*um;
-   TotSurfDend = TotSurfDend + SurDendcomp;
-   fMassDendcomp[fnbDendritecomp] = density*VolDendcomp; 
-   fMassDendTot = fMassDendTot + fMassDendcomp[fnbDendritecomp]; 
-   
-   G4double Dendx= x1 - x2;
-   G4double Dendy= y1 - y2;
-   G4double Dendz= z1 - z2;   
-   Dendx=Dendx/lengthDendcomp;
-   Dendy=Dendy/lengthDendcomp;
-   Dendz=Dendz/lengthDendcomp;
-   
-   // Euler angles of each compartment
-   G4ThreeVector directionDend = G4ThreeVector(Dendx,Dendy,Dendz);
-   G4double theta_eulerDend =  directionDend.theta();
-   G4double phi_eulerDend   =  directionDend.phi();
-   G4double psi_eulerDend   = 0;
-
-   //Rotation Matrix, Euler constructor build inverse matrix.
-   G4RotationMatrix rotmDendInv  = G4RotationMatrix(
-      phi_eulerDend+pi/2,
-      theta_eulerDend,
-      psi_eulerDend);
-   G4RotationMatrix rotmDend = rotmDendInv.inverse();
- 
-   fRotDendcomp [fnbDendritecomp]= rotmDend ;
-   //G4Transform3D transformDend = G4Transform3D(rotmDend,translmDend); 
-   //fRotTransDendPos [fnbDendritecomp]= transformDend ;  
-   fnbDendritecomp++ ; 
-    
-     }    
- 
-  nlines++;
- }
   
- // =======================================================================
+  // =======================================================================
 
- G4cout <<  " Total number of compartments into Neuron : "<< 
-       fnbNeuroncomp <<G4endl; 
- G4cout << "\n"<<G4endl; 
+  G4cout << " Total number of compartments into Neuron : " << 
+    fnbNeuroncomp << G4endl;
  
- // to calculate SHIFT value for neuron translation
- fshiftX = 0.; //(minX + maxX)/2. ;
- fshiftY = 0.; //(minY + maxY)/2. ;
- fshiftZ = 0.; //(minZ + maxZ)/2. ;
+  // to calculate SHIFT value for neuron translation
+  fshiftX = 0.; //(minX + maxX)/2. ;
+  fshiftY = 0.; //(minY + maxY)/2. ;
+  fshiftZ = 0.; //(minZ + maxZ)/2. ;
  
- // width, height, depth of bounding slice volume
- //maxRad = 0.0 ;
- fwidthB  = 640.;
- fheightB = 280.;
- fdepthB  = 25.;
- // diagonal length of bounding slice, that give diameter of sphere
- // for particle direction and fluence! 
- fdiagnlLength = std::sqrt(fwidthB*fwidthB + fheightB*fheightB 
-                 + fdepthB*fdepthB);
+  // width, height, depth of bounding slice volume
+  fwidthB  = 640.;
+  fheightB = 280.;
+  fdepthB  = 25.;
+  // diagonal length of bounding slice, that give diameter of sphere
+  // for particle direction and fluence! 
+  fdiagnlLength = std::sqrt(fwidthB*fwidthB + fheightB*fheightB 
+			    + fdepthB*fdepthB);
 
   fTotVolNeuron = TotVolSoma+TotVolDend+TotVolAxon;
   fTotSurfNeuron = TotSurfSoma+TotSurfDend+TotSurfAxon;
   fTotMassNeuron = fMassSomaTot+fMassDendTot+fMassAxonTot;
- 
+
   fTotVolSlice  = fwidthB*um*fheightB*um*fdepthB*um;
   fTotSurfSlice = 2*(fwidthB*um*fheightB*um+fheightB*um*fdepthB*um+
                   fwidthB*um*fdepthB*um);
@@ -746,37 +546,8 @@ void NeuronLoadDataFile::NeuralNetworkDATAfile
   fTotVolMedium  = Piconst*pow(fdiagnlLength*um/2.,3.) ;
   fTotSurfMedium = 3.*Piconst*pow(fdiagnlLength*um/2.,2);
   fTotMassMedium = 1.0 * (g/cm3) *fTotVolMedium; 
- 
-  } 
+
   infile.close();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-NeuronLoadDataFile::~NeuronLoadDataFile()
-{
-delete[] fMassSomacomp  ;
-delete[] fPosSomacomp   ;
-delete[] fRadSomacomp   ;
-delete[] fRadDendcomp   ;
-delete[] fHeightDendcomp;
-delete[] fMassDendcomp  ;
-delete[] fDistADendSoma ;
-delete[] fDistBDendSoma ;
-delete[] fPosDendcomp   ;
-delete[] fRotDendcomp ;
-delete[] fRadAxoncomp   ;
-delete[] fHeightAxoncomp;
-delete[] fMassAxoncomp  ;
-delete[] fDistAxonsoma ;
-delete[] fPosAxoncomp   ;
-delete[] fRotAxoncomp ;
-delete[] fRadNeuroncomp ;
-delete[] fHeightNeuroncomp;
-delete[] fMassNeuroncomp ;
-delete[] fDistNeuronsoma ;
-delete[] fPosNeuroncomp  ;
-delete[] fRotNeuroncomp ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -784,51 +555,46 @@ delete[] fRotNeuroncomp ;
 void NeuronLoadDataFile::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-// to calculate Euler angles from Rotation Matrix after Inverse!
-//
- G4RotationMatrix rotmNeuron = G4RotationMatrix(fRotNeuroncomp[copyNo]);
- G4double cosX = std::sqrt (rotmNeuron.xx()*rotmNeuron.xx() + 
-                 rotmNeuron.yx()*rotmNeuron.yx()) ; 
- G4double euX, euY, euZ;
- if (cosX > 16*FLT_EPSILON)
-  {
-  euX = std::atan2 (rotmNeuron.zy(),rotmNeuron.zz());
-  euY = std::atan2 (-rotmNeuron.zx(),cosX);
-  euZ = std::atan2 (rotmNeuron.yx(),rotmNeuron.xx());
+  // to calculate Euler angles from Rotation Matrix after Inverse!
+  //
+  G4RotationMatrix rotmNeuron = G4RotationMatrix(fRotNeuroncomp[copyNo]);
+  G4double cosX = std::sqrt (rotmNeuron.xx()*rotmNeuron.xx() + 
+			     rotmNeuron.yx()*rotmNeuron.yx()) ; 
+  G4double euX, euY, euZ;
+  if (cosX > 16*FLT_EPSILON) {
+    euX = std::atan2 (rotmNeuron.zy(),rotmNeuron.zz());
+    euY = std::atan2 (-rotmNeuron.zx(),cosX);
+    euZ = std::atan2 (rotmNeuron.yx(),rotmNeuron.xx());
+  } 
+  else {
+    euX = std::atan2 (-rotmNeuron.yz(),rotmNeuron.yy());
+    euY = std::atan2 (-rotmNeuron.zx(),cosX);
+    euZ = 0. ;
   }
- else
-  {
-  euX = std::atan2 (-rotmNeuron.yz(),rotmNeuron.yy());
-  euY = std::atan2 (-rotmNeuron.zx(),cosX);
-  euZ = 0. ;
-  }
- G4RotationMatrix* rot = new G4RotationMatrix();
- rot->rotateX(euX);
- rot->rotateY(euY);
- rot->rotateZ(euZ);  
+  G4RotationMatrix* rot = new G4RotationMatrix();
+  rot->rotateX(euX);
+  rot->rotateY(euY);
+  rot->rotateZ(euZ);  
 
- physVol->SetRotation(rot);  
+  physVol->SetRotation(rot);  
 
-// shift of cylinder compartments 
- G4ThreeVector
-    originNeuron(
-      (fPosNeuroncomp[copyNo].x()-fshiftX) * um,  
-      (fPosNeuroncomp[copyNo].y()-fshiftY) * um, 
-      (fPosNeuroncomp[copyNo].z()-fshiftZ) * um 
-   );
-  physVol->SetTranslation(originNeuron);  
-    
+  // shift of cylinder compartments 
+  G4ThreeVector originNeuron((fPosNeuroncomp[copyNo].x()-fshiftX) * um,  
+			     (fPosNeuroncomp[copyNo].y()-fshiftY) * um, 
+			     (fPosNeuroncomp[copyNo].z()-fshiftZ) * um);
+  physVol->SetTranslation(originNeuron);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NeuronLoadDataFile::ComputeDimensions
 (G4Tubs& fcylinderComp, const G4int copyNo, const G4VPhysicalVolume*) const
 { 
- fcylinderComp.SetInnerRadius(0*um);
- fcylinderComp.SetOuterRadius(fRadNeuroncomp[copyNo]*um);
- fcylinderComp.SetZHalfLength(fHeightNeuroncomp[copyNo]*um /2.);
- fcylinderComp.SetStartPhiAngle(0.*deg);
- fcylinderComp.SetDeltaPhiAngle(360.*deg); 
+  fcylinderComp.SetInnerRadius(0*um);
+  fcylinderComp.SetOuterRadius(fRadNeuroncomp[copyNo]*um);
+  fcylinderComp.SetZHalfLength(fHeightNeuroncomp[copyNo]*um /2.);
+  fcylinderComp.SetStartPhiAngle(0.*deg);
+  fcylinderComp.SetDeltaPhiAngle(360.*deg); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1094,14 +1094,14 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.020000s Real=0.193986s Sys=0.010000s
+  User=0.020000s Real=0.033770s Sys=0.010000s
 
 [=========================================================== DICOM ===========================================================]
 
 --------------------End of Global Run-----------------------
  The run was 100 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	1.5138e-06 Gy
+      TOTAL DOSE : 	1.66709e-06 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 100
@@ -1124,8 +1124,8 @@ Finished : End of Run Action 0
  closed file dicom2-vector.out for dose output
 --------------------End of Global Run-----------------------
  The run was 100 events 
-      TOTAL DOSE : 	1.5138e-06 [sigma: 1.47488e-09 | error: 0.0331116 | coeff: 0.0331116 | eff: 1 | fom: 1 | r2int: 0.00109543 | r2eff: 0 | hits: 1155 ] Gy
- TOTAL DOSE/Bq-s : 	1.5138e-08 [sigma: 1.47488e-11 | error: 0.0331116 | coeff: 0.0331116 | eff: 1 | fom: 1 | r2int: 0.00109543 | r2eff: 0 | hits: 1155 ] Gy/Bq-s
+      TOTAL DOSE : 	1.66709e-06 [sigma: 2.21747e-09 | error: 0.0452834 | coeff: 0.0452834 | eff: 1 | fom: 1 | r2int: 0.00204882 | r2eff: 0 | hits: 1159 ] Gy
+ TOTAL DOSE/Bq-s : 	1.66709e-08 [sigma: 2.21747e-11 | error: 0.0452834 | coeff: 0.0452834 | eff: 1 | fom: 1 | r2int: 0.00204882 | r2eff: 0 | hits: 1159 ] Gy/Bq-s
 
 Finished : End of Run Action 0
 
@@ -1136,5 +1136,5 @@ Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
 ============================================================
 
-[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.580000s Real=22.301931s Sys=0.430000s
+[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.390000s Real=11.337020s Sys=0.490000s
 

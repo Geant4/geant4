@@ -71,7 +71,6 @@ private:
 
   G4double fTolerance{0.0};
   G4double fElim{0.0};
-  G4double fTimeLim{0.0};
 
   const G4int maxZ{9};
   const G4int maxA{17};

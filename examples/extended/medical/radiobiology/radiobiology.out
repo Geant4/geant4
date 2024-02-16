@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -953,4 +953,4 @@ RBE: Computing alpha and beta...
 RBE: Computing survival and RBE...
 RBE: Alpha and beta written to RadioBio_AlphaAndBeta.out
 RBE: RBE written to RadioBio_RBE.out
-The simulation took: 75.0693 s to run (real time)
+The simulation took: 61.2878 s to run (real time)

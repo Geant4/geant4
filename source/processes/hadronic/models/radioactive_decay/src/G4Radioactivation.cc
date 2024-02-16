@@ -459,7 +459,7 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
         // summedDecayTable.  If not, just add its BR to sum for that decay mode. 
         if (levelManager->NumberOfTransitions() ) {
           nearestEnergy = levelManager->NearestLevelEnergy(daughterExcitation);
-          if (std::abs(daughterExcitation - nearestEnergy) < levelTolerance) {
+          if ((std::abs(daughterExcitation - nearestEnergy) < levelTolerance) && (std::abs(daughterExcitation - nearestEnergy) > DBL_EPSILON)) {
             // Level half-life is in ns and the threshold is set to 1 micros
             // by default, user can set it via the UI command
             nearestLevelIndex = (G4int)levelManager->NearestLevelIndex(daughterExcitation);

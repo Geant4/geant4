@@ -546,6 +546,7 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
   // reset parameters for the new track
   theNumberOfInteractionLengthLeft = -1.0;
   mfpKinEnergy = DBL_MAX;
+  preStepLambda = 0.0;
   currentCouple = nullptr;
 
   // reset ion
@@ -567,13 +568,13 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,G4double,G4double,G4double&,
+                             const G4Track& track, G4double, G4double, G4double&,
                              G4GPILSelection* selection)
 {
   G4double x = DBL_MAX;
   *selection = aGPILSelection;
   if(isIonisation && currentModel->IsActive(preStepScaledEnergy)) {
-    GetScaledRangeForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
+    GetScaledRangeForScaledEnergy(preStepScaledEnergy, LogScaledEkin(track));
     x = (useCutAsFinalRange) ? std::min(finalRange,
       currentCouple->GetProductionCuts()->GetProductionCut(1)) : finalRange;
     x = (fRange > x) ? fRange*dRoverRange + x*(1.0 - dRoverRange)*(2.0 - x/fRange)
@@ -601,15 +602,15 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // at the beginning of the step
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy       = track.GetKineticEnergy();
-  preStepLogKinEnergy    = track.GetDynamicParticle()->GetLogKineticEnergy();
   preStepScaledEnergy    = preStepKinEnergy*massRatio;
-  preStepLogScaledEnergy = preStepLogKinEnergy + logMassRatio;
   SelectModel(preStepScaledEnergy);
 
   if(!currentModel->IsActive(preStepScaledEnergy)) { 
     theNumberOfInteractionLengthLeft = -1.0;
+    mfpKinEnergy = DBL_MAX;
+    preStepLambda = 0.0;
     currentInteractionLength = DBL_MAX;
-    return x; 
+    return x;
   }
 
   // change effective charge of a charged particle on fly
@@ -632,9 +633,8 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     }
   }
 
-  // compute mean free path
-  ComputeLambdaForScaledEnergy(preStepScaledEnergy, preStepLogScaledEnergy);
-
+  ComputeLambdaForScaledEnergy(preStepScaledEnergy, track);
+  
   // zero cross section
   if(preStepLambda <= 0.0) { 
     theNumberOfInteractionLengthLeft = -1.0;
@@ -681,13 +681,13 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void
-G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
+G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, const G4Track& track)
 {
   // cross section increased with energy
   if(fXSType == fEmIncreasing) {
     if(e*invLambdaFactor < mfpKinEnergy) {
-      mfpKinEnergy = e;
-      preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+      preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
+      mfpKinEnergy = (preStepLambda > 0.0) ? e : 0.0;
     }
 
     // cross section has one peak
@@ -695,8 +695,8 @@ G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
     const G4double epeak = (*theEnergyOfCrossSectionMax)[basedCoupleIndex];
     if(e <= epeak) {
       if(e*invLambdaFactor < mfpKinEnergy) {
-        mfpKinEnergy = e;
-        preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+        preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
+        mfpKinEnergy = (preStepLambda > 0.0) ? e : 0.0;
       }
     } else if(e < mfpKinEnergy) { 
       const G4double e1 = std::max(epeak, e*lambdaFactor);
@@ -712,8 +712,8 @@ G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
     // below the 1st peak
     if(e <= e1peak) {
       if(e*invLambdaFactor < mfpKinEnergy) {
-        mfpKinEnergy = e;
-        preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+        preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
+        mfpKinEnergy = (preStepLambda > 0.0) ? e : 0.0;
       }
       return;
     }
@@ -732,7 +732,7 @@ G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
     if(e <= e2peak) {
       if(e*invLambdaFactor < mfpKinEnergy) {
         mfpKinEnergy = e;
-        preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+        preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
       }
       return;
     }
@@ -751,7 +751,7 @@ G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
     if(e <= e3peak) {
       if(e*invLambdaFactor < mfpKinEnergy) {
         mfpKinEnergy = e;
-        preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+        preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
       }
       return;
     }
@@ -763,7 +763,7 @@ G4VEnergyLossProcess::ComputeLambdaForScaledEnergy(G4double e, G4double loge)
     }
     // integral method is not used
   } else {
-    preStepLambda = GetLambdaForScaledEnergy(e, loge); 
+    preStepLambda = GetLambdaForScaledEnergy(e, LogScaledEkin(track));
   }
 }
 
@@ -820,7 +820,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // Short step
   eloss = length*GetDEDXForScaledEnergy(preStepScaledEnergy,
-                                        preStepLogScaledEnergy);
+                                        LogScaledEkin(track));
   /*
   G4cout << "##### Short STEP: eloss= " << eloss 
 	 << " Escaled=" << preStepScaledEnergy

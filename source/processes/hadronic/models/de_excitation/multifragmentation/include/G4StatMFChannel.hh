@@ -32,6 +32,7 @@
 #define G4StatMFChannel_h 1
 
 #include <deque>
+#include <vector>
 
 #include "G4StatMFParameters.hh"
 #include "G4StatMFFragment.hh"
@@ -93,6 +94,9 @@ private:
 private:
 
     std::deque<G4StatMFFragment*> _theFragments;
+    std::vector<G4ThreeVector> Pos;
+    std::vector<G4ThreeVector> Vel;
+    std::vector<G4ThreeVector> Accel;
 
     G4int _NumOfNeutralFragments;
 	

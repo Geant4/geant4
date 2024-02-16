@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-02-13 Vladimir Ivanchenko (radioactive_decay-V11-01-10)
+- G4BetaPlusDecay, G4BetaMinusDecay - fixed sampling algorithm (problem #2588)
+
+## 2024-01-13 Alexander Howard
+- G4Radioactivation : added DBL_EPSILON check on transition energy for
+  metastables to prevent creation of zero energy levels which have no decay
+  products!
+
 ## 2023-11-16 Alberto Ribon (radioactive_decay-V11-01-09)
 - G4RadioactiveDecay, G4Radioactivation : added an extra parameter in the
   constructor of these classes, to be able to set, directly at the level

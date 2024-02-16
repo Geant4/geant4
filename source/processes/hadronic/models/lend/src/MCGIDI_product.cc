@@ -82,9 +82,9 @@ int MCGIDI_product_release( statusMessageReporting *smr, MCGIDI_product *product
 int MCGIDI_product_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *element, MCGIDI_outputChannel *outputChannel,
         MCGIDI_POPs *pops, MCGIDI_product *product, int *delayedNeutronIndex ) {
 
-    char const *name, *label, *delayedNeutron, *multiplicityStr, *multiplicityUnits[2] = { "MeV", "" };
-    xDataTOM_element *multiplicity, *multiplicityTOM, *decayChannelElement;
-    nfu_status status;
+    char const *name{""}, *label{""}, *delayedNeutron{""}, *multiplicityStr{""}, *multiplicityUnits[2] = { "MeV", "" };
+    xDataTOM_element *multiplicity{nullptr}, *multiplicityTOM{nullptr}, *decayChannelElement{nullptr};
+    nfu_status status{nfu_Okay};
     ptwXYPoints *multiplicityVsEnergy = NULL, *norms1 = NULL, *norms2 = NULL;
 
     MCGIDI_product_initialize( smr, product );

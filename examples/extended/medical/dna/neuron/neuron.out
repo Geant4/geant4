@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -19,14 +19,10 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
                              WWW : http://geant4.org/
 **************************************************************
 
-Livermore + DNAphysics is activated!
-
- NeuronLoadDataFile::SingleNeuronSWCfile >>  opening filename:  
-					' GranuleCell-Nr2.CNG.swc ' 
-
+NeuronLoadDataFile::SingleNeuronSWCfile: number of strings=2922 in file GranuleCell-Nr2.CNG.swc
  Total number of compartments into Neuron : 2914
 
-
+Livermore + DNAphysics is activated!
  ---- Begin of Neuron Construction! ---- 
  ==========================================================
  Side length of word volume is calculated : 407.347 um
@@ -37,15 +33,14 @@ Livermore + DNAphysics is activated!
 	5.03049e+06 	229803 	5.03049
  
  Volume (um3), surface (um2) and mass(ug) of Neuron are calculated : 
-	7487.44 	20558.5 	0.00748744
+	12100 	30379.7 	0.0121
  Total number of compartments into Neuron : 2914
  Shift values (um) for Neuron translation are calculated : 
 	 shiftX = 35.13 shiftY = 99.995 shiftZ = 2.025
-
  ---- Soma for construction: ---- 
  Total number of compartments into Soma : 3
  ---- Dendrites for construction: ---- 
- Total number of compartments into Dendrites : 2775
+ Total number of compartments into Dendrites: 2775
  ---- Axon for construction: ---- 
  Total number of compartments into Axon : 136
  ---- Spines not found! ---- 
@@ -614,46 +609,47 @@ G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 End of tracking primary particle, its final energy is :3.47476 GeV
 Physics stage ends
-End of tracking primary particle, its final energy is :3.47557 GeV
+End of tracking primary particle, its final energy is :3.47537 GeV
 Physics stage ends
 
  ======= The summary of simulation results 'neuron' ========
 
   Primary particle               = C12
   Kinetic energy of beam         = 3480 A*MeV
-  Particle traversals the neuron = 0 of 2
+  Particle traversals the neuron = 1 of 2
   Full LET of beam as formulas   = 12.827 keV/um
-  Mean LET of beam as simulation = 10.367 +- 0.12645 keV/um
-  Mean track length of beam      = 417.14 +- 0.020891 um
+  Mean LET of beam as simulation = 10.892 +- 0.31423 keV/um
+  Mean track length of beam      = 399.22 +- 0.0029698 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.8848e-06 Gy
   Fluence dose ber beam          = 3.9424e-06 Gy
 
  List of generated physical process:
-                eIoni=   3883
-              ionIoni=   2591
-                  msc=   6089
+                eIoni=   3986
+              ionIoni=   2469
+                  msc=   5330
 
 
  List of generated particles outside neuron structure:
-             e- :    3008  Emean =  1.5752 keV	( 242.23 eV  --> 424.07 keV) 	Eflow/event = 2.3691 MeV
+             e- :    2997  Emean =  1.7843 keV	( 242.23 eV  --> 434.14 keV) 	Eflow/event = 2.6738 MeV
 
  Number of secondary particles inside neuron structure:
+             e- :      14
 
  Number of molecular products inside neuron structure:
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:   8.6486
-   Bounding slice:  3.4839
-      Neuron:         0
+  All volume:   8.6967
+   Bounding slice:  2.5219
+      Neuron:   0.014207
         Soma:         0
-    Dendrites:        0
+    Dendrites:  0.014207
         Axon:         0
 
  Number of compartments traversed by particle tracks :
         Soma:        0 of total: 3
-     Dendrites:       0 of total: 2775
+     Dendrites:       3 of total: 2775
           Axon:       0 of total: 136
  
 
@@ -662,8 +658,7 @@ Physics stage ends
  Dend3DEdep.out, Axon3DEdep.out, Soma3DEdep.out
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
- 
- Calculation time                      = 4.56373 s 
+ Calculation time                      = 2.15832 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

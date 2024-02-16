@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-ref-00    (8-December-2023)
+ Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1055,7 +1055,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000946s Sys=0.000000s
+  User=0.000000s Real=0.001057s Sys=0.000000s
 
 ========= Table of registered couples ============================
 
@@ -1074,7 +1074,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.010000s Real=0.013373s Sys=0.000000s
+  User=0.010000s Real=0.011536s Sys=0.000000s
 Set global field value to (0,0,1000) Gauss 
 
 ========= Table of registered couples ============================
@@ -1093,7 +1093,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.000000s Real=0.002696s Sys=0.000000s
+  User=0.000000s Real=0.002265s Sys=0.000000s
 Set global field value to (33000,0,0) Gauss 
 F03FieldSetup::UpdateField> The minimal step is equal to 10 mm
                             Stepper Type chosen = 4
@@ -1138,7 +1138,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000355s Sys=0.000000s
+  User=0.000000s Real=0.000294s Sys=0.000000s
 /tracking/verbose 0
 #
 /calor/setAbsMat Xe20CO2
@@ -1211,7 +1211,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.170000s Real=0.176658s Sys=0.010000s
+  User=0.240000s Real=0.244016s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================

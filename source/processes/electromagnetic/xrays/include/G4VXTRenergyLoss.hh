@@ -151,6 +151,8 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
   void   SetCompton(G4bool pC) { fCompton = pC; };
   G4bool GetCompton() { return fCompton; };
 
+  G4int GetKrange(){ return fKrange;};
+  void SetKrange( G4int kk ){ fKrange = kk;};
 
 
   void     SetAlphaGas(G4double ag){ fAlphaGas = ag;};
@@ -214,7 +216,7 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess
 
   G4int fTotBin;  //  number of bins in log-gamma scale
   G4int fBinTR;   //  number of bins in TR energy-angle vectors
-  
+  G4int fKrange; 
   G4ParticleDefinition* fPtrGamma;  // pointer to TR photon
 
   G4double* fGammaCutInKineticEnergy;  // TR photon cut in energy array

@@ -51,17 +51,17 @@ class RunAction;
 
 class EventAction : public G4UserEventAction
 {
-  public:
+public:
   
-    EventAction(RunAction*);
-   ~EventAction();
+  EventAction(RunAction*);
+  ~EventAction() override = default;
 
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*) override;
+  void EndOfEventAction(const G4Event*) override;
     
-  private:
+private:
   
-    RunAction* fRunAction;
+  RunAction* fRunAction;
 };
 
 #endif
