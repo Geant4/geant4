@@ -4,8 +4,8 @@ RUN        set -x && \
            cat /etc/issue && \
            dnf -y update   && \
            dnf config-manager --set-enabled crb   && \
-           dnf install epel-release   && \
-           dnf install dnf-plug*   && \
+           dnf -y install epel-release   && \
+           dnf -y install dnf-plug*   && \
            dnf -y install cmake gcc-c++ doxygen  zlib-devel expat-devel  xerces-c-devel xerces-c  ccache && \
            yum -y clean all      
            
