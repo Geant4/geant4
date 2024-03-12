@@ -1,0 +1,73 @@
+name: publish
+on: 
+  push:
+  pull_request:  
+  schedule:
+    - cron: "0 7 * * 2"
+
+jobs:
+
+  build-geant4-docker-image-alma9:
+    runs-on: ubuntu-latest
+    name: Alma image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+          fetch-depth: 2 
+    - name: Check if the Docker file was changed
+      id: changed-docker-files
+      uses: tj-actions/changed-files@v38
+      with:
+          files: .github/alma9
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build the geant4 Docker image on the change of Dockerfile
+      if: steps.changed-docker-files.outputs.any_changed == 'true' 
+      run: |
+         docker build . -f .github/alma9 --tag ghcr.io/andriish/geant4alma9:latest
+         docker run ghcr.io/andriish/geant4alma9:latest
+         docker push ghcr.io/andriish/geant4alma9:latest
+    - name: Build the geant4 Docker image on schedule
+      if: ${{ github.event_name == 'schedule' }}
+      run: |
+         docker build . -f .github/alma9 --tag ghcr.io/andriish/geant4alma9:latest
+         docker run ghcr.io/andriish/geant4alma9:latest
+         docker push ghcr.io/andriish/geant4alma9:latest
+
+
+  run-in-geant4-docker-image-alma9:
+    name: Alma
+    runs-on: ubuntu-latest
+    needs: build-geant4-docker-image-alma9
+    container:
+            image: ghcr.io/andriish/geant4alma9:latest
+            credentials:
+               username: ${{ github.actor }}
+               password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+          fetch-depth: 3 
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2.11
+      with:
+         key: alma9
+
+    - name: Run
+      run : |
+             cmake -S . -B BUILD -DGEANT4_INSTALL_DATA:BOOL=ON  -DGEANT4_USE_SYSTEM_CLHEP:BOOL=ON  -DGEANT4_USE_SYSTEM_EXPAT:BOOL=ON \
+             -DGEANT4_USE_SYSTEM_ZLIB:BOOL=ON \
+             -DGEANT4_USE_SYSTEM_PTL:BOOL=ON \
+             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
+             -DGEANT4_USE_GDML:BOOL=ON \
+             -DGEANT4_BUILD_MULTITHREADED=ON  -DGEANT4_BUILD_TLS_MODEL=global-dynamic \
+             -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+             cmake --build BUILD
+
