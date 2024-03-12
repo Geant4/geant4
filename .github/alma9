@@ -1,4 +1,4 @@
-FROM alma:9
+FROM almalinux:9
 RUN        set -x && \
            uname -a  && \
            cat /etc/issue && \
