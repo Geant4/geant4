@@ -2,11 +2,11 @@ FROM almalinux:9
 RUN        set -x && \
            uname -a  && \
            cat /etc/issue && \
-           dnf -y update   && \  
-           dnf config-manager --set-enabled crb   && \  
-           dnf install epel-release   && \  
-           dnf install dnf-plug*   && \  
-           dnf -y install cmake gcc-c++ doxygen  zlib-devel expat-devel  xerces-c-devel xerces-c  ccache && \  
+           dnf -y update   && \
+           dnf config-manager --set-enabled crb   && \
+           dnf install epel-release   && \
+           dnf install dnf-plug*   && \
+           dnf -y install cmake gcc-c++ doxygen  zlib-devel expat-devel  xerces-c-devel xerces-c  ccache && \
            yum -y clean all      
            
 RUN  dnf -y copr enable averbyts/HEPrpms && yum -y  install  PTL-devel clhep-devel   &&  yum -y  clean all
