@@ -1,7 +1,7 @@
 # - Locate pythia8 library
 # Defines:
 #
-#  Pythia_FOUND
+#  Pythia8_FOUND
 #  PYTHIA8_VERSION
 #  PYTHIA8_INCLUDE_DIR
 #  PYTHIA8_XMLDOC_DIR
