@@ -35,7 +35,7 @@ endif()
 # py8decayer example requires Pythia8
 #
 find_package(Pythia8 QUIET)
-if (PYTHIA8_FOUND)
+if (Pythia8_FOUND)
   add_subdirectory(pythia/py8decayer)
 else()
   message(STATUS "G4 Examples: Pythia8 package not found. --> py8decayer example disabled.") 
