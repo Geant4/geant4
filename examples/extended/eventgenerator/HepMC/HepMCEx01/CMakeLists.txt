@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.16...3.27)
-project(HepMCEx01)
+project(HepMCEx01 LANGUAGES C CXX Fortran )
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -24,43 +24,50 @@ include(${Geant4_USE_FILE})
 # Find HepMC (required package)
 #
 find_package(HepMC REQUIRED)
-
+#----------------------------------------------------------------------------
+# Find LHAPDF (required package)
+#
+find_package(LHAPDF REQUIRED)
 #----------------------------------------------------------------------------
 # Find Pythia6 (optional package)
 #
-find_package(Pythia6 QUIET)
-if(PYTHIA6_FOUND)
+if (NOT PYTHIA6_INTERNAL)
+  find_package(Pythia6)
+endif()
+if(PYTHIA6_FOUND OR PYTHIA6_INTERNAL)
   message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx01 example with Pythia6 enabled.") 
-  add_definitions(-DG4LIB_USE_PYTHIA) 
+  add_definitions(-DG4LIB_USE_PYTHIA)
+    enable_language(Fortran)
+  set (generator_sources 
+   ${PROJECT_SOURCE_DIR}/external/initpydata.f
+   ${PROJECT_SOURCE_DIR}/external/upevnt.F
+   ${PROJECT_SOURCE_DIR}/external/upinit.F
+   ${PROJECT_SOURCE_DIR}/external/upveto.F
+   )
 else()
   set(PYTHIA6_LIBRARIES "")  
+  set (generator_sources "")
 endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${HEPMC_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(HepMCEx01 HepMCEx01.cc ${sources} ${headers})
-#target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
-#                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-#                      ${PYTHIA6_LIBRARIES} gfortran)
+add_executable(HepMCEx01 HepMCEx01.cc ${sources} ${headers} ${generator_sources})
 target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES})
-
-# if pythia is compiled with g77, link with -lg2c instead.
-#target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
-#                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-#                      ${PYTHIA6_LIBRARIES} g2c)
-
+                      ${PYTHIA6_LIBRARIES} ${LHAPDF_LIBRARIES})
+target_include_directories(HepMCEx01 PRIVATE ${PROJECT_SOURCE_DIR}/include 
+                                             ${Geant4_INCLUDE_DIR}
+                                             ${HEPMC_INCLUDE_DIR})
+if(PYTHIA6_FOUND)
+set_target_properties(HepMCEx01 PROPERTIES LINKER_LANGUAGE Fortran)
+endif()
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build HepMCEx01. This is so that we can run the executable directly because it
