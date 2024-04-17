@@ -933,7 +933,7 @@ function(geant4_compose_targets)
     geant4_get_module_property(__parent_target ${__module} PARENT_TARGET)
     get_filename_component(__listdir "${__listfile}" DIRECTORY)
     # Remove generated headers
-    list(TRANSFORM __publichdrs REPLACE "^${PROJECT_BINARY_DIR}/.*$" "")
+    #list(TRANSFORM __publichdrs REPLACE "^${PROJECT_BINARY_DIR}/.*$" "")
     list(TRANSFORM __publichdrs REPLACE "^/.*/" "")
     list(TRANSFORM __privatehdrs REPLACE "^/.*/" "")
     list(TRANSFORM __srcs REPLACE "^/.*/" "")
