@@ -110,6 +110,12 @@ protected:
   void ShootAtFixedPosition(G4MoleculeGun*){}
 };
 
+template<>
+void TG4MoleculeShoot<G4Track>::ShootAtFixedPosition(G4MoleculeGun* gun);
+
+template<>
+void TG4MoleculeShoot<G4Track>::Shoot(G4MoleculeGun* gun);
+
 template<typename TYPE>
 G4shared_ptr<G4MoleculeShoot> G4MoleculeShoot::ChangeType()
 {
