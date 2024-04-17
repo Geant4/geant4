@@ -1031,7 +1031,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector& pGlobalpoint,
                 << "    (local position: " << newLocalPoint << ")" << G4endl
                 << "    (local direction: " << localDirection << ")." << G4endl
                 << "  Previous phys volume: '"
-                << ( fLastMotherPhys != nullptr ? fLastMotherPhys->GetName() : "" )
+                << ( fLastMotherPhys != nullptr ? fLastMotherPhys->GetName() : G4String("") )
                 << "'" << G4endl << G4endl;
         if( actAndReport || abandon )
         {

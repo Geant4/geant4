@@ -133,7 +133,7 @@ G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
 void G4VParticleChange::DumpInfo() const
 {
   auto vol = theCurrentTrack->GetVolume();
-  G4String vname = (nullptr == vol) ? "" : vol->GetName();
+  G4String vname = (nullptr == vol) ? G4String("") : vol->GetName();
   G4long olprc = G4cout.precision(8);
   G4cout << "      -----------------------------------------------" << G4endl;
   G4cout << "        G4VParticleChange Information " << G4endl;

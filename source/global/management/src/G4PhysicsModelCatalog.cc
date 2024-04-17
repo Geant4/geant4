@@ -684,7 +684,7 @@ const G4String G4PhysicsModelCatalog::GetModelNameFromID( const G4int modelID ) 
 
 // --------------------------------------------------------------------------
 const G4String G4PhysicsModelCatalog::GetModelNameFromIndex( const G4int modelIndex ) {
-  return ( modelIndex >= 0  &&  modelIndex < Entries() ) ? (*theVectorOfModelNames)[ modelIndex ] : "Undefined";
+  return ( modelIndex >= 0  &&  modelIndex < Entries() ) ? (*theVectorOfModelNames)[ modelIndex ] : G4String("Undefined");
 }
 
 // --------------------------------------------------------------------------
