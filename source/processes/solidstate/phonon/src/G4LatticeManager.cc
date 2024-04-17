@@ -210,14 +210,14 @@ G4LatticeLogical* G4LatticeManager::GetLattice(G4Material* Mat) const {
   LatticeMatMap::const_iterator latFind = fLLatticeList.find(Mat);
   if (latFind != fLLatticeList.end()) {
     if (verboseLevel)
-      G4cout << "G4LatticeManager::GetLattice found " << latFind->second
-	     << " for " << (Mat?Mat->GetName():"NULL") << "." << G4endl;
+      G4cout << "G4LatticeManager::GetLattice found " << latFind->second << " for "
+             << (Mat ? Mat->GetName() : G4String("NULL")) << "." << G4endl;
     return latFind->second;
   }
 
   if (verboseLevel) 
     G4cerr << "G4LatticeManager:: Found no matching lattices for "
-	   << (Mat?Mat->GetName():"NULL") << "." << G4endl;
+           << (Mat ? Mat->GetName() : G4String("NULL")) << "." << G4endl;
 
   return 0;			// No lattice associated with volume
 }
@@ -229,14 +229,14 @@ G4LatticePhysical* G4LatticeManager::GetLattice(G4VPhysicalVolume* Vol) const {
   LatticeVolMap::const_iterator latFind = fPLatticeList.find(Vol);
   if (latFind != fPLatticeList.end()) {
     if (verboseLevel)
-      G4cout << "G4LatticeManager::GetLattice found " << latFind->second
-	     << " for " << (Vol?Vol->GetName():"default") << "." << G4endl;
+      G4cout << "G4LatticeManager::GetLattice found " << latFind->second << " for "
+             << (Vol ? Vol->GetName() : G4String("default")) << "." << G4endl;
     return latFind->second;
   }
 
   if (verboseLevel) 
     G4cerr << "G4LatticeManager::GetLattice found no matching lattices for "
-	   << (Vol?Vol->GetName():"default") << "." << G4endl;
+           << (Vol ? Vol->GetName() : G4String("default")) << "." << G4endl;
 
   return 0;			// No lattice associated with volume
 }
