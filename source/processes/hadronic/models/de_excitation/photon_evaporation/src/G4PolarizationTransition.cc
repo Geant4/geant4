@@ -153,9 +153,6 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
     }
   }
   if(phiIsIsotropic) { return G4UniformRand()*CLHEP::twopi; }
-
-  map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
-
   // Otherwise, P(phi) can be written as a sum of cos(kappa phi + phi_kappa).
   // Calculate the amplitude and phase for each term
   std::vector<G4double> amp(length, 0.0);
@@ -169,7 +166,7 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
         G4double tmpAmp = GammaTransFCoefficient(k);
         if(tmpAmp == 0) { continue; }
         tmpAmp *= std::sqrt((G4double)(2*k+1)) 
-	  * fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta, cachePtr);
+	  * fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta);
         if(kappa > 0) tmpAmp *= 2.*G4Exp(0.5*(LnFactorial(k-kappa) - LnFactorial(k+kappa)));
         cAmpSum += ((pol)[k])[kappa]*tmpAmp;
       } else {
@@ -280,10 +277,6 @@ void G4PolarizationTransition::SampleGammaTransition(
   //POLAR newPol(newlength);
   POLAR newPol;
 
-  //map<G4int, map<G4int, G4double> > cache;
-  map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
-  //if(newlength > 10 || pol.size() > 10) cachePtr = &cache;
-
   for(G4int k2=0; k2<(G4int)newlength; ++k2) {
     std::vector<G4complex> npolar;
     npolar.resize(k2+1, 0);
@@ -317,7 +310,7 @@ void G4PolarizationTransition::SampleGammaTransition(
             //AR-13Jun2017 Useful for debugging very long computations
             //G4cout << "G4PolarizationTransition::UpdatePolarizationToFinalState : k1=" << k1 
             //       << " ; k2=" << k2 << " ; kappa1=" << kappa1 << " ; kappa2=" << kappa2 << G4endl;
-            tmpAmp *= fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta, cachePtr);
+            tmpAmp *= fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta);
             if(kappa != 0) {
               tmpAmp *= G4Exp(0.5*(LnFactorial(((G4int)k)-kappa) 
 				   - LnFactorial(((G4int)k)+kappa)));
