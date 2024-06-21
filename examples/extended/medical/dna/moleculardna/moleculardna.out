@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -561,15 +561,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      50.71        27.18         0.09        42138k DNAPhysLV
-      49.16        26.35         0.10        42138k CellLogical
+      50.55        27.44         0.11        42138k DNAPhysLV
+      49.32        26.77         0.19        42138k CellLogical
        0.07         0.04         0.00          380k prism
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      49.78      42137k    311671   314256     703064        27.18    DNAPhysLV
-      49.78      42137k    311671   314256     703064        26.35    CellLogical
+      49.78      42137k    311671   314256     703064        27.44    DNAPhysLV
+      49.78      42137k    311671   314256     703064        26.77    CellLogical
        0.45        379k      1273     3780      14482         0.04    prism
 ### Run 0 starts.
 AnalysisManager::Initialize() GetRunID : 0
@@ -586,7 +586,7 @@ DNAIndependentReactionTimeModel will be used ==========================
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.320000s Real=0.329029s Sys=0.000000s
+  User=0.370000s Real=0.444687s Sys=0.010000s
 ... write file : molecular-dna.root - done
 ... close file : molecular-dna.root - done
 G4 kernel has come to Quit state.

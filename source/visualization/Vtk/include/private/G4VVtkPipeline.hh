@@ -32,7 +32,8 @@
 #include "G4VisAttributes.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkRenderer.h"
+#include <vtkSmartPointer.h>
+#include <vtkRenderer.h>
 
 namespace std
 {

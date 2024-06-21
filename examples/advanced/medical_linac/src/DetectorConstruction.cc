@@ -262,7 +262,7 @@ void DetectorConstruction::ConstructTarget()
 	G4Region *regVol;
 	regVol = new G4Region("TargetR");
 	G4ProductionCuts* cuts = new G4ProductionCuts;
-	cuts -> SetProductionCut(1.*cm);
+	cuts -> SetProductionCut(1.*mm);
 	regVol -> SetProductionCuts(cuts);
 	BoxMinusTubeLV -> SetRegion(regVol);
 	regVol -> AddRootLogicalVolume(BoxMinusTubeLV);
@@ -292,7 +292,7 @@ void DetectorConstruction::ConstructPrimaryCollimator()
 	tube1HalfLengthZ 	= 15.86/2. * mm;
 	cone1RadiusMin 		= 34./2.*mm; // upper cone
 	cone1RadiusMax 		= 54./2.*mm;
-	cone1HalfLengthZ 	= (bigTube1HalfLengthZ - tube1HalfLengthZ)/2.*mm; //(79.-15.86)/2.*mm;
+	cone1HalfLengthZ 	= (bigTube1HalfLengthZ - tube1HalfLengthZ)*mm; //(79.-15.86)/2.*mm;
 
 	// middle principal tube = bigTube2
 	bigTube2Radius 		= 141./2. * mm;

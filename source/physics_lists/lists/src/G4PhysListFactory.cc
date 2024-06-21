@@ -82,16 +82,17 @@
 G4PhysListFactory::G4PhysListFactory(G4int ver) 
   : defName("FTFP_BERT"),verbose(ver),theMessenger(nullptr)
 {
-  nlists_hadr = 33;
-  G4String ss[33] = {
+  nlists_hadr = 36;
+  G4String ss[36] = {
     "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_ATL","FTFP_BERT_HP","FTFQGSP_BERT",
-    "FTFP_INCLXX","FTFP_INCLXX_HP","FTF_BIC", "LBE","QBBC",
+    "FTFP_INCLXX","FTFP_INCLXX_HP","FTF_BIC","LBE","QBBC",
     "QGSP_BERT","QGSP_BERT_HP","QGSP_BIC","QGSP_BIC_HP","QGSP_BIC_AllHP",
     "QGSP_FTFP_BERT","QGSP_INCLXX","QGSP_INCLXX_HP","QGS_BIC",
-    "Shielding","ShieldingLEND","ShieldingM","NuBeam",
-    "Shielding_HP","ShieldingM_HP",
-    "FTFP_BERT_HPT", "FTFP_INCLXX_HPT", "QGSP_BERT_HPT", "QGSP_BIC_HPT",
-    "QGSP_BIC_AllHPT", "QGSP_INCLXX_HPT", "Shielding_HPT", "ShieldingM_HPT" };
+    "Shielding","ShieldingLEND","ShieldingLIQMD","ShieldingM","NuBeam",
+    "Shielding_HP","ShieldingLIQMD_HP","ShieldingM_HP",
+    "FTFP_BERT_HPT","FTFP_INCLXX_HPT","QGSP_BERT_HPT","QGSP_BIC_HPT",
+    "QGSP_BIC_AllHPT","QGSP_INCLXX_HPT","Shielding_HPT","ShieldingLIQMD_HPT",
+    "ShieldingM_HPT"};
   for(size_t i=0; i<nlists_hadr; ++i) {
     listnames_hadr.push_back(ss[i]);
   }
@@ -160,46 +161,50 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	   << em_name << ">  EMoption= " << em_opt << G4endl;
   }
   G4VModularPhysicsList* p = nullptr;
-  if(had_name == "FTFP_BERT")           {p = new FTFP_BERT(verbose);}
-  else if(had_name == "FTFP_BERT_HP")   {p = new FTFP_BERT_HP(verbose);}
-  else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
-  else if(had_name == "FTFP_BERT_ATL")  {p = new FTFP_BERT_ATL(verbose);}
-  else if(had_name == "FTFQGSP_BERT")   {p = new FTFQGSP_BERT(verbose);}
-  else if(had_name == "FTFP_INCLXX")    {p = new FTFP_INCLXX(verbose);}
-  else if(had_name == "FTFP_INCLXX_HP") {p = new FTFP_INCLXX_HP(verbose);}
-  else if(had_name == "FTF_BIC")        {p = new FTF_BIC(verbose);}
-  else if(had_name == "LBE")            {p = new LBE();}
-  else if(had_name == "QBBC")           {p = new QBBC(verbose);}
-  else if(had_name == "QGSP_BERT")      {p = new QGSP_BERT(verbose);}
-  else if(had_name == "QGSP_BERT_HP")   {p = new QGSP_BERT_HP(verbose);}
-  else if(had_name == "QGSP_BIC")       {p = new QGSP_BIC(verbose);}
-  else if(had_name == "QGSP_BIC_HP")    {p = new QGSP_BIC_HP(verbose);}
-  else if(had_name == "QGSP_BIC_AllHP") {p = new QGSP_BIC_AllHP(verbose);}
-  else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
-  else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
-  else if(had_name == "QGSP_INCLXX_HP") {p = new QGSP_INCLXX_HP(verbose);}
-  else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
-  else if(had_name == "Shielding")      {p = new Shielding(verbose);}
-  else if(had_name == "ShieldingLEND")  {p = new ShieldingLEND(verbose);}
-  else if(had_name == "ShieldingM")     {p = new Shielding(verbose,"HP","M");}
-  else if(had_name == "NuBeam")         {p = new NuBeam(verbose);}
-  else if(had_name == "Shielding_HP")   {p = new Shielding(verbose);}
-  else if(had_name == "ShieldingM_HP")  {p = new Shielding(verbose,"HP","M");}
-  else if(had_name == "FTFP_BERT_HPT")  {p = new FTFP_BERT_HP(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "FTFP_INCLXX_HPT"){p = new FTFP_INCLXX_HP(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "QGSP_BERT_HPT")  {p = new QGSP_BERT_HP(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "QGSP_BIC_HPT")   {p = new QGSP_BIC_HPT(verbose);}
-  else if(had_name == "QGSP_BIC_AllHPT"){p = new QGSP_BIC_AllHP(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "QGSP_INCLXX_HPT"){p = new QGSP_INCLXX_HP(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "Shielding_HPT")  {p = new Shielding(verbose);
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
-  else if(had_name == "ShieldingM_HPT") {p = new Shielding(verbose,"HP","M");
-                                         p->RegisterPhysics(new G4ThermalNeutrons);}
+  if(had_name == "FTFP_BERT")               {p = new FTFP_BERT(verbose);}
+  else if(had_name == "FTFP_BERT_HP")       {p = new FTFP_BERT_HP(verbose);}
+  else if(had_name == "FTFP_BERT_TRV")      {p = new FTFP_BERT_TRV(verbose);}
+  else if(had_name == "FTFP_BERT_ATL")      {p = new FTFP_BERT_ATL(verbose);}
+  else if(had_name == "FTFQGSP_BERT")       {p = new FTFQGSP_BERT(verbose);}
+  else if(had_name == "FTFP_INCLXX")        {p = new FTFP_INCLXX(verbose);}
+  else if(had_name == "FTFP_INCLXX_HP")     {p = new FTFP_INCLXX_HP(verbose);}
+  else if(had_name == "FTF_BIC")            {p = new FTF_BIC(verbose);}
+  else if(had_name == "LBE")                {p = new LBE();}
+  else if(had_name == "QBBC")               {p = new QBBC(verbose);}
+  else if(had_name == "QGSP_BERT")          {p = new QGSP_BERT(verbose);}
+  else if(had_name == "QGSP_BERT_HP")       {p = new QGSP_BERT_HP(verbose);}
+  else if(had_name == "QGSP_BIC")           {p = new QGSP_BIC(verbose);}
+  else if(had_name == "QGSP_BIC_HP")        {p = new QGSP_BIC_HP(verbose);}
+  else if(had_name == "QGSP_BIC_AllHP")     {p = new QGSP_BIC_AllHP(verbose);}
+  else if(had_name == "QGSP_FTFP_BERT")     {p = new QGSP_FTFP_BERT(verbose);}
+  else if(had_name == "QGSP_INCLXX")        {p = new QGSP_INCLXX(verbose);}
+  else if(had_name == "QGSP_INCLXX_HP")     {p = new QGSP_INCLXX_HP(verbose);}
+  else if(had_name == "QGS_BIC")            {p = new QGS_BIC(verbose);}
+  else if(had_name == "Shielding")          {p = new Shielding(verbose);}
+  else if(had_name == "ShieldingLEND")      {p = new ShieldingLEND(verbose);}
+  else if(had_name == "ShieldingLIQMD")     {p = new Shielding(verbose,"HP","",true);}  
+  else if(had_name == "ShieldingM")         {p = new Shielding(verbose,"HP","M");}
+  else if(had_name == "NuBeam")             {p = new NuBeam(verbose);}
+  else if(had_name == "Shielding_HP")       {p = new Shielding(verbose);}
+  else if(had_name == "ShieldingLIQMD_HP")  {p = new Shielding(verbose,"HP","",true);}
+  else if(had_name == "ShieldingM_HP")      {p = new Shielding(verbose,"HP","M");}
+  else if(had_name == "FTFP_BERT_HPT")      {p = new FTFP_BERT_HP(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "FTFP_INCLXX_HPT")    {p = new FTFP_INCLXX_HP(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_BERT_HPT")      {p = new QGSP_BERT_HP(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_BIC_HPT")       {p = new QGSP_BIC_HPT(verbose);}
+  else if(had_name == "QGSP_BIC_AllHPT")    {p = new QGSP_BIC_AllHP(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "QGSP_INCLXX_HPT")    {p = new QGSP_INCLXX_HP(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "Shielding_HPT")      {p = new Shielding(verbose);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "ShieldingLIQMD_HPT") {p = new Shielding(verbose,"HP","",true);
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
+  else if(had_name == "ShieldingM_HPT")     {p = new Shielding(verbose,"HP","M");
+                                             p->RegisterPhysics(new G4ThermalNeutrons);}
   else {
     p = new FTFP_BERT(verbose);
     G4ExceptionDescription ed;

@@ -32,14 +32,16 @@
 #include "G4VVtkPipeline.hh"
 #include "G4PseudoScene.hh"
 
-#include "vtkSmartPointer.h"
-#include "vtkPoints.h"
-#include "vtkCharArray.h"
-#include "vtkDoubleArray.h"
-#include "vtkUnstructuredGrid.h"
-#include "vtkStaticCleanUnstructuredGrid.h"
-#include "vtkLookupTable.h"
-#include "vtkDiscretizableColorTransferFunction.h"
+#include <vtkSmartPointer.h>
+#include <vtkPoints.h>
+#include <vtkCharArray.h>
+#include <vtkDoubleArray.h>
+#include <vtkUnstructuredGrid.h>
+#if VTK_MINOR_VERSION >= 2
+#include <vtkStaticCleanUnstructuredGrid.h>
+#endif
+#include <vtkLookupTable.h>
+#include <vtkDiscretizableColorTransferFunction.h>
 
 class vtkClipDataSet;
 class vtkDataSetMapper;
@@ -171,7 +173,9 @@ class G4VtkUnstructuredGridPipeline : public G4VVtkPipeline
 
     vtkSmartPointer<vtkUnstructuredGrid> unstructuredGrid;
     std::vector<vtkSmartPointer<vtkUnstructuredGridAlgorithm>> filters;  // derived types can store filters in this vector
+#if VTK_MINOR_VERSION >= 2
     vtkSmartPointer<vtkStaticCleanUnstructuredGrid> clean;
+#endif
     vtkSmartPointer<vtkClipDataSet> clip;
     vtkSmartPointer<vtkDataSetMapper> mapper;
     vtkSmartPointer<vtkUnstructuredGridVolumeRayCastMapper> volumeMapper;

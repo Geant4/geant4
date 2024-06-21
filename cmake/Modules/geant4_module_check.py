@@ -142,7 +142,7 @@ def scan_includes(input_file, settings):
         m = re.search("^ *# *include *\"(.*)\"(.*)$", line)
         if m:
             c = re.search(
-                "\s*//\s*no_geant4_module_check\s*(\((.*)\))?.*$", m.group(2))
+                "\\s*//\\s*no_geant4_module_check\\s*(\\((.*)\\))?.*$", m.group(2))
             if c:
                 conds = set()
                 if c.group(2):

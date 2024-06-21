@@ -38,25 +38,30 @@
 #include "G4VtkStore.hh"
 #include "G4VtkUtility.hh"
 
+#ifndef WIN32
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra-semi"
-#include "vtkAutoInit.h"
-#include "vtkCamera.h"
-#include "vtkCameraOrientationWidget.h"
-#include "vtkImplicitPlaneRepresentation.h"
-#include "vtkImplicitPlaneWidget2.h"
-#include "vtkInteractorStyleTerrain.h"
-#include "vtkInteractorStyleTrackballCamera.h"
-#include "vtkLight.h"
-#include "vtkNew.h"
-#include "vtkObject.h"
-#include "vtkPlane.h"
-#include "vtkRenderWindow.h"
-#include "vtkRenderWindowInteractor.h"
-#include "vtkRenderer.h"
-#include "vtkTextActor.h"
+#endif
 
+#include <vtkAutoInit.h>
+#include <vtkCamera.h>
+#include <vtkCameraOrientationWidget.h>
+#include <vtkImplicitPlaneRepresentation.h>
+#include <vtkImplicitPlaneWidget2.h>
+#include <vtkInteractorStyleTerrain.h>
+#include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkLight.h>
+#include <vtkNew.h>
+#include <vtkObject.h>
+#include <vtkPlane.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkTextActor.h>
+
+#ifndef WIN32
 #pragma GCC diagnostic pop
+#endif
 
 VTK_MODULE_INIT(vtkRenderingOpenGL2)
 VTK_MODULE_INIT(vtkInteractionStyle);

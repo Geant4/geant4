@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-03-13 Gabriele Cosmo (visQt3D-V11-01-08)
+- Fixed compilation error on Windows for ambiguous string assignment in
+  G4Qt3DSceneHandler::CreateNewNode().
+
 ## 2023-10-14 John Allison (visQt3D-V11-01-07)
 - G4Qt3DSceneHandler.cc: Add dummy normal line attributes - Qt6 seems to require!!
   - I am puzzled - why do lines need normals?

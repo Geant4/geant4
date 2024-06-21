@@ -56,6 +56,27 @@ inline G4String TtoS(T value)
   return os.str();
 }
 
+// Check if the value is within the range of (long) int
+inline G4bool ChkMax(const char* str, short maxDigits)
+{
+  if(maxDigits > 10) {
+  // long int assumed
+    auto tmpval = std::stoll(str);
+    if(tmpval > LONG_MAX || tmpval < LONG_MIN) {
+      G4cerr << "input string '" << str << "' out-of-range for conversion to 'long int' value" << G4endl;
+      return false;
+    }
+  } else {
+  // int assumed
+    auto tmpval = std::stol(str);
+    if(tmpval > INT_MAX || tmpval < INT_MIN) {
+      G4cerr << "input string '" << str << "' out-of-range for conversion to 'int' value" << G4endl;
+      return false;
+    }
+  }
+  return true;
+}
+
 // Return true if `str` parses to an integral number no more than `maxDigit` digits
 inline G4bool IsInt(const char* str, short maxDigits)
 {
@@ -74,7 +95,7 @@ inline G4bool IsInt(const char* str, short maxDigits)
         G4cerr << "digit length exceeds" << G4endl;
         return false;
       }
-      return true;
+      return ChkMax(str,maxDigits);
     }
   }
   return false;

@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-07 Gabriele Cosmo (digits_hits-V11-01-01)
+- Fixed compilation error in G4THitsMap on macOS/clang with C++23 Standard
+  enabled.
+
 ## 2022-12-12 Ben Morgan (digits_hits-V11-01-00)
 - Remove obsolete GNUmakefile scripts
 

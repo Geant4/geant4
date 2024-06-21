@@ -34,8 +34,8 @@
 #include "G4AutoLock.hh"
 #include "globals.hh"
 
-#if defined(WIN32) || defined(__MINGW32__)
-#  include <Windows.h>
+#if defined(_WIN32)
+#  include <windows.h>
 #else
 #  include <sys/syscall.h>
 #  include <sys/types.h>

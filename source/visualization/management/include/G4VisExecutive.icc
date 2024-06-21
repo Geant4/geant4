@@ -483,7 +483,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_TOOLSSG_QT_GLES
   tsg_qt_gles->AddNickname("TSG");
 #  if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-  if (fVerbosity >= startup) {
+  if (GetVerbosity() >= startup) {
     G4cout << "  Qt6: Asking ToolsSG to stand in for OpenGL" << G4endl;
     tsg_qt_gles->AddNickname("OGL");
   }
@@ -505,7 +505,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #endif
 
 #ifdef G4VIS_USE_VTK
-  if (fVerbosity >= startup) {
+  if (GetVerbosity() >= startup) {
     G4cout
     << "  VTK: OpenGL-based drivers suppressed because of compatibility issues."
     << G4endl;

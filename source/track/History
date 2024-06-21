@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-21 Gabriele Cosmo (track-V11-01-02)
+- Fixed compilation error in G4VParticleChange on Windows VC++ with
+  C++20 Standard enabled.
+  Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
 ## 2023-09-12 Makoto Asai (track-V11-01-01)
 - Adding fSuspendAndWait to G4TrackStatus.
 - G4TrackStatus is mutable in G4Track so that it may be modified in stacking.

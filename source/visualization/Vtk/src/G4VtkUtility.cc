@@ -32,8 +32,8 @@
 #include "G4Transform3D.hh"
 #include "G4Colour.hh"
 
-#include "vtkMatrix4x4.h"
-#include "vtkPlane.h"
+#include <vtkMatrix4x4.h>
+#include <vtkPlane.h>
 
 vtkSmartPointer<vtkMatrix4x4> G4Transform3DToVtkMatrix4x4(const G4Transform3D& g4Trans)
 {

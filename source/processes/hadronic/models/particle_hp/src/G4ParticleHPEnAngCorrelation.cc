@@ -63,10 +63,9 @@ void G4ParticleHPEnAngCorrelation::Init(std::istream& aDataFile)
 {
   inCharge = true;
   aDataFile >> targetMass >> frameFlag >> nProducts;
-  //G4cout << "G4ParticleHPEnAngCorrelation::Init " << theProjectile->GetParticleName()
-  //	 << " frameFlag=" << frameFlag << " N=" << nProducts << " Mass=" << targetMass << G4endl;
-  theProducts = new G4ParticleHPProduct[nProducts];
-  for (G4int i = 0; i < nProducts; ++i) {
+  const std::size_t psize = nProducts > 0 ? nProducts : 1;
+  theProducts = new G4ParticleHPProduct[psize];
+  for (std::size_t i = 0; i < psize; ++i) {
     theProducts[i].Init(aDataFile, theProjectile);
   }
 }

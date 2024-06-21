@@ -1,9 +1,14 @@
 # Example Hadr09 History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
+-------------------------------------------------------------------------------
+
+## 2024-04-24 Gabriele Cosmo (exhadr09-V11-01-01)
+- Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+  Make proper use of G4String in main().
 
 ## 2023-10-26 Alberto Ribon (exhadr09-V11-01-00)
 - README : documented macro hadr09.in 

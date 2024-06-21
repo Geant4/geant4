@@ -87,7 +87,7 @@ class  CexmcSetup : public G4VUserDetectorConstruction
 
     public:
         explicit CexmcSetup( const G4String &  gdmlFile = "default.gdml",
-                             G4bool  validateGDMLFile = true );
+                             G4bool  validateGDMLFile = false );
 
         G4VPhysicalVolume *  Construct( void );
 

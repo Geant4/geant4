@@ -388,7 +388,12 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   G4LorentzVector LeptonMinus;
   G4double pdf    = 0.;
 
-  G4double rndmv6[6];
+  G4double rndmv6[6] = {0.0};
+  const G4double corrFac = 1.0/(correctionIndex + 1.0);
+  const G4double expLowLim = -20.;
+  const G4double logLowLim = G4Exp(expLowLim/corrFac);
+  G4double z0, z1, z2, x0, x1;
+  G4double betheheitler, sinTheta, cosTheta, dum0;
   // START Sampling
   do {
 
@@ -399,18 +404,25 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     // integral y = pow(x,(c+1))/(c+1) @ x = 1 =>  y = 1 /(1+c)
     // invCdf exp( log(y /* *( c + 1.0 )/ (c + 1.0 ) */ ) /( c + 1.0) )
     //////////////////////////////////////////////////
-    const G4double X1 =
-      G4Exp(G4Log(rndmv6[0])/(correctionIndex + 1.0));
 
-    const G4double x0       = G4Exp(xl1 + (xu1 - xl1)*rndmv6[1]);
-    const G4double dum0     = 1./(1.+x0);
-    const G4double cosTheta = (x0-1.)*dum0;
-    const G4double sinTheta = std::sqrt(4.*x0)*dum0;
+    z0 = (rndmv6[0] > logLowLim) ? G4Log(rndmv6[0])*corrFac : expLowLim;  
+    G4double X1 = (z0 > expLowLim) ? G4Exp(z0) : 0.0;
+    z1 = xl1 + (xu1 - xl1)*rndmv6[1];
+    if (z1 > expLowLim) {
+      x0 = G4Exp(z1);
+      dum0 = 1.0/(1.0 + x0);
+      x1 = dum0*x0;
+      cosTheta = -1.0 + 2.0*x1;
+      sinTheta = 2*std::sqrt(x1*(1.0 - x1));
+    } else {
+      x0 = 0.0;
+      dum0 = 1.0;
+      cosTheta = -1.0;
+      sinTheta = 0.0;
+    }
 
-    const G4double PairInvMass  = PairInvMassMin*G4Exp(X1*X1*lnPairInvMassRange);
-
-    //    G4double rndmv3[3];
-    //    rndmEngine->flatArray(3, rndmv3);
+    z2 = X1*X1*lnPairInvMassRange;
+    const G4double PairInvMass = PairInvMassMin*((z2 > 1.e-3) ? G4Exp(z2) : 1 + z2 + 0.5*z2*z2);
 
     // cos and sin theta-lepton
     const G4double cosThetaLept = std::cos(pi*rndmv6[2]);
@@ -423,7 +435,7 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     const G4double sinPhiLept   = std::copysign(std::sqrt((1.-cosPhiLept)*(1.+cosPhiLept)),rndmv6[3]-0.5);
     // cos and sin phi
     const G4double cosPhi       = std::cos(twoPi*rndmv6[4]-pi);
-    const G4double sinPhi        = std::copysign(std::sqrt((1.-cosPhi)*(1.+cosPhi)),rndmv6[4]-0.5);
+    const G4double sinPhi       = std::copysign(std::sqrt((1.-cosPhi)*(1.+cosPhi)),rndmv6[4]-0.5);
 
     //////////////////////////////////////////////////
     // frames:
@@ -550,7 +562,6 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       }
     } // else FormFactor = 1 by default
 
-    G4double betheheitler;
     if (GammaPolarizationMag==0.) {
       const G4double pPlusSTP   = PPlus*sinThetaPlus;
       const G4double pMinusSTM  = PMinus*sinThetaMinus;
@@ -581,7 +592,7 @@ G4BetheHeitler5DModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     pdf = cross * (xu1 - xl1) / G4Exp(correctionIndex*G4Log(X1)); // cond1;
   } while ( pdf < ymax * rndmv6[5] );
   // END of Sampling
-
+  
   if ( fVerbose > 2 ) {
     G4double recul = std::sqrt(Recoil.x()*Recoil.x()+Recoil.y()*Recoil.y()
                               +Recoil.z()*Recoil.z());

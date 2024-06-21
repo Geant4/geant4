@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-06 V.Ivanchenko (emstand-V11-01-26)
+- G4BetheHeitler5DModel - fixed computation of sinTheta
+
+## 2024-05-28 V.Ivanchenko
+- G4BetheHeitler5DModel - added checks on arguments of G4Exp in SampleSecondaries(..)
+    method to avoid FPE problems in the case of -O3 optimisation
+
 ## 2024-01-23 V.Ivanchenko (emstand-V11-01-25)
 - G4IonICRU73Data - fixed bug #2586 for the case if target material has
     an element with Z>92, improve debug printouts. In the Lindhard-Sorensen 

@@ -117,7 +117,7 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
     // This will plot
 
 // Info to user
-    G4String ofName = (filename == "") ? "User terminal": filename;
+    G4String ofName = (filename == "") ? G4String("User terminal"): filename;
     G4cout << "User choice:\n";
     G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << 
 	      ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 

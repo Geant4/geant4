@@ -93,7 +93,8 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar(G4ParticleHPContAngularPa
   theDiscreteEnergiesOwn = val.theDiscreteEnergiesOwn;
   toBeCached v;
   fCache.Put(v);
-  theAngular = new G4ParticleHPList[nEnergies];
+  const std::size_t esize = nEnergies > 0 ? nEnergies : 1;
+  theAngular = new G4ParticleHPList[esize];
   for (G4int ie = 0; ie < nEnergies; ++ie) {
     theAngular[ie].SetLabel(val.theAngular[ie].GetLabel());
     for (G4int ip = 0; ip < nAngularParameters; ++ip) {
@@ -116,7 +117,8 @@ void G4ParticleHPContAngularPar::Init(std::istream& aDataFile, const G4ParticleD
 
   aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
   theEnergy *= eV;
-  theAngular = new G4ParticleHPList[nEnergies];
+  const std::size_t esize = nEnergies > 0 ? nEnergies : 1;
+  theAngular = new G4ParticleHPList[esize];
   G4double sEnergy;
   for (G4int i = 0; i < nEnergies; ++i) {
     aDataFile >> sEnergy;
@@ -840,7 +842,8 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy,
   nEnergies = nDiscreteEnergies + (G4int)theEnergiesTransformed.size();
 
   // Create final array of angular parameters
-  auto theNewAngular = new G4ParticleHPList[nEnergies];
+  const std::size_t esize = nEnergies > 0 ? nEnergies : 1;
+  auto theNewAngular = new G4ParticleHPList[esize];
 
   // Copy discrete energies and interpolated parameters to new array
 

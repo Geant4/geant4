@@ -431,19 +431,16 @@ G4bool G4GDMLWriteStructure::FindOpticalSurface(const G4SurfaceProperty* psurf)
 const G4LogicalSkinSurface* G4GDMLWriteStructure::GetSkinSurface(
   const G4LogicalVolume* const lvol)
 {
-  G4LogicalSkinSurface* surf = 0;
+  G4LogicalSkinSurface* surf = nullptr;
   std::size_t nsurf = G4LogicalSkinSurface::GetNumberOfSkinSurfaces();
   if(nsurf)
   {
     const G4LogicalSkinSurfaceTable* stable =
       G4LogicalSkinSurface::GetSurfaceTable();
-    for(auto pos = stable->cbegin(); pos != stable->cend(); ++pos)
+    auto pos = stable->find(lvol);
+    if(pos != stable->cend())
     {
-      if(lvol == (*pos)->GetLogicalVolume())
-      {
-        surf = *pos;
-        break;
-      }
+      surf = pos->second;
     }
   }
   return surf;

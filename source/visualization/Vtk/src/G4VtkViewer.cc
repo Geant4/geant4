@@ -27,6 +27,8 @@
 
 #include "G4VtkViewer.hh"
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4Transform3D.hh"
 #include "G4VSceneHandler.hh"
 #include "G4VtkCutterPipeline.hh"
@@ -38,43 +40,43 @@
 #include "G4VtkUtility.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtk3DSImporter.h"
-#include "vtkBMPWriter.h"
-#include "vtkIVExporter.h"  // open inventor
-#include "vtkImageWriter.h"
-#include "vtkImplicitPlaneRepresentation.h"
-#include "vtkImplicitPlaneWidget2.h"
-#include "vtkJPEGWriter.h"
-#include "vtkLightCollection.h"
-#include "vtkOBJExporter.h"
-#include "vtkOBJImporter.h"
-#include "vtkGLTFExporter.h"
-#include "vtkOOGLExporter.h"
-#include "vtkJSONRenderWindowExporter.h"
-#include "vtkVtkJSSceneGraphSerializer.h"
-//#include "vtkBufferedArchiver.h"
-#include "vtkPNGWriter.h"
-#include "vtkPNMWriter.h"
-#include "vtkPOVExporter.h"
-#include "vtkPostScriptWriter.h"
-#include "vtkRIBExporter.h"  // Renderman
-#include "vtkRendererCollection.h"
-#include "vtkSingleVTPExporter.h"
-#include "vtkTIFFWriter.h"
-#include "vtkVRMLExporter.h"
-#include "vtkVRMLImporter.h"
-#include "vtkWindowToImageFilter.h"
-#include "vtkX3DExporter.h"
+#include <vtk3DSImporter.h>
+#include <vtkBMPWriter.h>
+#include <vtkIVExporter.h>  // open inventor
+#include <vtkImageWriter.h>
+#include <vtkImplicitPlaneRepresentation.h>
+#include <vtkImplicitPlaneWidget2.h>
+#include <vtkJPEGWriter.h>
+#include <vtkLightCollection.h>
+#include <vtkOBJExporter.h>
+#include <vtkOBJImporter.h>
+#include <vtkGLTFExporter.h>
+#include <vtkOOGLExporter.h>
+#include <vtkJSONRenderWindowExporter.h>
+#include <vtkVtkJSSceneGraphSerializer.h>
+//#include <vtkBufferedArchiver.h>
+#include <vtkPNGWriter.h>
+#include <vtkPNMWriter.h>
+#include <vtkPOVExporter.h>
+#include <vtkPostScriptWriter.h>
+#include <vtkRIBExporter.h>  // Renderman
+#include <vtkRendererCollection.h>
+#include <vtkSingleVTPExporter.h>
+#include <vtkTIFFWriter.h>
+#include <vtkVRMLExporter.h>
+#include <vtkVRMLImporter.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkX3DExporter.h>
 
 // Readers (vtkDataReader)
 
-#include "vtkCameraPass.h"
-#include "vtkOpenGLRenderer.h"
-#include "vtkRenderPass.h"
-#include "vtkRenderPassCollection.h"
-#include "vtkSequencePass.h"
-#include "vtkShadowMapBakerPass.h"
-#include "vtkShadowMapPass.h"
+#include <vtkCameraPass.h>
+#include <vtkOpenGLRenderer.h>
+#include <vtkRenderPass.h>
+#include <vtkRenderPassCollection.h>
+#include <vtkSequencePass.h>
+#include <vtkShadowMapBakerPass.h>
+#include <vtkShadowMapPass.h>
 
 G4VtkViewer::G4VtkViewer(G4VSceneHandler& sceneHandler, const G4String& name)
   : G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
@@ -177,7 +179,7 @@ void G4VtkViewer::SetView()
 
   vtkCamera* activeCamera = renderer->GetActiveCamera();
   activeCamera->SetFocalPoint(targetPosition.x(), targetPosition.y(), targetPosition.z());
-  activeCamera->SetViewAngle(2*fieldHalfAngle / M_PI * 180);
+  activeCamera->SetViewAngle(2*fieldHalfAngle / CLHEP::pi * 180);
   activeCamera->SetPosition(cameraPosition.x(), cameraPosition.y(), cameraPosition.z());
   activeCamera->SetParallelScale(cameraDistance / zoomFactor);
 
@@ -702,9 +704,9 @@ void G4VtkViewer::AddImageOverlay(const G4String& fileName, const G4double alpha
   G4cout << xScale << " " << yScale << G4endl;
   auto transformation = G4Transform3D::Identity;
   auto scal = G4Scale3D(xScale, yScale, 1);
-  auto rotx = G4RotateX3D(rotation[0]/180*M_PI);
-  auto roty = G4RotateY3D(rotation[1]/180*M_PI);
-  auto rotz = G4RotateZ3D(rotation[2]/180*M_PI);
+  auto rotx = G4RotateX3D(rotation[0]/180*CLHEP::pi);
+  auto roty = G4RotateY3D(rotation[1]/180*CLHEP::pi);
+  auto rotz = G4RotateZ3D(rotation[2]/180*CLHEP::pi);
   auto tranImg = G4Translate3D(  -std::fabs(imageBottomLeft[0] + imageTopRight[0]) / 2.0,
                                  -std::fabs(imageBottomLeft[1] + imageTopRight[1]) / 2.0,
                                  0);

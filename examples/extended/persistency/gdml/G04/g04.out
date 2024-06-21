@@ -22,7 +22,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1078,7 +1078,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.001280s Sys=0.000000s
+  User=0.000000s Real=0.001320s Sys=0.000000s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -1330,7 +1330,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.001482s Sys=0.000000s
+  User=0.000000s Real=0.000947s Sys=0.000000s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -1383,7 +1383,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000171s Sys=0.000000s
+  User=0.000000s Real=0.000193s Sys=0.000000s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 
@@ -1435,7 +1435,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000181s Sys=0.000000s
+  User=0.000000s Real=0.000171s Sys=0.000000s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -1487,7 +1487,7 @@ Processing hits ....
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.000000s Real=0.000162s Sys=0.000000s
+  User=0.000000s Real=0.000195s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

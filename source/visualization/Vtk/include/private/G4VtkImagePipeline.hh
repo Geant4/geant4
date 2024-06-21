@@ -30,10 +30,10 @@
 #include "G4Types.hh"
 #include "G4VVtkPipeline.hh"
 
-#include "vtkImageData.h"
-#include "vtkImageReader2.h"
-#include "vtkImageReader2Factory.h"
-#include "vtkSmartPointer.h"
+#include <vtkImageData.h>
+#include <vtkImageReader2.h>
+#include <vtkImageReader2Factory.h>
+#include <vtkSmartPointer.h>
 
 #include <vector>
 

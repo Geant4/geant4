@@ -724,7 +724,8 @@ G4NuclNuclDiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
                                        G4double momentum, G4double A)
 {
   G4int i, iMax = 100;  
-  G4double norm, result, theta1, theta2, thetaMax, sum = 0.;
+  G4double norm, theta1, theta2, thetaMax;
+  G4double result = 0., sum = 0.;
 
   fParticle      = particle;
   fWaveVector    = momentum/hbarc;

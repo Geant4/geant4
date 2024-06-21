@@ -11,8 +11,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#if defined(WIN32) || defined(__MINGW32__)
-#include <BaseTsd.h>
+#if defined(_WIN32)
+#include <basetsd.h>
 #include <io.h>
 #include <windows.h>
 #define realpath( a, b ) GetFullPathName( a, PATH_MAX, b, NULL )

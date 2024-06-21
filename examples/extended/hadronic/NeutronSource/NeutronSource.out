@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -74,7 +74,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
          --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:  0.926 %
           ElmMassFraction:   8.00 %  ElmAbundance   7.54 % 
 
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
 #
 # Set a very high time threshold to allow all decays to happen
 /process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
@@ -397,13 +397,13 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.920000s Real=3.972358s Sys=0.010000s
+  User=3.370000s Real=3.864022s Sys=0.030000s
 
  The run is 10000 Am241 of 0 eV  within BeO (D =  3 cm  L = 6 cm )
 
  Process calls frequency :
             NoProcess=  10005       Radioactivation= 225185                  Rayl=   2593
-       Transportation= 170224        alphaInelastic=      6                 compt=  22335
+       Transportation= 170296        alphaInelastic=      6                 compt=  22335
                 eIoni= 195112               ionIoni= 323989                   msc=  11861
                  phot=  13194 
 
@@ -439,7 +439,7 @@ Run Summary
           Tl209:     208  Emean =  112.13 keV	( 106.1 keV --> 112.51 keV)	mean life = 3.1739 min
            U233:   10000  Emean =  356.52 meV	( 3.7544 meV --> 1.9313 eV )	mean life = 2.2983e+05 y  
           alpha:   80007  Emean =  5.9269 MeV	( 741.36 keV --> 8.3755 MeV)	stable
-      anti_nu_e:   39976  Emean =  402.06 keV	( 345.56 eV  --> 1.7796 MeV)	stable
+      anti_nu_e:   40000  Emean =  401.82 keV	( 1 eV  --> 1.7796 MeV)	stable
              e-:  155220  Emean =  83.746 keV	( 1.5054 eV  --> 1.8512 MeV)	stable
           gamma:   25228  Emean =  195.92 keV	( 8.1758 keV --> 4.4211 MeV)	stable
         neutron:       2  Emean =   2.508 MeV	( 743.03 keV --> 4.2731 MeV)	mean life = 14.67 min
@@ -448,7 +448,7 @@ Run Summary
  Mean energy flow per event    = 1.9406 MeV  rms = 483.66 keV
 
  List of particles emerging from the container :
-      anti_nu_e:   39976  Emean =  402.06 keV	( 345.56 eV  --> 1.7796 MeV) 	Eflow/event = 1.6073 MeV
+      anti_nu_e:   40000  Emean =  401.82 keV	( 1 eV  --> 1.7796 MeV) 	Eflow/event = 1.6073 MeV
              e-:       9  Emean =  106.48 keV	( 23.828 keV --> 204.58 keV) 	Eflow/event = 95.829 eV 
           gamma:   12034  Emean =  276.49 keV	( 40.09 keV --> 4.4211 MeV) 	Eflow/event = 332.73 keV
         neutron:       2  Emean =   2.508 MeV	( 743.03 keV --> 4.2731 MeV) 	Eflow/event = 501.61 eV 

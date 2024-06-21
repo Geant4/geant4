@@ -6,6 +6,11 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-22 Gunter Folger  (had-binary-V11-01-01)
+- Address problem reported by Atlas of throwing execption if momentum cannot 
+   be corrected. Problem ocurrs for D + H around 1600 MeV
+  - The exception is removed,in this rare case the initial state is kept
+    unchanged instead.
 
 ## 2023-04-28 Vladimir Ivantchenko (had-binary-V11-01-00)
 - G4BinaryCascade, G4BinaryLightIonReaction - do not call getenv, use

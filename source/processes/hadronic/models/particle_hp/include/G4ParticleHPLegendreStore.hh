@@ -33,6 +33,7 @@
 #include "G4ParticleHPLegendreTable.hh"
 #include "G4ios.hh"
 
+#include <vector>
 #include <fstream>
 
 class G4ParticleHPLegendreStore
@@ -40,11 +41,11 @@ class G4ParticleHPLegendreStore
   public:
     G4ParticleHPLegendreStore(G4int n)
     {
-      theCoeff = new G4ParticleHPLegendreTable[n];
+      theCoeff.resize(n);
       nEnergy = n;
     }
 
-    ~G4ParticleHPLegendreStore() { delete[] theCoeff; }
+    ~G4ParticleHPLegendreStore() {}
 
     inline void Init(G4int i, G4double e, G4int n) { theCoeff[i].Init(e, n); }
     inline void SetNPoints(G4int n) { nEnergy = n; }
@@ -77,7 +78,7 @@ class G4ParticleHPLegendreStore
 
   private:
     G4int nEnergy;
-    G4ParticleHPLegendreTable* theCoeff;
+    std::vector<G4ParticleHPLegendreTable> theCoeff;
     G4InterpolationManager theManager;  // interpolate between different Tables
 };
 #endif

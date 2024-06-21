@@ -4,6 +4,13 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-06-05 Alberto Ribon (phys-lists-V11-01-08)
+- G4PhysListFactory : added three new variants of the physics list `Shielding`,
+  which use the model G4LightIonQMDReaction : `ShieldingLIQMD`,
+  `ShieldingLIQMD_HP` and `ShieldingLIQMD_HPT`.
+  Note that `ShieldingLIQMD` and `ShieldingLIQMD_HP` are the same: the latter
+  is introduced only for consistency.
+
 ## 2023-11-09 Yoshihide Sato (phys-lists-V11-01-07)
 - Add a option for `Shielding` to use G4LightIonQMDPhysics, 
   which is the constructor of light ion qmd.

@@ -29,11 +29,8 @@ find_package(HepMC REQUIRED)
 # Find Pythia6 (optional package)
 #
 find_package(Pythia6 QUIET)
-if(PYTHIA6_FOUND)
+if(Pythia6_FOUND)
   message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx01 example with Pythia6 enabled.") 
-  add_definitions(-DG4LIB_USE_PYTHIA) 
-else()
-  set(PYTHIA6_LIBRARIES "")  
 endif()
 
 #----------------------------------------------------------------------------
@@ -49,17 +46,21 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(HepMCEx01 HepMCEx01.cc ${sources} ${headers})
+target_compile_definitions(HepMCEx01 PRIVATE $<$<BOOL:${Pythia6_FOUND}>:G4LIB_USE_PYTHIA>)
 #target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
 #                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-#                      ${PYTHIA6_LIBRARIES} gfortran)
+#                      $<$<BOOL:${Pythia6_FOUND}>:Pythia6::Pythia6>
+#                      gfortran)
 target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES})
+                      $<$<BOOL:${Pythia6_FOUND}>:Pythia6::Pythia6>
+                      )
 
 # if pythia is compiled with g77, link with -lg2c instead.
 #target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
 #                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-#                      ${PYTHIA6_LIBRARIES} g2c)
+#                      $<$<BOOL:${Pythia6_FOUND}>:Pythia6::Pythia6>
+#                      g2c)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

@@ -27,8 +27,8 @@
 
 #include "G4VisAttributes.hh"
 
-#include "vtkActor.h"
-#include "vtkProperty.h"
+#include <vtkActor.h>
+#include <vtkProperty.h>
 
 std::size_t G4VtkPolydataPolylinePipeline::MakeHash(const G4VisAttributes* pVA)
 {

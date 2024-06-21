@@ -115,8 +115,10 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4FieldTrack  yFldTrkStart(y_current);
 #endif
 
-  G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
-  G4double ystart[G4FieldTrack::ncompSVEC], yEnd[G4FieldTrack::ncompSVEC]; 
+  G4double y[G4FieldTrack::ncompSVEC] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
+  G4double dydx[G4FieldTrack::ncompSVEC] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
+  G4double ystart[G4FieldTrack::ncompSVEC] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
+  G4double yEnd[G4FieldTrack::ncompSVEC] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
   G4double  x1, x2;
   G4bool succeeded = true;
 

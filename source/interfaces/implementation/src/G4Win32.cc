@@ -28,7 +28,6 @@
 // Original author: G.Barrand, 1998
 // --------------------------------------------------------------------
 
-// this :
 #include "G4Win32.hh"
 
 #include "G4ios.hh"
@@ -65,12 +64,13 @@ G4Win32::G4Win32()
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
-    wc.lpszMenuName = className;
-    wc.lpszClassName = className;
+    wc.lpszMenuName = (PTSTR)className;
+    wc.lpszClassName = (PTSTR)className;
     ::RegisterClass(&wc);
 
+    char winName[] = "Test";
     topWindow =
-      ::CreateWindowEx(WS_EX_CLIENTEDGE, className, "Test", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
+      ::CreateWindowEx(WS_EX_CLIENTEDGE, (PTSTR)className, (PTSTR)winName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, ::GetModuleHandle(NULL), NULL);
 
     if (topWindow == NULL) {

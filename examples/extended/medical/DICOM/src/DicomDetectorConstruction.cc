@@ -168,10 +168,10 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
                                    symbol = "S",
                                    z = 16.0,a = 32.065* g/mole );
     G4Element* elCl = new G4Element( name = "Chlorine",
-                                    symbol = "P",
+                                    symbol = "Cl",
                                     z = 17.0, a = 35.453* g/mole );
     G4Element* elK = new G4Element( name = "Potassium",
-                                   symbol = "P",
+                                   symbol = "K",
                                    z = 19.0, a = 30.0983* g/mole );
 
     G4Element* elFe = new G4Element( name = "Iron",

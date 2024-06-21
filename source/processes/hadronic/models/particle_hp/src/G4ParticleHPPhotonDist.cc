@@ -61,11 +61,12 @@ G4bool G4ParticleHPPhotonDist::InitMean(std::istream& aDataFile)
     if (repFlag == 1) {
       // multiplicities
       aDataFile >> nDiscrete;
-      disType = new G4int[nDiscrete];
-      energy = new G4double[nDiscrete];
-      // actualMult = new G4int[nDiscrete];
-      theYield = new G4ParticleHPVector[nDiscrete];
-      for (G4int i = 0; i < nDiscrete; ++i) {
+      const std::size_t msize = nDiscrete > 0 ? nDiscrete : 1;
+      disType = new G4int[msize];
+      energy = new G4double[msize];
+      // actualMult = new G4int[msize];
+      theYield = new G4ParticleHPVector[msize];
+      for (std::size_t i = 0; i < msize; ++i) {
         aDataFile >> disType[i] >> energy[i];
         energy[i] *= eV;
         theYield[i].Init(aDataFile, eV);
@@ -77,11 +78,12 @@ G4bool G4ParticleHPPhotonDist::InitMean(std::istream& aDataFile)
       theBaseEnergy *= eV;
       aDataFile >> theInternalConversionFlag;
       aDataFile >> nGammaEnergies;
-      theLevelEnergies = new G4double[nGammaEnergies];
-      theTransitionProbabilities = new G4double[nGammaEnergies];
+      const std::size_t esize = nGammaEnergies > 0 ? nGammaEnergies : 1;
+      theLevelEnergies = new G4double[esize];
+      theTransitionProbabilities = new G4double[esize];
       if (theInternalConversionFlag == 2)
-        thePhotonTransitionFraction = new G4double[nGammaEnergies];
-      for (G4int ii = 0; ii < nGammaEnergies; ++ii) {
+        thePhotonTransitionFraction = new G4double[esize];
+      for (std::size_t ii = 0; ii < esize; ++ii) {
         if (theInternalConversionFlag == 1) {
           aDataFile >> theLevelEnergies[ii] >> theTransitionProbabilities[ii];
           theLevelEnergies[ii] *= eV;
@@ -146,8 +148,9 @@ void G4ParticleHPPhotonDist::InitAngular(std::istream& aDataFile)
         vct_pXS_par.push_back(hpv);
       }
     }
-    if (theGammas == nullptr) theGammas = new G4double[nDiscrete2];
-    if (theShells == nullptr) theShells = new G4double[nDiscrete2];
+    const std::size_t psize = nDiscrete2 > 0 ? nDiscrete2 : 1;
+    if (theGammas == nullptr) theGammas = new G4double[psize];
+    if (theShells == nullptr) theShells = new G4double[psize];
 
     for (i = 0; i < nIso; ++i)  // isotropic photons
     {
@@ -155,15 +158,17 @@ void G4ParticleHPPhotonDist::InitAngular(std::istream& aDataFile)
       theGammas[i] *= eV;
       theShells[i] *= eV;
     }
-    nNeu = new G4int[nDiscrete2 - nIso];
-    if (tabulationType == 1) theLegendre = new G4ParticleHPLegendreTable*[nDiscrete2 - nIso];
-    if (tabulationType == 2) theAngular = new G4ParticleHPAngularP*[nDiscrete2 - nIso];
+    const std::size_t tsize = nDiscrete2 - nIso > 0 ? nDiscrete2 - nIso : 1;
+    nNeu = new G4int[tsize];
+    if (tabulationType == 1) theLegendre = new G4ParticleHPLegendreTable*[tsize];
+    if (tabulationType == 2) theAngular = new G4ParticleHPAngularP*[tsize];
     for (i = nIso; i < nDiscrete2; ++i) {
       if (tabulationType == 1) {
         aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i - nIso];
         theGammas[i] *= eV;
         theShells[i] *= eV;
-        theLegendre[i - nIso] = new G4ParticleHPLegendreTable[nNeu[i - nIso]];
+        const std::size_t lsize = nNeu[i - nIso] > 0 ? nNeu[i - nIso] : 1;
+        theLegendre[i - nIso] = new G4ParticleHPLegendreTable[lsize];
         theLegendreManager.Init(aDataFile);
         for (ii = 0; ii < nNeu[i - nIso]; ++ii) {
           theLegendre[i - nIso][ii].Init(aDataFile);
@@ -173,7 +178,8 @@ void G4ParticleHPPhotonDist::InitAngular(std::istream& aDataFile)
         aDataFile >> theGammas[i] >> theShells[i] >> nNeu[i - nIso];
         theGammas[i] *= eV;
         theShells[i] *= eV;
-        theAngular[i - nIso] = new G4ParticleHPAngularP[nNeu[i - nIso]];
+        const std::size_t asize = nNeu[i - nIso] > 0 ? nNeu[i - nIso] : 1;
+        theAngular[i - nIso] = new G4ParticleHPAngularP[asize];
         for (ii = 0; ii < nNeu[i - nIso]; ++ii) {
           theAngular[i - nIso][ii].Init(aDataFile);
         }
@@ -213,9 +219,10 @@ void G4ParticleHPPhotonDist::InitEnergies(std::istream& aDataFile)
   }
   if (energyDistributionsNeeded == 0) return;
   aDataFile >> nPartials;
-  distribution = new G4int[nPartials];
-  probs = new G4ParticleHPVector[nPartials];
-  partials = new G4ParticleHPPartial*[nPartials];
+  const std::size_t dsize = nPartials > 0 ? nPartials : 1;
+  distribution = new G4int[dsize];
+  probs = new G4ParticleHPVector[dsize];
+  partials = new G4ParticleHPPartial*[dsize];
   G4int nen;
   G4int dummy;
   for (i = 0; i < nPartials; ++i) {
@@ -236,13 +243,13 @@ void G4ParticleHPPhotonDist::InitPartials(std::istream& aDataFile, G4ParticleHPV
   if (nDiscrete != 1) {
     theTotalXsec.Init(aDataFile, eV);
   }
-  G4int i;
-  theGammas = new G4double[nDiscrete];
-  theShells = new G4double[nDiscrete];
-  isPrimary = new G4int[nDiscrete];
-  disType = new G4int[nDiscrete];
-  thePartialXsec = new G4ParticleHPVector[nDiscrete];
-  for (i = 0; i < nDiscrete; ++i) {
+  const std::size_t dsize = nDiscrete > 0 ? nDiscrete : 1;
+  theGammas = new G4double[dsize];
+  theShells = new G4double[dsize];
+  isPrimary = new G4int[dsize];
+  disType = new G4int[dsize];
+  thePartialXsec = new G4ParticleHPVector[dsize];
+  for (std::size_t i = 0; i < dsize; ++i) {
     aDataFile >> theGammas[i] >> theShells[i] >> isPrimary[i] >> disType[i];
     theGammas[i] *= eV;
     theShells[i] *= eV;

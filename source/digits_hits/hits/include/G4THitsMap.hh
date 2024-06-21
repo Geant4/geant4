@@ -33,6 +33,7 @@
 
 #include <map>
 #include <unordered_map>
+#include <type_traits>
 
 // class description:
 //

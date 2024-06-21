@@ -191,9 +191,9 @@ void FinalStateHistoManager::ScoreSecondary(const G4DynamicParticle* const secon
     const G4String& particleName = particle->GetParticleName();
     const G4int particlePDG = secondary->GetPDGcode();
 
-    const G4String histoTitle = (particlePDG == 0 ? 
-                                 "Particle pdg==0 spectrum"
-                                 : G4String(particleName + " spectrum"));
+    const G4String histoTitle = (particlePDG == 0
+                                 ? G4String("Particle pdg==0 spectrum")
+                                 : particleName + G4String(" spectrum"));
     const G4int histoIndex = fAnalysisManager->CreateH1(particleName, 
                                                       histoTitle,
                                                       fNumBins, 

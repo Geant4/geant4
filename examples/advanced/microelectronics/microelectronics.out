@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -343,7 +343,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
 See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
-##### Create analysis manager   0x10a44b0
+##### Create analysis manager   0x1b5c470
 Using  analysis manager
 ... set ntuple merging row mode : row-wise - done
 ... create file : microelectronics.root - done
@@ -365,7 +365,7 @@ Elastic Cumulated Diff Cross : /cvmfs/geant4.cern.ch/share/data/G4EMLOW8.5/micro
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.340000s Real=0.416159s Sys=0.010000s
+  User=0.350000s Real=0.577205s Sys=0.020000s
 ... write file : microelectronics.root - done
 ... close file : microelectronics.root - done
 ... clear all data - done

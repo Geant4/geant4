@@ -1206,9 +1206,15 @@ leap:
       E2_total = E2_perp * E2_perp + E2_parl * E2_parl;
       s2       = fRindex2 * cost2 * E2_total;
 
-      if(fTransmittance > 0.)
-        transCoeff = fTransmittance;
-      else if(cost1 != 0.0)
+      // D.Sawkey, 24 May 24
+      // Transmittance has already been taken into account in PostStepDoIt.
+      // For e.g. specular surfaces, the ratio of Fresnel refraction to
+      // reflection should be given by the math, not material property
+      // TRANSMITTANCE
+      //if(fTransmittance > 0.)
+      //  transCoeff = fTransmittance;
+      //else if(cost1 != 0.0)
+      if(cost1 != 0.0)
         transCoeff = s2 / s1;
       else
         transCoeff = 0.0;

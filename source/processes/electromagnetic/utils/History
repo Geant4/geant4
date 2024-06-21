@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-22 V.Ivanchenko (emutils-V11-01-28)
+- G4EmUtility - simplify computation of cross section maximum for discrete 
+    processes to fix the problem of FPE if -O3 compiler option is used.
+
+## 2024-04-21 Gabriele Cosmo (emutils-V11-01-27)
+- Fixed compilation error in G4EmConfigurator on Windows VC++ with
+  C++20 Standard enabled.
+  Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
 ## 2023-12-15 V.Ivanchenko (emutils-V11-01-26)
 - G4VEmProcess, G4VEnergyLossProcess - minor CPU optimisation by reduction
     of number of calls for Log of kinetic energy 

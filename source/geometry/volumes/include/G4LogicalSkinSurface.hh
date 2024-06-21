@@ -35,14 +35,15 @@
 #ifndef G4LogicalSkinSurface_hh
 #define G4LogicalSkinSurface_hh 1
 
-#include <vector>
+#include <map>
 
 #include "G4LogicalSurface.hh"
 
 class G4LogicalVolume;
 class G4LogicalSkinSurface;
 
-using G4LogicalSkinSurfaceTable = std::vector<G4LogicalSkinSurface*>;
+using G4LogicalSkinSurfaceTable
+      = std::map<const G4LogicalVolume*, G4LogicalSkinSurface*>;
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {

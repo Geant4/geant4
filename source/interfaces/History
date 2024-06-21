@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-03-13 Gabriele Cosmo (interfaces-V11-01-32)
+- Fixed string assignments in G4Win32 and G4UIWin32, to support either UNICODE
+  or UTF-16 encoding on Windows. Addressing problem report #2599.
+  
+## 2024-02-02 Gabriele Cosmo
+- Use std::size_t as arrays size in G4InteractorMessenger and G4UIArrayString.
+
 ## 2023-11-06 John Allison (interfaces-V11-01-31)
 - Requires visman-V11-01-31.
 - G4UIQt::SceneTreeItemClicked:

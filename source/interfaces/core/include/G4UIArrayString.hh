@@ -58,8 +58,8 @@ class G4UIArrayString
   G4int CalculateColumnWidth() const;
 
   G4String* stringArray;
-  G4int nElement;
-  G4int nColumn;
+  std::size_t nElement;
+  std::size_t nColumn;
 };
 
 #endif

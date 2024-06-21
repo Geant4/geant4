@@ -1,0 +1,261 @@
+
+                 Geant4 11.2 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                           21 June 2024
+
+List of fixes included in this public patch since the public release 11.2.1:
+
+  o Configuration
+    -------------
+    + CMake:
+      o Fix to do not export HDF5 version to Geant4Config.
+      o Fixed find_package(SoXt) and find_package(SoWin).
+      o In main CMake source script, VTK driver library requires the application
+        of VTK's vtk_module_autoinit cmake function, but the existence of the
+        target was not checked, leading to configure time errors. Check for the
+        existence of both G4visVTK and G4visVTK-static targets before applying
+        vtk_module_autoinit. Addressing problem report #2600.
+      o Mention the possibility of using cvmfs datasets in the cmake configuration.
+      o Updated FindPythia6 module to account for lib64.
+        Applies GitHub PR#63 (https://github.com/Geant4/geant4/pull/63).
+      o Disabled use of FindPythia6 outside of internal Geant4 examples.
+      o Updated FindPythia8 module to reduce capability to only that required by
+        py8decayer example and emit error if used in project outside Geant4 or
+        py8decayer. Applies GitHub PR#68 (https://github.com/Geant4/geant4/pull/68). 
+      o Fixed escaping of regex in geant4_module_check to satisfy latest Python3.
+      o Updated dataset: G4NDL-4.7.1.
+
+  o Analysis
+    --------
+    + Do not delete G4Accumulable<T> default constructor, as it prevents from
+      using it in an array without an explicit initialization in the header.
+    + Fixed wrong conversion to G4String in G4THnToolsManager, leading to
+      compilation error on gcc compiler with C++23 Standard enabled.
+
+  o Digits_Hits
+    -----------
+    + Fixed compilation error in G4THitsMap on macOS/clang with C++23 Standard
+      enabled.
+
+  o Externals
+    ---------
+    + g4tools:
+      o Fixed compilation warnings on gcc when LTO settings are enabled.
+      o Fixed string assignments in 'window' and 'pixwin', to support either
+        UNICODE or UTF-16 encoding on Windows. Addressing problem report #2599.
+    + ptl:
+      o Changed Windows.h to windows.h, to allow build Windows/MinGW.
+        Not relevant for native VC++ builds.
+
+  o Geometry
+    --------
+    + magnetic_field:
+      o Fixed potential uninitialised data, detected in ATLAS LTO builds.
+    + navigation:
+      o Fixed compilation error in G4Navigator on Windows VC++ with C++20 Standard
+        enabled. Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+    + solids/specific:
+      o Use std::size_t for array sizes in G4PolyhedraSide and G4PolyPhiFace,
+        fixing compilation warnings on gcc when LTO settings are enabled.
+    + volumes:
+      o Use std::map instead of std::vector to define G4LogicalSkinSurfaceTable,
+        to speedup search of skin surfaces in large tables, as already done
+        previously for G4LogicalBorderSurface. Addressing problem report #2598.
+
+  o Global
+    ------
+    + Changed Windows.h to windows.h, to allow build Windows/MinGW.
+      Not relevant for native VC++ builds. Use _WIN32 to detect Windows system.
+    + Fixed compilation error in G4PhysicsModelCatalog on Windows VC++ with
+      C++20 Standard enabled.
+      Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+    + Provide helpful error message when GEANT4_DATA_DIR is set to an invalid
+      location.
+    + Updated date and version for 11.2.2.
+
+  o Intercoms
+    ---------
+    + G4UIparsing: checking either 'int' or 'long int' parameter value are
+      within range of G4int or G4long.
+    + Fix in G4GenericMessenger::DeclareMethod() which was wrongly converting
+      valid Boolean parameters. Improved SetNewValue() function.
+      Addressing problem report #2606.
+
+  o Interfaces
+    ----------
+    + Use std::size_t as arrays size in G4InteractorMessenger and G4UIArrayString,
+      fixing compilation warnings on gcc when LTO settings are enabled
+    + Fixed string assignments in G4Win32 and G4UIWin32, to support either
+      UNICODE or UTF-16 encoding on Windows. Addressing problem report #2599.
+
+  o Materials
+    ---------
+    + Fix in G4NistMaterialBuilder::HepAndNuclearMaterials(): G4_BRASS,
+      G4_BRONZE and G4_STAILESS_STEEL are now defined using mass fractions
+      of components instead of number of atoms, in order to have more natural
+      description. Addressing problem report #2601.
+      Results may be changed on level of 10^-5 due to numerical differences.
+
+  o Persistency
+    -----------
+    + GDML:
+      o Disabled schema validation on Windows platforms, as XercesC currently does
+        support only 'http'.
+      o Fix in schema module gdml_solids.xsd for tessellated solid semantics, to
+        correctly reference facet types. Fixes schema validation errors which may
+        occur on some custom XSD validation tools (fix included in GDML-3.1.7).
+      o Use std::map instead of std::vector to iterate on logical-skin surfaces
+        in G4GDMLWriteStructure::GetSkinSurface().
+        Part of fix addressing problem report #2598.
+
+  o Physics Lists
+    -------------
+    + lists:
+      o G4PhysListFactory: added three new variants of 'Shielding' physics list,
+        using the model G4LightIonQMDReaction: 'ShieldingLIQMD', 'ShieldingLIQMD_HP'
+        and 'ShieldingLIQMD_HPT'. Addressing problem report #2615.
+        Note that 'ShieldingLIQMD' and 'ShieldingLIQMD_HP' refer to the same
+        configuration, the latter is introduced only for consistency.
+
+  o Processes - Electromagnetic
+    ---------------------------
+    + dna:
+      o Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+        Added missing declarations for TG4MoleculeShoot specialisations on G4Track.
+        Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+      o Fixed compilation error on macOS/clang with C++23 enabled, for the use
+        of std::function in G4OctreeFinder.
+    + standard:
+      o G4BetheHeitler5DModel: fixed computation of sinTheta sampling and added
+        checks on arguments of G4Exp in SampleSecondaries() method, to avoid FPE
+        problems in the case of -O3 optimisation on alma9.
+    + utils:
+      o G4EmUtility: simplified computation of cross-section maximum for
+        discrete  processes to fix FPE issues on alma9 when -O3 compiler
+        option is used.
+      o Fixed compilation error in G4EmConfigurator on Windows VC++ with
+        C++20 Standard enabled.
+        Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+  o Processes - Hadronic
+    --------------------
+    + models/binary_cascade:
+      o Removed throwing of exception if momentum cannot be corrected in rare
+        cases for D + H around 1600 MeV; the initial state is now kept unchanged
+        instead.
+    + models/coherent_elastic:
+      o Fixed compilation warnings for potentially initialised local variables
+        in SampleThetaCMS() for G4DiffuseElastic and G4NuclNuclDiffuseElastic.
+    + models/lend:
+      o Fixed compilation warnings for potentially initialised local variables
+        in ptwXY_createFromFunctionZeroCrossing().
+      o Define _USE_MATH_DEFINES before inclusion of <cmath> to define
+        non-standard math macros such as M_PI on Windows. Use _WIN32 instead of
+        WIN32 to detect Windows system. Use basetsd.h instead of BaseTsd.h to
+        allow for compilation on Windows/MinGW.
+    + models/inclxx:
+      o Fix in G4INCLInteractionAvatar to not use local energy for all antibaryons.
+    + models/particle_hp:
+      o G4CrossSectionHP: fixed method taking into account temperature effect
+        (the difference due to this fix is small).
+        Fixed elastic and capture cross-sections in Argon, by using only the main
+        isotope Z=18, A=40 (there was up to 50% overestimation of cross-sections
+        due to wrong data for rare isotopes of argon).
+        Fixed cross-sections for rare target atoms Promethium, Astatine, Radon
+        and Francium.
+      o Fixed compilation error in G4ParticleHPManager and G4ParticleHPNames on
+        Windows VC++ with C++20 Standard enabled.
+        Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+      o Fixed remaining compilation warnings on gcc compiler when LTO settings
+        are enabled.
+    + radioactive_decay:
+      o G4BetaPlusDecay, G4BetaMinusDecay: added extra numerical protection on
+        level of 1 eV to avoid precision lost and production of neutrino with
+        negative kinetic energy. In case Q-value is bigger than mass difference,
+        betas in the tail of the spectrum may have more energy than residual free
+        energy. To minimize the non-conservation of 4-momentum, in such cases,
+        neutrino and daughter nucleus are given 1 eV, leading to non conservation
+        of linear momentum because momentum of beta is not counterbalanced.
+
+  o processes - solidstate/phonon
+    -----------------------------
+    + Fixed compilation error in G4LatticeManager on Windows VC++ with
+      C++20 Standard enabled.
+      Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+  o processes/optical
+    -----------------
+    + G4OpBoundaryProcess: correctly calculate Fresnel reflection/refraction,
+      when material property TRANSMITTANCE is specified. The ratio of Fresnel
+      reflection/refraction now does not change when a non-zero transmission is
+      specified. Previously, if transmission of X% was specified, there would be
+      transmission of X% as expected, but the ratio of Fresnel refraction to
+      Fresnel reflection would be set to X%. Addressing problem report #2578.
+  
+  o Track
+    -----
+    + Fixed compilation error in G4VParticleChange on Windows VC++ with
+      C++20 Standard enabled.
+      Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+  o Visualization
+    -------------
+    + management:
+      o G4VisExecutive: fixed use of static symbol 'fVerbosity' and replaced
+        with call to dedicated static method, to avoid linkage problems on Windows.
+    + Qt3D:
+      o Fixed compilation error on Windows for ambiguous string assignment in
+        G4Qt3DSceneHandler::CreateNewNode().
+    + Vtk:
+      o Porting code to compile on Windows Visual-Studio.
+      o Fixed Ubuntu 22 & VTK 9.1 compilation error.
+
+  o Data
+    ----
+    + G4NDL-4.7.1:
+      o Removed all files for Argon-36 and Argon-38 as significantly different
+        from those of ENDF/B-VIII.0.
+      o Reprocessed thermal scattering files after fixing a problem in NJOY.
+        Addressing problem report #2552.
+ 
+  o Examples
+    --------
+    + advanced/ChargeExchangeMC
+      o Disabled GDML schema validation.
+    + advanced/hadrontherapy:
+      o Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+    + medical_linac:
+      o Fixed geometry of medical linear accelerator's collimator.
+    + extended/biasing:
+      o Fixed URls in documentation.
+    + extended/eventgenerator:
+      o Updated CMake scripts to use new Pythia8 setup/build variables.
+    + extended/hadronic/FlukaCern/ProcessLevel/FinalState:
+    + extended/hadronic/Hadr09:
+      o Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+    + extended/medical/DICOM:
+      o Corrected symbols for Chlorine and Potassium elements in function
+        InitialisationOfMaterials().
+    + extended/parameterisations/Par04
+      o Bump scipy version according to
+        GitHub Dependabot PR#66(https://github.com/Geant4/geant4/pull/66).
+      o Bump pymysql version according to
+        GitHub Dependabot PR#72 (https://github.com/Geant4/geant4/pull/72).
+      o Bump scikit-learn version according to
+        GitHub Dependabot PR#73 (https://github.com/Geant4/geant4/pull/73).
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 11.2 series.
+  o  Technical notes distributed for release 11.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 11.2.2 are available
+through the Geant4 "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

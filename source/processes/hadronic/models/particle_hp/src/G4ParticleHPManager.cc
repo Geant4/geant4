@@ -72,7 +72,7 @@ G4ParticleHPManager::G4ParticleHPManager()
   // path may be defined by two environment variables
   // it is not mandatory to access PHP data - path may be not defined
   const char* ttp = G4FindDataDir("G4PARTICLEHPDATA");
-  G4String tendl = (nullptr == ttp) ? "" : G4String(ttp);
+  G4String tendl = (nullptr == ttp) ? G4String("") : G4String(ttp);
   const char* ssp = G4FindDataDir("G4PROTONHPDATA");
   fDataPath[1] = (nullptr == ssp) ? tendl + "/Proton" : G4String(ssp);
 

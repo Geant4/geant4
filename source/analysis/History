@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-05 I. Hrivnacova (analysis-V11-01-11)
+- Do not delete G4Accumulable<T> default constructor,
+  as it prevents from using it in an array without an explicit
+  initialization in the header.
+
+## 2024-05-02 Gabriele Cosmo
+- Fixed wrong conversion to G4String in G4THnToolsManager, leading to
+  compilation error on gcc compiler with C++23 Standard enabled.
+
 ## 2023-11-03 Ben Morgan (analysis-V11-01-10)
 - Use "G4" prefixed version of EXPAT/ZLIB CMake variables
 

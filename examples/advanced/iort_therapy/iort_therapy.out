@@ -10,7 +10,7 @@
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -596,7 +596,7 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=9.240000s Real=9.555099s Sys=0.180000s
+  User=10.160000s Real=11.616344s Sys=0.290000s
 /score/dumpQuantityToFile boxMesh_1 dose dose.out
 Graphics systems deleted.
 Visualization Manager deleting...

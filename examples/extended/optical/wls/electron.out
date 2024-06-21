@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1274,7 +1274,7 @@ Arrival time: 6.66111 ns Arrival position: (-282.731 um , -524.081 um ) Exit pos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=24.700000s Real=24.816061s Sys=0.000000s
+  User=26.210000s Real=28.609734s Sys=0.010000s
 
  ----> print histograms statistics for the entire run 
 

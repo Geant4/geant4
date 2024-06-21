@@ -29,13 +29,13 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkCutter.h"
-#include "vtkPlane.h"
-#include "vtkPolyDataAlgorithm.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkProperty.h"
-#include "vtkSmartPointer.h"
+#include <vtkActor.h>
+#include <vtkCutter.h>
+#include <vtkPlane.h>
+#include <vtkPolyDataAlgorithm.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkSmartPointer.h>
 
 G4VtkCutterPipeline::G4VtkCutterPipeline(G4String nameIn, const G4VtkVisContext& vcIn,
                                          vtkSmartPointer<vtkPolyDataAlgorithm> filter,

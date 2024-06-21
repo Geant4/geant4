@@ -10,9 +10,6 @@
   Geant4 decay tables to such resonances as tau+/- or B+/- with 
   the Pythia8-based ones.
   
-  This example is activated by setting up PYTHIA8 environment variable
-  to point to the area where Pythia8 is installed.
- 
   The complete Pythia8 information, including on download, and documentation 
   is available from the following site:
   https://pythia.org
@@ -66,16 +63,16 @@ make
 	--cxx-common='-O2 -std=c++17 -pedantic -W -Wall -Wshadow -fPIC -pthread'
 \endverbatim
 
-- 4. Setup PYTHIA8 environment variable to point to the area where Pythia8
+- 4. Setup Pythia8_ROOT environment variable to point to the area where Pythia8
       is built/installed:
 \verbatim
-export PYTHIA8=$PWD
+export Pythia8_ROOT=$PWD
 \endverbatim
 
 
   ## Building example:
   
-  Upon setup of PYTHIA8 environment variable to point to the area where 
+  Upon setup of Pythia8_ROOT environment variable to point to the area where 
   Pythia8 package is installed, the pythia/py8decayer example will be
   compiled together with several other features of the eventgenerator example.
 

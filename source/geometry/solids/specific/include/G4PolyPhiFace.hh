@@ -43,7 +43,7 @@
 // Author: David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 #ifndef G4POLYPHIFACE_HH
-#define G4POLYPHIFACE_HH
+#define G4POLYPHIFACE_HH 1
 
 #include "G4VCSGface.hh"
 #include "G4TwoVector.hh"
@@ -65,7 +65,7 @@ struct G4PolyPhiFaceVertex
 
 struct G4PolyPhiFaceEdge
 {
-  G4PolyPhiFaceEdge() {}
+  G4PolyPhiFaceEdge() = default;
   G4PolyPhiFaceVertex  *v0{nullptr}, *v1{nullptr};  // Corners
   G4double tr{.0}, tz{0.},        // Unit vector along edge
            length{0.};            // Length of edge
@@ -205,7 +205,7 @@ class G4PolyPhiFace : public G4VCSGface
 
   protected:
 
-    G4int numEdges;              // Number of edges
+    G4int numEdges = 0;  // Number of edges
     G4PolyPhiFaceEdge* edges = nullptr;       // The edges of the face
     G4PolyPhiFaceVertex* corners = nullptr;   // And the corners
     G4ThreeVector normal;        // Normal unit vector

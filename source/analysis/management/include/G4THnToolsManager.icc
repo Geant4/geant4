@@ -297,7 +297,7 @@ template <unsigned int DIM, typename HT>
 G4String G4THnToolsManager<DIM, HT>::GetTitle(G4int id) const
 {
   auto ht = GetTInFunction(id, "GetTitle");
-  if (ht == nullptr) return 0;
+  if (ht == nullptr) return G4String();
 
   return ht->title();
 }
@@ -308,7 +308,7 @@ template <unsigned int DIM, typename HT>
 G4String G4THnToolsManager<DIM, HT>::GetAxisTitle(unsigned int idim, G4int id) const
 {
   auto ht = GetTInFunction(id, "GetAxisTitle");
-  if (ht == nullptr) return 0;
+  if (ht == nullptr) return G4String();
 
   G4String title;
   G4bool result = ht->annotation(fkKeyAxisTitle[idim], title);

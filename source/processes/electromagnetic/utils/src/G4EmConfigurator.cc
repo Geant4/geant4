@@ -348,7 +348,7 @@ G4EmConfigurator::PrepareModels(const G4ParticleDefinition* aParticle,
 
   if(n > 0) {
     G4String particleName = aParticle->GetParticleName();
-    G4String processName = (nullptr == p) ? "msc" : p->GetProcessName();
+    G4String processName = (nullptr == p) ? G4String("msc") : p->GetProcessName();
     for(size_t i=0; i<n; ++i) {
       if(processName == processes[i]) {
 	if((particleName == particles[i]) ||

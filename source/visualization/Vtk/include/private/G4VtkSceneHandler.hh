@@ -40,38 +40,44 @@
 #include <map>
 #include <vector>
 
+#ifndef WIN32
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra-semi"
-#include "vtkActor.h"
-#include "vtkBillboardTextActor3D.h"
-#include "vtkCleanPolyData.h"
-#include "vtkDoubleArray.h"
-#include "vtkFeatureEdges.h"
-#include "vtkFollower.h"
-#include "vtkGlyph2D.h"
-#include "vtkGlyph3D.h"
-#include "vtkImageData.h"
-#include "vtkLine.h"
-#include "vtkMatrix4x4.h"
-#include "vtkNamedColors.h"
-#include "vtkOpenGLGPUVolumeRayCastMapper.h"
-#include "vtkPointData.h"
-#include "vtkPolyData.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkPolyDataNormals.h"
-#include "vtkProperty.h"
-#include "vtkRegularPolygonSource.h"
-#include "vtkScalarsToColors.h"
-#include "vtkSmartPointer.h"
-#include "vtkSphereSource.h"
-#include "vtkTensorGlyph.h"
-#include "vtkTensorGlyphColor.h"
-#include "vtkTextActor.h"
-#include "vtkTextProperty.h"
-#include "vtkTriangleFilter.h"
-#include "vtkVertexGlyphFilter.h"
-#include "vtkVolume.h"
+#endif
+
+#include <vtkActor.h>
+#include <vtkBillboardTextActor3D.h>
+#include <vtkCleanPolyData.h>
+#include <vtkDoubleArray.h>
+#include <vtkFeatureEdges.h>
+#include <vtkFollower.h>
+#include <vtkGlyph2D.h>
+#include <vtkGlyph3D.h>
+#include <vtkImageData.h>
+#include <vtkLine.h>
+#include <vtkMatrix4x4.h>
+#include <vtkNamedColors.h>
+#include <vtkOpenGLGPUVolumeRayCastMapper.h>
+#include <vtkPointData.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkProperty.h>
+#include <vtkRegularPolygonSource.h>
+#include <vtkScalarsToColors.h>
+#include <vtkSmartPointer.h>
+#include <vtkSphereSource.h>
+#include <vtkTensorGlyph.h>
+#include <vtkTensorGlyphColor.h>
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
+#include <vtkTriangleFilter.h>
+#include <vtkVertexGlyphFilter.h>
+#include <vtkVolume.h>
+
+#ifndef WIN32
 #pragma GCC diagnostic pop
+#endif
 
 class G4VtkSceneHandler : public G4VSceneHandler
 {

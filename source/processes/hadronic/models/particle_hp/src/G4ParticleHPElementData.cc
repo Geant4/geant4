@@ -60,7 +60,8 @@ void G4ParticleHPElementData::Init(G4Element* theElement,
 {
   auto nIso = (G4int)theElement->GetNumberOfIsotopes();
   auto Z = theElement->GetZasInt();
-  theIsotopeWiseData = new G4ParticleHPIsoData[nIso];
+  const std::size_t dsize = nIso > 0 ? nIso : 1;
+  theIsotopeWiseData = new G4ParticleHPIsoData[dsize];
 
   for (G4int i1 = 0; i1 < nIso; ++i1) {
     G4int A = theElement->GetIsotope(i1)->GetN();

@@ -339,7 +339,7 @@ endif()
 # - HDF5
 set(Geant4_hdf5_FOUND @GEANT4_USE_HDF5@)
 if(Geant4_hdf5_FOUND)
-  find_dependency(HDF5 @HDF5_VERSION@)
+  find_dependency(HDF5) 
   include("${CMAKE_CURRENT_LIST_DIR}/G4HDF5Shim.cmake")
 endif()
 

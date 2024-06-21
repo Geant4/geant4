@@ -6,6 +6,23 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-21 Gabriele Cosmo (hadr-hpp-V11-01-26)
+- Fixed compilation error in G4ParticleHPManager and G4ParticleHPNames on
+  Windows VC++ with C++20 Standard enabled.
+  Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+## 2024-02-26 Vladimir Ivanchenko
+- G4CrossSectionHP - fixed method takeing into account temperatue effect
+  (the difference due to this fix is small), fixed elastic and capture
+  cross-sections in Argon by using only the main isotope Z=18, A=40 (there
+  was up to 50% overestimation of cross sections due to wrong data for
+  rare isotopes of argon); fixed cross sections for rare target atoms
+  Promethium, Astatine, Radon, Francium.
+
+## 2024-02-12 Gabriele Cosmo
+- Fixed remaining compilation warnings on gcc compiler when LTO settings
+  are enabled.
+
 ## 2024-01-30 Vladimir Ivanchenko (hadr-hpp-V11-01-25)
 - G4ParticleHPFSFissionFS, G4ParticleHPFissionBaseFS - substitute
     C-arrays with std::vector in order to reduce compilation warnings on gcc

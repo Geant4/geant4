@@ -28,14 +28,14 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkClipPolyData.h"
-#include "vtkPlane.h"
-#include "vtkPolyDataAlgorithm.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkPolyDataNormals.h"
-#include "vtkProperty.h"
-#include "vtkSmartPointer.h"
+#include <vtkActor.h>
+#include <vtkClipPolyData.h>
+#include <vtkPlane.h>
+#include <vtkPolyDataAlgorithm.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkProperty.h>
+#include <vtkSmartPointer.h>
 #include <vtkClipClosedSurface.h>
 
 G4VtkClipOpenPipeline::G4VtkClipOpenPipeline(G4String nameIn, const G4VtkVisContext& vcIn,

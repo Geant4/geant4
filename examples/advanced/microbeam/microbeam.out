@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -804,7 +804,7 @@ CoulombScat:  for pi- XStype:1 SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180, pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-##### Create analysis manager   0x1a65190
+##### Create analysis manager   0x11b7150
 Using  analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 

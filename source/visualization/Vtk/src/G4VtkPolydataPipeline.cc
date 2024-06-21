@@ -33,15 +33,15 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkCleanPolyData.h"
-#include "vtkLine.h"
-#include "vtkMatrix4x4.h"
-#include "vtkPolyDataAlgorithm.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkPolyDataNormals.h"
-#include "vtkProperty.h"
-#include "vtkTriangleFilter.h"
+#include <vtkActor.h>
+#include <vtkCleanPolyData.h>
+#include <vtkLine.h>
+#include <vtkMatrix4x4.h>
+#include <vtkPolyDataAlgorithm.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkProperty.h>
+#include <vtkTriangleFilter.h>
 
 std::size_t G4VtkPolydataPipeline::MakeHash(const G4Polyhedron& polyhedron,
                                             const G4VtkVisContext& vc)

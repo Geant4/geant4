@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-24 Pere Mato (ptl-V11-01-01)
+- Changed Windows.h to windows.h since for MinGW always seems to be lower case, not relevant for native builds.
+
 ## 2023-10-11 Ben Morgan (ptl-V11-01-00)
 - Disable optimization of ThreadPool::execute_thread on Apple/Intel/AppleClang builds
   - Workaround for Bugzilla 2564

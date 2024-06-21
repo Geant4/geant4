@@ -56,7 +56,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   numEdges = rz->NumVertices();
-  
+
   rMin = rz->Amin();
   rMax = rz->Amax();
   zMin = rz->Bmin();
@@ -92,7 +92,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
   //
   // Allocate corners
   //
-  corners = new G4PolyPhiFaceVertex[numEdges];
+  const std::size_t maxEdges = numEdges>0 ? numEdges : 1;
+  corners = new G4PolyPhiFaceVertex[maxEdges];
   //
   // Fill them
   //
@@ -112,13 +113,13 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
     // Add pointer on prev corner
     //
     if( corn == corners )
-      { corn->prev = corners+numEdges-1;}
+      { corn->prev = corners+maxEdges-1;}
     else
       { corn->prev = helper; }
 
     // Add pointer on next corner
     //
-    if( corn < corners+numEdges-1 )
+    if( corn < corners+maxEdges-1 )
       { corn->next = corn+1;}
     else
       { corn->next = corners; }
@@ -129,7 +130,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
   //
   // Allocate edges
   //
-  edges = new G4PolyPhiFaceEdge[numEdges];
+  edges = new G4PolyPhiFaceEdge[maxEdges];
 
   //
   // Fill them
@@ -137,7 +138,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
   G4double rFact = std::cos(0.5*deltaPhi);
   G4double rFactNormalize = 1.0/std::sqrt(1.0+rFact*rFact);
 
-  G4PolyPhiFaceVertex* prev = corners+numEdges-1,
+  G4PolyPhiFaceVertex* prev = corners+maxEdges-1,
                      * here = corners;
   G4PolyPhiFaceEdge*   edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
@@ -176,12 +177,12 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
     sideNorm += normal;
     
     edge->norm3D = sideNorm.unit();
-  } while( edge++, prev=here, ++here < corners+numEdges );
+  } while( edge++, prev=here, ++here < corners+maxEdges );
 
   //
   // Go back and fill in corner "normals"
   //
-  G4PolyPhiFaceEdge* prevEdge = edges+numEdges-1;
+  G4PolyPhiFaceEdge* prevEdge = edges+maxEdges-1;
   edge = edges;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
@@ -238,7 +239,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon* rz,
     // Combine it with the r/z direction from the face
     //
     edge->v0->norm3D = rNorm*xyVector.unit() + G4ThreeVector( 0, 0, zNorm );
-  } while(  prevEdge=edge, ++edge < edges+numEdges );
+  } while(  prevEdge=edge, ++edge < edges+maxEdges );
   
   //
   // Build point on surface
@@ -335,23 +336,25 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace& source )
   kCarTolerance = source.kCarTolerance;
   fSurfaceArea = source.fSurfaceArea;
 
+  const std::size_t maxEdges = (numEdges > 0) ? numEdges : 1;
+
   //
   // Corner dynamic array
   //
-  corners = new G4PolyPhiFaceVertex[numEdges];
+  corners = new G4PolyPhiFaceVertex[maxEdges];
   G4PolyPhiFaceVertex *corn = corners,
                       *sourceCorn = source.corners;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
-  } while( ++sourceCorn, ++corn < corners+numEdges );
+  } while( ++sourceCorn, ++corn < corners+maxEdges );
   
   //
   // Edge dynamic array
   //
-  edges = new G4PolyPhiFaceEdge[numEdges];
+  edges = new G4PolyPhiFaceEdge[maxEdges];
 
-  G4PolyPhiFaceVertex* prev = corners+numEdges-1,
+  G4PolyPhiFaceVertex* prev = corners+maxEdges-1,
                      * here = corners;
   G4PolyPhiFaceEdge*   edge = edges,
                    *   sourceEdge = source.edges;
@@ -360,7 +363,7 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace& source )
     *edge = *sourceEdge;
     edge->v0 = prev;
     edge->v1 = here;
-  } while( ++sourceEdge, ++edge, prev=here, ++here < corners+numEdges );
+  } while( ++sourceEdge, ++edge, prev=here, ++here < corners+maxEdges );
 }
 
 // Intersect
@@ -1095,7 +1098,8 @@ void G4PolyPhiFace::Triangulate()
   // The copy of Polycone is made and this copy is reordered in order to 
   // have a list of triangles. This list is used for GetPointOnFace().
 
-  auto tri_help = new G4PolyPhiFaceVertex[numEdges];
+  const std::size_t maxEdges = (numEdges > 0) ? numEdges : 1;
+  auto tri_help = new G4PolyPhiFaceVertex[maxEdges];
   triangles = tri_help;
   G4PolyPhiFaceVertex* triang = triangles;
 
@@ -1114,18 +1118,18 @@ void G4PolyPhiFace::Triangulate()
     triang->r = helper->r;
     triang->z = helper->z;
     triang->x = helper->x;
-    triang->y= helper->y;
+    triang->y = helper->y;
 
     // add pointer on prev corner
     //
     if( helper==corners )
-      { triang->prev=triangles+numEdges-1; }
+      { triang->prev=triangles+maxEdges-1; }
     else
       { triang->prev=helper2; }
 
     // add pointer on next corner
     //
-    if( helper<corners+numEdges-1 )
+    if( helper<corners+maxEdges-1 )
       { triang->next=triang+1; }
     else
       { triang->next=triangles; }
@@ -1229,11 +1233,11 @@ void G4PolyPhiFace::Triangulate()
     if(chose>=Achose1 && chose<Achose2)
     {
       G4ThreeVector point;
-       point=points[i] ;
-       surface_point=point;
-       break;     
+      point=points[i];
+      surface_point=point;
+      break;     
     }
-    i++; Achose1=Achose2;
+    ++i; Achose1=Achose2;
   } while( i<numEdges-2 );
  
   delete [] tri_help;

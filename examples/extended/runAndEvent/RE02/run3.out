@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1034,7 +1034,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=10.160000s Real=10.319129s Sys=0.040000s
+  User=10.780000s Real=12.159889s Sys=0.050000s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 52027
  PrimitiveScorer RUN PhantomSD,protonEDep

@@ -377,7 +377,7 @@ void G4PhysicsModelCatalog::Initialize() {
     // --- Low-energy data-driven : 25'000 - 25'999 ---
     // ------------------------------------------------
     //    -  25'000 - 25'199 : ParticleHP
-    //    -  25'200 - 25'200 : LEND
+    //    -  25'200 - 25'299 : LEND
     //       ...
     //    -  25'500 - 25'999 : RadioactiveDecay
 
@@ -585,7 +585,7 @@ void G4PhysicsModelCatalog::Initialize() {
     // --- Others ... ---
 
     // ======================================================================
-    // ================== 4th MODELS ADDED AFTER Geant4 11 ==================   
+    // ================== 4th MODELS ADDED AFTER Geant4 11.0 ================   
     // ======================================================================
     // PLEASE ADD MODELS ONLY BELOW HERE, WITH PROPER  modelID .
     // IF YOU ARE NOT SURE, PLEASE CONTACT ONE OF THE COORDINATORS OF THE
@@ -684,12 +684,14 @@ const G4String G4PhysicsModelCatalog::GetModelNameFromID( const G4int modelID ) 
 
 // --------------------------------------------------------------------------
 const G4String G4PhysicsModelCatalog::GetModelNameFromIndex( const G4int modelIndex ) {
-  return ( modelIndex >= 0  &&  modelIndex < Entries() ) ? (*theVectorOfModelNames)[ modelIndex ] : "Undefined";
+  return ( modelIndex >= 0  &&  modelIndex < Entries() )
+       ? (*theVectorOfModelNames)[ modelIndex ] : G4String("Undefined");
 }
 
 // --------------------------------------------------------------------------
 G4int G4PhysicsModelCatalog::GetModelID( const G4int modelIndex ) {
-  return ( modelIndex >= 0  &&  modelIndex < Entries() ) ? (*theVectorOfModelIDs)[ modelIndex ] : -1;
+  return ( modelIndex >= 0  &&  modelIndex < Entries() )
+       ? (*theVectorOfModelIDs)[ modelIndex ] : -1;
 }
 
 // --------------------------------------------------------------------------

@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-03-18 Gabriele Cosmo (visman-V11-01-33)
+- G4VisExecutive.icc: fixed use of static symbol 'fVerbosity' and replaced
+  with call to dedicated static method, to avoid linkage problems on Windows.
+
 ## 2023-11-12 John Allison (visman-V11-01-32)
 - G4VisExecutive.icc:
   - Add single line message "VTK: OpenGL-based drivers suppressed".

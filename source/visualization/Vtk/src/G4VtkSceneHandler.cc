@@ -51,10 +51,10 @@
 #include "G4VtkStore.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkColorTransferFunction.h"
-#include "vtkContourValues.h"
-#include "vtkPiecewiseFunction.h"
-#include "vtkVolumeProperty.h"
+#include <vtkColorTransferFunction.h>
+#include <vtkContourValues.h>
+#include <vtkPiecewiseFunction.h>
+#include <vtkVolumeProperty.h>
 
 #include <cstdlib>
 

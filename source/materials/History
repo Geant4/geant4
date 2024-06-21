@@ -6,6 +6,13 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-04 Vladimir Ivanchenko (materials-V11-01-15)
+- G4NistMaterialBuilder in the method HepAndNuclearMaterials()
+    G4_BRASS, G4_BRONZE, and G4_STAILESS_STEEL are defined using
+    mass fractions of components instead of number of atoms
+    in order to have more natural description (problem #2601).
+    Results may be changed on level 10^-5 due to numerical differences.
+
 ## 2023-11-13 Ben Morgan (materials-V11-01-14)
 - Use G4FindDataDir to access data libraries in place of raw `getenv`.
 

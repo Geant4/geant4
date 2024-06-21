@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-24 Daren Sawkey (op-V11-01-01)
+- G4OpBoundaryProcess: Calculate Fresnel reflection/refraction correctly when
+  material property TRANSMITTANCE is specified. The ratio of Fresnel
+  reflection/refraction now does not change when a non-zero transmission is
+  specified. Previously, if transmission of X% was specified, there would be
+  transmission of X% as expected, but the ratio of Fresnel refraction to
+  Fresnel reflection would be set to X%. Addressing bug 2578.
+
 ## 2023-10-27 Daren Sawkey (op-V11-01-00)
 - G4OpBoundaryProcess: verbosity of 0 silences run-time warnings
 

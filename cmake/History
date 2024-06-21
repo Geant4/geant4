@@ -6,6 +6,35 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-07 Ben Morgan (cmake-V11-01-33)
+- Do not export HDF5 version to Geant4Config
+  - Fixes Issue #214
+
+## 2024-05-17 Gunter Folger
+- Use patched G4NDL 4.7.1 dataset.
+
+## 2024-03-26  Ben Morgan
+- Disable use of FindPythia6 outside of internal Geant4 examples.
+
+## 2024-04-17 Stephan Hageboeck
+- Mention the possibility of using cvmfs datasets in the cmake configure warning
+
+## 2024-04-08 Guilherme Amadio
+- Fix also find_package(SoXt) and find_package(SoWin)
+
+## 2024-04-20 Ben Morgan
+- Update FindPythia8 module to:
+  - Apply [GitHub PR 68](https://github.com/Geant4/geant4/pull/68)
+  - Reduce capability to only that required by py8decayer example
+  - Emit error if used in project outside Geant4 or py8decayer
+
+## 2024-03-12 Ben Morgan
+- Update FindPythia6 module to account for lib64
+  - Applies [GitHub PR 63](https://github.com/Geant4/geant4/pull/63)
+
+## 2024-03-11 Ben Morgan
+- Fix escaping of regex in geant4_module_check to satisfy latest Python3. 
+
 ## 2024-01-29 Ben Morgan (cmake-V11-01-32)
 - Manually check versions of found SoXX packages to workaround their use of
   the `ExactVersionOnly` version checking strategy in find_package. Geant4

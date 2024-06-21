@@ -6,6 +6,15 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-11 Gabriele Cosmo (emdna-V11-01-26)
+- Fixed compilation error on macOS/clang with C++23 enabled, for the use
+  of std::function in G4OctreeFinder.
+
+## 2024-04-19 Gabriele Cosmo
+- Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+  Added missing declarations for TG4MoleculeShoot specialisations on G4Track.
+  Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
 ## 2023-11-14 Ben Morgan (emdna-V11-01-25)
 - Use G4FindDataDir to access data libraries in place of raw `getenv`.
 

@@ -30,12 +30,12 @@
 #define G4VTKINTERACTORSTYLE_HH
 
 #include "G4ios.hh"
-#include "vtkInteractionStyleModule.h"  // For export macro
-#include "vtkInteractorStyleMultiTouchCamera.h"
+#include <vtkInteractionStyleModule.h>  // For export macro
+#include <vtkInteractorStyleMultiTouchCamera.h>
 #include <vtkObjectFactory.h>
 
 // Define interaction style
-class VTKINTERACTIONSTYLE_EXPORT G4VtkInteractorStyle : public vtkInteractorStyleMultiTouchCamera
+class G4VtkInteractorStyle : public vtkInteractorStyleMultiTouchCamera
 {
   public:
     static G4VtkInteractorStyle* New();

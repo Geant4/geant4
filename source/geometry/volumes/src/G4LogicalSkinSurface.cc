@@ -51,7 +51,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&  name,
   }
   // Store in the table of Surfaces
   //
-  theSkinSurfaceTable->push_back(this);
+  theSkinSurfaceTable->insert(std::make_pair(logicalVolume, this));
 }
 
 // --------------------------------------------------------------------
@@ -99,10 +99,8 @@ G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
   if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos : *theSkinSurfaceTable)
-    {
-      if (pos->GetLogicalVolume() == vol)  { return pos; }
-    }
+    auto pos = theSkinSurfaceTable->find(vol);
+    if(pos != theSkinSurfaceTable->cend()) return pos->second;
   }
   return nullptr;
 }
@@ -117,11 +115,12 @@ void G4LogicalSkinSurface::DumpInfo()
 
   if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos : *theSkinSurfaceTable)
+    for(const auto & pos : *theSkinSurfaceTable)
     {
-      G4cout << pos->GetName() << " : " << G4endl
+      G4LogicalSkinSurface* pSurf = pos.second;
+      G4cout << pSurf->GetName() << " : " << G4endl
              << " Skin of logical volume "
-             << pos->GetLogicalVolume()->GetName()
+             << pSurf->GetLogicalVolume()->GetName()
              << G4endl;
     }
   }
@@ -133,9 +132,9 @@ void G4LogicalSkinSurface::CleanSurfaceTable()
 {
   if (theSkinSurfaceTable != nullptr)
   {
-    for(auto pos : *theSkinSurfaceTable)
+    for(const auto & pos : *theSkinSurfaceTable)
     {
-      if (pos != nullptr) { delete pos; }
+      delete pos.second;
     }
     theSkinSurfaceTable->clear();
   }

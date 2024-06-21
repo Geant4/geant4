@@ -58,9 +58,9 @@
      ./configure --prefix=$PWD --cxx=$CXX \
 	--cxx-common='-O2 -std=c++17 -pedantic -W -Wall -Wshadow -fPIC -pthread'
 
-   4. Setup PYTHIA8 environment variable to point to the area where Pythia8
+   4. Setup Pythia8_ROOT environment variable to point to the area where Pythia8
       is built/installed:
-      export PYTHIA8=$PWD
+      export Pythia8_ROOT=$PWD
 
 
   Building example:

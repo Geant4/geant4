@@ -32,8 +32,8 @@
 #include "G4VisAttributes.hh"
 #include "G4VtkViewer.hh"
 
-#include "vtkTextActor.h"
-#include "vtkTextProperty.h"
+#include <vtkTextActor.h>
+#include <vtkTextProperty.h>
 
 std::size_t G4VtkText2DPipeline::MakeHash(const G4Text& text, const G4VtkVisContext& /*vc*/,
                                           const G4VisAttributes* pVA)

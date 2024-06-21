@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -67,7 +67,7 @@ DicomRegularDetectorConstruction::ConstructPhantom
  for proton :  3 to 6 GeV
  for neutron : 3 to 6 GeV
 
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -559,7 +559,7 @@ CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
  Enable DEBUG                    0
 =======================================================
 
-@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
+@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1094,7 +1094,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.020000s Real=0.033770s Sys=0.010000s
+  User=0.020000s Real=0.041872s Sys=0.010000s
 
 [=========================================================== DICOM ===========================================================]
 
@@ -1136,5 +1136,5 @@ Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.04 MB
 ============================================================
 
-[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=8.390000s Real=11.337020s Sys=0.490000s
+[/build/jenkins/workspace/examples/extended/medical/DICOM2/dicom2] Primary execution time: User=9.080000s Real=13.646082s Sys=0.670000s
 

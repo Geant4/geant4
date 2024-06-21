@@ -4,6 +4,10 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-03-20 L.G. Sarmiento (exbiasing-V11-01-01)
+- Fixed broken link from "Further information:"
+  - updated from old `http://cern.ch/geant4/working_groups` site.
+    Triggerred by [user forum](https://geant4-forum.web.cern.ch/t/help-me-find-information-on-biasing/11922/5)
 
 ## 2023-11-15 I. Hrivnacova (exbiasing-V11-01-00)
 - Updated vis.mac macros:

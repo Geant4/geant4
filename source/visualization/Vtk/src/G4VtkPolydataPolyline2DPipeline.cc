@@ -30,15 +30,15 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkActor2D.h"
-#include "vtkCoordinate.h"
-#include "vtkLine.h"
-#include "vtkPolyDataAlgorithm.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkPolyDataMapper2D.h"
-#include "vtkProperty.h"
-#include "vtkProperty2D.h"
+#include <vtkActor.h>
+#include <vtkActor2D.h>
+#include <vtkCoordinate.h>
+#include <vtkLine.h>
+#include <vtkPolyDataAlgorithm.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkPolyDataMapper2D.h>
+#include <vtkProperty.h>
+#include <vtkProperty2D.h>
 
 std::size_t G4VtkPolydataPolyline2DPipeline::MakeHash(const G4VisAttributes* pVA)
 {

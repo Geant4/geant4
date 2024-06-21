@@ -35,7 +35,7 @@
 #include "G4VtkSceneHandler.hh"
 #include "G4VtkViewer.hh"
 
-#include "vtkObject.h"
+#include <vtkObject.h>
 
 G4VtkMessenger* G4VtkMessenger::fpInstance = nullptr;
 

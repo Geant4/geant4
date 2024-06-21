@@ -6,6 +6,19 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-25 Pere Mato (global-V11-01-28)
+- Changed Windows.h to windows.h since for MinGW always seems to be lower case, not relevant for native builds.
+  _MSC_VER is only available for VC compiler, the os one is _WIN32.
+
+## 2024-04-20 Gabriele Cosmo
+- Fixed compilation error in G4PhysicsModelCatalog on Windows VC++ with
+  C++20 Standard enabled.
+  Based on [GitHub PR#69](https://github.com/Geant4/geant4/pull/69).
+
+## 2024-04-04 Stephan Hageboeck
+- Provide a helpful error message when GEANT4_DATA_DIR is set to an invalid
+  location.
+
 ## 2023-12-21 Yoshihide Sato (global-V11-01-27)
 - G4PhysicsModelCatalog.cc: added the ID for the Light-Ion QMD model.
 

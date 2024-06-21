@@ -29,7 +29,7 @@
 #include "G4Point3D.hh"
 #include "G4VVtkPipeline.hh"
 
-#include "vtkSmartPointer.h"
+#include <vtkSmartPointer.h>
 
 #include <vector>
 

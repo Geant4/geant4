@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -87,7 +87,7 @@ HADRONTHERAPY_1 PHYSICS LIST has been activated
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
 --- G4CoupledTransportation is used 
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1
 *******************************************
 ****** Parameters of the class Dose *******
 *******************************************
@@ -573,7 +573,7 @@ CoulombScat:  for mu- XStype:1 SubType=1 BuildTable=1
  Enable DEBUG                    0
 =======================================================
 
-@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7/Inelastic
+@@@ G4ParticleHPInelastic instantiated for particle neutron/n    data directory is /cvmfs/geant4.cern.ch/share/data/G4NDL4.7.1/Inelastic
 
 msc:  for pi+  SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -953,4 +953,4 @@ RBE: Computing alpha and beta...
 RBE: Computing survival and RBE...
 RBE: Alpha and beta written to RadioBio_AlphaAndBeta.out
 RBE: RBE written to RadioBio_RBE.out
-The simulation took: 61.2878 s to run (real time)
+The simulation took: 67.6671 s to run (real time)

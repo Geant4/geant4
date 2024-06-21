@@ -42,11 +42,10 @@ class G4Accumulable : public G4VAccumulable
   public:
     G4Accumulable(const G4String& name, T initValue,
                 G4MergeMode mergeMode = G4MergeMode::kAddition);
-    G4Accumulable(T initValue,
+    G4Accumulable(T initValue = 0,
                 G4MergeMode mergeMode = G4MergeMode::kAddition);
     G4Accumulable(const G4Accumulable& rhs);
     G4Accumulable(G4Accumulable&& rhs) noexcept;
-    G4Accumulable() = delete;
     ~G4Accumulable() override = default;
 
     // Operators

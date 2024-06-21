@@ -40,7 +40,7 @@ importance of the current volumes.
 Further information:
 --------------------
 Short description of importance sampling and scoring:
-http://cern.ch/geant4/working_groups/geometry/biasing/Sampling.html
+https://geant4.web.cern.ch/collaboration/working_groups/geometryTransport/#development-documents (Under the Event Biasing & Tallies Section)
 
 Example B01
 ===========
