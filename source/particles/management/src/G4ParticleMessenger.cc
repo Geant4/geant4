@@ -201,6 +201,7 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand* command)
     }
     selectCmd->SetCandidates((const char*)(candidates));
 
+    const G4ParticleDefinition* currentParticle = theParticleTable->GetSelectedParticle();
     static const G4String noName("none");
     // current value
     if (currentParticle == nullptr) {
