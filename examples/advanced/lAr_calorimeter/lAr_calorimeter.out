@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -923,13 +923,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.23 seconds
+    Total CPU time elapsed for geometry optimisation: 0.24 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      52.17         0.12         0.00          152k EmModuleLogical
-      47.83         0.11         0.00          238k HadModuleLogical
+      54.17         0.13         0.00          152k EmModuleLogical
+      45.83         0.11         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -941,7 +941,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       60.17        238k      1385     2370       3792         0.11    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.12    EmModuleLogical
+      38.50        152k      1129     1152       2426         0.13    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
@@ -1304,7 +1304,7 @@ Edep in FCAL1 FCAl2 : 19838.2 3.89468
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=6.680000s Real=6.734801s Sys=0.000000s
+  User=7.660000s Real=8.185956s Sys=0.000000s
 There are histograms that can be viewed with visualization:
   4 h1 histograms(s)
   List them with "/analysis/list".

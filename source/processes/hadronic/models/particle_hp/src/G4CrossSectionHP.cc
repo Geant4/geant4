@@ -64,6 +64,7 @@ G4CrossSectionHP::G4CrossSectionHP(const G4ParticleDefinition* p,
                                    G4int zmin, G4int zmax)
   : G4VCrossSectionDataSet(nameData),
     fParticle(p),
+    fNeutron(G4Neutron::Neutron()),
     fManagerHP(G4ParticleHPManager::GetInstance()),
     emax(emaxHP),
     emaxT(fManagerHP->GetMaxEnergyDoppler()),
@@ -161,30 +162,35 @@ G4double G4CrossSectionHP::IsoCrossSection(const G4double ekin,
   } else {
 
     // Doppler broading
-    G4double lambda = 1.0/(CLHEP::k_Boltzmann*T);
+    G4double e0 = CLHEP::k_Boltzmann*T;
     G4double mass = fParticle->GetPDGMass();
     G4double massTarget = G4NucleiProperties::GetNuclearMass(A, Z);
-    G4LorentzVector lv(0., 0., 0., mass + ekin);
+
+    // projectile
+    G4LorentzVector lv(0., 0., std::sqrt(ekin*(ekin + 2*mass)), mass + ekin);
 
     // limits of integration
     const G4double lim = 1.01;
     const G4int nmin = 3;
-    G4int i;
+    G4int ii = 0;
     const G4int nn = 20;
     G4double xs2 = 0.0;
 
-    for (i=1; i<nn; ++i) {
-      G4double erand = G4RandGamma::shoot(2.0, lambda);
+    for (G4int i=0; i<nn; ++i) {
+      G4double erand = G4RandGamma::shoot(2.0, e0);
       auto mom = G4RandomDirection()*std::sqrt(2*massTarget*erand);
-      fLV.set(mom.x(), mom.y(), mom.z(), mass + erand);
+      fLV.set(mom.x(), mom.y(), mom.z(), massTarget + erand);
       fBoost = fLV.boostVector();
-      G4double e = lv.boost(fBoost).e() - mass;
+      fLV = lv.boost(fBoost);
+      if (fLV.pz() <= 0.0) { continue; }
+      ++ii;
+      G4double e = fLV.e() - mass;
       G4double y = pv->Value(e, index);
       xs += y;
       xs2 += y*y;
-      if (i >= nmin && i*xs2 <= lim*xs*xs) { break; } 
+      if (ii >= nmin && ii*xs2 <= lim*xs*xs) { break; } 
     }
-    xs /= (G4double)std::min(i, nn-1);
+    if (ii > 0) { xs /= (G4double)(ii); }
   }
 #ifdef G4VERBOSE
   if (verboseLevel > 1) {
@@ -317,8 +323,7 @@ void G4CrossSectionHP::DumpPhysicsTable(const G4ParticleDefinition&)
   const G4ElementTable* table = G4Element::GetElementTable();
   for ( auto const & elm : *table ) {
     G4int Z = elm->GetZasInt();
-    if (Z >= minZ && Z <= maxZ &&
-        nullptr != fData->GetElementData(Z - minZ)) {
+    if (Z >= minZ && Z <= maxZ && nullptr != fData->GetElementData(Z - minZ)) {
       G4cout << "---------------------------------------------------" << G4endl;
       G4cout << elm->GetName() << G4endl;
       std::size_t n = fData->GetNumberOfComponents(Z);
@@ -369,31 +374,36 @@ void G4CrossSectionHP::Initialise(const G4int Z)
   G4bool noComp = true;
   for (G4int A=amin[Z]; A<=amax[Z]; ++A) {
     std::ostringstream ost;
-    ost << fDataDirectory << Z << "_";
-    if (6 == Z && 12 == A) {
-      ost << "nat_";
+    ost << fDataDirectory;
+    // first check special cases
+    if (6 == Z && 12 == A && fParticle == fNeutron) {
+      ost << Z << "_nat_" << elementName[Z];
+    } else if (18 == Z && 40 != A) {
+      continue;
     } else if (27 == Z && 62 == A) {
-      ost << "62m1_";
+      ost << Z << "_62m1_" << elementName[Z];
     } else if (47 == Z && 106 == A) {
-      ost << "106m1_";
+      ost << Z << "_106m1_" << elementName[Z];
     } else if (48 == Z && 115 == A) {
-      ost << "115m1_";
+      ost << Z << "_115m1_" << elementName[Z];
     } else if (52 == Z && 127 == A) {
-      ost << "127m1_";
+      ost << Z << "_127m1_" << elementName[Z];
     } else if (52 == Z && 129 == A) {
-      ost << "129m1_";
+      ost << Z << "_129m1_" << elementName[Z];
     } else if (52 == Z && 131 == A) {
-      ost << "131m1_";
+      ost << Z << "_131m1_" << elementName[Z];
+    } else if (61 == Z && 145 == A) {
+      ost << Z << "_147_" << elementName[Z];
     } else if (67 == Z && 166 == A) {
-      ost << "166m1_";
+      ost << Z << "_166m1_" << elementName[Z];
     } else if (73 == Z && 180 == A) {
-      ost << "180m1_";
+      ost << Z << "_180m1_" << elementName[Z];
+    } else if ((Z == 85 && A == 210) || (Z == 86 && A == 222) || (Z == 87 && A == 223)) {
+      ost << "84_209_" << elementName[84];
     } else {
-      ost << A << "_";
+      // the main file name
+      ost << Z << "_" << A << "_" << elementName[Z];
     }
-    ost << elementName[Z];
-    std::ifstream filein(ost.str().c_str());
-    //G4cout << "File: " << ost.str() << "  " << G4endl;
     std::istringstream theXSData(tnam, std::ios::in);
     fManagerHP->GetDataStream(ost.str().c_str(), theXSData);
     if (theXSData) {
@@ -408,11 +418,11 @@ void G4CrossSectionHP::Initialise(const G4int Z)
       for (G4int i=0; i<n; ++i) {
 	theXSData >> x >> y;
 	x *= CLHEP::eV;
-	y *= CLHEP::barn;         
+	y *= CLHEP::barn;
 	//G4cout << "  e=" << x << "  xs=" << y << G4endl;
 	v->PutValues((std::size_t)i, x, y);
       }
-      v->EnableLogBinSearch(2);
+      v->EnableLogBinSearch(binSearch);
       if (noComp) {
 	G4int nmax = amax[Z] - A + 1;
 	fData->InitialiseForComponent(Z - minZ, nmax);

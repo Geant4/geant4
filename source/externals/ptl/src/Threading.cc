@@ -27,7 +27,7 @@
 #include "PTL/Utility.hh"
 
 #if defined(PTL_WINDOWS)
-#    include <Windows.h>
+#    include <windows.h>
 #endif
 
 #if defined(PTL_MACOS)

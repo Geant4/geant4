@@ -42,8 +42,6 @@ b) use of Pythia8 as an external decayer to replace native Geant4 decay
 tables for such resonances as tau+/- and B+/-, and to supplement Pythia8-based
 decay tables to those resonances where Geant4 native decay features are not
 implemented. 
-The feature is activated by setting environment variable PYTHIA8 to point
-to the Pythia8 installation area.
 For details, please see \link Examplepy8decayer Example py8decayer \endlink.
 
 */

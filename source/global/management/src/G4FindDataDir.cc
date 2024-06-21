@@ -29,12 +29,13 @@
 #ifndef G4GMAKE
 #include "G4FindDataDir.hh"
 #include "G4Filesystem.hh"
+#include "G4Exception.hh"
 
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 #define setenv(name, value, overwrite) _putenv_s(name, value)
 #endif
 
@@ -91,7 +92,7 @@ static const char* G4FindDataDir(const char* name, const path& prefix, const pat
 }
 
 const char* G4FindDataDir(const char* name)
-{ 
+{
 #if defined(G4MULTITHREADED)
   static std::mutex mutex;
   std::lock_guard<std::mutex> lock(mutex);
@@ -104,8 +105,12 @@ const char* G4FindDataDir(const char* name)
   /* If we know which directory/version to search for, try to find it */
   if (const char *dataset = G4GetDataDir(name)) {
     /* If GEANT4_DATA_DIR environment variable is set, use it and don't search further */
-    if (const char *basedir = std::getenv("GEANT4_DATA_DIR"))
-      return G4FindDataDir(name, basedir, dataset);
+    if (const char *basedir = std::getenv("GEANT4_DATA_DIR")) {
+      if (is_directory(basedir)) return G4FindDataDir(name, basedir, dataset);
+
+      G4Exception("G4FindDataDir", "Invalid GEANT4_DATA_DIR", JustWarning, "The GEANT4_DATA_DIR environment variable points to an invalid directory.\n"
+                  "Will try fallback locations now. Correct the variable to disable this behaviour.");
+    }
 
     /* If GEANT4_DATA_DIR environment variable is not set, search in default system paths */
     for (const auto prefix : system_paths)

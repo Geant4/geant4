@@ -85,6 +85,8 @@ class G4CrossSectionHP : public G4VCrossSectionDataSet
 
     inline G4double GetMaxHPEnergy() const;
 
+    inline void SetBinSearch(G4int n);
+
   private:
 
     void Initialise(const G4int Z);
@@ -102,6 +104,7 @@ class G4CrossSectionHP : public G4VCrossSectionDataSet
     inline G4bool CheckCache(const G4int Z);
 
     const G4ParticleDefinition* fParticle;
+    const G4ParticleDefinition* fNeutron;
     G4ParticleHPManager* fManagerHP;
 
     const G4double emax;
@@ -113,6 +116,8 @@ class G4CrossSectionHP : public G4VCrossSectionDataSet
 
     const G4int minZ;
     const G4int maxZ;
+
+    G4int binSearch{2};
     std::size_t index{0};
     G4bool fPrinted{false};
 
@@ -155,6 +160,11 @@ inline G4bool G4CrossSectionHP::CheckCache(const G4int Z)
 inline G4double G4CrossSectionHP::GetMaxHPEnergy() const
 { 
   return emax;
+}
+
+inline void G4CrossSectionHP::SetBinSearch(G4int n)
+{
+  if (n > 0) { binSearch = n; }
 }
 
 #endif

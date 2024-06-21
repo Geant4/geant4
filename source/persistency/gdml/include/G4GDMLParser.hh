@@ -44,9 +44,15 @@
 #include "G4Navigator.hh"
 #include "G4Threading.hh"
 
+#ifndef G4GDML_DEFAULT_SCHEMALOCATION
 #define G4GDML_DEFAULT_SCHEMALOCATION                                          \
-  G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/"     \
-           "schema/gdml.xsd")
+  G4String("http://cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
+#endif
+
+#ifndef G4GDML_DEFAULT_WRITE_SCHEMALOCATION
+#define G4GDML_DEFAULT_WRITE_SCHEMALOCATION                                    \
+  G4String("http://cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
+#endif
 
 class G4GDMLParser
 {
@@ -59,20 +65,22 @@ class G4GDMLParser
     //
     // Parser constructors & destructor
 
-    inline void Read(const G4String& filename, G4bool Validate = true);
+    inline void Read(const G4String& filename, G4bool Validate = false);
     //
     // Imports geometry with world-volume, specified by the GDML filename
     // in input. Validation against schema is activated by default.
+    // Schema validation is disabled, as XercesC currently does not support https.
 
-    inline void ReadModule(const G4String& filename, G4bool Validate = true);
+    inline void ReadModule(const G4String& filename, G4bool Validate = false);
     //
     // Imports a single GDML module, specified by the GDML filename
     // in input. Validation against schema is activated by default.
+    // Schema validation is disabled, as XercesC currently does not support https.
 
     inline void Write( const G4String& filename,
                        const G4VPhysicalVolume* pvol = 0,
                        G4bool storeReferences = true,
-               const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
+               const G4String& SchemaLocation = G4GDML_DEFAULT_WRITE_SCHEMALOCATION);
     //
     // Exports on a GDML file, specified by 'filename' a geometry tree
     // starting from 'pvol' as top volume. Uniqueness of stored entities
@@ -82,7 +90,7 @@ class G4GDMLParser
 
     inline void Write( const G4String& filename, const G4LogicalVolume* lvol,
                        G4bool storeReferences = true,
-               const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
+               const G4String& SchemaLocation = G4GDML_DEFAULT_WRITE_SCHEMALOCATION);
     //
     // Exports on a GDML file, specified by 'filename' a geometry tree
     // starting from 'pvol' as top volume. Uniqueness of stored entities

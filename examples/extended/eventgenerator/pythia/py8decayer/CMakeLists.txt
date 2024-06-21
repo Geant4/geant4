@@ -25,16 +25,12 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find Pythia8 (required package)
 #
-# Ideally, should be done via find_package, e.g.
 find_package(Pythia8 REQUIRED)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-		    ${PYTHIA8_INCLUDES})
-
+include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/*.c)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -42,7 +38,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(pythia8_decayer pythia8_decayer.cc ${sources} ${headers})
-target_link_libraries(pythia8_decayer  ${Geant4_LIBRARIES} ${PYTHIA8_LIBRARIES} )
+target_link_libraries(pythia8_decayer  ${Geant4_LIBRARIES} Pythia8::Pythia8 )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

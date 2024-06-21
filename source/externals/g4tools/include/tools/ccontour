@@ -168,8 +168,8 @@ protected:
 	double m_pLimits[4];						// left, right, bottom, top
 	int m_iColFir;								// primary	grid, number of columns
 	int m_iRowFir;								// primary	grid, number of rows
-	int m_iColSec;								// secondary grid, number of columns
-	int m_iRowSec;								// secondary grid, number of rows
+	unsigned int m_iColSec;								// secondary grid, number of columns
+	unsigned int m_iRowSec;								// secondary grid, number of rows
         void* m_pFieldFcnData; // G.Barrand : handle a user data pointer.
         double (*m_pFieldFcn)(double x, double y,void*); // pointer to F(x,y) function
 
@@ -252,7 +252,7 @@ inline void ccontour::InitMemory()
 	if (!m_ppFnData)
 	{
 		m_ppFnData=new CFnStr*[m_iColSec+1];
-		for (int i=0;i<m_iColSec+1;i++)
+		for (unsigned int i=0;i<m_iColSec+1;i++)
 		{
 			m_ppFnData[i]=NULL;
 		}
@@ -263,8 +263,7 @@ inline void ccontour::CleanMemory()
 {
 	if (m_ppFnData)
 	{
-		int i;
-		for (i=0;i<m_iColSec+1;i++)
+		for (unsigned int i=0;i<m_iColSec+1;i++)
 		{
 			if (m_ppFnData[i])
 				delete[] (m_ppFnData[i]);
@@ -279,8 +278,8 @@ inline void ccontour::generate()
 
 	int i, j;
 	int x3, x4, y3, y4, x, y, oldx3, xlow;
-	const int cols=m_iColSec+1;
-	const int rows=m_iRowSec+1;
+	const unsigned int cols=m_iColSec+1;
+	const unsigned int rows=m_iRowSec+1;
 	//double xoff,yoff;
 
 	// Initialize memroy if needed
@@ -298,12 +297,12 @@ inline void ccontour::generate()
 	for (x = oldx3; x <= x4; x++)
 	{	  /* allocate new columns needed
 		*/
-		if (x >= cols)
+		if (x >= (int)cols)
 			break;
 		if (m_ppFnData[x]==NULL)
 			m_ppFnData[x] = new CFnStr[rows];
 
-		for (y = 0; y < rows; y++)
+		for (y = 0; y < (int)rows; y++)
 			FnctData(x,y)->m_sTopLen = -1;
 	}
 
@@ -351,7 +350,7 @@ inline void ccontour::generate()
 					if (m_ppFnData[x]==NULL)
 						m_ppFnData[x] = new CFnStr[rows];
 
-				for (y = 0; y < rows; y++)
+				for (y = 0; y < (int)rows; y++)
 					FnctData(x,y)->m_sTopLen = -1;
 			}
 		}

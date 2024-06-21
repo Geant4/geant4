@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -52,11 +52,6 @@ Creating FTFP_BERT physics list ################ 1
 Adding G4GenericBiasingPhysics for GeomBias ################ 
 Using 
 G4GDML: Reading 'simpleCone.gdml'...
-G4GDML: VALIDATION ERROR! ID attribute 'G4_Ni' is referenced but was never declared at line: 48
-G4GDML: VALIDATION ERROR! ID attribute 'G4_Fe' is referenced but was never declared at line: 48
-G4GDML: VALIDATION ERROR! ID attribute 'G4_Cr' is referenced but was never declared at line: 48
-G4GDML: VALIDATION ERROR! ID attribute 'G4_AIR' is referenced but was never declared at line: 48
-G4GDML: VALIDATION ERROR! ID attribute 'G4_Galactic' is referenced but was never declared at line: 48
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
@@ -225,7 +220,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=136.470000s Real=137.754628s Sys=0.000000s
+  User=153.380000s Real=163.747664s Sys=0.100000s
 /control/doifBatch /score/dumpAllQuantitiesToFile Probes Probes.csv
 /score/dumpAllQuantitiesToFile Probes Probes.csv
 # Mesh or volume name: Probes  -- # Primitive scorer name: dose

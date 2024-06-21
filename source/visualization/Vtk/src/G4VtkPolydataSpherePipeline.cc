@@ -29,10 +29,10 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkProperty.h"
-#include "vtkVertexGlyphFilter.h"
+#include <vtkActor.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkVertexGlyphFilter.h>
 
 std::size_t G4VtkPolydataSpherePipeline::MakeHash(const G4VisAttributes* pVA)
 {

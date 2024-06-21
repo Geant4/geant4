@@ -65,6 +65,7 @@ G4double G4BetaDecayCorrections::FermiFunction(const G4double& W)
 {
   // Calculate the relativistic Fermi function.  Argument W is the
   // total electron energy in units of electron mass.
+  // Ref: E. Feenberg, G. Trigg, Reviews of Modern Physics, 22(1950)
 
   G4double Wprime;
   if (Z < 0) {

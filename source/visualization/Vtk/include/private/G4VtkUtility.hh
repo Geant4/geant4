@@ -35,7 +35,7 @@
 #include "G4Transform3D.hh"
 #include "G4Types.hh"
 
-#include "vtkSmartPointer.h"
+#include <vtkSmartPointer.h>
 
 class vtkMatrix4x4;
 class vtkPlane;

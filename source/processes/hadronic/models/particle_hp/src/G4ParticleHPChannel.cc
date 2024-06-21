@@ -112,14 +112,15 @@ G4bool G4ParticleHPChannel::Register(G4ParticleHPFinalState* theFS)
   G4int Z = theElement->GetZasInt();
 
   niso = (G4int)theElement->GetNumberOfIsotopes();
+  const std::size_t nsize = niso > 0 ? niso : 1;
 
   delete[] theIsotopeWiseData;
-  theIsotopeWiseData = new G4ParticleHPIsoData[niso];
+  theIsotopeWiseData = new G4ParticleHPIsoData[nsize];
   delete[] active;
-  active = new G4bool[niso];
+  active = new G4bool[nsize];
 
   delete[] theFinalStates;
-  theFinalStates = new G4ParticleHPFinalState*[niso];
+  theFinalStates = new G4ParticleHPFinalState*[nsize];
   delete theChannelData;
   theChannelData = new G4ParticleHPVector;
   for (G4int i = 0; i < niso; ++i) {

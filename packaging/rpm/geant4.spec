@@ -1,6 +1,6 @@
-%global geant4_version 11.2.1
+%global geant4_version 11.2.2
 
-%global NEUTRONHPDATA G4NDL.4.7
+%global NEUTRONHPDATA G4NDL.4.7.1
 %global LEDATA G4EMLOW.8.5
 %global LEVELGAMMADATA G4PhotonEvaporation.5.7
 %global RADIOACTIVEDATA G4RadioactiveDecay.5.6
@@ -258,6 +258,12 @@ tar xzf %{SOURCE12} -C %{buildroot}/%{_datadir}/%{name}/data
 %endif
 
 %changelog
+* Fri Jun 21 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.2
+- Update to version 11.2.2
+
+* Fri Feb 16 2024 Gabriele Cosmo <Gabriele.Cosmo@cern.ch> - 11.2.1
+- Update to version 11.2.1
+
 * Wed Dec 12 2023 Guilherme Amadio <amadio@cern.ch> - 11.2.0
 - Update to version 11.2.0
 

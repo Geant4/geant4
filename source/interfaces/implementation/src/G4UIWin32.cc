@@ -98,11 +98,11 @@ G4UIWin32::G4UIWin32()
     wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
     wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wc.lpszMenuName = mainClassName;
-    wc.lpszClassName = mainClassName;
+    wc.lpszMenuName = (PTSTR)mainClassName;
+    wc.lpszClassName = (PTSTR)mainClassName;
 
     if (! RegisterClass(&wc)) {
-      MessageBox(nullptr, "G4UIWin32: Win32 window registration failed!", "Error!",
+      MessageBoxA(nullptr, "G4UIWin32: Win32 window registration failed!", "Error!",
         MB_ICONEXCLAMATION | MB_OK);
       G4cout << "G4UIWin32: Win32 window registration failed!" << G4endl;
       return;
@@ -115,45 +115,46 @@ G4UIWin32::G4UIWin32()
 
   // Add some initial options to the menu
   HMENU hMenu = CreatePopupMenu();
-  AppendMenu(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&Geant4");
+  AppendMenuA(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&Geant4");
   AddInteractor("Geant4", (G4Interactor)hMenu);
 
-  AppendMenu(hMenu, MF_STRING, ID_OPEN_MACRO, "&Open macro...");
-  AppendMenu(hMenu, MF_STRING, ID_SAVE_VIEWER_STATE, "&Save viewer state...");
-  AppendMenu(hMenu, MF_SEPARATOR, -1, "");
-  AppendMenu(hMenu, MF_STRING, ID_RUN_BEAMON, "&Beam On");
-  AppendMenu(hMenu, MF_SEPARATOR, -1, "");
-  AppendMenu(hMenu, MF_STRING, ID_EXIT_APP, "E&xit");
+  AppendMenuA(hMenu, MF_STRING, ID_OPEN_MACRO, "&Open macro...");
+  AppendMenuA(hMenu, MF_STRING, ID_SAVE_VIEWER_STATE, "&Save viewer state...");
+  AppendMenuA(hMenu, MF_SEPARATOR, -1, "");
+  AppendMenuA(hMenu, MF_STRING, ID_RUN_BEAMON, "&Beam On");
+  AppendMenuA(hMenu, MF_SEPARATOR, -1, "");
+  AppendMenuA(hMenu, MF_STRING, ID_EXIT_APP, "E&xit");
 
   hMenu = CreatePopupMenu();
-  AppendMenu(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&View");
+  AppendMenuA(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&View");
   AddInteractor("View", (G4Interactor)hMenu);
 
-  AppendMenu(hMenu, MF_STRING, ID_VIEW_SOLID, "S&olid");
-  AppendMenu(hMenu, MF_STRING, ID_VIEW_WIREFRAME, "&Wireframe");
-  AppendMenu(hMenu, MF_SEPARATOR, -1, "");
-  AppendMenu(hMenu, MF_STRING, ID_PROJ_ORTHOGRAPHIC, "&Orthographic");
-  AppendMenu(hMenu, MF_STRING, ID_PROJ_PERSPECTIVE, "P&erspective");
-  AppendMenu(hMenu, MF_SEPARATOR, -1, "");
-  AppendMenu(hMenu, MF_STRING, ID_ORIENTATION_XY, "&X-Y Plane");
-  AppendMenu(hMenu, MF_STRING, ID_ORIENTATION_XZ, "X-&Z Plane");
-  AppendMenu(hMenu, MF_STRING, ID_ORIENTATION_YZ, "&Y-Z Plane");
-  AppendMenu(hMenu, MF_STRING, ID_ORIENTATION_OBLIQUE, "&Oblique");
+  AppendMenuA(hMenu, MF_STRING, ID_VIEW_SOLID, "S&olid");
+  AppendMenuA(hMenu, MF_STRING, ID_VIEW_WIREFRAME, "&Wireframe");
+  AppendMenuA(hMenu, MF_SEPARATOR, -1, "");
+  AppendMenuA(hMenu, MF_STRING, ID_PROJ_ORTHOGRAPHIC, "&Orthographic");
+  AppendMenuA(hMenu, MF_STRING, ID_PROJ_PERSPECTIVE, "P&erspective");
+  AppendMenuA(hMenu, MF_SEPARATOR, -1, "");
+  AppendMenuA(hMenu, MF_STRING, ID_ORIENTATION_XY, "&X-Y Plane");
+  AppendMenuA(hMenu, MF_STRING, ID_ORIENTATION_XZ, "X-&Z Plane");
+  AppendMenuA(hMenu, MF_STRING, ID_ORIENTATION_YZ, "&Y-Z Plane");
+  AppendMenuA(hMenu, MF_STRING, ID_ORIENTATION_OBLIQUE, "&Oblique");
 
   hMenu = CreatePopupMenu();
-  AppendMenu(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&Zoom");
+  AppendMenuA(menuBar, MF_POPUP, (UINT_PTR)hMenu, "&Zoom");
   AddInteractor("Zoom", (G4Interactor)hMenu);
 
-  AppendMenu(hMenu, MF_STRING, ID_ZOOM_IN, "Zoom &In");
-  AppendMenu(hMenu, MF_STRING, ID_ZOOM_OUT, "Zoom &Out");
+  AppendMenuA(hMenu, MF_STRING, ID_ZOOM_IN, "Zoom &In");
+  AppendMenuA(hMenu, MF_STRING, ID_ZOOM_OUT, "Zoom &Out");
 
   tmpSession = this;
-  fHWndMainWindow = ::CreateWindowEx(WS_EX_CLIENTEDGE, mainClassName, "Geant4",
+  char winName[] = "Geant4";
+  fHWndMainWindow = ::CreateWindowEx(WS_EX_CLIENTEDGE, (PTSTR)mainClassName, (PTSTR)winName,
     WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
     CW_USEDEFAULT, nullptr, menuBar, ::GetModuleHandle(nullptr), nullptr);
 
   if (fHWndMainWindow == nullptr) {
-    MessageBox(nullptr, "Window Creation Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
+    MessageBoxA(nullptr, "Window Creation Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
     return;
   }
   tmpSession = nullptr;
@@ -360,7 +361,7 @@ void G4UIWin32::AddMenu(const char* a_name, const char* a_label)
 {
   if (a_name != nullptr) {
     HMENU hMenu = CreatePopupMenu();
-    AppendMenu(menuBar, MF_POPUP, (UINT_PTR)hMenu, a_label);
+    AppendMenuA(menuBar, MF_POPUP, (UINT_PTR)hMenu, a_label);
     AddInteractor(a_name, (G4Interactor)hMenu);
     DrawMenuBar(fHWndMainWindow);
   }
@@ -376,7 +377,7 @@ void G4UIWin32::AddButton(const char* a_menu, const char* a_label, const char* a
     HMENU hMenu = (HMENU)GetInteractor(a_menu);
     actionIdentifier++;
     commands[actionIdentifier] = a_command;
-    AppendMenu(hMenu, MF_STRING, actionIdentifier, a_label);
+    AppendMenuA(hMenu, MF_STRING, actionIdentifier, a_label);
   }
 }
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -398,7 +399,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc(
       auto* This = (G4UIWin32*)tmpSession;
       if (This != nullptr) {
         if (! This->CreateComponents(aWindow)) {
-          MessageBox(aWindow, "Could not create components.", "Error", MB_OK | MB_ICONERROR);
+          MessageBoxA(aWindow, "Could not create components.", "Error", MB_OK | MB_ICONERROR);
           return false;
         }
       }
@@ -409,7 +410,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc(
       auto* This = (G4UIWin32*)::GetWindowLongPtr(aWindow, GWLP_USERDATA);
       if (This != nullptr) {
         if (! This->ResizeComponents(aWindow)) {
-          MessageBox(aWindow, "Could not resize components.", "Error", MB_OK | MB_ICONERROR);
+          MessageBoxA(aWindow, "Could not resize components.", "Error", MB_OK | MB_ICONERROR);
           return false;
         }
       }
@@ -439,13 +440,13 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc(
             auto lpttt = (LPTOOLTIPTEXT)lParam;
             lpttt->hinst = nullptr;
             UINT idButton = lpttt->hdr.idFrom;
-            lpttt->lpszText = (LPSTR)This->GetToolTips(idButton).c_str();
+            lpttt->lpszText = (PTSTR)This->GetToolTips(idButton).c_str();
           } break;
 
           // Tooltip for TreeView
           case TVN_GETINFOTIP: {
             auto pTip = (LPNMTVGETINFOTIP)lParam;
-            pTip->pszText = (LPSTR)This->GetHelpTreeToolTips(pTip->hItem).c_str();
+            pTip->pszText = (PTSTR)This->GetHelpTreeToolTips(pTip->hItem).c_str();
           } break;
 
           // Double click for TreeView
@@ -568,16 +569,18 @@ G4bool G4UIWin32::CreateComponents(HWND aWindow)
   G4int statwidths[] = {100, -1};
 
   // Create Edit Control
-  fHWndEditor = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", "",
+  char winName[] = "EDIT";
+  char winParam[] = "";
+  fHWndEditor = CreateWindowEx(WS_EX_CLIENTEDGE, (PTSTR)winName, (PTSTR)winParam,
     WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL |
       ES_AUTOHSCROLL | ES_READONLY,
     0, 0, 100, 100, aWindow, (HMENU)IDC_MAIN_EDIT, GetModuleHandle(nullptr), nullptr);
   if (fHWndEditor == nullptr)
-    MessageBox(aWindow, "Could not create edit box.", "Error", MB_OK | MB_ICONERROR);
+    MessageBoxA(aWindow, "Could not create edit box.", "Error", MB_OK | MB_ICONERROR);
 
   // Set editor font
   // hfDefault = (HFONT) GetStockObject(DEFAULT_GUI_FONT);
-  hfDefault = CreateFont(-10, -8, 0, 0, 0, false, 0, 0, OEM_CHARSET, OUT_RASTER_PRECIS,
+  hfDefault = CreateFontA(-10, -8, 0, 0, 0, false, 0, 0, OEM_CHARSET, OUT_RASTER_PRECIS,
     CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, FIXED_PITCH, "System");
   SendMessage(fHWndEditor, WM_SETFONT, (WPARAM)hfDefault, MAKELPARAM(false, 0));
 
@@ -589,7 +592,7 @@ G4bool G4UIWin32::CreateComponents(HWND aWindow)
     WS_CHILD | WS_VISIBLE | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS, 0, 0, 0, 0, aWindow,
     (HMENU)IDC_MAIN_TOOL, GetModuleHandle(nullptr), nullptr);
   if (fHWndToolBar == nullptr)
-    MessageBox(aWindow, "Could not create tool bar.", "Error", MB_OK | MB_ICONERROR);
+    MessageBoxA(aWindow, "Could not create tool bar.", "Error", MB_OK | MB_ICONERROR);
 
   // Required for backward compatibility.
   SendMessage(fHWndToolBar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), (LPARAM)0);
@@ -743,7 +746,7 @@ void G4UIWin32::ProcessTabKey()
     G4String cmd = Complete(command);
     const char* d = cmd.data();
     G4int l = strlen(d);
-    Edit_SetText(fHWndComboEditor, d);
+    Edit_SetText(fHWndComboEditor, (PTSTR)d);
     Edit_SetSel(fHWndComboEditor, l, l);
   }
   else {
@@ -828,7 +831,7 @@ void G4UIWin32::ProcessUpKey()
     G4String command = fHistory[pos];
     const char* d = command.data();
     G4int l = strlen(d);
-    Edit_SetText(fHWndComboEditor, d);
+    Edit_SetText(fHWndComboEditor, (PTSTR)d);
     Edit_SetSel(fHWndComboEditor, l, l);
 
     fHistoryPos = pos;
@@ -846,13 +849,14 @@ void G4UIWin32::ProcessDownKey()
     G4String command = fHistory[pos];
     const char* d = command.data();
     G4int l = strlen(d);
-    Edit_SetText(fHWndComboEditor, d);
+    Edit_SetText(fHWndComboEditor, (PTSTR)d);
     Edit_SetSel(fHWndComboEditor, l, l);
 
     fHistoryPos = pos;
   }
   else if (pos >= (G4int)fHistory.size()) {
-    Edit_SetText(fHWndComboEditor, "");
+	char eName[] = "";
+    Edit_SetText(fHWndComboEditor, (PTSTR)eName);
     Edit_SetSel(fHWndComboEditor, 0, 0);
 
     fHistoryPos = -1;
@@ -946,7 +950,10 @@ G4bool G4UIWin32::ProcessDefaultCommands(G4int idCommand)
     case ID_HELP_ABOUT:
       return true;
     case ID_LOG_CLEAN:
-      SetDlgItemText(fHWndMainWindow, IDC_MAIN_EDIT, "");
+	  {
+	    char eName[] = "";
+        SetDlgItemText(fHWndMainWindow, IDC_MAIN_EDIT, (PTSTR)eName);
+	  }
       return true;
     case ID_LOG_SAVE:
       DoSaveLog(fHWndMainWindow);
@@ -1049,7 +1056,7 @@ void G4UIWin32::HelpTreeDoubleClick(HTREEITEM item)
 {
   const char* item_path = GetItemPath(item);
   G4int l = strlen(item_path);
-  Edit_SetText(fHWndComboEditor, item_path);
+  Edit_SetText(fHWndComboEditor, (PTSTR)item_path);
   Edit_SetSel(fHWndComboEditor, l, l);
 
   SetFocus(fHWndComboEditor);
@@ -1077,7 +1084,7 @@ G4bool G4UIWin32::SaveLogFile(LPCTSTR fileName)
 
       text = (LPSTR)GlobalAlloc(GPTR, dwBufferSize);
       if (text != nullptr) {
-        if (GetWindowText(fHWndEditor, text, dwBufferSize)) {
+        if (GetWindowTextA(fHWndEditor, text, dwBufferSize)) {
           DWORD dwWritten;
 
           if (WriteFile(hFile, text, dwTextLength, &dwWritten, nullptr)) bSuccess = true;
@@ -1122,11 +1129,13 @@ void G4UIWin32::DoOpenMacro(HWND aWindow)
 
   ofn.lStructSize = sizeof(ofn);
   ofn.hwndOwner = aWindow;
-  ofn.lpstrFilter = "Macro Files (*.mac)\0*.mac\0All Files (*.*)\0*.*\0";
-  ofn.lpstrFile = szFileName;
+  char fName[] = "Macro Files (*.mac)\0*.mac\0All Files (*.*)\0*.*\0";
+  ofn.lpstrFilter = (PTSTR)fName;
+  ofn.lpstrFile = (PTSTR)szFileName;
   ofn.nMaxFile = MAX_PATH;
   ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-  ofn.lpstrDefExt = "mac";
+  char dName[] = "mac";
+  ofn.lpstrDefExt = (PTSTR)dName;
 
   if (GetOpenFileName(&ofn)) {
     G4String command = "/control/execute " + G4String(szFileName);
@@ -1150,10 +1159,12 @@ void G4UIWin32::DoSaveViewer(HWND aWindow)
 
   ofn.lStructSize = sizeof(ofn);
   ofn.hwndOwner = aWindow;
-  ofn.lpstrFilter = "Macro Files (*.mac)\0*.mac\0All Files (*.*)\0*.*\0";
-  ofn.lpstrFile = szFileName;
+  char fName[] = "Macro Files (*.mac)\0*.mac\0All Files (*.*)\0*.*\0";
+  ofn.lpstrFilter = (PTSTR)fName;
+  ofn.lpstrFile = (PTSTR)szFileName;
   ofn.nMaxFile = MAX_PATH;
-  ofn.lpstrDefExt = "mac";
+  char dName[] = "mac";
+  ofn.lpstrDefExt = (PTSTR)dName;
   ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
   if (GetSaveFileName(&ofn)) {
@@ -1178,14 +1189,16 @@ void G4UIWin32::DoSaveLog(HWND aWindow)
 
   ofn.lStructSize = sizeof(ofn);
   ofn.hwndOwner = aWindow;
-  ofn.lpstrFilter = "Log Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
-  ofn.lpstrFile = szFileName;
+  char fName[] = "Log Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
+  ofn.lpstrFilter = (PTSTR)fName;
+  ofn.lpstrFile = (PTSTR)szFileName;
   ofn.nMaxFile = MAX_PATH;
-  ofn.lpstrDefExt = "txt";
+  char dName[] = "txt";
+  ofn.lpstrDefExt = (PTSTR)dName;
   ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 
   if (GetSaveFileName(&ofn)) {
-    if (SaveLogFile(szFileName)) {
+    if (SaveLogFile((PTSTR)szFileName)) {
       SendDlgItemMessage(aWindow, IDC_MAIN_STATUS, SB_SETTEXT, 0, (LPARAM) "Saved log file...");
       SendDlgItemMessage(aWindow, IDC_MAIN_STATUS, SB_SETTEXT, 1, (LPARAM)szFileName);
     }
@@ -1211,7 +1224,7 @@ G4bool G4UIWin32::InitHelpTreeItems()
     commandText = treeTop->GetTree(a + 1)->GetPathName().data();
 
     // Add the item to the tree-view control.
-    newItem = AddItemToHelpTree(const_cast<LPTSTR>(GetShortCommandPath(commandText).c_str()));
+    newItem = AddItemToHelpTree((PTSTR)GetShortCommandPath(commandText).c_str());
 
     if (newItem == nullptr) return false;
 
@@ -1239,7 +1252,7 @@ void G4UIWin32::CreateHelpTree(HTREEITEM aParent, G4UIcommandTree* aCommandTree)
 
       // Add the item to the tree-view control.
       newItem =
-        AddItemToHelpTree(const_cast<LPTSTR>(GetShortCommandPath(commandText).c_str()), aParent);
+        AddItemToHelpTree((PTSTR)GetShortCommandPath(commandText).c_str(), aParent);
 
       // Look for children
       CreateHelpTree(newItem, aCommandTree->GetTree(a + 1));
@@ -1250,7 +1263,7 @@ void G4UIWin32::CreateHelpTree(HTREEITEM aParent, G4UIcommandTree* aCommandTree)
       commandText = aCommandTree->GetCommand(a + 1)->GetCommandPath().data();
 
       // Add the item to the tree-view control.
-      AddItemToHelpTree(const_cast<LPTSTR>(GetShortCommandPath(commandText).c_str()), aParent);
+      AddItemToHelpTree((PTSTR)GetShortCommandPath(commandText).c_str(), aParent);
     }
   }
 }
@@ -1319,9 +1332,9 @@ LPSTR G4UIWin32::GetItemPath(HTREEITEM item)
   tvitem.cchTextMax = sizeof(infoTipBuf) / sizeof(TCHAR);
 
   std::string str = "";
-  while (item != nullptr) {
+  while  (item != nullptr) {
     TreeView_GetItem(fHWndHelpTree, &tvitem);
-    str = "/" + std::string(tvitem.pszText) + str;
+    str = "/" + std::string((PSTR)tvitem.pszText) + str;
 
     item = TreeView_GetParent(fHWndHelpTree, item);
     tvitem.hItem = item;
@@ -1331,7 +1344,7 @@ LPSTR G4UIWin32::GetItemPath(HTREEITEM item)
   result[str.size()] = 0;
   std::copy(str.begin(), str.end(), result);
 
-  return result;
+  return (LPSTR)result;
 }
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 /****************************************************************************************************/

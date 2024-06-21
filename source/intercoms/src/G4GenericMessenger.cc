@@ -33,20 +33,26 @@
 //    M.Asai, SLAC - 04 May 2014
 //      Fix core dump when GetCurrentValue() method is invoked for
 //      a command defined by DeclareMethod().
+//    M.Asai, SLAC - 30 September 2020
+//      Adding new parameter type 'L' for long int.
 //    M.Asai, SLAC - 11 July 2021
 //      Adding G4ThreeVector type without unit
+//    M.Asai, JLab - 24 April 2024
+//      Fix DeclareMethod() wrongly converts valid boolean parameters.
 // --------------------------------------------------------------------
 
 #include "G4GenericMessenger.hh"
 
 #include "G4Threading.hh"
 #include "G4Types.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
 #include "G4UImessenger.hh"
+#include "G4Tokenizer.hh"
 
 #include <iostream>
 
@@ -228,6 +234,13 @@ void G4GenericMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if (typeid(*command) == typeid(G4UIcmdWith3VectorAndUnit)) {
     newValue = G4UIcommand::ConvertToString(G4UIcommand::ConvertToDimensioned3Vector(newValue));
   }
+  else if (typeid(*command) == typeid(G4UIcmdWithABool)) {
+    if(StoB(newValue)) {
+      newValue = "1";
+    } else {
+      newValue = "0";
+    }
+  }
 
   if (properties.find(command->GetCommandName()) != properties.cend()) {
     Property& p = properties[command->GetCommandName()];
@@ -239,7 +252,20 @@ void G4GenericMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       m.method.operator()(m.object);
     }
     else if (m.method.NArg() > 0) {
-      m.method.operator()(m.object, newValue);
+      G4Tokenizer tokens(newValue);
+      G4String paraValue;
+      for (std::size_t i = 0; i < m.method.NArg(); ++i) {
+        G4String aToken = tokens();
+        if(m.method.ArgType(i)==typeid(bool)) {
+          if(StoB(aToken)) {
+            aToken = "1";
+          } else {
+            aToken = "0";
+          }
+        }
+        paraValue += aToken + " ";
+      }
+      m.method.operator()(m.object, paraValue);
     }
     else {
       throw G4InvalidUICommand();

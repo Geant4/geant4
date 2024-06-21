@@ -25,8 +25,8 @@
 
 #include "G4VtkPolydataInstancePipeline.hh"
 
-#include "vtkDoubleArray.h"
-#include "vtkPoints.h"
+#include <vtkDoubleArray.h>
+#include <vtkPoints.h>
 
 G4VtkPolydataInstancePipeline::G4VtkPolydataInstancePipeline(G4String nameIn,
                                                              const G4VtkVisContext& vcIn)

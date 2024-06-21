@@ -116,13 +116,12 @@ G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
   G4LorentzVector lv(-eMomentum*dir.x(), -eMomentum*dir.y(), -eMomentum*dir.z(),
                      parentMass - eKE - eMass);
 
-  G4double edel = std::max(lv.e() - resMass, 0.0);
-  // Free energy should be above zero
-  if (edel > 0.0) {
-
-    // centrum of mass system
-    G4double M = lv.mag();
-
+  // centrum of mass system
+  G4double M = lv.mag();
+  const G4double elim = CLHEP::eV;
+  G4double edel = M - resMass;
+  // Free energy should be above limit
+  if (edel >= elim) {
     // neutrino
     G4double eNu = 0.5*(M - resMass*resMass/M);
     G4LorentzVector lvnu(eNu*G4RandomDirection(), eNu);
@@ -139,8 +138,8 @@ G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
     products->PushProducts(dp);
 
   } else {
-    // neglecting relativistic kinematic and giving all energy to neutrino
-    dp = new G4DynamicParticle(fNeutrino, G4RandomDirection(), edel);
+    // neglecting relativistic kinematic and giving some energy to neutrino
+    dp = new G4DynamicParticle(fNeutrino, G4RandomDirection(), elim);
     products->PushProducts(dp);
     dp = new G4DynamicParticle(fResIon, G4ThreeVector(0.0,0.0,1.0), 0.0);
     products->PushProducts(dp);

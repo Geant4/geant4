@@ -1850,21 +1850,21 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 
   // SRIM-2008 materials
   AddMaterial("G4_BRASS", 8.52, 0, 0.0, 3);
-  AddElementByAtomCount("Cu", 62);
-  AddElementByAtomCount("Zn", 35);
-  AddElementByAtomCount("Pb" , 3);
+  AddElementByWeightFraction( 29, 0.57515);
+  AddElementByWeightFraction( 30, 0.33415);
+  AddElementByWeightFraction( 82, 0.0907);
 
   AddMaterial("G4_BRONZE", 8.82, 0, 0.0, 3);
-  AddElementByAtomCount("Cu", 89);
-  AddElementByAtomCount("Zn",  9);
-  AddElementByAtomCount("Pb" , 2);
+  AddElementByWeightFraction( 29, 0.8494);
+  AddElementByWeightFraction( 30, 0.0884);
+  AddElementByWeightFraction( 82, 0.0622);
 
   // parameters are taken from
   //  http://www.azom.com/article.aspx?ArticleID=965
   AddMaterial("G4_STAINLESS-STEEL", 8.00, 0, 0.0, 3);
-  AddElementByAtomCount("Fe", 74);
-  AddElementByAtomCount("Cr", 18);
-  AddElementByAtomCount("Ni" , 8);
+  AddElementByWeightFraction( 26, 0.7462);
+  AddElementByWeightFraction( 24, 0.1690);
+  AddElementByWeightFraction( 28, 0.0848);
 
   AddMaterial("G4_CR39", 1.32, 0, 0.0, 3);
   AddElementByAtomCount("H", 18);

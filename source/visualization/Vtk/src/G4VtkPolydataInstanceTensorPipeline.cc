@@ -28,14 +28,14 @@
 #include "G4VtkViewer.hh"
 #include "G4VtkVisContext.hh"
 
-#include "vtkActor.h"
-#include "vtkDataArray.h"
-#include "vtkDoubleArray.h"
-#include "vtkPointData.h"
-#include "vtkPolyData.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkProperty.h"
-#include "vtkTensorGlyphColor.h"
+#include <vtkActor.h>
+#include <vtkDataArray.h>
+#include <vtkDoubleArray.h>
+#include <vtkPointData.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkTensorGlyphColor.h>
 
 std::size_t G4VtkPolydataInstanceTensorPipeline::MakeHash(const G4Polyhedron& polyhedron,
                                                           const G4VtkVisContext& vc)

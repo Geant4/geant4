@@ -28,7 +28,7 @@
 
 #include "G4VVtkPipeline.hh"
 
-#include "vtkSmartPointer.h"
+#include <vtkSmartPointer.h>
 
 class G4VtkVisContext;
 

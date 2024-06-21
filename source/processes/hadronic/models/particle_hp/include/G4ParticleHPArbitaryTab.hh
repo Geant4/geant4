@@ -55,13 +55,14 @@ class G4ParticleHPArbitaryTab : public G4VParticleHPEDis
 
     inline void Init(std::istream& theData) override
     {
-      G4int i;
+      std::size_t i;
       theFractionalProb.Init(theData, CLHEP::eV);
       theData >> nDistFunc;  // = number of incoming n energy points
-      theDistFunc = new G4ParticleHPVector[nDistFunc];
+      const std::size_t dsize = nDistFunc > 0 ? nDistFunc : 1;
+      theDistFunc = new G4ParticleHPVector[dsize];
       theManager.Init(theData);
       G4double currentEnergy;
-      for (i = 0; i < nDistFunc; i++) {
+      for (i = 0; i < dsize; ++i) {
         theData >> currentEnergy;
         theDistFunc[i].SetLabel(currentEnergy * CLHEP::eV);
         theDistFunc[i].Init(theData, CLHEP::eV);
@@ -76,17 +77,17 @@ class G4ParticleHPArbitaryTab : public G4VParticleHPEDis
       //************************************************************************
       // EMendoza:
       // Here we calculate the thresholds for the 2D sampling:
-      for (i = 0; i < nDistFunc; i++) {
+      for (i = 0; i < dsize; ++i) {
         G4int np = theDistFunc[i].GetVectorLength();
         theLowThreshold[i] = theDistFunc[i].GetEnergy(0);
         theHighThreshold[i] = theDistFunc[i].GetEnergy(np - 1);
-        for (G4int j = 0; j < np - 1; j++) {
+        for (G4int j = 0; j < np - 1; ++j) {
           if (theDistFunc[i].GetXsec(j + 1) > 1.e-20) {
             theLowThreshold[i] = theDistFunc[i].GetEnergy(j);
             break;
           }
         }
-        for (G4int j = 1; j < np; j++) {
+        for (G4int j = 1; j < np; ++j) {
           if (theDistFunc[i].GetXsec(j - 1) > 1.e-20) {
             theHighThreshold[i] = theDistFunc[i].GetEnergy(j);
           }

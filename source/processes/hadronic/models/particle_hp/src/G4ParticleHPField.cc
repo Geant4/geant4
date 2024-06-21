@@ -91,9 +91,9 @@ G4double G4ParticleHPField::GetY(G4double e, G4int j)
 void G4ParticleHPField::Dump()
 {
   G4cout << nEntries << G4endl;
-  for (G4int i = 0; i < nEntries; i++) {
+  for (G4int i = 0; i < nEntries; ++i) {
     G4cout << theData[i].GetX() << " ";
-    for (G4int j = 0; j < theData[i].GetDepth(); j++) {
+    for (G4int j = 0; j < theData[i].GetDepth(); ++j) {
       G4cout << theData[i].GetY(j) << " ";
     }
     G4cout << G4endl;
@@ -107,12 +107,11 @@ void G4ParticleHPField::Check(G4int i)
                               "Skipped some index numbers in G4ParticleHPField");
   if (i == nPoints) {
     nPoints += 50;
-    auto buff = new G4ParticleHPFieldPoint[nPoints];
-    //      G4cout << "copying 1"<<G4endl;
-    for (G4int j = 0; j < nEntries; j++) {
+    const std::size_t fsize = nPoints > 0 ? nPoints : 1;
+    auto buff = new G4ParticleHPFieldPoint[fsize];
+    for (G4int j = 0; j < nEntries; ++j) {
       buff[j] = theData[j];
     }
-    //      G4cout << "copying 2"<<G4endl;
     delete[] theData;
     theData = buff;
   }

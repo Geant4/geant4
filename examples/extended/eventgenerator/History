@@ -4,6 +4,11 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top). It must **not**
 be used as a substitute for writing good git commit messages!
 
+## 2024-04-25 Ben Morgan (exEventGenerator-V11-01-01)
+- Update CMake script to use new Pythia6 setup/build variables
+
+## 2024-03-20 Ben Morgan
+- Update docs and CMake script to use new Pythia8 setup/build variables
 
 ## 2023-11-15 I. Hrivnacova (exEventGenerator-V11-01-00)
 - Updated vis.mac macros:

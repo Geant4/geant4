@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-05-18 Makoto Asai (intercoms-V11-01-09)
+- G4GenericMessenger.cc : Further addressing to Bug Report #2606
+
+## 2024-04-24 Makoto Asai
+- G4UIparsing.hh : checking int or long int parameter value is withing the 
+  range of G4int or G4long
+- G4GenericMessenger.cc : Addressing to Bug Report #2606
+
 ## 2023-10-16 Makoto Asai (intercoms-V11-01-08)
 - Add G4UImessenger::LtoS().
   - Missed when StoL() was introduced.

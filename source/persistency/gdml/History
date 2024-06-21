@@ -6,6 +6,25 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-20 Gabriele Cosmo (gdml-V11-01-03)
+- Disabled schema validation by default, as XercesC currently does
+  support only 'http' (see: https://issues.apache.org/jira/browse/XERCESC-2220).
+- Added possibility to define G4GDML_DEFAULT_SCHEMALOCATION string as
+  environment variable, to point to local path for the schema.
+  Defined new flag G4GDML_DEFAULT_WRITE_SCHEMALOCATION for schema location
+  in writing.
+
+## 2024-03-08 Gabriele Cosmo
+- Use std::map instead of std::vector to iterate on logical-skin surfaces
+  in G4GDMLWriteStructure::GetSkinSurface().
+  Part of fix addressing problem report #2598.
+
+## 2024-02-29 Gabriele Cosmo
+- Fix in schema module gdml_solids.xsd for tessellated solid semantics, to
+  correctly reference facet types. Fixes schema validation errors which may
+  occur on some custom XSD validation tools. Schema updated to GDML-3.1.7.
+  Thanks to A.Trouche (Artenum) for providing the patch.
+
 ## 2023-06-16 I. Hrivnacova (gdml-V11-01-02)
 - Let G4ThreeVectorCompare obey the strict weak ordering requirements;
   which fixes failures in inserting elements in the std::map with

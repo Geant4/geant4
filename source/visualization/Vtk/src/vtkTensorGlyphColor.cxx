@@ -14,20 +14,20 @@
 =========================================================================*/
 #include "vtkTensorGlyphColor.h"
 
-#include "vtkCell.h"
-#include "vtkCellArray.h"
-#include "vtkDataSet.h"
-#include "vtkDoubleArray.h"
-#include "vtkExecutive.h"
-#include "vtkFloatArray.h"
-#include "vtkInformation.h"
-#include "vtkInformationVector.h"
-#include "vtkMath.h"
-#include "vtkObjectFactory.h"
-#include "vtkPointData.h"
-#include "vtkPolyData.h"
-#include "vtkStreamingDemandDrivenPipeline.h"
-#include "vtkTransform.h"
+#include <vtkCell.h>
+#include <vtkCellArray.h>
+#include <vtkDataSet.h>
+#include <vtkDoubleArray.h>
+#include <vtkExecutive.h>
+#include <vtkFloatArray.h>
+#include <vtkInformation.h>
+#include <vtkInformationVector.h>
+#include <vtkMath.h>
+#include <vtkObjectFactory.h>
+#include <vtkPointData.h>
+#include <vtkPolyData.h>
+#include <vtkStreamingDemandDrivenPipeline.h>
+#include <vtkTransform.h>
 
 vtkStandardNewMacro(vtkTensorGlyphColor)
 

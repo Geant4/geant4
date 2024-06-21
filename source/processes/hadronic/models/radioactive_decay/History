@@ -6,6 +6,18 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-08 Vladimir Ivanchenko, Alvaro Tolosa Delgado (radioactive_decay-V11-01-11)
+- G4BetaPlusDecay, G4BetaMinusDecay - minor fix of radioactive_decay-V11-02-02
+    In case Q-value is bigger than mass diference, betas in the tail of the spectrum
+    may have more energy than residual free energy. To minimize the non-conservation
+    of 4-momentum, in such cases neutrino and daughter nucleus are given 1 eV, leading
+    to non conservation of linear momentum because momentum of beta is not counterbalanced.
+
+## 2024-02-20 Vladimir Ivanchenko
+- G4BetaPlusDecay, G4BetaMinusDecay - added extra numerical protection on
+    level of 1 eV to avoid precision lost and production of neutrino with
+    negative kinetic energy
+
 ## 2024-02-13 Vladimir Ivanchenko (radioactive_decay-V11-01-10)
 - G4BetaPlusDecay, G4BetaMinusDecay - fixed sampling algorithm (problem #2588)
 

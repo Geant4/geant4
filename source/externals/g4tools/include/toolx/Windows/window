@@ -28,8 +28,8 @@ class window {
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
       wc.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
-      wc.lpszMenuName  = s_class().c_str();
-      wc.lpszClassName = s_class().c_str();
+      wc.lpszMenuName  = (PTSTR)s_class().c_str();
+      wc.lpszClassName = (PTSTR)s_class().c_str();
       ::RegisterClass(&wc);
       s_done = true;
     }
@@ -54,7 +54,7 @@ public:
     // WARNING : given a_w,a_h may not be the client area because of various decorations.
     //           See set_client_area_size() method to enforce a client area size.
     register_class();
-    m_hwnd = ::CreateWindow(s_class().c_str(),
+    m_hwnd = ::CreateWindow((PTSTR)s_class().c_str(),
                               NULL,
                               a_mask,
                               a_x,a_y,
@@ -63,7 +63,7 @@ public:
                               ::GetModuleHandle(NULL),
                               NULL);
     if(!m_hwnd) return;
-    ::SetWindowText(m_hwnd,a_title);
+    ::SetWindowText(m_hwnd,(PTSTR)a_title);
     ::SetWindowLongPtr(m_hwnd,GWLP_USERDATA,LONG_PTR(this));
   }
   virtual ~window(){

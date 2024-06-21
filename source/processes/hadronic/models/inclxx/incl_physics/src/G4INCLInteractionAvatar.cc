@@ -447,9 +447,8 @@ namespace G4INCL {
         (*i)->setPotentialEnergy(0.);
       }
 
-//jcd      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
-        if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
-           !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda() && !(*i)->isAntiNucleon()) { // This translates AECSVT's loops 1, 3 and 4
+      if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
+         !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isPhoton() && !(*i)->isLambda() && !(*i)->isAntiBaryon()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
          const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
          G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy

@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-03-13 Gabriele Cosmo (g4tools-V11-01-07)
+- Fixed string assignments in 'window' and 'pixwin', to support either UNICODE
+  or UTF-16 encoding on Windows. Addressing problem report #2599.
+
+## 2024-02-15 Gabriele Cosmo
+- Fixed compilation warnings in ccontour and gl2ps on gcc when LTO settings
+  are enabled.
+
 ## 2023-11-09 Guy Barrand (g4tools-V11-01-06)
 - tools/wroot/file: in the constructor, for the streaming of the root directory, take into account the streaming of what would be
   the fUUID (a TUUID in ROOT) field of the TDirectory version 4. This permits to fix the "G4AnalysisManager creates ROOT files

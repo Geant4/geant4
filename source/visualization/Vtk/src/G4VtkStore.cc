@@ -57,22 +57,28 @@
 #include "G4VtkTextPipeline.hh"
 #include "G4VtkUnstructuredGridPipeline.hh"
 
+#ifndef WIN32
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wextra-semi"
-#include "vtkNew.h"
-#include "vtkSmartPointer.h"
-#include "vtkBillboardTextActor3D.h"
-#include "vtkLine.h"
-#include "vtkMatrix3x3.h"
-#include "vtkOBJReader.h"
-#include "vtkPLYReader.h"
-#include "vtkSTLReader.h"
-#include "vtkPolyDataReader.h"
-#include "vtkProperty.h"
-#include "vtkProperty2D.h"
-#include "vtkRegularPolygonSource.h"
-#include "vtkTextProperty.h"
+#endif
+
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+#include <vtkBillboardTextActor3D.h>
+#include <vtkLine.h>
+#include <vtkMatrix3x3.h>
+#include <vtkOBJReader.h>
+#include <vtkPLYReader.h>
+#include <vtkSTLReader.h>
+#include <vtkPolyDataReader.h>
+#include <vtkProperty.h>
+#include <vtkProperty2D.h>
+#include <vtkRegularPolygonSource.h>
+#include <vtkTextProperty.h>
+
+#ifndef WIN32
 #pragma GCC diagnostic pop
+#endif
 
 G4VtkStore::G4VtkStore(G4String nameIn) : name(nameIn) {}
 

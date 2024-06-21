@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1567,7 +1567,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.500000s Real=2.512848s Sys=0.000000s
+  User=2.540000s Real=2.799974s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1576,11 +1576,11 @@ Number of events: 100
 Material of world: G4_AIR
 Material of tank:  G4_BGO
 
-Average energy of Cerenkov photons created per event: 2.4e+02 eV.
-Average number of Cerenkov photons created per event: 46
+Average energy of Cerenkov photons created per event: 2.2e+02 eV.
+Average number of Cerenkov photons created per event: 43
  Average energy per photon: 5.2 eV.
-Average energy of scintillation photons created per event: 1.7e+04 eV.
-Average number of scintillation photons created per event: 3.1e+03
+Average energy of scintillation photons created per event: 1.6e+04 eV.
+Average number of scintillation photons created per event: 3e+03
  Average energy per photon: 5.4 eV.
 Average number of photons absorbed by WLS per event: 0 
 Average number of photons created by WLS per event: 0
@@ -1588,32 +1588,32 @@ Average energy of WLS photons created per event: 0 eV.
 Average number of photons absorbed by WLS2 per event: 0 
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
-Average number of OpRayleigh per event:   5.9e+03
-Average number of OpAbsorption per event: 3e+03
+Average number of OpRayleigh per event:   4.6e+03
+Average number of OpAbsorption per event: 2.9e+03
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+02
-OpAbsorption before surface:   174523
-Total # of surface events:     140768
+OpAbsorption before surface:   159264
+Total # of surface events:     142423
 
 Surface events by process:
-  Transmission:                 14111
-  Fresnel refraction:            4905
-  Lambertian reflection:        75801
-  Lobe reflection:              10106
-  Spike reflection:             10838
-  Backscattering:               10947
-  Absorption:                   12632
-  Detection:                     1428
- Sum:                          140768
+  Transmission:                 14273
+  Fresnel refraction:           46449
+  Lambertian reflection:        47882
+  Lobe reflection:               6014
+  Spike reflection:              6764
+  Backscattering:                6866
+  Absorption:                   12805
+  Detection:                     1370
+ Sum:                          142423
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- Cerenkov spectrum: mean = 5.16763 eV rms = 1.70628 eV.
- Scintillation spectrum: mean = 5.43459 eV rms = 1.66517 eV.
- Scintillation time: mean = 48.3451 ns rms = 46.907 ns.
+ Cerenkov spectrum: mean = 5.1769 eV rms = 1.71874 eV.
+ Scintillation spectrum: mean = 5.43182 eV rms = 1.66615 eV.
+ Scintillation time: mean = 48.2966 ns rms = 46.8436 ns.
 
 ... write file : electron.root - done
 ... close file : electron.root - done
@@ -1628,5 +1628,5 @@ Graphics systems deleted.
 Visualization Manager deleting...
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.43 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.41 MB
 ============================================================

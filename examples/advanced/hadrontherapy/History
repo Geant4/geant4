@@ -1,8 +1,14 @@
 # Example hadrontherapy History
 
 See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
-which **must** added in reverse chronological order (newest at the top). It must **not**
-be used as a substitute for writing good git commit messages!
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
+
+-------------------------------------------------------------------------------
+
+## 2024-04-24 Gabriele Cosmo (hadrontherapy-V11-01-02)
+- Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+  Make proper use of G4String in HadrontherapyInteractionParameters.
 
 ## 2023-11-15 I. Hrivnacova (hadrontherapy-V11-01-01)
 - Updated macros using /vis/open:

@@ -34,24 +34,24 @@
 #include "G4VtkQtSceneHandler.hh"
 #include "G4VtkUtility.hh"
 
-#include "qcoreapplication.h"
-#include "qlabel.h"
-#include "qlayout.h"
-#include "qlineedit.h"
-#include "qopenglcontext.h"
-#include "qpushbutton.h"
-#include "qthread.h"
-#include "qtreewidget.h"
-#include "vtkActor.h"
-#include "vtkCamera.h"
-#include "vtkCylinderSource.h"
-#include "vtkGenericOpenGLRenderWindow.h"
-#include "vtkNamedColors.h"
-#include "vtkNew.h"
-#include "vtkPolyDataMapper.h"
-#include "vtkProperty.h"
-#include "vtkRenderer.h"
-#include "vtkVersion.h"
+#include <qcoreapplication.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qopenglcontext.h>
+#include <qpushbutton.h>
+#include <qthread.h>
+#include <qtreewidget.h>
+#include <vtkActor.h>
+#include <vtkCamera.h>
+#include <vtkCylinderSource.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkNamedColors.h>
+#include <vtkNew.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkRenderer.h>
+#include <vtkVersion.h>
 
 #include <array>
 

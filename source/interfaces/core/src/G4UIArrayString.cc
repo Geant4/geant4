@@ -62,7 +62,7 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
 
   // push...
   indx = 0;
-  for (G4int i = 0; i < nElement; ++i) {
+  for (std::size_t i = 0; i < nElement; ++i) {
     std::size_t jc = astream.find(' ', indx);
     if (jc != G4String::npos)
       stringArray[i] = astream.substr(indx, jc - indx);
@@ -93,9 +93,9 @@ G4String* G4UIArrayString::GetElement(G4int icol, G4int irow) const
 {
   if (icol < 1 || irow < 1)  // offset of column/row is "1".
     G4cerr << "G4UIArrayString: overrange" << G4endl;
-  if (icol > nColumn) G4cerr << "G4UIArrayString: overrange" << G4endl;
+  if (icol > (G4int)nColumn) G4cerr << "G4UIArrayString: overrange" << G4endl;
 
-  G4int jq = (irow - 1) * nColumn + icol;
+  std::size_t jq = (irow - 1) * nColumn + icol;
   if (jq > nElement) G4cerr << "G4UIArrayString: overrange" << G4endl;
 
   jq--;
@@ -103,28 +103,28 @@ G4String* G4UIArrayString::GetElement(G4int icol, G4int irow) const
 }
 
 ////////////////////////////////////////////
-G4int G4UIArrayString::GetNRow(int icol) const
+G4int G4UIArrayString::GetNRow(G4int icol) const
 ////////////////////////////////////////////
 {
   G4int ni;
   if (nElement % nColumn == 0)
-    ni = nElement / nColumn;
+    ni = G4int(nElement / nColumn);
   else
-    ni = nElement / nColumn + 1;
+    ni = G4int(nElement / nColumn) + 1;
 
-  G4int nn = nElement % nColumn;
-  if (nn == 0) nn = nColumn;
+  G4int nn = G4int(nElement % nColumn);
+  if (nn == 0) nn = (G4int)nColumn;
 
   if (icol <= nn) return ni;
   return ni - 1;
 }
 
 ////////////////////////////////////////////////
-G4int G4UIArrayString::GetNField(int icol) const
+G4int G4UIArrayString::GetNField(G4int icol) const
 ////////////////////////////////////////////////
 {
   std::size_t maxWidth = 0;
-  for (G4int iy = 1; iy <= GetNRow(icol); iy++) {
+  for (G4int iy = 1; iy <= GetNRow(icol); ++iy) {
     std::size_t ilen = GetElement(icol, iy)->length();
     // care for color code
     // if(GetElement(icol,iy)-> index(strESC,0) != G4String::npos) {
@@ -140,12 +140,12 @@ G4int G4UIArrayString::GetNField(int icol) const
 }
 
 /////////////////////////////////////////////////
-int G4UIArrayString::CalculateColumnWidth() const
+G4int G4UIArrayString::CalculateColumnWidth() const
 /////////////////////////////////////////////////
 {
   G4int totalWidth = 0;
 
-  for (G4int ix = 1; ix <= nColumn; ix++) {
+  for (G4int ix = 1; ix <= (G4int)nColumn; ++ix) {
     totalWidth += GetNField(ix);
   }
 
@@ -168,12 +168,12 @@ void G4UIArrayString::Show(G4int ncol)
   }
 
   for (G4int iy = 1; iy <= GetNRow(1); iy++) {
-    G4int nc = nColumn;
+    G4int nc = (G4int)nColumn;
     if (iy == GetNRow(1)) {  // last row
-      nc = nElement % nColumn;
-      if (nc == 0) nc = nColumn;
+      nc = G4int(nElement % nColumn);
+      if (nc == 0) nc = (G4int)nColumn;
     }
-    for (G4int ix = 1; ix <= nc; ix++) {
+    for (G4int ix = 1; ix <= nc; ++ix) {
       G4String word = GetElement(ix, iy)->data();
 
       // care for color code

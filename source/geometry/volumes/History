@@ -6,6 +6,14 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-03-28 Gabriele Cosmo (geomvol-V11-01-03)
+- Use 'const auto &' for iterator in G4LogicalSkinSurface::CleanSurfaceTable().
+
+## 2024-03-08 Gabriele Cosmo
+- Use std::map instead of std::vector to define G4LogicalSkinSurfaceTable,
+  to speedup search of skin surfaces in large tables, as already done
+  previously for G4LogicalBorderSurface. Addressing problem report #2598.
+
 ## 2023-10-24 Gabriele Cosmo (geomvol-V11-01-02)
 - Minor cleanup and code indentation. No functional changes.
 

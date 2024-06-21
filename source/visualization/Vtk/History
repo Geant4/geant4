@@ -6,7 +6,22 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
-## 2023--07 Stewart Boogert (visVtk-V11-01-15)
+## 2024-03-25 Gabriele Cosmo (visVtk-V11-01-16)
+- Use angle brackets <> for external Vtk package headers inclusion in
+  G4VVtkPipeline.hh.
+
+## 2024-03-20 Stewart Boogert
+- Fixed Ubuntu 22 & VTK 9.1 compilation error
+
+## 2024-03-18 Gabriele Cosmo
+- Porting code to compile on Windows Visual-Studio:
+  - Protected use of GNU pragmas in code.
+  - Removed explicit symbol export for G4VtkInteractorStyle and
+    vtkTensorGlyphColor types.
+  - Consistently use system includes with angle brackets <> for external
+    Vtk package.
+
+## 2023-11-07 Stewart Boogert (visVtk-V11-01-15)
 - Fixed missing circles in rendering (introduced in visVTK-V11-01-13)
 
 ## 2023-11-03 Ben Morgan (visVTK-V11-01-14)

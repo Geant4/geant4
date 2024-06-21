@@ -108,13 +108,13 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
   //
   // Construct side plane vector set
   //
-  numSide = theNumSide;
-  deltaPhi = phiTotal/theNumSide;
+  numSide = theNumSide>0 ? theNumSide : 1;
+  deltaPhi = phiTotal/numSide;
   endPhi = startPhi+phiTotal;
-  
-  vecs = new G4PolyhedraSideVec[numSide];
-  
-  edges = new G4PolyhedraSideEdge[phiIsOpen ? numSide+1 : numSide];
+
+  const std::size_t maxSides = numSide;
+  vecs = new G4PolyhedraSideVec[maxSides];
+  edges = new G4PolyhedraSideEdge[phiIsOpen ? maxSides+1 : maxSides];
   
   //
   // ...this is where we start
@@ -207,7 +207,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
     b1 = b2;
     c1 = c2;
     d1 = d2;
-  } while( ++vec < vecs+numSide );
+  } while( ++vec < vecs+maxSides );
   
   //
   // Clean up hanging edge
@@ -219,14 +219,14 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
   }
   else
   {
-    vecs[numSide-1].edges[1] = edges;
+    vecs[maxSides-1].edges[1] = edges;
   }
   
   //
   // Go back and fill in remaining fields in edges
   //
   vec = vecs;
-  G4PolyhedraSideVec *prev = vecs+numSide-1;
+  G4PolyhedraSideVec *prev = vecs+maxSides-1;
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
     edge = vec->edges[0];    // The edge between prev and vec
@@ -249,7 +249,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
   
     eNorm = vec->edgeNorm[1] + prev->edgeNorm[1];
     edge->cornNorm[1] = eNorm.unit();
-  } while( prev=vec, ++vec < vecs + numSide );
+  } while( prev=vec, ++vec < vecs + maxSides );
   
   if (phiIsOpen)
   {
@@ -279,7 +279,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ* prevRZ,
     //
     // Repeat for ending phi
     //
-    vec = vecs + numSide - 1;
+    vec = vecs + maxSides - 1;
     
     normvec = vec->edges[1]->corner[0] - vec->edges[1]->corner[1];
     normvec = normvec.cross(vec->normal);
@@ -356,11 +356,11 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide& source )
   //
   // The simple stuff
   //
-  numSide    = source.numSide;
   r[0]    = source.r[0];
   r[1]    = source.r[1];
   z[0]    = source.z[0];
   z[1]    = source.z[1];
+  numSide   = source.numSide;
   startPhi  = source.startPhi;
   deltaPhi  = source.deltaPhi;
   endPhi    = source.endPhi;
@@ -380,7 +380,8 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide& source )
   //
   // Duplicate edges
   //
-  G4int  numEdges = phiIsOpen ? numSide+1 : numSide;
+  const std::size_t numSides = (numSide > 0) ? numSide : 1;
+  const std::size_t numEdges = phiIsOpen ? numSides+1 : numSides;
   edges = new G4PolyhedraSideEdge[numEdges];
   
   G4PolyhedraSideEdge *edge = edges,
@@ -393,7 +394,7 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide& source )
   //
   // Duplicate vecs
   //
-  vecs = new G4PolyhedraSideVec[numSide];
+  vecs = new G4PolyhedraSideVec[numSides];
   
   G4PolyhedraSideVec *vec = vecs,
          *sourceVec = source.vecs;
@@ -402,7 +403,7 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide& source )
     *vec = *sourceVec;
     vec->edges[0] = edges + (sourceVec->edges[0] - source.edges);
     vec->edges[1] = edges + (sourceVec->edges[1] - source.edges);
-  } while( ++sourceVec, ++vec < vecs + numSide );
+  } while( ++sourceVec, ++vec < vecs + numSides );
 }
   
 // Intersect

@@ -11,7 +11,7 @@ Environment variable "G4FORCE_RUN_MANAGER_TYPE" enabled with value == Serial. Fo
 
 
 **************************************************************
- Geant4 version Name: geant4-11-02-patch-01    (16-February-2024)
+ Geant4 version Name: geant4-11-02-patch-02    (21-June-2024)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1090,7 +1090,7 @@ See commands in /vis/modeling/trajectories/ for other options.
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.110000s Real=0.109857s Sys=0.000000s
+  User=0.090000s Real=0.092462s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1106,38 +1106,38 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0024
+Average number of OpAbsorption per event: 0.0075
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:        7
+Total # of surface events:       9993
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   934
-  Fresnel refraction:             760
-  Lambertian reflection:         5125
-  Lobe reflection:                717
-  Spike reflection:               723
-  Backscattering:                 717
-  Absorption:                     909
-  Detection:                      109
- Sum:                            9994
+  Transmission:                   958
+  Fresnel refraction:            7543
+  Lambertian reflection:          311
+  Lobe reflection:                 48
+  Spike reflection:                52
+  Backscattering:                  56
+  Absorption:                     921
+  Detection:                      104
+ Sum:                            9993
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.718713 rms = 0.227075
- Y momentum dir of backward-going photons: mean = 0.0468752 rms = 0.495499
- Z momentum dir of backward-going photons: mean = 0.000772204 rms = 0.429151
- X momentum dir of forward-going photons: mean = 0.856056 rms = 0.0630571
- Y momentum dir of forward-going photons: mean = 0.502684 rms = 0.0863708
- Z momentum dir of forward-going photons: mean = -0.00121438 rms = 0.0551406
- X momentum dir of Fresnel-refracted photons: mean = 0.804036 rms = 0.0628867
- Y momentum dir of Fresnel-refracted photons: mean = 0.580689 rms = 0.0747771
- Z momentum dir of Fresnel-refracted photons: mean = -0.00270678 rms = 0.0822985
+ X momentum dir of backward-going photons: mean = -0.689643 rms = 0.253084
+ Y momentum dir of backward-going photons: mean = 0.0943402 rms = 0.528487
+ Z momentum dir of backward-going photons: mean = -0.00898856 rms = 0.414803
+ X momentum dir of forward-going photons: mean = 0.8178 rms = 0.0620999
+ Y momentum dir of forward-going photons: mean = 0.561565 rms = 0.0812816
+ Z momentum dir of forward-going photons: mean = 0.00240857 rms = 0.073341
+ X momentum dir of Fresnel-refracted photons: mean = 0.807566 rms = 0.0584525
+ Y momentum dir of Fresnel-refracted photons: mean = 0.577104 rms = 0.0728213
+ Z momentum dir of Fresnel-refracted photons: mean = 0.00271447 rms = 0.0778538
 
 ... write file : unified.root - done
 ... close file : unified.root - done
@@ -1183,7 +1183,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.073048s Sys=0.000000s
+  User=0.070000s Real=0.071201s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1199,34 +1199,34 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0025
+Average number of OpAbsorption per event: 0.0066
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        3
-Total # of surface events:       9997
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1046
-  Fresnel refraction:             783
-  Fresnel reflection:            7225
-  Absorption:                     862
-  Detection:                       81
- Sum:                            9997
+  Transmission:                   996
+  Fresnel refraction:            7846
+  Fresnel reflection:             165
+  Absorption:                     876
+  Detection:                      109
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.19609e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.69981e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 1.05367e-08
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.49012e-08
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.864767 rms = 0.0388554
- Y momentum dir of forward-going photons: mean = 0.496301 rms = 0.0659858
+ X momentum dir of forward-going photons: mean = 0.828703 rms = 0.0248269
+ Y momentum dir of forward-going photons: mean = 0.557546 rms = 0.042162
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 6.32203e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.36523e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 2.24509e-07
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 2.71921e-07
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : unified.root - done
@@ -1294,7 +1294,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.081661s Sys=0.000000s
+  User=0.090000s Real=0.154027s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1310,34 +1310,34 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0028
+Average number of OpAbsorption per event: 0.0089
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        8
-Total # of surface events:       9992
+OpAbsorption before surface:        3
+Total # of surface events:       9997
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   968
-  Fresnel refraction:             851
-  Lambertian reflection:         7189
-  Absorption:                     877
-  Detection:                      107
- Sum:                            9992
+  Transmission:                   977
+  Fresnel refraction:            7905
+  Lambertian reflection:          160
+  Absorption:                     875
+  Detection:                       80
+ Sum:                            9997
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.665526 rms = 0.235466
- Y momentum dir of backward-going photons: mean = 0.00239262 rms = 0.500192
- Z momentum dir of backward-going photons: mean = -0.004687 rms = 0.501409
- X momentum dir of forward-going photons: mean = 0.861646 rms = 0.0391821
- Y momentum dir of forward-going photons: mean = 0.5016 rms = 0.0665407
+ X momentum dir of backward-going photons: mean = -0.686792 rms = 0.242672
+ Y momentum dir of backward-going photons: mean = -0.0234456 rms = 0.490284
+ Z momentum dir of backward-going photons: mean = -0.0300005 rms = 0.477073
+ X momentum dir of forward-going photons: mean = 0.828495 rms = 0.02457
+ Y momentum dir of forward-going photons: mean = 0.557899 rms = 0.0417258
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 1.82501e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 8.22944e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 2.24261e-07
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 2.72431e-07
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : unified.root - done
@@ -1411,7 +1411,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.069458s Sys=0.000000s
+  User=0.070000s Real=0.114906s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1427,30 +1427,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0031
+Average number of OpAbsorption per event: 0.0016
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       11
-Total # of surface events:       9989
+OpAbsorption before surface:        6
+Total # of surface events:       9994
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   968
-  Spike reflection:              8011
-  Absorption:                     932
-  Detection:                       78
- Sum:                            9989
+  Transmission:                  1027
+  Spike reflection:              7991
+  Absorption:                     889
+  Detection:                       87
+ Sum:                            9994
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35705e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35356e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75998e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.21255e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78192e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.47862e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1495,7 +1495,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.088687s Sys=0.000000s
+  User=0.080000s Real=0.093447s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1511,30 +1511,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0019
+Average number of OpAbsorption per event: 0.0026
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        7
-Total # of surface events:       9993
+OpAbsorption before surface:        9
+Total # of surface events:       9991
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1040
-  Lambertian reflection:         7911
-  Absorption:                     956
-  Detection:                       86
- Sum:                            9993
+  Transmission:                  1012
+  Lambertian reflection:         7936
+  Absorption:                     962
+  Detection:                       81
+ Sum:                            9991
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.667673 rms = 0.236716
- Y momentum dir of backward-going photons: mean = 0.00034159 rms = 0.497246
- Z momentum dir of backward-going photons: mean = 0.00195691 rms = 0.500919
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.51129e-08
+ X momentum dir of backward-going photons: mean = -0.667175 rms = 0.235689
+ Y momentum dir of backward-going photons: mean = -0.0032043 rms = 0.499688
+ Z momentum dir of backward-going photons: mean = 0.0104915 rms = 0.499519
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.42937e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1579,7 +1579,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.130000s Real=0.134960s Sys=0.000000s
+  User=0.140000s Real=0.203836s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1595,38 +1595,37 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0033
+Average number of OpAbsorption per event: 0.0028
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       15
-Total # of surface events:       9985
+OpAbsorption before surface:       10
+Total # of surface events:       9990
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   418
-  Fresnel refraction:             276
-  Lambertian reflection:         6218
-  Lobe reflection:                881
-  Spike reflection:               899
-  Backscattering:                 935
-  Absorption:                     325
-  Detection:                       33
- Sum:                            9985
+  Transmission:                  1002
+  Fresnel refraction:            8017
+  Lambertian reflection:           16
+  Lobe reflection:                  3
+  Spike reflection:                 2
+  Absorption:                     867
+  Detection:                       83
+ Sum:                            9990
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.724482 rms = 0.226596
- Y momentum dir of backward-going photons: mean = 0.0410654 rms = 0.492108
- Z momentum dir of backward-going photons: mean = -0.00572817 rms = 0.424135
- X momentum dir of forward-going photons: mean = 0.738204 rms = 0.23476
- Y momentum dir of forward-going photons: mean = 0.118046 rms = 0.457018
- Z momentum dir of forward-going photons: mean = -0.0421986 rms = 0.418762
- X momentum dir of Fresnel-refracted photons: mean = -0.772655 rms = 0.210369
- Y momentum dir of Fresnel-refracted photons: mean = 0.130137 rms = 0.451622
- Z momentum dir of Fresnel-refracted photons: mean = 0.0127116 rms = 0.371065
+ X momentum dir of backward-going photons: mean = -0.896508 rms = 0.0271572
+ Y momentum dir of backward-going photons: mean = 0.437238 rms = 0.0553518
+ Z momentum dir of backward-going photons: mean = -5.86886e-05 rms = 0.0359954
+ X momentum dir of forward-going photons: mean = 0.912683 rms = 0.0192075
+ Y momentum dir of forward-going photons: mean = 0.406497 rms = 0.0280178
+ Z momentum dir of forward-going photons: mean = 0.00054454 rms = 0.0247918
+ X momentum dir of Fresnel-refracted photons: mean = -0.896969 rms = 0.0223153
+ Y momentum dir of Fresnel-refracted photons: mean = 0.438459 rms = 0.0417916
+ Z momentum dir of Fresnel-refracted photons: mean = -0.000243323 rms = 0.0309063
 
 ... write file : unified.root - done
 ... close file : unified.root - done
@@ -1667,7 +1666,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.150000s Real=0.162637s Sys=0.000000s
+  User=0.150000s Real=0.172470s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1683,38 +1682,37 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0022
+Average number of OpAbsorption per event: 0.0023
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   372
-  Fresnel refraction:             236
-  Lambertian reflection:         6300
-  Lobe reflection:                918
-  Spike reflection:               885
-  Backscattering:                 890
-  Absorption:                     343
-  Detection:                       44
- Sum:                            9988
+  Transmission:                  1178
+  Fresnel refraction:            7574
+  Lambertian reflection:           20
+  Lobe reflection:                  4
+  Spike reflection:                 4
+  Absorption:                    1087
+  Detection:                      125
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.725772 rms = 0.224848
- Y momentum dir of backward-going photons: mean = 0.0444837 rms = 0.485951
- Z momentum dir of backward-going photons: mean = -0.00338832 rms = 0.429604
- X momentum dir of forward-going photons: mean = 0.727341 rms = 0.237219
- Y momentum dir of forward-going photons: mean = 0.0727391 rms = 0.461781
- Z momentum dir of forward-going photons: mean = -0.00214693 rms = 0.442905
- X momentum dir of Fresnel-refracted photons: mean = -0.675078 rms = 0.253912
- Y momentum dir of Fresnel-refracted photons: mean = -0.00509466 rms = 0.479507
- Z momentum dir of Fresnel-refracted photons: mean = 0.0387011 rms = 0.498346
+ X momentum dir of backward-going photons: mean = -0.682395 rms = 0.230093
+ Y momentum dir of backward-going photons: mean = -0.000899796 rms = 0.490842
+ Z momentum dir of backward-going photons: mean = -0.000254792 rms = 0.490375
+ X momentum dir of forward-going photons: mean = 0.864048 rms = 0.16035
+ Y momentum dir of forward-going photons: mean = 0.336901 rms = 0.272153
+ Z momentum dir of forward-going photons: mean = -0.00647327 rms = 0.200245
+ X momentum dir of Fresnel-refracted photons: mean = -0.682062 rms = 0.230749
+ Y momentum dir of Fresnel-refracted photons: mean = -0.000412887 rms = 0.490706
+ Z momentum dir of Fresnel-refracted photons: mean = -2.64853e-05 rms = 0.490666
 
 ... write file : unified.root - done
 ... close file : unified.root - done
@@ -1760,7 +1758,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.070743s Sys=0.000000s
+  User=0.070000s Real=0.088903s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1776,30 +1774,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0024
+Average number of OpAbsorption per event: 0.003
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       14
-Total # of surface events:       9986
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   959
-  Spike reflection:              7992
-  Absorption:                     926
-  Detection:                      109
- Sum:                            9986
+  Transmission:                  1025
+  Spike reflection:              8034
+  Absorption:                     856
+  Detection:                       77
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35356e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.36229e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75366e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.17869e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78192e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.46223e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1844,7 +1842,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.077580s Sys=0.000000s
+  User=0.070000s Real=0.189126s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1860,33 +1858,33 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0028
+Average number of OpAbsorption per event: 0.0027
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       10
-Total # of surface events:       9990
+OpAbsorption before surface:        8
+Total # of surface events:       9992
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1038
-  Lambertian reflection:         5529
-  Lobe reflection:                825
-  Spike reflection:               811
-  Backscattering:                 775
-  Absorption:                     917
-  Detection:                       95
- Sum:                            9990
+  Transmission:                   997
+  Lambertian reflection:         5559
+  Lobe reflection:                792
+  Spike reflection:               834
+  Backscattering:                 819
+  Absorption:                     891
+  Detection:                      100
+ Sum:                            9992
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.722361 rms = 0.225844
- Y momentum dir of backward-going photons: mean = 0.0434055 rms = 0.486472
- Z momentum dir of backward-going photons: mean = 0.00111381 rms = 0.434338
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.51129e-08
+ X momentum dir of backward-going photons: mean = -0.722436 rms = 0.224863
+ Y momentum dir of backward-going photons: mean = 0.044443 rms = 0.489062
+ Z momentum dir of backward-going photons: mean = -0.000469122 rms = 0.4317
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.76941e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.34665e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -1942,7 +1940,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.071666s Sys=0.000000s
+  User=0.060000s Real=0.093857s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -1958,34 +1956,34 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0032
+Average number of OpAbsorption per event: 0.0078
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        8
-Total # of surface events:       9992
+OpAbsorption before surface:        5
+Total # of surface events:       9995
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   999
-  Fresnel refraction:             760
-  Fresnel reflection:            7299
-  Absorption:                     852
-  Detection:                       82
- Sum:                            9992
+  Transmission:                   984
+  Fresnel refraction:            7853
+  Fresnel reflection:             166
+  Absorption:                     899
+  Detection:                       93
+ Sum:                            9995
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.21219e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.70389e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 1.49012e-08
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.58051e-08
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.864456 rms = 0.0388993
- Y momentum dir of forward-going photons: mean = 0.496829 rms = 0.0660604
+ X momentum dir of forward-going photons: mean = 0.828601 rms = 0.0247018
+ Y momentum dir of forward-going photons: mean = 0.557718 rms = 0.0419496
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 7.14635e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.39482e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 2.24509e-07
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 2.72023e-07
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
@@ -2053,7 +2051,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.077668s Sys=0.000000s
+  User=0.070000s Real=0.086323s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2069,34 +2067,34 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0032
+Average number of OpAbsorption per event: 0.007
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:        4
+Total # of surface events:       9996
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   983
-  Fresnel refraction:             792
-  Lambertian reflection:         7250
-  Absorption:                     861
-  Detection:                      102
- Sum:                            9988
+  Transmission:                  1007
+  Fresnel refraction:            7827
+  Lambertian reflection:          155
+  Absorption:                     912
+  Detection:                       95
+ Sum:                            9996
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.664396 rms = 0.235779
- Y momentum dir of backward-going photons: mean = 0.000419988 rms = 0.505821
- Z momentum dir of backward-going photons: mean = -0.00475194 rms = 0.4971
- X momentum dir of forward-going photons: mean = 0.863346 rms = 0.0390355
- Y momentum dir of forward-going photons: mean = 0.498714 rms = 0.0662916
+ X momentum dir of backward-going photons: mean = -0.693008 rms = 0.224061
+ Y momentum dir of backward-going photons: mean = 0.0110085 rms = 0.492653
+ Z momentum dir of backward-going photons: mean = -0.0128396 rms = 0.475966
+ X momentum dir of forward-going photons: mean = 0.828809 rms = 0.0249559
+ Y momentum dir of forward-going photons: mean = 0.557366 rms = 0.0423811
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 5.86659e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 9.2759e-08
+ X momentum dir of Fresnel-refracted photons: mean = 0.819857 rms = 2.24261e-07
+ Y momentum dir of Fresnel-refracted photons: mean = 0.572568 rms = 2.71716e-07
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
@@ -2169,21 +2167,10 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : OpBoun06
-      issued by : G4OpBoundaryProcess
-G4OpBoundaryProcess: Opticalphoton step length: 1.24319e-09 mm.
-This is larger than the threshold 1e-09 mm to set status StepTooSmall.
-Boundary scattering may be incorrect. 
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.075752s Sys=0.000000s
+  User=0.070000s Real=0.082468s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2199,36 +2186,36 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0034
+Average number of OpAbsorption per event: 0.0071
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       11
-Total # of surface events:       9989
+OpAbsorption before surface:       14
+Total # of surface events:       9986
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   976
-  Fresnel refraction:             659
-  Fresnel reflection:            5859
-  Total internal reflection:     1546
-  Absorption:                     859
-  Detection:                       90
- Sum:                            9989
+  Transmission:                  1009
+  Fresnel refraction:            6178
+  Fresnel reflection:             354
+  Total internal reflection:     1498
+  Absorption:                     850
+  Detection:                       97
+ Sum:                            9986
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.567482 rms = 0.28111
- Y momentum dir of backward-going photons: mean = 0.318986 rms = 0.498415
- Z momentum dir of backward-going photons: mean = 0.00687657 rms = 0.498723
- X momentum dir of forward-going photons: mean = 0.85959 rms = 0.0838588
- Y momentum dir of forward-going photons: mean = 0.484965 rms = 0.0939651
- Z momentum dir of forward-going photons: mean = 0.0017035 rms = 0.100249
- X momentum dir of Fresnel-refracted photons: mean = 0.806129 rms = 0.0988686
- Y momentum dir of Fresnel-refracted photons: mean = 0.552408 rms = 0.115575
- Z momentum dir of Fresnel-refracted photons: mean = 0.00412516 rms = 0.147827
+ X momentum dir of backward-going photons: mean = -0.334625 rms = 0.258574
+ Y momentum dir of backward-going photons: mean = 0.730536 rms = 0.284152
+ Z momentum dir of backward-going photons: mean = -0.0535923 rms = 0.451517
+ X momentum dir of forward-going photons: mean = 0.823995 rms = 0.103663
+ Y momentum dir of forward-going photons: mean = 0.529144 rms = 0.110972
+ Z momentum dir of forward-going photons: mean = 0.00253029 rms = 0.134058
+ X momentum dir of Fresnel-refracted photons: mean = 0.799568 rms = 0.168999
+ Y momentum dir of Fresnel-refracted photons: mean = 0.545108 rms = 0.114213
+ Z momentum dir of Fresnel-refracted photons: mean = 0.0030218 rms = 0.148099
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
@@ -2276,7 +2263,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.067210s Sys=0.000000s
+  User=0.110000s Real=0.161353s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2292,30 +2279,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0025
+Average number of OpAbsorption per event: 0.002
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       10
-Total # of surface events:       9990
+OpAbsorption before surface:        2
+Total # of surface events:       9998
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1020
-  Spike reflection:              7964
-  Absorption:                     886
-  Detection:                      120
- Sum:                            9990
+  Transmission:                   996
+  Spike reflection:              8000
+  Absorption:                     888
+  Detection:                      114
+ Sum:                            9998
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34919e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35443e-07
  Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78192e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.44582e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.76941e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.34665e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2360,7 +2347,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.073970s Sys=0.000000s
+  User=0.090000s Real=0.096752s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2376,34 +2363,34 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0021
+Average number of OpAbsorption per event: 0.0023
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        4
-Total # of surface events:       9996
+OpAbsorption before surface:       11
+Total # of surface events:       9989
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   380
-  Fresnel refraction:             292
-  Fresnel reflection:            8942
-  Absorption:                     337
-  Detection:                       45
- Sum:                            9996
+  Transmission:                   949
+  Fresnel refraction:            7993
+  Fresnel reflection:              20
+  Absorption:                     912
+  Detection:                      115
+ Sum:                            9989
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.39189e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.74573e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.35705e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.912889 rms = 1.1051e-07
- Y momentum dir of forward-going photons: mean = 0.408207 rms = 4.7997e-08
+ X momentum dir of forward-going photons: mean = 0.912889 rms = 2.14131e-07
+ Y momentum dir of forward-going photons: mean = 0.408207 rms = 1.05367e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
- X momentum dir of Fresnel-refracted photons: mean = -0.898384 rms = 3.65002e-08
- Y momentum dir of Fresnel-refracted photons: mean = 0.43921 rms = 4.3444e-08
+ X momentum dir of Fresnel-refracted photons: mean = -0.898384 rms = 6.35356e-07
+ Y momentum dir of Fresnel-refracted photons: mean = 0.43921 rms = 1.7201e-07
  Z momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
 
 ... write file : glisur.root - done
@@ -2445,7 +2432,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.072221s Sys=0.000000s
+  User=0.110000s Real=0.124029s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2461,30 +2448,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0031
+Average number of OpAbsorption per event: 0.0024
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        6
-Total # of surface events:       9994
+OpAbsorption before surface:        3
+Total # of surface events:       9997
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1034
-  Lambertian reflection:         8029
-  Absorption:                     851
-  Detection:                       80
- Sum:                            9994
+  Transmission:                   988
+  Lambertian reflection:         8033
+  Absorption:                     876
+  Detection:                      100
+ Sum:                            9997
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.665866 rms = 0.235735
- Y momentum dir of backward-going photons: mean = 0.00334398 rms = 0.499813
- Z momentum dir of backward-going photons: mean = -0.0063113 rms = 0.501186
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.49497e-08
+ X momentum dir of backward-going photons: mean = -0.667107 rms = 0.235809
+ Y momentum dir of backward-going photons: mean = -0.00469695 rms = 0.499265
+ Z momentum dir of backward-going photons: mean = 0.00143354 rms = 0.500073
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.76627e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.34665e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2529,10 +2516,21 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : OpBoun06
+      issued by : G4OpBoundaryProcess
+G4OpBoundaryProcess: Opticalphoton step length: 9.80124e-09 mm.
+This is larger than the threshold 1e-09 mm to set status StepTooSmall.
+Boundary scattering may be incorrect. 
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.087881s Sys=0.000000s
+  User=0.090000s Real=0.106595s Sys=0.010000s
 
     Run Summary
 ---------------------------------
@@ -2548,35 +2546,35 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0025
+Average number of OpAbsorption per event: 0.0029
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:       12
-Total # of surface events:       9988
+OpAbsorption before surface:       11
+Total # of surface events:       9989
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   448
-  Fresnel refraction:             280
-  Fresnel reflection:            8851
-  Absorption:                     368
-  Detection:                       41
- Sum:                            9988
+  Transmission:                  1139
+  Fresnel refraction:            7678
+  Fresnel reflection:              39
+  Absorption:                    1007
+  Detection:                      126
+ Sum:                            9989
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.5787 rms = 0.277189
- Y momentum dir of backward-going photons: mean = 0.291968 rms = 0.501763
- Z momentum dir of backward-going photons: mean = 0.000161926 rms = 0.501259
- X momentum dir of forward-going photons: mean = 0.635705 rms = 0.290007
- Y momentum dir of forward-going photons: mean = 0.100331 rms = 0.557468
- Z momentum dir of forward-going photons: mean = -0.0265975 rms = 0.436155
- X momentum dir of Fresnel-refracted photons: mean = -0.613482 rms = 0.278753
- Y momentum dir of Fresnel-refracted photons: mean = -0.0657021 rms = 0.51511
- Z momentum dir of Fresnel-refracted photons: mean = -0.0384944 rms = 0.524213
+ X momentum dir of backward-going photons: mean = -0.646351 rms = 0.260826
+ Y momentum dir of backward-going photons: mean = -0.00292778 rms = 0.50452
+ Z momentum dir of backward-going photons: mean = -0.00248608 rms = 0.509555
+ X momentum dir of forward-going photons: mean = 0.765198 rms = 0.286454
+ Y momentum dir of forward-going photons: mean = 0.322533 rms = 0.360157
+ Z momentum dir of forward-going photons: mean = 0.00995 rms = 0.313967
+ X momentum dir of Fresnel-refracted photons: mean = -0.631523 rms = 0.284322
+ Y momentum dir of Fresnel-refracted photons: mean = -0.00325281 rms = 0.508292
+ Z momentum dir of Fresnel-refracted photons: mean = -0.00132996 rms = 0.511827
 
 ... write file : glisur.root - done
 ... close file : glisur.root - done
@@ -2625,7 +2623,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.067965s Sys=0.000000s
+  User=0.080000s Real=0.103967s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2641,30 +2639,30 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0018
+Average number of OpAbsorption per event: 0.0013
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        3
-Total # of surface events:       9997
+OpAbsorption before surface:        6
+Total # of surface events:       9994
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                  1043
-  Spike reflection:              7937
-  Absorption:                     920
-  Detection:                       97
- Sum:                            9997
+  Transmission:                   980
+  Spike reflection:              8039
+  Absorption:                     866
+  Detection:                      109
+ Sum:                            9994
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.898384 rms = 6.34394e-07
- Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.71929e-07
+ X momentum dir of backward-going photons: mean = -0.898384 rms = 6.36229e-07
+ Y momentum dir of backward-going photons: mean = 0.43921 rms = 1.72171e-07
  Z momentum dir of backward-going photons: mean = 0 rms = 0
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.78503e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.52758e-08
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.75998e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.27987e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2709,21 +2707,10 @@ Index : 1     used in the geometry : Yes
 ... create file : glisur.root - done
 ... open analysis file : glisur.root - done
 ... open analysis file : glisur.root - done
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : OpBoun06
-      issued by : G4OpBoundaryProcess
-G4OpBoundaryProcess: Opticalphoton step length: 4.1758e-09 mm.
-This is larger than the threshold 1e-09 mm to set status StepTooSmall.
-Boundary scattering may be incorrect. 
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.072146s Sys=0.000000s
+  User=0.080000s Real=0.085205s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2743,26 +2730,26 @@ Average number of OpAbsorption per event: 0.0027
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:       14
+Total # of surface events:       9986
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   998
-  Lobe reflection:               7996
-  Absorption:                     902
-  Detection:                       95
- Sum:                            9991
+  Transmission:                  1014
+  Lobe reflection:               7926
+  Absorption:                     945
+  Detection:                      101
+ Sum:                            9986
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.579214 rms = 0.275843
- Y momentum dir of backward-going photons: mean = 0.3073 rms = 0.491893
- Z momentum dir of backward-going photons: mean = -0.000913265 rms = 0.502024
- X momentum dir of forward-going photons: mean = 0.898384 rms = 1.76941e-07
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.34665e-08
+ X momentum dir of backward-going photons: mean = -0.581269 rms = 0.277293
+ Y momentum dir of backward-going photons: mean = 0.309134 rms = 0.490313
+ Z momentum dir of backward-going photons: mean = 0.000711553 rms = 0.499263
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 1.77568e-07
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 8.42937e-08
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
@@ -2822,7 +2809,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.070000s Real=0.076579s Sys=0.000000s
+  User=0.080000s Real=0.104076s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2838,27 +2825,27 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0024
+Average number of OpAbsorption per event: 0.0026
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        5
-Total # of surface events:       9995
+OpAbsorption before surface:        9
+Total # of surface events:       9991
 Unaccounted for:                    0
 
 Surface events by process:
-  Lobe reflection:               9575
-  Absorption:                     380
-  Detection:                       40
- Sum:                            9995
+  Lobe reflection:               9539
+  Absorption:                     410
+  Detection:                       42
+ Sum:                            9991
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.775707 rms = 0.207112
- Y momentum dir of backward-going photons: mean = 0.205271 rms = 0.432973
- Z momentum dir of backward-going photons: mean = 0.00382865 rms = 0.354635
+ X momentum dir of backward-going photons: mean = -0.772565 rms = 0.20914
+ Y momentum dir of backward-going photons: mean = 0.2167 rms = 0.431722
+ Z momentum dir of backward-going photons: mean = -0.00394944 rms = 0.355029
  X momentum dir of forward-going photons: mean = 0 rms = 0
  Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
@@ -2909,7 +2896,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.040000s Real=0.043443s Sys=0.000000s
+  User=0.040000s Real=0.049297s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -2925,27 +2912,27 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.0009
+Average number of OpAbsorption per event: 0.0006
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+04
-OpAbsorption before surface:        9
-Total # of surface events:       9991
+OpAbsorption before surface:        6
+Total # of surface events:       9994
 Unaccounted for:                    0
 
 Surface events by process:
-  Lobe reflection:                 88
-  Absorption:                    8878
-  Detection:                     1025
- Sum:                            9991
+  Lobe reflection:                101
+  Absorption:                    8917
+  Detection:                      976
+ Sum:                            9994
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.906254 rms = 0.00220898
- Y momentum dir of backward-going photons: mean = 0.422681 rms = 0.00475342
- Z momentum dir of backward-going photons: mean = -0.000597642 rms = 0.00415842
+ X momentum dir of backward-going photons: mean = -0.906345 rms = 0.00232788
+ Y momentum dir of backward-going photons: mean = 0.422472 rms = 0.00500944
+ Z momentum dir of backward-going photons: mean = -0.000378947 rms = 0.00500349
  X momentum dir of forward-going photons: mean = 0 rms = 0
  Y momentum dir of forward-going photons: mean = 0 rms = 0
  Z momentum dir of forward-going photons: mean = 0 rms = 0
@@ -3001,7 +2988,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.020000s Real=0.021501s Sys=0.000000s
+  User=0.020000s Real=0.025448s Sys=0.000000s
 
     Run Summary
 ---------------------------------
@@ -3017,7 +3004,7 @@ Average number of photons absorbed by WLS2 per event: 0
 Average number of photons created by WLS2 per event: 0
 Average energy of WLS2 photons created per event: 0 eV.
 Average number of OpRayleigh per event:   0
-Average number of OpAbsorption per event: 0.002
+Average number of OpAbsorption per event: 0.001
 
 Surface events (on +X surface, maximum one per photon) this run:
 # of primary particles:         1e+03
@@ -3026,21 +3013,21 @@ Total # of surface events:       1000
 Unaccounted for:                    0
 
 Surface events by process:
-  Transmission:                   112
-  Absorption:                      84
-  Detection:                       10
-  Polished Lumirror Air reflection:      794
+  Transmission:                    99
+  Absorption:                      83
+  Detection:                        8
+  Polished Lumirror Air reflection:      810
  Sum:                            1000
  Unaccounted for:                   0
 ---------------------------------
 
  Histogram statistics for the entire run:
 
- X momentum dir of backward-going photons: mean = -0.933435 rms = 0.0386909
- Y momentum dir of backward-going photons: mean = 0.128883 rms = 0.259903
- Z momentum dir of backward-going photons: mean = -0.00405043 rms = 0.207426
- X momentum dir of forward-going photons: mean = 0.898384 rms = 4.08085e-08
- Y momentum dir of forward-going photons: mean = 0.43921 rms = 1.17804e-08
+ X momentum dir of backward-going photons: mean = -0.9356 rms = 0.0381652
+ Y momentum dir of backward-going photons: mean = 0.134374 rms = 0.252293
+ Z momentum dir of backward-going photons: mean = -8.12083e-05 rms = 0.203687
+ X momentum dir of forward-going photons: mean = 0.898384 rms = 3.332e-08
+ Y momentum dir of forward-going photons: mean = 0.43921 rms = 9.12506e-09
  Z momentum dir of forward-going photons: mean = 0 rms = 0
  X momentum dir of Fresnel-refracted photons: mean = 0 rms = 0
  Y momentum dir of Fresnel-refracted photons: mean = 0 rms = 0

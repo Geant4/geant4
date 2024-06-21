@@ -5,6 +5,9 @@ which **must** added in reverse chronological order (newest at the top). It must
 be used as a substitute for writing good git commit messages!
 
 
+## 2024-04-25 Ben Morgan (HepMCEx01-V11-01-00)
+- Update CMake script to use new Pythia6 setup/build variables
+
 ## 2022-05-24 I. Hrivnacova (HepMCEx01-V11-00-01)
 - Fix failing comilation due to G4String changes in Geant4 11
   (Makes part of the GitHub PR #45)

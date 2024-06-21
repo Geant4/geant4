@@ -84,10 +84,9 @@
 #ifndef vtkTensorGlyphColor_h
 #define vtkTensorGlyphColor_h
 
-#include "vtkFiltersCoreModule.h"  // For export macro
-#include "vtkPolyDataAlgorithm.h"
+#include <vtkPolyDataAlgorithm.h>
 
-class VTKFILTERSCORE_EXPORT vtkTensorGlyphColor : public vtkPolyDataAlgorithm
+class vtkTensorGlyphColor : public vtkPolyDataAlgorithm
 {
   public:
     vtkTypeMacro(vtkTensorGlyphColor,

@@ -52,18 +52,20 @@ void G4ParticleHPLabAngularEnergy::Init(std::istream& aDataFile)
 {
   aDataFile >> nEnergies;
   theManager.Init(aDataFile);
-  theEnergies = new G4double[nEnergies];
-  nCosTh = new G4int[nEnergies];
-  theData = new G4ParticleHPVector*[nEnergies];
-  theSecondManager = new G4InterpolationManager[nEnergies];
-  for (G4int i = 0; i < nEnergies; i++) {
+  const std::size_t esize = nEnergies > 0 ? nEnergies : 1;
+  theEnergies = new G4double[esize];
+  nCosTh = new G4int[esize];
+  theData = new G4ParticleHPVector*[esize];
+  theSecondManager = new G4InterpolationManager[esize];
+  for (G4int i = 0; i < nEnergies; ++i) {
     aDataFile >> theEnergies[i];
     theEnergies[i] *= eV;
     aDataFile >> nCosTh[i];
     theSecondManager[i].Init(aDataFile);
-    theData[i] = new G4ParticleHPVector[nCosTh[i]];
+    const std::size_t dsize = nCosTh[i] > 0 ? nCosTh[i] : 1;
+    theData[i] = new G4ParticleHPVector[dsize];
     G4double label;
-    for (G4int ii = 0; ii < nCosTh[i]; ii++) {
+    for (std::size_t ii = 0; ii < dsize; ++ii) {
       aDataFile >> label;
       theData[i][ii].SetLabel(label);
       theData[i][ii].Init(aDataFile, eV);

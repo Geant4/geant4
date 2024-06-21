@@ -63,8 +63,9 @@ void G4ParticleHPDiscreteTwoBody::Init(std::istream& aDataFile)
 {
   aDataFile >> nEnergy;
   theManager.Init(aDataFile);
-  theCoeff = new G4ParticleHPLegendreTable[nEnergy];
-  for (G4int i = 0; i < nEnergy; i++) {
+  const std::size_t tsize = nEnergy > 0 ? nEnergy : 1;
+  theCoeff = new G4ParticleHPLegendreTable[tsize];
+  for (std::size_t i = 0; i < tsize; ++i) {
     G4double energy;
     G4int aRep, nCoeff;
     aDataFile >> energy >> aRep >> nCoeff;

@@ -149,7 +149,7 @@ G4Qt3DQEntity* G4Qt3DSceneHandler::CreateNewNode()
 
   if (fReadyForTransients) {  // All transients hang from this node
     newNode = new G4Qt3DQEntity(fpTransientObjects);
-    G4String name = fpModel? fpModel->GetGlobalTag(): "User";
+    G4String name = fpModel? fpModel->GetGlobalTag(): G4String("User");
     newNode->setObjectName(name.c_str());
     return newNode;
   }

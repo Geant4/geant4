@@ -27,13 +27,16 @@
 
 #ifndef G4OctreeFinder_hh
 #define G4OctreeFinder_hh 1
+
 #include "globals.hh"
-#include <map>
 #include "G4Octree.hh"
 #include "G4Track.hh"
 #include "G4ITType.hh"
 #include "G4memory.hh"
 #include "G4TrackList.hh"
+
+#include <map>
+#include <functional>
 
 #undef DEBUG
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

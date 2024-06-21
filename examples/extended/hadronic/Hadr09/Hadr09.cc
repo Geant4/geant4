@@ -296,7 +296,7 @@ int main( int , char** ) {
          << "Number of hadron projectiles: " << numProjectiles << G4endl
          << "Number of materials:   " << numMaterials   << G4endl
          << "IsIonProjectile: " << ( projectileNucleus != nullptr ? "true \t" : "false" )
-         << ( projectileNucleus != nullptr ? projectileNucleus->GetParticleName() : "") << G4endl
+         << ( projectileNucleus != nullptr ? projectileNucleus->GetParticleName() : G4String("")) << G4endl
          << "===================================================" << G4endl
          << G4endl;
   

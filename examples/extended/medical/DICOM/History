@@ -6,6 +6,10 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-06-05 L. T. Anh (DICOM-V11-01-03)
+- Correct symbols for Chlorine and Potassium elements in function 
+  InitialisationOfMaterials().
+
 ## 2023-12-03 A. Howard (DICOM-V11-01-02)
 - Modified DicomDetectorConstruction: added correct replica depths for x,y,z
   of G4PSDoseDeposit3D for nested parameterisation and corrected voxel ordering

@@ -54,7 +54,8 @@ G4ParticleHPContEnergyAngular::~G4ParticleHPContEnergyAngular()
 void G4ParticleHPContEnergyAngular::Init(std::istream& aDataFile)
 {
   aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
-  theAngular = new G4ParticleHPContAngularPar[nEnergy];
+  const std::size_t esize = nEnergy > 0 ? nEnergy : 1;
+  theAngular = new G4ParticleHPContAngularPar[esize];
   theManager.Init(aDataFile);
   for (G4int i = 0; i < nEnergy; ++i) {
     theAngular[i].Init(aDataFile, theProjectile);

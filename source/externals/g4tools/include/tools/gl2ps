@@ -1638,7 +1638,7 @@ inline tools_GLint tools_gl2psSplitPrimitive(tools_GL2PSprimitive *prim, tools_G
 {
   tools_GLshort i, j, in = 0, out = 0, in0[5], in1[5], out0[5], out1[5];
   tools_GLint type;
-  tools_GLfloat d[5];
+  tools_GLfloat d[5] = {0.0};
 
   type = TOOLS_GL2PS_COINCIDENT;
 

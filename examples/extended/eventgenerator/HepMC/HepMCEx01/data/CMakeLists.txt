@@ -19,11 +19,8 @@ endif()
 # Find Pythia6 (optional package)
 #
 find_package(Pythia6 QUIET)
-if(PYTHIA6_FOUND)
+if(Pythia6_FOUND)
   message(STATUS "G4 Examples: Pythia6 found. --> example_MyPythia with Pythia6 enabled.") 
-  add_definitions(-DG4LIB_USE_PYTHIA) 
-else()
-  set(PYTHIA6_LIBRARIES "")  
 endif()
 
 #----------------------------------------------------------------------------
@@ -31,14 +28,17 @@ endif()
 #
 include_directories(${HEPMC_INCLUDE_DIR})
 add_executable(example_MyPythia example_MyPythia.cxx)
+target_compile_definitions(example_MyPythia PRIVATE $<$<BOOL:${Pythia6_FOUND}>:G4LIB_USE_PYTHIA>)
 target_link_libraries(example_MyPythia
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES} gfortran)
+                      ${Pythia6_LIBRARIES} 
+                      $<$<BOOL:${Pythia6_FOUND}>:Pythia6::Pythia6>
+                      gfortran)
 
 # if pythia is compiled with g77, link with -lg2c instead.
 #target_link_libraries(example_MyPythia
 #                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-#                      ${PYTHIA6_LIBRARIES} g2c)
+#                      ${Pythia6_LIBRARIES} g2c)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX

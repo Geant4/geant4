@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-02-01 Gabriele Cosmo (geom-specific-V11-01-07)
+- Use std::size_t for array sizes in G4PolyhedraSide and G4PolyPhiFace.
+
 ## 2023-07-10 Evgueni Tcherniaev (geom-specific-V11-01-06)
 - Fixed bounding box calculation in G4VTwistedFaceted::BoundingLimits().
 

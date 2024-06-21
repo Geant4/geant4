@@ -1,20 +1,17 @@
--------------------------------------------------------------------
+# Example HadNucIneEvents History
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
+which **must** added in reverse chronological order (newest at the top).
+It must **not** be used as a substitute for writing good git commit messages!
 
-                    HadNucIneEvents History file
-                    -------------------
-This file should be used by the G4 example coordinator to briefly
-summarize all major modifications introduced in the code and keep
-track of all tags.
+-------------------------------------------------------------------------------
 
-     ----------------------------------------------------------
-     * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+## 2024-04-24 Gabriele Cosmo (exHadNucIneEvents-V11-01-02)
+- Fixed compilation error on Windows VC++ with C++20 Standard enabled.
+  Make proper use of G4String in HadNucIneEvents main() and
+  in FinalStateHistoManager.
 
-## 2023-09-13 I. Hrivnacova (exHadNucIneEvents-V11-01-01)
+## 2023-09-13 Ivana Hrivnacova (exHadNucIneEvents-V11-01-01)
 - Removed unused function HadronicGenerator::getAllHadronicProcesses()
 
 ## 2023-12-08 Gabrielle Hugo (exHadNucIneEvents-V11-01-00)

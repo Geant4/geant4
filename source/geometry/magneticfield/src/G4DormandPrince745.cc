@@ -130,7 +130,7 @@ void G4DormandPrince745::Stepper(const G4double yInput[],
         dc7 = -(- 1.0 / 40.0);
     
     const G4int numberOfVariables = GetNumberOfVariables();
-    State yTemp;
+    State yTemp = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
     
     // The number of variables to be integrated over
     //
@@ -304,7 +304,7 @@ void G4DormandPrince745::SetupInterpolation5thOrder()
                    b98 = -805.0 / 4104.0;
     
     const G4int numberOfVariables = GetNumberOfVariables();
-    State yTemp;
+    State yTemp = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
 
     // Evaluate the extra stages
     //

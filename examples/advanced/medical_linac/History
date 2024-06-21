@@ -4,6 +4,9 @@ See `CONTRIBUTING.rst` for details of **required** info/format for each entry,
 which **must** added in reverse chronological order (newest at the top).
 It must **not** be used as a substitute for writing good git commit messages!
 
+## 2024-04-22 D. Konstantinov (medical_linac-V11-01-02)
+- Fixed a critical bug in the geometry of the medical linear accelerator's collimator.
+- Reduced the cut for TargetR in the medical linear accelerator from 1 cm to 1 mm.
 
 ## 2023-11-15 I. Hrivnacova (medical_linac-V11-01-01)
 - Updated vis.mac:

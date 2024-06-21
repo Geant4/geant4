@@ -9,10 +9,6 @@
 #define MCGIDI_VERSION_MINOR 0
 #define MCGIDI_VERSION_PATCHLEVEL 0
 
-#ifdef WIN32
-#define M_PI 3.141592653589793238463
-#endif
-
 #include <GIDI_settings.hh>
 #include <map>
 #include <vector>

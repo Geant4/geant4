@@ -6,6 +6,9 @@ It must **not** be used as a substitute for writing good git commit messages!
 
 -------------------------------------------------------------------------------
 
+## 2024-04-12 Jean-Christophe David (hadr-inclxx-V11-01-05)
+- Fix in G4INCLInteractionAvatar to not use local energy for all antibaryons.
+
 ## 2023-12-01 Ben Morgan (hadr-inclxx-V11-01-04)
 - Replace raw std::getenv calls wih G4FindDataDir for G4INCLDATA location.
 

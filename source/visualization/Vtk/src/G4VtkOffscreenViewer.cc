@@ -27,8 +27,8 @@
 #include "G4VtkSceneHandler.hh"
 #include "G4VSceneHandler.hh"
 
-#include "vtkWindowToImageFilter.h"
-#include "vtkPNGWriter.h"
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
 
 G4VtkOffscreenViewer::G4VtkOffscreenViewer(G4VSceneHandler& sceneHandler, const G4String& name)
   : G4VtkViewer(sceneHandler, name)

@@ -120,7 +120,7 @@ static nfu_status ptwXY_createFromFunctionZeroCrossing( ptwXYPoints *ptwXY, doub
     if ( y2 == y1 ) return ( nfu_badInput );
 
     int i;
-    double x, y;
+    double x = 0, y = 0;
     nfu_status status;
 
     for( i = 0; i < 16; i++ ) {
